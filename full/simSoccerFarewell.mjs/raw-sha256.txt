@@ -1,0 +1,2 @@
+1c9731a2e4357b3a76013e655a07ab27ff7a8c3db205d8ba4e4d755e7486f573  /home/runner/work/_temp/rc-out/full/simSoccerFarewell.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerFarewell.mjs/stderr.log

@@ -1,0 +1,1196 @@
+{
+  "input": {
+    "playerName": "Story Role 119005",
+    "nationality": "England",
+    "position": "ST",
+    "era": "2020s",
+    "age": 17,
+    "potential": 88,
+    "potentialEarned": 0,
+    "eliteStreak": 0,
+    "startingOverall": 75,
+    "physique": {
+      "heightCm": 183,
+      "weightKg": 78
+    },
+    "attrShape": {},
+    "karma": 50,
+    "phoneUsedIds": [
+      "youth_bully",
+      "barber_cut"
+    ],
+    "phoneInbox": [
+      {
+        "id": "youth_bully-2020",
+        "defId": "youth_bully",
+        "from": "Academy mate",
+        "emoji": "🥺",
+        "text": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+        "year": 2020,
+        "choices": [
+          {
+            "label": "Stand up for him",
+            "reply": "Sit with me at lunch. If they touch your stuff again they deal with me",
+            "karma": 10,
+            "morale": 2
+          },
+          {
+            "label": "Stay out of it",
+            "reply": "Rough mate. Keep your head down",
+            "karma": -6
+          }
+        ]
+      },
+      {
+        "id": "barber_cut-2020",
+        "defId": "barber_cut",
+        "from": "Barber",
+        "emoji": "💈",
+        "text": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+        "year": 2020,
+        "choices": [
+          {
+            "label": "Send it",
+            "reply": "Chair. Tomorrow. Do your worst",
+            "karma": 2,
+            "popularity": 4
+          },
+          {
+            "label": "Keep it classic",
+            "reply": "Usual trim mate, big game week",
+            "karma": 1
+          }
+        ]
+      }
+    ],
+    "currentClub": "Liverpool",
+    "currentClubCountry": "England",
+    "currentClubTier": 1,
+    "currentClubColor": "#C8102E",
+    "currentLeague": "Premier League",
+    "contractYearsLeft": 3,
+    "weeklyWage": 43361,
+    "marketValue": 9.7,
+    "pace": 81,
+    "shooting": 79,
+    "passing": 81,
+    "dribbling": 77,
+    "defending": 78,
+    "physical": 80,
+    "reflexes": 76,
+    "overall": 79,
+    "seasons": [
+      {
+        "year": 2020,
+        "age": 16,
+        "club": "Liverpool Youth",
+        "clubCountry": "England",
+        "clubTier": 1,
+        "apps": 0,
+        "goals": 0,
+        "assists": 0,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2021,
+        "age": 17,
+        "club": "Liverpool Youth",
+        "clubCountry": "England",
+        "clubTier": 1,
+        "apps": 23,
+        "goals": 5,
+        "assists": 2,
+        "cleanSheets": 0,
+        "yellowCards": 3,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      }
+    ],
+    "events": [
+      "📈 Stats improved during youth development (OVR 79)",
+      "📩 Professional contract offers received!",
+      "✍️ Signed with Liverpool 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (3yr, €43k/wk)",
+      "🏠 One of our own! The Liverpool academy kid signs a first-team deal. The ultras already have a chant ready."
+    ],
+    "retired": false,
+    "phase": "playing",
+    "pendingOffers": [],
+    "pendingSummary": null,
+    "transferSituation": null,
+    "loan": null,
+    "pendingLoanOffers": null,
+    "pendingEvents": [],
+    "lastEventId": null,
+    "statBoostNextSeason": {},
+    "pendingNews": [],
+    "internationalCareer": false,
+    "sponsorDeal": null,
+    "totalEarnings": 0,
+    "popularity": 20,
+    "morale": 75,
+    "isLeader": false,
+    "hasRelationship": false,
+    "intStats": {
+      "caps": 0,
+      "goals": 0,
+      "assists": 0,
+      "tournaments": 0,
+      "worldCups": 0,
+      "continentals": 0,
+      "worldCupWins": 0,
+      "continentalWins": 0,
+      "isCaptain": false,
+      "isRetired": false,
+      "debutYear": null,
+      "debutAge": null,
+      "worldCupResults": [],
+      "squadSnubs": 0,
+      "failedQualifications": 0
+    },
+    "pendingWorldCup": null,
+    "pendingTournament": null,
+    "lastTournament": null,
+    "intlHistory": [],
+    "rival": null,
+    "rivalCreated": false,
+    "pendingRivalryEvent": null,
+    "lastRivalryEventId": null,
+    "rivalrySummary": null,
+    "netWorth": 0,
+    "lifestyleLevel": "Humble",
+    "lifestyleCostPerYear": 0.02,
+    "socialMediaFollowers": 0,
+    "sponsorshipIncome": 0,
+    "properties": [],
+    "investments": [],
+    "consecutiveDeficitYears": 0,
+    "agentFeesPaid": 0,
+    "family": {
+      "isMarried": false,
+      "marriedAge": null,
+      "children": 0,
+      "isDivorced": false,
+      "divorceAge": null
+    },
+    "purchasedItems": [],
+    "investmentHoldings": [],
+    "totalAssetValue": 0,
+    "customYearlyCosts": 0,
+    "awards": [],
+    "pendingBallonDor": null,
+    "lastUCLResult": null,
+    "legacy": null,
+    "postRetirementChoice": null,
+    "managerState": null,
+    "isFinalSeason": false,
+    "isPundit": false,
+    "punditEvents": [],
+    "primeType": "normal",
+    "socialMediaActionUsedThisSeason": false,
+    "socialMediaFocusBoost": false,
+    "pendingCoverAthleteEvent": false,
+    "coverAthleteAccepted": false,
+    "activeSponsorship": null,
+    "personality": null,
+    "agentId": null,
+    "lifeFlags": {},
+    "appearance": null,
+    "corruptionHeat": 0,
+    "dirtyMoney": 0,
+    "prisonSeasons": 0,
+    "academyClubName": "Liverpool",
+    "moralDilemmasTriggered": [],
+    "pendingMoralDilemma": null,
+    "pedSeasonsRemaining": 0,
+    "pedActive": false,
+    "matchFixBanned": 0,
+    "divingActive": false,
+    "integrityBonus": 0,
+    "pendingAppealResult": null,
+    "childEventsSeen": [],
+    "pregnancyAnnounced": false,
+    "punditState": null,
+    "ownerState": null,
+    "peakOverall": 75,
+    "retirementSuggested": false,
+    "phone": {
+      "threads": [
+        {
+          "id": "th_academy",
+          "c": "academy",
+          "name": "Academy kid",
+          "emoji": "🌱",
+          "lines": [
+            {
+              "w": 0,
+              "t": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+              "y": 2020
+            }
+          ],
+          "rel": 50,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "youth_bully-2020"
+          },
+          "waiting": 2020,
+          "cold": 0,
+          "seen": [],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_fitness",
+          "c": "fitness",
+          "name": "Fitness coach",
+          "emoji": "🏋️",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+              "y": 2020
+            }
+          ],
+          "rel": 50,
+          "pending": {
+            "kind": "convo",
+            "convo": "fitness_extra",
+            "beat": 0
+          },
+          "waiting": 2020,
+          "cold": 0,
+          "seen": [
+            "fitness_extra"
+          ],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_x_barber",
+          "c": "other",
+          "name": "Barber",
+          "emoji": "💬",
+          "lines": [
+            {
+              "w": 0,
+              "t": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+              "y": 2020
+            }
+          ],
+          "rel": 50,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "barber_cut-2020"
+          },
+          "waiting": 2020,
+          "cold": 0,
+          "seen": [],
+          "lastReplyYear": null
+        }
+      ],
+      "feed": [],
+      "world": null,
+      "clubs": {},
+      "rivalClub": null,
+      "seed": 3597730143,
+      "offers": 0,
+      "perksTaken": 0
+    },
+    "frozenOut": 0,
+    "badSeasonStreak": 0,
+    "story": [
+      {
+        "year": 2020,
+        "age": 16,
+        "club": "Liverpool Youth",
+        "lines": [
+          "📋 Joined Liverpool Youth Academy aged 16"
+        ]
+      }
+    ],
+    "sponsorBonus": 0,
+    "money": {
+      "seed": 2225241326,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 99.63,
+        "bricks": 103.69,
+        "cleats": 98.17,
+        "screens": 117.6,
+        "spark": 72.44
+      },
+      "hist": {
+        "ladder": [
+          100,
+          99.63
+        ],
+        "bricks": [
+          100,
+          103.69
+        ],
+        "cleats": [
+          100,
+          98.17
+        ],
+        "screens": [
+          100,
+          117.6
+        ],
+        "spark": [
+          100,
+          72.44
+        ]
+      },
+      "log": [],
+      "year": 2021,
+      "age": 1,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    }
+  },
+  "expected": {
+    "value": {
+      "playerName": "Story Role 119005",
+      "nationality": "England",
+      "position": "ST",
+      "era": "2020s",
+      "age": 17,
+      "potential": 88,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 75,
+      "physique": {
+        "heightCm": 183,
+        "weightKg": 78
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "youth_bully",
+        "barber_cut"
+      ],
+      "phoneInbox": [
+        {
+          "id": "youth_bully-2020",
+          "defId": "youth_bully",
+          "from": "Academy mate",
+          "emoji": "🥺",
+          "text": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Stand up for him",
+              "reply": "Sit with me at lunch. If they touch your stuff again they deal with me",
+              "karma": 10,
+              "morale": 2
+            },
+            {
+              "label": "Stay out of it",
+              "reply": "Rough mate. Keep your head down",
+              "karma": -6
+            }
+          ]
+        },
+        {
+          "id": "barber_cut-2020",
+          "defId": "barber_cut",
+          "from": "Barber",
+          "emoji": "💈",
+          "text": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Send it",
+              "reply": "Chair. Tomorrow. Do your worst",
+              "karma": 2,
+              "popularity": 4
+            },
+            {
+              "label": "Keep it classic",
+              "reply": "Usual trim mate, big game week",
+              "karma": 1
+            }
+          ]
+        }
+      ],
+      "currentClub": "Liverpool",
+      "currentClubCountry": "England",
+      "currentClubTier": 1,
+      "currentClubColor": "#C8102E",
+      "currentLeague": "Premier League",
+      "contractYearsLeft": 3,
+      "weeklyWage": 43361,
+      "marketValue": 9.7,
+      "pace": 81,
+      "shooting": 79,
+      "passing": 81,
+      "dribbling": 77,
+      "defending": 78,
+      "physical": 80,
+      "reflexes": 76,
+      "overall": 79,
+      "seasons": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Liverpool Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2021,
+          "age": 17,
+          "club": "Liverpool Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 23,
+          "goals": 5,
+          "assists": 2,
+          "cleanSheets": 0,
+          "yellowCards": 3,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 79)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Liverpool 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (3yr, €43k/wk)",
+        "🏠 One of our own! The Liverpool academy kid signs a first-team deal. The ultras already have a chant ready."
+      ],
+      "retired": false,
+      "phase": "playing",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 20,
+      "morale": 75,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "normal",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Liverpool",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 75,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_academy",
+            "c": "academy",
+            "name": "Academy kid",
+            "emoji": "🌱",
+            "lines": [
+              {
+                "w": 0,
+                "t": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "youth_bully-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_fitness",
+            "c": "fitness",
+            "name": "Fitness coach",
+            "emoji": "🏋️",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "fitness_extra",
+              "beat": 0
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [
+              "fitness_extra"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_x_barber",
+            "c": "other",
+            "name": "Barber",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "barber_cut-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 3597730143,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Liverpool Youth",
+          "lines": [
+            "📋 Joined Liverpool Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 2225241326,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 99.63,
+          "bricks": 103.69,
+          "cleats": 98.17,
+          "screens": 117.6,
+          "spark": 72.44
+        },
+        "hist": {
+          "ladder": [
+            100,
+            99.63
+          ],
+          "bricks": [
+            100,
+            103.69
+          ],
+          "cleats": [
+            100,
+            98.17
+          ],
+          "screens": [
+            100,
+            117.6
+          ],
+          "spark": [
+            100,
+            72.44
+          ]
+        },
+        "log": [],
+        "year": 2021,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "draws": []
+  },
+  "actual": {
+    "value": {
+      "playerName": "Story Role 119005",
+      "nationality": "England",
+      "position": "ST",
+      "era": "2020s",
+      "age": 17,
+      "potential": 88,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 75,
+      "physique": {
+        "heightCm": 183,
+        "weightKg": 78
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "youth_bully",
+        "barber_cut"
+      ],
+      "phoneInbox": [
+        {
+          "id": "youth_bully-2020",
+          "defId": "youth_bully",
+          "from": "Academy mate",
+          "emoji": "🥺",
+          "text": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Stand up for him",
+              "reply": "Sit with me at lunch. If they touch your stuff again they deal with me",
+              "karma": 10,
+              "morale": 2
+            },
+            {
+              "label": "Stay out of it",
+              "reply": "Rough mate. Keep your head down",
+              "karma": -6
+            }
+          ]
+        },
+        {
+          "id": "barber_cut-2020",
+          "defId": "barber_cut",
+          "from": "Barber",
+          "emoji": "💈",
+          "text": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Send it",
+              "reply": "Chair. Tomorrow. Do your worst",
+              "karma": 2,
+              "popularity": 4
+            },
+            {
+              "label": "Keep it classic",
+              "reply": "Usual trim mate, big game week",
+              "karma": 1
+            }
+          ]
+        }
+      ],
+      "currentClub": "Liverpool",
+      "currentClubCountry": "England",
+      "currentClubTier": 1,
+      "currentClubColor": "#C8102E",
+      "currentLeague": "Premier League",
+      "contractYearsLeft": 3,
+      "weeklyWage": 43361,
+      "marketValue": 9.7,
+      "pace": 81,
+      "shooting": 79,
+      "passing": 81,
+      "dribbling": 77,
+      "defending": 78,
+      "physical": 80,
+      "reflexes": 76,
+      "overall": 79,
+      "seasons": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Liverpool Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2021,
+          "age": 17,
+          "club": "Liverpool Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 23,
+          "goals": 5,
+          "assists": 2,
+          "cleanSheets": 0,
+          "yellowCards": 3,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 79)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Liverpool 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (3yr, €43k/wk)",
+        "🏠 One of our own! The Liverpool academy kid signs a first-team deal. The ultras already have a chant ready."
+      ],
+      "retired": false,
+      "phase": "playing",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 20,
+      "morale": 75,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "normal",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Liverpool",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 75,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_academy",
+            "c": "academy",
+            "name": "Academy kid",
+            "emoji": "🌱",
+            "lines": [
+              {
+                "w": 0,
+                "t": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "youth_bully-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_fitness",
+            "c": "fitness",
+            "name": "Fitness coach",
+            "emoji": "🏋️",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "fitness_extra",
+              "beat": 0
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [
+              "fitness_extra"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_x_barber",
+            "c": "other",
+            "name": "Barber",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "barber_cut-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 3597730143,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Liverpool Youth",
+          "lines": [
+            "📋 Joined Liverpool Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 2225241326,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 99.63,
+          "bricks": 103.69,
+          "cleats": 98.17,
+          "screens": 117.6,
+          "spark": 72.44
+        },
+        "hist": {
+          "ladder": [
+            100,
+            99.63
+          ],
+          "bricks": [
+            100,
+            103.69
+          ],
+          "cleats": [
+            100,
+            98.17
+          ],
+          "screens": [
+            100,
+            117.6
+          ],
+          "spark": [
+            100,
+            72.44
+          ]
+        },
+        "log": [],
+        "year": 2021,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "draws": []
+  }
+}

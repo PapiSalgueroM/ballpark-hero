@@ -1,0 +1,14 @@
+#!serial
+# Supplemental immutable-main residual comparison C only. No final-source1022 qualification credit.
+prepare: bash .rc/default-support.sh prepare
+simGmDealTableFixture: bash .rc/default-support.sh run simGmDealTableFixture.mjs
+simGmStaff: bash .rc/default-support.sh run simGmStaff.mjs
+simCreateClub: bash .rc/default-support.sh run simCreateClub.mjs
+simManagerWorldContinuity: bash .rc/default-support.sh run simManagerWorldContinuity.mjs
+simCareerLeagueSeasons: bash .rc/default-support.sh run simCareerLeagueSeasons.mjs
+simSoccerAgentReview: bash .rc/default-support.sh run simSoccerAgentReview.mjs
+simSoccerFarewell: bash .rc/default-support.sh run simSoccerFarewell.mjs
+simSoccerVeteranOffers: bash .rc/default-support.sh run simSoccerVeteranOffers.mjs
+simSoccerVeteranTalks: bash .rc/default-support.sh run simSoccerVeteranTalks.mjs
+simCareerStoryRole: bash .rc/default-support.sh run simCareerStoryRole.mjs
+finish: bash .rc/default-support.sh finish

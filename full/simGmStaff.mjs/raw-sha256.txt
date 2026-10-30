@@ -1,0 +1,2 @@
+66dcc93c356e89605971dec16146c41203e20aa5ba68f27d5243bf6b0ed3d2f2  /home/runner/work/_temp/rc-out/full/simGmStaff.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGmStaff.mjs/stderr.log

@@ -1,0 +1,2 @@
+821b52c0343198682052fe2957d9c370345f597e70b99ca202a0df43fef4dcef  /home/runner/work/_temp/rc-out/full/simCareerLeagueSeasons.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerLeagueSeasons.mjs/stderr.log

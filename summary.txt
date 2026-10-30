@@ -1,0 +1,12 @@
+prepare exit=0 67s | ordinary-build raw=0
+simGmDealTableFixture exit=1 2s | simGmDealTableFixture.mjs raw=1
+simGmStaff exit=1 3s | simGmStaff.mjs raw=1
+simCreateClub exit=1 10s | simCreateClub.mjs raw=1
+simManagerWorldContinuity exit=1 28s | simManagerWorldContinuity.mjs raw=1
+simCareerLeagueSeasons exit=0 18s | simCareerLeagueSeasons.mjs raw=0
+simSoccerAgentReview exit=0 10s | simSoccerAgentReview.mjs raw=0
+simSoccerFarewell exit=0 7s | simSoccerFarewell.mjs raw=0
+simSoccerVeteranOffers exit=0 802s | simSoccerVeteranOffers.mjs raw=0
+simSoccerVeteranTalks exit=0 63s | simSoccerVeteranTalks.mjs raw=0
+simCareerStoryRole exit=0 39s | simCareerStoryRole.mjs raw=0
+finish exit=1 23s | 

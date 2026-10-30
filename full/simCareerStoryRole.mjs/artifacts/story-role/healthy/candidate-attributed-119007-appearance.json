@@ -1,0 +1,440 @@
+{
+  "input": {
+    "playerName": "Story Role 119007",
+    "nationality": "England",
+    "position": "CM",
+    "era": "2020s",
+    "age": 17,
+    "potential": 88,
+    "potentialEarned": 0,
+    "eliteStreak": 0,
+    "startingOverall": 75,
+    "physique": {
+      "heightCm": 180,
+      "weightKg": 75
+    },
+    "attrShape": {},
+    "karma": 50,
+    "phoneUsedIds": [
+      "granny_scam",
+      "youth_bully"
+    ],
+    "phoneInbox": [
+      {
+        "id": "granny_scam-2020",
+        "defId": "granny_scam",
+        "from": "Unknown",
+        "emoji": "🎣",
+        "text": "CONGRATULATIONS! You won 2 MILLION. Just send account details plus a small release fee to claim.",
+        "year": 2020,
+        "choices": [
+          {
+            "label": "Report and warn fans",
+            "reply": "Posting this so nobody falls for it. Stay safe out there",
+            "karma": 7,
+            "popularity": 3
+          },
+          {
+            "label": "Delete it",
+            "reply": "",
+            "karma": 1
+          },
+          {
+            "label": "Reply as a joke and string them along",
+            "reply": "Amazing news!! My account number is 1-2-3-GET-A-JOB",
+            "karma": 2,
+            "popularity": 2
+          }
+        ]
+      },
+      {
+        "id": "youth_bully-2020",
+        "defId": "youth_bully",
+        "from": "Academy mate",
+        "emoji": "🥺",
+        "text": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+        "year": 2020,
+        "choices": [
+          {
+            "label": "Stand up for him",
+            "reply": "Sit with me at lunch. If they touch your stuff again they deal with me",
+            "karma": 10,
+            "morale": 2
+          },
+          {
+            "label": "Stay out of it",
+            "reply": "Rough mate. Keep your head down",
+            "karma": -6
+          }
+        ]
+      }
+    ],
+    "currentClub": "Liverpool",
+    "currentClubCountry": "England",
+    "currentClubTier": 1,
+    "currentClubColor": "#C8102E",
+    "currentLeague": "Premier League",
+    "contractYearsLeft": 3,
+    "weeklyWage": 26038,
+    "marketValue": 24.1,
+    "pace": 78,
+    "shooting": 79,
+    "passing": 80,
+    "dribbling": 79,
+    "defending": 77,
+    "physical": 80,
+    "reflexes": 77,
+    "overall": 79,
+    "seasons": [
+      {
+        "year": 2020,
+        "age": 16,
+        "club": "Liverpool Youth",
+        "clubCountry": "England",
+        "clubTier": 1,
+        "apps": 0,
+        "goals": 0,
+        "assists": 0,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2021,
+        "age": 17,
+        "club": "Liverpool Youth",
+        "clubCountry": "England",
+        "clubTier": 1,
+        "apps": 16,
+        "goals": 5,
+        "assists": 1,
+        "cleanSheets": 0,
+        "yellowCards": 2,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      }
+    ],
+    "events": [
+      "📈 Stats improved during youth development (OVR 79)",
+      "📩 Professional contract offers received!",
+      "✍️ Signed with Liverpool 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (3yr, €26k/wk)",
+      "🏠 One of our own! The Liverpool academy kid signs a first-team deal. The ultras already have a chant ready."
+    ],
+    "retired": false,
+    "phase": "playing",
+    "pendingOffers": [],
+    "pendingSummary": null,
+    "transferSituation": null,
+    "loan": null,
+    "pendingLoanOffers": null,
+    "pendingEvents": [],
+    "lastEventId": null,
+    "statBoostNextSeason": {},
+    "pendingNews": [],
+    "internationalCareer": false,
+    "sponsorDeal": null,
+    "totalEarnings": 0,
+    "popularity": 20,
+    "morale": 75,
+    "isLeader": false,
+    "hasRelationship": false,
+    "intStats": {
+      "caps": 0,
+      "goals": 0,
+      "assists": 0,
+      "tournaments": 0,
+      "worldCups": 0,
+      "continentals": 0,
+      "worldCupWins": 0,
+      "continentalWins": 0,
+      "isCaptain": false,
+      "isRetired": false,
+      "debutYear": null,
+      "debutAge": null,
+      "worldCupResults": [],
+      "squadSnubs": 0,
+      "failedQualifications": 0
+    },
+    "pendingWorldCup": null,
+    "pendingTournament": null,
+    "lastTournament": null,
+    "intlHistory": [],
+    "rival": null,
+    "rivalCreated": false,
+    "pendingRivalryEvent": null,
+    "lastRivalryEventId": null,
+    "rivalrySummary": null,
+    "netWorth": 0,
+    "lifestyleLevel": "Humble",
+    "lifestyleCostPerYear": 0.02,
+    "socialMediaFollowers": 0,
+    "sponsorshipIncome": 0,
+    "properties": [],
+    "investments": [],
+    "consecutiveDeficitYears": 0,
+    "agentFeesPaid": 0,
+    "family": {
+      "isMarried": false,
+      "marriedAge": null,
+      "children": 0,
+      "isDivorced": false,
+      "divorceAge": null
+    },
+    "purchasedItems": [],
+    "investmentHoldings": [],
+    "totalAssetValue": 0,
+    "customYearlyCosts": 0,
+    "awards": [],
+    "pendingBallonDor": null,
+    "lastUCLResult": null,
+    "legacy": null,
+    "postRetirementChoice": null,
+    "managerState": null,
+    "isFinalSeason": false,
+    "isPundit": false,
+    "punditEvents": [],
+    "primeType": "normal",
+    "socialMediaActionUsedThisSeason": false,
+    "socialMediaFocusBoost": false,
+    "pendingCoverAthleteEvent": false,
+    "coverAthleteAccepted": false,
+    "activeSponsorship": null,
+    "personality": null,
+    "agentId": null,
+    "lifeFlags": {},
+    "appearance": null,
+    "corruptionHeat": 0,
+    "dirtyMoney": 0,
+    "prisonSeasons": 0,
+    "academyClubName": "Liverpool",
+    "moralDilemmasTriggered": [],
+    "pendingMoralDilemma": null,
+    "pedSeasonsRemaining": 0,
+    "pedActive": false,
+    "matchFixBanned": 0,
+    "divingActive": false,
+    "integrityBonus": 0,
+    "pendingAppealResult": null,
+    "childEventsSeen": [],
+    "pregnancyAnnounced": false,
+    "punditState": null,
+    "ownerState": null,
+    "peakOverall": 75,
+    "retirementSuggested": false,
+    "phone": {
+      "threads": [
+        {
+          "id": "th_x_unknown",
+          "c": "other",
+          "name": "Unknown",
+          "emoji": "💬",
+          "lines": [
+            {
+              "w": 0,
+              "t": "CONGRATULATIONS! You won 2 MILLION. Just send account details plus a small release fee to claim.",
+              "y": 2020
+            }
+          ],
+          "rel": 50,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "granny_scam-2020"
+          },
+          "waiting": 2020,
+          "cold": 0,
+          "seen": [],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_grandad",
+          "c": "grandad",
+          "name": "Grandad",
+          "emoji": "🧓",
+          "lines": [
+            {
+              "w": 0,
+              "t": "In my day the ball was heavier and the pitch was mud from November. You lot play on a carpet.",
+              "y": 2020
+            }
+          ],
+          "rel": 50,
+          "pending": {
+            "kind": "convo",
+            "convo": "grandad_oldtimes",
+            "beat": 0
+          },
+          "waiting": 2020,
+          "cold": 0,
+          "seen": [
+            "grandad_oldtimes"
+          ],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_academy",
+          "c": "academy",
+          "name": "Academy kid",
+          "emoji": "🌱",
+          "lines": [
+            {
+              "w": 0,
+              "t": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+              "y": 2020
+            }
+          ],
+          "rel": 50,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "youth_bully-2020"
+          },
+          "waiting": 2020,
+          "cold": 0,
+          "seen": [],
+          "lastReplyYear": null
+        }
+      ],
+      "feed": [],
+      "world": null,
+      "clubs": {},
+      "rivalClub": null,
+      "seed": 734146376,
+      "offers": 0,
+      "perksTaken": 0
+    },
+    "frozenOut": 0,
+    "badSeasonStreak": 0,
+    "story": [
+      {
+        "year": 2020,
+        "age": 16,
+        "club": "Liverpool Youth",
+        "lines": [
+          "📋 Joined Liverpool Youth Academy aged 16"
+        ]
+      }
+    ],
+    "sponsorBonus": 0,
+    "money": {
+      "seed": 4186552568,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 102.11,
+        "bricks": 115.61,
+        "cleats": 91.8,
+        "screens": 99.41,
+        "spark": 95.99
+      },
+      "hist": {
+        "ladder": [
+          100,
+          102.11
+        ],
+        "bricks": [
+          100,
+          115.61
+        ],
+        "cleats": [
+          100,
+          91.8
+        ],
+        "screens": [
+          100,
+          99.41
+        ],
+        "spark": [
+          100,
+          95.99
+        ]
+      },
+      "log": [],
+      "year": 2021,
+      "age": 1,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    }
+  },
+  "expected": {
+    "value": {
+      "apps": 44,
+      "leagueApps": 30,
+      "injured": false,
+      "injuryWeeks": 0,
+      "injuryName": null,
+      "injurySevere": false
+    },
+    "draws": [
+      0.9430366442538798,
+      0.5554666616953909,
+      0.8520337610971183,
+      0.6364183754194528,
+      0.719089234014973,
+      0.9341613654978573
+    ]
+  },
+  "actual": {
+    "value": {
+      "apps": 44,
+      "leagueApps": 30,
+      "injured": false,
+      "injuryWeeks": 0,
+      "injuryName": null,
+      "injurySevere": false
+    },
+    "draws": [
+      0.9430366442538798,
+      0.5554666616953909,
+      0.8520337610971183,
+      0.6364183754194528,
+      0.719089234014973,
+      0.9341613654978573
+    ]
+  }
+}

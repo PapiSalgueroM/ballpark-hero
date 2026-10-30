@@ -1,0 +1,3 @@
+2323 /home/runner/work/_temp/rc-out/full/simGmDealTableFixture.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGmDealTableFixture.mjs/stderr.log
+2323 total

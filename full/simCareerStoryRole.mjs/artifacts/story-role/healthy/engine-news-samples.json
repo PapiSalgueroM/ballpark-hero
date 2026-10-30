@@ -1,0 +1,2066 @@
+[
+  {
+    "seed": 119901,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Nutmeg",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.54364118934609,
+        0.511361874639988
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Nutmeg",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.54364118934609,
+        0.511361874639988
+      ]
+    }
+  },
+  {
+    "seed": 119902,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Sport",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.09664793405681849,
+        0.013171896571293473
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Sport",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.09664793405681849,
+        0.013171896571293473
+      ]
+    }
+  },
+  {
+    "seed": 119903,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Sunday Volley",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.7779719477985054,
+        0.815890240482986
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Sunday Volley",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.7779719477985054,
+        0.815890240482986
+      ]
+    }
+  },
+  {
+    "seed": 119904,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Nutmeg",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.44289422570727766,
+        0.5728787935804576
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Nutmeg",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.44289422570727766,
+        0.5728787935804576
+      ]
+    }
+  },
+  {
+    "seed": 119905,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.08665822469629347,
+        0.699079972691834
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.08665822469629347,
+        0.699079972691834
+      ]
+    }
+  },
+  {
+    "seed": 119906,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.16606982867233455,
+        0.32003326062113047
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.16606982867233455,
+        0.32003326062113047
+      ]
+    }
+  },
+  {
+    "seed": 119907,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Nutmeg",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.4454412932973355,
+        0.5999826060142368
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Nutmeg",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.4454412932973355,
+        0.5999826060142368
+      ]
+    }
+  },
+  {
+    "seed": 119908,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Tackle Weekly",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.05288211884908378,
+        0.7368228728882968
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Tackle Weekly",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.05288211884908378,
+        0.7368228728882968
+      ]
+    }
+  },
+  {
+    "seed": 119909,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.5336736540775746,
+        0.38466438581235707
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.5336736540775746,
+        0.38466438581235707
+      ]
+    }
+  },
+  {
+    "seed": 119910,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Sport",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.9999138081911951,
+        0.016085964860394597
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Sport",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.9999138081911951,
+        0.016085964860394597
+      ]
+    }
+  },
+  {
+    "seed": 119911,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.673708338290453,
+        0.6901660189032555
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.673708338290453,
+        0.6901660189032555
+      ]
+    }
+  },
+  {
+    "seed": 119912,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Global Game",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.9009513049386442,
+        0.24240095494315028
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Global Game",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.9009513049386442,
+        0.24240095494315028
+      ]
+    }
+  },
+  {
+    "seed": 119913,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Tackle Weekly",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.6017132718116045,
+        0.7542253106366843
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Tackle Weekly",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.6017132718116045,
+        0.7542253106366843
+      ]
+    }
+  },
+  {
+    "seed": 119914,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.022606634069234133,
+        0.3244384441059083
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.022606634069234133,
+        0.3244384441059083
+      ]
+    }
+  },
+  {
+    "seed": 119915,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "90+4 Magazine",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.7509023367892951,
+        0.9842661309521645
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "90+4 Magazine",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.7509023367892951,
+        0.9842661309521645
+      ]
+    }
+  },
+  {
+    "seed": 119916,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.46503982855938375,
+        0.6282828045077622
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.46503982855938375,
+        0.6282828045077622
+      ]
+    }
+  },
+  {
+    "seed": 119917,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Football Weekly",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.3385644988156855,
+        0.18794652074575424
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Football Weekly",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.3385644988156855,
+        0.18794652074575424
+      ]
+    }
+  },
+  {
+    "seed": 119918,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Football Weekly",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.3284538518637419,
+        0.1464740033261478
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Football Weekly",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.3284538518637419,
+        0.1464740033261478
+      ]
+    }
+  },
+  {
+    "seed": 119919,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Sport",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.9969042793381959,
+        0.08382254303433001
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Sport",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.9969042793381959,
+        0.08382254303433001
+      ]
+    }
+  },
+  {
+    "seed": 119920,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.2804695798549801,
+        0.6172636272385716
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.2804695798549801,
+        0.6172636272385716
+      ]
+    }
+  },
+  {
+    "seed": 119921,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.7490812577307224,
+        0.3227743059396744
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.7490812577307224,
+        0.3227743059396744
+      ]
+    }
+  },
+  {
+    "seed": 119922,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Beautiful Game Report",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.41368359979242086,
+        0.4752600505016744
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Beautiful Game Report",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.41368359979242086,
+        0.4752600505016744
+      ]
+    }
+  },
+  {
+    "seed": 119923,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Nutmeg",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.6371821626089513,
+        0.592312577413395
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Nutmeg",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.6371821626089513,
+        0.592312577413395
+      ]
+    }
+  },
+  {
+    "seed": 119924,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.5288680756930262,
+        0.6327388132922351
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.5288680756930262,
+        0.6327388132922351
+      ]
+    }
+  },
+  {
+    "seed": 119925,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.06326331780292094,
+        0.37301678373478353
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.06326331780292094,
+        0.37301678373478353
+      ]
+    }
+  },
+  {
+    "seed": 119926,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.49537569540552795,
+        0.6657511696685106
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.49537569540552795,
+        0.6657511696685106
+      ]
+    }
+  },
+  {
+    "seed": 119927,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Football Weekly",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.6024044863879681,
+        0.19636772712692618
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Football Weekly",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.6024044863879681,
+        0.19636772712692618
+      ]
+    }
+  },
+  {
+    "seed": 119928,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Tackle Weekly",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.8325119619257748,
+        0.7628608078230172
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Tackle Weekly",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.8325119619257748,
+        0.7628608078230172
+      ]
+    }
+  },
+  {
+    "seed": 119929,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "90+4 Magazine",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.7718113632872701,
+        0.9328891572076827
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "90+4 Magazine",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.7718113632872701,
+        0.9328891572076827
+      ]
+    }
+  },
+  {
+    "seed": 119930,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.44952717353589833,
+        0.611626174300909
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.44952717353589833,
+        0.611626174300909
+      ]
+    }
+  },
+  {
+    "seed": 119931,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Sport",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.6255593767855316,
+        0.06316850171424448
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Sport",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.6255593767855316,
+        0.06316850171424448
+      ]
+    }
+  },
+  {
+    "seed": 119932,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Global Game",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.35610540793277323,
+        0.22130029159598053
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Global Game",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.35610540793277323,
+        0.22130029159598053
+      ]
+    }
+  },
+  {
+    "seed": 119933,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Sport",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.2995850641746074,
+        0.08139369240961969
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Sport",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.2995850641746074,
+        0.08139369240961969
+      ]
+    }
+  },
+  {
+    "seed": 119934,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Football Weekly",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.9377319291234016,
+        0.14043936785310507
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Football Weekly",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.9377319291234016,
+        0.14043936785310507
+      ]
+    }
+  },
+  {
+    "seed": 119935,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.27016271208412945,
+        0.31236828956753016
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.27016271208412945,
+        0.31236828956753016
+      ]
+    }
+  },
+  {
+    "seed": 119936,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Tackle Weekly",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.06757687171921134,
+        0.7933649469632655
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Tackle Weekly",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.06757687171921134,
+        0.7933649469632655
+      ]
+    }
+  },
+  {
+    "seed": 119937,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Global Game",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.9285645138006657,
+        0.29266438353806734
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Global Game",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.9285645138006657,
+        0.29266438353806734
+      ]
+    }
+  },
+  {
+    "seed": 119938,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Sunday Volley",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.6778768228832632,
+        0.8237059896346182
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Sunday Volley",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.6778768228832632,
+        0.8237059896346182
+      ]
+    }
+  },
+  {
+    "seed": 119939,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Global Game",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.3368776517454535,
+        0.21955250622704625
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Global Game",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.3368776517454535,
+        0.21955250622704625
+      ]
+    }
+  },
+  {
+    "seed": 119940,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Beautiful Game Report",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.44838897115550935,
+        0.44542123074643314
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Beautiful Game Report",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.44838897115550935,
+        0.44542123074643314
+      ]
+    }
+  },
+  {
+    "seed": 119941,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Sunday Volley",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.10691715124994516,
+        0.8657406016718596
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Sunday Volley",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.10691715124994516,
+        0.8657406016718596
+      ]
+    }
+  },
+  {
+    "seed": 119942,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Beautiful Game Report",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.5776329408399761,
+        0.4563482445664704
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Beautiful Game Report",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.5776329408399761,
+        0.4563482445664704
+      ]
+    }
+  },
+  {
+    "seed": 119943,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Sunday Volley",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.24528293800540268,
+        0.8244986294303089
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Sunday Volley",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.24528293800540268,
+        0.8244986294303089
+      ]
+    }
+  },
+  {
+    "seed": 119944,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Global Game",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.3214225168339908,
+        0.26460066833533347
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Global Game",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.3214225168339908,
+        0.26460066833533347
+      ]
+    }
+  },
+  {
+    "seed": 119945,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.17627092660404742,
+        0.6666803704574704
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "El Golazo",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.0 rating across 30 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "draws": [
+        0.17627092660404742,
+        0.6666803704574704
+      ]
+    }
+  },
+  {
+    "seed": 119946,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Football Weekly",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.6910850971471518,
+        0.15385915618389845
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Football Weekly",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.6910850971471518,
+        0.15385915618389845
+      ]
+    }
+  },
+  {
+    "seed": 119947,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Nutmeg",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.8180636605247855,
+        0.579441127134487
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Daily Nutmeg",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.8180636605247855,
+        0.579441127134487
+      ]
+    }
+  },
+  {
+    "seed": 119948,
+    "actual": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Beautiful Game Report",
+          "type": "milestone",
+          "headline": "World ere Reaches 100 Senior Club Goals",
+          "body": "2029/30: World ere scored 12 club goals, taking their saved senior club tally from 95 to 107."
+        }
+      ],
+      "draws": [
+        0.727336295414716,
+        0.42035089572891593
+      ]
+    },
+    "expected": {
+      "value": [
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "12 goals and 4 assists in 30 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "The Beautiful Game Report",
+          "type": "positive",
+          "headline": "World ere Silences Critics With Stunning Performance",
+          "body": "World ere put in an outstanding display for Twente this season, netting 12 goals and reminding the world of their immense talent. Pundits are running out of superlatives."
+        }
+      ],
+      "draws": [
+        0.727336295414716,
+        0.42035089572891593
+      ]
+    }
+  }
+]

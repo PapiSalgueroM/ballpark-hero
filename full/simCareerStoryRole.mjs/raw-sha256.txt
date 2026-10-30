@@ -1,0 +1,2 @@
+349a33b43844459e60dd23985ef0f983ec05d86925b024e41bbe987c9977296f  /home/runner/work/_temp/rc-out/full/simCareerStoryRole.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerStoryRole.mjs/stderr.log

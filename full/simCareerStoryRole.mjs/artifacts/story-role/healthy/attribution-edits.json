@@ -1,0 +1,343 @@
+{
+  "edits": [
+    {
+      "id": "milestone-empty-return",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "e29bcb94cc5bb4732a6246caa09769c7f872956cf3a5c8cfc9c7b00f7a9801f3",
+      "afterSha256": "b502c6bdf218014d0c1face3e2b2e7f0cef5e2355bbb7d171be43d91a7b7fd00",
+      "effective": true
+    },
+    {
+      "id": "milestone-final-return",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "b502c6bdf218014d0c1face3e2b2e7f0cef5e2355bbb7d171be43d91a7b7fd00",
+      "afterSha256": "9d13b41077ec53da99725aa3fd59e414b191ed2d30b4870e69b96e221092808d",
+      "effective": true
+    },
+    {
+      "id": "hundred-goal-slot",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "9d13b41077ec53da99725aa3fd59e414b191ed2d30b4870e69b96e221092808d",
+      "afterSha256": "1eab572d5b02d8a57fd2aa53eb9f5742eb2cca7cdd02f80f68dd0a0acd84fd99",
+      "effective": true
+    },
+    {
+      "id": "exact-goal-slot",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "1eab572d5b02d8a57fd2aa53eb9f5742eb2cca7cdd02f80f68dd0a0acd84fd99",
+      "afterSha256": "df2410cd90d224f17dee70233bbc9598d1183c772cf44a27099741fdb03fe5ec",
+      "effective": true
+    },
+    {
+      "id": "role-consequence",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "df2410cd90d224f17dee70233bbc9598d1183c772cf44a27099741fdb03fe5ec",
+      "afterSha256": "eddb16101aefc226efb7bc6bf3aad0b1f5c5c7a1437ad3e41f8faf15de3d6675",
+      "effective": true
+    },
+    {
+      "id": "role-event-line",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "eddb16101aefc226efb7bc6bf3aad0b1f5c5c7a1437ad3e41f8faf15de3d6675",
+      "afterSha256": "c32500e405ed5073674a84c3882328a3e236c972d8b9abf305af0b18664ffbfe",
+      "effective": true
+    },
+    {
+      "id": "next-ten-wheel",
+      "file": "src/lib/careerChanceWheel.ts",
+      "beforeSha256": "c59d577262eebbe8586b769500ab0b9b386feb435d7b189f2476d25330cdaef5",
+      "afterSha256": "1ffba72b208c06b484d818a893233f42dfac6c2c30dcec27e0b40dfdbd404590",
+      "effective": true
+    },
+    {
+      "id": "next-ten-opening",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "c32500e405ed5073674a84c3882328a3e236c972d8b9abf305af0b18664ffbfe",
+      "afterSha256": "4d3753d8017f96e7ecfbf1b21d024d6315de293172c4d23746559fca7e24e549",
+      "effective": true
+    },
+    {
+      "id": "veteran-pay-offers",
+      "file": "src/lib/soccerCareerContracts.ts",
+      "beforeSha256": "899c15c4990a8ca4e64775bd0dce33443b62e5a554711bc252741ae2ce16747a",
+      "afterSha256": "69100cdce19215572622bc4cc4705abfe225ddb43cd7de8164258bd4cea53c6d",
+      "effective": true
+    },
+    {
+      "id": "veteran-pay-talks",
+      "file": "src/lib/soccerCareerContracts.ts",
+      "beforeSha256": "69100cdce19215572622bc4cc4705abfe225ddb43cd7de8164258bd4cea53c6d",
+      "afterSha256": "d447f15a24352c29e0310811643b1e6609f0fc1ae24d374a926e789ffe11be1c",
+      "effective": true
+    },
+    {
+      "id": "award-generations-01",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "4d3753d8017f96e7ecfbf1b21d024d6315de293172c4d23746559fca7e24e549",
+      "afterSha256": "fe16ee6f1d2fd349aba2dbc108106bb0f17ac692d709baeae251059bece750e8",
+      "effective": true
+    },
+    {
+      "id": "award-generations-02",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "fe16ee6f1d2fd349aba2dbc108106bb0f17ac692d709baeae251059bece750e8",
+      "afterSha256": "7fa0e636d43ee9d29f6ad73221abcf91617f1412724e114e28eb4a0805e9b0ff",
+      "effective": true
+    },
+    {
+      "id": "award-generations-03",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "7fa0e636d43ee9d29f6ad73221abcf91617f1412724e114e28eb4a0805e9b0ff",
+      "afterSha256": "3ed9be7f74097800544bcf95c7e096080c9db604698fa9a473727f9f438fac56",
+      "effective": true
+    },
+    {
+      "id": "award-generations-04",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "3ed9be7f74097800544bcf95c7e096080c9db604698fa9a473727f9f438fac56",
+      "afterSha256": "362383415c0d377d08c15ec944d85e0f18bee5af2b6c01c4689af73cf36f3990",
+      "effective": true
+    },
+    {
+      "id": "award-generations-05",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "362383415c0d377d08c15ec944d85e0f18bee5af2b6c01c4689af73cf36f3990",
+      "afterSha256": "2a79b8e8fe282226b1d585a349fb2a64d82236e41af3dc46f9a86f86ee4f9330",
+      "effective": true
+    },
+    {
+      "id": "award-generations-06",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "2a79b8e8fe282226b1d585a349fb2a64d82236e41af3dc46f9a86f86ee4f9330",
+      "afterSha256": "bd971edac3b25e56a308f2cfb9a54f67ea2d9730f90fe1b185cc7acf3ec5a86d",
+      "effective": true
+    },
+    {
+      "id": "award-generations-07",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "bd971edac3b25e56a308f2cfb9a54f67ea2d9730f90fe1b185cc7acf3ec5a86d",
+      "afterSha256": "eda7769fadbffa3124a8b9f153e95be1dc6dd6a2623b92dd6b19804455d3dd51",
+      "effective": true
+    },
+    {
+      "id": "award-generations-08",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "eda7769fadbffa3124a8b9f153e95be1dc6dd6a2623b92dd6b19804455d3dd51",
+      "afterSha256": "3a1b3806c50839c9eeb392121d98772e6d144881442729a67828a324bfd91cd0",
+      "effective": true
+    },
+    {
+      "id": "award-generations-09",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "3a1b3806c50839c9eeb392121d98772e6d144881442729a67828a324bfd91cd0",
+      "afterSha256": "af85bc7cb1205852f559538c10313c1f8885c97e00462acd33daf66da4ac4cfc",
+      "effective": true
+    },
+    {
+      "id": "award-generations-10",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "af85bc7cb1205852f559538c10313c1f8885c97e00462acd33daf66da4ac4cfc",
+      "afterSha256": "a132d18a41d63ace99ee1c58b619d736645302c10eb5b0b326bdba74766ce649",
+      "effective": true
+    },
+    {
+      "id": "award-generations-11",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "a132d18a41d63ace99ee1c58b619d736645302c10eb5b0b326bdba74766ce649",
+      "afterSha256": "aa0674bf9aa3aa0e277ada0aef5d0c9468ab29b8a7ebee31b0c4fa676f31bf36",
+      "effective": true
+    },
+    {
+      "id": "award-generations-12",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "aa0674bf9aa3aa0e277ada0aef5d0c9468ab29b8a7ebee31b0c4fa676f31bf36",
+      "afterSha256": "d1a2904fc5e1ad8c85a7d719e3d6e554d1148866c7a6eb93fb9d1aa7206cd166",
+      "effective": true
+    },
+    {
+      "id": "award-generations-13",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "d1a2904fc5e1ad8c85a7d719e3d6e554d1148866c7a6eb93fb9d1aa7206cd166",
+      "afterSha256": "d2d9e2599feaf6bc638d28eddb6f536e115a253f2868a9878f2c69f0e8a94bfa",
+      "effective": true
+    },
+    {
+      "id": "award-generations-14",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "d2d9e2599feaf6bc638d28eddb6f536e115a253f2868a9878f2c69f0e8a94bfa",
+      "afterSha256": "a55dae0a763a61cbf2da2ed35911965fc251aa7df04fdcfe32404a7d87d3f2af",
+      "effective": true
+    }
+  ],
+  "sharedFaultInverses": [],
+  "controlledEdits": [
+    {
+      "id": "milestone-empty-return",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "e29bcb94cc5bb4732a6246caa09769c7f872956cf3a5c8cfc9c7b00f7a9801f3",
+      "afterSha256": "b502c6bdf218014d0c1face3e2b2e7f0cef5e2355bbb7d171be43d91a7b7fd00",
+      "effective": true
+    },
+    {
+      "id": "milestone-final-return",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "b502c6bdf218014d0c1face3e2b2e7f0cef5e2355bbb7d171be43d91a7b7fd00",
+      "afterSha256": "9d13b41077ec53da99725aa3fd59e414b191ed2d30b4870e69b96e221092808d",
+      "effective": true
+    },
+    {
+      "id": "hundred-goal-slot",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "9d13b41077ec53da99725aa3fd59e414b191ed2d30b4870e69b96e221092808d",
+      "afterSha256": "1eab572d5b02d8a57fd2aa53eb9f5742eb2cca7cdd02f80f68dd0a0acd84fd99",
+      "effective": true
+    },
+    {
+      "id": "exact-goal-slot",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "1eab572d5b02d8a57fd2aa53eb9f5742eb2cca7cdd02f80f68dd0a0acd84fd99",
+      "afterSha256": "df2410cd90d224f17dee70233bbc9598d1183c772cf44a27099741fdb03fe5ec",
+      "effective": true
+    },
+    {
+      "id": "role-consequence",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "df2410cd90d224f17dee70233bbc9598d1183c772cf44a27099741fdb03fe5ec",
+      "afterSha256": "eddb16101aefc226efb7bc6bf3aad0b1f5c5c7a1437ad3e41f8faf15de3d6675",
+      "effective": true
+    },
+    {
+      "id": "role-event-line",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "eddb16101aefc226efb7bc6bf3aad0b1f5c5c7a1437ad3e41f8faf15de3d6675",
+      "afterSha256": "c32500e405ed5073674a84c3882328a3e236c972d8b9abf305af0b18664ffbfe",
+      "effective": true
+    },
+    {
+      "id": "next-ten-wheel",
+      "file": "src/lib/careerChanceWheel.ts",
+      "beforeSha256": "c59d577262eebbe8586b769500ab0b9b386feb435d7b189f2476d25330cdaef5",
+      "afterSha256": "1ffba72b208c06b484d818a893233f42dfac6c2c30dcec27e0b40dfdbd404590",
+      "effective": true
+    },
+    {
+      "id": "next-ten-opening",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "c32500e405ed5073674a84c3882328a3e236c972d8b9abf305af0b18664ffbfe",
+      "afterSha256": "4d3753d8017f96e7ecfbf1b21d024d6315de293172c4d23746559fca7e24e549",
+      "effective": true
+    },
+    {
+      "id": "veteran-pay-offers",
+      "file": "src/lib/soccerCareerContracts.ts",
+      "beforeSha256": "899c15c4990a8ca4e64775bd0dce33443b62e5a554711bc252741ae2ce16747a",
+      "afterSha256": "69100cdce19215572622bc4cc4705abfe225ddb43cd7de8164258bd4cea53c6d",
+      "effective": true
+    },
+    {
+      "id": "veteran-pay-talks",
+      "file": "src/lib/soccerCareerContracts.ts",
+      "beforeSha256": "69100cdce19215572622bc4cc4705abfe225ddb43cd7de8164258bd4cea53c6d",
+      "afterSha256": "d447f15a24352c29e0310811643b1e6609f0fc1ae24d374a926e789ffe11be1c",
+      "effective": true
+    },
+    {
+      "id": "award-generations-01",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "4d3753d8017f96e7ecfbf1b21d024d6315de293172c4d23746559fca7e24e549",
+      "afterSha256": "fe16ee6f1d2fd349aba2dbc108106bb0f17ac692d709baeae251059bece750e8",
+      "effective": true
+    },
+    {
+      "id": "award-generations-02",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "fe16ee6f1d2fd349aba2dbc108106bb0f17ac692d709baeae251059bece750e8",
+      "afterSha256": "7fa0e636d43ee9d29f6ad73221abcf91617f1412724e114e28eb4a0805e9b0ff",
+      "effective": true
+    },
+    {
+      "id": "award-generations-03",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "7fa0e636d43ee9d29f6ad73221abcf91617f1412724e114e28eb4a0805e9b0ff",
+      "afterSha256": "3ed9be7f74097800544bcf95c7e096080c9db604698fa9a473727f9f438fac56",
+      "effective": true
+    },
+    {
+      "id": "award-generations-04",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "3ed9be7f74097800544bcf95c7e096080c9db604698fa9a473727f9f438fac56",
+      "afterSha256": "362383415c0d377d08c15ec944d85e0f18bee5af2b6c01c4689af73cf36f3990",
+      "effective": true
+    },
+    {
+      "id": "award-generations-05",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "362383415c0d377d08c15ec944d85e0f18bee5af2b6c01c4689af73cf36f3990",
+      "afterSha256": "2a79b8e8fe282226b1d585a349fb2a64d82236e41af3dc46f9a86f86ee4f9330",
+      "effective": true
+    },
+    {
+      "id": "award-generations-06",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "2a79b8e8fe282226b1d585a349fb2a64d82236e41af3dc46f9a86f86ee4f9330",
+      "afterSha256": "bd971edac3b25e56a308f2cfb9a54f67ea2d9730f90fe1b185cc7acf3ec5a86d",
+      "effective": true
+    },
+    {
+      "id": "award-generations-07",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "bd971edac3b25e56a308f2cfb9a54f67ea2d9730f90fe1b185cc7acf3ec5a86d",
+      "afterSha256": "eda7769fadbffa3124a8b9f153e95be1dc6dd6a2623b92dd6b19804455d3dd51",
+      "effective": true
+    },
+    {
+      "id": "award-generations-08",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "eda7769fadbffa3124a8b9f153e95be1dc6dd6a2623b92dd6b19804455d3dd51",
+      "afterSha256": "3a1b3806c50839c9eeb392121d98772e6d144881442729a67828a324bfd91cd0",
+      "effective": true
+    },
+    {
+      "id": "award-generations-09",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "3a1b3806c50839c9eeb392121d98772e6d144881442729a67828a324bfd91cd0",
+      "afterSha256": "af85bc7cb1205852f559538c10313c1f8885c97e00462acd33daf66da4ac4cfc",
+      "effective": true
+    },
+    {
+      "id": "award-generations-10",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "af85bc7cb1205852f559538c10313c1f8885c97e00462acd33daf66da4ac4cfc",
+      "afterSha256": "a132d18a41d63ace99ee1c58b619d736645302c10eb5b0b326bdba74766ce649",
+      "effective": true
+    },
+    {
+      "id": "award-generations-11",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "a132d18a41d63ace99ee1c58b619d736645302c10eb5b0b326bdba74766ce649",
+      "afterSha256": "aa0674bf9aa3aa0e277ada0aef5d0c9468ab29b8a7ebee31b0c4fa676f31bf36",
+      "effective": true
+    },
+    {
+      "id": "award-generations-12",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "aa0674bf9aa3aa0e277ada0aef5d0c9468ab29b8a7ebee31b0c4fa676f31bf36",
+      "afterSha256": "d1a2904fc5e1ad8c85a7d719e3d6e554d1148866c7a6eb93fb9d1aa7206cd166",
+      "effective": true
+    },
+    {
+      "id": "award-generations-13",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "d1a2904fc5e1ad8c85a7d719e3d6e554d1148866c7a6eb93fb9d1aa7206cd166",
+      "afterSha256": "d2d9e2599feaf6bc638d28eddb6f536e115a253f2868a9878f2c69f0e8a94bfa",
+      "effective": true
+    },
+    {
+      "id": "award-generations-14",
+      "file": "src/lib/soccerCareerEngine.ts",
+      "beforeSha256": "d2d9e2599feaf6bc638d28eddb6f536e115a253f2868a9878f2c69f0e8a94bfa",
+      "afterSha256": "a55dae0a763a61cbf2da2ed35911965fc251aa7df04fdcfe32404a7d87d3f2af",
+      "effective": true
+    }
+  ]
+}

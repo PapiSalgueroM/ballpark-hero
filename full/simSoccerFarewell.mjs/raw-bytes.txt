@@ -1,0 +1,3 @@
+623 /home/runner/work/_temp/rc-out/full/simSoccerFarewell.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerFarewell.mjs/stderr.log
+623 total
