@@ -1,0 +1,13 @@
+vitest exit=0 14s |    Duration  12.35s (transform 4.31s, setup 826ms, collect 11.89s, tests 13.78s, environment 3.81s, prepare 1.45s)
+c-noarchive exit=1 63s | simCmPlayerCard: control noarchive FIRED, 395 failures in section archive (398 in all) (63s)
+tsc exit=0 112s | 
+cards-default exit=0 129s | simCmPlayerCard: all green, 10261 checks (129s)
+simCmLeagueRules exit=0 86s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simManagerAppealIsolation exit=0 61s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simNoRivalNames exit=0 25s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+size-d exit=0 104s | simClubManagerSaveSize: all sections green
+simHarnessAnchors exit=0 70s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simSaveFence exit=0 56s | simSaveFence: all green (tabs, source, fleet)
+simCmLeagueBook exit=0 95s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (95s)
