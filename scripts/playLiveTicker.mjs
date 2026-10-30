@@ -65,6 +65,19 @@ let failures = 0;
 const say = (ok, what) => { console.log(`  ${ok ? 'PASS ' : 'FAIL '} ${what}`); if (!ok) failures += 1; };
 
 const BAR = '[aria-label="Live scores ticker"]';
+
+/* Supplemental passive pointer evidence only. It cannot change original failures. */
+let tickerProbeSequence = 0;
+async function recordTickerPointer(page, phase, point = null, extra = null) {
+  if (!process.env.RC_OUT || !path.isAbsolute(process.env.RC_OUT)) throw new Error('Ticker passive probe needs the existing absolute RC_OUT');
+  const observation = await page.evaluate(({ selector, phase, point }) => {
+    const describe = el => el ? { tag: el.tagName, id: el.id, role: el.getAttribute('role'), label: el.getAttribute('aria-label') } : null;
+    const bar = document.querySelector(selector), r = bar?.getBoundingClientRect();
+    return { phase, point, viewport: { width: innerWidth, height: innerHeight }, scrollY, bar: r ? { x: r.x, y: r.y, width: r.width, height: r.height, top: r.top, bottom: r.bottom } : null, hover: !!bar?.matches(':hover'), hits: point ? document.elementsFromPoint(point.x, point.y).map(describe) : null, pointerEvents: window.__tickerPassivePointerEvents ?? [] };
+  }, { selector: BAR, phase, point });
+  fs.writeFileSync(path.join(process.env.RC_OUT, `ticker-passive-${String(++tickerProbeSequence).padStart(5, '0')}.json`), JSON.stringify({ status: 'UNQUALIFIED_PASSIVE_DIAGNOSTIC_ONLY', originalFailures: failures, extra, observation }, null, 2), { flag: 'wx' });
+}
+
 const today = new Date();
 const at = (h, m = 0) => { const d = new Date(today); d.setHours(h, m, 0, 0); return d.toISOString(); };
 /* the poller's own stamp: fresh, so freshness is judged against a write that just happened */
@@ -339,6 +352,15 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
       timezoneId: 'America/New_York',
     });
     const p5 = await c5.newPage();
+
+    await p5.addInitScript(() => {
+      window.__tickerPassivePointerEvents = [];
+      for (const type of ['pointerenter', 'pointermove', 'pointerleave']) document.addEventListener(type, event => {
+        const target = event.target instanceof Element ? event.target : null;
+        const bar = document.querySelector('[aria-label="Live scores ticker"]');
+        window.__tickerPassivePointerEvents.push({ type: event.type, pointerType: event.pointerType, x: event.clientX, y: event.clientY, trusted: event.isTrusted, at: performance.now(), target: target ? { tag: target.tagName, id: target.id, role: target.getAttribute('role'), label: target.getAttribute('aria-label') } : null, targetInBar: !!target && !!bar?.contains(target), hit: document.elementFromPoint(event.clientX, event.clientY)?.tagName ?? null });
+      }, { capture: true, passive: true });
+    });
     await p5.route('**://*.supabase.co/**', r => r.abort());
     await p5.route('**/rest/v1/live_scores*', r => r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(fat) }));
     await p5.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
@@ -350,6 +372,8 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
     /* the brush that froze every phone. The tap lands on the LIVE chip, the
        one part of the strip that is not a link, because every score card
        navigates to its hub and a navigated harness measures nothing. */
+    const passiveChipBox = await p5.locator(`${BAR} [data-live-chip]`).boundingBox();
+    await recordTickerPointer(p5, 'before-original-tap', passiveChipBox ? { x: passiveChipBox.x + passiveChipBox.width / 2, y: passiveChipBox.y + passiveChipBox.height / 2 } : null);
     await p5.tap(`${BAR} [data-live-chip]`).catch(() => {});
     const afterTap = await p5.evaluate(async (sel) => {
       const vp = document.querySelector(`${sel} [aria-live="off"]`) || document.querySelector(`${sel} .flex-1.overflow-hidden`);
@@ -385,6 +409,7 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
     /* Playwright's page.mouse sends true mouse-pointer input even in a touch
        context, which is exactly the discrimination being tested. */
     const box = await p5.locator(BAR).boundingBox();
+    await recordTickerPointer(p5, 'before-original-direct-mouse-center', { x: box.x + box.width / 2, y: box.y + box.height / 2 });
     await p5.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await p5.waitForTimeout(600);
     const mouseParked = await p5.evaluate(async (sel) => {
@@ -395,6 +420,31 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
       return { s0, s1: vp.scrollLeft };
     }, BAR);
     say(Math.abs(mouseParked.s1 - mouseParked.s0) < 2, `a real mouse hover still parks it, so the detector reads both states (${mouseParked.s0.toFixed(0)} to ${mouseParked.s1.toFixed(0)}px over 2.5s)`);
+
+    const originalPhoneFailures = failures;
+    await recordTickerPointer(p5, 'after-original-mouse-assertion', { x: box.x + box.width / 2, y: box.y + box.height / 2 }, { originalMouseParked: mouseParked });
+    const outsideWitness = await p5.evaluate(sel => {
+      const r = document.querySelector(sel).getBoundingClientRect();
+      const x = Math.min(innerWidth - 1, Math.max(1, r.x + r.width / 2));
+      const y = r.bottom + 32 < innerHeight ? r.bottom + 32 : Math.max(1, r.top - 32);
+      return { x, y, geometricallyOutside: y < r.top || y > r.bottom };
+    }, BAR);
+    if (outsideWitness.geometricallyOutside) {
+      await p5.mouse.move(outsideWitness.x, outsideWitness.y);
+      await recordTickerPointer(p5, 'supplemental-outside', outsideWitness);
+      await p5.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await p5.waitForTimeout(600);
+      const supplementalParked = await p5.evaluate(async (sel) => {
+        const strip = document.querySelector(sel);
+        const vp = strip.querySelector('[aria-live="off"]') || strip.querySelector('.flex-1.overflow-hidden');
+        const s0 = vp.scrollLeft;
+        await new Promise(r => setTimeout(r, 2500));
+        return { s0, s1: vp.scrollLeft };
+      }, BAR);
+      await recordTickerPointer(p5, 'supplemental-outside-then-inside', { x: box.x + box.width / 2, y: box.y + box.height / 2 }, { outsideWitness, supplementalParked, originalPhoneFailures, currentFailures: failures });
+    } else {
+      await recordTickerPointer(p5, 'supplemental-no-valid-outside-point', null, { outsideWitness, originalPhoneFailures });
+    }
     await c5.close();
   }
 }

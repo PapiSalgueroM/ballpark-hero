@@ -305,6 +305,26 @@ if (SECTIONS.has('A')) {
   if (sackedOn.length === SEASON2_SEEDS.length) fail('A', `${s.id}: the board sacked him on every seed (${sackedOn.join(', ')}), so the season 2 landing went unmeasured`);
 }
 
+
+/* Supplemental passive geometry only. Original actions and assertions remain authoritative. */
+let hubProbeSequence = 0;
+async function recordHubGeometry(page, phase, point = null, context = null) {
+  const geometry = await page.evaluate(({ phase, point, context }) => {
+    const describe = el => el ? { tag: el.tagName, id: el.id, testid: el.getAttribute('data-testid'), role: el.getAttribute('role'), label: el.getAttribute('aria-label') } : null;
+    const read = el => {
+      if (!el) return null;
+      const r = el.getBoundingClientRect(), s = getComputedStyle(el);
+      return { element: describe(el), rect: { x: r.x, y: r.y, width: r.width, height: r.height, top: r.top, right: r.right, bottom: r.bottom, left: r.left }, inlineBottom: el.style.bottom, bottom: s.bottom, position: s.position, overflow: s.overflow, overflowX: s.overflowX, overflowY: s.overflowY, transform: s.transform, contain: s.contain };
+    };
+    const strip = document.querySelector('[data-testid="cm-calendar-day"]');
+    const banner = document.querySelector('[role="region"][aria-label="Cookie choices"]');
+    const ancestors = [];
+    for (let el = strip?.parentElement; el; el = el.parentElement) ancestors.push(read(el));
+    return { phase, context, point, scrollY, viewport: { width: innerWidth, height: innerHeight }, consentPending: document.body.dataset.consentPending ?? null, consentHeight: getComputedStyle(document.body).getPropertyValue('--dukb-consent-height'), strip: read(strip), banner: read(banner), ancestors, hits: point ? document.elementsFromPoint(point.x, point.y).map(describe) : null };
+  }, { phase, point, context });
+  fs.writeFileSync(path.join(OUT, `hub-passive-${String(++hubProbeSequence).padStart(5, '0')}.json`), JSON.stringify({ status: 'UNQUALIFIED_PASSIVE_DIAGNOSTIC_ONLY', geometry }, null, 2), { flag: 'wx' });
+}
+
 /* ---------------- B. Calendar ---------------- */
 const stripBox = page => page.evaluate(() => {
   const s = document.querySelector('[data-testid="cm-calendar-day"]');
@@ -313,13 +333,13 @@ const stripBox = page => page.evaluate(() => {
   const banner = document.querySelector('[role="region"][aria-label="Cookie choices"]');
   const b = banner && getComputedStyle(banner).position === 'fixed' ? banner.getBoundingClientRect() : null;
   return { top: r.top, bottom: r.bottom, text: s.innerText, vh: innerHeight, bannerTop: b ? b.top : null };
-});
+}).then(async box => { await recordHubGeometry(page, 'stripBox', null, { original: box }); return box; });
 const cellBox = (page, label) => page.evaluate(l => {
   const b = [...document.querySelectorAll('[data-testid="cm-calendar-grid"] > button')].find(x => x.getAttribute('aria-label') === l);
   if (!b) return null;
   const r = b.getBoundingClientRect();
   return { top: r.top, bottom: r.bottom, x: r.left + r.width / 2, y: r.top + r.height / 2 };
-}, label);
+}, label).then(async box => { await recordHubGeometry(page, 'cellBox', box, { label, original: box }); return box; });
 async function calendarTaps(page, tag, { banner = false } = {}) {
   await page.locator('[data-testid="cm-calendar-grid"]').waitFor({ timeout: 15000 });
   /* Where a player stands: the calendar opened from the hub's tiles, the first
@@ -353,10 +373,12 @@ async function calendarTaps(page, tag, { banner = false } = {}) {
     await page.waitForTimeout(250);
     const before = await page.evaluate(() => window.scrollY);
     const cell = await cellBox(page, label);
+    await recordHubGeometry(page, 'before-original-calendar-action', cell, { tag, what, label, how });
     if (how === 'dom') await page.evaluate(l => [...document.querySelectorAll('[data-testid="cm-calendar-grid"] > button')].find(b => b.getAttribute('aria-label') === l)?.click(), label);
     else if (how === 'mouse') await page.mouse.click(cell.x, cell.y);
     else await page.locator(`[data-testid="cm-calendar-grid"] > button[aria-label="${label.replace(/"/g, '\\"')}"]`).click();
     await page.waitForTimeout(500);
+    await recordHubGeometry(page, 'after-original-calendar-wait', cell, { tag, what, label, how });
     const after = await page.evaluate(() => window.scrollY);
     const strip = await stripBox(page);
     const cellAfter = await cellBox(page, label);
