@@ -1,0 +1,4 @@
+#!serial
+# Release BT lane b3: Round 1544's review control M5 (r1544/.tmp-fx/rc-m5.txt), which edits the runner's checkout and puts it back in the same line, so it runs alone. Must exit 1 (the unit file goes red on the mutation). Extra: review-run-mut.mjs (r1544).
+# Left out: tsc and vitest-unit (lane g's tsc; the unit files are in lane b's i44-vitest-intl).
+ctl-m5: node .rc/x/review-run-mut.mjs M5 && node_modules/.bin/vitest run src/test/nbaCareerIntl.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
