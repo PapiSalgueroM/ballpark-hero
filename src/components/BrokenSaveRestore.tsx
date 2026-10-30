@@ -113,7 +113,8 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
 
   const primary = 'px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity';
   const plain = 'px-4 py-2 rounded-lg bg-transparent border border-border text-foreground font-medium text-sm hover:bg-muted transition-colors';
-  const shell = 'fixed bottom-4 left-4 right-4 sm:left-auto sm:max-w-sm z-50 p-4 bg-card border border-border rounded-xl shadow-lg text-sm text-muted-foreground';
+  /* Round 1605 review: above the cookie choices while they are unanswered (the banner is z 60 and covered the card) */
+  const shell = 'fixed bottom-4 [body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_1rem)] left-4 right-4 sm:left-auto sm:max-w-sm z-50 p-4 bg-card border border-border rounded-xl shadow-lg text-sm text-muted-foreground';
 
   if (outcome) {
     return (

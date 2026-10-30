@@ -88,6 +88,8 @@
  * still counts). A line where the banner was never pending measured nothing and is ABORTED, never green. Three
  * scripted states reach the bars no load shows (the STATES table): Club Manager with a club picked (Take the job), the
  * custom club form open (Found the club), and a Soccer Career hub from a planted career (Next Year, Training, Phone).
+ * Since the Round 1605 review a fourth: a kept aside Soccer Career save and no live save, which shows the card every
+ * route mounts (BrokenSaveRestore, Put that save back); its card sat wholly under the banner until then.
  * Each FAILS when its script cannot reach the state or the controls it names are not on screen, so a renamed button
  * turns it red rather than green. A control whose host is the site's own chrome (data-site-chrome) is marked SITE in
  * its line: that cause belongs to the other lane and the lead hands it over.
@@ -286,6 +288,9 @@ const STATES = [
     key: '/soccer-career#hub', route: '/soccer-career', plant: plantCareer, steps: [],
     want: [{ sel: '[data-career-action-bar="floating"]' }, { sel: '[data-career-utility="training"]' }, { sel: '[data-career-utility="phone"]' }],
   },
+  /* Round 1605 review: the kept aside save card (BrokenSaveRestore, mounted on every route), from a planted backup of
+     an engine made Soccer Career save with no live save beside it */
+  { key: '/soccer-career#kept-aside', route: '/soccer-career', plant: plantKeptAside, steps: [], want: [{ sel: 'button', text: 'Put that save back' }] },
 ];
 const stateRuns = CONTROL ? [] : STATES.filter(st => routes.includes(st.route));
 if (BAR_CONTROL && !stateRuns.some(st => st.key === '/soccer-career#hub')) {
@@ -315,6 +320,11 @@ async function plantCareer() {
   const save = S.serializeSoccerCareerSave(s);
   if (!S.isSoccerCareerSave(S.parseSoccerCareerSave(save))) throw new Error('the Soccer Career plant: the game\'s own reader refuses the save');
   return { key: 'soccerCareerSave', save };
+}
+/* The same save kept aside under a dated backup key, the shape RouteErrorBoundary writes, and no live save. */
+async function plantKeptAside() {
+  const { save } = await plantCareer();
+  return { key: 'soccerCareerSave.broken-2026-10-29T12-00-00', save };
 }
 for (const st of stateRuns) {
   if (!st.plant) continue;
