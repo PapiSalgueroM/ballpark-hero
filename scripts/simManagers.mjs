@@ -509,7 +509,7 @@ async function realDugoutsSection() {
     console.log(`   7h: ${tried} leagues with a club a tier below his, ${offers} offers from his emptied chair read and ${accepted} accepted (all saying only that the club is making a change), ${unseated} skipped unseated, ${bySection['7h'].fails} failures`);
     if (offers < 10) fail(`7h: only ${offers} offers from the emptied real chair were read (floor 10)`);
   }
-  await ownAndManaged(S, byEra('now').find(l => l.id === 'premier') ?? byEra('now')[0]);
+  await ownAndManaged(S, byEra('now').find(l => l.id === 'premier') ?? byEra('now')[0], leagues);
   return { bySection };
 
   /* 7f. Whole seasons with the sentinel seated, read the way simNoInventedQuotes pass 1 reads them: every match
@@ -595,7 +595,7 @@ async function realDugoutsSection() {
 
 /* 7d and 7e. Never your club, a club you managed, a Hot Seat club or a mid season predecessor; an old save
    loads with its record untouched. L is the 'now' league whose first club holds the sentinel. */
-async function ownAndManaged(S, L) {
+async function ownAndManaged(S, L, sentinelLeagues) {
   const says = (state, label) => { if (JSON.stringify(state).includes(SENTINEL)) fail(`7d: ${label} carries the sentinel`); };
   const own = seeded(21, () => S.cm.startCareer(L.sentinel, 'now')).value;
   says(own, `a career at ${L.sentinel}, the sentinel's own club,`);
@@ -616,6 +616,22 @@ async function ownAndManaged(S, L) {
   S.cm.ensureManagers(other);
   const scrubbed = other.managers?.[L.sentinel];
   if (!scrubbed || scrubbed.name === SENTINEL || scrubbed.real === 1) fail(`7d: the repair left ${JSON.stringify(scrubbed)} at a club this career managed`);
+  /* The same chair with no entry at all (a season one load of a career that left it): the repair fills it with a
+     made up man, never the opening day's real one. */
+  delete other.managers[L.sentinel];
+  S.cm.ensureManagers(other);
+  const refilled = other.managers?.[L.sentinel];
+  if (!refilled || refilled.name === SENTINEL || refilled.real === 1) fail(`7d: the repair seated ${JSON.stringify(refilled)} in an empty chair at a club this career managed`);
+  /* A club this career managed outside the league now (a season one move abroad, then their cup or European tie):
+     the slot shows him before the club is yours to have managed, and nobody after. */
+  const abroad = sentinelLeagues.find(l => l.era === 'now' && l.id !== L.id && !other.leagueClubs.includes(l.sentinel))?.sentinel ?? '';
+  if (!abroad) fail('7d: no sentinel club outside the league to read, the check tests nothing');
+  else {
+    const before = S.cm.dugoutOf(other, abroad);
+    if (!before || before.name !== SENTINEL) fail(`7d: ${abroad}, outside the league, does not show its opening day man before you managed it (${JSON.stringify(before)}), the check tests nothing`);
+    other.careerStats.clubsManaged = [...other.careerStats.clubsManaged, abroad];
+    if (S.cm.dugoutOf(other, abroad) !== null) fail(`7d: the display slot shows the real man at ${abroad}, a club this career managed outside the league`);
+  }
   /* Manager Hot Seat at the sentinel's club, and a mid season start there: the job you take was his. */
   try {
     let run = S.hs.startHotSeat({ club: L.sentinel, seed: 4242 });
