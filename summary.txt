@@ -1,0 +1,7 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk-builder exit=0 47s | walk1604 fixed: 54 checks, 0 failed, red paths: none
+walk-review exit=0 229s | walkRev1604: 128 checks, 0 failed, red paths: none
+playSoccerLanding exit=1 283s | playSoccerLanding: RED, no base arm (set SOCCER_LANDING_BASE_DIST); a head arm alone is not a proof
+playTranslatedPage exit=0 134s | playTranslatedPage: 447 checks, 0 failed
+playTwoTabs exit=0 461s | playTwoTabs: green at 320x640, 390x844, 1280x900
+playStartingXi exit=1 1830s | playStartingXi: 2 failures

@@ -1,0 +1,158 @@
+{
+  "phase": "fixed",
+  "base": "http://localhost:4173",
+  "checks": 54,
+  "failed": 0,
+  "rows": [
+    {
+      "path": "A",
+      "width": 320,
+      "issues": [],
+      "seen": {
+        "first": {
+          "text": "Nottingham Forest Youth",
+          "raw": "Nottingham Forest Youth",
+          "flag": null
+        },
+        "started": {
+          "currentClub": "Nottingham Forest Youth",
+          "academyClubName": "Nottingham Forest",
+          "country": "England",
+          "nationality": "England"
+        }
+      }
+    },
+    {
+      "path": "B",
+      "width": 320,
+      "issues": [],
+      "seen": {
+        "first": {
+          "text": "Brighton Youth",
+          "raw": "Brighton Youth",
+          "flag": null
+        },
+        "after": {
+          "text": "Botafogo Youth",
+          "raw": "🇧🇷\nBotafogo Youth",
+          "flag": "Brazil"
+        },
+        "started": {
+          "currentClub": "Botafogo Youth",
+          "academyClubName": "Botafogo",
+          "country": "Brazil",
+          "nationality": "Brazil"
+        }
+      }
+    },
+    {
+      "path": "C",
+      "width": 320,
+      "issues": [],
+      "seen": {
+        "lines": 2,
+        "bothLines": 2
+      }
+    },
+    {
+      "path": "A",
+      "width": 390,
+      "issues": [],
+      "seen": {
+        "first": {
+          "text": "Stoke City Youth",
+          "raw": "Stoke City Youth",
+          "flag": null
+        },
+        "started": {
+          "currentClub": "Stoke City Youth",
+          "academyClubName": "Stoke City",
+          "country": "England",
+          "nationality": "England"
+        }
+      }
+    },
+    {
+      "path": "B",
+      "width": 390,
+      "issues": [],
+      "seen": {
+        "first": {
+          "text": "Brighton Youth",
+          "raw": "Brighton Youth",
+          "flag": null
+        },
+        "after": {
+          "text": "Botafogo Youth",
+          "raw": "🇧🇷\nBotafogo Youth",
+          "flag": "Brazil"
+        },
+        "started": {
+          "currentClub": "Botafogo Youth",
+          "academyClubName": "Botafogo",
+          "country": "Brazil",
+          "nationality": "Brazil"
+        }
+      }
+    },
+    {
+      "path": "C",
+      "width": 390,
+      "issues": [],
+      "seen": {
+        "lines": 2,
+        "bothLines": 2
+      }
+    },
+    {
+      "path": "A",
+      "width": 1280,
+      "issues": [],
+      "seen": {
+        "first": {
+          "text": "Leeds United Youth",
+          "raw": "Leeds United Youth",
+          "flag": null
+        },
+        "started": {
+          "currentClub": "Leeds United Youth",
+          "academyClubName": "Leeds United",
+          "country": "England",
+          "nationality": "England"
+        }
+      }
+    },
+    {
+      "path": "B",
+      "width": 1280,
+      "issues": [],
+      "seen": {
+        "first": {
+          "text": "Lincoln City Youth",
+          "raw": "Lincoln City Youth",
+          "flag": null
+        },
+        "after": {
+          "text": "Internacional Youth",
+          "raw": "🇧🇷\nInternacional Youth",
+          "flag": "Brazil"
+        },
+        "started": {
+          "currentClub": "Internacional Youth",
+          "academyClubName": "Internacional",
+          "country": "Brazil",
+          "nationality": "Brazil"
+        }
+      }
+    },
+    {
+      "path": "C",
+      "width": 1280,
+      "issues": [],
+      "seen": {
+        "lines": 2,
+        "bothLines": 2
+      }
+    }
+  ]
+}

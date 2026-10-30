@@ -1,0 +1,10 @@
+A@320: ok {"first":{"text":"Nottingham Forest Youth","raw":"Nottingham Forest Youth","flag":null},"started":{"currentClub":"Nottingham Forest Youth","academyClubName":"Nottingham Forest","country":"England","nationality":"England"}}
+B@320: ok {"first":{"text":"Brighton Youth","raw":"Brighton Youth","flag":null},"after":{"text":"Botafogo Youth","raw":"🇧🇷\nBotafogo Youth","flag":"Brazil"},"started":{"currentClub":"Botafogo Youth","academyClubName":"Botafogo","country":"Brazil","nationality":"Brazil"}}
+C@320: ok {"lines":2,"bothLines":2}
+A@390: ok {"first":{"text":"Stoke City Youth","raw":"Stoke City Youth","flag":null},"started":{"currentClub":"Stoke City Youth","academyClubName":"Stoke City","country":"England","nationality":"England"}}
+B@390: ok {"first":{"text":"Brighton Youth","raw":"Brighton Youth","flag":null},"after":{"text":"Botafogo Youth","raw":"🇧🇷\nBotafogo Youth","flag":"Brazil"},"started":{"currentClub":"Botafogo Youth","academyClubName":"Botafogo","country":"Brazil","nationality":"Brazil"}}
+C@390: ok {"lines":2,"bothLines":2}
+A@1280: ok {"first":{"text":"Leeds United Youth","raw":"Leeds United Youth","flag":null},"started":{"currentClub":"Leeds United Youth","academyClubName":"Leeds United","country":"England","nationality":"England"}}
+B@1280: ok {"first":{"text":"Lincoln City Youth","raw":"Lincoln City Youth","flag":null},"after":{"text":"Internacional Youth","raw":"🇧🇷\nInternacional Youth","flag":"Brazil"},"started":{"currentClub":"Internacional Youth","academyClubName":"Internacional","country":"Brazil","nationality":"Brazil"}}
+C@1280: ok {"lines":2,"bothLines":2}
+walk1604 fixed: 54 checks, 0 failed, red paths: none
