@@ -1,0 +1,4 @@
+base-WorldMoves exit=2 1s | simCmWorldMoves: cannot run: the base commit d4f2c6f6 is not in this clone (fetch its history)
+base-Unseeded exit=2 1s | simCmUnseededWorld: cannot run: the base commit b6eb78e7 is not in this clone (fetch its history)
+simCmUnseededWorld exit=1 164s | simCmUnseededWorld: 113 FAILURE(S)
+simCmWorldMoves exit=1 1129s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
