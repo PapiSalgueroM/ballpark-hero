@@ -1,0 +1,3 @@
+sack-a: SACK_CLUBS="Crystal Palace,Everton,Brentford,Fulham" node .rc/x/sack1593.mjs
+sack-b: SACK_CLUBS="Nottingham Forest,Bournemouth,Aston Villa,Real Betis" node .rc/x/sack1593.mjs
+sack-c: SACK_CLUBS="Lazio,Eintracht Frankfurt,Lyon,Braga,Rangers,Real Sociedad" node .rc/x/sack1593.mjs
