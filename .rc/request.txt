@@ -1,0 +1,2 @@
+#!playwright
+main-writes: git worktree add /tmp/mainwt origin/main > /dev/null 2>&1; ln -sfn "$PWD/node_modules" /tmp/mainwt/node_modules; cd /tmp/mainwt && git log --oneline -1 && node_modules/.bin/vite build > /tmp/vb.log 2>&1; tail -1 /tmp/vb.log; node scripts/simWritesAreSent.mjs > /tmp/w.log 2>&1; e=$?; grep -vE "^ +at " /tmp/w.log | tail -6; exit $e
