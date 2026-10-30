@@ -1,0 +1,5 @@
+simManagers-namedsack exit=0 35s | control run: namedsack FIRED, 7b went red 184 time(s), 184 naming the sentinel
+simManagers exit=1 40s | simManagers: 210 failure(s)
+simManagers-sever exit=0 9s | control run: 3 failure(s) FIRED as expected
+simManagers-recycle exit=0 26s | control run: recycle FIRED, 7b went red 205 time(s), 205 naming the sentinel
+simManagers-fleet exit=1 82s | simManagers: 210 failure(s)

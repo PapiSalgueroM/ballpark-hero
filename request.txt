@@ -1,0 +1,5 @@
+simManagers: node scripts/simManagers.mjs
+simManagers-fleet: SIM_MANAGERS_BASE=c0c66e087 node scripts/simManagers.mjs
+simManagers-namedsack: SIM_MANAGERS_CONTROL=namedsack node scripts/simManagers.mjs
+simManagers-recycle: SIM_MANAGERS_CONTROL=recycle node scripts/simManagers.mjs
+simManagers-sever: SIM_MANAGERS_CONTROL=sever node scripts/simManagers.mjs
