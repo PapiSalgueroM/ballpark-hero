@@ -38,7 +38,7 @@ export const CM_DUGOUTS: RealDugoutTable = {
     "Leeds United": { name: "Daniel Farke" },
     "Liverpool": { name: "Andoni Iraola" },
     "Manchester City": { name: "Enzo Maresca" },
-    "Manchester United": { name: "Michael Carrick", appointed: "2026-01" },
+    "Manchester United": { name: "Michael Carrick" },
     "Newcastle": { name: "Matthias Jaissle", appointed: "2026-08" },
     "Nottingham Forest": { name: "Oliver Glasner" },
     "Sunderland": { name: "Régis Le Bris" },
