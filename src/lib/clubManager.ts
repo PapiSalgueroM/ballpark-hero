@@ -13890,8 +13890,11 @@ export function carryWorldComp(career: CareerState, joined: CareerState, comp: W
        season plays. A move can change that one (a club in it leaving for one outside, or a watcher joining one
        of the 36 it watched, which draws it again), and the carried field would then share clubs with it: the
        rule a career with nothing to carry follows decides instead (season one draws it again, later none). */
-    const slice = comp === 'uel' && held && !held.me && uclEntrantsOf(joined).some(c => held.clubs.includes(c)) ? undefined : held;
     const names = [joined.clubName, joined.eraId ? eraEuroName(joined.eraId, joined.clubName) : joined.clubName];
+    /* Round 1593: the guard stands down only for the move the critic's correction 3b named, a participant's slice
+       carried to a club that is one of its entrants; a move from it anywhere else keeps fix-1509's rule. */
+    const toEntrant = !!held && !!held.me && names.some(c => held.clubs.includes(c));
+    const slice = comp === 'uel' && held && !toEntrant && uclEntrantsOf(joined).some(c => held.clubs.includes(c)) ? undefined : held;
     /* Round 1593 (the critic's correction 3b): a slice my old club PLAYED is carried even when the new club is one of
        its entrants: the new club is then an entrant like any other, played from the streams, and my old club's nights
        still to come are drawn the same way, so the season still crowns a winner. */
