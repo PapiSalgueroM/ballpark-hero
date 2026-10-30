@@ -1,0 +1,1 @@
+probe: node .rc/x/probeTrades.mjs && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx -t "a call left open" --testTimeout=600000 2>&1 | grep -a "PROBE\|Tests " ; git checkout -- src
