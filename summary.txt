@@ -1,0 +1,3 @@
+md-nodecider exit=0 27s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+md-base1603 exit=0 26s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+md-base1603-homeflip exit=1 27s | simCmMatchDay: CONTROL homeflip FIRED (38090 failures, section(s) 1, 2, 3, 4, 5, 7)
