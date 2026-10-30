@@ -144,9 +144,11 @@ const oldFile = await bundle('old', ROOT, OLD_PATCH);
 const baseFile = BASE_ROOT ? await bundle('base', BASE_ROOT, []) : null;
 
 /* ---------- dice ---------- */
+/* DECIDING_LEG_SALT walks the whole fleet on other dice, for measuring the floor's headroom on purpose. */
+const SALT = process.env.DECIDING_LEG_SALT || '';
 function keyOf(...parts) {
   let h = 2166136261 >>> 0;
-  for (const ch of parts.join('|')) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  for (const ch of [SALT, ...parts].join('|')) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
   return h >>> 0;
 }
 function withStream(seed, fn) {
@@ -162,6 +164,12 @@ function withStream(seed, fn) {
 }
 const clone = v => structuredClone(v);
 const J = v => JSON.stringify(v);
+/* The base tree called every haul of three or more a hat-trick. That line is the one other thing this round
+   changes on purpose, so a comparison with the base tree reads a named haul as the old words, and nothing else. */
+const HAUL_NAMED = /⚽ ([^"!]+?) scored (four|five|six|seven|eight|[0-9]+)!/g;
+const asBaseWords = s => s.replace(HAUL_NAMED, (_, name) => `⚽ ${name} bagged a hat-trick!`);
+let namedHauls = 0;
+const baseJ = v => { const s = J(v); const t = asBaseWords(s); if (t !== s) namedHauls += 1; return t; };
 
 /* ---------- checks ---------- */
 const checks = [];
@@ -251,7 +259,7 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
         const rO = step(O, sO, seed);
         if (B) {
           const rB = step(B, sB, seed);
-          if (J(rB.state) !== J(rO.state) || J(rB.report ?? null) !== J(rO.report ?? null)) baseBad.push(`${tag} week ${sO.week}`);
+          if (J(rB.state) !== baseJ(rO.state) || J(rB.report ?? null) !== baseJ(rO.report ?? null)) baseBad.push(`${tag} week ${sO.week}`);
           sB = rB.state;
         }
         if (!split) {
@@ -270,7 +278,7 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
   }
   console.log(`   ${inUcl} careers in the Champions League, ${parted.length} parted at a deciding leg: ${parted.join('; ') || 'none'}`);
   check('careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ)', identityBad.length === 0 && inUcl >= 8, identityBad.slice(0, 3).join('; ') || `${inUcl} careers`);
-  if (baseFile) check('careers: OLD is the base tree, week for week over the whole window', baseBad.length === 0, baseBad.slice(0, 3).join('; '));
+  if (baseFile) check('careers: OLD is the base tree, week for week over the whole window (a named haul read as the old words)', baseBad.length === 0, baseBad.slice(0, 3).join('; ') || `${namedHauls} saves or reports carried a named haul`);
   console.log(`   ${legPre.length} deciding second legs met (${legPre.filter(l => l.walk?.differ).length} differing on the walk's own dice)`);
 }
 
@@ -388,7 +396,7 @@ if (run('gate') || run('careers')) {
   const career = legPre[0]?.pre ?? runAfter.state;
   const saved = H.cm.saveCareer({ ...clone(career), tieRules: 'night' });
   const loaded = H.cm.loadCareer();
-  check('gate: loadCareer drops it, so no Club Manager save plays it', saved && loaded && !('tieRules' in loaded), saved ? (loaded ? 'still there' : 'did not load') : 'did not save');
+  check('gate: loadCareer drops it, so no Club Manager save plays it', saved && loaded && !('tieRules' in loaded), !saved ? 'did not save' : !loaded ? 'did not load' : 'tieRules' in loaded ? 'still there' : '');
 }
 
 /* ---------- 4. Manager Hot Seat replays ---------- */
@@ -412,6 +420,7 @@ if (run('hotseat')) {
   }
   const bad = [];
   const baseBad = [];
+  const baseNamed = [];
   let legRuns = 0;
   let afterMoved = 0;
   const lines = [];
@@ -426,12 +435,14 @@ if (run('hotseat')) {
     if (day < from) { if (h.digest !== o.digest) bad.push(`${day} ${setup.club}`); } else if (h.digest !== o.digest) afterMoved += 1;
     if (baseFile && day < from) {
       const B = await fresh(baseFile);
-      if (hotSeatDay(B, s).digest !== h.digest) baseBad.push(`${day} ${setup.club}`);
+      if (hotSeatDay(B, s).digest !== asBaseWords(h.digest)) baseBad.push(`${day} ${setup.club}`);
+      if (asBaseWords(h.digest) !== h.digest) baseNamed.push(`${day} ${setup.club}`);
     }
     lines.push(`${day} ${setup.club} ${h.verdict} ${h.points}`);
   }
   const frees = [['Everton', 11], ['Celtic', 22], ['Ajax', 33], ['Benfica', 44], ['Club Brugge', 55], ['Napoli', 66]];
   let freeBad = 0;
+  let freePlayed = 0;
   for (const [club, seed] of frees) {
     const H = await fresh(headFile);
     const O = await fresh(oldFile);
@@ -439,14 +450,15 @@ if (run('hotseat')) {
     let h;
     try { h = hotSeatDay(H, s); } catch { continue; }
     const o = hotSeatDay(O, s);
+    freePlayed += 1;
     if (h.legs) legRuns += 1;
     if (h.digest !== o.digest) freeBad += 1;
   }
-  console.log(`   ${days.length} dailies (${days.filter(d => d < from).length} before ${from}) and ${frees.length} unstamped free runs; ${legRuns} of the runs met a second leg at all; ${afterMoved} days from the cutover on moved`);
+  console.log(`   ${days.length} dailies (${days.filter(d => d < from).length} before ${from}) and ${freePlayed} of ${frees.length} unstamped free runs (a club outside the pool is skipped); ${legRuns} of the runs met a second leg at all; ${afterMoved} days from the cutover on moved`);
   console.log(`   ${lines.slice(0, 4).join('; ')} ...`);
   check('hotseat: every daily before the cutover replays the same verdict, points, target, takeover and log', bad.length === 0, bad.slice(0, 3).join('; ') || `${days.filter(d => d < from).length} days`);
   check('hotseat: every unstamped free run replays as it did', freeBad === 0, `${freeBad} moved`);
-  if (baseFile) check('hotseat: the base tree deals and plays every day before the cutover the same way', baseBad.length === 0, baseBad.slice(0, 3).join('; '));
+  if (baseFile) check('hotseat: the base tree deals and plays every day before the cutover the same way (a named haul read as the old words)', baseBad.length === 0, baseBad.slice(0, 3).join('; ') || `days whose feed names a haul: ${baseNamed.join(', ') || 'none'}`);
 }
 
 /* ---------- 5. the haul words ---------- */
