@@ -1,0 +1,2 @@
+simManagers: node scripts/simManagers.mjs
+ctl-liveevent: SIM_MANAGERS_CONTROL=liveevent node scripts/simManagers.mjs
