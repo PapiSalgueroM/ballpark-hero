@@ -1,0 +1,4 @@
+vitest exit=0 3s |    Duration  1.99s (transform 481ms, setup 62ms, collect 802ms, tests 437ms, environment 271ms, prepare 85ms)
+dr exit=0 15s | simDailyReload: all green (1 row(s), both controls fired)
+triviaBank-default exit=0 104s | simTriviaBank: all checks passed
+triviaBank-ctl-short exit=1 103s | simTriviaBank: 7 failure(s) (NEGATIVE CONTROL short ON)

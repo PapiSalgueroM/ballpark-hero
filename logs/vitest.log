@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/sportsMillionaireSwap.test.tsx[2m > [22m[2mSports Millionaire, Swap Question on the page (Round 1579)[2m > [22m[2mthe fixture ladder is whole and the three streams exist
+[22m[39msportsMillionaireSwap streams: REPEAT_1 1, FRESH_1 2, REPEAT_3 42
+
+[90mstderr[2m | src/test/sportsMillionaireSwap.test.tsx[2m > [22m[2mSports Millionaire, Swap Question on the page (Round 1579)[2m > [22m[2mA: on a stream where the old swap dealt a later rung, the swap at question 1 deals a question not on the ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/sportsMillionaireSwap.test.tsx[2m > [22m[2mSports Millionaire, Swap Question on the page (Round 1579)[2m > [22m[2mB: on a stream where the old swap was fresh, the page deals exactly what it dealt before
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/sportsMillionaireSwap.test.tsx[2m > [22m[2mSports Millionaire, Swap Question on the page (Round 1579)[2m > [22m[2mC: after two right answers, the swap at question 3 never brings back question 1 or 2
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/sportsMillionaireSwap.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 437[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 14:53:39
+[2m   Duration [22m 1.99s[2m (transform 481ms, setup 62ms, collect 802ms, tests 437ms, environment 271ms, prepare 85ms)[22m
+

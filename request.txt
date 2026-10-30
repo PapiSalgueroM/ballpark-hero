@@ -1,0 +1,5 @@
+# Release BU lane d: Sports Millionaire (Rounds 1573 and 1579): the trivia bank and its control, the swap test, the daily reload.
+vitest: node_modules/.bin/vitest run src/test/sportsMillionaireSwap.test.tsx --testTimeout=300000 --hookTimeout=120000
+dr: ONLY=sports-millionaire node scripts/simDailyReload.mjs
+triviaBank-default: node scripts/simTriviaBank.mjs
+triviaBank-ctl-short: TRIVIA_CONTROL=short node scripts/simTriviaBank.mjs
