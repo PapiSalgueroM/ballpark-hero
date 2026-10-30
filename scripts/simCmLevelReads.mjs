@@ -35,11 +35,16 @@
  *   nostamp  the load reads age whatever the stamp says (section 1: arm A moves)
  *   pointsfirst  the past seasons add the points under the stretch, Round 1102's order (section 4)
  *   noeraread    the past seasons do not read age (section 4)
+ *   youth        the 2026 load skips the read for a man under 24 (section 5: rows off the read, the band table)
  *
  * SECTION 4 (Proposal 4): every past season is read at load the same way, the stretch first (the level), then the
  * points on the season's own top: every row's level is the stretch of its file rating and its shown rating the read
  * (scripts/lib/cmEraRead.mjs), nobody past the top, each top the stretch of the season's best man, the rows changed
  * per season and Round 1214's table rows as its notes give them.
+ *
+ * SECTION 5 (R1, added by the Round 1600 fix): today's world as shipped, row by row (every modern row shows
+ * ageRead(level, age), its level the rating curve 1 showed) and the main file's age band table as a recorded
+ * baseline, with the shape R1 rules (the prime band unmoved, the young below their level, the veterans above).
  *
  * MEASURED (runner, see docs/audits/ROUND-1600-NOTES.md): the counts printed per section are the numbers.
  */
@@ -53,6 +58,7 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { stampedSquads, agedSquads, unflippedSquads, unstampedLeague, unstampedFreeAgents, isStamped } from './lib/cmSquadAges.mjs';
 import { eraShown } from './lib/cmEraRead.mjs';
+import { ageRead, RATING_CEIL } from './lib/cmValueCurve.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CM_LEVEL_READS_CONTROL || '';
@@ -78,6 +84,8 @@ const CONTROLS = {
   pointsfirst: ['src/lib/clubManagerEras.ts', '      const shown = readInWorld(b.r, b.a, world).rating;',
     '      const shown = eraUpliftRating(eraId, readInWorld(b.r, b.a, { ageShift: ERA_RATING_AGE_SHIFT }).rating);'],
   noeraread: ['src/lib/clubManagerEras.ts', 'const PAST_SEASONS_READ_AGE = true;', 'const PAST_SEASONS_READ_AGE = false;'],
+  /* Round 1600 fix (both reviews): the 2026 load skips the read for a man under 24 (section 5, on its own check). */
+  youth: ['src/data/clubManagerWorldRosters.ts', '      const r = ageRead(b.r, b.a);\n', '      const r = b.a < 24 ? b.r : ageRead(b.r, b.a);\n'],
 };
 if (CONTROL) {
   const c = CONTROLS[CONTROL];
@@ -107,7 +115,7 @@ const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cmlevelreads-'));
 async function bundle(name, rosterText, leagues = CURVE1_LEAGUES, src = SRC) {
   const outfile = path.join(TMP, `${name}.cjs`);
   await build({
-    stdin: { contents: "export * as cm from '@/lib/clubManager'; export * as eras from '@/lib/clubManagerEras';", resolveDir: ROOT, loader: 'ts' },
+    stdin: { contents: "export * as cm from '@/lib/clubManager'; export * as eras from '@/lib/clubManagerEras'; export * as ro from '@/data/clubManagerRosters';", resolveDir: ROOT, loader: 'ts' },
     bundle: true, format: 'cjs', platform: 'node', outfile, logLevel: 'error',
     alias: { '@': path.join(ROOT, 'src') },
     plugins: [{ name: 'arm', setup(b) {
@@ -299,6 +307,63 @@ console.log('4. the past seasons, read at load: the stretch (the level), then th
   }
   console.log(`   the table: ${TABLE.length - wrong} of ${TABLE.length} rows as Round 1214 worked them out`);
   check(wrong === 0, `${wrong} past season rows of the table are off`);
+}
+
+/* ---------- section 5: today's world, row by row and by age band (R1's whole population proof) ----------
+   Round 1600 fix (both reviews: R1 asks for the read proven over the whole population, and only six named 2026 men
+   were held). Arm B2 is the files as shipped. (a) Every row of every modern club shows exactly ageRead(level, age)
+   and its level is the rating arm A (curve 1) shows the same man: 0 off. (b) The age band table of the main squads
+   file's men in the engine's world, a RECORDED BASELINE (counts exact, means to two decimals): measured by the run
+   reviewer on cd95e82f4 (r1600-run4, popProbe) and again here (r1600-fix2). It moves only when a file moves; re-take
+   it then, with the cause. (c) The shape R1 rules: every man of 24 to 29 shows his level, the under 24s read below
+   theirs, the men of 30 and over above theirs, no row past the ceiling. 4,400 men, not 4,401: Ryan Fraser leaves
+   Southampton at join time (CM_ALEAGUE_SUPERSEDES), on the base too. */
+section = 5;
+console.log('5. today\'s world as shipped: every row on the read, and the age band table');
+{
+  const worldA = A.eras.eraRosters('now'), worldB = B2.eras.eraRosters('now');
+  let rows = 0, offRead = 0, offLevel = 0, unaligned = 0, over = 0;
+  for (const [club, list] of Object.entries(worldB)) {
+    list.forEach((b, i) => {
+      rows += 1;
+      const a = worldA[club]?.[i], level = b.lv ?? b.r;
+      if (!a || a.n !== b.n) { unaligned += 1; return; }
+      if (b.r !== ageRead(level, b.a)) offRead += 1;
+      if (level !== a.r) offLevel += 1;
+      if (b.r > RATING_CEIL) over += 1;
+    });
+  }
+  console.log(`   ${rows} modern rows: ${offRead} off the read, ${offLevel} levels off arm A's rating, ${unaligned} not aligned with arm A, ${over} past ${RATING_CEIL}`);
+  check(rows > 4000 && offRead === 0 && offLevel === 0 && unaligned === 0 && over === 0,
+    `today's world: ${offRead} rows off the read, ${offLevel} levels off, ${unaligned} unaligned, ${over} past the ceiling`);
+  const men = Object.keys(B2.ro.CM_ROSTERS).flatMap(club => (worldB[club] ?? []).map(b => ({ n: b.n, age: b.a, level: b.lv ?? b.r, shown: b.r })));
+  const mean = xs => +(xs.reduce((s, x) => s + x, 0) / Math.max(1, xs.length)).toFixed(2);
+  const BANDS = [[14, 20, 327, 74.63, 70.09], [21, 23, 924, 74.55, 72.70], [24, 29, 2322, 74.62, 74.62],
+    [30, 32, 553, 72.94, 74.52], [33, 35, 230, 70.94, 74.66], [36, 99, 44, 68.64, 75.48]];
+  let bandsOff = 0;
+  for (const [lo, hi, n, level, shown] of BANDS) {
+    const band = men.filter(m => m.age >= lo && m.age <= hi);
+    const got = [band.length, mean(band.map(m => m.level)), mean(band.map(m => m.shown))];
+    const ok = got[0] === n && got[1] === level && got[2] === shown;
+    if (!ok) bandsOff += 1;
+    console.log(`   ${lo} to ${hi > 90 ? 'up' : hi}: ${got[0]} men, level ${got[1]}, shown ${got[2]} (recorded ${n}, ${level}, ${shown})${ok ? '' : ' OFF'}`);
+  }
+  check(bandsOff === 0, `the age band table: ${bandsOff} of ${BANDS.length} bands off the recorded baseline`);
+  const vets = men.filter(m => m.age >= 30);
+  const top100 = [...men].sort((x, y) => y.shown - x.shown || x.n.localeCompare(y.n)).slice(0, 100);
+  const VETS = [['men of the main file', men.length, 4400], ['rows the read changes', men.filter(m => m.shown !== m.level).length, 2077],
+    ['veterans', vets.length, 827], ['veteran level', mean(vets.map(m => m.level)), 72.16], ['veteran shown', mean(vets.map(m => m.shown)), 74.61],
+    ['veterans shown 75 up', vets.filter(m => m.shown >= 75).length, 394], ['80 up', vets.filter(m => m.shown >= 80).length, 118],
+    ['85 up', vets.filter(m => m.shown >= 85).length, 17], ['veterans in the top 100', top100.filter(m => m.age >= 30).length, 7]];
+  const vetsOff = VETS.filter(([, got, want]) => got !== want);
+  console.log(`   ${VETS.map(([what, got, want]) => `${what} ${got}${got === want ? '' : ` (recorded ${want})`}`).join(', ')}`);
+  check(vetsOff.length === 0, `the veteran lines: ${vetsOff.map(([w]) => w).join(', ')} off the recorded baseline`);
+  const primeOff = men.filter(m => m.age >= 24 && m.age <= 29 && m.shown !== m.level).length;
+  const youngUp = men.filter(m => m.age < 24 && m.shown > m.level).length, oldDown = men.filter(m => m.age >= 30 && m.shown < m.level).length;
+  console.log(`   shape: ${primeOff} men of 24 to 29 off their level, ${youngUp} under 24 read above it, ${oldDown} of 30 and over read below it`);
+  check(primeOff === 0 && youngUp === 0 && oldDown === 0, `the shape: ${primeOff} prime men moved, ${youngUp} young men up, ${oldDown} veterans down`);
+  check(mean(men.filter(m => m.age < 21).map(m => m.shown)) < mean(men.filter(m => m.age < 21).map(m => m.level))
+    && mean(vets.map(m => m.shown)) > mean(vets.map(m => m.level)), 'the under 21s must read below their level and the veterans above theirs');
 }
 
 const total = Object.values(failures).reduce((s, n) => s + n, 0);
