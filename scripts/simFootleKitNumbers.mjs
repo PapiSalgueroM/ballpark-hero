@@ -44,6 +44,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
+import { fetchWithTransportRetry } from './lib/fetchWithTransportRetry.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.FOOTLE_KIT_CONTROL || '';
@@ -69,17 +70,23 @@ const M = await import(pathToFileURL(BUNDLE).href);
 
 /* The current club, from the same table and year Footle builds its pool from. */
 const rows = [];
-for (let from = 0; ; from += 1000) {
-  let page = null;
+for (let from = 0; from <= 21000; from += 1000) {
+  let page;
   try {
-    const r = await fetch(`${URL_}/rest/v1/player_market_values?select=player_name,club&year=eq.2026&order=player_name.asc`,
-      { headers: { ...HEAD, Range: `${from}-${from + 999}` } });
-    if (r.ok) page = await r.json();
-  } catch { /* retried once below */ }
-  if (page === null) { await new Promise(r => setTimeout(r, 800)); continue; }
+    const { response, error } = await fetchWithTransportRetry(() => fetch(
+      `${URL_}/rest/v1/player_market_values?select=player_name,club&year=eq.2026&order=player_name.asc`,
+      { headers: { ...HEAD, Range: `${from}-${from + 999}` }, signal: AbortSignal.timeout(15000) }));
+    if (!response) throw error ?? new Error('No response');
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    page = await response.json();
+    if (!Array.isArray(page)) throw new Error('Expected player rows');
+  } catch (error) {
+    console.error(`SUPABASE UNREACHABLE OR REFUSED (${error?.message ?? error}). NOTHING WAS CHECKED.`);
+    try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* non-fatal */ }
+    process.exit(1);
+  }
   rows.push(...page);
   if (page.length < 1000) break;
-  if (from > 20000) break;
 }
 const clubOf = new Map(rows.map(r => [r.player_name, r.club]));
 const names = Object.keys(M.footleEnrichment);
