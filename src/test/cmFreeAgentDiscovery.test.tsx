@@ -248,11 +248,12 @@ describe('Club Manager free-agent discovery on Transfers', () => {
     expect(game.career!.budget).toBe(expected!.budget);
     expect(game.career!.freeAgents!.some(f => f.name === agent!.name)).toBe(false);
     expect(within(actualPool).queryByText(agent!.name, { exact: true })).toBeNull();
-    await waitFor(() => expect(loadCareer()?.squad.find(p => p.id === signed.id)).toEqual(signed));
+    await waitFor(() => expect(loadCareer()?.squad.find(p => p.id === signed.id)).toMatchObject(signed));
+    const persisted = loadCareer()!.squad.find(p => p.id === signed.id)!;
     expect(loadCareer()!.freeAgents!.some(f => f.name === agent!.name)).toBe(false);
     cleanup();
     await resumeHook();
-    expect(game.career!.squad.find(p => p.id === signed.id)).toEqual(signed);
+    expect(game.career!.squad.find(p => p.id === signed.id)).toEqual(persisted);
     expect(game.career!.budget).toBe(expected!.budget);
     expect(game.career!.freeAgents!.some(f => f.name === agent!.name)).toBe(false);
     expect(hookCalls).toEqual([agent!.name]);

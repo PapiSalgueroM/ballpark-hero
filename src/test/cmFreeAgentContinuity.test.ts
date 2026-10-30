@@ -52,7 +52,7 @@ function acquired(veteran = false): { career: CareerState; player: CMPlayer; ori
     seasonReds: 1, cleanSheets: 2, ratingSum: 90, releaseClause: .5,
   };
   const career = { ...bought!, squad: bought!.squad.map(p => p.id === player.id ? player : p) };
-  expect(freeAgentBlock({ ...career, squad: career.squad.filter(p => p.id !== player.id),
+  expect(freeAgentBlock({ ...career, worldRoster: undefined, squad: career.squad.filter(p => p.id !== player.id),
     freeAgents: [{ name: player.name, position: player.position, age: player.age, rating: 40,
       value: .2, since: career.season - 1, reason: 'expired' }] }, {
     name: player.name, position: player.position, age: player.age, rating: 40,
