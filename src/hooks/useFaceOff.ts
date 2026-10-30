@@ -50,13 +50,16 @@ export function useFaceOff() {
   const [turn, setTurn] = useState<1 | 2>(1);
   const firstChair = useRef<{ pick: 'a' | 'b' | null; secs: number } | null>(null);
   const today = getTodayET();
+  const dailyDate = useRef(today);
   const dailyPlayed = save.daily?.date === today ? save.daily : null;
 
   const cats = () => (catsRef.current ??= buildCategories());
 
   const start = useCallback((m: Mode, d: Difficulty) => {
     const diff = m === 'daily' ? DAILY_DIFFICULTY : d;
-    const rng = makeRng(m === 'daily' ? seedForDate(getTodayET()) : Math.floor(Math.random() * 2 ** 31));
+    const matchDay = getTodayET();
+    dailyDate.current = matchDay;
+    const rng = makeRng(m === 'daily' ? seedForDate(matchDay) : Math.floor(Math.random() * 2 ** 31));
     rngRef.current = rng;
     const dealt = dealRounds(cats(), rng, diff, ROUNDS);
     setMode(m); setDifficulty(diff); setRounds(dealt); setResults([]); setIndex(0);
@@ -143,7 +146,7 @@ export function useFaceOff() {
     const t = totals(results);
     if (mode !== 'versus') {
       /* two people on one phone is a game, not a record: the save tracks you against the rivals */
-      const booked = recordMatch(save, t, difficulty, mode === 'daily' ? getTodayET() : null);
+      const booked = recordMatch(save, t, difficulty, mode === 'daily' ? dailyDate.current : null);
       setSave(booked);
       writeSave(booked);
     }
@@ -163,7 +166,8 @@ export function useFaceOff() {
 
   return {
     save, phase, mode, difficulty, rounds, results, index, current, elapsed, rivalLocked, turn,
-    totals: t, outcome: outcome(t), lastResult, dailyPlayed, today,
+    totals: t, outcome: outcome(t), lastResult, dailyPlayed,
+    today: mode === 'daily' && phase !== 'menu' ? dailyDate.current : today,
     start, pick, ready, next, toMenu,
   };
 }

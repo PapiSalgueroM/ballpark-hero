@@ -8,10 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Bomb, CalendarDays, Heart, Infinity as InfinityIcon, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { getTodayET } from '@/lib/dateUtils';
+import { getTodayET, dayNumber } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 import {
-  buildRun, daySeed, loadDailyResult, maxRunScore, saveDailyResult,
+  buildRun, loadDailyResult, maxRunScore, saveDailyResult,
   CLEAR_BONUS, LIVES_PER_ROUND, POINTS_PER_FIND, ROUNDS_PER_RUN,
   type MinefieldRound,
 } from '@/lib/minefield';
@@ -36,7 +36,7 @@ const Minefield = () => {
   const [restored] = useState(() => loadDailyResult(todayStr));
   const [gameMode, setGameMode] = useState<GameMode>('daily');
   const [phase, setPhase] = useState<Phase>(restored ? 'done' : 'intro');
-  const [rounds, setRounds] = useState<MinefieldRound[]>(() => (restored ? buildRun(daySeed()) : []));
+  const [rounds, setRounds] = useState<MinefieldRound[]>(() => (restored ? buildRun(dayNumber(todayStr)) : []));
   const [roundIdx, setRoundIdx] = useState(0);
   const [picked, setPicked] = useState<number[]>([]);
   const [lives, setLives] = useState(LIVES_PER_ROUND);
@@ -64,7 +64,7 @@ const Minefield = () => {
       const saved = loadDailyResult(todayStr);
       if (saved) {
         setGameMode('daily');
-        setRounds(buildRun(daySeed()));
+        setRounds(buildRun(dayNumber(todayStr)));
         setScore(saved.score);
         setRoundsWon(saved.roundsWon);
         markRestoredFinish('minefield');
@@ -73,7 +73,7 @@ const Minefield = () => {
       }
     }
     setGameMode(gm);
-    setRounds(buildRun(gm === 'daily' ? daySeed() : undefined));
+    setRounds(buildRun(gm === 'daily' ? dayNumber(todayStr) : undefined));
     setRoundIdx(0);
     setPicked([]);
     setLives(LIVES_PER_ROUND);
