@@ -1,0 +1,5 @@
+Crystal Palace: head {"plays":true,"conf0":35,"sacked":3,"weeks":"14/14/20","objs":"league,cup,uel,rival,goals,youngStar,natQuota","cal":80,"uel":17} | off {"plays":false,"conf0":35,"sacked":2,"weeks":"22/24","objs":"league,cup,rival,goals,youngStar,natQuota","cal":63,"uel":0}
+Everton: head {"plays":true,"conf0":50,"sacked":6,"weeks":"15/25/29/36/37/53","objs":"league,cup,uel,rival,defence,marquee,natQuota","cal":72,"uel":17} | off {"plays":false,"conf0":50,"sacked":5,"weeks":"18/18/19/48/55","objs":"league,cup,rival,defence,marquee,natQuota","cal":55,"uel":0}
+Brentford: head {"plays":true,"conf0":69,"sacked":2,"weeks":"34/55","objs":"league,cup,uel,rival,goals,marquee,natQuota","cal":72,"uel":17} | off {"plays":false,"conf0":69,"sacked":0,"weeks":"","objs":"","cal":55,"uel":0}
+Fulham: head {"plays":false,"conf0":78,"sacked":3,"weeks":"30/31/49","objs":"league,cup,ucl,rival,points,youth,netSpend,marquee,natQuota","cal":55,"uel":0} | off {"plays":false,"conf0":78,"sacked":3,"weeks":"30/31/49","objs":"league,cup,ucl,rival,points,youth,netSpend,marquee,natQuota","cal":55,"uel":0}
+sack1593: sacked in season two, head (plays) 14 of 40, opt in dropped 10 of 40

@@ -1,0 +1,3 @@
+sack-b exit=0 97s | sack1593: sacked in season two, head (plays) 17 of 40, opt in dropped 11 of 40
+sack-a exit=0 98s | sack1593: sacked in season two, head (plays) 14 of 40, opt in dropped 10 of 40
+sack-c exit=0 118s | sack1593: sacked in season two, head (plays) 16 of 60, opt in dropped 15 of 60

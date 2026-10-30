@@ -1,0 +1,5 @@
+Nottingham Forest: head {"plays":true,"conf0":35,"sacked":7,"weeks":"14/14/17/36/37/52/65","objs":"league,cup,uel,rival,defence,natQuota,veterans","cal":72,"uel":17} | off {"plays":false,"conf0":35,"sacked":4,"weeks":"13/19/21/21","objs":"league,cup,rival,defence,natQuota,veterans","cal":55,"uel":0}
+Bournemouth: head {"plays":true,"conf0":35,"sacked":0,"weeks":"","objs":"","cal":80,"uel":17} | off {"plays":false,"conf0":35,"sacked":0,"weeks":"","objs":"","cal":63,"uel":0}
+Aston Villa: head {"plays":true,"conf0":39,"sacked":7,"weeks":"9/19/27/28/50/53/63","objs":"league,cup,uel,rival,points,marquee,natQuota","cal":72,"uel":17} | off {"plays":false,"conf0":39,"sacked":7,"weeks":"13/15/16/16/21/21/51","objs":"league,cup,rival,points,marquee,natQuota","cal":55,"uel":0}
+Real Betis: head {"plays":true,"conf0":69,"sacked":3,"weeks":"35/45/59","objs":"league,cup,uel,rival,goals,youth,netSpend,posGap,youngStar","cal":71,"uel":17} | off {"plays":false,"conf0":69,"sacked":0,"weeks":"","objs":"","cal":54,"uel":0}
+sack1593: sacked in season two, head (plays) 17 of 40, opt in dropped 11 of 40
