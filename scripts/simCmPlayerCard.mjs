@@ -522,7 +522,8 @@ const onlySeason = (fin, season) => (Array.isArray(fin.pastLines) ? fin.pastLine
     ['the committed second tier save (Valencia)', 'scripts/data/cmSecondTierOldSaveFixture.json', 0x7002],
   ];
   for (const [name, file, seed] of saves) {
-    const raw = fs.readFileSync(path.join(ROOT, file), 'utf8');
+    /* Line endings folded, as every read of this harness does (simHarnessAnchors). */
+    const raw = fs.readFileSync(path.join(ROOT, file), 'utf8').replace(/\r\n/g, '\n');
     const s = onStream(seed, () => loadOn(candidate, raw));
     const o = onStream(seed, () => loadOn(off, raw));
     tick('oldsave', 3);
