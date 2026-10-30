@@ -1,0 +1,3 @@
+simOneOffCups: node scripts/simOneOffCups.mjs
+ooc-2: ONE_OFF_ONLY=2 node scripts/simOneOffCups.mjs
+simCmShirtSales: node scripts/simCmShirtSales.mjs

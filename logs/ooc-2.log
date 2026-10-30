@@ -1,0 +1,29 @@
+  2 calendar: 80 participant seasons beside their twins, 57 nights; the closest neighbour of a night 1 days, at most 3 matches in seven days to a night
+  7 fitness into the league opener: 80.2 after the super cup night, 100.0 in the twin with no night, 100.0 at the rollover (40 seasons)
+  2 later participant seasons (not held to the twin: the arms have parted): 40
+  2 men who paid a night (sum): 901
+  2 nights whose squad was read (the norecovery control reads these): 80
+  2 participant journeys whose wages differ from the twin by a week keyed event (printed, not asserted): 39
+  2 states after a night and before the league opener (the leaguestarted control reads these): 80
+  FAIL 2 slots: Everton seed 5 nocoach season 2: the nights sit before entries 0,4,8,13,16,19,24,29,30,35,36,40,41,45,46,50,52,53, the placer gives 0
+  FAIL 2 nights: Everton seed 5 nocoach season 2: a night entry is not { oneOff, dsc, n } in order
+  FAIL 2 calendar: Everton seed 5 nocoach season 2: with the nights taken out the calendar is not the twin's
+  FAIL 2 dates: Everton seed 5 nocoach season 2: an entry's date moved (first: 2027-09-04)
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 1 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 1 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 1 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 1 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 1 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 1 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 5 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 5 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 1 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 5 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 5 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 5 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 1 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 5 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 5 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 1 and 2 days from its neighbours
+  FAIL 2 dates: Everton seed 5 nocoach season 2: a night 5 and 2 days from its neighbours
+simOneOffCups: 21 FAILURES of 6569 checks (361 s)
