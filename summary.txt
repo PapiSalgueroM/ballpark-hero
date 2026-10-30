@@ -1,0 +1,8 @@
+handover-head exit=1 1s | Node.js v24.22.1
+decision-head exit=1 1s | Node.js v24.22.1
+lineups-head exit=1 1s | Node.js v24.22.1
+restart-head exit=1 1s | Node.js v24.22.1
+handover-main exit=1 1s | Node.js v24.22.1
+decision-main exit=1 1s | Node.js v24.22.1
+restart-main exit=1 1s | Node.js v24.22.1
+lineups-main exit=1 1s | Node.js v24.22.1

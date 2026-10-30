@@ -1,0 +1,8 @@
+decision-head: R=$PWD; git worktree add /tmp/h-dd 4202099a7 >/dev/null 2>&1 && cd /tmp/h-dd && ln -s $R/node_modules node_modules && timeout 1500 node scripts/simClubManagerDecisionDeadline.mjs
+handover-head: R=$PWD; git worktree add /tmp/h-hd 4202099a7 >/dev/null 2>&1 && cd /tmp/h-hd && ln -s $R/node_modules node_modules && timeout 1500 node scripts/simCmHandoverDesk.mjs
+lineups-head: R=$PWD; git worktree add /tmp/h-ll 4202099a7 >/dev/null 2>&1 && cd /tmp/h-ll && ln -s $R/node_modules node_modules && timeout 1500 node scripts/simManagerLiveLineups.mjs
+restart-head: R=$PWD; git worktree add /tmp/h-pr 4202099a7 >/dev/null 2>&1 && cd /tmp/h-pr && ln -s $R/node_modules node_modules && timeout 1500 node scripts/simPitchRestartContinuity.mjs
+decision-main: R=$PWD; git worktree add /tmp/m-dd c18c4b7a8 >/dev/null 2>&1 && cd /tmp/m-dd && ln -s $R/node_modules node_modules && timeout 600 node scripts/simClubManagerDecisionDeadline.mjs
+handover-main: R=$PWD; git worktree add /tmp/m-hd c18c4b7a8 >/dev/null 2>&1 && cd /tmp/m-hd && ln -s $R/node_modules node_modules && timeout 600 node scripts/simCmHandoverDesk.mjs
+lineups-main: R=$PWD; git worktree add /tmp/m-ll c18c4b7a8 >/dev/null 2>&1 && cd /tmp/m-ll && ln -s $R/node_modules node_modules && timeout 600 node scripts/simManagerLiveLineups.mjs
+restart-main: R=$PWD; git worktree add /tmp/m-pr c18c4b7a8 >/dev/null 2>&1 && cd /tmp/m-pr && ln -s $R/node_modules node_modules && timeout 600 node scripts/simPitchRestartContinuity.mjs
