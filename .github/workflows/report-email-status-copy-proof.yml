@@ -1,0 +1,107 @@
+name: Report email status copy proof
+on:
+  push:
+    branches: [codex/report-email-status-copy-proof-20261030]
+permissions:
+  contents: read
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: 'true'
+      TZ: UTC
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_PRODUCT: 346ef329cab79b7837492bb571e4158e1b630a2d
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind copy-only product and one proof addition
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/report-email-status-copy";test ! -e "$out";mkdir "$out"
+          echo "REPORT_COPY_OUT=$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/report-email-status-copy-proof-20261030
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PRODUCT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PRODUCT")" = "$EXPECTED_PRODUCT 988dc9d6b880d6c8a15fb4a00e09e6bf7a18eeab"
+          test "$(git rev-parse "$EXPECTED_PRODUCT^{tree}")" = c5011f2c226acc9c2d27a25043c3bdc644973ceb
+          test "$(git ls-tree -r --name-only "$EXPECTED_PRODUCT" | wc -l)" -eq 5456
+          test "$(git ls-files | wc -l)" -eq 5457
+          git diff --name-status "$EXPECTED_PRODUCT" HEAD > "$out/proof-diff.txt"
+          printf 'A\t.github/workflows/report-email-status-copy-proof.yml\n' | cmp - "$out/proof-diff.txt"
+          test "$(git rev-parse "$EXPECTED_PRODUCT:src/pages/AdminReports.tsx")" = a0acccb0be5fd24ff35a8cb6889078f8d6004da2
+          test "$(git rev-parse "$EXPECTED_PRODUCT:docs/PROJECT-STATE.md")" = 118c233e9cf7d84360fe1ba4984bdce22be961d6
+          git ls-files -z | sort -z > "$out/source-members.before"
+          xargs -0 sha256sum < "$out/source-members.before" > "$out/source.before.sha256"
+          sha256sum package.json package-lock.json > "$out/packages.before.sha256"
+          sha256sum "$(git rev-parse --git-path index)" > "$out/index.before.sha256"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git archive --format=tar HEAD > "$out/source.tar"
+          printf '{"scope":"COPY_ONLY_EXISTING_REPORT_CHECKS","product":"%s","proof":"%s","productionDbAndEmail":"NO_TRANSPORT_ALLOWED","liveRelaySection4":"EXPECTED_OFFLINE_SKIP","fullSuite":"UNRUN","fullSims":"UNRUN","SEOAndBrowser":"UNRUN","publication":false}\n' "$EXPECTED_PRODUCT" "$GITHUB_SHA" > "$out/SCOPE.json"
+      - name: Actual locked dependencies
+        run: |
+          set -euo pipefail
+          raw=0;npm ci > "$REPORT_COPY_OUT/npm-ci.stdout.log" 2> "$REPORT_COPY_OUT/npm-ci.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$REPORT_COPY_OUT/npm-ci.raw.exit";test "$raw" -eq 0
+      - name: Existing report tests, real types, build and all owned relay controls
+        run: |
+          set -euo pipefail
+          out="$REPORT_COPY_OUT";unset REPORT_RELAY_CONTROL NODE_OPTIONS
+          run() {
+            local id="$1";shift;local dir="$out/$id";mkdir "$dir";printf '%q ' "$@" > "$dir/command.txt"
+            : > "$dir/transport.log";local raw=0
+            SIM_OFFLINE_RECEIPT="$dir/transport.log" NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" FORCE_COLOR=0 timeout --signal=TERM --kill-after=15s 8m "$@" > "$dir/stdout.log" 2> "$dir/stderr.log" || raw=$?
+            printf '%s\n' "$raw" > "$dir/raw.exit";cat "$dir/stdout.log" "$dir/stderr.log" > "$dir/combined.log";test "$raw" -eq 0
+          }
+          run types node_modules/.bin/tsc --noEmit -p tsconfig.app.json;test ! -s "$out/types/transport.log"
+          run report-tests npm test -- src/test/reportContext.test.ts src/test/reportDetails.test.tsx src/test/reportDraftLifecycle.test.tsx src/test/gameReportPlacement.test.tsx --no-cache --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile.json="$out/report-tests/vitest.json"
+          test ! -s "$out/report-tests/transport.log"
+          node -e 'const fs=require("node:fs"),a=require("node:assert/strict"),r=JSON.parse(fs.readFileSync(process.argv[1])),want={"reportContext.test.ts":5,"reportDetails.test.tsx":19,"reportDraftLifecycle.test.tsx":14,"gameReportPlacement.test.tsx":8};a.equal(r.success,true);a.equal(r.numTotalTests,46);a.equal(r.numPassedTests,46);for(const k of ["numFailedTests","numPendingTests","numTodoTests","numFailedTestSuites"])a.equal(r[k],0);a.equal(r.testResults.length,4);for(const f of r.testResults){const n=f.name.split("/").pop();a.equal(f.status,"passed");a.equal(f.message,"");a.equal(f.assertionResults.length,want[n]);delete want[n];for(const t of f.assertionResults){a.equal(t.status,"passed");a.deepEqual(t.failureMessages,[])}}a.equal(Object.keys(want).length,0);console.log("REPORT_COPY_EXISTING46: green")' "$out/report-tests/vitest.json" > "$out/report-tests/admission.stdout.log" 2> "$out/report-tests/admission.stderr.log"
+          run build npm run build;test ! -s "$out/build/transport.log";grep -Eq 'built in .+' "$out/build/stdout.log"
+          tar -cf "$out/dist.tar" -C dist .
+          for arm in normal silent oldkinds staleresolved countdrift snapback nostatus openinsert policy;do
+            if test "$arm" = normal;then run relay-normal node scripts/simReportRelay.mjs;else run "relay-$arm" env REPORT_RELAY_CONTROL="$arm" node scripts/simReportRelay.mjs;fi
+            dir="$out/relay-$arm"
+            test "$(wc -l < "$dir/transport.log")" -eq 1
+            test "$(grep -Fxc '[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co' "$dir/transport.log")" -eq 1
+            test "$(grep -Fxc '   SKIPPED: the table could not be reached (Offline harness blocked fetch to https://flawuiqbvjobmkfkauhw.supabase.co), so the live column check did not run.' "$dir/stdout.log")" -eq 1
+            if test "$arm" = normal;then test "$(grep -Ec '^simReportRelay: green\.' "$dir/stdout.log")" -eq 1
+            else
+              case "$arm" in silent) section=2;;oldkinds) section=1;;staleresolved|countdrift|snapback) section=5;;nostatus|openinsert|policy) section=6;;esac
+              test "$(grep -c '^NEGATIVE CONTROL ON:' "$dir/stdout.log")" -eq 1
+              test "$(grep -Ec "^control \"$arm\": [1-9][0-9]* failure\(s\) fired in section $section and nowhere else, the check works$" "$dir/stdout.log")" -eq 1
+            fi
+          done
+          printf '{"types":0,"existingReportTests":46,"ordinaryBuild":0,"relayNormal":0,"ownedControls":8,"liveSection4":"SKIPPED_OFFLINE_GUARD","productionDbAndEmail":"NO_TRANSPORT_ALLOWED","fullSuite":"UNRUN","fullSims":"UNRUN","SEOAndBrowser":"UNRUN","featureReady":false}\n' > "$out/GATES.json"
+      - name: Always retain raw evidence and source, package and index holds
+        if: ${{ always() }}
+        env:
+          PRIOR_STATUS: ${{ job.status }}
+        run: |
+          set -uo pipefail
+          out="$REPORT_COPY_OUT";failed=0
+          git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" || failed=1
+          sha256sum -c "$out/source.before.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          sha256sum -c "$out/packages.before.sha256" > "$out/packages-held.log" 2>&1 || failed=1
+          sha256sum -c "$out/index.before.sha256" > "$out/index-held.log" 2>&1 || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after";cmp "$out/refs.before" "$out/refs.after" || failed=1
+          if test -d dist && test ! -f "$out/dist.tar";then tar -cf "$out/dist.tar" -C dist . || failed=1;fi
+          printf '{"priorStatus":"%s","finalHoldsRaw":%s,"scope":"COPY_ONLY","fullSuite":"UNRUN","actualDbAndEmail":false,"publication":false}\n' "$PRIOR_STATUS" "$failed" > "$out/FINAL-HOLDS.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/report-copy-evidence.sha256"
+          cp "$RUNNER_TEMP/report-copy-evidence.sha256" "$out/evidence.sha256";exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: report-email-status-copy-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/report-email-status-copy
+          if-no-files-found: error
+          retention-days: 14
