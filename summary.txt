@@ -1,0 +1,9 @@
+tsc exit=0 44s | 
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 31s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 1s | simStorageWrites: all green (owed: 12)
+vitest exit=0 30s |    Duration  29.84s (transform 2.82s, setup 337ms, collect 9.19s, tests 42.23s, environment 2.15s, prepare 483ms)
+m1always exit=1 72s | playFirstVisitDialogs: RED. 3 bar lines: /club-manager#club-picked 320x640, /club-manager#club-picked 390x844, /club-manager#club-picked 1280x900
+m3nosm exit=1 63s | playFirstVisitDialogs: RED. 2 bar lines: /soccer-career#hub 320x640, /soccer-career#hub 390x844
+m6card exit=1 61s | playFirstVisitDialogs: RED. 3 bar lines: /soccer-career#kept-aside 320x640, /soccer-career#kept-aside 390x844, /soccer-career#kept-aside 1280x900
+m7foot exit=1 62s | playFirstVisitDialogs: RED. 1 bar lines: /soccer-career#hub 320x640

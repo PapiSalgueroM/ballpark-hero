@@ -1,0 +1,16 @@
+MUTATED m1 in src/pages/ClubManager.tsx
+  NONE     /club-manager 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /club-manager 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /club-manager 1280x900: no first visit dialog, banner 735 to 900 (pending)
+
+3 route widths walked over 1 routes: 0 dialogs tapped and closed, 0 expected site reds, 3 without a first visit dialog, 0 red
+
+THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner
+  BARS FAIL     /club-manager#club-picked 320x640: answered, "Take the job" moved 75 px when the 305 px banner was answered, not down by its height
+  BARS FAIL     /club-manager#club-picked 390x844: answered, "Take the job" moved 3 px when the 233 px banner was answered, not down by its height
+  BARS FAIL     /club-manager#club-picked 1280x900: answered, "Take the job" moved -65 px when the 165 px banner was answered, not down by its height
+  BARS PASS     /club-manager#custom-club 320x640: 1 fixed control, none meets the banner 335 to 640; the closest, "Found the club", 15 px above it; answered, 1 lifted control dropped by the banner's 305 px
+  BARS PASS     /club-manager#custom-club 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Found the club", 12 px above it; answered, 1 lifted control dropped by the banner's 233 px
+  BARS PASS     /club-manager#custom-club 1280x900: 1 fixed control, none meets the banner 735 to 900; the closest, "Found the club", 12 px above it; answered, 1 lifted control dropped by the banner's 165 px
+9 bar lines (6 of them scripted states): 6 green over 3 fixed controls, 3 red, 0 with no pending banner; the closest green control sat 12 px above the banner ("Found the club", /club-manager#custom-club 390x844); answered, 3 lifted controls dropped back by the banner's height
+playFirstVisitDialogs: RED. 3 bar lines: /club-manager#club-picked 320x640, /club-manager#club-picked 390x844, /club-manager#club-picked 1280x900

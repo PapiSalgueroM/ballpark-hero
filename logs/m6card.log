@@ -1,0 +1,16 @@
+MUTATED m6 in src/components/BrokenSaveRestore.tsx
+  NONE     /soccer-career 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /soccer-career 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /soccer-career 1280x900: no first visit dialog, banner 735 to 900 (pending)
+
+3 route widths walked over 1 routes: 0 dialogs tapped and closed, 0 expected site reds, 3 without a first visit dialog, 0 red
+
+THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner
+  BARS PASS     /soccer-career#hub 320x640: 1 fixed control, none meets the banner 335 to 640; the closest, "Next Year", 18 px above it; answered, 1 lifted control dropped by the banner's 305 px
+  BARS PASS     /soccer-career#hub 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Next Year", 18 px above it; answered, 1 lifted control dropped by the banner's 233 px
+  BARS PASS     /soccer-career#hub 1280x900: 3 fixed controls, none meets the banner 735 to 900; the closest, "Next Year", 18 px above it; answered, 3 lifted controls dropped by the banner's 165 px
+  BARS FAIL     /soccer-career#kept-aside 320x640: 3 fixed controls meet the banner 335 to 640: "Put that save back" 525 to 561, 36 px under the banner, in div.fixed.bottom-4.left-4.right-4.sm:left-auto.sm:max-w-sm.z-50.p-4 (z 50); "Leave it aside" 569 to 607, 38 px under the banner, in div.fixed.bottom-4.left-4.right-4.sm:left-auto.sm:max-w-sm.z-50.p-4 (z 50); "Delete it" 569 to 607, 38 px under the banner, in div.fixed.bottom-4.left-4.right-4.sm:left-auto.sm:max-w-sm.z-50.p-4 (z 50). answered, "Put that save back" moved 0 px when the 305 px banner was answered, not down by its height
+  BARS FAIL     /soccer-career#kept-aside 390x844: 3 fixed controls meet the banner 611 to 844: "Put that save back" 727 to 765, 38 px under the banner, in div.fixed.bottom-4.left-4.right-4.sm:left-auto.sm:max-w-sm.z-50.p-4 (z 50); "Leave it aside" 727 to 765, 38 px under the banner, in div.fixed.bottom-4.left-4.right-4.sm:left-auto.sm:max-w-sm.z-50.p-4 (z 50); "Delete it" 773 to 811, 38 px under the banner, in div.fixed.bottom-4.left-4.right-4.sm:left-auto.sm:max-w-sm.z-50.p-4 (z 50). answered, "Put that save back" moved 0 px when the 233 px banner was answered, not down by its height
+  BARS FAIL     /soccer-career#kept-aside 1280x900: 3 fixed controls meet the banner 735 to 900: "Put that save back" 783 to 821, 38 px under the banner, in div.fixed.bottom-4.left-4.right-4.sm:left-auto.sm:max-w-sm.z-50.p-4 (z 50); "Leave it aside" 783 to 821, 38 px under the banner, in div.fixed.bottom-4.left-4.right-4.sm:left-auto.sm:max-w-sm.z-50.p-4 (z 50); "Delete it" 829 to 867, 38 px under the banner, in div.fixed.bottom-4.left-4.right-4.sm:left-auto.sm:max-w-sm.z-50.p-4 (z 50). answered, "Put that save back" moved 0 px when the 165 px banner was answered, not down by its height
+9 bar lines (6 of them scripted states): 6 green over 5 fixed controls, 3 red, 0 with no pending banner; the closest green control sat 18 px above the banner ("Next Year", /soccer-career#hub 320x640); answered, 5 lifted controls dropped back by the banner's height
+playFirstVisitDialogs: RED. 3 bar lines: /soccer-career#kept-aside 320x640, /soccer-career#kept-aside 390x844, /soccer-career#kept-aside 1280x900
