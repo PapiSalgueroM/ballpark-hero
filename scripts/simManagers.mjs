@@ -36,6 +36,12 @@
    7d. never your club, a club you managed, a Hot Seat club or a mid season
        predecessor;
    7e. an old save fixture loads with its managers record byte identical.
+   7f. 20 whole seasons with the sentinel seated (4 per era), read the way
+       simNoInventedQuotes pass 1 reads them (every match result, the feed,
+       the inbox and the desk after each entry, then the season end and the
+       summer): nothing outside the record says him, and each season is its
+       empty table twin's draw for draw. Floors: 20 matches against his club
+       and 300 distinct lines.
    7g. in every league, the summer you take the sentinel's own job (a move
        into his chair, the call an accepted offer makes) reads "You take
        over at {club}." and nothing names him, then or after.
@@ -52,6 +58,8 @@
      recycle    a real name recycled into another chair, 7b must go red.
      takeover   the takeover line names the real man you replace, 7g must
                 name the sentinel.
+     liveevent  every match writes the other manager into a live event, 7f
+                must name the sentinel.
 
    Run: node scripts/simManagers.mjs
 */
@@ -68,7 +76,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL_NAME = process.env.SIM_MANAGERS_CONTROL || '';
 /* Round 1606: the sentinel controls, each judged on its own section's failures. */
-const SENTINEL_CONTROLS = { namedsack: '7b', recycle: '7b', takeover: '7g' };
+const SENTINEL_CONTROLS = { namedsack: '7b', recycle: '7b', takeover: '7g', liveevent: '7f' };
 if (CONTROL_NAME && CONTROL_NAME !== 'sever' && !SENTINEL_CONTROLS[CONTROL_NAME]) {
   console.error(`SIM_MANAGERS_CONTROL=${CONTROL_NAME} is not a control this harness knows (sever, ${Object.keys(SENTINEL_CONTROLS).join(', ')})`);
   process.exit(2);
@@ -289,6 +297,7 @@ async function realDugoutsSection() {
   };
   const failB = failer('7b');
   const failG = failer('7g');
+  const failF = failer('7f');
   /* Everything a state says outside the record and the vacancy list, in one pass (spoken() copies the state first). */
   const said = state => JSON.stringify({ ...state, managers: undefined, pendingVacancies: undefined });
   /* The sentinel must be nobody: no shipped file under src (every roster, bake, pool and generator bank) carries
@@ -307,7 +316,10 @@ async function realDugoutsSection() {
   const plan = await sentinelPlan(cm);
   const edit = MODE === 'namedsack' ? { from: 'const holderReal = realOut.has(s.name);', to: 'const holderReal = false;' }
     : MODE === 'recycle' ? { from: 'if (recycled && !realOut.has(recycled)) {', to: 'if (recycled) {' }
-    : MODE === 'takeover' ? { from: 'const displacedReal = isRealChair(record[state.clubName]);', to: 'const displacedReal = false;' } : null;
+    : MODE === 'takeover' ? { from: 'const displacedReal = isRealChair(record[state.clubName]);', to: 'const displacedReal = false;' }
+    /* A round that writes the other manager into a live event: one line per match naming whoever is in their chair. */
+    : MODE === 'liveevent' ? { from: '  let trophyWon: string | null = null;', to: '  let trophyWon: string | null = null; { const oppMgr = state.managers?.[fx.opponent]?.name; if (oppMgr) events.push(`The other bench, ${oppMgr}, never sat down.`); }' }
+    : null;
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'managers-1606-'));
   const nodeModules = path.join(ROOT, 'node_modules');
   const srcDir = path.join(ROOT, 'src');
@@ -384,6 +396,7 @@ async function realDugoutsSection() {
   console.log(`   7b: ${summers} summers, ${emptied} with the sentinel's chair emptied (${natural} by the sim's own draw), ${recycleChances} with a second chair to recycle into, ${offersChecked} offers read (${realOffers} for the emptied real chair, all saying only that the club is making a change), ${bySection['7b'].fails} failures (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
   console.log(`   7c: ${sameStrip} of ${summers} sentinel careers equal their empty table twin after the strip, draw for draw`);
   if (emptied < 200) fail(`7b: only ${emptied} summers emptied the sentinel's chair (floor 200)`);
+  if (!MODE || MODE === 'liveevent') playedSeasons();
   /* 7a runs after 7b and 7c on purpose: the engine numbers its youth ids with a counter, so the two twins must have run the same calls before they are compared. */
   /* 7a. day one, and only day one of the table's own year */
   let held = 0, partialSeen = 0;
@@ -454,6 +467,85 @@ async function realDugoutsSection() {
   }
   await ownAndManaged(S, byEra('now').find(l => l.id === 'premier') ?? byEra('now')[0]);
   return { bySection };
+
+  /* 7f. Whole seasons with the sentinel seated, read the way simNoInventedQuotes pass 1 reads them: every match
+     result (its events and the rest of its report), the feed, the inbox and the desk after every entry, answered as
+     pass 1 answers them, then the season end (offers, awards, the summary) and the summer. Nothing outside the
+     record may say him, and each season must be its empty table twin's, draw for draw, after the 7c strip. Floors
+     on the distinct lines read and on the matches played against his club (measured numbers in the header). */
+  function playedSeasons() {
+    const PER_ERA_F = 4;
+    let seasons = 0, entries = 0, vsHim = 0, twins = 0, hidden = 0;
+    const seen = new Set();
+    const t1 = Date.now();
+    for (const era of ERAS) {
+      const pool = byEra(era);
+      for (let k = 0; k < PER_ERA_F; k++) {
+        const L = pool[(k * 2 + 1) % pool.length];
+        const seed = hashSeed(`7f|${era}|${k}`);
+        let shown = 0;
+        const hit = (label, text) => {
+          const i = text.indexOf(SENTINEL);
+          if (i < 0) return;
+          shown += 1;
+          const m = `${era} ${L.id} seed ${k}: ${label} says ${SENTINEL}: "${text.slice(Math.max(0, i - 80), i + 40)}"`;
+          if (shown <= 3) failF(m);
+          else { hidden += 1; failures += 1; bySection['7f'].fails += 1; bySection['7f'].named += 1; }
+        };
+        const line = t => { if (typeof t === 'string' && t) seen.add(t); };
+        const read = {
+          entry: (r, s) => {
+            entries += 1;
+            const res = r.result;
+            if (res && (res.home === L.sentinel || res.away === L.sentinel)) vsHim += 1;
+            for (const e of res?.events ?? []) line(e);
+            for (const h of s.aiHeadlines ?? []) line(h);
+            for (const m of s.inbox ?? []) { line(m.text); line(m.resolved); }
+            for (const d of Array.isArray(s.decisions) ? s.decisions : []) { line(d.text); line(d.resolved); for (const o of d.options ?? []) line(o.label); }
+            hit(`the match result of week ${s.week}`, JSON.stringify(res ?? null));
+            hit(`week ${s.week}`, said(s));
+          },
+          state: (st, label) => hit(label, said(st)),
+        };
+        const play = (E, rd) => seeded(seed, () => {
+          let s = E.cm.startCareer(L.career, era);
+          const seated = s.managers?.[L.sentinel]?.name === SENTINEL;
+          E.cm.ensureRoles(s);
+          s.xiIds = E.cm.autoPickXI(s.squad, E.cm.FORMATIONS[s.formationIndex] ?? E.cm.FORMATIONS[0]);
+          for (const h of s.aiHeadlines ?? []) if (rd) line(h);
+          let guard = 0;
+          while (s.week < s.calendar.length && guard < 140) {
+            guard += 1;
+            const r = E.cm.playNextEntry(s, { skipHalftime: true });
+            s = r.state;
+            if (rd) rd.entry(r, s);
+            const open = [...(s.inbox ?? []), ...(Array.isArray(s.decisions) ? s.decisions : [])].filter(m => !m.resolved && (m.options?.length ?? 0) > 0);
+            for (const m of open) s = E.cm.answerMessage(s, m.id, guard % m.options.length);
+            if (rd) rd.state(s, `week ${s.week} after answering`);
+            if (r.kind === 'seasonOver') break;
+          }
+          const fin = E.cm.finishSeason(s).state;
+          if (rd) rd.state(fin, 'the season end');
+          const next = E.cm.startNextSeason(fin);
+          if (rd) rd.state(next, 'the new season');
+          return { seated, s, fin, next };
+        });
+        const a = play(S, read), z = play(Z, null);
+        seasons += 1;
+        if (!a.value.seated) { fail(`7f: ${era} ${L.id} seed ${k}: the sentinel was not seated at ${L.sentinel}, the season tests nothing`); continue; }
+        const keys = ['s', 'fin', 'next'];
+        if (a.draws === z.draws && keys.every(key => JSON.stringify(strip(a.value[key])) === JSON.stringify(strip(z.value[key])))) twins += 1;
+        else {
+          const where = keys.map(key => firstDiff(strip(a.value[key]), strip(z.value[key]))).find(Boolean) ?? 'the draws';
+          fail(`7f: ${era} ${L.id} seed ${k}: the season differs from the empty table's twin (draws ${a.draws} vs ${z.draws}), first at ${where}`);
+        }
+      }
+    }
+    console.log(`   7f: ${seasons} whole seasons with the sentinel seated, ${entries} entries, ${vsHim} matches against his club, ${seen.size} distinct lines read, ${twins} of ${seasons} equal to their empty table twin, ${bySection['7f'].fails} failures${hidden ? ` (${hidden} not shown)` : ''} (${((Date.now() - t1) / 1000).toFixed(0)} s)`);
+    if (seasons !== ERAS.length * PER_ERA_F) fail(`7f: only ${seasons} seasons played`);
+    if (vsHim < 20) fail(`7f: only ${vsHim} matches against the sentinel's club (floor 20)`);
+    if (seen.size < 300) fail(`7f: only ${seen.size} distinct lines read, the harvest did not exercise the narrative (floor 300)`);
+  }
 }
 
 /* 7d and 7e. Never your club, a club you managed, a Hot Seat club or a mid season predecessor; an old save
