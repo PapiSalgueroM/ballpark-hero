@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+playSoccerCareer: ENGINES=chromium node scripts/playSoccerCareer.mjs
+playTwoTabs: ENGINES=chromium node scripts/playTwoTabs.mjs
