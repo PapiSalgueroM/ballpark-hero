@@ -1,0 +1,9 @@
+roll-head exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx,title=src/test/soccerCareerCreationRoll.test.tsx > Soccer Career cre
+mutM2 exit=0 6s | MUTANT M2 KILLED by node_modules/.bin/vitest run
+mutM7 exit=0 5s | MUTANT M7 KILLED by node_modules/.bin/vitest run
+mutM3 exit=0 6s | MUTANT M3 KILLED by node_modules/.bin/vitest run
+mutM3n exit=0 6s | MUTANT M3n KILLED by node_modules/.bin/vitest run
+mutM3e exit=0 6s | MUTANT M3e KILLED by node_modules/.bin/vitest run
+mutM9 exit=0 6s | MUTANT M9 KILLED by node_modules/.bin/vitest run
+mutM5 exit=0 6s | MUTANT M5 KILLED by node_modules/.bin/vitest run
+mutM8 exit=0 6s | MUTANT M8 KILLED by node_modules/.bin/vitest run
