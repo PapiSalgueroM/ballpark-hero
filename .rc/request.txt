@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+size-d: node scripts/simClubManagerSaveSize.mjs
+size-1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+size-2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+size-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+size-4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+size-5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+size-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simUsCareerHallWall: node scripts/simUsCareerHallWall.mjs
