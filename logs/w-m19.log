@@ -1,0 +1,28 @@
+  FAIL: /club-manager: 642K of gzipped JavaScript against a budget of 636K
+  FAIL: /front-office: 389K of gzipped JavaScript against a budget of 388K
+  FAIL: /manager-hot-seat: 657K of gzipped JavaScript against a budget of 654K
+  FAIL: /deadline-day: 665K of gzipped JavaScript against a budget of 661K
+sweepWeight: 4 failures
+   /                   245K gz over   3 files (budget 245K, 244.7K to the tenth)
+   /club-manager       642K gz over  43 files (budget 636K, 641.8K to the tenth)
+   /soccer-career      832K gz over  50 files (budget 840K, 832.3K to the tenth)
+   /stadium-tycoon     305K gz over  25 files (budget 305K, 304.7K to the tenth)
+   /wonderkid-factory  278K gz over  21 files (budget 278K, 277.7K to the tenth)
+   /minefield          295K gz over  21 files (budget 295K, 295.3K to the tenth)
+   /footle             354K gz over  39 files (budget 354K, 354.4K to the tenth)
+   /nfl-my-career      498K gz over  49 files (budget 498K, 498.2K to the tenth)
+   /front-office       389K gz over  43 files (budget 388K, 389.1K to the tenth)
+   /soccer-grid        320K gz over  36 files (budget 320K, 320.1K to the tenth)
+   /leaderboard        253K gz over   9 files (budget 266K, 252.7K to the tenth)
+   /manager-hot-seat   657K gz over  45 files (budget 654K, 657.1K to the tenth)
+   /deadline-day       665K gz over  48 files (budget 661K, 664.7K to the tenth)
+   /transfer-path      380K gz over  39 files (budget 381K, 380.1K to the tenth)
+   /nba-front-office   397K gz over  44 files (budget 397K, 396.7K to the tenth)
+m19 /nhl-front-office: 378.2K over 42 files
+m19 /front-office: 389.1K over 43 files
+m19 /nfl-my-career: 498.2K over 49 files
+m19 /aussie-rules-manager: 290.9K over 27 files
+m19 /player-bingo: 310.5K over 34 files
+m19 /sports-millionaire: 307.0K over 31 files
+m19 /whats-new: 373.0K over 3 files
+weighBU m19: done, 7 routes

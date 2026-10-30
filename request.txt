@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weigh-head: node .rc/x/weighbu.mjs head
+w-m15: git worktree add /tmp/m15 4310e6714 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m15/node_modules && (cd /tmp/m15 && node_modules/.bin/vite build > /tmp/m15-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m15/dist 4175 > /tmp/m15-server.log 2>&1 &) && sleep 4 && X=$PWD/.rc/x && cd /tmp/m15 && (BASE=http://localhost:4175 SWEEP_BASE=http://localhost:4175 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs | grep -E "K gz|sweepWeight:"); BASE=http://localhost:4175 node $X/weighbu.mjs m15
+w-m17: git worktree add /tmp/m17 d8a1f38e3 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m17/node_modules && (cd /tmp/m17 && node_modules/.bin/vite build > /tmp/m17-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m17/dist 4176 > /tmp/m17-server.log 2>&1 &) && sleep 4 && X=$PWD/.rc/x && cd /tmp/m17 && (BASE=http://localhost:4176 SWEEP_BASE=http://localhost:4176 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs | grep -E "K gz|sweepWeight:"); BASE=http://localhost:4176 node $X/weighbu.mjs m17
+w-m19: git worktree add /tmp/m19 024a81f10 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m19/node_modules && (cd /tmp/m19 && node_modules/.bin/vite build > /tmp/m19-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m19/dist 4177 > /tmp/m19-server.log 2>&1 &) && sleep 4 && X=$PWD/.rc/x && cd /tmp/m19 && (BASE=http://localhost:4177 SWEEP_BASE=http://localhost:4177 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs | grep -E "K gz|sweepWeight:"); BASE=http://localhost:4177 node $X/weighbu.mjs m19
