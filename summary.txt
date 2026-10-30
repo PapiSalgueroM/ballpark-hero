@@ -1,0 +1,3 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playCmHubLanding exit=0 89s | playCmHubLanding: green (A 8 pass 0 fail, B 65 pass 0 fail, C 112 pass 0 fail, E 65 pass 0 fail, F 9 pass 0 fail); the hub lands on the club on its first frame
+playTwoTabs exit=0 445s | playTwoTabs: green at 320x640, 390x844, 1280x900

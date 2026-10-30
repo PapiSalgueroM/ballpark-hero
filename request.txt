@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+playCmHubLanding: node scripts/playCmHubLanding.mjs
+playTwoTabs: node scripts/playTwoTabs.mjs
