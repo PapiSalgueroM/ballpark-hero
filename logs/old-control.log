@@ -1,0 +1,17 @@
+   FAIL now Aston Villa season end: played on from the base save, the branch writes different bytes
+      first difference: .managers.Brighton: {"name":"Alfie Gallardo","since":2} vs {"since":2,"name":"Alfie Gallardo"}
+   FAIL now Fiorentina mid season: played on from the base save, the branch writes different bytes
+      first difference: .managers.Como: {"name":"Emil Abara","since":2} vs {"since":2,"name":"Emil Abara"}
+   FAIL now Fiorentina season end: played on from the base save, the branch writes different bytes
+      first difference: .managers.Inter Milan: {"name":"Bruno Ortega","since":2} vs {"since":2,"name":"Bruno Ortega"}
+   FAIL now Fiorentina summer: played on from the base save, the branch writes different bytes
+   FAIL now PEC Zwolle season end: played on from the base save, the branch writes different bytes
+   FAIL now Colorado Rapids mid season: played on from the base save, the branch writes different bytes
+   FAIL now Colorado Rapids season end: played on from the base save, the branch writes different bytes
+   FAIL now Colorado Rapids summer: played on from the base save, the branch writes different bytes
+   FAIL now Beşiktaş mid season: played on from the base save, the branch writes different bytes
+   FAIL now Beşiktaş season end: played on from the base save, the branch writes different bytes
+   FAIL now Beşiktaş summer: played on from the base save, the branch writes different bytes
+   FAIL now Austria Wien mid season: played on from the base save, the branch writes different bytes
+oldSaveRun1606: 90 base saves loaded on the branch, 180 comparisons, 30 loaded under a filled sentinel table (30 sentinel chairs read), 77 failures (20 s, base c0c66e087)
+oldSaveRun1606: 77 failure(s)

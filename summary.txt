@@ -1,0 +1,2 @@
+old-control exit=1 22s | oldSaveRun1606: 77 failure(s)
+old exit=0 22s | oldSaveRun1606: all green
