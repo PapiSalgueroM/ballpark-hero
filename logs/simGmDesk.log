@@ -1,0 +1,13 @@
+1) every sport declares every field
+   68 fields read across 4 sports
+2) the descriptor mirrors the engines and the boards
+   66 mirrors compared
+3) a corrupt block resets that block alone
+   70 corrupt block cases walked across 3 systems
+4) a save with no gm block is a fresh desk
+   20 envelope cases walked
+5) an empty panel list draws nothing
+   20 renders across 4 sports
+6) hub boxes: keyed apart, first of a repeated key, null left off
+   3 boxes from 5 panels
+simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and an empty panel list leaves nothing on the hub.

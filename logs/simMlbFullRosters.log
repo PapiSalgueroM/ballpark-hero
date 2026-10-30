@@ -1,0 +1,20 @@
+1) the record: 30 clubs from the API on the record date, and the spot check
+   50 men checked against ESPN, 0 disagree
+2) the data file is exactly what the generator makes of the record
+3) every shipped man is a record row, rated and aged by the rule
+   780 men shipped, 12 ratings marked partial
+3c) every club ships two men who caught in 2026, shown at C
+   30 of 30 clubs carry two catchers; 28 men who caught in 2026 are on the left out list
+3n) no two shipped names the same without accents or case
+4) a new league: 26 real men a club, nobody invented, the payroll rule
+   opening payrolls 119 to 230 against the line
+5) the bench never moves a result
+   against a 13 man twin (seed 7919): 22 of 30 clubs end on a different win total, mean 1.8 wins. Why: when one of the 13 is on the IL the 26 man club plays its next man, the 13 man club plays short (the strength averages fewer men), and that changes the strengths in those games.
+   269 of 270 twin rounds compared, 0 moved; IL identical on 210600 of 210600 man rounds
+6) ten franchises, five seasons each
+   50 seasons played across 10 franchises; the GM's club owed 9 DFAs after its drafts
+9) the cut down to 28
+7) an old save replays exactly as it did before this round
+8) the boards under vitest
+
+simMlbFullRosters: all 6201 checks pass

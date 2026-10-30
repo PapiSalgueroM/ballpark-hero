@@ -1,0 +1,9 @@
+1) The four boards, rendered: a reload on the recap draws the recap again and never replays the season
+   vitest exit 0, 25 passed (25)
+   NFL Front Office: 5 green, 0 red. NFL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+   NFL Front Office, full rosters: 5 green, 0 red. NFL Front Office, full rosters: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+   NBA Front Office: 5 green, 0 red. NBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+   MLB Front Office: 5 green, 0 red. MLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+   NHL Front Office: 5 green, 0 red. NHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.

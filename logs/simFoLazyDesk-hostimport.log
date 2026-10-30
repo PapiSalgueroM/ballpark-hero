@@ -1,0 +1,16 @@
+NEGATIVE CONTROL ON: hostimport; section 1 must go red
+1) the page carries the boxes and the loader, and not one module of the career kit
+   FAIL the page carries src/lib/gmDeskHost.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office-shared/gmCareerDesk.tsx > src/lib/gmDeskHost.ts
+   FAIL the page carries src/lib/gmSeat.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office-shared/gmCareerDesk.tsx > src/lib/gmDeskHost.ts > src/lib/gmSeat.ts
+   FAIL the page carries src/lib/managerOffers.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office-shared/gmCareerDesk.tsx > src/lib/gmDeskHost.ts > src/lib/gmSeat.ts > src/lib/managerOffers.ts
+   116 files reached from src/pages/FrontOffice.tsx, 56 dynamic edges seen, 13 kit modules and 5 season modules checked absent
+3) NHL row: /nhl-front-office carries the boxes and its loader, and not one module of any career kit
+   FAIL the page carries src/lib/gmDeskHost.ts, which is the kit's: src/pages/NhlFrontOffice.tsx > src/components/nhl-front-office/NhlFrontOfficeBoard.tsx > src/components/front-office-shared/gmCareerDesk.tsx > src/lib/gmDeskHost.ts
+   FAIL the page carries src/lib/gmSeat.ts, which is the kit's: src/pages/NhlFrontOffice.tsx > src/components/nhl-front-office/NhlFrontOfficeBoard.tsx > src/components/front-office-shared/gmCareerDesk.tsx > src/lib/gmDeskHost.ts > src/lib/gmSeat.ts
+   FAIL the page carries src/lib/managerOffers.ts, which is the kit's: src/pages/NhlFrontOffice.tsx > src/components/nhl-front-office/NhlFrontOfficeBoard.tsx > src/components/front-office-shared/gmCareerDesk.tsx > src/lib/gmDeskHost.ts > src/lib/gmSeat.ts > src/lib/managerOffers.ts
+   108 files reached from src/pages/NhlFrontOffice.tsx, 53 dynamic edges seen, 16 kit modules and 0 season modules checked absent
+2) the Career box drawn before the kit is the box drawn with it, save by save (the GM level box reads the desk alone, the same on both)
+   55296 saves over 3 leagues: the records differ in 30348, the kit's tier is not the bottom one in 39744, a last grade in 9216, a stored record read as itself in 13824
+4) NHL row: the Career box drawn before the kit is the box the NHL kit draws, save by save
+   55296 saves over 3 leagues: the records differ in 31584, the kit's tier is not the bottom one in 41472, a last grade in 9216, a stored record read as itself in 13824
+simFoLazyDesk CONTROL hostimport FIRED: section 1 went red with 3 failures (red sections 1, 3)
