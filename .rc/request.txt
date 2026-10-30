@@ -1,0 +1,14 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+playTwoTabs: bash .rc/default-support.sh run playTwoTabs.mjs
+playTycoonGearFit: bash .rc/default-support.sh run playTycoonGearFit.mjs
+playTycoonSaleReview1083: bash .rc/default-support.sh run playTycoonSaleReview1083.mjs
+playTycoonSetPieceFit: bash .rc/default-support.sh run playTycoonSetPieceFit.mjs
+playUsCareerReports: bash .rc/default-support.sh run playUsCareerReports.mjs
+playUsCareerSaveSeam: bash .rc/default-support.sh run playUsCareerSaveSeam.mjs
+playUsDirtyMoney: bash .rc/default-support.sh run playUsDirtyMoney.mjs
+playUsMarketTalk: bash .rc/default-support.sh run playUsMarketTalk.mjs
+playUsRivalLines: bash .rc/default-support.sh run playUsRivalLines.mjs
+playUsSeasonCentre: bash .rc/default-support.sh run playUsSeasonCentre.mjs
+finish: bash .rc/default-support.sh finish
