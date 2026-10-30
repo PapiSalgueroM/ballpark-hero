@@ -1,0 +1,2 @@
+build exit=0 37s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=1 85s | rwalk1583: 1 problems: 390-reduced-nbaconn-004-win: receipt "Locked: Played for the Boston Celtics (as of 2025-26). Those five are solved." breaks the date over 2 lines
