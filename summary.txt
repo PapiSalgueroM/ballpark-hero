@@ -1,0 +1,3 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+plain exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL, NHL and NBA Connections group is held to the record, and no board has a second right answer the record can see (other t
+simWritesAreSent exit=1 13s | simWritesAreSent: 2 failures

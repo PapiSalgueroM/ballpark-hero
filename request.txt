@@ -1,0 +1,4 @@
+#!build
+#!playwright
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+plain: node scripts/simUsConnectionsFacts.mjs
