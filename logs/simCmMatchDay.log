@@ -1,0 +1,22 @@
+fleet: 25 careers, 918 matches (462 home, 448 away, 8 neutral), 0 reports with no fixture read before them, 17s
+live: 182 matches kicked off live (64 away, 8 on a neutral ground), 728 live renders
+1) One rule: the fixture's venue and the report's own order agree on every match
+   918 matches, 8 reports saying neutral; red: 0 home, 0 away, 0 neutral
+2) The report card: every two sided block in the scoreline's order
+   918 reports, 9180 stat bars read (18360 bar segments); red: 0 home, 0 away, 0 neutral
+3) The timeline: home side first, whole names, every mark right after its name
+   918 timelines, 15799 rows, 15799 names, 246 marks; red: 0 home, 0 away, 0 neutral
+4) Live and half time: the strip, the score's digits, the interval card, the stats and the line under the pitch home side first
+   364 live matches judged, 8 of them on a neutral ground (182 first, 182 interval, 182 second, 182 done; 546 frames staged with no venue field; 2548 possession bar segments, 2002 green names); red: 0 home, 0 away, 0 neutral, 0 staged with no venue field
+5) The Match Centre: the tie, the form rows and the ones to watch home side first; the odds still Win, Draw, They win
+   165 Match Centres (77 home, 80 away, 8 neutral, 165 with ones to watch); red: 0 home, 0 away, 0 neutral
+6) The pitch: every dot label is the man's pitch name, his initials or his slot's role, never a number
+   15958 dot labels over 728 pitches: 7951 of mine named (66 in initials), 4949 named opponents, 3058 nameless opponents (2002 of them staged); red: 0 home, 0 away, 0 neutral
+7) A home or neutral match: the card's visible text equals the base's, the board word and the pitch labels masked
+  FAIL [7]: Barcelona era2015 seed 0: Barcelona 4-1 Real Madrid (Champions League · Semi-final · second leg, home): the card's text differs from the base at "' Added time 90+8' AET 120+3' THROUGH (AET) Won 4-1 on the night Throu" against "' Added time 90+8' AET 120+3' VICTORY (AET) Through 5-3 on aggregate a"
+  FAIL [7]: Barcelona era2015 seed 1: Barcelona 0-1 Chelsea (Champions League · Semi-final · second leg, home): the card's text differs from the base at "75,917 45+2' Added time 90+5' OUT Lost 0-1 on the night Out 0-5 on agg" against "75,917 45+2' Added time 90+5' DEFEAT Out 0-5 on aggregate Barcelona 0 "
+  FAIL [7]: Barcelona era2015 seed 2: Barcelona 2-0 Astana (Champions League · Round of 16 · second leg, home): the card's text differs from the base at "72,802 45+2' Added time 90+5' THROUGH Won 2-0 on the night Through 6-2" against "72,802 45+2' Added time 90+5' VICTORY Through 6-2 on aggregate Barcelo"
+  FAIL [7]: Barcelona era2015 seed 2: Barcelona 3-1 Porto (Champions League · Semi-final · second leg, home): the card's text differs from the base at "78,000 45+5' Added time 90+4' THROUGH Won 3-1 on the night Through 5-1" against "78,000 45+5' Added time 90+4' VICTORY Through 5-1 on aggregate Barcelo"
+  FAIL [7]: Barcelona era2015 seed 3: Barcelona 0-0 Olympiacos (Champions League · Round of 16 · second leg, home): the card's text differs from the base at "62,911 45+1' Added time 90+5' THROUGH Drew 0-0 on the night Through 1-" against "62,911 45+1' Added time 90+5' DRAW Through 1-0 on aggregate Barcelona "
+   673 home and neutral screens compared with cbc72c1d (590 live screens and 85 Match Centres among them); red: 5 home, 0 neutral
+simCmMatchDay: RED, 5 failures in section(s) 7
