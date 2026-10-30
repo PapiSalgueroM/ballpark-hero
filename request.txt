@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+states: ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
+walk: node .rc/x/review-run-walk.mjs
+nolift: CONSENT_BAR_CONTROL=nolift ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
+nolift-nohub: CONSENT_BAR_CONTROL=nolift ONLY=/club-manager node scripts/playFirstVisitDialogs.mjs
+nolift-badname: CONSENT_BAR_CONTROL=bogus ONLY=/club-manager node scripts/playFirstVisitDialogs.mjs
+shard2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+playHomeFold: node scripts/playHomeFold.mjs

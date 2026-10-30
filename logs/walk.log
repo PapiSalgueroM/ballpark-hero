@@ -1,0 +1,102 @@
+hub-320x640 top pending=true banner=335..640 scroll=0/14777 bar[251..335 fixed b=305px hit=y gap=0] training[193..237 relative b=0px hit=y gap=98] phone[193..237 relative b=0px hit=y gap=98]
+hub-320x640 pagebottom pending=true banner=335..640 scroll=14777/14777 bar[-133..-49 fixed b=305px hit=NO(div) gap=384] training[-14584..-14540 relative b=0px hit=NO(button) gap=14875] phone[-14584..-14540 relative b=0px hit=NO(div) gap=14875]
+hub-320x640 answered(Reject all) pagebottom pending=false banner=none scroll=14777/14777 bar[172..256 fixed b=0px hit=y gap=384] training[-14584..-14540 relative b=0px hit=NO(button) gap=15180] phone[-14584..-14540 relative b=0px hit=NO(div) gap=15180]
+hub-320x640 answered top pending=false banner=none scroll=0/14777 bar[556..640 fixed b=0px hit=y gap=0] training[193..237 relative b=0px hit=y gap=403] phone[193..237 relative b=0px hit=y gap=403]
+hub-390x844 top pending=true banner=611..844 scroll=0/12250 bar[527..611 fixed b=233px hit=y gap=0] training[193..237 relative b=0px hit=y gap=374] phone[193..237 relative b=0px hit=y gap=374]
+hub-390x844 pagebottom pending=true banner=611..844 scroll=12250/12250 bar[152..236 fixed b=233px hit=y gap=375] training[-12057..-12013 relative b=0px hit=NO(div) gap=12624] phone[-12057..-12013 relative b=0px hit=NO(div) gap=12624]
+hub-390x844 answered(Reject all) pagebottom pending=false banner=none scroll=12250/12250 bar[385..469 fixed b=0px hit=y gap=375] training[-12057..-12013 relative b=0px hit=NO(div) gap=12857] phone[-12057..-12013 relative b=0px hit=NO(div) gap=12857]
+hub-390x844 answered top pending=false banner=none scroll=0/12250 bar[760..844 fixed b=0px hit=y gap=0] training[193..237 relative b=0px hit=y gap=607] phone[193..237 relative b=0px hit=y gap=607]
+hub-390x844-rm top pending=true banner=611..844 scroll=0/12250 bar[527..611 fixed b=233px hit=y gap=0] training[193..237 relative b=0px hit=y gap=374] phone[193..237 relative b=0px hit=y gap=374]
+hub-390x844-rm pagebottom pending=true banner=611..844 scroll=12250/12250 bar[152..236 fixed b=233px hit=y gap=375] training[-12057..-12013 relative b=0px hit=NO(div) gap=12624] phone[-12057..-12013 relative b=0px hit=NO(div) gap=12624]
+hub-390x844-rm answered(Reject all) pagebottom pending=false banner=none scroll=12250/12250 bar[385..469 fixed b=0px hit=y gap=375] training[-12057..-12013 relative b=0px hit=NO(div) gap=12857] phone[-12057..-12013 relative b=0px hit=NO(div) gap=12857]
+hub-390x844-rm answered top pending=false banner=none scroll=0/12250 bar[760..844 fixed b=0px hit=y gap=0] training[193..237 relative b=0px hit=y gap=607] phone[193..237 relative b=0px hit=y gap=607]
+hub-1280x900 top pending=true banner=735..900 scroll=0/8092 bar[651..735 fixed b=165px hit=y gap=0] training[591..647 fixed b=253px hit=y gap=88] phone[659..715 fixed b=185px hit=y gap=20]
+hub-1280x900 pagebottom pending=true banner=735..900 scroll=8092/8092 bar[387..471 fixed b=165px hit=y gap=264] training[327..383 fixed b=253px hit=y gap=352] phone[395..451 fixed b=185px hit=y gap=284]
+hub-1280x900 real tap on Training while pending: opened ["Training ground"]
+hub-1280x900 answered(Reject all) pagebottom pending=false banner=none scroll=8092/8092 bar[552..636 fixed b=0px hit=y gap=264] training[492..548 fixed b=88px hit=y gap=352] phone[560..616 fixed b=20px hit=y gap=284]
+hub-1280x900 answered top pending=false banner=none scroll=0/8092 bar[816..900 fixed b=0px hit=y gap=0] training[756..812 fixed b=88px hit=y gap=88] phone[824..880 fixed b=20px hit=y gap=20]
+hub-1280x900-rm top pending=true banner=735..900 scroll=0/8092 bar[651..735 fixed b=165px hit=y gap=0] training[591..647 fixed b=253px hit=y gap=88] phone[659..715 fixed b=185px hit=y gap=20]
+hub-1280x900-rm pagebottom pending=true banner=735..900 scroll=8092/8092 bar[387..471 fixed b=165px hit=y gap=264] training[327..383 fixed b=253px hit=y gap=352] phone[395..451 fixed b=185px hit=y gap=284]
+hub-1280x900-rm real tap on Training while pending: opened ["Training ground"]
+hub-1280x900-rm answered(Reject all) pagebottom pending=false banner=none scroll=8092/8092 bar[552..636 fixed b=0px hit=y gap=264] training[492..548 fixed b=88px hit=y gap=352] phone[560..616 fixed b=20px hit=y gap=284]
+hub-1280x900-rm answered top pending=false banner=none scroll=0/8092 bar[816..900 fixed b=0px hit=y gap=0] training[756..812 fixed b=88px hit=y gap=88] phone[824..880 fixed b=20px hit=y gap=20]
+hub-1280x720 top pending=true banner=555..720 scroll=0/8272 bar[471..555 fixed b=165px hit=y gap=0] training[411..467 fixed b=253px hit=y gap=88] phone[479..535 fixed b=185px hit=y gap=20]
+hub-1280x720 pagebottom pending=true banner=555..720 scroll=8272/8272 bar[207..291 fixed b=165px hit=y gap=264] training[147..203 fixed b=253px hit=y gap=352] phone[215..271 fixed b=185px hit=y gap=284]
+hub-1280x720 real tap on Training while pending: opened ["Training ground"]
+hub-1280x720 answered(Reject all) pagebottom pending=false banner=none scroll=8272/8272 bar[372..456 fixed b=0px hit=y gap=264] training[312..368 fixed b=88px hit=y gap=352] phone[380..436 fixed b=20px hit=y gap=284]
+hub-1280x720 answered top pending=false banner=none scroll=0/8272 bar[636..720 fixed b=0px hit=y gap=0] training[576..632 fixed b=88px hit=y gap=88] phone[644..700 fixed b=20px hit=y gap=20]
+hub-844x390 top pending=true banner=225..390 scroll=0/8642 bar[141..225 fixed b=165px hit=y gap=0] training[81..137 fixed b=253px hit=y gap=88] phone[149..205 fixed b=185px hit=NO(div) gap=20]
+hub-844x390 pagebottom pending=true banner=225..390 scroll=8642/8642 bar[-93..-9 fixed b=165px hit=NO(div) gap=234] training[-153..-97 fixed b=253px hit=NO(div) gap=322] phone[-85..-29 fixed b=185px hit=NO(div) gap=254]
+hub-844x390 real tap on Training while pending: opened ["Training ground"]
+hub-844x390 answered(Reject all) pagebottom pending=false banner=none scroll=8642/8642 bar[72..156 fixed b=0px hit=y gap=234] training[12..68 fixed b=88px hit=NO(div) gap=322] phone[80..136 fixed b=20px hit=NO(div) gap=254]
+hub-844x390 answered top pending=false banner=none scroll=0/8642 bar[306..390 fixed b=0px hit=y gap=0] training[246..302 fixed b=88px hit=y gap=88] phone[314..370 fixed b=20px hit=NO(div) gap=20]
+hub-768x1024 top pending=true banner=859..1024 scroll=0/8024 bar[775..859 fixed b=165px hit=y gap=0] training[715..771 fixed b=253px hit=y gap=88] phone[783..839 fixed b=185px hit=NO(div) gap=20]
+hub-768x1024 pagebottom pending=true banner=859..1024 scroll=8024/8024 bar[511..595 fixed b=165px hit=y gap=264] training[451..507 fixed b=253px hit=y gap=352] phone[519..575 fixed b=185px hit=NO(div) gap=284]
+hub-768x1024 real tap on Training while pending: opened ["Training ground"]
+hub-768x1024 answered(Reject all) pagebottom pending=false banner=none scroll=8024/8024 bar[676..760 fixed b=0px hit=y gap=264] training[616..672 fixed b=88px hit=y gap=352] phone[684..740 fixed b=20px hit=NO(div) gap=284]
+hub-768x1024 answered top pending=false banner=none scroll=0/8024 bar[940..1024 fixed b=0px hit=y gap=0] training[880..936 fixed b=88px hit=y gap=88] phone[948..1004 fixed b=20px hit=NO(div) gap=20]
+cm-320x640 picked pending=true banner=335..640 scroll=0/30882 take[279..323 static b=auto hit=y gap=12]
+cm-320x640 picked pagebottom pending=true banner=335..640 scroll=30882/30882 take[279..323 static b=auto hit=y gap=12]
+cm-320x640 real tap on Take the job while pending: Take the job still there=true; now showing ["CLUB MANAGER","Who is in the dugout?","Club Manager: Free Football Management Game","How to play Club Manager, a free online football m"]
+cm-320x640 picked answered(Reject all) pending=false banner=none scroll=0/30882 take[584..628 static b=auto hit=y gap=12]
+cm-320x640 custom pending=true banner=335..640 scroll=0/30940 found[276..320 static b=auto hit=y gap=15]
+cm-390x844 picked pending=true banner=611..844 scroll=0/24385 take[555..599 static b=auto hit=y gap=12]
+cm-390x844 picked pagebottom pending=true banner=611..844 scroll=24385/24385 take[555..599 static b=auto hit=y gap=12]
+cm-390x844 real tap on Take the job while pending: Take the job still there=true; now showing ["CLUB MANAGER","Who is in the dugout?","Club Manager: Free Football Management Game","How to play Club Manager, a free online football m"]
+cm-390x844 picked answered(Reject all) pending=false banner=none scroll=0/24385 take[788..832 static b=auto hit=y gap=12]
+cm-390x844-rm picked pending=true banner=611..844 scroll=0/24385 take[555..599 static b=auto hit=y gap=12]
+cm-390x844-rm picked pagebottom pending=true banner=611..844 scroll=24385/24385 take[555..599 static b=auto hit=y gap=12]
+cm-390x844-rm real tap on Take the job while pending: Take the job still there=true; now showing ["CLUB MANAGER","Who is in the dugout?","Club Manager: Free Football Management Game","How to play Club Manager, a free online football m"]
+cm-390x844-rm picked answered(Reject all) pending=false banner=none scroll=0/24385 take[788..832 static b=auto hit=y gap=12]
+cm-1280x900 picked pending=true banner=735..900 scroll=0/13866 take[679..723 static b=auto hit=y gap=12]
+cm-1280x900 picked pagebottom pending=true banner=735..900 scroll=13866/13866 take[679..723 static b=auto hit=y gap=12]
+cm-1280x900 real tap on Take the job while pending: Take the job still there=true; now showing ["CLUB MANAGER","Who is in the dugout?","Club Manager: Free Football Management Game","How to play Club Manager, a free online football m"]
+cm-1280x900 picked answered(Reject all) pending=false banner=none scroll=0/13866 take[844..888 static b=auto hit=y gap=12]
+cm-1280x900 custom pending=true banner=735..900 scroll=0/14258 found[679..723 static b=auto hit=y gap=12]
+cm-844x390 picked pending=true banner=225..390 scroll=0/14416 take[169..213 static b=auto hit=y gap=12]
+cm-844x390 picked pagebottom pending=true banner=225..390 scroll=14416/14416 take[169..213 static b=auto hit=y gap=12]
+cm-844x390 real tap on Take the job while pending: Take the job still there=true; now showing ["CLUB MANAGER","Who is in the dugout?","Club Manager: Free Football Management Game","How to play Club Manager, a free online football m"]
+cm-844x390 picked answered(Reject all) pending=false banner=none scroll=0/14416 take[334..378 static b=auto hit=y gap=12]
+cm-844x390 custom pending=true banner=225..390 scroll=0/14808 found[169..213 static b=auto hit=y gap=12]
+wc-390x844 load pending=true banner=611..844 scroll=0/13230 auto[535..587 fixed b=257px hit=y gap=24]
+wc-390x844 answered(Reject all) pending=false banner=none scroll=0/13230 auto[768..820 fixed b=24px hit=y gap=24]
+wc-1280x900 load pending=true banner=735..900 scroll=0/4918 auto[659..711 fixed b=189px hit=y gap=24]
+wc-1280x900 answered(Reject all) pending=false banner=none scroll=0/4918 auto[824..876 fixed b=24px hit=y gap=24]
+wc-320x640 load pending=true banner=335..640 scroll=0/14464 auto[259..311 fixed b=329px hit=y gap=24]
+wc-320x640 answered(Reject all) pending=false banner=none scroll=0/14464 auto[564..616 fixed b=24px hit=y gap=24]
+setaside-390x844 load pending=true banner=611..844 scroll=0/11253 card[634..828 fixed b=16px hit=NO(div (banner)) gap=-217] firstButton[727..765 static b=auto hit=NO(strong (banner)) gap=-154]
+setaside-1280x900 load pending=true banner=735..900 scroll=0/7506 card[690..884 fixed b=16px hit=NO(div (banner)) gap=-149] firstButton[783..821 static b=auto hit=NO(div (banner)) gap=-86]
+FLAGS (32):
+FLAG hub-320x640 pagebottom bar OFF SCREEN (top -133, bottom -49, vh 640)
+FLAG hub-320x640 pagebottom training OFF SCREEN (top -14584, bottom -14540, vh 640)
+FLAG hub-320x640 pagebottom phone OFF SCREEN (top -14584, bottom -14540, vh 640)
+FLAG hub-320x640 answered(Reject all) pagebottom training OFF SCREEN (top -14584, bottom -14540, vh 640)
+FLAG hub-320x640 answered(Reject all) pagebottom phone OFF SCREEN (top -14584, bottom -14540, vh 640)
+FLAG hub-390x844 pagebottom training OFF SCREEN (top -12057, bottom -12013, vh 844)
+FLAG hub-390x844 pagebottom phone OFF SCREEN (top -12057, bottom -12013, vh 844)
+FLAG hub-390x844 answered(Reject all) pagebottom training OFF SCREEN (top -12057, bottom -12013, vh 844)
+FLAG hub-390x844 answered(Reject all) pagebottom phone OFF SCREEN (top -12057, bottom -12013, vh 844)
+FLAG hub-390x844-rm pagebottom training OFF SCREEN (top -12057, bottom -12013, vh 844)
+FLAG hub-390x844-rm pagebottom phone OFF SCREEN (top -12057, bottom -12013, vh 844)
+FLAG hub-390x844-rm answered(Reject all) pagebottom training OFF SCREEN (top -12057, bottom -12013, vh 844)
+FLAG hub-390x844-rm answered(Reject all) pagebottom phone OFF SCREEN (top -12057, bottom -12013, vh 844)
+FLAG hub-844x390 top phone not tappable at its centre: div is there
+FLAG hub-844x390 pagebottom bar OFF SCREEN (top -93, bottom -9, vh 390)
+FLAG hub-844x390 pagebottom training OFF SCREEN (top -153, bottom -97, vh 390)
+FLAG hub-844x390 pagebottom phone OFF SCREEN (top -85, bottom -29, vh 390)
+FLAG hub-844x390 answered(Reject all) pagebottom training not tappable at its centre: div is there
+FLAG hub-844x390 answered(Reject all) pagebottom phone not tappable at its centre: div is there
+FLAG hub-844x390 answered top phone not tappable at its centre: div is there
+FLAG hub-768x1024 top phone not tappable at its centre: div is there
+FLAG hub-768x1024 pagebottom phone not tappable at its centre: div is there
+FLAG hub-768x1024 answered(Reject all) pagebottom phone not tappable at its centre: div is there
+FLAG hub-768x1024 answered top phone not tappable at its centre: div is there
+FLAG setaside-390x844 load card not tappable at its centre: div (banner) is there
+FLAG setaside-390x844 load card meets the banner by 217 px
+FLAG setaside-390x844 load firstButton not tappable at its centre: strong (banner) is there
+FLAG setaside-390x844 load firstButton meets the banner by 154 px
+FLAG setaside-1280x900 load card not tappable at its centre: div (banner) is there
+FLAG setaside-1280x900 load card meets the banner by 149 px
+FLAG setaside-1280x900 load firstButton not tappable at its centre: div (banner) is there
+FLAG setaside-1280x900 load firstButton meets the banner by 86 px
+review walk DONE: 58 reads, 32 flags

@@ -1,0 +1,10 @@
+build exit=0 37s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+states exit=0 52s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+tsc exit=0 84s | 
+nolift-nohub exit=2 1s | playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift acts on the Soccer Career hub, and /soccer-career is not in this run
+nolift-badname exit=2 1s | CONSENT_BAR_CONTROL=bogus is not a control this walk knows (nolift)
+nolift exit=1 51s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift FIRED. 12 of 12 lines with the lift stripped read red, the Soccer Career hub among them
+simAccessibility exit=0 1s | simAccessibility: all green
+playHomeFold exit=0 31s | playHomeFold: green. The first thing on the page is something to play.
+walk exit=0 194s | review walk DONE: 58 reads, 32 flags
+shard2 exit=0 246s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
