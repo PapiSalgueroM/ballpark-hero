@@ -2207,7 +2207,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         </div>
       )}
 
-      <Button onClick={onBegin} disabled={!isFormValid || saving || rolledOvr === null || !previewStats}
+      <Button onClick={onBegin} disabled={!isFormValid || saving || rolledOvr === null || !previewStats || isRolling}
         className="w-full h-12 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-black disabled:opacity-40">
         {saving ? "Creating..." : "⚽ Begin Career"}
       </Button>
