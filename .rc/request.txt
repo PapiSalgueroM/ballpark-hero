@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+cv-capall: CUSTOM_VALUES_CONTROL=capall node scripts/simCustomClubValues.mjs
+simCreateClub: node scripts/simCreateClub.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simCmDifficulty: node scripts/simCmDifficulty.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simRoles: node scripts/simRoles.mjs
+simCmLevelReads: node scripts/simCmLevelReads.mjs
