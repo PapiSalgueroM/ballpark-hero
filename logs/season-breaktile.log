@@ -1,0 +1,18 @@
+main runs: 3 careers x 8 seasons, 24 seasons complete, 2014 actions, 7.2 s
+
+2. Calendar: 23 rounds, everyone once a round, 17 opponents, 6 doubled with venues reversed
+  5 seeds x 40 seasons checked, 0 faults; double ups changed in 3510 of 3510 club season pairs (100.0%); home games 11 to 13 (printed, not asserted)
+  ok: every season: each round has every club once, 23 games, 17 opponents, 6 met twice with venues reversed
+  ok: the double up opponents change between seasons in at least 90 percent of club season pairs
+
+10. Tiles and routing
+  ok: no career crashed or got stuck (0)
+  ok: tile states cover every phase (7 of 7)
+  165 states (phases preparehomeAway, quarterhomeAway, breakhomeAway, reporthomeAway, preparefinals, reportfinals, quarterfinals, breakfinals, seasonOverfinals, summerfinals, draftfinals): 1 with an empty word, 0 wrong round, 0 ladder tiles off the ladder row
+  FAIL [10]: every tile has a title, a value and a second line in every phase
+  ok: the Next match tile reads "Round N of 23" with the right N
+  ok: the Ladder tile is the ladder row: place, points and percentage
+  chooseBoard: 7 cases, 0 wrong
+  ok: a valid full season opens the league, an unfinished ten round season the legacy board, otherwise the menu
+
+simAussieRulesSeason control breaktile: RED as intended (section 10 failed 1 checks, independent section 2 passed) in 7.8 s
