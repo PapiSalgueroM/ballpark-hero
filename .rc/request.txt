@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walkDugouts: node .rc/x/walkDugouts.mjs
