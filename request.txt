@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fence: node scripts/simClubManagerDugouts.mjs
+ctl-spelling: DUGOUTS_CONTROL=spelling node scripts/simClubManagerDugouts.mjs
+ctl-twochairs: DUGOUTS_CONTROL=twochairs node scripts/simClubManagerDugouts.mjs
+ctl-onehost: DUGOUTS_CONTROL=onehost node scripts/simClubManagerDugouts.mjs
+ctl-samedomain: DUGOUTS_CONTROL=samedomain node scripts/simClubManagerDugouts.mjs
+ctl-wikimirror: DUGOUTS_CONTROL=wikimirror node scripts/simClubManagerDugouts.mjs
+ctl-orphan: DUGOUTS_CONTROL=orphan node scripts/simClubManagerDugouts.mjs
+ctl-gap: DUGOUTS_CONTROL=gap node scripts/simClubManagerDugouts.mjs
+ctl-monthclash: DUGOUTS_CONTROL=monthclash node scripts/simClubManagerDugouts.mjs
+ctl-monthsamedomain: DUGOUTS_CONTROL=monthsamedomain node scripts/simClubManagerDugouts.mjs
+ctl-latereads: DUGOUTS_CONTROL=latereads node scripts/simClubManagerDugouts.mjs
+ctl-bogus: DUGOUTS_CONTROL=bogus node scripts/simClubManagerDugouts.mjs
+rivals: node scripts/simNoRivalNames.mjs
