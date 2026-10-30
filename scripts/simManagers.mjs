@@ -274,13 +274,14 @@ async function realDugoutsSection() {
   console.log('7) real dugouts: a sentinel registered as real is a display fact and nothing else');
   let bFails = 0, bNamed = 0;
   const failB = m => { bFails += 1; if (m.includes(SENTINEL)) bNamed += 1; fail(`7b: ${m}`); };
-  /* The sentinel must be nobody: no file under src (every roster, bake, pool and generator bank) carries it. */
+  /* The sentinel must be nobody: no shipped file under src (every roster, bake, pool and generator bank) carries
+     it. Tests are not shipped, and src/test/clubDetailDugout.test.tsx swaps in this same sentinel on purpose. */
   const carriers = [];
   (function walk(dir) {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
       const p = path.join(dir, e.name);
-      if (e.isDirectory()) walk(p);
-      else if (/\.(ts|tsx|json)$/.test(e.name) && fs.readFileSync(p, 'utf8').includes(SENTINEL.split(' ')[1])) carriers.push(p);
+      if (e.isDirectory()) { if (e.name !== 'test') walk(p); }
+      else if (/\.(ts|tsx|json)$/.test(e.name) && !/\.test\.tsx?$/.test(e.name) && fs.readFileSync(p, 'utf8').includes(SENTINEL.split(' ')[1])) carriers.push(p);
     }
   })(path.join(ROOT, 'src'));
   if (carriers.length) refuse(`the sentinel surname is in ${carriers.length} src file(s) (${carriers[0]}), it is not nobody`);
