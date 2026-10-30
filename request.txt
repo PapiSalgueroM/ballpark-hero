@@ -1,0 +1,10 @@
+# Release BU lane b: the US My Career Hall wall (Round 1570) and the L3 seam: its sims, its controls, the board files, the board parity replay.
+alone-c8: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C8:" --testTimeout=300000 --hookTimeout=120000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "C8|AssertionError|Tests " | head -20; exit ${PIPESTATUS[0]}
+alone-c8b: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C8b:" --testTimeout=300000 --hookTimeout=120000 2>&1 | sed 's/\x1b\[[0-9;]*m//g' | grep -E "C8|AssertionError|Tests " | head -20; exit ${PIPESTATUS[0]}
+vt-wall: node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx src/lib/usCareerHallWall.test.ts --testTimeout=300000 --hookTimeout=120000
+simWall: node scripts/simUsCareerHallWall.mjs
+c-readdraw: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=readdraw node scripts/simUsCareerHallWall.mjs
+c-boarddraw: SIM_WALL_CAREERS=5 SIM_HALL_WALL_CONTROL=boarddraw node scripts/simUsCareerHallWall.mjs
+vitest-us: node_modules/.bin/vitest run src/test/usCareerSaveRetry.test.tsx src/test/usCareerReports1569.test.tsx src/test/careerSeasonReview.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs

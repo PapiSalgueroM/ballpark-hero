@@ -1,0 +1,17 @@
+section 1 nfl: 5 plaques of 5 careers, bytes median 550 p90 1050, outcomes {"notOnBallot":4,"waiting":1}
+section 1 nba: 5 plaques of 5 careers, bytes median 1016 p90 1047, outcomes {"waiting":3,"notOnBallot":2}
+section 1 mlb: 5 plaques of 5 careers, bytes median 565 p90 1004, outcomes {"fellOff":2,"notOnBallot":3}
+section 1 nhl: 5 plaques of 5 careers, bytes median 649 p90 972, outcomes {"notOnBallot":2,"inducted":2,"waiting":1}
+section 2: 16 retired saves of the parity fixture, 86 V1 rows, 50 retired 1301 rows
+section 3: the worst case plaque is 2251 characters of JSON (stated 2251), a full wall of them 27043
+section 3 clamp name: longest real 24 (the fleet's longest 10, printed only), clamp 40
+section 3 clamp pos: longest real 4 (the fleet's longest 2, printed only), clamp 6
+section 3 clamp eraId: longest real 5 (the fleet's longest 5, printed only), clamp 16
+section 3 clamp team: longest real 3 (the fleet's longest 3, printed only), clamp 8
+section 3 clamp verdict: longest real 54 (the fleet's longest 41, printed only), clamp 160
+section 3 clamp hallName: longest real 41 (the fleet's longest 41, printed only), clamp 80
+section 3 clamp teamName: longest real 22 (the fleet's longest 17, printed only), clamp 60
+section 3 clamp weighs: longest real 187 (the fleet's longest 145, printed only), clamp 320
+section 3 clamp label: longest real 22 (the fleet's longest 15, printed only), clamp 48
+section 4 (readdraw): 57 board cases, 53 passed, by tag {"C1":"4/4","C4":"4/4","C4b":"4/4","C7":"4/4","C3":"4/4","C6":"4/4","C9":"4/4","C8":"4/4","C8b":"0/4","C5":"4/4","C10a":"4/4","C10b":"4/4","C10c":"4/4","J":"4/4","C11":"1/1"}
+simUsCareerHallWall CONTROL readdraw: FIRED, C8b red in all four sports and C1, C3, C4, C4b, C5, C6, C7, C8, C9, C10a, C10b, C10c, J green

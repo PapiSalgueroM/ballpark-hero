@@ -1,0 +1,5 @@
+   ✓ C8b: the wall's read draws nothing and moves no save byte > 'NFL': five seeds, no Hall bound, a bound Hall with no wall and with a full wall  1966ms
+   ✓ C8b: the wall's read draws nothing and moves no save byte > 'NBA': five seeds, no Hall bound, a bound Hall with no wall and with a full wall  1797ms
+   ✓ C8b: the wall's read draws nothing and moves no save byte > 'MLB': five seeds, no Hall bound, a bound Hall with no wall and with a full wall  1845ms
+   ✓ C8b: the wall's read draws nothing and moves no save byte > 'NHL': five seeds, no Hall bound, a bound Hall with no wall and with a full wall  1784ms
+      Tests  4 passed | 53 skipped (57)

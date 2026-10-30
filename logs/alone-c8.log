@@ -1,0 +1,5 @@
+   ✓ C8: the wall draws nothing and moves no save byte > 'NFL': five seeds, the wall written, refused and absent, press for press  6122ms
+   ✓ C8: the wall draws nothing and moves no save byte > 'NBA': five seeds, the wall written, refused and absent, press for press  5825ms
+   ✓ C8: the wall draws nothing and moves no save byte > 'MLB': five seeds, the wall written, refused and absent, press for press  5674ms
+   ✓ C8: the wall draws nothing and moves no save byte > 'NHL': five seeds, the wall written, refused and absent, press for press  5657ms
+      Tests  4 passed | 53 skipped (57)
