@@ -1,0 +1,10 @@
+uncapped exit 1
+   Real Madrid   seasons 15, day one 63044, season 1 176108, season 15 239460, slope after season 3 4611 bytes a season
+   Everton       seasons 15, day one 58746, season 1 161704, season 15 252564, slope after season 3 5585 bytes a season
+   Lincoln City  seasons 15, day one 59808, season 1 163277, season 15 257928, slope after season 3 5122 bytes a season
+simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+base exit 1
+   Real Madrid   seasons 15, day one 63044, season 1 176108, season 15 204050, slope after season 3 1199 bytes a season
+   Everton       seasons 15, day one 59285, season 1 163300, season 15 207670, slope after season 3 1320 bytes a season
+   Lincoln City  seasons 15, day one 59681, season 1 163401, season 15 209240, slope after season 3 -280 bytes a season
+ FAIL  src/test/clubManagerSaveSize.test.tsx [ src/test/clubManagerSaveSize.test.tsx ]

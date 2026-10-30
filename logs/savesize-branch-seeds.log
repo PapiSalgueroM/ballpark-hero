@@ -1,0 +1,47 @@
+stream 0 exit 1
+   Real Madrid   seasons 15, day one 63044, season 1 176108, season 15 212125, slope after season 3 1889 bytes a season
+   Everton       seasons 15, day one 58746, season 1 161704, season 15 218403, slope after season 3 2193 bytes a season
+  FAIL: Everton: the save is 218403 bytes after 15 seasons, over the 214000 budget
+  FAIL: Everton: the save grows 2193 bytes a season over seasons 4 to 15, over the 2000 cap
+   Lincoln City  seasons 15, day one 59808, season 1 163277, season 15 223145, slope after season 3 1671 bytes a season
+  FAIL: Lincoln City: the save is 223145 bytes after 15 seasons, over the 214000 budget
+stream 1 exit 1
+   Real Madrid   seasons 15, day one 61502, season 1 177812, season 15 207127, slope after season 3 1268 bytes a season
+   Everton       seasons 15, day one 59565, season 1 161735, season 15 218032, slope after season 3 2165 bytes a season
+  FAIL: Everton: the save is 218032 bytes after 15 seasons, over the 214000 budget
+  FAIL: Everton: the save grows 2165 bytes a season over seasons 4 to 15, over the 2000 cap
+   Lincoln City  seasons 15, day one 60313, season 1 164348, season 15 222671, slope after season 3 2571 bytes a season
+  FAIL: Lincoln City: the save is 222671 bytes after 15 seasons, over the 214000 budget
+  FAIL: Lincoln City: the save grows 2571 bytes a season over seasons 4 to 15, over the 2000 cap
+stream 2 exit 1
+   Real Madrid   seasons 15, day one 62172, season 1 176901, season 15 214347, slope after season 3 1908 bytes a season
+  FAIL: Real Madrid: the save is 214347 bytes after 15 seasons, over the 214000 budget
+   Everton       seasons 15, day one 58602, season 1 161871, season 15 217834, slope after season 3 2239 bytes a season
+  FAIL: Everton: the save is 217834 bytes after 15 seasons, over the 214000 budget
+  FAIL: Everton: the save grows 2239 bytes a season over seasons 4 to 15, over the 2000 cap
+   Lincoln City  seasons 15, day one 59728, season 1 164410, season 15 221455, slope after season 3 2350 bytes a season
+  FAIL: Lincoln City: the save is 221455 bytes after 15 seasons, over the 214000 budget
+  FAIL: Lincoln City: the save grows 2350 bytes a season over seasons 4 to 15, over the 2000 cap
+stream 3 exit 1
+   Real Madrid   seasons 15, day one 61525, season 1 177203, season 15 206589, slope after season 3 1399 bytes a season
+   Everton       seasons 15, day one 60001, season 1 162268, season 15 215806, slope after season 3 2026 bytes a season
+  FAIL: Everton: the save is 215806 bytes after 15 seasons, over the 214000 budget
+  FAIL: Everton: the save grows 2026 bytes a season over seasons 4 to 15, over the 2000 cap
+   Lincoln City  seasons 15, day one 60341, season 1 162995, season 15 222719, slope after season 3 2648 bytes a season
+  FAIL: Lincoln City: the save is 222719 bytes after 15 seasons, over the 214000 budget
+  FAIL: Lincoln City: the save grows 2648 bytes a season over seasons 4 to 15, over the 2000 cap
+stream 4 exit 1
+   Real Madrid   seasons 15, day one 63533, season 1 178109, season 15 215255, slope after season 3 1376 bytes a season
+  FAIL: Real Madrid: the save is 215255 bytes after 15 seasons, over the 214000 budget
+   Everton       seasons 15, day one 59587, season 1 163194, season 15 215657, slope after season 3 1846 bytes a season
+  FAIL: Everton: the save is 215657 bytes after 15 seasons, over the 214000 budget
+   Lincoln City  seasons 15, day one 59028, season 1 161187, season 15 221753, slope after season 3 2358 bytes a season
+  FAIL: Lincoln City: the save is 221753 bytes after 15 seasons, over the 214000 budget
+  FAIL: Lincoln City: the save grows 2358 bytes a season over seasons 4 to 15, over the 2000 cap
+stream 5 exit 1
+   Real Madrid   seasons 15, day one 63350, season 1 177959, season 15 207362, slope after season 3 1628 bytes a season
+   Everton       seasons 15, day one 59413, season 1 163380, season 15 218915, slope after season 3 2227 bytes a season
+  FAIL: Everton: the save is 218915 bytes after 15 seasons, over the 214000 budget
+  FAIL: Everton: the save grows 2227 bytes a season over seasons 4 to 15, over the 2000 cap
+   Lincoln City  seasons 15, day one 59756, season 1 162336, season 15 221747, slope after season 3 1056 bytes a season
+  FAIL: Lincoln City: the save is 221747 bytes after 15 seasons, over the 214000 budget

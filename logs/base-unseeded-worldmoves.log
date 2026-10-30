@@ -1,0 +1,8 @@
+unseeded base exit 1
+  ... and 7 more
+simCmUnseededWorld: 113 FAILURE(S)
+worldmoves base exit 1
+24
+  section 6: 262 more failures not shown
+  section 8: 49 more failures not shown
+simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)

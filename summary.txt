@@ -1,0 +1,3 @@
+savesize-uncapped-and-base exit=0 124s |  FAIL  src/test/clubManagerSaveSize.test.tsx [ src/test/clubManagerSaveSize.test.tsx ]
+savesize-branch-seeds exit=0 315s |   FAIL: Lincoln City: the save is 221747 bytes after 15 seasons, over the 214000 budget
+base-unseeded-worldmoves exit=0 796s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
