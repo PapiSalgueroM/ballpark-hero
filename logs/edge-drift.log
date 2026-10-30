@@ -1,0 +1,13 @@
+1) every function is classified
+   28 functions, 16 recorded as deployed, 12 unverified, 0 unclassified
+2) nothing recorded as deployed has been edited since
+   NEGATIVE CONTROL ON: account-privacy edited in memory, this section must go red
+  FAIL: account-privacy has changed since it was deployed on 2026-10-21 (version 1). Redeploy it and update the ledger, or the live site is not running this code.
+  FAIL: soccer-grid-validate has changed since it was deployed on 2026-10-01 (version 25). Redeploy it and update the ledger, or the live site is not running this code.
+  FAIL: validate-player has changed since it was deployed on 2026-10-01 (version 12). Redeploy it and update the ledger, or the live site is not running this code.
+   16 checked, 3 edited without a redeploy
+   1 supporting files checked, 0 supporting mismatches
+3) the unverified list is a ratchet
+   12 unverified against a baseline of 12
+
+NEGATIVE CONTROL drift was on; 3 finding(s). A control run is expected to be red.

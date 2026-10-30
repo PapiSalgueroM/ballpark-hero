@@ -1,0 +1,11 @@
+M  supabase/functions/soccer-grid-validate/index.ts
+M  supabase/functions/validate-player/index.ts
+1) every function is classified
+   28 functions, 16 recorded as deployed, 12 unverified, 0 unclassified
+2) nothing recorded as deployed has been edited since
+   16 checked, 0 edited without a redeploy
+   1 supporting files checked, 0 supporting mismatches
+3) the unverified list is a ratchet
+   12 unverified against a baseline of 12
+
+simEdgeSync: green. Nothing deployed has been edited behind the live site's back.

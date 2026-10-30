@@ -1,0 +1,9 @@
+edge-drift exit=0 0s | NEGATIVE CONTROL drift was on; 3 finding(s). A control run is expected to be red.
+simEdgeSync exit=1 0s | simEdgeSync: 2 finding(s).
+edge-main exit=1 1s | simEdgeSync: 1 finding(s).
+edge-attr exit=0 2s | simEdgeSync: green. Nothing deployed has been edited behind the live site's back.
+sim exit=0 4s | simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 73s | 
