@@ -71,17 +71,13 @@ export function PlayerCardScreen({ card: ref, career, onBack }: { card: CardRef;
   const [help, setHelp] = useState(false);
   const card = useMemo(() => playerCardOf(career, ref), [career, ref]);
   const money = moneyIn(career);
+  /* The top row's right corner is the page's own "?" (How to Play Club Manager), so the card's own "?" sits beside
+     the name instead. */
   const top = (
-    <div className="flex items-center justify-between gap-2">
+    <div className="flex items-center gap-2">
       <button type="button" onClick={onBack} data-cm-card-back className={`${btn} gap-1 pr-2`}>
         <ChevronLeft className="w-4 h-4" /> Back
       </button>
-      {card && (
-        <button type="button" aria-label="How the player card works" aria-expanded={help} onClick={() => setHelp(!help)} data-cm-card-help
-          className={`${btn} border border-border`}>
-          <HelpCircle className="w-4 h-4" />
-        </button>
-      )}
     </div>
   );
   if (!card) {
@@ -95,19 +91,25 @@ export function PlayerCardScreen({ card: ref, career, onBack }: { card: CardRef;
   return (
     <div data-cm-card={card.mine ? 'mine' : 'man'} className="space-y-2">
       {top}
-      <div className={tile}>
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span data-cm-card-name className="text-base font-bold text-foreground break-words">{card.name}</span>
-          {card.madeUp && <MadeUpTag className="text-xs" />}
-        </div>
-        <div className="text-xs text-muted-foreground">
-          {[card.pos, card.age === null ? null : `age ${card.age}`, card.club].filter(Boolean).join(' · ')}
-        </div>
-        {(card.rating !== null || card.worth !== null) && (
-          <div className="text-xs text-muted-foreground">
-            {[card.rating === null ? null : `Rated ${card.rating}`, card.worth === null ? null : `Worth ${money(card.worth)}`].filter(Boolean).join(', ')}
+      <div className="rounded-xl border border-border bg-card p-3 flex items-start justify-between gap-2">
+        <div className="min-w-0 space-y-1">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span data-cm-card-name className="text-base font-bold text-foreground break-words">{card.name}</span>
+            {card.madeUp && <MadeUpTag className="text-xs" />}
           </div>
-        )}
+          <div className="text-xs text-muted-foreground">
+            {[card.pos, card.age === null ? null : `age ${card.age}`, card.club].filter(Boolean).join(' · ')}
+          </div>
+          {(card.rating !== null || card.worth !== null) && (
+            <div className="text-xs text-muted-foreground">
+              {[card.rating === null ? null : `Rated ${card.rating}`, card.worth === null ? null : `Worth ${money(card.worth)}`].filter(Boolean).join(', ')}
+            </div>
+          )}
+        </div>
+        <button type="button" aria-label="How the player card works" aria-expanded={help} onClick={() => setHelp(!help)} data-cm-card-help
+          className={`${btn} shrink-0 border border-border`}>
+          <HelpCircle className="w-4 h-4" />
+        </button>
       </div>
       {help && <Help card={card} />}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">

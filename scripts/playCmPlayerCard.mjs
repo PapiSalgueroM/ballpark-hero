@@ -263,8 +263,14 @@ async function settled(page) {
 /** Rectangles of the things a finger must hit, and whether a hit test at the middle lands on each. */
 const targets = (page, sel) => page.evaluate(s => [...document.querySelectorAll(s)].map(el => {
   const r = el.getBoundingClientRect();
-  const visible = r.bottom > 0 && r.top < innerHeight && r.width > 0;
-  const hit = visible ? el.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)) : true;
+  /* Judged only where a finger can reach it now: its middle inside the window and not under a bar pinned to the
+     screen (a row the sticky bar covers is scrolled to, not tapped through). */
+  const mid = [r.left + r.width / 2, r.top + r.height / 2];
+  const at = mid[1] > 0 && mid[1] < innerHeight ? document.elementFromPoint(mid[0], mid[1]) : null;
+  let pinned = false;
+  for (let n = at; n && n !== document.body; n = n.parentElement) if (!el.contains(n) && ['fixed', 'sticky'].includes(getComputedStyle(n).position)) pinned = true;
+  const visible = !!at && !pinned && r.width > 0;
+  const hit = visible ? el.contains(at) : true;
   return { what: el.getAttribute('data-cm-card-link') ?? [...el.attributes].map(a => a.name).find(n => n.startsWith('data-cm')) ?? el.tagName, w: r.width, h: r.height, hit, visible };
 }), sel);
 
@@ -377,6 +383,15 @@ async function quickSim(page) {
 }
 /** Six cards opened and closed on one page: three of my men, three rivals. */
 async function lookAround(page) {
+  await toStats(page);
+  await page.locator('[data-cm-leaders-tile="goals"]').click();
+  for (let k = 0; k < 3; k += 1) {
+    await page.locator('[data-cm-board-row] [data-cm-card-link]').nth(k).click();
+    await page.locator('[data-cm-card]').waitFor();
+    await page.locator('[data-cm-card-back]').click();
+    await page.locator('[data-cm-board="goals"]').waitFor();
+  }
+  await page.locator('[data-cm-leaders-back]').first().click();
   await toSquad(page);
   for (const p of S.S1.squad.slice(0, 3)) {
     const row = page.locator(`[data-cm-squad-row="${p.id}"] > button`);
@@ -387,15 +402,7 @@ async function lookAround(page) {
     await page.locator('[data-cm-squad-list]').waitFor();
     await row.click();
   }
-  await toStats(page);
-  await page.locator('[data-cm-leaders-tile="goals"]').click();
-  for (let k = 0; k < 3; k += 1) {
-    await page.locator('[data-cm-board-row] [data-cm-card-link]').nth(k).click();
-    await page.locator('[data-cm-card]').waitFor();
-    await page.locator('[data-cm-card-back]').click();
-    await page.locator('[data-cm-board="goals"]').waitFor();
-  }
-  await page.locator('[data-cm-leaders-back]').first().click();
+  await page.getByRole('tab', { name: 'Home', exact: true }).click();
 }
 
 const all = { S1: [], S2: [], S3: [], S4: [] };
