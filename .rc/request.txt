@@ -1,0 +1,3 @@
+simDailyDeals: node scripts/simDailyDeals.mjs
+gathered-base: git worktree add -q /tmp/base 14a9af704 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simClubManagerGathered.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
