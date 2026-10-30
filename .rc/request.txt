@@ -1,0 +1,14 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+playUsShopPromises: bash .rc/default-support.sh run playUsShopPromises.mjs
+playWc2026Reset: bash .rc/default-support.sh run playWc2026Reset.mjs
+playWilderness: bash .rc/default-support.sh run playWilderness.mjs
+playWorldUcl: bash .rc/default-support.sh run playWorldUcl.mjs
+playWorldXiReportFit: bash .rc/default-support.sh run playWorldXiReportFit.mjs
+simCareerMoments: bash .rc/default-support.sh run simCareerMoments.mjs
+simConquestMotion: bash .rc/default-support.sh run simConquestMotion.mjs
+simDrawOrder: bash .rc/default-support.sh run simDrawOrder.mjs
+simDrillMotion: bash .rc/default-support.sh run simDrillMotion.mjs
+simFaqSchema: bash .rc/default-support.sh run simFaqSchema.mjs
+finish: bash .rc/default-support.sh finish
