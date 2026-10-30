@@ -1,0 +1,13 @@
+size-head-d exit=0 89s | simClubManagerSaveSize: all sections green
+size-head-1 exit=0 94s | simClubManagerSaveSize: all sections green
+size-base-d exit=0 95s | simClubManagerSaveSize: all sections green
+size-base-1 exit=0 93s | simClubManagerSaveSize: all sections green
+size-head-2 exit=0 91s | simClubManagerSaveSize: all sections green
+size-base-2 exit=0 94s | simClubManagerSaveSize: all sections green
+size-head-3 exit=0 84s | simClubManagerSaveSize: all sections green
+size-base-3 exit=0 98s | simClubManagerSaveSize: all sections green
+size-head-4 exit=0 95s | simClubManagerSaveSize: all sections green
+size-base-4 exit=0 93s | simClubManagerSaveSize: all sections green
+size-head-5 exit=0 89s | simClubManagerSaveSize: all sections green
+size-base-5 exit=0 92s | simClubManagerSaveSize: all sections green
+size-head-uncapped exit=1 70s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
