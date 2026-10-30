@@ -1,0 +1,65 @@
+mkwalk: season 1 week 48, league weeks left 4, expiring 3, hub line {"count":3,"real":true,"text":"3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers."}, pool 14, sacked false
+mkwalk: wrote walksave.txt
+mkwalk: end of season 1, review pending true, expiring 3, sacked false
+mkwalk: wrote walkend.txt
+  ok   phone-rm: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. (this game's deals) Open the contracts desk"
+  ok   phone-rm: the hub line sits inside the screen (x 16, width 358)
+  ok   phone-rm: no sideways scroll on the hub (0)
+  info phone-rm: after "Open the contracts desk" the desk heading is at 69 px from the top of a 844 px screen (scrollY 1365)
+  ok   phone-rm: the desk heading is in the top half of the screen after the press (69 of 844)
+  ok   phone-rm: the season review shows the contracts checkpoint (steps tab,calendar,rest,continue)
+  info phone-rm: checkpoint 1294 to 1602, Continue at 1922, page height 25193
+  ok   phone-rm: Continue is shut: "Answer 3 deals first"
+  info phone-rm: 3 rows: Jordan Pickford | Christian Nørgaard | Mark Travers
+  ok   phone-rm: no sideways scroll at the review (0)
+  ok   phone-rm: every answer in, Continue opens: "Continue to Season 2" (renewed Jordan Pickford, let go Christian Nørgaard)
+  ok   phone-rm: the new season's first screen names the man who retired off the list: "👟 RETIRED OFF THE FREE AGENT LIST Dani Parejo (38, rated 59) · Sergio Ramos (41, rated 60) · Edinson Cavani (40, rated 54) · Willian (39, rated 52) · Walk Prob"
+  ok   phone-rm: every man let go is on the free agent list, still here or retired after the summer (2 let go, missing none; list 11)
+  ok   phone-rm: the renewed man Jordan Pickford is in the squad on a new deal (1 years)
+  ok   phone-rm: no page errors ()
+  ok   phone-motion: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. (this game's deals) Open the contracts desk"
+  ok   phone-motion: the hub line sits inside the screen (x 16, width 358)
+  ok   phone-motion: no sideways scroll on the hub (0)
+  info phone-motion: after "Open the contracts desk" the desk heading is at 69 px from the top of a 844 px screen (scrollY 1365)
+  ok   phone-motion: the desk heading is in the top half of the screen after the press (69 of 844)
+  ok   phone-motion: the season review shows the contracts checkpoint (steps tab,calendar,rest,continue)
+  info phone-motion: checkpoint 1294 to 1602, Continue at 1922, page height 25193
+  ok   phone-motion: Continue is shut: "Answer 3 deals first"
+  info phone-motion: 3 rows: Jordan Pickford | Christian Nørgaard | Mark Travers
+  ok   phone-motion: no sideways scroll at the review (0)
+  ok   phone-motion: every answer in, Continue opens: "Continue to Season 2" (renewed Jordan Pickford, let go Christian Nørgaard)
+  ok   phone-motion: the new season's first screen names the man who retired off the list: "👟 RETIRED OFF THE FREE AGENT LIST Dani Parejo (38, rated 59) · Sergio Ramos (41, rated 60) · Edinson Cavani (40, rated 54) · Willian (39, rated 52) · Walk Prob"
+  ok   phone-motion: every man let go is on the free agent list, still here or retired after the summer (2 let go, missing none; list 11)
+  ok   phone-motion: the renewed man Jordan Pickford is in the squad on a new deal (1 years)
+  ok   phone-motion: no page errors ()
+  ok   desktop-rm: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. (this game's deals) Open the contracts desk"
+  ok   desktop-rm: the hub line sits inside the screen (x 208, width 864)
+  ok   desktop-rm: no sideways scroll on the hub (0)
+  info desktop-rm: after "Open the contracts desk" the desk heading is at 73 px from the top of a 900 px screen (scrollY 1331)
+  ok   desktop-rm: the desk heading is in the top half of the screen after the press (73 of 900)
+  ok   desktop-rm: the season review shows the contracts checkpoint (steps tab,calendar,rest,continue)
+  info desktop-rm: checkpoint 1211 to 1481, Continue at 1699, page height 15216
+  ok   desktop-rm: Continue is shut: "Answer 3 deals first"
+  info desktop-rm: 3 rows: Jordan Pickford | Christian Nørgaard | Mark Travers
+  ok   desktop-rm: no sideways scroll at the review (0)
+  ok   desktop-rm: every answer in, Continue opens: "Continue to Season 2" (renewed Jordan Pickford, let go Christian Nørgaard)
+  ok   desktop-rm: the new season's first screen names the man who retired off the list: "👟 RETIRED OFF THE FREE AGENT LIST Dani Parejo (38, rated 59) · Sergio Ramos (41, rated 60) · Edinson Cavani (40, rated 54) · Willian (39, rated 52) · Walk Prob"
+  ok   desktop-rm: every man let go is on the free agent list, still here or retired after the summer (2 let go, missing none; list 11)
+  ok   desktop-rm: the renewed man Jordan Pickford is in the squad on a new deal (1 years)
+  ok   desktop-rm: no page errors ()
+  ok   desktop-motion: the hub names the deals that run out: "📝 3 deals end this summer: Jordan Pickford, Christian Nørgaard, Mark Travers. (this game's deals) Open the contracts desk"
+  ok   desktop-motion: the hub line sits inside the screen (x 208, width 864)
+  ok   desktop-motion: no sideways scroll on the hub (0)
+  info desktop-motion: after "Open the contracts desk" the desk heading is at 73 px from the top of a 900 px screen (scrollY 1331)
+  ok   desktop-motion: the desk heading is in the top half of the screen after the press (73 of 900)
+  ok   desktop-motion: the season review shows the contracts checkpoint (steps tab,calendar,rest,continue)
+  info desktop-motion: checkpoint 1211 to 1481, Continue at 1699, page height 15216
+  ok   desktop-motion: Continue is shut: "Answer 3 deals first"
+  info desktop-motion: 3 rows: Jordan Pickford | Christian Nørgaard | Mark Travers
+  ok   desktop-motion: no sideways scroll at the review (0)
+  ok   desktop-motion: every answer in, Continue opens: "Continue to Season 2" (renewed Jordan Pickford, let go Christian Nørgaard)
+  ok   desktop-motion: the new season's first screen names the man who retired off the list: "👟 RETIRED OFF THE FREE AGENT LIST Dani Parejo (38, rated 59) · Sergio Ramos (41, rated 60) · Edinson Cavani (40, rated 54) · Willian (39, rated 52) · Walk Prob"
+  ok   desktop-motion: every man let go is on the free agent list, still here or retired after the summer (2 let go, missing none; list 11)
+  ok   desktop-motion: the renewed man Jordan Pickford is in the squad on a new deal (1 years)
+  ok   desktop-motion: no page errors ()
+walk1597-review: green
