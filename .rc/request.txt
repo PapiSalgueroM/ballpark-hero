@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+weight-base: R=$PWD && git worktree add -f /tmp/wb2 14a9af704 >/dev/null 2>&1 && cd /tmp/wb2 && ln -s "$R/node_modules" node_modules && node_modules/.bin/vite build >/dev/null 2>&1 && { node scripts/lib/hostLikeServer.mjs dist 4181 >/dev/null 2>&1 & } && sleep 5 && SWEEP_OFFLINE=1 BASE=http://localhost:4181 node scripts/sweepWeight.mjs
