@@ -1,0 +1,6 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+psc-noreach exit=0 11s | control "noreach": exactly the targeted check went red, the check works
+psc exit=0 107s | ALL SOCCER CAREER WALK CHECKS PASSED
+psc-noagg exit=0 107s | control "noagg": exactly the targeted check went red, the check works
+psc-strayload exit=0 106s | control "strayload": exactly the targeted check went red, the check works
+psc-s2 exit=0 104s | ALL SOCCER CAREER WALK CHECKS PASSED

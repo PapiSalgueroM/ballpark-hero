@@ -1,0 +1,18 @@
+playSoccerCareer: base seed 20260101, era "Current era", up to 4 career(s) of 240 steps
+
+The walk
+  PASS  1. the walk reached a qualified Champions League campaign: seed 20260101 after 151 steps, 13 distinct phases driven (attempts: 20260101:reached in 151)
+
+The card a player actually saw
+      ⭐ CHAMPIONS LEAGUE Quarter-final LEAGUE PHASE 8TH OF 36 4-3-1, 15 pts · 8th had 15 pts, 24th had 9 All 8 games Level on points splits on goal difference, then goals scored. KNOCKOUTS R16 L1 Rangers 2 - 1 Barcelona R16 L2 Barcelona 0 - 0 Rangers W 2-1 on aggreg
+  PASS  2. every two legged tie shows its aggregate on screen: 2 of 2 ties are two legged and every one prints its aggregate (R16 2-1 by aggregate, QF 1-4 by aggregate)
+  PASS  3. both legs of a two legged tie are labelled: L1 and L2 present for all 2
+  PASS  4. no first leg claims a result: a first leg wins nothing, and none claims to
+
+The page survived
+  PASS  5. the error boundary never appeared and the root is not empty: root holds 21137 characters
+      database requests the walk aborted itself: 12; their resource lines set aside: 12
+  PASS  6. no console or page errors across the walk: none
+
+6 checks, 0 failed
+ALL SOCCER CAREER WALK CHECKS PASSED
