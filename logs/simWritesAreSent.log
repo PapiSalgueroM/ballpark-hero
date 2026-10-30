@@ -1,0 +1,8 @@
+1) no database write in src is built and then dropped on the floor
+   22 write calls in src, 0 never sent
+2) a finished round really does put a request on the wire
+  FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout 8000ms exceeded.
+   played=false, POSTs to guess_nation_scores seen: 0
+  FAIL: no guess was ever submitted, so this section proved nothing about the write
+
+simWritesAreSent: 2 failures

@@ -1,0 +1,32 @@
+#!serve
+#!playwright
+#!serial
+# Release BU: the 24 rule fences (C:/Users/antho/dukb-handoff/2026-10-05/gate-rule-fences.txt), one at a time, Release BT's rc-BTz.txt with its lines unchanged.
+# Release BT: the 24 rule fences (C:/Users/antho/dukb-handoff/2026-10-05/gate-rule-fences.txt), one at a time, Release BS's rc-BSz.txt with its lines unchanged. Expected reds on any runner: simSchemaNames and simLeaderboardCaps (no database), simWritesAreSent (Guess the Nation, red since Release BI).
+# Release BS: the 24 rule fences (C:/Users/antho/dukb-handoff/2026-10-05/gate-rule-fences.txt), one at a time, BR's rc-BRz.txt
+# unchanged. Expected reds on any runner: simSchemaNames and simLeaderboardCaps (no database), simWritesAreSent (Guess the
+# Nation, red on main since Release BI), and simPrerender-style saved page reds until rgA's build:seo where a fence reads them.
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
