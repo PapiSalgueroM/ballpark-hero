@@ -49,6 +49,9 @@ import { advanceClubManagerTrajectory } from '@/lib/clubManagerTrajectory';
 // Round 1035: the modern squads, baked plus the A-League Men, joined once.
 import { CM_WORLD_ROSTERS as CM_ROSTERS } from '@/data/clubManagerWorldRosters';
 import { loadNationalityWorld, registerNationalityWorld } from '@/data/playerNationalities';
+// Round 1606: the real opening day managers, so no made up player or manager can wear one's name.
+import { CM_DUGOUTS } from '@/data/clubManagerDugouts';
+import { realDugoutNames } from '@/lib/realDugouts';
 /* Round 832: the three era bakes are no longer imported here. Each one is its
    own chunk, fetched when its era is picked or an era save is opened (see
    ensureEraRosters below), so the page stops carrying all three past worlds
@@ -383,6 +386,7 @@ function realNames(): Set<string> {
   }
   for (const n of ERA_NAMES_THE_FILLER_COULD_BUILD) set.add(n);
   for (const n of ALSO_REAL_ELSEWHERE) set.add(n);
+  for (const n of realDugoutNames(CM_DUGOUTS)) set.add(n);
   REAL_NAME_SET = set;
   return set;
 }

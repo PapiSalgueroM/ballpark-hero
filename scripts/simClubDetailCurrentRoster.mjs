@@ -8,6 +8,8 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { withoutClubDetailFixtures } from './lib/clubDetailFixturesSourceJoin.mjs';
+/* Round 1606: the real dugouts' manager line comes off the screen first, then the fixtures join, as before. */
+import { withoutClubDetailDugout } from './lib/clubDetailDugoutSourceJoin.mjs';
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Current-roster proof requires remote offline CI');
 const readLf = file => fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n'); /* Release BE: simHarnessAnchors, a CRLF checkout */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), SELF = fileURLToPath(import.meta.url);
@@ -101,7 +103,7 @@ try {
     }
     assert.equal(inverse, before); const name = path.basename(file);
     fs.writeFileSync(path.join(retained, name + '.fixed-plan'), after); fs.writeFileSync(path.join(retained, name + '.inverse'), inverse);
-    const actual = file === COMPONENT ? withoutClubDetailFixtures(sources.get(file)) : sources.get(file);
+    const actual = file === COMPONENT ? withoutClubDetailFixtures(withoutClubDetailDugout(sources.get(file))) : sources.get(file);
     assert.equal(actual, RED ? before : after, file + ': actual whole source must equal the exact phase plan after the explicit fixtures inverse');
     return { file, spans: rows, parentSha256: sha(before), plannedSha256: sha(after), inverseSha256: sha(inverse) };
   }

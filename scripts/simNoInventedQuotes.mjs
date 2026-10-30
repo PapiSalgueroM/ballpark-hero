@@ -52,17 +52,28 @@
  * Control (Round 979): QUOTES_CONTROL=desk plants one decisions desk card
  * naming a real player next to invented conduct, so pass 1 must go red,
  * which proves the desk (s.decisions) is harvested and not just the inbox.
+ *
+ * Round 1606: real managers. Every name in Club Manager's dugout table
+ * (src/data/clubManagerDugouts.ts) joins the never quote set, full name and
+ * surname, and pass 1 now also reads the feed a new career opens on.
+ * Control QUOTES_CONTROL=dugout swaps in a SENTINEL table (Arsenal's chair
+ * held by "Testa Realmann", a made up name registered as real) through a
+ * bundled copy in a temp folder and plants one opening headline giving the
+ * first real holder a first person quote; pass 1 must go red on it. It
+ * exits 1 with a last line saying FIRED, 3 if the planted line was read and
+ * not caught, and 2 if the plant never reached the harvest (a dead control).
  */
 import { execSync } from 'node:child_process';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { SENTINEL, SENTINEL_MONTH, bundleEngine } from './lib/cmDugoutSentinel.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const QUOTES_CONTROL = process.env.QUOTES_CONTROL || '';
-if (QUOTES_CONTROL && QUOTES_CONTROL !== 'desk') {
-  console.error(`QUOTES_CONTROL=${QUOTES_CONTROL} is not a control this guard knows (desk)`);
+if (QUOTES_CONTROL && QUOTES_CONTROL !== 'desk' && QUOTES_CONTROL !== 'dugout') {
+  console.error(`QUOTES_CONTROL=${QUOTES_CONTROL} is not a control this guard knows (desk, dugout)`);
   process.exit(1);
 }
 const ENTRY = path.join(os.tmpdir(), 'quotesEntry.mjs');
@@ -77,13 +88,36 @@ export const cm = mod;
 // Round 146: the 2010 era ships real people too, so its 802 names join the
 // never-quote set through the same {"n":"..."} harvest below.
 export const rs = { modern: rosters, era2010 };
+// Round 1606: the real opening day managers, for the never quote set.
+export { CM_DUGOUTS } from '${ROOT.replaceAll('\\', '/')}/src/data/clubManagerDugouts.ts';
+export { realDugoutNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/realDugouts.ts';
 `);
 execSync(
   `"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`,
   { stdio: 'inherit' },
 );
 
-const { cm, rs } = await import(pathToFileURL(BUNDLE).href);
+const shipped = await import(pathToFileURL(BUNDLE).href);
+const { rs } = shipped;
+let cm = shipped.cm;
+let DUGOUT_NAMES = shipped.realDugoutNames(shipped.CM_DUGOUTS);
+/* The dugout control: the engine pass 1 drives is the sentinel copy, and its one real name is the sentinel. */
+const DUGOUT_PLANT = 'on the new season: "I want my side pressing higher than anyone, and I know we can."';
+if (QUOTES_CONTROL === 'dugout') {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'quotes-dugout-'));
+  const refuse = why => { console.error(`control run: dugout cannot run: ${why}; refusing a dead control`); process.exit(2); };
+  const S = await bundleEngine({
+    srcDir: path.join(ROOT, 'src'), tmp, name: 'quotes-dugout', nodeModules: path.join(ROOT, 'node_modules'), refuse,
+    table: { now: { Arsenal: { name: SENTINEL, appointed: SENTINEL_MONTH } } }, partial: {},
+    edit: {
+      /* After the start's headlines are built, which rebuild the feed from scratch and would eat an earlier plant. */
+      from: 'const unrecorded = generateHeadlines(state);',
+      to: 'const unrecorded = generateHeadlines(state); { const realOne = Object.values(state.managers ?? {}).find(v => v.real === 1); if (realOne) state.aiHeadlines = [`${realOne.name} ' + DUGOUT_PLANT + '`, ...(state.aiHeadlines ?? [])]; }',
+    },
+  });
+  cm = S.cm;
+  DUGOUT_NAMES = [SENTINEL];
+}
 const { startCareer, playNextEntry, answerMessage, autoPickXI, FORMATIONS, ensureRoles } = cm;
 
 let failures = 0;
@@ -117,6 +151,8 @@ function realNames() {
   const full = new Set();
   const rosterBlob = JSON.stringify(rs);
   for (const m of rosterBlob.matchAll(/"n":"([^"]{3,})"/g)) full.add(m[1]);
+  /* Round 1606: and every real manager in the dugout table (the sentinel alone under the dugout control). */
+  for (const n of DUGOUT_NAMES) full.add(n);
   const surnames = new Set();
   for (const n of full) {
     const parts = n.trim().split(/\s+/);
@@ -284,6 +320,8 @@ console.log('1) Runtime: every line real seasons can put on screen');
   for (const club of CLUBS) {
     for (let run = 0; run < 3; run++) {
       let s = startCareer(club);
+      /* Round 1606: the feed a new career opens on is on screen too. */
+      for (const h of s.aiHeadlines ?? []) keep(h);
       ensureRoles(s);
       s.xiIds = autoPickXI(s.squad, FORMATIONS[s.formationIndex] ?? FORMATIONS[0]);
       let guard = 0;
@@ -291,7 +329,9 @@ console.log('1) Runtime: every line real seasons can put on screen');
         guard += 1;
         const r = playNextEntry(s, { skipHalftime: true });
         s = r.state;
-        for (const e of r.result?.events ?? []) keep(e);
+        /* Round 1606: the match is r.report. PlayResult has no result field, so this line read nothing and pass 1
+           never saw a live event until the fix (one run: 1774 lines harvested instead of about 230). */
+        for (const e of r.report?.events ?? []) keep(e);
         for (const h of s.aiHeadlines ?? []) keep(h);
         /* Round 979: the decisions desk (s.decisions) sits on the inbox screen
            and names squad players, so it is read the same way, buttons too.
@@ -332,7 +372,9 @@ console.log('1) Runtime: every line real seasons can put on screen');
      will not flake, while still catching the failure this guards against:
      the harvest loop silently stopping (a changed playNextEntry signature,
      an inbox that no longer populates) and dropping the count to single
-     figures. */
+     figures. Round 1606: those trials predate the events read above; with
+     it one run harvested 1774. The floor stays at 150, still a dead loop
+     catch, until ten new trials set a tighter one. */
   if (harvested.length < 150) {
     fail(`only ${harvested.length} lines harvested, so this pass did not actually exercise the narrative and its green result is meaningless`);
   }
@@ -345,6 +387,17 @@ console.log('1) Runtime: every line real seasons can put on screen');
   console.log(`   ${bad.length} of them put words in a real player's mouth`);
   for (const b of bad.slice(0, 12)) console.error(`     ${b.v}\n       ${b.t.slice(0, 150)}`);
   if (bad.length > 0) fail(`${bad.length} rendered lines attribute invented speech or conduct to a real player`);
+  /* Round 1606: the dugout control's verdict, on pass 1 alone. */
+  if (QUOTES_CONTROL === 'dugout') {
+    const planted = harvested.filter(t => t.includes(DUGOUT_PLANT));
+    if (planted.length === 0) { console.error('control run: dugout planted nothing pass 1 read (no real holder, or the opening feed is not harvested), refusing a dead control'); process.exit(2); }
+    if (bad.some(b => b.t.includes(DUGOUT_PLANT) && b.t.includes(SENTINEL))) {
+      console.log(`control run: dugout FIRED, pass 1 caught ${planted.length} planted quote(s) from a real manager`);
+      process.exit(1);
+    }
+    console.error('control run: dugout DID NOT FIRE, a real manager\'s first person quote passed pass 1');
+    process.exit(3);
+  }
 }
 
 /* ---------- pass 2: literal names in source copy ---------- */

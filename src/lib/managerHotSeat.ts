@@ -51,7 +51,10 @@
  *
  * Nothing here invents a fact about a real club or person. The previous
  * manager has no name, the manager is you, the opposition dugouts are the
- * engine's generated names, and every number on screen is the engine's.
+ * engine's (generated names, and since Round 1606 a club's real opening day
+ * manager where the dugout table has him: a name in a display slot only,
+ * never in a line the engine writes), and every number on screen is the
+ * engine's.
  */
 import {
   REAL_LEAGUES,

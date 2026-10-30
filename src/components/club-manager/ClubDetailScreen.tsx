@@ -6,10 +6,11 @@ import {
   money, moneyIn, sortedLeagueTable, isPartialClub, TIER_INFO,
   oppRosterFor, worldRosterXIAvg, worldSeasonLabel, yearsOn,
   boardWantLabel, careerLeagueOf, eraClubDefFor,
-  managerOf, sellValue,
+  dugoutOf, sellValue,
 } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
+import { realDugoutSince, DUGOUT_MADE_UP_TITLE, DUGOUT_PARTIAL_TITLE } from '@/lib/realDugouts';
 
 interface ClubDetailScreenProps {
   clubName: string;
@@ -32,6 +33,8 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
      roster is the 2010 squad aged to the save's season. */
   const def = eraClubDefFor(clubName, career.eraId);
   const league = careerLeagueOf({ clubName, eraId: career.eraId, customClub: career.customClub });
+  /* Round 1606: who is in the other dugout, as a display slot reads it (real and dated, or made up). */
+  const dugout = clubName === career.clubName ? null : dugoutOf(career, clubName);
   /* Round 132: the rival viewer shows the rival AS HE IS THIS SEASON. Before
      the clock existed this read the frozen August 2026 bake, so in 2036 you
      could open Liverpool and be looking at a squad list a decade out of date
@@ -120,16 +123,24 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
             </div>
             {/* Round 308: the other dugout has a name now. Your own club
                 shows your created manager if one exists, second person if
-                not, and rivals show the generated name and its tenure. */}
+                not, and rivals show the generated name and its tenure.
+                Round 1606: a real opening day manager shows with the month
+                he took the job, and nothing else about him; every made up
+                one wears MADE UP so the page says which is which. */}
             {clubName === career.clubName ? (
               career.manager && (
-                <div className="text-[10px] text-muted-foreground">Dugout: <span className="text-foreground font-semibold">{career.manager.name}</span> (you)</div>
+                <div className="text-[10px] text-muted-foreground">Manager: <span className="text-foreground font-semibold">{career.manager.name}</span> (you)</div>
               )
             ) : (
-              managerOf(career, clubName) && (
-                <div className="text-[10px] text-muted-foreground">
-                  Dugout: <span className="text-foreground font-semibold">{managerOf(career, clubName)!.name}</span>
-                  {' '}since S{managerOf(career, clubName)!.since}
+              dugout && (
+                <div className="text-[10px] text-muted-foreground flex flex-wrap items-center gap-x-1 gap-y-0.5 min-w-0" data-cm-dugout={dugout.real ? 'real' : 'made-up'}>
+                  <span className="truncate max-w-full">
+                    Manager: <span className="text-foreground font-semibold">{dugout.name}</span>
+                    {dugout.real
+                      ? (realDugoutSince(dugout.appointed) ? ` · ${realDugoutSince(dugout.appointed)}` : '')
+                      : (dugout.since ? ` · since S${dugout.since}` : '')}
+                  </span>
+                  {!dugout.real && <MadeUpTag title={dugout.partial ? DUGOUT_PARTIAL_TITLE : DUGOUT_MADE_UP_TITLE} />}
                 </div>
               )
             )}

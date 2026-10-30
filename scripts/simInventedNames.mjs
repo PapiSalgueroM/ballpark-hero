@@ -176,10 +176,17 @@ const real = new Set();
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/nationalities/allWorlds.ts';
 export { allIntlNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts';
+export { CM_DUGOUTS } from '${ROOT.replaceAll('\\', '/')}/src/data/clubManagerDugouts.ts';
+export { realDugoutNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/realDugouts.ts';
 `);
   execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-  const { NATIONALITY_BY_WORLD, allIntlNames } = await import(pathToFileURL(BUNDLE).href);
+  const { NATIONALITY_BY_WORLD, allIntlNames, CM_DUGOUTS, realDugoutNames } = await import(pathToFileURL(BUNDLE).href);
   for (const world of Object.values(NATIONALITY_BY_WORLD)) for (const n of Object.keys(world)) real.add(n);
+  /* Round 1606: Club Manager's real opening day managers are real people too, whatever shape their rows take,
+     so no generator anywhere may build one of their names. Read through the module, not a source regex. */
+  const dugoutNames = realDugoutNames(CM_DUGOUTS);
+  for (const n of dugoutNames) real.add(n);
+  console.log(`   ${dugoutNames.length} real managers from the Club Manager dugout table`);
   globalThis.__intl = allIntlNames();
   if (real.size < 8000) fail(`only ${real.size} real names harvested, the check is not checking much`);
   /* Round 971: every sealed world feeds the guard, the 2020-21 one included
@@ -262,19 +269,31 @@ export { makeGeneratedName } from '${ROOT.replaceAll('\\', '/')}/src/lib/clubMan
     .replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/[^\n]*/g, ' ');
   const listed = new Set([...listBody.matchAll(/'([^']+)'/g)].map(m => m[1]));
   const cmWorlds = new Set();
+  /* Round 1606: a real manager in Club Manager's dugout table is covered at runtime too, because realNames() in
+     clubManagerEras.ts joins the table, but only while that join is really in the function's code (comments
+     stripped). If it is gone, his pairing is uncovered and the advice says to put the join back. */
+  const realNamesBody = ((eraSrc.match(/function realNames\(\)[^{]*\{([\s\S]*?)\n\}/) ?? [, ''])[1] ?? '')
+    .replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/[^\n]*/g, ' ');
+  const dugoutJoined = /realDugoutNames\(\s*CM_DUGOUTS\s*\)/.test(realNamesBody);
+  let dugoutCovered = new Set(), dugoutAll = new Set();
   {
-    const { NATIONALITY_BY_WORLD } = await import(pathToFileURL(BUNDLE_WORLDS).href);
+    const { NATIONALITY_BY_WORLD, CM_DUGOUTS, realDugoutNames } = await import(pathToFileURL(BUNDLE_WORLDS).href);
     for (const w of Object.values(NATIONALITY_BY_WORLD)) for (const n of Object.keys(w)) cmWorlds.add(n);
+    dugoutAll = new Set(realDugoutNames(CM_DUGOUTS));
+    if (dugoutJoined) dugoutCovered = dugoutAll;
   }
-  const uncovered = [];
+  const uncovered = [], dugoutUncovered = [];
   for (const a of eraFirst) for (const b of eraLast) {
     const n = `${a} ${b}`;
-    if (real.has(n) && !cmWorlds.has(n) && !listed.has(n)) uncovered.push(n);
+    if (real.has(n) && !cmWorlds.has(n) && !listed.has(n) && !dugoutCovered.has(n)) (dugoutAll.has(n) ? dugoutUncovered : uncovered).push(n);
   }
   if (uncovered.length) {
     fail(`the era filler can emit real people the roster guard cannot see: ${uncovered.slice(0, 8).join(' | ')}. Add them to ALSO_REAL_ELSEWHERE.`);
   }
-  console.log(`   20,000 rolls, ${seen.size} distinct invented names, ${hits} real ones; ${eraFirst.length}x${eraLast.length} pairings checked against the whole site, ${listed.size} listed, ${uncovered.length} uncovered`);
+  if (dugoutUncovered.length) {
+    fail(`the era filler can emit real managers from the dugout table, and realNames() in clubManagerEras.ts no longer joins it: ${dugoutUncovered.slice(0, 8).join(' | ')}. Put realDugoutNames(CM_DUGOUTS) back in realNames().`);
+  }
+  console.log(`   20,000 rolls, ${seen.size} distinct invented names, ${hits} real ones; ${eraFirst.length}x${eraLast.length} pairings checked against the whole site, ${listed.size} listed, ${uncovered.length + dugoutUncovered.length} uncovered (the dugout table's ${dugoutAll.size} names ${dugoutJoined ? 'joined' : 'NOT joined'} in realNames())`);
 }
 
 /* ---------- 2c. The career rival, the bank the register could not see ---------- */
