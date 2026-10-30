@@ -1,0 +1,7 @@
+mE-dl exit=1 27s | simCmDecidingLeg: FAIL, 2 of 8 checks red (gate, gate)
+mG-dl exit=1 26s | simCmDecidingLeg: FAIL, 1 of 8 checks red (gate)
+mH-dl exit=1 26s | simCmDecidingLeg: FAIL, 1 of 8 checks red (gate)
+mD1-vt exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding seco
+mD2-vt exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding seco
+mF-vt exit=0 5s |    Duration  3.87s (transform 1.63s, setup 147ms, collect 3.91s, tests 1.96s, environment 639ms, prepare 159ms)
+mF-tsc exit=0 72s | MUTATED F

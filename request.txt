@@ -1,0 +1,8 @@
+#!serial
+mE-dl: node .rc/x/mut1603.mjs E && DECIDING_LEG_SECTION=gate node scripts/simCmDecidingLeg.mjs; s=$?; git checkout -- src scripts; exit $s
+mG-dl: node .rc/x/mut1603.mjs G && DECIDING_LEG_SECTION=gate node scripts/simCmDecidingLeg.mjs; s=$?; git checkout -- src scripts; exit $s
+mH-dl: node .rc/x/mut1603.mjs H && DECIDING_LEG_SECTION=gate node scripts/simCmDecidingLeg.mjs; s=$?; git checkout -- src scripts; exit $s
+mD1-vt: node .rc/x/mut1603.mjs D1 && node_modules/.bin/vitest run src/test/cmDecidingLegCard.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mD2-vt: node .rc/x/mut1603.mjs D2 && node_modules/.bin/vitest run src/test/cmDecidingLegCard.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mF-vt: node .rc/x/mut1603.mjs F && node_modules/.bin/vitest run src/test/managerHotSeatCarryOnCard.test.tsx src/test/dailyMenuResume.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mF-tsc: node .rc/x/mut1603.mjs F && node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; git checkout -- src scripts; exit $s

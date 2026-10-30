@@ -1,0 +1,56 @@
+MUTATED D1
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/cmDecidingLegCard.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 88[2mms[22m[39m
+   [32m✓[39m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mlost 1-2 at home, through on penalties: THROUGH, the 1-2 still printed, a pulse and no shake[32m 45[2mms[22m[39m
+[31m   [31m×[31m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mwon 2-1 at home, out on aggregate: OUT, the 2-1 still printed, a shake and no pulse[39m[32m 16[2mms[22m[39m
+[31m     → expected 'THROUGH' to be 'OUT' // Object.is equality[39m
+[31m   [31m×[31m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mreads the night in my orientation away from home, and a drawn night through on away goals[39m[32m 8[2mms[22m[39m
+[31m     → expected 'OUT' to be 'THROUGH' // Object.is equality[39m
+   [32m✓[39m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mkeeps the night's word on a first leg, a league game and a report from before the tie line[32m 18[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmDecidingLegCard.test.tsx[2m > [22mClub Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mwon 2-1 at home, out on aggregate: OUT, the 2-1 still printed, a shake and no pulse
+[31m[1mAssertionError[22m: expected 'THROUGH' to be 'OUT' // Object.is equality[39m
+
+Expected: [32m"OUT"[39m
+Received: [31m"THROUGH"[39m
+
+[36m [2m❯[22m src/test/cmDecidingLegCard.test.tsx:[2m65:20[22m[39m
+    [90m 63| [39m      tie: { leg: 2, aggMine: 2, aggTheirs: 4, through: false, leg1Min…
+    [90m 64| [39m    }))[33m;[39m
+    [90m 65| [39m    [34mexpect[39m(s[33m.[39mhead)[33m.[39m[34mtoBe[39m([32m'OUT'[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 66| [39m    [34mexpect[39m(s[33m.[39mtone)[33m.[39m[34mtoContain[39m([32m'text-destructive'[39m)[33m;[39m
+    [90m 67| [39m    [34mexpect[39m(s[33m.[39mnight)[33m.[39m[34mtoBe[39m([32m'Won 2-1 on the night'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmDecidingLegCard.test.tsx[2m > [22mClub Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mreads the night in my orientation away from home, and a drawn night through on away goals
+[31m[1mAssertionError[22m: expected 'OUT' to be 'THROUGH' // Object.is equality[39m
+
+Expected: [32m"THROUGH"[39m
+Received: [31m"OUT"[39m
+
+[36m [2m❯[22m src/test/cmDecidingLegCard.test.tsx:[2m80:23[22m[39m
+    [90m 78| [39m      tie: { leg: 2, aggMine: 3, aggTheirs: 2, through: true, leg1Mine…
+    [90m 79| [39m    }))[33m;[39m
+    [90m 80| [39m    [34mexpect[39m(away[33m.[39mhead)[33m.[39m[34mtoBe[39m([32m'THROUGH'[39m)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m 81| [39m    [34mexpect[39m(away[33m.[39mnight)[33m.[39m[34mtoBe[39m([32m'Lost 0-2 on the night'[39m)[33m;[39m
+    [90m 82| [39m    [35mconst[39m level [33m=[39m [34mshown[39m([34mreport[39m({
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 09:27:09
+[2m   Duration [22m 2.82s[2m (transform 1.50s, setup 73ms, collect 1.94s, tests 88ms, environment 311ms, prepare 127ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding second leg is headlined by the tie (Round 1603) > won 2-1 at home%2C out on aggregate%3A OUT%2C the 2-1 still printed%2C a shake and no pulse,line=65,column=20::AssertionError: expected 'THROUGH' to be 'OUT' // Object.is equality%0A%0AExpected: "OUT"%0AReceived: "THROUGH"%0A%0A ❯ src/test/cmDecidingLegCard.test.tsx:65:20%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding second leg is headlined by the tie (Round 1603) > reads the night in my orientation away from home%2C and a drawn night through on away goals,line=80,column=23::AssertionError: expected 'OUT' to be 'THROUGH' // Object.is equality%0A%0AExpected: "THROUGH"%0AReceived: "OUT"%0A%0A ❯ src/test/cmDecidingLegCard.test.tsx:80:23%0A%0A
