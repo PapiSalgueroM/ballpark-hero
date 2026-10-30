@@ -39,6 +39,7 @@ vi.mock('@/components/ui/select', () => ({
 
 import * as E from '@/lib/soccerCareerEngine';
 import { attrTreeFor, defaultPhysique } from '@/lib/soccerCareerAttributes';
+import { adjustClubsForYear } from '@/lib/careerEras';
 import { isSoccerCareerSave, parseSoccerCareerSave } from '@/lib/soccerCareerSave';
 import SoccerCareer from '@/pages/SoccerCareer';
 
@@ -145,5 +146,94 @@ describe('Soccer Career creation roll belongs to its selected position', () => {
     const before = snapshot(view, 'GK'); fireEvent.click(begin(view));
     retain('new-position-start', { before, after: snapshot(view, 'GK'), saved: saved() });
     const state = assertStarted(view, 'GK', shown!); expect(state.reflexes).toBeGreaterThan(state.shooting);
+  });
+});
+
+/* Round 1604 (report 3f014b97): the page half of "the academy shown is the
+   academy you join". simSoccerAcademyPlacement proves initCareer honours a
+   name it is handed; these drive the page itself, so a merge that stops
+   handing the shown name to initCareer, stops reporting it up, or loses the
+   redraw on a nationality or era change goes red here. Math.random is a
+   seeded stream in these cases (the constant 0.52 above would make two
+   independent draws agree and hide exactly that bug). */
+const seeded = (seed: number) => {
+  let t = seed >>> 0;
+  return () => {
+    t = (t + 0x6D2B79F5) >>> 0;
+    let x = Math.imul(t ^ (t >>> 15), 1 | t);
+    x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x;
+    return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
+  };
+};
+const SEEDS = [16041, 16042, 16043, 16044, 16045, 16046];
+function placement(view: ReturnType<typeof render>) {
+  const label = view.queryByText('Academy Placement'); if (!label) return null;
+  const card = label.parentElement!;
+  const row = [...card.querySelectorAll('div')].find(d => d.className.includes('font-bold') && / Youth$/.test(d.textContent!.trim()));
+  const tier = card.textContent!.match(/Tier (\d)/);
+  expect(row, 'the placement card names no club').toBeTruthy(); expect(tier, 'the placement card shows no tier').toBeTruthy();
+  return { name: row!.textContent!.trim().replace(/ Youth$/, ''), tier: Number(tier![1]) };
+}
+function fresh(seed: number) {
+  cleanup(); localStorage.clear(); localStorage.setItem(OTHER, 'untouched');
+  vi.mocked(Math.random).mockImplementation(seeded(seed));
+  return prepare();
+}
+const yearList = (year: number) => new Map(adjustClubsForYear(E.FALLBACK_CLUBS, year).map(c => [c.name, c]));
+function startedAt(view: ReturnType<typeof render>, shown: { name: string; tier: number }, why: string) {
+  fireEvent.click(begin(view));
+  const state = saved(); expect(state, `${why}: Begin Career started nothing`).not.toBeNull();
+  expect(view.queryByText('Create Your Player')).toBeNull();
+  expect(state!.academyClubName, `${why}: shown ${shown.name}, started at ${state!.academyClubName}`).toBe(shown.name);
+  expect(state!.currentClub).toBe(`${shown.name} Youth`); expect(state!.currentClubTier).toBe(shown.tier);
+  return state!;
+}
+
+describe('Soccer Career creation: the academy shown is the academy joined', () => {
+  it('academy kept: a settled roll starts the career at the club under Academy Placement', () => {
+    for (const seed of SEEDS) {
+      const view = fresh(seed); roll(view); settle(); const shown = placement(view);
+      expect(shown, `seed ${seed}: no placement after the roll`).not.toBeNull();
+      const state = startedAt(view, shown!, `seed ${seed}`);
+      expect(state.nationality).toBe('England'); expect(state.era).toBe('2020-24');
+    }
+  });
+  it('academy kept: a nationality change after the roll re-reads the placement and starts there', () => {
+    for (const seed of SEEDS) {
+      const view = fresh(seed); roll(view); settle(); const before = placement(view)!;
+      expect(E.FALLBACK_CLUBS.find(c => c.name === before.name)?.country, `seed ${seed}: England's roll`).toBe('England');
+      fireEvent.change(view.container.querySelectorAll('select')[0], { target: { value: 'Brazil' } });
+      const shown = placement(view)!;
+      expect(E.FALLBACK_CLUBS.find(c => c.name === shown.name)?.country, `seed ${seed}: still showing ${shown.name} for a Brazilian`).toBe('Brazil');
+      const state = startedAt(view, shown, `seed ${seed} Brazil`);
+      expect(state.nationality).toBe('Brazil'); expect(state.currentClubCountry).toBe('Brazil');
+    }
+  });
+  it('academy kept: an era change after the roll re-reads the placement for the new year and starts there', () => {
+    /* USA, because no club of its in the pool existed in 1990: a placement
+       left over from the 2020s, or one drawn from the unadjusted list, names
+       a club the early 90s list does not have. */
+    const in1990 = yearList(1990);
+    for (const seed of SEEDS) {
+      const view = fresh(seed);
+      fireEvent.change(view.container.querySelectorAll('select')[0], { target: { value: 'USA' } });
+      roll(view); settle(); expect(placement(view), `seed ${seed}: no placement after the roll`).not.toBeNull();
+      fireEvent.change(view.container.querySelectorAll('select')[2], { target: { value: '1990-94' } });
+      const shown = placement(view)!;
+      expect(in1990.has(shown.name), `seed ${seed}: ${shown.name} is shown for 1990 but is not in the 1990 list`).toBe(true);
+      expect(shown.tier, `seed ${seed}: ${shown.name} shows the wrong tier for 1990`).toBe(in1990.get(shown.name)!.tier);
+      const state = startedAt(view, shown, `seed ${seed} 1990`);
+      expect(state.era).toBe('1990-94'); expect(state.nationality).toBe('USA');
+    }
+  });
+  it('academy kept: Begin Career waits while Roll again is rolling, then starts at the new placement', () => {
+    for (const seed of SEEDS.slice(0, 3)) {
+      const view = fresh(seed); roll(view); settle(); expect(placement(view)).not.toBeNull(); expect(begin(view)).toBeEnabled();
+      roll(view); act(() => { vi.advanceTimersByTime(300); });
+      expect(placement(view), `seed ${seed}: a placement shows mid roll`).toBeNull();
+      expect(begin(view), `seed ${seed}: Begin Career is live mid roll, so it would start at a club nobody was shown`).toBeDisabled();
+      settle(); const shown = placement(view)!; expect(begin(view)).toBeEnabled();
+      startedAt(view, shown, `seed ${seed} reroll`);
+    }
   });
 });
