@@ -1141,7 +1141,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Trust upstairs runs from zero to 100",
         items: [
-          "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends.",
+          "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired, though the save goes on: franchises that rate your record can call, and you can usually sit a season out.",
         ],
       },
       {
@@ -1210,7 +1210,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       },
       {
         q: "Can I get fired?",
-        a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Missing the bracket with a Cup-or-bust roster costs real trust, and at zero the save ends and you take another chair.",
+        a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. Missing the bracket with a Cup-or-bust roster costs real trust, and at zero you lose the seat but not the save: franchises that rate your record can call, and you can usually sit a season out instead.",
       },
       {
         q: "How long can one franchise run?",
