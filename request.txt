@@ -1,0 +1,2 @@
+#!serial
+m-takeover: node .rc/x/mutRun1606.mjs takeover && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
