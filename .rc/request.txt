@@ -1,0 +1,35 @@
+# Release BU lane c: Player Bingo club counts and the window class (Rounds 1571 and 1576): the sim, the generator check, the honours pin and the 22 BINGO_CLUBS_CONTROL lines (each exit 1).
+vitest: node_modules/.bin/vitest run src/test/clubCareerAdditions.test.ts src/test/playerBingoClubCounts.test.ts src/test/playerBingoHonours.test.ts src/test/playerBingoTransport.test.ts src/test/playerBingoWorldCupAlias.test.ts src/test/playerBingoReport.test.tsx src/test/playerBingoLoad.test.tsx src/test/playerBingoLineFeedback.test.tsx src/test/scoreShown.test.tsx src/test/playerBingoRodriHonour.test.ts src/test/playerBingoCategories.test.ts src/test/playerBingoBirthYear.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simBingoClubCounts.mjs
+gen: node scripts/genBingoClubAdditions.mjs && git diff --exit-code src/data/bingoClubAdditions.json && echo "derived file is the generator's output"
+honours: node scripts/simPlayerBingoHonours.mjs
+c-rule: BINGO_CLUBS_CONTROL=rule node scripts/simBingoClubCounts.mjs
+c-onesource: BINGO_CLUBS_CONTROL=onesource node scripts/simBingoClubCounts.mjs
+c-pending: BINGO_CLUBS_CONTROL=pending node scripts/simBingoClubCounts.mjs
+c-leak: BINGO_CLUBS_CONTROL=leak node scripts/simBingoClubCounts.mjs
+c-nomorton: BINGO_CLUBS_CONTROL=nomorton node scripts/simBingoClubCounts.mjs
+c-noapply: BINGO_CLUBS_CONTROL=noapply node scripts/simBingoClubCounts.mjs
+c-noreserve: BINGO_CLUBS_CONTROL=noreserve node scripts/simBingoClubCounts.mjs
+c-nosplit: BINGO_CLUBS_CONTROL=nosplit node scripts/simBingoClubCounts.mjs
+c-drift: BINGO_CLUBS_CONTROL=drift node scripts/simBingoClubCounts.mjs
+c-handedit: BINGO_CLUBS_CONTROL=handedit node scripts/simBingoClubCounts.mjs
+c-slashdup: BINGO_CLUBS_CONTROL=slashdup node scripts/simBingoClubCounts.mjs
+c-aliasdup: BINGO_CLUBS_CONTROL=aliasdup node scripts/simBingoClubCounts.mjs
+c-tableclubs: BINGO_CLUBS_CONTROL=tableclubs node scripts/simBingoClubCounts.mjs
+c-noseason: BINGO_CLUBS_CONTROL=noseason node scripts/simBingoClubCounts.mjs
+c-window: BINGO_CLUBS_CONTROL=window node scripts/simBingoClubCounts.mjs
+c-unjudged: BINGO_CLUBS_CONTROL=unjudged node scripts/simBingoClubCounts.mjs
+c-touchprev: BINGO_CLUBS_CONTROL=touchprev node scripts/simBingoClubCounts.mjs
+c-prevleak: BINGO_CLUBS_CONTROL=prevleak node scripts/simBingoClubCounts.mjs
+c-nowindow: BINGO_CLUBS_CONTROL=nowindow node scripts/simBingoClubCounts.mjs
+c-windowdrop: BINGO_CLUBS_CONTROL=windowdrop node scripts/simBingoClubCounts.mjs
+c-windowseason: BINGO_CLUBS_CONTROL=windowseason node scripts/simBingoClubCounts.mjs
+c-windowdb: BINGO_CLUBS_CONTROL=windowdb node scripts/simBingoClubCounts.mjs
+c-cap: FIXTURE_CONTROL=cap node scripts/simBingoClubCounts.mjs
+c-bogus: BINGO_CLUBS_CONTROL=bogus node scripts/simBingoClubCounts.mjs
+simMarketYearScope: node scripts/simMarketYearScope.mjs
+simPlayerBingoCategories: CI=1 SIM_NETWORK=offline node scripts/simPlayerBingoCategories.mjs
+simPlayerBingoRodriHonour: CI=1 SIM_NETWORK=offline node scripts/simPlayerBingoRodriHonour.mjs
+simPlayerBingoWorldCupAlias: CI=1 SIM_NETWORK=offline node scripts/simPlayerBingoWorldCupAlias.mjs
+simPlayerBingoLoad: node scripts/simPlayerBingoLoad.mjs
+simPlayerBingoLineFeedback: node scripts/simPlayerBingoLineFeedback.mjs
