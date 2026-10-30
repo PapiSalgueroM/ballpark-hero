@@ -1,0 +1,10 @@
+playSoccerCareer: base seed 20260914, era "Current era", up to 1 career(s) of 2 steps, CONTROL=noreach
+
+The walk
+  FAIL  1. the walk reached a qualified Champions League campaign: no campaign on screen in 1 career(s): 20260914:2 steps, no campaign. This is a coverage failure, not a pass: the card below was never checked.
+
+The page survived
+  PASS  5. the error boundary never appeared and the root is not empty: root holds 19735 characters
+  FAIL  6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+control "noreach": other checks went red too, so the control is not isolated: 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
