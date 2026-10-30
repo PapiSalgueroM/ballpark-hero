@@ -1,0 +1,3 @@
+2583 /home/runner/work/_temp/rc-out/full/playLegacy.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playLegacy.mjs/stderr.log
+2583 total

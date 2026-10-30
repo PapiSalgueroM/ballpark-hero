@@ -1,0 +1,3 @@
+5967 /home/runner/work/_temp/rc-out/full/playHowTo.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playHowTo.mjs/stderr.log
+5967 total

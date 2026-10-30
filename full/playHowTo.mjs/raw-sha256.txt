@@ -1,0 +1,2 @@
+4540efbb40d2e12420ab85f67d076db6d024cc5036fbc7affbcdbcce1d8ad5bd  /home/runner/work/_temp/rc-out/full/playHowTo.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playHowTo.mjs/stderr.log

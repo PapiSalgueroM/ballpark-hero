@@ -1,0 +1,2 @@
+da72d7def5d0b029020c71b24ec1e939b7666bb51ba8a0abbcaa93b5baa43831  /home/runner/work/_temp/rc-out/full/playLightMode.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playLightMode.mjs/stderr.log

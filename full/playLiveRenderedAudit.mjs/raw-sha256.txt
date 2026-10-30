@@ -1,0 +1,2 @@
+52cd7b5a9765d4c0a413cd0c664a810345bd4e26db7b7231ba72f182303a6583  /home/runner/work/_temp/rc-out/full/playLiveRenderedAudit.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playLiveRenderedAudit.mjs/stderr.log

@@ -1,0 +1,2 @@
+4aa73270e3d7d4254904a31b85dcb2e6890478693b203d44185756a16cd44fb7  /home/runner/work/_temp/rc-out/full/playIndexing.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playIndexing.mjs/stderr.log

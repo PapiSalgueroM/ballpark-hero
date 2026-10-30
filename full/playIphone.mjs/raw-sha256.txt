@@ -1,0 +1,2 @@
+78c01aebf9123e2383cbbcdbb28ca4e71359b9ceea00232ff28d7374982cc8ee  /home/runner/work/_temp/rc-out/full/playIphone.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playIphone.mjs/stderr.log

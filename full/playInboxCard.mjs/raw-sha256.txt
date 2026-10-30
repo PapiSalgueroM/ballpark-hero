@@ -1,0 +1,2 @@
+1bdcbcc065c52048730895b1bbbc70cde6ac775547db4a25f12d65b819caa099  /home/runner/work/_temp/rc-out/full/playInboxCard.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playInboxCard.mjs/stderr.log

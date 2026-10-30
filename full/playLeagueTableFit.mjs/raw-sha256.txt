@@ -1,0 +1,2 @@
+d82725fde14962fa27c9179d35ed58240543990d2dd5a08913998d14bba3f24d  /home/runner/work/_temp/rc-out/full/playLeagueTableFit.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playLeagueTableFit.mjs/stderr.log

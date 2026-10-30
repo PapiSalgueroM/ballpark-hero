@@ -1,0 +1,3 @@
+3646 /home/runner/work/_temp/rc-out/full/playIndexing.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playIndexing.mjs/stderr.log
+3646 total
