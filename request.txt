@@ -1,0 +1,8 @@
+#!serial
+m-espn-closed: node .rc/x/rmutfix.mjs espn-closed; s=$?; git checkout -- src scripts; exit $s
+m-born-guess: node .rc/x/rmutfix.mjs born-guess; s=$?; git checkout -- src scripts; exit $s
+m-continent-no: node .rc/x/rmutfix.mjs continent-no; s=$?; git checkout -- src scripts; exit $s
+m-agree-silent: node .rc/x/rmutfix.mjs agree-silent; s=$?; git checkout -- src scripts; exit $s
+disk-page: sed -i 's#<ConnectionsGroupLabel theme={group.theme} />#{group.theme}#' src/pages/NbaConnections.tsx && git diff --stat -- src | tail -1 && node scripts/simConnectionsDatedCopy.mjs; s=$?; git checkout -- src scripts; exit $s
+disk-dialog: sed -i 's# A team group marked "as of 2025-26" only counts seasons up to then, so a trade later on can.t change the answer\.##' src/components/nba-connections/NbaConnectionsHowToPlay.tsx && git diff --stat -- src | tail -1 && node scripts/simConnectionsDatedCopy.mjs; s=$?; git checkout -- src scripts; exit $s
+disk-receipt: sed -i 's#<ConnectionsReceiptText text={notice.text} />#{notice.text}#' src/pages/NhlConnections.tsx && git diff --stat -- src | tail -1 && node scripts/simConnectionsDatedCopy.mjs; s=$?; git checkout -- src scripts; exit $s

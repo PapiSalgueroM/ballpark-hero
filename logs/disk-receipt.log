@@ -1,0 +1,8 @@
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   baseball: 0 raw labels, receipt not shown, dialog date 2026 (boards carry 2026)
+   nfl: 0 raw labels, receipt not shown, dialog date 2025 (boards carry 2025)
+  FAIL raw-receipt nhl: src/pages/NhlConnections.tsx renders {notice.text} as text, so the receipt can break inside a date
+  FAIL raw-receipt nhl: src/pages/NhlConnections.tsx shows a receipt but not through ConnectionsReceiptText
+   nhl: 0 raw labels, receipt shown, dialog date 2025-26 (boards carry 2025-26)
+   nba: 0 raw labels, receipt shown, dialog date 2025-26 (boards carry 2025-26)
+simConnectionsDatedCopy: 2 finding(s)

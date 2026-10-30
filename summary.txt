@@ -1,0 +1,7 @@
+m-espn-closed exit=0 6s | MUT espn-closed: plain exit=0; controls that stopped firing: nbaespn -> DETECTED
+m-born-guess exit=0 6s | MUT born-guess: plain exit=1; controls that stopped firing: none -> DETECTED
+m-continent-no exit=0 6s | MUT continent-no: plain exit=0; controls that stopped firing: nbacontinent -> DETECTED
+m-agree-silent exit=0 6s | MUT agree-silent: plain exit=0; controls that stopped firing: nbaaba,nbaespn,nbacontinent -> DETECTED
+disk-page exit=1 0s | simConnectionsDatedCopy: 2 finding(s)
+disk-dialog exit=1 0s | simConnectionsDatedCopy: 1 finding(s)
+disk-receipt exit=1 0s | simConnectionsDatedCopy: 2 finding(s)
