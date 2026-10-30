@@ -963,7 +963,9 @@ function nightChecks(M, prev, s, where) {
     const mf = M.cm.matchFacts(s);
     ok(!!mf && mf.myPos === null && mf.oppPos === null, `2 league started: ${where}: before the league opener the preview reads position ${mf?.myPos} against ${mf?.oppPos}`);
   }
-  if (!prev.calendar?.[prev.week]?.night) return;
+  /* Round 1593: a Europa League night carries `night` too and is played (its record grows uel's `mine`, not dsc's);
+     this arm reads super cup nights, as it did before that round. */
+  if (!prev.calendar?.[prev.week]?.night || prev.calendar[prev.week].type !== 'oneOff') return;
   const before = new Map(prev.squad.map(p => [p.id, p.fitness]));
   /* A night my club does not play (a four club cup's final after a lost semi final) is skipped with no tick. */
   if (Object.keys(s.worldComps?.dsc?.mine ?? {}).length <= Object.keys(prev.worldComps?.dsc?.mine ?? {}).length) {
