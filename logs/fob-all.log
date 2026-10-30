@@ -1,0 +1,447 @@
+control nolog (the log is not saved): vitest exit 1; 37 red, 74 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it his game of the week is in the save, and the grid shows that very score, a football score
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it the next press appends in week order, and a remount keeps the log
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it a save from before the round adopts the log at the week it is first played here: it starts at we
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save a damaged log, a log of another season or another club, an empt
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save an older recap save opens on the draft and its first save holds
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the log does not follow a GM into his next franchise abandon in the middle of a season and start again: the new save holds no log, a
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficePostseason.test.tsx > NFL front office: a save in the playoffs loads with its bracket, draws nothing on the way, and every save after it holds the bracket
+   red: FrontOfficePostseason.test.tsx > NFL front office: a save in the playoffs a bracket that does not read is started again unplayed: the feed says so, and the log keeps its regular seaso
+   red: FrontOfficePostseason.test.tsx > NFL front office: one box, two faces in the playoffs a round he plays opens his game on the box with the back chip; the chip shows the bracket, and "Y
+   red: FrontOfficePostseason.test.tsx > NFL front office: one box, two faces in the playoffs a round he does not play (his bye) shows the bracket, and the log takes nothing
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile the week box holds a tile: the next game before a press, his saved final after it, and again after a remount
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile a reload in the middle of a watch shows the result, never a clock, and plays nothing twice
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile leaving the week box in the middle of a watch ends it: back in the box the result is there and both buttons are op
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile reduced motion: Watch shows the result at once, with no clock
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile a save from before the log shows the next game, and after its first press the chips start at that week
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk off: every checkpoint of two seasons is the base's
+control abandonkeeps (the log is cleared neither by Abandon nor by a new franchise (each alone is masked by the other: two keys, one lock)): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the log does not follow a GM into his next franchise abandon in the middle of a season and start again: the new save holds no log, a
+control summerkeeps (the summer does not end the log): vitest exit 1; 14 red, 97 green of 111
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk off: every checkpoint of two seasons is the base's
+control refusesave (a log that does not read refuses the save): vitest exit 1; 2 red, 109 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save a damaged log, a log of another season or another club, an empt
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save an older recap save opens on the draft and its first save holds
+control trustlog (a log that does not read is kept as it is): vitest exit 1; 2 red, 109 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save a damaged log, a log of another season or another club, an empt
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save an older recap save opens on the draft and its first save holds
+control rawback (a log that did not read goes back to storage as it was typed): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save an older recap save opens on the draft and its first save holds
+control weekengine (the week's grid shows the engine's own scores): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it his game of the week is in the save, and the grid shows that very score, a football score
+control enginescores (the one press postseason keeps the engine's own scores in the save): vitest exit 1; 25 red, 86 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then 
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office: Sim the rest from any round after one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk off: every checkpoint of two seasons is the base's
+control keyseason (the week's games are keyed to another season): vitest exit 1; 10 red, 101 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it his game of the week is in the save, and the grid shows that very score, a football score
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk off: every checkpoint of two seasons is the base's
+control tellnoedges (the week's games are told without the edges they were played with): vitest exit 1; 5 red, 106 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+control noedges (the staff's edge is dropped from the week's games and still told): vitest exit 1; 5 red, 106 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+control playoffnoedges (the thirteen playoff games are told without the edges the bracket was played with): vitest exit 1; 5 red, 106 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+control playoffkey (a playoff game is keyed to the week and not to its round): vitest exit 1; 25 red, 86 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then 
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office: Sim the rest from any round after one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk off: every checkpoint of two seasons is the base's
+control noseason (the lifted close forgets to count the season): vitest exit 1; 21 red, 90 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeLazyDesk.test.tsx > NFL front office: the GM career kit loads when it is needed the last week asks for it, its press buttons wait for it, and the one press then closes th
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk off: every checkpoint of two seasons is the base's
+control closetwice (the season is closed twice): vitest exit 1; 31 red, 80 green of 111
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then 
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office: Sim the rest from any round after one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk off: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk off: every checkpoint of two seasons is the base's
+control titles (a title counts double): vitest exit 1; 5 red, 106 green of 111
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the ba
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk off: one press of the final week title: the save at the recap, the draft and the next season's hub is the base'
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+control recordspoils (while a game is watched the page shows the league AFTER the press (the hold is not read)): vitest exit 1; 5 red, 106 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs "Watch Week 17" is "Play Week 17" on the clock: Week 17 until full time, then his game on the box, the bracket
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched: the recap waits for full time, and then it comes
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched, won and lost: the press card, the owner card and the finish are as they were until ful
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the
+control gridspoils (the league grid is drawn while a game is watched): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+control holdkept (the hold is not let go when he leaves the week box): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile leaving the week box in the middle of a watch ends it: back in the box the result is there and both buttons are op
+control tilenolog (the tile is handed no log): vitest exit 1; 16 red, 95 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: one box, two faces in the playoffs a round he plays opens his game on the box with the back chip; the chip shows the bracket, and "Y
+   red: FrontOfficePostseason.test.tsx > NFL front office: one box, two faces in the playoffs "Your game" on a tie against a club he met in the regular season opens the playoff game, not the 
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs WATCH YOUR GAME is the same press and gives nothing away: the page is the round before it until full time
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs "Watch Week 17" is "Play Week 17" on the clock: Week 17 until full time, then his game on the box, the bracket
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched: the recap waits for full time, and then it comes
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched, won and lost: the press card, the owner card and the finish are as they were until ful
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs reduced motion: a watched playoff game shows his result at once with no clock, and the title game's recap come
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile the week box holds a tile: the next game before a press, his saved final after it, and again after a remount
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile WATCH IS THE SAME PRESS and gives nothing away: the page is the week before it until full time, and the save is th
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile a reload in the middle of a watch shows the result, never a clock, and plays nothing twice
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile leaving the week box in the middle of a watch ends it: back in the box the result is there and both buttons are op
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile reduced motion: Watch shows the result at once, with no clock
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile HIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing line is the engine's own seeding of the saved
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile a save from before the log shows the next game, and after its first press the chips start at that week
+   red: FrontOfficeGmCareer.test.tsx > nfl board: a title watched at the club he took the title game watched to full time records one finish, at the career score, and none before it
+control pacespoils (the owner card's pace reads the league AFTER the press while a game is watched (the line the board had before Watch)): vitest exit 1; 2 red, 109 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched, won and lost: the press card, the owner card and the finish are as they were until ful
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile NO SPOILER ON THE OWNER CARD: while he watches, its pace line is the one of before the press, and at full time the
+control seedoff (the seed handed to the standing line is an index and not a seed (one too good, and a top seed reads 0th)): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeTile.test.tsx > NFL front office: the Game Day tile HIS SEED IS COUNTED FROM 1: on a club that holds a seed the standing line is the engine's own seeding of the saved
+control noplayoffs (the bracket is not saved): vitest exit 1; 18 red, 93 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: a save in the playoffs loads with its bracket, draws nothing on the way, and every save after it holds the bracket
+   red: FrontOfficePostseason.test.tsx > NFL front office: a save in the playoffs a bracket that does not read is started again unplayed: the feed says so, and the log keeps its regular seaso
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then 
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office: Sim the rest from any round after one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+   red: FrontOfficePostseason.test.tsx > NFL front office: a club over the roster limit cannot press a round the round and the rest are shut, and a press on them plays nothing
+   red: FrontOfficePostseason.test.tsx > NFL front office: one box, two faces in the playoffs a round he does not play (his bye) shows the bracket, and the log takes nothing
+   red: FrontOfficeGmCareer.test.tsx > nfl board: a title watched at the club he took the title game watched to full time records one finish, at the career score, and none before it
+control abandonbracket (the bracket is cleared neither by Abandon nor by a new franchise (two keys, one lock)): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: the bracket does not follow a GM into his next franchise abandon in the playoffs and start again: the new save holds no bracket, and
+control rebuiltkeeps (a bracket started again keeps the log of the one that is gone): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: a save in the playoffs a bracket that does not read is started again unplayed: the feed says so, and the log keeps its regular seaso
+control champopen (a hub save past the last week with nothing to play opens): vitest exit 1; 2 red, 109 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: a save in the playoffs a hub save past the last week with a bracket, but its season already has a champion opens on the save error s
+   red: FrontOfficePostseason.test.tsx > NFL front office: a save in the playoffs a hub save past the last week with a bracket of a season no bracket can be made for opens on the save error s
+control bracketnoedges (the bracket is played without the desk's edges (the winners may stand; the told scores may not)): vitest exit 1; 2 red, 109 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim th
+control restround ("Sim the rest" plays one round): vitest exit 1; 13 red, 98 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then 
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, fifteen league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Si
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk off: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim t
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press ordinary: "Play Week 17" then a press a round, and then "Sim
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press title: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office, deep league, GM desk on: the bracket a round at a time is the one press fired: "Play Week 17" then a press a round, and then "Sim th
+   red: FrontOfficePostseason.test.tsx > NFL front office: Sim the rest from any round after one, two or three rounds a press, "Sim the rest" leaves the one press save after the same draws
+control weekeighteen (the chip reads Week 18/17 in the playoffs): vitest exit 1; 4 red, 107 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Week 18 reads as the playoffs the chip, the week box line and its buttons: no Week 18 of 17, no bye line, no old button
+   red: FrontOfficePostseason.test.tsx > NFL front office: Week 18 reads as the playoffs "Play Week 17" turns the chip to Playoffs and takes the old button away
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs "Watch Week 17" is "Play Week 17" on the clock: Week 17 until full time, then his game on the box, the bracket
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched: the recap waits for full time, and then it comes
+control playofftrades (trades stay open in the playoffs with the desk off): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Week 18 reads as the playoffs a trade is refused in the bracket (GM desk on: false), and nothing is traded
+control roundspoils (while he watches a playoff game the page reads the bracket AFTER the press): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs WATCH YOUR GAME is the same press and gives nothing away: the page is the round before it until full time
+control holdround (a playoff press is never held (the hold asks only for the next week)): vitest exit 1; 4 red, 107 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs WATCH YOUR GAME is the same press and gives nothing away: the page is the round before it until full time
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched: the recap waits for full time, and then it comes
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched, won and lost: the press card, the owner card and the finish are as they were until ful
+   red: FrontOfficeGmCareer.test.tsx > nfl board: a title watched at the club he took the title game watched to full time records one finish, at the career score, and none before it
+control recapnow (the recap is drawn while he watches the title game): vitest exit 1; 3 red, 108 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched: the recap waits for full time, and then it comes
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched, won and lost: the press card, the owner card and the finish are as they were until ful
+   red: FrontOfficeGmCareer.test.tsx > nfl board: a title watched at the club he took the title game watched to full time records one finish, at the career score, and none before it
+control bracketgrid (the league grid is drawn in the bracket): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs "Watch Week 17" is "Play Week 17" on the clock: Week 17 until full time, then his game on the box, the bracket
+control tiegame ("Your game" opens his last game and not the game of that tie): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: one box, two faces in the playoffs a round he plays opens his game on the box with the back chip; the chip shows the bracket, and "Y
+control trustspoils (the owner card shows the trust the title game's press graded while he watches it): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched, won and lost: the press card, the owner card and the finish are as they were until ful
+control pressspoils (the press card shows the room the title game's press called while he watches it): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched, won and lost: the press card, the owner card and the finish are as they were until ful
+control tiewhere ("Your game" opens the first game between the two clubs, whatever its round (the review's mutant)): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: one box, two faces in the playoffs "Your game" on a tie against a club he met in the regular season opens the playoff game, not the 
+control hurtweeks (a man hurt on "Play Week 17" is out a count of weeks in the feed, though nobody heals in the bracket): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Week 18 reads as the playoffs a man of his hurt on "Play Week 17" is out for the playoffs in the feed, never out a count of weeks
+control donenow (the finish is recorded at the title game's press while he watches it): vitest exit 1; 2 red, 109 green of 111
+   red: FrontOfficePostseason.test.tsx > NFL front office: Watch in the playoffs the title game watched, won and lost: the press card, the owner card and the finish are as they were until ful
+   red: FrontOfficeGmCareer.test.tsx > nfl board: a title watched at the club he took the title game watched to full time records one finish, at the career score, and none before it
+control thirdkey (the season close writes a third block on the desk): vitest exit 1; 9 red, 102 green of 111
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the 
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, fifteen league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week ordinary: the save at the recap, the draft and the next season's hub is the bas
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week title: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeOnePress.test.tsx > NFL front office, deep league, GM desk on: one press of the final week fired: the save at the recap, the draft and the next season's hub is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 1|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 2|desk on: every checkpoint of two seasons is the base's
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the default path seed 3|desk on: every checkpoint of two seasons is the base's
+control resetbutton (the fired recap deletes the save again): vitest exit 1; 4 red, 107 green of 111
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the career fired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the career taking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the career a call left open when he is fired stays with the old club: the new club's Trades box builds a deal
+   red: FrontOfficeGmCareer.test.tsx > nfl board: a title watched at the club he took the title game watched to full time records one finish, at the career score, and none before it
+control arrivaltitle (the arrival recap stages the new club's title as his): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the career taking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+control lookopens (looking at a career box switches a desk off save's desk on): vitest exit 1; 2 red, 109 green of 111
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the career looking at Career and GM level on the hub of a save whose desk is off writes nothing
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the career looking at all three boxes out of work, desk off, writes nothing
+control deskstale (the close is built on the desk from before the final week's tick): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the career a staff approach that runs out in the final week is still settled after the close
+control askalways (the board asks for the career kit while a season is played): vitest exit 1; 2 red, 109 green of 111
+   red: FrontOfficeLazyDesk.test.tsx > NFL front office: the GM career kit loads when it is needed a season being played never asks for it, and the Career box reads the same before and afte
+   red: FrontOfficeLazyDesk.test.tsx > NFL front office: the GM career kit loads when it is needed a career box opened asks for it: the box header and the holding box, then the screen
+control nowait (the last week's press does not wait for the career kit): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeLazyDesk.test.tsx > NFL front office: the GM career kit loads when it is needed the last week asks for it, its press buttons wait for it, and the one press then closes th
+control recapnever (a save that loads on the recap never asks for the career kit): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeLazyDesk.test.tsx > NFL front office: the GM career kit loads when it is needed a save that loads on the recap waits in a holding box, then draws the recap
+control xpzero (the recap prints the XP line on a season that paid nothing): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the career fired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+control nhl-wipebutton (the NHL fired recap deletes the save again): vitest exit 1; 3 red, 40 green of 43
+   red: FrontOfficeGmCareer.test.tsx > nhl board: the career fired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+   red: FrontOfficeGmCareer.test.tsx > nhl board: the career taking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+   red: FrontOfficeGmCareer.test.tsx > nhl board: the career a call left open when he is fired stays with the old club: the new club's Trades box builds a deal
+control nhl-arrivaltitle (the NHL arrival recap stages the new club's title as his): vitest exit 1; 1 red, 42 green of 43
+   red: FrontOfficeGmCareer.test.tsx > nhl board: the career taking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+control nhl-lookopens (looking at a career box switches a desk off NHL save's desk on): vitest exit 1; 2 red, 41 green of 43
+   red: FrontOfficeGmCareer.test.tsx > nhl board: the career looking at Career and GM level on the hub of a save whose desk is off writes nothing
+   red: FrontOfficeGmCareer.test.tsx > nhl board: the career looking at all three boxes out of work, desk off, writes nothing
+control nhl-xpzero (the NHL recap prints the XP line on a season that paid nothing): vitest exit 1; 1 red, 42 green of 43
+   red: FrontOfficeGmCareer.test.tsx > nhl board: the career fired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+control nhl-askalways (the NHL board asks for the career kit while a season is played): vitest exit 1; 2 red, 41 green of 43
+   red: NhlLazyDesk.test.tsx > NHL front office: the GM career kit loads when it is needed a season being played never asks for it, and the Career box reads the same before and afte
+   red: NhlLazyDesk.test.tsx > NHL front office: the GM career kit loads when it is needed a career box opened asks for it: the box header and the holding box, then the screen
+control nhl-nowait (the NHL last round's press does not wait for the career kit): vitest exit 1; 2 red, 41 green of 43
+   red: NhlLazyDesk.test.tsx > NHL front office: the GM career kit loads when it is needed the last round asks for it, its press waits for it, and the press then closes the season
+   red: NhlLazyDesk.test.tsx > NHL front office: the GM career kit loads when it is needed a desk off save on the last round whose fetch fails: the retry card, nothing written, then
+control nhl-recapnever (an NHL save that loads on the recap never asks for the career kit): vitest exit 1; 1 red, 42 green of 43
+   red: NhlLazyDesk.test.tsx > NHL front office: the GM career kit loads when it is needed a save that loads on the recap waits in a holding box, then draws the recap
+control waitsalways (the press waits for the career kit on every week, not the last one alone): vitest exit 1; 9 red, 102 green of 111
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it his game of the week is in the save, and the grid shows that very score, a football score
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it the next press appends in week order, and a remount keeps the log
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a press tells his game and keeps it a save from before the round adopts the log at the week it is first played here: it starts at we
+   red: FrontOfficeGameDay.test.tsx > NFL front office: a log that does not read whole is absent, and never refuses the save a damaged log, a log of another season or another club, an empt
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the log does not follow a GM into his next franchise abandon in the middle of a season and start again: the new save holds no log, a
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk off: the rounds of the recap hold what the bind answered
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish the told scores are the saved scores, with the GM desk on: the rounds of the recap hold what the bind answered 
+   red: FrontOfficeGameDay.test.tsx > NFL front office: the one press finish with the GM desk on, his game is told at the chance it was played at, the edge of his staff included
+   red: FrontOfficeLazyDesk.test.tsx > NFL front office: the GM career kit loads when it is needed a season being played never asks for it, and the Career box reads the same before and afte
+control nhl-waitsalways (the NHL press waits for the career kit on every round, not the last one alone): vitest exit 1; 1 red, 42 green of 43
+   red: NhlLazyDesk.test.tsx > NHL front office: the GM career kit loads when it is needed a season being played never asks for it, and the Career box reads the same before and afte
+control hubstack (a career box opened on the hub is drawn under the board's own boxes): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the career looking at Career and GM level on the hub of a save whose desk is off writes nothing
+control nhl-hubstack (an NHL career box opened on the hub is drawn under the board's own boxes): vitest exit 1; 1 red, 42 green of 43
+   red: FrontOfficeGmCareer.test.tsx > nhl board: the career looking at Career and GM level on the hub of a save whose desk is off writes nothing
+control talkskept (the old club's phone call follows him through a seat taken): vitest exit 1; 1 red, 110 green of 111
+   red: FrontOfficeGmCareer.test.tsx > nfl board: the career a call left open when he is fired stays with the old club: the new club's Trades box builds a deal
+control nhl-talkskept (the NHL old club's phone call follows him through a seat taken): vitest exit 1; 1 red, 42 green of 43
+   red: FrontOfficeGmCareer.test.tsx > nhl board: the career a call left open when he is fired stays with the old club: the new club's Trades box builds a deal
+control nolog: FIRED. Every test it names is red and every test it spares is green.
+control abandonkeeps: FIRED. Every test it names is red and every test it spares is green.
+control summerkeeps: FIRED. Every test it names is red and every test it spares is green.
+control refusesave: FIRED. Every test it names is red and every test it spares is green.
+control trustlog: FIRED. Every test it names is red and every test it spares is green.
+control rawback: FIRED. Every test it names is red and every test it spares is green.
+control weekengine: FIRED. Every test it names is red and every test it spares is green.
+control enginescores: FIRED. Every test it names is red and every test it spares is green.
+control keyseason: FIRED. Every test it names is red and every test it spares is green.
+control tellnoedges: FIRED. Every test it names is red and every test it spares is green.
+control noedges: FIRED. Every test it names is red and every test it spares is green.
+control playoffnoedges: FIRED. Every test it names is red and every test it spares is green.
+control playoffkey: FIRED. Every test it names is red and every test it spares is green.
+control noseason: FIRED. Every test it names is red and every test it spares is green.
+control closetwice: FIRED. Every test it names is red and every test it spares is green.
+control titles: FIRED. Every test it names is red and every test it spares is green.
+control recordspoils: FIRED. Every test it names is red and every test it spares is green.
+control gridspoils: FIRED. Every test it names is red and every test it spares is green.
+control holdkept: FIRED. Every test it names is red and every test it spares is green.
+control tilenolog: FIRED. Every test it names is red and every test it spares is green.
+control pacespoils: FIRED. Every test it names is red and every test it spares is green.
+control seedoff: FIRED. Every test it names is red and every test it spares is green.
+control noplayoffs: FIRED. Every test it names is red and every test it spares is green.
+control abandonbracket: FIRED. Every test it names is red and every test it spares is green.
+control rebuiltkeeps: FIRED. Every test it names is red and every test it spares is green.
+control champopen: FIRED. Every test it names is red and every test it spares is green.
+control bracketnoedges: FIRED. Every test it names is red and every test it spares is green.
+control restround: FIRED. Every test it names is red and every test it spares is green.
+control weekeighteen: FIRED. Every test it names is red and every test it spares is green.
+control playofftrades: FIRED. Every test it names is red and every test it spares is green.
+control roundspoils: FIRED. Every test it names is red and every test it spares is green.
+control holdround: FIRED. Every test it names is red and every test it spares is green.
+control recapnow: FIRED. Every test it names is red and every test it spares is green.
+control bracketgrid: FIRED. Every test it names is red and every test it spares is green.
+control tiegame: FIRED. Every test it names is red and every test it spares is green.
+control trustspoils: FIRED. Every test it names is red and every test it spares is green.
+control pressspoils: FIRED. Every test it names is red and every test it spares is green.
+control tiewhere: FIRED. Every test it names is red and every test it spares is green.
+control hurtweeks: FIRED. Every test it names is red and every test it spares is green.
+control donenow: FIRED. Every test it names is red and every test it spares is green.
+control thirdkey: FIRED. Every test it names is red and every test it spares is green.
+control resetbutton: FIRED. Every test it names is red and every test it spares is green.
+control arrivaltitle: FIRED. Every test it names is red and every test it spares is green.
+control lookopens: FIRED. Every test it names is red and every test it spares is green.
+control deskstale: FIRED. Every test it names is red and every test it spares is green.
+control askalways: FIRED. Every test it names is red and every test it spares is green.
+control nowait: FIRED. Every test it names is red and every test it spares is green.
+control recapnever: FIRED. Every test it names is red and every test it spares is green.
+control xpzero: FIRED. Every test it names is red and every test it spares is green.
+control nhl-wipebutton: FIRED. Every test it names is red and every test it spares is green.
+control nhl-arrivaltitle: FIRED. Every test it names is red and every test it spares is green.
+control nhl-lookopens: FIRED. Every test it names is red and every test it spares is green.
+control nhl-xpzero: FIRED. Every test it names is red and every test it spares is green.
+control nhl-askalways: FIRED. Every test it names is red and every test it spares is green.
+control nhl-nowait: FIRED. Every test it names is red and every test it spares is green.
+control nhl-recapnever: FIRED. Every test it names is red and every test it spares is green.
+control waitsalways: FIRED. Every test it names is red and every test it spares is green.
+control nhl-waitsalways: FIRED. Every test it names is red and every test it spares is green.
+control hubstack: FIRED. Every test it names is red and every test it spares is green.
+control nhl-hubstack: FIRED. Every test it names is red and every test it spares is green.
+control talkskept: FIRED. Every test it names is red and every test it spares is green.
+control nhl-talkskept: FIRED. Every test it names is red and every test it spares is green.
+controlFrontOfficeBoard: 62 of 62 control(s) fired, the board tests can fail for each named reason.

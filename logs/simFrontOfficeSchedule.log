@@ -1,0 +1,10 @@
+   NBA: 20 seeds x 2 seasons, every club checked against 80 games
+   MLB: 20 seeds x 2 seasons, every club checked against 162 games
+   NHL: 20 seeds x 2 seasons, every club checked against 80 games
+   NBA: 10 origin/main saves mid season and 10 before tip off, loaded and played on
+   MLB: 10 origin/main saves mid season and 10 before tip off, loaded and played on
+   NHL: 10 origin/main saves mid season and 10 before tip off, loaded and played on
+   NBA titles (reported, not asserted): origin/main top three 36/60, bottom ten 0/60; this tree top three 43/60, bottom ten 0/60
+   MLB titles (reported, not asserted): origin/main top three 30/60, bottom ten 0/60; this tree top three 29/60, bottom ten 0/60
+   NHL titles (reported, not asserted): origin/main top three 31/60, bottom ten 2/60; this tree top three 32/60, bottom ten 1/60
+simFrontOfficeSchedule: GREEN, NBA, MLB and NHL seasons booked and played exactly over 20 seeds

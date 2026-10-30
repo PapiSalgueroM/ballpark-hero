@@ -1,0 +1,100 @@
+simNhlCpuRosters normal: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters normal: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters normal: PASS: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters normal: PASS: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters normal: PASS: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters normal: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters normal: PASS: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters normal: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters normal:8 outcomes, 0 exact assertion rejects, 8 held.
+simNhlCpuRosters omit: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters omit: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters omit: FAIL: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters omit: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters omit: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters omit: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters omit: FAIL: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters omit: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters omit:8 outcomes, 4 exact assertion rejects, 4 held.
+simNhlCpuRosters human: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters human: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters human: PASS: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters human: PASS: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters human: PASS: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters human: FAIL: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters human: PASS: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters human: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters human:8 outcomes, 1 exact assertion rejects, 7 held.
+simNhlCpuRosters preferences: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters preferences: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters preferences: PASS: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters preferences: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters preferences: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters preferences: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters preferences: FAIL: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters preferences: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters preferences:8 outcomes, 3 exact assertion rejects, 5 held.
+simNhlCpuRosters waiver: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters waiver: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters waiver: FAIL: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters waiver: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters waiver: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters waiver: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters waiver: FAIL: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters waiver: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters waiver:8 outcomes, 4 exact assertion rejects, 4 held.
+simNhlCpuRosters earlyRoll: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters earlyRoll: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters earlyRoll: FAIL: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters earlyRoll: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters earlyRoll: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters earlyRoll: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters earlyRoll: FAIL: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters earlyRoll: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters earlyRoll:8 outcomes, 4 exact assertion rejects, 4 held.
+simNhlCpuRosters earlyAge: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters earlyAge: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters earlyAge: PASS: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters earlyAge: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters earlyAge: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters earlyAge: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters earlyAge: PASS: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters earlyAge: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters earlyAge:8 outcomes, 2 exact assertion rejects, 6 held.
+simNhlCpuRosters order: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters order: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters order: FAIL: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters order: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters order: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters order: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters order: FAIL: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters order: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters order:8 outcomes, 4 exact assertion rejects, 4 held.
+simNhlCpuRosters pool: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters pool: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters pool: PASS: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters pool: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters pool: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters pool: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters pool: PASS: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters pool: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters pool:8 outcomes, 2 exact assertion rejects, 6 held.
+simNhlCpuRosters quote: PASS: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters quote: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters quote: PASS: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters quote: FAIL: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters quote: FAIL: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters quote: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters quote: PASS: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters quote: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters quote:8 outcomes, 2 exact assertion rejects, 6 held.
+simNhlCpuRosters owner: FAIL: keeps omitted invalid and inherited owners on the exact two-argument outcome and tape
+simNhlCpuRosters owner: PASS: holds the ordinary owner-enabled offseason when nobody needs a cut
+simNhlCpuRosters owner: PASS: repairs the retained real seed17 NYR16 opening through one actual surplus waiver
+simNhlCpuRosters owner: PASS: cuts two fictional CPU overages to15 and protects lower-rated valid preferences
+simNhlCpuRosters owner: PASS: holds actual fees quotes IDs no-return and30-place pool without double-aging new waivers
+simNhlCpuRosters owner: PASS: keeps the actual trade-and-four-selection human17 exact
+simNhlCpuRosters owner: PASS: rolls CPU charges through the next actual offseason and preserves saved ownership
+simNhlCpuRosters owner: PASS: preserves the existing expiring-copy age path in both arms
+simNhlCpuRosters owner:8 outcomes, 1 exact assertion rejects, 7 held.
+simNhlCpuRosters passed: /home/runner/work/_temp/t-simNhlCpuRosters-all/dukb-nhl969-proof-Pq3t2J
