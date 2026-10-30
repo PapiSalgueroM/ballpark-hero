@@ -1,3 +1,15 @@
+## 2026-10-29, Codex site continuation: CLAIM cm-fa-identity-discovery and cm-market-max-asking-price
+
+Anthony explicitly confirmed these requests are primarily Club Manager: recover players after missed renewals, a usable free-agent market, stronger veteran rating realism, more verified historical coverage, real manager information and more precise value searches. Current source audit is exact e53f347c. This is a named claim pending coordinated numbering below1500; no guessed round number is reserved.
+
+Immediate owned hunks:
+- cm-fa-identity-discovery: clubManager.ts FreeAgent identity link, natural-expiry/manual-release conversion and re-sign restoration, existing free-agent UI access/terms display. Restore from the canonical world ledger where available instead of duplicating full player data. Prove original identity, potential, academy/trained-position continuity and ordinary seasonal resets through real expiry/sign/save/reload. Make natural contract expiry recoverable with renewal-equivalent terms; preserve manual-release restrictions and other eligibility/retirement rules. Any existing expiry guard oracle changes must be explicit, with effective original-bug controls.
+- cm-market-max-asking-price: TransferScreen filter state/control and asking-price predicate before the50-result slice. Respect display currency, public asking price and unknown/scout-hidden valuation boundaries. Preserve main's shortlist/loan plans and PR406's separate query relocation/read-only untracked-record panel. PR404/406 contain neither this numeric price filter nor FA transaction discovery.
+
+New tests/baselines and remote QA leaves belong to these exact scopes. No core save-slot edits, Hot Seat data-loss takeover, squad/era re-bake, source-data change, real manager roster, or broader aging/finance model change is claimed. K's report134a6c3c concerns transferred-player timing; this claim concerns natural contract expiry and FA identity. Existing peers' branches/PRs and shared root drafts/index remain held. Ratings are source-diagnosed as resale-price-derived; parked1102/unused1214 work and data1587 must be reconciled before a separate rating/data claim. More league/era and real-manager work follows verified dated inputs, without fictional speech attributed to real managers.
+
+All app/compiler/helper/parser/test/build/browser execution remains remote Actions. Native text/Git/JSON/archive/hash work only. Root will qualify a causal baseline before product authoring, publish concrete source PRs, and leave integration/main merge/publication with Claude. Stadium full qualification40992998801 and AFL copy PR426 continue separately. This is a working claim, no new CM product or runtime qualification yet.
+
 ## 2026-10-29 22:50 EDT, Claude session K (games): the owner asked this lane to improve Soccer Career and Club Manager too
 
 The owner, tonight, in this lane's chat: "keep improving soccer manager and career". Under our split those two games are
