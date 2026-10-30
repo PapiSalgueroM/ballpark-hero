@@ -1,0 +1,152 @@
+MUTATION APPLIED: hookwaits in src/components/front-office-shared/useGmCareerKit.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/components/front-office-shared/gmCareerKitPieces.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 58[2mms[22m[39m
+   [32m✓[39m careerBindingOf: the career half of a board, before the kit and with it[2m > [22m1 before the kit: the record is the save alone, no market, and the pack and the earn line throw when read[32m 3[2mms[22m[39m
+   [32m✓[39m careerBindingOf: the career half of a board, before the kit and with it[2m > [22m2 with the kit: the record is the kit's legacy, the pack and the earn line are the kit's, the market only when out of work[32m 2[2mms[22m[39m
+[31m   [31m×[31m useGmCareerKit: the kit asked for when a screen needs it, the last press waiting for it[2m > [22m3a a season being played never asks for it and its press never waits[39m[32m 18[2mms[22m[39m
+[31m     → a round in the middle of the season waits for the kit: expected true to be false // Object.is equality[39m
+   [32m✓[39m useGmCareerKit: the kit asked for when a screen needs it, the last press waiting for it[2m > [22m3b the last period asks for it, its press waits until it is here, then plays[32m 3[2mms[22m[39m
+[31m   [31m×[31m useGmCareerKit: the kit asked for when a screen needs it, the last press waiting for it[2m > [22m3c a recap, a presser and an open box each ask, and none of them makes a press wait off the hub[39m[32m 3[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+   [32m✓[39m useGmCareerKit: the kit asked for when a screen needs it, the last press waiting for it[2m > [22m3d a failed fetch says so, and a retry asks again and lands the kit[32m 7[2mms[22m[39m
+   [32m✓[39m useGmCareerKit: the kit asked for when a screen needs it, the last press waiting for it[2m > [22m3e a kit already on the page is used at once: nothing asked, no press waits[32m 1[2mms[22m[39m
+   [32m✓[39m GmCareerKitHolding: the box a career screen holds while the kit is on its way[2m > [22m4 the holding box stands at its floor; a failed fetch says so and Try again retries[32m 18[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/components/front-office/FrontOfficeLazyDesk.test.tsx[2m > [22m[2mNFL front office: the GM career kit loads when it is needed[2m > [22m[2ma career box opened asks for it: the box header and the holding box, then the screen
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficeLazyDesk.test.tsx[2m > [22m[2mNFL front office: the GM career kit loads when it is needed[2m > [22m[2ma save that loads on the recap waits in a holding box, then draws the recap
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [31m❯[39m src/components/front-office/FrontOfficeLazyDesk.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1597[2mms[22m[39m
+[31m   [31m×[31m NFL front office: the GM career kit loads when it is needed[2m > [22ma season being played never asks for it, and the Career box reads the same before and after it[39m[33m 980[2mms[22m[39m
+[31m     → a week in the middle of the season waits for the kit: expected true to be false // Object.is equality[39m
+   [32m✓[39m NFL front office: the GM career kit loads when it is needed[2m > [22ma career box opened asks for it: the box header and the holding box, then the screen[32m 200[2mms[22m[39m
+   [32m✓[39m NFL front office: the GM career kit loads when it is needed[2m > [22mthe last week asks for it, its press buttons wait for it, and the one press then closes the season[32m 172[2mms[22m[39m
+   [32m✓[39m NFL front office: the GM career kit loads when it is needed[2m > [22ma save that loads on the recap waits in a holding box, then draws the recap[32m 88[2mms[22m[39m
+   [32m✓[39m NFL front office: the GM career kit loads when it is needed[2m > [22ma save that loads on the fired screen waits in a holding box, then draws the out of work screen[32m 73[2mms[22m[39m
+   [32m✓[39m NFL front office: the GM career kit loads when it is needed[2m > [22ma fetch that fails says so and asks again on Try again[32m 83[2mms[22m[39m
+ [31m❯[39m src/components/nhl-front-office/NhlLazyDesk.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1619[2mms[22m[39m
+[31m   [31m×[31m NHL front office: the GM career kit loads when it is needed[2m > [22ma season being played never asks for it, and the Career box reads the same before and after it[39m[33m 900[2mms[22m[39m
+[31m     → a round in the middle of the season waits for the kit: expected true to be false // Object.is equality[39m
+   [32m✓[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma career box opened asks for it: the box header and the holding box, then the screen[32m 213[2mms[22m[39m
+   [32m✓[39m NHL front office: the GM career kit loads when it is needed[2m > [22mthe last round asks for it, its press waits for it, and the press then closes the season[32m 112[2mms[22m[39m
+   [32m✓[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma save that loads on the recap waits in a holding box, then draws the recap[32m 82[2mms[22m[39m
+   [32m✓[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma save that loads on the fired screen waits in a holding box, then draws the out of work screen[32m 73[2mms[22m[39m
+   [32m✓[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma fetch that fails says so and asks again on Try again[32m 83[2mms[22m[39m
+   [32m✓[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma desk off save on the last round whose fetch fails: the retry card, nothing written, then one retry closes the season as a press with the kit here[32m 156[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office/FrontOfficeLazyDesk.test.tsx[2m > [22mNFL front office: the GM career kit loads when it is needed[2m > [22ma season being played never asks for it, and the Career box reads the same before and after it
+[31m[1mAssertionError[22m: a week in the middle of the season waits for the kit: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/components/front-office/FrontOfficeLazyDesk.test.tsx:[2m95:89[22m[39m
+    [90m 93| [39m    const weekPress = Array.from(document.querySelectorAll('button')).…
+    [90m 94| [39m    expect(weekPress, 'the week box draws a Play Week press').toBeTrut…
+    [90m 95| [39m    expect(weekPress!.disabled, 'a week in the middle of the season wa…
+    [90m   | [39m                                                                                        [31m^[39m
+    [90m 96| [39m    fireEvent[33m.[39m[34mclick[39m(weekPress[33m![39m)[33m;[39m
+    [90m 97| [39m    [35mawait[39m [34mtick[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/gmCareerKitPieces.test.tsx[2m > [22museGmCareerKit: the kit asked for when a screen needs it, the last press waiting for it[2m > [22m3a a season being played never asks for it and its press never waits
+[31m[1mAssertionError[22m: a round in the middle of the season waits for the kit: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/components/front-office-shared/gmCareerKitPieces.test.tsx:[2m105:91[22m[39m
+    [90m103| [39m    [35mawait[39m [34mact[39m([35masync[39m () [33m=>[39m { [35mawait[39m [33mPromise[39m[33m.[39m[34mresolve[39m()[33m;[39m })[33m;[39m
+    [90m104| [39m    expect(asks.length, 'a round in the middle of the season asked for…
+    [90m105| [39m    expect(result.current.waits, 'a round in the middle of the season …
+    [90m   | [39m                                                                                          [31m^[39m
+    [90m106| [39m    [34mexpect[39m(result[33m.[39mcurrent[33m.[39mkit)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m107| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/gmCareerKitPieces.test.tsx[2m > [22museGmCareerKit: the kit asked for when a screen needs it, the last press waiting for it[2m > [22m3c a recap, a presser and an open box each ask, and none of them makes a press wait off the hub
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/components/front-office-shared/gmCareerKitPieces.test.tsx:[2m124:36[22m[39m
+    [90m122| [39m      const { result, unmount } = renderHook(() => useGmCareerKit(load…
+    [90m123| [39m      [34mexpect[39m(asks[33m.[39mlength[33m,[39m [32m`[39m[36m${[39m[33mJSON[39m[33m.[39m[34mstringify[39m(m)[36m}[39m[32m did not ask`[39m)[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+    [90m124| [39m      expect(result.current.waits).toBe(m.phase === 'hub' && m.lastPer…
+    [90m   | [39m                                   [31m^[39m
+    [90m125| [39m      [34munmount[39m()[33m;[39m
+    [90m126| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/nhl-front-office/NhlLazyDesk.test.tsx[2m > [22mNHL front office: the GM career kit loads when it is needed[2m > [22ma season being played never asks for it, and the Career box reads the same before and after it
+[31m[1mAssertionError[22m: a round in the middle of the season waits for the kit: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/components/nhl-front-office/NhlLazyDesk.test.tsx:[2m99:91[22m[39m
+    [90m 97| [39m    const roundPress = Array.from(document.querySelectorAll('button'))…
+    [90m 98| [39m    [34mexpect[39m(roundPress[33m,[39m [32m'the Play box draws Play Round 5'[39m)[33m.[39m[34mtoBeTruthy[39m()[33m;[39m
+    [90m 99| [39m    expect(roundPress!.disabled, 'a round in the middle of the season …
+    [90m   | [39m                                                                                          [31m^[39m
+    [90m100| [39m    fireEvent[33m.[39m[34mclick[39m(roundPress[33m![39m)[33m;[39m
+    [90m101| [39m    [35mawait[39m [34mtick[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m3 failed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (21)[39m
+[2m   Start at [22m 05:45:37
+[2m   Duration [22m 2.49s[2m (transform 1.25s, setup 197ms, collect 594ms, tests 3.27s, environment 1.01s, prepare 270ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeLazyDesk.test.tsx,title=src/components/front-office/FrontOfficeLazyDesk.test.tsx > NFL front office%3A the GM career kit loads when it is needed > a season being played never asks for it%2C and the Career box reads the same before and after it,line=95,column=89::AssertionError: a week in the middle of the season waits for the kit: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/components/front-office/FrontOfficeLazyDesk.test.tsx:95:89%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/gmCareerKitPieces.test.tsx,title=src/components/front-office-shared/gmCareerKitPieces.test.tsx > useGmCareerKit%3A the kit asked for when a screen needs it%2C the last press waiting for it > 3a a season being played never asks for it and its press never waits,line=105,column=91::AssertionError: a round in the middle of the season waits for the kit: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/components/front-office-shared/gmCareerKitPieces.test.tsx:105:91%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/gmCareerKitPieces.test.tsx,title=src/components/front-office-shared/gmCareerKitPieces.test.tsx > useGmCareerKit%3A the kit asked for when a screen needs it%2C the last press waiting for it > 3c a recap%2C a presser and an open box each ask%2C and none of them makes a press wait off the hub,line=124,column=36::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/components/front-office-shared/gmCareerKitPieces.test.tsx:124:36%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlLazyDesk.test.tsx,title=src/components/nhl-front-office/NhlLazyDesk.test.tsx > NHL front office%3A the GM career kit loads when it is needed > a season being played never asks for it%2C and the Career box reads the same before and after it,line=99,column=91::AssertionError: a round in the middle of the season waits for the kit: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/components/nhl-front-office/NhlLazyDesk.test.tsx:99:91%0A%0A
