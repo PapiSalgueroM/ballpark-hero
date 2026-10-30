@@ -1,0 +1,8 @@
+simCmUnseededWorld exit=1 229s | simCmUnseededWorld: 113 FAILURE(S)
+simGmStaff exit=1 4s | GM STAFF: 40 failure(s)
+simClubManagerSlots exit=0 107s | simClubManagerSlots: all sections green
+simBoardObjectives exit=0 0s | simBoardObjectives: green. Every board talks like a board.
+simClubManagerFinances exit=0 82s | simClubManagerFinances: PASS. The books add up, the projection lands, prices move the fans and the board, and the sponsor desk pays what it says.
+tsc exit=0 114s | 
+ucl-2 exit=0 1354s | simWorldUcl: green, 23917 checks, 0 failures
+simOneOffCups exit=1 2862s | simOneOffCups: 84 FAILURES of 272261 checks (2862 s)
