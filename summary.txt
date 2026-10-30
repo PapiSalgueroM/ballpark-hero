@@ -1,0 +1,8 @@
+ctl-noretire exit=1 256s | simCmFreeAgencyFleet: CONTROL noretire FIRED: section 2 red (red: 2 (1), 6 (16))
+ctl-deletepool exit=1 275s | simCmFreeAgencyFleet: CONTROL deletepool FIRED: section 1 red (red: 1 (343), 4 (15), 8 (374))
+ctl-nodedupe exit=1 278s | simCmFreeAgencyFleet: CONTROL nodedupe FIRED: section 3 red (red: 2 (2), 3 (81))
+ctl-norecover exit=1 268s | simCmFreeAgencyFleet: CONTROL norecover FIRED: section 4 red
+ctl-notrimpool exit=1 266s | simCmFreeAgencyFleet: CONTROL notrimpool FIRED: section 5 red (red: 1 (12), 5 (12))
+ctl-trimstranger exit=1 264s | simCmFreeAgencyFleet: CONTROL trimstranger FIRED: section 5 red
+ctl-trimbar exit=1 195s | simCmFreeAgencyFleet: CONTROL trimbar FIRED: section 5 red
+ctl-dropreal exit=1 189s | simCmFreeAgencyFleet: CONTROL dropreal FIRED: section 8 red
