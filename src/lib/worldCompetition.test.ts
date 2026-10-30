@@ -12,7 +12,7 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   G8_SHAPE, LEAGUE_PHASE_NIGHT_MARKS, drawG8, evaluateWorldComp, g8DrawRules, groupFixtures, leaguePhaseNightRounds,
-  nightsOf, settleTie, worldCompWinner,
+  myWorldNight, nightsOf, settleRecordedTie, settleTie, worldCompWinner,
   type G8Entrant, type SettleableTie, type TieRules, type WorldCompBind, type WorldCompResult, type WorldCompSlice,
   type WorldTieView,
 } from './worldCompetition';
@@ -444,3 +444,98 @@ describe('the same tables on every device (correction 1)', () => {
   });
 });
 
+
+/* Round 1593: one participant on the slice. Its recorded results are read, never drawn; nothing else moves. */
+describe('a participant on the slice', () => {
+  const at = (s: WorldCompSlice, k: number) => evaluateWorldComp(s, k, phaseBind);
+  const base = (seed: number): WorldCompSlice => phaseSlice(seed) as WorldCompSlice;
+  it('with no record evaluates exactly as the watched slice', () => {
+    for (const seed of [1, 2, 3, 4, 5]) {
+      const s = base(seed);
+      for (const k of [0, 3, 6, 8, 9, 12, 16, 17]) expect(at({ ...s, me: s.clubs[7] }, k)).toEqual(at(s, k));
+    }
+  });
+  it('a recorded league phase result lands in the table and no other fixture moves', () => {
+    const s = base(2);
+    const me = s.clubs[3];
+    const plain = at(s, 1);
+    const mine = plain.nights[0].fixtures.find(x => x.home === me || x.away === me) as { home: string; away: string };
+    const rec = { ...s, me, mine: { 0: { h: 6, a: 6 } } };
+    const got = at(rec, 1);
+    const row = (got.table ?? []).find(r => r.club === me) as TableRow;
+    expect(row.gf).toBe(6);
+    expect(row.ga).toBe(6);
+    expect(row.d).toBe(1);
+    expect(got.nights[0].fixtures.filter(x => x.home !== mine.home)).toEqual(plain.nights[0].fixtures.filter(x => x.home !== mine.home));
+  });
+  /* A play-off tie of the unrecorded season, played by its first named club. */
+  const playoff = (seed: number) => {
+    const s = base(seed);
+    const tie = at(s, 17).ties.find(t => t.round === 'PO') as WorldTieView;
+    return { s, tie, me: tie.home };
+  };
+  it('a recorded two legged tie is settled on aggregate from the records alone', () => {
+    const { s, tie, me } = playoff(3);
+    const got = at({ ...s, me, mine: { 8: { h: 3, a: 0 }, 9: { h: 1, a: 0 } } }, 10);
+    const v = got.ties.find(t => t.round === 'PO' && t.home === me) as WorldTieView;
+    expect(v.leg1).toEqual([3, 0]);
+    expect(v.leg2).toEqual([0, 1]);
+    expect(v.agg).toEqual([3, 1]);
+    expect(v.winner).toBe(me);
+    expect(v.aet).toBeUndefined();
+    expect(v.pens).toBeUndefined();
+    expect(tie.away).toBe(v.away);
+  });
+  it('level after two legs: extra time from the record, then the recorded shootout', () => {
+    const { s, tie, me } = playoff(3);
+    const got = at({ ...s, me, mine: { 8: { h: 1, a: 0 }, 9: { h: 2, a: 1, et: 1, pens: 'h' } } }, 10);
+    const v = got.ties.find(t => t.round === 'PO' && t.home === me) as WorldTieView;
+    expect(v.agg).toEqual([2, 2]);
+    expect(v.aet).toBe(true);
+    expect(v.pens).toBe(true);
+    expect(v.byAwayGoals).toBeUndefined();
+    expect(v.winner).toBe(tie.away);
+  });
+  it('leg one recorded and leg two still to come shows leg one and no winner; past it the stream settles leg two', () => {
+    const { s, me } = playoff(4);
+    const rec = { ...s, me, mine: { 8: { h: 3, a: 0 } } };
+    const mid = at(rec, 9).ties.find(t => t.round === 'PO' && t.home === me) as WorldTieView;
+    expect(mid.leg1).toEqual([3, 0]);
+    expect(mid.winner).toBeUndefined();
+    const night = myWorldNight(at(rec, 9), rec, 9);
+    expect(night?.atHome).toBe(false);
+    expect(night?.firstLeg).toEqual([0, 3]);
+    expect(night?.settles).toBe(true);
+    expect(myWorldNight(at(rec, 8), rec, 8)?.settles).toBe(false);
+    const past = at(rec, 10).ties.find(t => t.round === 'PO' && t.home === me) as WorldTieView;
+    expect(past.leg1).toEqual([3, 0]);
+    expect(typeof past.winner).toBe('string');
+    expect(at(rec, 17).done).toBe(true);
+  });
+  it('a recorded final crowns the participant, after extra time and penalties too', () => {
+    const s = base(5);
+    const plain = at(s, 17);
+    const me = plain.runnerUp as string;
+    const fin = plain.ties[plain.ties.length - 1];
+    const meHome = fin.home === me;
+    for (const rec of [meHome ? { h: 2, a: 1 } : { h: 1, a: 2 }, { h: 1, a: 1, et: 1 as const, pens: (meHome ? 'h' : 'a') as 'h' | 'a' }]) {
+      const got = at({ ...s, me, mine: { 16: rec } }, 17);
+      expect(got.done).toBe(true);
+      expect(got.winner).toBe(me);
+      expect(worldCompWinner(got)?.runnerUp).toBe(plain.winner);
+      expect(myWorldNight(at({ ...s, me }, 16), { ...s, me }, 16)?.settles).toBe(true);
+    }
+  });
+  it('settleRecordedTie with no record is settleTie, call for call', () => {
+    for (let seed = 1; seed <= 20; seed += 1) for (const legs of [1, 2] as const) {
+      const rules: TieRules = { legs, awayGoals: seed % 2 === 0, deciderScale: 0.965, etScale: 0.32 };
+      const play = (fn: typeof settleTie) => {
+        const rand = keyedRng(`tie|${seed}|${legs}`);
+        const t: SettleableTie = { home: 'A', away: 'B', homeGoals: null, awayGoals: null, winner: null };
+        fn(t, rules, (h, a, scale) => sim(h === 'A' ? 75 : 70, h === 'A' ? 70 : 75, scale, rand), rand);
+        return { t, next: rand() };
+      };
+      expect(play((t, r, si, c) => settleRecordedTie(t, r, undefined, undefined, si, c))).toEqual(play(settleTie));
+    }
+  });
+});

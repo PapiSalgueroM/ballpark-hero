@@ -30,8 +30,17 @@
  * named in WORLD_COMP_PARTIAL and nothing stands on it. What the game plays in place of a real rule it does not
  * model (pots by its own strength, the bracket order after the round of 16, its own calendar's nights) is the
  * ledger's standIns list, said on the screen.
+ *
+ * ONE PARTICIPANT (Round 1593). A slice may name the club whose nights the save plays (`me`) and keep that club's
+ * own results (`mine`, by night). A recorded result is read, never drawn: a league phase fixture takes it in place
+ * of its draw, and a tie takes its recorded legs through settleRecordedTie. Every other fixture and tie keeps its
+ * own keyed stream, so nothing else moves; a fixture of `me` with no record is drawn exactly as a watched one (the
+ * case of a save that moved clubs mid season and no longer plays it), so the season still crowns a winner. A slice
+ * with no record evaluates to exactly what it did before this round. The fields are the format's, not the Europa
+ * League's: any key of worldComps can carry them.
  */
 import { keyedRng } from './keyedRng';
+import type { NightResult } from './worldNights';
 import { uclTieOutcome, type UclLegScore } from './uclTieRule';
 import { sortedUclGroupTable, type UclGroupRule } from './clubManagerUclGroups';
 import {
@@ -113,6 +122,12 @@ export interface WorldCompSlice {
   /** Nights already shown when the slice was carried across a mid season job move (Round 1502): the new club's
    *  calendar can sit behind the old one, and a night once shown is never taken back. */
   seen?: number;
+  /** Round 1593: the club whose nights the save plays, written when the slice opens and never changed after (a job
+   *  move leaves it naming the old club). Absent on every watched slice and every slice older than this round. */
+  me?: string;
+  /** Round 1593: `me`'s own result of night n (the nightsOf index), in that fixture's orientation, home first,
+   *  after any extra time. Read by the evaluation in place of the draw. */
+  mine?: Record<number, NightResult>;
 }
 
 /** One night of the season, in order. */
@@ -279,6 +294,68 @@ export function settleTie(
   }
 }
 
+/**
+ * Round 1593: settle a tie the save played some of. `leg1` is the result of the tie's first match (one match: the
+ * whole tie) and `leg2` of its second, each in that match's own orientation (leg two is at t.away's ground, so its
+ * `h` is t.away's goals), after any extra time, with the shootout's side. A recorded leg is read; a leg that is not
+ * recorded is drawn from `sim` in settleTie's order (leg one, leg two, extra time, the coin), which happens only
+ * when the save no longer plays the tie (a job move) or the leg is still to come (the evaluation then shows no
+ * winner). With neither recorded it is settleTie, call for call. The fields are written in settleTie's order.
+ */
+export function settleRecordedTie(
+  t: SettleableTie, rules: TieRules, leg1: NightResult | undefined, leg2: NightResult | undefined,
+  sim: (home: string, away: string, scale: number) => [number, number], coin: () => number,
+): void {
+  if (!leg1 && !leg2) { settleTie(t, rules, sim, coin); return; }
+  if (rules.legs === 2) {
+    const [h1, a1] = leg1 ? [leg1.h, leg1.a] : sim(t.home, t.away, 1);
+    const [a2, h2] = leg2 ? [leg2.h, leg2.a] : sim(t.away, t.home, rules.deciderScale);
+    t.legs = 2;
+    t.leg1 = { homeGoals: h1, awayGoals: a1 };
+    t.leg2 = { homeGoals: h2, awayGoals: a2 };
+    let out = uclTieOutcome(t, rules.awayGoals);
+    if (leg2?.et) t.aet = true;
+    else if (!leg2 && out.winner === null && rules.extraTime !== false) {
+      const [ea, eh] = sim(t.away, t.home, rules.etScale);
+      t.leg2 = { homeGoals: h2 + eh, awayGoals: a2 + ea };
+      t.aet = true;
+      out = uclTieOutcome(t, rules.awayGoals);
+    }
+    t.homeGoals = out.homeAgg;
+    t.awayGoals = out.awayAgg;
+    t.byAwayGoals = out.byAwayGoals || undefined;
+    if (out.winner === null) {
+      t.pens = true;
+      /* Leg two's home side is t.away. */
+      t.winner = leg2?.pens ? (leg2.pens === 'h' ? t.away : t.home) : coin() < 0.5 ? t.home : t.away;
+    } else {
+      t.winner = out.winner === 'home' ? t.home : t.away;
+    }
+    return;
+  }
+  let hg: number, ag: number;
+  if (leg1) {
+    [hg, ag] = [leg1.h, leg1.a];
+    if (leg1.et) t.aet = true;
+  } else {
+    [hg, ag] = sim(t.home, t.away, rules.deciderScale);
+    if (hg === ag && rules.extraTime !== false) {
+      const [eh, ea] = sim(t.home, t.away, rules.etScale);
+      hg += eh;
+      ag += ea;
+      t.aet = true;
+    }
+  }
+  t.homeGoals = hg;
+  t.awayGoals = ag;
+  if (hg === ag) {
+    t.pens = true;
+    t.winner = leg1?.pens ? (leg1.pens === 'h' ? t.home : t.away) : coin() < 0.5 ? t.home : t.away;
+  } else {
+    t.winner = hg > ag ? t.home : t.away;
+  }
+}
+
 /** One club of an era field: its strength for the pots and its association for the draw's rules. */
 export interface G8Entrant { club: string; str: number; assoc: string | null }
 
@@ -399,11 +476,16 @@ export function evaluateWorldComp(slice: WorldCompSlice, nightsDone: number, bin
   const groupsOf = f === 'g8' && slice.clubs.length === G8_SHAPE.clubs
     ? GROUP_NAMES.map((_, g) => slice.clubs.slice(g * G8_SHAPE.groupSize, (g + 1) * G8_SHAPE.groupSize)) : [];
   if (f === 'g8' ? groupsOf.length === 0 : !slate) return out;
+  /* Round 1593: the participant's recorded result of night n, when the fixture is the participant's. */
+  const me = slice.me;
+  const recordOf = (n: number, home: string, away: string): NightResult | undefined =>
+    (me && (home === me || away === me) ? slice.mine?.[n] : undefined);
   for (let md = 0; md < firstStage; md += 1) {
     const pairs = f === 'g8' ? groupsOf.flatMap(g => groupFixtures(g, md)) : slateFixtures(slate as UclLeagueSlate, md);
     nights[md].fixtures = pairs.map(([home, away]): WorldFixture => {
       if (md >= k) return { home, away };
-      const [hg, ag] = playFixture(slice, strOf, bind, nights[md].id, home, away);
+      const rec = recordOf(md, home, away);
+      const [hg, ag] = rec ? [rec.h, rec.a] : playFixture(slice, strOf, bind, nights[md].id, home, away);
       addResult(rows, home, away, hg, ag);
       results[`${home}|${away}`] = [hg, ag];
       return { home, away, hg, ag };
@@ -444,7 +526,11 @@ export function evaluateWorldComp(slice: WorldCompSlice, nightsDone: number, bin
     pairs.forEach((p, slot) => {
       const t: SettleableTie = { home: p.home, away: p.away, homeGoals: null, awayGoals: null, winner: null };
       const rand = keyedRng(`${slice.seed}|${round}|${p.home}|${p.away}`);
-      settleTie(t, rules, (h, a, scale) => bind.sim(strOf.get(h) ?? 0, strOf.get(a) ?? 0, scale, rand), rand);
+      const tieSim = (h: string, a: string, scale: number): [number, number] => bind.sim(strOf.get(h) ?? 0, strOf.get(a) ?? 0, scale, rand);
+      const r1 = recordOf(first, p.home, p.away);
+      const r2 = rules.legs === 2 ? recordOf(end, p.home, p.away) : undefined;
+      if (r1 || r2) settleRecordedTie(t, rules, r1, r2, tieSim, rand);
+      else settleTie(t, rules, tieSim, rand);
       const view: WorldTieView = { round, slot, home: t.home, away: t.away };
       if (rules.legs === 2 && t.leg1 && t.leg2) {
         nights[first].fixtures.push(k > first ? { home: t.home, away: t.away, hg: t.leg1.homeGoals, ag: t.leg1.awayGoals } : { home: t.home, away: t.away });
@@ -480,5 +566,38 @@ export function evaluateWorldComp(slice: WorldCompSlice, nightsDone: number, bin
 /** The winner and runner-up of a finished season, else null. */
 export function worldCompWinner(result: WorldCompResult): { winner: string; runnerUp: string } | null {
   return result.done && result.winner && result.runnerUp ? { winner: result.winner, runnerUp: result.runnerUp } : null;
+}
+
+/** Round 1593: the participant's match on one night, as the binding plays it. */
+export interface MyWorldNight {
+  n: number; night: WorldNight; home: string; away: string; opponent: string; atHome: boolean;
+  /** A second leg: the first leg's score in THIS match's orientation (home first). */
+  firstLeg?: [number, number];
+  /** The tie is settled tonight: a second leg, or a one match round. */
+  settles: boolean;
+}
+
+/**
+ * Round 1593: `me`'s fixture on night n, read off an evaluation that has reached it (the binding evaluates at
+ * n nights done), or null when the slice names no participant, the night has no fixture of `me` (a bye to the round
+ * of 16, a tie lost) or its round is not drawn yet. The binding reads the participant's nights only through this.
+ */
+export function myWorldNight(result: WorldCompResult, slice: WorldCompSlice, n: number): MyWorldNight | null {
+  const me = slice.me;
+  const night = result.nights[n];
+  if (!me || !night) return null;
+  const fx = night.fixtures.find(x => x.home === me || x.away === me);
+  if (!fx) return null;
+  const atHome = fx.home === me;
+  const out: MyWorldNight = { n, night, home: fx.home, away: fx.away, opponent: atHome ? fx.away : fx.home, atHome, settles: false };
+  if (night.stage === 'md') return out;
+  const twoLegs = result.nights.some(x => x.stage === night.stage && x.leg === 2);
+  out.settles = !twoLegs || night.leg === 2;
+  if (night.leg === 2) {
+    const tie = result.ties.find(t => t.round === night.stage && (t.home === me || t.away === me));
+    /* Leg two is at the tie's away club's ground, so its orientation is the first leg's turned round. */
+    if (tie?.leg1) out.firstLeg = [tie.leg1[1], tie.leg1[0]];
+  }
+  return out;
 }
 
