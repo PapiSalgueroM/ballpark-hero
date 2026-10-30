@@ -1,0 +1,6 @@
+m-managedopen exit=1 35s | simManagers: 2 failure(s)
+m-partial exit=1 35s | simManagers: 2 failure(s)
+m-takeover exit=1 35s | simManagers: 91 failure(s)
+m-namesrow exit=0 7s | simInventedNames: green. Every invented man on this site is invented all the way down.
+m-erasnojoin exit=1 8s | simInventedNames: 1 failure
+probe-quotes-report exit=0 17s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
