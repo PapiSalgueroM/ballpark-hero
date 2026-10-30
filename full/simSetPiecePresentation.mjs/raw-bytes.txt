@@ -1,0 +1,3 @@
+605 /home/runner/work/_temp/rc-out/full/simSetPiecePresentation.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSetPiecePresentation.mjs/stderr.log
+605 total

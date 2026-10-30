@@ -1,0 +1,3 @@
+8098 /home/runner/work/_temp/rc-out/full/simRevealScroll.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simRevealScroll.mjs/stderr.log
+8098 total

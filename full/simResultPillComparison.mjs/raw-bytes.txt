@@ -1,0 +1,3 @@
+4609 /home/runner/work/_temp/rc-out/full/simResultPillComparison.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simResultPillComparison.mjs/stderr.log
+4609 total

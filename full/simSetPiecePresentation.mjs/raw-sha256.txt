@@ -1,0 +1,2 @@
+2404bd4bd1b4a78ffd98a02abba4383bef461ad6edfea463d4df51d79360408e  /home/runner/work/_temp/rc-out/full/simSetPiecePresentation.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSetPiecePresentation.mjs/stderr.log

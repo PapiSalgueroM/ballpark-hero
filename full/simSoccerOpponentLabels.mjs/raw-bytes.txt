@@ -1,0 +1,3 @@
+730 /home/runner/work/_temp/rc-out/full/simSoccerOpponentLabels.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerOpponentLabels.mjs/stderr.log
+730 total

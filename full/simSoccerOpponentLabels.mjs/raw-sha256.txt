@@ -1,0 +1,2 @@
+c5d71a6deef6fb9e13d629c7256da387f7ada028da46da08a8d5dc032cbf6258  /home/runner/work/_temp/rc-out/full/simSoccerOpponentLabels.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerOpponentLabels.mjs/stderr.log

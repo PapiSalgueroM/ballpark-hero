@@ -1,0 +1,14 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+simMobileChrome: bash .rc/default-support.sh run simMobileChrome.mjs
+simPrerenderBoot: bash .rc/default-support.sh run simPrerenderBoot.mjs
+simResultMoment: bash .rc/default-support.sh run simResultMoment.mjs
+simResultPillComparison: bash .rc/default-support.sh run simResultPillComparison.mjs
+simRevealScroll: bash .rc/default-support.sh run simRevealScroll.mjs
+simSeasonVerdict: bash .rc/default-support.sh run simSeasonVerdict.mjs
+simSeoMetaSplit: bash .rc/default-support.sh run simSeoMetaSplit.mjs
+simSetPiecePresentation: bash .rc/default-support.sh run simSetPiecePresentation.mjs
+simSoccerOpponentLabels: bash .rc/default-support.sh run simSoccerOpponentLabels.mjs
+simTactics: bash .rc/default-support.sh run simTactics.mjs
+finish: bash .rc/default-support.sh finish

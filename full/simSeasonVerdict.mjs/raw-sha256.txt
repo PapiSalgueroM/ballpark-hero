@@ -1,0 +1,2 @@
+c5c94dca20ed967537bf5c2a40604c61e6835a876da936d0ff3e84485756c9d7  /home/runner/work/_temp/rc-out/full/simSeasonVerdict.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSeasonVerdict.mjs/stderr.log

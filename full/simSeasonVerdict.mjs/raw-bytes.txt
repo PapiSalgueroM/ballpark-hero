@@ -1,0 +1,3 @@
+2248 /home/runner/work/_temp/rc-out/full/simSeasonVerdict.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSeasonVerdict.mjs/stderr.log
+2248 total

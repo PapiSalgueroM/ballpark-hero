@@ -1,0 +1,2 @@
+f69374cc1384404e4c843f08f04231219384ac3d55e1022c22981727424e6d1d  /home/runner/work/_temp/rc-out/full/simPrerenderBoot.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPrerenderBoot.mjs/stderr.log

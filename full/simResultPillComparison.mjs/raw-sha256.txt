@@ -1,0 +1,2 @@
+f97e1f4f6354789cf35552c5daaa16c741d3624e954d84f19754817e37ae9d74  /home/runner/work/_temp/rc-out/full/simResultPillComparison.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simResultPillComparison.mjs/stderr.log
