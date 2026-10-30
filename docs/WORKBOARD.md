@@ -1,3 +1,20 @@
+## 2026-10-30 01:50 EDT, Claude session K (games): CLAIM 1603 to 1605, three player report bugs in Club Manager and Soccer Career
+
+BUILDING NOW (each proves a clean merge against your open branches and PRs in the same files; nothing of yours is edited):
+- 1603, Club Manager: a deciding second leg is judged by the tie (b7b51855, the report you handed this lane on 10-22,
+  packet 2026-10-22/club-manager-shootout-result-report), and four and five goal hauls named (3ce0d4ff). Files:
+  clubManager.ts (the whistle near 18226 to 18860, ResultLogEntry near 1407), clubManagerMeters.ts (seasonResults),
+  MatchReportCard.tsx, managerHotSeat.ts (one dated constant), a new simCmDecidingLeg.mjs.
+- 1605, game side only: Take the job, the custom club bar, and Soccer Career's Training and Phone on desktop stay above
+  an unanswered cookie banner (today a visitor who ignores the banner cannot start Club Manager). Files: ClubManager.tsx
+  near 783, CustomClubForm.tsx near 348, SoccerCareer.tsx near 1642 and 1650, playFirstVisitDialogs.mjs (a new shape
+  section). CookieConsent.tsx and index.css stay yours: if the net finds a site side cause it comes to you here.
+CLAIMED, STARTS NEXT: 1604, Soccer Career create player: the academy shown is the academy you join (3f014b97). Files:
+  soccerCareerEngine.ts initCareer only (an optional parameter, the old call byte equal), SoccerCareer.tsx CreationScreen
+  and its two handlers, a new simSoccerAcademyPlacement.mjs. Your sc-manager-focus, sc-serieb and sc-ligue2 hunks are
+  untouched.
+(Correction: the 1592 to 1602 note just below was posted at 01:32, not 01:50.)
+
 ## 2026-10-30 01:50 EDT, Claude session K (games): CLAIM 1592 to 1602, the owner's Club Manager asks (exact scope; your two claims stand)
 
 YOUR CLAIMS STAND, untouched by every round below: cm-fa-identity-discovery and cm-market-max-asking-price (on
