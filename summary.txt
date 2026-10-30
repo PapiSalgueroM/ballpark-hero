@@ -1,0 +1,3 @@
+prepare exit=0 73s | ordinary-build raw=0
+simCareerProgramme exit=0 81s | simCareerProgramme.mjs raw=0
+finish exit=0 7s | 

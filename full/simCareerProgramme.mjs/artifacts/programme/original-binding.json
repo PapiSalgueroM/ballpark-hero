@@ -1,0 +1,14 @@
+{
+  "arm": "original",
+  "role": "pinned original Git",
+  "original": true,
+  "compatibility": false,
+  "historicalPool": false,
+  "pristine": false,
+  "attributionControl": "",
+  "poolNormalized": false,
+  "playingSizesNormalized": false,
+  "openingOffApplied": false,
+  "compiledSHA256": "5fcf6ed82c128e7fe20d6f908b20ffea3458aef60e7586f5e8af825a724af1cb",
+  "loadedSources": "original-loaded.json"
+}

@@ -1,0 +1,6632 @@
+{
+  "input": {
+    "playerName": "World ere",
+    "nationality": "Netherlands",
+    "position": "CM",
+    "era": "2025",
+    "age": 19,
+    "potential": 86,
+    "potentialEarned": 0,
+    "eliteStreak": 0,
+    "startingOverall": 68,
+    "physique": {
+      "heightCm": 180,
+      "weightKg": 75
+    },
+    "attrShape": {},
+    "karma": 50,
+    "phoneUsedIds": [
+      "grandad_game",
+      "agent_boots"
+    ],
+    "phoneInbox": [
+      {
+        "id": "grandad_game-2025",
+        "defId": "grandad_game",
+        "from": "Grandad",
+        "emoji": "🧓",
+        "text": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+        "year": 2025,
+        "choices": [
+          {
+            "label": "Visit with your shirt",
+            "reply": "Coming round Sunday with a shirt and biscuits. Put the kettle on",
+            "karma": 9,
+            "morale": 5
+          },
+          {
+            "label": "Promise vaguely",
+            "reply": "One day grandad, promise",
+            "karma": 1
+          }
+        ]
+      },
+      {
+        "id": "agent_boots-2025",
+        "defId": "agent_boots",
+        "from": "Agent",
+        "emoji": "💼",
+        "text": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+        "year": 2025,
+        "choices": [
+          {
+            "label": "Take the money",
+            "reply": "Money is money. Send the contract",
+            "karma": -7,
+            "cash": 1.5
+          },
+          {
+            "label": "Turn it down publicly",
+            "reply": "Not wearing that. And I'm saying why",
+            "karma": 9,
+            "popularity": 4
+          },
+          {
+            "label": "Quietly decline",
+            "reply": "Pass on this one. Keep it quiet",
+            "karma": 4
+          }
+        ]
+      }
+    ],
+    "currentClub": "Twente",
+    "currentClubCountry": "Netherlands",
+    "currentClubTier": 4,
+    "currentClubColor": "#E70011",
+    "currentLeague": "Eredivisie",
+    "contractYearsLeft": 3,
+    "weeklyWage": 20000,
+    "marketValue": 17.4,
+    "pace": 71,
+    "shooting": 75,
+    "passing": 80,
+    "dribbling": 72,
+    "defending": 75,
+    "physical": 79,
+    "reflexes": 77,
+    "overall": 75,
+    "seasons": [
+      {
+        "year": 2025,
+        "age": 16,
+        "club": "Ajax Youth",
+        "clubCountry": "Netherlands",
+        "clubTier": 1,
+        "apps": 0,
+        "goals": 0,
+        "assists": 0,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2026,
+        "age": 17,
+        "club": "Ajax Youth",
+        "clubCountry": "Netherlands",
+        "clubTier": 1,
+        "apps": 20,
+        "goals": 2,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2027,
+        "age": 18,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 36,
+        "leagueApps": 35,
+        "goals": 4,
+        "assists": 5,
+        "cleanSheets": 0,
+        "yellowCards": 8,
+        "redCards": 0,
+        "rating": 7.3,
+        "ovr": 71,
+        "injury": "Dead leg",
+        "injuryWeeks": 4,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": false
+            }
+          ]
+        }
+      },
+      {
+        "year": 2028,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 29,
+        "leagueApps": 31,
+        "goals": 4,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      }
+    ],
+    "events": [
+      "🚑 Injury: Groin strain, out 10 weeks, missed matches",
+      "😤 A new rival emerges: Bukayo Costa (🇲🇨 Monaco)",
+      "⭐ Named Young Player of the Year!",
+      "🏆 Won the European Championship with Netherlands!",
+      "🇺🇳 Manager chose Bukayo Costa over you.",
+      "🇺🇳 National Team Battle",
+      "🩻 The scan was clear but you took three weeks anyway. The knee has never complained since",
+      "🧢 Signed with Cousin Ricky. What could go wrong"
+    ],
+    "retired": false,
+    "phase": "playing",
+    "pendingOffers": [],
+    "pendingSummary": null,
+    "transferSituation": null,
+    "loan": null,
+    "pendingLoanOffers": null,
+    "pendingEvents": [],
+    "lastEventId": 201,
+    "statBoostNextSeason": {
+      "physical": 1
+    },
+    "pendingNews": [],
+    "internationalCareer": true,
+    "sponsorDeal": null,
+    "totalEarnings": 2.3,
+    "popularity": 35,
+    "morale": 95,
+    "isLeader": false,
+    "hasRelationship": false,
+    "intStats": {
+      "caps": 12,
+      "goals": 5,
+      "assists": 2,
+      "tournaments": 1,
+      "worldCups": 0,
+      "continentals": 1,
+      "worldCupWins": 0,
+      "continentalWins": 1,
+      "isCaptain": false,
+      "isRetired": false,
+      "debutYear": -1,
+      "debutAge": 18,
+      "worldCupResults": [],
+      "squadSnubs": 0,
+      "failedQualifications": 0
+    },
+    "pendingWorldCup": null,
+    "pendingTournament": null,
+    "lastTournament": {
+      "year": 2028,
+      "name": "European Championship",
+      "short": "Euros",
+      "kind": "Continental",
+      "confederation": "UEFA",
+      "nation": "Netherlands",
+      "teams": 24,
+      "qualifying": {
+        "confederation": "UEFA",
+        "table": [
+          {
+            "nation": "Netherlands",
+            "played": 10,
+            "won": 8,
+            "drawn": 2,
+            "lost": 0,
+            "gf": 17,
+            "ga": 5,
+            "points": 26
+          },
+          {
+            "nation": "Romania",
+            "played": 10,
+            "won": 4,
+            "drawn": 5,
+            "lost": 1,
+            "gf": 20,
+            "ga": 11,
+            "points": 17
+          },
+          {
+            "nation": "Northern Ireland",
+            "played": 10,
+            "won": 5,
+            "drawn": 2,
+            "lost": 3,
+            "gf": 16,
+            "ga": 12,
+            "points": 17
+          },
+          {
+            "nation": "Ukraine",
+            "played": 10,
+            "won": 2,
+            "drawn": 4,
+            "lost": 4,
+            "gf": 11,
+            "ga": 10,
+            "points": 10
+          },
+          {
+            "nation": "Luxembourg",
+            "played": 10,
+            "won": 1,
+            "drawn": 3,
+            "lost": 6,
+            "gf": 7,
+            "ga": 18,
+            "points": 6
+          },
+          {
+            "nation": "Latvia",
+            "played": 10,
+            "won": 1,
+            "drawn": 2,
+            "lost": 7,
+            "gf": 5,
+            "ga": 20,
+            "points": 5
+          }
+        ],
+        "myPosition": 1,
+        "through": 3,
+        "qualified": true,
+        "automatic": false
+      },
+      "qualified": true,
+      "squad": {
+        "called": true,
+        "role": "Starter",
+        "reason": "You made it as number 3 of 8 in your position.",
+        "myRank": 3,
+        "poolSize": 18,
+        "places": 8,
+        "myScore": 79,
+        "cutScore": 70,
+        "xi": {
+          "formation": "4-3-3",
+          "gk": [
+            {
+              "slot": "GK",
+              "name": "Gijs Nieuwland",
+              "ovr": 81,
+              "me": false
+            }
+          ],
+          "def": [
+            {
+              "slot": "LB",
+              "name": "Wout Vlietstra",
+              "ovr": 78,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Rick Doornbos",
+              "ovr": 81,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Daan Rijkaard-Veen",
+              "ovr": 81,
+              "me": false
+            },
+            {
+              "slot": "RB",
+              "name": "Koen Heemskerk",
+              "ovr": 79,
+              "me": false
+            }
+          ],
+          "mid": [
+            {
+              "slot": "CM",
+              "name": "You",
+              "ovr": 75,
+              "me": true
+            },
+            {
+              "slot": "CDM",
+              "name": "Sem Boterman",
+              "ovr": 80,
+              "me": false
+            },
+            {
+              "slot": "CM",
+              "name": "Hidde Lindeboom",
+              "ovr": 81,
+              "me": false
+            }
+          ],
+          "att": [
+            {
+              "slot": "LW",
+              "name": "Bas Schuurmans",
+              "ovr": 77,
+              "me": false
+            },
+            {
+              "slot": "ST",
+              "name": "Ferdi Oosterveen",
+              "ovr": 84,
+              "me": false
+            },
+            {
+              "slot": "RW",
+              "name": "Mees Grevelink",
+              "ovr": 80,
+              "me": false
+            }
+          ],
+          "mySlot": "CM",
+          "aheadOfMe": null
+        }
+      },
+      "groupTable": [
+        {
+          "nation": "Turkey",
+          "played": 3,
+          "won": 2,
+          "drawn": 1,
+          "lost": 0,
+          "gf": 8,
+          "ga": 2,
+          "points": 7
+        },
+        {
+          "nation": "Switzerland",
+          "played": 3,
+          "won": 2,
+          "drawn": 0,
+          "lost": 1,
+          "gf": 3,
+          "ga": 3,
+          "points": 6
+        },
+        {
+          "nation": "Netherlands",
+          "played": 3,
+          "won": 1,
+          "drawn": 1,
+          "lost": 1,
+          "gf": 4,
+          "ga": 3,
+          "points": 4
+        },
+        {
+          "nation": "Scotland",
+          "played": 3,
+          "won": 0,
+          "drawn": 0,
+          "lost": 3,
+          "gf": 1,
+          "ga": 8,
+          "points": 0
+        }
+      ],
+      "bracket": [
+        {
+          "round": "R16",
+          "slot": 0,
+          "home": "Slovenia",
+          "away": "Netherlands",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": true
+        },
+        {
+          "round": "R16",
+          "slot": 1,
+          "home": "France",
+          "away": "Czech Republic",
+          "homeGoals": 3,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "France",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 2,
+          "home": "Turkey",
+          "away": "Italy",
+          "homeGoals": 0,
+          "awayGoals": 0,
+          "pens": true,
+          "winner": "Turkey",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 3,
+          "home": "Hungary",
+          "away": "Switzerland",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Hungary",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 4,
+          "home": "Croatia",
+          "away": "Belgium",
+          "homeGoals": 0,
+          "awayGoals": 0,
+          "pens": true,
+          "winner": "Belgium",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 5,
+          "home": "England",
+          "away": "Slovakia",
+          "homeGoals": 3,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "England",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 6,
+          "home": "Spain",
+          "away": "Norway",
+          "homeGoals": 4,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 7,
+          "home": "Austria",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 0,
+          "home": "Netherlands",
+          "away": "France",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": true
+        },
+        {
+          "round": "QF",
+          "slot": 1,
+          "home": "Turkey",
+          "away": "Hungary",
+          "homeGoals": 2,
+          "awayGoals": 2,
+          "pens": true,
+          "winner": "Turkey",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 2,
+          "home": "Belgium",
+          "away": "England",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "England",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 3,
+          "home": "Spain",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "SF",
+          "slot": 0,
+          "home": "Netherlands",
+          "away": "Turkey",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": true
+        },
+        {
+          "round": "SF",
+          "slot": 1,
+          "home": "England",
+          "away": "Portugal",
+          "homeGoals": 0,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "F",
+          "slot": 0,
+          "home": "Netherlands",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Netherlands",
+          "mine": true
+        }
+      ],
+      "champion": "Netherlands",
+      "runnerUp": "Portugal",
+      "groupLabel": "Group A",
+      "thirdsThrough": 4,
+      "myResult": "Winner",
+      "matches": [
+        {
+          "round": "Group A",
+          "home": "Netherlands",
+          "away": "Switzerland",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "playerGoals": 0,
+          "playerAssists": 0,
+          "playerRating": 6.2
+        },
+        {
+          "round": "Group A",
+          "home": "Netherlands",
+          "away": "Turkey",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 7.1
+        },
+        {
+          "round": "Group A",
+          "home": "Netherlands",
+          "away": "Scotland",
+          "homeGoals": 3,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 7.4
+        },
+        {
+          "round": "R16",
+          "home": "Slovenia",
+          "away": "Netherlands",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "playerGoals": 0,
+          "playerAssists": 1,
+          "playerRating": 6.5
+        },
+        {
+          "round": "QF",
+          "home": "Netherlands",
+          "away": "France",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 6.6
+        },
+        {
+          "round": "SF",
+          "home": "Netherlands",
+          "away": "Turkey",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 6.7
+        },
+        {
+          "round": "F",
+          "home": "Netherlands",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "playerGoals": 0,
+          "playerAssists": 0,
+          "playerRating": 6.9
+        }
+      ],
+      "playerApps": 7,
+      "playerGoals": 4,
+      "playerAssists": 1,
+      "playerAvgRating": 6.8,
+      "goldenBoot": false,
+      "bestPlayer": false
+    },
+    "intlHistory": [
+      {
+        "year": 2028,
+        "short": "Euros",
+        "nation": "Netherlands",
+        "champion": "Netherlands",
+        "myResult": "Winner",
+        "apps": 7,
+        "goals": 4
+      }
+    ],
+    "rival": {
+      "name": "Bukayo Costa",
+      "nationality": "Monaco",
+      "position": "CM",
+      "club": "Rangers",
+      "clubTier": 2,
+      "overall": 81,
+      "careerGoals": 3,
+      "careerAssists": 6,
+      "careerApps": 24,
+      "leagueTitles": 0,
+      "championsLeagues": 0,
+      "worldCups": 0,
+      "ballonDors": 0,
+      "intCaps": 9,
+      "intGoals": 2,
+      "marketValue": 75.3,
+      "age": 20,
+      "retired": false
+    },
+    "rivalCreated": true,
+    "pendingRivalryEvent": null,
+    "lastRivalryEventId": 106,
+    "rivalrySummary": null,
+    "netWorth": 2.19,
+    "lifestyleLevel": "Humble",
+    "lifestyleCostPerYear": 0.060000000000000005,
+    "socialMediaFollowers": 2.13,
+    "sponsorshipIncome": 0.22,
+    "properties": [],
+    "investments": [],
+    "consecutiveDeficitYears": 0,
+    "agentFeesPaid": 0,
+    "family": {
+      "isMarried": false,
+      "marriedAge": null,
+      "children": 0,
+      "isDivorced": false,
+      "divorceAge": null
+    },
+    "purchasedItems": [],
+    "investmentHoldings": [],
+    "totalAssetValue": 0,
+    "customYearlyCosts": 0.01,
+    "awards": [
+      {
+        "year": 2028,
+        "name": "Young Player of the Year",
+        "emoji": "⭐"
+      }
+    ],
+    "pendingBallonDor": null,
+    "lastUCLResult": {
+      "qualified": false,
+      "matches": [],
+      "result": "N/A",
+      "playerGoals": 0,
+      "isTopScorer": false
+    },
+    "legacy": null,
+    "postRetirementChoice": null,
+    "managerState": null,
+    "isFinalSeason": false,
+    "isPundit": false,
+    "punditEvents": [],
+    "primeType": "late",
+    "socialMediaActionUsedThisSeason": false,
+    "socialMediaFocusBoost": false,
+    "pendingCoverAthleteEvent": false,
+    "coverAthleteAccepted": false,
+    "activeSponsorship": null,
+    "personality": "showman",
+    "agentId": "cousin",
+    "lifeFlags": {},
+    "appearance": null,
+    "corruptionHeat": 0,
+    "dirtyMoney": 0,
+    "prisonSeasons": 0,
+    "academyClubName": "Ajax",
+    "moralDilemmasTriggered": [],
+    "pendingMoralDilemma": null,
+    "pedSeasonsRemaining": 0,
+    "pedActive": false,
+    "matchFixBanned": 0,
+    "divingActive": false,
+    "integrityBonus": 1,
+    "pendingAppealResult": null,
+    "childEventsSeen": [],
+    "pregnancyAnnounced": false,
+    "punditState": null,
+    "ownerState": null,
+    "peakOverall": 73,
+    "retirementSuggested": false,
+    "phone": {
+      "threads": [
+        {
+          "id": "th_grandad",
+          "c": "grandad",
+          "name": "Grandad",
+          "emoji": "🧓",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Did you get my last one? No rush.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "Wow. I see how it is then.",
+              "y": 2027
+            }
+          ],
+          "rel": 27,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "grandad_game-2025"
+          },
+          "waiting": 2027,
+          "cold": 2,
+          "seen": [],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_fitness",
+          "c": "fitness",
+          "name": "Fitness coach",
+          "emoji": "🏋️",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Bumping this up your inbox.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "I will assume that is a no then.",
+              "y": 2027
+            }
+          ],
+          "rel": 27,
+          "pending": {
+            "kind": "convo",
+            "convo": "fitness_extra",
+            "beat": 0
+          },
+          "waiting": 2027,
+          "cold": 2,
+          "seen": [
+            "fitness_extra"
+          ],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_agent",
+          "c": "agent",
+          "name": "Your agent",
+          "emoji": "💼",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Still need an answer on that when you get a sec.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "I will assume that is a no then.",
+              "y": 2027
+            }
+          ],
+          "rel": 27,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "agent_boots-2025"
+          },
+          "waiting": 2027,
+          "cold": 2,
+          "seen": [],
+          "lastReplyYear": null
+        }
+      ],
+      "feed": [
+        "🔄 DONE DEAL. Pedri joins Feyenoord from Barcelona. Fee around 90m.",
+        "⭐ Barcelona are champions of Europe.",
+        "🏆 Liverpool win the Premier League.",
+        "🏆 Barcelona win La Liga.",
+        "🥅 Lamine Yamal finished top scorer in La Liga on 22.",
+        "🔄 DONE DEAL. Kylian Mbappé joins Sporting CP from Real Madrid. Fee around 120m.",
+        "🔄 DONE DEAL. Florian Wirtz joins Feyenoord from Liverpool. Fee around 110m.",
+        "⭐ Bayern Munich are champions of Europe.",
+        "🏆 Newcastle win the Premier League.",
+        "🏆 Real Madrid win La Liga.",
+        "🥅 Ousmane Dembélé finished top scorer in Ligue 1 on 17.",
+        "🌍 Netherlands win the European Championship."
+      ],
+      "world": {
+        "year": 2028,
+        "ucl": "Bayern Munich",
+        "leagues": {
+          "Premier League": "Newcastle",
+          "La Liga": "Real Madrid",
+          "Bundesliga": "Bayern Munich",
+          "Serie A": "Inter Milan",
+          "Ligue 1": "Lyon",
+          "Primeira Liga": "Porto",
+          "Eredivisie": "PSV",
+          "Scottish Premiership": "Rangers",
+          "Brasileirao": "Flamengo",
+          "Saudi Pro League": "Al Hilal",
+          "MLS": "Seattle Sounders",
+          "K League 1": "Jeonbuk Motors"
+        },
+        "cups": {
+          "Premier League": "Newcastle",
+          "La Liga": "Girona",
+          "Bundesliga": "Dortmund",
+          "Serie A": "Juventus",
+          "Ligue 1": "Marseille",
+          "Primeira Liga": "Porto",
+          "Eredivisie": "Feyenoord",
+          "Scottish Premiership": "Aberdeen",
+          "Brasileirao": "Palmeiras",
+          "Saudi Pro League": "Al Nassr",
+          "MLS": "Seattle Sounders",
+          "K League 1": "Ulsan HD"
+        },
+        "moves": [
+          {
+            "who": "Kylian Mbappé",
+            "from": "Real Madrid",
+            "to": "Sporting CP",
+            "fee": 120
+          },
+          {
+            "who": "Florian Wirtz",
+            "from": "Liverpool",
+            "to": "Feyenoord",
+            "fee": 110
+          }
+        ],
+        "topScorer": {
+          "who": "Ousmane Dembélé",
+          "club": "PSG",
+          "goals": 17,
+          "league": "Ligue 1"
+        },
+        "intl": {
+          "name": "European Championship",
+          "champion": "Netherlands"
+        }
+      },
+      "clubs": {
+        "Kylian Mbappé": "Sporting CP",
+        "Erling Haaland": "Barcelona",
+        "Jude Bellingham": "Real Madrid",
+        "Vinícius Jr": "Real Madrid",
+        "Lamine Yamal": "Barcelona",
+        "Florian Wirtz": "Feyenoord",
+        "Jamal Musiala": "Bayern Munich",
+        "Bukayo Saka": "Arsenal",
+        "Pedri": "Feyenoord",
+        "Rodri": "Barcelona",
+        "Federico Valverde": "Real Madrid",
+        "Harry Kane": "Bayern Munich",
+        "Mohamed Salah": "Trabzonspor",
+        "Phil Foden": "Man City",
+        "Declan Rice": "Arsenal",
+        "Raphinha": "Barcelona",
+        "Endrick": "Real Madrid",
+        "Nico Williams": "Athletic Bilbao",
+        "Désiré Doué": "PSG",
+        "Kobbie Mainoo": "Man United",
+        "Gianluigi Donnarumma": "Man City",
+        "Ousmane Dembélé": "PSG"
+      },
+      "rivalClub": "Rangers",
+      "seed": 1141312389,
+      "offers": 0,
+      "perksTaken": 0
+    },
+    "frozenOut": 0,
+    "badSeasonStreak": 0,
+    "story": [
+      {
+        "year": 2025,
+        "age": 16,
+        "club": "Ajax Youth",
+        "lines": [
+          "📋 Joined Ajax Youth Academy aged 16"
+        ]
+      },
+      {
+        "year": 2026,
+        "age": 17,
+        "club": "Ajax Youth",
+        "lines": [
+          "📈 Stats improved during youth development (OVR 71)",
+          "📩 Professional contract offers received!",
+          "✍️ Signed with Twente 🇳🇱 (5yr, €20k/wk)"
+        ]
+      },
+      {
+        "year": 2027,
+        "age": 18,
+        "club": "Twente",
+        "lines": [
+          "🚑 Injury: Dead leg, out 4 weeks, missed matches",
+          "🇺🇳 First international call-up for Netherlands!",
+          "🎭 You leaned into it: The Showman is born",
+          "🥅 Scored on international debut for Netherlands!",
+          "🐕 Adopted a rescue dog. He has his own fan account now",
+          "🦝 Gaffer Two is now official staff. Attendance: perfect",
+          "🍝 Made peace with your camp roommate over room service. He still kicks you, but he apologises now"
+        ]
+      }
+    ],
+    "sponsorBonus": 0,
+    "money": {
+      "seed": 3500022165,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 113.44,
+        "bricks": 102.13,
+        "cleats": 112.99,
+        "screens": 111.14,
+        "spark": 70.41
+      },
+      "hist": {
+        "ladder": [
+          100,
+          104.78,
+          110.14,
+          113.44
+        ],
+        "bricks": [
+          100,
+          101.62,
+          99.6,
+          102.13
+        ],
+        "cleats": [
+          100,
+          84.1,
+          95.3,
+          112.99
+        ],
+        "screens": [
+          100,
+          98.35,
+          106.73,
+          111.14
+        ],
+        "spark": [
+          100,
+          73.51,
+          79.36,
+          70.41
+        ]
+      },
+      "log": [],
+      "year": 2028,
+      "age": 3,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    },
+    "eventLastFired": {
+      "18": 2027,
+      "72": 2027,
+      "200": 2027,
+      "201": 2028,
+      "247": 2027,
+      "267": 2027,
+      "433": 2028
+    }
+  },
+  "before": {
+    "playerName": "World ere",
+    "nationality": "Netherlands",
+    "position": "CM",
+    "era": "2025",
+    "age": 19,
+    "potential": 86,
+    "potentialEarned": 0,
+    "eliteStreak": 0,
+    "startingOverall": 68,
+    "physique": {
+      "heightCm": 180,
+      "weightKg": 75
+    },
+    "attrShape": {},
+    "karma": 50,
+    "phoneUsedIds": [
+      "grandad_game",
+      "agent_boots"
+    ],
+    "phoneInbox": [
+      {
+        "id": "grandad_game-2025",
+        "defId": "grandad_game",
+        "from": "Grandad",
+        "emoji": "🧓",
+        "text": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+        "year": 2025,
+        "choices": [
+          {
+            "label": "Visit with your shirt",
+            "reply": "Coming round Sunday with a shirt and biscuits. Put the kettle on",
+            "karma": 9,
+            "morale": 5
+          },
+          {
+            "label": "Promise vaguely",
+            "reply": "One day grandad, promise",
+            "karma": 1
+          }
+        ]
+      },
+      {
+        "id": "agent_boots-2025",
+        "defId": "agent_boots",
+        "from": "Agent",
+        "emoji": "💼",
+        "text": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+        "year": 2025,
+        "choices": [
+          {
+            "label": "Take the money",
+            "reply": "Money is money. Send the contract",
+            "karma": -7,
+            "cash": 1.5
+          },
+          {
+            "label": "Turn it down publicly",
+            "reply": "Not wearing that. And I'm saying why",
+            "karma": 9,
+            "popularity": 4
+          },
+          {
+            "label": "Quietly decline",
+            "reply": "Pass on this one. Keep it quiet",
+            "karma": 4
+          }
+        ]
+      }
+    ],
+    "currentClub": "Twente",
+    "currentClubCountry": "Netherlands",
+    "currentClubTier": 4,
+    "currentClubColor": "#E70011",
+    "currentLeague": "Eredivisie",
+    "contractYearsLeft": 3,
+    "weeklyWage": 20000,
+    "marketValue": 17.4,
+    "pace": 71,
+    "shooting": 75,
+    "passing": 80,
+    "dribbling": 72,
+    "defending": 75,
+    "physical": 79,
+    "reflexes": 77,
+    "overall": 75,
+    "seasons": [
+      {
+        "year": 2025,
+        "age": 16,
+        "club": "Ajax Youth",
+        "clubCountry": "Netherlands",
+        "clubTier": 1,
+        "apps": 0,
+        "goals": 0,
+        "assists": 0,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2026,
+        "age": 17,
+        "club": "Ajax Youth",
+        "clubCountry": "Netherlands",
+        "clubTier": 1,
+        "apps": 20,
+        "goals": 2,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2027,
+        "age": 18,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 36,
+        "leagueApps": 35,
+        "goals": 4,
+        "assists": 5,
+        "cleanSheets": 0,
+        "yellowCards": 8,
+        "redCards": 0,
+        "rating": 7.3,
+        "ovr": 71,
+        "injury": "Dead leg",
+        "injuryWeeks": 4,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": false
+            }
+          ]
+        }
+      },
+      {
+        "year": 2028,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 29,
+        "leagueApps": 31,
+        "goals": 4,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      }
+    ],
+    "events": [
+      "🚑 Injury: Groin strain, out 10 weeks, missed matches",
+      "😤 A new rival emerges: Bukayo Costa (🇲🇨 Monaco)",
+      "⭐ Named Young Player of the Year!",
+      "🏆 Won the European Championship with Netherlands!",
+      "🇺🇳 Manager chose Bukayo Costa over you.",
+      "🇺🇳 National Team Battle",
+      "🩻 The scan was clear but you took three weeks anyway. The knee has never complained since",
+      "🧢 Signed with Cousin Ricky. What could go wrong"
+    ],
+    "retired": false,
+    "phase": "playing",
+    "pendingOffers": [],
+    "pendingSummary": null,
+    "transferSituation": null,
+    "loan": null,
+    "pendingLoanOffers": null,
+    "pendingEvents": [],
+    "lastEventId": 201,
+    "statBoostNextSeason": {
+      "physical": 1
+    },
+    "pendingNews": [],
+    "internationalCareer": true,
+    "sponsorDeal": null,
+    "totalEarnings": 2.3,
+    "popularity": 35,
+    "morale": 95,
+    "isLeader": false,
+    "hasRelationship": false,
+    "intStats": {
+      "caps": 12,
+      "goals": 5,
+      "assists": 2,
+      "tournaments": 1,
+      "worldCups": 0,
+      "continentals": 1,
+      "worldCupWins": 0,
+      "continentalWins": 1,
+      "isCaptain": false,
+      "isRetired": false,
+      "debutYear": -1,
+      "debutAge": 18,
+      "worldCupResults": [],
+      "squadSnubs": 0,
+      "failedQualifications": 0
+    },
+    "pendingWorldCup": null,
+    "pendingTournament": null,
+    "lastTournament": {
+      "year": 2028,
+      "name": "European Championship",
+      "short": "Euros",
+      "kind": "Continental",
+      "confederation": "UEFA",
+      "nation": "Netherlands",
+      "teams": 24,
+      "qualifying": {
+        "confederation": "UEFA",
+        "table": [
+          {
+            "nation": "Netherlands",
+            "played": 10,
+            "won": 8,
+            "drawn": 2,
+            "lost": 0,
+            "gf": 17,
+            "ga": 5,
+            "points": 26
+          },
+          {
+            "nation": "Romania",
+            "played": 10,
+            "won": 4,
+            "drawn": 5,
+            "lost": 1,
+            "gf": 20,
+            "ga": 11,
+            "points": 17
+          },
+          {
+            "nation": "Northern Ireland",
+            "played": 10,
+            "won": 5,
+            "drawn": 2,
+            "lost": 3,
+            "gf": 16,
+            "ga": 12,
+            "points": 17
+          },
+          {
+            "nation": "Ukraine",
+            "played": 10,
+            "won": 2,
+            "drawn": 4,
+            "lost": 4,
+            "gf": 11,
+            "ga": 10,
+            "points": 10
+          },
+          {
+            "nation": "Luxembourg",
+            "played": 10,
+            "won": 1,
+            "drawn": 3,
+            "lost": 6,
+            "gf": 7,
+            "ga": 18,
+            "points": 6
+          },
+          {
+            "nation": "Latvia",
+            "played": 10,
+            "won": 1,
+            "drawn": 2,
+            "lost": 7,
+            "gf": 5,
+            "ga": 20,
+            "points": 5
+          }
+        ],
+        "myPosition": 1,
+        "through": 3,
+        "qualified": true,
+        "automatic": false
+      },
+      "qualified": true,
+      "squad": {
+        "called": true,
+        "role": "Starter",
+        "reason": "You made it as number 3 of 8 in your position.",
+        "myRank": 3,
+        "poolSize": 18,
+        "places": 8,
+        "myScore": 79,
+        "cutScore": 70,
+        "xi": {
+          "formation": "4-3-3",
+          "gk": [
+            {
+              "slot": "GK",
+              "name": "Gijs Nieuwland",
+              "ovr": 81,
+              "me": false
+            }
+          ],
+          "def": [
+            {
+              "slot": "LB",
+              "name": "Wout Vlietstra",
+              "ovr": 78,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Rick Doornbos",
+              "ovr": 81,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Daan Rijkaard-Veen",
+              "ovr": 81,
+              "me": false
+            },
+            {
+              "slot": "RB",
+              "name": "Koen Heemskerk",
+              "ovr": 79,
+              "me": false
+            }
+          ],
+          "mid": [
+            {
+              "slot": "CM",
+              "name": "You",
+              "ovr": 75,
+              "me": true
+            },
+            {
+              "slot": "CDM",
+              "name": "Sem Boterman",
+              "ovr": 80,
+              "me": false
+            },
+            {
+              "slot": "CM",
+              "name": "Hidde Lindeboom",
+              "ovr": 81,
+              "me": false
+            }
+          ],
+          "att": [
+            {
+              "slot": "LW",
+              "name": "Bas Schuurmans",
+              "ovr": 77,
+              "me": false
+            },
+            {
+              "slot": "ST",
+              "name": "Ferdi Oosterveen",
+              "ovr": 84,
+              "me": false
+            },
+            {
+              "slot": "RW",
+              "name": "Mees Grevelink",
+              "ovr": 80,
+              "me": false
+            }
+          ],
+          "mySlot": "CM",
+          "aheadOfMe": null
+        }
+      },
+      "groupTable": [
+        {
+          "nation": "Turkey",
+          "played": 3,
+          "won": 2,
+          "drawn": 1,
+          "lost": 0,
+          "gf": 8,
+          "ga": 2,
+          "points": 7
+        },
+        {
+          "nation": "Switzerland",
+          "played": 3,
+          "won": 2,
+          "drawn": 0,
+          "lost": 1,
+          "gf": 3,
+          "ga": 3,
+          "points": 6
+        },
+        {
+          "nation": "Netherlands",
+          "played": 3,
+          "won": 1,
+          "drawn": 1,
+          "lost": 1,
+          "gf": 4,
+          "ga": 3,
+          "points": 4
+        },
+        {
+          "nation": "Scotland",
+          "played": 3,
+          "won": 0,
+          "drawn": 0,
+          "lost": 3,
+          "gf": 1,
+          "ga": 8,
+          "points": 0
+        }
+      ],
+      "bracket": [
+        {
+          "round": "R16",
+          "slot": 0,
+          "home": "Slovenia",
+          "away": "Netherlands",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": true
+        },
+        {
+          "round": "R16",
+          "slot": 1,
+          "home": "France",
+          "away": "Czech Republic",
+          "homeGoals": 3,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "France",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 2,
+          "home": "Turkey",
+          "away": "Italy",
+          "homeGoals": 0,
+          "awayGoals": 0,
+          "pens": true,
+          "winner": "Turkey",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 3,
+          "home": "Hungary",
+          "away": "Switzerland",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Hungary",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 4,
+          "home": "Croatia",
+          "away": "Belgium",
+          "homeGoals": 0,
+          "awayGoals": 0,
+          "pens": true,
+          "winner": "Belgium",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 5,
+          "home": "England",
+          "away": "Slovakia",
+          "homeGoals": 3,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "England",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 6,
+          "home": "Spain",
+          "away": "Norway",
+          "homeGoals": 4,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 7,
+          "home": "Austria",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 0,
+          "home": "Netherlands",
+          "away": "France",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": true
+        },
+        {
+          "round": "QF",
+          "slot": 1,
+          "home": "Turkey",
+          "away": "Hungary",
+          "homeGoals": 2,
+          "awayGoals": 2,
+          "pens": true,
+          "winner": "Turkey",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 2,
+          "home": "Belgium",
+          "away": "England",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "England",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 3,
+          "home": "Spain",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "SF",
+          "slot": 0,
+          "home": "Netherlands",
+          "away": "Turkey",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": true
+        },
+        {
+          "round": "SF",
+          "slot": 1,
+          "home": "England",
+          "away": "Portugal",
+          "homeGoals": 0,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "F",
+          "slot": 0,
+          "home": "Netherlands",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Netherlands",
+          "mine": true
+        }
+      ],
+      "champion": "Netherlands",
+      "runnerUp": "Portugal",
+      "groupLabel": "Group A",
+      "thirdsThrough": 4,
+      "myResult": "Winner",
+      "matches": [
+        {
+          "round": "Group A",
+          "home": "Netherlands",
+          "away": "Switzerland",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "playerGoals": 0,
+          "playerAssists": 0,
+          "playerRating": 6.2
+        },
+        {
+          "round": "Group A",
+          "home": "Netherlands",
+          "away": "Turkey",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 7.1
+        },
+        {
+          "round": "Group A",
+          "home": "Netherlands",
+          "away": "Scotland",
+          "homeGoals": 3,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 7.4
+        },
+        {
+          "round": "R16",
+          "home": "Slovenia",
+          "away": "Netherlands",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "playerGoals": 0,
+          "playerAssists": 1,
+          "playerRating": 6.5
+        },
+        {
+          "round": "QF",
+          "home": "Netherlands",
+          "away": "France",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 6.6
+        },
+        {
+          "round": "SF",
+          "home": "Netherlands",
+          "away": "Turkey",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 6.7
+        },
+        {
+          "round": "F",
+          "home": "Netherlands",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "playerGoals": 0,
+          "playerAssists": 0,
+          "playerRating": 6.9
+        }
+      ],
+      "playerApps": 7,
+      "playerGoals": 4,
+      "playerAssists": 1,
+      "playerAvgRating": 6.8,
+      "goldenBoot": false,
+      "bestPlayer": false
+    },
+    "intlHistory": [
+      {
+        "year": 2028,
+        "short": "Euros",
+        "nation": "Netherlands",
+        "champion": "Netherlands",
+        "myResult": "Winner",
+        "apps": 7,
+        "goals": 4
+      }
+    ],
+    "rival": {
+      "name": "Bukayo Costa",
+      "nationality": "Monaco",
+      "position": "CM",
+      "club": "Rangers",
+      "clubTier": 2,
+      "overall": 81,
+      "careerGoals": 3,
+      "careerAssists": 6,
+      "careerApps": 24,
+      "leagueTitles": 0,
+      "championsLeagues": 0,
+      "worldCups": 0,
+      "ballonDors": 0,
+      "intCaps": 9,
+      "intGoals": 2,
+      "marketValue": 75.3,
+      "age": 20,
+      "retired": false
+    },
+    "rivalCreated": true,
+    "pendingRivalryEvent": null,
+    "lastRivalryEventId": 106,
+    "rivalrySummary": null,
+    "netWorth": 2.19,
+    "lifestyleLevel": "Humble",
+    "lifestyleCostPerYear": 0.060000000000000005,
+    "socialMediaFollowers": 2.13,
+    "sponsorshipIncome": 0.22,
+    "properties": [],
+    "investments": [],
+    "consecutiveDeficitYears": 0,
+    "agentFeesPaid": 0,
+    "family": {
+      "isMarried": false,
+      "marriedAge": null,
+      "children": 0,
+      "isDivorced": false,
+      "divorceAge": null
+    },
+    "purchasedItems": [],
+    "investmentHoldings": [],
+    "totalAssetValue": 0,
+    "customYearlyCosts": 0.01,
+    "awards": [
+      {
+        "year": 2028,
+        "name": "Young Player of the Year",
+        "emoji": "⭐"
+      }
+    ],
+    "pendingBallonDor": null,
+    "lastUCLResult": {
+      "qualified": false,
+      "matches": [],
+      "result": "N/A",
+      "playerGoals": 0,
+      "isTopScorer": false
+    },
+    "legacy": null,
+    "postRetirementChoice": null,
+    "managerState": null,
+    "isFinalSeason": false,
+    "isPundit": false,
+    "punditEvents": [],
+    "primeType": "late",
+    "socialMediaActionUsedThisSeason": false,
+    "socialMediaFocusBoost": false,
+    "pendingCoverAthleteEvent": false,
+    "coverAthleteAccepted": false,
+    "activeSponsorship": null,
+    "personality": "showman",
+    "agentId": "cousin",
+    "lifeFlags": {},
+    "appearance": null,
+    "corruptionHeat": 0,
+    "dirtyMoney": 0,
+    "prisonSeasons": 0,
+    "academyClubName": "Ajax",
+    "moralDilemmasTriggered": [],
+    "pendingMoralDilemma": null,
+    "pedSeasonsRemaining": 0,
+    "pedActive": false,
+    "matchFixBanned": 0,
+    "divingActive": false,
+    "integrityBonus": 1,
+    "pendingAppealResult": null,
+    "childEventsSeen": [],
+    "pregnancyAnnounced": false,
+    "punditState": null,
+    "ownerState": null,
+    "peakOverall": 73,
+    "retirementSuggested": false,
+    "phone": {
+      "threads": [
+        {
+          "id": "th_grandad",
+          "c": "grandad",
+          "name": "Grandad",
+          "emoji": "🧓",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Did you get my last one? No rush.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "Wow. I see how it is then.",
+              "y": 2027
+            }
+          ],
+          "rel": 27,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "grandad_game-2025"
+          },
+          "waiting": 2027,
+          "cold": 2,
+          "seen": [],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_fitness",
+          "c": "fitness",
+          "name": "Fitness coach",
+          "emoji": "🏋️",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Bumping this up your inbox.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "I will assume that is a no then.",
+              "y": 2027
+            }
+          ],
+          "rel": 27,
+          "pending": {
+            "kind": "convo",
+            "convo": "fitness_extra",
+            "beat": 0
+          },
+          "waiting": 2027,
+          "cold": 2,
+          "seen": [
+            "fitness_extra"
+          ],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_agent",
+          "c": "agent",
+          "name": "Your agent",
+          "emoji": "💼",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Still need an answer on that when you get a sec.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "I will assume that is a no then.",
+              "y": 2027
+            }
+          ],
+          "rel": 27,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "agent_boots-2025"
+          },
+          "waiting": 2027,
+          "cold": 2,
+          "seen": [],
+          "lastReplyYear": null
+        }
+      ],
+      "feed": [
+        "🔄 DONE DEAL. Pedri joins Feyenoord from Barcelona. Fee around 90m.",
+        "⭐ Barcelona are champions of Europe.",
+        "🏆 Liverpool win the Premier League.",
+        "🏆 Barcelona win La Liga.",
+        "🥅 Lamine Yamal finished top scorer in La Liga on 22.",
+        "🔄 DONE DEAL. Kylian Mbappé joins Sporting CP from Real Madrid. Fee around 120m.",
+        "🔄 DONE DEAL. Florian Wirtz joins Feyenoord from Liverpool. Fee around 110m.",
+        "⭐ Bayern Munich are champions of Europe.",
+        "🏆 Newcastle win the Premier League.",
+        "🏆 Real Madrid win La Liga.",
+        "🥅 Ousmane Dembélé finished top scorer in Ligue 1 on 17.",
+        "🌍 Netherlands win the European Championship."
+      ],
+      "world": {
+        "year": 2028,
+        "ucl": "Bayern Munich",
+        "leagues": {
+          "Premier League": "Newcastle",
+          "La Liga": "Real Madrid",
+          "Bundesliga": "Bayern Munich",
+          "Serie A": "Inter Milan",
+          "Ligue 1": "Lyon",
+          "Primeira Liga": "Porto",
+          "Eredivisie": "PSV",
+          "Scottish Premiership": "Rangers",
+          "Brasileirao": "Flamengo",
+          "Saudi Pro League": "Al Hilal",
+          "MLS": "Seattle Sounders",
+          "K League 1": "Jeonbuk Motors"
+        },
+        "cups": {
+          "Premier League": "Newcastle",
+          "La Liga": "Girona",
+          "Bundesliga": "Dortmund",
+          "Serie A": "Juventus",
+          "Ligue 1": "Marseille",
+          "Primeira Liga": "Porto",
+          "Eredivisie": "Feyenoord",
+          "Scottish Premiership": "Aberdeen",
+          "Brasileirao": "Palmeiras",
+          "Saudi Pro League": "Al Nassr",
+          "MLS": "Seattle Sounders",
+          "K League 1": "Ulsan HD"
+        },
+        "moves": [
+          {
+            "who": "Kylian Mbappé",
+            "from": "Real Madrid",
+            "to": "Sporting CP",
+            "fee": 120
+          },
+          {
+            "who": "Florian Wirtz",
+            "from": "Liverpool",
+            "to": "Feyenoord",
+            "fee": 110
+          }
+        ],
+        "topScorer": {
+          "who": "Ousmane Dembélé",
+          "club": "PSG",
+          "goals": 17,
+          "league": "Ligue 1"
+        },
+        "intl": {
+          "name": "European Championship",
+          "champion": "Netherlands"
+        }
+      },
+      "clubs": {
+        "Kylian Mbappé": "Sporting CP",
+        "Erling Haaland": "Barcelona",
+        "Jude Bellingham": "Real Madrid",
+        "Vinícius Jr": "Real Madrid",
+        "Lamine Yamal": "Barcelona",
+        "Florian Wirtz": "Feyenoord",
+        "Jamal Musiala": "Bayern Munich",
+        "Bukayo Saka": "Arsenal",
+        "Pedri": "Feyenoord",
+        "Rodri": "Barcelona",
+        "Federico Valverde": "Real Madrid",
+        "Harry Kane": "Bayern Munich",
+        "Mohamed Salah": "Trabzonspor",
+        "Phil Foden": "Man City",
+        "Declan Rice": "Arsenal",
+        "Raphinha": "Barcelona",
+        "Endrick": "Real Madrid",
+        "Nico Williams": "Athletic Bilbao",
+        "Désiré Doué": "PSG",
+        "Kobbie Mainoo": "Man United",
+        "Gianluigi Donnarumma": "Man City",
+        "Ousmane Dembélé": "PSG"
+      },
+      "rivalClub": "Rangers",
+      "seed": 1141312389,
+      "offers": 0,
+      "perksTaken": 0
+    },
+    "frozenOut": 0,
+    "badSeasonStreak": 0,
+    "story": [
+      {
+        "year": 2025,
+        "age": 16,
+        "club": "Ajax Youth",
+        "lines": [
+          "📋 Joined Ajax Youth Academy aged 16"
+        ]
+      },
+      {
+        "year": 2026,
+        "age": 17,
+        "club": "Ajax Youth",
+        "lines": [
+          "📈 Stats improved during youth development (OVR 71)",
+          "📩 Professional contract offers received!",
+          "✍️ Signed with Twente 🇳🇱 (5yr, €20k/wk)"
+        ]
+      },
+      {
+        "year": 2027,
+        "age": 18,
+        "club": "Twente",
+        "lines": [
+          "🚑 Injury: Dead leg, out 4 weeks, missed matches",
+          "🇺🇳 First international call-up for Netherlands!",
+          "🎭 You leaned into it: The Showman is born",
+          "🥅 Scored on international debut for Netherlands!",
+          "🐕 Adopted a rescue dog. He has his own fan account now",
+          "🦝 Gaffer Two is now official staff. Attendance: perfect",
+          "🍝 Made peace with your camp roommate over room service. He still kicks you, but he apologises now"
+        ]
+      }
+    ],
+    "sponsorBonus": 0,
+    "money": {
+      "seed": 3500022165,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 113.44,
+        "bricks": 102.13,
+        "cleats": 112.99,
+        "screens": 111.14,
+        "spark": 70.41
+      },
+      "hist": {
+        "ladder": [
+          100,
+          104.78,
+          110.14,
+          113.44
+        ],
+        "bricks": [
+          100,
+          101.62,
+          99.6,
+          102.13
+        ],
+        "cleats": [
+          100,
+          84.1,
+          95.3,
+          112.99
+        ],
+        "screens": [
+          100,
+          98.35,
+          106.73,
+          111.14
+        ],
+        "spark": [
+          100,
+          73.51,
+          79.36,
+          70.41
+        ]
+      },
+      "log": [],
+      "year": 2028,
+      "age": 3,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    },
+    "eventLastFired": {
+      "18": 2027,
+      "72": 2027,
+      "200": 2027,
+      "201": 2028,
+      "247": 2027,
+      "267": 2027,
+      "433": 2028
+    }
+  },
+  "pristineOpeningOn": {
+    "value": {
+      "playerName": "World ere",
+      "nationality": "Netherlands",
+      "position": "CM",
+      "era": "2025",
+      "age": 20,
+      "potential": 86,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 68,
+      "physique": {
+        "heightCm": 180,
+        "weightKg": 75
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "grandad_game",
+        "agent_boots"
+      ],
+      "phoneInbox": [
+        {
+          "id": "grandad_game-2025",
+          "defId": "grandad_game",
+          "from": "Grandad",
+          "emoji": "🧓",
+          "text": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+          "year": 2025,
+          "choices": [
+            {
+              "label": "Visit with your shirt",
+              "reply": "Coming round Sunday with a shirt and biscuits. Put the kettle on",
+              "karma": 9,
+              "morale": 5
+            },
+            {
+              "label": "Promise vaguely",
+              "reply": "One day grandad, promise",
+              "karma": 1
+            }
+          ]
+        },
+        {
+          "id": "agent_boots-2025",
+          "defId": "agent_boots",
+          "from": "Agent",
+          "emoji": "💼",
+          "text": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+          "year": 2025,
+          "choices": [
+            {
+              "label": "Take the money",
+              "reply": "Money is money. Send the contract",
+              "karma": -7,
+              "cash": 1.5
+            },
+            {
+              "label": "Turn it down publicly",
+              "reply": "Not wearing that. And I'm saying why",
+              "karma": 9,
+              "popularity": 4
+            },
+            {
+              "label": "Quietly decline",
+              "reply": "Pass on this one. Keep it quiet",
+              "karma": 4
+            }
+          ]
+        }
+      ],
+      "currentClub": "Twente",
+      "currentClubCountry": "Netherlands",
+      "currentClubTier": 4,
+      "currentClubColor": "#E70011",
+      "currentLeague": "Eredivisie",
+      "contractYearsLeft": 2,
+      "weeklyWage": 20000,
+      "marketValue": 33.9,
+      "pace": 74,
+      "shooting": 78,
+      "passing": 80,
+      "dribbling": 77,
+      "defending": 75,
+      "physical": 80,
+      "reflexes": 77,
+      "overall": 77,
+      "seasons": [
+        {
+          "year": 2025,
+          "age": 16,
+          "club": "Ajax Youth",
+          "clubCountry": "Netherlands",
+          "clubTier": 1,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2026,
+          "age": 17,
+          "club": "Ajax Youth",
+          "clubCountry": "Netherlands",
+          "clubTier": 1,
+          "apps": 20,
+          "goals": 2,
+          "assists": 4,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2027,
+          "age": 18,
+          "club": "Twente",
+          "clubCountry": "Netherlands",
+          "clubTier": 4,
+          "apps": 36,
+          "leagueApps": 35,
+          "goals": 4,
+          "assists": 5,
+          "cleanSheets": 0,
+          "yellowCards": 8,
+          "redCards": 0,
+          "rating": 7.3,
+          "ovr": 71,
+          "injury": "Dead leg",
+          "injuryWeeks": 4,
+          "injurySevere": false,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "playing",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null,
+          "cupRun": {
+            "cup": "KNVB Cup",
+            "stages": [
+              {
+                "stage": "early",
+                "won": false
+              }
+            ]
+          }
+        },
+        {
+          "year": 2028,
+          "age": 19,
+          "club": "Twente",
+          "clubCountry": "Netherlands",
+          "clubTier": 4,
+          "apps": 29,
+          "leagueApps": 31,
+          "goals": 4,
+          "assists": 4,
+          "cleanSheets": 0,
+          "yellowCards": 5,
+          "redCards": 0,
+          "rating": 7.8,
+          "ovr": 73,
+          "injury": "Groin strain",
+          "injuryWeeks": 10,
+          "injurySevere": false,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "playing",
+          "intApps": 12,
+          "intGoals": 5,
+          "intAssists": 2,
+          "intRating": 6.8,
+          "tournament": "European Championship",
+          "tournamentResult": "Winner",
+          "continentalCup": true,
+          "cupRun": {
+            "cup": "KNVB Cup",
+            "stages": [
+              {
+                "stage": "early",
+                "won": true
+              },
+              {
+                "stage": "QF",
+                "opp": "PSV",
+                "won": false,
+                "for": 2,
+                "against": 3,
+                "home": true
+              }
+            ]
+          }
+        },
+        {
+          "year": 2029,
+          "age": 20,
+          "club": "Twente",
+          "clubCountry": "Netherlands",
+          "clubTier": 4,
+          "apps": 39,
+          "leagueApps": 33,
+          "goals": 8,
+          "assists": 8,
+          "cleanSheets": 0,
+          "yellowCards": 4,
+          "redCards": 0,
+          "rating": 8.2,
+          "ovr": 75,
+          "injury": null,
+          "injuryWeeks": 0,
+          "injurySevere": false,
+          "leagueTitle": false,
+          "leagueFinish": 6,
+          "leagueSize": 18,
+          "domesticCup": true,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "playing",
+          "intApps": 5,
+          "intGoals": 1,
+          "intAssists": 1,
+          "intRating": 7.5,
+          "tournament": null,
+          "tournamentResult": null,
+          "cupRun": {
+            "cup": "KNVB Cup",
+            "stages": [
+              {
+                "stage": "early",
+                "won": true
+              },
+              {
+                "stage": "QF",
+                "opp": "ADO Den Haag",
+                "won": true,
+                "for": 1,
+                "against": 0,
+                "home": true
+              },
+              {
+                "stage": "SF",
+                "opp": "Ajax",
+                "won": true,
+                "for": 1,
+                "against": 0
+              },
+              {
+                "stage": "F",
+                "opp": "Cambuur",
+                "won": true
+              }
+            ],
+            "final": {
+              "for": 1,
+              "against": 0,
+              "legs": 1,
+              "scored": true
+            },
+            "opening": {
+              "opp": "AZ Alkmaar",
+              "country": "Netherlands",
+              "league": "Eredivisie",
+              "won": true,
+              "for": 1,
+              "against": 0,
+              "home": false
+            }
+          }
+        }
+      ],
+      "events": [
+        "🏆 Won the KNVB Cup with Twente!",
+        "🏆 Won Player of the Month (October 2029)!",
+        "🏆 Won Player of the Month (November 2029)!",
+        "🏆 Won Player of the Month (December 2029)!"
+      ],
+      "retired": false,
+      "phase": "newspaper",
+      "pendingOffers": [],
+      "pendingSummary": {
+        "year": 2029,
+        "age": 20,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 39,
+        "leagueApps": 33,
+        "goals": 8,
+        "assists": 8,
+        "cleanSheets": 0,
+        "yellowCards": 4,
+        "redCards": 0,
+        "rating": 8.2,
+        "ovr": 75,
+        "injury": null,
+        "injuryWeeks": 0,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "leagueFinish": 6,
+        "leagueSize": 18,
+        "domesticCup": true,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 5,
+        "intGoals": 1,
+        "intAssists": 1,
+        "intRating": 7.5,
+        "tournament": null,
+        "tournamentResult": null,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "ADO Den Haag",
+              "won": true,
+              "for": 1,
+              "against": 0,
+              "home": true
+            },
+            {
+              "stage": "SF",
+              "opp": "Ajax",
+              "won": true,
+              "for": 1,
+              "against": 0
+            },
+            {
+              "stage": "F",
+              "opp": "Cambuur",
+              "won": true
+            }
+          ],
+          "final": {
+            "for": 1,
+            "against": 0,
+            "legs": 1,
+            "scored": true
+          },
+          "opening": {
+            "opp": "AZ Alkmaar",
+            "country": "Netherlands",
+            "league": "Eredivisie",
+            "won": true,
+            "for": 1,
+            "against": 0,
+            "home": false
+          }
+        }
+      },
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": 201,
+      "statBoostNextSeason": {},
+      "pendingNews": [
+        {
+          "newspaper": "The Beautiful Game Report",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "8 goals and 8 assists in 39 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.2 rating across 39 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "internationalCareer": true,
+      "sponsorDeal": null,
+      "totalEarnings": 3.6,
+      "popularity": 35,
+      "morale": 92,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 17,
+        "goals": 6,
+        "assists": 3,
+        "tournaments": 1,
+        "worldCups": 0,
+        "continentals": 1,
+        "worldCupWins": 0,
+        "continentalWins": 1,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": -1,
+        "debutAge": 18,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": {
+        "year": 2028,
+        "name": "European Championship",
+        "short": "Euros",
+        "kind": "Continental",
+        "confederation": "UEFA",
+        "nation": "Netherlands",
+        "teams": 24,
+        "qualifying": {
+          "confederation": "UEFA",
+          "table": [
+            {
+              "nation": "Netherlands",
+              "played": 10,
+              "won": 8,
+              "drawn": 2,
+              "lost": 0,
+              "gf": 17,
+              "ga": 5,
+              "points": 26
+            },
+            {
+              "nation": "Romania",
+              "played": 10,
+              "won": 4,
+              "drawn": 5,
+              "lost": 1,
+              "gf": 20,
+              "ga": 11,
+              "points": 17
+            },
+            {
+              "nation": "Northern Ireland",
+              "played": 10,
+              "won": 5,
+              "drawn": 2,
+              "lost": 3,
+              "gf": 16,
+              "ga": 12,
+              "points": 17
+            },
+            {
+              "nation": "Ukraine",
+              "played": 10,
+              "won": 2,
+              "drawn": 4,
+              "lost": 4,
+              "gf": 11,
+              "ga": 10,
+              "points": 10
+            },
+            {
+              "nation": "Luxembourg",
+              "played": 10,
+              "won": 1,
+              "drawn": 3,
+              "lost": 6,
+              "gf": 7,
+              "ga": 18,
+              "points": 6
+            },
+            {
+              "nation": "Latvia",
+              "played": 10,
+              "won": 1,
+              "drawn": 2,
+              "lost": 7,
+              "gf": 5,
+              "ga": 20,
+              "points": 5
+            }
+          ],
+          "myPosition": 1,
+          "through": 3,
+          "qualified": true,
+          "automatic": false
+        },
+        "qualified": true,
+        "squad": {
+          "called": true,
+          "role": "Starter",
+          "reason": "You made it as number 3 of 8 in your position.",
+          "myRank": 3,
+          "poolSize": 18,
+          "places": 8,
+          "myScore": 79,
+          "cutScore": 70,
+          "xi": {
+            "formation": "4-3-3",
+            "gk": [
+              {
+                "slot": "GK",
+                "name": "Gijs Nieuwland",
+                "ovr": 81,
+                "me": false
+              }
+            ],
+            "def": [
+              {
+                "slot": "LB",
+                "name": "Wout Vlietstra",
+                "ovr": 78,
+                "me": false
+              },
+              {
+                "slot": "CB",
+                "name": "Rick Doornbos",
+                "ovr": 81,
+                "me": false
+              },
+              {
+                "slot": "CB",
+                "name": "Daan Rijkaard-Veen",
+                "ovr": 81,
+                "me": false
+              },
+              {
+                "slot": "RB",
+                "name": "Koen Heemskerk",
+                "ovr": 79,
+                "me": false
+              }
+            ],
+            "mid": [
+              {
+                "slot": "CM",
+                "name": "You",
+                "ovr": 75,
+                "me": true
+              },
+              {
+                "slot": "CDM",
+                "name": "Sem Boterman",
+                "ovr": 80,
+                "me": false
+              },
+              {
+                "slot": "CM",
+                "name": "Hidde Lindeboom",
+                "ovr": 81,
+                "me": false
+              }
+            ],
+            "att": [
+              {
+                "slot": "LW",
+                "name": "Bas Schuurmans",
+                "ovr": 77,
+                "me": false
+              },
+              {
+                "slot": "ST",
+                "name": "Ferdi Oosterveen",
+                "ovr": 84,
+                "me": false
+              },
+              {
+                "slot": "RW",
+                "name": "Mees Grevelink",
+                "ovr": 80,
+                "me": false
+              }
+            ],
+            "mySlot": "CM",
+            "aheadOfMe": null
+          }
+        },
+        "groupTable": [
+          {
+            "nation": "Turkey",
+            "played": 3,
+            "won": 2,
+            "drawn": 1,
+            "lost": 0,
+            "gf": 8,
+            "ga": 2,
+            "points": 7
+          },
+          {
+            "nation": "Switzerland",
+            "played": 3,
+            "won": 2,
+            "drawn": 0,
+            "lost": 1,
+            "gf": 3,
+            "ga": 3,
+            "points": 6
+          },
+          {
+            "nation": "Netherlands",
+            "played": 3,
+            "won": 1,
+            "drawn": 1,
+            "lost": 1,
+            "gf": 4,
+            "ga": 3,
+            "points": 4
+          },
+          {
+            "nation": "Scotland",
+            "played": 3,
+            "won": 0,
+            "drawn": 0,
+            "lost": 3,
+            "gf": 1,
+            "ga": 8,
+            "points": 0
+          }
+        ],
+        "bracket": [
+          {
+            "round": "R16",
+            "slot": 0,
+            "home": "Slovenia",
+            "away": "Netherlands",
+            "homeGoals": 1,
+            "awayGoals": 2,
+            "pens": false,
+            "winner": "Netherlands",
+            "mine": true
+          },
+          {
+            "round": "R16",
+            "slot": 1,
+            "home": "France",
+            "away": "Czech Republic",
+            "homeGoals": 3,
+            "awayGoals": 1,
+            "pens": false,
+            "winner": "France",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 2,
+            "home": "Turkey",
+            "away": "Italy",
+            "homeGoals": 0,
+            "awayGoals": 0,
+            "pens": true,
+            "winner": "Turkey",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 3,
+            "home": "Hungary",
+            "away": "Switzerland",
+            "homeGoals": 2,
+            "awayGoals": 0,
+            "pens": false,
+            "winner": "Hungary",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 4,
+            "home": "Croatia",
+            "away": "Belgium",
+            "homeGoals": 0,
+            "awayGoals": 0,
+            "pens": true,
+            "winner": "Belgium",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 5,
+            "home": "England",
+            "away": "Slovakia",
+            "homeGoals": 3,
+            "awayGoals": 0,
+            "pens": false,
+            "winner": "England",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 6,
+            "home": "Spain",
+            "away": "Norway",
+            "homeGoals": 4,
+            "awayGoals": 1,
+            "pens": false,
+            "winner": "Spain",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 7,
+            "home": "Austria",
+            "away": "Portugal",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": true,
+            "winner": "Portugal",
+            "mine": false
+          },
+          {
+            "round": "QF",
+            "slot": 0,
+            "home": "Netherlands",
+            "away": "France",
+            "homeGoals": 2,
+            "awayGoals": 1,
+            "pens": false,
+            "winner": "Netherlands",
+            "mine": true
+          },
+          {
+            "round": "QF",
+            "slot": 1,
+            "home": "Turkey",
+            "away": "Hungary",
+            "homeGoals": 2,
+            "awayGoals": 2,
+            "pens": true,
+            "winner": "Turkey",
+            "mine": false
+          },
+          {
+            "round": "QF",
+            "slot": 2,
+            "home": "Belgium",
+            "away": "England",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": true,
+            "winner": "England",
+            "mine": false
+          },
+          {
+            "round": "QF",
+            "slot": 3,
+            "home": "Spain",
+            "away": "Portugal",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": true,
+            "winner": "Portugal",
+            "mine": false
+          },
+          {
+            "round": "SF",
+            "slot": 0,
+            "home": "Netherlands",
+            "away": "Turkey",
+            "homeGoals": 2,
+            "awayGoals": 0,
+            "pens": false,
+            "winner": "Netherlands",
+            "mine": true
+          },
+          {
+            "round": "SF",
+            "slot": 1,
+            "home": "England",
+            "away": "Portugal",
+            "homeGoals": 0,
+            "awayGoals": 1,
+            "pens": false,
+            "winner": "Portugal",
+            "mine": false
+          },
+          {
+            "round": "F",
+            "slot": 0,
+            "home": "Netherlands",
+            "away": "Portugal",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": true,
+            "winner": "Netherlands",
+            "mine": true
+          }
+        ],
+        "champion": "Netherlands",
+        "runnerUp": "Portugal",
+        "groupLabel": "Group A",
+        "thirdsThrough": 4,
+        "myResult": "Winner",
+        "matches": [
+          {
+            "round": "Group A",
+            "home": "Netherlands",
+            "away": "Switzerland",
+            "homeGoals": 0,
+            "awayGoals": 2,
+            "pens": false,
+            "playerGoals": 0,
+            "playerAssists": 0,
+            "playerRating": 6.2
+          },
+          {
+            "round": "Group A",
+            "home": "Netherlands",
+            "away": "Turkey",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": false,
+            "playerGoals": 1,
+            "playerAssists": 0,
+            "playerRating": 7.1
+          },
+          {
+            "round": "Group A",
+            "home": "Netherlands",
+            "away": "Scotland",
+            "homeGoals": 3,
+            "awayGoals": 0,
+            "pens": false,
+            "playerGoals": 1,
+            "playerAssists": 0,
+            "playerRating": 7.4
+          },
+          {
+            "round": "R16",
+            "home": "Slovenia",
+            "away": "Netherlands",
+            "homeGoals": 1,
+            "awayGoals": 2,
+            "pens": false,
+            "playerGoals": 0,
+            "playerAssists": 1,
+            "playerRating": 6.5
+          },
+          {
+            "round": "QF",
+            "home": "Netherlands",
+            "away": "France",
+            "homeGoals": 2,
+            "awayGoals": 1,
+            "pens": false,
+            "playerGoals": 1,
+            "playerAssists": 0,
+            "playerRating": 6.6
+          },
+          {
+            "round": "SF",
+            "home": "Netherlands",
+            "away": "Turkey",
+            "homeGoals": 2,
+            "awayGoals": 0,
+            "pens": false,
+            "playerGoals": 1,
+            "playerAssists": 0,
+            "playerRating": 6.7
+          },
+          {
+            "round": "F",
+            "home": "Netherlands",
+            "away": "Portugal",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": true,
+            "playerGoals": 0,
+            "playerAssists": 0,
+            "playerRating": 6.9
+          }
+        ],
+        "playerApps": 7,
+        "playerGoals": 4,
+        "playerAssists": 1,
+        "playerAvgRating": 6.8,
+        "goldenBoot": false,
+        "bestPlayer": false
+      },
+      "intlHistory": [
+        {
+          "year": 2028,
+          "short": "Euros",
+          "nation": "Netherlands",
+          "champion": "Netherlands",
+          "myResult": "Winner",
+          "apps": 7,
+          "goals": 4
+        }
+      ],
+      "rival": {
+        "name": "Bukayo Costa",
+        "nationality": "Monaco",
+        "position": "CM",
+        "club": "Rangers",
+        "clubTier": 2,
+        "overall": 82,
+        "careerGoals": 6,
+        "careerAssists": 10,
+        "careerApps": 45,
+        "leagueTitles": 0,
+        "championsLeagues": 0,
+        "worldCups": 0,
+        "ballonDors": 0,
+        "intCaps": 13,
+        "intGoals": 2,
+        "marketValue": 79.8,
+        "age": 21,
+        "retired": false
+      },
+      "rivalCreated": true,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": 106,
+      "rivalrySummary": null,
+      "netWorth": 3.28,
+      "lifestyleLevel": "Comfortable",
+      "lifestyleCostPerYear": 0.21000000000000002,
+      "socialMediaFollowers": 2.67,
+      "sponsorshipIncome": 0.26,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0.01,
+      "awards": [
+        {
+          "year": 2028,
+          "name": "Young Player of the Year",
+          "emoji": "⭐"
+        },
+        {
+          "year": 2029,
+          "name": "Player of the Month",
+          "emoji": "🏆"
+        },
+        {
+          "year": 2029,
+          "name": "Player of the Month",
+          "emoji": "🏆"
+        },
+        {
+          "year": 2029,
+          "name": "Player of the Month",
+          "emoji": "🏆"
+        }
+      ],
+      "pendingBallonDor": {
+        "year": 2029,
+        "nominees": [
+          {
+            "name": "Florian Wirtz",
+            "nationality": "Germany",
+            "position": "CAM",
+            "club": "Liverpool",
+            "points": 88,
+            "goals": 14,
+            "trophies": [
+              "UCL",
+              "League"
+            ],
+            "isPlayer": false
+          },
+          {
+            "name": "Lamine Yamal",
+            "nationality": "Spain",
+            "position": "RW",
+            "club": "Barcelona",
+            "points": 80,
+            "goals": 28,
+            "trophies": [
+              "League",
+              "Cup"
+            ],
+            "isPlayer": false
+          },
+          {
+            "name": "Kylian Mbappé",
+            "nationality": "France",
+            "position": "ST",
+            "club": "Real Madrid",
+            "points": 68,
+            "goals": 38,
+            "trophies": [],
+            "isPlayer": false
+          },
+          {
+            "name": "Erling Haaland",
+            "nationality": "Norway",
+            "position": "ST",
+            "club": "Man City",
+            "points": 63,
+            "goals": 34,
+            "trophies": [],
+            "isPlayer": false
+          },
+          {
+            "name": "Harry Kane",
+            "nationality": "England",
+            "position": "ST",
+            "club": "Bayern Munich",
+            "points": 58,
+            "goals": 24,
+            "trophies": [
+              "League"
+            ],
+            "isPlayer": false
+          },
+          {
+            "name": "Jude Bellingham",
+            "nationality": "England",
+            "position": "CAM",
+            "club": "Real Madrid",
+            "points": 46,
+            "goals": 18,
+            "trophies": [],
+            "isPlayer": false
+          },
+          {
+            "name": "Jamal Musiala",
+            "nationality": "Germany",
+            "position": "CAM",
+            "club": "Bayern Munich",
+            "points": 42,
+            "goals": 13,
+            "trophies": [
+              "League"
+            ],
+            "isPlayer": false
+          },
+          {
+            "name": "Pedri",
+            "nationality": "Spain",
+            "position": "CM",
+            "club": "Barcelona",
+            "points": 41,
+            "goals": 8,
+            "trophies": [
+              "League",
+              "Cup"
+            ],
+            "isPlayer": false
+          },
+          {
+            "name": "Mohamed Salah",
+            "nationality": "Egypt",
+            "position": "RW",
+            "club": "Trabzonspor",
+            "points": 41,
+            "goals": 27,
+            "trophies": [],
+            "isPlayer": false
+          },
+          {
+            "name": "Vinícius Jr",
+            "nationality": "Brazil",
+            "position": "LW",
+            "club": "Real Madrid",
+            "points": 40,
+            "goals": 25,
+            "trophies": [],
+            "isPlayer": false
+          }
+        ],
+        "playerRank": null,
+        "playerPoints": 0,
+        "playerNominated": false
+      },
+      "lastUCLResult": {
+        "qualified": false,
+        "matches": [],
+        "result": "N/A",
+        "playerGoals": 0,
+        "isTopScorer": false,
+        "seasonYear": 2029,
+        "club": "Twente"
+      },
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "late",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": "showman",
+      "agentId": "cousin",
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Ajax",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 1,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 75,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_grandad",
+            "c": "grandad",
+            "name": "Grandad",
+            "emoji": "🧓",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+                "y": 2025
+              },
+              {
+                "w": 0,
+                "t": "Did you get my last one? No rush.",
+                "y": 2026
+              },
+              {
+                "w": 0,
+                "t": "Wow. I see how it is then.",
+                "y": 2027
+              },
+              {
+                "w": 0,
+                "t": "You have changed. Everyone says it and I keep defending you.",
+                "y": 2028
+              }
+            ],
+            "rel": 22,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "grandad_game-2025"
+            },
+            "waiting": 2028,
+            "cold": 3,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_fitness",
+            "c": "fitness",
+            "name": "Fitness coach",
+            "emoji": "🏋️",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+                "y": 2025
+              },
+              {
+                "w": 0,
+                "t": "Bumping this up your inbox.",
+                "y": 2026
+              },
+              {
+                "w": 0,
+                "t": "I will assume that is a no then.",
+                "y": 2027
+              },
+              {
+                "w": 0,
+                "t": "The fame has really gotten to you.",
+                "y": 2028
+              }
+            ],
+            "rel": 22,
+            "pending": {
+              "kind": "convo",
+              "convo": "fitness_extra",
+              "beat": 0
+            },
+            "waiting": 2028,
+            "cold": 3,
+            "seen": [
+              "fitness_extra"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_agent",
+            "c": "agent",
+            "name": "Your agent",
+            "emoji": "💼",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+                "y": 2025
+              },
+              {
+                "w": 0,
+                "t": "Still need an answer on that when you get a sec.",
+                "y": 2026
+              },
+              {
+                "w": 0,
+                "t": "I will assume that is a no then.",
+                "y": 2027
+              },
+              {
+                "w": 0,
+                "t": "I will stop bothering you. Best of luck.",
+                "y": 2028
+              }
+            ],
+            "rel": 22,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "agent_boots-2025"
+            },
+            "waiting": 2028,
+            "cold": 3,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [
+          "🥅 Lamine Yamal finished top scorer in La Liga on 22.",
+          "🔄 DONE DEAL. Kylian Mbappé joins Sporting CP from Real Madrid. Fee around 120m.",
+          "🔄 DONE DEAL. Florian Wirtz joins Feyenoord from Liverpool. Fee around 110m.",
+          "⭐ Bayern Munich are champions of Europe.",
+          "🏆 Newcastle win the Premier League.",
+          "🏆 Real Madrid win La Liga.",
+          "🥅 Ousmane Dembélé finished top scorer in Ligue 1 on 17.",
+          "🌍 Netherlands win the European Championship.",
+          "⭐ Liverpool are champions of Europe.",
+          "🏆 Liverpool win the Premier League.",
+          "🏆 Barcelona win La Liga.",
+          "🔮 Your world's 2029-30, as it played out:"
+        ],
+        "world": {
+          "year": 2029,
+          "ucl": "Liverpool",
+          "leagues": {
+            "Premier League": "Liverpool",
+            "La Liga": "Barcelona",
+            "Bundesliga": "Bayern Munich",
+            "Serie A": "Como",
+            "Ligue 1": "Strasbourg",
+            "Primeira Liga": "Benfica",
+            "Eredivisie": "Feyenoord",
+            "Scottish Premiership": "Aberdeen",
+            "Brasileirao": "Cruzeiro",
+            "Saudi Pro League": "Al Hilal",
+            "MLS": "LAFC",
+            "K League 1": "Jeonbuk Motors",
+            "Championship": "Wolves",
+            "2. Bundesliga": "Osnabruck",
+            "Ligue 2": "Nancy",
+            "Serie B": "Benevento",
+            "Segunda Division": "Girona"
+          },
+          "cups": {
+            "Premier League": "Arsenal",
+            "La Liga": "Barcelona",
+            "Bundesliga": "Leverkusen",
+            "Serie A": "Atalanta",
+            "Ligue 1": "Monaco",
+            "Primeira Liga": "Sporting CP",
+            "Eredivisie": "Twente",
+            "Scottish Premiership": "Rangers",
+            "Brasileirao": "Palmeiras",
+            "Saudi Pro League": "Al Ittihad",
+            "MLS": "Seattle Sounders",
+            "K League 1": "Jeonbuk Motors"
+          },
+          "moves": [],
+          "topScorer": null,
+          "intl": null
+        },
+        "clubs": {
+          "Kylian Mbappé": "Real Madrid",
+          "Erling Haaland": "Man City",
+          "Jude Bellingham": "Real Madrid",
+          "Vinícius Jr": "Real Madrid",
+          "Lamine Yamal": "Barcelona",
+          "Florian Wirtz": "Liverpool",
+          "Jamal Musiala": "Bayern Munich",
+          "Bukayo Saka": "Arsenal",
+          "Pedri": "Barcelona",
+          "Rodri": "Barcelona",
+          "Federico Valverde": "Real Madrid",
+          "Harry Kane": "Bayern Munich",
+          "Mohamed Salah": "Trabzonspor",
+          "Phil Foden": "Man City",
+          "Declan Rice": "Arsenal",
+          "Raphinha": "Barcelona",
+          "Endrick": "Real Madrid",
+          "Nico Williams": "Athletic Bilbao",
+          "Désiré Doué": "PSG",
+          "Kobbie Mainoo": "Man United",
+          "Gianluigi Donnarumma": "Man City",
+          "Ousmane Dembélé": "PSG"
+        },
+        "rivalClub": "Rangers",
+        "seed": 4272396692,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2025,
+          "age": 16,
+          "club": "Ajax Youth",
+          "lines": [
+            "📋 Joined Ajax Youth Academy aged 16"
+          ]
+        },
+        {
+          "year": 2026,
+          "age": 17,
+          "club": "Ajax Youth",
+          "lines": [
+            "📈 Stats improved during youth development (OVR 71)",
+            "📩 Professional contract offers received!",
+            "✍️ Signed with Twente 🇳🇱 (5yr, €20k/wk)"
+          ]
+        },
+        {
+          "year": 2027,
+          "age": 18,
+          "club": "Twente",
+          "lines": [
+            "🚑 Injury: Dead leg, out 4 weeks, missed matches",
+            "🇺🇳 First international call-up for Netherlands!",
+            "🎭 You leaned into it: The Showman is born",
+            "🥅 Scored on international debut for Netherlands!",
+            "🐕 Adopted a rescue dog. He has his own fan account now",
+            "🦝 Gaffer Two is now official staff. Attendance: perfect",
+            "🍝 Made peace with your camp roommate over room service. He still kicks you, but he apologises now"
+          ]
+        },
+        {
+          "year": 2028,
+          "age": 19,
+          "club": "Twente",
+          "lines": [
+            "🚑 Injury: Groin strain, out 10 weeks, missed matches",
+            "😤 A new rival emerges: Bukayo Costa (🇲🇨 Monaco)",
+            "⭐ Named Young Player of the Year!",
+            "🏆 Won the European Championship with Netherlands!",
+            "🇺🇳 Manager chose Bukayo Costa over you.",
+            "🇺🇳 National Team Battle",
+            "🩻 The scan was clear but you took three weeks anyway. The knee has never complained since",
+            "🧢 Signed with Cousin Ricky. What could go wrong"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 3901343582,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 120.14,
+          "bricks": 115.51,
+          "cleats": 95.77,
+          "screens": 125.11,
+          "spark": 107.97
+        },
+        "hist": {
+          "ladder": [
+            100,
+            104.78,
+            110.14,
+            113.44,
+            120.14
+          ],
+          "bricks": [
+            100,
+            101.62,
+            99.6,
+            102.13,
+            115.51
+          ],
+          "cleats": [
+            100,
+            84.1,
+            95.3,
+            112.99,
+            95.77
+          ],
+          "screens": [
+            100,
+            98.35,
+            106.73,
+            111.14,
+            125.11
+          ],
+          "spark": [
+            100,
+            73.51,
+            79.36,
+            70.41,
+            107.97
+          ]
+        },
+        "log": [],
+        "year": 2029,
+        "age": 4,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      },
+      "eventLastFired": {
+        "18": 2027,
+        "72": 2027,
+        "200": 2027,
+        "201": 2028,
+        "247": 2027,
+        "267": 2027,
+        "433": 2028
+      },
+      "leagueWorld": {
+        "year": 2030,
+        "leagues": {
+          "Premier League": [
+            "Arsenal",
+            "Man City",
+            "Liverpool",
+            "Chelsea",
+            "Man United",
+            "Tottenham",
+            "Newcastle",
+            "Nottingham Forest",
+            "Brighton",
+            "Aston Villa",
+            "Everton",
+            "Crystal Palace",
+            "Brentford",
+            "Sunderland",
+            "Ipswich Town",
+            "Coventry City",
+            "Hull City",
+            "Wolves",
+            "Burnley",
+            "Bolton Wanderers"
+          ],
+          "Championship": [
+            "West Ham",
+            "Southampton",
+            "Middlesbrough",
+            "Sheffield United",
+            "Swansea City",
+            "Birmingham City",
+            "Norwich City",
+            "Stoke City",
+            "Watford",
+            "Wrexham",
+            "Derby County",
+            "QPR",
+            "West Brom",
+            "Bristol City",
+            "Millwall",
+            "Preston North End",
+            "Charlton Athletic",
+            "Blackburn Rovers",
+            "Cardiff City",
+            "Lincoln City",
+            "Portsmouth",
+            "Bournemouth",
+            "Leeds United",
+            "Fulham"
+          ],
+          "Bundesliga": [
+            "Bayern Munich",
+            "Dortmund",
+            "Leipzig",
+            "Stuttgart",
+            "Leverkusen",
+            "Frankfurt",
+            "Hoffenheim",
+            "Augsburg",
+            "Hamburg",
+            "Mainz",
+            "Gladbach",
+            "Koln",
+            "Union Berlin",
+            "Werder Bremen",
+            "Paderborn",
+            "Elversberg",
+            "Osnabruck",
+            "Karlsruhe"
+          ],
+          "2. Bundesliga": [
+            "Wolfsburg",
+            "St. Pauli",
+            "Heidenheim",
+            "Nurnberg",
+            "Holstein Kiel",
+            "Arminia Bielefeld",
+            "Bochum",
+            "Braunschweig",
+            "Darmstadt",
+            "Dynamo Dresden",
+            "Energie Cottbus",
+            "Greuther Furth",
+            "Hannover 96",
+            "Hertha Berlin",
+            "Kaiserslautern",
+            "Magdeburg",
+            "Schalke 04",
+            "Freiburg"
+          ],
+          "Ligue 1": [
+            "PSG",
+            "Lyon",
+            "Marseille",
+            "Monaco",
+            "Lille",
+            "Nice",
+            "Strasbourg",
+            "Rennes",
+            "Lens",
+            "Lorient",
+            "Toulouse",
+            "Auxerre",
+            "Brest",
+            "Angers",
+            "Le Mans",
+            "Troyes",
+            "Nancy",
+            "Metz"
+          ],
+          "Ligue 2": [
+            "Nantes",
+            "Saint-Étienne",
+            "Red Star FC",
+            "Reims",
+            "Montpellier",
+            "Annecy",
+            "Sochaux",
+            "Dijon",
+            "Pau",
+            "Guingamp",
+            "Dunkerque",
+            "Grenoble",
+            "Rodez",
+            "Clermont",
+            "Boulogne",
+            "Laval",
+            "Paris FC",
+            "Le Havre"
+          ],
+          "Serie A": [
+            "Inter Milan",
+            "Juventus",
+            "Roma",
+            "Como",
+            "AC Milan",
+            "Napoli",
+            "Atalanta",
+            "Fiorentina",
+            "Lazio",
+            "Bologna",
+            "Sassuolo",
+            "Genoa",
+            "Cagliari",
+            "Lecce",
+            "Monza",
+            "Venezia",
+            "Frosinone",
+            "Benevento",
+            "Juve Stabia",
+            "Sampdoria"
+          ],
+          "Serie B": [
+            "Cremonese",
+            "Verona",
+            "Pisa",
+            "Avellino",
+            "Carrarese",
+            "Catanzaro",
+            "Cesena",
+            "Empoli",
+            "Entella",
+            "Mantova",
+            "Modena",
+            "Padova",
+            "Palermo",
+            "Südtirol",
+            "Vicenza",
+            "Arezzo",
+            "Ascoli",
+            "Udinese",
+            "Torino",
+            "Parma"
+          ],
+          "La Liga": [
+            "Real Madrid",
+            "Barcelona",
+            "Atletico Madrid",
+            "Athletic Bilbao",
+            "Sevilla",
+            "Villarreal",
+            "Real Sociedad",
+            "Real Betis",
+            "Celta Vigo",
+            "Espanyol",
+            "Levante",
+            "Getafe",
+            "Racing Santander",
+            "Osasuna",
+            "Elche",
+            "Alaves",
+            "Malaga",
+            "Girona",
+            "Ceuta",
+            "Tenerife"
+          ],
+          "Segunda Division": [
+            "Real Oviedo",
+            "Mallorca",
+            "Eibar",
+            "Castellón",
+            "Almería",
+            "Burgos",
+            "Sabadell",
+            "Sporting Gijón",
+            "Granada",
+            "Las Palmas",
+            "Leganés",
+            "Valladolid",
+            "Córdoba",
+            "Eldense",
+            "Cádiz",
+            "FC Andorra",
+            "Albacete",
+            "Rayo Vallecano",
+            "Deportivo",
+            "Valencia"
+          ]
+        },
+        "movements": [
+          {
+            "club": "Bournemouth",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Leeds United",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Fulham",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Wolves",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          },
+          {
+            "club": "Burnley",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          },
+          {
+            "club": "Bolton Wanderers",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          },
+          {
+            "club": "Schalke 04",
+            "from": "Bundesliga",
+            "to": "2. Bundesliga",
+            "kind": "relegated"
+          },
+          {
+            "club": "Freiburg",
+            "from": "Bundesliga",
+            "to": "2. Bundesliga",
+            "kind": "relegated"
+          },
+          {
+            "club": "Osnabruck",
+            "from": "2. Bundesliga",
+            "to": "Bundesliga",
+            "kind": "promoted"
+          },
+          {
+            "club": "Karlsruhe",
+            "from": "2. Bundesliga",
+            "to": "Bundesliga",
+            "kind": "promoted"
+          },
+          {
+            "club": "Paris FC",
+            "from": "Ligue 1",
+            "to": "Ligue 2",
+            "kind": "relegated"
+          },
+          {
+            "club": "Le Havre",
+            "from": "Ligue 1",
+            "to": "Ligue 2",
+            "kind": "relegated"
+          },
+          {
+            "club": "Nancy",
+            "from": "Ligue 2",
+            "to": "Ligue 1",
+            "kind": "promoted"
+          },
+          {
+            "club": "Metz",
+            "from": "Ligue 2",
+            "to": "Ligue 1",
+            "kind": "promoted"
+          },
+          {
+            "club": "Udinese",
+            "from": "Serie A",
+            "to": "Serie B",
+            "kind": "relegated"
+          },
+          {
+            "club": "Torino",
+            "from": "Serie A",
+            "to": "Serie B",
+            "kind": "relegated"
+          },
+          {
+            "club": "Parma",
+            "from": "Serie A",
+            "to": "Serie B",
+            "kind": "relegated"
+          },
+          {
+            "club": "Benevento",
+            "from": "Serie B",
+            "to": "Serie A",
+            "kind": "promoted"
+          },
+          {
+            "club": "Juve Stabia",
+            "from": "Serie B",
+            "to": "Serie A",
+            "kind": "promoted"
+          },
+          {
+            "club": "Sampdoria",
+            "from": "Serie B",
+            "to": "Serie A",
+            "kind": "promoted"
+          },
+          {
+            "club": "Rayo Vallecano",
+            "from": "La Liga",
+            "to": "Segunda Division",
+            "kind": "relegated"
+          },
+          {
+            "club": "Deportivo",
+            "from": "La Liga",
+            "to": "Segunda Division",
+            "kind": "relegated"
+          },
+          {
+            "club": "Valencia",
+            "from": "La Liga",
+            "to": "Segunda Division",
+            "kind": "relegated"
+          },
+          {
+            "club": "Girona",
+            "from": "Segunda Division",
+            "to": "La Liga",
+            "kind": "promoted"
+          },
+          {
+            "club": "Ceuta",
+            "from": "Segunda Division",
+            "to": "La Liga",
+            "kind": "promoted"
+          },
+          {
+            "club": "Tenerife",
+            "from": "Segunda Division",
+            "to": "La Liga",
+            "kind": "promoted"
+          }
+        ]
+      },
+      "generatedBallonPool": {
+        "version": 1,
+        "year": 2029,
+        "nextId": 6,
+        "entries": [
+          {
+            "name": "Ferdi Doornbos",
+            "nationality": "Belgium",
+            "position": "LW",
+            "club": "AC Milan",
+            "baseGoals": [
+              10,
+              28
+            ],
+            "id": 0,
+            "role": "primary",
+            "slot": 0,
+            "seed": 9900,
+            "firstYear": 2029,
+            "entryAge": 28,
+            "retiredYear": null
+          },
+          {
+            "name": "Shohei Nishizawa",
+            "nationality": "Japan",
+            "position": "CDM",
+            "club": "Chelsea",
+            "baseGoals": [
+              2,
+              8
+            ],
+            "id": 1,
+            "role": "primary",
+            "slot": 1,
+            "seed": 9901,
+            "firstYear": 2029,
+            "entryAge": 27,
+            "retiredYear": null
+          },
+          {
+            "name": "Agustín Quiroga",
+            "nationality": "Argentina",
+            "position": "RW",
+            "club": "Arsenal",
+            "baseGoals": [
+              10,
+              28
+            ],
+            "id": 2,
+            "role": "primary",
+            "slot": 2,
+            "seed": 9902,
+            "firstYear": 2029,
+            "entryAge": 21,
+            "retiredYear": null
+          },
+          {
+            "name": "Nahuel Lombardero",
+            "nationality": "Uruguay",
+            "position": "CB",
+            "club": "Real Madrid",
+            "baseGoals": [
+              1,
+              5
+            ],
+            "id": 3,
+            "role": "primary",
+            "slot": 3,
+            "seed": 9903,
+            "firstYear": 2029,
+            "entryAge": 21,
+            "retiredYear": null
+          },
+          {
+            "name": "Wanderson Guimarães",
+            "nationality": "Brazil",
+            "position": "CAM",
+            "club": "Tottenham",
+            "baseGoals": [
+              8,
+              22
+            ],
+            "id": 4,
+            "role": "primary",
+            "slot": 4,
+            "seed": 9904,
+            "firstYear": 2029,
+            "entryAge": 28,
+            "retiredYear": null
+          },
+          {
+            "name": "Hidde Lindeboom",
+            "nationality": "Netherlands",
+            "position": "ST",
+            "club": "Dortmund",
+            "baseGoals": [
+              18,
+              40
+            ],
+            "id": 5,
+            "role": "primary",
+            "slot": 5,
+            "seed": 9905,
+            "firstYear": 2029,
+            "entryAge": 23,
+            "retiredYear": null
+          }
+        ]
+      }
+    },
+    "draws": [
+      0.15629516984336078,
+      0.6251922610681504,
+      0.3006645820569247,
+      0.6959542871918529,
+      0.5850091010797769,
+      0.4493990018963814,
+      0.8187595529016107,
+      0.23881455743685365,
+      0.5066176659893245,
+      0.06013806466944516,
+      0.5141839140560478,
+      0.07335842959582806,
+      0.5694546550512314,
+      0.22035978082567453,
+      0.1605476187542081,
+      0.9547326399479061,
+      0.6934303275775164,
+      0.09099580231122673,
+      0.12780720135197043,
+      0.039383789990097284,
+      0.5559864083770663,
+      0.44409582228399813,
+      0.7527186293154955,
+      0.7741854069754481,
+      0.03967142081819475,
+      0.4539489618036896,
+      0.3586144964210689,
+      0.5004136899951845,
+      0.32101798383519053,
+      0.51855622488074,
+      0.12463114643469453,
+      0.8609090223908424,
+      0.3239955063909292,
+      0.7331142304465175,
+      0.899670880753547,
+      0.511402229545638,
+      0.6849419376812875,
+      0.7544218504335731,
+      0.6492377039976418,
+      0.3077852928545326,
+      0.27667427714914083,
+      0.10408892831765115,
+      0.3101469916291535,
+      0.9998672087676823,
+      0.5682123769074678,
+      0.40342582762241364,
+      0.04790632473304868,
+      0.44236176321282983,
+      0.7892064421903342,
+      0.9978257692418993,
+      0.24996148608624935,
+      0.8604963445104659,
+      0.0732565438374877,
+      0.5468705417588353,
+      0.5359666713047773,
+      0.17836156068369746,
+      0.405385083751753,
+      0.11516751698218286,
+      0.1071564257144928,
+      0.9943259733263403,
+      0.8383376826532185,
+      0.19082613778300583,
+      0.022641319781541824,
+      0.9589596868027002,
+      0.6065105169545859,
+      0.79427918093279,
+      0.4000914266798645,
+      0.44509713165462017,
+      0.030758977169170976,
+      0.417141712969169,
+      0.30002570105716586,
+      0.7023158958181739,
+      0.0011113674845546484,
+      0.7522407586220652,
+      0.37439649226143956,
+      0.25634062057361007,
+      0.9831468125339597,
+      0.8870674234349281,
+      0.8410391425713897,
+      0.5883639119565487,
+      0.6700334628112614,
+      0.9546495964750648,
+      0.3101755396928638,
+      0.09473007335327566,
+      0.5845677764154971,
+      0.39676599646918476,
+      0.3366491715423763,
+      0.8923962025437504,
+      0.3238512275274843,
+      0.5489268358796835,
+      0.28450881876051426,
+      0.7236998714506626,
+      0.5344273638911545,
+      0.4031665332149714,
+      0.7398413654882461,
+      0.518626743927598,
+      0.7155228254850954,
+      0.8259600962046534,
+      0.36353874183259904,
+      0.26600018446333706,
+      0.9778762459754944,
+      0.059174185153096914,
+      0.09158020769245923,
+      0.6837748363614082,
+      0.31708511360920966,
+      0.9365437505766749,
+      0.03096668398939073,
+      0.5790296627674252,
+      0.3591891380492598,
+      0.6832777746021748,
+      0.11967993737198412,
+      0.19070399226620793,
+      0.2579487187322229,
+      0.7544420869089663,
+      0.7525522310752422,
+      0.11010575899854302,
+      0.5339820228982717,
+      0.44034839677624404,
+      0.6148745890241116,
+      0.26657906943000853,
+      0.26429681247100234,
+      0.5351574770174921,
+      0.26147966738790274,
+      0.10140419309027493,
+      0.4721776011865586,
+      0.21109217358753085,
+      0.5181608982384205,
+      0.10074071935378015,
+      0.028060921700671315,
+      0.7381888588424772,
+      0.07076097163371742,
+      0.48960428941063583,
+      0.8733981365803629,
+      0.6133775096386671,
+      0.42650880897417665,
+      0.629609169671312,
+      0.26125446963123977,
+      0.11946395016275346,
+      0.6963282846845686,
+      0.537143015768379,
+      0.9167501560878009,
+      0.17267796723172069,
+      0.3008202745113522,
+      0.8442343187052757,
+      0.884876660304144,
+      0.5627734144218266,
+      0.658590353326872,
+      0.20640674652531743,
+      0.20616899570450187,
+      0.6343548579607159,
+      0.5095381010323763,
+      0.7855825365986675,
+      0.2228345947805792,
+      0.30949701368808746,
+      0.953177671181038,
+      0.26149248448200524,
+      0.9020798644050956,
+      0.1556067152414471,
+      0.2104134624823928,
+      0.06590548157691956,
+      0.45927315298467875,
+      0.23587275692261755,
+      0.28883341257460415,
+      0.8534152032807469,
+      0.004220895003527403,
+      0.012713729869574308,
+      0.5877229287289083,
+      0.543377417139709
+    ]
+  },
+  "pristineOpeningOff": {
+    "value": {
+      "playerName": "World ere",
+      "nationality": "Netherlands",
+      "position": "CM",
+      "era": "2025",
+      "age": 20,
+      "potential": 86,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 68,
+      "physique": {
+        "heightCm": 180,
+        "weightKg": 75
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "grandad_game",
+        "agent_boots"
+      ],
+      "phoneInbox": [
+        {
+          "id": "grandad_game-2025",
+          "defId": "grandad_game",
+          "from": "Grandad",
+          "emoji": "🧓",
+          "text": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+          "year": 2025,
+          "choices": [
+            {
+              "label": "Visit with your shirt",
+              "reply": "Coming round Sunday with a shirt and biscuits. Put the kettle on",
+              "karma": 9,
+              "morale": 5
+            },
+            {
+              "label": "Promise vaguely",
+              "reply": "One day grandad, promise",
+              "karma": 1
+            }
+          ]
+        },
+        {
+          "id": "agent_boots-2025",
+          "defId": "agent_boots",
+          "from": "Agent",
+          "emoji": "💼",
+          "text": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+          "year": 2025,
+          "choices": [
+            {
+              "label": "Take the money",
+              "reply": "Money is money. Send the contract",
+              "karma": -7,
+              "cash": 1.5
+            },
+            {
+              "label": "Turn it down publicly",
+              "reply": "Not wearing that. And I'm saying why",
+              "karma": 9,
+              "popularity": 4
+            },
+            {
+              "label": "Quietly decline",
+              "reply": "Pass on this one. Keep it quiet",
+              "karma": 4
+            }
+          ]
+        }
+      ],
+      "currentClub": "Twente",
+      "currentClubCountry": "Netherlands",
+      "currentClubTier": 4,
+      "currentClubColor": "#E70011",
+      "currentLeague": "Eredivisie",
+      "contractYearsLeft": 2,
+      "weeklyWage": 20000,
+      "marketValue": 33.9,
+      "pace": 74,
+      "shooting": 78,
+      "passing": 80,
+      "dribbling": 77,
+      "defending": 75,
+      "physical": 80,
+      "reflexes": 77,
+      "overall": 77,
+      "seasons": [
+        {
+          "year": 2025,
+          "age": 16,
+          "club": "Ajax Youth",
+          "clubCountry": "Netherlands",
+          "clubTier": 1,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2026,
+          "age": 17,
+          "club": "Ajax Youth",
+          "clubCountry": "Netherlands",
+          "clubTier": 1,
+          "apps": 20,
+          "goals": 2,
+          "assists": 4,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2027,
+          "age": 18,
+          "club": "Twente",
+          "clubCountry": "Netherlands",
+          "clubTier": 4,
+          "apps": 36,
+          "leagueApps": 35,
+          "goals": 4,
+          "assists": 5,
+          "cleanSheets": 0,
+          "yellowCards": 8,
+          "redCards": 0,
+          "rating": 7.3,
+          "ovr": 71,
+          "injury": "Dead leg",
+          "injuryWeeks": 4,
+          "injurySevere": false,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "playing",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null,
+          "cupRun": {
+            "cup": "KNVB Cup",
+            "stages": [
+              {
+                "stage": "early",
+                "won": false
+              }
+            ]
+          }
+        },
+        {
+          "year": 2028,
+          "age": 19,
+          "club": "Twente",
+          "clubCountry": "Netherlands",
+          "clubTier": 4,
+          "apps": 29,
+          "leagueApps": 31,
+          "goals": 4,
+          "assists": 4,
+          "cleanSheets": 0,
+          "yellowCards": 5,
+          "redCards": 0,
+          "rating": 7.8,
+          "ovr": 73,
+          "injury": "Groin strain",
+          "injuryWeeks": 10,
+          "injurySevere": false,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "playing",
+          "intApps": 12,
+          "intGoals": 5,
+          "intAssists": 2,
+          "intRating": 6.8,
+          "tournament": "European Championship",
+          "tournamentResult": "Winner",
+          "continentalCup": true,
+          "cupRun": {
+            "cup": "KNVB Cup",
+            "stages": [
+              {
+                "stage": "early",
+                "won": true
+              },
+              {
+                "stage": "QF",
+                "opp": "PSV",
+                "won": false,
+                "for": 2,
+                "against": 3,
+                "home": true
+              }
+            ]
+          }
+        },
+        {
+          "year": 2029,
+          "age": 20,
+          "club": "Twente",
+          "clubCountry": "Netherlands",
+          "clubTier": 4,
+          "apps": 39,
+          "leagueApps": 33,
+          "goals": 8,
+          "assists": 8,
+          "cleanSheets": 0,
+          "yellowCards": 4,
+          "redCards": 0,
+          "rating": 8.2,
+          "ovr": 75,
+          "injury": null,
+          "injuryWeeks": 0,
+          "injurySevere": false,
+          "leagueTitle": false,
+          "leagueFinish": 6,
+          "leagueSize": 18,
+          "domesticCup": true,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "playing",
+          "intApps": 5,
+          "intGoals": 1,
+          "intAssists": 1,
+          "intRating": 7.5,
+          "tournament": null,
+          "tournamentResult": null,
+          "cupRun": {
+            "cup": "KNVB Cup",
+            "stages": [
+              {
+                "stage": "early",
+                "won": true
+              },
+              {
+                "stage": "QF",
+                "opp": "ADO Den Haag",
+                "won": true,
+                "for": 1,
+                "against": 0,
+                "home": true
+              },
+              {
+                "stage": "SF",
+                "opp": "Ajax",
+                "won": true,
+                "for": 1,
+                "against": 0
+              },
+              {
+                "stage": "F",
+                "opp": "Cambuur",
+                "won": true
+              }
+            ],
+            "final": {
+              "for": 1,
+              "against": 0,
+              "legs": 1,
+              "scored": true
+            }
+          }
+        }
+      ],
+      "events": [
+        "🏆 Won the KNVB Cup with Twente!",
+        "🏆 Won Player of the Month (October 2029)!",
+        "🏆 Won Player of the Month (November 2029)!",
+        "🏆 Won Player of the Month (December 2029)!"
+      ],
+      "retired": false,
+      "phase": "newspaper",
+      "pendingOffers": [],
+      "pendingSummary": {
+        "year": 2029,
+        "age": 20,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 39,
+        "leagueApps": 33,
+        "goals": 8,
+        "assists": 8,
+        "cleanSheets": 0,
+        "yellowCards": 4,
+        "redCards": 0,
+        "rating": 8.2,
+        "ovr": 75,
+        "injury": null,
+        "injuryWeeks": 0,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "leagueFinish": 6,
+        "leagueSize": 18,
+        "domesticCup": true,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 5,
+        "intGoals": 1,
+        "intAssists": 1,
+        "intRating": 7.5,
+        "tournament": null,
+        "tournamentResult": null,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "ADO Den Haag",
+              "won": true,
+              "for": 1,
+              "against": 0,
+              "home": true
+            },
+            {
+              "stage": "SF",
+              "opp": "Ajax",
+              "won": true,
+              "for": 1,
+              "against": 0
+            },
+            {
+              "stage": "F",
+              "opp": "Cambuur",
+              "won": true
+            }
+          ],
+          "final": {
+            "for": 1,
+            "against": 0,
+            "legs": 1,
+            "scored": true
+          }
+        }
+      },
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": 201,
+      "statBoostNextSeason": {},
+      "pendingNews": [
+        {
+          "newspaper": "The Beautiful Game Report",
+          "type": "positive",
+          "headline": "THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So",
+          "body": "8 goals and 8 assists in 39 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out."
+        },
+        {
+          "newspaper": "Soccer Times",
+          "type": "positive",
+          "headline": "World ere Named In Team Of The Season",
+          "body": "After averaging a 8.2 rating across 39 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition."
+        }
+      ],
+      "internationalCareer": true,
+      "sponsorDeal": null,
+      "totalEarnings": 3.6,
+      "popularity": 35,
+      "morale": 92,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 17,
+        "goals": 6,
+        "assists": 3,
+        "tournaments": 1,
+        "worldCups": 0,
+        "continentals": 1,
+        "worldCupWins": 0,
+        "continentalWins": 1,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": -1,
+        "debutAge": 18,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": {
+        "year": 2028,
+        "name": "European Championship",
+        "short": "Euros",
+        "kind": "Continental",
+        "confederation": "UEFA",
+        "nation": "Netherlands",
+        "teams": 24,
+        "qualifying": {
+          "confederation": "UEFA",
+          "table": [
+            {
+              "nation": "Netherlands",
+              "played": 10,
+              "won": 8,
+              "drawn": 2,
+              "lost": 0,
+              "gf": 17,
+              "ga": 5,
+              "points": 26
+            },
+            {
+              "nation": "Romania",
+              "played": 10,
+              "won": 4,
+              "drawn": 5,
+              "lost": 1,
+              "gf": 20,
+              "ga": 11,
+              "points": 17
+            },
+            {
+              "nation": "Northern Ireland",
+              "played": 10,
+              "won": 5,
+              "drawn": 2,
+              "lost": 3,
+              "gf": 16,
+              "ga": 12,
+              "points": 17
+            },
+            {
+              "nation": "Ukraine",
+              "played": 10,
+              "won": 2,
+              "drawn": 4,
+              "lost": 4,
+              "gf": 11,
+              "ga": 10,
+              "points": 10
+            },
+            {
+              "nation": "Luxembourg",
+              "played": 10,
+              "won": 1,
+              "drawn": 3,
+              "lost": 6,
+              "gf": 7,
+              "ga": 18,
+              "points": 6
+            },
+            {
+              "nation": "Latvia",
+              "played": 10,
+              "won": 1,
+              "drawn": 2,
+              "lost": 7,
+              "gf": 5,
+              "ga": 20,
+              "points": 5
+            }
+          ],
+          "myPosition": 1,
+          "through": 3,
+          "qualified": true,
+          "automatic": false
+        },
+        "qualified": true,
+        "squad": {
+          "called": true,
+          "role": "Starter",
+          "reason": "You made it as number 3 of 8 in your position.",
+          "myRank": 3,
+          "poolSize": 18,
+          "places": 8,
+          "myScore": 79,
+          "cutScore": 70,
+          "xi": {
+            "formation": "4-3-3",
+            "gk": [
+              {
+                "slot": "GK",
+                "name": "Gijs Nieuwland",
+                "ovr": 81,
+                "me": false
+              }
+            ],
+            "def": [
+              {
+                "slot": "LB",
+                "name": "Wout Vlietstra",
+                "ovr": 78,
+                "me": false
+              },
+              {
+                "slot": "CB",
+                "name": "Rick Doornbos",
+                "ovr": 81,
+                "me": false
+              },
+              {
+                "slot": "CB",
+                "name": "Daan Rijkaard-Veen",
+                "ovr": 81,
+                "me": false
+              },
+              {
+                "slot": "RB",
+                "name": "Koen Heemskerk",
+                "ovr": 79,
+                "me": false
+              }
+            ],
+            "mid": [
+              {
+                "slot": "CM",
+                "name": "You",
+                "ovr": 75,
+                "me": true
+              },
+              {
+                "slot": "CDM",
+                "name": "Sem Boterman",
+                "ovr": 80,
+                "me": false
+              },
+              {
+                "slot": "CM",
+                "name": "Hidde Lindeboom",
+                "ovr": 81,
+                "me": false
+              }
+            ],
+            "att": [
+              {
+                "slot": "LW",
+                "name": "Bas Schuurmans",
+                "ovr": 77,
+                "me": false
+              },
+              {
+                "slot": "ST",
+                "name": "Ferdi Oosterveen",
+                "ovr": 84,
+                "me": false
+              },
+              {
+                "slot": "RW",
+                "name": "Mees Grevelink",
+                "ovr": 80,
+                "me": false
+              }
+            ],
+            "mySlot": "CM",
+            "aheadOfMe": null
+          }
+        },
+        "groupTable": [
+          {
+            "nation": "Turkey",
+            "played": 3,
+            "won": 2,
+            "drawn": 1,
+            "lost": 0,
+            "gf": 8,
+            "ga": 2,
+            "points": 7
+          },
+          {
+            "nation": "Switzerland",
+            "played": 3,
+            "won": 2,
+            "drawn": 0,
+            "lost": 1,
+            "gf": 3,
+            "ga": 3,
+            "points": 6
+          },
+          {
+            "nation": "Netherlands",
+            "played": 3,
+            "won": 1,
+            "drawn": 1,
+            "lost": 1,
+            "gf": 4,
+            "ga": 3,
+            "points": 4
+          },
+          {
+            "nation": "Scotland",
+            "played": 3,
+            "won": 0,
+            "drawn": 0,
+            "lost": 3,
+            "gf": 1,
+            "ga": 8,
+            "points": 0
+          }
+        ],
+        "bracket": [
+          {
+            "round": "R16",
+            "slot": 0,
+            "home": "Slovenia",
+            "away": "Netherlands",
+            "homeGoals": 1,
+            "awayGoals": 2,
+            "pens": false,
+            "winner": "Netherlands",
+            "mine": true
+          },
+          {
+            "round": "R16",
+            "slot": 1,
+            "home": "France",
+            "away": "Czech Republic",
+            "homeGoals": 3,
+            "awayGoals": 1,
+            "pens": false,
+            "winner": "France",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 2,
+            "home": "Turkey",
+            "away": "Italy",
+            "homeGoals": 0,
+            "awayGoals": 0,
+            "pens": true,
+            "winner": "Turkey",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 3,
+            "home": "Hungary",
+            "away": "Switzerland",
+            "homeGoals": 2,
+            "awayGoals": 0,
+            "pens": false,
+            "winner": "Hungary",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 4,
+            "home": "Croatia",
+            "away": "Belgium",
+            "homeGoals": 0,
+            "awayGoals": 0,
+            "pens": true,
+            "winner": "Belgium",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 5,
+            "home": "England",
+            "away": "Slovakia",
+            "homeGoals": 3,
+            "awayGoals": 0,
+            "pens": false,
+            "winner": "England",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 6,
+            "home": "Spain",
+            "away": "Norway",
+            "homeGoals": 4,
+            "awayGoals": 1,
+            "pens": false,
+            "winner": "Spain",
+            "mine": false
+          },
+          {
+            "round": "R16",
+            "slot": 7,
+            "home": "Austria",
+            "away": "Portugal",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": true,
+            "winner": "Portugal",
+            "mine": false
+          },
+          {
+            "round": "QF",
+            "slot": 0,
+            "home": "Netherlands",
+            "away": "France",
+            "homeGoals": 2,
+            "awayGoals": 1,
+            "pens": false,
+            "winner": "Netherlands",
+            "mine": true
+          },
+          {
+            "round": "QF",
+            "slot": 1,
+            "home": "Turkey",
+            "away": "Hungary",
+            "homeGoals": 2,
+            "awayGoals": 2,
+            "pens": true,
+            "winner": "Turkey",
+            "mine": false
+          },
+          {
+            "round": "QF",
+            "slot": 2,
+            "home": "Belgium",
+            "away": "England",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": true,
+            "winner": "England",
+            "mine": false
+          },
+          {
+            "round": "QF",
+            "slot": 3,
+            "home": "Spain",
+            "away": "Portugal",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": true,
+            "winner": "Portugal",
+            "mine": false
+          },
+          {
+            "round": "SF",
+            "slot": 0,
+            "home": "Netherlands",
+            "away": "Turkey",
+            "homeGoals": 2,
+            "awayGoals": 0,
+            "pens": false,
+            "winner": "Netherlands",
+            "mine": true
+          },
+          {
+            "round": "SF",
+            "slot": 1,
+            "home": "England",
+            "away": "Portugal",
+            "homeGoals": 0,
+            "awayGoals": 1,
+            "pens": false,
+            "winner": "Portugal",
+            "mine": false
+          },
+          {
+            "round": "F",
+            "slot": 0,
+            "home": "Netherlands",
+            "away": "Portugal",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": true,
+            "winner": "Netherlands",
+            "mine": true
+          }
+        ],
+        "champion": "Netherlands",
+        "runnerUp": "Portugal",
+        "groupLabel": "Group A",
+        "thirdsThrough": 4,
+        "myResult": "Winner",
+        "matches": [
+          {
+            "round": "Group A",
+            "home": "Netherlands",
+            "away": "Switzerland",
+            "homeGoals": 0,
+            "awayGoals": 2,
+            "pens": false,
+            "playerGoals": 0,
+            "playerAssists": 0,
+            "playerRating": 6.2
+          },
+          {
+            "round": "Group A",
+            "home": "Netherlands",
+            "away": "Turkey",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": false,
+            "playerGoals": 1,
+            "playerAssists": 0,
+            "playerRating": 7.1
+          },
+          {
+            "round": "Group A",
+            "home": "Netherlands",
+            "away": "Scotland",
+            "homeGoals": 3,
+            "awayGoals": 0,
+            "pens": false,
+            "playerGoals": 1,
+            "playerAssists": 0,
+            "playerRating": 7.4
+          },
+          {
+            "round": "R16",
+            "home": "Slovenia",
+            "away": "Netherlands",
+            "homeGoals": 1,
+            "awayGoals": 2,
+            "pens": false,
+            "playerGoals": 0,
+            "playerAssists": 1,
+            "playerRating": 6.5
+          },
+          {
+            "round": "QF",
+            "home": "Netherlands",
+            "away": "France",
+            "homeGoals": 2,
+            "awayGoals": 1,
+            "pens": false,
+            "playerGoals": 1,
+            "playerAssists": 0,
+            "playerRating": 6.6
+          },
+          {
+            "round": "SF",
+            "home": "Netherlands",
+            "away": "Turkey",
+            "homeGoals": 2,
+            "awayGoals": 0,
+            "pens": false,
+            "playerGoals": 1,
+            "playerAssists": 0,
+            "playerRating": 6.7
+          },
+          {
+            "round": "F",
+            "home": "Netherlands",
+            "away": "Portugal",
+            "homeGoals": 1,
+            "awayGoals": 1,
+            "pens": true,
+            "playerGoals": 0,
+            "playerAssists": 0,
+            "playerRating": 6.9
+          }
+        ],
+        "playerApps": 7,
+        "playerGoals": 4,
+        "playerAssists": 1,
+        "playerAvgRating": 6.8,
+        "goldenBoot": false,
+        "bestPlayer": false
+      },
+      "intlHistory": [
+        {
+          "year": 2028,
+          "short": "Euros",
+          "nation": "Netherlands",
+          "champion": "Netherlands",
+          "myResult": "Winner",
+          "apps": 7,
+          "goals": 4
+        }
+      ],
+      "rival": {
+        "name": "Bukayo Costa",
+        "nationality": "Monaco",
+        "position": "CM",
+        "club": "Rangers",
+        "clubTier": 2,
+        "overall": 82,
+        "careerGoals": 6,
+        "careerAssists": 10,
+        "careerApps": 45,
+        "leagueTitles": 0,
+        "championsLeagues": 0,
+        "worldCups": 0,
+        "ballonDors": 0,
+        "intCaps": 13,
+        "intGoals": 2,
+        "marketValue": 79.8,
+        "age": 21,
+        "retired": false
+      },
+      "rivalCreated": true,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": 106,
+      "rivalrySummary": null,
+      "netWorth": 3.28,
+      "lifestyleLevel": "Comfortable",
+      "lifestyleCostPerYear": 0.21000000000000002,
+      "socialMediaFollowers": 2.67,
+      "sponsorshipIncome": 0.26,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0.01,
+      "awards": [
+        {
+          "year": 2028,
+          "name": "Young Player of the Year",
+          "emoji": "⭐"
+        },
+        {
+          "year": 2029,
+          "name": "Player of the Month",
+          "emoji": "🏆"
+        },
+        {
+          "year": 2029,
+          "name": "Player of the Month",
+          "emoji": "🏆"
+        },
+        {
+          "year": 2029,
+          "name": "Player of the Month",
+          "emoji": "🏆"
+        }
+      ],
+      "pendingBallonDor": {
+        "year": 2029,
+        "nominees": [
+          {
+            "name": "Florian Wirtz",
+            "nationality": "Germany",
+            "position": "CAM",
+            "club": "Liverpool",
+            "points": 88,
+            "goals": 14,
+            "trophies": [
+              "UCL",
+              "League"
+            ],
+            "isPlayer": false
+          },
+          {
+            "name": "Lamine Yamal",
+            "nationality": "Spain",
+            "position": "RW",
+            "club": "Barcelona",
+            "points": 80,
+            "goals": 28,
+            "trophies": [
+              "League",
+              "Cup"
+            ],
+            "isPlayer": false
+          },
+          {
+            "name": "Kylian Mbappé",
+            "nationality": "France",
+            "position": "ST",
+            "club": "Real Madrid",
+            "points": 68,
+            "goals": 38,
+            "trophies": [],
+            "isPlayer": false
+          },
+          {
+            "name": "Erling Haaland",
+            "nationality": "Norway",
+            "position": "ST",
+            "club": "Man City",
+            "points": 63,
+            "goals": 34,
+            "trophies": [],
+            "isPlayer": false
+          },
+          {
+            "name": "Harry Kane",
+            "nationality": "England",
+            "position": "ST",
+            "club": "Bayern Munich",
+            "points": 58,
+            "goals": 24,
+            "trophies": [
+              "League"
+            ],
+            "isPlayer": false
+          },
+          {
+            "name": "Jude Bellingham",
+            "nationality": "England",
+            "position": "CAM",
+            "club": "Real Madrid",
+            "points": 46,
+            "goals": 18,
+            "trophies": [],
+            "isPlayer": false
+          },
+          {
+            "name": "Jamal Musiala",
+            "nationality": "Germany",
+            "position": "CAM",
+            "club": "Bayern Munich",
+            "points": 42,
+            "goals": 13,
+            "trophies": [
+              "League"
+            ],
+            "isPlayer": false
+          },
+          {
+            "name": "Pedri",
+            "nationality": "Spain",
+            "position": "CM",
+            "club": "Barcelona",
+            "points": 41,
+            "goals": 8,
+            "trophies": [
+              "League",
+              "Cup"
+            ],
+            "isPlayer": false
+          },
+          {
+            "name": "Mohamed Salah",
+            "nationality": "Egypt",
+            "position": "RW",
+            "club": "Trabzonspor",
+            "points": 41,
+            "goals": 27,
+            "trophies": [],
+            "isPlayer": false
+          },
+          {
+            "name": "Vinícius Jr",
+            "nationality": "Brazil",
+            "position": "LW",
+            "club": "Real Madrid",
+            "points": 40,
+            "goals": 25,
+            "trophies": [],
+            "isPlayer": false
+          }
+        ],
+        "playerRank": null,
+        "playerPoints": 0,
+        "playerNominated": false
+      },
+      "lastUCLResult": {
+        "qualified": false,
+        "matches": [],
+        "result": "N/A",
+        "playerGoals": 0,
+        "isTopScorer": false,
+        "seasonYear": 2029,
+        "club": "Twente"
+      },
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "late",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": "showman",
+      "agentId": "cousin",
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Ajax",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 1,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 75,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_grandad",
+            "c": "grandad",
+            "name": "Grandad",
+            "emoji": "🧓",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+                "y": 2025
+              },
+              {
+                "w": 0,
+                "t": "Did you get my last one? No rush.",
+                "y": 2026
+              },
+              {
+                "w": 0,
+                "t": "Wow. I see how it is then.",
+                "y": 2027
+              },
+              {
+                "w": 0,
+                "t": "You have changed. Everyone says it and I keep defending you.",
+                "y": 2028
+              }
+            ],
+            "rel": 22,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "grandad_game-2025"
+            },
+            "waiting": 2028,
+            "cold": 3,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_fitness",
+            "c": "fitness",
+            "name": "Fitness coach",
+            "emoji": "🏋️",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+                "y": 2025
+              },
+              {
+                "w": 0,
+                "t": "Bumping this up your inbox.",
+                "y": 2026
+              },
+              {
+                "w": 0,
+                "t": "I will assume that is a no then.",
+                "y": 2027
+              },
+              {
+                "w": 0,
+                "t": "The fame has really gotten to you.",
+                "y": 2028
+              }
+            ],
+            "rel": 22,
+            "pending": {
+              "kind": "convo",
+              "convo": "fitness_extra",
+              "beat": 0
+            },
+            "waiting": 2028,
+            "cold": 3,
+            "seen": [
+              "fitness_extra"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_agent",
+            "c": "agent",
+            "name": "Your agent",
+            "emoji": "💼",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+                "y": 2025
+              },
+              {
+                "w": 0,
+                "t": "Still need an answer on that when you get a sec.",
+                "y": 2026
+              },
+              {
+                "w": 0,
+                "t": "I will assume that is a no then.",
+                "y": 2027
+              },
+              {
+                "w": 0,
+                "t": "I will stop bothering you. Best of luck.",
+                "y": 2028
+              }
+            ],
+            "rel": 22,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "agent_boots-2025"
+            },
+            "waiting": 2028,
+            "cold": 3,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [
+          "🥅 Lamine Yamal finished top scorer in La Liga on 22.",
+          "🔄 DONE DEAL. Kylian Mbappé joins Sporting CP from Real Madrid. Fee around 120m.",
+          "🔄 DONE DEAL. Florian Wirtz joins Feyenoord from Liverpool. Fee around 110m.",
+          "⭐ Bayern Munich are champions of Europe.",
+          "🏆 Newcastle win the Premier League.",
+          "🏆 Real Madrid win La Liga.",
+          "🥅 Ousmane Dembélé finished top scorer in Ligue 1 on 17.",
+          "🌍 Netherlands win the European Championship.",
+          "⭐ Liverpool are champions of Europe.",
+          "🏆 Liverpool win the Premier League.",
+          "🏆 Barcelona win La Liga.",
+          "🔮 Your world's 2029-30, as it played out:"
+        ],
+        "world": {
+          "year": 2029,
+          "ucl": "Liverpool",
+          "leagues": {
+            "Premier League": "Liverpool",
+            "La Liga": "Barcelona",
+            "Bundesliga": "Bayern Munich",
+            "Serie A": "Como",
+            "Ligue 1": "Strasbourg",
+            "Primeira Liga": "Benfica",
+            "Eredivisie": "Feyenoord",
+            "Scottish Premiership": "Aberdeen",
+            "Brasileirao": "Cruzeiro",
+            "Saudi Pro League": "Al Hilal",
+            "MLS": "LAFC",
+            "K League 1": "Jeonbuk Motors",
+            "Championship": "Wolves",
+            "2. Bundesliga": "Osnabruck",
+            "Ligue 2": "Nancy",
+            "Serie B": "Benevento",
+            "Segunda Division": "Girona"
+          },
+          "cups": {
+            "Premier League": "Arsenal",
+            "La Liga": "Barcelona",
+            "Bundesliga": "Leverkusen",
+            "Serie A": "Atalanta",
+            "Ligue 1": "Monaco",
+            "Primeira Liga": "Sporting CP",
+            "Eredivisie": "Twente",
+            "Scottish Premiership": "Rangers",
+            "Brasileirao": "Palmeiras",
+            "Saudi Pro League": "Al Ittihad",
+            "MLS": "Seattle Sounders",
+            "K League 1": "Jeonbuk Motors"
+          },
+          "moves": [],
+          "topScorer": null,
+          "intl": null
+        },
+        "clubs": {
+          "Kylian Mbappé": "Real Madrid",
+          "Erling Haaland": "Man City",
+          "Jude Bellingham": "Real Madrid",
+          "Vinícius Jr": "Real Madrid",
+          "Lamine Yamal": "Barcelona",
+          "Florian Wirtz": "Liverpool",
+          "Jamal Musiala": "Bayern Munich",
+          "Bukayo Saka": "Arsenal",
+          "Pedri": "Barcelona",
+          "Rodri": "Barcelona",
+          "Federico Valverde": "Real Madrid",
+          "Harry Kane": "Bayern Munich",
+          "Mohamed Salah": "Trabzonspor",
+          "Phil Foden": "Man City",
+          "Declan Rice": "Arsenal",
+          "Raphinha": "Barcelona",
+          "Endrick": "Real Madrid",
+          "Nico Williams": "Athletic Bilbao",
+          "Désiré Doué": "PSG",
+          "Kobbie Mainoo": "Man United",
+          "Gianluigi Donnarumma": "Man City",
+          "Ousmane Dembélé": "PSG"
+        },
+        "rivalClub": "Rangers",
+        "seed": 4272396692,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2025,
+          "age": 16,
+          "club": "Ajax Youth",
+          "lines": [
+            "📋 Joined Ajax Youth Academy aged 16"
+          ]
+        },
+        {
+          "year": 2026,
+          "age": 17,
+          "club": "Ajax Youth",
+          "lines": [
+            "📈 Stats improved during youth development (OVR 71)",
+            "📩 Professional contract offers received!",
+            "✍️ Signed with Twente 🇳🇱 (5yr, €20k/wk)"
+          ]
+        },
+        {
+          "year": 2027,
+          "age": 18,
+          "club": "Twente",
+          "lines": [
+            "🚑 Injury: Dead leg, out 4 weeks, missed matches",
+            "🇺🇳 First international call-up for Netherlands!",
+            "🎭 You leaned into it: The Showman is born",
+            "🥅 Scored on international debut for Netherlands!",
+            "🐕 Adopted a rescue dog. He has his own fan account now",
+            "🦝 Gaffer Two is now official staff. Attendance: perfect",
+            "🍝 Made peace with your camp roommate over room service. He still kicks you, but he apologises now"
+          ]
+        },
+        {
+          "year": 2028,
+          "age": 19,
+          "club": "Twente",
+          "lines": [
+            "🚑 Injury: Groin strain, out 10 weeks, missed matches",
+            "😤 A new rival emerges: Bukayo Costa (🇲🇨 Monaco)",
+            "⭐ Named Young Player of the Year!",
+            "🏆 Won the European Championship with Netherlands!",
+            "🇺🇳 Manager chose Bukayo Costa over you.",
+            "🇺🇳 National Team Battle",
+            "🩻 The scan was clear but you took three weeks anyway. The knee has never complained since",
+            "🧢 Signed with Cousin Ricky. What could go wrong"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 3901343582,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 120.14,
+          "bricks": 115.51,
+          "cleats": 95.77,
+          "screens": 125.11,
+          "spark": 107.97
+        },
+        "hist": {
+          "ladder": [
+            100,
+            104.78,
+            110.14,
+            113.44,
+            120.14
+          ],
+          "bricks": [
+            100,
+            101.62,
+            99.6,
+            102.13,
+            115.51
+          ],
+          "cleats": [
+            100,
+            84.1,
+            95.3,
+            112.99,
+            95.77
+          ],
+          "screens": [
+            100,
+            98.35,
+            106.73,
+            111.14,
+            125.11
+          ],
+          "spark": [
+            100,
+            73.51,
+            79.36,
+            70.41,
+            107.97
+          ]
+        },
+        "log": [],
+        "year": 2029,
+        "age": 4,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      },
+      "eventLastFired": {
+        "18": 2027,
+        "72": 2027,
+        "200": 2027,
+        "201": 2028,
+        "247": 2027,
+        "267": 2027,
+        "433": 2028
+      },
+      "leagueWorld": {
+        "year": 2030,
+        "leagues": {
+          "Premier League": [
+            "Arsenal",
+            "Man City",
+            "Liverpool",
+            "Chelsea",
+            "Man United",
+            "Tottenham",
+            "Newcastle",
+            "Nottingham Forest",
+            "Brighton",
+            "Aston Villa",
+            "Everton",
+            "Crystal Palace",
+            "Brentford",
+            "Sunderland",
+            "Ipswich Town",
+            "Coventry City",
+            "Hull City",
+            "Wolves",
+            "Burnley",
+            "Bolton Wanderers"
+          ],
+          "Championship": [
+            "West Ham",
+            "Southampton",
+            "Middlesbrough",
+            "Sheffield United",
+            "Swansea City",
+            "Birmingham City",
+            "Norwich City",
+            "Stoke City",
+            "Watford",
+            "Wrexham",
+            "Derby County",
+            "QPR",
+            "West Brom",
+            "Bristol City",
+            "Millwall",
+            "Preston North End",
+            "Charlton Athletic",
+            "Blackburn Rovers",
+            "Cardiff City",
+            "Lincoln City",
+            "Portsmouth",
+            "Bournemouth",
+            "Leeds United",
+            "Fulham"
+          ],
+          "Bundesliga": [
+            "Bayern Munich",
+            "Dortmund",
+            "Leipzig",
+            "Stuttgart",
+            "Leverkusen",
+            "Frankfurt",
+            "Hoffenheim",
+            "Augsburg",
+            "Hamburg",
+            "Mainz",
+            "Gladbach",
+            "Koln",
+            "Union Berlin",
+            "Werder Bremen",
+            "Paderborn",
+            "Elversberg",
+            "Osnabruck",
+            "Karlsruhe"
+          ],
+          "2. Bundesliga": [
+            "Wolfsburg",
+            "St. Pauli",
+            "Heidenheim",
+            "Nurnberg",
+            "Holstein Kiel",
+            "Arminia Bielefeld",
+            "Bochum",
+            "Braunschweig",
+            "Darmstadt",
+            "Dynamo Dresden",
+            "Energie Cottbus",
+            "Greuther Furth",
+            "Hannover 96",
+            "Hertha Berlin",
+            "Kaiserslautern",
+            "Magdeburg",
+            "Schalke 04",
+            "Freiburg"
+          ],
+          "Ligue 1": [
+            "PSG",
+            "Lyon",
+            "Marseille",
+            "Monaco",
+            "Lille",
+            "Nice",
+            "Strasbourg",
+            "Rennes",
+            "Lens",
+            "Lorient",
+            "Toulouse",
+            "Auxerre",
+            "Brest",
+            "Angers",
+            "Le Mans",
+            "Troyes",
+            "Nancy",
+            "Metz"
+          ],
+          "Ligue 2": [
+            "Nantes",
+            "Saint-Étienne",
+            "Red Star FC",
+            "Reims",
+            "Montpellier",
+            "Annecy",
+            "Sochaux",
+            "Dijon",
+            "Pau",
+            "Guingamp",
+            "Dunkerque",
+            "Grenoble",
+            "Rodez",
+            "Clermont",
+            "Boulogne",
+            "Laval",
+            "Paris FC",
+            "Le Havre"
+          ],
+          "Serie A": [
+            "Inter Milan",
+            "Juventus",
+            "Roma",
+            "Como",
+            "AC Milan",
+            "Napoli",
+            "Atalanta",
+            "Fiorentina",
+            "Lazio",
+            "Bologna",
+            "Sassuolo",
+            "Genoa",
+            "Cagliari",
+            "Lecce",
+            "Monza",
+            "Venezia",
+            "Frosinone",
+            "Benevento",
+            "Juve Stabia",
+            "Sampdoria"
+          ],
+          "Serie B": [
+            "Cremonese",
+            "Verona",
+            "Pisa",
+            "Avellino",
+            "Carrarese",
+            "Catanzaro",
+            "Cesena",
+            "Empoli",
+            "Entella",
+            "Mantova",
+            "Modena",
+            "Padova",
+            "Palermo",
+            "Südtirol",
+            "Vicenza",
+            "Arezzo",
+            "Ascoli",
+            "Udinese",
+            "Torino",
+            "Parma"
+          ],
+          "La Liga": [
+            "Real Madrid",
+            "Barcelona",
+            "Atletico Madrid",
+            "Athletic Bilbao",
+            "Sevilla",
+            "Villarreal",
+            "Real Sociedad",
+            "Real Betis",
+            "Celta Vigo",
+            "Espanyol",
+            "Levante",
+            "Getafe",
+            "Racing Santander",
+            "Osasuna",
+            "Elche",
+            "Alaves",
+            "Malaga",
+            "Girona",
+            "Ceuta",
+            "Tenerife"
+          ],
+          "Segunda Division": [
+            "Real Oviedo",
+            "Mallorca",
+            "Eibar",
+            "Castellón",
+            "Almería",
+            "Burgos",
+            "Sabadell",
+            "Sporting Gijón",
+            "Granada",
+            "Las Palmas",
+            "Leganés",
+            "Valladolid",
+            "Córdoba",
+            "Eldense",
+            "Cádiz",
+            "FC Andorra",
+            "Albacete",
+            "Rayo Vallecano",
+            "Deportivo",
+            "Valencia"
+          ]
+        },
+        "movements": [
+          {
+            "club": "Bournemouth",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Leeds United",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Fulham",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Wolves",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          },
+          {
+            "club": "Burnley",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          },
+          {
+            "club": "Bolton Wanderers",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          },
+          {
+            "club": "Schalke 04",
+            "from": "Bundesliga",
+            "to": "2. Bundesliga",
+            "kind": "relegated"
+          },
+          {
+            "club": "Freiburg",
+            "from": "Bundesliga",
+            "to": "2. Bundesliga",
+            "kind": "relegated"
+          },
+          {
+            "club": "Osnabruck",
+            "from": "2. Bundesliga",
+            "to": "Bundesliga",
+            "kind": "promoted"
+          },
+          {
+            "club": "Karlsruhe",
+            "from": "2. Bundesliga",
+            "to": "Bundesliga",
+            "kind": "promoted"
+          },
+          {
+            "club": "Paris FC",
+            "from": "Ligue 1",
+            "to": "Ligue 2",
+            "kind": "relegated"
+          },
+          {
+            "club": "Le Havre",
+            "from": "Ligue 1",
+            "to": "Ligue 2",
+            "kind": "relegated"
+          },
+          {
+            "club": "Nancy",
+            "from": "Ligue 2",
+            "to": "Ligue 1",
+            "kind": "promoted"
+          },
+          {
+            "club": "Metz",
+            "from": "Ligue 2",
+            "to": "Ligue 1",
+            "kind": "promoted"
+          },
+          {
+            "club": "Udinese",
+            "from": "Serie A",
+            "to": "Serie B",
+            "kind": "relegated"
+          },
+          {
+            "club": "Torino",
+            "from": "Serie A",
+            "to": "Serie B",
+            "kind": "relegated"
+          },
+          {
+            "club": "Parma",
+            "from": "Serie A",
+            "to": "Serie B",
+            "kind": "relegated"
+          },
+          {
+            "club": "Benevento",
+            "from": "Serie B",
+            "to": "Serie A",
+            "kind": "promoted"
+          },
+          {
+            "club": "Juve Stabia",
+            "from": "Serie B",
+            "to": "Serie A",
+            "kind": "promoted"
+          },
+          {
+            "club": "Sampdoria",
+            "from": "Serie B",
+            "to": "Serie A",
+            "kind": "promoted"
+          },
+          {
+            "club": "Rayo Vallecano",
+            "from": "La Liga",
+            "to": "Segunda Division",
+            "kind": "relegated"
+          },
+          {
+            "club": "Deportivo",
+            "from": "La Liga",
+            "to": "Segunda Division",
+            "kind": "relegated"
+          },
+          {
+            "club": "Valencia",
+            "from": "La Liga",
+            "to": "Segunda Division",
+            "kind": "relegated"
+          },
+          {
+            "club": "Girona",
+            "from": "Segunda Division",
+            "to": "La Liga",
+            "kind": "promoted"
+          },
+          {
+            "club": "Ceuta",
+            "from": "Segunda Division",
+            "to": "La Liga",
+            "kind": "promoted"
+          },
+          {
+            "club": "Tenerife",
+            "from": "Segunda Division",
+            "to": "La Liga",
+            "kind": "promoted"
+          }
+        ]
+      },
+      "generatedBallonPool": {
+        "version": 1,
+        "year": 2029,
+        "nextId": 6,
+        "entries": [
+          {
+            "name": "Ferdi Doornbos",
+            "nationality": "Belgium",
+            "position": "LW",
+            "club": "AC Milan",
+            "baseGoals": [
+              10,
+              28
+            ],
+            "id": 0,
+            "role": "primary",
+            "slot": 0,
+            "seed": 9900,
+            "firstYear": 2029,
+            "entryAge": 28,
+            "retiredYear": null
+          },
+          {
+            "name": "Shohei Nishizawa",
+            "nationality": "Japan",
+            "position": "CDM",
+            "club": "Chelsea",
+            "baseGoals": [
+              2,
+              8
+            ],
+            "id": 1,
+            "role": "primary",
+            "slot": 1,
+            "seed": 9901,
+            "firstYear": 2029,
+            "entryAge": 27,
+            "retiredYear": null
+          },
+          {
+            "name": "Agustín Quiroga",
+            "nationality": "Argentina",
+            "position": "RW",
+            "club": "Arsenal",
+            "baseGoals": [
+              10,
+              28
+            ],
+            "id": 2,
+            "role": "primary",
+            "slot": 2,
+            "seed": 9902,
+            "firstYear": 2029,
+            "entryAge": 21,
+            "retiredYear": null
+          },
+          {
+            "name": "Nahuel Lombardero",
+            "nationality": "Uruguay",
+            "position": "CB",
+            "club": "Real Madrid",
+            "baseGoals": [
+              1,
+              5
+            ],
+            "id": 3,
+            "role": "primary",
+            "slot": 3,
+            "seed": 9903,
+            "firstYear": 2029,
+            "entryAge": 21,
+            "retiredYear": null
+          },
+          {
+            "name": "Wanderson Guimarães",
+            "nationality": "Brazil",
+            "position": "CAM",
+            "club": "Tottenham",
+            "baseGoals": [
+              8,
+              22
+            ],
+            "id": 4,
+            "role": "primary",
+            "slot": 4,
+            "seed": 9904,
+            "firstYear": 2029,
+            "entryAge": 28,
+            "retiredYear": null
+          },
+          {
+            "name": "Hidde Lindeboom",
+            "nationality": "Netherlands",
+            "position": "ST",
+            "club": "Dortmund",
+            "baseGoals": [
+              18,
+              40
+            ],
+            "id": 5,
+            "role": "primary",
+            "slot": 5,
+            "seed": 9905,
+            "firstYear": 2029,
+            "entryAge": 23,
+            "retiredYear": null
+          }
+        ]
+      }
+    },
+    "draws": [
+      0.15629516984336078,
+      0.6251922610681504,
+      0.3006645820569247,
+      0.6959542871918529,
+      0.5850091010797769,
+      0.4493990018963814,
+      0.8187595529016107,
+      0.23881455743685365,
+      0.5066176659893245,
+      0.06013806466944516,
+      0.5141839140560478,
+      0.07335842959582806,
+      0.5694546550512314,
+      0.22035978082567453,
+      0.1605476187542081,
+      0.9547326399479061,
+      0.6934303275775164,
+      0.09099580231122673,
+      0.12780720135197043,
+      0.039383789990097284,
+      0.5559864083770663,
+      0.44409582228399813,
+      0.7527186293154955,
+      0.7741854069754481,
+      0.03967142081819475,
+      0.4539489618036896,
+      0.3586144964210689,
+      0.5004136899951845,
+      0.32101798383519053,
+      0.51855622488074,
+      0.12463114643469453,
+      0.8609090223908424,
+      0.3239955063909292,
+      0.7331142304465175,
+      0.899670880753547,
+      0.511402229545638,
+      0.6849419376812875,
+      0.7544218504335731,
+      0.6492377039976418,
+      0.3077852928545326,
+      0.27667427714914083,
+      0.10408892831765115,
+      0.3101469916291535,
+      0.9998672087676823,
+      0.5682123769074678,
+      0.40342582762241364,
+      0.04790632473304868,
+      0.44236176321282983,
+      0.7892064421903342,
+      0.9978257692418993,
+      0.24996148608624935,
+      0.8604963445104659,
+      0.0732565438374877,
+      0.5468705417588353,
+      0.5359666713047773,
+      0.17836156068369746,
+      0.405385083751753,
+      0.11516751698218286,
+      0.1071564257144928,
+      0.9943259733263403,
+      0.8383376826532185,
+      0.19082613778300583,
+      0.022641319781541824,
+      0.9589596868027002,
+      0.6065105169545859,
+      0.79427918093279,
+      0.4000914266798645,
+      0.44509713165462017,
+      0.030758977169170976,
+      0.417141712969169,
+      0.30002570105716586,
+      0.7023158958181739,
+      0.0011113674845546484,
+      0.7522407586220652,
+      0.37439649226143956,
+      0.25634062057361007,
+      0.9831468125339597,
+      0.8870674234349281,
+      0.8410391425713897,
+      0.5883639119565487,
+      0.6700334628112614,
+      0.9546495964750648,
+      0.3101755396928638,
+      0.09473007335327566,
+      0.5845677764154971,
+      0.39676599646918476,
+      0.3366491715423763,
+      0.8923962025437504,
+      0.3238512275274843,
+      0.5489268358796835,
+      0.28450881876051426,
+      0.7236998714506626,
+      0.5344273638911545,
+      0.4031665332149714,
+      0.7398413654882461,
+      0.518626743927598,
+      0.7155228254850954,
+      0.8259600962046534,
+      0.36353874183259904,
+      0.26600018446333706,
+      0.9778762459754944,
+      0.059174185153096914,
+      0.09158020769245923,
+      0.6837748363614082,
+      0.31708511360920966,
+      0.9365437505766749,
+      0.03096668398939073,
+      0.5790296627674252,
+      0.3591891380492598,
+      0.6832777746021748,
+      0.11967993737198412,
+      0.19070399226620793,
+      0.2579487187322229,
+      0.7544420869089663,
+      0.7525522310752422,
+      0.11010575899854302,
+      0.5339820228982717,
+      0.44034839677624404,
+      0.6148745890241116,
+      0.26657906943000853,
+      0.26429681247100234,
+      0.5351574770174921,
+      0.26147966738790274,
+      0.10140419309027493,
+      0.4721776011865586,
+      0.21109217358753085,
+      0.5181608982384205,
+      0.10074071935378015,
+      0.028060921700671315,
+      0.7381888588424772,
+      0.07076097163371742,
+      0.48960428941063583,
+      0.8733981365803629,
+      0.6133775096386671,
+      0.42650880897417665,
+      0.629609169671312,
+      0.26125446963123977,
+      0.11946395016275346,
+      0.6963282846845686,
+      0.537143015768379,
+      0.9167501560878009,
+      0.17267796723172069,
+      0.3008202745113522,
+      0.8442343187052757,
+      0.884876660304144,
+      0.5627734144218266,
+      0.658590353326872,
+      0.20640674652531743,
+      0.20616899570450187,
+      0.6343548579607159,
+      0.5095381010323763,
+      0.7855825365986675,
+      0.2228345947805792,
+      0.30949701368808746,
+      0.953177671181038,
+      0.26149248448200524,
+      0.9020798644050956,
+      0.1556067152414471,
+      0.2104134624823928,
+      0.06590548157691956,
+      0.45927315298467875,
+      0.23587275692261755,
+      0.28883341257460415,
+      0.8534152032807469,
+      0.004220895003527403,
+      0.012713729869574308,
+      0.5877229287289083,
+      0.543377417139709
+    ]
+  },
+  "sourceControl": "",
+  "observed": {
+    "id": "ere",
+    "seed": 8,
+    "file": "pristine-ere-8.json",
+    "openingFieldsOn": 2,
+    "openingFieldsOff": 0,
+    "outsideOpeningEqual": true,
+    "drawTapeEqual": true,
+    "inputHeld": true,
+    "drawCount": 168
+  }
+}

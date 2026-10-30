@@ -1,0 +1,34 @@
+{
+  "arm": "historical-opening-off",
+  "attributionControl": "",
+  "receipts": [
+    {
+      "id": "club-since",
+      "file": "src/data/soccerCareerClubPool.ts",
+      "beforeSHA256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "afterSHA256": "6234d037c9775583918e926b38bc1f4228c67e99483ef5cc216ff34bfe3dff30",
+      "beforeHunkSHA256": "df7983054547d7d274250c3fa12355e2cd89c32e5c305d2c568a0a2183a270de",
+      "afterHunkSHA256": "a563d1cb76f1038c50e5fff56381ba6355855b6deef57acde2552c0463571cad",
+      "onlyOwnedPoolSemantics": true
+    },
+    {
+      "id": "league-order",
+      "file": "src/data/soccerCareerClubPool.ts",
+      "beforeSHA256": "6234d037c9775583918e926b38bc1f4228c67e99483ef5cc216ff34bfe3dff30",
+      "afterSHA256": "c5f8296642c7543a051e0a4157d9b63c904fda9b4131fa6314673a03b89385af",
+      "beforeHunkSHA256": "f2e2b2b82b58ec6ad3687330416ba0b7bc472fc198a73fc2ed5e2f6a1f82826a",
+      "afterHunkSHA256": "dce607951918d593bb04d88b7f6352d13a254adb46da8d6e8e69cd4c894a6872",
+      "onlyOwnedPoolSemantics": true
+    },
+    {
+      "id": "club-rows",
+      "file": "src/data/soccerCareerClubPool.ts",
+      "beforeSHA256": "c5f8296642c7543a051e0a4157d9b63c904fda9b4131fa6314673a03b89385af",
+      "afterSHA256": "bb226d5bd095cb228625a71ded01ecf3c9062643d9b110909ed8ef1891199635",
+      "beforeHunkSHA256": "f55fb9ccb8a6dfb5be0000475168e04254d5795943bdbf67e855bea519714a09",
+      "afterHunkSHA256": "236710edacd7063770f2f7359c9ca6fb576c7e285b55f8f380e2b5c8f7c258cc",
+      "onlyOwnedPoolSemantics": true
+    }
+  ],
+  "wholeSourceForwardRestored": true
+}

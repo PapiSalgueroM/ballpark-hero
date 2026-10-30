@@ -1,0 +1,14 @@
+{
+  "arm": "historical-opening-off",
+  "role": "owned pool and live playing-size semantics inverse plus inherited historical inverses and opening off",
+  "original": false,
+  "compatibility": true,
+  "historicalPool": true,
+  "pristine": false,
+  "attributionControl": "",
+  "poolNormalized": true,
+  "playingSizesNormalized": true,
+  "openingOffApplied": true,
+  "compiledSHA256": "581ac9c1e883ed4ac6ba267d18d768b639a849d98894b244ae65cf0bb211d6b0",
+  "loadedSources": "historical-opening-off-loaded.json"
+}

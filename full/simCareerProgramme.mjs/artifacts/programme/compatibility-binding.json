@@ -1,0 +1,14 @@
+{
+  "arm": "compatibility",
+  "role": "inherited current-league opening off",
+  "original": false,
+  "compatibility": true,
+  "historicalPool": false,
+  "pristine": false,
+  "attributionControl": "",
+  "poolNormalized": false,
+  "playingSizesNormalized": false,
+  "openingOffApplied": true,
+  "compiledSHA256": "cfa842cc1c2b483c2dbdf5aa5c5e5b68e98aaba76b7138067ac22a32eba11a5f",
+  "loadedSources": "compatibility-loaded.json"
+}

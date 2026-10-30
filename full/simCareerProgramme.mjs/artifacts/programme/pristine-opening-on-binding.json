@@ -1,0 +1,14 @@
+{
+  "arm": "pristine-opening-on",
+  "role": "actual production source",
+  "original": false,
+  "compatibility": false,
+  "historicalPool": false,
+  "pristine": true,
+  "attributionControl": "",
+  "poolNormalized": false,
+  "playingSizesNormalized": false,
+  "openingOffApplied": false,
+  "compiledSHA256": "c0d0611e0ef264df86e16a94b8b3c1b46cd76283f2b3c5188aacd895d8b95815",
+  "loadedSources": "pristine-opening-on-loaded.json"
+}

@@ -1,0 +1,25 @@
+{
+  "arm": "historical-opening-off",
+  "attributionControl": "",
+  "receipts": [
+    {
+      "id": "SerieB-live-playing-size",
+      "file": "src/lib/soccerCareerLeague.ts",
+      "beforeSHA256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+      "afterSHA256": "901900ab56039290d28cf350dda2e9ba1566c23a7b3db6c1d78e7ea9c90e58df",
+      "beforeHunkSHA256": "c9d87ff34fe8200420546400a41cfea1b3b0b4fb19cf7bdc7be1b84b821cb221",
+      "afterHunkSHA256": "7b0ca765d16614419b7f468f7d5c3b1e9c5317447ec433a0209c909cf863dc86",
+      "onlyOwnedLivePlayingSizes": true
+    },
+    {
+      "id": "Ligue2-live-playing-size",
+      "file": "src/lib/soccerCareerLeague.ts",
+      "beforeSHA256": "901900ab56039290d28cf350dda2e9ba1566c23a7b3db6c1d78e7ea9c90e58df",
+      "afterSHA256": "3e253f8c244a487bb9c6281d95503ec7030782d415ed26a36aab1f9292f5177d",
+      "beforeHunkSHA256": "c6cfbd5d4f4bc2b2c035bb898390fcc4e5d1e2e86c65c5424c603989c7804a35",
+      "afterHunkSHA256": "042a0f8dea0facfe2792d5ec7ea84fb8622cecb3da3678514cd2439430d88773",
+      "onlyOwnedLivePlayingSizes": true
+    }
+  ],
+  "wholeSourceForwardRestored": true
+}

@@ -1,0 +1,14 @@
+{
+  "arm": "pristine-opening-off",
+  "role": "actual production source with only declared C control or opening off",
+  "original": false,
+  "compatibility": true,
+  "historicalPool": false,
+  "pristine": true,
+  "attributionControl": "",
+  "poolNormalized": false,
+  "playingSizesNormalized": false,
+  "openingOffApplied": true,
+  "compiledSHA256": "45154065e1a1e23de416c5a811f053ef35b81b81b6e8e7ff2fdde55acaf763ac",
+  "loadedSources": "pristine-opening-off-loaded.json"
+}

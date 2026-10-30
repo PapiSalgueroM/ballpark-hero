@@ -1,0 +1,18 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 472,
+      "sha256": "45fddad73082a3816572dc32f752750f82b8e01d1fbf167ca8bbfc8f26e1eb54",
+      "tests": [
+        ":src/lib/soccerCareerProgramme.test.ts",
+        ":src/lib/usCareerProgramme.test.ts",
+        ":src/test/soccerCareerProgrammeUi.test.tsx",
+        ":src/lib/careerChanceWheel.test.ts",
+        ":src/test/careerChanceWheelUi.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}
