@@ -1,0 +1,2 @@
+#!serial
+nogate: sed -i 's/playAgainDisabled={openDeals > 0}/playAgainDisabled={false}/' src/components/club-manager/ClubManagerSeasonSummary.tsx && grep -c 'playAgainDisabled={false}' src/components/club-manager/ClubManagerSeasonSummary.tsx && node_modules/.bin/vitest run src/test/ClubManagerSeasonSummary.expiring.test.tsx --testTimeout=300000; s=$?; git checkout -- src; exit $s
