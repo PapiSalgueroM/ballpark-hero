@@ -1,0 +1,5 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest exit=0 13s |    Duration  11.31s (transform 3.97s, setup 602ms, collect 10.52s, tests 13.39s, environment 3.39s, prepare 897ms)
+tsc exit=0 90s | 
+cards-default exit=0 97s | simCmPlayerCard: all green, 10261 checks (96s)
+playCmPlayerCard exit=0 147s | playCmPlayerCard: green, 5 sections at 320, 390 and 1280
