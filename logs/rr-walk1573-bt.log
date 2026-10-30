@@ -1,0 +1,14 @@
+Preparing worktree (detached HEAD 1589692185)
+HEAD is now at 1589692185 Board and state: Release BT is live (deployment 73a7d1af), Round 1565 applied in production
+S1-head-dead-390-reduce: done, "You won $1,000,000!", rungs seen 15, distinct 15
+S1 reload: done, "You won $1,000,000!"
+S2-head-dead-1280-motion: done, "You won $1,000,000!", rungs seen 15, distinct 15
+S3-head-dead-390-wrong: done, "Game over: $0", rungs seen 3, distinct 3
+S4 head Unlimited at 1280 on 2026-11-02: {"deals":150,"error":0,"short":0,"repeats":0,"misrung":0,"sameAsLast":0}
+S5-base-good-390-walk: done, "Walked away with $300", rungs seen 4, distinct 4
+S5 base record keys: sports-millionaire-daily-2026-11-02, rules-gate-seen:/sports-millionaire
+S5 head with the base record: done, "Walked away with $300" (base ended "Walked away with $300")
+S5 base on the dead day 2026-11-04: error (the control: the base must show the error card)
+S6 390: line found, 398 chars, dash false
+S6 1280: line found, 398 chars, dash false
+walkrun1573: green

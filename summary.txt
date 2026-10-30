@@ -1,0 +1,6 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+rr-walk1573-bt exit=0 163s | walkrun1573: green
+rr-nofallback-nhl-A exit=0 26s | playGmCareer control nofallback: all 2 guarded checks fired (mutations landed: {"nofallback":4})
+rr-nofallback-nfl-A exit=0 31s | playGmCareer control nofallback: all 2 guarded checks fired (mutations landed: {"nofallback":4})
+rr-mutdeps-vt exit=0 59s |    Duration  58.10s (transform 2.05s, setup 146ms, collect 3.68s, tests 55.48s, environment 706ms, prepare 255ms)
+rr-mutdeps-sim exit=0 61s | simUsCareerHallWall: ok, 53 check ids, 7847 checks, 200 careers a sport, 152 old saves

@@ -1,0 +1,18 @@
+rrmutdeps: applied (intlRepairPending out of the keep effect deps)
+section 1 nfl: 200 plaques of 200 careers, bytes median 993 p90 1068, outcomes {"notOnBallot":77,"waiting":105,"inducted":18}
+section 1 nba: 200 plaques of 200 careers, bytes median 730 p90 1083, outcomes {"waiting":90,"notOnBallot":95,"inducted":15}
+section 1 mlb: 200 plaques of 200 careers, bytes median 585 p90 1034, outcomes {"fellOff":92,"notOnBallot":92,"inducted":16}
+section 1 nhl: 200 plaques of 200 careers, bytes median 800 p90 1042, outcomes {"notOnBallot":79,"inducted":26,"waiting":95}
+section 2: 16 retired saves of the parity fixture, 86 V1 rows, 50 retired 1301 rows
+section 3: the worst case plaque is 2251 characters of JSON (stated 2251), a full wall of them 27043
+section 3 clamp name: longest real 24 (the fleet's longest 12, printed only), clamp 40
+section 3 clamp pos: longest real 4 (the fleet's longest 4, printed only), clamp 6
+section 3 clamp eraId: longest real 5 (the fleet's longest 5, printed only), clamp 16
+section 3 clamp team: longest real 3 (the fleet's longest 3, printed only), clamp 8
+section 3 clamp verdict: longest real 54 (the fleet's longest 54, printed only), clamp 160
+section 3 clamp hallName: longest real 41 (the fleet's longest 41, printed only), clamp 80
+section 3 clamp teamName: longest real 22 (the fleet's longest 22, printed only), clamp 60
+section 3 clamp weighs: longest real 187 (the fleet's longest 175, printed only), clamp 320
+section 3 clamp label: longest real 22 (the fleet's longest 22, printed only), clamp 48
+section 4: 57 board cases, 57 passed, by tag {"C1":"4/4","C4":"4/4","C4b":"4/4","C7":"4/4","C3":"4/4","C6":"4/4","C9":"4/4","C8":"4/4","C8b":"4/4","C5":"4/4","C10a":"4/4","C10b":"4/4","C10c":"4/4","J":"4/4","C11":"1/1"}
+simUsCareerHallWall: ok, 53 check ids, 7847 checks, 200 careers a sport, 152 old saves
