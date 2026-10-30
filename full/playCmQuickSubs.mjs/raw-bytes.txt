@@ -1,0 +1,3 @@
+579 /home/runner/work/_temp/rc-out/full/playCmQuickSubs.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playCmQuickSubs.mjs/stderr.log
+579 total

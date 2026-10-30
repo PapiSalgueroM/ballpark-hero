@@ -1,0 +1,3 @@
+7070 /home/runner/work/_temp/rc-out/full/playCmMatchDay.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playCmMatchDay.mjs/stderr.log
+7070 total

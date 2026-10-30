@@ -1,0 +1,2 @@
+2e88aef4296c2a8b47f42ef8e1bb4eda17e24e9324364d56a5f1caa2ef187921  /home/runner/work/_temp/rc-out/full/playCmRetire.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmRetire.mjs/stderr.log

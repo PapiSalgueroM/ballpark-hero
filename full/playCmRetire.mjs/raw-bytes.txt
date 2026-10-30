@@ -1,0 +1,3 @@
+6302 /home/runner/work/_temp/rc-out/full/playCmRetire.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playCmRetire.mjs/stderr.log
+6302 total

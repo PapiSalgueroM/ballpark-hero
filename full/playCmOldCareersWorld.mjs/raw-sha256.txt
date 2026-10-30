@@ -1,0 +1,2 @@
+8ebfe9b1928d1e619e57b1cf207eadcf47a69dc4f8805dc52ac30e688794856a  /home/runner/work/_temp/rc-out/full/playCmOldCareersWorld.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmOldCareersWorld.mjs/stderr.log

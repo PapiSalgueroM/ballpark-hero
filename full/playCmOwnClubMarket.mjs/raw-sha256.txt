@@ -1,0 +1,2 @@
+83b1cd23ccff4efecfb2bcad8336152f91f1ccf58617daa926be3be5946a7ea4  /home/runner/work/_temp/rc-out/full/playCmOwnClubMarket.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmOwnClubMarket.mjs/stderr.log

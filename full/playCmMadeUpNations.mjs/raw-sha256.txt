@@ -1,0 +1,2 @@
+9636d59a98415836a8c2a846bcc4778e9d6ced54b6760322ff5da02ff7dffe30  /home/runner/work/_temp/rc-out/full/playCmMadeUpNations.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmMadeUpNations.mjs/stderr.log

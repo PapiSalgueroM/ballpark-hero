@@ -1,0 +1,3 @@
+1420 /home/runner/work/_temp/rc-out/full/playCmMadeUpNations.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playCmMadeUpNations.mjs/stderr.log
+1420 total

@@ -1,0 +1,26 @@
+{
+  "cases": [],
+  "controls": [],
+  "sourceBefore": {
+    "src/lib/clubManager.ts": "ea2bf9c72ad4097af2df77fa5c19e04cfbca0bcc9c39bf71dc7fc42f249b3cc2",
+    "src/lib/clubManagerFixtures.ts": "9ca9e7233ce26939ae588f12c0823d32daa00f12b1be169cd27b7d8ffbe0bf3d",
+    "src/data/clubManagerPremierFixtures2026.ts": "acef076f2ded4e396454d20a316fd6deeff9b2e60d537615047dfc913a760f51",
+    "scripts/data/clubManagerPremierFixtures2026.receipt.json": "7e97c3119a28400654366b8979d3f1146c635a0303da4d1bc8adce00fba6d54e",
+    "src/components/club-manager/CalendarCard.tsx": "e0981ad783a98146fc7a91f0e891a763c1d6c1f51d3352065b4b817912f3d8bf",
+    "src/components/club-manager/CalendarScreen.tsx": "170898d99006c2055c833d9e09c0fcc24eaa4a00ae7eec9a5448365690811075",
+    "src/components/club-manager/ClubManagerHelp.tsx": "d7d47717e7311b51f22891d3f334bc26b046c22ff6a7a088488783d18f557e1f",
+    "scripts/playCmRealFixtures.mjs": "737d79c24bc2c17aa61f293b477ff1b5b0d13f5afe86e2d0c6963685589b32a1"
+  },
+  "forwardedExternalRequests": 0,
+  "sourceAfter": {
+    "src/lib/clubManager.ts": "ea2bf9c72ad4097af2df77fa5c19e04cfbca0bcc9c39bf71dc7fc42f249b3cc2",
+    "src/lib/clubManagerFixtures.ts": "9ca9e7233ce26939ae588f12c0823d32daa00f12b1be169cd27b7d8ffbe0bf3d",
+    "src/data/clubManagerPremierFixtures2026.ts": "acef076f2ded4e396454d20a316fd6deeff9b2e60d537615047dfc913a760f51",
+    "scripts/data/clubManagerPremierFixtures2026.receipt.json": "7e97c3119a28400654366b8979d3f1146c635a0303da4d1bc8adce00fba6d54e",
+    "src/components/club-manager/CalendarCard.tsx": "e0981ad783a98146fc7a91f0e891a763c1d6c1f51d3352065b4b817912f3d8bf",
+    "src/components/club-manager/CalendarScreen.tsx": "170898d99006c2055c833d9e09c0fcc24eaa4a00ae7eec9a5448365690811075",
+    "src/components/club-manager/ClubManagerHelp.tsx": "d7d47717e7311b51f22891d3f334bc26b046c22ff6a7a088488783d18f557e1f",
+    "scripts/playCmRealFixtures.mjs": "737d79c24bc2c17aa61f293b477ff1b5b0d13f5afe86e2d0c6963685589b32a1"
+  },
+  "sourceHeld": true
+}

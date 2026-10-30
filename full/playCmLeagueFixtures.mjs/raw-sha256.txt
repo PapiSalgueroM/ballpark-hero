@@ -1,0 +1,2 @@
+5c24f47399e6f1b4f3133911485407284016851f65a6415501fb56b2b8f67617  /home/runner/work/_temp/rc-out/full/playCmLeagueFixtures.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmLeagueFixtures.mjs/stderr.log

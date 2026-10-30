@@ -1,0 +1,14 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+playCmLeagueFixtures: bash .rc/default-support.sh run playCmLeagueFixtures.mjs
+playCmLeagueLeaders: bash .rc/default-support.sh run playCmLeagueLeaders.mjs
+playCmMadeUpNations: bash .rc/default-support.sh run playCmMadeUpNations.mjs
+playCmMatchDay: bash .rc/default-support.sh run playCmMatchDay.mjs
+playCmNoSack: bash .rc/default-support.sh run playCmNoSack.mjs
+playCmOldCareersWorld: bash .rc/default-support.sh run playCmOldCareersWorld.mjs
+playCmOwnClubMarket: bash .rc/default-support.sh run playCmOwnClubMarket.mjs
+playCmQuickSubs: bash .rc/default-support.sh run playCmQuickSubs.mjs
+playCmRealFixtures: bash .rc/default-support.sh run playCmRealFixtures.mjs
+playCmRetire: bash .rc/default-support.sh run playCmRetire.mjs
+finish: bash .rc/default-support.sh finish

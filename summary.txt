@@ -1,0 +1,12 @@
+prepare exit=0 74s | ordinary-build raw=0
+playCmLeagueFixtures exit=1 97s | playCmLeagueFixtures.mjs raw=1
+playCmLeagueLeaders exit=0 107s | playCmLeagueLeaders.mjs raw=0
+playCmMadeUpNations exit=0 7s | playCmMadeUpNations.mjs raw=0
+playCmMatchDay exit=1 183s | playCmMatchDay.mjs raw=1
+playCmNoSack exit=1 22s | playCmNoSack.mjs raw=1
+playCmOldCareersWorld exit=0 5s | playCmOldCareersWorld.mjs raw=0
+playCmOwnClubMarket exit=0 8s | playCmOwnClubMarket.mjs raw=0
+playCmQuickSubs exit=1 14s | playCmQuickSubs.mjs raw=1
+playCmRealFixtures exit=1 3s | playCmRealFixtures.mjs raw=1
+playCmRetire exit=0 99s | playCmRetire.mjs raw=0
+finish exit=1 8s | 

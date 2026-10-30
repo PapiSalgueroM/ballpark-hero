@@ -1,0 +1,2 @@
+979b8391d62ee683a76a6e71f8930cb1ce484b3c94e3df34d63489850e965c76  /home/runner/work/_temp/rc-out/full/playCmNoSack.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmNoSack.mjs/stderr.log

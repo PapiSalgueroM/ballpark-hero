@@ -1,0 +1,3 @@
+1605 /home/runner/work/_temp/rc-out/full/playCmOwnClubMarket.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playCmOwnClubMarket.mjs/stderr.log
+1605 total

@@ -1,0 +1,2 @@
+1b29aca547c45aa1e753f3704a62d8c09d91d3002327f52c9df852d2cb1e829f  /home/runner/work/_temp/rc-out/full/playCmRealFixtures.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmRealFixtures.mjs/stderr.log

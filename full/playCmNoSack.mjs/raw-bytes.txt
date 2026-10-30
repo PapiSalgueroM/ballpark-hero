@@ -1,0 +1,3 @@
+2745 /home/runner/work/_temp/rc-out/full/playCmNoSack.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playCmNoSack.mjs/stderr.log
+2745 total

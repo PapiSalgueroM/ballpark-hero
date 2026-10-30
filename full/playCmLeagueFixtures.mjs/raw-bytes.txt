@@ -1,0 +1,3 @@
+988 /home/runner/work/_temp/rc-out/full/playCmLeagueFixtures.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playCmLeagueFixtures.mjs/stderr.log
+988 total
