@@ -14,6 +14,8 @@ import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 import { withoutClubDetailFixtures } from './lib/clubDetailFixturesSourceJoin.mjs';
+/* Round 1606: the real dugouts' manager line comes off the screen first, then the fixtures join, as before. */
+import { withoutClubDetailDugout } from './lib/clubDetailDugoutSourceJoin.mjs';
 
 assert(process.env.CI && process.env.SIM_NETWORK === 'offline', 'Current-roster browser execution requires remote offline CI.');
 assert(process.env.CM_OWN_ROSTER_PHASE === 'fixed', 'The browser proof runs only after fixed real-engine screen outcomes.');
@@ -313,7 +315,7 @@ try {
     retained('fixed/' + path.basename(binding.file) + '.fixed-plan', binding.plannedSha256);
     const inverse = retained('fixed/' + path.basename(binding.file) + '.inverse', binding.inverseSha256);
     const current = fs.readFileSync(path.join(ROOT, binding.file), 'utf8');
-    const comparable = binding.file === SOURCE_FILES[0] ? withoutClubDetailFixtures(current) : current;
+    const comparable = binding.file === SOURCE_FILES[0] ? withoutClubDetailFixtures(withoutClubDetailDugout(current)) : current;
     setup(binding.plannedSha256 === sha(comparable) && binding.inverseSha256 === binding.parentSha256
       && fs.readFileSync(inverse).equals(execFileSync('git', ['show', PARENT + ':' + binding.file], { cwd: ROOT })), 'Exact whole phase inverse differs: ' + binding.file);
   }
