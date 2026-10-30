@@ -1,0 +1,3 @@
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+rules-base: R=$PWD && git worktree add -f /tmp/lrb 14a9af704 >/dev/null 2>&1 && cd /tmp/lrb && ln -s "$R/node_modules" node_modules && node scripts/simCmLeagueRules.mjs
