@@ -1,0 +1,6825 @@
+{
+  "saveVersion": 3,
+  "clubName": "Brentford",
+  "season": 1,
+  "week": 0,
+  "startYear": 2026,
+  "eraId": "now",
+  "retiredNames": [],
+  "retiredLastSummer": [],
+  "budget": 69,
+  "boardConfidence": 69,
+  "sacked": false,
+  "squad": [
+    {
+      "id": "p-igor-thiago",
+      "name": "Igor Thiago",
+      "position": "ST",
+      "rating": 86,
+      "age": 24,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 40.5,
+      "wage": 52,
+      "contractYears": 4,
+      "potential": 90,
+      "role": "star",
+      "lastTen": []
+    },
+    {
+      "id": "p-dango-ouattara",
+      "name": "Dango Ouattara",
+      "position": "RW",
+      "rating": 84,
+      "age": 23,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 28.5,
+      "wage": 40,
+      "contractYears": 1,
+      "potential": 86,
+      "role": "star",
+      "lastTen": []
+    },
+    {
+      "id": "p-kevin-schade",
+      "name": "Kevin Schade",
+      "position": "LW",
+      "rating": 84,
+      "age": 24,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 28.5,
+      "wage": 40,
+      "contractYears": 2,
+      "potential": 86,
+      "role": "star",
+      "lastTen": []
+    },
+    {
+      "id": "p-michael-kayode",
+      "name": "Michael Kayode",
+      "position": "RB",
+      "rating": 84,
+      "age": 21,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 28.5,
+      "wage": 40,
+      "contractYears": 3,
+      "potential": 93,
+      "role": "key",
+      "lastTen": []
+    },
+    {
+      "id": "p-sepp-van-den-berg",
+      "name": "Sepp van den Berg",
+      "position": "CB",
+      "rating": 84,
+      "age": 24,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 26.3,
+      "wage": 38,
+      "contractYears": 3,
+      "potential": 85,
+      "role": "key",
+      "lastTen": []
+    },
+    {
+      "id": "p-mamadou-sangare",
+      "name": "Mamadou Sangaré",
+      "position": "CM",
+      "rating": 83,
+      "age": 23,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 24,
+      "wage": 35,
+      "contractYears": 4,
+      "potential": 85,
+      "role": "key",
+      "lastTen": []
+    },
+    {
+      "id": "p-mikkel-damsgaard",
+      "name": "Mikkel Damsgaard",
+      "position": "CAM",
+      "rating": 83,
+      "age": 25,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 24,
+      "wage": 35,
+      "contractYears": 2,
+      "potential": 84,
+      "role": "key",
+      "lastTen": []
+    },
+    {
+      "id": "p-nathan-collins",
+      "name": "Nathan Collins",
+      "position": "CB",
+      "rating": 83,
+      "age": 24,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 24,
+      "wage": 35,
+      "contractYears": 3,
+      "potential": 86,
+      "role": "key",
+      "lastTen": []
+    },
+    {
+      "id": "p-yegor-yarmolyuk",
+      "name": "Yegor Yarmolyuk",
+      "position": "CM",
+      "rating": 83,
+      "age": 21,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 24,
+      "wage": 35,
+      "contractYears": 2,
+      "potential": 95,
+      "role": "key",
+      "lastTen": []
+    },
+    {
+      "id": "p-el-hadji-malick-diouf",
+      "name": "El Hadji Malick Diouf",
+      "position": "LB",
+      "rating": 83,
+      "age": 21,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 22.5,
+      "wage": 34,
+      "contractYears": 4,
+      "potential": 95,
+      "role": "key",
+      "lastTen": []
+    },
+    {
+      "id": "p-caoimhin-kelleher",
+      "name": "Caoimhín Kelleher",
+      "position": "GK",
+      "rating": 82,
+      "age": 27,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 20.3,
+      "wage": 31,
+      "contractYears": 3,
+      "potential": 84,
+      "role": "key",
+      "lastTen": []
+    },
+    {
+      "id": "p-keane-lewis-potter",
+      "name": "Keane Lewis-Potter",
+      "position": "LM",
+      "rating": 82,
+      "age": 24,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 20.3,
+      "wage": 31,
+      "contractYears": 4,
+      "potential": 84,
+      "role": "rotation",
+      "lastTen": []
+    },
+    {
+      "id": "p-antoni-milambo",
+      "name": "Antoni Milambo",
+      "position": "CAM",
+      "rating": 81,
+      "age": 20,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 16.5,
+      "wage": 27,
+      "contractYears": 1,
+      "potential": 83,
+      "role": "rotation",
+      "lastTen": []
+    },
+    {
+      "id": "p-jaidon-anthony",
+      "name": "Jaidon Anthony",
+      "position": "LW",
+      "rating": 80,
+      "age": 26,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 14.3,
+      "wage": 24,
+      "contractYears": 3,
+      "potential": 82,
+      "role": "rotation",
+      "lastTen": []
+    },
+    {
+      "id": "p-kristoffer-ajer",
+      "name": "Kristoffer Ajer",
+      "position": "CB",
+      "rating": 80,
+      "age": 27,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 14.3,
+      "wage": 24,
+      "contractYears": 2,
+      "potential": 82,
+      "role": "rotation",
+      "lastTen": []
+    },
+    {
+      "id": "p-vitaly-janelt",
+      "name": "Vitaly Janelt",
+      "position": "CDM",
+      "rating": 80,
+      "age": 27,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 13,
+      "wage": 23,
+      "contractYears": 2,
+      "potential": 80,
+      "role": "backup",
+      "lastTen": []
+    },
+    {
+      "id": "p-aaron-hickey",
+      "name": "Aaron Hickey",
+      "position": "RB",
+      "rating": 80,
+      "age": 23,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 12.8,
+      "wage": 23,
+      "contractYears": 1,
+      "potential": 81,
+      "role": "backup",
+      "lastTen": []
+    },
+    {
+      "id": "p-rico-henry",
+      "name": "Rico Henry",
+      "position": "LB",
+      "rating": 79,
+      "age": 28,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 12,
+      "wage": 22,
+      "contractYears": 4,
+      "potential": 80,
+      "role": "backup",
+      "lastTen": []
+    },
+    {
+      "id": "p-mathias-jensen",
+      "name": "Mathias Jensen",
+      "position": "CM",
+      "rating": 78,
+      "age": 30,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 9.8,
+      "wage": 19,
+      "contractYears": 3,
+      "potential": 78,
+      "role": "backup",
+      "lastTen": []
+    },
+    {
+      "id": "p-fabio-carvalho",
+      "name": "Fábio Carvalho",
+      "position": "CAM",
+      "rating": 77,
+      "age": 23,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 8.3,
+      "wage": 17,
+      "contractYears": 4,
+      "potential": 78,
+      "role": "backup",
+      "lastTen": []
+    },
+    {
+      "id": "p-kaye-furo",
+      "name": "Kaye Furo",
+      "position": "ST",
+      "rating": 76,
+      "age": 18,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 6.8,
+      "wage": 14,
+      "contractYears": 3,
+      "potential": 90,
+      "role": "prospect",
+      "lastTen": []
+    },
+    {
+      "id": "p-josh-dasilva",
+      "name": "Josh Dasilva",
+      "position": "CM",
+      "rating": 75,
+      "age": 27,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 5.7,
+      "wage": 13,
+      "contractYears": 3,
+      "potential": 76,
+      "role": "backup",
+      "lastTen": []
+    },
+    {
+      "id": "p-callum-wilson",
+      "name": "Callum Wilson",
+      "position": "ST",
+      "rating": 73,
+      "age": 33,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 3.8,
+      "wage": 9,
+      "contractYears": 3,
+      "potential": 73,
+      "role": "backup",
+      "lastTen": []
+    },
+    {
+      "id": "p-hakon-valdimarsson",
+      "name": "Hákon Valdimarsson",
+      "position": "GK",
+      "rating": 70,
+      "age": 24,
+      "fitness": 100,
+      "morale": 70,
+      "injuryWeeks": 0,
+      "suspendedMatches": 0,
+      "isYouth": false,
+      "seasonGoals": 0,
+      "seasonAssists": 0,
+      "value": 2.3,
+      "wage": 7,
+      "contractYears": 3,
+      "potential": 74,
+      "role": "backup",
+      "lastTen": []
+    }
+  ],
+  "xiIds": [
+    "p-caoimhin-kelleher",
+    "p-michael-kayode",
+    "p-sepp-van-den-berg",
+    "p-nathan-collins",
+    "p-el-hadji-malick-diouf",
+    "p-mamadou-sangare",
+    "p-mikkel-damsgaard",
+    "p-yegor-yarmolyuk",
+    "p-dango-ouattara",
+    "p-igor-thiago",
+    "p-kevin-schade"
+  ],
+  "formationIndex": 0,
+  "mentality": "balanced",
+  "leagueClubs": [
+    "Nottingham Forest",
+    "Newcastle",
+    "Arsenal",
+    "Fulham",
+    "Manchester City",
+    "Brighton",
+    "Hull City",
+    "Leeds United",
+    "Chelsea",
+    "Crystal Palace",
+    "Bournemouth",
+    "Aston Villa",
+    "Manchester United",
+    "Tottenham",
+    "Liverpool",
+    "Brentford",
+    "Coventry City",
+    "Ipswich Town",
+    "Sunderland",
+    "Everton"
+  ],
+  "balancedFixtures": true,
+  "table": [
+    {
+      "club": "Nottingham Forest",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Newcastle",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Arsenal",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Fulham",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Manchester City",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Brighton",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Hull City",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Leeds United",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Chelsea",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Crystal Palace",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Bournemouth",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Aston Villa",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Manchester United",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Tottenham",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Liverpool",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Brentford",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Coventry City",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Ipswich Town",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Sunderland",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    },
+    {
+      "club": "Everton",
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "gf": 0,
+      "ga": 0,
+      "pts": 0
+    }
+  ],
+  "form": [],
+  "calendar": [
+    {
+      "type": "league",
+      "round": 0
+    },
+    {
+      "type": "league",
+      "round": 1
+    },
+    {
+      "type": "league",
+      "round": 2
+    },
+    {
+      "type": "uclGroup",
+      "round": 0
+    },
+    {
+      "type": "league",
+      "round": 3
+    },
+    {
+      "type": "league",
+      "round": 4
+    },
+    {
+      "type": "league",
+      "round": 5
+    },
+    {
+      "type": "uclGroup",
+      "round": 1
+    },
+    {
+      "type": "league",
+      "round": 6
+    },
+    {
+      "type": "cup",
+      "round": 0,
+      "cupRound": "R16"
+    },
+    {
+      "type": "league",
+      "round": 7
+    },
+    {
+      "type": "league",
+      "round": 8
+    },
+    {
+      "type": "uclGroup",
+      "round": 2
+    },
+    {
+      "type": "league",
+      "round": 9
+    },
+    {
+      "type": "league",
+      "round": 10
+    },
+    {
+      "type": "uclGroup",
+      "round": 3
+    },
+    {
+      "type": "league",
+      "round": 11
+    },
+    {
+      "type": "league",
+      "round": 12
+    },
+    {
+      "type": "uclGroup",
+      "round": 4
+    },
+    {
+      "type": "league",
+      "round": 13
+    },
+    {
+      "type": "league",
+      "round": 14
+    },
+    {
+      "type": "cup",
+      "round": 0,
+      "cupRound": "QF"
+    },
+    {
+      "type": "league",
+      "round": 15
+    },
+    {
+      "type": "uclGroup",
+      "round": 5
+    },
+    {
+      "type": "league",
+      "round": 16
+    },
+    {
+      "type": "league",
+      "round": 17
+    },
+    {
+      "type": "league",
+      "round": 18
+    },
+    {
+      "type": "window",
+      "round": 0
+    },
+    {
+      "type": "league",
+      "round": 19
+    },
+    {
+      "type": "league",
+      "round": 20
+    },
+    {
+      "type": "league",
+      "round": 21
+    },
+    {
+      "type": "league",
+      "round": 22
+    },
+    {
+      "type": "uclKo",
+      "round": 0,
+      "uclRound": "QF",
+      "uclLeg": 1
+    },
+    {
+      "type": "league",
+      "round": 23
+    },
+    {
+      "type": "uclKo",
+      "round": 0,
+      "uclRound": "QF",
+      "uclLeg": 2
+    },
+    {
+      "type": "league",
+      "round": 24
+    },
+    {
+      "type": "league",
+      "round": 25
+    },
+    {
+      "type": "league",
+      "round": 26
+    },
+    {
+      "type": "cup",
+      "round": 0,
+      "cupRound": "SF"
+    },
+    {
+      "type": "league",
+      "round": 27
+    },
+    {
+      "type": "league",
+      "round": 28
+    },
+    {
+      "type": "league",
+      "round": 29
+    },
+    {
+      "type": "uclKo",
+      "round": 0,
+      "uclRound": "SF",
+      "uclLeg": 1
+    },
+    {
+      "type": "league",
+      "round": 30
+    },
+    {
+      "type": "uclKo",
+      "round": 0,
+      "uclRound": "SF",
+      "uclLeg": 2
+    },
+    {
+      "type": "league",
+      "round": 31
+    },
+    {
+      "type": "league",
+      "round": 32
+    },
+    {
+      "type": "league",
+      "round": 33
+    },
+    {
+      "type": "cup",
+      "round": 0,
+      "cupRound": "F"
+    },
+    {
+      "type": "league",
+      "round": 34
+    },
+    {
+      "type": "league",
+      "round": 35
+    },
+    {
+      "type": "uclKo",
+      "round": 0,
+      "uclRound": "F"
+    },
+    {
+      "type": "league",
+      "round": 36
+    },
+    {
+      "type": "league",
+      "round": 37
+    }
+  ],
+  "clubStrengths": {
+    "Arsenal": 88.7,
+    "Aston Villa": 84.7,
+    "Bournemouth": 83.4,
+    "Brentford": 81.5,
+    "Brighton": 85.4,
+    "Chelsea": 88.5,
+    "Coventry City": 81.1,
+    "Crystal Palace": 82.6,
+    "Everton": 84.2,
+    "Fulham": 80.5,
+    "Hull City": 76.6,
+    "Ipswich Town": 82.4,
+    "Leeds United": 83.5,
+    "Liverpool": 87.3,
+    "Manchester City": 86.5,
+    "Manchester United": 84.5,
+    "Newcastle": 85.1,
+    "Nottingham Forest": 85.8,
+    "Sunderland": 82.2,
+    "Tottenham": 84.8,
+    "Birmingham City": 73.5,
+    "Blackburn Rovers": 63.2,
+    "Bolton Wanderers": 63.5,
+    "Bristol City": 74,
+    "Burnley": 75,
+    "Cardiff City": 63.5,
+    "Charlton Athletic": 65.5,
+    "Derby County": 73.7,
+    "Lincoln City": 60.7,
+    "Middlesbrough": 77.8,
+    "Millwall": 70.7,
+    "Norwich City": 74,
+    "Portsmouth": 65.8,
+    "Preston North End": 70.6,
+    "QPR": 74.7,
+    "Sheffield United": 77.5,
+    "Southampton": 78.6,
+    "Stoke City": 74.9,
+    "Swansea City": 73.8,
+    "Watford": 74.8,
+    "West Brom": 71.2,
+    "West Ham": 80.3,
+    "Wolves": 77.1,
+    "Wrexham": 73.3,
+    "Alavés": 72.1,
+    "Athletic Club": 80.3,
+    "Atlético Madrid": 85.4,
+    "Barcelona": 90.9,
+    "Real Betis": 82,
+    "Celta Vigo": 75.7,
+    "Deportivo La Coruña": 73.4,
+    "Elche": 73.2,
+    "Espanyol": 78.3,
+    "Getafe": 76.8,
+    "Levante": 77.3,
+    "Málaga": 68.1,
+    "Osasuna": 72.6,
+    "Racing Santander": 74.9,
+    "Rayo Vallecano": 71.7,
+    "Real Madrid": 87.6,
+    "Real Sociedad": 80.8,
+    "Sevilla": 79.1,
+    "Valencia": 76,
+    "Villarreal": 79.5,
+    "Atalanta": 84.2,
+    "Bologna": 79.4,
+    "Cagliari": 74.6,
+    "Como": 81.4,
+    "Fiorentina": 79,
+    "Frosinone": 70.7,
+    "Genoa": 74.9,
+    "Inter Milan": 84.5,
+    "Juventus": 83.3,
+    "Lazio": 80.5,
+    "Lecce": 73.5,
+    "AC Milan": 81.9,
+    "Monza": 73.5,
+    "Napoli": 80.5,
+    "Parma": 74.8,
+    "Roma": 84.5,
+    "Sassuolo": 78,
+    "Torino": 79.5,
+    "Udinese": 74.8,
+    "Venezia": 71.9,
+    "Augsburg": 78.2,
+    "Bayer Leverkusen": 81.9,
+    "Bayern Munich": 87.6,
+    "Borussia Dortmund": 86.4,
+    "Gladbach": 75.1,
+    "Eintracht Frankfurt": 82.8,
+    "Freiburg": 76.3,
+    "Hamburg": 78.3,
+    "Hoffenheim": 80.3,
+    "Köln": 74.1,
+    "Mainz": 75.3,
+    "RB Leipzig": 84.2,
+    "Schalke 04": 70.2,
+    "Elversberg": 71,
+    "Paderborn": 68.4,
+    "Stuttgart": 83.6,
+    "Union Berlin": 75.5,
+    "Werder Bremen": 74,
+    "Angers": 74.2,
+    "Auxerre": 72.4,
+    "Brest": 71.3,
+    "Le Havre": 70.1,
+    "Le Mans": 61.7,
+    "Lens": 76.4,
+    "Lille": 81.1,
+    "Lorient": 77.3,
+    "Lyon": 80.4,
+    "Marseille": 80.2,
+    "Monaco": 81.6,
+    "Nice": 74.6,
+    "Paris FC": 75.5,
+    "PSG": 86.9,
+    "Rennes": 76.5,
+    "Strasbourg": 79.7,
+    "Toulouse": 74.1,
+    "Troyes": 63.599999999999994,
+    "Ajax": 80.5,
+    "AZ Alkmaar": 75.9,
+    "ADO Den Haag": 65,
+    "Cambuur": 64,
+    "Excelsior": 61.4,
+    "Feyenoord": 77.2,
+    "Fortuna Sittard": 63,
+    "Go Ahead Eagles": 63.5,
+    "Groningen": 68.2,
+    "Heerenveen": 69.6,
+    "NEC Nijmegen": 68.7,
+    "PEC Zwolle": 64.2,
+    "PSV": 78.5,
+    "Sparta Rotterdam": 65.1,
+    "Telstar": 62.8,
+    "Twente": 74.8,
+    "Utrecht": 70.7,
+    "Willem II": 58.9,
+    "Abha": 60.4,
+    "Al-Ahli": 78,
+    "Al-Diriyah": 60.7,
+    "Al-Ettifaq": 69.4,
+    "Al-Faisaly": 68,
+    "Al-Fateh": 62.5,
+    "Al-Fayha": 63.8,
+    "Al-Hazem": 59.5,
+    "Al-Hilal": 80.8,
+    "Al-Ittihad": 77.8,
+    "Al-Khaleej": 63.900000000000006,
+    "Al-Kholood": 64.9,
+    "Al-Nassr": 76.7,
+    "Al-Qadsiah": 75.4,
+    "Al-Riyadh": 59.3,
+    "Al-Shabab": 68.1,
+    "Al-Taawoun": 62.400000000000006,
+    "NEOM SC": 71.4,
+    "Atlanta United": 71.1,
+    "Charlotte FC": 71.4,
+    "Chicago Fire": 71.5,
+    "FC Cincinnati": 68.4,
+    "Columbus Crew": 73.1,
+    "D.C. United": 65.5,
+    "Inter Miami": 72,
+    "CF Montréal": 66.9,
+    "Nashville SC": 65.5,
+    "New England Revolution": 70.2,
+    "New York City FC": 72.2,
+    "New York Red Bulls": 67.2,
+    "Orlando City": 70.9,
+    "Philadelphia Union": 65.2,
+    "Toronto FC": 67.6,
+    "Austin FC": 70.8,
+    "Colorado Rapids": 69,
+    "FC Dallas": 65.6,
+    "Houston Dynamo": 67.3,
+    "LA Galaxy": 65.5,
+    "LAFC": 70.1,
+    "Minnesota United": 66.4,
+    "Portland Timbers": 71.4,
+    "Real Salt Lake": 64.3,
+    "San Diego FC": 68.3,
+    "San Jose Earthquakes": 64.7,
+    "Seattle Sounders": 68.6,
+    "Sporting Kansas City": 62.099999999999994,
+    "St. Louis City": 69.2,
+    "Vancouver Whitecaps": 68.4,
+    "Porto": 84.6,
+    "Benfica": 81,
+    "Sporting CP": 79.7,
+    "Braga": 75.9,
+    "Vitória Guimarães": 68.9,
+    "Famalicão": 70.7,
+    "Rio Ave": 69.5,
+    "Casa Pia": 63,
+    "Estoril": 68.5,
+    "Moreirense": 67.5,
+    "Arouca": 60,
+    "Gil Vicente": 67.2,
+    "Santa Clara": 66,
+    "Nacional": 63.3,
+    "Estrela Amadora": 63.2,
+    "Alverca": 62.7,
+    "Marítimo": 64,
+    "Académico de Viseu": 64,
+    "Celtic": 74,
+    "Rangers": 76.5,
+    "Aberdeen": 62.4,
+    "Hearts": 63.4,
+    "Hibernian": 64.3,
+    "Dundee United": 59.7,
+    "Dundee": 60.4,
+    "Motherwell": 60.2,
+    "St Mirren": 63,
+    "Kilmarnock": 62.6,
+    "Falkirk": 59.7,
+    "St Johnstone": 61.7,
+    "Galatasaray": 84.4,
+    "Fenerbahçe": 82.1,
+    "Beşiktaş": 78.9,
+    "Trabzonspor": 79.4,
+    "Başakşehir": 73.6,
+    "Samsunspor": 68.9,
+    "Eyüpspor": 60.6,
+    "Göztepe": 72.9,
+    "Kasımpaşa": 62.2,
+    "Alanyaspor": 68.4,
+    "Konyaspor": 65.5,
+    "Gaziantep FK": 64.5,
+    "Gençlerbirliği": 61.8,
+    "Kocaelispor": 61.7,
+    "Rizespor": 66.3,
+    "Erzurumspor": 61.1,
+    "Amedspor": 64,
+    "Çorum FK": 61.3,
+    "Wolfsburg": 74.4,
+    "Heidenheim": 69.5,
+    "St. Pauli": 71.3,
+    "Bochum": 63.1,
+    "Hertha BSC": 63.2,
+    "Magdeburg": 68,
+    "Kaiserslautern": 64.1,
+    "Holstein Kiel": 66.5,
+    "Hannover 96": 62.400000000000006,
+    "Dynamo Dresden": 59.9,
+    "Braunschweig": 61.3,
+    "Greuther Fürth": 63.7,
+    "Nürnberg": 65.6,
+    "Darmstadt": 61.7,
+    "Arminia Bielefeld": 59.8,
+    "Karlsruhe": 62.2,
+    "Osnabrück": 61,
+    "Energie Cottbus": 61,
+    "Club Brugge": 75.5,
+    "Union Saint-Gilloise": 71.7,
+    "Anderlecht": 72.7,
+    "Genk": 76.4,
+    "Gent": 68.7,
+    "Antwerp": 68.5,
+    "Standard Liège": 63.5,
+    "Mechelen": 67.1,
+    "Charleroi": 65.5,
+    "Westerlo": 66.9,
+    "Sint-Truiden": 67.5,
+    "OH Leuven": 62.5,
+    "Cercle Brugge": 65.6,
+    "La Louvière": 62.7,
+    "Zulte Waregem": 64.5,
+    "Beveren": 62.4,
+    "Kortrijk": 61.4,
+    "Lommel": 63,
+    "RB Salzburg": 72.2,
+    "Sturm Graz": 67.9,
+    "Rapid Wien": 71.5,
+    "LASK": 66.5,
+    "Wolfsberger AC": 59.8,
+    "Austria Wien": 63,
+    "Grazer AK": 61.7,
+    "Hartberg": 62.8,
+    "Ried": 59.1,
+    "Altach": 64,
+    "WSG Tirol": 60.4,
+    "Austria Lustenau": 63,
+    "Olympiacos": 76.6,
+    "Panathinaikos": 76,
+    "AEK Athens": 73.2,
+    "PAOK": 72.9,
+    "Aris": 66,
+    "Asteras Tripolis": 66,
+    "Atromitos": 66,
+    "Iraklis": 61,
+    "Kalamata": 62,
+    "Kifisia": 61,
+    "Levadiakos": 62,
+    "OFI": 59.3,
+    "Panetolikos": 58.7,
+    "Volos": 59.6,
+    "FC Copenhagen": 74.5,
+    "FC Midtjylland": 75.1,
+    "Brøndby IF": 67.5,
+    "AGF": 65.5,
+    "FC Nordsjælland": 65,
+    "Viborg FF": 62.3,
+    "Randers FC": 63.7,
+    "OB": 60.4,
+    "Silkeborg IF": 59.7,
+    "Lyngby": 61.5,
+    "AC Horsens": 63,
+    "SønderjyskE": 64,
+    "Basel": 70.5,
+    "Young Boys": 73.7,
+    "Thun": 64,
+    "St. Gallen": 63.400000000000006,
+    "Lugano": 68.2,
+    "Servette": 64.9,
+    "Luzern": 62.7,
+    "Lausanne-Sport": 68.4,
+    "FC Zürich": 60.3,
+    "Grasshopper": 62.9,
+    "Sion": 61.7,
+    "Vaduz": 58.4,
+    "Dinamo Zagreb": 68.3,
+    "Hajduk Split": 70,
+    "Rijeka": 66.2,
+    "Osijek": 63.8,
+    "Varaždin": 67,
+    "Slaven Belupo": 59.5,
+    "Istra 1961": 63,
+    "Lokomotiva Zagreb": 67,
+    "Gorica": 65,
+    "Rudeš": 60,
+    "Flamengo": 78.8,
+    "Palmeiras": 78.8,
+    "Athletico Paranaense": 68.6,
+    "Fluminense": 73.4,
+    "Bahia": 73.5,
+    "Cruzeiro": 76.8,
+    "Atlético Mineiro": 75.3,
+    "Santos": 76,
+    "Coritiba": 64.9,
+    "Red Bull Bragantino": 71.5,
+    "São Paulo": 73.4,
+    "Botafogo": 76.2,
+    "Vitória": 69.5,
+    "Corinthians": 78,
+    "Mirassol": 64.5,
+    "Vasco da Gama": 72.9,
+    "Grêmio": 75.6,
+    "Internacional": 70.6,
+    "Remo": 63.7,
+    "Chapecoense": 61,
+    "América": 73.3,
+    "Guadalajara": 72.6,
+    "Cruz Azul": 70.8,
+    "Monterrey": 72.8,
+    "Tigres UANL": 71.2,
+    "Toluca": 74.9,
+    "Pumas UNAM": 70.5,
+    "Pachuca": 68.2,
+    "León": 69.5,
+    "Santos Laguna": 62.6,
+    "Atlas": 63.5,
+    "Necaxa": 69,
+    "Puebla": 60.1,
+    "Querétaro": 64,
+    "Tijuana": 66.4,
+    "FC Juárez": 69.7,
+    "Atlético San Luis": 68.3,
+    "Atlante": 62,
+    "Adelaide United": 59.9,
+    "Auckland FC": 61.2,
+    "Brisbane Roar": 58.3,
+    "Central Coast Mariners": 58.5,
+    "Macarthur FC": 60.1,
+    "Melbourne City": 59.5,
+    "Melbourne Victory": 58.1,
+    "Newcastle Jets": 59.4,
+    "Perth Glory": 59.1,
+    "Sydney FC": 58.5,
+    "Wellington Phoenix": 62,
+    "Western Sydney Wanderers": 60,
+    "Cremonese": 66.3,
+    "Verona": 71.5,
+    "Pisa": 71.5,
+    "Avellino": 60.9,
+    "Carrarese": 62.6,
+    "Catanzaro": 61.3,
+    "Cesena": 63.3,
+    "Empoli": 64,
+    "Entella": 59.5,
+    "Juve Stabia": 63,
+    "Mantova": 59.9,
+    "Modena": 59.7,
+    "Padova": 63.5,
+    "Palermo": 64,
+    "Sampdoria": 63.5,
+    "Südtirol": 61,
+    "Vicenza": 61.5,
+    "Arezzo": 60,
+    "Benevento": 62.1,
+    "Ascoli": 59.4,
+    "Metz": 67.5,
+    "Nantes": 70.7,
+    "Saint-Étienne": 67.9,
+    "Red Star FC": 61.7,
+    "Reims": 70.2,
+    "Montpellier": 67.2,
+    "Nancy": 59.7,
+    "Annecy": 61.4,
+    "Sochaux": 63,
+    "Dijon": 61,
+    "Pau": 62,
+    "Guingamp": 60.7,
+    "Dunkerque": 60.7,
+    "Grenoble": 60,
+    "Rodez": 62,
+    "Clermont": 60.7,
+    "Boulogne": 58.4,
+    "Laval": 62,
+    "Real Oviedo": 62.7,
+    "Girona": 70.2,
+    "Mallorca": 70,
+    "Eibar": 62.1,
+    "Castellón": 59.5,
+    "Almería": 64.5,
+    "Burgos": 61.7,
+    "Sabadell": 63,
+    "Sporting Gijón": 62.7,
+    "Granada": 63,
+    "Las Palmas": 63,
+    "Tenerife": 59,
+    "Leganés": 62.2,
+    "Valladolid": 61.1,
+    "Córdoba": 62,
+    "Eldense": 63,
+    "Cádiz": 61.6,
+    "FC Andorra": 62,
+    "Ceuta": 63,
+    "Albacete": 62.7,
+    "Zenit": 76.5,
+    "Krasnodar": 77,
+    "Spartak Moscow": 75.7,
+    "CSKA Moscow": 73.6,
+    "Lokomotiv Moscow": 73.5,
+    "Rubin Kazan": 72.2,
+    "Dynamo Moscow": 73.5,
+    "Rostov": 69,
+    "Akhmat Grozny": 68.5,
+    "Krylia Sovetov": 65.5,
+    "Baltika": 66.4,
+    "Orenburg": 66.6,
+    "Akron Tolyatti": 69,
+    "Dynamo Makhachkala": 64.5,
+    "Rodina Moscow": 65.3,
+    "Fakel Voronezh": 64.5
+  },
+  "transferWindow": "summer",
+  "windowWeeksLeft": 4,
+  "aiHeadlines": [
+    "Nottingham Forest sign Willian Pacho from PSG for £64m.",
+    "PSG sign Morgan Rogers from Chelsea for £85m.",
+    "Real Madrid sign Erling Haaland from Manchester City for £195m.",
+    "Bayern Munich sign Dani Olmo from Barcelona for £50m.",
+    "Chelsea sign Bradley Barcola from Liverpool for £65m.",
+    "💰 The window's biggest deal so far: Erling Haaland to Real Madrid for £195m."
+  ],
+  "goneNames": [
+    "Willian Pacho",
+    "Morgan Rogers",
+    "Erling Haaland",
+    "Dani Olmo",
+    "Bradley Barcola"
+  ],
+  "seasonSignings": [],
+  "cupRound": "R16",
+  "cupDraw": {
+    "R16": "Nottingham Forest"
+  },
+  "uclField": [
+    "Arsenal",
+    "Manchester City",
+    "Manchester United",
+    "Aston Villa",
+    "Barcelona",
+    "Real Madrid",
+    "Villarreal",
+    "Atlético Madrid",
+    "Inter Milan",
+    "Napoli",
+    "Roma",
+    "Como",
+    "Bayern Munich",
+    "Borussia Dortmund",
+    "RB Leipzig",
+    "Stuttgart",
+    "PSG",
+    "Lens",
+    "Lille",
+    "PSV",
+    "Feyenoord",
+    "Porto",
+    "Sporting CP",
+    "Celtic",
+    "Galatasaray",
+    "Club Brugge",
+    "LASK",
+    "AEK Athens",
+    "AGF",
+    "Thun",
+    "Dinamo Zagreb",
+    "Hoffenheim"
+  ],
+  "uclGroup": null,
+  "uclKoRound": null,
+  "uclDraw": {},
+  "cupBracket": [
+    {
+      "round": "R16",
+      "slot": 0,
+      "home": "Brentford",
+      "away": "Nottingham Forest",
+      "homeGoals": null,
+      "awayGoals": null,
+      "winner": null,
+      "mine": true
+    },
+    {
+      "round": "R16",
+      "slot": 1,
+      "home": "Tottenham",
+      "away": "Bournemouth",
+      "homeGoals": null,
+      "awayGoals": null,
+      "winner": null,
+      "mine": false
+    },
+    {
+      "round": "R16",
+      "slot": 2,
+      "home": "Liverpool",
+      "away": "Hull City",
+      "homeGoals": null,
+      "awayGoals": null,
+      "winner": null,
+      "mine": false
+    },
+    {
+      "round": "R16",
+      "slot": 3,
+      "home": "Charlton Athletic",
+      "away": "Chelsea",
+      "homeGoals": null,
+      "awayGoals": null,
+      "winner": null,
+      "mine": false
+    },
+    {
+      "round": "R16",
+      "slot": 4,
+      "home": "Lincoln City",
+      "away": "Manchester United",
+      "homeGoals": null,
+      "awayGoals": null,
+      "winner": null,
+      "mine": false
+    },
+    {
+      "round": "R16",
+      "slot": 5,
+      "home": "Coventry City",
+      "away": "Aston Villa",
+      "homeGoals": null,
+      "awayGoals": null,
+      "winner": null,
+      "mine": false
+    },
+    {
+      "round": "R16",
+      "slot": 6,
+      "home": "Manchester City",
+      "away": "Newcastle",
+      "homeGoals": null,
+      "awayGoals": null,
+      "winner": null,
+      "mine": false
+    },
+    {
+      "round": "R16",
+      "slot": 7,
+      "home": "Sunderland",
+      "away": "Leeds United",
+      "homeGoals": null,
+      "awayGoals": null,
+      "winner": null,
+      "mine": false
+    }
+  ],
+  "world": {
+    "championship": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Birmingham City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Blackburn Rovers",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Bolton Wanderers",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Bristol City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Burnley",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Cardiff City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Charlton Athletic",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Derby County",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lincoln City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Middlesbrough",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Millwall",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Norwich City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Portsmouth",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Preston North End",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "QPR",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sheffield United",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Southampton",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Stoke City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Swansea City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Watford",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "West Brom",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "West Ham",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Wolves",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Wrexham",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "laliga": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Alavés",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Athletic Club",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Atlético Madrid",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Barcelona",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Real Betis",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Celta Vigo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Deportivo La Coruña",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Elche",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Espanyol",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Getafe",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Levante",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Málaga",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Osasuna",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Racing Santander",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rayo Vallecano",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Real Madrid",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Real Sociedad",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sevilla",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Valencia",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Villarreal",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "seriea": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Atalanta",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Bologna",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Cagliari",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Como",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Fiorentina",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Frosinone",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Genoa",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Inter Milan",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Juventus",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lazio",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lecce",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "AC Milan",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Monza",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Napoli",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Parma",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Roma",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sassuolo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Torino",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Udinese",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Venezia",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "bundesliga": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Augsburg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Bayer Leverkusen",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Bayern Munich",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Borussia Dortmund",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Gladbach",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Eintracht Frankfurt",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Freiburg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Hamburg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Hoffenheim",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Köln",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Mainz",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "RB Leipzig",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Schalke 04",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Elversberg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Paderborn",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Stuttgart",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Union Berlin",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Werder Bremen",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "ligue1": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Angers",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Auxerre",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Brest",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Le Havre",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Le Mans",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lens",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lille",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lorient",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lyon",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Marseille",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Monaco",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Nice",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Paris FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "PSG",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rennes",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Strasbourg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Toulouse",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Troyes",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "eredivisie": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Ajax",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "AZ Alkmaar",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "ADO Den Haag",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Cambuur",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Excelsior",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Feyenoord",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Fortuna Sittard",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Go Ahead Eagles",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Groningen",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Heerenveen",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "NEC Nijmegen",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "PEC Zwolle",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "PSV",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sparta Rotterdam",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Telstar",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Twente",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Utrecht",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Willem II",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "saudi": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Abha",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Ahli",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Diriyah",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Ettifaq",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Faisaly",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Fateh",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Fayha",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Hazem",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Hilal",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Ittihad",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Khaleej",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Kholood",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Nassr",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Qadsiah",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Riyadh",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Shabab",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Al-Taawoun",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "NEOM SC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "mlsEast": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Atlanta United",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Charlotte FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Chicago Fire",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "FC Cincinnati",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Columbus Crew",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "D.C. United",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Inter Miami",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "CF Montréal",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Nashville SC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "New England Revolution",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "New York City FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "New York Red Bulls",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Orlando City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Philadelphia Union",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Toronto FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "mlsWest": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Austin FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Colorado Rapids",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "FC Dallas",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Houston Dynamo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "LA Galaxy",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "LAFC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Minnesota United",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Portland Timbers",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Real Salt Lake",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "San Diego FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "San Jose Earthquakes",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Seattle Sounders",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sporting Kansas City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "St. Louis City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Vancouver Whitecaps",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "primeira": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Porto",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Benfica",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sporting CP",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Braga",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Vitória Guimarães",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Famalicão",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rio Ave",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Casa Pia",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Estoril",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Moreirense",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Arouca",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Gil Vicente",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Santa Clara",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Nacional",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Estrela Amadora",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Alverca",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Marítimo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Académico de Viseu",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "scottish": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Celtic",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rangers",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Aberdeen",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Hearts",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Hibernian",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Dundee United",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Dundee",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Motherwell",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "St Mirren",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Kilmarnock",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Falkirk",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "St Johnstone",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "superlig": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Galatasaray",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Fenerbahçe",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Beşiktaş",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Trabzonspor",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Başakşehir",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Samsunspor",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Eyüpspor",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Göztepe",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Kasımpaşa",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Alanyaspor",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Konyaspor",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Gaziantep FK",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Gençlerbirliği",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Kocaelispor",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rizespor",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Erzurumspor",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Amedspor",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Çorum FK",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "bundesliga2": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Wolfsburg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Heidenheim",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "St. Pauli",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Bochum",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Hertha BSC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Magdeburg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Kaiserslautern",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Holstein Kiel",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Hannover 96",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Dynamo Dresden",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Braunschweig",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Greuther Fürth",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Nürnberg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Darmstadt",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Arminia Bielefeld",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Karlsruhe",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Osnabrück",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Energie Cottbus",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "proleague": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Club Brugge",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Union Saint-Gilloise",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Anderlecht",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Genk",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Gent",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Antwerp",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Standard Liège",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Mechelen",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Charleroi",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Westerlo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sint-Truiden",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "OH Leuven",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Cercle Brugge",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "La Louvière",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Zulte Waregem",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Beveren",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Kortrijk",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lommel",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "austria": {
+      "round": 0,
+      "table": [
+        {
+          "club": "RB Salzburg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sturm Graz",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rapid Wien",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "LASK",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Wolfsberger AC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Austria Wien",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Grazer AK",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Hartberg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Ried",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Altach",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "WSG Tirol",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Austria Lustenau",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "greece": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Olympiacos",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Panathinaikos",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "AEK Athens",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "PAOK",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Aris",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Asteras Tripolis",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Atromitos",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Iraklis",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Kalamata",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Kifisia",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Levadiakos",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "OFI",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Panetolikos",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Volos",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "denmark": {
+      "round": 0,
+      "table": [
+        {
+          "club": "FC Copenhagen",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "FC Midtjylland",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Brøndby IF",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "AGF",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "FC Nordsjælland",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Viborg FF",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Randers FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "OB",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Silkeborg IF",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lyngby",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "AC Horsens",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "SønderjyskE",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "switzerland": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Basel",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Young Boys",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Thun",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "St. Gallen",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lugano",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Servette",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Luzern",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lausanne-Sport",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "FC Zürich",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Grasshopper",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sion",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Vaduz",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "croatia": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Dinamo Zagreb",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Hajduk Split",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rijeka",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Osijek",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Varaždin",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Slaven Belupo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Istra 1961",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lokomotiva Zagreb",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Gorica",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rudeš",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "brasileirao": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Flamengo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Palmeiras",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Athletico Paranaense",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Fluminense",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Bahia",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Cruzeiro",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Atlético Mineiro",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Santos",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Coritiba",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Red Bull Bragantino",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "São Paulo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Botafogo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Vitória",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Corinthians",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Mirassol",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Vasco da Gama",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Grêmio",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Internacional",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Remo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Chapecoense",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "ligamx": {
+      "round": 0,
+      "table": [
+        {
+          "club": "América",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Guadalajara",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Cruz Azul",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Monterrey",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Tigres UANL",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Toluca",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Pumas UNAM",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Pachuca",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "León",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Santos Laguna",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Atlas",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Necaxa",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Puebla",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Querétaro",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Tijuana",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "FC Juárez",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Atlético San Luis",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Atlante",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "aleague": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Adelaide United",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Auckland FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Brisbane Roar",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Central Coast Mariners",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Macarthur FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Melbourne City",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Melbourne Victory",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Newcastle Jets",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Perth Glory",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sydney FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Wellington Phoenix",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Western Sydney Wanderers",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "serieb": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Cremonese",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Verona",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Pisa",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Avellino",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Carrarese",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Catanzaro",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Cesena",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Empoli",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Entella",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Juve Stabia",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Mantova",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Modena",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Padova",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Palermo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sampdoria",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Südtirol",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Vicenza",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Arezzo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Benevento",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Ascoli",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "ligue2": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Metz",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Nantes",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Saint-Étienne",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Red Star FC",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Reims",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Montpellier",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Nancy",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Annecy",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sochaux",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Dijon",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Pau",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Guingamp",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Dunkerque",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Grenoble",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rodez",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Clermont",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Boulogne",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Laval",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "segunda": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Real Oviedo",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Girona",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Mallorca",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Eibar",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Castellón",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Almería",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Burgos",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sabadell",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Sporting Gijón",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Granada",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Las Palmas",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Tenerife",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Leganés",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Valladolid",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Córdoba",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Eldense",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Cádiz",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "FC Andorra",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Ceuta",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Albacete",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    },
+    "russia": {
+      "round": 0,
+      "table": [
+        {
+          "club": "Zenit",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Krasnodar",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Spartak Moscow",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "CSKA Moscow",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Lokomotiv Moscow",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rubin Kazan",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Dynamo Moscow",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rostov",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Akhmat Grozny",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Krylia Sovetov",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Baltika",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Orenburg",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Akron Tolyatti",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Dynamo Makhachkala",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Rodina Moscow",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        },
+        {
+          "club": "Fakel Voronezh",
+          "w": 0,
+          "d": 0,
+          "l": 0,
+          "gf": 0,
+          "ga": 0,
+          "pts": 0
+        }
+      ]
+    }
+  },
+  "trophies": [],
+  "history": [],
+  "careerStats": {
+    "played": 0,
+    "wins": 0,
+    "draws": 0,
+    "losses": 0,
+    "clubsManaged": [
+      "Brentford"
+    ]
+  },
+  "pendingSummary": null,
+  "boardObjectives": [
+    {
+      "id": "league",
+      "target": 10,
+      "label": "Finish in the top half"
+    },
+    {
+      "id": "cup",
+      "target": 3,
+      "label": "Reach the FA Cup final"
+    },
+    {
+      "id": "rival",
+      "target": 0,
+      "rivalName": "Fulham",
+      "label": "Finish above Fulham"
+    },
+    {
+      "id": "goals",
+      "target": 70,
+      "label": "Score 70+ league goals"
+    },
+    {
+      "id": "youngStar",
+      "target": 1,
+      "minRating": 86,
+      "maxAge": 21,
+      "label": "Sign someone 21 or under rated 86 or better"
+    },
+    {
+      "id": "natQuota",
+      "target": 5,
+      "country": "England",
+      "label": "Have 5 players from England in the squad"
+    }
+  ],
+  "cupExit": null,
+  "uclExit": null,
+  "negotiation": null,
+  "incomingBids": [
+    {
+      "playerId": "p-igor-thiago",
+      "playerName": "Igor Thiago",
+      "club": "Real Oviedo",
+      "offer": 52.5,
+      "status": "open"
+    }
+  ],
+  "coldNames": [],
+  "loanedOut": [],
+  "transferLog": [
+    {
+      "name": "Willian Pacho",
+      "from": "PSG",
+      "to": "Nottingham Forest",
+      "fee": 64,
+      "season": 1,
+      "week": 0
+    },
+    {
+      "name": "Morgan Rogers",
+      "from": "Chelsea",
+      "to": "PSG",
+      "fee": 85,
+      "season": 1,
+      "week": 0
+    },
+    {
+      "name": "Erling Haaland",
+      "from": "Manchester City",
+      "to": "Real Madrid",
+      "fee": 195,
+      "season": 1,
+      "week": 0
+    },
+    {
+      "name": "Dani Olmo",
+      "from": "Barcelona",
+      "to": "Bayern Munich",
+      "fee": 50,
+      "season": 1,
+      "week": 0
+    },
+    {
+      "name": "Bradley Barcola",
+      "from": "Liverpool",
+      "to": "Chelsea",
+      "fee": 65,
+      "season": 1,
+      "week": 0
+    }
+  ],
+  "resultLog": [],
+  "inbox": [],
+  "promisedStarts": [],
+  "pairResults": {},
+  "realLeagueFixtures": "premier-2026-27-v1",
+  "wageCap": 768,
+  "freeAgents": [
+    {
+      "name": "Ailton Mendes",
+      "position": "GK",
+      "age": 31,
+      "rating": 58,
+      "value": 0.2,
+      "wage": 3,
+      "generated": true,
+      "since": 1,
+      "reason": "unattached",
+      "nation": "England"
+    },
+    {
+      "name": "Viktor Paredes",
+      "position": "RWB",
+      "age": 29,
+      "rating": 59,
+      "value": 0.2,
+      "wage": 5,
+      "generated": true,
+      "since": 1,
+      "reason": "unattached",
+      "nation": "Norway"
+    },
+    {
+      "name": "Enrique Moreau",
+      "position": "CAM",
+      "age": 28,
+      "rating": 61,
+      "value": 0.2,
+      "wage": 7,
+      "generated": true,
+      "since": 1,
+      "reason": "unattached",
+      "nation": "Nigeria"
+    },
+    {
+      "name": "Ronan Vermeer",
+      "position": "RW",
+      "age": 29,
+      "rating": 59,
+      "value": 0.2,
+      "wage": 5,
+      "generated": true,
+      "since": 1,
+      "reason": "unattached",
+      "nation": "France"
+    },
+    {
+      "name": "Javier Veloso",
+      "position": "RWB",
+      "age": 29,
+      "rating": 59,
+      "value": 0.2,
+      "wage": 5,
+      "generated": true,
+      "since": 1,
+      "reason": "unattached",
+      "nation": "Ukraine"
+    },
+    {
+      "name": "Remi Lozano",
+      "position": "LM",
+      "age": 33,
+      "rating": 58,
+      "value": 0.2,
+      "wage": 2,
+      "generated": true,
+      "since": 1,
+      "reason": "unattached",
+      "nation": "The Gambia"
+    },
+    {
+      "name": "Dani Parejo",
+      "position": "CM",
+      "age": 37,
+      "rating": 65,
+      "value": 0.8,
+      "since": 1,
+      "reason": "unattached"
+    },
+    {
+      "name": "Dele Alli",
+      "position": "CAM",
+      "age": 30,
+      "rating": 65,
+      "value": 0.8,
+      "since": 1,
+      "reason": "unattached"
+    },
+    {
+      "name": "Sergio Ramos",
+      "position": "CB",
+      "age": 40,
+      "rating": 63,
+      "value": 0.7,
+      "since": 1,
+      "reason": "unattached"
+    },
+    {
+      "name": "Edinson Cavani",
+      "position": "ST",
+      "age": 39,
+      "rating": 60,
+      "value": 0.4,
+      "since": 1,
+      "reason": "unattached"
+    },
+    {
+      "name": "Tiemoué Bakayoko",
+      "position": "CDM",
+      "age": 32,
+      "rating": 60,
+      "value": 0.4,
+      "since": 1,
+      "reason": "unattached"
+    },
+    {
+      "name": "Wissam Ben Yedder",
+      "position": "ST",
+      "age": 36,
+      "rating": 60,
+      "value": 0.4,
+      "since": 1,
+      "reason": "unattached"
+    },
+    {
+      "name": "Willian",
+      "position": "LW",
+      "age": 38,
+      "rating": 59,
+      "value": 0.3,
+      "since": 1,
+      "reason": "unattached"
+    }
+  ],
+  "severance": [],
+  "training": {
+    "intensity": "normal",
+    "focus": "balanced"
+  },
+  "academy": {
+    "recruitment": 10,
+    "coaching": 11,
+    "facilities": 11,
+    "scouts": [],
+    "candidates": [
+      {
+        "id": "sc-mvuke4d7-7564",
+        "name": "Dermot Aziz",
+        "judgement": 1,
+        "network": 2,
+        "fee": 2,
+        "regionId": "",
+        "regionName": "",
+        "regionFlag": "",
+        "weeksLeft": 0,
+        "found": 0
+      },
+      {
+        "id": "sc-mvuke4d7-8964",
+        "name": "Rui Nkemdi",
+        "judgement": 4,
+        "network": 4,
+        "fee": 5,
+        "regionId": "",
+        "regionName": "",
+        "regionFlag": "",
+        "weeksLeft": 0,
+        "found": 0
+      },
+      {
+        "id": "sc-mvuke4d7-5701",
+        "name": "Kenny Aziz",
+        "judgement": 5,
+        "network": 4,
+        "fee": 5,
+        "regionId": "",
+        "regionName": "",
+        "regionFlag": "",
+        "weeksLeft": 0,
+        "found": 0
+      }
+    ],
+    "prospects": [],
+    "lastIntakeSeason": 0
+  },
+  "academyGraduates": 0,
+  "teamTalk": null,
+  "press": {
+    "mood": 50,
+    "pending": null,
+    "lastWeek": -3,
+    "answered": 0,
+    "ducked": 0,
+    "nextFire": 0,
+    "nextSharpen": 0,
+    "promised": false,
+    "lastTone": null,
+    "toneRun": 0
+  },
+  "managers": {
+    "Arsenal": {
+      "name": "Youri Sagna",
+      "since": 1
+    },
+    "Aston Villa": {
+      "name": "Salim Wagner",
+      "since": 1
+    },
+    "Bournemouth": {
+      "name": "Zoran Idrissi",
+      "since": 1
+    },
+    "Brighton": {
+      "name": "Hugo Doherty",
+      "since": 1
+    },
+    "Chelsea": {
+      "name": "Ari Vidal",
+      "since": 1
+    },
+    "Coventry City": {
+      "name": "Goran Fernandes",
+      "since": 1
+    },
+    "Crystal Palace": {
+      "name": "Goran Mucci",
+      "since": 1
+    },
+    "Everton": {
+      "name": "Elias Navarro",
+      "since": 1
+    },
+    "Fulham": {
+      "name": "Caio Aguirre",
+      "since": 1
+    },
+    "Hull City": {
+      "name": "Alfie Gallardo",
+      "since": 1
+    },
+    "Ipswich Town": {
+      "name": "Tadeo Falk",
+      "since": 1
+    },
+    "Leeds United": {
+      "name": "Amadou Arslan",
+      "since": 1
+    },
+    "Liverpool": {
+      "name": "Zeke Trevisan",
+      "since": 1
+    },
+    "Manchester City": {
+      "name": "Felipe Karlsson",
+      "since": 1
+    },
+    "Manchester United": {
+      "name": "Asier Nielsen",
+      "since": 1
+    },
+    "Newcastle": {
+      "name": "Wout Martel",
+      "since": 1
+    },
+    "Nottingham Forest": {
+      "name": "Jaden Machado",
+      "since": 1
+    },
+    "Sunderland": {
+      "name": "Felipe Lampe",
+      "since": 1
+    },
+    "Tottenham": {
+      "name": "Ivo Colombo",
+      "since": 1
+    }
+  },
+  "boardAsksVersion": 1,
+  "scorerRace": [
+    {
+      "name": "Morgan Gibbs-White",
+      "club": "Nottingham Forest",
+      "goals": 0
+    },
+    {
+      "name": "Dan Ndoye",
+      "club": "Nottingham Forest",
+      "goals": 0
+    },
+    {
+      "name": "Anthony Elanga",
+      "club": "Newcastle",
+      "goals": 0
+    },
+    {
+      "name": "Bazoumana Touré",
+      "club": "Newcastle",
+      "goals": 0
+    },
+    {
+      "name": "Bukayo Saka",
+      "club": "Arsenal",
+      "goals": 0
+    },
+    {
+      "name": "Declan Rice",
+      "club": "Arsenal",
+      "goals": 0
+    },
+    {
+      "name": "Hugo Larsson",
+      "club": "Fulham",
+      "goals": 0
+    },
+    {
+      "name": "Gonzalo García",
+      "club": "Fulham",
+      "goals": 0
+    },
+    {
+      "name": "Erling Haaland",
+      "club": "Manchester City",
+      "goals": 0
+    },
+    {
+      "name": "Enzo Fernández",
+      "club": "Manchester City",
+      "goals": 0
+    },
+    {
+      "name": "Yankuba Minteh",
+      "club": "Brighton",
+      "goals": 0
+    },
+    {
+      "name": "Georginio Rutter",
+      "club": "Brighton",
+      "goals": 0
+    },
+    {
+      "name": "Christos Mouzakitis",
+      "club": "Hull City",
+      "goals": 0
+    },
+    {
+      "name": "Robinio Vaz",
+      "club": "Hull City",
+      "goals": 0
+    },
+    {
+      "name": "Ethan Ampadu",
+      "club": "Leeds United",
+      "goals": 0
+    },
+    {
+      "name": "Anton Stach",
+      "club": "Leeds United",
+      "goals": 0
+    },
+    {
+      "name": "Cole Palmer",
+      "club": "Chelsea",
+      "goals": 0
+    },
+    {
+      "name": "Moisés Caicedo",
+      "club": "Chelsea",
+      "goals": 0
+    },
+    {
+      "name": "Adam Wharton",
+      "club": "Crystal Palace",
+      "goals": 0
+    },
+    {
+      "name": "Jørgen Strand Larsen",
+      "club": "Crystal Palace",
+      "goals": 0
+    },
+    {
+      "name": "Alex Scott",
+      "club": "Bournemouth",
+      "goals": 0
+    },
+    {
+      "name": "Junior Kroupi",
+      "club": "Bournemouth",
+      "goals": 0
+    },
+    {
+      "name": "Amadou Onana",
+      "club": "Aston Villa",
+      "goals": 0
+    },
+    {
+      "name": "Boubacar Kamara",
+      "club": "Aston Villa",
+      "goals": 0
+    },
+    {
+      "name": "Bryan Mbeumo",
+      "club": "Manchester United",
+      "goals": 0
+    },
+    {
+      "name": "Matheus Cunha",
+      "club": "Manchester United",
+      "goals": 0
+    },
+    {
+      "name": "Sandro Tonali",
+      "club": "Tottenham",
+      "goals": 0
+    },
+    {
+      "name": "Omar Marmoush",
+      "club": "Tottenham",
+      "goals": 0
+    },
+    {
+      "name": "Florian Wirtz",
+      "club": "Liverpool",
+      "goals": 0
+    },
+    {
+      "name": "Alexander Isak",
+      "club": "Liverpool",
+      "goals": 0
+    },
+    {
+      "name": "Jack Rudoni",
+      "club": "Coventry City",
+      "goals": 0
+    },
+    {
+      "name": "Sidiki Chérif",
+      "club": "Coventry City",
+      "goals": 0
+    },
+    {
+      "name": "Exequiel Palacios",
+      "club": "Ipswich Town",
+      "goals": 0
+    },
+    {
+      "name": "Abdul Fatawu",
+      "club": "Ipswich Town",
+      "goals": 0
+    },
+    {
+      "name": "Habib Diarra",
+      "club": "Sunderland",
+      "goals": 0
+    },
+    {
+      "name": "Malick Fofana",
+      "club": "Sunderland",
+      "goals": 0
+    },
+    {
+      "name": "James Garner",
+      "club": "Everton",
+      "goals": 0
+    },
+    {
+      "name": "Brennan Johnson",
+      "club": "Everton",
+      "goals": 0
+    }
+  ],
+  "leagueBook": {
+    "s": "premier|jqxk12",
+    "c": {},
+    "my": []
+  },
+  "setPieces": {
+    "captain": "p-igor-thiago",
+    "cornersLeft": "p-dango-ouattara",
+    "cornersRight": "p-kevin-schade",
+    "freeKicks": "p-dango-ouattara",
+    "penalties": "p-igor-thiago"
+  },
+  "intl": {
+    "season": 1,
+    "fired": []
+  },
+  "worldSeed": 2608279430,
+  "worldComps": {
+    "ucl": {
+      "v": 1,
+      "s": 1,
+      "f": "l36",
+      "seed": 2474403614,
+      "clubs": [
+        "PSG",
+        "Barcelona",
+        "Arsenal",
+        "Bayern Munich",
+        "Real Madrid",
+        "Liverpool",
+        "Manchester City",
+        "Borussia Dortmund",
+        "Atlético Madrid",
+        "Aston Villa",
+        "Porto",
+        "Inter Milan",
+        "Manchester United",
+        "Roma",
+        "Galatasaray",
+        "RB Leipzig",
+        "Stuttgart",
+        "Real Betis",
+        "AC Milan",
+        "Como",
+        "Lille",
+        "Napoli",
+        "Lyon",
+        "Hoffenheim",
+        "Sporting CP",
+        "Villarreal",
+        "PSV",
+        "Feyenoord",
+        "Lens",
+        "Club Brugge",
+        "Celtic",
+        "AEK Athens",
+        "Dinamo Zagreb",
+        "LASK",
+        "AGF",
+        "Thun"
+      ],
+      "str": [
+        86.9,
+        90.9,
+        88.7,
+        87.6,
+        87.6,
+        87.3,
+        86.5,
+        86.4,
+        85.4,
+        84.7,
+        84.6,
+        84.5,
+        84.5,
+        84.5,
+        84.4,
+        84.2,
+        83.6,
+        82,
+        81.9,
+        81.4,
+        81.1,
+        80.5,
+        80.4,
+        80.3,
+        79.7,
+        79.5,
+        78.5,
+        77.2,
+        76.4,
+        75.5,
+        74,
+        73.2,
+        68.3,
+        66.5,
+        65.5,
+        64
+      ],
+      "fx": [
+        75,
+        170,
+        187,
+        230,
+        340,
+        393,
+        490,
+        541,
+        642,
+        672,
+        764,
+        828,
+        912,
+        1007,
+        1027,
+        1055,
+        1136,
+        1186,
+        1352,
+        1390,
+        1421,
+        1552,
+        1628,
+        1661,
+        1727,
+        1756,
+        1770,
+        1854,
+        2006,
+        2066,
+        2284,
+        2371,
+        2376,
+        2473,
+        2508,
+        2543,
+        2593,
+        2705,
+        2816,
+        2977,
+        3087,
+        3146,
+        3172,
+        3307,
+        3330,
+        3382,
+        3401,
+        3431,
+        3486,
+        3607,
+        3662,
+        3746,
+        3789,
+        3864,
+        3899,
+        4034,
+        4150,
+        4199,
+        4241,
+        4335,
+        4539,
+        4588,
+        4641,
+        4669,
+        4758,
+        4837,
+        4882,
+        4913,
+        5005,
+        5054,
+        5117,
+        5178,
+        5226,
+        5285,
+        5360,
+        5377,
+        5472,
+        5587,
+        5637,
+        5691,
+        5791,
+        5815,
+        5842,
+        5913,
+        6011,
+        6063,
+        6111,
+        6143,
+        6292,
+        6441,
+        6513,
+        6525,
+        6568,
+        6616,
+        6636,
+        6715,
+        6783,
+        6958,
+        7018,
+        7103,
+        7279,
+        7337,
+        7364,
+        7385,
+        7448,
+        7581,
+        7623,
+        7758,
+        7800,
+        7905,
+        7987,
+        8019,
+        8063,
+        8098,
+        8123,
+        8184,
+        8293,
+        8348,
+        8369,
+        8452,
+        8462,
+        8500,
+        8698,
+        8713,
+        8866,
+        8993,
+        9138,
+        9270,
+        9349,
+        9441,
+        9492,
+        9504,
+        9596,
+        9674,
+        9686,
+        9885,
+        9919,
+        10052,
+        10112,
+        10119,
+        10201,
+        10264,
+        10311,
+        10338
+      ],
+      "breaks": 0,
+      "overCap": 0,
+      "holder": "PSG"
+    },
+    "uel": {
+      "v": 1,
+      "s": 1,
+      "f": "l36",
+      "seed": 792490188,
+      "clubs": [
+        "Brighton",
+        "Atalanta",
+        "Bournemouth",
+        "Juventus",
+        "Eintracht Frankfurt",
+        "Crystal Palace",
+        "Sunderland",
+        "Fenerbahçe",
+        "Bayer Leverkusen",
+        "Monaco",
+        "Benfica",
+        "Real Sociedad",
+        "Marseille",
+        "Bologna",
+        "Trabzonspor",
+        "Getafe",
+        "Olympiacos",
+        "Rangers",
+        "Rennes",
+        "Freiburg",
+        "AZ Alkmaar",
+        "Braga",
+        "Celta Vigo",
+        "FC Midtjylland",
+        "RB Salzburg",
+        "Union Saint-Gilloise",
+        "Hajduk Split",
+        "NEC Nijmegen",
+        "Lugano",
+        "Sturm Graz",
+        "Sint-Truiden",
+        "Varaždin",
+        "FC Nordsjælland",
+        "Hearts",
+        "St. Gallen",
+        "OFI"
+      ],
+      "str": [
+        85.4,
+        84.2,
+        83.4,
+        83.3,
+        82.8,
+        82.6,
+        82.2,
+        82.1,
+        81.9,
+        81.6,
+        81,
+        80.8,
+        80.2,
+        79.4,
+        79.4,
+        76.8,
+        76.6,
+        76.5,
+        76.5,
+        76.3,
+        75.9,
+        75.9,
+        75.7,
+        75.1,
+        72.2,
+        71.7,
+        70,
+        68.7,
+        68.2,
+        67.9,
+        67.5,
+        67,
+        65,
+        63.4,
+        63.4,
+        59.3
+      ],
+      "fx": [
+        200,
+        252,
+        371,
+        480,
+        521,
+        579,
+        667,
+        760,
+        800,
+        834,
+        945,
+        1006,
+        1032,
+        1045,
+        1082,
+        1141,
+        1220,
+        1275,
+        1337,
+        1464,
+        1543,
+        1561,
+        1586,
+        1635,
+        1708,
+        1928,
+        1944,
+        2002,
+        2151,
+        2208,
+        2264,
+        2368,
+        2386,
+        2498,
+        2523,
+        2577,
+        2640,
+        2706,
+        2745,
+        2915,
+        2984,
+        3083,
+        3137,
+        3326,
+        3365,
+        3400,
+        3489,
+        3510,
+        3530,
+        3583,
+        3600,
+        3701,
+        3715,
+        3827,
+        3974,
+        4065,
+        4112,
+        4161,
+        4319,
+        4320,
+        4438,
+        4528,
+        4549,
+        4601,
+        4611,
+        4706,
+        4757,
+        4789,
+        4876,
+        4991,
+        5049,
+        5143,
+        5214,
+        5285,
+        5367,
+        5410,
+        5509,
+        5630,
+        5794,
+        5809,
+        5867,
+        5875,
+        5971,
+        6023,
+        6063,
+        6112,
+        6140,
+        6164,
+        6340,
+        6394,
+        6481,
+        6574,
+        6620,
+        6631,
+        6671,
+        6786,
+        6933,
+        7008,
+        7053,
+        7065,
+        7098,
+        7174,
+        7333,
+        7501,
+        7544,
+        7623,
+        7730,
+        7770,
+        7792,
+        7831,
+        7909,
+        7983,
+        8130,
+        8138,
+        8179,
+        8252,
+        8284,
+        8342,
+        8520,
+        8555,
+        8602,
+        8817,
+        8832,
+        8909,
+        8946,
+        9042,
+        9095,
+        9142,
+        9148,
+        9195,
+        9314,
+        9352,
+        9377,
+        9418,
+        9457,
+        9487,
+        9531,
+        9571,
+        9605,
+        9666,
+        9822,
+        9957,
+        10259,
+        10265
+      ],
+      "breaks": 0,
+      "overCap": 0,
+      "via": "FPLLFHPLLFLCLFCFLPPPCPLLPLLLPLPPPLLC"
+    },
+    "dsc": {
+      "v": 1,
+      "s": 1,
+      "row": "eng-2026",
+      "clubs": [
+        "Arsenal",
+        "Manchester City"
+      ],
+      "str": [
+        88.7,
+        86.5
+      ],
+      "seed": 3906813133
+    },
+    "usc": {
+      "v": 1,
+      "s": 1,
+      "row": "uefa-2026",
+      "clubs": [
+        "PSG",
+        "Aston Villa"
+      ],
+      "str": [
+        86.9,
+        84.7
+      ],
+      "seed": 2423416481
+    }
+  },
+  "worldRoster": {
+    "version": 1,
+    "eraId": "now",
+    "records": [
+      {
+        "key": "[\"now\",\"PSG\",\"Willian Pacho\",\"CB\",2002,0]",
+        "origin": {
+          "club": "PSG",
+          "name": "Willian Pacho",
+          "position": "CB",
+          "birthYear": 2002,
+          "since": 0
+        },
+        "owner": "Nottingham Forest",
+        "status": "owned",
+        "year": 2026,
+        "player": {
+          "id": "p-willian-pacho",
+          "name": "Willian Pacho",
+          "position": "CB",
+          "rating": 88,
+          "age": 24,
+          "fitness": 100,
+          "morale": 70,
+          "injuryWeeks": 0,
+          "suspendedMatches": 0,
+          "isYouth": false,
+          "seasonGoals": 0,
+          "seasonAssists": 0,
+          "value": 57,
+          "worldRosterKey": "[\"now\",\"PSG\",\"Willian Pacho\",\"CB\",2002,0]"
+        }
+      },
+      {
+        "key": "[\"now\",\"Chelsea\",\"Morgan Rogers\",\"CAM\",2003,0]",
+        "origin": {
+          "club": "Chelsea",
+          "name": "Morgan Rogers",
+          "position": "CAM",
+          "birthYear": 2003,
+          "since": 0
+        },
+        "owner": "PSG",
+        "status": "owned",
+        "year": 2026,
+        "player": {
+          "id": "p-morgan-rogers",
+          "name": "Morgan Rogers",
+          "position": "CAM",
+          "rating": 89,
+          "age": 23,
+          "fitness": 100,
+          "morale": 70,
+          "injuryWeeks": 0,
+          "suspendedMatches": 0,
+          "isYouth": false,
+          "seasonGoals": 0,
+          "seasonAssists": 0,
+          "value": 64.5,
+          "worldRosterKey": "[\"now\",\"Chelsea\",\"Morgan Rogers\",\"CAM\",2003,0]"
+        }
+      },
+      {
+        "key": "[\"now\",\"Manchester City\",\"Erling Haaland\",\"ST\",2001,0]",
+        "origin": {
+          "club": "Manchester City",
+          "name": "Erling Haaland",
+          "position": "ST",
+          "birthYear": 2001,
+          "since": 0
+        },
+        "owner": "Real Madrid",
+        "status": "owned",
+        "year": 2026,
+        "player": {
+          "id": "p-erling-haaland",
+          "name": "Erling Haaland",
+          "position": "ST",
+          "rating": 94,
+          "age": 25,
+          "fitness": 100,
+          "morale": 70,
+          "injuryWeeks": 0,
+          "suspendedMatches": 0,
+          "isYouth": false,
+          "seasonGoals": 0,
+          "seasonAssists": 0,
+          "value": 162,
+          "worldRosterKey": "[\"now\",\"Manchester City\",\"Erling Haaland\",\"ST\",2001,0]"
+        }
+      },
+      {
+        "key": "[\"now\",\"Barcelona\",\"Dani Olmo\",\"CAM\",1999,0]",
+        "origin": {
+          "club": "Barcelona",
+          "name": "Dani Olmo",
+          "position": "CAM",
+          "birthYear": 1999,
+          "since": 0
+        },
+        "owner": "Bayern Munich",
+        "status": "owned",
+        "year": 2026,
+        "player": {
+          "id": "p-dani-olmo",
+          "name": "Dani Olmo",
+          "position": "CAM",
+          "rating": 87,
+          "age": 27,
+          "fitness": 100,
+          "morale": 70,
+          "injuryWeeks": 0,
+          "suspendedMatches": 0,
+          "isYouth": false,
+          "seasonGoals": 0,
+          "seasonAssists": 0,
+          "value": 48.8,
+          "worldRosterKey": "[\"now\",\"Barcelona\",\"Dani Olmo\",\"CAM\",1999,0]"
+        }
+      },
+      {
+        "key": "[\"now\",\"Liverpool\",\"Bradley Barcola\",\"LW\",2003,0]",
+        "origin": {
+          "club": "Liverpool",
+          "name": "Bradley Barcola",
+          "position": "LW",
+          "birthYear": 2003,
+          "since": 0
+        },
+        "owner": "Chelsea",
+        "status": "owned",
+        "year": 2026,
+        "player": {
+          "id": "p-bradley-barcola",
+          "name": "Bradley Barcola",
+          "position": "LW",
+          "rating": 88,
+          "age": 23,
+          "fitness": 100,
+          "morale": 70,
+          "injuryWeeks": 0,
+          "suspendedMatches": 0,
+          "isYouth": false,
+          "seasonGoals": 0,
+          "seasonAssists": 0,
+          "value": 57,
+          "worldRosterKey": "[\"now\",\"Liverpool\",\"Bradley Barcola\",\"LW\",2003,0]"
+        }
+      }
+    ]
+  }
+}
