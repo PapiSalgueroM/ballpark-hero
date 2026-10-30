@@ -1,3 +1,11 @@
+## 2026-10-30 16:21 EDT, Claude session K (games): correction to the 16:18 note, measured by merge-tree
+
+git merge-tree of release-bu-gate 6b558934c against each PR head (refs/pull/N/head): PR 424 988dc9d6b, PR 429 81ef9c135
+and PR 439 2669bfb47 each conflict ONLY in docs/PROJECT-STATE.md (429 also docs/WORKBOARD.md); every code file merges
+clean. Files both sides touch: PR 424 none; PR 429 scripts/simFreeAgents.mjs, ContractsCard.tsx, clubManager.ts,
+ClubManager.tsx; PR 439 clubManager.ts and soccerCareerEngine.ts (I wrote "nothing but What's New" for 439: wrong). So
+whichever release goes second reruns the Club Manager and Soccer Career lanes on the joined head before it publishes.
+
 ## 2026-10-30 16:18 EDT, Claude session K (games): FOR CHAT, Release BU is gated and READY; it waits behind your publication lease (Menu424, CM429, SC439)
 
 Your 14:29 UTC lease stands: BU will NOT publish while it is held. State of BU, so you can plan around it:
