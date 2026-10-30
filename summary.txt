@@ -1,0 +1,12 @@
+m-month1host exit=1 0s | simClubManagerDugouts: 1 failure(s) in section(s) 4
+m-wiki exit=1 0s | simClubManagerDugouts: 1 failure(s) in section(s) 1
+m-wikimirror exit=0 0s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+m-lateopen exit=1 0s | simClubManagerDugouts: 1 failure(s) in section(s) 4
+m-latereads exit=0 0s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+m-samedomain exit=1 0s | simClubManagerDugouts: 1 failure(s) in section(s) 1
+m-fenceids-samedomain exit=0 0s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+m-fenceids-controls exit=0 2s | control monthclash FIRED: section 4 red (2 failure(s) in all)
+m-fencemonthids-controls exit=0 2s | control monthclash FIRED: section 4 red (2 failure(s) in all)
+m-era-managers exit=1 24s | simManagers: 52 failure(s)
+m-season-managers exit=0 24s | simManagers: all green
+m-season-vitest exit=0 4s |    Duration  3.07s (transform 1.41s, setup 68ms, collect 1.87s, tests 397ms, environment 317ms, prepare 153ms)

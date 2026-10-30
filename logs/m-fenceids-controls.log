@@ -1,0 +1,7 @@
+mutation fenceids applied
+simClubManagerDugouts: all green (96 chairs, 0 partial)
+control twochairs FIRED: section 0 red (1 failure(s) in all)
+control onehost FIRED: section 1 red (1 failure(s) in all)
+control orphan FIRED: section 2 red (2 failure(s) in all)
+control gap FIRED: section 3 red (2 failure(s) in all)
+control monthclash FIRED: section 4 red (2 failure(s) in all)
