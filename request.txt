@@ -1,0 +1,3 @@
+#!serial
+oldsave: git worktree add -q .rcb-o 4bd20c993 && BASE_ROOT=$PWD/.rcb-o node .rc/x/oldsave1603.mjs
+base-y8: git worktree add -q .rcb-y 4bd20c993 && DECIDING_LEG_SALT=y DECIDING_LEG_BASE=$PWD/.rcb-y node scripts/simCmDecidingLeg.mjs

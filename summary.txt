@@ -1,0 +1,2 @@
+oldsave exit=0 48s | oldsave1603 GREEN: 6 of 6 green
+base-y8 exit=0 78s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
