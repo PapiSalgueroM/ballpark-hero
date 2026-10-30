@@ -1,0 +1,15 @@
+#!serial
+m-takeover: node .rc/x/mutRun1606.mjs takeover && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-offer: node .rc/x/mutRun1606.mjs offer && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-splice: node .rc/x/mutRun1606.mjs splice && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-years: node .rc/x/mutRun1606.mjs years && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-managedopen: node .rc/x/mutRun1606.mjs managedopen && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-scrub: node .rc/x/mutRun1606.mjs scrub && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-recycledline: node .rc/x/mutRun1606.mjs recycledline && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-viewmanaged: node .rc/x/mutRun1606.mjs viewmanaged && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-fleetorder: node .rc/x/mutRun1606.mjs fleetorder && SIM_MANAGERS_BASE=c0c66e087 node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-drift: node .rc/x/mutRun1606.mjs drift && SIM_MANAGERS_CONTROL=namedsack node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-quotesnojoin: node .rc/x/mutRun1606.mjs quotesnojoin && QUOTES_CONTROL=dugout node scripts/simNoInventedQuotes.mjs; s=$?; git checkout -- src scripts; exit $s
+m-namesrow: node .rc/x/mutRun1606.mjs namesrow && node scripts/simInventedNames.mjs; s=$?; git checkout -- src scripts; exit $s
+m-namesnojoin: node .rc/x/mutRun1606.mjs namesrow namesnojoin && node scripts/simInventedNames.mjs; s=$?; git checkout -- src scripts; exit $s
+m-erasnojoin: node .rc/x/mutRun1606.mjs namesrow erasnojoin && node scripts/simInventedNames.mjs; s=$?; git checkout -- src scripts; exit $s

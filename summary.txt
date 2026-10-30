@@ -1,0 +1,14 @@
+m-takeover exit=0 17s | simManagers: all green
+m-offer exit=1 17s | simManagers: 3 failure(s)
+m-splice exit=1 17s | simManagers: 42 failure(s)
+m-years exit=1 17s | simManagers: 1 failure(s)
+m-managedopen exit=0 17s | simManagers: all green
+m-scrub exit=1 17s | simManagers: 1 failure(s)
+m-recycledline exit=1 17s | simManagers: 102 failure(s)
+m-viewmanaged exit=1 17s | simManagers: 1 failure(s)
+m-fleetorder exit=1 19s | simManagers: 8 failure(s)
+m-drift exit=2 1s | control or setup cannot run: the control's anchor is in clubManager.ts 0 times, it must be there exactly once: const holderReal = realOut.has(s.name);; refusing a dead ch
+m-quotesnojoin exit=3 11s | control run: dugout DID NOT FIRE, a real manager's first person quote passed pass 1
+m-namesrow exit=1 7s | simInventedNames: 1 failure
+m-namesnojoin exit=1 7s | simInventedNames: 1 failure
+m-erasnojoin exit=1 6s | simInventedNames: 1 failure

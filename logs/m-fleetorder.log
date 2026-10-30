@@ -1,0 +1,34 @@
+mutation fleetorder: applied to src/lib/clubManager.ts
+1) a fresh career names every dugout but yours, no real person among them
+   19 dugouts named, all distinct, 0 from the real table, no generated one real, yours empty
+2) deterministic and idempotent
+   same career twice, same names; double ensure, no change
+3) the summer turns chairs over honestly
+   13 changes across 190 chair seasons (6.8% churn), 16 sack lines checked, 0 untrue
+4) moving clubs writes its own truths
+   moved to Aston Villa: their chair cleared, Everton appointed Goran Konate
+5) an old save grows a record on load, never for its own club
+   repaired in one call, own chair left alone
+6) offers and the merry-go-round agree on one vacancy list
+   40 offers over 30 summers, 3 from real vacancies (0 untrue blurbs), 26 declined chairs refilled (0 stale)
+7) real dugouts: a sentinel registered as real is a display fact and nothing else
+   sentinel "Testa Realmann" is in no src file; 47 leagues across 5 eras hold it
+   7b: 200 summers, 200 with the sentinel's chair emptied (16 by the sim's own draw), 200 with a second chair to recycle into, 149 offers read (1 for the emptied real chair, all saying only that the club is making a change), 0 failures (11 s)
+   7c: 200 of 200 sentinel careers equal their empty table twin after the strip, draw for draw
+   7a: 47 of 47 sentinel chairs held on day one, 47 partial chairs made up and marked
+   7a: a later world and a season two repair seat nobody real; an outside club shows him in season one only
+   7d: nothing at Arsenal as your club, the club you left, a club you managed, Hot Seat or a mid season start
+   7e: the old save loads with its 19 chairs byte identical (Arsenal: Youri Sagna)
+8) the fleet against c0c66e087: the table is empty, so every save must be the same bytes
+  FAIL: 8: now Arsenal seed 0 day one: differs from the base (draws 771 vs 771)
+  FAIL: 8: now Derby County seed 1 day one: differs from the base (draws 722 vs 722)
+  FAIL: 8: now Real Betis seed 2 day one: differs from the base (draws 710 vs 710)
+  FAIL: 8: now Atalanta seed 3 day one: differs from the base (draws 709 vs 709)
+  FAIL: 8: now Köln seed 4 day one: differs from the base (draws 712 vs 712)
+  FAIL: 8: now Troyes seed 5 day one: differs from the base (draws 757 vs 757)
+  FAIL: 8: now Fortuna Sittard seed 6 day one: differs from the base (draws 743 vs 743)
+  FAIL: 8: now Al-Qadsiah seed 7 day one: differs from the base (draws 696 vs 696)
+   60 careers over 3 seasons, 3 mid season starts and 3 Hot Seat runs: 66 states compared, 66 differ (2 s, base c0c66e087)
+   teeth: real names from the live bakes, truth checked headlines, churn measured not asserted per run
+
+simManagers: 8 failure(s)

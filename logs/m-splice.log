@@ -1,0 +1,67 @@
+mutation splice: applied to src/lib/clubManager.ts
+1) a fresh career names every dugout but yours, no real person among them
+   19 dugouts named, all distinct, 0 from the real table, no generated one real, yours empty
+2) deterministic and idempotent
+   same career twice, same names; double ensure, no change
+3) the summer turns chairs over honestly
+   13 changes across 190 chair seasons (6.8% churn), 16 sack lines checked, 0 untrue
+4) moving clubs writes its own truths
+   moved to Aston Villa: their chair cleared, Everton appointed Goran Konate
+5) an old save grows a record on load, never for its own club
+   repaired in one call, own chair left alone
+6) offers and the merry-go-round agree on one vacancy list
+   40 offers over 30 summers, 3 from real vacancies (0 untrue blurbs), 26 declined chairs refilled (0 stale)
+7) real dugouts: a sentinel registered as real is a display fact and nothing else
+   sentinel "Testa Realmann" is in no src file; 47 leagues across 5 eras hold it
+  FAIL: 7c: now bundesliga seed 4: the sentinel twin differs from the empty table's outside the strip (draws 691/83/757 vs 691/83/759), first at .goneNames.0: "Geovany Quenda" vs "Yan Diomande"
+  FAIL: 7c: now saudi seed 7: the sentinel twin differs from the empty table's outside the strip (draws 716/18/732 vs 716/18/731), first at .goneNames.4: "Fermín López" vs "Alexander Isak"
+  FAIL: 7c: now austria seed 15: the sentinel twin differs from the empty table's outside the strip (draws 736/12/717 vs 736/12/710), first at .goneNames.4: "Jules Koundé" vs "Aurélien Tchouaméni"
+  FAIL: 7c: now ligue2 seed 24: the sentinel twin differs from the empty table's outside the strip (draws 781/84/747 vs 781/84/756), first at .goneNames.4: "Phil Foden" vs "Jarrad Branthwaite"
+  FAIL: 7c: now scottish seed 38: the sentinel twin differs from the empty table's outside the strip (draws 745/78/722 vs 745/78/735), first at .goneNames.4: "Alberto Moleiro" vs "Aurélien Tchouaméni"
+  FAIL: 7c: era2020 premier2020 seed 0: the sentinel twin differs from the empty table's outside the strip (draws 389/34/410 vs 389/34/408), first at .aiHeadlines.4: "Bayern Munich sign Lautaro Martínez from Inter Milan for £98m." vs "Tottenham sign Jan Oblak from Atlético Madrid for £85m."
+  FAIL: 7c: era2020 premier2020 seed 5: the sentinel twin differs from the empty table's outside the strip (draws 379/20/410 vs 379/20/410), first at .academy.prospects.0.id: "pr-mv0wy2o0-1095-856" vs "pr-mv0wy2o0-8392-109"
+  FAIL: 7c: era2020 laliga2020 seed 11: the sentinel twin differs from the empty table's outside the strip (draws 382/20/422 vs 382/20/407), first at .aiHeadlines.3: "Chelsea sign Alisson from Liverpool for £53m." vs "Real Madrid sign Kai Havertz from Chelsea for £113m."
+  FAIL: 7c: era2020 bundesliga2020 seed 13: the sentinel twin differs from the empty table's outside the strip (draws 331/18/417 vs 331/18/417), first at .academy.prospects.0.id: "pr-mv0wy2o0-7794-187" vs "pr-mv0wy2o0-5352-779"
+  FAIL: 7c: era2020 ligue12020 seed 14: the sentinel twin differs from the empty table's outside the strip (draws 341/82/384 vs 341/82/381), first at .aiHeadlines.4: "Everton sign Ángel Correa from Atlético Madrid for £39m." vs "Barcelona sign Aymeric Laporte from Manchester City for £47m."
+  FAIL: 7c: era2020 seriea2020 seed 17: the sentinel twin differs from the empty table's outside the strip (draws 338/20/382 vs 338/20/386), first at .aiHeadlines.3: "Arsenal sign Thibaut Courtois from Real Madrid for £60m." vs "Lazio sign Jorginho from Chelsea for £29m."
+  FAIL: 7c: era2020 seriea2020 seed 32: the sentinel twin differs from the empty table's outside the strip (draws 351/82/396 vs 351/82/388), first at .aiHeadlines.4: "Arsenal sign Alex Meret from Napoli for £56m." vs "Liverpool sign João Félix from Atlético Madrid for £109m."
+  FAIL: 7c: era2020 bundesliga2020 seed 33: the sentinel twin differs from the empty table's outside the strip (draws 328/18/409 vs 328/18/409), first at .aiHeadlines.4: "Borussia Dortmund sign Eden Hazard from Real Madrid for £43m." vs "Borussia Dortmund sign Serge Gnabry from Bayern Munich for £74m."
+  FAIL: 7c: era2015 laliga2015 seed 1: the sentinel twin differs from the empty table's outside the strip (draws 339/20/443 vs 339/20/443), first at .academy.prospects.0.id: "pr-mv0wy2o0-9164-315" vs "pr-mv0wy2o0-6539-916"
+  FAIL: 7c: era2015 ligue12015 seed 4: the sentinel twin differs from the empty table's outside the strip (draws 370/69/385 vs 370/69/386), first at .aiHeadlines.3: "Atlético Madrid sign Mesut Özil from Arsenal for £34m." vs "Roma sign Oscar from Chelsea for £38m."
+  FAIL: 7c: era2015 bundesliga2015 seed 8: the sentinel twin differs from the empty table's outside the strip (draws 384/27/393 vs 384/27/393), first at .academy.prospects.0.rating: 40 vs 53
+  FAIL: 7c: era2015 ligue12015 seed 14: the sentinel twin differs from the empty table's outside the strip (draws 367/69/370 vs 367/69/370), first at .academy.prospects.0.id: "pr-mv0wy2o0-9763-589" vs "pr-mv0wy2o0-9988-976"
+  FAIL: 7c: era2015 seriea2015 seed 17: the sentinel twin differs from the empty table's outside the strip (draws 351/20/415 vs 351/20/420), first at .aiHeadlines.4: "Inter Milan sign Hugo Lloris from Tottenham for £14m." vs "Manchester City sign Thibaut Courtois from Chelsea for £50m."
+  FAIL: 7c: era2015 ligue12015 seed 19: the sentinel twin differs from the empty table's outside the strip (draws 365/20/378 vs 365/20/370), first at .aiHeadlines.3: "Napoli sign Javier Pastore from PSG for £24m." vs "Real Madrid sign Samir Nasri from Manchester City for £29m."
+  FAIL: 7c: era2015 seriea2015 seed 32: the sentinel twin differs from the empty table's outside the strip (draws 349/43/374 vs 349/43/387), first at .aiHeadlines.4: "Juventus sign Jan Oblak from Atlético Madrid for £33m." vs "Chelsea sign Memphis Depay from Manchester United for £65m."
+  FAIL: 7c: era2015 bundesliga2015 seed 33: the sentinel twin differs from the empty table's outside the strip (draws 389/18/411 vs 389/18/410), first at .aiHeadlines.4: "Bayern Munich sign Philippe Coutinho from Liverpool for £37m." vs "Barcelona sign José Gayà from Valencia for £26m."
+  FAIL: 7c: era2015 seriea2015 seed 37: the sentinel twin differs from the empty table's outside the strip (draws 353/20/386 vs 353/20/382), first at .aiHeadlines.4: "Atlético Madrid sign José Callejón from Napoli for £18m." vs "Sampdoria sign Arjen Robben from Bayern Munich for £11m."
+  FAIL: 7c: era2015 bundesliga2015 seed 38: the sentinel twin differs from the empty table's outside the strip (draws 379/27/408 vs 379/27/392), first at .aiHeadlines.3: "Borussia Dortmund sign Wayne Rooney from Manchester United for £21m." vs "Liverpool sign Erik Lamela from Tottenham for £29m."
+  FAIL: 7c: era2010 seriea2010 seed 7: the sentinel twin differs from the empty table's outside the strip (draws 340/20/384 vs 340/20/380), first at .aiHeadlines.4: "Manchester United sign Marouane Fellaini from Everton for £30m." vs "Roma sign John Terry from Chelsea for £20m."
+  FAIL: 7c: era2010 bundesliga2010 seed 8: the sentinel twin differs from the empty table's outside the strip (draws 389/27/397 vs 389/27/393), first at .aiHeadlines.3: "AC Milan sign Juan Mata from Valencia for £23m." vs "Borussia Dortmund sign Adriano from Barcelona for £17m."
+  FAIL: 7c: era2010 seriea2010 seed 12: the sentinel twin differs from the empty table's outside the strip (draws 333/45/383 vs 333/45/388), first at .aiHeadlines.4: "Fiorentina sign Philipp Lahm from Bayern Munich for £28m." vs "Juventus sign Pepe from Real Madrid for £22m."
+  FAIL: 7c: era2010 bundesliga2010 seed 13: the sentinel twin differs from the empty table's outside the strip (draws 392/18/404 vs 392/18/405), first at .aiHeadlines.4: "Fiorentina sign Fernando Llorente from AC Milan for £20m." vs "Lyon sign Darren Fletcher from Manchester United for £20m."
+  FAIL: 7c: era2010 premier2010 seed 15: the sentinel twin differs from the empty table's outside the strip (draws 332/20/405 vs 332/20/426), first at .aiHeadlines.4: "AC Milan sign Wilson Palacios from Tottenham for £18m." vs "Tottenham sign Dani Alves from Barcelona for £26m."
+  FAIL: 7c: era2010 ligue12010 seed 19: the sentinel twin differs from the empty table's outside the strip (draws 335/20/365 vs 335/20/366), first at .aiHeadlines.4: "Real Madrid sign Alexandre Pato from AC Milan for £60m." vs "Bayer Leverkusen sign Éver Banega from Valencia for £17m."
+  FAIL: 7c: era2010 laliga2010 seed 21: the sentinel twin differs from the empty table's outside the strip (draws 321/20/405 vs 321/20/397), first at .aiHeadlines.3: "Real Madrid sign Sergio Busquets from Barcelona for £33m." vs "Real Madrid sign David Villa from Barcelona for £39m."
+  FAIL: 7c: era2010 ligue12010 seed 24: the sentinel twin differs from the empty table's outside the strip (draws 336/89/393 vs 336/89/398), first at .aiHeadlines.4: "Borussia Dortmund sign Giampaolo Pazzini from Sampdoria for £13m." vs "AC Milan sign John Terry from Chelsea for £19m."
+  FAIL: 7c: era2010 laliga2010 seed 26: the sentinel twin differs from the empty table's outside the strip (draws 321/45/411 vs 321/45/389), first at .aiHeadlines.3: "Real Madrid sign Sergio Agüero from Atlético Madrid for £44m." vs "Sevilla sign Pedro from Barcelona for £26m."
+  FAIL: 7c: era2010 bundesliga2010 seed 28: the sentinel twin differs from the empty table's outside the strip (draws 386/27/398 vs 386/27/406), first at .aiHeadlines.4: "Bayern Munich sign Gareth Bale from Tottenham for £27m." vs "Bayern Munich sign Sergio Ramos from Real Madrid for £28m."
+  FAIL: 7c: era2010 bundesliga2010 seed 33: the sentinel twin differs from the empty table's outside the strip (draws 380/18/400 vs 380/18/410), first at .aiHeadlines.3: "Bayern Munich sign Diego Perotti from Sevilla for £18m." vs "Barcelona sign Fernando Torres from Liverpool for £48m."
+  FAIL: 7c: era2005 bundesliga2005 seed 8: the sentinel twin differs from the empty table's outside the strip (draws 321/41/365 vs 321/41/369), first at .aiHeadlines.4: "Bayern Munich sign Mauro Camoranesi from Werder Bremen for £17m." vs "Bayern Munich sign Robinho from Real Madrid for £27m."
+  FAIL: 7c: era2005 ligue12005 seed 14: the sentinel twin differs from the empty table's outside the strip (draws 393/86/387 vs 393/86/387), first at .academy.prospects.0.id: "pr-mv0wy2o0-8467-518" vs "pr-mv0wy2o0-1192-846"
+  FAIL: 7c: era2005 ligue12005 seed 19: the sentinel twin differs from the empty table's outside the strip (draws 397/20/405 vs 397/20/404), first at .aiHeadlines.4: "Tottenham sign David Albelda from Valencia for £11m." vs "Treviso sign Ryan Giggs from Manchester United for £4m."
+  FAIL: 7c: era2005 ligue12005 seed 24: the sentinel twin differs from the empty table's outside the strip (draws 389/87/390 vs 389/87/374), first at .aiHeadlines.3: "Gladbach sign Hernán Crespo from Chelsea for £6m." vs "Barcelona sign Dejan Stanković from Inter Milan for £28m."
+  FAIL: 7c: era2005 premier2005 seed 25: the sentinel twin differs from the empty table's outside the strip (draws 344/20/394 vs 344/20/411), first at .aiHeadlines.4: "Newcastle sign Xavi from Barcelona for £13m." vs "Birmingham City sign Eidur Gudjohnsen from Chelsea for £9m."
+  FAIL: 7c: era2005 laliga2005 seed 26: the sentinel twin differs from the empty table's outside the strip (draws 339/42/397 vs 339/42/385), first at .aiHeadlines.4: "Barcelona sign Ryan Giggs from Manchester United for £4m." vs "Atlético Madrid sign Daniele De Rossi from Roma for £11m."
+  FAIL: 7c: era2005 laliga2005 seed 31: the sentinel twin differs from the empty table's outside the strip (draws 339/20/388 vs 339/20/380), first at .aiHeadlines.3: "Barcelona sign Freddie Ljungberg from Arsenal for £11m." vs "Barcelona sign Petr Cech from Chelsea for £35m."
+  FAIL: 7c: era2005 seriea2005 seed 37: the sentinel twin differs from the empty table's outside the strip (draws 328/20/406 vs 328/20/407), first at .aiHeadlines.4: "AC Milan sign David Villa from Valencia for £12m." vs "Valencia sign Kieron Dyer from Newcastle for £10m."
+   7b: 200 summers, 200 with the sentinel's chair emptied (16 by the sim's own draw), 200 with a second chair to recycle into, 149 offers read (1 for the emptied real chair, all saying only that the club is making a change), 0 failures (12 s)
+   7c: 158 of 200 sentinel careers equal their empty table twin after the strip, draw for draw
+   7a: 47 of 47 sentinel chairs held on day one, 47 partial chairs made up and marked
+   7a: a later world and a season two repair seat nobody real; an outside club shows him in season one only
+   7d: nothing at Arsenal as your club, the club you left, a club you managed, Hot Seat or a mid season start
+   7e: the old save loads with its 19 chairs byte identical (Arsenal: Youri Sagna)
+8) NOT RUN: the byte identity fleet needs SIM_MANAGERS_BASE=<commit>, the round's base on main
+   teeth: real names from the live bakes, truth checked headlines, churn measured not asserted per run
+
+simManagers: 42 failure(s)

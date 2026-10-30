@@ -1,0 +1,3 @@
+mutation drift: applied to src/lib/clubManager.ts
+7) real dugouts: a sentinel registered as real is a display fact and nothing else
+control or setup cannot run: the control's anchor is in clubManager.ts 0 times, it must be there exactly once: const holderReal = realOut.has(s.name);; refusing a dead check

@@ -1,0 +1,127 @@
+mutation recycledline: applied to src/lib/clubManager.ts
+1) a fresh career names every dugout but yours, no real person among them
+   19 dugouts named, all distinct, 0 from the real table, no generated one real, yours empty
+2) deterministic and idempotent
+   same career twice, same names; double ensure, no change
+3) the summer turns chairs over honestly
+   13 changes across 190 chair seasons (6.8% churn), 16 sack lines checked, 0 untrue
+4) moving clubs writes its own truths
+   moved to Aston Villa: their chair cleared, Everton appointed Goran Konate
+5) an old save grows a record on load, never for its own club
+   repaired in one call, own chair left alone
+6) offers and the merry-go-round agree on one vacancy list
+   40 offers over 30 summers, 3 from real vacancies (0 untrue blurbs), 26 declined chairs refilled (0 stale)
+7) real dugouts: a sentinel registered as real is a display fact and nothing else
+   sentinel "Testa Realmann" is in no src file; 47 leagues across 5 eras hold it
+  FAIL: 7b: now laliga seed 2: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Oliwier Idrissi after Testa Realmann finished 20th. He was out at Atlético Madrid the same week."
+  FAIL: 7b: now ligue1 seed 5: the new season says Testa Realmann outside the record: "🪑 Angers appoint Lasse Lehmann after Testa Realmann finished 18th. He was out at Strasbourg the same week."
+  FAIL: 7b: now eredivisie seed 6: the new season says Testa Realmann outside the record: "🪑 ADO Den Haag appoint Gabriel Nunes after Testa Realmann finished 18th. He was out at Ajax the same week."
+  FAIL: 7b: now saudi seed 7: the new season says Testa Realmann outside the record: "🪑 Abha appoint Ethan Marchetti after Testa Realmann finished 18th. He was out at Al-Shabab the same week."
+  FAIL: 7b: now mlsWest seed 9: the new season says Testa Realmann outside the record: "🪑 Austin FC appoint Adem Doherty after Testa Realmann finished 15th. He was out at FC Dallas the same week."
+  FAIL: 7b: now primeira seed 10: the new season says Testa Realmann outside the record: "🪑 Académico de Viseu appoint Reece Nakamura after Testa Realmann finished 18th. He was out at Arouca the same week."
+  FAIL: 7b: now superlig seed 12: the new season says Testa Realmann outside the record: "🪑 Alanyaspor appoint Onur Diarra after Testa Realmann finished 18th. He was out at Erzurumspor the same week."
+  FAIL: 7b: now bundesliga2 seed 13: the new season says Testa Realmann outside the record: "🪑 Arminia Bielefeld appoint Cheick Kalu after Testa Realmann finished 18th. He was out at Braunschweig the same week."
+  FAIL: 7b: now denmark seed 17: the new season says Testa Realmann outside the record: "🪑 AC Horsens appoint Anders Bakker after Testa Realmann finished 12th. He was out at Brøndby IF the same week."
+  FAIL: 7b: now switzerland seed 18: the new season says Testa Realmann outside the record: "🪑 Basel appoint Rasmus Okoro after Testa Realmann finished 12th. He was out at Grasshopper the same week."
+  FAIL: 7b: now brasileirao seed 20: the new season says Testa Realmann outside the record: "🪑 Athletico Paranaense appoint Ibrahim Ibarra after Testa Realmann finished 20th. He was out at Bahia the same week."
+  FAIL: 7b: now ligue2 seed 24: the new season says Testa Realmann outside the record: "🪑 Annecy appoint Sven Hansen after Testa Realmann finished 1st. He was out at Clermont the same week."
+  FAIL: 7b: now premier seed 27: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Felipe Lampe after Testa Realmann finished 20th. He was out at Sunderland the same week."
+  FAIL: 7b: now laliga seed 29: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Oliwier Idrissi after Testa Realmann finished 20th. He was out at Atlético Madrid the same week."
+  FAIL: 7b: now ligue1 seed 32: the new season says Testa Realmann outside the record: "🪑 Angers appoint Ari Lozano after Testa Realmann finished 18th. He was out at Le Mans the same week."
+  FAIL: 7b: now saudi seed 34: the new season says Testa Realmann outside the record: "🪑 Abha appoint Ethan Marchetti after Testa Realmann finished 1st. He was out at Al-Shabab the same week."
+  FAIL: 7b: now primeira seed 37: the new season says Testa Realmann outside the record: "🪑 Académico de Viseu appoint Reece Nakamura after Testa Realmann finished 18th. He was out at Arouca the same week."
+  FAIL: 7b: now scottish seed 38: the new season says Testa Realmann outside the record: "🪑 Aberdeen appoint Gabriel Ibarra after Testa Realmann finished 12th. He was out at Dundee the same week."
+  FAIL: 7b: now superlig seed 39: the new season says Testa Realmann outside the record: "🪑 Alanyaspor appoint Ismael Sinclair after Testa Realmann finished 18th. He was out at Başakşehir the same week."
+  FAIL: 7b: era2020 premier2020 seed 0: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Tunde Ramires after Testa Realmann finished 1st. He was out at West Ham the same week."
+  FAIL: 7b: era2020 laliga2020 seed 1: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Colm Martel after Testa Realmann finished 20th. He was out at Atlético Madrid the same week."
+  FAIL: 7b: era2020 premier2020 seed 5: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Tunde Ramires after Testa Realmann finished 20th. He was out at West Ham the same week."
+  FAIL: 7b: era2020 bundesliga2020 seed 8: the new season says Testa Realmann outside the record: "🪑 Arminia Bielefeld appoint Ezra Paredes after Testa Realmann finished 18th. He was out at Werder Bremen the same week."
+  FAIL: 7b: era2020 ligue12020 seed 9: the new season says Testa Realmann outside the record: "🪑 Angers appoint Florent Beck after Testa Realmann finished 20th. He was out at Rennes the same week."
+  FAIL: 7b: era2020 premier2020 seed 10: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Valentin Hansen after Testa Realmann finished 20th. He was out at Newcastle the same week."
+  FAIL: 7b: era2020 laliga2020 seed 11: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Alan Ilic after Testa Realmann finished 20th. He was out at Valencia the same week."
+  FAIL: 7b: era2020 bundesliga2020 seed 13: the new season says Testa Realmann outside the record: "🪑 Arminia Bielefeld appoint Amadou Eriksen after Testa Realmann finished 18th. He was out at Freiburg the same week."
+  FAIL: 7b: era2020 ligue12020 seed 14: the new season says Testa Realmann outside the record: "🪑 Angers appoint Manu Prieto after Testa Realmann finished 20th. He was out at Lyon the same week."
+  FAIL: 7b: era2020 laliga2020 seed 16: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Armel Nunes after Testa Realmann finished 20th. He was out at Valladolid the same week."
+  FAIL: 7b: era2020 ligue12020 seed 19: the new season says Testa Realmann outside the record: "🪑 Angers appoint Bo Gilbert after Testa Realmann finished 20th. He was out at Saint-Étienne the same week."
+  FAIL: 7b: era2020 premier2020 seed 20: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Arda Eriksen after Testa Realmann finished 20th. He was out at Everton the same week."
+  FAIL: 7b: era2020 bundesliga2020 seed 23: the new season says Testa Realmann outside the record: "🪑 Arminia Bielefeld appoint Ezra Paredes after Testa Realmann finished 18th. He was out at Werder Bremen the same week."
+  FAIL: 7b: era2020 ligue12020 seed 24: the new season says Testa Realmann outside the record: "🪑 Angers appoint Bo Gilbert after Testa Realmann finished 20th. He was out at Saint-Étienne the same week."
+  FAIL: 7b: era2020 laliga2020 seed 26: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Colm Martel after Testa Realmann finished 20th. He was out at Atlético Madrid the same week."
+  FAIL: 7b: era2020 laliga2020 seed 31: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Alan Ilic after Testa Realmann finished 20th. He was out at Valencia the same week."
+  FAIL: 7b: era2020 seriea2020 seed 32: the new season says Testa Realmann outside the record: "🪑 AC Milan appoint Dario Thiam after Testa Realmann finished 20th. He was out at Udinese the same week."
+  FAIL: 7b: era2020 bundesliga2020 seed 38: the new season says Testa Realmann outside the record: "🪑 Arminia Bielefeld appoint Rico Ferrari after Testa Realmann finished 18th. He was out at Hoffenheim the same week."
+  FAIL: 7b: era2020 ligue12020 seed 39: the new season says Testa Realmann outside the record: "🪑 Angers appoint Florent Beck after Testa Realmann finished 20th. He was out at Rennes the same week."
+  FAIL: 7b: era2015 laliga2015 seed 1: the new season says Testa Realmann outside the record: "🪑 Athletic Club appoint Nikola Jimenez after Testa Realmann finished 20th. He was out at Barcelona the same week."
+  FAIL: 7b: era2015 seriea2015 seed 2: the new season says Testa Realmann outside the record: "🪑 AC Milan appoint Pelle Akande after Testa Realmann finished 20th. He was out at Hellas Verona the same week."
+  FAIL: 7b: era2015 bundesliga2015 seed 3: the new season says Testa Realmann outside the record: "🪑 Augsburg appoint Miro Grimaldo after Testa Realmann finished 18th. He was out at Bayern Munich the same week."
+  FAIL: 7b: era2015 ligue12015 seed 4: the new season says Testa Realmann outside the record: "🪑 Angers appoint Jorge Jankovic after Testa Realmann finished 20th. He was out at Bordeaux the same week."
+  FAIL: 7b: era2015 premier2015 seed 5: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Ibrahim Sarr after Testa Realmann finished 20th. He was out at Manchester City the same week."
+  FAIL: 7b: era2015 ligue12015 seed 9: the new season says Testa Realmann outside the record: "🪑 Angers appoint Remi Toure after Testa Realmann finished 20th. He was out at Saint-Étienne the same week."
+  FAIL: 7b: era2015 premier2015 seed 10: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Manu Keita after Testa Realmann finished 20th. He was out at Leicester City the same week."
+  FAIL: 7b: era2015 seriea2015 seed 12: the new season says Testa Realmann outside the record: "🪑 AC Milan appoint Lorenzo Abara after Testa Realmann finished 20th. He was out at Bologna the same week."
+  FAIL: 7b: era2015 bundesliga2015 seed 13: the new season says Testa Realmann outside the record: "🪑 Augsburg appoint Miro Grimaldo after Testa Realmann finished 18th. He was out at Bayern Munich the same week."
+  FAIL: 7b: era2015 ligue12015 seed 14: the new season says Testa Realmann outside the record: "🪑 Angers appoint Harvey Pavlik after Testa Realmann finished 20th. He was out at GFC Ajaccio the same week."
+  FAIL: 7b: era2015 laliga2015 seed 16: the new season says Testa Realmann outside the record: "🪑 Athletic Club appoint Sander Kessler after Testa Realmann finished 20th. He was out at Sporting Gijón the same week."
+  FAIL: 7b: era2015 seriea2015 seed 17: the new season says Testa Realmann outside the record: "🪑 AC Milan appoint Jaden Bruns after Testa Realmann finished 20th. He was out at Empoli the same week."
+  FAIL: 7b: era2015 laliga2015 seed 21: the new season says Testa Realmann outside the record: "🪑 Athletic Club appoint Nikola Jimenez after Testa Realmann finished 20th. He was out at Barcelona the same week."
+  FAIL: 7b: era2015 bundesliga2015 seed 23: the new season says Testa Realmann outside the record: "🪑 Augsburg appoint Miro Grimaldo after Testa Realmann finished 18th. He was out at Bayern Munich the same week."
+  FAIL: 7b: era2015 premier2015 seed 25: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Hakan Roman after Testa Realmann finished 1st. He was out at Bournemouth the same week."
+  FAIL: 7b: era2015 laliga2015 seed 26: the new season says Testa Realmann outside the record: "🪑 Athletic Club appoint Nikola Jimenez after Testa Realmann finished 20th. He was out at Barcelona the same week."
+  FAIL: 7b: era2015 bundesliga2015 seed 28: the new season says Testa Realmann outside the record: "🪑 Augsburg appoint Miro Grimaldo after Testa Realmann finished 1st. He was out at Bayern Munich the same week."
+  FAIL: 7b: era2015 ligue12015 seed 29: the new season says Testa Realmann outside the record: "🪑 Angers appoint Kelvin Gerber after Testa Realmann finished 20th. He was out at Guingamp the same week."
+  FAIL: 7b: era2015 laliga2015 seed 31: the new season says Testa Realmann outside the record: "🪑 Athletic Club appoint Axel Kruger after Testa Realmann finished 20th. He was out at Deportivo La Coruña the same week."
+  FAIL: 7b: era2015 bundesliga2015 seed 33: the new season says Testa Realmann outside the record: "🪑 Augsburg appoint Ari Ricci after Testa Realmann finished 18th. He was out at Darmstadt the same week."
+  FAIL: 7b: era2015 ligue12015 seed 34: the new season says Testa Realmann outside the record: "🪑 Angers appoint Adem Esposito after Testa Realmann finished 20th. He was out at Toulouse the same week."
+  FAIL: 7b: era2015 premier2015 seed 35: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Hakan Roman after Testa Realmann finished 20th. He was out at Bournemouth the same week."
+  FAIL: 7b: era2015 seriea2015 seed 37: the new season says Testa Realmann outside the record: "🪑 AC Milan appoint Jarne Lehmann after Testa Realmann finished 20th. He was out at Carpi the same week."
+  FAIL: 7b: era2015 ligue12015 seed 39: the new season says Testa Realmann outside the record: "🪑 Angers appoint Jorge Jankovic after Testa Realmann finished 20th. He was out at Bordeaux the same week."
+  FAIL: 7b: era2010 premier2010 seed 0: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Marek Walsh after Testa Realmann finished 20th. He was out at Birmingham City the same week."
+  FAIL: 7b: era2010 laliga2010 seed 1: the new season says Testa Realmann outside the record: "🪑 Almería appoint Mathis Kabore after Testa Realmann finished 20th. He was out at Atlético Madrid the same week."
+  FAIL: 7b: era2010 bundesliga2010 seed 3: the new season says Testa Realmann outside the record: "🪑 Bayer Leverkusen appoint Sven Larsen after Testa Realmann finished 18th. He was out at St. Pauli the same week."
+  FAIL: 7b: era2010 ligue12010 seed 4: the new season says Testa Realmann outside the record: "🪑 Arles-Avignon appoint Ronan Conte after Testa Realmann finished 20th. He was out at Toulouse the same week."
+  FAIL: 7b: era2010 bundesliga2010 seed 8: the new season says Testa Realmann outside the record: "🪑 Bayer Leverkusen appoint Jorge Leite after Testa Realmann finished 1st. He was out at Eintracht Frankfurt the same week."
+  FAIL: 7b: era2010 ligue12010 seed 9: the new season says Testa Realmann outside the record: "🪑 Arles-Avignon appoint Vito Olsen after Testa Realmann finished 20th. He was out at Bordeaux the same week."
+  FAIL: 7b: era2010 premier2010 seed 10: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Ivo Fortuna after Testa Realmann finished 20th. He was out at West Ham the same week."
+  FAIL: 7b: era2010 laliga2010 seed 11: the new season says Testa Realmann outside the record: "🪑 Almería appoint Mathis Kabore after Testa Realmann finished 20th. He was out at Atlético Madrid the same week."
+  FAIL: 7b: era2010 bundesliga2010 seed 13: the new season says Testa Realmann outside the record: "🪑 Bayer Leverkusen appoint Bruno Sousa after Testa Realmann finished 18th. He was out at Borussia Dortmund the same week."
+  FAIL: 7b: era2010 laliga2010 seed 16: the new season says Testa Realmann outside the record: "🪑 Almería appoint Mathis Kabore after Testa Realmann finished 20th. He was out at Atlético Madrid the same week."
+  FAIL: 7b: era2010 laliga2010 seed 21: the new season says Testa Realmann outside the record: "🪑 Almería appoint Felipe Pinto after Testa Realmann finished 20th. He was out at Valencia the same week."
+  FAIL: 7b: era2010 bundesliga2010 seed 23: the new season says Testa Realmann outside the record: "🪑 Bayer Leverkusen appoint Sven Maes after Testa Realmann finished 1st. He was out at Stuttgart the same week."
+  FAIL: 7b: era2010 laliga2010 seed 26: the new season says Testa Realmann outside the record: "🪑 Almería appoint Felipe Pinto after Testa Realmann finished 20th. He was out at Valencia the same week."
+  FAIL: 7b: era2010 bundesliga2010 seed 28: the new season says Testa Realmann outside the record: "🪑 Bayer Leverkusen appoint Sven Maes after Testa Realmann finished 18th. He was out at Stuttgart the same week."
+  FAIL: 7b: era2010 seriea2010 seed 32: the new season says Testa Realmann outside the record: "🪑 AC Milan appoint Dennis Fernandes after Testa Realmann finished 20th. He was out at Bologna the same week."
+  FAIL: 7b: era2010 bundesliga2010 seed 33: the new season says Testa Realmann outside the record: "🪑 Bayer Leverkusen appoint Rico Lindgren after Testa Realmann finished 1st. He was out at Werder Bremen the same week."
+  FAIL: 7b: era2010 ligue12010 seed 34: the new season says Testa Realmann outside the record: "🪑 Arles-Avignon appoint Yaya Vogel after Testa Realmann finished 20th. He was out at Rennes the same week."
+  FAIL: 7b: era2010 seriea2010 seed 37: the new season says Testa Realmann outside the record: "🪑 AC Milan appoint Onur Escobar after Testa Realmann finished 20th. He was out at Roma the same week."
+  FAIL: 7b: era2010 bundesliga2010 seed 38: the new season says Testa Realmann outside the record: "🪑 Bayer Leverkusen appoint Bruno Sousa after Testa Realmann finished 18th. He was out at Borussia Dortmund the same week."
+  FAIL: 7b: era2010 ligue12010 seed 39: the new season says Testa Realmann outside the record: "🪑 Arles-Avignon appoint Ronan Conte after Testa Realmann finished 20th. He was out at Toulouse the same week."
+  FAIL: 7b: era2005 premier2005 seed 0: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Erik Steiner after Testa Realmann finished 20th. He was out at Birmingham City the same week."
+  FAIL: 7b: era2005 ligue12005 seed 4: the new season says Testa Realmann outside the record: "🪑 AC Ajaccio appoint Ciro Medina after Testa Realmann finished 20th. He was out at Bordeaux the same week."
+  FAIL: 7b: era2005 premier2005 seed 5: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Erik Steiner after Testa Realmann finished 20th. He was out at Birmingham City the same week."
+  FAIL: 7b: era2005 laliga2005 seed 6: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Emil Kaya after Testa Realmann finished 1st. He was out at Atlético Madrid the same week."
+  FAIL: 7b: era2005 bundesliga2005 seed 8: the new season says Testa Realmann outside the record: "🪑 Arminia Bielefeld appoint Ilias Lorenzi after Testa Realmann finished 18th. He was out at Hamburg the same week."
+  FAIL: 7b: era2005 ligue12005 seed 9: the new season says Testa Realmann outside the record: "🪑 AC Ajaccio appoint Ciro Medina after Testa Realmann finished 20th. He was out at Bordeaux the same week."
+  FAIL: 7b: era2005 premier2005 seed 10: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Erik Steiner after Testa Realmann finished 20th. He was out at Birmingham City the same week."
+  FAIL: 7b: era2005 laliga2005 seed 11: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Emil Kaya after Testa Realmann finished 20th. He was out at Atlético Madrid the same week."
+  FAIL: 7b: era2005 laliga2005 seed 16: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Quentin Balogun after Testa Realmann finished 20th. He was out at Málaga the same week."
+  FAIL: 7b: era2005 ligue12005 seed 19: the new season says Testa Realmann outside the record: "🪑 AC Ajaccio appoint Axel Nakamura after Testa Realmann finished 20th. He was out at Toulouse the same week."
+  FAIL: 7b: era2005 seriea2005 seed 22: the new season says Testa Realmann outside the record: "🪑 AC Milan appoint Karim Ferrari after Testa Realmann finished 20th. He was out at Sampdoria the same week."
+  FAIL: 7b: era2005 premier2005 seed 25: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Levi Solberg after Testa Realmann finished 1st. He was out at West Brom the same week."
+  FAIL: 7b: era2005 laliga2005 seed 26: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Jonas Diallo after Testa Realmann finished 20th. He was out at Valencia the same week."
+  FAIL: 7b: era2005 bundesliga2005 seed 28: the new season says Testa Realmann outside the record: "🪑 Arminia Bielefeld appoint Kian Kolar after Testa Realmann finished 18th. He was out at Bayern Munich the same week."
+  FAIL: 7b: era2005 premier2005 seed 30: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Erik Steiner after Testa Realmann finished 20th. He was out at Birmingham City the same week."
+  FAIL: 7b: era2005 laliga2005 seed 31: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Oliwier Kimura after Testa Realmann finished 20th. He was out at Villarreal the same week."
+  FAIL: 7b: era2005 premier2005 seed 35: the new season says Testa Realmann outside the record: "🪑 Arsenal appoint Erik Steiner after Testa Realmann finished 20th. He was out at Birmingham City the same week."
+  FAIL: 7b: era2005 laliga2005 seed 36: the new season says Testa Realmann outside the record: "🪑 Alavés appoint Emil Kaya after Testa Realmann finished 20th. He was out at Atlético Madrid the same week."
+  FAIL: 7b: era2005 seriea2005 seed 37: the new season says Testa Realmann outside the record: "🪑 AC Milan appoint Timo Cordero after Testa Realmann finished 20th. He was out at Siena the same week."
+  FAIL: 7b: era2005 bundesliga2005 seed 38: the new season says Testa Realmann outside the record: "🪑 Arminia Bielefeld appoint Felipe Dembo after Testa Realmann finished 18th. He was out at Werder Bremen the same week."
+   7b: 200 summers, 200 with the sentinel's chair emptied (16 by the sim's own draw), 200 with a second chair to recycle into, 149 offers read (1 for the emptied real chair, all saying only that the club is making a change), 102 failures (12 s)
+   7c: 200 of 200 sentinel careers equal their empty table twin after the strip, draw for draw
+   7a: 47 of 47 sentinel chairs held on day one, 47 partial chairs made up and marked
+   7a: a later world and a season two repair seat nobody real; an outside club shows him in season one only
+   7d: nothing at Arsenal as your club, the club you left, a club you managed, Hot Seat or a mid season start
+   7e: the old save loads with its 19 chairs byte identical (Arsenal: Youri Sagna)
+8) NOT RUN: the byte identity fleet needs SIM_MANAGERS_BASE=<commit>, the round's base on main
+   teeth: real names from the live bakes, truth checked headlines, churn measured not asserted per run
+
+simManagers: 102 failure(s)
