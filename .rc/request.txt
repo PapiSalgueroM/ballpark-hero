@@ -1,0 +1,1 @@
+stack-head: bash .rc/x/wcStack.sh 1a46f4bd9
