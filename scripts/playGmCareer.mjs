@@ -18,6 +18,8 @@
  * waits for it and then closes the season; a reload on the fired screen holds
  * and then draws where the box stood; the market and a seat taken; the new
  * hub's boxes drawn without it, and the GM level box holding until it lands.
+ * Round 1561 (closing check): then the hub reloaded once more and the Career
+ * box opened before the kit, both of its holding stages read frame by frame.
  *
  * Round 1561: the NHL Front Office joins as a second row (the board bound to
  * the career on the same shared pieces). A row carries its own season shape
@@ -36,8 +38,8 @@
  * the served chunks rewritten, never a rebuild):
  *   wipebutton  the fired recap's button deletes the save again (Walk A red)
  *   nofallback  the holding box loses its minimum height (the jump check red;
- *               Round 1561: also the two 390 checks, Walk A's Job market and
- *               Walk E's GM level before the kit). Run it with
+ *               Round 1561: also the 390 checks, Walk A's Job market and
+ *               Walk E's GM level before the kit and Career box). Run it with
  *               PLAY_GM_CAREER_WALKS=A for a clean verdict: under Walk E the
  *               served copy also loses its stylesheet and its kit delay, so
  *               four unrelated checks go red beside the aimed one (r1561-g5:
@@ -615,6 +617,53 @@ async function walkE(row, w, h) {
   say(kitAsked(n0) >= 1, `${tag}: the GM level box asks for the kit`);
   await shot(page, `${row.sport}-${w}-slow-gm-level`);
   await screenChecks(page, `${tag} GM level`);
+
+  /* Round 1561 (closing check, finding 10, critic 14): the Career box's two holding stages. The hub reloaded again on
+     the slow line (from the top, as above; routing turns the browser's cache off, so the kit and the Career screen's
+     chunk are both fetched anew), and the Career box opened before the kit: the board's own holding box
+     (GmCareerKitHolding), then, once the kit is here, the screen's own holding box while its chunk loads (when the
+     line is slow enough to show one), then the screen. Every frame is read in the page, so neither stage is raced;
+     a stage is the panel element it stood in (the mount draws a new one when the kit lands). On the owner's phone
+     every holding frame is the Career screen's own height to 8 px (GM_CAREER_FLOORS, career 184); at both sizes the
+     screen lands where its holding box stood, and the last holding frame's scroll is the landed screen's. */
+  await back(page);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  n0 = assets.length;
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await careerBox(page, 'Career').waitFor({ timeout: 90000 });
+  await wait(600);
+  say(kitAsked(n0) === 0, `${tag}: reloaded again, the hub draws the Career box without asking for the kit`);
+  await page.evaluate(() => {
+    const seen = [], stageOf = new WeakMap();
+    let panels = 0;
+    window.__careerHolds = seen;
+    const tick = () => {
+      const panel = document.querySelector('[data-gm-desk="panel"]');
+      if (panel && !stageOf.has(panel)) stageOf.set(panel, ++panels);
+      const held = panel && panel.querySelector('[data-gm-panel-loading]');
+      if (held) seen.push({ stage: stageOf.get(panel), key: panel.getAttribute('data-gm-panel'), h: held.getBoundingClientRect().height, top: panel.getBoundingClientRect().top + window.scrollY, y: window.scrollY });
+      if (!document.querySelector('[data-gm-career]')) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+  await careerBox(page, 'Career').click();
+  await page.locator('[data-gm-career]').first().waitFor({ timeout: 90000 });
+  await wait(300);
+  const { seen, landedC } = await page.evaluate(() => {
+    const el = document.querySelector('[data-gm-career]'), panel = el && el.closest('[data-gm-desk="panel"]');
+    return { seen: window.__careerHolds || [], landedC: el && panel ? { h: el.getBoundingClientRect().height, top: panel.getBoundingClientRect().top + window.scrollY, y: window.scrollY } : null };
+  });
+  const firstStage = seen.length ? seen[0].stage : null;
+  const beforeKit = seen.filter(f => f.stage === firstStage), afterKit = seen.filter(f => f.stage !== firstStage);
+  const span = fs => (fs.length ? `${Math.round(Math.min(...fs.map(f => f.h)))} to ${Math.round(Math.max(...fs.map(f => f.h)))}px over ${fs.length} frame(s)` : 'not seen');
+  console.log(`  MEASURED ${tag}: the Career box before the kit ${span(beforeKit)}, its screen's own holding box ${span(afterKit)}, the landed screen ${landedC ? Math.round(landedC.h) : 'none'}px`);
+  say(beforeKit.length > 0 && beforeKit.every(f => f.key === 'career'), `${tag}: the Career box holds, under its own header, while the kit is on its way (${beforeKit.length} frame(s), ${beforeKit[0]?.key ?? null})`);
+  if (w === 390) say(seen.length > 0 && !!landedC && seen.every(f => Math.abs(f.h - landedC.h) <= 8), `${tag}: at 390 every holding frame of the Career box is the Career screen's own height (${span(seen)} for ${landedC ? Math.round(landedC.h) : 0}px)`, aimed('nofallback'));
+  const lastHold = seen[seen.length - 1];
+  say(!!lastHold && !!landedC && seen.every(f => Math.abs(f.top - landedC.top) < 2) && lastHold.y === landedC.y, `${tag}: the Career screen lands where its holding box stood, the page not moving (top ${lastHold ? Math.round(lastHold.top) : '-'} to ${landedC ? Math.round(landedC.top) : '-'}, scroll ${lastHold?.y ?? '-'} to ${landedC?.y ?? '-'})`);
+  say(kitAsked(n0) >= 1, `${tag}: the Career box asks for the kit`);
+  await shot(page, `${row.sport}-${w}-slow-career`);
+  await screenChecks(page, `${tag} Career`);
   await slow(false);
   say(errors.length === 0, `${tag}: no console error (${errors[0] ?? 'clean'})`);
   await ctx.close();
