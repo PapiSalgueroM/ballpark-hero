@@ -1,0 +1,62 @@
+name: SC current league browser proof
+on:
+  push:
+    branches: [codex/sc-league-current-browser-20261030]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser:
+    if: github.ref == 'refs/heads/codex/sc-league-current-browser-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: '1'
+      SC_BROWSER_CONTROLLER_SHA256: 256b9d302037eabe70406573b7fe0e0a06d91a84e4d8c6577992c5cd871640d2
+      SC_BROWSER_CONTRACT_SHA256: 23610657d17e96bffc2fd522d17a8e9f00ee3f21ffe6d102d03f25c0d48f84cc
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+      - name: Bind outside-workspace evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$RUNNER_TEMP/sc-league-browser-$GITHUB_RUN_ID-a$GITHUB_RUN_ATTEMPT"
+          test ! -e "$output"
+          mkdir "$output"
+          echo "SC_BROWSER_PROOF_OUT=$output" >> "$GITHUB_ENV"
+      - name: Cheap syntax of the exact four QA bodies
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/qa/runScLeagueBrowserProof.mjs
+          node --check scripts/qa/scLeagueBrowserCustody.mjs
+          node --check scripts/qa/playLigue2Release.mjs
+          node --check scripts/qa/playSerieBRelease.mjs
+      - name: Actual types, ordinary build, six journeys, physical UI refusal and restoration
+        shell: bash
+        run: |
+          set +e
+          node scripts/qa/runScLeagueBrowserProof.mjs all > "$SC_BROWSER_PROOF_OUT/controller.stdout.log" 2> "$SC_BROWSER_PROOF_OUT/controller.stderr.log"
+          raw=$?
+          printf '%s\n' "$raw" > "$SC_BROWSER_PROOF_OUT/controller.exit"
+          cat "$SC_BROWSER_PROOF_OUT/controller.stdout.log"
+          cat "$SC_BROWSER_PROOF_OUT/controller.stderr.log" >&2
+          exit "$raw"
+      - name: Retain actual originals including failure bodies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-league-browser-${{ github.run_id }}-a${{ github.run_attempt }}
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            ${{ runner.temp }}/sc-league-browser-${{ github.run_id }}-a${{ github.run_attempt }}/
+            !${{ runner.temp }}/sc-league-browser-${{ github.run_id }}-a${{ github.run_attempt }}/matched-source/**
+            !${{ runner.temp }}/sc-league-browser-${{ github.run_id }}-a${{ github.run_attempt }}/browser-tools/**
+            !${{ runner.temp }}/sc-league-browser-${{ github.run_id }}-a${{ github.run_attempt }}/browsers/**

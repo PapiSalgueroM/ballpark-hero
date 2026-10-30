@@ -1,0 +1,56 @@
+{
+  "status": "CURRENT_SOURCE_REPIN_ONLY_RUNTIME_UNRUN",
+  "product": "0b545ff00497ed849224ab74deaba546ab5d93ca",
+  "tree": "02cde32c88fd64e0417ef36ea098a899a758645c",
+  "files": [
+    {
+      "sha256": "a57ebdbf9d1ca33acbc3f3906801d7330b956e92df24b0069a0c1f0e15e76441",
+      "bytes": 1242401,
+      "gitBlob": "2832a7a81c3f0ed8e08553bcb8f81c02d04d931e",
+      "path": "src/lib/clubManager.ts"
+    },
+    {
+      "sha256": "bc02c0d49e6d0b5fde50c2a2b1b78b30d6b1ec035a75d96265638cc9047b4ae6",
+      "bytes": 176880,
+      "gitBlob": "9828e41da792eafeead8036879d49f05242a5164",
+      "path": "scripts/data/soccerCareerFacts.json"
+    },
+    {
+      "sha256": "ded92933aa4790e4c4a532647d09e5ee3c65b22dfec57432de18d25641d9dce0",
+      "bytes": 22296,
+      "gitBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24",
+      "path": "scripts/lib/careerClubPool.mjs"
+    },
+    {
+      "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5",
+      "bytes": 7070,
+      "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b",
+      "path": "src/data/leagueFormat.ts"
+    },
+    {
+      "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+      "bytes": 47020,
+      "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844",
+      "path": "src/lib/soccerCareerLeague.ts"
+    },
+    {
+      "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8",
+      "bytes": 23401,
+      "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba",
+      "path": "src/lib/soccerCareerDerby.ts"
+    },
+    {
+      "sha256": "7c79aef8322ea52d617c2390500bba5d2b93de8af2295f75dd3f2b079902711e",
+      "bytes": 552324,
+      "gitBlob": "6661bca7a583d57933a533f9edcabc1fc102c700",
+      "path": "src/lib/soccerCareerEngine.ts"
+    },
+    {
+      "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "bytes": 49030,
+      "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "path": "src/data/soccerCareerClubPool.ts"
+    }
+  ],
+  "scope": "Selected current product bodies for the retained genuine journey. No data import or app overlay."
+}
