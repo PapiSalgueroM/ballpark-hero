@@ -62,7 +62,7 @@ function Help({ card }: { card: PlayerCard }) {
   return (
     <div data-cm-card-rules className="rounded-xl border border-border bg-background/40 p-3 space-y-1.5 text-xs text-muted-foreground">
       <p><span className="font-bold text-foreground">Your players:</span> this season counts every competition, and the league line is the league on its own. When a season ends, every man who played for you gets a row, the last {PAST_KEPT} kept. Seasons are kept for the men at your club when a season ends, while they stay.</p>
-      <p><span className="font-bold text-foreground">Other clubs in your league:</span> goals, assists and clean sheets as the league book counted them. The book has no appearances, ratings or cards for them, so the card shows none.</p>
+      <p><span className="font-bold text-foreground">Other clubs in your league:</span> goals, assists and clean sheets as the league book counted them. The book has no appearances, match ratings or cards for them, so the card shows none.</p>
       <p><span className="font-bold text-foreground">Clubs outside your league:</span> who he is and where he plays. The game keeps goals for your league only.</p>
       <p data-cm-card-example><span className="font-bold text-foreground">Worked example:</span> {p ? 'his' : 'say a man has'} {sum.toFixed(1)} in match ratings over {apps} games, which is an average of {avg(example)}.</p>
     </div>
