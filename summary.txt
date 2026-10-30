@@ -1,0 +1,24 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest exit=0 11s |    Duration  10.71s (transform 3.55s, setup 571ms, collect 12.62s, tests 6.93s, environment 3.06s, prepare 1.00s)
+dl exit=0 91s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+c-board exit=1 88s | simCmDecidingLeg: control board FIRED (legs: board went red; red in all: legs: board moves the tie's way on every differing leg (the report's swing | legs: board size)
+tsc exit=0 123s | 
+c-morale exit=1 92s | simCmDecidingLeg: control morale FIRED (legs: morale went red; red in all: legs: morale moves the tie's way on every differing leg | legs: morale size)
+c-fans exit=1 93s | simCmDecidingLeg: control fans FIRED (legs: fans went red; red in all: legs: fans count the tie | gate: night | gate: base)
+c-tieall exit=1 90s | simCmDecidingLeg: control tieall FIRED (careers: identity went red; red in all: careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ) |
+c-hattrick exit=1 91s | simCmDecidingLeg: control hattrick FIRED (hauls: planted went red; red in all: careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ) | 
+c-cutover exit=1 64s | simCmDecidingLeg: control cutover FIRED (gate: cutover went red; red in all: gate: cutover)
+c-nogate exit=1 94s | simCmDecidingLeg: control nogate FIRED (gate: night went red; red in all: gate: night | gate: base)
+c-boardsize exit=1 89s | simCmDecidingLeg: control boardsize FIRED (legs: board size went red; red in all: legs: board size)
+c-bogus exit=2 1s | simCmDecidingLeg: ABORT, DECIDING_LEG_CONTROL=bogus is not one of board, morale, fans, tieall, hattrick, nogate, cutover, boardsize, moralesize, relief
+c-moralesize exit=1 94s | simCmDecidingLeg: control moralesize FIRED (legs: morale size went red; red in all: legs: morale size)
+c-relief exit=1 90s | simCmDecidingLeg: control relief FIRED (legs: morale size went red; red in all: legs: morale size)
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 27s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 72s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simManagerAppealIsolation exit=0 61s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simCmLeagueRules exit=0 91s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simCmMatchDay exit=0 39s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+sweepWeight exit=0 30s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simManagerHotSeat exit=0 67s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+walk exit=0 57s | playCmDecidingLeg GREEN: 42 of 42 checks green
