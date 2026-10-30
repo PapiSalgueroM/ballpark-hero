@@ -1,0 +1,3 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+always exit=1 94s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=always FIRED. 15 of 15 lines with the lift pinned read red for the answered half, the Soccer Career hub among them
+states exit=0 95s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
