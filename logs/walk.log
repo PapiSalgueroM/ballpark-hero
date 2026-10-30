@@ -1,0 +1,9 @@
+   squad row: Luka Modrić80 rated, this game's deal: 8k a week, 4 years left
+  PASS  AC Milan squad: Modric shows 80
+   market row: null
+  FAIL  market: Lionel Messi shows 86
+   market row: 🇵🇹Cristiano RonaldoAl-Nassr · 41y · worth £9.6m to £10.1m
+  FAIL  market: Cristiano Ronaldo shows 86
+  PASS  no real page errors (clean)
+  PASS  no sideways scroll at 1280 (0)
+walk1600: 2 failure(s)
