@@ -1,0 +1,6 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+card exit=0 61s | playFoSeasonCard: 216 checks, 0 failed
+nflwalk exit=0 42s | playNflSeasonStats: 112 checks, 0 failed
+c-nocue exit=1 92s | playFoSeasonCard: 216 checks, 6 failed (control nocue)
+c-shortbox exit=1 91s | playFoSeasonCard: 216 checks, 6 failed (control shortbox)
+c-oldbadge exit=1 91s | playFoSeasonCard: 216 checks, 6 failed (control oldbadge)

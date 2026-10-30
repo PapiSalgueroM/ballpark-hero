@@ -1,0 +1,129 @@
+  ok   (c) the planted second season has its first season's awards and a winner still on a roster (Drake Maye, 2026 MVP)
+
+320 by 640
+  ok   (a) 320, Week 1: a row for every touchdown of the saved game's story (5 rows, the story 5)
+  ok   (a) 320, Week 1: every row names a man (Q1 10:00LA Matthew Stafford to Davante Adams0-7)
+  ok   (a) 320, Week 1: the save keeps his game's credits under its key
+  ok   (a) 320, Week 1: the Game Day box keeps its height (400 then 400)
+  (printed) 320, Week 1: scrollY 647 then 1080, page height 12291 then 12515
+  ok   (a) 320, Week 2: a row for every touchdown of the saved game's story (3 rows, the story 3)
+  ok   (a) 320, Week 2: every row names a man (Q2 8:00ARI Jacoby Brissett to Trey McBride13-3)
+  ok   (a) 320, Week 2: the save keeps his game's credits under its key
+  ok   (a) 320, Week 2: the Game Day box keeps its height (400 then 400)
+  (printed) 320, Week 2: scrollY 1080 then 730, page height 12515 then 12441
+  ok   (a) 320, Week 3: a row for every touchdown of the saved game's story (5 rows, the story 5)
+  ok   (a) 320, Week 3: every row names a man (Q1 2:00SF Christian McCaffrey runs it in3-7)
+  ok   (a) 320, Week 3: the save keeps his game's credits under its key
+  ok   (a) 320, Week 3: the Game Day box keeps its height (400 then 400)
+  (printed) 320, Week 3: scrollY 730 then 730, page height 12441 then 12441
+  ok   (a) 320: the three games named 13 scorers
+  ok   (e) 320, the tile: no horizontal overflow (0 px)
+  ok   (e) 320, the tile: every button this round adds is 44 px high
+  ok   (e) 320, the tile: every text this round adds is 12 px or more
+  ok   (e) 320, the tile: nothing this round adds is cut
+  ok   (e) 320, a: no page error
+  ok   (b) 320: the recap draws the season card
+  ok   (b) 320: the awards tab names three awards, each a winner or nobody, with its rule (MVPJared Goff (DET) 41 TD th | Offensive Rookie of the Year | Defensive Rookie of the Year)
+  ok   (b) 320: the sim note is on the Awards tab
+  ok   (b) 320: the sim note is on the Leaders tab
+  ok   (b) 320: the sim note is on the Your lines tab
+  ok   (e) 320, the recap card: no horizontal overflow (0 px)
+  ok   (e) 320, the recap card: every button this round adds is 44 px high
+  ok   (e) 320, the recap card: every text this round adds is 12 px or more
+  ok   (e) 320, the recap card: nothing this round adds is cut
+  ok   (e) 320, b: no page error
+  ok   (c) 320: Standings opens on the table, with its two faces
+  ok   (c) 320: This season draws the season so far
+  ok   (c) 320: the award history holds the first season's line (Award history, this saveYour club has won 1 award here. Sim seasons, not real NFL history.)
+  ok   (e) 320, Standings: no horizontal overflow (0 px)
+  ok   (e) 320, Standings: every button this round adds is 44 px high
+  ok   (e) 320, Standings: every text this round adds is 12 px or more
+  ok   (e) 320, Standings: nothing this round adds is cut
+  ok   (d) 320: the MVP's roster row carries the sim badge (🏅 Sim 2026 MVP)
+  ok   (e) 320, c and d: no page error
+
+390 by 844
+  ok   (a) 390, Week 1: a row for every touchdown of the saved game's story (5 rows, the story 5)
+  ok   (a) 390, Week 1: every row names a man (Q1 10:00LA Matthew Stafford to Davante Adams0-7)
+  ok   (a) 390, Week 1: the save keeps his game's credits under its key
+  ok   (a) 390, Week 1: the Game Day box keeps its height (400 then 400)
+  (printed) 390, Week 1: scrollY 70 then 518, page height 10372 then 10617
+  ok   (a) 390, Week 2: a row for every touchdown of the saved game's story (3 rows, the story 3)
+  ok   (a) 390, Week 2: every row names a man (Q2 8:00ARI Jacoby Brissett to Trey McBride13-3)
+  ok   (a) 390, Week 2: the save keeps his game's credits under its key
+  ok   (a) 390, Week 2: the Game Day box keeps its height (400 then 400)
+  (printed) 390, Week 2: scrollY 518 then 518, page height 10617 then 10543
+  ok   (a) 390, Week 3: a row for every touchdown of the saved game's story (5 rows, the story 5)
+  ok   (a) 390, Week 3: every row names a man (Q1 2:00SF Christian McCaffrey runs it in3-7)
+  ok   (a) 390, Week 3: the save keeps his game's credits under its key
+  ok   (a) 390, Week 3: the Game Day box keeps its height (400 then 400)
+  (printed) 390, Week 3: scrollY 518 then 518, page height 10543 then 10543
+  ok   (a) 390: the three games named 13 scorers
+  ok   (e) 390, the tile: no horizontal overflow (0 px)
+  ok   (e) 390, the tile: every button this round adds is 44 px high
+  ok   (e) 390, the tile: every text this round adds is 12 px or more
+  ok   (e) 390, the tile: nothing this round adds is cut
+  ok   (e) 390, a: no page error
+  ok   (b) 390: the recap draws the season card
+  ok   (b) 390: the awards tab names three awards, each a winner or nobody, with its rule (MVPJared Goff (DET) 41 TD th | Offensive Rookie of the Year | Defensive Rookie of the Year)
+  ok   (b) 390: the sim note is on the Awards tab
+  ok   (b) 390: the sim note is on the Leaders tab
+  ok   (b) 390: the sim note is on the Your lines tab
+  ok   (e) 390, the recap card: no horizontal overflow (0 px)
+  ok   (e) 390, the recap card: every button this round adds is 44 px high
+  ok   (e) 390, the recap card: every text this round adds is 12 px or more
+  ok   (e) 390, the recap card: nothing this round adds is cut
+  ok   (e) 390, b: no page error
+  ok   (c) 390: Standings opens on the table, with its two faces
+  ok   (c) 390: This season draws the season so far
+  ok   (c) 390: the award history holds the first season's line (Award history, this saveYour club has won 1 award here. Sim seasons, not real NFL history.)
+  ok   (e) 390, Standings: no horizontal overflow (0 px)
+  ok   (e) 390, Standings: every button this round adds is 44 px high
+  ok   (e) 390, Standings: every text this round adds is 12 px or more
+  ok   (e) 390, Standings: nothing this round adds is cut
+  ok   (d) 390: the MVP's roster row carries the sim badge (🏅 Sim 2026 MVP)
+  ok   (e) 390, c and d: no page error
+
+1280 by 900
+  ok   (a) 1280, Week 1: a row for every touchdown of the saved game's story (5 rows, the story 5)
+  ok   (a) 1280, Week 1: every row names a man (Q1 10:00LA Matthew Stafford to Davante Adams0-7)
+  ok   (a) 1280, Week 1: the save keeps his game's credits under its key
+  ok   (a) 1280, Week 1: the Game Day box keeps its height (352 then 352)
+  (printed) 1280, Week 1: scrollY 0 then 313, page height 7063 then 7320
+  ok   (a) 1280, Week 2: a row for every touchdown of the saved game's story (3 rows, the story 3)
+  ok   (a) 1280, Week 2: every row names a man (Q2 8:00ARI Jacoby Brissett to Trey McBride13-3)
+  ok   (a) 1280, Week 2: the save keeps his game's credits under its key
+  ok   (a) 1280, Week 2: the Game Day box keeps its height (352 then 352)
+  (printed) 1280, Week 2: scrollY 313 then 313, page height 7320 then 7246
+  ok   (a) 1280, Week 3: a row for every touchdown of the saved game's story (5 rows, the story 5)
+  ok   (a) 1280, Week 3: every row names a man (Q1 2:00SF Christian McCaffrey runs it in3-7)
+  ok   (a) 1280, Week 3: the save keeps his game's credits under its key
+  ok   (a) 1280, Week 3: the Game Day box keeps its height (352 then 352)
+  (printed) 1280, Week 3: scrollY 313 then 313, page height 7246 then 7246
+  ok   (a) 1280: the three games named 13 scorers
+  ok   (e) 1280, the tile: no horizontal overflow (0 px)
+  ok   (e) 1280, the tile: every button this round adds is 44 px high
+  ok   (e) 1280, the tile: every text this round adds is 12 px or more
+  ok   (e) 1280, the tile: nothing this round adds is cut
+  ok   (e) 1280, a: no page error
+  ok   (b) 1280: the recap draws the season card
+  ok   (b) 1280: the awards tab names three awards, each a winner or nobody, with its rule (MVPJared Goff (DET) 41 TD th | Offensive Rookie of the Year | Defensive Rookie of the Year)
+  ok   (b) 1280: the sim note is on the Awards tab
+  ok   (b) 1280: the sim note is on the Leaders tab
+  ok   (b) 1280: the sim note is on the Your lines tab
+  ok   (e) 1280, the recap card: no horizontal overflow (0 px)
+  ok   (e) 1280, the recap card: every button this round adds is 44 px high
+  ok   (e) 1280, the recap card: every text this round adds is 12 px or more
+  ok   (e) 1280, the recap card: nothing this round adds is cut
+  ok   (e) 1280, b: no page error
+  ok   (c) 1280: Standings opens on the table, with its two faces
+  ok   (c) 1280: This season draws the season so far
+  ok   (c) 1280: the award history holds the first season's line (Award history, this saveYour club has won 1 award here. Sim seasons, not real NFL history.)
+  ok   (e) 1280, Standings: no horizontal overflow (0 px)
+  ok   (e) 1280, Standings: every button this round adds is 44 px high
+  ok   (e) 1280, Standings: every text this round adds is 12 px or more
+  ok   (e) 1280, Standings: nothing this round adds is cut
+  ok   (d) 1280: the MVP's roster row carries the sim badge (🏅 Sim 2026 MVP)
+  ok   (e) 1280, c and d: no page error
+
+playNflSeasonStats: 112 checks, 0 failed

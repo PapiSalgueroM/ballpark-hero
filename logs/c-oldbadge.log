@@ -1,0 +1,285 @@
+mutCard oldbadge: src/components/front-office-shared/FoAwardBadge.tsx rewritten
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[dukb] preload wrapper: a cancelled chunk error waits for the reload (vite 5.4.21)
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+nfl: planted, his club WAS; the league's longest name is Jacory Croskey-Merritt (WAS, 22 letters)
+nba: planted, his club MEM; the league's longest name is Kentavious Caldwell-Pope (MEM, 24 letters)
+nbaold: planted, his club MEM; the league's longest name is Kentavious Caldwell-Pope (MEM, 24 letters)
+
+320 by 640
+  ok   (card) nfl 320: the close draws the season card
+  ok   (size) nfl 320, Awards: every text in the card is 12 px or more
+  ok   (tab) nfl 320, Awards: every tab is 44 px tall or more
+  ok   (cut) nfl 320, Awards: nothing clipped, held to one line or split mid word
+  ok   (page) nfl 320, Awards: no horizontal page scroll (0 px)
+  ok   (cut) nfl 320, Awards: the league's longest name shown whole in a copied row ("Jacory Croskey-Merritt (WAS) 36 TD thrown, 5 run in", 2 lines)
+  (printed) text nfl 320 awards 1194a78ee459 890 chars; the card 568 px tall
+  ok   (still) nfl 320: to Leaders, scrollY 1284 then 1284, the card's top 60 then 60 (page 12598 then 12518 px)
+  ok   (size) nfl 320, Leaders: every text in the card is 12 px or more
+  ok   (tab) nfl 320, Leaders: every tab is 44 px tall or more
+  ok   (cut) nfl 320, Leaders: nothing clipped, held to one line or split mid word
+  ok   (page) nfl 320, Leaders: no horizontal page scroll (0 px)
+  ok   (cut) nfl 320, Leaders: the league's longest name shown whole in a copied row ("1. Jacory Croskey-Merritt (WAS)40", 1 line)
+  (printed) text nfl 320 leaders 0f27714918c1 611 chars; the card 488 px tall
+  (printed) nfl 320, Leaders: 0 of 9 leader rows take more than one line
+  ok   (still) nfl 320: to Your lines, scrollY 1284 then 1284, the card's top 60 then 60 (page 12518 then 12704 px)
+  ok   (size) nfl 320, Your lines: every text in the card is 12 px or more
+  ok   (tab) nfl 320, Your lines: every tab is 44 px tall or more
+  ok   (cut) nfl 320, Your lines: nothing clipped, held to one line or split mid word
+  ok   (page) nfl 320, Your lines: no horizontal page scroll (0 px)
+  ok   (cut) nfl 320, Your lines: the league's longest name shown whole in a copied row ("Jacory Croskey-Merritt (rookie)1618000", 2 lines)
+  ok   (room) nfl 320, Your lines: 11 of 12 men shown whole before the box scrolls (the floor 11; the box 430 of 440 px)
+  ok   (cue) nfl 320, Your lines, stacked: 11 of 11 men after the first set apart from the man above by a rule or a gap
+  (printed) text nfl 320 lines 97d246d39b35 659 chars; the card 674 px tall
+  (printed) nfl 320, Your lines: the name has 244 px, the numbers under it
+  ok   (still) nfl 320: to Awards, scrollY 1284 then 1284, the card's top 60 then 60 (page 12704 then 12598 px)
+  ok   (card) nfl 320: no page error
+  ok   (card) nba 320: the close draws the season card
+  ok   (size) nba 320, Awards: every text in the card is 12 px or more
+  ok   (tab) nba 320, Awards: every tab is 44 px tall or more
+  ok   (cut) nba 320, Awards: nothing clipped, held to one line or split mid word
+  ok   (page) nba 320, Awards: no horizontal page scroll (0 px)
+  ok   (cut) nba 320, Awards: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (MEM) 28.2 pts, 13.8 reb, 2.9 ast a", 2 lines)
+  (printed) text nba 320 awards 80133824d97d 1218 chars; the card 880 px tall
+  ok   (still) nba 320: to Leaders, scrollY 1199 then 1199, the card's top 60 then 60 (page 12633 then 12193 px)
+  ok   (size) nba 320, Leaders: every text in the card is 12 px or more
+  ok   (tab) nba 320, Leaders: every tab is 44 px tall or more
+  ok   (cut) nba 320, Leaders: nothing clipped, held to one line or split mid word
+  ok   (page) nba 320, Leaders: no horizontal page scroll (0 px)
+  ok   (cut) nba 320, Leaders: the league's longest name shown whole in a copied row ("1. Kentavious Caldwell-Pope (MEM)31.3", 1 line)
+  (printed) text nba 320 leaders 36cfad3f5cc8 491 chars; the card 440 px tall
+  (printed) nba 320, Leaders: 0 of 9 leader rows take more than one line
+  ok   (still) nba 320: to Your lines, scrollY 1199 then 1199, the card's top 60 then 60 (page 12193 then 12290 px)
+  ok   (size) nba 320, Your lines: every text in the card is 12 px or more
+  ok   (tab) nba 320, Your lines: every tab is 44 px tall or more
+  ok   (cut) nba 320, Your lines: nothing clipped, held to one line or split mid word
+  ok   (page) nba 320, Your lines: no horizontal page scroll (0 px)
+  ok   (cut) nba 320, Your lines: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (rookie)7228.55.87.7", 2 lines)
+  ok   (room) nba 320, Your lines: 9 of 9 men shown whole before the box scrolls (the floor 9; the box 341 of 341 px)
+  ok   (cue) nba 320, Your lines, stacked: 8 of 8 men after the first set apart from the man above by a rule or a gap
+  (printed) text nba 320 lines f3db3e69a703 515 chars; the card 537 px tall
+  (printed) nba 320, Your lines: the name has 244 px, the numbers under it
+  ok   (still) nba 320: to Awards, scrollY 1199 then 1199, the card's top 60 then 60 (page 12290 then 12633 px)
+  ok   (card) nba 320: no page error
+  ok   (card) nbaold 320: the close draws the season card
+  ok   (size) nbaold 320, Awards: every text in the card is 12 px or more
+  ok   (tab) nbaold 320, Awards: every tab is 44 px tall or more
+  ok   (cut) nbaold 320, Awards: nothing clipped, held to one line or split mid word
+  ok   (page) nbaold 320, Awards: no horizontal page scroll (0 px)
+  ok   (cut) nbaold 320, Awards: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (MEM) 28.2 pts, 13.8 reb, 2.9 ast a", 2 lines)
+  (printed) text nbaold 320 awards 80133824d97d 1218 chars; the card 880 px tall
+  ok   (still) nbaold 320: to Leaders, scrollY 1199 then 1199, the card's top 60 then 60 (page 12633 then 12193 px)
+  ok   (size) nbaold 320, Leaders: every text in the card is 12 px or more
+  ok   (tab) nbaold 320, Leaders: every tab is 44 px tall or more
+  ok   (cut) nbaold 320, Leaders: nothing clipped, held to one line or split mid word
+  ok   (page) nbaold 320, Leaders: no horizontal page scroll (0 px)
+  ok   (cut) nbaold 320, Leaders: the league's longest name shown whole in a copied row ("1. Kentavious Caldwell-Pope (MEM)31.3", 1 line)
+  (printed) text nbaold 320 leaders 36cfad3f5cc8 491 chars; the card 440 px tall
+  (printed) nbaold 320, Leaders: 0 of 9 leader rows take more than one line
+  ok   (still) nbaold 320: to Your lines, scrollY 1199 then 1199, the card's top 60 then 60 (page 12193 then 12290 px)
+  ok   (size) nbaold 320, Your lines: every text in the card is 12 px or more
+  ok   (tab) nbaold 320, Your lines: every tab is 44 px tall or more
+  ok   (cut) nbaold 320, Your lines: nothing clipped, held to one line or split mid word
+  ok   (page) nbaold 320, Your lines: no horizontal page scroll (0 px)
+  ok   (cut) nbaold 320, Your lines: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (rookie)7228.55.87.7", 2 lines)
+  ok   (room) nbaold 320, Your lines: 9 of 9 men shown whole before the box scrolls (the floor 9; the box 341 of 341 px)
+  ok   (cue) nbaold 320, Your lines, stacked: 8 of 8 men after the first set apart from the man above by a rule or a gap
+  (printed) text nbaold 320 lines f3db3e69a703 515 chars; the card 537 px tall
+  (printed) nbaold 320, Your lines: the name has 244 px, the numbers under it
+  ok   (still) nbaold 320: to Awards, scrollY 1199 then 1199, the card's top 60 then 60 (page 12290 then 12633 px)
+  ok   (card) nbaold 320: no page error
+  ok   (old) nba 320, awards: a save from before Round 1566 (named rows) draws the same card, word for word (80133824d97d and 80133824d97d)
+  ok   (old) nba 320, leaders: a save from before Round 1566 (named rows) draws the same card, word for word (36cfad3f5cc8 and 36cfad3f5cc8)
+  ok   (old) nba 320, lines: a save from before Round 1566 (named rows) draws the same card, word for word (f3db3e69a703 and f3db3e69a703)
+  FAIL (badge.nfl) nfl 320, Roster: the sim award badge "🏅 Sim 2025 MVP, Sim 2025 Defensive Rookie of the Year +1 more" 10 px, 1 line, CUT, HELD to one line
+  ok   (card) nfl 320, Roster: no page error
+  FAIL (badge.nba) nba 320, Roster: the sim award badge "🏅 Sim 2025 MVP, Sim 2025 Defensive Player of the Year +1 more" 10 px, 1 line, CUT, HELD to one line
+  ok   (card) nba 320, Roster: no page error
+
+390 by 844
+  ok   (card) nfl 390: the close draws the season card
+  ok   (size) nfl 390, Awards: every text in the card is 12 px or more
+  ok   (tab) nfl 390, Awards: every tab is 44 px tall or more
+  ok   (cut) nfl 390, Awards: nothing clipped, held to one line or split mid word
+  ok   (page) nfl 390, Awards: no horizontal page scroll (0 px)
+  ok   (cut) nfl 390, Awards: the league's longest name shown whole in a copied row ("Jacory Croskey-Merritt (WAS) 36 TD thrown, 5 run in", 1 line)
+  (printed) text nfl 390 awards 1194a78ee459 890 chars; the card 504 px tall
+  ok   (still) nfl 390: to Leaders, scrollY 1195 then 1195, the card's top 60 then 60 (page 10649 then 10617 px)
+  ok   (size) nfl 390, Leaders: every text in the card is 12 px or more
+  ok   (tab) nfl 390, Leaders: every tab is 44 px tall or more
+  ok   (cut) nfl 390, Leaders: nothing clipped, held to one line or split mid word
+  ok   (page) nfl 390, Leaders: no horizontal page scroll (0 px)
+  ok   (cut) nfl 390, Leaders: the league's longest name shown whole in a copied row ("1. Jacory Croskey-Merritt (WAS)40", 1 line)
+  (printed) text nfl 390 leaders 0f27714918c1 611 chars; the card 472 px tall
+  (printed) nfl 390, Leaders: 0 of 9 leader rows take more than one line
+  ok   (still) nfl 390: to Your lines, scrollY 1195 then 1195, the card's top 60 then 60 (page 10617 then 10803 px)
+  ok   (size) nfl 390, Your lines: every text in the card is 12 px or more
+  ok   (tab) nfl 390, Your lines: every tab is 44 px tall or more
+  ok   (cut) nfl 390, Your lines: nothing clipped, held to one line or split mid word
+  ok   (page) nfl 390, Your lines: no horizontal page scroll (0 px)
+  ok   (cut) nfl 390, Your lines: the league's longest name shown whole in a copied row ("Jacory Croskey-Merritt (rookie)1618000", 2 lines)
+  ok   (room) nfl 390, Your lines: 11 of 12 men shown whole before the box scrolls (the floor 11; the box 430 of 440 px)
+  ok   (cue) nfl 390, Your lines, stacked: 11 of 11 men after the first set apart from the man above by a rule or a gap
+  (printed) text nfl 390 lines 97d246d39b35 659 chars; the card 658 px tall
+  (printed) nfl 390, Your lines: the name has 314 px, the numbers under it
+  ok   (still) nfl 390: to Awards, scrollY 1195 then 1195, the card's top 60 then 60 (page 10803 then 10649 px)
+  ok   (card) nfl 390: no page error
+  ok   (card) nba 390: the close draws the season card
+  ok   (size) nba 390, Awards: every text in the card is 12 px or more
+  ok   (tab) nba 390, Awards: every tab is 44 px tall or more
+  ok   (cut) nba 390, Awards: nothing clipped, held to one line or split mid word
+  ok   (page) nba 390, Awards: no horizontal page scroll (0 px)
+  ok   (cut) nba 390, Awards: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (MEM) 28.2 pts, 13.8 reb, 2.9 ast a", 2 lines)
+  (printed) text nba 390 awards 80133824d97d 1218 chars; the card 704 px tall
+  ok   (still) nba 390: to Leaders, scrollY 1107 then 1107, the card's top 60 then 60 (page 10681 then 10401 px)
+  ok   (size) nba 390, Leaders: every text in the card is 12 px or more
+  ok   (tab) nba 390, Leaders: every tab is 44 px tall or more
+  ok   (cut) nba 390, Leaders: nothing clipped, held to one line or split mid word
+  ok   (page) nba 390, Leaders: no horizontal page scroll (0 px)
+  ok   (cut) nba 390, Leaders: the league's longest name shown whole in a copied row ("1. Kentavious Caldwell-Pope (MEM)31.3", 1 line)
+  (printed) text nba 390 leaders 36cfad3f5cc8 491 chars; the card 424 px tall
+  (printed) nba 390, Leaders: 0 of 9 leader rows take more than one line
+  ok   (still) nba 390: to Your lines, scrollY 1107 then 1107, the card's top 60 then 60 (page 10401 then 10498 px)
+  ok   (size) nba 390, Your lines: every text in the card is 12 px or more
+  ok   (tab) nba 390, Your lines: every tab is 44 px tall or more
+  ok   (cut) nba 390, Your lines: nothing clipped, held to one line or split mid word
+  ok   (page) nba 390, Your lines: no horizontal page scroll (0 px)
+  ok   (cut) nba 390, Your lines: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (rookie)7228.55.87.7", 2 lines)
+  ok   (room) nba 390, Your lines: 9 of 9 men shown whole before the box scrolls (the floor 9; the box 341 of 341 px)
+  ok   (cue) nba 390, Your lines, stacked: 8 of 8 men after the first set apart from the man above by a rule or a gap
+  (printed) text nba 390 lines f3db3e69a703 515 chars; the card 521 px tall
+  (printed) nba 390, Your lines: the name has 314 px, the numbers under it
+  ok   (still) nba 390: to Awards, scrollY 1107 then 1107, the card's top 60 then 60 (page 10498 then 10681 px)
+  ok   (card) nba 390: no page error
+  ok   (card) nbaold 390: the close draws the season card
+  ok   (size) nbaold 390, Awards: every text in the card is 12 px or more
+  ok   (tab) nbaold 390, Awards: every tab is 44 px tall or more
+  ok   (cut) nbaold 390, Awards: nothing clipped, held to one line or split mid word
+  ok   (page) nbaold 390, Awards: no horizontal page scroll (0 px)
+  ok   (cut) nbaold 390, Awards: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (MEM) 28.2 pts, 13.8 reb, 2.9 ast a", 2 lines)
+  (printed) text nbaold 390 awards 80133824d97d 1218 chars; the card 704 px tall
+  ok   (still) nbaold 390: to Leaders, scrollY 1107 then 1107, the card's top 60 then 60 (page 10681 then 10401 px)
+  ok   (size) nbaold 390, Leaders: every text in the card is 12 px or more
+  ok   (tab) nbaold 390, Leaders: every tab is 44 px tall or more
+  ok   (cut) nbaold 390, Leaders: nothing clipped, held to one line or split mid word
+  ok   (page) nbaold 390, Leaders: no horizontal page scroll (0 px)
+  ok   (cut) nbaold 390, Leaders: the league's longest name shown whole in a copied row ("1. Kentavious Caldwell-Pope (MEM)31.3", 1 line)
+  (printed) text nbaold 390 leaders 36cfad3f5cc8 491 chars; the card 424 px tall
+  (printed) nbaold 390, Leaders: 0 of 9 leader rows take more than one line
+  ok   (still) nbaold 390: to Your lines, scrollY 1107 then 1107, the card's top 60 then 60 (page 10401 then 10498 px)
+  ok   (size) nbaold 390, Your lines: every text in the card is 12 px or more
+  ok   (tab) nbaold 390, Your lines: every tab is 44 px tall or more
+  ok   (cut) nbaold 390, Your lines: nothing clipped, held to one line or split mid word
+  ok   (page) nbaold 390, Your lines: no horizontal page scroll (0 px)
+  ok   (cut) nbaold 390, Your lines: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (rookie)7228.55.87.7", 2 lines)
+  ok   (room) nbaold 390, Your lines: 9 of 9 men shown whole before the box scrolls (the floor 9; the box 341 of 341 px)
+  ok   (cue) nbaold 390, Your lines, stacked: 8 of 8 men after the first set apart from the man above by a rule or a gap
+  (printed) text nbaold 390 lines f3db3e69a703 515 chars; the card 521 px tall
+  (printed) nbaold 390, Your lines: the name has 314 px, the numbers under it
+  ok   (still) nbaold 390: to Awards, scrollY 1107 then 1107, the card's top 60 then 60 (page 10498 then 10681 px)
+  ok   (card) nbaold 390: no page error
+  ok   (old) nba 390, awards: a save from before Round 1566 (named rows) draws the same card, word for word (80133824d97d and 80133824d97d)
+  ok   (old) nba 390, leaders: a save from before Round 1566 (named rows) draws the same card, word for word (36cfad3f5cc8 and 36cfad3f5cc8)
+  ok   (old) nba 390, lines: a save from before Round 1566 (named rows) draws the same card, word for word (f3db3e69a703 and f3db3e69a703)
+  FAIL (badge.nfl) nfl 390, Roster: the sim award badge "🏅 Sim 2025 MVP, Sim 2025 Defensive Rookie of the Year +1 more" 10 px, 1 line, CUT, HELD to one line
+  ok   (card) nfl 390, Roster: no page error
+  FAIL (badge.nba) nba 390, Roster: the sim award badge "🏅 Sim 2025 MVP, Sim 2025 Defensive Player of the Year +1 more" 10 px, 1 line, CUT, HELD to one line
+  ok   (card) nba 390, Roster: no page error
+
+1280 by 900
+  ok   (card) nfl 1280: the close draws the season card
+  ok   (size) nfl 1280, Awards: every text in the card is 12 px or more
+  ok   (tab) nfl 1280, Awards: every tab is 44 px tall or more
+  ok   (cut) nfl 1280, Awards: nothing clipped, held to one line or split mid word
+  ok   (page) nfl 1280, Awards: no horizontal page scroll (0 px)
+  ok   (cut) nfl 1280, Awards: the league's longest name shown whole in a copied row ("Jacory Croskey-Merritt (WAS) 36 TD thrown, 5 run in", 1 line)
+  (printed) text nfl 1280 awards 1194a78ee459 890 chars; the card 408 px tall
+  ok   (still) nfl 1280: to Leaders, scrollY 902 then 902, the card's top 60 then 60 (page 7183 then 7031 px)
+  ok   (size) nfl 1280, Leaders: every text in the card is 12 px or more
+  ok   (tab) nfl 1280, Leaders: every tab is 44 px tall or more
+  ok   (cut) nfl 1280, Leaders: nothing clipped, held to one line or split mid word
+  ok   (page) nfl 1280, Leaders: no horizontal page scroll (0 px)
+  ok   (cut) nfl 1280, Leaders: the league's longest name shown whole in a copied row ("1. Jacory Croskey-Merritt (WAS)40", 2 lines)
+  (printed) text nfl 1280 leaders 0f27714918c1 611 chars; the card 256 px tall
+  (printed) nfl 1280, Leaders: 0 of 9 leader rows take more than one line
+  ok   (still) nfl 1280: to Your lines, scrollY 902 then 902, the card's top 60 then 60 (page 7031 then 7175 px)
+  ok   (size) nfl 1280, Your lines: every text in the card is 12 px or more
+  ok   (tab) nfl 1280, Your lines: every tab is 44 px tall or more
+  ok   (cut) nfl 1280, Your lines: nothing clipped, held to one line or split mid word
+  ok   (page) nfl 1280, Your lines: no horizontal page scroll (0 px)
+  ok   (cut) nfl 1280, Your lines: the league's longest name shown whole in a copied row ("Jacory Croskey-Merritt (rookie)1618000", 1 line)
+  ok   (room) nfl 1280, Your lines: 12 of 12 men shown whole before the box scrolls (the floor 11; the box 220 of 220 px)
+  (printed) nfl 1280, Your lines: one row a man, 0 of 11 set apart
+  (printed) text nfl 1280 lines 97d246d39b35 659 chars; the card 400 px tall
+  (printed) nfl 1280, Your lines: the name has 380 px, the numbers beside it
+  ok   (still) nfl 1280: to Awards, scrollY 902 then 902, the card's top 60 then 60 (page 7175 then 7183 px)
+  ok   (card) nfl 1280: no page error
+  ok   (card) nba 1280: the close draws the season card
+  ok   (size) nba 1280, Awards: every text in the card is 12 px or more
+  ok   (tab) nba 1280, Awards: every tab is 44 px tall or more
+  ok   (cut) nba 1280, Awards: nothing clipped, held to one line or split mid word
+  ok   (page) nba 1280, Awards: no horizontal page scroll (0 px)
+  ok   (cut) nba 1280, Awards: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (MEM) 28.2 pts, 13.8 reb, 2.9 ast a", 1 line)
+  (printed) text nba 1280 awards 80133824d97d 1218 chars; the card 560 px tall
+  ok   (still) nba 1280: to Leaders, scrollY 833 then 833, the card's top 60 then 60 (page 7141 then 6821 px)
+  ok   (size) nba 1280, Leaders: every text in the card is 12 px or more
+  ok   (tab) nba 1280, Leaders: every tab is 44 px tall or more
+  ok   (cut) nba 1280, Leaders: nothing clipped, held to one line or split mid word
+  ok   (page) nba 1280, Leaders: no horizontal page scroll (0 px)
+  ok   (cut) nba 1280, Leaders: the league's longest name shown whole in a copied row ("1. Kentavious Caldwell-Pope (MEM)31.3", 2 lines)
+  (printed) text nba 1280 leaders 36cfad3f5cc8 491 chars; the card 240 px tall
+  (printed) nba 1280, Leaders: 2 of 9 leader rows take more than one line
+  ok   (still) nba 1280: to Your lines, scrollY 833 then 833, the card's top 60 then 60 (page 6821 then 6901 px)
+  ok   (size) nba 1280, Your lines: every text in the card is 12 px or more
+  ok   (tab) nba 1280, Your lines: every tab is 44 px tall or more
+  ok   (cut) nba 1280, Your lines: nothing clipped, held to one line or split mid word
+  ok   (page) nba 1280, Your lines: no horizontal page scroll (0 px)
+  ok   (cut) nba 1280, Your lines: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (rookie)7228.55.87.7", 1 line)
+  ok   (room) nba 1280, Your lines: 9 of 9 men shown whole before the box scrolls (the floor 9; the box 172 of 172 px)
+  (printed) nba 1280, Your lines: one row a man, 0 of 8 set apart
+  (printed) text nba 1280 lines f3db3e69a703 515 chars; the card 320 px tall
+  (printed) nba 1280, Your lines: the name has 423 px, the numbers beside it
+  ok   (still) nba 1280: to Awards, scrollY 833 then 833, the card's top 60 then 60 (page 6901 then 7141 px)
+  ok   (card) nba 1280: no page error
+  ok   (card) nbaold 1280: the close draws the season card
+  ok   (size) nbaold 1280, Awards: every text in the card is 12 px or more
+  ok   (tab) nbaold 1280, Awards: every tab is 44 px tall or more
+  ok   (cut) nbaold 1280, Awards: nothing clipped, held to one line or split mid word
+  ok   (page) nbaold 1280, Awards: no horizontal page scroll (0 px)
+  ok   (cut) nbaold 1280, Awards: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (MEM) 28.2 pts, 13.8 reb, 2.9 ast a", 1 line)
+  (printed) text nbaold 1280 awards 80133824d97d 1218 chars; the card 560 px tall
+  ok   (still) nbaold 1280: to Leaders, scrollY 833 then 833, the card's top 60 then 60 (page 7141 then 6821 px)
+  ok   (size) nbaold 1280, Leaders: every text in the card is 12 px or more
+  ok   (tab) nbaold 1280, Leaders: every tab is 44 px tall or more
+  ok   (cut) nbaold 1280, Leaders: nothing clipped, held to one line or split mid word
+  ok   (page) nbaold 1280, Leaders: no horizontal page scroll (0 px)
+  ok   (cut) nbaold 1280, Leaders: the league's longest name shown whole in a copied row ("1. Kentavious Caldwell-Pope (MEM)31.3", 2 lines)
+  (printed) text nbaold 1280 leaders 36cfad3f5cc8 491 chars; the card 240 px tall
+  (printed) nbaold 1280, Leaders: 2 of 9 leader rows take more than one line
+  ok   (still) nbaold 1280: to Your lines, scrollY 833 then 833, the card's top 60 then 60 (page 6821 then 6901 px)
+  ok   (size) nbaold 1280, Your lines: every text in the card is 12 px or more
+  ok   (tab) nbaold 1280, Your lines: every tab is 44 px tall or more
+  ok   (cut) nbaold 1280, Your lines: nothing clipped, held to one line or split mid word
+  ok   (page) nbaold 1280, Your lines: no horizontal page scroll (0 px)
+  ok   (cut) nbaold 1280, Your lines: the league's longest name shown whole in a copied row ("Kentavious Caldwell-Pope (rookie)7228.55.87.7", 1 line)
+  ok   (room) nbaold 1280, Your lines: 9 of 9 men shown whole before the box scrolls (the floor 9; the box 172 of 172 px)
+  (printed) nbaold 1280, Your lines: one row a man, 0 of 8 set apart
+  (printed) text nbaold 1280 lines f3db3e69a703 515 chars; the card 320 px tall
+  (printed) nbaold 1280, Your lines: the name has 423 px, the numbers beside it
+  ok   (still) nbaold 1280: to Awards, scrollY 833 then 833, the card's top 60 then 60 (page 6901 then 7141 px)
+  ok   (card) nbaold 1280: no page error
+  ok   (old) nba 1280, awards: a save from before Round 1566 (named rows) draws the same card, word for word (80133824d97d and 80133824d97d)
+  ok   (old) nba 1280, leaders: a save from before Round 1566 (named rows) draws the same card, word for word (36cfad3f5cc8 and 36cfad3f5cc8)
+  ok   (old) nba 1280, lines: a save from before Round 1566 (named rows) draws the same card, word for word (f3db3e69a703 and f3db3e69a703)
+  FAIL (badge.nfl) nfl 1280, Roster: the sim award badge "🏅 Sim 2025 MVP, Sim 2025 Defensive Rookie of the Year +1 more" 10 px, 1 line, CUT, HELD to one line
+  ok   (card) nfl 1280, Roster: no page error
+  FAIL (badge.nba) nba 1280, Roster: the sim award badge "🏅 Sim 2025 MVP, Sim 2025 Defensive Player of the Year +1 more" 10 px, 1 line, CUT, HELD to one line
+  ok   (card) nba 1280, Roster: no page error
+
+control oldbadge: FIRED at point badge.nba and badge.nfl
+playFoSeasonCard: 216 checks, 6 failed (control oldbadge)
