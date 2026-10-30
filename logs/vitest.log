@@ -1,0 +1,32 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/ballIqFeedback.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 3044[2mms[22m[39m
+   [33m[2m✓[22m[39m Ball IQ committed answer feedback[2m > [22mfinishes all twelve with the original perfect score save and quiet replay [33m 1090[2mms[22m[39m
+   [33m[2m✓[22m[39m Ball IQ committed answer feedback[2m > [22mwalks every rank band onto its result state with the exact squares on the card [33m 475[2mms[22m[39m
+ [32m✓[39m src/test/emojiGuessFeedback.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 5385[2mms[22m[39m
+   [33m[2m✓[22m[39m Emoji Guess committed feedback[2m > [22mreveals an accepted miss and hint then announces the earned second-try score [33m 652[2mms[22m[39m
+   [33m[2m✓[22m[39m Emoji Guess committed feedback[2m > [22mroutes native actions to Next input and Share while owned repeated keys stay quiet [33m 751[2mms[22m[39m
+   [33m[2m✓[22m[39m Emoji Guess committed feedback[2m > [22mreveals the actual failed answer with zero points and only one final result announcement [33m 1086[2mms[22m[39m
+   [33m[2m✓[22m[39m Emoji Guess committed feedback[2m > [22mcompletes the actual Page at 290 with exact original storage and clipboard payload [33m 1084[2mms[22m[39m
+   [33m[2m✓[22m[39m Emoji Guess committed feedback[2m > [22mwalks every solved count onto its result state with the exact squares on the card [33m 485[2mms[22m[39m
+   [33m[2m✓[22m[39m Emoji Guess committed feedback[2m > [22mkeeps full answer text and real finite reduced-motion declarations bound to owned controls [33m 768[2mms[22m[39m
+ [32m✓[39m src/test/ClubManagerSeasonSummary.expiring.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1340[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut [33m 568[2mms[22m[39m
+ [32m✓[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 4769[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did [33m 1159[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why [33m 601[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma league between the floor and 95 is settled by the book and still carries the honest line, on the card and on the review [33m 908[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma season on a late book says the book covered only part of it, not that its data was thin [33m 1187[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerOfferConfirm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1011[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1335: an offer asks first[2m > [22ma tap on an offer moves nothing and opens the question in the same panel [33m 304[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsDoor.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 562[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m52 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 06:45:28
+[2m   Duration [22m 14.04s[2m (transform 6.52s, setup 917ms, collect 14.54s, tests 16.11s, environment 4.06s, prepare 893ms)[22m
+

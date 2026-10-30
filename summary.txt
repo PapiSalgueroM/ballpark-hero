@@ -1,0 +1,7 @@
+simClubManagerSaveSize exit=0 98s | simClubManagerSaveSize: all sections green
+tsc exit=0 107s | 
+savesize-uncapped exit=1 110s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+vitest exit=0 14s |    Duration  14.04s (transform 6.52s, setup 917ms, collect 14.54s, tests 16.11s, environment 4.06s, prepare 893ms)
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simFreeAgents exit=0 110s | simFreeAgents: all sections passed
+fleet exit=0 197s | simCmFreeAgencyFleet: green, all four sections held
