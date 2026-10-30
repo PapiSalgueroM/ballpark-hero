@@ -1,0 +1,2 @@
+probe exit=0 0s | probe1592: done
+probe-m2 exit=0 0s | probe1592: done

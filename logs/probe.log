@@ -1,0 +1,10 @@
+run Arsenal; careers Manchester City, Liverpool, Chelsea; career sizes 60402, 60502, 61258
+P1 kept aside copy refused: answered failed; active slot 1; careers Manchester City, Liverpool, Chelsea (were Manchester City, Liverpool, Chelsea); careers gone 0; keys changed: none
+P2 career write after the swap refused: answered failed; active slot 1; careers Manchester City, Liverpool, Chelsea (were Manchester City, Liverpool, Chelsea); careers gone 0; keys changed: none
+Q headroom 0.5 careers, free: answered failed; active 1; careers Manchester City, empty, empty (were Manchester City, empty, empty); kept aside 0
+Q headroom 0.5 careers, replace: answered failed; active 1; careers Manchester City, Liverpool, Chelsea (were Manchester City, Liverpool, Chelsea); kept aside 0
+Q headroom 1.5 careers, free: answered failed; active 1; careers Manchester City, empty, empty (were Manchester City, empty, empty); kept aside 0
+Q headroom 1.5 careers, replace: answered failed; active 1; careers Manchester City, Liverpool, Chelsea (were Manchester City, Liverpool, Chelsea); kept aside 0
+Q headroom 2.5 careers, free: answered failed; active 1; careers Manchester City, empty, empty (were Manchester City, empty, empty); kept aside 0
+Q headroom 2.5 careers, replace: answered saved; active 2; careers Manchester City, Arsenal, Chelsea (were Manchester City, Liverpool, Chelsea); kept aside 1
+probe1592: done
