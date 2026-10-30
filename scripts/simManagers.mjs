@@ -56,7 +56,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { SENTINEL, SENTINEL_MONTH, ERAS, seeded, hashSeed, bundleEngine, baseTree, strip, spoken, chairLines, sentinelPlan } from './lib/cmDugoutSentinel.mjs';
+import { SENTINEL, SENTINEL_MONTH, ERAS, seeded, hashSeed, bundleEngine, baseTree, strip, spoken, chairLines, sentinelPlan, firstDiff } from './lib/cmDugoutSentinel.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
@@ -383,7 +383,10 @@ async function realDugoutsSection() {
         && JSON.stringify(s.finStrip) === JSON.stringify(z.finStrip)
         && JSON.stringify(strip(s.next)) === JSON.stringify(strip(z.next));
       if (same) sameStrip += 1;
-      else fail(`7c: ${era} ${L.id} seed ${k}: the sentinel twin differs from the empty table's outside the strip (draws ${s.draws.join('/')} vs ${z.draws.join('/')})`);
+      else {
+        const where = firstDiff(strip(s.start), strip(z.start)) ?? firstDiff(s.finStrip, z.finStrip) ?? firstDiff(strip(s.next), strip(z.next)) ?? 'the draws';
+        fail(`7c: ${era} ${L.id} seed ${k}: the sentinel twin differs from the empty table's outside the strip (draws ${s.draws.join('/')} vs ${z.draws.join('/')}), first at ${where}`);
+      }
     }
   }
   console.log(`   7b: ${summers} summers, ${emptied} with the sentinel's chair emptied (${natural} by the sim's own draw), ${recycleChances} with a second chair to recycle into, ${offersChecked} offers read, ${bFails} failures (${((Date.now() - t0) / 1000).toFixed(0)} s)`);

@@ -115,6 +115,18 @@ export function strip(state) {
   return s;
 }
 
+/** The first path where two plain values differ, with both sides cut short, or null when they are equal. */
+export function firstDiff(a, b, at = '') {
+  if (JSON.stringify(a) === JSON.stringify(b)) return null;
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) {
+      const d = firstDiff(a[k], b[k], `${at}.${k}`);
+      if (d) return d;
+    }
+  }
+  return `${at || '(root)'}: ${JSON.stringify(a)?.slice(0, 140)} vs ${JSON.stringify(b)?.slice(0, 140)}`;
+}
+
 /** Everything a state says outside the dugout record and the vacancy list, as one string to search. */
 export function spoken(state) {
   const s = JSON.parse(JSON.stringify(state ?? {}));
@@ -124,9 +136,12 @@ export function spoken(state) {
 }
 
 /**
- * The sentinel table: per era, per league with at least four playable clubs, the first club by name holds the
- * sentinel, the second is on the partial list, the third is the second chair a summer empties, and the last is
- * where the careers start. One name across every league, as one real man registered for every chair.
+ * The sentinel table: per era, per league, a career is started at its last playable club by name and the league
+ * it really plays in is read off that career (a league's playable list and the season's membership differ where
+ * clubs went up or down). In that league the first other club by name holds the sentinel, the second is on the
+ * partial list and the third is the second chair a summer empties. A club already used by an earlier league of
+ * the same era is skipped, so every league holds the sentinel exactly once. One name across every league, as one
+ * real man registered for every chair. `start` is the plain engine's startCareer.
  */
 export async function sentinelPlan(cm) {
   const table = {}, partial = {}, leagues = [];
@@ -135,11 +150,16 @@ export async function sentinelPlan(cm) {
     const defs = cm.worldLeagueDefs({ eraId: era });
     table[era] = {};
     partial[era] = [];
+    const used = new Set();
     for (const def of defs) {
       const playable = (era === 'now' ? cm.playableClubs(def.id) : cm.eraPlayableClubs(era, def.id)).map(c => c.name).sort();
-      if (playable.length < 4) continue;
-      const [sentinel, part, second] = playable;
-      const career = playable[playable.length - 1];
+      const career = playable.filter(c => !used.has(c)).pop();
+      if (!career) continue;
+      const c = seeded(hashSeed(`plan|${era}|${def.id}`), () => cm.startCareer(career, era)).value;
+      const others = [...c.leagueClubs].filter(club => club !== career).sort();
+      if (others.length < 3 || others.slice(0, 3).some(club => used.has(club))) continue;
+      const [sentinel, part, second] = others;
+      for (const club of c.leagueClubs) used.add(club);
       table[era][sentinel] = { name: SENTINEL, appointed: SENTINEL_MONTH };
       partial[era].push(part);
       leagues.push({ era, id: def.id, sentinel, partial: part, second, career });
