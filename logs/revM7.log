@@ -1,0 +1,8 @@
+mutant M7: applied to src/pages/SoccerCareer.tsx (anchor seen 1 time(s))
+  gate node_modules/.bin/vitest run exit=1 9s | [31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+    [31m❯[39m src/test/soccerCareerCreationRoll.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 2537[2mms[22m[39m
+    [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount [33m 2265[2mms[22m[39m
+    [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine [33m 1224[2mms[22m[39m
+    [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal [33m 1112[2mms[22m[39m
+  gate node scripts/simSoccerAcademyPlacement.mjs exit=0 5s | simSoccerAcademyPlacement: all sections green
+MUTANT M7 KILLED by node_modules/.bin/vitest run

@@ -1,0 +1,9 @@
+roll-head exit=0 6s |    Duration  6.08s (transform 1.46s, setup 52ms, collect 1.97s, tests 3.47s, environment 237ms, prepare 77ms)
+revM2 exit=0 70s | MUTANT M2 KILLED by node_modules/.bin/vitest run
+revM3 exit=0 14s | MUTANT M3 KILLED by node_modules/.bin/vitest run
+revM5 exit=0 15s | MUTANT M5 KILLED by node_modules/.bin/vitest run
+revM7 exit=0 14s | MUTANT M7 KILLED by node_modules/.bin/vitest run
+fixM3n exit=0 6s | MUTANT M3n KILLED by node_modules/.bin/vitest run
+fixM3e exit=0 6s | MUTANT M3e KILLED by node_modules/.bin/vitest run
+fixM9 exit=0 5s | MUTANT M9 KILLED by node_modules/.bin/vitest run
+fixM8 exit=0 6s | MUTANT M8 KILLED by node_modules/.bin/vitest run
