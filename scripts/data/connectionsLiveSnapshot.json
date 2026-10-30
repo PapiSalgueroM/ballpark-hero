@@ -4,7 +4,7 @@
     "The game deals from that table; src/data/connectionsPuzzles.ts is the fallback and must be its copy, board for board and in the same order.",
     "scripts/simConnectionsFacts.mjs section 6 fails while the two disagree. The lead rewrites this file at each release's live pass with scripts/qa/connectionsLiveSnapshot.mjs."
   ],
-  "takenAt": "expected after supabase/migrations/20261029120000_round_1565_connections_live.sql: the 2026-10-23 05:59 EDT read only export with that migration applied (Round 1565); the lead replaces it with the live read at the release's live pass",
+  "takenAt": "read only, 2026-10-30 08:26 EDT, after Round 1565",
   "rows": [
     {"puzzle_id":"puzzle-1","sort_order":0,"md5":"af788097eec05bafa950b79ed92e4a06"},
     {"puzzle_id":"puzzle-2","sort_order":1,"md5":"88ab0912c6cfdd1204046e4be5937880"},
