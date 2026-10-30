@@ -1,0 +1,26 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1197[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerSlots.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1060[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOn.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1737[2mms[22m[39m
+ [32m✓[39m src/test/saveFence.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 4541[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mtwo managers survive leaving the page, and either one opens [33m 984[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 402[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mclosing the old tab after a switch in another never wipes the career switched in [33m 385[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22ma change in the old tab writes nothing over the other career and goes back to the managers [33m 322[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab live clock writes nothing over the career switched in [33m 336[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: two tabs on one device[2m > [22mthe old tab managers screen follows the other tab, and a stale New manager says why it did nothing [33m 408[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager slots: a parked era career[2m > [22mopens through the era boot, squads first [33m 469[2mms[22m[39m
+ [32m✓[39m src/lib/brokenSaveRecovery.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOnCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1688[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: the offer waits on the menu[2m > [22ma finished free run that kept the job reopens on its verdict with the offer [33m 307[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsScreen.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 514[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m      Tests [22m [1m[32m175 passed[39m[22m[90m (175)[39m
+[2m   Start at [22m 06:15:39
+[2m   Duration [22m 11.75s[2m (transform 3.93s, setup 930ms, collect 10.04s, tests 10.88s, environment 4.90s, prepare 1.39s)[22m
+

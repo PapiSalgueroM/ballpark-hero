@@ -1,0 +1,31 @@
+NEGATIVE CONTROL ON: a sacked manager is offered the job anyway; section 5 must go red
+5) A manager who keeps the job carries on in Club Manager
+  FAIL: Leeds United seed 3876630285: a sacked manager was offered the career
+  FAIL: Leeds United seed 3876630285 (wrong arm): a sacked manager was offered the career
+  FAIL: Villarreal seed 2527425588: a boardSacked manager was offered the career
+  FAIL: Villarreal seed 2527425588 (wrong arm): a boardSacked manager was offered the career
+  FAIL: Werder Bremen seed 4179643955: a sacked manager was offered the career
+  FAIL: Werder Bremen seed 4179643955 (wrong arm): a sacked manager was offered the career
+  FAIL: PSV seed 2792087670: a sacked manager was offered the career
+  FAIL: PSV seed 2792087670 (wrong arm): a sacked manager was offered the career
+  FAIL: Utrecht seed 545450603: a sacked manager was offered the career
+  FAIL: NEOM SC seed 2045875097: a sacked manager was offered the career
+  FAIL: NEOM SC seed 2045875097 (wrong arm): a sacked manager was offered the career
+  FAIL: Vancouver Whitecaps seed 1296218415: a sacked manager was offered the career
+  FAIL: Vancouver Whitecaps seed 1296218415 (wrong arm): a sacked manager was offered the career
+  FAIL: Benfica seed 4127816210: a sacked manager was offered the career
+  FAIL: Benfica seed 4127816210 (wrong arm): a sacked manager was offered the career
+  FAIL: Vitória Guimarães seed 662549376: a sacked manager was offered the career
+  FAIL: Celtic seed 3271775616 (wrong arm): a sacked manager was offered the career
+  FAIL: Holstein Kiel seed 3569599570: a sacked manager was offered the career
+  FAIL: Holstein Kiel seed 3569599570 (wrong arm): a sacked manager was offered the career
+  FAIL: Young Boys seed 3876892485 (wrong arm): a sacked manager was offered the career
+  FAIL: Corinthians seed 792915288 (wrong arm): a sacked manager was offered the career
+  FAIL: Wellington Phoenix seed 708376328: a sacked manager was offered the career
+  FAIL: Wellington Phoenix seed 708376328 (wrong arm): a sacked manager was offered the career
+  FAIL: Reims seed 311012506 (wrong arm): a sacked manager was offered the career
+   54 setups in 27 leagues: 43 handed over (1 on a reprieve) from 25 leagues, 37 played to the end of the season, 6 sacked in Club Manager on the way, 0 sacked runs refused, 2 with a window before the next fixture, 164 of the previous manager's messages left behind
+  FAIL: only 0 sacked runs were checked for the refusal (floor 5)
+   slot arms on 43 survivors: emptyDevice 43, keptSlotOne 43, intoSlotOne 43, fullAsked 43, damagedKept 43, pointsCleared 43, rolledBack 43, picked 43, changedRefused 43
+
+simManagerHotSeat: 25 failure(s)
