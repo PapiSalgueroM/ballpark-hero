@@ -1,0 +1,10 @@
+vitest exit=0 30s |    Duration  29.14s (transform 4.36s, setup 287ms, collect 7.78s, tests 25.10s, environment 1.33s, prepare 278ms)
+tsc exit=0 112s | 
+fleet exit=0 265s | simCmFreeAgencyFleet: green, all seven sections held
+ctl-notrimpool exit=1 271s | simCmFreeAgencyFleet: CONTROL notrimpool FIRED: section 5 red (red: 1 (12), 5 (12))
+ctl-ledgeroff exit=1 261s | simCmFreeAgencyFleet: CONTROL ledgeroff FIRED: section 6 red
+ctl-staleseason exit=1 258s | simCmFreeAgencyFleet: CONTROL staleseason FIRED: section 6 red
+loanprobe exit=0 4s | loanprobe: 3 final year men loaned out, 0 of them walked at the summer without a checkpoint row or a hub line
+trimprobe exit=0 21s | trimprobe: trimmed 12, on the list after the summer 12 (released, not mine: 12), still somewhere two summers on 12; ledger held list men 80, agree 80, disagree 0, record 
+ctl-noloanrow exit=1 261s | simCmFreeAgencyFleet: CONTROL noloanrow FIRED: section 7 red
+ctl-norenewloan exit=1 240s | simCmFreeAgencyFleet: CONTROL norenewloan FIRED: section 7 red

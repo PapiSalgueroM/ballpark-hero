@@ -1,0 +1,45 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/ClubManagerSeasonSummary.expiring.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1579[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut [33m 451[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22ma final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal [33m 364[2mms[22m[39m
+ [32m✓[39m src/test/cmTablesTruth.test.tsx [2m([22m[2m58 tests[22m[2m)[22m[33m 23521[2mms[22m[39m
+   [33m[2m✓[22m[39m 1 the contracts desk labels a real man's deal as this game's, and no made up man's[2m > [22mLiverpool 2026-27 [33m 444[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mLiverpool 2026-27 [33m 691[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mDundee 2026-27 [33m 336[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mEverton 2005-06 [33m 473[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mOB 2026-27 [33m 376[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mBrentford with an academy graduate [33m 716[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mBrentford with a made up free agent signed [33m 641[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mSevilla old save (Round 1052) [33m 450[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mValencia second tier old save [33m 506[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mEverton book save [33m 412[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mValencia second tier old save [33m 484[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mEverton book save [33m 326[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mLiverpool 2026-27 [33m 861[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mDundee 2026-27 [33m 501[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mEverton 2005-06 [33m 620[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mOB 2026-27 [33m 411[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mBrentford with an academy graduate [33m 717[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mBrentford with a made up free agent signed [33m 770[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mSevilla old save (Round 1052) [33m 595[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mValencia second tier old save [33m 686[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mEverton book save [33m 697[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mHertha book save [33m 469[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mLiverpool 2026-27 [33m 765[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mDundee 2026-27 [33m 470[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mEverton 2005-06 [33m 627[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mOB 2026-27 [33m 437[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mBrentford with an academy graduate [33m 859[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mBrentford with a made up free agent signed [33m 860[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mSevilla old save (Round 1052) [33m 724[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mValencia second tier old save [33m 740[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mEverton book save [33m 720[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mHertha book save [33m 497[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m66 passed[39m[22m[90m (66)[39m
+[2m   Start at [22m 09:55:44
+[2m   Duration [22m 29.14s[2m (transform 4.36s, setup 287ms, collect 7.78s, tests 25.10s, environment 1.33s, prepare 278ms)[22m
+
