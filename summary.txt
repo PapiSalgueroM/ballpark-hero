@@ -1,0 +1,6 @@
+rules-head exit=1 30s | simCmLeagueRules: 47 failure(s)
+rules-mutexact exit=1 30s | simCmLeagueRules: 47 failure(s)
+rules-premerge exit=0 30s | simCmLeagueRules: all checks passed (modern, eras)
+rules-main exit=1 30s | simCmLeagueRules: 47 failure(s)
+gathered-main exit=1 2s | simClubManagerGathered: 1 failure(s) (G 1)
+rules-write exit=0 91s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)

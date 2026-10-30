@@ -1,0 +1,7 @@
+#!serial
+rules-head: node scripts/simCmLeagueRules.mjs --part=modern,eras
+rules-mutexact: node .rc/x/mutExact.mjs && node scripts/simCmLeagueRules.mjs --part=modern,eras; s=$?; git checkout -- src scripts; exit $s
+rules-premerge: git show 1b182d1ca:src/lib/clubManager.ts > src/lib/clubManager.ts && git diff --stat -- src | tail -1 && node scripts/simCmLeagueRules.mjs --part=modern,eras; s=$?; git checkout -- src scripts; exit $s
+rules-main: git worktree add -q /tmp/m 931308159c967c3ab9af404ed01e0b8483f90bd7 && ln -s "$PWD/node_modules" /tmp/m/node_modules && cd /tmp/m && node scripts/simCmLeagueRules.mjs --part=modern,eras
+gathered-main: cd /tmp/m && node scripts/simClubManagerGathered.mjs
+rules-write: node scripts/simCmLeagueRules.mjs --part=modern,eras --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && git diff --numstat -- scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs

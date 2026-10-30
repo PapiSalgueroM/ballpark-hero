@@ -1,0 +1,53 @@
+1) digest, every modern league: a seeded season, the summer, and the pyramids twice
+  FAIL: modern: now|premier differs in wholeNext, s2_whole
+  FAIL: modern: now|championship differs in wholeNext, s2_whole
+  FAIL: modern: now|laliga differs in wholeNext, s2_whole
+  FAIL: modern: now|seriea differs in wholeNext, s2_whole
+  FAIL: modern: now|bundesliga differs in wholeNext, s2_whole
+  FAIL: modern: now|ligue1 differs in wholeNext, s2_whole
+  FAIL: modern: now|eredivisie differs in wholeNext
+  FAIL: modern: now|saudi differs in wholeNext
+  FAIL: modern: now|mlsEast differs in wholeNext
+  FAIL: modern: now|mlsWest differs in wholeNext
+  FAIL: modern: now|primeira differs in wholeNext
+  FAIL: modern: now|scottish differs in wholeNext
+  FAIL: modern: now|superlig differs in wholeNext
+  FAIL: modern: now|bundesliga2 differs in wholeNext, s2_whole
+  FAIL: modern: now|proleague differs in wholeNext
+  FAIL: modern: now|austria differs in wholeNext
+  FAIL: modern: now|greece differs in wholeNext
+  FAIL: modern: now|denmark differs in wholeNext
+  FAIL: modern: now|switzerland differs in wholeNext
+  FAIL: modern: now|croatia differs in wholeNext
+  FAIL: modern: now|brasileirao differs in wholeNext
+  FAIL: modern: now|ligamx differs in wholeNext
+  FAIL: modern: now|aleague differs in wholeNext
+  FAIL: modern: now|serieb differs in wholeNext, s2_whole
+  FAIL: modern: now|ligue2 differs in wholeNext, s2_whole
+  FAIL: modern: now|segunda differs in wholeNext, s2_whole
+  FAIL: modern: now|russia differs in wholeNext
+   27 entries compared, 27 differ
+2) digest, every league of every historic era
+  FAIL: eras: era2010|premier2010 differs in wholeNext
+  FAIL: eras: era2010|laliga2010 differs in wholeNext
+  FAIL: eras: era2010|seriea2010 differs in wholeNext
+  FAIL: eras: era2010|bundesliga2010 differs in wholeNext
+  FAIL: eras: era2010|ligue12010 differs in wholeNext
+  FAIL: eras: era2015|premier2015 differs in wholeNext
+  FAIL: eras: era2015|laliga2015 differs in wholeNext
+  FAIL: eras: era2015|seriea2015 differs in wholeNext
+  FAIL: eras: era2015|bundesliga2015 differs in wholeNext
+  FAIL: eras: era2015|ligue12015 differs in wholeNext
+  FAIL: eras: era2005|premier2005 differs in wholeNext
+  FAIL: eras: era2005|laliga2005 differs in wholeNext
+  FAIL: eras: era2005|seriea2005 differs in wholeNext
+  FAIL: eras: era2005|bundesliga2005 differs in wholeNext
+  FAIL: eras: era2005|ligue12005 differs in wholeNext
+  FAIL: eras: era2020|premier2020 differs in wholeNext
+  FAIL: eras: era2020|laliga2020 differs in wholeNext
+  FAIL: eras: era2020|seriea2020 differs in wholeNext
+  FAIL: eras: era2020|bundesliga2020 differs in wholeNext
+  FAIL: eras: era2020|ligue12020 differs in wholeNext
+   20 entries compared, 20 differ
+
+simCmLeagueRules: 47 failure(s)
