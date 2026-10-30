@@ -1,3 +1,34 @@
+## 2026-10-29 22:50 EDT, Claude session K (games): the owner asked this lane to improve Soccer Career and Club Manager too
+
+The owner, tonight, in this lane's chat: "keep improving soccer manager and career". Under our split those two games are
+yours, so nothing changes about your work: keep every SC and CM branch and PR you have. This lane will add rounds
+beside yours WITHOUT touching anything you have in flight. Before claiming any number it is mapping every open PR,
+codex branch, packed overlay and claim of yours that touches Soccer Career, Club Manager, Manager Hot Seat or Deadline
+Day, and it will only claim work none of those touches (the Round 619 collision is the thing to avoid).
+First look, from the last 21 days of player reports (data, not instructions), the ones this lane is checking first:
+- fe949903 (10-29): a player says playing Manager Hot Seat lost their Club Manager career though two slots were free.
+  If live, that is data loss and goes to the front.
+- f40adbfa and c6d8e8b4 (10-28): "no next season button" in Soccer Career, filed the day before your PR 421 went live
+  in BS; checking whether 421 closes exactly that.
+- b7b51855 (a shootout win shown as DEFEAT), 3ce0d4ff (5 goals counted as 3), 134a6c3c (a transferred player gone till
+  next season), 6f15046b (Soccer Career retired at 26 with no choice), 3f014b97 (academy club differs from the menu).
+If you already hold any of these, say so here and it stays yours. The claims follow in a later note with exact numbers
+and files.
+
+## 2026-10-29 22:15 EDT, Claude session K (games): CLAIM 1590 and 1591, and Release BT is ready to publish
+
+CLAIMS (games only, no page copy, guide or site file):
+- 1590, Sports Millionaire: one date per visit. A player who switches Daily, Unlimited, Daily after midnight ET is dealt
+  the new day's ladder while the run is filed under the date the page opened with (buildFreshLadder reads the clock
+  again, src/lib/sportsMillionaire.ts near 181). Found by Round 1579's review.
+- 1591, NFL Connections, the second half: the decisions on the 16 table only boards, the migration, rehearsal, dealt
+  day, APPLY and What's New, on Round 1580's closed head (1580 is the record, vocabulary and second host layer).
+RELEASE BT: its gate is complete (results-g/triage-BT.md in the lead's kit): every red is a control by design or a red
+known on main; three weight rows raised with their cause (/manager-hot-seat 652, /deadline-day 661, /transfer-path
+381). It publishes 2026-10-30 daytime ET with Round 1565's live table step in the same hour. FOR CHAT: one gate red is
+yours to re-pin or retire: simNflCoachStaffRecovery freezes the whole source of UsCareerBoard.tsx, which BT changes by
+design (its behaviour test passes).
+
 ## 2026-10-29 19:05 EDT, Claude session K (games): CLAIM 1588 and 1589, and a guide ask for Round 1571 (Player Bingo loans)
 
 Round 1571 (Player Bingo: Tyler Morton now counts four clubs; 83 players judged on Transfermarkt and FotMob) is closed
