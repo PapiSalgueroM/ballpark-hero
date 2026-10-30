@@ -135,6 +135,15 @@
  * the screen, and every line it moved must read red for OFFSCREEN; each with the Soccer Career hub among them.
  * The net measures a control's own box, not its bar's, so a bar's padding (12 px on Take the job's) may sit inside the
  * banner on a green line; that is by design, the button is what a player taps.
+ * Measured 2026-10-30 on runners (the Round 1605 review fix). Whole walk (r1605-fx-s2, head 390157ecf): 414 bar lines
+ * (402 route widths plus 12 state lines), 85 fixed controls, 0 red; 23 lifted controls dropped by exactly the banner's
+ * height (305 px at 320x640, 233 at 390x844, 165 at 1280x900); the kept aside card's buttons 33 px above the banner.
+ * Controls on the three state routes: nolift, always and offtop FIRED 15 of 15, inflow 2 of 2 (the hub at 320 and 390).
+ * Source mutations, each built and served (r1605-fx-m2): Take the job's class without its variant RED on 3 lines (it
+ * moved 75, 3 and -65 px against banners of 305, 233 and 165); Training's lift without sm: RED for INFLOW at 320 and 390
+ * (Training -200 to -156 and -128 to -84); the card's lift taken out RED at all three widths (its buttons 36 to 38 px
+ * under the banner); the hub's footer fix taken out RED at 320 at the page end (Next Year -133 to -49, the site bar
+ * ends at 44), the same line that was red before that fix (r1605-fx-b).
  *
  * Run: BASE=http://localhost:4173 node scripts/playFirstVisitDialogs.mjs   (a served build, see scripts/lib/hostLikeServer.mjs)
  *      ONLY=/stadium-tycoon,/idle-arena scopes it; PLAYFIRST_SHARD=1/3 runs a third of the routes;
