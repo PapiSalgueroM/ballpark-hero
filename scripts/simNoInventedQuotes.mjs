@@ -145,6 +145,10 @@ const SURNAME_STOPLIST = new Set([
   // club (Aston Villa), and Minefield's trivia line about the club tripped
   // the guard. The full name check still protects the man himself.
   'Villa',
+  // Round 1607: the real dugout table brought Auxerre's coach Will Still, and
+  // five family texts that open with the word "Still" in the NFL, NHL and
+  // soccer phones tripped the guard. The full name check still protects him.
+  'Still',
 ]);
 
 function realNames() {
