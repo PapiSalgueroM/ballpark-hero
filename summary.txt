@@ -1,0 +1,12 @@
+c-noplace exit=1 44s | simCmEuroPlay: control noplace FIRED (1 failures, all its own)
+c-uelrank exit=1 45s | simCmEuroPlay: control uelrank FIRED (2 failures, all its own)
+c-nowinnerucl exit=1 43s | simCmEuroPlay: control nowinnerucl FIRED (2 failures, all its own)
+c-notneutral exit=1 45s | simCmEuroPlay: control notneutral FIRED (1 failures, all its own)
+c-friday exit=1 124s | simCmEuroPlay: control friday FIRED (204 failures, all its own)
+c-noet exit=1 41s | simCmEuroPlay: control noet FIRED (4 failures, all its own)
+c-inplace exit=1 46s | simCmEuroPlay: control inplace FIRED (1 failures, all its own)
+c-carryall-s5to8 exit=1 136s | simCmEuroPlay: control carryall FIRED (2 failures, all its own)
+c-u8thursday exit=1 1s | simWorldEuro: control u8thursday FIRED (1 failures, all its own)
+c-nocarry exit=1 143s | simCmEuroPlay: control nocarry FIRED (3 failures, all its own)
+c-nouelucl exit=1 179s | simCmEuroPlay: control nouelucl FIRED (2 failures, all its own)
+simExtraTime exit=0 99s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
