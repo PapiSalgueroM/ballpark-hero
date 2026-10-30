@@ -1,0 +1,10 @@
+deep-press exit=0 26s | deepDaily: 77 early dates played to the end; A vs F differ: Deadline Day 0, Hot Seat 0; F vs M differ: Deadline Day 0, Hot Seat 0
+deep-carry exit=0 25s | deepDaily: 77 early dates played to the end; A vs F differ: Deadline Day 0, Hot Seat 0; F vs M differ: Deadline Day 0, Hot Seat 0
+deep-match exit=0 26s | deepDaily: 77 early dates played to the end; A vs F differ: Deadline Day 0, Hot Seat 0; F vs M differ: Deadline Day 0, Hot Seat 75
+deep-dd exit=0 26s | deepDaily: 77 early dates played to the end; A vs F differ: Deadline Day 0, Hot Seat 0; F vs M differ: Deadline Day 0, Hot Seat 0
+m-press-dv exit=0 26s | simCmDailyView: 5 checks, 0 failures
+m-press-hs exit=0 58s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+m-press-dd exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+m-carrypos-dv exit=0 24s | simCmDailyView: 5 checks, 0 failures
+m-carrypos-hs exit=0 58s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+m-carrypos-dd exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 

@@ -1,0 +1,11 @@
+#!serial
+deep-press: DEEP_M=press node .rc/x/deepDaily.mjs
+deep-carry: DEEP_M=carry node .rc/x/deepDaily.mjs
+deep-match: DEEP_M=match node .rc/x/deepDaily.mjs
+deep-dd: DEEP_M=dd node .rc/x/deepDaily.mjs
+m-press-dv: node .rc/x/mut1600.mjs press && node scripts/simCmDailyView.mjs; s=$?; git checkout -- src scripts; exit $s
+m-press-hs: node .rc/x/mut1600.mjs press && node scripts/simManagerHotSeat.mjs; s=$?; git checkout -- src scripts; exit $s
+m-press-dd: node .rc/x/mut1600.mjs press && node scripts/simDailyDeals.mjs; s=$?; git checkout -- src scripts; exit $s
+m-carrypos-dv: node .rc/x/mut1600.mjs carrypos && node scripts/simCmDailyView.mjs; s=$?; git checkout -- src scripts; exit $s
+m-carrypos-hs: node .rc/x/mut1600.mjs carrypos && node scripts/simManagerHotSeat.mjs; s=$?; git checkout -- src scripts; exit $s
+m-carrypos-dd: node .rc/x/mut1600.mjs carrypos && node scripts/simDailyDeals.mjs; s=$?; git checkout -- src scripts; exit $s
