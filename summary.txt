@@ -1,0 +1,6 @@
+vitest exit=0 17s |    Duration  16.41s (transform 4.83s, setup 855ms, collect 17.44s, tests 13.25s, environment 4.98s, prepare 1.42s)
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simCmDecidingLeg exit=0 93s | simCmDecidingLeg: PASS, 19 of 19 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+simManagerHotSeat exit=0 75s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+tsc exit=0 117s | 
+simExtraTime exit=0 92s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (

@@ -1,0 +1,26 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/cmDecidingLegCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 239[2mms[22m[39m
+ [32m✓[39m src/test/managerScorerMarks.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[32m 236[2mms[22m[39m
+ [32m✓[39m src/test/managerQuickSimLegs.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 1130[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: a quick sim makes its subs (Round 1146)[2m > [22mbrings fresh legs on after the break, and the report the player lands on lists the change [33m 863[2mms[22m[39m
+ [32m✓[39m src/test/cmReportBoardWord.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1607[2mms[22m[39m
+   [33m[2m✓[22m[39m the report card and the header say the same thing about the board[2m > [22magrees at every whole value from 0 to 100, No sacking off [33m 1047[2mms[22m[39m
+   [33m[2m✓[22m[39m the report card and the header say the same thing about the board[2m > [22magrees at every whole value from 0 to 100, No sacking on [33m 548[2mms[22m[39m
+ [32m✓[39m src/test/managerPenaltyMarkers.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 226[2mms[22m[39m
+[90mstdout[2m | src/lib/clubManagerReportedScorers.test.ts
+[22m[39mManager scorer diagnostic {"campaigns":4,"matches":191,"league":144,"cup":8,"europe":39,"ownGoals":8,"shootouts":2,"leagueSubGoals":13}
+
+ [32m✓[39m src/lib/clubManagerReportedScorers.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 9810[2mms[22m[39m
+   [33m[2m✓[22m[39m reported Manager scorer omission, actual current-source diagnostics[2m > [22msettles each committed scorer exactly once into his season and the correct competition [33m 365[2mms[22m[39m
+   [33m[2m✓[22m[39m reported Manager scorer omission, actual current-source diagnostics[2m > [22mrolls completed real campaigns to empty new-season goal lines and league boards [33m 746[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 07:41:35
+[2m   Duration [22m 16.41s[2m (transform 4.83s, setup 855ms, collect 17.44s, tests 13.25s, environment 4.98s, prepare 1.42s)[22m
+
