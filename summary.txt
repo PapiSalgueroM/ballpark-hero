@@ -1,0 +1,4 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+clubDetailRoster exit=1 0s | Node.js v24.22.1
+simClubDetailFixtures exit=0 15s | PASS complete component/test restoration and actual saved league fixture outcomes
+playNationJob exit=0 18s | playNationJob: green. Win enough and your country calls, and the club job carries on underneath it.

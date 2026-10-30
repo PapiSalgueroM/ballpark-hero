@@ -1,0 +1,103 @@
+{
+  "head": "51848b2768b7a30014deefde2b3957f759dc81a8",
+  "parentRef": "082fc2774c8aa9f919c14efa33bfc3fbfc599597",
+  "phase": "fixed",
+  "control": "",
+  "bindings": [
+    {
+      "file": "src/components/club-manager/ClubDetailScreen.tsx",
+      "parentSha256": "bf8a46ebf55f6dae9deeab81380915280ef5fe94d9b9c64dae3ca369da63c6fe",
+      "candidateSha256": "19f4674597883bcdb3583bd3f9dd6d2693d0adf892a812fcefe94c7f3793b8ac"
+    },
+    {
+      "file": "src/lib/clubManager.ts",
+      "parentSha256": "22833be3e9849fbcbd20f4e75f490fdb7a519651473358c63671e341a18cd8d8",
+      "candidateSha256": "cd18583f090843f5cb2d5b123a8884f08f6cc1a495a37a26b117d312a278ca2d"
+    },
+    {
+      "file": "src/lib/clubManagerWorldRoster.ts",
+      "parentSha256": "5a9d8dc53227d8af609876f62d2423b55679c333964dec9b2faa4e51818eb737",
+      "candidateSha256": "f6adb423530a29fc75fcc6e759bb746e6885b2b718ef4dc12033304e8669e4b4"
+    },
+    {
+      "file": "src/lib/clubManagerEras.ts",
+      "parentSha256": "d7b6b39f375ecd9e0e4cab9bf01b1782249fab65c9b6a1ebbef199bbb7619cd5",
+      "candidateSha256": "74fcf309fee3943670a4ec1c44333a68ffb290f67b1d1325769dc2d368e55ec3"
+    },
+    {
+      "file": "src/test/clubDetailOwnClub.test.tsx",
+      "parentSha256": "441dc39313529306a3e2f3725f7c10829151b179f83808ee63cad83432c48c35",
+      "candidateSha256": "65da5716a548e3c89ff612df10b1bc6093a0eac9f1380d5ca7c5a7075640c789"
+    }
+  ],
+  "fixtureBindings": [
+    {
+      "file": "src/lib/clubDetailFixtures.ts",
+      "headSha256": "3375d8edac9dee57012f2bee3a0d2992a2e20714b06872fe60ed6682dada4e9f",
+      "candidateSha256": "3375d8edac9dee57012f2bee3a0d2992a2e20714b06872fe60ed6682dada4e9f"
+    },
+    {
+      "file": "scripts/lib/clubDetailFixturesSourceJoin.mjs",
+      "headSha256": "4970b655e0bfc110e1420fc181a365751f815c7d897d9260679450d277bd2756",
+      "candidateSha256": "4970b655e0bfc110e1420fc181a365751f815c7d897d9260679450d277bd2756"
+    }
+  ],
+  "methodError": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'cd18583f090843f5cb2d5b123a8884f08f6cc1a495a37a26b117d312a278ca2d'\n- '22833be3e9849fbcbd20f4e75f490fdb7a519651473358c63671e341a18cd8d8'\n\n    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simClubDetailCurrentRoster.mjs:64:12\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)",
+  "sourceReceipts": [
+    {
+      "file": "src/components/club-manager/ClubDetailScreen.tsx",
+      "beforeSha256": "19f4674597883bcdb3583bd3f9dd6d2693d0adf892a812fcefe94c7f3793b8ac",
+      "afterSha256": "19f4674597883bcdb3583bd3f9dd6d2693d0adf892a812fcefe94c7f3793b8ac"
+    },
+    {
+      "file": "src/lib/clubManager.ts",
+      "beforeSha256": "cd18583f090843f5cb2d5b123a8884f08f6cc1a495a37a26b117d312a278ca2d",
+      "afterSha256": "cd18583f090843f5cb2d5b123a8884f08f6cc1a495a37a26b117d312a278ca2d"
+    },
+    {
+      "file": "src/lib/clubManagerWorldRoster.ts",
+      "beforeSha256": "f6adb423530a29fc75fcc6e759bb746e6885b2b718ef4dc12033304e8669e4b4",
+      "afterSha256": "f6adb423530a29fc75fcc6e759bb746e6885b2b718ef4dc12033304e8669e4b4"
+    },
+    {
+      "file": "src/lib/clubManagerEras.ts",
+      "beforeSha256": "74fcf309fee3943670a4ec1c44333a68ffb290f67b1d1325769dc2d368e55ec3",
+      "afterSha256": "74fcf309fee3943670a4ec1c44333a68ffb290f67b1d1325769dc2d368e55ec3"
+    },
+    {
+      "file": "src/test/clubDetailOwnClub.test.tsx",
+      "beforeSha256": "65da5716a548e3c89ff612df10b1bc6093a0eac9f1380d5ca7c5a7075640c789",
+      "afterSha256": "65da5716a548e3c89ff612df10b1bc6093a0eac9f1380d5ca7c5a7075640c789"
+    },
+    {
+      "file": "src/test/clubDetailCurrentRoster.test.tsx",
+      "beforeSha256": "d2692b39d5ffad7bd38916b86ab9faa40cc9f0949a3b8c43026b74f3191e2f7b",
+      "afterSha256": "d2692b39d5ffad7bd38916b86ab9faa40cc9f0949a3b8c43026b74f3191e2f7b"
+    },
+    {
+      "file": "scripts/simClubDetailCurrentRoster.mjs",
+      "beforeSha256": "9b439f5daf0d7b2affcf599ed240fac34d9e5045387f993f5c8050812b104bec",
+      "afterSha256": "9b439f5daf0d7b2affcf599ed240fac34d9e5045387f993f5c8050812b104bec"
+    },
+    {
+      "file": ".github/workflows/club-detail-current-roster.yml",
+      "beforeSha256": "d4fd6b2ce56e21834e4adaee828d9974529384448721556aafe4132a1e21382d",
+      "afterSha256": "d4fd6b2ce56e21834e4adaee828d9974529384448721556aafe4132a1e21382d"
+    },
+    {
+      "file": "scripts/playClubDetailCurrentRoster.mjs",
+      "beforeSha256": "ca35e424a2f1a71f13529347b595640cdf533848225fdf7b9ed8a084a8830cbf",
+      "afterSha256": "ca35e424a2f1a71f13529347b595640cdf533848225fdf7b9ed8a084a8830cbf"
+    },
+    {
+      "file": "src/lib/clubDetailFixtures.ts",
+      "beforeSha256": "3375d8edac9dee57012f2bee3a0d2992a2e20714b06872fe60ed6682dada4e9f",
+      "afterSha256": "3375d8edac9dee57012f2bee3a0d2992a2e20714b06872fe60ed6682dada4e9f"
+    },
+    {
+      "file": "scripts/lib/clubDetailFixturesSourceJoin.mjs",
+      "beforeSha256": "4970b655e0bfc110e1420fc181a365751f815c7d897d9260679450d277bd2756",
+      "afterSha256": "4970b655e0bfc110e1420fc181a365751f815c7d897d9260679450d277bd2756"
+    }
+  ]
+}
