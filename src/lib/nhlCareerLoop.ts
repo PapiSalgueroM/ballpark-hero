@@ -14,7 +14,7 @@ import type { NhlCareerState, NhlSeasonLine } from './nhlMyCareer';
 import { nhlCareerTotals, nhlLegacyOf, nhlTeamLabelOf, nhlWorkSlate } from './nhlMyCareer';
 import { NHL_BADGES, earnedBadges } from './careerBadges';
 import type { BadgeDef, NhlBadgeFacts } from './careerBadges';
-import { fanComments, followersFromFanbase, fmtFollowers, nhlSeasonHeadlines } from './careerSocial';
+import { conductOnRecord, fanComments, followersFromFanbase, fmtFollowers, nhlSeasonHeadlines } from './careerSocial';
 import { nhlMoneyWealth } from './nhlCareerMoney';
 import { US_ENGINE_SEASON, fullSeasonOf, slateOf, toSlate } from './usSeasonShape';
 
@@ -79,6 +79,7 @@ export function nhlFanComments(c: NhlCareerState): string[] {
     pos: c.pos,
     standing: c.fanbase,
     followers: fmtFollowers(nhlFollowers(c)),
+    conduct: conductOnRecord(c),
   });
 }
 

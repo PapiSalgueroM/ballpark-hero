@@ -5,6 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { noteNoIntlCareer } from '../lib/intlCallNote.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ARTIFACTS = path.join(ROOT, 'manager-match-plans-artifacts');
@@ -324,5 +325,7 @@ try {
     finally {await context.close();}
   }
   assert.equal(report.cases.length,3);assert(report.cases.every(row=>row.passed));assert.equal(report.controls.length,12);assert.equal(report.forwardedWrites,0);report.sourceAfter=hashes();assert.deepEqual(report.sourceAfter,report.sourceBefore);report.passed=true;save();
+  /* Round 1557 (critic-1541 correction 9): every walk naming the NBA save says whether it meets the national team's call. */
+  noteNoIntlCareer('managerMatchPlans1079', 'its NBA save is a protected string kept byte for byte, never a career, so no bar reaches it');
   console.log('PASS manager match plans native: 3 actual hook journeys, 12 effective restored DOM faults, independent engine previews and kickoff, reload and club isolation.');
 } finally {await browser?.close();if(server)await new Promise(resolve=>server.close(resolve));report.sourceAfter=hashes();report.sourcesHeld=JSON.stringify(report.sourceAfter)===JSON.stringify(report.sourceBefore);const resolved=path.resolve(temp);assert(resolved.startsWith(ROOT+path.sep+'.manager-plans-native-'));fs.rmSync(resolved,{recursive:true,force:true});save();}

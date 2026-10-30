@@ -370,6 +370,65 @@
  * Continue" at age 31 (its markup: the training card on screen, where the
  * button is the maintenance one). No save, text excerpt, length or coverage
  * count moved. 2,298,769 bytes.
+ * Round 1569 (the player reports of 2026-10-26) re-recorded it on purpose on
+ * 2026-10-29, by the same method, on a runner from its branch at dc0eed05
+ * with the proved historical Panel aliased in (rc r1569-fx2, extra files
+ * rec1569.mjs, mut1569.mjs, fixdiff.mjs). The round adds three ways out
+ * that this replay leaves out by their data attributes, as it does every
+ * additive control (Start over, data-career-start-over; the market's retire
+ * choice, data-career-market-retire; the no offer reason,
+ * data-extension-why), and it changes three pieces of copy: the playoff note
+ * (careerVariance.ts clutchNote reads the January level), the press scrum's
+ * sentence, and the extension card's words in a season that ends the career.
+ * With those three copy changes put back to main's words (recB) the
+ * recording equals the fixture before it in every click, save, coverage
+ * count and screen of all four sports. As shipped (recA) no click, save,
+ * coverage count or fixed save moved; 397 screens moved, every one a
+ * season's words: the curtain's new credit or tough playoff line, the News
+ * tile that prints the same season's feed until the next season is played
+ * (5 of its presses carry a headline count one higher in the label, the same
+ * tile), and the scrum's sentence. 2,298,806 bytes.
+ * Round 1569's fix run re-recorded it on purpose the same day, by the same
+ * method, from 43f38a3a1 (rc r1569-fx-rec, extra files mutFix1569.mjs,
+ * rec1569.mjs, fixdiff.mjs). Two kinds of input moved it: the board is one
+ * element now (UsCareerBoard.tsx withSaveStatus returns a div, so the sticky
+ * Start over is held to the board), which moves the markup of every screen,
+ * and four pieces of copy: the extension card's market promise says "if your
+ * career goes on", its last season words show with an offer too, a pulled
+ * offer's note in a last season, and "the playoffs" for an NFL run that
+ * reached the Super Bowl. With those put back (mutFix1569.mjs all) the head
+ * replays the fixture before it green (proof-all), and a recording equals
+ * it in every click, save, coverage count and screen (diffB 0). With only
+ * the wrapper put back, 129 screens move (diffCopy, the extension card's
+ * screens: 128 of the excerpts read its words, one opens on a card above it);
+ * with nothing put back, 5,518 (diffAll, every screen's markup). No click,
+ * save or coverage count moved. 2,298,807 bytes.
+ * Round 1569's third fix run (the lead's rulings R1 to R3) re-recorded it
+ * once more, by the same method, from 335c4b1b8 (rc r1569-f3-rec, extra
+ * files mutR2.mjs, rec1569.mjs, fixdiff3.mjs). One input moved it: the fans
+ * (src/lib/careerSocial.ts) read the conduct lines only with a cause on the
+ * save, so a low fanbase with nothing on the record reads "Quiet year. We
+ * know you have more in you" where the fixture read "Talented but man the
+ * attitude...". The start and restart reveal (a ref) and the Hall sentence
+ * of the restart prompt (only drawn while the prompt is open) are not seen
+ * by the replay. With the gate taken out (mutR2.mjs) the head replays the
+ * fixture before it green (proof-gate) and a recording equals it in every
+ * click, save, coverage count and screen (diffB 0); with nothing taken out,
+ * 47 screens move (diffAll), every one a SocialGram screen now reading the
+ * new line, in all four sports. No click, save or coverage count moved.
+ * 2,298,804 bytes.
+ * Release BT's join re-recorded it once, by the same method, from 6d109b351
+ * (Rounds 1569, 1541, 1544, 1557, 1566 and 1565 and PRs 400 and 401 merged;
+ * rc rBTg-fix, extra files mutfix.mjs, rec1569.mjs, fixdiff3.mjs). One input
+ * moved it: Round 1557's three national team badges (src/lib/careerBadges.ts,
+ * NBA_BADGES 23 to 26), so the NBA Trophy Case reads "Badges n of 26" where
+ * the fixture read "n of 23". With the three badges taken out (mutfix.mjs
+ * no3badges) the joined head replays Round 1569's recording green
+ * (proof-attr) and a recording equals it in every click, save, coverage
+ * count and screen (diffB 0); with nothing taken out, 29 NBA screens move
+ * (diffAll: 8 on the click path, 21 on the fixed saves), every one the badge
+ * count. No click, save or coverage count moved, and the NFL, MLB and NHL
+ * boards replay unchanged. 2,298,804 bytes.
  *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared

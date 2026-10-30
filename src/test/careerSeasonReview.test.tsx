@@ -419,6 +419,11 @@ describe('saved career season review', () => {
     const fixture = reviewFixtures[0], sport = reviewSports.nba, career = makeReviewCareer(fixture);
     career.age = 27;
     delete career.rival;
+    /* Round 1544: this test is about Career Log during a summer card, not the national team. The season
+       labelled 2034 is rated past the call's bar and 2035 is a World Cup summer, so the call would come before
+       the card; a rest row already answered for 2035 keeps the card first (critic correction 9: a planted rest
+       row, never a loosened assertion). The call itself is src/test/usCareerIntlBoard.test.tsx. */
+    (career as { intl?: unknown }).intl = { v: 1, summers: [{ year: 2035, edition: 'wc-2035', went: false }] };
     localStorage.setItem(sport.saveKey, reviewSave(career));
     render(<MemoryRouter><NbaMyCareerBoard /></MemoryRouter>);
     await screen.findByRole('button', { name: /Play the 2034 season/ });

@@ -56,6 +56,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { noteIntlCallTotals, watchIntlCalls } from './lib/intlCallNote.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
@@ -102,6 +103,8 @@ async function open(slug, raw, size = PHONE) {
   }, [ALL[slug].key, raw, ALL[slug].route, CONTROL === 'noreveal']);
   await ctx.route('**://*.supabase.co/**', r => { aborted += 1; return r.abort(); });
   const page = await ctx.newPage();
+  /* Round 1557 (critic-1541 correction 9): the NBA journeys print whether their saves met the national team's call. */
+  if (slug === 'nba') await watchIntlCalls(page);
   await page.goto(`${BASE}${ALL[slug].route}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
   return { ctx, page };
 }
@@ -324,6 +327,7 @@ try {
 }
 await browser.close();
 console.log(`     ${aborted} requests to the live database were aborted by the walk's own route`);
+noteIntlCallTotals('playUsMarketTalk, the NBA journeys');
 console.log(`playUsMarketTalk: ${checks} checks, ${failed} failed${CONTROL ? ` (control ${CONTROL})` : ''}`);
 if (CONTROL === 'droptalk') {
   const own = failures.length > 0 && failures.every(f => f === 'reload') && failures.length === controlRan;

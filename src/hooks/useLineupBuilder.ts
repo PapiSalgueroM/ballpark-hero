@@ -1,9 +1,9 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
-import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS, CLUB_TABLE_NAMES } from '@/data/lineupTeams';
+import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS, CLUB_TABLE_NAMES, clubYearClubs } from '@/data/lineupTeams';
 import { askValidator, type ValidatorAnswer } from '@/lib/validatorClient';
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
-import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
+import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment, DraftChoice } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
 import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
@@ -98,6 +98,13 @@ export function clubPickVerifies(team: TeamAssignment, slotRole: Position, pick:
   return pick.club.split(' / ').map((part) => part.trim()).some((part) => stored.includes(part));
 }
 
+function recordedYearPickVerifies(team: TeamAssignment, role: Position, pick: PickMeta | undefined, year: number): boolean {
+  return Number.isInteger(year) && pick?.year === year
+    && typeof pick?.rawName === 'string' && Boolean(pick.rawName.trim())
+    && typeof pick.club === 'string' && typeof pick.rawPosition === 'string'
+    && clubPickVerifies(team, role, pick);
+}
+
 /* The one line a pick that could not be checked shows. Nothing here says
    "saved" (this game saves nothing) and nothing says "hasn't played for":
    that line is for a refusal the validator really made. */
@@ -112,6 +119,7 @@ function unverifiedLine(answer: Extract<ValidatorAnswer, { kind: 'unverified' }>
 export function useLineupBuilder() {
   const [formation, setFormation] = useState<Formation | null>(null);
   const [phase, setPhase] = useState<GamePhase>('formation');
+  const [draftChoice, setDraftChoice] = useState<DraftChoice>({ mode: 'mixed' });
   const [selectedPositionIndex, setSelectedPositionIndex] = useState<number | null>(null);
   const [filledSlots, setFilledSlots] = useState<Map<number, FilledSlot>>(new Map());
   const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>([]);
@@ -139,21 +147,34 @@ export function useLineupBuilder() {
   }, []);
   useEffect(() => cancelValidation, [cancelValidation]);
 
+  const evaluationRun = useRef(0);
+  const cancelEvaluation = useCallback(() => {
+    evaluationRun.current += 1;
+    setIsEvaluating(false);
+  }, []);
+  useEffect(() => () => { evaluationRun.current += 1; }, []);
+
   const positions = useMemo(() => (formation ? FORMATIONS[formation] : []), [formation]);
 
   const filledCount = filledSlots.size;
   const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
 
-  const selectFormation = useCallback((f: Formation) => {
+  const selectFormation = useCallback((f: Formation, choice: DraftChoice = { mode: 'mixed' }) => {
+    if (choice.mode === 'club-year' && !Number.isInteger(choice.year)) return;
     cancelValidation();
+    cancelEvaluation();
+    const selectedDraft: DraftChoice = choice.mode === 'club-year'
+      ? { mode: 'club-year', year: choice.year } : { mode: 'mixed' };
+    setDraftChoice(selectedDraft);
     setFormation(f);
-    setTeamAssignments(getRandomTeamAssignments(11));
+    setTeamAssignments(selectedDraft.mode === 'mixed' ? getRandomTeamAssignments(11)
+      : [...clubYearClubs].sort(() => Math.random() - 0.5).slice(0, 11).map(name => ({ name, isNation: false })));
     setPhase('building');
     setSelectedPositionIndex(null);
     setFilledSlots(new Map());
     setVerdict(null);
     setValidationError(null);
-  }, [cancelValidation]);
+  }, [cancelValidation, cancelEvaluation]);
 
   const selectPosition = useCallback((index: number) => {
     if (filledSlots.has(index)) return;
@@ -174,11 +195,14 @@ export function useLineupBuilder() {
     cancelValidation();
     setTeamAssignments((prev) => {
       const usedNames = new Set(prev.filter((_, i) => i !== filledCount).map((t) => t.name));
-      const all = [
+      const all = draftChoice.mode === 'club-year'
+        ? clubYearClubs.map((name) => ({ name, isNation: false }))
+        : [
         ...ALL_CLUBS.map((name) => ({ name, isNation: false })),
         ...ALL_NATIONS.map((name) => ({ name, isNation: true })),
       ];
-      const available = all.filter((t) => !usedNames.has(t.name));
+      const available = all.filter((t) => !usedNames.has(t.name)
+        && (draftChoice.mode !== 'club-year' || t.name !== prev[filledCount]?.name));
       const pick = available[Math.floor(Math.random() * available.length)];
       if (!pick) return prev;
       const next = [...prev];
@@ -188,7 +212,7 @@ export function useLineupBuilder() {
     setSelectedPositionIndex(null);
     setValidationError(null);
     startSpin();
-  }, [filledCount, startSpin, cancelValidation]);
+  }, [filledCount, startSpin, cancelValidation, draftChoice]);
 
   const submitPlayer = useCallback(
     async (inputName: string, pickMeta?: PickMeta) => {
@@ -197,6 +221,11 @@ export function useLineupBuilder() {
       if (selectedPositionIndex === null || !currentTeam) return;
       const position = positions[selectedPositionIndex];
       if (!position) return;
+      if (draftChoice.mode === 'club-year'
+        && !recordedYearPickVerifies(currentTeam, position.role, pickMeta, draftChoice.year)) {
+        setValidationError(`Choose a matching ${currentTeam.name} record from ${draftChoice.year} with a known position.`);
+        return;
+      }
 
       const trimmedName = playerName.trim().toLowerCase();
       const isDuplicate = Array.from(filledSlots.values()).some(
@@ -337,7 +366,7 @@ export function useLineupBuilder() {
         startSpin();
       }
     },
-    [selectedPositionIndex, currentTeam, positions, filledCount, startSpin]
+    [selectedPositionIndex, currentTeam, positions, filledCount, startSpin, draftChoice]
   );
 
   const filledSlotsArray = useMemo(() => {
@@ -346,8 +375,21 @@ export function useLineupBuilder() {
       .map(([, slot]) => slot);
   }, [filledSlots]);
 
+  const completeRecordedYearDraft = useCallback((nextVerdict: AIVerdict) => {
+    if (draftChoice.mode !== 'club-year' || phase !== 'reviewing' || filledSlotsArray.length !== 11
+      || new Set(filledSlotsArray.map(slot => slot.playerName.trim().toLowerCase())).size !== 11
+      || filledSlotsArray.some(slot => !recordedYearPickVerifies(
+        { name: slot.assignedTeam, isNation: slot.isNation }, slot.role, slot.pick, draftChoice.year,
+      ))) return;
+    cancelEvaluation();
+    setVerdict(nextVerdict);
+    setPhase('result');
+  }, [draftChoice, phase, filledSlotsArray, cancelEvaluation]);
+
   const evaluateTeam = useCallback(async () => {
+    if (draftChoice.mode === 'club-year') return;
     if (filledSlotsArray.length !== 11) return;
+    const run = ++evaluationRun.current;
     setIsEvaluating(true);
     try {
       const resp = await fetch(
@@ -361,11 +403,14 @@ export function useLineupBuilder() {
           body: JSON.stringify({ formation, players: filledSlotsArray }),
         }
       );
+      if (run !== evaluationRun.current) return;
       const data = await resp.json();
+      if (run !== evaluationRun.current) return;
       
       if (!resp.ok) {
         // AI referee down/out of quota -> offline judge, never a dead-end
         const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
+        if (run !== evaluationRun.current) return;
         setVerdict(local);
         setPhase('result');
         return;
@@ -382,21 +427,25 @@ export function useLineupBuilder() {
       }
       setPhase('result');
     } catch (err) {
+      if (run !== evaluationRun.current) return;
       console.error('Evaluation error:', err);
       try {
         const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
+        if (run !== evaluationRun.current) return;
         setVerdict(local);
       } catch {
+        if (run !== evaluationRun.current) return;
         setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error. Please check your connection and try again.' });
       }
       setPhase('result');
     } finally {
-      setIsEvaluating(false);
+      if (run === evaluationRun.current) setIsEvaluating(false);
     }
-  }, [filledSlotsArray, formation]);
+  }, [filledSlotsArray, formation, draftChoice]);
 
   const resetGame = useCallback(() => {
     cancelValidation();
+    cancelEvaluation();
     setFormation(null);
     setPhase('formation');
     setSelectedPositionIndex(null);
@@ -405,12 +454,12 @@ export function useLineupBuilder() {
     setVerdict(null);
     setValidationError(null);
     setIsSpinning(false);
-  }, [cancelValidation]);
+  }, [cancelValidation, cancelEvaluation]);
 
   useGameCompletion('build-your-xi', phase === 'result', verdict ? 500 : 0);
 
   return {
-    formation, phase, selectedPositionIndex, currentTeam, positions,
+    formation, phase, draftChoice, selectedPositionIndex, currentTeam, positions,
     filledSlots, filledSlotsArray, filledCount, verdict, isEvaluating,
     isValidating, validationError, isSpinning, spinTeamIndex, setSpinTeamIndex,
     /* Round 1138: never true any more. An allowance answer blocks the one
@@ -419,7 +468,7 @@ export function useLineupBuilder() {
        paragraph and the condition on the box); the Build Your XI screens pass
        deletes both of those and then this line. */
     checkingDown: false,
-    selectFormation, selectPosition, submitPlayer, evaluateTeam, resetGame,
+    selectFormation, selectPosition, submitPlayer, evaluateTeam, completeRecordedYearDraft, resetGame,
     startSpin, finishSpin, rerollTeam, teamAssignments, cancelValidation,
   };
 }

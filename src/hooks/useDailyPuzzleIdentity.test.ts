@@ -142,4 +142,21 @@ describe('useDailyPuzzle: the save carries the puzzle id', () => {
     expect(again.result.current.puzzle).toBe(shown);
     expect(again.result.current.guesses).toEqual(['a guess']);
   });
+
+  /* Round 1565: the soccer Connections file gained the live table's boards, so a board the table dealt
+     moved from "not in the pool" (saved as index 0) to its own index. The same id is the same puzzle. */
+  it('restores a finished save whose puzzle now sits at another index of the pool, when the id is the same', () => {
+    const dealt: Man = { id: 'c-3', name: 'Third Man' };
+    localStorage.setItem(KEY, JSON.stringify({ v: 1, date: getTodayET(), puzzleIndex: 0, puzzleId: 'c-3', guesses: ['Third Man'], gameStatus: 'won' }));
+    const view = renderHook(() => useDailyPuzzle<Man, Guess>(options(dealt, STATIC)));
+    expect(view.result.current.puzzleIndex).toBe(2);
+    expect(view.result.current.gameStatus).toBe('won');
+    expect(view.result.current.guesses).toEqual(['Third Man']);
+    view.unmount();
+    /* and an id that is not today's is still no save, whatever its index */
+    localStorage.setItem(KEY, JSON.stringify({ v: 1, date: getTodayET(), puzzleIndex: 2, puzzleId: 'b-2', guesses: ['Second Man'], gameStatus: 'won' }));
+    const other = renderHook(() => useDailyPuzzle<Man, Guess>(options(dealt, STATIC)));
+    expect(other.result.current.gameStatus).toBe('playing');
+    expect(other.result.current.guesses).toEqual([]);
+  });
 });

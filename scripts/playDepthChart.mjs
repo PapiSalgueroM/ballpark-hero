@@ -14,6 +14,8 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
+/* Round 1557 (critic-1541 correction 9): the NBA walk prints whether its career met the national team's call. */
+import { noteIntlCalls, watchIntlCalls } from './lib/intlCallNote.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
@@ -85,6 +87,7 @@ async function createCareer(page, path) {
   page.on('pageerror', e => errors.push(String(e)));
 
   console.log('4) The NBA hub carries the rotation');
+  await watchIntlCalls(page);
   await createCareer(page, '/nba-my-career');
   const chip = await page.locator('span:has-text("Starting five"), span:has-text("Second unit")').count();
   say(chip >= 1, 'the rotation chip is on the hub');
@@ -99,6 +102,7 @@ async function createCareer(page, path) {
   await page.waitForTimeout(1200);
   say(await page.locator('span:has-text("🪑 Second unit")').count() === 1, 'the second-unit chip renders from the save');
   say(errors.length === 0, `no page errors on the NBA walk (${errors.length ? errors[0] : 'clean'})`);
+  noteIntlCalls('the NBA walk', page);
   await page.close();
 }
 

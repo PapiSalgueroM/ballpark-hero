@@ -595,6 +595,7 @@ export * as E from '${ROOT_URL}/src/lib/nbaFrontOffice.ts';
 export * as D from '${ROOT_URL}/src/lib/nbaGmDesk.ts';
 export * as S from '${ROOT_URL}/src/lib/gmStaff.ts';
 export { nbaCloseSeasonStats } from '${ROOT_URL}/src/lib/nbaSeasonStats.ts';
+export * as SS from '${ROOT_URL}/src/lib/nbaSeasonStats.ts';
 export { NBA_OPENING_RATINGS } from '${ROOT_URL}/src/data/nbaOpeningRatings.ts';
 export { leagueNames } from '${ROOT_URL}/src/lib/foNames.ts';
 export { deadCapUsed } from '${ROOT_URL}/src/lib/frontOfficeCuts.ts';
@@ -667,8 +668,18 @@ function counted(rng) {
   f.calls = 0;
   return f;
 }
-/* Ids carry a per process epoch (entityIds.ts); a hash takes it out and keeps the counter. */
-const hashOf = v => crypto.createHash('sha1').update(J(v).replace(/"n[0-9a-z]+-(\d+)"/g, '"n-$1"')).digest('hex');
+/* Ids carry a per process epoch (entityIds.ts); a hash takes it out and keeps the counter (a line's key included). */
+const hashOf = v => crypto.createHash('sha1').update(J(v).replace(/(["|])n[0-9a-z]+-(\d+)"/g, '$1n-$2"')).digest('hex');
+/* Round 1566: the season's lines are saved in the shared short shape (src/lib/foStatsCodec.ts), so section 1 hashes a
+   league with its block read as the named rows it stands for (the one expand, its club columns aside) and the lines in
+   key order: the season, not the save shape. On a tree from before the round the block already is named rows and only
+   the order applies; the fixture was recorded that way from 5d1198389, the commit before the round. */
+const shapeFree = lg => {
+  if (!lg || !lg.stats) return lg;
+  let rows = lg.stats;
+  if ('clubs' in rows) { const { club, ...named } = M.SS.nbaFoStats(rows); void club; rows = named; }
+  return { ...lg, stats: { ...rows, lines: Object.fromEntries(Object.entries(rows.lines).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) } };
+};
 /* Every club, by id, without building a league (that would mint ids before section 1). */
 const CLUBS = [...E.EAST, ...E.WEST].sort();
 
@@ -721,7 +732,7 @@ open(1);
     const lg = E.initNbaLeague(rng, NBA_OPENING_RATINGS);
     const closed = seasonToDraft(M, lg, team, D.openNbaDesk(lg, team), rng);
     /* The postseason rides on the save beside the league (the board's `postseason`), so it is hashed with it. */
-    got[s] = { team, league: hashOf([lg, closed.series, closed.taxes]), desk: hashOf(closed.desk), calls: rng.calls };
+    got[s] = { team, league: hashOf([shapeFree(lg), closed.series, closed.taxes]), desk: hashOf(closed.desk), calls: rng.calls };
   }
   if (RECORD) {
     fs.writeFileSync(FIXTURE, `${JSON.stringify({ recordedFrom: RECORD, seeds: got }, null, 2)}\n`);

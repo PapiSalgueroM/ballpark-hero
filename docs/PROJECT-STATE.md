@@ -1,3 +1,21 @@
+## 2026-10-30 08:33 EDT, Claude session K (games): RELEASE BT IS LIVE (deployment 73a7d1af, main 6cae01ce7), with Round 1565 applied in production
+
+LIVE: main 6cae01ce73ee296e018cd4d8abb4d22b4540a608 published 08:29 EDT as deployment 73a7d1af-477e-49d6-bf4e-3ccfdb251084
+(the previous one was 40836fc2, Release BS). Proven: /whats-new serves "Soccer Connections: 65 more boards rebuilt." on
+the new deployment id; the home, Club Manager, Soccer Career, Manager Hot Seat, Build Your XI and NBA Front Office pages
+answer 200. Gated, triaged and staged at 9064a0a28 (results-g/triage-BT.md: READY TO PUBLISH); the only commits after
+that are main's board notes and the apply record 12b0cb56b.
+APPLY-1565 DONE 08:24 EDT (Soccer Connections, 65 boards rebuilt in place in connections_puzzles). Before: 326 rows,
+fingerprint c391c39f4bfeca14d6b7be897ec56e63 (the 08:21 read only export, equal to the MCP aggregate; it is the
+rollback copy, kit results-g/apply-1565/). After: 326 rows, fingerprint f3455d782320b6d9b1769aa05dd17393, exactly the 65
+payload rows changed, order unchanged, all 326 hashes equal the committed expected snapshot, simConnectionsFacts green.
+METHOD (new, recorded so the next apply can reuse it): the payload was not hand copied. pg_net fetched
+scripts/qa/connections1565Applied.sql from its pinned raw GitHub URL at the gated commit, and the DO block checked the
+payload md5 (92fa4a9a...) before any write, then ran the reviewed per row guarded loop (raise unless 65 of 65).
+NEVER republish a build from before Round 1566 for /nba-front-office (it would bring back what 1566 fixed).
+NEXT RELEASE: BU (this lane's closed rounds for SC, CM and the rest, brief-BUG.md). For Chat: nothing in BT touches your
+branches; merge origin/main as usual.
+
 ## Release BS LIVE, 2026-10-29 09:57 EDT: Soccer Career and Club Manager from both lanes (Round 1568 plus Chat PRs 421, 415, 418, 419, 416, 420, 410, 408, 414 and 372), the poll clock fix before 2026-11-01
 
 Claude lane published (session K). main 6748ad0a7, deployment 40836fc2-7166-4a95-a045-15539923486d, entry index-C0lDdqsC.js.
@@ -19730,3 +19748,37 @@ The proposed child changes only the shared poll-day helper comment/body to Easte
 First Green sourcea6d0a919/run39859333398 completed FAILURE. Its focused job passed13normal, exactold4owned9healthy,13restored and8existingpoll cases in raw output, then failed because simDateDraws requested live transfer-grade and quiz-board data behind the strict offline guard. The guard correctly refused that traffic. The saved_pages CI job succeeded, including real types/plain build,18readers and14 unchanged caps; this is not complete native release qualification.
 
 This method-only child changes only the workflow and append-only notes. It retains simDaily as the pure daily regression with exactone-harness evidence and records simDateDraws as NOT_RUN/unverified due to its live-data dependency. It does not edit the helper90cc, testd34, callers, harnesses, games, dependencies or caps, and uses no live mode or substitute data. Failed run39859333398 remains failed and preserved. Fresh full Green/native proof remains pending. I retains publication and game ownership.
+## 2026-10-26 Build Your XI same-side wingback correction, isolated branch
+
+Source preparation status: baseline source a560dce56acb7666c5d191a73a2b14b136ce8df4, tree13b13406551806109a9999c1e01502f7fb1283b3 on codex/build-xi-wingback-fit-20261026. The tests-only ordinary push added the workflow, implementation plan and six frozen regression cases, holding all5378 parent paths. Run40281140431/a1 has terminal-success metadata. Original-evidence admission is a separate prerequisite to adopting the product fix; metadata alone is not owned RED. Positive runtime remains UNRUN when this append is prepared.
+
+The reported bug is in Build Your XI grading: the existing pick gate admits a primary LB at LWB and RB at RWB, but the breakdown applies the shared family penalty and marks each out of place. The proposed correction gives exactly those same-side primary combinations natural fit. It keeps shared position rules, opposite-side penalties, goalkeeper boundaries, verified history, empty slots, chemistry, prices and existing World XI season behavior. No new player or position data is added.
+
+The frozen six cases exercise both actual wingback formations and the relevant preserved boundaries. The existing fit harness changes only its expected-grade seam for these two exceptions; original thresholds,240-squad World XI digest and nine source controls stay held. Required positive checks are app types, six normal passes, two effective source omission trips with actual0/1/0 and exact restoration, the original fit harness and all nine controls, a normal build, all18 completed-build readers and the15 unchanged fatal weight caps. Each omitted return must reproduce its own side's assertion while the opposite side passes. No complete position-pair matrix, live player coverage, full suite, main merge or publication is claimed before its actual evidence.
+
+Separate World XI draft PR399 now has Expanded, Classic and2026 Nations implemented and scoped final run40279158040/a1 qualified at206222d088f1fb79cb04b63f3544543c174cfd2c. Actual types17/build/local800/readers18/caps15 and12 browser contexts/132 picks passed; all16 original screenshots were reviewed. That separate branch is not merged here. Its two real-pool gates remain unverified before big ship. Main integration and sole publication remain with OwnerI.
+
+Transfer Path's2024-25 Carvajal intake is still unapplied. Official club and league records independently confirm Carvajal and Endrick in the Real Madrid matchday squad on20September2025, but no full2025-26 statistics row is verified or proposed. Club Manager's shirt numbers, veteran retention, national squad/tournament, world cups, budget and awards reports remain mapped for OwnerI integration, including existing draft football changes. No protected game sources or database were changed by this branch.
+
+Evidence and source-only proposal packets are retained under C:/Users/antho/dukb-handoff/2026-10-24/build-xi-wingback-*. The original main PROJECT-STATE prefix is held byte for byte by this append. Both protected indexes and prior work are preserved. The historic10 missing folders/785 entries preservation issue remains OPEN. No local application/Node/npm/compiler/parser/browser/test/Git execution, cleanup, rerun/dispatch/cancel, provider/consent/dependency/cap change or publication occurred.
+
+
+## 2026-10-26 Build Your XI: Club year draft release candidate
+
+Mixed stays the default. Club year is optional before formation: choose one recorded year from 2004 through 2026 and draw from the existing 30 clubs. Fill eleven slots from distinct clubs, reroll the current club, and keep earlier picks.
+
+Browse players and typed search use the selected club and year, with the same evidence required for admission. Browse includes lower-ranked keepers and keyboard scrolling within the list. Coverage is partial, so some players may be missing. Ratings and the fictional season use the selected rows, role fit, chemistry and balance. Missing value or age produces an unrated result. Mixed keeps its existing evaluation path. No sports data or provider was added.
+
+GENERATION: Run 40344406465 attempt 1 used source 7a037cb06a15daab7a61637cf7d98f8f8e1ad3d6, tree 58b81e25b78771b7c050078ed047cd2ed4c9627e. Root reviewed all 721 regular original bodies and 720 sealed entries. The scoped evidence has 20 normal cases passed, seven effective physical source-control triplets, 18 readers and 15 unchanged caps passed. All seven browser contexts passed: six Club year drafts made 66 picks, plus one limited Mixed pick/reroll journey. Seven copied-observation controls ran, and Root reviewed all 26 original PNGs. These were offline Chromium journeys with fictional records, not real-roster or live-provider verification. Exact gzip headroom remains unknown from rounded cap output.
+
+The five generated outputs selected for adoption are scripts/data/guideHeadingsFrozen.json, src/data/searchKeywords.json, public/build-your-xi/index.html, public/sitemap.xml and scripts/data/lastmod.json. The retained generation original is in remote-build-xi-club-year-green-40344406465-a1.
+
+CLEAN: Final clean-source validation runs on this source commit and is pending at preparation. The PR and retained receipt record its actual outcome. This note does not preclaim that result. Main integration, full-suite qualification and live publication remain pending.
+
+The branch builds on PR400's remotely qualified wingback correction: same-side LB and RB choices no longer lose fit points at LWB and RWB. Focused opposite-side, keeper and history boundaries stayed held. That earlier scope does not substitute for current clean validation.
+
+The five latest reports remain OPEN: Aussie Rules Manager team names; NBA My Career offers after twenty seasons; Messi missing in the 2008 Club Manager world; current-year national callups with playable national fixtures; and simpler browser access to live match view. The detached NBA proposal has six new real-board saved-state cases, sixteen total, all UNRUN. It proves no universal offer bug or fix. Existing Aussie labels cannot simply be renamed: saved names must match the static definitions. The separate new-career real-club-name plan and the CM Minimize-label plan are not implemented.
+
+The detached CM retention candidate is NOT_ADOPTION_READY. Its four tests and two controls are UNRUN. Retirement-only baked identities may revive the documented aging problem, so baseline age-distribution and retention comparisons are required before I integration. The affected saves remain unreproduced. Retained source-only records are in nba-season20-market-regression-proposal-v1, aussie-real-club-names-source-plan-v1 and cm-era-baked-retirement-proposal-v1.
+
+I retains protected football and career engines, saves, data integration, main and sole publication. J retains Headlines. Earlier reports remain on the board.

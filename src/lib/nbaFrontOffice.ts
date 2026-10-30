@@ -15,7 +15,7 @@ import {
 export { NBA_TIPOFF_MIN, NBA_MIN_CONTRACT, nbaTaxLine, nbaFirstApron, nbaSecondApron, nbaTaxBill } from './nbaLuxuryTax';
 /* Round 824: season lines and awards. The stats file imports only types from
    this one, so there is no cycle at run time. */
-import { type FoSeasonStats, foNewSeasonStats } from './foSeasonStats';
+import { type FoSavedStats, foNewSaved } from './foStatsCodec';
 import { type NbaSeasonAwards, nbaBoxScore, nbaRecordBox, nbaLiveStats } from './nbaSeasonStats';
 import { nbaRotationSlots, nbaReconcileRotation } from './nbaRotation';
 /* Round 851: a booked, balanced schedule, shared with MLB and the NHL. */
@@ -97,9 +97,10 @@ export interface NbaLeague {
    * Round 824: this season's player lines and club totals (nbaSeasonStats.ts).
    * Optional: a league saved before the round keeps no lines for the season
    * it was saved in and starts keeping them at its next summer, the way it
-   * met the tax.
+   * met the tax. Round 1566: kept in the shared save shape (foStatsCodec.ts,
+   * NBA_CODEC); a save of named rows is turned into it on load (nbaCleanStats).
    */
-  stats?: FoSeasonStats;
+  stats?: FoSavedStats;
   /** Round 824: every closed season's awards, oldest first. */
   awards?: NbaSeasonAwards[];
   /**
@@ -198,7 +199,7 @@ export function initNbaLeague(rng: () => number = Math.random, opening?: Record<
     round: 1,
     champions: [],
     /* Round 824: lines kept from the first tip off. */
-    stats: foNewSeasonStats(2026),
+    stats: foNewSaved(2026),
   };
   /* Round 722: the tax lines are set from this league's own payrolls. */
   nbaCalibrateLeagueTax(league);
@@ -842,7 +843,7 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
   league.round = 1;
   /* Round 824: a clean sheet of lines for the new season. A league saved
      before the round starts keeping them here, at its first summer. */
-  league.stats = foNewSeasonStats(league.season);
+  league.stats = foNewSaved(league.season);
   /* Round 722: a league saved before the round gets its tax lines here, at
      its first summer, from the payrolls it will tip off with. A calibrated
      league keeps its scale, and its lines rise with the cap. */

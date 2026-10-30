@@ -151,19 +151,23 @@
     },
     "/build-your-xi": {
       "howToPlay": [
+        "Choose a recorded year from 2004 to 2026 before the formation. It stays fixed for the draft.",
         "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
-        "Tap a position. The spinner shows which club or national team that slot is locked to.",
-        "Type a player from that team who fits. The game verifies the answer before it counts.",
-        "Hate an assignment? Reroll it for a different team.",
-        "Fill all 11 slots, check the role fit, chemistry and balance tiles under the pitch, then submit for the AI rating."
+        "Tap any empty position on the pitch. Fill it with a player who matches the current team and fits that position.",
+        "Type a name and choose a suggestion that fits the slot. Club year picks must match both club and recorded year.",
+        "Tap Browse players to see matching Club year records, or type to narrow them. Records may be incomplete, not a full squad or proof of every appearance.",
+        "No matching record? Try another name or reroll. Club year rerolls change the club, keeping the year.",
+        "Choose 2010, tap GK and use Browse players. A goalkeeper record from the current club in 2010 can fill that slot; a record only from a different year cannot.",
+        "Fill all 11 slots and check the role fit, chemistry and balance tiles under the pitch. Mixed uses its usual evaluation when you submit."
       ],
       "rules": [
         "Wrong answers are rejected with a reason but cost nothing. Retry until a valid name lands.",
         "A slot takes a player who plays there or right beside it: full backs and wing backs cover each other, wingers count on both flanks, CM covers CDM and CAM, strikers cover each other. A keeper only ever goes in goal.",
         "No duplicate players across your XI.",
         "Chemistry: two players standing next to each other on the pitch who are at the same club on our data add +0.6 to the side, from the same country +0.2, up to +2 in all.",
-        "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.",
+        "Mixed uses its offline backup if the AI cannot respond. Club year draft uses the selected records instead.",
         "Role fit: a player in a slot his recorded positions cover plays at full value. Next door, like a right back at left back, costs 2 rating points on him, averaged over the eleven. The slot check never lets anyone further out of position than that.",
+        "A full back at wing back on his own side, a left back at LWB or a right back at RWB, plays at full value too.",
         "Balance: no defensive midfielder in a CM or CDM slot costs the side 1, and a wide slot held by someone who is not a wide player, like a centre back at full back, costs 0.5 for that flank.",
         "The season report says what role fit, chemistry and balance were each worth in league points, by replaying the same season without each one."
       ],
@@ -2237,7 +2241,7 @@
         "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
         "During a playing season, open Deal with it under the heat meter when you're holding dirty money. Choose Come clean, Give it away, Keep it quiet or Wash it after reading the cost and any catch risk.",
         "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
-        "Collect badges in the Trophy Case: 23 of them, from a first ring and Rookie of the Year to an All-Star nod, 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+        "Collect badges in the Trophy Case: 26 of them, from a first ring and Rookie of the Year to an All-Star nod, 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
         "Answer your phone. Texts from your agent, the head coach, the GM, a teammate or your mom land on the beats of the basketball year: draft night and your first summer league, camp, the trade deadline, the All-Star break, the playoffs if you get there, the offseason, and the summer before the last year of your deal. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
         "Some seasons your rival hands you a decision instead of a headline: a flagrant you can answer or let go, a debate show offering real money, a youth camp his foundation wants you to co-host, an All-Star vote his team is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
         "Get drafted by a real NBA team. Stronger prospects go higher and earn more.",
@@ -2245,7 +2249,7 @@
         "Sim each season for a full line: games, minutes, points, rebounds, assists, steals, blocks, awards, team result.",
         "Press 📺 Week by week instead of Play the season to watch that season one game at a time, with your stat line and your team's record after every game. It is the same season either way.",
         "Throwback careers play against unnamed teams, and the real seasons that were not a full 82 games (2011-12, 2012-13, 2019-20 and 2020-21) have no game by game view. The game tells you before you press.",
-        "Handle the summer, up to three decisions one card at a time. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
+        "Handle the summer, up to three cards one at a time. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
         "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
         "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "When the contract runs out, work a real free agency window: competing offers from named franchises with their own money, length and roster quality, and one push for more on any of them.",

@@ -818,7 +818,7 @@ export function simNbaSeason(
     line.poRpg = po.rpg;
     line.poApg = po.apg;
     notes.push(`📊 Playoffs: ${poG} games, ${po.ppg.toFixed(1)} ppg, ${po.rpg.toFixed(1)} rpg, ${po.apg.toFixed(1)} apg.`);
-    const cn = clutchNote(clutch, depth, 'nba');
+    const cn = clutchNote(clutch, depth, 'nba', poForm);
     if (cn) notes.push(cn);
   }
 

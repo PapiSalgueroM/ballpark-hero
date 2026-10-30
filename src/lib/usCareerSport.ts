@@ -34,6 +34,7 @@ import type { CareerReviewStats } from '@/lib/usCareerSeasonReview';
 import type { RetirementBlock } from '@/lib/careerRetirement';
 import type { HallCalibration, HallSpeechBlock, LegacyRead, NumberRetiredBy, UsHallSport } from '@/lib/careerHallOfFame';
 import type { UsSeasonBind } from '@/lib/season/us';
+import type { CareerIntlBlock, IntlCall, IntlSummerEntry, IntlTournament } from '@/lib/careerIntl';
 
 export interface UsCareerPracticeResult extends TrainingBank {
   year: number;
@@ -110,6 +111,66 @@ export interface UsCareerCore {
    *  at retirement (src/lib/careerHallOfFame.ts). Optional: a retired save
    *  with none retired before the round and is read on calibration 1. */
   hallCal?: HallCalibration;
+  /** Round 1541: the international summers he answered (src/lib/careerIntl.ts).
+   *  Optional: an old save, and a career never called, carries none. */
+  intl?: CareerIntlBlock;
+}
+
+/** Round 1541: a sport's international summers, the face the board reads from
+ *  Round 1544 (src/lib/nbaCareerIntl.ts is the NBA's). */
+export interface UsIntlSport<C> {
+  /** The call waiting on an answer after his last season, or null. */
+  pending(c: C): IntlCall | null;
+  /** Go or rest; mutates c. Null when nothing is pending. */
+  answer(c: C, choice: 'go' | 'rest'): { row: IntlSummerEntry; tournament: IntlTournament | null } | null;
+  /** The house repair on load; whether anything changed. */
+  repairOnLoad(c: C): boolean;
+  /** Round 1544: the tournament of a summer he went to, played again from the
+   *  save (nothing of it is stored), or null when it no longer agrees with the
+   *  summer's row, which stays the record. */
+  tournamentOf(c: C, year: number): IntlTournament | null;
+  /** The Trophy Case's medal rows. */
+  trophyRows(c: C): { label: string; n: number; years: number[] }[];
+  medalCount(c: C): number;
+  summersOf(c: C): IntlSummerEntry[];
+  /** An edition's name, year and host, or its projected line, from the ledger. */
+  editionLabel(id: string): string;
+  /** The rules behind the page's ?, built from the bind's constants. */
+  helpRules(): string[];
+  /** Round 1544: the words the call card and the result screen print for an edition, at his age that summer. */
+  summerNotes(editionId: string, age: number): IntlSummerNotes;
+}
+
+/** Round 1544: what the national team's two screens print, written by the sport so the screens import none. */
+export interface IntlSummerNotes {
+  /** "the 2004 Olympics in Athens" */
+  label: string;
+  /** the chance he comes home hurt that summer, whole percent, and what it costs in words */
+  knockPct: number;
+  hurtCost: string;
+  /** a line when the game draws the field (an edition still to come, or the game's own), else null */
+  fieldNote: string | null;
+  /** a line when the game plays the edition in another format, else null */
+  playedAsNote: string | null;
+  /** the real tournament was played (so its groups and results here are this career's own) */
+  happened: boolean;
+  /** the nation he plays for, as the tournament names it */
+  nation: string;
+  /** his numbers a game in words: [key on the summer row's avg, word] */
+  statWords: readonly (readonly [string, string])[];
+}
+
+/** Round 1544 (the lead's ruling L5): what the binding holds of a sport's
+ *  international summers. The board reads the gate synchronously and loads
+ *  the whole face (the ledger, the bracket runner, the words) only when a
+ *  career meets a call or its save carries a summer. */
+export interface UsIntlLazy<C> {
+  /** The summer whose call waits on an answer after his last season, or null: no ledger needed. */
+  pendingYear(c: C): number | null;
+  /** The curtain's line when a call is waiting, or null. */
+  curtainLine(c: C): string | null;
+  /** The whole face, in its own chunk. */
+  load(): Promise<UsIntlSport<C>>;
 }
 
 /** Round 1038: one offseason's cards, as ids, and how many are answered. */
@@ -310,6 +371,11 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
    *  Fame (src/lib/careerHallOfFame.ts). Optional, so the parity replay can
    *  mount a binding without it and play the old board draw for draw. */
   hall?: UsHallSport<C>;
+  /** Round 1541: the international summers (src/lib/careerIntl.ts). Optional: a
+   *  binding without it never calls anyone up, which is the NFL, MLB and NHL
+   *  today; the board reads it from Round 1544, through the static gate, and
+   *  loads the rest on demand (UsIntlLazy). */
+  intl?: UsIntlLazy<C>;
   /** Round 1048: the Season Center's numbers for this sport (src/lib/season/us.ts), loaded when he first
    *  watches a season. Optional: a binding without it shows no button, which is the NHL today (baseball
    *  was bound in Round 1212). */
