@@ -1,0 +1,237 @@
+name: Frozen Stadium independent continuation
+on:
+  push:
+    branches: [codex/stadium-plan-continuation-20261030]
+permissions:
+  contents: read
+  actions: read
+env:
+  EXPECTED_PARENT: 7fc9b3b3f8fe1170531cefc759b25078720d2c52
+  EXPECTED_MAIN: bd0c07bf72dc0214842202fe2f931b14c65d82dc
+  STADIUM_ENGINE_SHA256: bd510c2277e61eef5e7cbcf4f283c07124735c8f25b6503297fc61e477a0c428
+  SIM_NETWORK: offline
+jobs:
+  inputs:
+    if: github.ref == 'refs/heads/codex/stadium-plan-continuation-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      manifest_sha: ${{ steps.seal.outputs.manifest_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: '20', cache: npm}
+      - name: Bind source and admit pinned original dependency
+        env:
+          PRIOR_ARTIFACT_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          echo "PLACEMENT_OUT=$RUNNER_TEMP/stadium-v6-inputs" >> "$GITHUB_ENV"
+          echo "QUALIFICATION_ROOT=$RUNNER_TEMP/stadium-v6-input-source" >> "$GITHUB_ENV"
+          echo "STADIUM_PHASE=inputs" >> "$GITHUB_ENV"
+          echo "ACTUAL_MAIN_AT_START=$(git rev-parse refs/remotes/origin/main)" >> "$GITHUB_ENV"
+          mkdir -p "$RUNNER_TEMP/stadium-v6-inputs"
+          git archive --format=tar HEAD > "$RUNNER_TEMP/stadium-v6-inputs/proof-before.tar"
+          for file in scripts/qa/proveStadiumContinuation.mjs scripts/qa/stadiumChildJournal.cjs scripts/qa/playStadiumLatePlan.mjs; do
+            node --check "$file" >> "$RUNNER_TEMP/stadium-v6-inputs/source-syntax.stdout.log" 2>> "$RUNNER_TEMP/stadium-v6-inputs/source-syntax.stderr.log"
+          done
+          PLACEMENT_OUT="$RUNNER_TEMP/stadium-v6-inputs" QUALIFICATION_ROOT="$RUNNER_TEMP/stadium-v6-input-source" node scripts/qa/proveStadiumContinuation.mjs original
+      - name: Install locked dependencies and isolated pinned browser
+        run: |
+          set -euo pipefail
+          npm ci > "$PLACEMENT_OUT/npm-ci.log" 2>&1
+          tools="$RUNNER_TEMP/stadium-v6-tools-inputs"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$PLACEMENT_OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          PLAYWRIGHT_BROWSERS_PATH="$tools/browsers" node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$PLACEMENT_OUT/chromium-install.log" 2>&1
+          echo "PLACEMENT_TOOLS=$tools" >> "$GITHUB_ENV"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$tools/browsers" >> "$GITHUB_ENV"
+      - name: Exact matched copy and initial holds
+        run: node scripts/qa/proveStadiumContinuation.mjs begin
+      - name: Actual types and fresh ordinary Vite
+        run: |
+          set -euo pipefail
+          cd "$QUALIFICATION_ROOT"; source "$PLACEMENT_OUT/helpers/run-gate.sh"
+          run_gate types 0 '' node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          test ! -s "$PLACEMENT_OUT/gates/types/stdout.log"; test ! -s "$PLACEMENT_OUT/gates/types/stderr.log"
+          run_gate early-vite-build 0 'built in .+' npm run build -- --manifest
+      - name: Exact existing fifteen-cap method
+        run: bash "$PLACEMENT_OUT/inputs/helpers/caps-proof.sh"
+      - name: Prove fresh equality and import only declared outputs
+        run: node scripts/qa/proveStadiumContinuation.mjs admit
+      - name: Always hold exact input source and dependencies
+        if: always()
+        run: node scripts/qa/proveStadiumContinuation.mjs hold
+      - name: Seal exact immutable sibling inputs
+        id: seal
+        run: node scripts/qa/proveStadiumContinuation.mjs seal
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stadium-v6-input-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-v6-inputs/inputs
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stadium-v6-input-evidence-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-v6-inputs
+          if-no-files-found: error
+  browser:
+    needs: inputs
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    env:
+      EXPECTED_INPUT_MANIFEST_SHA: ${{ needs.inputs.outputs.manifest_sha }}
+      STADIUM_PHASE: browser
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: '20', cache: npm}
+      - name: Set independent browser paths
+        run: |
+          echo "PLACEMENT_OUT=$RUNNER_TEMP/stadium-v6-browser" >> "$GITHUB_ENV"
+          echo "QUALIFICATION_ROOT=$RUNNER_TEMP/stadium-v6-browser-source" >> "$GITHUB_ENV"
+          echo "ACTUAL_MAIN_AT_START=$(git rev-parse refs/remotes/origin/main)" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          name: stadium-v6-input-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-v6-browser/inputs
+      - name: Install independent locked dependencies and pinned browser
+        run: |
+          set -euo pipefail
+          npm ci > "$PLACEMENT_OUT/npm-ci.log" 2>&1
+          tools="$RUNNER_TEMP/stadium-v6-tools-browser"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$PLACEMENT_OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          PLAYWRIGHT_BROWSERS_PATH="$tools/browsers" node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$PLACEMENT_OUT/chromium-install.log" 2>&1
+          echo "PLACEMENT_TOOLS=$tools" >> "$GITHUB_ENV"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$tools/browsers" >> "$GITHUB_ENV"
+      - name: Bind independently restored source, inputs and dependencies
+        run: node scripts/qa/proveStadiumContinuation.mjs begin
+      - name: Actual Stadium UI and unchanged physical compiled control
+        run: |
+          set -euo pipefail
+          cd "$QUALIFICATION_ROOT"; out="$PLACEMENT_OUT"; source "$out/helpers/run-gate.sh"
+          : > "$out/stadium-server.transport"
+          SIM_OFFLINE_RECEIPT="$out/stadium-server.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/stadium-server.stdout.log" 2> "$out/stadium-server.stderr.log" & server=$!
+          trap 'kill "$server" 2>/dev/null || true; wait "$server" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 60);do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then break;fi;sleep 1;done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          GATE_TIMEOUT=3600s run_gate stadium-final-browser 0 '^STADIUM_FINAL_BROWSER:' node "$out/helpers/stadium-browser.cjs"
+          test ! -s "$out/stadium-server.transport"
+      - name: Bind actual browser scope without integration credit
+        run: node scripts/qa/proveStadiumContinuation.mjs browser-admission
+      - name: Always retain browser source and exact restoration holds
+        if: always()
+        run: node scripts/qa/proveStadiumContinuation.mjs hold
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stadium-v6-browser-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-v6-browser
+          if-no-files-found: error
+  default:
+    needs: inputs
+    runs-on: ubuntu-latest
+    timeout-minutes: 320
+    env:
+      EXPECTED_INPUT_MANIFEST_SHA: ${{ needs.inputs.outputs.manifest_sha }}
+      STADIUM_PHASE: default
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: '20', cache: npm}
+      - name: Set independent default paths and source-owned artifact redirects
+        run: |
+          echo "PLACEMENT_OUT=$RUNNER_TEMP/stadium-v6-default" >> "$GITHUB_ENV"
+          echo "QUALIFICATION_ROOT=$RUNNER_TEMP/stadium-v6-default-source" >> "$GITHUB_ENV"
+          echo "ACTUAL_MAIN_AT_START=$(git rev-parse refs/remotes/origin/main)" >> "$GITHUB_ENV"
+          echo "SIM_AWARDS_NIGHT_ARTIFACTS=$RUNNER_TEMP/stadium-v6-default/harness-artifacts/awards-night" >> "$GITHUB_ENV"
+          echo "SIM_LEAGUE_FINISH_ARTIFACTS=$RUNNER_TEMP/stadium-v6-default/harness-artifacts/league-finish" >> "$GITHUB_ENV"
+          echo "CAREER_STORY_ROLE_ARTIFACTS=$RUNNER_TEMP/stadium-v6-default/harness-artifacts/story-role" >> "$GITHUB_ENV"
+          echo "CAREER_TROPHY_RUNS_ARTIFACTS=$RUNNER_TEMP/stadium-v6-default/harness-artifacts/trophy-runs" >> "$GITHUB_ENV"
+          echo "STADIUM_CHILD_JOURNAL_DIR=$RUNNER_TEMP/stadium-v6-default/child-journal" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          name: stadium-v6-input-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-v6-default/inputs
+      - name: Install independent locked dependencies and existing brand/browser prerequisites
+        run: |
+          set -euo pipefail
+          npm ci > "$PLACEMENT_OUT/npm-ci.log" 2>&1
+          python3 -m pip install fonttools pillow > "$PLACEMENT_OUT/brand-tools.log" 2>&1
+          tools="$RUNNER_TEMP/stadium-v6-tools-default"
+          npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$PLACEMENT_OUT/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          PLAYWRIGHT_BROWSERS_PATH="$tools/browsers" node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$PLACEMENT_OUT/chromium-install.log" 2>&1
+          echo "PLACEMENT_TOOLS=$tools" >> "$GITHUB_ENV"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$tools/browsers" >> "$GITHUB_ENV"
+      - name: Bind independently restored source, inputs and dependencies
+        run: node scripts/qa/proveStadiumContinuation.mjs begin
+      - name: Actual unchanged default selection and passive live child journal
+        run: |
+          set -euo pipefail
+          cd "$QUALIFICATION_ROOT"; source "$PLACEMENT_OUT/helpers/run-gate.sh"
+          unset ONLY BROWSER DB_PROBE
+          export SIM_NETWORK=offline SIM_FULL_OUTPUT=1
+          run_gate default-sims-plan 0 '' node scripts/runAllSims.mjs --plan-json
+          GATE_TIMEOUT=18000s run_gate default-node-sims 0 '^All [1-9][0-9]* harnesses green(, [1-9][0-9]* skipped above)?\.$' node --require="$GITHUB_WORKSPACE/scripts/qa/stadiumChildJournal.cjs" "$QUALIFICATION_ROOT/scripts/runAllSims.mjs"
+      - name: Bind only completed actual child outcomes and effective journal controls
+        run: node scripts/qa/proveStadiumContinuation.mjs default-admission
+      - name: Always retain raw partial child evidence and strict holds
+        if: always()
+        run: node scripts/qa/proveStadiumContinuation.mjs hold
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stadium-v6-default-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-v6-default
+          if-no-files-found: error
+  join:
+    if: always()
+    needs: [inputs, browser, default]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      EXPECTED_INPUT_MANIFEST_SHA: ${{ needs.inputs.outputs.manifest_sha }}
+      INPUT_RESULT: ${{ needs.inputs.result }}
+      BROWSER_RESULT: ${{ needs.browser.result }}
+      DEFAULT_RESULT: ${{ needs.default.result }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '20'}
+      - name: Join paths
+        run: |
+          echo "PLACEMENT_OUT=$RUNNER_TEMP/stadium-v6-join" >> "$GITHUB_ENV"
+          echo "QUALIFICATION_ROOT=$RUNNER_TEMP/stadium-v6-join-unused" >> "$GITHUB_ENV"
+          echo "JOIN_INPUT=$RUNNER_TEMP/stadium-v6-results" >> "$GITHUB_ENV"
+      - uses: actions/download-artifact@v4
+        with:
+          name: stadium-v6-input-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-v6-results/inputs
+      - uses: actions/download-artifact@v4
+        with:
+          name: stadium-v6-browser-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-v6-results/browser
+      - uses: actions/download-artifact@v4
+        with:
+          name: stadium-v6-default-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-v6-results/default
+      - name: Explicit scoped join, never a merge or publication claim
+        run: node scripts/qa/proveStadiumContinuation.mjs join
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stadium-v6-join-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-v6-join
+          if-no-files-found: error
