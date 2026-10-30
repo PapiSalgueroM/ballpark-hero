@@ -49,11 +49,16 @@
    7h. the offer from his emptied chair, built in every league with a club
        a tier below his (a title season there, his club bottom), says only
        that the club is making a change, and accepting it names nobody.
-       Floor 10 offers (7b alone meets one in 200 summers).
+       Measured 13 offers in 13 leagues; floor 9, a third below (7b alone meets one in 200 summers).
    8.  with SIM_MANAGERS_BASE=<commit>, a fleet (12 seeds by 5 eras by 3
-       seasons, mid season starts, Hot Seat runs) saves the same bytes as
-       that commit's engine (after the 7c strip once the table has rows).
-       NOT RUN without the variable, and the run says so.
+       seasons of 4 entries, 3 mid season starts, and 3 fresh Hot Seat runs
+       of up to 3 matches each, which stand in for Proposal 1's "Hot Seat
+       replay": they are not simManagerHotSeat section 3's recorded replay)
+       saves the same bytes as that commit's engine (after the 7c strip once
+       the table has rows). NOT RUN without the variable, and the run says
+       so: runAllSims sets no base, so this is a one time proof run by hand
+       against the round's base on main (Round 1606: c0c66e087), not a
+       standing gate.
 
    Negative controls (SIM_MANAGERS_CONTROL=<name>; a control that fires
    exits 0 with a last line saying FIRED, one that does not exits 1, one
@@ -498,7 +503,7 @@ async function realDugoutsSection() {
      league with a club one (else two) tiers below the sentinel's, a career there finishes a title season (90 points) with his
      club bottom (0, the rest 40), so the axe picks his chair often and his club calls; the first seed of up to 16
      whose offers carry his club is read, then accepted the way the hook accepts it. The offer may only say the
-     club is making a change, and nothing then or after may name him. Floor 10 offers. */
+     club is making a change, and nothing then or after may name him. Measured 13 offers (r1606-fx-c), floor 9, a third below. */
   if (!MODE || MODE === 'offer') {
     let tried = 0, unseated = 0, offers = 0, accepted = 0;
     for (const L of leagues) {
@@ -531,7 +536,7 @@ async function realDugoutsSection() {
       }
     }
     console.log(`   7h: ${tried} leagues with a club below his, ${offers} offers from his emptied chair read and ${accepted} accepted (all saying only that the club is making a change), ${unseated} skipped unseated, ${bySection['7h'].fails} failures`);
-    if (offers < 10) fail(`7h: only ${offers} offers from the emptied real chair were read (floor 10)`);
+    if (offers < 9) fail(`7h: only ${offers} offers from the emptied real chair were read (floor 9, measured 13)`);
   }
   await ownAndManaged(S, byEra('now').find(l => l.id === 'premier') ?? byEra('now')[0], leagues);
   return { bySection };
