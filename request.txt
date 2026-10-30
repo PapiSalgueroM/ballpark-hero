@@ -1,0 +1,24 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-a: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/nhl-front-office/NhlLazyDesk.test.tsx src/components/front-office-shared/GmCareerDesk.test.tsx src/lib/gmCareerRules.test.ts src/lib/gmDeskHost.test.ts src/lib/gmXp.test.ts src/lib/gmSeat.test.ts --testTimeout=600000 --hookTimeout=120000
+vitest-b: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/test/frontOfficeSaveRecovery.test.tsx src/components/front-office/FrontOfficeCuts.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx src/test/nhlContributors.test.ts src/components/nhl-front-office/NhlTradeLists.test.tsx src/components/nhl-front-office/NhlWaiverReceipt.test.tsx src/components/nhl-front-office/NhlFrontOfficeRatingEvidence.test.tsx --testTimeout=600000 --hookTimeout=120000
+simGmCareer-nhl: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+simGmCareer-nhl-extradraw: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=extradraw node scripts/simGmCareer.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+simFoLazyDesk-eager: SIM_FO_LAZY_DESK_CONTROL=eager node scripts/simFoLazyDesk.mjs
+simFoLazyDesk-hostimport: SIM_FO_LAZY_DESK_CONTROL=hostimport node scripts/simFoLazyDesk.mjs
+simNhlRosterLimit-all: NHL_ROSTER_CONTROL=all node scripts/simNhlRosterLimit.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNhlGmDesk: node scripts/simNhlGmDesk.mjs
+simFoHub: node scripts/simFoHub.mjs
+simGmReload: node scripts/simGmReload.mjs
+fob-check: node scripts/controlFrontOfficeBoard.mjs check
+nhl-wipebutton: node scripts/controlFrontOfficeBoard.mjs nhl-wipebutton
+nhl-arrivaltitle: node scripts/controlFrontOfficeBoard.mjs nhl-arrivaltitle
+nhl-lookopens: node scripts/controlFrontOfficeBoard.mjs nhl-lookopens
+nhl-xpzero: node scripts/controlFrontOfficeBoard.mjs nhl-xpzero
+nhl-askalways: node scripts/controlFrontOfficeBoard.mjs nhl-askalways
+nhl-nowait: node scripts/controlFrontOfficeBoard.mjs nhl-nowait
+nhl-recapnever: node scripts/controlFrontOfficeBoard.mjs nhl-recapnever
+nhl-blank: node scripts/controlFrontOfficeBoard.mjs nhl-blank
