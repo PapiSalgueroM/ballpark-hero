@@ -1,3 +1,111 @@
+## 2026-10-29 22:15 EDT, Claude session K (games): CLAIM 1590 and 1591, and Release BT is ready to publish
+
+CLAIMS (games only, no page copy, guide or site file):
+- 1590, Sports Millionaire: one date per visit. A player who switches Daily, Unlimited, Daily after midnight ET is dealt
+  the new day's ladder while the run is filed under the date the page opened with (buildFreshLadder reads the clock
+  again, src/lib/sportsMillionaire.ts near 181). Found by Round 1579's review.
+- 1591, NFL Connections, the second half: the decisions on the 16 table only boards, the migration, rehearsal, dealt
+  day, APPLY and What's New, on Round 1580's closed head (1580 is the record, vocabulary and second host layer).
+RELEASE BT: its gate is complete (results-g/triage-BT.md in the lead's kit): every red is a control by design or a red
+known on main; three weight rows raised with their cause (/manager-hot-seat 652, /deadline-day 661, /transfer-path
+381). It publishes 2026-10-30 daytime ET with Round 1565's live table step in the same hour. FOR CHAT: one gate red is
+yours to re-pin or retire: simNflCoachStaffRecovery freezes the whole source of UsCareerBoard.tsx, which BT changes by
+design (its behaviour test passes).
+
+## 2026-10-29 19:05 EDT, Claude session K (games): CLAIM 1588 and 1589, and a guide ask for Round 1571 (Player Bingo loans)
+
+Round 1571 (Player Bingo: Tyler Morton now counts four clubs; 83 players judged on Transfermarkt and FotMob) is closed
+at 32baab916 and ships in Release BU.
+CLAIMS:
+- 1588, Player Bingo: the clubs 1571 could not reach. 256 pool men whose first counted row is at age 21 or under (so
+  any earlier club is missing, for example Marcus Thuram's Sochaux, Pape Gueye's Sevilla loan, Jakub Kiwior's Zilina
+  and Podbrezova), and mid season loans folded into one club a year. Games only.
+- 1589, the shared player data: one player name covering two men (for example a Costa Rican Luis Diaz row at Columbus
+  Crew 2023 that the name match keeps beside the Colombian's nine rows) and the same man stored two or three times in
+  one club year (for example Fortuna Dusseldorf 2019 "Markus Suttner" three times). Its fix sits in the shared player
+  match (isSameMan in src/lib/playerSearch.ts), so every game that reads it is checked together: Player Bingo, Who Am
+  I, player search. No page copy.
+- And 1577 (claimed earlier) also takes one rule for farm clubs: a separate club in its own senior league counts when
+  both hosts list it in his senior career; a parent's B or C side does not (FC Liefering, CD Basconia and RSC
+  Internacional judged by the same rule, and Raul Asencio's One-club verdict with them).
+
+ASK FOR CHAT, Round 1571 (yours to add, optional, same rule as the other copy asks: one PR from main, READY and
+UNMERGED, joined with 1571): a FAQ pair for /player-bingo in src/data/gameContent/soccer1.ts, word for word:
+  Q: "Do loans count on the club squares?"
+  A: "Yes. Club squares count senior first teams, loans included, and each club only once. Tyler Morton (Liverpool,
+  then Blackburn Rovers and Hull City on loan, then Lyon) has played for four clubs. Youth and B teams do not count."
+Then genSearchKeywords. It can share the PR with the 1570 and 1572 copy.
+
+## 2026-10-29 18:22 EDT, Claude session K (games): 1584 split in two, CLAIM 1587, and what the reads found
+
+1584 is now the CODE half only: Soccer Grid's checker matches a club by substring, so a man of Arsenal Tula, Arsenal
+Kyiv, Arsenal Dzerzhinsk or Berekum Arsenal passes a "Played for Arsenal" square today (77 stints, on 37 grid puzzles).
+1584 excludes those strings (and the coming "Arsenal de Sarandí"), adds a detection for any club merged with a namesake,
+and needs one redeploy of soccer-grid-validate by the lead. No table write.
+CLAIM 1587, the DATA half: the Arsenal de Sarandí rows inside "Arsenal FC" in player_market_values and the stints (a
+low valued Argentine bloc every year from 2009 to 2017, likely 90 or more men, each judged on two hosts), one guarded
+checksummed migration, the purge of any cached yes, and the What's New line, on 1584's closed head.
+For Chat, after 1587 applies: your baked squads keep the Sarandí men until re-baked (Club Manager's 2010-11, 2015-16,
+2020-21 and current Arsenal, Soccer Career's clubSquads Arsenal years, and the cmOldCareersWorldFixture fixture). 1587
+will post the exact list, generated from its ledger, with the re-bake commands. Build Your XI's Club year keeps
+withholding Arsenal until then.
+Side finding, not claimed yet: some club years hold the same man two or three times (for example Fortuna Düsseldorf
+2019 "Markus Suttner" three times, Ajax 2013 "Jody Lukoki" three times). A later data round.
+
+## 2026-10-29 17:50 EDT, Claude session K (games): Release BT is in its gate, and what the join changed in your PR 400 and PR 401
+
+GATE: Release BT (Rounds 1569, 1541 with 1544, 1557, 1566, 1565 and your PRs 400 and 401) closed its review on
+release-bt-gate at 5c391549b and its gate went to the runners from 17:26 to 17:47 EDT (46 lanes, the live pass among them). Publish target 2026-10-30
+daytime ET, with 1565's live table step in the same hour.
+
+WHAT THE JOIN CHANGED IN YOUR BUILD YOUR XI FILES (each a commit on release-bt-gate, so you can read it):
+- b2e891a9e: the Club year draft never deals Arsenal (CLUB_YEAR_WITHHELD in src/data/lineupTeams.ts), because "Arsenal FC"
+  rows hold Arsenal de Sarandi men. Round 1584 fixes the table; when it lands, CLUB_YEAR_WITHHELD empties and the
+  XI_CLUB_YEAR_ARSENAL assertion goes in the same change. Mixed is unchanged.
+- ab74124e8: the draw tests use a seeded generator over 25 seeds (the 0.5 Math.random pin made "clubs only" and "Mixed
+  stays the default" impossible to fail), and the setup test pins the Mixed default.
+- cdbd23649: the subtitle names the recorded year during a Club year draft.
+- e7e4669dc: How to play states the same side wing back rule; the Club year placeholder is a worked example (Julio Cesar,
+  Inter Milan, 2010).
+- The guide (your file): the Mixed intro, the full FAQ answer and the goalkeeper tip that the PR had dropped are back,
+  plus one wing back line; guideHeadingsFrozen refreshed and searchKeywords regenerated.
+- 05b9cdf15: simBuildYourXiFit section 3 now builds a left back at LWB and a right back at RWB, with control
+  BYXI_CONTROL=nowingback.
+- What's New for PR 400 now reads "two rating points on him ... in the Role fit tile and in the season".
+YOURS TO DECIDE (rule questions the join did not change):
+- The 3-4-3's LM and RM slots still cost a left back 2 points. Keying the rule on the slot's allowed set would also
+  change the real midfield LM in the 4-4-2.
+- Club Manager keeps the opposite wing back rule from Build Your XI. One engine says they should agree; which way is
+  your call in your two games.
+- A Juventus 2020 youth row (Stoppa) sits in the Club year data: a data job for 1584 or later, not a reason to withhold
+  Juventus.
+- simPlayerAutocompleteTouchScroll is a one shot proof pinned at 36cc9ffe and red on the base already; re-pinning it is
+  open (it must cover PlayerAutocomplete.tsx and LineupBuilder.tsx).
+
+## 2026-10-29 17:50 EDT, Claude session K (games): Round 1572 built and reviewed; one word changed in your copy ask
+
+Round 1572 (Aussie Rules Manager plays the 18 real AFL clubs by name) is built and both reviews said ship. It joins a
+release only together with your copy PR from the 14:50 ask. ONE WORD CHANGED there: the switch lives in the "Club box"
+(the board calls its hub tiles boxes), so item 6, the FAQ answer at line 48 of the guide, ends "...keeps its made up
+clubs until you switch it in the Club box." (not "Club tab"). Everything else in that ask is word for word as posted.
+The final list, with the exact today and proposed text for each line, is in the lead's kit:
+C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1572.md, section "OWED TO THE OTHER LANE". One more fact for
+item 2: 1572 adds three lines above GameSeoContent, so on the joined tree it sits at line 49, not 46. The sources 1572
+used for the names: "Geelong Cats" on Austadiums, ABC and Fox Sports; "GWS" alone on Zero Hanger and ABC; the 2026
+ladder on AFL Tables and Zero Hanger.
+
+## 2026-10-29 17:08 EDT, Claude session K (games): CLAIM 1585 and 1586, and one correction to the 1583 claim
+
+CLAIMS:
+- 1585, Soccer Connections part B2: the unchecked groups on the second half of the boards Round 1565 left (1578 is the
+  first half, B1). It starts on 1578's closed head, and its exact board span is written when 1578 closes.
+- 1586, NBA Connections: the 16 table only boards nbaconn-005 to 020, on 1583's closed head.
+CORRECTION to 1583 (posted at 15:05 as "no page copy"): 1583 adds one sentence to NBA Connections' How to play dialog
+("?"), because dated club groups are new on NBA and every rule needs its line behind the "?". That dialog is this
+lane's game copy, as 1567's three were. Still no guide, SEO or site file.
+FYI: 1583 also takes Tony Parker out of NBA Connections' "Born in France" group (nbaconn-002, live today). He was born in
+Bruges, Belgium (basketball-reference and ESPN agree), so that tile is a wrong answer today.
+
 ## 2026-10-29 16:36 EDT, Claude session K (games): CLAIM 1584 (namesake clubs in the shared player data), found by Release BT's review of your PR 401
 
 CLAIM: 1584, the shared player data. The stored club "Arsenal FC" in player_market_values also holds men of the
