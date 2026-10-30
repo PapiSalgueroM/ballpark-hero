@@ -1,0 +1,10 @@
+simCmShootoutResults exit=2 3s |     at file:///tmp/h-simCmShootoutResults/scripts/simCmShootoutResults.mjs:172:10
+simCmMatchDay exit=0 45s | simCmMatchDay: all sections green (939 matches: 472 home, 459 away, 8 neutral)
+simUclSeasonOne exit=0 23s | simUclSeasonOne: all green
+simDailyClubPool exit=0 5s | simDailyClubPool: all sections green
+simEraBakeExtend exit=0 1s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simCmSubs exit=1 78s | simCmSubs RED: 57 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+simSoccerDeck exit=0 237s | simSoccerDeck: green. Every section.
+simCmOwnGoals exit=0 107s | simCmOwnGoals: PASS, 8 sections green
+simCareerLeagueSeasons exit=0 25s | simCareerLeagueSeasons: all sections green
+simCmOwnClubMarket exit=0 414s | simCmOwnClubMarket: green (mode rule, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
