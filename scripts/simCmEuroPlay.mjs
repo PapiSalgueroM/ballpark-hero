@@ -462,6 +462,7 @@ async function sectionPlay() {
         moveCheck(M, s, `${where0} season ${s.season}`, counts);
       }
       if (/-finish$/.test(label) && prevEnd && prevEnd.season === s.season - 0 && prevEnd.worldComps?.uel?.me === prevEnd.clubName) {
+        if (prevEnd.sacked) counts.sackedSeasons = (counts.sackedSeasons ?? 0) + 1;
         if (runs(2) || runs(3)) counts.nightsPlayed += competitionCheck(M, prevEnd, `${where0} season ${prevEnd.season}`, throughs.splice(0));
         if (runs(2)) reviewCheck(M, prevEnd, got?.summary, `${where0} season ${prevEnd.season}`, counts);
         prevEnd = null;
@@ -482,7 +483,7 @@ async function sectionPlay() {
   if (runs(3)) ok(counts3.ties >= Math.min(PLAY_MIN, 3), `3 only ${counts3.ties} ties of mine settled over the fleet`);
   if (runs(1) || runs(4)) ok(counts.participant >= PLAY_MIN, `1 only ${counts.participant} participant seasons in the fleet, at least ${PLAY_MIN} are needed`);
   console.log(`  play: ${PLAY_FLEET.length * PLAY_SEEDS.length} saves, ${counts.participant} participant seasons, ${counts.watcher} watcher seasons, ${counts.nightsPlayed} nights played, tails ${JSON.stringify(counts.tail)}, season one participants ${counts.seasonOneMe}, ties of mine checked ${counts3.ties}`);
-  if (runs(2)) console.log(`  2 review: ${counts.review ?? 0} participant seasons read on the review, ${counts.uelWon ?? 0} of them won it`);
+  if (runs(2)) console.log(`  2 review: ${counts.review ?? 0} participant seasons read on the review, ${counts.uelWon ?? 0} of them won it, ${counts.sackedSeasons ?? 0} of the participant seasons ended with the manager sacked (the engine plays on after a sacking, so their nights after it are no player's, counted in the totals all the same)`);
   if (runs(2)) {
     ok((counts.moves ?? 0) >= 2 * MOVE_SAVES, `2b only ${counts.moves ?? 0} job moves played, ${2 * MOVE_SAVES} are wanted`);
     console.log(`  2b moves: ${counts.moves ?? 0} job moves out of ${counts.moveSaves ?? 0} participant seasons, each played to the season's end; ${counts.uclMoves ?? 0} moves to a Champions League club (${counts.uclMovesInIt ?? 0} joined with its group, ${counts.uclMovesKept ?? 0} kept the Europa League); ${counts.dropped ?? 0} moves dropped it, each into a Champions League sharing clubs with it`);
