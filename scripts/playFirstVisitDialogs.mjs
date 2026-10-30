@@ -95,6 +95,16 @@
  * bar's lift class (refuses to run otherwise), then strips every [body[data-consent-pending]_&]: class from the page
  * before the read. Every line it stripped something on must go red, and the Soccer Career hub must be one of them:
  * FIRED (exit 1), did NOT fire (exit 3), or ABORTED when nothing was stripped or the hub is not in the run (exit 2).
+ * Measured 2026-10-30 on runners (Round 1605). On main's game code (r1605-red2, the three game files checked out from
+ * 4bd20c993) 7 bar lines were red: Take the job 44 px under the banner at 320, 390 and 1280, Found the club 44 px under
+ * at all three, and at 1280 Training and Phone 56 px under; the hub's Next Year was already 18 px above at 320 and 390
+ * (Release BS). The first walk of all 133 routes with the net (r1605-g1) found one more: World Cup 2026 Bracket's Auto
+ * Fill Everything (fixed bottom-6, z 50) 52 px under at all three widths, game side and one class, so it was lifted
+ * too. After (r1605-g2): 411 bar lines (402 route widths plus 9 state lines), 76 fixed controls read, 0 red, 0 with no
+ * pending banner; the closest green control is Take the job, 12 px above the banner, then Found the club 12 to 15, Next
+ * Year 18 and Auto Fill 24. No site control met the banner anywhere. The first nolift run (r1605-ctl) caught 9 of 12
+ * stripped lines and passed the bracket's 3: its button has transition-all, so it was read mid move. The strip turns
+ * transitions off now.
  *
  * Run: BASE=http://localhost:4173 node scripts/playFirstVisitDialogs.mjs   (a served build, see scripts/lib/hostLikeServer.mjs)
  *      ONLY=/stadium-tycoon,/idle-arena scopes it; PLAYFIRST_SHARD=1/3 runs a third of the routes;
@@ -292,8 +302,10 @@ function barsInPage({ BANNER, strip }) {
   }) || null;
   if (!banner || getComputedStyle(banner).position !== 'fixed' || document.body.dataset.consentPending == null) return { pending: false };
   let stripped = 0;
+  /* transitions off first: a lifted control with transition-all (the bracket's Auto Fill) would otherwise still be
+     read where it was, and the first nolift run passed it for exactly that reason */
   if (strip) for (const el of document.querySelectorAll('[class*="data-consent-pending"]')) {
-    for (const c of [...el.classList]) if (c.includes('[body[data-consent-pending]_&]:')) { el.classList.remove(c); stripped += 1; }
+    for (const c of [...el.classList]) if (c.includes('[body[data-consent-pending]_&]:')) { el.style.transition = 'none'; el.classList.remove(c); stripped += 1; }
   }
   const bb = banner.getBoundingClientRect();
   const cut = (a, b) => ({ left: Math.max(a.left, b.left), top: Math.max(a.top, b.top), right: Math.min(a.right, b.right), bottom: Math.min(a.bottom, b.bottom) });
