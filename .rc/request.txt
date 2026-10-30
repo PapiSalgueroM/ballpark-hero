@@ -1,0 +1,3 @@
+anchors: node scripts/simHarnessAnchors.mjs
+noRival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
