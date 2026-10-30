@@ -1,0 +1,12 @@
+MUT ledgeroff applied (1 edit)
+  Everton: squad 28 into the summer, 26 after; trimmed 0, on the list 0
+  Ajax: squad 33 into the summer, 27 after; trimmed 0, on the list 0
+  Southampton: squad 29 into the summer, 23 after; trimmed 0, on the list 0
+  Freiburg: squad 32 into the summer, 24 after; trimmed 0, on the list 0
+  BAD Everton summer 3: Ainsley Maitland-Niles list 31/77, record 31/75
+  BAD Southampton summer 2: Harrison Reed list 21/69, record 21/70
+  BAD Southampton summer 3: Eljero Elia list 30/72, record 30/71
+  BAD Southampton summer 3: Harrison Reed list 22/69, record 22/72
+  BAD Freiburg summer 3: Keisuke Goto list 23/78, record 23/79
+trimprobe: trimmed 0, on the list after the summer 0 (released, not mine: 0), still somewhere two summers on 0; ledger held list men 78, agree 73, disagree 5, record retired but on list 0
+ledgeroff probe exit 1 (expect 1: disagree above 0)
