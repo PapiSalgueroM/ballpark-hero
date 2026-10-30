@@ -1,0 +1,4 @@
+rules-p1: git worktree add -q /tmp/p1 555f9ebcc && ln -s "$PWD/node_modules" /tmp/p1/node_modules && cd /tmp/p1 && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-p2: git worktree add -q /tmp/p2 8044d4070 && ln -s "$PWD/node_modules" /tmp/p2/node_modules && cd /tmp/p2 && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-head: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+rules-write: git worktree add -q /tmp/wr HEAD && ln -s "$PWD/node_modules" /tmp/wr/node_modules && cd /tmp/wr && node scripts/simCmLeagueRules.mjs --part=modern,eras --write && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/"

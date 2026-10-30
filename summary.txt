@@ -1,0 +1,4 @@
+rules-p1 exit=0 43s | simCmLeagueRules: all checks passed (modern, eras, pure)
+rules-head exit=1 44s | simCmLeagueRules: 47 failure(s)
+rules-p2 exit=0 45s | simCmLeagueRules: all checks passed (modern, eras, pure)
+rules-write exit=0 61s | simCmLeagueRules: all checks passed (modern, eras, pure)
