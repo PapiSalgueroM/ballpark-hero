@@ -1,0 +1,152 @@
+name: US Connect 4 phone board regression preservation
+on:
+  push:
+    branches: [codex/us-connect4-phone-board-repair-20261030]
+permissions:
+  contents: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_MAIN: 1589692185954298dcbd2fe6d14572f10c9bb0e7
+      EXPECTED_BASE: 4ac1803157e05f3515bcb786def7c6d9212ddcf1
+      EXPECTED_SOURCE_COUNT: '5497'
+      EXPECTED_PARENT: 14d145486a6bd6092c639495da494693ca8fc1cf
+      EXPECTED_TREE: dd38227583e799f1dbb973c7bd955b0ae22b85e1
+      TEST_SHA256: ab4d4534ed59b5337b8aa1629edfb628993db95f6f5426b44ce2a6c9d5eaf92d
+      CONTROLLER_SHA256: 32b614703606c03c8bb7a64e3fc9fad16566760e7c671679a43c8f380f75b658
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind fixed app and exact regression source
+        run: |
+          set -euo pipefail
+          runner_temp=$(realpath "$RUNNER_TEMP")
+          workspace=$(realpath "$PWD")
+          case "$runner_temp/" in "$workspace/"*) exit 1;; esac
+          out="$runner_temp/usc4-phone-unit"
+          test ! -e "$out"
+          mkdir -p "$out/runtime-tmp"
+          echo "PHONE_UNIT_OUT=$out" >> "$GITHUB_ENV"
+          echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/us-connect4-phone-board-repair-20261030
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT $EXPECTED_BASE"
+          test "$(git rev-list --parents -n1 "$EXPECTED_BASE")" = "$EXPECTED_BASE $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5497
+          git diff --name-status "$EXPECTED_BASE" "$EXPECTED_PARENT" > "$out/product.paths"
+          printf 'M\tsrc/pages/MlbConnect4.tsx\nM\tsrc/pages/NbaConnect4.tsx\nM\tsrc/pages/NflConnect4.tsx\nM\tsrc/pages/NhlConnect4.tsx\n' > "$out/expected-product.paths"
+          cmp "$out/product.paths" "$out/expected-product.paths"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.paths"
+          printf 'A\t.github/workflows/us-connect4-phone-board-game.yml\nA\t.github/workflows/us-connect4-phone-board-unit.yml\nA\tscripts/qa/playUsConnect4PhoneBoard.mjs\nA\tscripts/qa/usConnect4PhoneBoardUnit.cjs\n' > "$out/expected-proof.paths"
+          cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(sha256sum src/test/usConnect4ValidationLock.test.tsx | cut -d' ' -f1)" = "$TEST_SHA256"
+          test "$(sha256sum scripts/qa/usConnect4PhoneBoardUnit.cjs | cut -d' ' -f1)" = "$CONTROLLER_SHA256"
+          test "$(git hash-object src/hooks/useNbaConnect4.ts)" = 708173aba81a7fb5a68113d5bebed38523713aa0
+          test "$(git hash-object src/pages/NbaConnect4.tsx)" = b0664481286814f835b7a2af3460e243ee2938f4
+          test "$(git hash-object src/hooks/useNflConnect4.ts)" = d5d03522e3a53058f8e4bbf721241e8f93c58a04
+          test "$(git hash-object src/pages/NflConnect4.tsx)" = a49275fd208323ed4b40c91517ad442f44ebc5e6
+          test "$(git hash-object src/hooks/useNhlConnect4.ts)" = 0a64f4ea2c3ec1211a0b10456d04aedf94dea61a
+          test "$(git hash-object src/pages/NhlConnect4.tsx)" = db606b8366e84c38c85328e3fbcc1cb048a4a05d
+          test "$(git hash-object src/hooks/useMlbConnect4.ts)" = 1f3695ec3ab5ba994806ab1f830f96b053be81a6
+          test "$(git hash-object src/pages/MlbConnect4.tsx)" = 8b45ed4eedc6f00103874298bf88380a43dd8fc2
+          test "$(git hash-object scripts/sweepWeight.mjs)" = 58afae7329f0e1a520d7804e670b29583fd2964d
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cp scripts/qa/usConnect4PhoneBoardUnit.cjs "$out/unit-controller.cjs"
+          cmp scripts/qa/usConnect4PhoneBoardUnit.cjs "$out/unit-controller.cjs"
+          sha256sum "$out/unit-controller.cjs" > "$out/controller-copy.sha256"
+          raw=0
+          node --check scripts/qa/usConnect4PhoneBoardUnit.cjs > "$out/syntax.stdout" 2> "$out/syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/syntax.stdout"
+          test ! -s "$out/syntax.stderr"
+      - name: Locked dependencies and actual application types
+        run: |
+          set -euo pipefail
+          out="$PHONE_UNIT_OUT"
+          raw=0
+          env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.exit"
+          test "$raw" -eq 0
+          raw=0
+          : > "$out/types.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 3m node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json > "$out/types.stdout" 2> "$out/types.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/types.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/types.stdout"
+          test ! -s "$out/types.stderr"
+          test ! -s "$out/types.transport"
+      - name: Existing 24 regressions and four effective classifier controls
+        run: |
+          set -euo pipefail
+          out="$PHONE_UNIT_OUT"
+          raw=0
+          : > "$out/red.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/red.transport" env -u NO_DOUBLE_SWAP timeout --signal=TERM --kill-after=15s 10m node "$out/unit-controller.cjs" > "$out/red.stdout" 2> "$out/red.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/red.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/red.stderr"
+          test ! -s "$out/red.transport"
+          grep -Fqx 'US_CONNECT4_PHONE_UNIT: actual24 existing regression cases passed with zero skips/todo/callback errors;4 physical classifier refusals and same-copy restores passed.' "$out/red.stdout"
+          test "$(cat "$out/unit/raw.exit")" -eq 0
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-held.log"
+          find node_modules -type f -print0 | sort -z > "$out/dependencies.members.post"
+          xargs -0 sha256sum < "$out/dependencies.members.post" > "$out/dependencies.post.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.post"
+      - name: Always preserve source and qualification evidence
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="$PHONE_UNIT_OUT"
+          mkdir -p "$out"
+          failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git diff --exit-code HEAD > "$out/working-source.diff" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"
+          cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-final-held.log" 2>&1 || failed=1
+          if test -f "$out/dependencies.post.sha256"; then
+            find node_modules -type f -print0 | sort -z > "$out/dependencies.members.final"
+            cmp "$out/dependencies.members.post" "$out/dependencies.members.final" || failed=1
+            sha256sum -c "$out/dependencies.post.sha256" > "$out/dependencies-final-held.log" 2>&1 || failed=1
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.post" "$out/dependency-links.final" || failed=1
+          else
+            printf 'POST_QUALIFICATION_DEPENDENCY_SNAPSHOT_NOT_CREATED\n' > "$out/dependencies-not-created.txt"
+            failed=1
+          fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"PHONE_UI_EXISTING24_REGRESSION_PRESERVATION_AND_FOUR_COPIED_GUARDS_ONLY","applicationPresentation":true,"focused":"READ_ACTUAL24_AND_ADMISSION","runtimeCallbackErrors":"READ_ACTUAL_CALLBACKS","fullSuite":"UNRUN","build":"UNRUN","browser":"UNRUN","caps":"UNRUN","builtReaders":"UNRUN","globalSims":"UNRUN","featureReady":false,"dependencyInventoryScope":"POST_QUALIFICATION_ONLY"}\n' > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/usc4-phone-unit-evidence.sha256"
+          cp "$RUNNER_TEMP/usc4-phone-unit-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: us-connect4-phone-unit-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/usc4-phone-unit
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14

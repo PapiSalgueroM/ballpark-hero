@@ -1,0 +1,341 @@
+name: US Connect 4 phone board build and browser qualification
+on:
+  push:
+    branches: [codex/us-connect4-phone-board-capture-20261030]
+permissions:
+  contents: read
+jobs:
+  game:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_MAIN: 1589692185954298dcbd2fe6d14572f10c9bb0e7
+      EXPECTED_BASE: 4ac1803157e05f3515bcb786def7c6d9212ddcf1
+      EXPECTED_PARENT: 14d145486a6bd6092c639495da494693ca8fc1cf
+      EXPECTED_TREE: dd38227583e799f1dbb973c7bd955b0ae22b85e1
+      TEST_SHA256: ab4d4534ed59b5337b8aa1629edfb628993db95f6f5426b44ce2a6c9d5eaf92d
+      CONTROLLER_SHA256: a39fb7e20794d13eb76714e4c2ae1ae972d4511a8e664094e6993db5ec9ac3c8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind fixed product and exact shared qualification source
+        run: |
+          set -euo pipefail
+          runner_temp=$(realpath "$RUNNER_TEMP")
+          workspace=$(realpath "$PWD")
+          case "$runner_temp/" in "$workspace/"*) exit 1;; esac
+          out="$runner_temp/usc4-phone-game"
+          test ! -e "$out"
+          mkdir -p "$out/helpers" "$out/runtime-tmp"
+          echo "PHONE_GAME_OUT=$out" >> "$GITHUB_ENV"
+          echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          echo "PHONE_BOARD_OUT=$out/native" >> "$GITHUB_ENV"
+          echo "PHONE_BOARD_PARENT_DIST=$out/parent-dist" >> "$GITHUB_ENV"
+          echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/us-connect4-phone-board-capture-20261030
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT $EXPECTED_BASE"
+          test "$(git rev-list --parents -n1 "$EXPECTED_BASE")" = "$EXPECTED_BASE $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5497
+          git diff --name-status "$EXPECTED_BASE" "$EXPECTED_PARENT" > "$out/product.paths"
+          printf 'M\tsrc/pages/MlbConnect4.tsx\nM\tsrc/pages/NbaConnect4.tsx\nM\tsrc/pages/NflConnect4.tsx\nM\tsrc/pages/NhlConnect4.tsx\n' > "$out/expected-product.paths"
+          cmp "$out/product.paths" "$out/expected-product.paths"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.paths"
+          printf 'A\t.github/workflows/us-connect4-phone-board-game.yml\nA\t.github/workflows/us-connect4-phone-board-unit.yml\nA\tscripts/qa/playUsConnect4PhoneBoard.mjs\nA\tscripts/qa/usConnect4PhoneBoardUnit.cjs\n' > "$out/expected-proof.paths"
+          cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(sha256sum src/test/usConnect4ValidationLock.test.tsx | cut -d' ' -f1)" = "$TEST_SHA256"
+          test "$(sha256sum scripts/qa/playUsConnect4PhoneBoard.mjs | cut -d' ' -f1)" = "$CONTROLLER_SHA256"
+          test "$(git hash-object src/hooks/useMlbConnect4.ts)" = 1f3695ec3ab5ba994806ab1f830f96b053be81a6
+          test "$(git hash-object src/hooks/useNbaConnect4.ts)" = 708173aba81a7fb5a68113d5bebed38523713aa0
+          test "$(git hash-object src/hooks/useNflConnect4.ts)" = d5d03522e3a53058f8e4bbf721241e8f93c58a04
+          test "$(git hash-object src/hooks/useNhlConnect4.ts)" = 0a64f4ea2c3ec1211a0b10456d04aedf94dea61a
+          test "$(git hash-object src/pages/MlbConnect4.tsx)" = 8b45ed4eedc6f00103874298bf88380a43dd8fc2
+          test "$(git hash-object src/pages/NbaConnect4.tsx)" = b0664481286814f835b7a2af3460e243ee2938f4
+          test "$(git hash-object src/pages/NflConnect4.tsx)" = a49275fd208323ed4b40c91517ad442f44ebc5e6
+          test "$(git hash-object src/pages/NhlConnect4.tsx)" = db606b8366e84c38c85328e3fbcc1cb048a4a05d
+          test "$(git hash-object scripts/sweepWeight.mjs)" = 58afae7329f0e1a520d7804e670b29583fd2964d
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cp scripts/qa/playUsConnect4PhoneBoard.mjs "$out/native-collector.mjs"
+          cmp scripts/qa/playUsConnect4PhoneBoard.mjs "$out/native-collector.mjs"
+          sha256sum "$out/native-collector.mjs" > "$out/controller-copy.sha256"
+          raw=0
+          node --check scripts/qa/playUsConnect4PhoneBoard.mjs > "$out/syntax.stdout" 2> "$out/syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/syntax.stdout"
+          test ! -s "$out/syntax.stderr"
+          cat > "$out/helpers/run.sh" <<'RUN'
+          run() {
+            local id="$1" budget="$2"; shift 2
+            local raw=0
+            : > "$PHONE_GAME_OUT/$id.transport"
+            { printf '%q ' "$@"; printf '\n'; } > "$PHONE_GAME_OUT/$id.command"
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$PHONE_GAME_OUT/$id.transport" FORCE_COLOR=0 env -u NO_COLOR -u NO_DOUBLE_SWAP timeout --signal=TERM --kill-after=15s "$budget" "$@" > "$PHONE_GAME_OUT/$id.stdout" 2> "$PHONE_GAME_OUT/$id.stderr" || raw=$?
+            printf '%s\n' "$raw" > "$PHONE_GAME_OUT/$id.exit"
+            test ! -s "$PHONE_GAME_OUT/$id.transport"
+          }
+          RUN
+          cat > "$out/helpers/parent-build.cjs" <<'PARENT_HELPER'
+          'use strict';
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto');
+          const root=fs.realpathSync(process.cwd()),out=process.env.PHONE_GAME_OUT,base=process.env.EXPECTED_BASE;
+          a(out&&path.isAbsolute(out),'PHONE_PARENT_OUTPUT_ABSOLUTE');a.equal(fs.realpathSync(out),out,'PHONE_PARENT_OUTPUT_CANONICAL');a(out!==root&&!out.startsWith(root+path.sep),'PHONE_PARENT_OUTPUT_OUTSIDE_SOURCE');a.equal(base,'4ac1803157e05f3515bcb786def7c6d9212ddcf1');
+          const hash=b=>createHash('sha256').update(b).digest('hex'),git=b=>createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex'),write=(n,v)=>fs.writeFileSync(path.join(out,n),JSON.stringify(v,null,2)+'\n',{flag:'wx'});
+          const pages=[{"path":"src/pages/NbaConnect4.tsx","oldSHA256":"11f7fc4a2bfaac7012c705c3c73a1641b810c37df1fc13a33bf65ee5aac3d490","oldGit":"90a1ab7379758268d296939b287f4930414cfe02","newSHA256":"04ca2d5d092f8487b52bade5e392ecbb3385925039998a058ec2ebd6710b1d65","newGit":"b0664481286814f835b7a2af3460e243ee2938f4"},{"path":"src/pages/NflConnect4.tsx","oldSHA256":"316c907162cbd699da56c0ad6e17fb929b54fd5dd4081195f649993d79da5f72","oldGit":"40127b56b60e50bbfff64b85b64b37e1b7a745a6","newSHA256":"7de7dca4a1bdef4d1ce373bd8c083b532e4926d115eeb90fd4ac90eb78a512d0","newGit":"a49275fd208323ed4b40c91517ad442f44ebc5e6"},{"path":"src/pages/NhlConnect4.tsx","oldSHA256":"3be131c53f4bf65c1e7e3f48fed00d57ee2a9f5b93e765e87ae422676c51fff4","oldGit":"46040748080f86ad2732714627feb773f3bb9468","newSHA256":"01a23540e2bbf06130fb8e0bd05a0e0d0db2f8c5ba860be75c6e2d204c819e22","newGit":"db606b8366e84c38c85328e3fbcc1cb048a4a05d"},{"path":"src/pages/MlbConnect4.tsx","oldSHA256":"4f7d03757fccfabbf8c2f92c813ef108076b6df8d5f854c3bea3f4b59da6af86","oldGit":"3fc3864882e540ef42e8a7e36c580642148473a2","newSHA256":"ec292fc2064d965702890ff18d89d8f890676a4b23396f9ce4dd2709018f9d99","newGit":"8b45ed4eedc6f00103874298bf88380a43dd8fc2"}],members=fs.readFileSync(path.join(out,'source-members.initial'),'utf8').split('\0').filter(Boolean);
+          a.equal(members.length,5497);a.equal(new Set(members).size,5497);for(const p of members)a(!path.isAbsolute(p)&&!p.split(/[\\/]/).includes('..'));
+          const own=new Set(pages.map(v=>v.path)),snapshot=()=>new Map(members.map(p=>[p,hash(fs.readFileSync(path.join(root,p)))])),manifest=(name,map)=>write(name,[...map].map(([file,sha256])=>({file,sha256})));
+          const before=snapshot();manifest('parent-source.before.json',before);const current=new Map(),original=new Map();
+          for(const item of pages){
+           const file=path.join(root,item.path);a(fs.lstatSync(file).isFile()&&!fs.lstatSync(file).isSymbolicLink());
+           const now=fs.readFileSync(file);a.equal(hash(now),item.newSHA256,'PHONE_PARENT_CURRENT_PAGE_PIN');a.equal(git(now),item.newGit);
+           const old=cp.execFileSync('git',['show',base+':'+item.path],{cwd:root,maxBuffer:2*1024*1024});a.equal(hash(old),item.oldSHA256,'PHONE_PARENT_BASE_PAGE_PIN');a.equal(git(old),item.oldGit);
+           current.set(item.path,now);original.set(item.path,old);
+           for(const pair of [['parent-current-page-bodies',now],['parent-reference-page-bodies',old]]){const target=path.join(out,pair[0],item.path);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,pair[1],{flag:'wx'});}
+          }
+          function held(map,oldMode){
+           for(const p of members){const expected=oldMode&&own.has(p)?hash(original.get(p)):before.get(p);a.equal(map.get(p),expected,'PHONE_PARENT_SOURCE_BODY_HELD:'+p);}
+           a.equal(map.size,before.size);
+          }
+          const parentDist=path.join(out,'parent-dist');a(!fs.existsSync(parentDist),'PHONE_PARENT_DIST_FRESH');
+          let staged=false,processRecord=null,buildSucceeded=false,restored=false,primaryError=null;
+          try{
+           staged=true;for(const item of pages)fs.writeFileSync(path.join(root,item.path),original.get(item.path));
+           const during=snapshot();manifest('parent-source.staged.json',during);held(during,true);
+           const receipt=path.join(out,'parent-build.transport');fs.writeFileSync(receipt,'',{flag:'wx'});
+           const stdout=fs.openSync(path.join(out,'parent-build.stdout'),'wx'),stderr=fs.openSync(path.join(out,'parent-build.stderr'),'wx');
+           const args=['--signal=TERM','--kill-after=15s','5m','npm','run','build','--','--manifest','--outDir',parentDist];
+           let child;try{child=cp.spawnSync('timeout',args,{cwd:root,env:{...process.env,SIM_OFFLINE_RECEIPT:receipt},timeout:360000,stdio:['ignore',stdout,stderr]});}finally{fs.closeSync(stdout);fs.closeSync(stderr);}
+           processRecord={executable:'timeout',args,cwd:root,status:child.status,signal:child.signal,error:child.error?String(child.error):null};
+           write('parent-build.process.json',processRecord);fs.writeFileSync(path.join(out,'parent-build.raw.exit'),String(child.status)+'\n',{flag:'wx'});
+           a.equal(child.status,0,'PHONE_PARENT_BUILD_RAW_ZERO');a.equal(child.signal,null);a.equal(child.error,undefined);a.equal(fs.statSync(receipt).size,0,'PHONE_PARENT_BUILD_OFFLINE');
+           a(fs.statSync(path.join(parentDist,'.vite','manifest.json')).isFile());a(fs.statSync(path.join(parentDist,'index.html')).isFile());
+           const built=snapshot();manifest('parent-source.after-build.json',built);held(built,true);buildSucceeded=true;
+          }catch(error){primaryError=error;write('parent-build.failure.json',{name:error.name,message:error.message,stack:error.stack});}
+          finally{
+           if(staged)for(const item of pages)fs.writeFileSync(path.join(root,item.path),current.get(item.path));
+           const after=snapshot();manifest('parent-source.restored.json',after);held(after,false);restored=true;
+           const same=pages.every(item=>fs.readFileSync(path.join(root,item.path)).equals(current.get(item.path)));a(same,'PHONE_PARENT_SAME_WORKING_PAGES_RESTORED');
+           write('PARENT-BUILD-RESTORATION.json',{source:process.env.GITHUB_SHA,base,staged,buildSucceeded,restored,sameWorkingCopiesRestored:same,sourceFiles:members.length,temporaryPageEdits:4,otherSourceFilesHeld:members.length-4,sourceBeforeManifest:'parent-source.before.json',duringManifest:staged?'parent-source.staged.json':null,afterBuildManifest:buildSucceeded?'parent-source.after-build.json':null,restoredManifest:'parent-source.restored.json',currentPagePins:pages.map(v=>({file:v.path,sha256:v.newSHA256,git:v.newGit})),parentPagePins:pages.map(v=>({file:v.path,sha256:v.oldSHA256,git:v.oldGit})),buildProcess:processRecord,parentDist,applicationInputScope:'All tracked application inputs match base4ac; proof QA files and Git build metadata remain current proof',noBrowserOrLayoutCredit:true});
+          }
+          if(primaryError)throw primaryError;
+          a(buildSucceeded&&restored);
+          
+          const guardControls=[],working=path.join(out,'parent-source-control-working.json');
+          function mapControl(id,foundation,oldMode,mutate){
+           const bytes=fs.readFileSync(path.join(out,foundation));fs.writeFileSync(working,bytes,{flag:fs.existsSync(working)?'w':'wx'});
+           const read=()=>new Map(JSON.parse(fs.readFileSync(working,'utf8')).map(v=>[v.file,v.sha256]));held(read(),oldMode);
+           fs.writeFileSync(path.join(out,id+'.before.json'),bytes,{flag:'wx'});const rows=JSON.parse(bytes.toString('utf8')),changedPath=mutate(rows);a(changedPath);
+           const changed=Buffer.from(JSON.stringify(rows,null,2)+'\n');a(!changed.equals(bytes),'PHONE_PARENT_CONTROL_CHANGED');fs.writeFileSync(working,changed);
+           let refusal=null,restored=false;
+           try{try{held(read(),oldMode);}catch(error){refusal={name:error.name,message:error.message};}a(refusal&&refusal.name==='AssertionError'&&refusal.message.includes('PHONE_PARENT_SOURCE_BODY_HELD:'+changedPath),'PHONE_PARENT_CONTROL_OWNED_REFUSAL');fs.writeFileSync(path.join(out,id+'.changed.json'),fs.readFileSync(working),{flag:'wx'});}
+           finally{fs.writeFileSync(working,bytes);a(fs.readFileSync(working).equals(bytes),'PHONE_PARENT_CONTROL_SAME_COPY_RESTORE');held(read(),oldMode);fs.writeFileSync(path.join(out,id+'.restored.json'),fs.readFileSync(working),{flag:'wx'});restored=true;}
+           guardControls.push({id,foundation,oldMode,changedPath,beforeSHA256:hash(bytes),changedSHA256:hash(changed),restoredSHA256:hash(fs.readFileSync(working)),semanticChange:true,refusal,samePhysicalCopyRestored:restored,scope:'COPIED_ACTUAL_SOURCE_HASH_MAP_ONLY',buildOrBrowserCredit:false});
+          }
+          mapControl('parent-staged-nonpage-control','parent-source.staged.json',true,rows=>{const row=rows.find(v=>!own.has(v.file));a(row&&row.sha256!=='0'.repeat(64));row.sha256='0'.repeat(64);return row.file;});
+          mapControl('parent-restored-page-control','parent-source.restored.json',false,rows=>{const row=rows.find(v=>v.file===pages[0].path);a(row);const old=hash(original.get(row.file));a.notEqual(row.sha256,old);row.sha256=old;return row.file;});
+          a.equal(guardControls.length,2);write('PARENT-PHASE-GUARD-CONTROLS.json',guardControls);
+          
+          write('PARENT-BUILD-ADMISSION.json',{status:'ACTUAL_PARENT_INPUT_BUILD_WITH_EXACT_FOUR_PAGE_RESTORE',source:process.env.GITHUB_SHA,base,parentDist,sourceFiles:members.length,temporaryPageEdits:4,otherSourceFilesHeld:members.length-4,raw:processRecord.status,samePhysicalCurrentPagesRestored:true,physicalCopiedPhaseGuardControls:guardControls,noBrowserOrLayoutCredit:true});
+          console.log('US_CONNECT4_PHONE_PARENT_BUILD: actual parent-input Vite build raw0; all four same current page bodies restored and all source held;2 copied phase guard refusals/restores passed.');
+          PARENT_HELPER
+          test "$(sha256sum "$out/helpers/parent-build.cjs" | cut -d' ' -f1)" = 4a540bd5ed23533dc259d04d6d991844b915ced88c9ac9ac7819f72ed18c1f5e
+          raw=0
+          node --check "$out/helpers/parent-build.cjs" > "$out/parent-helper-syntax.stdout" 2> "$out/parent-helper-syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/parent-helper-syntax.exit"
+          test "$raw" -eq 0;test ! -s "$out/parent-helper-syntax.stdout";test ! -s "$out/parent-helper-syntax.stderr"
+          sha256sum "$out/helpers/run.sh" "$out/helpers/parent-build.cjs" > "$out/helpers.sha256"
+      - name: Locked dependencies and actual application types
+        run: |
+          set -euo pipefail
+          out="$PHONE_GAME_OUT"
+          raw=0
+          env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.exit"
+          test "$raw" -eq 0
+          raw=0
+          : > "$out/types.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 3m node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json > "$out/types.stdout" 2> "$out/types.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/types.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/types.stdout"
+          test ! -s "$out/types.stderr"
+          test ! -s "$out/types.transport"
+      - name: Isolated exact Playwright and real prepared fonts
+        run: |
+          set -euo pipefail
+          out="$PHONE_GAME_OUT";tools="$RUNNER_TEMP/usc4-phone-game-tools";test ! -e "$tools"
+          env -u NODE_OPTIONS npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright;ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          export PLAYWRIGHT_BROWSERS_PATH="$tools/browsers"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV";echo "PHONE_TOOLS=$tools" >> "$GITHUB_ENV";echo "PLACEMENT_TOOLS=$tools" >> "$GITHUB_ENV"
+          executable=$(node -e 'const a=require("node:assert/strict");a.equal(require("playwright/package.json").version,"1.64.0");a.equal(require("playwright-core/package.json").version,"1.64.0");process.stdout.write(require("playwright").chromium.executablePath())')
+          if test ! -f "$executable";then env -u NODE_OPTIONS node "$tools/node_modules/playwright/cli.js" install chromium > "$out/chromium-install.log" 2>&1;fi
+          test -f "$executable";printf '%s\n' "$executable" > "$out/chromium.path"
+          env -u NODE_OPTIONS node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d' ' -f1);echo "FONT_CACHE_MANIFEST_SHA256=$sha" >> "$GITHUB_ENV"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Existing Brand-reader Python tools only
+        run: |
+          env -u NODE_OPTIONS python -m pip install fonttools pillow > "$PHONE_GAME_OUT/python-install.log" 2>&1
+          python -m pip freeze > "$PHONE_GAME_OUT/python-packages.initial"
+      - name: Actual parent input build and exact current Page restoration
+        id: parent
+        run: |
+          set -euo pipefail
+          out="$PHONE_GAME_OUT";source "$out/helpers/run.sh"
+          sha256sum -c "$out/source.initial.sha256" > "$out/source.pre-parent-held.log"
+          run parent-builder 10m node "$out/helpers/parent-build.cjs"
+          test "$(cat "$out/parent-builder.exit")" -eq 0;test ! -s "$out/parent-builder.stderr"
+          grep -Fqx 'US_CONNECT4_PHONE_PARENT_BUILD: actual parent-input Vite build raw0; all four same current page bodies restored and all source held;2 copied phase guard refusals/restores passed.' "$out/parent-builder.stdout"
+          test "$(cat "$out/parent-build.raw.exit")" -eq 0;test ! -s "$out/parent-build.transport"
+          test -f "$PHONE_BOARD_PARENT_DIST/.vite/manifest.json"
+          sha256sum -c "$out/source.initial.sha256" > "$out/source.post-parent-restored-held.log"
+          find "$PHONE_BOARD_PARENT_DIST" -type f -print0 | sort -z > "$out/parentdist.members"
+          xargs -0 sha256sum < "$out/parentdist.members" > "$out/parentdist.sha256"
+      - name: Actual Vite manifest build and post-qualification inventories
+        id: build
+        run: |
+          set -euo pipefail
+          out="$PHONE_GAME_OUT";source "$out/helpers/run.sh"
+          run build 5m npm run build -- --manifest;test "$(cat "$out/build.exit")" -eq 0
+          test -f dist/.vite/manifest.json
+          sha256sum -c "$out/source.initial.sha256" > "$out/source.prebrowser-held.log"
+          for pair in "deps:node_modules" "tools:$PHONE_TOOLS" "fonts:$FREE_KICK_FONT_CACHE" "dist:dist";do
+            label="${pair%%:*}";dir="${pair#*:}";find "$dir" -type f -print0 | sort -z > "$out/$label.members";xargs -0 sha256sum < "$out/$label.members" > "$out/$label.sha256"
+          done
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.before"
+          tar -cf "$out/dist.tar" -C dist .;tar -cf "$out/font-cache.tar" -C "$FREE_KICK_FONT_CACHE" .
+      - name: All fifteen current Main fatal page caps
+        id: caps
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT";: > "$out/caps-controller.transport";export SIM_OFFLINE_RECEIPT="$out/caps-controller.transport"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),{createHash}=require('node:crypto'),sha=b=>createHash('sha256').update(b).digest('hex');
+          const original="'use strict';\nconst fs = require('node:fs');\nconst path = require('node:path');\nconst assert = require('node:assert/strict');\nconst { createHash } = require('node:crypto');\nconst hash = value => createHash('sha256').update(value).digest('hex');\nif (path.basename(process.argv[1] || '') === 'prerender.mjs') {\n  const cache = process.env.FREE_KICK_FONT_CACHE;\n  const manifestBytes = fs.readFileSync(path.join(cache, 'manifest.json'));\n  assert.match(process.env.FONT_CACHE_MANIFEST_SHA256 || '', /^[a-f0-9]{64}$/);\n  assert.equal(hash(manifestBytes), process.env.FONT_CACHE_MANIFEST_SHA256, 'Prepared font manifest stays exact');\n  const sheet = [...fs.readFileSync('index.html', 'utf8').matchAll(/<link\\s+href=\"(https:\\/\\/fonts\\.googleapis\\.com\\/[^\\\"]+)\"\\s+rel=\"stylesheet\"/g)].map(m => new URL(m[1]).href);\n  assert.equal(sheet.length, 1, 'Use the actual single template stylesheet');\n  const entries = JSON.parse(manifestBytes);\n  assert(Array.isArray(entries) && entries.length > 1);\n  const fonts = new Map();\n  for (const entry of entries) {\n    assert(!fonts.has(entry.url), 'No duplicate font cache URL');\n    const url = new URL(entry.url);\n    assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(url.origin));\n    assert.equal(url.href, entry.url);\n    assert.equal(entry.file, hash(entry.url));\n    assert.match(entry.sha256, /^[a-f0-9]{64}$/);\n    assert.equal(typeof entry.contentType, 'string');\n    const body = fs.readFileSync(path.join(cache, entry.file));\n    assert.equal(hash(body), entry.sha256, 'Prepared font body stays exact');\n    fonts.set(entry.url, { ...entry, body });\n  }\n  assert(fonts.has(sheet[0]), 'Current template stylesheet is cached');\n  const css = fonts.get(sheet[0]);\n  assert.match(css.contentType, /^text\\/css(?:;|$)/);\n  const declared = [...new Set([...css.body.toString('utf8').matchAll(/url\\(\\s*['\"]?(https:\\/\\/[^)'\"\\s]+)/g)].map(m => m[1]))];\n  assert(declared.length > 0);\n  assert.deepEqual([...fonts.keys()].sort(), [sheet[0], ...declared].sort(), 'Only actual stylesheet dependencies are fulfilled');\n  for (const url of declared) assert.equal(new URL(url).origin, 'https://fonts.gstatic.com');\n  const pw = require('playwright-core');\n  let contextId = 0;\n  const originalLaunch = pw.chromium.launch.bind(pw.chromium);\n  pw.chromium.launch = async options => {\n    const browser = await originalLaunch(options);\n    const originalContext = browser.newContext.bind(browser);\n    browser.newContext = async options => {\n      const context = await originalContext(options);\n      const id = ++contextId;\n      await context.route(/^https:\\/\\/(?:fonts\\.googleapis\\.com|fonts\\.gstatic\\.com)\\//, async route => {\n        const request = route.request(), entry = fonts.get(request.url());\n        if (request.method() !== 'GET' || !entry || !['stylesheet', 'font'].includes(request.resourceType())) return route.fallback();\n        await route.fulfill({ status: 200, contentType: entry.contentType, body: entry.body });\n        fs.appendFileSync(process.env.FONT_CACHE_USE_RECEIPT, JSON.stringify({ contextId: id, url: entry.url, sha256: entry.sha256, manifestSha256: hash(manifestBytes), resourceType: request.resourceType() }) + '\\n');\n      });\n      return context;\n    };\n    return browser;\n  };\n}\n";
+          assert.equal(sha(original),'ac09f64a5d9592ec980864bf422c7f580880d9bd981adaef8c9c0e674d298fd3');
+          const moduleBefore="require('playwright-core')",moduleAfter="require(path.join(process.cwd(),'node_modules/playwright-core'))";
+          const gate="if (path.basename(process.argv[1] || '') === 'prerender.mjs') {",next="if (path.basename(process.argv[1] || '') === 'sweepWeight.mjs') {",anchor='      const id = ++contextId;';
+          const insert=anchor+'\n'+[
+            '      fs.appendFileSync(process.env.SWEEP_CONTEXT_RECEIPT, JSON.stringify({ contextId: id }) + "\\n");',
+            '      await context.route(url => url.origin === "https://flagcdn.com", async route => {',
+            '        const request = route.request(), url = new URL(request.url());',
+            '        const validPath = /^\\/(?:w[1-9][0-9]{0,2}\\/|h[1-9][0-9]{0,2}\\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\\.(?:png|webp|svg)$/.test(url.pathname);',
+            '        if (url.origin !== "https://flagcdn.com" || url.username || url.password || url.search || url.hash || !validPath || request.method() !== "GET" || request.resourceType() !== "image") return route.fallback();',
+            '        await route.abort("blockedbyclient");',
+            '        fs.appendFileSync(process.env.SWEEP_FLAG_RECEIPT, JSON.stringify({ contextId: id, method: request.method(), resourceType: request.resourceType(), url: url.href, action: "LOCAL_ABORT" }) + "\\n");',
+            '      });',
+          ].join('\n');
+          assert.equal(original.split(gate).length,2);assert.equal(original.split(anchor).length,2);assert.equal(original.split(moduleBefore).length,2);const copy=original.replace(gate,next).replace(anchor,insert).replace(moduleBefore,moduleAfter);assert.notEqual(copy,original);assert.equal(copy.split(moduleAfter).length,2);assert.equal(copy.replace(moduleAfter,moduleBefore).replace(insert,anchor).replace(next,gate),original);
+          fs.writeFileSync(process.env.PLACEMENT_OUT+'/weights-cached-fonts.cjs',copy,{flag:'wx'});fs.writeFileSync(process.env.PLACEMENT_OUT+'/weights-preload-binding.json',JSON.stringify({sourceSha256:sha(original),copySha256:sha(copy),wholeInverseExact:true,resolverAdapter:{before:moduleBefore,after:moduleAfter,occurrences:1,wholeInverseExact:true},onlyPreparedFontsAndStrictLocalFlagDenials:true},null,2)+'\n',{flag:'wx'});
+          NODE
+          sha256sum "$out/weights-cached-fonts.cjs" >> "$out/helpers.sha256"
+          : > "$out/caps-server.transport";: > "$out/caps.transport";: > "$out/weights-contexts.jsonl";: > "$out/weights-fonts.jsonl";: > "$out/weights-flags.jsonl"
+          SIM_OFFLINE_RECEIPT="$out/caps-server.transport" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/caps-server.log" 2>&1 &
+          server=$!;trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          status=0;NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/weights-cached-fonts.cjs" SIM_OFFLINE_RECEIPT="$out/caps.transport" FONT_CACHE_USE_RECEIPT="$out/weights-fonts.jsonl" SWEEP_CONTEXT_RECEIPT="$out/weights-contexts.jsonl" SWEEP_FLAG_RECEIPT="$out/weights-flags.jsonl" SWEEP_OFFLINE=1 BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 timeout --signal=TERM --kill-after=15s 5m node scripts/sweepWeight.mjs > "$out/caps.log" 2>&1 || status=$?
+          printf '%s\n' "$status" > "$out/caps.exit";test "$status" -eq 0
+          node <<'NODE'
+          const fs=require('node:fs'),assert=require('node:assert/strict'),out=process.env.PLACEMENT_OUT,read=n=>fs.readFileSync(out+'/'+n,'utf8'),load=n=>read(n).trim().split('\n').filter(Boolean).map(s=>JSON.parse(s));
+          const log=read('caps.log');assert.equal((log.match(/gz over[^\n]+budget/g)||[]).length,15);assert.match(log,/sweepWeight: green/);
+          const ids=Array.from({length:15},(_,i)=>i+1),contexts=load('weights-contexts.jsonl'),fonts=load('weights-fonts.jsonl'),flags=load('weights-flags.jsonl'),manifest=new Map(JSON.parse(fs.readFileSync(process.env.FREE_KICK_FONT_CACHE+'/manifest.json','utf8')).map(x=>[x.url,x]));
+          assert.deepEqual(contexts.map(x=>x.contextId),ids);assert.equal(fonts.filter(x=>x.resourceType==='stylesheet').length,15);
+          for(const id of ids){assert.equal(fonts.filter(x=>x.contextId===id&&x.resourceType==='stylesheet').length,1);assert(fonts.some(x=>x.contextId===id&&x.resourceType==='font'));}
+          for(const row of fonts){assert(ids.includes(row.contextId));assert(manifest.has(row.url));assert.equal(row.sha256,manifest.get(row.url).sha256);assert.equal(row.manifestSha256,process.env.FONT_CACHE_MANIFEST_SHA256);}
+          for(const row of flags){const u=new URL(row.url);assert(ids.includes(row.contextId));assert.equal(row.method,'GET');assert.equal(row.resourceType,'image');assert.equal(row.action,'LOCAL_ABORT');assert.equal(u.origin,'https://flagcdn.com');assert(!u.username&&!u.password&&!u.search&&!u.hash);assert.match(u.pathname,/^\/(?:w[1-9][0-9]{0,2}\/|h[1-9][0-9]{0,2}\/|[1-9][0-9]{0,2}x[1-9][0-9]{0,2}\/)?[a-z]{2}(?:-[a-z0-9]{1,8})?\.(?:png|webp|svg)$/);}
+          fs.writeFileSync(out+'/caps-font-summary.json',JSON.stringify({complete:true,source:process.env.GITHUB_SHA,capRows:15,contexts:15,fontRows:fonts.length,localFlagDenials:flags.length,capSourceUnchanged:true},null,2)+'\n',{flag:'wx'});
+          NODE
+          test ! -s "$out/caps-server.transport";test ! -s "$out/caps.transport";test ! -s "$out/caps-controller.transport"
+      - name: All fifteen existing built-site readers
+        id: readers
+        if: ${{ !cancelled() && steps.caps.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$PHONE_GAME_OUT";source "$out/helpers/run.sh"
+          : > "$out/readers-server.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/readers-server.transport" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/readers-server.log" 2>&1 & server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          cat > "$out/helpers/readers.cjs" <<'READERS'
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),out=process.env.PLACEMENT_OUT,root=path.join(out,'readers'),names=["simAdsense","simBrand","simHeadTags","simHiddenPages","simHubs","simIndexNow","simIndexing","simInternalLinks","simNoRivalNames","simPrerender","simPrerenderBoot","simRetiredRoutes","simSchema","simSitemap","simSnapshotAssets"],closings={"simAdsense":"simAdsense: green.","simBrand":"simBrand: green.","simHeadTags":"simHeadTags: green.","simHiddenPages":"simHiddenPages: green.","simHubs":"simHubs: green.","simIndexNow":"simIndexNow: green.","simIndexing":"simIndexing: green.","simInternalLinks":"simInternalLinks: green.","simNoRivalNames":"No rival product names found. 0 findings.","simPrerender":"simPrerender: green.","simPrerenderBoot":"simPrerenderBoot: green.","simRetiredRoutes":"simRetiredRoutes: all green","simSchema":"simSchema: green.","simSitemap":"simSitemap: green.","simSnapshotAssets":"simSnapshotAssets: green."},rows=[];fs.mkdirSync(root);for(const key of ["RESULT_MOMENT_CONTROL","SIM_SEASON_VERDICT_CONTROL"])a.equal(process.env[key],undefined,"NORMAL_RESULT_READER_CONTROL_UNSET:"+key);
+          for(const method of names){const dir=path.join(root,method);fs.mkdirSync(dir);const receipt=path.join(dir,'transport.jsonl');fs.writeFileSync(receipt,'',{flag:'wx'});const x=fs.openSync(path.join(dir,'stdout.log'),'w'),y=fs.openSync(path.join(dir,'stderr.log'),'w');let p;try{p=cp.spawnSync(process.execPath,['scripts/'+method+'.mjs'],{env:{...process.env,BASE:'http://127.0.0.1:4173',SWEEP_BASE:'http://127.0.0.1:4173',SIM_OFFLINE_RECEIPT:receipt},timeout:240000,stdio:['ignore',x,y]});}finally{fs.closeSync(x);fs.closeSync(y);}const processRecord={status:p.status,signal:p.signal,error:p.error?String(p.error):null};fs.writeFileSync(path.join(dir,'process.json'),JSON.stringify(processRecord,null,2)+'\n',{flag:'wx'});fs.writeFileSync(path.join(dir,'raw.exit'),String(p.status)+'\n',{flag:'wx'});const cli=(fs.readFileSync(path.join(dir,'stdout.log'),'utf8')+'\n'+fs.readFileSync(path.join(dir,'stderr.log'),'utf8')).replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,''),closing=cli.split(/\r?\n/).filter(line=>line.startsWith(closings[method]));rows.push({method,...processRecord,closingCount:closing.length,closing:closing[0]??null,transportBytes:fs.statSync(receipt).size,scriptSHA256:createHash('sha256').update(fs.readFileSync('scripts/'+method+'.mjs')).digest('hex')});console.log(method+': raw '+p.status+', actual closing rows '+closing.length);}
+          fs.writeFileSync(path.join(out,'actual-readers-processes.json'),JSON.stringify(rows,null,2)+'\n',{flag:'wx'});a.deepEqual(rows.map(v=>v.method),names);a.equal(rows.length,15);for(const r of rows){a.equal(r.status,0,'ACTUAL_READER_RAW_ZERO:'+r.method);a.equal(r.signal,null);a.equal(r.error,null);a.equal(r.closingCount,1,'ACTUAL_NORMAL_READER_CLOSING:'+r.method);a.equal(r.transportBytes,0);}fs.writeFileSync(path.join(out,'READERS-ADMISSION.json'),JSON.stringify({status:'ACTUAL_15_EXISTING_BUILT_READERS_PASSED',source:process.env.GITHUB_SHA,savedReaders:15,totalReaderMethods:15,publicSnapshotsRegenerated:false,methods:rows,fullHarnessSuiteClaim:false},null,2)+'\n',{flag:'wx'});console.log('US_C4_GAME_READERS: all15 existing built readers completed with raw0, normal closings and empty transports; no regenerated snapshot credit.');
+          READERS
+          sha256sum "$out/helpers/readers.cjs" >> "$out/helpers.sha256"
+          node --check "$out/helpers/readers.cjs"
+          run readers 65m node "$out/helpers/readers.cjs"
+          test "$(cat "$out/readers.exit")" -eq 0;test ! -s "$out/readers-server.transport"
+      - name: Actual phone boards, desktop parent comparison and effective CSS controls
+        run: |
+          set -euo pipefail
+          out="$PHONE_GAME_OUT";source "$out/helpers/run.sh"
+          run native 20m node scripts/qa/playUsConnect4PhoneBoard.mjs
+          test "$(cat "$out/native.exit")" -eq 0
+          test ! -s "$out/native.stderr"
+          grep -Fqx 'US_CONNECT4_PHONE_BOARD_NATIVE_PASSED: 32 current and 8 parent contexts; 4 rendered CSS controls; 1 physical CSS owner control; 19 copied observation, 9 additional guard and 3 capture-only guard controls.' "$out/native.stdout"
+          sha256sum -c "$out/source.initial.sha256" > "$out/source.post-native-held.log"
+      - name: Always retain source, post-qualification inventories and originals
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="$PHONE_GAME_OUT";mkdir -p "$out";failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          xargs -0 sha256sum < "$out/source-members.final" > "$out/source.final.sha256"
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git diff --exit-code HEAD > "$out/working-source.diff" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"
+          cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/helpers.sha256" > "$out/helpers-held.log" 2>&1 || failed=1
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-final-held.log" 2>&1 || failed=1
+          for pair in "deps:node_modules" "tools:${PHONE_TOOLS:-}" "fonts:${FREE_KICK_FONT_CACHE:-}" "dist:dist" "parentdist:${PHONE_BOARD_PARENT_DIST:-}";do
+            label="${pair%%:*}";dir="${pair#*:}"
+            if test -f "$out/$label.sha256";then
+              find "$dir" -type f -print0 | sort -z > "$out/$label.members.final"
+              cmp "$out/$label.members" "$out/$label.members.final" || failed=1
+              sha256sum -c "$out/$label.sha256" > "$out/$label-held.log" 2>&1 || failed=1
+            else printf 'POST_QUALIFICATION_INVENTORY_NOT_CREATED\n' > "$out/$label-not-created.txt";failed=1;fi
+          done
+          if test -f "$out/dependency-links.before";then
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.before" "$out/dependency-links.final" || failed=1
+          else failed=1;fi
+          if test -f "$out/python-packages.initial";then python -m pip freeze > "$out/python-packages.final";cmp "$out/python-packages.initial" "$out/python-packages.final" || failed=1;fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"PHONE_BOARD_BUILD_PARENT_COMPARISON_AND_RENDERED_SOURCE_CONTROLS_ONLY","source":"%s","productParent":"%s","existing24Preservation":"SEPARATE_UNIT_WORKFLOW_NO_CREDIT_HERE","build":"READ_ACTUAL_RAW","caps15":"READ_ACTUAL_RAW_AND_FONT_RECEIPTS","capPolicy":"CURRENT_MAIN_58AF_WITH_SIX_PREEXISTING_MAIN_RAISES_NO_ROOT_CAP_CHANGE","builtReaders15":"READ_ACTUAL_ADMISSION","native":"32CURRENT_8PARENT_REFERENCE_8CSSCONTROL_CONTEXTS_ONLY","nativePixelReview":"OWED_ROOT_48_ORIGINAL_VIEWS","wholeBoardPixelScope":"SEPARATE_TALLER_CAPTURE_ONLY_VIEWPORT_SAME_WIDTH_GEOMETRY_HELD_ORIGINAL_VIEWPORT_RESTORED","pendingPixelScope":"8_CURRENT_390_ORIGINAL_NORMAL_VIEWPORTS","unitBridge":"PRIOR_EBAE_24_CASE_ACTUAL_SAME_5493_PRODUCT_INPUTS_NO_NEW_UNIT_RUN","fullDefaultSuite":"UNRUN_ON_PHONE_SOURCE_PARENT_QUALIFICATION_ONLY","publicSnapshotsRegenerated":false,"fullSEO":"UNRUN","globalSims":"UNRUN","releaseOrPublicationReady":false,"dependencyInventoryScope":"POST_BUILD_ONLY"}\n' "$GITHUB_SHA" "$EXPECTED_PARENT" > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/usc4-phone-game-evidence.sha256"
+          cp "$RUNNER_TEMP/usc4-phone-game-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: us-connect4-phone-game-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/usc4-phone-game
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
