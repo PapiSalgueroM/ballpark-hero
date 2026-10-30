@@ -1,0 +1,4 @@
+ctl-talkskept exit=0 56s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+vitest-a exit=0 58s |    Duration  56.26s (transform 6.01s, setup 620ms, collect 2.30s, tests 64.77s, environment 4.21s, prepare 741ms)
+ctl-nhl-talkskept exit=0 30s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+tsc exit=0 108s | 
