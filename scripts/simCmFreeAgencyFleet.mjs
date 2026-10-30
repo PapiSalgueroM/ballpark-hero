@@ -18,7 +18,18 @@
  *                           least one of: my squad or out on loan from me, the free agent list, retiredNames, an AI
  *                           club's squad through the world ledger. Lost must be 0.
  *   section 2 RETIREMENT    men on the list do retire (the list is not a home for life): at least RETIRE_FLOOR
- *                           retirements off the list over the fleet, and every one of them is in that summer's news.
+ *                           retirements off the list over the fleet, and every one of them is named on the new
+ *                           season's first screen (freeAgentsRetired), nobody else.
+ *
+ * MEASURED on a GitHub runner (remote check r1597-s2a, 12 careers, 8 seasons each, three world seeds):
+ *   main 14a9af704   626 men left a squad, 404 of them LOST (gone from every place by a later summer, 22 to 45 a
+ *                    career), 0 retired off the list; list size at season 9 median 16, median age 22.
+ *   this round       629 men left, lost 0, twice 0, 133 retired off the list (3 to 18 a career); list size at
+ *                    season 9 median 43 (25 to 56; the renew nobody careers the biggest), median age 25.
+ *   controls (r1597-s2b): deletepool 171 lost in 5 seasons; noretire 0 retirements; nodedupe 46 names twice.
+ *   The old save fixture (written on main by this file's CM_FA_WRITE_OLD mode, remote check r1597-s2a): by the end
+ *   of season 5 main had lost 12, 15 and 11 men at Everton, Ajax and Southampton 2015, of whom 4, 4 and 5 were
+ *   still held by the ledger as released: those come back, the rest left no record and are not rebuilt.
  *   section 3 NOBODY TWICE  no tracked man is in two of those places at once, and no name is on the list twice.
  *   section 4 OLD SAVE      saves written by main (14a9af704) at the end of season 5, in a fixture: loading one
  *                           changes nothing on the list, its next summer puts back every man its ledger still holds
@@ -177,8 +188,10 @@ function runCareer(club, eraId, seed, policy, seasons, atSeasonEnd) {
     const wasRetired = new Set(before.retiredNames ?? []);
     const offList = (before.freeAgents ?? []).filter(f => !isJourneyman(f) && !wasRetired.has(f.name) && (s.retiredNames ?? []).includes(f.name));
     row.retiredOff += offList.length;
-    if (offList.length && !(s.aiHeadlines ?? []).some(h => h.includes('retired without finding a new club'))) {
-      totals.unseen += 1; fail(2, `${club} ${policy} summer ${season}: ${offList.length} retired off the list and no news line says so`);
+    const said = new Set((s.freeAgentsRetired ?? []).map(r => r.name));
+    const unsaid = offList.filter(f => !said.has(f.name));
+    if (unsaid.length || said.size !== offList.length) {
+      totals.unseen += 1; fail(2, `${club} ${policy} summer ${season}: ${offList.length} retired off the list, the new season's first screen names ${said.size} of them (${unsaid.map(f => f.name).slice(0, 3).join(', ')} unsaid)`);
     }
     /* Sections 1 and 3: every man tracked so far, at this summer. */
     const records = ledger.readWorldRoster(s)?.records ?? [];
@@ -277,9 +290,9 @@ if (!SKIP_OLD) {
 }
 
 /* ---------- the verdict ---------- */
-/* Floors, a tenth of what the fleet makes (to be set from the first measured run): a run that stops dealing cannot
-   pass by having nothing to check. */
-const TRACK_FLOOR = 50, RETIRE_FLOOR = 1;
+/* Floors, a tenth of what the fleet made on its first measured run (629 men left, 133 retired off the list, r1597-s2a),
+   so a run that stops dealing cannot pass by having nothing to check. */
+const TRACK_FLOOR = 60, RETIRE_FLOOR = 13;
 if (totals.tracked < TRACK_FLOOR) fail(1, `only ${totals.tracked} men left a squad over the fleet, under ${TRACK_FLOOR}`);
 if (totals.poolRetired < RETIRE_FLOOR) fail(2, `only ${totals.poolRetired} men retired off the list over the fleet, under ${RETIRE_FLOOR}`);
 console.log(`simCmFreeAgencyFleet: ${totals.careers} careers to season ${SEASONS + 1}; ${totals.tracked} men left a squad, ${totals.checks} summer checks; lost ${totals.lost}, twice ${totals.twice}; ${totals.poolRetired} retired off the list (${totals.unseen} summers unseen); list size at the end median ${median(endSizes)}, its median age median ${median(endAges)}${SKIP_OLD ? '; old saves skipped' : `; old saves recoverable ${recoverableTotal}, recovered ${recoveredTotal}`}`);

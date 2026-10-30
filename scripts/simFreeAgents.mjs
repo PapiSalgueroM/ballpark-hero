@@ -1704,8 +1704,10 @@ console.log("18) a modern day one opens with today's real free agents, and only 
   try { loaded = cm.loadCareer(); } finally { globalThis.localStorage.getItem = realGet; }
   if (!loaded) leaks.push('an old save did not load');
   else if (realOf(loaded).length) leaks.push(`an old save with no pool opens listing ${realOf(loaded).length}`);
-  /* Summers: a man not signed is carried one summer, a year older, and then
-     gone with everybody else the pool ages out; a man signed is never back. */
+  /* Summers: a man not signed is carried, a year older each summer, until a
+     club signs him or he retires (Round 1597: the pool no longer deletes him at
+     his second summer); a man signed is never back; and no summer seeds them
+     again, so nobody is listed in season three who was not there on day one. */
   const signable = realOf(everton).find(f => cm.freeAgentBlock({ ...everton, wageCap: Number.MAX_SAFE_INTEGER }, f) === null);
   const signedSt = signable ? cm.signFreeAgent({ ...clone(everton), wageCap: Number.MAX_SAFE_INTEGER }, signable.name) : null;
   if (!signedSt) leaks.push('no real free agent could be signed at Everton, so the summer checks see nothing');
@@ -1715,11 +1717,19 @@ console.log("18) a modern day one opens with today's real free agents, and only 
     const carried = realOf(n1);
     const want = realOf(everton).filter(f => f.name !== signable.name);
     if (carried.some(f => f.name === signable.name)) leaks.push(`${signable.name}, signed in season one, is back in the pool the next summer`);
-    if (carried.length !== want.length || carried.some(f => f.since !== everton.season || f.age !== (want.find(w => w.name === f.name)?.age ?? -9) + 1)) leaks.push(`season two holds ${carried.length} real men, not the ${want.length} unsigned ones a year older`);
-    if (realOf(n2).length) leaks.push(`season three still lists ${realOf(n2).length} real men, so the summer re-seeds them`);
+    const accounted = (st, f, years) => {
+      const on = realOf(st).find(x => x.name === f.name);
+      return on ? on.since === everton.season && on.age === f.age + years : (st.retiredNames ?? []).includes(f.name);
+    };
+    const lost1 = want.filter(f => !accounted(n1, f, 1));
+    if (lost1.length || carried.length > want.length) leaks.push(`season two lists ${carried.length} real men, and ${lost1.length} of the ${want.length} unsigned ones are neither on it a year older nor retired`);
+    const extra = realOf(n2).filter(f => !want.some(w => w.name === f.name));
+    if (extra.length) leaks.push(`season three lists ${extra.length} real men who were not there on day one, so the summer re-seeds them`);
+    const lost2 = want.filter(f => !accounted(n2, f, 2));
+    if (lost2.length) leaks.push(`season three: ${lost2.length} unsigned real men are neither on the list two years older nor retired`);
   }
   if (leaks.length) fail(`the real free agents are listed somewhere other than a new modern day one: ${leaks.slice(0, 3).join(' | ')}`);
-  else ok('never in an era save, a job move, an old save or a later summer; a signed man never comes back and the rest age out in two');
+  else ok('never in an era save, a job move, an old save or a later summer; a signed man never comes back and the rest stay on the list, older each summer, until they retire');
 
   /* COVER, NOT AN UPGRADE. The rule this pool has lived under since Round
      619. Journeymen sit 20 to 26 under the club; a real man sits wherever his

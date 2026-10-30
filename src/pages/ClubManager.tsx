@@ -1124,6 +1124,16 @@ const ClubManager = () => {
               <div className="text-[9px] text-muted-foreground mt-1">That is the end of their careers. You will need to replace them.</div>
             </div>
           )}
+          {/* Round 1597: and the men on the free agent list who called it a day, so nobody leaves the game unseen. */}
+          {!leagueStarted(c) && (c.freeAgentsRetired ?? []).length > 0 && (
+            <div data-cm-fa-retired className="rounded-xl border border-border bg-card p-2.5">
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">👟 Retired off the free agent list</div>
+              <div className="text-xs text-foreground">
+                {(c.freeAgentsRetired ?? []).map(r => `${r.name} (${r.age}, rated ${r.rating})`).join(' · ')}
+              </div>
+              <div className="text-[9px] text-muted-foreground mt-1">Nobody signed them, so they have hung up their boots.</div>
+            </div>
+          )}
           {c.transferWindow !== null && (
             <button
               onClick={() => g.setActiveTab('transfers')}

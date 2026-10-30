@@ -2869,6 +2869,9 @@ export interface CareerState {
    *  held as released were put back on the list (recoverPooledReleases). Absent on
    *  every save before that summer, which is what makes the pass run once. */
   freeAgencyV2?: true;
+  /** Round 1597: the men on the free agent list who retired at the last summer, for the new season's first
+   *  screen (retiredLastSummer is the squad's). Rewritten every summer; absent when nobody did. */
+  freeAgentsRetired?: { name: string; age: number; rating: number }[];
   aiHeadlines: string[];
   /** Names no longer purchasable (bought by me or by AI clubs this season). */
   goneNames: string[];
@@ -22878,15 +22881,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 161: the add-ons that came due lead the summer's news. This sits
      after generateHeadlines on purpose: that call rebuilds the feed. */
   if (addOnNews.length || loanOptionNews.length) state.aiHeadlines = [...loanOptionNews, ...addOnNews, ...state.aiHeadlines].slice(0, 8);
-  /* Round 1597: a man on the free agent list who retires is said in the news, so nobody leaves the game unseen.
-     After generateHeadlines for the Round 161 reason: that call rebuilds the feed. */
-  if (poolSummer.retired.length) {
-    const names = poolSummer.retired.map(r => `${r.name} (${r.age})`);
-    state.aiHeadlines = [
-      `\u{1F45F} ${names.slice(0, 3).join(', ')}${names.length > 3 ? ` and ${names.length - 3} more` : ''} ${poolSummer.retired.length === 1 ? 'has' : 'have'} retired without finding a new club.`,
-      ...state.aiHeadlines,
-    ].slice(0, 8);
-  }
+  /* Round 1597: a man on the free agent list who retires is said on the new season's first screen, beside the
+     squad's own retirements, so nobody leaves the game unseen. Kept on the save for the summer, not put in the
+     feed: the merry-go-round and the promotions prepend after this and the feed keeps eight lines, so a headline
+     here was pushed off in 34 of the fleet's summers (simCmFreeAgencyFleet's first run). */
+  if (poolSummer.retired.length) state.freeAgentsRetired = poolSummer.retired;
+  else delete state.freeAgentsRetired;
   /* Round 508: an exercised option is a TRANSFER, so it goes in the transfer
      log rather than only into the headline feed. The feed is capped at eight
      and two more prepends follow this line, so a summer with promotion news and
