@@ -1,0 +1,3 @@
+simWorldEuro-head exit=2 119s | simWorldEuro: cannot run: off: the line to edit stands in src/lib/clubManager.ts 0 times, it must be exactly once (    openWorldComp(state, 'uel', worldCompField(state, '
+simGmStaff-base exit=1 3s | GM STAFF: 40 failure(s)
+simCmUnseededWorld-base exit=1 114s | simCmUnseededWorld: 113 FAILURE(S)

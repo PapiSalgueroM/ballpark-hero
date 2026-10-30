@@ -1,0 +1,4 @@
+#!serial
+simWorldEuro-head: WORLD_EURO_BASE=14a9af704 node scripts/simWorldEuro.mjs
+simGmStaff-base: git checkout -q -f 14a9af704 && node scripts/simGmStaff.mjs
+simCmUnseededWorld-base: git checkout -q -f 14a9af704 && node scripts/simCmUnseededWorld.mjs
