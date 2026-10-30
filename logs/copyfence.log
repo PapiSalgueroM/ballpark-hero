@@ -1,0 +1,5 @@
+   baseball: 0 raw labels, receipt not shown, dialog date 2026 (boards carry 2026)
+   nfl: 0 raw labels, receipt not shown, dialog date 2025 (boards carry 2025)
+   nhl: 0 raw labels, receipt shown, dialog date 2025-26 (boards carry 2025-26)
+   nba: 0 raw labels, receipt shown, dialog date 2025-26 (boards carry 2025-26)
+simConnectionsDatedCopy: green. The four US Connections pages render every group label through ConnectionsGroupLabel and every receipt through ConnectionsReceiptText, and each How to play dialog says what "as of" means with a date its own boards carry (45 dated labels).

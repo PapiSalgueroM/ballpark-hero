@@ -1,0 +1,6 @@
+migcheck1567 exit=0 0s | supabase/migrations/20261029130000_round_1567_us_connections_gray.sql matches the files
+facts exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL, NHL and NBA Connections group is held to the record, and no board has a second right answer the record can see (other t
+simUsCareerHallWall exit=2 3s | simUsCareerHallWall board control nokeep: REFUSED, its string is in the board 0 times, not once (not a FIRED)
+copyfence exit=0 0s | simConnectionsDatedCopy: green. The four US Connections pages render every group label through ConnectionsGroupLabel and every receipt through ConnectionsReceiptText, and
+vitest-us exit=0 67s |    Duration  66.44s (transform 3.43s, setup 665ms, collect 12.33s, tests 100.11s, environment 3.48s, prepare 829ms)
+tsc exit=0 82s | 
