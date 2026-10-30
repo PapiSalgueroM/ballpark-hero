@@ -1,0 +1,14 @@
+simCmDifficulty: node scripts/simCmDifficulty.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmLevelReads: node scripts/simCmLevelReads.mjs
+simCmDailyView: node scripts/simCmDailyView.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simEras: node scripts/simEras.mjs
+simRoles: node scripts/simRoles.mjs
+simPress: node scripts/simPress.mjs
