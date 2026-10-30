@@ -1,0 +1,3 @@
+1221 /home/runner/work/_temp/rc-out/full/playNationJob.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playNationJob.mjs/stderr.log
+1221 total

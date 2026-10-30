@@ -1,0 +1,2 @@
+3db67ef7f73bcabe88d9a28f433524ce64de5ed21f0b44179b8458f315da3501  /home/runner/work/_temp/rc-out/full/playNationJob.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playNationJob.mjs/stderr.log

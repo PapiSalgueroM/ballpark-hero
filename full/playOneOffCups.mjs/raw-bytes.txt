@@ -1,0 +1,3 @@
+2363 /home/runner/work/_temp/rc-out/full/playOneOffCups.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playOneOffCups.mjs/stderr.log
+2363 total

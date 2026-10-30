@@ -1,0 +1,3 @@
+980 /home/runner/work/_temp/rc-out/full/playManagerCustomPromotion.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playManagerCustomPromotion.mjs/stderr.log
+980 total

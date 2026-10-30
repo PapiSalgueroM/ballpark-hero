@@ -1,0 +1,2 @@
+e5e4e60c54997ab614b06614c48c9e328684c4d932861b9e1581116831c50acd  /home/runner/work/_temp/rc-out/full/playOneOffCups.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playOneOffCups.mjs/stderr.log

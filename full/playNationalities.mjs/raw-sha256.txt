@@ -1,0 +1,2 @@
+027f0896f64f02c98546f7655ef3c2db82e82d091ac71a7540664c4f0ddbe6c0  /home/runner/work/_temp/rc-out/full/playNationalities.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playNationalities.mjs/stderr.log

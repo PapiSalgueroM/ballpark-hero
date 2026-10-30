@@ -1,0 +1,2 @@
+7f73a5b8f6fe64ae5544eafcc3c538fa3a0d98caae4ce5465dce167d6423ed0b  /home/runner/work/_temp/rc-out/full/playNbaNumbers.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playNbaNumbers.mjs/stderr.log
