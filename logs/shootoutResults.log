@@ -1,0 +1,6 @@
+Round 1600 bridge: both engines on the world before the flip (curve 1 files served {"original":{"clubManagerRosters":1,"clubManagerALeague2026":1,"clubManagerRussia2026":1,"clubManagerFreeAgents2026":1},"candidate":{"clubManagerRosters":1,"clubManagerALeague2026":1,"clubManagerRussia2026":1,"clubManagerFreeAgents2026":1}}).
+Shootout results: 159 actual matches compared; 0 assertions failed; preservation passed.
+Current witnesses: shootout win 782112, shootout loss 782114, ordinary match 782100.
+Preservation: whole state 159/159, global draw values/count 159/159, other report content 159/159.
+Negative controls: 10/10 changed inputs rejected. Evidence: /home/runner/work/ballpark-hero/ballpark-hero/.sim-artifacts/cm-shootout-results-A6sNFU
+ALL SHOOTOUT RESULTS CHECKS PASSED

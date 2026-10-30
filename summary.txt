@@ -1,0 +1,4 @@
+sr-keepcurve exit=2 2s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+shootoutResults exit=0 10s | ALL SHOOTOUT RESULTS CHECKS PASSED
+so-tie-record-main exit=1 27s | simCmShootoutOrder: 92 FAILURE(S)
+shootout exit=0 34s | simCmShootoutOrder: all sections passed

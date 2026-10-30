@@ -1,0 +1,4 @@
+shootoutResults: node scripts/simCmShootoutResults.mjs
+sr-keepcurve: CM_SHOOTOUT_RESULTS_CONTROL=keepcurve node scripts/simCmShootoutResults.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+so-tie-record-main: R=$PWD; git worktree add /tmp/m-so c18c4b7a8 >/dev/null 2>&1 && cd /tmp/m-so && ln -s $R/node_modules node_modules && CM_SHOOTOUT_CONTROL=tie-record node scripts/simCmShootoutOrder.mjs
