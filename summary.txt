@@ -1,0 +1,43 @@
+head exit=0 0s |  10 files changed, 391 insertions(+), 48 deletions(-)
+gen exit=0 0s | derived file is the generator's output
+sim exit=0 4s | simBingoClubCounts: GREEN, every section held
+moved exit=0 5s | simBingoClubCounts: GREEN, every section held
+honours exit=0 14s | simPlayerBingoHonours PASS
+moved-old exit=1 7s | simBingoClubCounts: RED, 23 failures (section 4: 23)
+moved-nowindow exit=1 4s | simBingoClubCounts: CONTROL=nowindow FIRED (1 failures; section 8: 1)
+moved-bornone exit=1 4s | simBingoClubCounts: CONTROL=bornone FIRED (1 failures; section 5: 1)
+moved-windowseason exit=1 4s | simBingoClubCounts: CONTROL=windowseason FIRED (1 failures; section 8: 1)
+c-bornone exit=1 5s | simBingoClubCounts: CONTROL=bornone FIRED (1 failures; section 5: 1)
+c-shortname exit=1 4s | simBingoClubCounts: CONTROL=shortname FIRED (1 failures; section 6: 1)
+c-forgot exit=1 5s | simBingoClubCounts: CONTROL=forgot FIRED (2 failures; section 4: 2)
+c-rule exit=1 4s | simBingoClubCounts: CONTROL=rule FIRED (19 failures; section 1: 4, section 4: 15)
+c-onesource exit=1 5s | simBingoClubCounts: CONTROL=onesource FIRED (1 failures; section 5: 1)
+c-pending exit=1 4s | simBingoClubCounts: CONTROL=pending FIRED (4 failures; section 4: 4)
+c-nomorton exit=1 4s | simBingoClubCounts: CONTROL=nomorton FIRED (6 failures; section 2: 1, section 3: 3, section 9: 2)
+c-leak exit=1 5s | simBingoClubCounts: CONTROL=leak FIRED (4 failures; section 2: 2, section 9: 2)
+c-noreserve exit=1 5s | simBingoClubCounts: CONTROL=noreserve FIRED (120 failures; section 2: 32, section 3: 42, section 9: 46)
+c-noapply exit=1 5s | simBingoClubCounts: CONTROL=noapply FIRED (268 failures; section 2: 60, section 3: 121, section 8: 14, section 9: 73)
+c-drift exit=1 4s | simBingoClubCounts: CONTROL=drift FIRED (2 failures; section 7: 1, section 9: 1)
+c-nosplit exit=1 5s | simBingoClubCounts: CONTROL=nosplit FIRED (25 failures; section 2: 8, section 3: 6, section 9: 11)
+c-handedit exit=1 5s | simBingoClubCounts: CONTROL=handedit FIRED (1 failures; section 6: 1)
+c-slashdup exit=1 4s | simBingoClubCounts: CONTROL=slashdup FIRED (1 failures; section 6: 1)
+c-aliasdup exit=1 5s | simBingoClubCounts: CONTROL=aliasdup FIRED (1 failures; section 6: 1)
+c-tableclubs exit=1 5s | simBingoClubCounts: CONTROL=tableclubs FIRED (1 failures; section 6: 1)
+c-noseason exit=1 4s | simBingoClubCounts: CONTROL=noseason FIRED (1 failures; section 5: 1)
+c-window exit=1 4s | simBingoClubCounts: CONTROL=window FIRED (4 failures; section 1: 2, section 4: 2)
+c-unjudged exit=1 4s | simBingoClubCounts: CONTROL=unjudged FIRED (1 failures; section 4: 1)
+c-touchprev exit=1 5s | simBingoClubCounts: CONTROL=touchprev FIRED (1 failures; section 9: 1)
+c-prevleak exit=1 5s | simBingoClubCounts: CONTROL=prevleak FIRED (1 failures; section 9: 1)
+c-nowindow exit=1 5s | simBingoClubCounts: CONTROL=nowindow FIRED (1 failures; section 8: 1)
+c-windowdrop exit=1 4s | simBingoClubCounts: CONTROL=windowdrop FIRED (4 failures; section 2: 1, section 3: 2, section 8: 1)
+c-windowseason exit=1 3s | simBingoClubCounts: CONTROL=windowseason FIRED (1 failures; section 8: 1)
+c-cap exit=3 0s |    FIXTURE_CONTROL=cap did not fire: no history page reached the 1,000 row cap (largest 781), so nobody exceeds a page and paging is not exercised by this fixture
+c-windowdb exit=1 5s | simBingoClubCounts: CONTROL=windowdb FIRED (1 failures; section 8: 1)
+c-bogus exit=3 7s | simBingoClubCounts: CONTROL=bogus DID NOT FIRE (it changed nothing)
+vitest exit=0 12s |    Duration  11.20s (transform 1.20s, setup 1.26s, collect 4.26s, tests 10.80s, environment 7.44s, prepare 2.11s)
+tsc exit=0 111s | 
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 30s | No rival product names found. 0 findings.
+dashes exit=0 0s | dashes: 0 in 1 files
+simPlayerBingoCategories exit=0 34s | simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.
+simHarnessAnchors exit=0 62s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

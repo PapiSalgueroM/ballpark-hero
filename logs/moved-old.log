@@ -1,0 +1,38 @@
+mvround: PREV 0ade4ec7b, round 9999 (ROUND moved), wrote scripts/xMoved-old.mjs
+0) The fixture
+1) The diagnosis receipt and the candidate rule
+2) Identity, BASE against the tree
+3) Verdicts
+4) Completeness, a ratchet
+  FAIL: Marcus Rashford: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Endrick: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Benjamin Pavard: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Victor Boniface: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Evan Ferguson: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Douglas Luiz: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Nico González: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: James Ward-Prowse: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Antoine Semenyo: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Brennan Johnson: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Crysencio Summerville: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Evann Guessand: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Morgan Rogers: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Nahuel Molina: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Nathan Aké: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Simon Adingra: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Artem Dovbyk: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Ollie Watkins: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Randal Kolo Muani: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Tijjani Reijnders: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Mason Greenwood: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Alejandro Grimaldo: round 1576 is not this round (9999); an earlier round's entry carries no round key
+  FAIL: Guglielmo Vicario: round 1576 is not this round (9999); an earlier round's entry carries no round key
+   168 candidates (69 hole, 99 window): 60 additions, 45 agrees, 1 partial, 75 pending (ratchet 75); round 9999 entries 0
+5) Sources
+6) The derived file
+7) The fleet: 200 seeded boards and decks, BASE against the tree
+8) The window answer (round 9999 entries)
+   0 round 9999 entries (0 partial), 0 window clubs; 0 men had a 2025-26 club the table lacked
+9) Against the previous closed head on this record, PREV 0ade4ec7b
+   (a) 106 of 106 PREV entries byte equal by name (0 amended by name); round, checkedOn, report, fixture, counting, hole candidates, 6 rule keys and 1 earlier classes equal
+simBingoClubCounts: RED, 23 failures (section 4: 23)
