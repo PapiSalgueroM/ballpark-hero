@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+vitest: node_modules/.bin/vitest run src/test/managerHotSeatTieStamp.test.tsx src/test/cmDecidingLegCard.test.tsx --testTimeout=300000 --hookTimeout=300000
+walk: node scripts/playCmDecidingLeg.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
