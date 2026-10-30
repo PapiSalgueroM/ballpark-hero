@@ -1,0 +1,8 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playCmLeagueLeaders exit=0 103s | playCmLeagueLeaders: green, 5 sections at 320, 390 and 1280
+sweepWeight exit=1 28s | sweepWeight: 3 failures
+walk-stack exit=1 136s | playCmPlayerCard: CONTROL stack FIRED: section 3 went red (45 failures) and no other did
+playCmPlayerCard exit=0 136s | playCmPlayerCard: green, 5 sections at 320, 390 and 1280
+playCmOldCareersWorld exit=0 4s | playCmOldCareersWorld: green, 5 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+playNationJob exit=0 16s | playNationJob: green. Win enough and your country calls, and the club job carries on underneath it.
+playCmWorldMoves exit=0 21s | playCmWorldMoves: green, 22 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
