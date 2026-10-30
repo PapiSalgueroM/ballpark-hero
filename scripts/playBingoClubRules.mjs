@@ -57,7 +57,7 @@ const SECTION = [
 ];
 const WINDOW_MAN = 'Marcus Rashford';
 const WINDOW_TILE = 'Played for Barcelona';
-const ENTRY_TITLE = "Player Bingo: last season's clubs are back for 23 players.";
+const ENTRY_TITLE = "Player Bingo: last season's clubs are back for 13 players.";
 const ENTRY_TEXT = `${ENTRY_TITLE} When players moved in 2026 we wrote their new club over the old one, and for some of them that wiped out where they played in 2025-26. We've now checked 23 of those players one by one, their whole careers on two sources, and put back the clubs they were missing, so Marcus Rashford now fits Played for Barcelona on the board.`;
 const CASES = [
   { key: 'morton', man: 'Tyler Morton', tile: 'Played for 4+ clubs', seeds: 60, shot: 'morton-tap' },
