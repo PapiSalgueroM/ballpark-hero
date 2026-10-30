@@ -1,0 +1,3 @@
+gathered-base exit=1 4s | simClubManagerGathered: 1 failure(s) (G 1)
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simDeadlineDay exit=0 6s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
