@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerTrajectory.test.ts src/lib/cmMatchDisplay.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmLevelReads: node scripts/simCmLevelReads.mjs
+ctl-exit: CM_LEVEL_READS_CONTROL=exit node scripts/simCmLevelReads.mjs
+simCmDailyView: node scripts/simCmDailyView.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simEras: node scripts/simEras.mjs

@@ -1,0 +1,9 @@
+simCmLevelReads exit=0 2s | simCmLevelReads: 27 checks, 0 failures
+ctl-exit exit=1 2s | simCmLevelReads: 27 checks, 1 failures (control exit)
+vitest-cm exit=0 23s |    Duration  21.80s (transform 3.97s, setup 498ms, collect 9.16s, tests 31.00s, environment 3.14s, prepare 793ms)
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simDeadlineDay exit=0 5s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simCmDailyView exit=0 32s | simCmDailyView: 5 checks, 0 failures
+tsc exit=0 89s | 
+simManagerHotSeat exit=0 62s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simEras exit=0 1197s | ALL ERA AND AGEING CHECKS PASSED
