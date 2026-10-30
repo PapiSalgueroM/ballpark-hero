@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmEuroPlay: node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-nothursday: CM_EURO_PLAY_CONTROL=nothursday node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-mineflip: CM_EURO_PLAY_CONTROL=mineflip node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-noplaygate: CM_EURO_PLAY_CONTROL=noplaygate node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-noplayrevert: CM_EURO_PLAY_CONTROL=noplayrevert node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-rawlength: CM_EURO_PLAY_CONTROL=rawlength node scripts/simCmEuroPlay.mjs
+simWorldEuro: node scripts/simWorldEuro.mjs
+simOneOffCups: node scripts/simOneOffCups.mjs

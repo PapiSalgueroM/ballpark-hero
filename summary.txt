@@ -1,0 +1,9 @@
+tsc exit=0 120s | 
+simCmEuroPlay-nothursday exit=1 132s | simCmEuroPlay: control nothursday FIRED (114 failures, all its own)
+simCmEuroPlay-mineflip exit=1 132s | simCmEuroPlay: control mineflip FIRED (71 failures, all its own)
+simCmEuroPlay-noplaygate exit=1 131s | simCmEuroPlay: control noplaygate FIRED (32 failures, all its own)
+simCmEuroPlay-rawlength exit=1 70s | simCmEuroPlay: control rawlength FIRED (22 failures, all its own)
+simCmEuroPlay exit=0 512s | simCmEuroPlay: green, 1076 checks, 0 failures
+simWorldEuro exit=2 254s | simWorldEuro: cannot run: off: the line to edit stands in src/lib/clubManager.ts 0 times, it must be exactly once (    openWorldComp(state, 'uel', worldCompField(state, '
+simCmEuroPlay-noplayrevert exit=1 370s | simCmEuroPlay: control noplayrevert FIRED (12 failures, all its own)
+simOneOffCups exit=1 2693s | simOneOffCups: 76 FAILURES of 271522 checks (2693 s)
