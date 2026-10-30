@@ -1,0 +1,9 @@
+ctl-staleseason exit=1 256s | simCmFreeAgencyFleet: CONTROL staleseason FIRED: section 6 red
+ctl-ledgeroff exit=1 259s | simCmFreeAgencyFleet: CONTROL ledgeroff FIRED: section 6 red
+ctl-notrimpool exit=1 279s | simCmFreeAgencyFleet: CONTROL notrimpool FIRED: section 5 red (red: 1 (12), 5 (12))
+ctl-norenewloan exit=1 256s | simCmFreeAgencyFleet: CONTROL norenewloan FIRED: section 7 red
+ctl-noloanrow exit=1 273s | simCmFreeAgencyFleet: CONTROL noloanrow FIRED: section 7 red
+ctl-deletepool exit=1 266s | simCmFreeAgencyFleet: CONTROL deletepool FIRED: section 1 red (red: 1 (422), 4 (16))
+ctl-nodedupe exit=1 245s | simCmFreeAgencyFleet: CONTROL nodedupe FIRED: section 3 red (red: 2 (2), 3 (125))
+ctl-noretire exit=1 280s | simCmFreeAgencyFleet: CONTROL noretire FIRED: section 2 red (red: 2 (1), 6 (16))
+ctl-norecover exit=1 262s | simCmFreeAgencyFleet: CONTROL norecover FIRED: section 4 red

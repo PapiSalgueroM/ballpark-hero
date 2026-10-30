@@ -1,0 +1,31 @@
+  Everton now none: 65 men left, lost 0, twice 0, 16 retired off the list; at season 9 43 on the list besides the journeymen, median age 25
+  Everton now eleven: 31 men left, lost 0, twice 0, 12 retired off the list; at season 9 25 on the list besides the journeymen, median age 23
+  FAIL section 3: Villarreal none, season 2: Aleks Moretti (Youth) is in {"squad":0,"pool":2,"retired":0,"ai":0,"total":2}
+  FAIL section 3: Villarreal none, season 2: on the list twice: Aleks Moretti (Youth)
+  FAIL section 3: Villarreal none, season 3: Aleks Moretti (Youth) is in {"squad":0,"pool":2,"retired":0,"ai":0,"total":2}
+  FAIL section 3: Villarreal none, season 3: on the list twice: Aleks Moretti (Youth)
+  FAIL section 3: Villarreal none, season 4: Aleks Moretti (Youth) is in {"squad":0,"pool":2,"retired":0,"ai":0,"total":2}
+  FAIL section 3: Villarreal none, season 4: on the list twice: Aleks Moretti (Youth)
+  FAIL section 3: Villarreal none, season 5: Aleks Moretti (Youth) is in {"squad":0,"pool":2,"retired":0,"ai":0,"total":2}
+  FAIL section 3: Villarreal none, season 5: on the list twice: Aleks Moretti (Youth)
+  Villarreal now none: 68 men left, lost 0, twice 16, 10 retired off the list; at season 9 57 on the list besides the journeymen, median age 25
+  Villarreal now eleven: 39 men left, lost 0, twice 16, 10 retired off the list; at season 9 35 on the list besides the journeymen, median age 24
+  Freiburg now none: 66 men left, lost 0, twice 16, 11 retired off the list; at season 9 53 on the list besides the journeymen, median age 25
+  Freiburg now eleven: 37 men left, lost 0, twice 16, 13 retired off the list; at season 9 29 on the list besides the journeymen, median age 23
+  FAIL section 2: Ajax none summer 3: 3 retired off the list, the new season's first screen names 2 of them ( unsaid)
+  Ajax now none: 74 men left, lost 0, twice 4, 19 retired off the list; at season 9 51 on the list besides the journeymen, median age 24
+  FAIL section 2: Ajax eleven summer 6: 4 retired off the list, the new season's first screen names 3 of them ( unsaid)
+  Ajax now eleven: 40 men left, lost 0, twice 10, 16 retired off the list; at season 9 27 on the list besides the journeymen, median age 23
+  Braga now none: 68 men left, lost 0, twice 16, 11 retired off the list; at season 9 55 on the list besides the journeymen, median age 25
+  Braga now eleven: 37 men left, lost 0, twice 16, 9 retired off the list; at season 9 36 on the list besides the journeymen, median age 25
+  Southampton era2015 none: 67 men left, lost 0, twice 0, 3 retired off the list; at season 9 54 on the list besides the journeymen, median age 25
+  Southampton era2015 eleven: 37 men left, lost 0, twice 0, 5 retired off the list; at season 9 29 on the list besides the journeymen, median age 23
+  trim Everton now: squad 35 into the summer, 30 after; 3 trimmed, listed as {"released":3}; lent out Christian Nørgaard
+  trim Ajax now: squad 39 into the summer, 30 after; 5 trimmed, listed as {"released":5}; lent out Simon Adingra
+  trim Southampton era2015: squad 36 into the summer, 30 after; 0 trimmed, listed as {}; lent out Graziano Pellè
+  trim Freiburg now: squad 38 into the summer, 30 after; 4 trimmed, listed as {"released":4}; lent out Maximilian Eggestein
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 5
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 762 men left a squad, 2705 summer checks; lost 0, twice 122; 155 retired off the list (2 summers unseen); list size at the end median 43, its median age median 25; trimmed 12; ledger held list men 696, a summer on 1921; out on loan in the last year 4 (left 4, renewed 4); old saves recoverable 13, recovered 13
+simCmFreeAgencyFleet: CONTROL nodedupe FIRED: section 3 red (red: 2 (2), 3 (125))

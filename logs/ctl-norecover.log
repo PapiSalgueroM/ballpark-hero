@@ -1,0 +1,29 @@
+  Everton now none: 65 men left, lost 0, twice 0, 16 retired off the list; at season 9 43 on the list besides the journeymen, median age 25
+  Everton now eleven: 31 men left, lost 0, twice 0, 12 retired off the list; at season 9 25 on the list besides the journeymen, median age 23
+  Villarreal now none: 68 men left, lost 0, twice 0, 10 retired off the list; at season 9 56 on the list besides the journeymen, median age 25
+  Villarreal now eleven: 39 men left, lost 0, twice 0, 10 retired off the list; at season 9 34 on the list besides the journeymen, median age 24
+  Freiburg now none: 66 men left, lost 0, twice 0, 11 retired off the list; at season 9 52 on the list besides the journeymen, median age 25
+  Freiburg now eleven: 37 men left, lost 0, twice 0, 13 retired off the list; at season 9 28 on the list besides the journeymen, median age 23
+  Ajax now none: 74 men left, lost 0, twice 0, 18 retired off the list; at season 9 51 on the list besides the journeymen, median age 24
+  Ajax now eleven: 40 men left, lost 0, twice 0, 15 retired off the list; at season 9 27 on the list besides the journeymen, median age 23
+  Braga now none: 68 men left, lost 0, twice 0, 11 retired off the list; at season 9 54 on the list besides the journeymen, median age 25
+  Braga now eleven: 37 men left, lost 0, twice 0, 9 retired off the list; at season 9 35 on the list besides the journeymen, median age 25
+  Southampton era2015 none: 67 men left, lost 0, twice 0, 3 retired off the list; at season 9 54 on the list besides the journeymen, median age 25
+  Southampton era2015 eleven: 37 men left, lost 0, twice 0, 5 retired off the list; at season 9 29 on the list besides the journeymen, median age 23
+  trim Everton now: squad 35 into the summer, 30 after; 3 trimmed, listed as {"released":3}; lent out Christian Nørgaard
+  trim Ajax now: squad 39 into the summer, 30 after; 5 trimmed, listed as {"released":5}; lent out Simon Adingra
+  trim Southampton era2015: squad 36 into the summer, 30 after; 0 trimmed, listed as {}; lent out Graziano Pellè
+  trim Freiburg now: squad 38 into the summer, 30 after; 4 trimmed, listed as {"released":4}; lent out Maximilian Eggestein
+  FAIL section 4: Everton: Jarrad Branthwaite, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Everton: Brennan Johnson, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Everton: Thierno Barry, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Everton: Merlin Röhl, held by the ledger as released and listed nowhere, did not come back at the next summer
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 0
+  FAIL section 4: Ajax: Simon Adingra, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Ajax: Caio Henrique, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Ajax: Maher Carrizo, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Ajax: Anton Gaaei, held by the ledger as released and listed nowhere, did not come back at the next summer
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 0
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 0
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 762 men left a squad, 2705 summer checks; lost 0, twice 0; 153 retired off the list (0 summers unseen); list size at the end median 43, its median age median 25; trimmed 12; ledger held list men 684, a summer on 1860; out on loan in the last year 4 (left 4, renewed 4); old saves recoverable 13, recovered 0
+simCmFreeAgencyFleet: CONTROL norecover FIRED: section 4 red
