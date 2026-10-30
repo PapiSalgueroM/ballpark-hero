@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+nofallback-nhl-A: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=nofallback node scripts/playGmCareer.mjs
+nofallback-nfl-A: PLAY_GM_CAREER_SPORT=nfl PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=nofallback node scripts/playGmCareer.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
