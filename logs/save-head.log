@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/rvConnSave.test.tsx[2m > [22m[2msoccer Connections daily save across the Round 1565 file change[2m > [22m[2ma lost daily saved by the base bundle on 2026-11-01 (crafted-1028, puzzleIndex 0) is still lost
+[22m[39mRVSAVE lost: dealt crafted-1028, hook puzzleIndex 205, gameStatus lost, stored lost index 0
+
+[90mstdout[2m | src/test/rvConnSave.test.tsx[2m > [22m[2msoccer Connections daily save across the Round 1565 file change[2m > [22m[2ma won daily saved by the base bundle on 2026-11-01 (crafted-1028, puzzleIndex 0) is still won
+[22m[39mRVSAVE won: dealt crafted-1028, hook puzzleIndex 51, gameStatus won, stored won index 0
+
+ [32m✓[39m src/test/rvConnSave.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 746[2mms[22m[39m
+   [33m[2m✓[22m[39m soccer Connections daily save across the Round 1565 file change[2m > [22ma lost daily saved by the base bundle on 2026-11-01 (crafted-1028, puzzleIndex 0) is still lost [33m 387[2mms[22m[39m
+   [33m[2m✓[22m[39m soccer Connections daily save across the Round 1565 file change[2m > [22ma won daily saved by the base bundle on 2026-11-01 (crafted-1028, puzzleIndex 0) is still won [33m 358[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 17:15:24
+[2m   Duration [22m 1.83s[2m (transform 262ms, setup 68ms, collect 352ms, tests 746ms, environment 291ms, prepare 80ms)[22m
+

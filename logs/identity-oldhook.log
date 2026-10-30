@@ -1,0 +1,40 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/hooks/useDailyPuzzleIdentity.test.ts [2m([22m[2m8 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 46[2mms[22m[39m
+   [32m✓[39m useDailyPuzzle: the save carries the puzzle id[2m > [22mwaits for the Supabase puzzle when there is no static pool, then writes its id into the save[32m 16[2mms[22m[39m
+   [32m✓[39m useDailyPuzzle: the save carries the puzzle id[2m > [22mrestores a save under the same man[32m 5[2mms[22m[39m
+   [32m✓[39m useDailyPuzzle: the save carries the puzzle id[2m > [22mstarts fresh when a different man arrives under the same index, and does not carry his finish across[32m 4[2mms[22m[39m
+   [32m✓[39m useDailyPuzzle: the save carries the puzzle id[2m > [22mmarks a restored finish once, when the man it belongs to arrives[32m 4[2mms[22m[39m
+   [32m✓[39m useDailyPuzzle: the save carries the puzzle id[2m > [22mstill reads a save written before the id existed[32m 2[2mms[22m[39m
+   [32m✓[39m useDailyPuzzle: the save carries the puzzle id[2m > [22ma game with no static pool and no getPuzzleId still finishes loading when its puzzle lands[32m 2[2mms[22m[39m
+   [32m✓[39m useDailyPuzzle: the save carries the puzzle id[2m > [22ma static pool game without getPuzzleId saves and restores exactly as before, with no id[32m 3[2mms[22m[39m
+[31m   [31m×[31m useDailyPuzzle: the save carries the puzzle id[2m > [22mrestores a finished save whose puzzle now sits at another index of the pool, when the id is the same[39m[32m 8[2mms[22m[39m
+[31m     → expected 'playing' to be 'won' // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/hooks/useDailyPuzzleIdentity.test.ts[2m > [22museDailyPuzzle: the save carries the puzzle id[2m > [22mrestores a finished save whose puzzle now sits at another index of the pool, when the id is the same
+[31m[1mAssertionError[22m: expected 'playing' to be 'won' // Object.is equality[39m
+
+Expected: [32m"won"[39m
+Received: [31m"playing"[39m
+
+[36m [2m❯[22m src/hooks/useDailyPuzzleIdentity.test.ts:[2m153:44[22m[39m
+    [90m151| [39m    const view = renderHook(() => useDailyPuzzle<Man, Guess>(options(d…
+    [90m152| [39m    [34mexpect[39m(view[33m.[39mresult[33m.[39mcurrent[33m.[39mpuzzleIndex)[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+    [90m153| [39m    [34mexpect[39m(view[33m.[39mresult[33m.[39mcurrent[33m.[39mgameStatus)[33m.[39m[34mtoBe[39m([32m'won'[39m)[33m;[39m
+    [90m   | [39m                                           [31m^[39m
+    [90m154| [39m    [34mexpect[39m(view[33m.[39mresult[33m.[39mcurrent[33m.[39mguesses)[33m.[39m[34mtoEqual[39m([[32m'Third Man'[39m])[33m;[39m
+    [90m155| [39m    view[33m.[39m[34munmount[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 17:15:22
+[2m   Duration [22m 970ms[2m (transform 72ms, setup 69ms, collect 151ms, tests 46ms, environment 291ms, prepare 64ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/hooks/useDailyPuzzleIdentity.test.ts,title=src/hooks/useDailyPuzzleIdentity.test.ts > useDailyPuzzle%3A the save carries the puzzle id > restores a finished save whose puzzle now sits at another index of the pool%2C when the id is the same,line=153,column=44::AssertionError: expected 'playing' to be 'won' // Object.is equality%0A%0AExpected: "won"%0AReceived: "playing"%0A%0A ❯ src/hooks/useDailyPuzzleIdentity.test.ts:153:44%0A%0A

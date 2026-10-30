@@ -1,0 +1,7 @@
+#!serial
+# Release BT lane d2: Round 1565's lines that write into the runner's checkout and put it back in the same line (r1565/.tmp-fx/fx/rc-fx-a.txt), so they run one at a time: the daily identity test, the same test against main's old hook (identity-oldhook must exit 1: the race it fixes is there), and the save replay of a dealt board from the export. Extras: rvConnSave.test.tsx and post-apply.json (r1565/.tmp-fx/fx).
+# Left out: vitest-daily, simDailySaveHardening and simDailyPuzzleContract (lane d and the fences).
+identity: node_modules/.bin/vitest run src/hooks/useDailyPuzzleIdentity.test.ts --testTimeout=120000
+identity-oldhook: git show 5d1198389:src/hooks/useDailyPuzzle.ts > src/hooks/useDailyPuzzle.ts && node_modules/.bin/vitest run src/hooks/useDailyPuzzleIdentity.test.ts --testTimeout=120000; s=$?; git checkout -- src; exit $s
+save-head: cp .rc/x/rvConnSave.test.tsx src/test/rvConnSave.test.tsx && RV_EXPORT=$PWD/.rc/x/post-apply.json RV_DAY=2026-11-01 RV_ID=crafted-1028 RV_INDEX=0 node_modules/.bin/vitest run src/test/rvConnSave.test.tsx --testTimeout=120000; s=$?; rm -f src/test/rvConnSave.test.tsx; exit $s
+save-head-headindex: cp .rc/x/rvConnSave.test.tsx src/test/rvConnSave.test.tsx && RV_EXPORT=$PWD/.rc/x/post-apply.json RV_DAY=2026-11-01 RV_ID=crafted-1028 RV_INDEX=277 node_modules/.bin/vitest run src/test/rvConnSave.test.tsx --testTimeout=120000; s=$?; rm -f src/test/rvConnSave.test.tsx; exit $s
