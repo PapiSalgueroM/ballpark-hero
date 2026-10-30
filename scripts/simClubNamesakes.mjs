@@ -64,8 +64,9 @@
  * P, THE STATE AFTER (Round 1587). Q2 with the payload applied: no sarandi row reads Arsenal FC, each reads its old
  *    club with Arsenal FC replaced by 'Arsenal de Sarandí', every other row byte equal; once the lead commits
  *    arsenalMarketPost-<date>.json it must equal that state row for row.
- * R, RARITY ROUND (Round 1587). rarityRound.ts's club-arsenal pool (the bare string and both loan shapes) built from
- *    the state after holds no sarandi man (measured: 217 names before, 161 after).
+ * R, RARITY ROUND (Round 1587). rarityRound.ts's club-arsenal pool built from the state after holds no sarandi man
+ *    (measured: 217 names before, 161 after). The pool filter is the SHIPPED one: fetchClubPool's .or() string and the
+ *    club the category passes, read out of the source and evaluated (review 1587 minor 10).
  * Round 1587 controls: manhost (the first two source sarandi man loses one), wiki (his statscrew source becomes
  *    en.wikipedia.org), twotm (both his sources Transfermarkt): L is red. unjudged (a made up Argentine row added to Q2
  *    in memory): T is red once the migration exists. payload (one market row dropped from the parsed payload): M red.
@@ -75,6 +76,7 @@
  *    and freshstill (the "moved" fresh Q2 is left unchanged): F is red. namesakedrift (every payload club spelled
  *    'Arsenal Sarandí' in memory): M's tie to the grid's exclusion is red. nonet (the first man who came in by the
  *    roster net only, Joel Soñora or Nicolás Giménez, taken out of the ledger in memory): T's roster net check is red.
+ *    widepool (fetchClubPool's bare string condition widened to club.like."Arsenal*" in the source text): R is red.
  *
  * Run: node scripts/simClubNamesakes.mjs            (green: the closing line and exit 0) */
 import fs from 'node:fs';
@@ -93,7 +95,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'scripts', 'data', 'clubNamesakes1584');
 const MIGRATION_PATH = 'supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql';
 const CONTROLS = ['blind', 'unmerge', 'noexclude', 'wide', 'mirrordrift', 'onehost', 'forget',
-  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak', 'freshmoved', 'freshstill', 'namesakedrift', 'nonet'];
+  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak', 'freshmoved', 'freshstill', 'namesakedrift', 'nonet', 'widepool'];
 const WIKI_HOST = /(^|\.)(wikipedia|wikidata|wikimedia|fandom|wikiwand)\./i;
 const regDomain = h => h.toLowerCase().replace(/^www\./, '').split('.').slice(-2).join('.');
 /* two registrable hosts (soccerway's and ESPN's regional mirrors are one host each), no wiki, at most one Transfermarkt,
@@ -530,8 +532,34 @@ console.log('P) the state after the apply, and R) Rarity Round\'s Arsenal pool i
     if (!diff.length && live.length === after.length) ok(`${post} equals the state after, row for row (${live.length} rows)`);
     else fail(`${post} differs from the state after on ${diff.length} rows (${live.length} live rows, ${after.length} expected)`);
   }
-  /* R: rarityRound.ts fetchClubPool('Arsenal FC'): the bare string and both loan shapes, by player_name */
-  const inPool = c => c === 'Arsenal FC' || c.startsWith('Arsenal FC / ') || c.endsWith(' / Arsenal FC');
+  /* R: Rarity Round's SHIPPED pool filter (review 1587 minor 10), never a copy: the .or() string of fetchClubPool in
+     src/lib/rarityRound.ts, read out of the comment stripped source with the club the club-arsenal category passes,
+     and evaluated as the API does (eq exact; like with * as the wildcard, and SQL's % and _). A condition this cannot
+     read fails the section rather than being skipped. */
+  let rr = stripComments(readText('src/lib/rarityRound.ts'));
+  const catM = /cachedPool\('club-arsenal', fetchClubPool\('([^']+)'\)\)/.exec(rr);
+  const fnAt = once(rr, 'function fetchClubPool(club: string) {', 'rarityRound.ts');
+  if (CONTROL === 'widepool') {
+    const from = 'club.eq."${club}",';
+    if (fnAt < 0 || rr.slice(fnAt, braceEnd(rr, fnAt)).split(from).length !== 2) abort('the bare string condition is not in fetchClubPool once');
+    rr = rr.replace(from, 'club.like."Arsenal*",');
+    fired.push('widepool: fetchClubPool\'s bare string condition widened to club.like."Arsenal*" in the source text');
+  }
+  const orM = fnAt >= 0 ? /\.or\(`([^`]*)`\)/.exec(rr.slice(fnAt, braceEnd(rr, fnAt))) : null;
+  let inPool = () => false;
+  if (!catM || !orM) fail(`R: ${catM ? '' : "the club-arsenal category's fetchClubPool argument "}${orM ? '' : "fetchClubPool's .or() filter "}could not be read out of rarityRound.ts`);
+  else {
+    const filter = orM[1].split('${club}').join(catM[1]);
+    const conds = [...filter.matchAll(/(\w+)\.(eq|like)\."([^"]*)"/g)];
+    const rest = filter.replace(/(\w+)\.(eq|like)\."([^"]*)"/g, '').replace(/,/g, '').trim();
+    if (!conds.length || rest || conds.some(c => c[1] !== 'club')) fail(`R: fetchClubPool's filter has a part this section cannot read: ${filter}`);
+    else {
+      const likeRe = p => new RegExp('^' + p.split('').map(ch => (ch === '*' || ch === '%' ? '.*' : ch === '_' ? '.' : ch.replace(/[.+?^${}()|[\]\\]/g, '\\$&'))).join('') + '$');
+      const tests = conds.map(c => (c[2] === 'eq' ? (s => s === c[3]) : (re => s => re.test(s))(likeRe(c[3]))));
+      inPool = s => tests.some(t => t(s));
+      ok(`R reads the shipped filter for "${catM[1]}": ${conds.map(c => c[2] + ' "' + c[3] + '"').join(', ')}`);
+    }
+  }
   const before = new Set(MARKET.filter(r => inPool(r.club)).map(r => r.player_name));
   const pool = new Set(after.filter(r => inPool(r.club)).map(r => r.player_name));
   const sarNames = new Set(sar.map(m => MARKET.find(r => r.id === m.rows[0]).player_name));
