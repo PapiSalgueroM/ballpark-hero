@@ -1,0 +1,14 @@
+#!serial
+pgl: npm install --silent --prefix /tmp/pgl @electric-sql/pglite > /tmp/pgl.log 2>&1; s=$?; ls /tmp/pgl/node_modules/@electric-sql/pglite/dist/index.js; exit $s
+eq83: bash .rc/x/equiv.sh scripts/qa/rehearseNbaConnections1583.mjs
+eq83-noguard: bash .rc/x/equiv.sh scripts/qa/rehearseNbaConnections1583.mjs noguard
+eq83-drift: bash .rc/x/equiv.sh scripts/qa/rehearseNbaConnections1583.mjs drift
+eq83-tamper: bash .rc/x/equiv.sh scripts/qa/rehearseNbaConnections1583.mjs tamper
+eq83-nohash: bash .rc/x/equiv.sh scripts/qa/rehearseNbaConnections1583.mjs nohash
+eq83-dupname: bash .rc/x/equiv.sh scripts/qa/rehearseNbaConnections1583.mjs dupname
+eq74: bash .rc/x/equiv.sh scripts/qa/rehearseUsConnections1574.mjs
+eq74-noguard: bash .rc/x/equiv.sh scripts/qa/rehearseUsConnections1574.mjs noguard
+eq74-drift: bash .rc/x/equiv.sh scripts/qa/rehearseUsConnections1574.mjs drift
+eq74-tamper: bash .rc/x/equiv.sh scripts/qa/rehearseUsConnections1574.mjs tamper
+eq74-nohash: bash .rc/x/equiv.sh scripts/qa/rehearseUsConnections1574.mjs nohash
+eq74-dupname: bash .rc/x/equiv.sh scripts/qa/rehearseUsConnections1574.mjs dupname
