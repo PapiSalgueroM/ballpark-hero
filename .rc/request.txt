@@ -1,0 +1,4 @@
+#!serial
+lr-head: node scripts/simCmLeagueRules.mjs
+lr-base1601: git checkout eb70fa6e3b14079e390570d179d13dfb574d83ca -- src/lib src/data && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src; exit $s
+lr-write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && git diff --stat -- scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- scripts/data; exit $s
