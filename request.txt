@@ -1,0 +1,33 @@
+# Release BT's live pass: Release BS's rcl-bs.txt, its lines unchanged. No BT head adds a live read the runner can make;
+# Round 1565's live steps (the dealt day check, the apply and the post apply export) are the lead's, by results-g/APPLY-1565.md.
+# Release BS's live pass: Release BR's rcl-br.txt, its lines unchanged (Soccer Career, Club Manager, the US My Careers, the Player Bingo
+# pool and the rest of BR's pass). No BS pull request adds a live read. The lead runs it once, at release.
+# Release BR's live pass: Release BQ's rcl-bq.txt renamed, its lines unchanged, plus simNbaChainNames for Round 1549
+# (brief-BRG item 5: its live pass). The lead's other live items are SQL through the MCP, not lines here:
+# Round 1555's read only SELECTs (results-g/fix2-1555.md: census names, span and games holds, match rate) and Round
+# 1552's namesakes read only query (results-g/APPLY-1552.md). Round 1558's migration stays UNAPPLIED (APPLY-1558.md).
+# Release BQ's live pass: Release BP's rcl-bp.txt renamed, its lines unchanged (no BQ round adds a live read).
+# Release BP (Release BO's lines unchanged; Rounds 1519, 1520, 1522, 1530 and 1531 add no live read, and 1531's Free Kick cap migration is held, unapplied), the one live pass (read only), Release BD to BF lines, clear of the midnight rollover
+# Release BI adds simCompletionSlugs: finish-1346.md item 6 owes it to the release's one live sweep (its section 2 pages the live daily_completions game_slug column, 1000 rows a read, read only, and on a runner it skips that section silently).
+#!serve
+#!playwright
+#!serial
+simSchemaNames: node scripts/simSchemaNames.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+playSoccerCareer: node scripts/playSoccerCareer.mjs
+playGames-soccer-career: ONLY=/soccer-career node scripts/playGames.mjs
+playGames-club-manager: ONLY=/club-manager node scripts/playGames.mjs
+playGames-nba-my-career: ONLY=/nba-my-career node scripts/playGames.mjs
+playGames-nfl-my-career: ONLY=/nfl-my-career node scripts/playGames.mjs
+playGames-mlb-my-career: ONLY=/mlb-my-career node scripts/playGames.mjs
+playGames-nhl-my-career: ONLY=/nhl-my-career node scripts/playGames.mjs
+playGames-stadium-tycoon: ONLY=/stadium-tycoon node scripts/playGames.mjs
+playGames-front-office: ONLY=/front-office node scripts/playGames.mjs
+simValidatePlayerRecords: node scripts/simValidatePlayerRecords.mjs
+simValidatePlayerRecords-crossrow-EXPECT-RED: VPR_CONTROL=crossrow node scripts/simValidatePlayerRecords.mjs
+simPlayerBingoPool: node scripts/simPlayerBingoPool.mjs
+simNbaChainNames: node scripts/simNbaChainNames.mjs

@@ -1,0 +1,16 @@
+1) no double encoded name remains
+   nba_player_team_stints: 13948 rows read, 0 still broken
+   bref_nba_player_seasons: 30462 rows read, 0 still broken
+2) every folded name still matches its own player_name
+   13948 rows, 0 whose name_folded disagrees with their name
+3) the live function answers the accented stars
+   Nikola Jokic <- Jamal Murray: Denver Nuggets (2016-2020)
+   Luka Doncic <- Kyrie Irving: Dallas Mavericks (2022-2024)
+   Nikola Vucevic <- Zach LaVine: Chicago Bulls (2020-2024)
+   Dario Saric <- Joel Embiid: Philadelphia 76ers (2016-2018)
+   Bogdan Bogdanovic <- Trae Young: Atlanta Hawks (2020-2024)
+   5/5 accented players are known to the validator
+4) the source still prefilters on the folded column
+   prefilter on name_folded: yes
+
+simNbaChainNames: green. The accented players are in the table, folded, and answerable.
