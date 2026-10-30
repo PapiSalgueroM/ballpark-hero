@@ -1,0 +1,4 @@
+quotes-dugout exit=2 25s | control run: dugout planted nothing pass 1 read (no real holder, or the opening feed is not harvested), refusing a dead control
+simClubManagerDugouts exit=0 0s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+quotes-desk exit=1 32s | simNoInventedQuotes: 1 failure
+simNoInventedQuotes exit=0 32s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
