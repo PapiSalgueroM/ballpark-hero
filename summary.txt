@@ -1,0 +1,5 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+expected exit=1 53s | playFirstVisitDialogs: PLAYFIRST_CONTROL=expected FIRED. 24 of 24 covered route widths listed in EXPECTED_SITE_RED printed EXPECTED and none failed the walk
+lift exit=1 57s | playFirstVisitDialogs: PLAYFIRST_CONTROL=lift FIRED. 24 of 24 moved dialogs read red for the check it targets
+edge exit=1 58s | playFirstVisitDialogs: PLAYFIRST_CONTROL=edge FIRED. 21 of 21 moved dialogs read red for the check it targets
+nobanner exit=1 190s | playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. 27 of 27 route widths with the banner hidden were refused as measuring nothing
