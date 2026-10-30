@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+weight-head: ENGINES=chromium node scripts/sweepWeight.mjs
+weight-base: git worktree add -f /tmp/wbase 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && (cd /tmp/wbase && npx vite build > /tmp/wbase-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/wbase/dist 4175 > /tmp/wbase-serve.log 2>&1 &) && sleep 4 && BASE=http://localhost:4175 SWEEP_BASE=http://localhost:4175 ENGINES=chromium node scripts/sweepWeight.mjs
