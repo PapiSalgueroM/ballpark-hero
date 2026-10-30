@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+w-m18: git worktree add /tmp/m18 5d59c0599 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m18/node_modules && (cd /tmp/m18 && node_modules/.bin/vite build > /tmp/m18-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m18/dist 4174 > /tmp/m18-server.log 2>&1 &) && sleep 4 && X=$PWD/.rc/x && cd /tmp/m18 && (BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs | grep -E "K gz|sweepWeight:"); BASE=http://localhost:4174 node $X/weighbu.mjs m18
