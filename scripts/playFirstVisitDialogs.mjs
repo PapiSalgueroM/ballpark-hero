@@ -107,6 +107,18 @@
  * transitions off now, and the rerun (r1605-nolift) fired on 12 of 12, each control back where main had it (Take the
  * job and Found the club 44 px under, the hub's Next Year 48, Training and Phone 56, Auto Fill 52); with /soccer-career
  * left out of the run it refuses (ABORTED, exit 2).
+ * THE ANSWERED HALF (Round 1605 review): the rule is also "once it is answered they drop back", and nothing read that
+ * half, so a lift made unconditional (the class kept, its pending variant lost) left the net green while Take the job
+ * floated 242 px up the screen after the answer. Now the net reads the lift by shape: a LIFT is a class whose variant
+ * chain holds [body[data-consent-pending]_&] and whose utility moves an edge (bottom, top, inset), ACTIVE when every
+ * other variant in its chain is a screen variant this window matches. Every control inside a fixed element with an
+ * active lift is a lifted control. On every scripted state line, and on every route line that read a lifted control,
+ * the walk goes back to the top of the page, reads the lifted controls with the banner pending, answers the banner
+ * with its own Reject all button and reads them again: each must have moved down by the banner's height, plus or
+ * minus 2 px, or the line FAILS (and it FAILS when the banner has no Reject all or stays pending). NEGATIVE CONTROL:
+ * CONSENT_BAR_CONTROL=always pins every lift element's bottom where the pending lift put it just before the answer,
+ * the in page form of that slip; every line it pinned something on must read red for the answered half, the Soccer
+ * Career hub among them: FIRED (exit 1), did NOT fire (exit 3), ABORTED (exit 2, nothing pinned, or no hub).
  *
  * Run: BASE=http://localhost:4173 node scripts/playFirstVisitDialogs.mjs   (a served build, see scripts/lib/hostLikeServer.mjs)
  *      ONLY=/stadium-tycoon,/idle-arena scopes it; PLAYFIRST_SHARD=1/3 runs a third of the routes;
@@ -127,11 +139,13 @@ if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`PLAYFIRST_CONTROL=$
 /* Round 1605: the bottom bar net's own control (see the header). The needle is the class Release BS put on Soccer
    Career's floating action bar; the control refuses to run when the source no longer holds it. */
 const BAR_CONTROL = process.env.CONSENT_BAR_CONTROL || '';
-if (BAR_CONTROL && BAR_CONTROL !== 'nolift') { console.error(`CONSENT_BAR_CONTROL=${BAR_CONTROL} is not a control this walk knows (nolift)`); process.exit(2); }
+const BAR_CONTROLS = ['nolift', 'always'];
+if (BAR_CONTROL && !BAR_CONTROLS.includes(BAR_CONTROL)) { console.error(`CONSENT_BAR_CONTROL=${BAR_CONTROL} is not a control this walk knows (${BAR_CONTROLS.join(', ')})`); process.exit(2); }
 if (BAR_CONTROL && CONTROL) { console.error('playFirstVisitDialogs: run CONSENT_BAR_CONTROL and PLAYFIRST_CONTROL one at a time'); process.exit(2); }
 const LIFT_NEEDLE = '[body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]';
-if (BAR_CONTROL === 'nolift' && !fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').includes(LIFT_NEEDLE)) {
-  console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift strips ${LIFT_NEEDLE}, and src/pages/SoccerCareer.tsx no longer holds it, so it would strip nothing. Refusing to run.`);
+const NEEDLE = LIFT_NEEDLE;
+if (BAR_CONTROL && !fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').includes(NEEDLE)) {
+  console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=${BAR_CONTROL} acts on ${NEEDLE}, and src/pages/SoccerCareer.tsx no longer holds it, so it would act on nothing. Refusing to run.`);
   process.exit(2);
 }
 const WIDTHS = [[320, 640], [390, 844], [1280, 900]];
@@ -260,8 +274,8 @@ const STATES = [
   },
 ];
 const stateRuns = CONTROL ? [] : STATES.filter(st => routes.includes(st.route));
-if (BAR_CONTROL === 'nolift' && !stateRuns.some(st => st.key === '/soccer-career#hub')) {
-  console.log('playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift acts on the Soccer Career hub, and /soccer-career is not in this run');
+if (BAR_CONTROL && !stateRuns.some(st => st.key === '/soccer-career#hub')) {
+  console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=${BAR_CONTROL} acts on the Soccer Career hub, and /soccer-career is not in this run`);
   process.exit(2);
 }
 
@@ -312,7 +326,46 @@ function barsInPage({ BANNER, strip }) {
   const bb = banner.getBoundingClientRect();
   const cut = (a, b) => ({ left: Math.max(a.left, b.left), top: Math.max(a.top, b.top), right: Math.min(a.right, b.right), bottom: Math.min(a.bottom, b.bottom) });
   const label = el => (el.getAttribute('aria-label') || (el.textContent || '').trim() || el.getAttribute('title') || '').replace(/\s+/g, ' ').slice(0, 30);
-  const offenders = [];
+  /* Round 1605 review: the lift itself, read by shape. A LIFT is a class whose variant chain holds the pending variant
+     and whose utility moves an edge (bottom, top, inset). It is ACTIVE when every other variant in its chain is a
+     screen variant this window matches (an unknown variant, hover: say, is never read as active). Every fixed element
+     with an active lift is marked, and so is every control inside one, so the drop check finds them once the banner is
+     answered. */
+  const PENDING = '[body[data-consent-pending]_&]';
+  const SCREENS = { sm: 640, md: 768, lg: 1024, xl: 1280, '2xl': 1536 };
+  const parts = cls => {
+    const out = []; let depth = 0, cur = '';
+    for (const ch of cls) {
+      if (ch === '[' || ch === '(') depth += 1; else if (ch === ']' || ch === ')') depth -= 1;
+      if (ch === ':' && depth === 0) { out.push(cur); cur = ''; } else cur += ch;
+    }
+    out.push(cur);
+    return out;
+  };
+  const screenQuery = v => {
+    if (SCREENS[v]) return `(min-width: ${SCREENS[v]}px)`;
+    let m = v.match(/^max-(sm|md|lg|xl|2xl)$/);
+    if (m) return `not all and (min-width: ${SCREENS[m[1]]}px)`;
+    m = v.match(/^(min|max)-\[(\d+(?:\.\d+)?px)\]$/);
+    return m ? `(${m[1]}-width: ${m[2]})` : null;
+  };
+  const liftOf = cls => {
+    if (!cls.includes(PENDING)) return null;
+    const p = parts(cls);
+    const utility = p.pop();
+    const at = p.indexOf(PENDING);
+    if (at < 0 || !/^-?(bottom|top|inset|inset-y)-/.test(utility)) return null;
+    const others = p.filter((_, i) => i !== at);
+    const queries = others.map(screenQuery);
+    return { utility, others, known: queries.every(Boolean), active: queries.every(q => q && matchMedia(q).matches) };
+  };
+  const liftEls = new Set();
+  for (const el of document.querySelectorAll('[class*="data-consent-pending"]')) {
+    if (banner.contains(el)) continue;
+    if (![...el.classList].some(c => liftOf(c)?.active)) continue;
+    if (getComputedStyle(el).position === 'fixed') { liftEls.add(el); el.setAttribute('data-playfirst-liftel', ''); }
+  }
+  const offenders = [], lift = [];
   let fixedControls = 0, closest = null;
   for (const c of document.querySelectorAll('button, a[href], [role="button"], [role="link"]')) {
     if (banner.contains(c)) continue;
@@ -320,13 +373,18 @@ function barsInPage({ BANNER, strip }) {
     if (r.width < 2 || r.height < 2) continue;
     const cs = getComputedStyle(c);
     if (cs.display === 'none' || cs.visibility === 'hidden') continue;
-    let host = null, opacity = 1, box = cut(r, { left: 0, top: 0, right: W, bottom: H });
+    let host = null, lifted = false, opacity = 1, box = cut(r, { left: 0, top: 0, right: W, bottom: H });
     for (let n = c; n && n !== document.documentElement; n = n.parentElement) {
       const s = getComputedStyle(n);
       opacity *= Number(s.opacity);
       if (host) continue;
+      if (liftEls.has(n)) lifted = true;
       if (n !== c && (s.overflowX !== 'visible' || s.overflowY !== 'visible')) box = cut(box, n.getBoundingClientRect());
       if (s.position === 'fixed') host = n;
+    }
+    if (host && lifted && opacity >= 0.05) {
+      if (!c.dataset.playfirstLift) c.dataset.playfirstLift = String((window.__playfirstLift = (window.__playfirstLift || 0) + 1));
+      lift.push({ id: c.dataset.playfirstLift, label: label(c), top: Math.round(r.top), bottom: Math.round(r.bottom) });
     }
     if (!host || opacity < 0.05 || box.right - box.left < 1 || box.bottom - box.top < 1) continue;
     fixedControls += 1;
@@ -346,7 +404,34 @@ function barsInPage({ BANNER, strip }) {
       if (closest === null || gap < closest.gap) closest = { gap, label: label(c) };
     }
   }
-  return { pending: true, banner: { top: Math.round(bb.top), bottom: Math.round(bb.bottom) }, fixedControls, offenders, closest, stripped };
+  return { pending: true, banner: { top: Math.round(bb.top), bottom: Math.round(bb.bottom) }, fixedControls, offenders, closest, stripped, lift };
+}
+
+/* Runs in the page (Round 1605 review, the answered half): answers the banner with its own Reject all button.
+   CONSENT_BAR_CONTROL=always first pins every marked lift element's bottom where the pending lift put it, so the lift
+   no longer depends on the banner (the slip that keeps the class and loses its variant), and every lifted control
+   must then fail to drop. */
+function answerInPage({ BANNER, freeze }) {
+  let frozen = 0;
+  if (freeze) for (const el of document.querySelectorAll('[data-playfirst-liftel]')) {
+    const bottom = getComputedStyle(el).bottom;
+    el.style.transition = 'none';
+    el.style.bottom = bottom;
+    frozen += 1;
+  }
+  const banner = [...document.querySelectorAll(BANNER)].find(b => { const r = b.getBoundingClientRect(); return r.width >= 2 && r.height >= 2; });
+  const pick = banner ? [...banner.querySelectorAll('button')].find(b => /^\s*reject all\s*$/i.test(b.textContent || '')) : null;
+  if (!pick) return { frozen, clicked: false };
+  pick.click();
+  return { frozen, clicked: true };
+}
+
+/* Runs in the page: where each marked lifted control is now. */
+function dropInPage() {
+  return [...document.querySelectorAll('[data-playfirst-lift]')].map(c => {
+    const r = c.getBoundingClientRect();
+    return { id: c.dataset.playfirstLift, top: Math.round(r.top), shown: r.width >= 2 && r.height >= 2 };
+  });
 }
 
 /* Runs in the page (a scripted state): closes an open first visit dialog with a DOM click on its own go button. */
@@ -514,6 +599,42 @@ function cardFactsInPage({ label, full }) {
 }
 
 const span = b => (b ? `${b.top} to ${b.bottom}` : 'none');
+/* Round 1605 review: THE ANSWERED HALF of the rule ("once it is answered they drop back"). Back at the top of the page
+   it reads the lifted controls with the banner still pending, answers the banner (Reject all) and reads them again:
+   dropBarsOf then wants each one moved down by the banner's height. Its own errors stay on the line as dropError, so
+   they never read as a page that did not load. */
+async function answerAndDrop(page, res) {
+  try {
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(600);
+    res.barsPre = await page.evaluate(barsInPage, { BANNER, strip: BAR_CONTROL === 'nolift' });
+    if (!res.barsPre.pending || !res.barsPre.lift.length) return;
+    const ans = await page.evaluate(answerInPage, { BANNER, freeze: BAR_CONTROL === 'always' });
+    const answered = ans.clicked && await page.waitForFunction(() => document.body.dataset.consentPending == null, null, { timeout: 4000 }).then(() => true, () => false);
+    await page.waitForTimeout(700);
+    res.drop = { ...ans, answered, after: await page.evaluate(dropInPage) };
+  } catch (e) {
+    res.dropError = String(e.message || e).split('\n')[0].slice(0, 120);
+  }
+}
+/* What the answered half found wrong on one line: every lifted control read just before the answer must have moved
+   down by the banner's height (plus or minus 2 px) once it was answered. */
+function dropBarsOf(r) {
+  if (r.dropError) return [`the answered half could not be read: ${r.dropError}`];
+  const pre = r.barsPre;
+  if (!pre?.pending || !pre.lift?.length || !r.drop) return [];
+  if (!r.drop.clicked) return ['the banner has no Reject all button, so the answered half could not be read'];
+  if (!r.drop.answered) return ['the banner stayed pending after Reject all, so the answered half could not be read'];
+  const height = pre.banner.bottom - pre.banner.top;
+  const out = [];
+  for (const l of pre.lift) {
+    const a = r.drop.after.find(x => x.id === l.id);
+    if (!a || !a.shown) { out.push(`"${l.label}" left the screen when the banner was answered`); continue; }
+    const moved = a.top - l.top;
+    if (Math.abs(moved - height) > 2) out.push(`"${l.label}" moved ${moved} px when the ${height} px banner was answered, not down by its height`);
+  }
+  return out;
+}
 const results = [];
 const lines = [];
 for (const route of routes) for (const [w, h] of WIDTHS) lines.push({ route, w, h, key: `${route}@${w}`, scene: null });
@@ -570,6 +691,9 @@ for (const { route, w, h, key, scene } of lines) {
       /* Round 1605: and again once the first visit dialog is closed, for a bar the dialog hid at load */
       res.barsAfter = await page.evaluate(barsInPage, { BANNER, strip: BAR_CONTROL === 'nolift' });
     }
+    /* Round 1605 review: a line that read a lifted control also reads the answered half, last, so it touches no
+       dialog verdict */
+    if (res.barsLoad?.lift?.length || res.barsAfter?.lift?.length) await answerAndDrop(page, res);
   } catch (e) {
     res.error = String(e.message || e).split('\n')[0].slice(0, 120);
   }
@@ -618,6 +742,7 @@ for (const st of stateRuns) for (const [w, h] of WIDTHS) {
     }
     res.barsLoad = await page.evaluate(barsInPage, { BANNER, strip: BAR_CONTROL === 'nolift' });
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `bars-${st.key.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}-${w}${BAR_CONTROL ? `-${BAR_CONTROL}` : ''}.png`) });
+    if (!res.missed) await answerAndDrop(page, res);
   } catch (e) {
     res.error = String(e.message || e).split('\n')[0].slice(0, 120);
   }
@@ -700,14 +825,16 @@ console.log(`${results.length} route widths walked over ${routes.length} routes$
 console.log('');
 console.log('THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner');
 const barFailures = [], barNoBanner = [], barLines = [];
-let barPassed = 0, barControls = 0, barClosest = null;
+let barPassed = 0, barControls = 0, barClosest = null, barDropped = 0;
 for (const r of [...results, ...stateResults]) {
   const where = `${r.scripted ?? r.scene ?? r.route} ${r.width}x${r.height}`;
-  const reads = [r.barsLoad, r.barsAfter].filter(Boolean);
+  const reads = [r.barsLoad, r.barsAfter, r.barsPre].filter(Boolean);
   const pending = reads.filter(b => b.pending);
   const seen = new Set();
   const offenders = pending.flatMap(b => b.offenders).filter(o => { const k = `${o.label}|${o.host}`; if (seen.has(k)) return false; seen.add(k); return true; });
-  const line = { r, where, offenders, stripped: reads.reduce((s, b) => s + (b.stripped || 0), 0) };
+  const drops = dropBarsOf(r);
+  const dropped = r.drop?.answered && !drops.length ? r.barsPre.lift.length : 0;
+  const line = { r, where, offenders, drops, frozen: r.drop?.frozen || 0, stripped: reads.reduce((s, b) => s + (b.stripped || 0), 0) };
   barLines.push(line);
   const banner = pending[0]?.banner;
   const closest = pending.map(b => b.closest).filter(Boolean).sort((a, b) => a.gap - b.gap)[0] ?? null;
@@ -716,24 +843,44 @@ for (const r of [...results, ...stateResults]) {
   else if (r.scripted && r.missed) { state = 'FAIL'; why = `the script did not reach its state: ${r.missed}`; }
   else if (r.scripted && r.missing.length) { state = 'FAIL'; why = `the state is reached but ${r.missing.join(', ')} is not on screen`; }
   else if (!pending.length) { state = 'NOBANNER'; why = 'the banner was never pending on this line, so it measured nothing'; barNoBanner.push(where); }
-  else if (offenders.length) {
+  else if (offenders.length || drops.length) {
     state = 'FAIL';
-    why = `${offenders.length} fixed control${offenders.length === 1 ? '' : 's'} meet${offenders.length === 1 ? 's' : ''} the banner ${banner.top} to ${banner.bottom}: `
-      + offenders.map(o => `${o.site ? 'SITE ' : ''}"${o.label}" ${o.top} to ${o.bottom}, ${o.meets} px ${o.side}, in ${o.host} (z ${o.z})`).join('; ');
+    const said = [];
+    if (offenders.length) {
+      said.push(`${offenders.length} fixed control${offenders.length === 1 ? '' : 's'} meet${offenders.length === 1 ? 's' : ''} the banner ${banner.top} to ${banner.bottom}: `
+        + offenders.map(o => `${o.site ? 'SITE ' : ''}"${o.label}" ${o.top} to ${o.bottom}, ${o.meets} px ${o.side}, in ${o.host} (z ${o.z})`).join('; '));
+    }
+    if (drops.length) said.push(`answered, ${drops.join('; ')}`);
+    why = said.join('. ');
   } else {
     state = 'PASS';
     const n = Math.max(...pending.map(b => b.fixedControls));
     barControls += n;
+    barDropped += dropped;
     if (closest && (barClosest === null || closest.gap < barClosest.gap)) barClosest = { ...closest, where };
-    why = `${n} fixed control${n === 1 ? '' : 's'}, none meets the banner ${banner.top} to ${banner.bottom}${closest ? `; the closest, "${closest.label}", ${closest.gap} px above it` : ''}`;
+    why = `${n} fixed control${n === 1 ? '' : 's'}, none meets the banner ${banner.top} to ${banner.bottom}${closest ? `; the closest, "${closest.label}", ${closest.gap} px above it` : ''}`
+      + (dropped ? `; answered, ${dropped} lifted control${dropped === 1 ? '' : 's'} dropped by the banner's ${r.barsPre.banner.bottom - r.barsPre.banner.top} px` : '');
   }
   if (r.scripted && r.dismissed.length) why +=` (closed first: ${r.dismissed.join(', ')})`;
   line.state = state;
   if (state === 'FAIL') barFailures.push(`${where}: ${why}`);
   if (state === 'PASS') barPassed += 1;
-  if (state !== 'PASS' || r.scripted) console.log(`  BARS ${state.padEnd(8)} ${where}: ${why}`);
+  if (state !== 'PASS' || r.scripted || dropped) console.log(`  BARS ${state.padEnd(8)} ${where}: ${why}`);
 }
-console.log(`${barLines.length} bar lines (${stateResults.length} of them scripted states): ${barPassed} green over ${barControls} fixed controls, ${barFailures.length} red, ${barNoBanner.length} with no pending banner${barClosest ? `; the closest green control sat ${barClosest.gap} px above the banner ("${barClosest.label}", ${barClosest.where})` : ''}`);
+console.log(`${barLines.length} bar lines (${stateResults.length} of them scripted states): ${barPassed} green over ${barControls} fixed controls, ${barFailures.length} red, ${barNoBanner.length} with no pending banner${barClosest ? `; the closest green control sat ${barClosest.gap} px above the banner ("${barClosest.label}", ${barClosest.where})` : ''}; answered, ${barDropped} lifted controls dropped back by the banner's height`);
+/* Round 1605 review: CONSENT_BAR_CONTROL=always pins every lift where the pending banner put it, so every line it
+   pinned something on must read red for the answered half, the Soccer Career hub among them */
+if (BAR_CONTROL === 'always') {
+  const acted = barLines.filter(l => l.frozen > 0);
+  if (!acted.length || !acted.some(l => l.r.scripted === '/soccer-career#hub')) {
+    console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=always pinned ${acted.length ? 'nothing on the Soccer Career hub' : 'nothing on any line'}, so the answered half was not tried`);
+    process.exit(2);
+  }
+  const escaped = acted.filter(l => l.state !== 'FAIL' || !l.drops.length);
+  if (!escaped.length) { console.log(`playFirstVisitDialogs: CONSENT_BAR_CONTROL=always FIRED. ${acted.length} of ${acted.length} lines with the lift pinned read red for the answered half, the Soccer Career hub among them`); process.exit(1); }
+  console.log(`playFirstVisitDialogs: CONSENT_BAR_CONTROL=always did NOT fire on ${escaped.length} of ${acted.length} pinned lines: ${escaped.map(l => l.where).join(', ')}`);
+  process.exit(3);
+}
 if (BAR_CONTROL === 'nolift') {
   const acted = barLines.filter(l => l.stripped > 0);
   const hub = acted.filter(l => l.r.scripted === '/soccer-career#hub');
