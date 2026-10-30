@@ -122,6 +122,33 @@ describe('Manager Hot Seat: the Carry on in Club Manager card', () => {
     expect(aside.map(k => localStorage.getItem(k))).toEqual([third]);
   }, 120000);
 
+  /* Review fix (r1592-run-w finding 3): the note sat under Cancel, below the fold. */
+  it('a slot changed under the open chooser: nothing is written and the note sits above the options', () => {
+    const clubs = [1, 2, 3].map(i => hotSeatPool()[i].club);
+    expect(saveCareer(startCareer(clubs[0]))).toBe(true);
+    expect(switchSlot(2)).toBe(true);
+    expect(saveCareer(startCareer(clubs[1]))).toBe(true);
+    expect(switchSlot(3)).toBe(true);
+    expect(saveCareer(startCareer(clubs[2]))).toBe(true);
+    expect(switchSlot(1)).toBe(true);
+    const openPath = vi.fn();
+    const view = render(<CarryOnCard run={kept} openPath={openPath} />);
+    fireEvent.click(view.getByRole('button', { name: 'Carry on in Club Manager' }));
+    const chooser = view.getByTestId('hot-seat-carry-on-choose');
+    expect(chooser.textContent).toContain('deleted for good');
+    localStorage.setItem(parkedKey(2), '{another tab');
+    const before = snap();
+    fireEvent.click(view.getByTestId('hot-seat-carry-on-replace-2'));
+    expect(snap()).toBe(before);
+    expect(openPath).not.toHaveBeenCalled();
+    const notes = view.getAllByRole('status');
+    expect(notes.length).toBe(1);
+    expect(notes[0].textContent).toContain('changed since this card read it');
+    expect(chooser.contains(notes[0])).toBe(true);
+    const first = view.getByTestId('hot-seat-carry-on-replace-1');
+    expect(notes[0].compareDocumentPosition(first) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  }, 120000);
+
   it('says so and goes nowhere when the browser refuses the write', () => {
     const openPath = vi.fn();
     const view = render(<CarryOnCard run={kept} openPath={openPath} />);

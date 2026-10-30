@@ -197,7 +197,9 @@ export function CarryOnCard({ run, openPath = openPage }: { run: HotSeatRun; ope
       <p className="mt-1 text-xs text-muted-foreground">Not now? The offer waits on the menu until you start another run, or until tomorrow for the daily.</p>
       {choosing && target === null ? (
         <div className="mt-3 rounded-md bg-muted p-3 text-sm" role="alertdialog" aria-label="Which Club Manager career does this job replace?" data-testid="hot-seat-carry-on-choose">
-          <p>Pick the career this job replaces. It's kept aside on this device first, so Club Manager can put it back later. Its save points don't come with it.</p>
+          <p>Pick the career this job replaces. It's kept aside on this device first, so Club Manager can put it back later. Any save points stored in that slot are deleted for good, even if you put it back.</p>
+          {/* Review fix: a note from the chooser sits above its options, where the eye already is, not under Cancel and off screen. */}
+          {note && <p className="mt-2 text-xs font-semibold text-foreground" role="status">{note}</p>}
           <div className="mt-2 grid grid-cols-1 gap-2">
             {held.map(v => (
               <button key={v.slot} type="button" onClick={() => go(v)} disabled={going} data-testid={`hot-seat-carry-on-replace-${v.slot}`} className="min-h-[44px] rounded-md border border-border bg-card px-3 py-2 text-left text-sm font-semibold disabled:opacity-50">
@@ -212,7 +214,7 @@ export function CarryOnCard({ run, openPath = openPage }: { run: HotSeatRun; ope
           {going ? 'Opening Club Manager...' : 'Carry on in Club Manager'}
         </button>
       )}
-      {note && <p className="mt-2 text-xs text-muted-foreground" role="status">{note}</p>}
+      {note && !(choosing && target === null) && <p className="mt-2 text-xs text-muted-foreground" role="status">{note}</p>}
     </div>
   );
 }
