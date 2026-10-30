@@ -1,0 +1,3 @@
+1991 /home/runner/work/_temp/rc-out/full/playRelatedGames.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playRelatedGames.mjs/stderr.log
+1991 total

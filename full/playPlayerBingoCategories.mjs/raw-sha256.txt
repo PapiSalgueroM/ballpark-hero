@@ -1,0 +1,2 @@
+db272f922b0dc3b041e6de6b597a5600ebb120e69393b0e5662e7d463e62fe5f  /home/runner/work/_temp/rc-out/full/playPlayerBingoCategories.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playPlayerBingoCategories.mjs/stderr.log

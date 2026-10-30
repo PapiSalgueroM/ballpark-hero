@@ -1,0 +1,2 @@
+beea83b53148a1d6de79cbb91fe594c2b03b303574f71f6222f9392b196a1f9c  /home/runner/work/_temp/rc-out/full/playOwnerMandate.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playOwnerMandate.mjs/stderr.log

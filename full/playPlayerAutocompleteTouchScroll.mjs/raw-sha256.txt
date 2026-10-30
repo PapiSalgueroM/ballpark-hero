@@ -1,0 +1,2 @@
+12d34b22604702388bb77ba972ec78650894119de1e1408e6e77af49159072a1  /home/runner/work/_temp/rc-out/full/playPlayerAutocompleteTouchScroll.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playPlayerAutocompleteTouchScroll.mjs/stderr.log

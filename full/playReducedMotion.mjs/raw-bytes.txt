@@ -1,0 +1,3 @@
+9711 /home/runner/work/_temp/rc-out/full/playReducedMotion.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playReducedMotion.mjs/stderr.log
+9711 total

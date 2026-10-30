@@ -1,0 +1,2 @@
+fcb189b64655166782440f162ce7bf5f3f8f4210ceaf263dae2358386b52af00  /home/runner/work/_temp/rc-out/full/playSaveKeeper.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSaveKeeper.mjs/stderr.log

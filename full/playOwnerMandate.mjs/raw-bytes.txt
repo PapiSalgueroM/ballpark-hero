@@ -1,0 +1,3 @@
+1781 /home/runner/work/_temp/rc-out/full/playOwnerMandate.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playOwnerMandate.mjs/stderr.log
+1781 total

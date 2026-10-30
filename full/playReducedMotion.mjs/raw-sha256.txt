@@ -1,0 +1,2 @@
+6af127cce611738b443306993073a2028206f0c706f08858d58300c5a49fa1cc  /home/runner/work/_temp/rc-out/full/playReducedMotion.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playReducedMotion.mjs/stderr.log

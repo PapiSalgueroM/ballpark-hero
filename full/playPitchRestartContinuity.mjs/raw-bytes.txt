@@ -1,0 +1,3 @@
+755 /home/runner/work/_temp/rc-out/full/playPitchRestartContinuity.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playPitchRestartContinuity.mjs/stderr.log
+755 total

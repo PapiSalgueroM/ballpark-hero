@@ -1,0 +1,12 @@
+prepare exit=0 60s | ordinary-build raw=0
+playOwnerMandate exit=0 27s | playOwnerMandate.mjs raw=0
+playPhonePanelLifeStories exit=1 1s | playPhonePanelLifeStories.mjs raw=1
+playPitchRestartContinuity exit=1 1s | playPitchRestartContinuity.mjs raw=1
+playPlayerAutocompleteTouchScroll exit=1 1s | playPlayerAutocompleteTouchScroll.mjs raw=1
+playPlayerBingoCategories exit=1 1s | playPlayerBingoCategories.mjs raw=1
+playReducedMotion exit=1 56s | playReducedMotion.mjs raw=1
+playRelatedGames exit=1 7s | playRelatedGames.mjs raw=1
+playReleaseClause exit=1 18s | playReleaseClause.mjs raw=1
+playRenderStability exit=124 1800s | playRenderStability.mjs raw=124
+playSaveKeeper exit=1 1s | playSaveKeeper.mjs raw=1
+finish exit=0 7s | 

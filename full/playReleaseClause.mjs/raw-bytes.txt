@@ -1,0 +1,3 @@
+2251 /home/runner/work/_temp/rc-out/full/playReleaseClause.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playReleaseClause.mjs/stderr.log
+2251 total

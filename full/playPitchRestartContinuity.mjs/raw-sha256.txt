@@ -1,0 +1,2 @@
+d0bdaeedfc1ed52ef619c235d64a8f00ea272c662d4fcd40b807ab5f208904eb  /home/runner/work/_temp/rc-out/full/playPitchRestartContinuity.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playPitchRestartContinuity.mjs/stderr.log
