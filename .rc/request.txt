@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmDailyView: node scripts/simCmDailyView.mjs
+view-off: CM_DAILY_VIEW_CONTROL=off node scripts/simCmDailyView.mjs
+view-untagged: CM_DAILY_VIEW_CONTROL=untagged node scripts/simCmDailyView.mjs
+view-halfswap: CM_DAILY_VIEW_CONTROL=halfswap node scripts/simCmDailyView.mjs
+genview-check: node scripts/genCmCurve1View.mjs --check
+simCmLevelReads: node scripts/simCmLevelReads.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+fleet: git worktree add -q /tmp/base 14a9af704 && node .rc/x/fleet1600.mjs /tmp/base > /tmp/fb.txt && node .rc/x/fleet1600.mjs . > /tmp/fh.txt && diff /tmp/fb.txt /tmp/fh.txt && echo "FLEET_EQUAL $(wc -l < /tmp/fh.txt) lines"
+simNoRivalNames: node scripts/simNoRivalNames.mjs
