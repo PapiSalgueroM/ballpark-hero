@@ -18,7 +18,7 @@ import { GmDeskMount } from './GmDeskMount';
 import GmJobMarketPanel from './GmJobMarketPanel';
 import GmCareerPanel from './GmCareerPanel';
 import GmXpDeskPanel from './GmXpDeskPanel';
-import { GM_CAREER_KEYS, GM_CAREER_PANELS } from './gmCareerDesk';
+import { GM_CAREER_FLOORS, GM_CAREER_KEYS, GM_CAREER_PANELS } from './gmCareerDesk';
 import { GmPanelLoading, lazyGmPanel } from './gmLazyPanel';
 import { freshGmDesk, gmDeskTiles, withGmBlock, type GmDesk, type GmPanelDef, type GmPhase } from '@/lib/gmDesk';
 import { GM_SPORTS } from '@/lib/gmSport';
@@ -294,7 +294,9 @@ describe('a panel that loads on demand', () => {
     const loading = container.querySelector('[data-gm-panel-loading]') as HTMLElement;
     expect(loading).not.toBeNull();
     expect(loading.getAttribute('role')).toBe('status');
-    expect(loading.style.minHeight).toBe('220px');
+    /* Round 1561 (finding 9): the Career screen's own floor, measured at 390, not the lazy screen's general 220 */
+    expect(loading.style.minHeight).toBe(`${GM_CAREER_FLOORS[GM_CAREER_KEYS.career]}px`);
+    expect(GM_CAREER_FLOORS[GM_CAREER_KEYS.career]).toBe(184);
     await landed(container);
     expect(container.querySelector('[data-gm-panel-loading]')).toBeNull();
     /* State inside the panel: its "?" opened. */
