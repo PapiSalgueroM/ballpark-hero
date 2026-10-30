@@ -267,7 +267,10 @@
  *   shootouts against the thin side (7b)       38, 44, 36, 49, 42, 58                                            floor 12
  *   every control still fires where it did: ignoreorder and noskip section 1 (29 failures), oppworst sections 1, 6
  *   and 7, nocap 3, ownkeeper and wrongkeeper 6, nooppkeeper 6 and 7, thinside, nomakeup and keeperonfull 7,
- *   tie-record 4 (76 rows rejected as incomplete; the old save's probe row is a win, which it leaves alone).
+ *   tie-record 4 (76 rows rejected as incomplete; the old save's probe row, 782113, is a win, which it leaves
+ *   alone). On main c18c4b7a8 (r1600-so3) it also failed twice in section 5, but both came from the first,
+ *   discarded attempt (the coachless engine on the world with the league, where 782113 is a loss), not from the
+ *   pair the row is judged on, which is a win there too; so section 5 never caught it on its judged row.
  *
  * Measured once and not asserted, because it is a design fact rather than
  * a check: on the same shootouts (1500 seeds of that cup match, the order
