@@ -1,0 +1,2 @@
+7) real dugouts: a sentinel registered as real is a display fact and nothing else
+control or setup cannot run: the sentinel surname is in 1 src file(s) (/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubDetailDugout.test.tsx), it is not nobody; refusing a dead check

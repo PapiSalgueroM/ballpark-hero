@@ -1,0 +1,10 @@
+simManagers-namedsack exit=2 1s | control or setup cannot run: the sentinel surname is in 1 src file(s) (/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubDetailDugout.test.tsx), it is not nobody
+simManagers-recycle exit=2 0s | control or setup cannot run: the sentinel surname is in 1 src file(s) (/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubDetailDugout.test.tsx), it is not nobody
+simManagers exit=2 7s | control or setup cannot run: the sentinel surname is in 1 src file(s) (/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubDetailDugout.test.tsx), it is not nobody
+simManagers-fleet exit=2 8s | control or setup cannot run: the sentinel surname is in 1 src file(s) (/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubDetailDugout.test.tsx), it is not nobody
+simManagers-sever exit=0 8s | control run: 3 failure(s) FIRED as expected
+quotes-dugout exit=2 20s | control run: dugout planted nothing pass 1 read (no real holder, or the opening feed is not harvested), refusing a dead control
+simNoInventedQuotes exit=0 31s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simInventedNames exit=0 13s | simInventedNames: green. Every invented man on this site is invented all the way down.
+quotes-desk exit=1 33s | simNoInventedQuotes: 1 failure
