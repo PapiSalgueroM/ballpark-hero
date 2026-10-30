@@ -1,0 +1,5 @@
+#!serial
+rules-head: node scripts/simCmLeagueRules.mjs
+rules-noet: node .rc/x/mutFix1593.mjs noet && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
+rules-nowin: node .rc/x/mutFix1593.mjs nowin && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
+appeal: node scripts/simManagerAppealIsolation.mjs
