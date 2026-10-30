@@ -1,0 +1,2 @@
+wc-head: bash .rc/x/wcHead.sh 1a46f4bd9
+memwatch: for i in $(seq 1 75); do echo "$(date -u +%H:%M:%S) $(free -m | sed -n 2p) disk $(df -m / | tail -1 | tr -s ' ' | cut -d' ' -f4)MB free"; sleep 20; done
