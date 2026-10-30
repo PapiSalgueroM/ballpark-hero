@@ -1,0 +1,44 @@
+PROBE before summer of season 1 worldYear 2026 list [] squad [] retired false
+PROBE   raw ledger []
+PROBE   ahead ledger []
+PROBE after summer: worldYear 2027 list [] squad [] retired false tlog [] left []
+PROBE   raw ledger []
+PROBE before summer of season 2 worldYear 2027 list [] squad [] retired false
+PROBE   raw ledger []
+PROBE   ahead ledger []
+PROBE after summer: worldYear 2028 list [] squad [] retired false tlog [] left []
+PROBE   raw ledger []
+PROBE before summer of season 3 worldYear 2028 list [] squad [] retired false
+PROBE   raw ledger []
+PROBE   ahead ledger []
+PROBE after summer: worldYear 2029 list [] squad [] retired false tlog [] left []
+PROBE   raw ledger []
+PROBE before summer of season 4 worldYear 2029 list [] squad [] retired false
+PROBE   raw ledger []
+PROBE   ahead ledger []
+PROBE after summer: worldYear 2030 list [] squad [{"id":"fa-bruno-magnusson-s5","age":24,"rating":54,"cy":3,"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","yth":false,"gen":true}] retired false tlog [{"name":"Bruno Magnusson","from":"a free transfer","to":"Freiburg","fee":0,"season":5,"week":0}] left []
+PROBE   raw ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"owned","owner":"Freiburg","year":2030,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":24,"rating":54,"pos":"GK"}]
+PROBE before summer of season 5 worldYear 2030 list [] squad [{"id":"fa-bruno-magnusson-s5","age":24,"rating":54,"cy":3,"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","yth":false,"gen":true}] retired false
+PROBE   raw ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"owned","owner":"Freiburg","year":2030,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":24,"rating":54,"pos":"GK"}]
+PROBE   ahead ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"owned","owner":"Freiburg","year":2031,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":25,"rating":54,"pos":"GK"}]
+PROBE after summer: worldYear 2031 list [] squad [{"id":"fa-bruno-magnusson-s5","age":25,"rating":54,"cy":2,"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","yth":false,"gen":true}] retired false tlog [{"name":"Bruno Magnusson","from":"a free transfer","to":"Freiburg","fee":0,"season":5,"week":0}] left []
+PROBE   raw ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"owned","owner":"Freiburg","year":2031,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":25,"rating":54,"pos":"GK"}]
+PROBE before summer of season 6 worldYear 2031 list [] squad [{"id":"fa-bruno-magnusson-s5","age":25,"rating":54,"cy":2,"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","yth":false,"gen":true}] retired false
+PROBE   raw ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"owned","owner":"Freiburg","year":2031,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":25,"rating":54,"pos":"GK"}]
+PROBE   ahead ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"owned","owner":"Freiburg","year":2032,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":26,"rating":54,"pos":"GK"}]
+PROBE after summer: worldYear 2032 list [] squad [{"id":"fa-bruno-magnusson-s5","age":26,"rating":54,"cy":1,"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","yth":false,"gen":true}] retired false tlog [{"name":"Bruno Magnusson","from":"a free transfer","to":"Freiburg","fee":0,"season":5,"week":0}] left []
+PROBE   raw ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"owned","owner":"Freiburg","year":2032,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":26,"rating":54,"pos":"GK"}]
+PROBE before summer of season 7 worldYear 2032 list [] squad [{"id":"fa-bruno-magnusson-s5","age":26,"rating":54,"cy":1,"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","yth":false,"gen":true}] retired false
+PROBE   raw ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"owned","owner":"Freiburg","year":2032,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":26,"rating":54,"pos":"GK"}]
+PROBE   ahead ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"owned","owner":"Freiburg","year":2033,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":27,"rating":54,"pos":"GK"}]
+PROBE after summer: worldYear 2033 list [] squad [{"id":"fa-bruno-magnusson-s8","age":27,"rating":54,"cy":3,"yth":false,"gen":true}] retired false tlog [{"name":"Bruno Magnusson","from":"a free transfer","to":"Freiburg","fee":0,"season":5,"week":0},{"name":"Bruno Magnusson","from":"Freiburg","to":"a free transfer","fee":0,"season":8,"week":0},{"name":"Bruno Magnusson","from":"a free transfer","to":"Freiburg","fee":0,"season":8,"week":0}] left []
+PROBE   raw ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"released","owner":null,"year":2033,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":27,"rating":54,"pos":"GK"}]
+  FAIL section 6: Freiburg none, season 8: Bruno Magnusson plays for me and the ledger still holds him as released with no club
+PROBE before summer of season 8 worldYear 2033 list [] squad [{"id":"fa-bruno-magnusson-s8","age":27,"rating":54,"cy":3,"yth":false,"gen":true}] retired false
+PROBE   raw ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"released","owner":null,"year":2033,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":27,"rating":54,"pos":"GK"}]
+PROBE   ahead ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"released","owner":null,"year":2034,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":28,"rating":54,"pos":"GK"}]
+PROBE after summer: worldYear 2034 list [] squad [{"id":"fa-bruno-magnusson-s8","age":28,"rating":54,"cy":2,"yth":false,"gen":true}] retired false tlog [{"name":"Bruno Magnusson","from":"Freiburg","to":"a free transfer","fee":0,"season":8,"week":0},{"name":"Bruno Magnusson","from":"a free transfer","to":"Freiburg","fee":0,"season":8,"week":0}] left []
+PROBE   raw ledger [{"key":"[\"now\",\"Rostov\",\"Bruno Magnusson\",\"GK\",2006,4]","status":"released","owner":null,"year":2034,"oClub":"Rostov","oBirth":2006,"oPos":"GK","age":28,"rating":54,"pos":"GK"}]
+  FAIL section 6: Freiburg none, season 9: Bruno Magnusson plays for me and the ledger still holds him as released with no club
+  Freiburg now none: 68 men left, lost 0, twice 0, 11 retired off the list; at season 9 42 on the list besides the journeymen, median age 24
+PROBE DONE
