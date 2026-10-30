@@ -207,6 +207,26 @@
  * under the defect's. The growth is the list, and it stops being a slope only
  * when other clubs sign free agents too (the next free agency round): measure
  * again then, and bring both fences back down.
+ * Round 1601 measured again (the lead's ruling R1 of 2026-10-30), on GitHub
+ * runners: by then the round's base (14a9af70) was already past that line,
+ * healthy 197,197 to 210,710 over the default stream and SIM_SEED 1 to 5
+ * (remote check r1601-size1). The round keeps the seasons each man of mine
+ * played (CareerState.pastLines, at most ten short rows a man, kept only for
+ * the men at the club), a ramp that stops at a plateau, not a slope. The
+ * same six streams with it (head b5da8e73): healthy 198,759 to 212,102
+ * (each 1,317 to 1,745 over its base), slope 393 to 1,547 (base 390 to
+ * 1,520). A renewing Everton career (every deal in its last year renewed,
+ * so men stay and fill their ten rows; simCmPlayerCard section cap, remote
+ * check r1601-s3) reads 211,806 at season 15 against its base's 208,317,
+ * the archive 3,463 bytes, slope 1,244 against 1,116. Uncapped, default
+ * stream, with the rows: Real Madrid 232,779, Everton 242,759, Lincoln City
+ * 245,401, slope 3,158 to 4,664 (the control fired, section 1 red, 33
+ * failures). 222,000 sits about 9,900 over the healthy top AT SEASON 15 and
+ * 10,800 under the defect's bottom. It is a season 15 line, not a ceiling no
+ * healthy save crosses: the renewing career spikes to 226,705 at season 6
+ * (its base 224,136, so the spike is the base's own), and this harness
+ * measures season 15 only. The slope fence did not move. If a later head's
+ * healthy top passes 215,000, measure again.
  * The first cut of this file set 5,000 and 240,000 by feel, and both passed
  * the uncapped engine, which is exactly the mistake the house rule names.
  *

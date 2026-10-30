@@ -18,6 +18,7 @@ import type { CareerState } from '@/lib/clubManager';
 import { AWARD_FLOOR, BOOK_FULL_SHARE, TEAMS_KEPT, bestOfMine, leaders, type BoardKind, type BoardMan } from '@/lib/clubManagerLeagueBoards';
 import { dealShares, type BookMan } from '@/lib/clubManagerLeagueBook';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
+import { CmCardLink, mineCard } from '@/components/club-manager/CmCardLink';
 import { SeasonHonoursCard } from '@/components/club-manager/SeasonHonoursCard';
 
 /** A board of the card: one of the three, or the past winners. */
@@ -232,6 +233,9 @@ export function LeagueLeadersCard({ career, board, onBoard }: CardProps) {
             {rows.map((m, i) => (
               <li key={`${m.name}|${m.club}|${m.pos}`} data-cm-board-row data-mine={m.mine ? '' : undefined}
                 className={cn('flex items-center gap-2 text-xs py-1 border-b border-border/30 last:border-0', m.mine && 'bg-primary/5 rounded')}>
+                {/* Round 1601: the whole row opens his card when the page's stack is above; with none it is the row it was. */}
+                <CmCardLink card={m.mine ? mineCard(career.squad, m.name, m.pos) : { k: 'man', name: m.name, pos: m.pos, club: m.club }}
+                  className="flex w-full min-h-[44px] items-center gap-2 text-left">
                 <span className="w-5 shrink-0 text-muted-foreground font-bold">{i + 1}</span>
                 <span className="min-w-0 flex-1">
                   <span className="flex flex-wrap items-center gap-1">
@@ -241,6 +245,7 @@ export function LeagueLeadersCard({ career, board, onBoard }: CardProps) {
                   <span data-cm-board-club className="block truncate text-[10px] text-muted-foreground">{m.club}</span>
                 </span>
                 <span data-cm-board-n className="shrink-0 font-bold text-foreground">{m.n}</span>
+                </CmCardLink>
               </li>
             ))}
           </ol>}

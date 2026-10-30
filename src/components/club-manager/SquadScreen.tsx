@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { createContext, useContext, useLayoutEffect, useMemo, useState } from 'react';
 import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 /* Round 194: real players wear their real flag, from this world's map.
@@ -10,6 +10,7 @@ import {
 } from '@/lib/clubManager';
 import type { CMPlayer, CareerState, IncomingBid } from '@/lib/clubManager';
 import { staffLevel } from '@/lib/clubManagerStaff';
+import { CmCardLink, CmHost } from '@/components/club-manager/CmCardLink';
 /* Round 978: who is just back from international duty, and who you rested. */
 import { backFromDuty, restingIds } from '@/lib/clubManagerInternationals';
 import type { IntlCallUp } from '@/lib/clubManagerInternationals';
@@ -210,6 +211,13 @@ export function sortSquad(squad: CMPlayer[], key: SquadSortKey, dir: SortDir, sc
 
 type Money = (n: number) => string;
 
+/* Round 1601: a player card opened from a row leaves the list as it stood (sort and open rows), and the list takes
+   it back on its next mount, once, for the same save at the same week. A row that comes back open mounts with its
+   reveal off, so Back lands where the thumb was instead of being pulled to that row. */
+let resume: { key: string; sort: { key: SquadSortKey; dir: SortDir }; openIds: string[] } | null = null;
+const resumeFor = (c: CareerState) => (resume && resume.key === `${c.clubName}|${c.season}|${c.week}` ? resume : null);
+const RestoredOpen = createContext<ReadonlySet<string>>(new Set());
+
 function bandText(b: ScoutBand | null): string {
   return b ? `${b.low}-${b.high}` : '?';
 }
@@ -367,6 +375,11 @@ export function SquadRowDetail({ p, career, scoutLevel, money }: { p: CMPlayer; 
           His wage and years left are this game's numbers, not his real contract.
         </p>
       )}
+      {/* Round 1601: his card, this season and the seasons the game kept for him (drawn only under the page's stack). */}
+      <CmCardLink only card={{ k: 'mine', id: p.id }}
+        className="col-span-2 md:col-span-4 min-h-[44px] rounded-xl border border-border bg-background/40 px-3 text-left text-xs font-bold text-foreground hover:border-primary">
+        Seasons: this one and the ones the game kept
+      </CmCardLink>
     </div>
   );
 }
@@ -393,7 +406,8 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
      another above it and pulls the one you tapped out from under your thumb.
      If the row sits so low that its detail would open below the fold, the
      shared hook brings the row's top into view and does nothing otherwise. */
-  const ref = useRevealScroll<HTMLDivElement>(isOpen ? `open:${p.id}` : 'shut', { enabled: isOpen, skipFirst: false });
+  const restored = useContext(RestoredOpen).has(p.id);
+  const ref = useRevealScroll<HTMLDivElement>(isOpen ? `open:${p.id}` : 'shut', { enabled: isOpen && !restored, skipFirst: false });
   const band = scoutBand(p, scoutLevel);
   const nat = shownNation(eraId, p);
   const form = formOf(p);
@@ -507,8 +521,11 @@ interface SquadScreenProps {
  */
 export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: SquadScreenProps) {
   const inXI = new Set(xiIds.filter((id): id is string => !!id));
-  const [sort, setSort] = useState<{ key: SquadSortKey; dir: SortDir }>({ key: 'ovr', dir: 'desc' });
-  const [openIds, setOpenIds] = useState<ReadonlySet<string>>(() => new Set());
+  const [sort, setSort] = useState<{ key: SquadSortKey; dir: SortDir }>(() => resumeFor(career)?.sort ?? { key: 'ovr', dir: 'desc' });
+  const [openIds, setOpenIds] = useState<ReadonlySet<string>>(() => new Set(resumeFor(career)?.openIds ?? []));
+  const [restored, setRestored] = useState<ReadonlySet<string>>(() => new Set(resumeFor(career)?.openIds ?? []));
+  useLayoutEffect(() => { resume = null; }, []);
+  const hold = () => { resume = { key: `${career.clubName}|${career.season}|${career.week}`, sort, openIds: [...openIds] }; };
   const scoutLevel = staffLevel(career, 'scout');
   const money = moneyIn(career);
   const sorted = useMemo(() => sortSquad(squad, sort.key, sort.dir, scoutLevel), [squad, sort, scoutLevel]);
@@ -526,15 +543,19 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
   const pick = (key: SquadSortKey) => setSort(s => (
     s.key === key ? { key, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: SORT_BY_KEY.get(key)?.first ?? 'desc' }
   ));
-  const toggle = (id: string) => setOpenIds(prev => {
-    const next = new Set(prev);
-    if (next.has(id)) next.delete(id);
-    else next.add(id);
-    return next;
-  });
+  const toggle = (id: string) => {
+    setRestored(prev => (prev.has(id) ? new Set([...prev].filter(x => x !== id)) : prev));
+    setOpenIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
   const Arrow = sort.dir === 'asc' ? ArrowUp : ArrowDown;
 
   return (
+    <CmHost hold={hold}><RestoredOpen.Provider value={restored}>
     <div data-cm-squad-list data-cm-sort-key={sort.key} data-cm-sort-dir={sort.dir} className="bg-card border border-border rounded-2xl p-3 md:p-4">
       {back.length > 0 && (
         <div data-cm-intl-banner className="mb-2 rounded-lg border border-emerald-400/40 bg-emerald-500/10 px-2.5 py-1.5 text-[11px] text-foreground">
@@ -621,6 +642,7 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
         </p>
       )}
     </div>
+    </RestoredOpen.Provider></CmHost>
   );
 }
 

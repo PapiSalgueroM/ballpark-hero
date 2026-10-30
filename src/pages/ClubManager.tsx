@@ -83,6 +83,9 @@ const StatsScreen = lazy(() => import('@/components/club-manager/StatsScreen').t
 const CalendarScreen = lazy(() => import('@/components/club-manager/CalendarScreen').then(m => ({ default: m.CalendarScreen })));
 const InboxCard = lazy(() => import('@/components/club-manager/InboxCard').then(m => ({ default: m.InboxCard })));
 const ClubDetailScreen = lazy(() => import('@/components/club-manager/ClubDetailScreen').then(m => ({ default: m.ClubDetailScreen })));
+/* Round 1601: the player card (lazy) and the page's stack of cards (small, static). */
+const PlayerCardScreen = lazy(() => import('@/components/club-manager/PlayerCardScreen').then(m => ({ default: m.PlayerCardScreen })));
+import { CmCardsProvider, useCmCards } from '@/components/club-manager/CmCards';
 const SquadScreen = lazy(() => import('@/components/club-manager/SquadScreen').then(m => ({ default: m.SquadScreen })));
 const ContractsCard = lazy(() => import('@/components/club-manager/ContractsCard').then(m => ({ default: m.ContractsCard })));
 const TacticsScreen = lazy(() => import('@/components/club-manager/TacticsScreen').then(m => ({ default: m.TacticsScreen })));
@@ -259,7 +262,11 @@ const ClubManager = () => {
   // Round 74: the tile rule. Boxes on the home screen open their own
   // screens, and any club anywhere opens the rival viewer.
   const [hubPanel, setHubPanel] = useState<HubPanel | null>(null);
-  const [clubView, setClubView] = useState<string | null>(null);
+  /* Round 1601: the club page rides the page's stack of cards with the player cards; this shim keeps every
+     caller's setClubView(club) and the swap reset's setClubView(null) as they were. */
+  const cards = useCmCards();
+  const card = cards?.top ?? null;
+  const setClubView = useCallback((club: string | null) => { if (club) cards?.open({ k: 'club', club }); else cards?.reset(); }, [cards]);
   /* Round 158: watching the match live instead of jumping between screens.
      While this is on, the halftime and full time phases render inside the
      animated viewer; turning it off drops back to the classic screens.
@@ -275,7 +282,7 @@ const ClubManager = () => {
   /* Round 1597 review fix: each press of the hub's deals line, and the last one the desk has answered (DeskInView). */
   const [deskJump, setDeskJump] = useState(0);
   const deskServed = useRef(0);
-  const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
+  const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${cards?.pushes ?? 0}`, { skipFirst: true });
   /* Round 928 review: the managers screen is where one career is swapped for
      another, so the hub's open panel, rival view, live viewer switch and
      tactics request belong to the career being left, not the one coming in. */
@@ -1017,10 +1024,12 @@ const ClubManager = () => {
   const uclAlive = (c.uclGroup !== null && c.uclKoRound === null) || (!!c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won');
 
   /* ---- Round 74: the rival viewer takes over the whole screen ---- */
-  if (clubView) {
+  if (card) {
     return shell(
       <div ref={panelRef}>
-        <ScreenLoading><ClubDetailScreen clubName={clubView} career={c} onBack={() => setClubView(null)} /></ScreenLoading>
+        <ScreenLoading>{card.k === 'club'
+          ? <ClubDetailScreen clubName={card.club} career={c} onBack={() => cards?.back()} />
+          : <PlayerCardScreen card={card} career={c} onBack={() => cards?.back()} />}</ScreenLoading>
       </div>
     );
   }
@@ -1758,4 +1767,7 @@ const ClubManager = () => {
   );
 };
 
-export default ClubManager;
+/* Round 1601: the page always mounts the stack of cards, so the two page tests that import this get it too. */
+const ClubManagerWithCards = () => <CmCardsProvider><ClubManager /></CmCardsProvider>;
+
+export default ClubManagerWithCards;

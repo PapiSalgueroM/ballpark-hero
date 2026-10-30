@@ -4,6 +4,10 @@ import { teamCompRecord, careerLeagueOf, goldenBootTable, playerOfSeasonRace, ba
 import type { CareerState, CMPlayer, CompBucket, CompStatLine } from '@/lib/clubManager';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { LeagueLeadersCard, type LeadersBoard } from '@/components/club-manager/LeagueLeadersCard';
+import { CmHost } from '@/components/club-manager/CmCardLink';
+
+/* Round 1601: the state a player card's trip leaves behind (see StatsScreen). */
+let resume: { key: string; view: View; sortKey: SortKey; board: LeadersBoard | null; backTo: number | null } | null = null;
 import { leaders } from '@/lib/clubManagerLeagueBoards';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
@@ -148,12 +152,18 @@ function AwardRacesCard({ career }: { career: CareerState }) {
  * second bookkeeping.
  */
 export function StatsScreen({ career }: StatsScreenProps) {
-  const [view, setView] = useState<View>('all');
-  const [sortKey, setSortKey] = useState<SortKey>('goals');
+  /* Round 1601: a player card opened from a board leaves this screen as it stood, and the screen takes it back
+     on its next mount, once, for the same save at the same week (the hold below; cleared in a mount effect). */
+  const saveKey = `${career.clubName}|${career.season}|${career.week}`;
+  const held = resume && resume.key === saveKey ? resume : null;
+  const [view, setView] = useState<View>(() => held?.view ?? 'all');
+  const [sortKey, setSortKey] = useState<SortKey>(() => held?.sortKey ?? 'goals');
   /* Round 1311: one league leaders board open at a time, drawn alone. Opening one remembers where the
      page stood; Back puts it there again, so the tiles are where they were and the page never jumps. */
-  const [board, setBoard] = useState<LeadersBoard | null>(null);
-  const backTo = useRef<number | null>(null);
+  const [board, setBoard] = useState<LeadersBoard | null>(() => held?.board ?? null);
+  const backTo = useRef<number | null>(held?.backTo ?? null);
+  useLayoutEffect(() => { resume = null; }, []);
+  const hold = () => { resume = { key: saveKey, view, sortKey, board, backTo: backTo.current }; };
   const boardRef = useRevealScroll<HTMLDivElement>(`board:${board ?? ''}`, { skipFirst: true });
   const onBoard = (next: LeadersBoard | null) => {
     if (next !== null && board === null && typeof window !== 'undefined') backTo.current = window.scrollY;
@@ -207,9 +217,11 @@ export function StatsScreen({ career }: StatsScreenProps) {
   /* Round 1311: a board open is the whole screen under the hub's back button: nothing stacks under it. */
   if (board !== null) {
     return (
-      <div ref={boardRef} data-cm-stats-board>
-        <LeagueLeadersCard career={career} board={board} onBoard={onBoard} />
-      </div>
+      <CmHost hold={hold}>
+        <div ref={boardRef} data-cm-stats-board>
+          <LeagueLeadersCard career={career} board={board} onBoard={onBoard} />
+        </div>
+      </CmHost>
     );
   }
 

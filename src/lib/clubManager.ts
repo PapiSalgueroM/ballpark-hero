@@ -61,6 +61,8 @@ import {
   bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
   liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
+/* Round 1601: the season archive, pure and import free. */
+import { archiveCareerSeason } from '@/lib/clubManagerCareerLines';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
 import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
 import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
@@ -3189,6 +3191,13 @@ export interface CareerState {
   /** Round 1343: set once, by retireCareer (clubManagerRetire.ts), when the manager retires. A retired career
    *  keeps its slot as a finished career and opens on its farewell. Absent on every other save. */
   retired?: import('@/lib/clubManagerRetire').Retirement;
+  /** Round 1601: the seasons each man of mine played for the club, one entry a man by squad id, written only
+   *  at finishSeason (clubManagerCareerLines.ts) and kept for the men at the club when a season ends. A list,
+   *  never a map keyed by id. Absent until a season ends on this engine with somebody having played. */
+  pastLines?: import('@/lib/clubManagerCareerLines').PastEntry[];
+  /** Round 1601: the season the archive first ran in, set once. Seasons before it were played before the
+   *  game kept them. Absent on a save that has not ended a season since the update. */
+  pastFrom?: number;
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -21824,6 +21833,8 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length, ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
   ];
   state.history = keepTeams(state.history);
+  /* Round 1601: write down the season every man of mine played, after everything above; it draws nothing. */
+  archiveCareerSeason(state);
   state.pendingSummary = summary;
   return { state, summary };
 }
