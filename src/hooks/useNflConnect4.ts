@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { getRandomConnect4Board } from '@/data/nflConnect4Boards';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -101,7 +101,12 @@ export function useNflConnect4() {
   const [currentTeam, setCurrentTeam] = useState<Connect4Team>('red');
   const [phase, setPhase] = useState<Connect4Phase>('playing');
   const [winInfo, setWinInfo] = useState<Connect4WinInfo | null>(null);
-  const [isValidating, setIsValidating] = useState(false);
+  const [isValidating, setValidationState] = useState(false);
+  const validatingRef = useRef(false);
+  const setIsValidating = useCallback((pending: boolean) => {
+    validatingRef.current = pending;
+    setValidationState(pending);
+  }, []);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [selectedCol, setSelectedCol] = useState<number | null>(null);
   const [usedPlayers, setUsedPlayers] = useState<Set<string>>(new Set());
@@ -114,7 +119,7 @@ export function useNflConnect4() {
 
   const selectColumn = useCallback(
     (col: number) => {
-      if (phase !== 'playing') return;
+      if (phase !== 'playing' || validatingRef.current) return;
       const row = getLowestEmptyRow(grid, col);
       if (row === null) return; // column full
       setSelectedCol(col);
@@ -125,7 +130,7 @@ export function useNflConnect4() {
 
   const submitPlayer = useCallback(
     async (playerName: string) => {
-      if (selectedCol === null || phase !== 'playing') return;
+      if (selectedCol === null || phase !== 'playing' || validatingRef.current) return;
       const targetRow = getLowestEmptyRow(grid, selectedCol);
       if (targetRow === null) return;
 
@@ -218,11 +223,11 @@ export function useNflConnect4() {
       setIsValidating(false);
       setValidationError(null);
     },
-    [selectedCol, grid, currentTeam, phase, board, usedPlayers]
+    [selectedCol, grid, currentTeam, phase, board, usedPlayers, setIsValidating]
   );
 
   const skipTurn = useCallback(() => {
-    if (phase !== 'playing') return;
+    if (phase !== 'playing' || validatingRef.current) return;
     setCurrentTeam((t) => (t === 'red' ? 'blue' : 'red'));
     setSelectedCol(null);
     setValidationError(null);
@@ -238,7 +243,7 @@ export function useNflConnect4() {
     setValidationError(null);
     setSelectedCol(null);
     setUsedPlayers(new Set());
-  }, []);
+  }, [setIsValidating]);
 
   useGameCompletion('nfl-connect-4', phase === 'won' || phase === 'draw', phase === 'won' ? 500 : 200);
 
