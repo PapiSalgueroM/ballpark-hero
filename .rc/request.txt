@@ -1,0 +1,13 @@
+size-head-d: node scripts/simClubManagerSaveSize.mjs
+size-base-d: git worktree add -f /tmp/sbd 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/sbd/node_modules && cd /tmp/sbd && node scripts/simClubManagerSaveSize.mjs
+size-head-1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+size-base-1: git worktree add -f /tmp/sb1 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/sb1/node_modules && cd /tmp/sb1 && SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+size-head-2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+size-base-2: git worktree add -f /tmp/sb2 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/sb2/node_modules && cd /tmp/sb2 && SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+size-head-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+size-base-3: git worktree add -f /tmp/sb3 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/sb3/node_modules && cd /tmp/sb3 && SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+size-head-4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+size-base-4: git worktree add -f /tmp/sb4 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/sb4/node_modules && cd /tmp/sb4 && SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+size-head-5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+size-base-5: git worktree add -f /tmp/sb5 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/sb5/node_modules && cd /tmp/sb5 && SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+size-head-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
