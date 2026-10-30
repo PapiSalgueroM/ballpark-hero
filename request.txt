@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rules: node scripts/simCmLeagueRules.mjs
+levelReads: node scripts/simCmLevelReads.mjs
+lr-youth: CM_LEVEL_READS_CONTROL=youth node scripts/simCmLevelReads.mjs
+oldLedger: node scripts/simCmOldLedger.mjs
+oldLedger-exact: CM_OLD_LEDGER_CONTROL=exact node scripts/simCmOldLedger.mjs
+noRival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/lib/clubManagerTrajectory.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldMovesNamesakes.test.ts src/lib/clubManagerAdoption.test.ts src/test/clubManagerLoanPlanIntegration.test.ts --testTimeout=300000 --hookTimeout=120000
+dailyDeals: node scripts/simDailyDeals.mjs
+dd-oldhashes: R=$PWD; git worktree add /tmp/dd HEAD >/dev/null 2>&1 && cd /tmp/dd && ln -s $R/node_modules node_modules && grep -c "'0f5c7f4df3f4b53c5531'" scripts/simDailyDeals.mjs && sed -i "s/'0f5c7f4df3f4b53c5531'/'b33b5b04a41504ec5f53'/; s/'a065461da7accfc4228e'/'9b6451735725f9ce1ba8'/; s/'7dc686ab3b392aa070ca'/'75a43fcbf0106a1f29e3'/" scripts/simDailyDeals.mjs && grep -c "b33b5b04a41504ec5f53" scripts/simDailyDeals.mjs && node scripts/simDailyDeals.mjs

@@ -1,0 +1,21 @@
+simCmOldLedger: base 14a9af704
+section 1: 454 clubs, 0 namesake pairs of one position born within a year
+made on base: Everton bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: Everton, 5 records, 5 moves, 0 problems
+  section 2 bytes: stored 60559, base load saves 61728, this tree 61728 (the base's)
+  section 4: Everton sold Jarrad Branthwaite (23y) to Aston Villa: record owned by Aston Villa, listed at Aston Villa 1
+  section 3 season two: Everton, 13 records, 13 moves, 0 problems
+made on base: AC Milan bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: AC Milan, 6 records, 6 moves, 0 problems
+  section 2 bytes: stored 61313, base load saves 62476, this tree 62476 (the base's)
+  section 4: AC Milan sold Christian Pulisic (27y) to Juventus: record owned by Juventus, listed at Juventus 1
+  section 3 season two: AC Milan, 17 records, 17 moves, 0 problems
+made on base: Bayern Munich bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: Bayern Munich, 6 records, 6 moves, 0 problems
+  section 2 bytes: stored 62553, base load saves 63718, this tree 63718 (the base's)
+  section 4: Bayern Munich sold Jamal Musiala (22y) to Borussia Dortmund: record owned by Borussia Dortmund, listed at Borussia Dortmund 1
+  section 3 season two: Bayern Munich, 14 records, 14 moves, 0 problems
+section 5: a new Everton career, ledger curve 2, near false
+  section 5 new: Everton, 5 records, 5 moves, 0 problems
+simCmOldLedger: 17 ledger moves loaded, 3 sales, 0 failures
+simCmOldLedger: all sections green
