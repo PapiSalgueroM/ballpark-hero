@@ -1,0 +1,5 @@
+vitest exit=0 31s |    Duration  29.93s (transform 5.09s, setup 398ms, collect 11.29s, tests 36.89s, environment 3.27s, prepare 1.19s)
+trimprobe exit=0 20s | trimprobe: trimmed 12, on the list after the summer 12 (released, not mine: 0), still somewhere two summers on 8; ledger held list men 80, agree 80, disagree 0, record re
+loanprobe exit=0 5s | loanprobe: 3 final year men loaned out, 0 of them walked at the summer without a checkpoint row or a hub line
+tsc exit=0 91s | 
+fleet exit=0 180s | simCmFreeAgencyFleet: green, all eight sections held

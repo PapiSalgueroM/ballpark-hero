@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/ClubManagerSeasonSummary.expiring.test.tsx src/test/cmFreeAgencyJoinNow.test.ts src/test/clubManagerHandoverDesk.test.ts src/test/cmTablesTruth.test.tsx --testTimeout=300000 --hookTimeout=120000
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+trimprobe: cp .rc/x/trimprobe.mjs scripts/trimprobe.mjs && node scripts/trimprobe.mjs
+loanprobe: cp .rc/x/loanprobe.mjs scripts/loanprobe.mjs && node scripts/loanprobe.mjs
