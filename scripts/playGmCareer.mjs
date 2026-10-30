@@ -625,7 +625,7 @@ async function walkE(row, w, h) {
      line is slow enough to show one), then the screen. Every frame is read in the page, so neither stage is raced;
      a stage is the panel element it stood in (the mount draws a new one when the kit lands). On the owner's phone
      every holding frame is the Career screen's own height to 8 px (GM_CAREER_FLOORS, career 184); at both sizes the
-     screen lands where its holding box stood, and the last holding frame's scroll is the landed screen's. */
+     screen lands where its holding box stood, and the last holding frame's scroll is the landed screen's (to 2 px). */
   await back(page);
   await page.evaluate(() => window.scrollTo(0, 0));
   n0 = assets.length;
@@ -655,12 +655,16 @@ async function walkE(row, w, h) {
   });
   const firstStage = seen.length ? seen[0].stage : null;
   const beforeKit = seen.filter(f => f.stage === firstStage), afterKit = seen.filter(f => f.stage !== firstStage);
-  const span = fs => (fs.length ? `${Math.round(Math.min(...fs.map(f => f.h)))} to ${Math.round(Math.max(...fs.map(f => f.h)))}px over ${fs.length} frame(s)` : 'not seen');
-  console.log(`  MEASURED ${tag}: the Career box before the kit ${span(beforeKit)}, its screen's own holding box ${span(afterKit)}, the landed screen ${landedC ? Math.round(landedC.h) : 'none'}px`);
+  const span = fs => (fs.length ? `${Math.min(...fs.map(f => f.h)).toFixed(1)} to ${Math.max(...fs.map(f => f.h)).toFixed(1)}px over ${fs.length} frame(s)` : 'not seen');
+  console.log(`  MEASURED ${tag}: the Career box before the kit ${span(beforeKit)}, its screen's own holding box ${span(afterKit)}, the landed screen ${landedC ? landedC.h.toFixed(1) : 'none'}px, scroll ${seen.length ? seen[seen.length - 1].y : '-'} to ${landedC?.y ?? '-'}`);
   say(beforeKit.length > 0 && beforeKit.every(f => f.key === 'career'), `${tag}: the Career box holds, under its own header, while the kit is on its way (${beforeKit.length} frame(s), ${beforeKit[0]?.key ?? null})`);
   if (w === 390) say(seen.length > 0 && !!landedC && seen.every(f => Math.abs(f.h - landedC.h) <= 8), `${tag}: at 390 every holding frame of the Career box is the Career screen's own height (${span(seen)} for ${landedC ? Math.round(landedC.h) : 0}px)`, aimed('nofallback'));
   const lastHold = seen[seen.length - 1];
-  say(!!lastHold && !!landedC && seen.every(f => Math.abs(f.top - landedC.top) < 2) && lastHold.y === landedC.y, `${tag}: the Career screen lands where its holding box stood, the page not moving (top ${lastHold ? Math.round(lastHold.top) : '-'} to ${landedC ? Math.round(landedC.top) : '-'}, scroll ${lastHold?.y ?? '-'} to ${landedC?.y ?? '-'})`);
+  /* the scroll to 2 px, as the top: on r1561-fz2 the 390 rows went 202 to 201 and 184 to 183 with the top unmoved
+     (443, 424). The landed screen is a fraction of a pixel under its whole pixel floor and, the page sitting mid way
+     down, the browser's scroll anchoring takes that fraction off the scroll; at 1280 the page sits at the top, 0 to 0.
+     Under nofallback the same check reads 64 to 269. */
+  say(!!lastHold && !!landedC && seen.every(f => Math.abs(f.top - landedC.top) < 2) && Math.abs(lastHold.y - landedC.y) < 2, `${tag}: the Career screen lands where its holding box stood, the page not moving (top ${lastHold ? Math.round(lastHold.top) : '-'} to ${landedC ? Math.round(landedC.top) : '-'}, scroll ${lastHold?.y ?? '-'} to ${landedC?.y ?? '-'})`);
   say(kitAsked(n0) >= 1, `${tag}: the Career box asks for the kit`);
   await shot(page, `${row.sport}-${w}-slow-career`);
   await screenChecks(page, `${tag} Career`);
