@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+playBingoClubRules: CI=1 SIM_NETWORK=offline RC_OUT=$RC_OUT node scripts/playBingoClubRules.mjs
+simPrerender: node scripts/simPrerender.mjs 2>&1 | grep -v "^   ok" | tail -25; exit ${PIPESTATUS[0]}
+simPrerender-oldnews: git show 692590145:src/pages/WhatsNew.tsx > src/pages/WhatsNew.tsx && node scripts/simPrerender.mjs 2>&1 | grep -v "^   ok" | tail -12; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
