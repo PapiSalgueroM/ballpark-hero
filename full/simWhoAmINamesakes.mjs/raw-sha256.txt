@@ -1,0 +1,2 @@
+500b63f4f62b6c2be0514e2bbb8553b487dacf66a1a7fbc491be3f2c688bef56  /home/runner/work/_temp/rc-out/full/simWhoAmINamesakes.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simWhoAmINamesakes.mjs/stderr.log

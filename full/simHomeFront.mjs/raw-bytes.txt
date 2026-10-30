@@ -1,0 +1,3 @@
+2781 /home/runner/work/_temp/rc-out/full/simHomeFront.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simHomeFront.mjs/stderr.log
+2781 total

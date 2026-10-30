@@ -1,0 +1,3 @@
+7714 /home/runner/work/_temp/rc-out/full/simSoccerDeckFairness.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerDeckFairness.mjs/stderr.log
+7714 total

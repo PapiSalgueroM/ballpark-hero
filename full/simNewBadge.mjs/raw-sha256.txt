@@ -1,0 +1,2 @@
+b28a093a9e2436bfd1e5ec1b756bb32c8b17656b6febb9926e96332c47458887  /home/runner/work/_temp/rc-out/full/simNewBadge.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNewBadge.mjs/stderr.log

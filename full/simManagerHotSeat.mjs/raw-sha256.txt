@@ -1,0 +1,2 @@
+8363eb026247df34144d7ce933433bdf70736e79434e2547b1e9548f243434c3  /home/runner/work/_temp/rc-out/full/simManagerHotSeat.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simManagerHotSeat.mjs/stderr.log

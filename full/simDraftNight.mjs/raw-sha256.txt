@@ -1,0 +1,2 @@
+622a6cd412f76f10c764b62cfb83b7b6b5f96755d8502a38d1c3bdddeeb2580a  /home/runner/work/_temp/rc-out/full/simDraftNight.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simDraftNight.mjs/stderr.log

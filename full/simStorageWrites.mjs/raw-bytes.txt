@@ -1,0 +1,3 @@
+3297 /home/runner/work/_temp/rc-out/full/simStorageWrites.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simStorageWrites.mjs/stderr.log
+3297 total

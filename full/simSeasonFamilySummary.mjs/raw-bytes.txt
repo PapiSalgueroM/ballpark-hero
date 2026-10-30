@@ -1,0 +1,3 @@
+9194 /home/runner/work/_temp/rc-out/full/simSeasonFamilySummary.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSeasonFamilySummary.mjs/stderr.log
+9194 total

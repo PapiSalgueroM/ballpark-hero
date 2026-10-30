@@ -1,0 +1,2 @@
+f67b1745c9d27fabb6bd3bcc433ed361ef9bb69c281f2aae8d9b118c5b3d555b  /home/runner/work/_temp/rc-out/full/simFootleCurrency.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFootleCurrency.mjs/stderr.log

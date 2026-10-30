@@ -1,0 +1,2 @@
+dabee30409452b5b26f1973f62721f830ad986ddc59f6fa681589ff2e71fb895  /home/runner/work/_temp/rc-out/full/simPhone2.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPhone2.mjs/stderr.log

@@ -1,0 +1,3 @@
+570 /home/runner/work/_temp/rc-out/full/simReservedNames.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simReservedNames.mjs/stderr.log
+570 total

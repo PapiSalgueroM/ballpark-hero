@@ -1,0 +1,2 @@
+f4caf28f50c9e9683ea32eefd60286e7cb3af8a32e1af009293d90ace132ef64  /home/runner/work/_temp/rc-out/full/simSoccerCareerColdContext.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerCareerColdContext.mjs/stderr.log

@@ -1,0 +1,2 @@
+f6f28b9c22a709c6f09ce91e7f8ce9b009f8af7516e867da3517349264c6bbb3  /home/runner/work/_temp/rc-out/full/simCollegeDynastyBoard.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCollegeDynastyBoard.mjs/stderr.log

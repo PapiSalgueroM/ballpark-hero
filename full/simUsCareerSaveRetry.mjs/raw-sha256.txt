@@ -1,0 +1,2 @@
+61bdc8818a7ecbfe4460c0e788b306611e46430f13f49f8184c40e5398d3d1af  /home/runner/work/_temp/rc-out/full/simUsCareerSaveRetry.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simUsCareerSaveRetry.mjs/stderr.log

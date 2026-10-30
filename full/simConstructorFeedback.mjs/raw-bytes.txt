@@ -1,0 +1,3 @@
+2017 /home/runner/work/_temp/rc-out/full/simConstructorFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simConstructorFeedback.mjs/stderr.log
+2017 total

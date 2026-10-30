@@ -1,0 +1,3 @@
+15969 /home/runner/work/_temp/rc-out/full/simCmMadeUpNations.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simCmMadeUpNations.mjs/stderr.log
+15969 total

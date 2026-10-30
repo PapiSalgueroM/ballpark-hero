@@ -1,0 +1,3 @@
+3296 /home/runner/work/_temp/rc-out/full/simF1DriverHintPoints.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simF1DriverHintPoints.mjs/stderr.log
+3296 total

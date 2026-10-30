@@ -1,0 +1,3 @@
+1363 /home/runner/work/_temp/rc-out/full/simNhlOpeningRatingInputs.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNhlOpeningRatingInputs.mjs/stderr.log
+1363 total

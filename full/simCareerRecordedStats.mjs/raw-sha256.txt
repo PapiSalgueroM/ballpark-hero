@@ -1,0 +1,2 @@
+4679b51f649e93b7ca7d046318b445acd145b5c3565015ab178b1f2f2fc29ee0  /home/runner/work/_temp/rc-out/full/simCareerRecordedStats.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerRecordedStats.mjs/stderr.log

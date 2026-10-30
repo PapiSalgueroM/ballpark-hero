@@ -1,0 +1,3 @@
+1964 /home/runner/work/_temp/rc-out/full/simPhone2.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simPhone2.mjs/stderr.log
+1964 total

@@ -1,0 +1,27 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 1262,
+      "sha256": "f79cab1d941aa76862b18760dcecee1df4cff2e9491a002bb2bb65fc6303d7f0",
+      "tests": [
+        ":src/hooks/useClubManager.test.ts",
+        ":src/test/ballIqFeedback.test.tsx",
+        ":src/test/cagePractice.test.tsx",
+        ":src/test/careerRecordedStats.test.tsx",
+        ":src/test/chainTimelineMotion.test.tsx",
+        ":src/components/college-dynasty/collegeDynastyFixture.test.tsx",
+        ":src/test/constructorFeedback.test.tsx",
+        ":src/test/f1DriverHintPoints.test.tsx",
+        ":src/test/footleResultCurrency.test.tsx",
+        ":src/test/lineupPickerFocus.test.tsx",
+        ":src/test/reservedNames.test.ts",
+        ":src/test/seasonFamilySummary.test.ts",
+        ":src/test/tycoonSaleReview.test.tsx",
+        ":src/test/usCareerSaveRetry.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

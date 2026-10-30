@@ -1,0 +1,2 @@
+1b58196a8079fbf115739cda9f5bb3ae4feab8bb1656967b87a28613cb70fe77  /home/runner/work/_temp/rc-out/full/simCmMadeUpNations.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmMadeUpNations.mjs/stderr.log

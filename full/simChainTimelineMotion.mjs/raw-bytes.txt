@@ -1,0 +1,3 @@
+2803 /home/runner/work/_temp/rc-out/full/simChainTimelineMotion.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simChainTimelineMotion.mjs/stderr.log
+2803 total

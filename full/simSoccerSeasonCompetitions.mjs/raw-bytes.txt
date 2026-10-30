@@ -1,0 +1,3 @@
+676 /home/runner/work/_temp/rc-out/full/simSoccerSeasonCompetitions.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerSeasonCompetitions.mjs/stderr.log
+676 total

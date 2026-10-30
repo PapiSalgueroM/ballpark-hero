@@ -1,0 +1,3 @@
+1352 /home/runner/work/_temp/rc-out/full/simSoccerCareerColdContext.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerCareerColdContext.mjs/stderr.log
+1352 total

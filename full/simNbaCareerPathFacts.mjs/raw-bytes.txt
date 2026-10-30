@@ -1,0 +1,3 @@
+1789 /home/runner/work/_temp/rc-out/full/simNbaCareerPathFacts.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNbaCareerPathFacts.mjs/stderr.log
+1789 total

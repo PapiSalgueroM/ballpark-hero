@@ -1,0 +1,3 @@
+4141 /home/runner/work/_temp/rc-out/full/simClubManagerScore.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simClubManagerScore.mjs/stderr.log
+4141 total
