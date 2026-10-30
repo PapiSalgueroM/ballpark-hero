@@ -1,0 +1,3 @@
+#!build
+#!playwright
+simWritesAreSent: node scripts/simWritesAreSent.mjs
