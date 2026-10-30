@@ -1,0 +1,4 @@
+prepare exit=0 54s | ordinary-build raw=0
+simSoccerDeck exit=1 110s | simSoccerDeck.mjs raw=1
+deckCapture exit=1 7s | Node.js v24.22.1
+finish exit=0 6s | 

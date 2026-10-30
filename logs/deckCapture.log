@@ -1,0 +1,31 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: ORIGINAL_FAILURE_LINES_PRESERVED
++ actual - expected
+
++ []
+- [
+-   '   FAIL 34 careers part from the base: career 7 (LW, 2025) from step 14; career 14 (CDM, 2020-24) from step 54; career 15 (CM, 2025) from step 40',
+-   '   FAIL 1 careers draw Math.random a different number of times',
+-   '   FAIL 34 careers part from the base at a season end',
+-   '   FAIL 0 base saves load differently here and 13 play their season differently (the deck not loaded)'
+- ]
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/captureSoccerDeck.mjs:132:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [],
+  expected: [
+    '   FAIL 34 careers part from the base: career 7 (LW, 2025) from step 14; career 14 (CDM, 2020-24) from step 54; career 15 (CM, 2025) from step 40',
+    '   FAIL 1 careers draw Math.random a different number of times',
+    '   FAIL 34 careers part from the base at a season end',
+    '   FAIL 0 base saves load differently here and 13 play their season differently (the deck not loaded)'
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

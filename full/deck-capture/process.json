@@ -1,0 +1,21 @@
+{
+  "started": "2026-10-30T20:09:51.608Z",
+  "ended": "2026-10-30T20:09:52.522Z",
+  "cwd": "/home/runner/work/_temp/deck-capture-matched-41120532832-a1",
+  "command": "timeout",
+  "args": [
+    "--kill-after=10s",
+    "1800",
+    "/opt/hostedtoolcache/node/24.22.1/x64/bin/node",
+    "scripts/simSoccerDeck.mjs"
+  ],
+  "raw": 1,
+  "signal": null,
+  "error": null,
+  "effective": {
+    "NODE_OPTIONS": "--require=/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs",
+    "SIM_NETWORK": "offline",
+    "SOCCER_DECK_CAPTURE_OUT": "/home/runner/work/_temp/rc-out/full/deck-capture/observations"
+  },
+  "credit": "DIAGNOSTIC_ONLY_ORIGINAL_STATUS_UNCHANGED"
+}
