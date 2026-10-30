@@ -1,0 +1,10 @@
+#!build
+#!playwright
+playClubDetailCurrentRoster: ENGINES=chromium node scripts/playClubDetailCurrentRoster.mjs
+playCmOldCareersWorld: ENGINES=chromium node scripts/playCmOldCareersWorld.mjs
+playCmWorldMoves: ENGINES=chromium node scripts/playCmWorldMoves.mjs
+playLiveMatchFit: ENGINES=chromium node scripts/playLiveMatchFit.mjs
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs
+simBracketMoment: ENGINES=chromium node scripts/simBracketMoment.mjs
+simCreateClub: ENGINES=chromium node scripts/simCreateClub.mjs
+simCreateClub-base: git worktree add -f /tmp/cb 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/cb/node_modules && cd /tmp/cb && node scripts/simCreateClub.mjs
