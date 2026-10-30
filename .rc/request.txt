@@ -1,0 +1,6 @@
+#!serial
+mut-2005: node .rc/x/mutPointsFirst.mjs && node scripts/simEra2005.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-2010: node .rc/x/mutPointsFirst.mjs && node scripts/simEra2010.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-2015: node .rc/x/mutPointsFirst.mjs && node scripts/simEra2015.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-2020: node .rc/x/mutPointsFirst.mjs && node scripts/simEra2020.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short | grep -c . ; node scripts/simEra2010.mjs
