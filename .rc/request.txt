@@ -1,0 +1,17 @@
+simNhlDraftCapital: node scripts/simNhlDraftCapital.mjs
+simNhlRosterLimit: node scripts/simNhlRosterLimit.mjs
+simNhlWaiverReceipt: node scripts/simNhlWaiverReceipt.mjs
+simNhlContributorsBoard: node scripts/simNhlContributorsBoard.mjs
+simNhlRatingEvidence: node scripts/simNhlRatingEvidence.mjs
+simNhlGmDesk: node scripts/simNhlGmDesk.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simFrontOfficeCuts: node scripts/simFrontOfficeCuts.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simDraftNight: node scripts/simDraftNight.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simLeagueCaps: node scripts/simLeagueCaps.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simOwnerMandate: node scripts/simOwnerMandate.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
