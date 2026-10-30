@@ -311,6 +311,23 @@ const PlayerBingo = () => {
                 </p>
               </section>
               <section>
+                <h3 className="font-bold text-foreground mb-2">Club squares</h3>
+                <p className="text-muted-foreground">
+                  Played for (a club), One-club man and Played for 4+ clubs count senior first teams only,
+                  and loans count. A club counts once however many times he went back. Youth, academy and B
+                  teams do not count.
+                </p>
+                <p className="text-muted-foreground mt-2">
+                  Example: Tyler Morton came through Liverpool, went on loan to Blackburn Rovers and then Hull
+                  City, and joined Lyon. That is four clubs, so he fits Played for 4+ clubs, and he is not a
+                  One-club man.
+                </p>
+                <p className="text-muted-foreground mt-2">
+                  Some players' early clubs and loans are still missing from our lists, so now and then the
+                  board can say no to a club he really played for. If it does, use Report a problem.
+                </p>
+              </section>
+              <section>
                 <h3 className="font-bold text-foreground mb-2">Skipping</h3>
                 <p className="text-muted-foreground">
                   Skips are free and unlimited. If a player fits nowhere useful, skip and wait for a better

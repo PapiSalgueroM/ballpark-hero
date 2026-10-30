@@ -1,0 +1,411 @@
+{
+  "rules": {
+    "aliases": {
+      "fc bayern munich": "bayern munich",
+      "juventus": "juventus fc"
+    },
+    "reserves": [
+      "ajax amsterdam u21",
+      "ajax amsterdam uefa u19",
+      "arsenal fc u21",
+      "atalanta u23",
+      "bilbao athletic",
+      "brighton & hove albion u21",
+      "chelsea fc u21",
+      "fc barcelona atletic",
+      "fc bayern munich ii",
+      "fc porto b",
+      "fiorentina primavera",
+      "jong genk",
+      "juventus next gen",
+      "manchester united u21",
+      "real madrid castilla",
+      "recreativo granada",
+      "sassuolo primavera",
+      "sc freiburg ii",
+      "sl benfica b",
+      "tsg 1899 hoffenheim ii",
+      "young reds"
+    ]
+  },
+  "add": [
+    {
+      "n": "Abdukodir Khusanov",
+      "nat": "Uzbekistan",
+      "by": 2004,
+      "pos": "Centre-Back",
+      "clubs": [
+        "Energetik-BGU"
+      ]
+    },
+    {
+      "n": "Adam Wharton",
+      "nat": "England",
+      "by": 2004,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Blackburn Rovers"
+      ]
+    },
+    {
+      "n": "Aleksandar Stanković",
+      "nat": "Serbia",
+      "by": 2005,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "FC Luzern",
+        "Club Brugge KV"
+      ]
+    },
+    {
+      "n": "Amadou Onana",
+      "nat": "Belgium",
+      "by": 2001,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Everton FC"
+      ]
+    },
+    {
+      "n": "Angelo Stiller",
+      "nat": "Germany",
+      "by": 2001,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Bayern Munich"
+      ]
+    },
+    {
+      "n": "Bazoumana Touré",
+      "nat": "Cote d'Ivoire",
+      "by": 2006,
+      "pos": "Left Winger",
+      "clubs": [
+        "ASEC Mimosas"
+      ]
+    },
+    {
+      "n": "Carlos Baleba",
+      "nat": "Cameroon",
+      "by": 2004,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "LOSC Lille",
+        "Brighton & Hove Albion"
+      ]
+    },
+    {
+      "n": "Conor Bradley",
+      "nat": "Northern Ireland",
+      "by": 2003,
+      "pos": "Right-Back",
+      "clubs": [
+        "Bolton Wanderers"
+      ]
+    },
+    {
+      "n": "Dean Huijsen",
+      "nat": "Spain",
+      "by": 2005,
+      "pos": "Centre-Back",
+      "clubs": [
+        "Juventus FC"
+      ]
+    },
+    {
+      "n": "Dilane Bakwa",
+      "nat": "France",
+      "by": 2002,
+      "pos": "Right Winger",
+      "clubs": [
+        "FC Girondins Bordeaux",
+        "Nottingham Forest"
+      ]
+    },
+    {
+      "n": "Ethan Ampadu",
+      "nat": "Wales",
+      "by": 2000,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Exeter City",
+        "Spezia Calcio"
+      ]
+    },
+    {
+      "n": "Evanilson",
+      "nat": "Brazil",
+      "by": 1999,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "FC STK 1914 Šamorín"
+      ]
+    },
+    {
+      "n": "Fisnik Asllani",
+      "nat": "Kosovo",
+      "by": 2002,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "FK Austria Vienna"
+      ]
+    },
+    {
+      "n": "Franco Mastantuono",
+      "nat": "Argentina",
+      "by": 2007,
+      "pos": "Right Winger",
+      "clubs": [
+        "Real Madrid"
+      ]
+    },
+    {
+      "n": "Gregor Kobel",
+      "nat": "Switzerland",
+      "by": 1997,
+      "pos": "Goalkeeper",
+      "clubs": [
+        "TSG 1899 Hoffenheim"
+      ]
+    },
+    {
+      "n": "Hayden Hackney",
+      "nat": "England",
+      "by": 2002,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Middlesbrough FC",
+        "Scunthorpe United"
+      ]
+    },
+    {
+      "n": "James Garner",
+      "nat": "England",
+      "by": 2001,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Watford FC"
+      ]
+    },
+    {
+      "n": "Joaquín Panichelli",
+      "nat": "Argentina",
+      "by": 2002,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "Deportivo Alavés"
+      ]
+    },
+    {
+      "n": "Joel Ordóñez",
+      "nat": "Ecuador",
+      "by": 2004,
+      "pos": "Centre-Back",
+      "clubs": [
+        "Independiente del Valle"
+      ]
+    },
+    {
+      "n": "João Cancelo",
+      "nat": "Portugal",
+      "by": 1994,
+      "pos": "Right-Back",
+      "clubs": [
+        "SL Benfica",
+        "Bayern Munich"
+      ]
+    },
+    {
+      "n": "Jérémy Jacquet",
+      "nat": "France",
+      "by": 2005,
+      "pos": "Centre-Back",
+      "clubs": [
+        "Clermont Foot 63"
+      ]
+    },
+    {
+      "n": "Kaishu Sano",
+      "nat": "Japan",
+      "by": 2000,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "FC Machida Zelvia",
+        "Kashima Antlers"
+      ]
+    },
+    {
+      "n": "Leon Avdullahu",
+      "nat": "Kosovo",
+      "by": 2004,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "FC Basel 1893"
+      ]
+    },
+    {
+      "n": "Mamadou Sangaré",
+      "nat": "Mali",
+      "by": 2002,
+      "pos": "Central Midfield",
+      "clubs": [
+        "FC Liefering",
+        "Grazer AK",
+        "SV Zulte Waregem",
+        "RC Lens"
+      ]
+    },
+    {
+      "n": "Marco Palestra",
+      "nat": "Italy",
+      "by": 2005,
+      "pos": "Right-Back",
+      "clubs": [
+        "Cagliari Calcio"
+      ]
+    },
+    {
+      "n": "Mario Gila",
+      "nat": "Spain",
+      "by": 2000,
+      "pos": "Centre-Back",
+      "clubs": [
+        "Real Madrid"
+      ]
+    },
+    {
+      "n": "Mateus Fernandes",
+      "nat": "Portugal",
+      "by": 2004,
+      "pos": "Central Midfield",
+      "clubs": [
+        "Sporting CP",
+        "West Ham United"
+      ]
+    },
+    {
+      "n": "Moisés Caicedo",
+      "nat": "Ecuador",
+      "by": 2001,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Beerschot VA"
+      ]
+    },
+    {
+      "n": "Morten Hjulmand",
+      "nat": "Denmark",
+      "by": 1999,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "FC Admira Wacker",
+        "Sporting CP"
+      ]
+    },
+    {
+      "n": "Máximo Perrone",
+      "nat": "Argentina",
+      "by": 2003,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Manchester City",
+        "UD Las Palmas"
+      ]
+    },
+    {
+      "n": "Nick Woltemade",
+      "nat": "Germany",
+      "by": 2002,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "SV 07 Elversberg",
+        "Newcastle United"
+      ]
+    },
+    {
+      "n": "Nico Paz",
+      "nat": "Argentina",
+      "by": 2004,
+      "pos": "Attacking Midfield",
+      "clubs": [
+        "Real Madrid"
+      ]
+    },
+    {
+      "n": "Petar Sučić",
+      "nat": "Croatia",
+      "by": 2003,
+      "pos": "Central Midfield",
+      "clubs": [
+        "HŠK Zrinjski Mostar"
+      ]
+    },
+    {
+      "n": "Ryan Gravenberch",
+      "nat": "Netherlands",
+      "by": 2002,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Bayern Munich"
+      ]
+    },
+    {
+      "n": "Sandro Tonali",
+      "nat": "Italy",
+      "by": 2000,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Newcastle United"
+      ]
+    },
+    {
+      "n": "Senne Lammens",
+      "nat": "Belgium",
+      "by": 2002,
+      "pos": "Goalkeeper",
+      "clubs": [
+        "Club Brugge KV"
+      ]
+    },
+    {
+      "n": "Thierno Barry",
+      "nat": "France",
+      "by": 2002,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "SK Beveren"
+      ]
+    },
+    {
+      "n": "Tyler Morton",
+      "nat": "England",
+      "by": 2002,
+      "pos": "Defensive Midfield",
+      "clubs": [
+        "Blackburn Rovers",
+        "Hull City"
+      ]
+    },
+    {
+      "n": "Vitor Reis",
+      "nat": "Brazil",
+      "by": 2006,
+      "pos": "Centre-Back",
+      "clubs": [
+        "Girona FC"
+      ]
+    },
+    {
+      "n": "Yan Diomande",
+      "nat": "Cote d'Ivoire",
+      "by": 2006,
+      "pos": "Left Winger",
+      "clubs": [
+        "RB Leipzig"
+      ]
+    }
+  ],
+  "partial": [
+    "Rômulo"
+  ]
+}
