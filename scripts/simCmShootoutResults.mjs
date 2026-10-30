@@ -25,7 +25,7 @@ import { worldReadsAge1600, curve1Plugin1600 } from './lib/cmCurve1World1600.mjs
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const phase = process.env.CM_SHOOTOUT_RESULTS_PHASE ?? 'fixed';
-const control = process.env.CM_SHOOTOUT_RESULTS_CONTROL ?? '';
+const bridgeControl = process.env.CM_SHOOTOUT_RESULTS_CONTROL ?? '';
 let baseline = process.env.CM_SHOOTOUT_RESULTS_BASELINE;
 let output = process.env.CM_SHOOTOUT_RESULTS_OUT;
 const candidate = process.env.CM_SHOOTOUT_RESULTS_CANDIDATE ?? path.join(ROOT, 'src/lib/clubManager.ts');
@@ -163,11 +163,11 @@ try {
   Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: {
     getItem: () => null, setItem: () => { throw new Error('Match proof unexpectedly wrote storage'); }, removeItem: () => {},
   } });
-  assert.ok(['', 'keepcurve'].includes(control), `Unknown CM_SHOOTOUT_RESULTS_CONTROL ${control}`);
+  assert.ok(['', 'keepcurve'].includes(bridgeControl), `Unknown CM_SHOOTOUT_RESULTS_CONTROL ${bridgeControl}`);
   /* Round 1600: the bridge, while this tree's world reads age and b20 cannot (see the header) */
   const bridgeNeeded = worldReadsAge1600(ROOT) && !baselineBytes.includes('cmWorldReadsAge');
-  assert.ok(control !== 'keepcurve' || bridgeNeeded, 'keepcurve control cannot run: there is no curve 1 bridge to leave out');
-  const bridged = bridgeNeeded && control !== 'keepcurve';
+  assert.ok(bridgeControl !== 'keepcurve' || bridgeNeeded, 'keepcurve control cannot run: there is no curve 1 bridge to leave out');
+  const bridged = bridgeNeeded && bridgeControl !== 'keepcurve';
   receipt.bridge1600 = { needed: bridgeNeeded, used: bridged, served: {} };
   async function engine(source, name) {
     const file = path.join(temporary, `${name}.mjs`);

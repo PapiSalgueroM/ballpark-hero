@@ -248,6 +248,27 @@
  *     (eleven checks since Release AM added the keeperless thirteen; measured on a GitHub runner, 2026-10-08:
  *      0 wrong as committed, 8 under nomakeup as before, 1 under keeperonfull, 21 seconds a run)
  *
+ * ROUND 1600, 2026-10-30: the world reads age (curve 2), section 1 moved to
+ * 782003 (Getafe, 18 with two keepers; 782002's tie is now Espanyol, 14 men
+ * and no keeper) and sections 4 and 5 judge a row on the world before the
+ * flip (the keepcurve control above). Measured on GitHub runners r1600-so1
+ * and r1600-so2 (head 70917f457), default seed and SIM_SEED=1 to 5:
+ *   metric                                     fixed                                control                      floor / band
+ *   shootouts reached in section 1             28, 20, 29, 22, 28, 28 of 150                                     floor 12
+ *   first five kicks in listed order           all of them in every run             0 of 28 (ignoreorder, noskip) all
+ *   scored share, all kicks                    74.4, 78.8, 78.6, 77.7, 78.8, 81.1 %                              band 62 to 90
+ *   best five first minus worst five first     9.7, 9.4, 10.4, 9.2, 9.5, 11.0 pts                                floor 6
+ *   rows equal main, fixture base              150 of 150, all by the curve 1 arm   0 of 150 (keepcurve,         150
+ *                                                                                   keepleague), 141 (unsetpath)
+ *   rows equal main, named base                300 of 300 (37 on penalties), all    0 of 300 (keepcurve,         300, floor 12
+ *                                              by the curve 1 arm                   keepleague), 263 (unsetpath)
+ *   loaded old save equal main                 seed 782113, by the curve 1 arm      differs (keepcurve,          equal
+ *                                                                                   keepleague, unsetpath)
+ *   shootouts against the thin side (7b)       38, 44, 36, 49, 42, 58                                            floor 12
+ *   every control still fires where it did: ignoreorder and noskip section 1 (29 failures), oppworst sections 1, 6
+ *   and 7, nocap 3, ownkeeper and wrongkeeper 6, nooppkeeper 6 and 7, thinside, nomakeup and keeperonfull 7,
+ *   tie-record 4 (76 rows rejected as incomplete; the old save's probe row is a win, which it leaves alone).
+ *
  * Measured once and not asserted, because it is a design fact rather than
  * a check: on the same shootouts (1500 seeds of that cup match, the order
  * changes nothing before the whistle) an order of the five best first won
@@ -555,6 +576,8 @@ export const leagueOut = ${leagueOutEnginePath ? `await import('${leagueOutEngin
   const loaded = await import(pathToFileURL(BUNDLE_1600).href);
   curve1 = { historical: loaded.historical, baseline: loaded.baseline, arm: loaded.leagueOut ?? loaded.historical };
 }
+/* what the arm's engine also takes out, for the lines that count it */
+const ARM_ALSO_1600 = curve1 && leagueOutEnginePath ? ", its engine the league out arm's (Round 1052's league and Round 1520's made up countries taken out too)" : '';
 const {
   startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor,
   setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides, shootoutRosterSide,
@@ -1040,7 +1063,7 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
     defaultPens, withKicks };
   if (by1052) console.log(`   ${by1052} of those rows equal it only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory (the move is that round's)`);
   baselineEvidence.summary.by1052 = by1052;
-  if (by1600) console.log(`   ${by1600} of those rows equal it only with both engines on the world before Round 1600's flip (the curve 1 files rebuilt from this tree's own; the move is that round's)`);
+  if (by1600) console.log(`   ${by1600} of those rows equal it only with both engines on the world before Round 1600's flip (the curve 1 files rebuilt from this tree's own; the move is that round's)${ARM_ALSO_1600}`);
   baselineEvidence.summary.by1600 = by1600;
   if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the actual pre-1072 engine with no order set`);
   if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual pre-1072 main ${baselineGolden}`);
@@ -1090,7 +1113,7 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   const livePens = baselineEvidence.rows.filter(r => r.baseline.decidedBy === 'pens').length;
   console.log(`   on section 1's base: ${namedSame} of ${NAMED_SEEDS.length} rows equal actual pre-1072 main in result, next draw and full content after the default-detail allowance, ${namedPens} of them settled on penalties by main (${livePens} on the fixture's base)`);
   if (namedBy1052) console.log(`   ${namedBy1052} of those rows equal it only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
-  if (namedBy1600) console.log(`   ${namedBy1600} of those rows equal it only with both engines on the world before Round 1600's flip`);
+  if (namedBy1600) console.log(`   ${namedBy1600} of those rows equal it only with both engines on the world before Round 1600's flip${ARM_ALSO_1600}`);
   baselineEvidence.namedBase = { seed: NAMED_BASE_SEED, rows: NAMED_SEEDS.length, paired: namedSame, pens: namedPens, by1052: namedBy1052, by1600: namedBy1600 };
   if (namedSame !== NAMED_SEEDS.length) fail(`${NAMED_SEEDS.length - namedSame} rows on section 1's base differ from the actual pre-1072 engine with no order set`);
   if (namedKicks !== namedPens) fail(`${namedKicks} default-order reports on section 1's base carried kicks for ${namedPens} actual shootouts`);
@@ -1171,7 +1194,7 @@ section = 5;
     const rawPaired = JSON.stringify(got) === JSON.stringify(base);
     baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, by1052: oldBy1052, by1600: oldBy1600, ...content };
     if (oldBy1052) console.log(`   the old save equals actual pre-1072 main only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
-    if (oldBy1600) console.log(`   the old save equals actual pre-1072 main only with both engines on the world before Round 1600's flip`);
+    if (oldBy1600) console.log(`   the old save equals actual pre-1072 main only with both engines on the world before Round 1600's flip${ARM_ALSO_1600}`);
     if (!content.paired) fail(`the loaded old save differs from actual pre-1072 main at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
     if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual pre-1072 main');
     console.log(`   loaded old save, seed ${probe.seed} (one of ${pensNow.size} rows main settles on penalties, decided ${base.decidedBy}): equal actual pre-1072 main ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
