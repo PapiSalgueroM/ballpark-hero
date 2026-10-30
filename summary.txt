@@ -1,0 +1,4 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=1 181s | rv-walk1576: RED, 2 failures
+playBingoClubRules exit=0 55s | playBingoClubRules: GREEN, both viewports held
+simPlayerBingoLineFeedback exit=0 4s | simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
