@@ -1,0 +1,11 @@
+tsc exit=0 65s | 
+size-1 exit=0 67s | simClubManagerSaveSize: all sections green
+size-d exit=0 70s | simClubManagerSaveSize: all sections green
+size-2 exit=0 63s | simClubManagerSaveSize: all sections green
+size-3 exit=0 62s | simClubManagerSaveSize: all sections green
+size-4 exit=0 65s | simClubManagerSaveSize: all sections green
+simCmLeagueRules exit=1 54s | simCmLeagueRules: 47 failure(s)
+size-5 exit=0 63s | simClubManagerSaveSize: all sections green
+simManagerAppealIsolation exit=1 9s | Node.js v24.22.1
+size-uncapped exit=1 70s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+simUsCareerHallWall exit=0 58s | simUsCareerHallWall: ok, 53 check ids, 7847 checks, 200 careers a sport, 152 old saves
