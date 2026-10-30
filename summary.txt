@@ -1,0 +1,1 @@
+redmain exit=1 76s | playFirstVisitDialogs: RED. 7 bar lines: /club-manager#club-picked 320x640, /club-manager#club-picked 390x844, /club-manager#club-picked 1280x900, /club-manager#custom-cl

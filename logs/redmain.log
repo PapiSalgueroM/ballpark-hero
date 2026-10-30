@@ -1,0 +1,23 @@
+ src/pages/WhatsNew.tsx | 1 +
+ 1 file changed, 1 insertion(+)
+  NONE     /club-manager 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /club-manager 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /club-manager 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /soccer-career 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /soccer-career 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /soccer-career 1280x900: no first visit dialog, banner 735 to 900 (pending)
+
+6 route widths walked over 2 routes: 0 dialogs tapped and closed, 0 expected site reds, 6 without a first visit dialog, 0 red
+
+THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner
+  BARS FAIL     /club-manager#club-picked 320x640: 1 fixed control meets the banner 335 to 640: "Take the job" 584 to 628, 44 px under the banner, in div.fixed.bottom-0.left-0.right-0.z-40.border-t.border-border.bg-background/95 (z 40)
+  BARS FAIL     /club-manager#club-picked 390x844: 1 fixed control meets the banner 611 to 844: "Take the job" 788 to 832, 44 px under the banner, in div.fixed.bottom-0.left-0.right-0.z-40.border-t.border-border.bg-background/95 (z 40)
+  BARS FAIL     /club-manager#club-picked 1280x900: 1 fixed control meets the banner 735 to 900: "Take the job" 844 to 888, 44 px under the banner, in div.fixed.bottom-0.left-0.right-0.z-40.border-t.border-border.bg-background/95 (z 40)
+  BARS FAIL     /club-manager#custom-club 320x640: 1 fixed control meets the banner 335 to 640: "Found the club" 581 to 625, 44 px under the banner, in div.fixed.bottom-0.left-0.right-0.z-40.border-t.border-border.bg-background/95 (z 40)
+  BARS FAIL     /club-manager#custom-club 390x844: 1 fixed control meets the banner 611 to 844: "Found the club" 788 to 832, 44 px under the banner, in div.fixed.bottom-0.left-0.right-0.z-40.border-t.border-border.bg-background/95 (z 40)
+  BARS FAIL     /club-manager#custom-club 1280x900: 1 fixed control meets the banner 735 to 900: "Found the club" 844 to 888, 44 px under the banner, in div.fixed.bottom-0.left-0.right-0.z-40.border-t.border-border.bg-background/95 (z 40)
+  BARS PASS     /soccer-career#hub 320x640: 1 fixed control, none meets the banner 335 to 640; the closest, "Next Year", 18 px above it
+  BARS PASS     /soccer-career#hub 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Next Year", 18 px above it
+  BARS FAIL     /soccer-career#hub 1280x900: 2 fixed controls meet the banner 735 to 900: "🏋️TrainingDrill ready" 756 to 812, 56 px under the banner, in button.relative.min-h-11.flex-1.rounded-xl.bg-zinc-900.border-2.border-zinc-700.flex (z 40); "📱Phone2 unread" 824 to 880, 56 px under the banner, in button.relative.min-h-11.flex-1.rounded-xl.bg-zinc-900.border-2.border-zinc-700.flex (z 40)
+15 bar lines (9 of them scripted states): 8 green over 2 fixed controls, 7 red, 0 with no pending banner; the closest green control sat 18 px above the banner ("Next Year", /soccer-career#hub 320x640)
+playFirstVisitDialogs: RED. 7 bar lines: /club-manager#club-picked 320x640, /club-manager#club-picked 390x844, /club-manager#club-picked 1280x900, /club-manager#custom-club 320x640, /club-manager#custom-club 390x844, /club-manager#custom-club 1280x900, /soccer-career#hub 1280x900
