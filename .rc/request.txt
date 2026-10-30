@@ -1,0 +1,20 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+fleet-deletepool: CM_FA_CONTROL=deletepool node scripts/simCmFreeAgencyFleet.mjs
+fleet-noretire: CM_FA_CONTROL=noretire node scripts/simCmFreeAgencyFleet.mjs
+fleet-nodedupe: CM_FA_CONTROL=nodedupe node scripts/simCmFreeAgencyFleet.mjs
+fleet-norecover: CM_FA_CONTROL=norecover node scripts/simCmFreeAgencyFleet.mjs
+fleet-12seasons: CM_FA_SEASONS=12 CM_FA_SKIP_OLD=1 node scripts/simCmFreeAgencyFleet.mjs
+fa: node scripts/simFreeAgents.mjs
+fa-olddelete: FA_CONTROL=olddelete node scripts/simFreeAgents.mjs
+fa-nosummer: FA_CONTROL=nosummer node scripts/simFreeAgents.mjs
+fa-nodecay: FA_CONTROL=nodecay node scripts/simFreeAgents.mjs
+fa-nodecaywire: FA_CONTROL=nodecaywire node scripts/simFreeAgents.mjs
+fa-rollseed: FA_CONTROL=rollseed node scripts/simFreeAgents.mjs
+vitest: node_modules/.bin/vitest run src/test/ClubManagerSeasonSummary.expiring.test.tsx src/test/clubManagerOfferConfirm.test.tsx --testTimeout=300000 --hookTimeout=120000
+savesize: node scripts/simClubManagerSaveSize.mjs
+savesize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+contracts: node scripts/simContracts.mjs
+ledgerbound: node scripts/simCmLedgerBound.mjs
+cmsave: node scripts/simClubManagerSave.mjs
+norival: node scripts/simNoRivalNames.mjs
