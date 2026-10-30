@@ -1,0 +1,34 @@
+
+1. on the list and nothing else: the real set is the ledger, slot by slot; the invented set is CLUBS
+  ok: the 18 ids map onto the 18 AFL clubs one to one (18 recomputed, 18 from the engine)
+  FAIL [1]: club-00: the engine says Brisbane Lions / Brisbane / control / 1, the ledger's ladder gives Fremantle / Fremantle / control / 1
+  FAIL [1]: club-01: the engine says St Kilda / St Kilda / direct / 3, the ledger's ladder gives Western Bulldogs / Western Bulldogs / direct / 3
+  FAIL [1]: club-02: the engine says Melbourne / Melbourne / pressure / 2, the ledger's ladder gives Hawthorn / Hawthorn / pressure / 2
+  FAIL [1]: club-03: the engine says Port Adelaide / Port Adelaide / control / 4, the ledger's ladder gives GWS Giants / GWS / control / 4
+  FAIL [1]: club-04: the engine says Adelaide Crows / Adelaide / direct / 2, the ledger's ladder gives Geelong Cats / Geelong / direct / 2
+  FAIL [1]: club-05: the engine says Essendon / Essendon / pressure / 5, the ledger's ladder gives West Coast Eagles / West Coast / pressure / 5
+  FAIL [1]: club-06: the engine says Carlton / Carlton / control / 3, the ledger's ladder gives Collingwood / Collingwood / control / 3
+  FAIL [1]: club-08: the engine says North Melbourne / North Melbourne / pressure / 4, the ledger's ladder gives Gold Coast Suns / Gold Coast / pressure / 4
+  FAIL [1]: club-09: the engine says Geelong Cats / Geelong / control / 2, the ledger's ladder gives Adelaide Crows / Adelaide / control / 2
+  FAIL [1]: club-11: the engine says Collingwood / Collingwood / pressure / 3, the ledger's ladder gives Carlton / Carlton / pressure / 3
+  FAIL [1]: club-12: the engine says Gold Coast Suns / Gold Coast / control / 4, the ledger's ladder gives North Melbourne / North Melbourne / control / 4
+  FAIL [1]: club-13: the engine says Hawthorn / Hawthorn / direct / 2, the ledger's ladder gives Melbourne / Melbourne / direct / 2
+  FAIL [1]: club-14: the engine says Fremantle / Fremantle / pressure / 1, the ledger's ladder gives Brisbane Lions / Brisbane / pressure / 1
+  FAIL [1]: club-15: the engine says Western Bulldogs / Western Bulldogs / control / 3, the ledger's ladder gives St Kilda / St Kilda / control / 3
+  FAIL [1]: club-16: the engine says GWS Giants / GWS / direct / 4, the ledger's ladder gives Port Adelaide / Port Adelaide / direct / 4
+  FAIL [1]: club-17: the engine says West Coast Eagles / West Coast / pressure / 5, the ledger's ladder gives Essendon / Essendon / pressure / 5
+  FAIL [1]: 2 of 18 ids carry the full, short, style and tier the 2026 ladder band gives (club-00 Fremantle, club-01 Western Bulldogs, club-02 Hawthorn, club-03 GWS Giants, club-04 Geelong Cats, club-05 West Coast Eagles, club-06 Collingwood, club-07 Sydney Swans, club-08 Gold Coast Suns, club-09 Adelaide Crows, club-10 Richmond, club-11 Carlton, club-12 North Melbourne, club-13 Melbourne, club-14 Brisbane Lions, club-15 St Kilda, club-16 Port Adelaide, club-17 Essendon)
+  FAIL [1]: clubFull and clubShort of a real set save print the ledger's strings for all 18 ids (2)
+  ok: no real set reader prints a string that is not on the two sourced list (0)
+  ok: the invented set and the readers of a save with no set equal CLUBS exactly (18 of 18)
+  ok: an empty or unknown id ('' and 'club-18') prints as itself in both sets, never undefined and never a throw
+
+2a. identity (a): a career with no club set is the base record, checkpoint for checkpoint
+  ok: the record holds 72 fleet careers (72 expected)
+  ok: (a) no set: 9 careers, 27 checkpoints (default, seeds 1, 12, 24 by club-00, club-06, club-17) in 3.7 s
+  ok: (a) no set: 27 of 27 checkpoints equal the base's raw and masked hashes
+  ok: (a) no set: 27 of 27 checkpoints carry no clubSet key
+  ok: (a) no set: 27 of 27 checkpoints name every club and the player's club in their own set
+  ok: (a) no set: 27 of 27 checkpoints load through readLeagueSave
+
+simAflClubNames control ladder: target section 1 RED, independent section 2a green, 3.8 s. RED as intended

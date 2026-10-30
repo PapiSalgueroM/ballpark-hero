@@ -1,0 +1,70 @@
+
+0. sources: 18 clubs, every printed string from two independent non wiki publishers, the data file equals its receipts
+  ok: 18 clubs in the data file, 18 in the ledger (18 expected)
+  ok: ladder places are 1 to 18 once each, in ladder order
+  ok: no club's full or short form equals another club's (36 strings)
+  ok: every string is trimmed, single spaced and dash free (0 bad)
+  ok: every full form, short form and ladder place has two or more distinct publishers (54 checked)
+  ok: no publisher or address is a wiki (14 read)
+  ok: AFL.com.au and the club sites count as the one publisher AFL (1 such source)
+  ok: the read date 2026-10-29 is a date and matches the ledger and every source's read date
+  ok: the data file's 7 sources are the ledger's, id for id and publisher for publisher
+  ok: 18 of 18 rows equal the ledger string for string and source for source
+  ok: every one of 154 receipt lines prints its string (or starts with its ladder place)
+  ok: every one of 36 ladder receipt lines names its own club in the cell after its place
+  ok: each of 2 names a ladder source prints for a club is one of that club's ladder sources and no other club's form
+
+1. on the list and nothing else: the real set is the ledger, slot by slot; the invented set is CLUBS
+  ok: the 18 ids map onto the 18 AFL clubs one to one (18 recomputed, 18 from the engine)
+  ok: 18 of 18 ids carry the full, short, style and tier the 2026 ladder band gives (club-00 Fremantle, club-01 Western Bulldogs, club-02 Hawthorn, club-03 GWS Giants, club-04 Geelong Cats, club-05 West Coast Eagles, club-06 Collingwood, club-07 Sydney Swans, club-08 Gold Coast Suns, club-09 Adelaide Crows, club-10 Richmond, club-11 Carlton, club-12 North Melbourne, club-13 Melbourne, club-14 Brisbane Lions, club-15 St Kilda, club-16 Port Adelaide, club-17 Essendon)
+  ok: clubFull and clubShort of a real set save print the ledger's strings for all 18 ids (18)
+  ok: no real set reader prints a string that is not on the two sourced list (0)
+  ok: the invented set and the readers of a save with no set equal CLUBS exactly (18 of 18)
+  ok: an empty or unknown id ('' and 'club-18') prints as itself in both sets, never undefined and never a throw
+
+2a. identity (a): a career with no club set is the base record, checkpoint for checkpoint
+  ok: the record holds 72 fleet careers (72 expected)
+  ok: (a) no set: 9 careers, 27 checkpoints (default, seeds 1, 12, 24 by club-00, club-06, club-17) in 4.0 s
+  ok: (a) no set: 27 of 27 checkpoints equal the base's raw and masked hashes
+  ok: (a) no set: 27 of 27 checkpoints carry no clubSet key
+  ok: (a) no set: 27 of 27 checkpoints name every club and the player's club in their own set
+  ok: (a) no set: 27 of 27 checkpoints load through readLeagueSave
+
+2b. identity (b): a real club career is the base career once names, clubName and clubSet are masked
+  ok: (b) real set: 9 careers, 27 checkpoints (default, seeds 1, 12, 24 by club-00, club-06, club-17) in 4.2 s
+  ok: (b) real set: 27 of 27 checkpoints equal the base's MASKED hash (the same game with other names on it)
+  ok: (b) real set: 27 of 27 checkpoints carry clubSet 'afl2026'
+  ok: (b) real set: 27 of 27 checkpoints name every club and the player's club in their own set
+  ok: (b) real set: 27 of 27 checkpoints load through readLeagueSave
+
+3. old saves: every base save loads, round trips, opens the league and plays on to the base
+  ok: the record holds 16 save recipes (16 expected)
+  ok: 16 of 16 recipes replay to the base's raw save string
+  ok: 16 of 16 load and 16 round trip byte for byte
+  ok: 16 of 16 open the league board
+  ok: 16 of 16 play 60 more bot actions to the base's raw and masked hash
+  ok: 16 of 16 never carry a clubSet key
+  ok: 16 of 16 print their own invented names through clubFull and clubShort for all 18 ids
+  ok: 10 of 10 saves with a match show "v <invented place>" on the hub's Next match
+  ok: 16 of 16 real twins (the same save under the real names, built by this harness) load, round trip and mask to the same game
+  ok: 64 of 64 wrong ways to write a set are refused (clubSet fictional, afl2026 over invented names, one club renamed, an invented clubName)
+
+4. screens: src/test/aussieRulesClubNames.test.tsx through vitest
+  real set pulled: {"header":5,"hub":3,"premier":2,"score":6,"events":87,"results":22,"ladder":90,"finals":4,"history":6,"draft":9}
+  invented set pulled: {"header":5,"hub":3,"premier":2,"score":6,"events":87,"results":22,"ladder":90,"finals":4,"history":6,"draft":9}
+  vitest exit 0 in 4.7 s
+  ok: all 4 screen tests passed (vitest exit 0)
+  ok: (i) a new career picks from the 18 AFL clubs by name, under the five 2026 ladder bands
+  ok: (ii) a real club career prints only two sourced club names on every panel
+  ok: (iii) a career with no club set prints only its own invented names
+  ok: (iv) the Club panel switches an old career to the real names, after one cancel
+
+5. the switch: every base save switches to the real names losslessly, once, and plays on as the same game
+  ok: 16 of 16 switched saves load, round trip, carry clubSet 'afl2026' and the real name of the player's club
+  ok: 16 of 16 switched saves equal the base save once names are masked (nothing else changed)
+  ok: 16 of 16 switched saves are byte for byte the real twin built by this harness (createLeague's key order)
+  ok: 16 of 16 switch once only, and 16 of 16 real careers come back as they are
+  ok: 16 of 16 play 60 more bot actions after the switch to the base continuation's masked hash
+  ok: 16 of 16 leave the state they were given untouched
+
+simAflClubNames: 47 checks, 0 failures, sections 0,1,2a,2b,3,4,4i,5, 16.3 s

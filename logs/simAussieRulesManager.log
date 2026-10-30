@@ -1,0 +1,32 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > creates six deterministic fictional clubs with216 unique valid people and legal23-player teams 94ms
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > schedules every pair twice with opposite venues, ten games and five home games per club 2ms
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > rejects illegal lineups, phases, unknown IDs, invalid keys and repeated no-ops without mutation 3ms
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > applies exact training, rest, stamina and tactic fatigue to the players who actually play 8ms
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > keeps every opponent participant and scorer within its pinned opening23 for all quarters and all matches 82ms
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > swaps only nominated same-role players at a break, preserves18+5 and rejects a sixth change 3ms
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > derives every quarter and season score from real6/1 events, then produces an exact ten-game ladder and quiet league finish 71ms
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > awards actual drawn games2 points each and ranks equal points by percentage 33ms
+stdout | src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > measures stronger squads, counter tactics and rested player readiness against paired seeded match outcomes
+Aussie manager pairedsquad:96 seeds, mean point gap25.625, block means26.813,26.563,23.500
+Aussie manager pairedtactics:96 seeds, mean point gap20.698, block means19.906,21.219,20.969
+Aussie manager pairedreadiness:96 seeds, mean point gap16.323, block means16.813,16.219,15.938
+
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > replays the strict versioned action log exactly and refuses corrupt, impossible, extra or oversized saves 79ms
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > restores a full legal campaign with all five changes at every break within the action bound 41ms
+ ✓ src/test/aussieRulesManager.test.ts > fictional Aussie Rules manager engine > measures stronger squads, counter tactics and rested player readiness against paired seeded match outcomes 1233ms
+ ✓ src/test/aussieRulesManager.test.ts > actual manager hook with existing once-only completion > coalesces repeated lineup edits including return to the original, and restores exact progress without extra writes 14ms
+ ✓ src/test/aussieRulesManager.test.ts > actual manager hook with existing once-only completion > records the actual completed league once with undefined score, keeps restored finishes quiet and permits a new season 38ms
+ ✓ src/test/aussieRulesManager.test.ts > actual manager hook with existing once-only completion > fails closed on invalid saves and keeps valid in-memory play when storage refuses writes 2ms
+
+ Test Files  1 passed (1)
+      Tests  14 passed (14)
+   Start at  18:22:04
+   Duration  2.54s (transform 148ms, setup 57ms, collect 208ms, tests 1.70s, environment 219ms, prepare 45ms)
+
+
+simAussieRulesManager: fourteen actual engine/hook outcomes passed; paired policy means and block headroom printed above.
+simAussieRulesManager: strict action replay, actual matchday squads, event totals and existing undefined-score completion are exercised.
+simAussieRulesManager: source-copy controls never change the shared repository, league data or existing games.

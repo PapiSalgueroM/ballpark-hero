@@ -1,0 +1,26 @@
+
+0. sources: 18 clubs, every printed string from two independent non wiki publishers, the data file equals its receipts
+  ok: 18 clubs in the data file, 18 in the ledger (18 expected)
+  ok: ladder places are 1 to 18 once each, in ladder order
+  ok: no club's full or short form equals another club's (36 strings)
+  ok: every string is trimmed, single spaced and dash free (0 bad)
+  FAIL [0]: every full form, short form and ladder place has two or more distinct publishers (54 checked; thin: Sydney Swans full (afl))
+  ok: no publisher or address is a wiki (14 read)
+  ok: AFL.com.au and the club sites count as the one publisher AFL (1 such source)
+  ok: the read date 2026-10-29 is a date and matches the ledger and every source's read date
+  ok: the data file's 7 sources are the ledger's, id for id and publisher for publisher
+  FAIL [0]: row 2 (Sydney Swans) differs from its receipts in the ledger
+  FAIL [0]: 17 of 18 rows equal the ledger string for string and source for source
+  ok: every one of 154 receipt lines prints its string (or starts with its ladder place)
+  ok: every one of 36 ladder receipt lines names its own club in the cell after its place
+  ok: each of 2 names a ladder source prints for a club is one of that club's ladder sources and no other club's form
+
+2a. identity (a): a career with no club set is the base record, checkpoint for checkpoint
+  ok: the record holds 72 fleet careers (72 expected)
+  ok: (a) no set: 9 careers, 27 checkpoints (default, seeds 1, 12, 24 by club-00, club-06, club-17) in 4.3 s
+  ok: (a) no set: 27 of 27 checkpoints equal the base's raw and masked hashes
+  ok: (a) no set: 27 of 27 checkpoints carry no clubSet key
+  ok: (a) no set: 27 of 27 checkpoints name every club and the player's club in their own set
+  ok: (a) no set: 27 of 27 checkpoints load through readLeagueSave
+
+simAflClubNames control onesource: target section 0 RED, independent section 2a green, 4.4 s. RED as intended

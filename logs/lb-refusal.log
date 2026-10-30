@@ -1,0 +1,45 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/aussieRulesLeague.test.ts > Aussie Rules Manager full season engine > starts 18 fixed clubs of 36 generated players with unique names and a readable save 26ms
+ ↓ src/test/aussieRulesLeague.test.ts > Aussie Rules Manager full season engine > reads back a real save in every phase of a season and refuses forged ones
+ ↓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > removes the old ten round save on start and writes the whole state after each action
+ ↓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > records one completion for each finished season and stays quiet when a finished season is restored
+ ↓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > keeps playing in memory with a notice when storage refuses writes
+ ↓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > refuses an unreadable save whole, says so and leaves it in place
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > opens the hub from the 18 club menu, and every box opens a panel with a way back
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > plays a round in three taps: prepare, the whole match, next
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > shows the read before a quarter and what the opponent really played after it
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > shows the finals tile and the bracket once the finals start
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > lifts the cup with the Grand Final score when you win the flag
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > shows the premiership on the hub when you wrap up the season from the match panel
+ × src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > refuses a draft pick that would leave your list short of rucks, and says why 382ms
+   → Cannot read properties of null (reading 'textContent')
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > starts season two after the draft
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > opens an unfinished ten round season on the old board, and its new season goes to the full season menu
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 1 passed | 13 skipped (15)
+   Start at  18:21:58
+   Duration  1.85s (transform 521ms, setup 107ms, collect 992ms, tests 412ms, environment 594ms, prepare 230ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > refuses a draft pick that would leave your list short of rucks, and says why
+TypeError: Cannot read properties of null (reading 'textContent')
+ ❯ src/test/aussieRulesLeagueBoard.test.tsx:119:41
+    117|     const wrong = draftPool(state).find(p => p.role !== 'ruck')!;
+    118|     click(view, `[data-arl-prospect="${wrong.id}"]`);
+    119|     expect(view.container.querySelector('[data-arl-refusal]')!.textCon…
+       |                                         ^
+    120|     expect(saved()).toEqual(state);
+    121|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simAussieRulesLeagueBoard refusal: RED as intended, "refuses a draft pick that would leave your list short of rucks, and says why" fails and the independent engine test passes (2.3 s)

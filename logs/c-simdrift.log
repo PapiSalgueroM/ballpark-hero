@@ -1,0 +1,44 @@
+
+2a. identity (a): a career with no club set is the base record, checkpoint for checkpoint
+  ok: the record holds 72 fleet careers (72 expected)
+  ok: (a) no set: 9 careers, 27 checkpoints (default, seeds 1, 12, 24 by club-00, club-06, club-17) in 3.4 s
+  ok: (a) no set: 27 of 27 checkpoints equal the base's raw and masked hashes
+  ok: (a) no set: 27 of 27 checkpoints carry no clubSet key
+  ok: (a) no set: 27 of 27 checkpoints name every club and the player's club in their own set
+  ok: (a) no set: 27 of 27 checkpoints load through readLeagueSave
+
+2b. identity (b): a real club career is the base career once names, clubName and clubSet are masked
+  FAIL [2b]: seed 1 club-00 checkpoint 0 (season 1 seasonOver, 250 actions) differs from the base
+  FAIL [2b]: seed 1 club-00 checkpoint 1 (season 2 seasonOver, 481 actions) differs from the base
+  FAIL [2b]: seed 1 club-00 checkpoint 2 (season 3 prepare, 484 actions) differs from the base
+  FAIL [2b]: seed 1 club-06 checkpoint 0 (season 1 seasonOver, 228 actions) differs from the base
+  FAIL [2b]: seed 1 club-06 checkpoint 1 (season 2 seasonOver, 482 actions) differs from the base
+  FAIL [2b]: seed 1 club-06 checkpoint 2 (season 3 prepare, 486 actions) differs from the base
+  FAIL [2b]: seed 1 club-17 checkpoint 0 (season 1 seasonOver, 235 actions) differs from the base
+  FAIL [2b]: seed 1 club-17 checkpoint 1 (season 2 seasonOver, 481 actions) differs from the base
+  FAIL [2b]: seed 1 club-17 checkpoint 2 (season 3 prepare, 485 actions) differs from the base
+  FAIL [2b]: seed 12 club-00 checkpoint 0 (season 1 seasonOver, 228 actions) differs from the base
+  FAIL [2b]: seed 12 club-00 checkpoint 1 (season 2 seasonOver, 467 actions) differs from the base
+  FAIL [2b]: seed 12 club-00 checkpoint 2 (season 3 prepare, 471 actions) differs from the base
+  FAIL [2b]: seed 12 club-06 checkpoint 0 (season 1 seasonOver, 250 actions) differs from the base
+  FAIL [2b]: seed 12 club-06 checkpoint 1 (season 2 seasonOver, 489 actions) differs from the base
+  FAIL [2b]: seed 12 club-06 checkpoint 2 (season 3 prepare, 493 actions) differs from the base
+  FAIL [2b]: seed 12 club-17 checkpoint 0 (season 1 seasonOver, 236 actions) differs from the base
+  FAIL [2b]: seed 12 club-17 checkpoint 1 (season 2 seasonOver, 467 actions) differs from the base
+  FAIL [2b]: seed 12 club-17 checkpoint 2 (season 3 prepare, 471 actions) differs from the base
+  FAIL [2b]: seed 24 club-00 checkpoint 0 (season 1 seasonOver, 236 actions) differs from the base
+  FAIL [2b]: seed 24 club-00 checkpoint 1 (season 2 seasonOver, 468 actions) differs from the base
+  FAIL [2b]: seed 24 club-00 checkpoint 2 (season 3 prepare, 472 actions) differs from the base
+  FAIL [2b]: seed 24 club-06 checkpoint 0 (season 1 seasonOver, 250 actions) differs from the base
+  FAIL [2b]: seed 24 club-06 checkpoint 1 (season 2 seasonOver, 496 actions) differs from the base
+  FAIL [2b]: seed 24 club-06 checkpoint 2 (season 3 prepare, 500 actions) differs from the base
+  FAIL [2b]: seed 24 club-17 checkpoint 0 (season 1 seasonOver, 228 actions) differs from the base
+  FAIL [2b]: seed 24 club-17 checkpoint 1 (season 2 seasonOver, 459 actions) differs from the base
+  FAIL [2b]: seed 24 club-17 checkpoint 2 (season 3 prepare, 463 actions) differs from the base
+  ok: (b) real set: 9 careers, 27 checkpoints (default, seeds 1, 12, 24 by club-00, club-06, club-17) in 3.5 s
+  FAIL [2b]: (b) real set: 0 of 27 checkpoints equal the base's MASKED hash (the same game with other names on it)
+  ok: (b) real set: 27 of 27 checkpoints carry clubSet 'afl2026'
+  ok: (b) real set: 27 of 27 checkpoints name every club and the player's club in their own set
+  FAIL [2b]: (b) real set: 0 of 27 checkpoints load through readLeagueSave
+
+simAflClubNames control simdrift: target section 2b RED, independent section 2a green, 7.0 s. RED as intended
