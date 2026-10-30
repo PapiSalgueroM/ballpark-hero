@@ -1,0 +1,15 @@
+vitest-boards exit=0 36s |    Duration  34.78s (transform 5.33s, setup 1.46s, collect 13.16s, tests 52.77s, environment 7.98s, prepare 2.31s)
+vitest-round exit=0 57s |    Duration  56.34s (transform 6.84s, setup 1.34s, collect 12.81s, tests 82.08s, environment 8.60s, prepare 2.24s)
+simFoLazyDesk exit=0 42s | simFoLazyDesk: all checks passed
+nhleager exit=1 38s | simFoLazyDesk CONTROL nhleager FIRED: section 3 went red with 10 failures (red sections 3)
+simGuideHeadings exit=0 2s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+tsc exit=0 122s | 
+simNoRivalNames exit=0 25s | No rival product names found. 0 findings.
+nhlhostvalue exit=1 50s | simFoLazyDesk CONTROL nhlhostvalue FIRED: section 3 went red with 3 failures (red sections 3)
+simStorageWrites exit=0 7s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 68s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simGmGameDay exit=0 98s | simGmGameDay: 462 checks, 0 failed
+fob-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 64 controls is in the board exactly once.
+simGmCareer-nhl exit=0 39s | simGmCareer: all checks passed (nhl)
+simGmCareer-nfl exit=0 236s | simGmCareer: all checks passed (nfl)
