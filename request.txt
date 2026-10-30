@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+liftfiles: git diff --name-only c0b6c86dcf3519f840a89c6acbd97a0f7a97ca9c 2d3aedb6fcbc38613877d076aca9b2e6e390018a; wc -l scripts/lib/connectionsRehearsal.mjs scripts/qa/rehearseNbaConnections1583.mjs scripts/qa/rehearseUsConnections1574.mjs; grep -c "connectionsRehearsal" scripts/qa/rehearseNbaConnections1583.mjs scripts/qa/rehearseUsConnections1574.mjs

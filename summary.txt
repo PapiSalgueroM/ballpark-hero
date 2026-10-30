@@ -1,0 +1,4 @@
+simNoRivalNames exit=0 30s | No rival product names found. 0 findings.
+liftfiles exit=0 0s | scripts/qa/rehearseUsConnections1574.mjs:2
+simHarnessAnchors exit=0 67s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 95s | 

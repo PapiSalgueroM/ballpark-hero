@@ -1,0 +1,9 @@
+scripts/lib/connectionsRehearsal.mjs
+scripts/qa/rehearseNbaConnections1583.mjs
+scripts/qa/rehearseUsConnections1574.mjs
+  280 scripts/lib/connectionsRehearsal.mjs
+   66 scripts/qa/rehearseNbaConnections1583.mjs
+   71 scripts/qa/rehearseUsConnections1574.mjs
+  417 total
+scripts/qa/rehearseNbaConnections1583.mjs:2
+scripts/qa/rehearseUsConnections1574.mjs:2
