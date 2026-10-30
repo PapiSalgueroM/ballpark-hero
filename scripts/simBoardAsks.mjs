@@ -721,7 +721,11 @@ console.log('7) Every answer in the inbox moves a number that has a screen');
      none of them does. The two assertions are untouched and the clubs are
      fixed, so nothing here is a rerun until green. */
   const PROMISE_ROOM = 3;
-  const fixtures = ['Everton', 'Napoli', 'Brentford', 'Sevilla', 'Wolfsburg'];
+  /* Round 1600: ten more clubs after the first five, in a fixed order. On the age read all five land on a clamp
+     (runner r1600-s12: Everton 69 grade A, Napoli 35 grade F, Brentford nothing both hit and missed, Sevilla 69
+     grade B, Wolfsburg 69 grade A), so the list is longer, never the bounds wider. */
+  const fixtures = ['Everton', 'Napoli', 'Brentford', 'Sevilla', 'Wolfsburg',
+    'Fulham', 'Bologna', 'Real Betis', 'Eintracht Frankfurt', 'Lyon', 'Crystal Palace', 'Fiorentina', 'Villarreal', 'Mainz', 'Lille'];
   let settled = null;
   const tried = [];
   for (const club of fixtures) {

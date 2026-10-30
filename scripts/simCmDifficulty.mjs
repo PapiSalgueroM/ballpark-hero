@@ -930,7 +930,12 @@ function section3money() {
   const clubs = fleetClubs().filter(c => c.tier !== 'big');
   const mn = fresh(HEAD);
   const ends = [];
-  for (const c of clubs) for (let seed = 0; seed < Math.max(2, seeds - 1); seed += 1) {
+  /* Round 1600: three times the seasons, so the floors below (B2 4 under Safe and 1 above, M1 6 summers) are read
+     on enough survivors. They are sample floors, not bands: on the age read the steady driver at the mid and small
+     clubs kept 5 of 18 seasons (runner r1600-s11h; the base kept 11), and over 20 seeds a club (section 0, runner
+     r1600-s12) the mid and small sack rate is 0.475 against the base's 0.375, 1.6 standard errors. More careers,
+     the floors unchanged. */
+  for (const c of clubs) for (let seed = 0; seed < 3 * Math.max(2, seeds - 1); seed += 1) {
     const s = seasonEnd(mn, c.name, 12000 + seed * 53 + clubs.indexOf(c));
     if (s) ends.push({ club: c.name, s, seed: 13000 + seed * 7 + clubs.indexOf(c) });
   }
