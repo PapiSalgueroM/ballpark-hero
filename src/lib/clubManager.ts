@@ -8018,10 +8018,12 @@ export function recoverPooledReleases(career: CareerState): CareerState {
       reason: mine.has(p.name) ? 'released' : 'expired', fromMyClub: true,
     };
     /* Release BU (the lead's J2, Round 1597 x PR 429): the row carries his record's key when PR 429's
-       freeAgentRecord resolves the row to exactly that record, so every later read means this man and never a
-       namesake. A row it cannot resolve goes back without a key, as before: a key that resolves to nobody would
-       make him unsignable (freeAgentBlock's notInPool), and nobody comes back only to be stuck. */
-    back.push(freeAgentRecord(career, row)?.key === r.key ? { worldRosterKey: r.key, ...row } : row);
+       freeAgentRecord, asked with that key, resolves the row to exactly that record (a namesake is then never
+       his), so every later read means this man. A row the key does not resolve goes back without one, as
+       before: a key that resolves to nobody would make him unsignable (freeAgentBlock's notInPool), and nobody
+       comes back only to be stuck. */
+    const keyed: FreeAgent = { worldRosterKey: r.key, ...row };
+    back.push(freeAgentRecord(career, keyed)?.key === r.key ? keyed : row);
   }
   return back.length ? { ...done, freeAgents: [...career.freeAgents, ...back] } : done;
 }
