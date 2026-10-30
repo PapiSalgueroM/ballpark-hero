@@ -1,0 +1,34 @@
+gen exit=0 1s | derived file is the generator's output
+sim exit=0 5s | simBingoClubCounts: GREEN, every section held
+c-rule exit=1 5s | simBingoClubCounts: CONTROL=rule FIRED (19 failures; section 1: 4, section 4: 15)
+honours exit=0 14s | simPlayerBingoHonours PASS
+c-onesource exit=1 4s | simBingoClubCounts: CONTROL=onesource FIRED (1 failures; section 5: 1)
+c-leak exit=1 2s | simBingoClubCounts: CONTROL=leak FIRED (4 failures; section 2: 2, section 9: 2)
+c-pending exit=1 2s | simBingoClubCounts: CONTROL=pending FIRED (4 failures; section 4: 4)
+c-nomorton exit=1 2s | simBingoClubCounts: CONTROL=nomorton FIRED (6 failures; section 2: 1, section 3: 3, section 9: 2)
+c-noapply exit=1 2s | simBingoClubCounts: CONTROL=noapply FIRED (268 failures; section 2: 60, section 3: 121, section 8: 14, section 9: 73)
+vitest exit=0 23s |    Duration  21.99s (transform 7.90s, setup 1.53s, collect 11.54s, tests 19.77s, environment 5.97s, prepare 1.66s)
+c-nosplit exit=1 2s | simBingoClubCounts: CONTROL=nosplit FIRED (25 failures; section 2: 8, section 3: 6, section 9: 11)
+c-noreserve exit=1 2s | simBingoClubCounts: CONTROL=noreserve FIRED (120 failures; section 2: 32, section 3: 42, section 9: 46)
+c-drift exit=1 3s | simBingoClubCounts: CONTROL=drift FIRED (2 failures; section 7: 1, section 9: 1)
+c-slashdup exit=1 3s | simBingoClubCounts: CONTROL=slashdup FIRED (1 failures; section 6: 1)
+c-handedit exit=1 3s | simBingoClubCounts: CONTROL=handedit FIRED (1 failures; section 6: 1)
+c-aliasdup exit=1 2s | simBingoClubCounts: CONTROL=aliasdup FIRED (1 failures; section 6: 1)
+c-tableclubs exit=1 3s | simBingoClubCounts: CONTROL=tableclubs FIRED (1 failures; section 6: 1)
+c-noseason exit=1 3s | simBingoClubCounts: CONTROL=noseason FIRED (1 failures; section 5: 1)
+c-window exit=1 3s | simBingoClubCounts: CONTROL=window FIRED (4 failures; section 1: 2, section 4: 2)
+c-unjudged exit=1 3s | simBingoClubCounts: CONTROL=unjudged FIRED (1 failures; section 4: 1)
+c-touchprev exit=1 3s | simBingoClubCounts: CONTROL=touchprev FIRED (1 failures; section 9: 1)
+c-prevleak exit=1 3s | simBingoClubCounts: CONTROL=prevleak FIRED (1 failures; section 9: 1)
+c-nowindow exit=1 3s | simBingoClubCounts: CONTROL=nowindow FIRED (1 failures; section 8: 1)
+c-windowseason exit=1 3s | simBingoClubCounts: CONTROL=windowseason FIRED (1 failures; section 8: 1)
+c-windowdrop exit=1 3s | simBingoClubCounts: CONTROL=windowdrop FIRED (4 failures; section 2: 1, section 3: 2, section 8: 1)
+c-cap exit=3 0s |    FIXTURE_CONTROL=cap did not fire: no history page reached the 1,000 row cap (largest 781), so nobody exceeds a page and paging is not exercised by this fixture
+c-windowdb exit=1 3s | simBingoClubCounts: CONTROL=windowdb FIRED (1 failures; section 8: 1)
+simMarketYearScope exit=0 0s | simMarketYearScope: all green
+c-bogus exit=3 3s | simBingoClubCounts: CONTROL=bogus DID NOT FIRE (it changed nothing)
+simPlayerBingoWorldCupAlias exit=0 2s | Source bytes held; raw unit/output/control receipts retained when OUT is set. Offline proof only.
+simPlayerBingoLoad exit=0 5s | simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
+simPlayerBingoRodriHonour exit=0 13s | simPlayerBingoRodriHonour: fixed proof passed; complete raw reports and changed-copy receipts retained. Offline only.
+simPlayerBingoLineFeedback exit=0 5s | simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
+simPlayerBingoCategories exit=0 29s | simPlayerBingoCategories: fixed proof passed; raw reports and changed-copy receipts retained.

@@ -1,0 +1,7 @@
+simPlayerBingoLoad: 19 actual page and loader outcomes pass, no pending or unhandled cases.
+simPlayerBingoLoad: latest and paged history peaks are three each, all 17 fixture queries and 280 players retained.
+simPlayerBingoLoad: existing select/filter/order/range predicates and complete historical transforms match independent fixtures.
+simPlayerBingoLoad: caller cancellation and failed reads abort siblings and stop queued work, with no partial playable data.
+simPlayerBingoLoad: 30-second deadline offers manual Retry; stale loads, same-frame clicks, StrictMode and unmount remain isolated.
+simPlayerBingoLoad: first-line 100-point booking and no-refetch replay remain intact.
+simPlayerBingoLoad: CRLF bindings proved, raw source bytes held, owned copies cleaned; fictional transport only, no browser or live calls.
