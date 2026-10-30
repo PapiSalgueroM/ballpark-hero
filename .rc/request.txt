@@ -1,0 +1,11 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+simTycoonGoalFlight: bash .rc/default-support.sh run simTycoonGoalFlight.mjs
+simVictoryMoment: bash .rc/default-support.sh run simVictoryMoment.mjs
+simWritesAreSent: bash .rc/default-support.sh run simWritesAreSent.mjs
+sweepContrast: bash .rc/default-support.sh run sweepContrast.mjs
+sweepPhone: bash .rc/default-support.sh run sweepPhone.mjs
+sweepSaves: bash .rc/default-support.sh run sweepSaves.mjs
+sweepWeight: bash .rc/default-support.sh run sweepWeight.mjs
+finish: bash .rc/default-support.sh finish
