@@ -125,12 +125,10 @@ S.S1 = kept(() => {
   let s = cm.startCareer('Arsenal');
   for (let season = 0; season < 2 && !s.sacked; season += 1) s = cm.startNextSeason(cm.finishSeason(toSeasonEnd(s)).state);
   return s.sacked ? s : playTo(s, 20);
-}, 0x160101, s => {
-  /* Still in a league whose book is whole and on full record (a relegation or a thin league would earn the thin line). */
-  const lb = cm.leagueBoardsOf(s);
-  return s.season === 3 && !!lb && lb.from === null && lb.share >= boards.BOOK_FULL_SHARE;
-});
+}, 0x160101, s => s.season === 3);
 S.S2 = onStream(0x160102, () => playTo(cm.startCareer('Hertha BSC'), 20));
+/* S4: a first season, where the Premier League is on full record (a third season's world may not be: S1 read 92). */
+S.S4 = onStream(0x160104, () => playTo(cm.startCareer('Everton'), 20));
 S.S3 = JSON.parse(JSON.stringify(S.S1));
 delete S.S3.pastLines;
 S.S3.pastFrom = 3;
@@ -141,10 +139,12 @@ for (const [name, s] of Object.entries(S)) {
 const wake = s => { cm.registerCustomClub?.(s.customClub ?? null, s.eraId); cm.registerLeagueOverrides?.(s.leagueOverrides ?? null); return s; };
 const lb1 = cm.leagueBoardsOf(wake(S.S1));
 const lb2 = cm.leagueBoardsOf(wake(S.S2));
+const lb4 = cm.leagueBoardsOf(wake(S.S4));
 if (S.S1.season !== 3 || !(S.S1.pastLines ?? []).some(e => e[1].length === 2)) cannot('S1 is not in its third season with men holding two kept seasons');
-if (!lb1 || lb1.from !== null || lb1.share < boards.BOOK_FULL_SHARE) cannot(`S1 holds no whole, full league book (${lb1 ? `from ${lb1.from}, share ${lb1.share}` : `no readable book: ${S.S1.leagueBook ? 'a book the reader refuses or that does not add up' : 'no book key'}`}; season ${S.S1.season} week ${S.S1.week})`);
+if (!lb1 || lb1.from !== null) cannot(`S1 holds no whole league book (${lb1 ? `from ${lb1.from}, share ${lb1.share}` : `no readable book: ${S.S1.leagueBook ? 'a book the reader refuses or that does not add up' : 'no book key'}`}; season ${S.S1.season} week ${S.S1.week})`);
+if (!lb4 || lb4.from !== null || lb4.share < boards.BOOK_FULL_SHARE) cannot(`S4 reads ${lb4 ? `from ${lb4.from}, share ${lb4.share}` : 'no book'}: no save shows a rival card with no thin line`);
 if (!lb2 || lb2.share >= boards.BOOK_FULL_SHARE) cannot(`S2 reads ${lb2?.share ?? 'no book'}: the thin line has no save to earn it`);
-console.log(`playCmPlayerCard: saves built: S1 season ${S.S1.season} week ${S.S1.week}, ${S.S1.pastLines.length} men with kept seasons; S2 week ${S.S2.week}, share ${lb2.share}; S3 kept from 3`);
+console.log(`playCmPlayerCard: saves built: S1 season ${S.S1.season} week ${S.S1.week}, ${S.S1.pastLines.length} men with kept seasons, share ${lb1.share}; S4 share ${lb4.share}; S2 week ${S.S2.week}, share ${lb2.share}; S3 kept from 3`);
 
 /** What the card must print, from the reader, in the words and number formats of the screen. */
 function expected(save, ref) {
@@ -398,31 +398,39 @@ async function lookAround(page) {
   await page.locator('[data-cm-leaders-back]').first().click();
 }
 
-const all = { S1: [], S2: [], S3: [] };
+const all = { S1: [], S2: [], S3: [], S4: [] };
 for (const size of SIZES) {
   all.S1.push(...await squadCards('S1', S.S1, size), ...await boardCards('S1', S.S1, size));
   all.S2.push(...await boardCards('S2', S.S2, size));
+  all.S4.push(...await boardCards('S4', S.S4, size));
   all.S3.push(...await squadCards('S3', S.S3, size));
 }
 
 /* 4: the lines, each on the save that earns it and on no other. */
 {
   const rivals1 = all.S1.filter(c => c?.kind === 'man');
+  const rivals4 = all.S4.filter(c => c?.kind === 'man');
   const mine1 = all.S1.filter(c => c?.kind === 'mine');
   const rivals2 = all.S2.filter(c => c?.kind === 'man');
   const mine3 = all.S3.filter(c => c?.kind === 'mine');
   const label3 = cards.seasonLabelOf(S.S3, 3);
   const thinText = c => c.texts[c.notes.indexOf('thin')] ?? '';
-  tick('4', rivals1.length + mine1.length + rivals2.length + mine3.length);
-  if (!rivals1.length || !rivals2.length || !mine1.length || !mine3.length) fail('4', `a save drew no card to read: S1 ${rivals1.length} rivals and ${mine1.length} of mine, S2 ${rivals2.length} rivals, S3 ${mine3.length} of mine`);
-  for (const c of rivals1) if (c.notes.includes('thin')) fail('4', `S1 ${c.name}: the thin data line on a whole league`);
+  tick('4', rivals1.length + rivals4.length + mine1.length + rivals2.length + mine3.length);
+  if (!rivals1.length || !rivals4.length || !rivals2.length || !mine1.length || !mine3.length) fail('4', `a save drew no card to read: S1 ${rivals1.length} rivals and ${mine1.length} of mine, S2 ${rivals2.length} rivals, S3 ${mine3.length} of mine`);
+  /* The thin line follows the reader's share on every save: S4 is on full record, S2 is not, S1 says what it reads. */
+  for (const [nm, cs, lb] of [['S1', rivals1, lb1], ['S4', rivals4, lb4], ['S2', rivals2, lb2]]) {
+    for (const c of cs) {
+      const thin = lb.share < boards.BOOK_FULL_SHARE;
+      if (thin && !thinText(c).includes(`: ${lb.share} in 100 of the other clubs' goals have a name.`)) fail('4', `${nm} ${c.name}: the thin data line reads "${thinText(c)}", the reader's share is ${lb.share}`);
+      if (!thin && c.notes.includes('thin')) fail('4', `${nm} ${c.name}: the thin data line on a league on full record (share ${lb.share})`);
+    }
+  }
   for (const c of mine1) if (c.notes.includes('keptfrom')) fail('4', `S1 ${c.name}: the kept from line on a save that kept every season`);
-  for (const c of rivals2) if (!thinText(c).includes(`: ${lb2.share} in 100 of the other clubs' goals have a name.`)) fail('4', `S2 ${c.name}: the thin data line reads "${thinText(c)}", the reader's share is ${lb2.share}`);
   for (const c of mine3) {
     const t = c.texts[c.notes.indexOf('keptfrom')] ?? '';
     if (t !== `Seasons before ${label3} were played before the game kept them.`) fail('4', `S3 ${c.name}: the kept from line reads "${t}"`);
   }
-  console.log(`4       lines read on ${rivals1.length} S1 rival cards, ${mine1.length} S1 cards of mine, ${rivals2.length} S2 rival cards (share ${lb2.share}), ${mine3.length} S3 cards of mine (kept from ${label3})`);
+  console.log(`4       lines read on ${rivals1.length} S1 rival cards (share ${lb1.share}), ${rivals4.length} S4 rival cards (share ${lb4.share}), ${mine1.length} S1 cards of mine, ${rivals2.length} S2 rival cards (share ${lb2.share}), ${mine3.length} S3 cards of mine (kept from ${label3})`);
 }
 
 /* 5: a match with cards opened is the match without them. */
