@@ -35,7 +35,7 @@ const CONTROL = process.env.CM_EURO_PLAY_CONTROL || '';
 const ONLY = (process.env.CM_EURO_PLAY_ONLY || '').split(',').filter(Boolean).map(Number);
 const SEEDS = (process.env.CM_EURO_PLAY_SEEDS || '1,2').split(',').map(Number);
 const cannot = why => { console.log(`simCmEuroPlay: cannot run: ${why}`); process.exit(2); };
-const CONTROLS = { rawlength: [5, /^5.1 /], nothursday: [1, /^1 /], mineflip: [2, /^2 /], noplaygate: [4, /^4 /], noplayrevert: [6, /^6 /] };
+const CONTROLS = { rawlength: [5, /^5.1 /], nothursday: [1, /^1 /], mineflip: [2, /^2 /], noplaygate: [4, /^4 /], noplayrevert: [6, /^6 /], legfromucl: [3, /^3 /] };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`no control named ${CONTROL}`);
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
 
@@ -113,13 +113,13 @@ async function journey(E, club, seed, seasons, onStep) {
     const r = tape((seed * 0x9e3779b1 + k * 7919) >>> 0, () => fn(s));
     if (r.value?.state) s = r.value.state;
     steps.push({ label, h: s ? sha(JSON.stringify(s)) : null, d: sha(JSON.stringify(r.draws)), n: r.draws.length });
-    onStep?.(M, s, label);
+    onStep?.(M, s, label, r.value);
   };
   step('start', () => ({ state: M.cm.startCareer(club, 'now') }));
   for (let season = 1; season <= seasons; season += 1) {
     let over = false;
     for (let i = 0; i < 300 && !over; i += 1) {
-      step(`s${season}-e${i + 1}`, cur => { const r = M.cm.playNextEntry(cur, opts); over = r.kind === 'seasonOver'; return { state: r.state }; });
+      step(`s${season}-e${i + 1}`, cur => { const r = M.cm.playNextEntry(cur, opts); over = r.kind === 'seasonOver'; return { state: r.state, report: r.report }; });
     }
     if (!over) throw new Error(`${club} seed ${seed}: season ${season} did not end in 300 entries`);
     step(`s${season}-finish`, cur => ({ state: M.cm.finishSeason(cur).state }));
@@ -197,7 +197,10 @@ const BASE = process.env.CM_EURO_PLAY_BASE || '14a9af704';
 const TAIL = { 10: 5, 12: 3, 14: 2, 15: 1, 16: 1, 18: 1, '18nocup': 0, 20: 0, 24: 0 };
 const CM_FILE = 'src/lib/clubManager.ts';
 const CAL_FILE = 'src/lib/clubManagerCalendar.ts';
+const counts3 = { ties: 0 };
 const CONTROL_EDITS = {
+  /* The first leg read from nowhere (as from the Champions League's bracket, which a Europa League tie is never in). */
+  legfromucl: [{ file: CM_FILE, from: '  if (!my?.firstLeg) return null;\n', to: '  return null;\n' }],
   nothursday: [{ file: CAL_FILE, from: 'addDays(last, wasSaturday ? 5 : 1)', to: 'addDays(last, wasSaturday ? 4 : 1)' }],
   mineflip: [{ file: CM_FILE, from: '{ h: my.atHome ? mine : theirs, a: my.atHome ? theirs : mine }', to: '{ h: my.atHome ? theirs : mine, a: my.atHome ? mine : theirs }' }],
   noplaygate: [{ file: CM_FILE, from: "  if (play && tables && mine.clubs.length === UCL_LEAGUE.clubs && (earned === 'L'", to: "  if (mine.clubs.length === UCL_LEAGUE.clubs && (earned === 'L'" }],
@@ -230,7 +233,7 @@ function nightsCheck(M, s, where, counts) {
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 /** Section 2 on a participant season's last state before finishSeason: one competition, my results recorded. */
-function competitionCheck(M, s, where) {
+function competitionCheck(M, s, where, throughs = []) {
   const slice = s.worldComps?.uel;
   const res = M.cm.evalWorldComp(s, 'uel', Infinity);
   ok(!!res?.done && !!res.winner, `2 ${where}: the Europa League crowned no winner`);
@@ -247,6 +250,32 @@ function competitionCheck(M, s, where) {
     const [gf, ga] = r.score.split('-').map(Number);
     const mine = fx?.home === s.clubName ? [rec?.h, rec?.a] : [rec?.a, rec?.h];
     ok(!!rec && mine[0] === gf && mine[1] === ga, `2 ${where}: night ${n} is ${r.score} in the log, recorded ${JSON.stringify(rec)}`);
+  }
+  /* Section 3, the tie path (critic-1348 correction 1): every tie of mine settled over two legs is decided on the
+     aggregate of its two records, extra time and a shootout only where the aggregate is level, and the evaluation's
+     winner is the aggregate's; a final or a league phase night carries a shootout only when level. */
+  if (runs(3)) {
+    for (const t of (res?.ties ?? []).filter(x => (x.home === s.clubName || x.away === s.clubName) && x.winner)) {
+      const n1 = res.nights.findIndex(x => x.stage === t.round && (x.leg ?? 1) === 1);
+      const n2 = res.nights.findIndex(x => x.stage === t.round && x.leg === 2);
+      const r1 = slice.mine?.[n1];
+      const r2 = n2 >= 0 ? slice.mine?.[n2] : undefined;
+      if (!r1 || (n2 >= 0 && !r2)) continue;
+      counts3.ties += 1;
+      const homeAgg = r1.h + (r2 ? r2.a : 0);
+      const awayAgg = r1.a + (r2 ? r2.h : 0);
+      const level = homeAgg === awayAgg;
+      const pens = r2 ? r2.pens : r1.pens;
+      ok(level === !!pens, `3 ${where}: the ${t.round} tie is ${homeAgg}-${awayAgg} on aggregate and ${pens ? 'went' : 'did not go'} to penalties`);
+      if (!level) ok(t.winner === (homeAgg > awayAgg ? t.home : t.away), `3 ${where}: the ${t.round} tie went to ${t.winner} against its aggregate ${homeAgg}-${awayAgg}`);
+      if (r2) ok(!r1.et && !r1.pens, `3 ${where}: the ${t.round} first leg carries extra time or a shootout`);
+    }
+    /* What the match itself told the manager (its report's tie line) agrees with the tie the competition records. */
+    for (const x of throughs) {
+      const t = (res?.ties ?? []).find(v => v.round === x.round && (v.home === s.clubName || v.away === s.clubName));
+      ok(!!t && (t.winner === s.clubName) === x.through, `3 ${where}: the ${x.round} second leg told the manager ${x.through ? 'through' : 'out'}, the competition says ${t?.winner}`);
+    }
+    for (let n = 0; n < 8; n += 1) if (slice.mine?.[n]) ok(!slice.mine[n].et && !slice.mine[n].pens, `3 ${where}: league phase night ${n} carries extra time or a shootout`);
   }
   return played.length;
 }
@@ -268,9 +297,15 @@ async function sectionPlay() {
     const where0 = `${club} seed ${seed}`;
     let nights = false;
     let prevEnd = null;
-    const onStep = (M, s, label) => {
+    const throughs = [];
+    const onStep = (M, s, label, got) => {
       if (!s) return;
       if (s.calendar?.some(e => e.night)) nights = true;
+      const rep = got?.report;
+      if (rep?.tie?.leg === 2 && typeof rep.tie.through === 'boolean' && s.calendar[s.week - 1]?.type === 'uel') {
+        const night = M.cm.evalWorldComp(s, 'uel', Infinity)?.nights[s.calendar[s.week - 1].night.n];
+        if (night) throughs.push({ round: night.stage, through: rep.tie.through });
+      }
       const slice = s.worldComps?.uel;
       if (label === 'start' && (runs(4) || CONTROL === 'noplaygate')) {
         if (slice?.me) counts.seasonOneMe += 1;
@@ -285,7 +320,7 @@ async function sectionPlay() {
       }
       if (/^s\d+-e\d+$/.test(label) && slice?.me === s.clubName) prevEnd = s;
       if (/-finish$/.test(label) && prevEnd && prevEnd.season === s.season - 0 && prevEnd.worldComps?.uel?.me === prevEnd.clubName) {
-        if (runs(2)) counts.nightsPlayed += competitionCheck(M, prevEnd, `${where0} season ${prevEnd.season}`);
+        if (runs(2) || runs(3)) counts.nightsPlayed += competitionCheck(M, prevEnd, `${where0} season ${prevEnd.season}`, throughs.splice(0));
         prevEnd = null;
       }
     };
@@ -299,13 +334,14 @@ async function sectionPlay() {
     if (!nights) ok(part < 0, `6 ${where0}: no night in any season, yet the head parts from the base at ${steps[part]?.label}`);
     if (part < 0) identical += 1; else parted += 1;
   }
+  if (runs(3)) ok(counts3.ties >= Math.min(PLAY_MIN, 3), `3 only ${counts3.ties} ties of mine settled over the fleet`);
   if (runs(1) || runs(4)) ok(counts.participant >= PLAY_MIN, `1 only ${counts.participant} participant seasons in the fleet, at least ${PLAY_MIN} are needed`);
-  console.log(`  play: ${PLAY_FLEET.length * PLAY_SEEDS.length} saves, ${counts.participant} participant seasons, ${counts.watcher} watcher seasons, ${counts.nightsPlayed} nights played, tails ${JSON.stringify(counts.tail)}, season one participants ${counts.seasonOneMe}`);
+  console.log(`  play: ${PLAY_FLEET.length * PLAY_SEEDS.length} saves, ${counts.participant} participant seasons, ${counts.watcher} watcher seasons, ${counts.nightsPlayed} nights played, tails ${JSON.stringify(counts.tail)}, season one participants ${counts.seasonOneMe}, ties of mine checked ${counts3.ties}`);
   if (runs6) console.log(`  6 base ${BASE}: ${identical} saves byte equal to the base on the head, ${parted} parted (participants and super cup nights, by design)`);
 }
 
 /* ── Run ───────────────────────────────────────────────────────────────────────────────────────────────────── */
-if (runs(1) || runs(2) || runs(4) || runs(6)) await sectionPlay();
+if (runs(1) || runs(2) || runs(3) || runs(4) || runs(6)) await sectionPlay();
 if (runs(5)) await section5();
 if (CONTROL) {
   const [, must] = CONTROLS[CONTROL];

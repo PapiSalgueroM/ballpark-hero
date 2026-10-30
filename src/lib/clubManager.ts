@@ -1547,7 +1547,9 @@ export interface TrainingPlan {
  *  every objective shape shares this one record. */
 export interface BoardObjective {
   id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth' | 'points' | 'double' | 'netSpend'
-    | 'natQuota' | 'veterans' | 'posGap' | 'youngStar' | 'marquee';
+    | 'natQuota' | 'veterans' | 'posGap' | 'youngStar' | 'marquee'
+    /* Round 1593: the Europa League, for a club that plays it this season. */
+    | 'uel';
   /** What the board wants, e.g. "Qualify for the Europa League". */
   label: string;
   /** League position / cup stage rank / goal count the objective needs. */
@@ -12632,6 +12634,8 @@ export const ET_DEFLATOR = 0.965;
 function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {
   /* Round 1510: a one match cup's night plays it when its row's decider is extra time ('et'), never on 'pens'. */
   if (entry.type === 'oneOff') return oneOffPlaysExtraTime(state, entry);
+  /* Round 1593: a Europa League night that settles a tie (a second leg, the final). */
+  if (entry.type === 'uel') return !!uelMyNight(state, entry)?.settles;
   if (entry.type !== 'uclKo' || !entry.uclRound) return false;
   /* A legacy week carries no uclLeg and is the whole tie (Round 507). */
   const twoLegs = uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg;
@@ -12668,8 +12672,9 @@ export interface SecondLegContext {
 }
 export function secondLegContext(career: CareerState, week: number, mine: number, theirs: number): SecondLegContext | null {
   const entry = career.calendar[week];
-  if (!entry || !secondLegTonight(career, entry) || !entry.uclRound) return null;
-  const first = firstLegMine(career, entry.uclRound);
+  if (!entry || !secondLegTonight(career, entry) || (!entry.uclRound && entry.type !== 'uel')) return null;
+  /* Round 1593: a Europa League second leg reads its first leg from the slice's record. */
+  const first = entry.type === 'uel' ? uelFirstLegMine(career, entry) : firstLegMine(career, entry.uclRound!);
   if (!first) return null;
   return {
     leg1Mine: first.mine,
@@ -13958,6 +13963,11 @@ export function worldUclWinner(career: CareerState): string | null { return worl
 /** The save plays this season's Europa League: the slice names my club as its participant (`me`, written by the
  *  rollover's opt in) and my calendar holds its nights. A slice carried across a mid season move still names the
  *  old club, so the new club follows it from outside (the critic's correction 3c). */
+/** Round 1593: my club won this season's Europa League (today's world only; a watched slice never names it). */
+export function wonUelThisSeason(career: CareerState): boolean {
+  return !isHistoricEra(career.eraId ?? DEFAULT_ERA_ID) && career.worldComps?.uel?.me === career.clubName && worldCompWinnerOf(career, 'uel') === career.clubName;
+}
+
 export function uelParticipant(state: Pick<CareerState, 'clubName' | 'season' | 'calendar' | 'worldComps'>): boolean {
   const slice = state.worldComps?.uel;
   return !!slice && slice.me === state.clubName && slice.s === state.season && Array.isArray(state.calendar) && state.calendar.some(e => e.type === 'uel');
@@ -13979,16 +13989,14 @@ function insertWorldNights(state: CareerState): void {
 }
 
 /** My match on a Europa League night, still to be played, read off the evaluation as it stands (never ahead of the
- *  nights played: a knockout round is known once it is drawn), or null. Round 1593's first half plays the league
- *  phase; a knockout night is followed and settled from its own stream until the tie path's half lands. */
+ *  nights played: a knockout round is known once it is drawn), or null. */
 function uelMyNight(state: CareerState, entry: CalendarEntry): MyWorldNight | null {
   if (entry.type !== 'uel' || entry.night?.k !== 'uel' || !uelParticipant(state)) return null;
   const slice = state.worldComps?.uel as WorldCompSlice;
   const n = entry.night.n;
   if (slice.mine?.[n]) return null;
   const res = evalWorldComp(state, 'uel', Math.min(n, worldCompNightsDone(state, 'uel')));
-  const my = res ? myWorldNight(res, slice, n) : null;
-  return my && my.night.stage === 'md' ? my : null;
+  return res ? myWorldNight(res, slice, n) : null;
 }
 
 const UEL_STAGE_WORDS: Record<WorldKoRound, string> = { PO: 'Knockout play-off', R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final' };
@@ -14003,28 +14011,93 @@ function uelNightLabel(my: MyWorldNight): string {
 /**
  * A Europa League night's completion: my result goes into the slice by night in the fixture's own orientation (the
  * critic's correction 7: the slice is REPLACED, so an evaluation memoised on the old object is never served again).
- * After the eighth matchday the league phase table says where my club stands.
+ * After the eighth matchday the league phase table says where my club stands; a first leg says where the second is;
+ * a night that settles a tie reads the tie off the evaluation one night on. The board's swing is the domestic cup's
+ * (plus 12 the trophy, plus 2 a round won, minus 3 out before the quarter-finals and minus 4.5 from them on), never a
+ * number of its own (the critic's advice 16): the Champions League's bigger swing stays the Champions League's.
  */
-function completeWorldNight(state: CareerState, night: NightRef, mine: number, theirs: number, et: boolean, shootoutWon: boolean | null, events: string[]): void {
-  if (night.k !== 'uel' || !uelParticipant(state)) return;
+function completeWorldNight(state: CareerState, night: NightRef, mine: number, theirs: number, et: boolean, shootoutWon: boolean | null, events: string[]): { trophy: string | null; conf: number } {
+  const none = { trophy: null, conf: 0 };
+  if (night.k !== 'uel' || !uelParticipant(state)) return none;
   const slice = state.worldComps?.uel as WorldCompSlice;
   const n = night.n;
-  if (slice.mine?.[n]) return;
+  if (slice.mine?.[n]) return none;
   const before = evalWorldComp(state, 'uel', n);
   const my = before ? myWorldNight(before, slice, n) : null;
-  if (!my) return;
+  if (!my) return none;
   const res: NightResult = { h: my.atHome ? mine : theirs, a: my.atHome ? theirs : mine };
   if (et) res.et = 1;
   if (shootoutWon !== null) res.pens = shootoutWon === my.atHome ? 'h' : 'a';
   setWorldComp(state, 'uel', { ...slice, mine: { ...(slice.mine ?? {}), [n]: res } });
-  if (my.night.stage === 'md' && my.night.md === UCL_LEAGUE.games - 1) {
+  const stage = my.night.stage;
+  if (stage === 'md') {
+    if (my.night.md !== UCL_LEAGUE.games - 1) return none;
     const table = evalWorldComp(state, 'uel', UCL_LEAGUE.games)?.table ?? [];
     const pos = table.findIndex(r => r.club === state.clubName) + 1;
-    if (pos <= 0) return;
+    if (pos <= 0) return none;
     events.push(pos <= 8 ? `🟠 League phase done, ${ordinal(pos)} of 36: straight into the Europa League round of 16.`
       : pos <= 24 ? `🟠 League phase done, ${ordinal(pos)} of 36: into the Europa League knockout play-off.`
         : `❌ Out of the Europa League, ${ordinal(pos)} of 36 in the league phase.`);
+    return none;
   }
+  const words = UEL_STAGE_WORDS[stage].toLowerCase();
+  if (!my.settles) {
+    events.push(`🟠 First leg of the Europa League ${words} done, ${mine}-${theirs}. The second leg is ${my.atHome ? 'away' : 'at home'}.`);
+    return none;
+  }
+  const tie = evalWorldComp(state, 'uel', n + 1)?.ties.find(t => t.round === stage && (t.home === state.clubName || t.away === state.clubName));
+  const through = tie?.winner === state.clubName;
+  if (stage === 'F') {
+    if (!through) {
+      events.push(`🟠 The Europa League goes to ${my.opponent}.`);
+      return { trophy: null, conf: -4.5 };
+    }
+    state.trophies.push({ name: 'Europa League', emoji: '🟠', season: state.season });
+    events.push('🟠 The Europa League is yours!');
+    return { trophy: 'Europa League', conf: 12 };
+  }
+  if (!through) {
+    events.push(`❌ Out of the Europa League in the ${words}.`);
+    return { trophy: null, conf: stage === 'PO' || stage === 'R16' ? -3 : -4.5 };
+  }
+  const next = stage === 'PO' ? 'R16' : stage === 'R16' ? 'QF' : stage === 'QF' ? 'SF' : 'F';
+  events.push(`🟠 Into the Europa League ${UEL_STAGE_WORDS[next].toLowerCase()}.`);
+  return { trophy: null, conf: 2 };
+}
+
+/** Round 1593: tonight's leg of a two legged Europa League tie of mine (1 or 2), else 0 (the league phase, the one
+ *  match final, any other night). */
+function uelLegTonight(state: CareerState, entry: CalendarEntry): 0 | 1 | 2 {
+  const my = entry.type === 'uel' ? uelMyNight(state, entry) : null;
+  if (!my || my.night.stage === 'md' || my.night.stage === 'F') return 0;
+  return my.night.leg === 2 ? 2 : 1;
+}
+
+/** Round 1593: my Europa League tie's first leg in MY orientation, and whether it was at my ground, read from the
+ *  slice's record (never from the Champions League's bracket). Null before it is played or off a second leg. */
+function uelFirstLegMine(state: CareerState, entry: CalendarEntry): { mine: number; theirs: number; home: boolean } | null {
+  const my = entry.type === 'uel' ? uelMyNight(state, entry) : null;
+  if (!my?.firstLeg) return null;
+  /* firstLeg is in tonight's orientation, and leg one was at the ground of the club away tonight. */
+  return my.atHome ? { mine: my.firstLeg[0], theirs: my.firstLeg[1], home: false } : { mine: my.firstLeg[1], theirs: my.firstLeg[0], home: true };
+}
+
+/** Round 1593: mySecondLegOutcome's twin for a Europa League second leg, in the tie's orientation (its home club
+ *  hosted leg one), by the season's own away goals rule (none in today's world). */
+function uelSecondLegOutcome(state: CareerState, entry: CalendarEntry, myGoals: number, oppGoals: number): { iAmHome: boolean; out: ReturnType<typeof uclTieOutcome> } {
+  const first = uelFirstLegMine(state, entry);
+  const iAmHome = first ? first.home : true;
+  const leg1 = first
+    ? { homeGoals: iAmHome ? first.mine : first.theirs, awayGoals: iAmHome ? first.theirs : first.mine }
+    : { homeGoals: 0, awayGoals: 0 };
+  const leg2 = { homeGoals: iAmHome ? myGoals : oppGoals, awayGoals: iAmHome ? oppGoals : myGoals };
+  return { iAmHome, out: uclTieOutcome({ leg1, leg2 }, uclAwayGoalsApply(state.eraId)) };
+}
+
+/** Round 1593: my second leg tonight read with tonight's goals, in either European competition. */
+function secondLegOutcomeTonight(state: CareerState, entry: CalendarEntry, myGoals: number, oppGoals: number): { iAmHome: boolean; out: ReturnType<typeof uclTieOutcome> } {
+  if (entry.type === 'uel') return uelSecondLegOutcome(state, entry, myGoals, oppGoals);
+  return mySecondLegOutcome(state, entry.uclRound!, myGoals, oppGoals);
 }
 
 /* ================================================================== */
@@ -14650,6 +14723,29 @@ export function cupProgressRank(state: CareerState): { rank: number; alive: bool
   return { rank: CUP_STAGE_RANK[state.cupRound], alive: true };
 }
 
+/**
+ * Round 1593: how far my club got in the Europa League it plays, on the Champions League's scale so the board's
+ * targets read alike: 0 the league phase, 1 the knockouts (a game rule: the knockout play-off counts, as UEFA's own
+ * name for it says, and so do the round of 16 and the quarter-finals), 2 the semi-finals, 3 the final, 4 won it.
+ * `alive` while my club is still in it. A save that does not play it is at 0 and out.
+ */
+const UEL_STAGE_RANK: Record<WorldKoRound, number> = { PO: 1, R16: 1, QF: 1, SF: 2, F: 3 };
+export function uelProgressRank(state: CareerState): { rank: number; alive: boolean } {
+  const slice = state.worldComps?.uel;
+  if (!slice || slice.me !== state.clubName || slice.s !== state.season) return { rank: 0, alive: false };
+  const res = evalWorldComp(state, 'uel');
+  if (!res) return { rank: 0, alive: false };
+  if (res.winner === state.clubName && res.done) return { rank: 4, alive: false };
+  const mine = res.ties.filter(t => t.home === state.clubName || t.away === state.clubName);
+  /* Past the league phase the top 24 are in the knockouts (the top 8 straight into the round of 16, before its draw). */
+  const pos = (res.table ?? []).findIndex(r => r.club === state.clubName) + 1;
+  const past = res.nightsDone >= UCL_LEAGUE.games;
+  const rank = Math.max(mine.reduce((r, t) => Math.max(r, UEL_STAGE_RANK[t.round]), 0), past && pos > 0 && pos <= 24 ? 1 : 0);
+  if (mine.some(t => t.winner && t.winner !== state.clubName)) return { rank, alive: false };
+  if (past && (pos <= 0 || pos > 24)) return { rank, alive: false };
+  return { rank, alive: true };
+}
+
 /** How far we got in Europe: 0 = group, 1 = knockouts ... 4 = won it. */
 export function uclProgressRank(state: CareerState): { rank: number; alive: boolean } {
   if (state.uclKoRound === 'won') return { rank: 4, alive: false };
@@ -15095,7 +15191,7 @@ export function euroPlaceOf(career: CareerState): EuroPlace {
   let place: EuroPlace;
   let route: EuroRoute | null = null;
   try {
-    if (league.euro && pos > 0 && pos <= places) place = 'ucl';
+    if ((league.euro && pos > 0 && pos <= places) || wonUelThisSeason(career)) place = 'ucl';
     else {
       const over = Array.isArray(career.calendar) && career.calendar.length > 0 && career.week >= career.calendar.length;
       route = over ? euroRouteAtEnd(career, league, table) : euroRouteNow(career, league, table);
@@ -15205,6 +15301,9 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
       status = rank >= objective.target ? 'done' : alive ? 'onTrack' : 'failed';
     } else if (objective.id === 'ucl') {
       const { rank, alive } = uclProgressRank(career);
+      status = rank >= objective.target ? 'done' : alive ? 'onTrack' : 'failed';
+    } else if (objective.id === 'uel') {
+      const { rank, alive } = uelProgressRank(career);
       status = rank >= objective.target ? 'done' : alive ? 'onTrack' : 'failed';
     } else if (objective.id === 'rival') {
       const rIdx = table.findIndex(r => r.club === objective.rivalName);
@@ -17283,12 +17382,13 @@ function scoreAt90(live: LiveMatch): { mine: number; opp: number } {
 function extraTimeDue(state: CareerState, entry: CalendarEntry, live: LiveMatch): boolean {
   if (live.et || !live.h2Drawn || !playsExtraTime(state, entry)) return false;
   const { mine, opp } = scoreAt90(live);
-  if (secondLegTonight(state, entry)) return mySecondLegOutcome(state, entry.uclRound!, mine, opp).out.winner === null;
+  if (secondLegTonight(state, entry)) return secondLegOutcomeTonight(state, entry, mine, opp).out.winner === null;
   return mine === opp;
 }
 
 /** Round 670: tonight is the second leg of a two legged tie, so the tie is read on the aggregate. */
 function secondLegTonight(state: CareerState, entry: CalendarEntry): boolean {
+  if (entry.type === 'uel') return uelLegTonight(state, entry) === 2;
   return !!entry.uclRound && entry.uclLeg === 2 && uclLegsFor(state.eraId, entry.uclRound) === 2;
 }
 
@@ -17306,7 +17406,7 @@ function secondLegTonight(state: CareerState, entry: CalendarEntry): boolean {
 function levelAt90Words(state: CareerState, entry: CalendarEntry, live: LiveMatch): string {
   if (!secondLegTonight(state, entry)) return 'Level after 90 minutes';
   const { mine, opp } = scoreAt90(live);
-  const { iAmHome, out } = mySecondLegOutcome(state, entry.uclRound!, mine, opp);
+  const { iAmHome, out } = secondLegOutcomeTonight(state, entry, mine, opp);
   const aggMine = iAmHome ? out.homeAgg : out.awayAgg;
   const aggTheirs = iAmHome ? out.awayAgg : out.homeAgg;
   return `Level ${aggMine}-${aggTheirs} on aggregate${uclAwayGoalsApply(state.eraId) ? ' and on away goals' : ''}`;
@@ -18263,9 +18363,12 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
         twoLegs: uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg,
       }
     : null;
-  const firstLegTonight = !!uclLeg && uclLeg.twoLegs && uclLeg.leg === 1;
-  /* Round 1510: a one match cup's night settles the cup or its semi final, so a draw goes to the shootout. */
-  const isKnockout = (fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff') && !firstLegTonight;
+  /* Round 1593: tonight's leg of a two legged Europa League tie (0 for the league phase and the final). */
+  const uelLeg = fx.competition === 'uel' ? uelLegTonight(state, entry) : 0;
+  const firstLegTonight = (!!uclLeg && uclLeg.twoLegs && uclLeg.leg === 1) || uelLeg === 1;
+  /* Round 1510: a one match cup's night settles the cup or its semi final, so a draw goes to the shootout.
+     Round 1593: and a Europa League night that settles a tie (never a league phase night). */
+  const isKnockout = (fx.competition === 'cup' || fx.competition === 'uclKo' || fx.competition === 'oneOff' || (fx.competition === 'uel' && playsExtraTime(state, entry))) && !firstLegTonight;
 
   const suspendedNow = state.squad.filter(p => p.suspendedMatches > 0).map(p => p.id);
   /* Round 127: who could actually have played today, taken before the match
@@ -18357,11 +18460,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      semi finals, and the report should say both of those things.
      Round 670: tonight includes any extra time, so the tie is read after it,
      with away goals in extra time counting in the eras that counted them. */
-  if (uclLeg && uclLeg.twoLegs && uclLeg.leg === 2) {
-    const { iAmHome, out } = mySecondLegOutcome(state, uclLeg.round, myGoals, oppGoals);
+  if ((uclLeg && uclLeg.twoLegs && uclLeg.leg === 2) || uelLeg === 2) {
+    const { iAmHome, out } = secondLegOutcomeTonight(state, entry, myGoals, oppGoals);
     /* Round 781: the first leg in my orientation, so the report can print it
        beside the aggregate. Leg one was played at tie.home's ground. */
-    const first = firstLegMine(state, uclLeg.round);
+    const first = uelLeg === 2 ? uelFirstLegMine(state, entry) : firstLegMine(state, (uclLeg as { round: UclKoRound }).round);
     tieLine = {
       leg: 2,
       aggMine: iAmHome ? out.homeAgg : out.awayAgg,
@@ -18633,7 +18736,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   }
   /* Round 1593: a Europa League night writes my result into its slice; every other match of the night comes from
      the slice's own keyed streams. */
-  if (fx.competition === 'uel' && entry.night) completeWorldNight(state, entry.night, myGoals, oppGoals, etPlayed, shootoutWon, events);
+  if (fx.competition === 'uel' && entry.night) {
+    const got = completeWorldNight(state, entry.night, myGoals, oppGoals, etPlayed, shootoutWon, events);
+    if (got.trophy) trophyWon = got.trophy;
+    confDelta += got.conf;
+  }
 
   /* ----- Round 73: full stat lines for everyone who played ----- */
   const cleanSheet = oppGoals === 0;
@@ -21738,7 +21845,8 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     topScorer,
     topAssister,
     /* Round 543: the league's own slot count, not a hardcoded four. */
-    qualifiedUcl: position <= uclPlacesIn(careerLeagueOf(state)),
+    /* Round 1593: or the Europa League won (row Q4: its winner plays the next Champions League). */
+    qualifiedUcl: position <= uclPlacesIn(careerLeagueOf(state)) || wonUelThisSeason(state),
     signings: state.seasonSignings,
     offers,
     /* Round 633: one function, two call sites, so the number the player
@@ -22741,6 +22849,15 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     openWorldComp(state, 'uel', worldCompField(state, 'uel', tables, null, watchCup, null, true), null);
   } catch {
     setWorldComp(state, 'uel', null);
+  }
+  /* Round 1593 (the critic's correction 4a): a club in this season's Europa League gets the board's Europa League
+     target, spliced in after the cup's, the place the Champions League's sits, read off the slice just opened
+     (never last season's). buildBoardObjectives is untouched and draws nothing, so nothing else moves. */
+  if (state.worldComps?.uel?.me === state.clubName && !state.boardObjectives.some(o => o.id === 'uel')) {
+    const t = clubDefFor(state.clubName).tier === 1 ? 2 : 1;
+    const at = state.boardObjectives.findIndex(o => o.id === 'cup');
+    const uelAsk: BoardObjective = { id: 'uel', target: t, label: t === 2 ? 'Reach the Europa League semi-finals' : 'Make the Europa League knockouts' };
+    state.boardObjectives = at >= 0 ? [...state.boardObjectives.slice(0, at + 1), uelAsk, ...state.boardObjectives.slice(at + 1)] : [...state.boardObjectives, uelAsk];
   }
   // Round 165: a fresh golden boot race too (the new table is all zeros).
   state.scorerRace = initScorerRace(state);
