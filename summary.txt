@@ -1,0 +1,5 @@
+simCmEuroPlay-mineflip exit=1 79s | simCmEuroPlay: control mineflip FIRED (97 failures, all its own)
+simCmEuroPlay-nocarry exit=1 80s | simCmEuroPlay: control nocarry FIRED (6 failures, all its own)
+simHarnessAnchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+oldsaves exit=0 137s | proofWorldUclFleet: GREEN, 38 journeys and 4888 steps byte equal to 14a9af704, draws equal
+simCmEuroPlay exit=0 248s | simCmEuroPlay: green, 1413 checks, 0 failures
