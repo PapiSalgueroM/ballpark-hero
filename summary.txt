@@ -1,0 +1,5 @@
+vitest exit=0 8s |    Duration  7.00s (transform 2.92s, setup 250ms, collect 3.51s, tests 2.03s, environment 1.19s, prepare 574ms)
+cards-allcomps exit=1 62s | simCmPlayerCard: control allcomps FIRED, 4078 failures in section cards (4078 in all) (62s)
+tsc exit=0 111s | 
+cards-namekey exit=1 57s | simCmPlayerCard: control namekey FIRED, 1000 failures in section cards (1000 in all) (57s)
+cards-full2 exit=1 304s | simCmPlayerCard: RED, 999 failures (302s)

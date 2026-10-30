@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerCareerLines.test.ts src/lib/clubManagerCards.test.ts --testTimeout=300000 --hookTimeout=300000
+cards-full2: git worktree add -f /tmp/cbase 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/cbase/node_modules && CARDS_SEEDS=5 CARDS_BASE=/tmp/cbase node scripts/simCmPlayerCard.mjs
+cards-allcomps: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=allcomps node scripts/simCmPlayerCard.mjs
+cards-namekey: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=namekey node scripts/simCmPlayerCard.mjs
