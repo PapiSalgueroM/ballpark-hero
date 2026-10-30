@@ -1,0 +1,3 @@
+ctl-takeover exit=0 25s | control run: takeover FIRED, 7g went red 78 time(s), 78 naming the sentinel
+ctl-namedsack exit=0 25s | control run: namedsack FIRED, 7b went red 184 time(s), 184 naming the sentinel
+simManagers exit=0 28s | simManagers: all green
