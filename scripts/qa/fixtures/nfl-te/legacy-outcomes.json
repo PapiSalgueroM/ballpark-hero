@@ -1,0 +1,334 @@
+{
+  "squads": [
+    {
+      "squadId": "NE-2011",
+      "teamName": "New England Patriots",
+      "year": 2011,
+      "players": [
+        {
+          "playerId": "HC-NE-2011",
+          "name": "Bill Belichick",
+          "rating": 97,
+          "eligible": [
+            "HC"
+          ],
+          "detail": "Head coach, 2011 · 6 rings in New England"
+        },
+        {
+          "playerId": "00-0019596",
+          "name": "Tom Brady",
+          "rating": 94,
+          "eligible": [
+            "QB"
+          ],
+          "detail": "5235 pass yds · 39 TD · 12 INT"
+        },
+        {
+          "playerId": "00-0022427",
+          "name": "Wes Welker",
+          "rating": 90,
+          "eligible": [
+            "WR",
+            "WR2",
+            "FLEX"
+          ],
+          "detail": "122 rec · 1569 yds · 9 TD"
+        },
+        {
+          "playerId": "00-0027656",
+          "name": "Rob Gronkowski",
+          "rating": 90,
+          "eligible": [
+            "TE",
+            "FLEX"
+          ],
+          "detail": "90 rec · 1327 yds · 17 TD"
+        },
+        {
+          "playerId": "00-0027713",
+          "name": "Aaron Hernandez",
+          "rating": 76,
+          "eligible": [
+            "TE",
+            "FLEX"
+          ],
+          "detail": "79 rec · 910 yds · 7 TD"
+        },
+        {
+          "playerId": "00-0021192",
+          "name": "Deion Branch",
+          "rating": 68,
+          "eligible": [
+            "WR",
+            "WR2",
+            "FLEX"
+          ],
+          "detail": "51 rec · 702 yds · 5 TD"
+        },
+        {
+          "playerId": "00-0025860",
+          "name": "BenJarvus Green-Ellis",
+          "rating": 66,
+          "eligible": [
+            "RB",
+            "FLEX"
+          ],
+          "detail": "826 scrimmage yds · 11 TD"
+        },
+        {
+          "playerId": "00-0026019",
+          "name": "Danny Woodhead",
+          "rating": 54,
+          "eligible": [
+            "RB",
+            "FLEX"
+          ],
+          "detail": "508 scrimmage yds · 1 TD"
+        },
+        {
+          "playerId": "00-0028011",
+          "name": "Stevan Ridley",
+          "rating": 54,
+          "eligible": [
+            "RB",
+            "FLEX"
+          ],
+          "detail": "454 scrimmage yds · 1 TD"
+        },
+        {
+          "playerId": "00-0020397",
+          "name": "Chad Johnson",
+          "rating": 52,
+          "eligible": [
+            "WR",
+            "WR2",
+            "FLEX"
+          ],
+          "detail": "15 rec · 276 yds · 1 TD"
+        },
+        {
+          "playerId": "DEF-NE-2011",
+          "name": "New England Patriots Defense",
+          "rating": 44,
+          "eligible": [
+            "DEF"
+          ],
+          "detail": "#31 defense of 2011 · 428 yds/gm allowed · 40 sacks · 23 INTs"
+        }
+      ]
+    },
+    {
+      "squadId": "KC-2022",
+      "teamName": "Kansas City Chiefs",
+      "year": 2022,
+      "players": [
+        {
+          "playerId": "HC-KC-2022",
+          "name": "Andy Reid",
+          "rating": 96,
+          "eligible": [
+            "HC"
+          ],
+          "detail": "Head coach, 2022 · The Chiefs dynasty architect"
+        },
+        {
+          "playerId": "00-0033873",
+          "name": "Patrick Mahomes",
+          "rating": 90,
+          "eligible": [
+            "QB"
+          ],
+          "detail": "5250 pass yds · 41 TD · 12 INT"
+        },
+        {
+          "playerId": "00-0030506",
+          "name": "Travis Kelce",
+          "rating": 82,
+          "eligible": [
+            "TE",
+            "FLEX"
+          ],
+          "detail": "110 rec · 1338 yds · 12 TD"
+        },
+        {
+          "playerId": "DEF-KC-2022",
+          "name": "Kansas City Chiefs Defense",
+          "rating": 69,
+          "eligible": [
+            "DEF"
+          ],
+          "detail": "#17 defense of 2022 · 351 yds/gm allowed · 55 sacks · 11 INTs"
+        },
+        {
+          "playerId": "00-0033857",
+          "name": "JuJu Smith-Schuster",
+          "rating": 68,
+          "eligible": [
+            "WR",
+            "WR2",
+            "FLEX"
+          ],
+          "detail": "78 rec · 933 yds · 3 TD"
+        },
+        {
+          "playerId": "00-0035140",
+          "name": "Mecole Hardman",
+          "rating": 63,
+          "eligible": [
+            "WR",
+            "WR2",
+            "FLEX"
+          ],
+          "detail": "25 rec · 297 yds · 4 TD"
+        },
+        {
+          "playerId": "00-0031376",
+          "name": "Jerick McKinnon",
+          "rating": 62,
+          "eligible": [
+            "RB",
+            "FLEX"
+          ],
+          "detail": "803 scrimmage yds · 10 TD"
+        },
+        {
+          "playerId": "00-0036360",
+          "name": "Clyde Edwards-Helaire",
+          "rating": 62,
+          "eligible": [
+            "RB",
+            "FLEX"
+          ],
+          "detail": "453 scrimmage yds · 6 TD"
+        },
+        {
+          "playerId": "00-0037197",
+          "name": "Isiah Pacheco",
+          "rating": 61,
+          "eligible": [
+            "RB",
+            "FLEX"
+          ],
+          "detail": "960 scrimmage yds · 5 TD"
+        },
+        {
+          "playerId": "00-0034272",
+          "name": "Marquez Valdes-Scantling",
+          "rating": 60,
+          "eligible": [
+            "WR",
+            "WR2",
+            "FLEX"
+          ],
+          "detail": "42 rec · 687 yds · 2 TD"
+        },
+        {
+          "playerId": "00-0034386",
+          "name": "Justin Watson",
+          "rating": 51,
+          "eligible": [
+            "WR",
+            "WR2",
+            "FLEX"
+          ],
+          "detail": "15 rec · 315 yds · 2 TD"
+        },
+        {
+          "playerId": "00-0036637",
+          "name": "Noah Gray",
+          "rating": 50,
+          "eligible": [
+            "TE",
+            "FLEX"
+          ],
+          "detail": "28 rec · 299 yds · 1 TD"
+        },
+        {
+          "playerId": "00-0038090",
+          "name": "Skyy Moore",
+          "rating": 49,
+          "eligible": [
+            "WR",
+            "WR2",
+            "FLEX"
+          ],
+          "detail": "22 rec · 250 yds · 0 TD"
+        }
+      ]
+    }
+  ],
+  "calls": [
+    {
+      "table": "nflfastr_player_stats",
+      "columns": "player_id, player_display_name, player_name, position_group, week, attempts, passing_yards, passing_tds, interceptions, carries, rushing_yards, rushing_tds, receptions, receiving_yards, receiving_tds",
+      "eq": [
+        [
+          "season",
+          "2011"
+        ],
+        [
+          "recent_team",
+          "NE"
+        ],
+        [
+          "season_type",
+          "REG"
+        ]
+      ],
+      "limit": 400,
+      "single": false
+    },
+    {
+      "table": "nflfastr_player_stats",
+      "columns": "player_id, player_display_name, player_name, position_group, week, attempts, passing_yards, passing_tds, interceptions, carries, rushing_yards, rushing_tds, receptions, receiving_yards, receiving_tds",
+      "eq": [
+        [
+          "season",
+          "2022"
+        ],
+        [
+          "recent_team",
+          "KC"
+        ],
+        [
+          "season_type",
+          "REG"
+        ]
+      ],
+      "limit": 400,
+      "single": false
+    },
+    {
+      "table": "nfl_team_defense",
+      "columns": "ypg, tdpg, ints, sacks, def_rank, rating",
+      "eq": [
+        [
+          "abbr",
+          "NE"
+        ],
+        [
+          "year",
+          2011
+        ]
+      ],
+      "limit": null,
+      "single": true
+    },
+    {
+      "table": "nfl_team_defense",
+      "columns": "ypg, tdpg, ints, sacks, def_rank, rating",
+      "eq": [
+        [
+          "abbr",
+          "KC"
+        ],
+        [
+          "year",
+          2022
+        ]
+      ],
+      "limit": null,
+      "single": true
+    }
+  ]
+}
