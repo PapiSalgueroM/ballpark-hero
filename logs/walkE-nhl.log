@@ -1,0 +1,79 @@
+/nhl-front-office at 320 by 640
+/nhl-front-office at 390 by 844
+  PASS  nhl 390x844 E: the pick screen does not ask for the career kit (0 asks)
+  PASS  nhl 390x844 E: a new front office brings the kit with its league
+  PASS  nhl 390x844 E: mid season, the hub draws the Career box without the kit
+  PASS  nhl 390x844 E: mid season, the hub draws the GM level box without the kit
+  PASS  nhl 390x844 E: a season being played does not ask for the kit (0 asks)
+  PASS  nhl 390x844 E: on a slow line the last week's press waits for the kit
+  PASS  nhl 390x844 E: the last week asks for the kit
+  PASS  nhl 390x844 E: fired, on the out of work screen
+  PASS  nhl 390x844 E: a reload on the fired screen holds while the kit is on its way
+  MEASURED nhl 390x844 E: fired reload holding box 320px at 241, out of work screen at 241, scroll 0
+  PASS  nhl 390x844 E: the out of work screen lands where the holding box stood, the page not moving
+  PASS  nhl 390x844 E: the fired screen asks for the kit
+  PASS  nhl 390x844 E out of work: nothing wider than the screen (0px over)
+  PASS  nhl 390x844 E out of work: every control at least 44 px tall (all)
+  PASS  nhl 390x844 E out of work: no text under its floor (none)
+  PASS  nhl 390x844 E: the market opens on the slow line, 1 offer(s)
+  PASS  nhl 390x844 E: a seat taken on the slow line (ANA, recap)
+  PASS  nhl 390x844 E: the arrival recap holds the re-sign box
+  PASS  nhl 390x844 E: the new club's re-sign box opens
+  PASS  nhl 390x844 E: the new club's draft runs to the hub
+  PASS  nhl 390x844 E: the new club's hub draws its boxes without asking for the kit
+  PASS  nhl 390x844 E: the GM level box holds, under its own header, while the kit is on its way (xp)
+  MEASURED nhl 390x844 E: the GM level holding box before the kit 684px, the landed screen 684px
+  PASS  nhl 390x844 E: at 390 the holding box before the kit is the GM level screen's own height (684px for 684px)
+  PASS  nhl 390x844 E: the GM level box asks for the kit
+  PASS  nhl 390x844 E GM level: nothing wider than the screen (0px over)
+  PASS  nhl 390x844 E GM level: every control at least 44 px tall (all)
+  PASS  nhl 390x844 E GM level: no text under its floor (none)
+  PASS  nhl 390x844 E: reloaded again, the hub draws the Career box without asking for the kit
+  MEASURED nhl 390x844 E: the Career box before the kit 184.0 to 184.0px over 113 frame(s), its screen's own holding box 184.0 to 184.0px over 21 frame(s), the landed screen 183.5px, scroll 218 to 217
+  PASS  nhl 390x844 E: the Career box holds, under its own header, while the kit is on its way (113 frame(s), career)
+  PASS  nhl 390x844 E: at 390 every holding frame of the Career box is the Career screen's own height (184.0 to 184.0px over 134 frame(s) for 184px)
+  PASS  nhl 390x844 E: the Career screen lands where its holding box stood, the page not moving (top 458 to 458, scroll 218 to 217)
+  PASS  nhl 390x844 E: the Career box asks for the kit
+  PASS  nhl 390x844 E Career: nothing wider than the screen (0px over)
+  PASS  nhl 390x844 E Career: every control at least 44 px tall (all)
+  PASS  nhl 390x844 E Career: no text under its floor (none)
+  PASS  nhl 390x844 E: no console error (clean)
+/nhl-front-office at 1280 by 900
+  PASS  nhl 1280x900 E: the pick screen does not ask for the career kit (0 asks)
+  PASS  nhl 1280x900 E: a new front office brings the kit with its league
+  PASS  nhl 1280x900 E: mid season, the hub draws the Career box without the kit
+  PASS  nhl 1280x900 E: mid season, the hub draws the GM level box without the kit
+  PASS  nhl 1280x900 E: a season being played does not ask for the kit (0 asks)
+  PASS  nhl 1280x900 E: on a slow line the last week's press waits for the kit
+  PASS  nhl 1280x900 E: the last week asks for the kit
+  PASS  nhl 1280x900 E: fired, on the out of work screen
+  PASS  nhl 1280x900 E: a reload on the fired screen holds while the kit is on its way
+  MEASURED nhl 1280x900 E: fired reload holding box 320px at 189, out of work screen at 189, scroll 0
+  PASS  nhl 1280x900 E: the out of work screen lands where the holding box stood, the page not moving
+  PASS  nhl 1280x900 E: the fired screen asks for the kit
+  PASS  nhl 1280x900 E out of work: nothing wider than the screen (0px over)
+  PASS  nhl 1280x900 E out of work: every control at least 44 px tall (all)
+  PASS  nhl 1280x900 E out of work: no text under its floor (none)
+  PASS  nhl 1280x900 E: the market opens on the slow line, 1 offer(s)
+  PASS  nhl 1280x900 E: a seat taken on the slow line (CGY, recap)
+  PASS  nhl 1280x900 E: the arrival recap holds the re-sign box
+  PASS  nhl 1280x900 E: the new club's re-sign box opens
+  PASS  nhl 1280x900 E: the new club's draft runs to the hub
+  PASS  nhl 1280x900 E: the new club's hub draws its boxes without asking for the kit
+  PASS  nhl 1280x900 E: the GM level box holds, under its own header, while the kit is on its way (xp)
+  MEASURED nhl 1280x900 E: the GM level holding box before the kit 684px, the landed screen 676px
+  PASS  nhl 1280x900 E: the GM level box asks for the kit
+  PASS  nhl 1280x900 E GM level: nothing wider than the screen (0px over)
+  PASS  nhl 1280x900 E GM level: every control at least 44 px tall (all)
+  PASS  nhl 1280x900 E GM level: no text under its floor (none)
+  PASS  nhl 1280x900 E: reloaded again, the hub draws the Career box without asking for the kit
+  MEASURED nhl 1280x900 E: the Career box before the kit 184.0 to 184.0px over 112 frame(s), its screen's own holding box 184.0 to 184.0px over 22 frame(s), the landed screen 167.0px, scroll 0 to 0
+  PASS  nhl 1280x900 E: the Career box holds, under its own header, while the kit is on its way (112 frame(s), career)
+  PASS  nhl 1280x900 E: the Career screen lands where its holding box stood, the page not moving (top 357 to 357, scroll 0 to 0)
+  PASS  nhl 1280x900 E: the Career box asks for the kit
+  PASS  nhl 1280x900 E Career: nothing wider than the screen (0px over)
+  PASS  nhl 1280x900 E Career: every control at least 44 px tall (all)
+  PASS  nhl 1280x900 E Career: no text under its floor (none)
+  PASS  nhl 1280x900 E: no console error (clean)
+
+playGmCareer: green. 1 board(s) (nhl), 3 sizes, four walks each and the slow kit walk at 390 and 1280.
