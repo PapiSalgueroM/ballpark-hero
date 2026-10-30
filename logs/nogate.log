@@ -1,0 +1,110 @@
+1
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/ClubManagerSeasonSummary.expiring.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[33m 397[2mms[22m[39m
+[31m   [31m×[31m Round 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut[39m[32m 161[2mms[22m[39m
+[31m     → expected [] to have a length of 3 but got +0[39m
+[31m   [31m×[31m Round 1597: no deal ends unseen[2m > [22manswering two keeps it shut, the third opens it, and a renewal is the desk's own[39m[32m 62[2mms[22m[39m
+[31m     → Cannot read properties of undefined (reading 'querySelector')[39m
+[31m   [31m×[31m Round 1597: no deal ends unseen[2m > [22mLet the rest go answers every open deal at once and renews nobody[39m[32m 44[2mms[22m[39m
+[31m     → Unable to fire a "click" event - please provide a DOM element.[39m
+[31m   [31m×[31m Round 1597: no deal ends unseen[2m > [22ma man the budget cannot renew can still be let go[39m[32m 58[2mms[22m[39m
+[31m     → Cannot read properties of undefined (reading 'querySelector')[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22ma manager leaving for a job he booked is not asked[32m 34[2mms[22m[39m
+[31m   [31m×[31m Round 1597: no deal ends unseen[2m > [22mthe ? opens the rules with a worked example off the engine's numbers, and no dash anywhere[39m[32m 36[2mms[22m[39m
+[31m     → Unable to fire a "click" event - please provide a DOM element.[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/ClubManagerSeasonSummary.expiring.test.tsx[2m > [22mRound 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut
+[31m[1mAssertionError[22m: expected [] to have a length of 3 but got +0[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 3[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/test/ClubManagerSeasonSummary.expiring.test.tsx:[2m46:34[22m[39m
+    [90m 44| [39m  [34mit[39m([32m'lists the three final year men and keeps Continue shut'[39m[33m,[39m () [33m=>[39m {
+    [90m 45| [39m    [35mconst[39m { view } [33m=[39m [34msetup[39m()[33m;[39m
+    [90m 46| [39m    [34mexpect[39m([34mrows[39m(view[33m.[39mcontainer))[33m.[39m[34mtoHaveLength[39m([34m3[39m)[33m;[39m
+    [90m   | [39m                                 [31m^[39m
+    [90m 47| [39m    expect(rows(view.container).every(r => r.getAttribute('data-cm-dea…
+    [90m 48| [39m    [35mconst[39m cont [33m=[39m [34mcontinueButton[39m(view[33m.[39mcontainer)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/ClubManagerSeasonSummary.expiring.test.tsx[2m > [22mRound 1597: no deal ends unseen[2m > [22manswering two keeps it shut, the third opens it, and a renewal is the desk's own
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'querySelector')[39m
+[36m [2m❯[22m src/test/ClubManagerSeasonSummary.expiring.test.tsx:[2m55:55[22m[39m
+    [90m 53| [39m  it('answering two keeps it shut, the third opens it, and a renewal i…
+    [90m 54| [39m    [35mconst[39m { view[33m,[39m g[33m,[39m sm[33m,[39m three[33m,[39m c0[33m,[39m renewed } [33m=[39m [34msetup[39m()[33m;[39m
+    [90m 55| [39m    fireEvent.click(rowOf(view.container, c0, three[0]).querySelector(…
+    [90m   | [39m                                                      [31m^[39m
+    [90m 56| [39m    [34mexpect[39m(g[33m.[39mrenew)[33m.[39m[34mtoHaveBeenCalledWith[39m(three[[34m0[39m])[33m;[39m
+    [90m 57| [39m    [34mexpect[39m(renewed[[34m0[39m])[33m.[39m[34mtoEqual[39m([34mrenewContract[39m(c0[33m,[39m three[[34m0[39m]))[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/ClubManagerSeasonSummary.expiring.test.tsx[2m > [22mRound 1597: no deal ends unseen[2m > [22mLet the rest go answers every open deal at once and renews nobody
+[31m[1mError[22m: Unable to fire a "click" event - please provide a DOM element.[39m
+[90m [2m❯[22m createEvent node_modules/@testing-library/dom/dist/events.js:[2m27:11[22m[39m
+[90m [2m❯[22m createEvent.<computed> [as click] node_modules/@testing-library/dom/dist/events.js:[2m106:38[22m[39m
+[90m [2m❯[22m fireEvent.<computed> [as click] node_modules/@testing-library/dom/dist/events.js:[2m110:68[22m[39m
+[90m [2m❯[22m fireEvent.click node_modules/@testing-library/react/dist/fire-event.js:[2m15:52[22m[39m
+[36m [2m❯[22m src/test/ClubManagerSeasonSummary.expiring.test.tsx:[2m74:15[22m[39m
+    [90m 72| [39m  it('Let the rest go answers every open deal at once and renews nobod…
+    [90m 73| [39m    [35mconst[39m { view[33m,[39m g } [33m=[39m [34msetup[39m()[33m;[39m
+    [90m 74| [39m    fireEvent.click(view.container.querySelector('[data-cm-deals-rest]…
+    [90m   | [39m              [31m^[39m
+    [90m 75| [39m    expect(rows(view.container).every(r => r.getAttribute('data-cm-dea…
+    [90m 76| [39m    [34mexpect[39m([34mcontinueButton[39m(view[33m.[39mcontainer)[33m.[39mdisabled)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/ClubManagerSeasonSummary.expiring.test.tsx[2m > [22mRound 1597: no deal ends unseen[2m > [22ma man the budget cannot renew can still be let go
+[31m[1mTypeError[22m: Cannot read properties of undefined (reading 'querySelector')[39m
+[36m [2m❯[22m src/test/ClubManagerSeasonSummary.expiring.test.tsx:[2m83:17[22m[39m
+    [90m 81| [39m    [35mconst[39m { view[33m,[39m three[33m,[39m c0 } [33m=[39m [34msetup[39m({ budget[33m:[39m [34m0[39m })[33m;[39m
+    [90m 82| [39m    [35mconst[39m row [33m=[39m [34mrowOf[39m(view[33m.[39mcontainer[33m,[39m c0[33m,[39m three[[34m0[39m])[33m;[39m
+    [90m 83| [39m    expect((row.querySelector('[data-cm-deal-renew]') as HTMLButtonEle…
+    [90m   | [39m                [31m^[39m
+    [90m 84| [39m    fireEvent.click(view.container.querySelector('[data-cm-deals-rest]…
+    [90m 85| [39m    [34mexpect[39m([34mcontinueButton[39m(view[33m.[39mcontainer)[33m.[39mdisabled)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/ClubManagerSeasonSummary.expiring.test.tsx[2m > [22mRound 1597: no deal ends unseen[2m > [22mthe ? opens the rules with a worked example off the engine's numbers, and no dash anywhere
+[31m[1mError[22m: Unable to fire a "click" event - please provide a DOM element.[39m
+[90m [2m❯[22m createEvent node_modules/@testing-library/dom/dist/events.js:[2m27:11[22m[39m
+[90m [2m❯[22m createEvent.<computed> [as click] node_modules/@testing-library/dom/dist/events.js:[2m106:38[22m[39m
+[90m [2m❯[22m fireEvent.<computed> [as click] node_modules/@testing-library/dom/dist/events.js:[2m110:68[22m[39m
+[90m [2m❯[22m fireEvent.click node_modules/@testing-library/react/dist/fire-event.js:[2m15:52[22m[39m
+[36m [2m❯[22m src/test/ClubManagerSeasonSummary.expiring.test.tsx:[2m99:15[22m[39m
+    [90m 97| [39m    [35mconst[39m { view } [33m=[39m [34msetup[39m()[33m;[39m
+    [90m 98| [39m    expect(view.container.querySelector('[data-cm-deals-rules]')).toBe…
+    [90m 99| [39m    fireEvent.click(view.container.querySelector('[data-cm-deals-help]…
+    [90m   | [39m              [31m^[39m
+    [90m100| [39m    const rules = view.container.querySelector('[data-cm-deals-rules]'…
+    [90m101| [39m    const ex = renewalTerms({ id: 'example', name: 'Example', position…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 05:59:12
+[2m   Duration [22m 3.33s[2m (transform 1.50s, setup 69ms, collect 2.06s, tests 397ms, environment 313ms, prepare 175ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/ClubManagerSeasonSummary.expiring.test.tsx,title=src/test/ClubManagerSeasonSummary.expiring.test.tsx > Round 1597%3A no deal ends unseen > lists the three final year men and keeps Continue shut,line=46,column=34::AssertionError: expected [] to have a length of 3 but got +0%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 0%0A%0A ❯ src/test/ClubManagerSeasonSummary.expiring.test.tsx:46:34%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/ClubManagerSeasonSummary.expiring.test.tsx,title=src/test/ClubManagerSeasonSummary.expiring.test.tsx > Round 1597%3A no deal ends unseen > answering two keeps it shut%2C the third opens it%2C and a renewal is the desk's own,line=55,column=55::TypeError: Cannot read properties of undefined (reading 'querySelector')%0A ❯ src/test/ClubManagerSeasonSummary.expiring.test.tsx:55:55%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/ClubManagerSeasonSummary.expiring.test.tsx,title=src/test/ClubManagerSeasonSummary.expiring.test.tsx > Round 1597%3A no deal ends unseen > Let the rest go answers every open deal at once and renews nobody,line=74,column=15::Error: Unable to fire a "click" event - please provide a DOM element.%0A ❯ createEvent node_modules/@testing-library/dom/dist/events.js:27:11%0A ❯ createEvent.<computed> [as click] node_modules/@testing-library/dom/dist/events.js:106:38%0A ❯ fireEvent.<computed> [as click] node_modules/@testing-library/dom/dist/events.js:110:68%0A ❯ fireEvent.click node_modules/@testing-library/react/dist/fire-event.js:15:52%0A ❯ src/test/ClubManagerSeasonSummary.expiring.test.tsx:74:15%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/ClubManagerSeasonSummary.expiring.test.tsx,title=src/test/ClubManagerSeasonSummary.expiring.test.tsx > Round 1597%3A no deal ends unseen > a man the budget cannot renew can still be let go,line=83,column=17::TypeError: Cannot read properties of undefined (reading 'querySelector')%0A ❯ src/test/ClubManagerSeasonSummary.expiring.test.tsx:83:17%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/ClubManagerSeasonSummary.expiring.test.tsx,title=src/test/ClubManagerSeasonSummary.expiring.test.tsx > Round 1597%3A no deal ends unseen > the ? opens the rules with a worked example off the engine's numbers%2C and no dash anywhere,line=99,column=15::Error: Unable to fire a "click" event - please provide a DOM element.%0A ❯ createEvent node_modules/@testing-library/dom/dist/events.js:27:11%0A ❯ createEvent.<computed> [as click] node_modules/@testing-library/dom/dist/events.js:106:38%0A ❯ fireEvent.<computed> [as click] node_modules/@testing-library/dom/dist/events.js:110:68%0A ❯ fireEvent.click node_modules/@testing-library/react/dist/fire-event.js:15:52%0A ❯ src/test/ClubManagerSeasonSummary.expiring.test.tsx:99:15%0A%0A
