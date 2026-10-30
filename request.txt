@@ -1,0 +1,10 @@
+#!serial
+# UNBOUND post-publication read-only proof. Root must bind actual merged main and completed deployment before launch.
+prepare: bash .rc/default-support.sh prepare
+readback: bash .rc/default-support.sh post-publication readback
+raw-audit: bash .rc/default-support.sh post-publication raw-audit
+desktop: bash .rc/default-support.sh post-publication desktop
+desktop-report: bash .rc/default-support.sh post-publication desktop-report
+phone: bash .rc/default-support.sh post-publication phone
+phone-report: bash .rc/default-support.sh post-publication phone-report
+finish: bash .rc/default-support.sh finish

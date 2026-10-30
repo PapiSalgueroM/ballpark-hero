@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>DoUKnowBall: Free Sports Trivia Games and Daily Quizzes</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376" />
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1" />
+    <meta name="yandex-verification" content="78b02f385cab3272" />
+    <meta name="description" content="130+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA, MLB, NHL, F1, UFC and more. No login needed.">
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    <link rel="canonical" href="https://douknowball.com/">
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://douknowball.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://douknowball.com/og-image.png">
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script data-dukb-consent-bootstrap="">
+      // Keep this gate aligned with consentPreferences and consentedScripts.
+      (function () {
+        var ANALYTICS_READY = false;
+        if (!ANALYTICS_READY) return;
+        try {
+          var value = JSON.parse(localStorage.getItem('cookie-consent-v2') || 'null');
+          var now = Date.now();
+          if (!value || value.version !== 2 || typeof value.advertising !== 'boolean'
+            || typeof value.analytics !== 'boolean' || value.analytics !== true
+            || typeof value.updatedAt !== 'number' || !Number.isFinite(value.updatedAt)
+            || value.updatedAt < 0 || value.updatedAt > now
+            || now - value.updatedAt >= 180 * 24 * 60 * 60 * 1000) return;
+          if (/^\/(?:reset-password|auth|account|profile|admin)(?:\/|$)/.test(location.pathname)) return;
+          function cleanUrl(input) {
+            try {
+              var url = new URL(input, location.origin);
+              return url.protocol === 'https:' || url.protocol === 'http:' ? url.origin + url.pathname : '';
+            } catch (e) { return ''; }
+          }
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('consent', 'default', {
+            ad_storage: 'denied', analytics_storage: 'denied',
+            ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.__DUKB_CONSENT_DEFAULTED__ = true;
+          window.gtag('consent', 'update', {
+            ad_storage: value.advertising && navigator.globalPrivacyControl !== true ? 'granted' : 'denied',
+            analytics_storage: 'granted', ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.gtag('js', new Date());
+          window.gtag('config', 'G-KZQK2G68YC', {
+            send_page_view: false, page_location: cleanUrl(location.href),
+            page_referrer: document.referrer ? cleanUrl(document.referrer) : '',
+            allow_google_signals: false, allow_ad_personalization_signals: false
+          });
+          var g = document.createElement('script');
+          g.async = true;
+          g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+          document.head.appendChild(g);
+        } catch (e) { /* Blocked storage keeps optional analytics off. */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="DoUKnowBall: Free Sports Trivia Games and Daily Quizzes">
+  <meta name="twitter:title" content="DoUKnowBall: Free Sports Trivia Games and Daily Quizzes">
+  <meta property="og:description" content="130+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA, MLB, NHL, F1, UFC and more. No login needed.">
+  <meta name="twitter:description" content="130+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA, MLB, NHL, F1, UFC and more. No login needed.">
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  <style>
+    #dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:hsl(225 25% 6%)}
+    #dukb-boot img{width:72px;height:72px;animation:dukb-boot-pulse 1.2s ease-in-out infinite}
+    @keyframes dukb-boot-pulse{0%,100%{opacity:.55;transform:scale(.96)}50%{opacity:1;transform:scale(1)}}
+    @media (prefers-color-scheme:light){#dukb-boot{background:hsl(210 20% 98%)}}
+    @media (prefers-reduced-motion:reduce){#dukb-boot img{animation:none}}
+    #dukb-home-copy{max-height:100vh;overflow:hidden}
+  </style>
+  <noscript><style>#dukb-boot{display:none}#dukb-home-copy{max-height:none;overflow:visible}</style></noscript>
+  <script type="module" crossorigin src="/assets/index-BZVvQX7Z.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-C6JmvRVc.css">
+
+<style>
+	#lovable-badge {
+		--badge-bg: #1b1b1b;
+		--badge-text: #c5c1b9;
+		--badge-text-hover: #dcdad5;
+		--badge-radius: 6px;
+		--badge-padding: 8px;
+		--badge-gap: 6px;
+		--badge-shadow: 
+			0 0 0 1px rgba(0, 0, 0, 0.88),
+			0 1px 0 0 rgba(0, 0, 0, 0.04),
+			0 2px 2px -1px rgba(0, 0, 0, 0.08),
+			0 4px 4px -2px rgba(0, 0, 0, 0.08),
+			0 8px 8px -4px rgba(0, 0, 0, 0.08),
+			0 16px 16px -8px rgba(0, 0, 0, 0.08);
+		--badge-transition-duration: 0.2s;
+		--badge-transition-easing: cubic-bezier(0.16, 1, 0.32, 1);
+		--focus-color: #575ECF;
+		--focus-offset: 2px;
+		--focus-width: 2px;
+		
+		position: fixed;
+		bottom: 12px;
+		right: 12px;
+		height: 24px;
+		display: flex;
+		align-items: center;
+		z-index: 1000000;
+		background-color: var(--badge-bg) !important;
+		color: var(--badge-text) !important;
+		border-radius: var(--badge-radius);
+		box-shadow: var(--badge-shadow) !important;
+		font-size: 12px;
+		font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+		font-weight: 400 !important;
+		text-transform: none !important;
+		font-feature-settings: normal !important;
+		transform: translateZ(0);
+		will-change: transform, opacity;
+		transition: opacity var(--badge-transition-duration) var(--badge-transition-easing);
+	}
+
+	#lovable-badge.closing {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	#lovable-badge-cta {
+		display: flex;
+		align-items: baseline;
+		gap: var(--badge-gap);
+		box-sizing: border-box;
+		padding: 4px var(--badge-padding) 0;
+		height: 100%;
+		color: inherit;
+		text-decoration: none;
+		white-space: nowrap;
+		border-radius: var(--badge-radius) 0 0 var(--badge-radius);
+		transition: 
+			background-color var(--badge-transition-duration) ease,
+			color var(--badge-transition-duration) ease,
+			transform 0.1s ease;
+	}
+
+	#lovable-badge-cta:hover {
+		background: rgba(255, 255, 255, 0.04);
+		color: var(--badge-text-hover);
+	}
+
+	#lovable-badge-cta:active {
+		transform: scale(0.98);
+	}
+
+	#lovable-badge-cta:focus {
+		outline: none;
+	}
+
+	#lovable-badge-cta:focus-visible {
+		outline: var(--focus-width) solid var(--focus-color);
+		outline-offset: var(--focus-offset);
+		z-index: 1;
+	}
+
+	#lovable-badge-text {
+		line-height: 1;
+	}
+
+	/* The wordmark baseline sits at y=12 of the 16px logo; an empty 12px box
+	   makes that the flex baseline so the text aligns to it on any system font. */
+	#lovable-badge-logo {
+		position: relative;
+		display: block;
+		width: 52px;
+		height: 12px;
+	}
+
+	#lovable-badge-logo svg {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	#lovable-badge-divider {
+		width: 1px;
+		height: 24px;
+		background-color: rgba(255, 255, 255, 0.04);
+		flex-shrink: 0;
+	}
+
+	#lovable-badge-close {
+		width: 24px;
+		height: 24px;
+		min-width: 24px;
+		min-height: 24px;
+		cursor: pointer;
+		background: none;
+		border: none;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 0 var(--badge-radius) var(--badge-radius) 0;
+		flex-shrink: 0;
+		transition: 
+			background-color var(--badge-transition-duration) ease,
+			transform 0.1s ease;
+	}
+
+	#lovable-badge-close:hover {
+		background: rgba(255, 255, 255, 0.04);
+	}
+
+	#lovable-badge-close:active {
+		transform: scale(0.92);
+	}
+
+	#lovable-badge-close:focus {
+		outline: none;
+	}
+
+	#lovable-badge-close:focus-visible {
+		outline: var(--focus-width) solid var(--focus-color);
+		outline-offset: calc(var(--focus-offset) * -1);
+		z-index: 1;
+	}
+
+	#lovable-badge-close svg path {
+		fill: var(--badge-text);
+		transition: fill var(--badge-transition-duration) ease;
+	}
+
+	#lovable-badge-close:hover svg path {
+		fill: var(--badge-text-hover);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		#lovable-badge,
+		#lovable-badge-cta,
+		#lovable-badge-close,
+		#lovable-badge-close svg path {
+			transition: none;
+		}
+		
+		#lovable-badge-cta:active,
+		#lovable-badge-close:active {
+			transform: none;
+		}
+	}
+
+	@media (prefers-contrast: high) {
+		#lovable-badge {
+			--badge-bg: #000;
+			--badge-text: #fff;
+			--badge-text-hover: #fff;
+			border: 2px solid currentColor;
+		}
+		
+		#lovable-badge-cta:focus-visible,
+		#lovable-badge-close:focus-visible {
+			outline-width: 3px;
+		}
+	}
+</style>
+<script defer src="/~flock.js" data-proxy-url="/~api/analytics"></script><script defer src="/__l5e/events.270c78a44fc53e7b.js" data-artifact-kind="dwl_content_hash" data-artifact-id="7c5d1f7654e3f216a9d7ab9ec49ff8932da70a0d3dc689dd1cdb87296d6298e3" data-commit-sha="931308159c967c3ab9af404ed01e0b8483f90bd7" data-context-token="v1.eyJwcm9qZWN0X2lkIjoibG92cF8xaHlzaHQ4YzU5OGNtOGp6YjY4YTdneWYwMiIsImFydGlmYWN0X2tpbmQiOiJkd2xfY29udGVudF9oYXNoIiwiYXJ0aWZhY3RfaWQiOiI3YzVkMWY3NjU0ZTNmMjE2YTlkN2FiOWVjNDlmZjg5MzJkYTcwYTBkM2RjNjg5ZGQxY2RiODcyOTZkNjI5OGUzIiwiY29tbWl0X3NoYSI6IjkzMTMwODE1OWM5NjdjM2FiOWFmNDA0ZWQwMWUwYjg0ODNmOTBiZDciLCJleHAiOjE3OTU5ODc0MTh9.gfV4AyYIxXsWe_9Bay5DhKvzXImeplcEgLPYR2CPk6E"></script></head>
+  <body>
+    <!--
+      Round 257: the home page's static content.
+
+      Every other page on this site is prerendered to a real document after
+      the build (scripts/prerender.mjs) so a crawler can read it without
+      running JavaScript. The home page cannot be done that way: vite
+      generates dist/index.html from THIS file on whatever machine builds
+      the site, so a snapshot written over it would be thrown away, and a
+      snapshot written into public/ would collide with it. Measured on
+      2026-08-21, before this block existed, the built home page carried
+      exactly 43 characters of readable text: its own title. The most
+      important page on the site was the emptiest.
+
+      So the home page carries its content here, in the template, and React
+      replaces the whole of #root the moment it mounts. A visitor sees this
+      for the instant before the app draws, which is the same thing that
+      happens on every prerendered route.
+
+      RULES FOR EDITING THIS BLOCK. Nothing in it may be a figure that goes
+      stale: the game counts are phrased as FLOORS ("120+") rather
+      than exact numbers, because the exact ones change most weeks and the
+      live ticker computes them anyway. Every link here is a real route in
+      src/App.tsx. No data, no dates, no results.
+
+      Round 260: the first version of this block said "more than 120" and
+      "nearly forty" soccer games, both read off a crude grep of the registry
+      file rather than off the registry itself. The real figures are 113 and
+      30, so both claims were live and wrong for a day. scripts/simHomeCopy
+      .mjs now reads every number in this block and checks it against the
+      registry the site actually renders from, and it fails if a floor has
+      been overtaken as well as if one is too high, because a floor that is
+      forty games behind reality is not much better than one that is ahead.
+   
+      Round 280: this block was measured against the rest of the site and it
+      was losing. Every submitted page carries between four and six thousand
+      readable characters; this one carried 2,187, which made the page a
+      crawler visits most often, and the page an ad reviewer opens first, the
+      thinnest important document on the site. Twelve sports were named in a
+      closing paragraph with not one link on any of them, so the three
+      sections with no hub page of their own had no path in from here at all.
+      The block below is longer for those two reasons and no other: it links
+      what was already named, and it answers in writing the questions a first
+      time visitor actually arrives with. Same rules as ever apply to every
+      word of it, floors not figures and real routes only.
+
+      Round 840: Google indexes the page AFTER it renders, and React threw all
+      of this away on mount, so the rendered home page said almost nothing
+      about the site. The words now live in src/data/homeCopy.ts, the React
+      home draws them below the game tiles, and the block between the
+      home-copy markers below is generated from the same module by
+      node scripts/genHomeCopy.mjs. Edit the module, run the generator, commit
+      both. scripts/simHomeCopy.mjs section 6 fails while the two disagree.
+    -->
+    <div id="root">
+      <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+      <div id="dukb-home-copy">
+      <!-- home-copy:start. Generated from src/data/homeCopy.ts by node scripts/genHomeCopy.mjs: edit the module, never this block -->
+      <h1>Free sports games</h1>
+      <p>130+ free sports games in the browser: sports trivia, daily quizzes, grid puzzles and career sims. Every game plays without an account, nothing to download or install. New games and content ship almost every week, and the daily quizzes and puzzles reset for everyone at the same time, so you and everyone else get the same board.</p>
+      <h2>Free sports career sims and soccer management games</h2>
+      <p>Play a whole career out season by season: contracts, transfers, injuries, international call-ups, the lot.</p>
+      <ul>
+        <li><a href="/soccer-career">Soccer Career</a>, the biggest one here: start at 16 and play until you hang them up</li>
+        <li><a href="/club-manager">Club Manager</a>, run a club, shape the squad and balance the budget</li>
+        <li><a href="/nba-my-career">NBA My Career</a> and <a href="/nfl-my-career">NFL My Career</a>, create a prospect and play from draft night to retirement</li>
+        <li><a href="/fight-career">Fight Career</a>, create a boxer, choose your fights and manage damage that never heals</li>
+        <li><a href="/stadium-tycoon">Stadium Tycoon</a>, <a href="/hall-of-champions">Hall of Champions</a> and <a href="/wonderkid-factory">Wonderkid Factory</a>, the idle ones, the last an academy where you grow made up kids and sell at the right moment</li>
+        <li><a href="/build-your-xi">Build Your XI</a>, pick a lineup and get it rated</li>
+      </ul>
+      <h2>Daily sports puzzles and grid games</h2>
+      <p>The front page leads with one daily puzzle picked for everybody, a different one every day, and the rest of the daily boards sit in a row beside it. A few to start with:</p>
+      <ul>
+        <li><a href="/soccer-grid">Soccer Grid</a>, a three by three of clubs and countries</li>
+        <li><a href="/college-grid">College Grid</a>, the same idea for college football</li>
+        <li><a href="/transfer-path">Transfer Path</a>, get from one player to another through real moves</li>
+        <li><a href="/minefield">Minefield</a>, name as many as you dare before you hit a wrong one</li>
+        <li><a href="/silverware-sort">Silverware Sort</a>, stack five teams by titles won</li>
+        <li><a href="/champ-or-not">Champ or Not</a> and <a href="/whod-they-beat">Who'd They Beat?</a></li>
+      </ul>
+      <h2>Sports history: every champion by year</h2>
+      <p>The champion tables our quizzes run on are open to read in <a href="/records">The Record Books</a>: champions and award winners, year by year, checked against the official record before anything was allowed to serve it. Where history is odd we keep it odd, so seasons that were never played are missing on purpose and stripped titles stay vacant with a note saying why.</p>
+      <h2>Browse sports games by sport</h2>
+      <ul>
+        <li><a href="/soccer">Soccer games</a>, the deepest section here by a distance</li>
+        <li><a href="/pro-basketball">Basketball games</a>, grids, career paths and the front office</li>
+        <li><a href="/pro-football">Football games</a>, rarity scored grids and a full GM job</li>
+        <li><a href="/baseball">Baseball games</a>, franchise grids and a career to Cooperstown</li>
+        <li><a href="/hockey">Hockey games</a>, franchise grids and a hard cap sim</li>
+        <li><a href="/college">College games</a>, CFB and CBB puzzles and two dynasty sims</li>
+      </ul>
+      <h2>Sports trivia leaderboard and record books</h2>
+      <ul>
+        <li><a href="/leaderboard">World Leaderboard</a>, total points across every game</li>
+        <li><a href="/records">The Record Books</a>, every champion year by year</li>
+      </ul>
+      <h2>GM simulator games: front offices and dynasties</h2>
+      <p>If you would rather build the team than be on it, four front office sims put you in the general manager's chair. Build a roster, negotiate trades, draft prospects and try to meet your owner's expectations over several seasons.</p>
+      <ul>
+        <li><a href="/nba-front-office">NBA Front Office</a> and <a href="/nhl-front-office">NHL Front Office</a>, manage contracts, make trades and build a playoff team</li>
+        <li><a href="/mlb-front-office">MLB Front Office</a>, manage payroll against the tax line, trade players and chase a title</li>
+        <li><a href="/front-office">NFL Front Office</a>, the pro football one: real rosters, the cap, trades and the draft</li>
+        <li><a href="/cfb-dynasty">CFB Dynasty</a> and <a href="/cbb-dynasty">CBB Dynasty</a>, recruit high school and portal players, manage NIL and build a winning program</li>
+      </ul>
+      <h2>Sports trivia quizzes</h2>
+      <ul>
+        <li><a href="/sports-millionaire">Sports Millionaire</a>, fifteen questions and three lifelines</li>
+        <li><a href="/quiz-board">Sports Quiz Board</a>, five categories from two hundred to a thousand, and a wrong answer costs you</li>
+        <li><a href="/ball-iq">Ball IQ</a>, a scored test of how well you actually read the game</li>
+        <li><a href="/who-am-i">Who Am I?</a>, clues drip out one at a time and the fewer you need the better</li>
+        <li><a href="/guess-the-year">Guess The Year</a> and <a href="/teammates">Teammates</a></li>
+        <li><a href="/rank-em">Rank 'Em</a>, put five in the right order with no second chances</li>
+        <li><a href="/player-bingo">Player Bingo</a>, fill a line on a five by five board before three strikes</li>
+      </ul>
+      <h2>Every sport we cover, from soccer to F1, tennis, golf and UFC</h2>
+      <p>Soccer is the deepest section by a distance, with more than thirty games of its own, and the other twelve sections below all carry their own puzzles rather than a reskin of the soccer ones. Where a sport has a hub page it is linked here; where it does not, the game itself is.</p>
+      <ul>
+        <li><a href="/soccer">Soccer</a>, grids, transfer chains, career and management sims</li>
+        <li><a href="/pro-football">Pro football</a> and <a href="/college">college sports</a>, rarity scored grids, a GM job and two dynasty sims</li>
+        <li><a href="/pro-basketball">Pro basketball</a>, <a href="/baseball">baseball</a> and <a href="/hockey">hockey</a>, franchise grids, career paths and front offices</li>
+        <li>Formula 1: <a href="/f1-driver">Guess the Driver</a>, <a href="/f1-constructor">Constructor</a> and <a href="/f1-higher-lower">Higher or Lower</a></li>
+        <li>Tennis: <a href="/guess-tennis-player">Guess the Player</a>, <a href="/tennis-chain">Tennis Chain</a> and <a href="/tennis-higher-lower">Higher or Lower</a></li>
+        <li>Golf: <a href="/guess-the-golfer">Guess the Golfer</a> and <a href="/golf-higher-lower">Higher or Lower</a></li>
+        <li>Aussie rules: <a href="/aussie-rules-manager">Aussie Rules Manager</a>, a fictional club season, and <a href="/afl-higher-lower">AFL Higher or Lower</a></li>
+        <li>NASCAR: <a href="/guess-nascar-driver">Guess the Driver</a> and <a href="/nascar-chain">NASCAR Chain</a></li>
+        <li>Combat sports: <a href="/ufc">UFC quiz</a> and <a href="/ufc-chain">UFC Chain</a></li>
+        <li>World and Olympic games: <a href="/olympics">Olympics</a>, <a href="/world-cup-bracket">World Cup Bracket</a> and <a href="/guess-the-nation">Guess the Nation</a></li>
+      </ul>
+      <h2>Sports trivia games: questions people ask before they start</h2>
+      <h3>Are these sports games free to play?</h3>
+      <p>Yes, all of them. There is nothing to unlock, no energy meter and no premium tier. Advertising can help cover hosting costs.</p>
+      <h3>Do I need an account to play?</h3>
+      <p>No. Everything plays signed out, your progress is kept in your own browser, and you appear on the <a href="/leaderboard">world leaderboard</a> without signing up for anything. An optional account keeps your scores on your profile. Career saves stay in this browser.</p>
+      <h3>Can I play on my phone?</h3>
+      <p>Yes. It is a website, not an app, so there is nothing to install and nothing to update. Every game is built to be played with a thumb first.</p>
+      <h3>When do the daily sports puzzles reset?</h3>
+      <p>At the same moment for everyone, so the board you get is the board everybody else gets that day. The career and management sims are not daily at all: they are long saves you come back to.</p>
+      <h3>Where do the sports records and champion lists come from?</h3>
+      <p>The champion tables are read out of <a href="/records">The Record Books</a>, checked against the official record before anything is allowed to use them. Seasons that were never played are missing on purpose and stripped titles stay vacant with a note saying why, because a quiz built on tidied up history teaches you the wrong thing.</p>
+      <p><a href="/whats-new">See what shipped recently</a> · <a href="/about">About this site</a> · <a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+      <!-- home-copy:end -->
+      </div>
+    </div>
+    <!--
+      ROUND 282: THIS DOCUMENT IS ALSO THE 404 PAGE, AND UNTIL NOW IT NEVER SAID SO.
+
+      The host answers every unknown address with this file and a 200, which is
+      how a single page app is normally served. Measured on the live site as
+      Googlebot on 2026-08-24: /this-page-does-not-exist-12345 came back 200 with
+      18,725 bytes, the home page's title, the home page's readable copy, and no
+      robots tag at all. Google has a name for that answer, a soft 404, and two
+      complaints about it. One, it burns crawl budget on an unlimited number of
+      addresses that do not exist, on a site whose real pages are already
+      struggling to get looked at. Two, and worse since Round 257 put real copy
+      into this template, every one of those addresses now serves a full copy of
+      the home page, so the site is telling a crawler that infinitely many URLs
+      are duplicates of its most important one.
+
+      The app has rendered a proper noindexed 404 since Round 53, but that only
+      exists after React mounts. This runs before it.
+
+      HOW IT KNOWS, and it needs no list of routes to go stale. Every real
+      address on this site is served from its own prerendered document, and every
+      one of those carries id="dukb-snapshot" in its body. This template does not.
+      So a document with no snapshot block, at any path other than the root, is
+      by construction the fallback wearing the home page's clothes. A real route
+      whose saved document somehow went missing would also be caught, and being
+      noindexed is the safe direction for that: it is the same call Round 278
+      made, and it turns a silent failure into a visible one.
+
+      WHY THE CANONICAL HAS TO GO WITH IT. This template canonicalises to the
+      home page, which on a dead address is a claim that the address IS the home
+      page. Leaving that next to a noindex is the exact pairing Round 272 refused
+      for the retired routes, because Google's guidance is that a noindex can
+      propagate along a canonical to its target, and the target here is the most
+      important page on the site.
+
+      This script lives at the end of the body and therefore never reaches a
+      snapshot, because the prerenderer rebuilds bodies out of readable content
+      and drops everything else. That is exactly right: a real page must never
+      run this.
+
+      ROUND 284: IT MUST NOT RUN UNDER THE PRERENDERER EITHER, and the first
+      time the prerenderer ran with this script in place it did. The prerender
+      server hands every route this bare template on purpose, so that React
+      can draw the real page into it. To this script that is indistinguishable
+      from a dead address: no snapshot block, a path that is not the root. It
+      fired on every route, and the noindex it wrote into the head went into
+      all 133 saved documents, sitemap pages included. The prerenderer sets
+      window.__DUKB_PRERENDER__ before any page code runs, and this returns
+      on it. A real visitor never has that flag. simPrerender section 14 is the
+      fence behind this: no document in the sitemap may ship a noindex.
+
+      Guarded by scripts/playSoftFourOhFour.mjs, which checks the three cases
+      that matter: a real route untouched, the home page untouched, and a dead
+      address noindexed and stripped.
+    -->
+    <script>
+      (function () {
+        try {
+          if (window.__DUKB_PRERENDER__) return;
+          var path = location.pathname.replace(/\/+$/, '') || '/';
+          if (path === '/') return;
+          if (document.getElementById('dukb-snapshot')) return;
+
+          var robots = document.createElement('meta');
+          robots.setAttribute('name', 'robots');
+          robots.setAttribute('content', 'noindex, follow');
+          robots.setAttribute('data-dukb-fallback', '');
+          document.head.appendChild(robots);
+
+          var canonical = document.querySelector('link[rel="canonical"]');
+          if (canonical) canonical.parentNode.removeChild(canonical);
+          /* Defensive rather than load bearing: this template carries no og:url,
+             and the harness therefore does not assert on it, because a check
+             that cannot fire is worse than no check. It is here so that adding
+             one later cannot quietly reintroduce a dead address claiming to be
+             the home page. */
+          var ogUrl = document.querySelector('meta[property="og:url"]');
+          if (ogUrl) ogUrl.parentNode.removeChild(ogUrl);
+
+          /* Round 650: a player profile (/profile/<name>) is a real page that
+             can never have a saved copy, because nobody can prerender a
+             username. It keeps the noindex and loses the home canonical above,
+             which is what the profile page itself asks for once it loads, but
+             it is not a dead address, so it must not be painted as one. Before
+             this line every shared profile link opened on the 404 text. */
+          if (/^\/profile\/[^/]+$/.test(path)) return;
+
+          var NOT_FOUND_TITLE = 'Page Not Found | DoUKnowBall';
+          var NOT_FOUND_DESC = 'There is no page at this address on DoUKnowBall. Browse the free sports games instead.';
+          document.title = NOT_FOUND_TITLE;
+          var desc = document.querySelector('meta[name="description"]');
+          if (desc) desc.setAttribute('content', NOT_FOUND_DESC);
+          /* og:title and og:description DO exist here and both say the home
+             page's name, which on a dead address is the same false claim the
+             canonical was making. */
+          var ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', NOT_FOUND_TITLE);
+          var ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', NOT_FOUND_DESC);
+
+          var root = document.getElementById('root');
+          if (root) {
+            root.innerHTML =
+              '<h1>404: there is no page at this address</h1>' +
+              '<p>The link is either old or wrong. Everything on DoUKnowBall is free and needs no account, so try one of these instead.</p>' +
+              '<ul>' +
+              '<li><a href="/">All the games</a></li>' +
+              '<li><a href="/soccer">Soccer games</a></li>' +
+              '<li><a href="/pro-basketball">Basketball games</a></li>' +
+              '<li><a href="/pro-football">Football games</a></li>' +
+              '<li><a href="/baseball">Baseball games</a></li>' +
+              '<li><a href="/hockey">Hockey games</a></li>' +
+              '<li><a href="/college">College games</a></li>' +
+              '<li><a href="/records">The Record Books</a></li>' +
+              '</ul>';
+          }
+        } catch (e) { /* a broken 404 marker must never stop the app booting */ }
+      })();
+    </script>
+  
+<aside
+	id="lovable-badge"
+	role="complementary"
+	dir="ltr"
+	lang="en"
+	aria-label="Edit with Lovable">
+	<a
+		id="lovable-badge-cta" 
+		target="_blank" 
+		href="https://lovable.dev/projects/lovp_1hysht8c598cm8jzb68a7gyf02?utm_source=lovable-badge"
+		rel="noopener nofollow"
+		aria-label="Edit with Lovable">
+		<span id="lovable-badge-text">Edit with</span>
+		<span id="lovable-badge-logo"><svg xmlns="http://www.w3.org/2000/svg" width="52" height="16" fill="none" viewBox="0 0 52 16">
+  <path fill="#FCFBF8" fill-rule="evenodd" d="M20.318 5.25c.643 0 1.206.14 1.69.418a2.81 2.81 0 0 1 1.118 1.191c.266.513.4 1.115.4 1.807s-.134 1.296-.4 1.812a2.81 2.81 0 0 1-1.118 1.193c-.484.278-1.047.418-1.69.418s-1.208-.14-1.695-.418a2.85 2.85 0 0 1-1.125-1.193c-.262-.516-.393-1.12-.393-1.812s.131-1.294.393-1.807a2.848 2.848 0 0 1 1.125-1.191c.487-.279 1.052-.418 1.695-.418Zm0 1.425c-.27 0-.504.076-.7.228-.193.147-.34.37-.443.67-.102.295-.153.66-.153 1.093 0 .435.05.801.153 1.1.102.3.25.524.443.676.196.147.43.22.7.22.27 0 .502-.073.694-.22.193-.152.341-.375.443-.67.103-.299.153-.667.153-1.106 0-.65-.112-1.145-.337-1.481a1.08 1.08 0 0 0-.953-.51ZM32.7 5.25c.61 0 1.127.1 1.549.3.422.197.74.48.953.849.217.368.325.809.325 1.32v2.704c0 .29.02.562.062.812.044.245.108.4.19.466V12h-1.935a5.895 5.895 0 0 1-.105-.684 7.745 7.745 0 0 1-.02-.228 2.293 2.293 0 0 1-.151.203c-.205.242-.47.437-.793.584-.32.143-.685.215-1.094.215-.406 0-.77-.08-1.094-.24a1.845 1.845 0 0 1-.756-.682 1.984 1.984 0 0 1-.27-1.045c0-.606.178-1.069.535-1.388.356-.324.87-.534 1.542-.633l1.125-.16c.225-.032.403-.074.534-.123a.622.622 0 0 0 .288-.196.549.549 0 0 0 .093-.327.65.65 0 0 0-.11-.367.702.702 0 0 0-.32-.27c-.14-.07-.31-.105-.51-.105-.32 0-.576.083-.768.251-.193.164-.298.39-.314.676h-1.923c.016-.434.147-.82.393-1.155.25-.34.596-.604 1.039-.792.442-.189.954-.283 1.535-.283Zm.99 3.498a.98.98 0 0 1-.215.14 2.49 2.49 0 0 1-.584.178l-.473.092c-.315.061-.553.156-.713.283-.155.127-.233.305-.233.534 0 .23.084.412.252.547.168.135.383.203.645.203s.494-.058.694-.173c.201-.118.355-.282.461-.49.11-.21.166-.448.166-.714v-.6Zm4.526-2.375c.065-.125.138-.243.221-.349.197-.25.437-.44.719-.571.282-.135.6-.203.952-.203.528 0 .988.138 1.377.412.389.275.688.67.896 1.186.21.512.314 1.12.314 1.824 0 .7-.107 1.309-.32 1.825-.213.512-.518.906-.915 1.18-.393.275-.854.412-1.383.412-.352 0-.667-.062-.946-.184a1.832 1.832 0 0 1-.7-.554 2.2 2.2 0 0 1-.234-.383V12h-1.843V3h1.862v3.373Zm1.284.296c-.274 0-.51.085-.707.253-.192.163-.338.397-.436.7a3.376 3.376 0 0 0-.148 1.05c0 .406.05.759.148 1.058.098.299.243.53.436.694.197.164.433.246.707.246.279 0 .512-.082.7-.246.193-.164.336-.395.43-.694.099-.3.148-.652.148-1.058 0-.405-.05-.757-.147-1.056-.095-.299-.238-.53-.43-.694a1.015 1.015 0 0 0-.7-.253Zm9.416-1.419c.602 0 1.136.131 1.604.393.466.262.829.643 1.086 1.143.263.5.394 1.097.394 1.794 0 .25-.002.449-.006.596H47.51c.018.288.071.538.164.75a1.3 1.3 0 0 0 .491.596c.214.13.465.196.757.196.319 0 .583-.082.792-.246.209-.167.34-.403.393-.706h1.862a2.48 2.48 0 0 1-.485 1.235 2.54 2.54 0 0 1-1.051.805c-.439.188-.949.283-1.53.283-.655 0-1.225-.125-1.708-.375a2.672 2.672 0 0 1-1.13-1.143c-.267-.508-.4-1.137-.4-1.887 0-.712.14-1.327.418-1.843a2.86 2.86 0 0 1 1.155-1.186c.491-.27 1.051-.405 1.678-.405Zm-.044 1.345c-.274 0-.516.068-.725.203a1.29 1.29 0 0 0-.479.59 2.045 2.045 0 0 0-.132.498h2.562a1.873 1.873 0 0 0-.138-.602 1.061 1.061 0 0 0-.418-.516 1.243 1.243 0 0 0-.67-.173Z" clip-rule="evenodd"/>
+  <path fill="#FCFBF8" d="m26.605 9.995 1.342-4.566h1.924L27.628 12h-2.07l-2.33-6.57h1.98l1.397 4.565Zm-13.013.143h2.256c1.632 0 1.421 1.837 1.418 1.861h-5.603V3h1.93v7.138Zm31.516 1.861h-1.862V3h1.862v8.999Z"/>
+  <path fill="url(#a)" fill-rule="evenodd" d="M2.7 3c1.492 0 2.7 1.192 2.7 2.663v1.012h.9c1.49 0 2.7 1.192 2.7 2.662S7.791 12 6.3 12H0V5.663C0 4.193 1.209 3 2.7 3Z" clip-rule="evenodd"/>
+  <defs>
+    <radialGradient id="a" cx="0" cy="0" r="1" gradientTransform="matrix(-1.54236 7.07838 -10.231 -2.15602 4.627 5.022)" gradientUnits="userSpaceOnUse">
+      <stop offset=".106" stop-color="#FE7B02"/>
+      <stop offset=".394" stop-color="#FE3F21"/>
+      <stop offset=".608" stop-color="#F858BC"/>
+      <stop offset=".929" stop-color="#575ECF"/>
+    </radialGradient>
+  </defs>
+</svg>
+
+</span>
+	</a>
+	
+	<span id="lovable-badge-divider" aria-hidden="true"></span>
+	
+	<button 
+		id="lovable-badge-close"
+		aria-label="Dismiss"
+		title="Dismiss"
+		type="button">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16" aria-hidden="true">
+			<path d="M10.646 4.646a.5.5 0 1 1 .707.708L8.707 8l2.646 2.646a.5.5 0 1 1-.707.707L8 8.707l-2.646 2.646a.5.5 0 1 1-.708-.707L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708L8 7.293l2.646-2.647Z"/>
+		</svg>
+	</button>
+</aside>
+<script>
+	(() => {
+		if (window.self !== window.top || navigator.userAgent.includes('puppeteer')) {
+			const badge = document.querySelector('#lovable-badge');
+			if (badge) {
+				badge.style.display = 'none';
+			}
+			return;
+		}
+
+		const closeButton = document.querySelector('#lovable-badge-close');
+		if (closeButton) {
+			closeButton.addEventListener('click', function(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				const badge = document.querySelector('#lovable-badge');
+				if (badge) {
+					badge.classList.add('closing');
+					setTimeout(function() {
+						if (badge) {
+							badge.style.display = 'none';
+						}
+					}, 240);
+				}
+			});
+		}
+	})();
+</script>
+</body>
+</html>

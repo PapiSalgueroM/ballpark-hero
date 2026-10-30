@@ -1,0 +1,31 @@
+{
+  "label": "sitemap",
+  "url": "https://douknowball.com/sitemap.xml?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:23:38.583Z",
+  "end": "2026-10-30T21:23:40.768Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0002-sitemap.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0002-sitemap.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/sitemap.xml?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0002-sitemap.body",
+  "headerFile": "0002-sitemap.headers",
+  "bytes": 25678,
+  "sha256": "a394b3f49fb5ee2e76e89982c96c2af49b6f36c6ca79a33c5848226a9c10d917",
+  "headersSHA256": "5ff2b16f82ad693ca3df75e1205ec6d28179ef026da55f4b8159acbcfcda7573"
+}

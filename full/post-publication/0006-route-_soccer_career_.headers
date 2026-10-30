@@ -1,0 +1,13 @@
+HTTP/2 200 
+date: Fri, 30 Oct 2026 21:23:41 GMT
+content-type: text/html; charset=utf-8
+cache-control: no-cache, must-revalidate, max-age=0
+set-cookie: __cf_bm=4p8x53Z5YhLPDyXy4.vzoTz_oSowfOYaitHGwZnb93s-1793395421.4138215-1.0.1.1-m2QNbhuqxMBkpHHNyK8n_cZF_QMb.yoLXlbU3AIKaeSUVYxZjUtG6GefUR.5TftKXUE17cznW5Zr2t.MFlOJKbtEsBZ63_ZcEaIBDil_0u_oIHZYZQwFRbSSaRb4g9QP; HttpOnly; SameSite=None; Secure; Path=/; Domain=douknowball.com; Expires=Fri, 30 Oct 2026 21:53:41 GMT
+strict-transport-security: max-age=31536000; includeSubDomains
+referrer-policy: strict-origin-when-cross-origin
+x-content-type-options: nosniff
+x-deployment-id: psr2.115f7157-5a7b-46ae-abce-1c8859e8a441.1794000221.mWJcm7cMqrs2OVeReM4w6XDfLEzHkthBq6ONPl36EvY
+content-encoding: gzip
+server: cloudflare
+cf-ray: a52d7b87dbd0cc8b-SJC
+

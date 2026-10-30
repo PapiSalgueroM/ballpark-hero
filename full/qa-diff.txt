@@ -1,0 +1,12 @@
+A	.github/workflows/lane-remote-check.yml
+A	.rc/admitResultCache.mjs
+A	.rc/admitted-plan.json
+A	.rc/child-journal.cjs
+A	.rc/default-support.sh
+A	.rc/fonts.cjs
+A	.rc/post-publication-p-dist.json
+A	.rc/post-publication-readback.mjs
+A	.rc/publication-deployment.json
+A	.rc/request.txt
+A	.rc/run.sh
+A	scripts/auditLiveRenderedReadOnly.mjs

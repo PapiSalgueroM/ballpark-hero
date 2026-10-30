@@ -1,0 +1,36 @@
+{
+  "status": "ACTUAL_PUBLISH_COMPLETED",
+  "projectId": "c29d224f-a662-4a15-b809-d86fa3b3f0ad",
+  "mergedMain": "931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "latest_commit_sha": "931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "deployment_id": "115f7157-5a7b-46ae-abce-1c8859e8a441",
+  "toolEvidenceSHA256": [
+    "509b5ba94799a3508054730a43070fe36f128499611ea96cc1dd8257c61f3654",
+    "5551b8d499672264c2757de2153da3b044b2db1ed79f23e4791324b7eb948737",
+    "58a8d33166391778117117e95dd14cac74049733c789ca4a85b5348b63ca9e98",
+    "379f49f7ec04f723ac727a0a1efc799ae29e77eefac571b6538167f7e98d730a",
+    "3f468bde86754846351a36b65803c5b4ec2bbc77728cbabdfdf24c2429dc790a",
+    "3a9da3eaee1b40e7517e044d6d944115bb13f855a61761813d84bbf76964e3c8"
+  ],
+  "docsOnlyAllowedPaths": [
+    "docs/WORKBOARD.md",
+    "docs/PROJECT-STATE.md"
+  ],
+  "completionEvidence": "ACTUAL_PUBLIC_DEPLOYMENT_HEADER_MATCH",
+  "publicHeaderEvidence": {
+    "method": "ROOT_RETAINED_PUBLIC_GET",
+    "uri": "https://douknowball.com/",
+    "httpStatus": 200,
+    "startedUTC": "2026-10-30T21:12:58.0415853Z",
+    "endedUTC": "2026-10-30T21:12:58.7462726Z",
+    "headerName": "x-deployment-id",
+    "headerValue": "psr2.115f7157-5a7b-46ae-abce-1c8859e8a441.1793999578.OYIQ9GGHIU87Xy7JnqxAVs_0uvHR3_PLGRZMqCxauQI",
+    "responseSHA256": "3f468bde86754846351a36b65803c5b4ec2bbc77728cbabdfdf24c2429dc790a",
+    "bodyBytes": 43644,
+    "bodySHA256": "3a9da3eaee1b40e7517e044d6d944115bb13f855a61761813d84bbf76964e3c8",
+    "providerStatusAsReturned": "pending",
+    "providerCompletedStatusClaimed": false
+  },
+  "providerStatusAsReturned": "pending",
+  "note": "Root actual public HTTP200 deployment header matches requested D after provider response and latest M. Provider pending status remains preserved; no provider completed response is invented. Raw evidence stays private and hash associated."
+}

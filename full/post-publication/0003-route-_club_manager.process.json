@@ -1,0 +1,31 @@
+{
+  "label": "route-_club_manager",
+  "url": "https://douknowball.com/club-manager?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:23:40.771Z",
+  "end": "2026-10-30T21:23:40.965Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0003-route-_club_manager.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0003-route-_club_manager.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/club-manager?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0003-route-_club_manager.body",
+  "headerFile": "0003-route-_club_manager.headers",
+  "bytes": 72487,
+  "sha256": "45599ef4b8da9d316d63d22aac931e1a614183c9716a8285b8744b370c04a218",
+  "headersSHA256": "80cae2a178d35b47479ea60df2709e026f27a2a5fc8649bc29a43bd1e0ff6564"
+}
