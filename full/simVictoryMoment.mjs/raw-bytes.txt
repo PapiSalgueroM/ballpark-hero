@@ -1,0 +1,3 @@
+1841 /home/runner/work/_temp/rc-out/full/simVictoryMoment.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simVictoryMoment.mjs/stderr.log
+1841 total

@@ -1,0 +1,9 @@
+prepare exit=0 74s | ordinary-build raw=0
+simTycoonGoalFlight exit=1 2s | simTycoonGoalFlight.mjs raw=1
+simVictoryMoment exit=0 21s | simVictoryMoment.mjs raw=0
+simWritesAreSent exit=1 15s | simWritesAreSent.mjs raw=1
+sweepContrast exit=1 376s | sweepContrast.mjs raw=1
+sweepPhone exit=0 119s | sweepPhone.mjs raw=0
+sweepSaves exit=1 428s | sweepSaves.mjs raw=1
+sweepWeight exit=1 29s | sweepWeight.mjs raw=1
+finish exit=1 7s | 

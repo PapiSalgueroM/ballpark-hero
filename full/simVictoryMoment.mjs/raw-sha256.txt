@@ -1,0 +1,2 @@
+8c00e1e2c0cb9b4985033673cdd06e41d6d91d4f52f7aa798579d80e307a8c6c  /home/runner/work/_temp/rc-out/full/simVictoryMoment.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simVictoryMoment.mjs/stderr.log

@@ -1,0 +1,2 @@
+08600622acae5e6ec2b62c86752207dae70b3ed1518f0a75b069ff2e4af57d8b  /home/runner/work/_temp/rc-out/full/sweepPhone.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/sweepPhone.mjs/stderr.log

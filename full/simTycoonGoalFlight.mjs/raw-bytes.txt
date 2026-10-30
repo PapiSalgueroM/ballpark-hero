@@ -1,0 +1,3 @@
+751 /home/runner/work/_temp/rc-out/full/simTycoonGoalFlight.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simTycoonGoalFlight.mjs/stderr.log
+751 total
