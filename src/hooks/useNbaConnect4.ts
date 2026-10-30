@@ -1,9 +1,10 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { getRandomConnect4Board } from '@/data/nbaConnect4Boards';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { normalizeName } from '@/lib/playerSearch';
 import { normalizeValidationReason } from '@/lib/validationReason';
+import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
 import type {
   Connect4Team,
   Connect4Grid,
@@ -95,7 +96,12 @@ export function useNbaConnect4() {
   const [currentTeam, setCurrentTeam] = useState<Connect4Team>('red');
   const [phase, setPhase] = useState<Connect4Phase>('playing');
   const [winInfo, setWinInfo] = useState<Connect4WinInfo | null>(null);
-  const [isValidating, setIsValidating] = useState(false);
+  const [isValidating, setValidationState] = useState(false);
+  const validatingRef = useRef(false);
+  const setIsValidating = useCallback((pending: boolean) => {
+    validatingRef.current = pending;
+    setValidationState(pending);
+  }, []);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [selectedCol, setSelectedCol] = useState<number | null>(null);
   const [usedPlayers, setUsedPlayers] = useState<Set<string>>(new Set());
@@ -108,7 +114,7 @@ export function useNbaConnect4() {
 
   const selectColumn = useCallback(
     (col: number) => {
-      if (phase !== 'playing') return;
+      if (phase !== 'playing' || validatingRef.current) return;
       const row = getLowestEmptyRow(grid, col);
       if (row === null) return; // column full
       setSelectedCol(col);
@@ -119,7 +125,7 @@ export function useNbaConnect4() {
 
   const submitPlayer = useCallback(
     async (playerName: string) => {
-      if (selectedCol === null || phase !== 'playing') return;
+      if (selectedCol === null || phase !== 'playing' || validatingRef.current) return;
       const targetRow = getLowestEmptyRow(grid, selectedCol);
       if (targetRow === null) return;
 
@@ -142,12 +148,12 @@ export function useNbaConnect4() {
 
       try {
         const resp = await fetch(
-          `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/nba-connect4-validate`,
+          `${SUPABASE_URL}/functions/v1/nba-connect4-validate`,
           {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
+              Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
             },
             body: JSON.stringify({
               playerName: trimmed,
@@ -212,11 +218,11 @@ export function useNbaConnect4() {
       setIsValidating(false);
       setValidationError(null);
     },
-    [selectedCol, grid, currentTeam, phase, board, usedPlayers]
+    [selectedCol, grid, currentTeam, phase, board, usedPlayers, setIsValidating]
   );
 
   const skipTurn = useCallback(() => {
-    if (phase !== 'playing') return;
+    if (phase !== 'playing' || validatingRef.current) return;
     setCurrentTeam((t) => (t === 'red' ? 'blue' : 'red'));
     setSelectedCol(null);
     setValidationError(null);
@@ -232,7 +238,7 @@ export function useNbaConnect4() {
     setValidationError(null);
     setSelectedCol(null);
     setUsedPlayers(new Set());
-  }, []);
+  }, [setIsValidating]);
 
   useGameCompletion('nba-connect-4', phase === 'won' || phase === 'draw', phase === 'won' ? 500 : 200);
 

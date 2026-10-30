@@ -86,6 +86,7 @@ const NbaConnect4 = () => {
             </span>
             <button
               onClick={skipTurn}
+              disabled={isValidating}
               className="ml-2 inline-flex items-center gap-1 text-xs px-3 py-2 rounded-lg bg-secondary text-muted-foreground hover:text-foreground transition-colors"
             >
               <SkipForward className="w-3 h-3" />
@@ -111,7 +112,7 @@ const NbaConnect4 = () => {
               {board.columnAttributes.map((attr, c) => (
                 <button
                   key={c}
-                  disabled={phase !== 'playing' || getTargetRow(c) === null}
+                  disabled={isValidating || phase !== 'playing' || getTargetRow(c) === null}
                   onClick={() => selectColumn(c)}
                   className={cn(
                     'text-[10px] md:text-xs font-bold text-center px-1 py-2.5 rounded-lg transition-all leading-tight',
@@ -162,7 +163,7 @@ const NbaConnect4 = () => {
                         onClick={() => {
                           if (phase === 'playing' && !cell) selectColumn(c);
                         }}
-                        disabled={phase !== 'playing' || !!cell}
+                        disabled={isValidating || phase !== 'playing' || !!cell}
                         /* Round 306: the Round 215 rule reaches this board. An
                            empty square has no text, so a screen reader heard
                            nothing and a keyboard could not reach it; the label
