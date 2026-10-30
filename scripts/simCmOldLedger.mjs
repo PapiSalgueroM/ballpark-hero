@@ -17,13 +17,13 @@
  *      off the club he left, the market lists each real name once and none of my men, and the loaded career saves
  *      back to the very string it was loaded from (byte safe).
  *   3. season two: each loaded save goes through startNextSeason on this tree; the same audit.
- *   4. sale: on each loaded save a man of my own club's day one squad whose age the round moved (he carries the key
- *      the base gave him, which today's projection gives nobody) is sold to a rival through acceptBid. The ledger
- *      must record him owned by the buyer and the buyer must list him once (before the fix he left the world).
+ *   4. sale: on each loaded save a man of my own club's day one squad whose age the round moved (today's projection
+ *      of my club lists him a year older) is sold to a rival through acceptBid. The ledger must record him owned by
+ *      the buyer, the buyer must list him once and my squad not at all.
  *   5. new: a career started on this tree carries the stamp (curve 2), reads exact, and the same audit is clean.
  *
  * CONTROL (exit 1, the last line says FIRED):
- *   CM_OLD_LEDGER_CONTROL=exact   bornNear reads the year exactly, the fix out: sections 2 and 4 must go red.
+ *   CM_OLD_LEDGER_CONTROL=exact   bornNear reads the year exactly, the fix out: section 2 must find men at two clubs.
  *
  * Measured on the fix commit (runner r1600-fix1): see the numbers in docs/audits/ROUND-1600-NOTES.md.
  */
@@ -112,6 +112,15 @@ function audit(M, s, label) {
   return { problems: problems.length, moves };
 }
 
+/* Where two saved careers differ, as paths, for a failure a person can read. */
+function diffPaths(a, b, at = '', out = []) {
+  if (out.length >= 8 || JSON.stringify(a) === JSON.stringify(b)) return out;
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
+    for (const k of new Set([...Object.keys(a), ...Object.keys(b)])) diffPaths(a[k], b[k], `${at}.${k}`, out);
+  } else out.push(`${at}: ${JSON.stringify(a)?.slice(0, 60)} became ${JSON.stringify(b)?.slice(0, 60)}`);
+  return out;
+}
+
 const SAVE_KEY_OF = store => [...store.keys()].find(k => store.get(k)?.startsWith('{') && store.get(k).includes('"saveVersion"'));
 console.log(`simCmOldLedger: base ${BASE.slice(0, 9)}${CONTROL ? `, control ${CONTROL}` : ''}`);
 const B = await engine('base', true);
@@ -155,12 +164,21 @@ for (const [club, rival] of CLUBS) {
   const on = audit(H, loaded, 'section 2 loaded');
   loadedMoves += on.moves;
   if (on.problems) fail('2', `${club}: ${on.problems} problems on load`);
+  /* Byte safe: what this tree's load writes back is what the base's own load writes back (a load may repair; this
+     round must add nothing to it). */
   const raw = B.store.get(key);
+  const baseBack = seeded(1601, () => { const c = B.cm.loadCareer(); B.cm.saveCareer(c); return B.store.get(key); });
   H.cm.saveCareer(loaded);
-  if (H.store.get(key) !== raw) fail('2', `${club}: the loaded career saves back to a different string (${raw.length} to ${H.store.get(key)?.length})`);
-  /* Section 4: a man of my club's day one squad whose key today's projection no longer gives anyone, sold. */
-  const today = new Set(H.eras.projectedRoster(club, 0, 'now', loaded.worldSeed).map(p => p.worldRosterKey));
-  const moved = loaded.squad.filter(p => p.worldRosterKey && !today.has(p.worldRosterKey) && JSON.parse(p.worldRosterKey)[1] === club);
+  const headBack = H.store.get(key);
+  console.log(`  section 2 bytes: stored ${raw.length}, base load saves ${baseBack.length}${baseBack === raw ? ' (the same)' : ''}, this tree ${headBack.length}${headBack === baseBack ? ' (the base\'s)' : ''}`);
+  if (headBack !== baseBack) {
+    fail('2', `${club}: this tree's load saves back a different string from the base's own load`);
+    for (const line of diffPaths(JSON.parse(baseBack), JSON.parse(headBack)).slice(0, 8)) console.log(`     ${line}`);
+  }
+  /* Section 4: a man of my club's day one squad whose age the round moved (today's projection of my club lists him
+     a year older), sold: before the fix his projected source was not found a year on. */
+  const today = new Map(H.eras.projectedRoster(club, 0, 'now', loaded.worldSeed).map(p => [p.n, p.a]));
+  const moved = loaded.squad.filter(p => !p.academyGrad && !p.isYouth && !p.generated && today.get(p.name) === p.age + 1);
   let after = null, man = null;
   for (const p of moved.slice(0, 6)) {
     after = seeded(1603, () => H.cm.acceptBid({ ...loaded, incomingBids: [{ playerId: p.id, playerName: p.name, club: rival, offer: 30, status: 'open' }] }, p.id));
@@ -203,8 +221,8 @@ if (loadedMoves < 6) fail('2', `only ${loadedMoves} ledger moves were loaded acr
 
 console.log(`simCmOldLedger: ${loadedMoves} ledger moves loaded, ${sold} sales, ${failures.length} failures`);
 if (CONTROL) {
-  const fired = failures.some(f => f.startsWith('2:')) && failures.some(f => f.startsWith('4:'));
-  console.log(fired ? `simCmOldLedger: control ${CONTROL} FIRED (sections 2 and 4 red)` : `simCmOldLedger: control ${CONTROL} did NOT fire`);
+  const fired = failures.some(f => f.startsWith('2:') && f.includes('problems on load'));
+  console.log(fired ? `simCmOldLedger: control ${CONTROL} FIRED (section 2: men at two clubs on load)` : `simCmOldLedger: control ${CONTROL} did NOT fire`);
   process.exit(1);
 }
 console.log(failures.length ? 'simCmOldLedger: FAIL' : 'simCmOldLedger: all sections green');

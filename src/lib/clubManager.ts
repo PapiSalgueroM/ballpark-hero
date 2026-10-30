@@ -20004,14 +20004,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   openWorldUclOnStart(state, world);
   /* Round 1510: the country's super cup, season one's edition, followed, opened after the seed it is keyed on. */
   openOneOffsOnStart(state, world);
-  const opened = recordAiDeals(state, unrecorded);
-  /* Round 1600 fix: a brand new career on today's world as it reads now (the age read, never the dailies' curve 1
-     view) stamps the ledger its opening window wrote, so its identity stays exact (nearAges). A job move carries
-     the ledger it was handed, stamp or none. */
-  if (!world && cmWorldReadsAge() && (opened.eraId ?? 'now') === 'now' && opened.worldRoster) {
-    opened.worldRoster = { ...opened.worldRoster, curve: CM_AGE_CURVE };
-  }
-  return opened;
+  /* Round 1600 fix: a new seeded career on today's world as it reads now (never the dailies' curve 1 view) starts a stamped ledger, so its identity stays exact (nearAges). */
+  if (!world && state.worldSeed !== undefined && (state.eraId ?? 'now') === 'now' && cmWorldReadsAge()) state.worldRoster = { version: 1, eraId: 'now', records: [], curve: CM_AGE_CURVE };
+  return recordAiDeals(state, unrecorded);
 }
 
 /**

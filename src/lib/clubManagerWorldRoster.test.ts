@@ -18,7 +18,7 @@ import {
 import { joinClubNow } from '@/lib/clubManagerCalendar';
 import { ensureEraRosters } from '@/lib/clubManagerEras';
 import {
-  compactWorldRoster, readWorldRoster, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterKey, worldRosterOwner,
+  compactWorldRoster, nearAges, readWorldRoster, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterKey, worldRosterOwner,
   type WorldRosterCareer, type WorldRosterPlayer, type WorldRosterState,
 } from '@/lib/clubManagerWorldRoster';
 
@@ -239,9 +239,21 @@ describe('save-scoped world roster ownership', () => {
   });
 
   it('does not remove a distinct same-name player with a different game-age anchor', () => {
-    const c = bought(); const namesake = player({ id: 'namesake', age: 23 });
+    /* Round 1600 fix: a ledger a career started on the age world writes carries curve 2 and reads the year exactly. */
+    const c = mutate(bought(), state => { state.curve = 2; }); const namesake = player({ id: 'namesake', age: 23 });
     expect(worldRosterClub(c, 'Source Club', [player(), namesake])).toEqual([namesake]);
     expect(worldRosterClub(c, 'Unrelated Club', [player()])).toEqual([player()]);
+  });
+
+  it('reads a ledger from before the age read a year either side, and no further (Round 1600 fix)', () => {
+    /* No stamp: written before Round 1600 moved today's ages a year on, so the club he left lists him a year older
+       and must still drop him. A namesake one year apart at the same club and position is the rule's one cost
+       (scripts/simCmOldLedger.mjs section 1: today's files hold no such pair); two years apart he stays. */
+    const c = bought(); const older = player({ id: 'moved-on', age: 25 }); const apart = player({ id: 'namesake', age: 22 });
+    expect(c.worldRoster?.curve).toBeUndefined();
+    expect(worldRosterClub(c, 'Source Club', [older, apart])).toEqual([apart]);
+    /* A past season's files never moved their ages, and a stamped ledger is exact. */
+    expect([nearAges({ eraId: 'now' }), nearAges({ eraId: 'now', curve: 2 }), nearAges({ eraId: 'era2015' })]).toEqual([true, false, false]);
   });
 
   it('rejects duplicate keys rather than merging or discarding full player records', () => {
