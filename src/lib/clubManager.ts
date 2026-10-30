@@ -3124,8 +3124,10 @@ export interface CareerState {
    *  hold the club's REAL opening day manager (src/data/clubManagerDugouts.ts),
    *  marked `real: 1` with the month he was appointed, only on a season one
    *  start in the world the table describes. A real name is a display fact and
-   *  never goes into a sentence; old saves carry neither field. */
-  managers?: Record<string, { name: string; since: number; real?: 1; appointed?: string }>;
+   *  never goes into a sentence; old saves carry neither field. `partial: 1`
+   *  marks the made up man seated in such an opening day chair that the table
+   *  could not two source; the first man the sim appoints there drops it. */
+  managers?: Record<string, { name: string; since: number; real?: 1; appointed?: string; partial?: 1 }>;
   /** Round 309: the chairs this summer will empty, decided at season end so
    *  the job offers and the merry-go-round agree on one list. Written by
    *  finishSeason, consumed and cleared by the rollover. */
@@ -9022,7 +9024,9 @@ export function ensureManagers(state: CareerState, years: number = yearsOn(state
     }
     const name = mintManagerName(state, club, taken);
     taken.add(name);
-    m[club] = { name, since: state.season };
+    /* Round 1606: a made up man in an opening day chair the table could not two source says so, and only he. */
+    const unsourced = state.season === 1 && years === 0 && !managedHere.has(club) && realDugoutPartial(CM_DUGOUTS_PARTIAL, state.eraId ?? 'now', club);
+    m[club] = { name, since: state.season, ...(unsourced ? { partial: 1 as const } : {}) };
   }
 }
 
@@ -9039,18 +9043,16 @@ export function managerOf(career: CareerState, club: string): { name: string; si
 export interface DugoutView { name: string; since?: number; real?: 1; appointed?: string; partial?: boolean }
 export function dugoutOf(career: CareerState, club: string): DugoutView | null {
   if (club === career.clubName) return null;
-  const era = career.eraId ?? 'now';
   const entry = career.managers?.[club];
   if (entry && typeof entry.name === 'string') {
     if (entry.real === 1) {
       if ((career.careerStats?.clubsManaged ?? []).includes(club)) return null;
       return { name: entry.name, since: entry.since, real: 1, ...(entry.appointed ? { appointed: entry.appointed } : {}) };
     }
-    /* Partial only for the made up man standing in the opening day chair the table describes (seated in season one
-       of a world at the table's own year, at a club this career never managed); a man the sim appointed later is
-       made up for that reason instead. */
-    const opening = entry.since === 1 && yearsOn(career) === Math.max(0, career.season - 1) && !(career.careerStats?.clubsManaged ?? []).includes(club);
-    return { name: entry.name, since: entry.since, ...(opening && realDugoutPartial(CM_DUGOUTS_PARTIAL, era, club) ? { partial: true } : {}) };
+    /* Partial only for the made up man ensureManagers seated in an opening day chair the table describes and could
+       not source (his entry says so); a man the sim appointed later is made up for that reason instead. */
+    const unsourced = entry.partial === 1 && !(career.careerStats?.clubsManaged ?? []).includes(club);
+    return { name: entry.name, since: entry.since, ...(unsourced ? { partial: true } : {}) };
   }
   if ((career.leagueClubs ?? []).includes(club)) return null;
   const real = openingDayDugout(career, club, yearsOn(career));
