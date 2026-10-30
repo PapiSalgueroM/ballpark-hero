@@ -1,0 +1,57 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mlevelFrom: the age read run backwards, total[2m > [22m[2mit inverts the read wherever no clamp bit, and the clamped cells are counted
+[22m[39mlevelFrom: clamped cells of 1,664 a top (52 levels by 32 ages): {"94":299,"96":235,"97":203,"98":171}
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mone order in every world: the stretch first, then the age points[2m > [22m[2mover every row of the four past seasons: never more than six down or eight up, nobody past the top
+[22m[39mera2005: 829 of 1727 rows change, swing -6 to 8, on the top of 96: Ronaldinho, Thierry Henry
+era2010: 890 of 1751 rows change, swing -6 to 8, on the top of 97: Cristiano Ronaldo, Lionel Messi
+era2015: 738 of 1659 rows change, swing -6 to 8, on the top of 98: Cristiano Ronaldo, Lionel Messi
+era2020: 862 of 1774 rows change, swing -6 to 8, on the top of 94: Kylian Mbappé, Lionel Messi
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22m[2mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating
+[22m[39m2026 at the flip: 2078 of 4401 ratings change; by points {"0":2323,"1":230,"2":324,"3":110,"4":76,"5":44,"6":20,"7":11,"8":13,"-1":379,"-2":306,"-3":245,"-4":182,"-6":50,"-5":88}
+
+ [32m✓[39m src/test/cmValueCurve.test.ts [2m([22m[2m57 tests[22m[2m)[22m[33m 305[2mms[22m[39m
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mleaves every real season-zero source row byte-exact without adding potential
+[22m[39mTRAJECTORY original source rows held: 5113
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mmakes both rare development turns reachable without escaping their per-season bounds
+[22m[39mTRAJECTORY zero-curve outcomes: {"players":1024,"breakouts":51,"setbacks":35,"unchanged":938}
+
+ [32m✓[39m src/test/cmFreeAgentContinuity.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1185[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent continuity[2m > [22mrecovers a naturally expired player in the arrival season without a cheaper contract [33m 550[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldRoster.test.ts [2m([22m[2m97 tests[22m[2m)[22m[33m 2994[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mkeeps the fresh world seed and complete constructor draw vector stable across other careers and clocks [33m 478[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mbuys, joins another job, saves, reloads and rejoins the buyer without seller resurrection [33m 561[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgentDiscovery.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 2259[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mkeeps the contracts desk quotes and signing callback intact [33m 466[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mshows the existing free-agent pool and signing terms in the open transfer window [33m 811[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mshows the same free-agent signing action with the transfer window closed [33m 344[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgentOldLedger1600.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 185[2mms[22m[39m
+ [32m✓[39m src/test/cmMarketMaxPrice.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 4136[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mkeeps existing price presets and the default Buy results unchanged [33m 956[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mincludes the exact asking-price boundary and excludes the next higher ask [33m 378[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mapplies the asking-price ceiling before the fifty-result limit [33m 1016[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22muses each selected currency symbol without converting the asking-price amount [33m 1070[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgentLegacyIdentity.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 184[2mms[22m[39m
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mrespects every source age curve, rating floor and carried potential ceiling
+[22m[39mTRAJECTORY bounded player years: 122712
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2mClub Manager save-bound player trajectories[2m > [22m[2mmeasures save variety and leader changes across the complete real source pool
+[22m[39mTRAJECTORY measured real-pool outcomes: {"sourceRows":5113,"clubs":412,"seeds":[7,31,81,307,1207,2026],"years":5,"variedPlayers":5110,"changedClubLeaders":279,"drift":{"0":1641,"1":1899,"2":2495,"3":2431,"4":2239,"5":1864,"6":1526,"7":1043,"8":705,"9":464,"10":256,"11":159,"12":56,"13":28,"14":9,"15":6,"16":4,"17":2,"-5":941,"-6":856,"-4":1057,"-3":1122,"-1":1438,"-2":1303,"-14":338,"-12":530,"-10":673,"-17":210,"-7":811,"-8":729,"-9":698,"-11":580,"-21":153,"-24":122,"-27":70,"-29":49,"-30":38,"-18":201,"-16":259,"-15":282,"-13":421,"-22":160,"-26":63,"-19":221,"-23":120,"-32":20,"-31":32,"-28":55,"-33":33,"-25":76,"-20":154,"-36":8,"-34":20,"-37":4,"-35":4}}
+
+[90mstdout[2m | src/lib/clubManagerTrajectory.test.ts[2m > [22m[2msave-scoped actual world projections[2m > [22m[2mmeasures actual seeded world leader changes without asserting an unmeasured frequency
+[22m[39mTRAJECTORY actual world outcomes: {"clubs":454,"seeds":[7,31,81,307,1207,2026],"years":5,"variedClubs":409,"changedLeaders":301,"generatedRows":18051,"drift":{"0":811,"1":984,"2":1383,"3":1383,"4":1324,"5":1099,"6":896,"7":594,"8":403,"9":266,"10":151,"11":99,"12":27,"13":21,"14":5,"15":3,"16":4,"17":1,"-2":563,"-5":272,"-9":122,"-14":21,"-1":636,"-3":393,"-4":313,"-12":61,"-6":205,"-10":98,"-17":17,"-8":131,"-7":162,"-11":74,"-13":42,"-15":22,"-16":14,"-18":5,"-19":6,"-29":2,"-20":3,"-24":4,"-22":2,"-25":1,"-21":4}}
+
+ [32m✓[39m src/lib/clubManagerTrajectory.test.ts [2m([22m[2m44 tests[22m[2m)[22m[33m 13031[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mleaves every real season-zero source row byte-exact without adding potential [33m 307[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager save-bound player trajectories[2m > [22mrespects every source age curve, rating floor and carried potential ceiling [33m 10603[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped actual world projections[2m > [22mmeasures actual seeded world leader changes without asserting an unmeasured frequency [33m 1033[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m221 passed[39m[22m[90m (221)[39m
+[2m   Start at [22m 22:54:26
+[2m   Duration [22m 16.82s[2m (transform 3.27s, setup 579ms, collect 9.34s, tests 24.28s, environment 3.27s, prepare 934ms)[22m
+

@@ -1,0 +1,14 @@
+tsc exit=0 61s | 
+vitest-cm exit=0 17s |    Duration  16.82s (transform 3.27s, setup 579ms, collect 9.34s, tests 24.28s, environment 3.27s, prepare 934ms)
+simCmLeagueRules exit=0 53s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simFreeAgents exit=0 95s | simFreeAgents: all sections passed
+simCmOldLedger exit=0 3s | simCmOldLedger: all sections green
+simCmOldLedger-exact exit=1 3s | simCmOldLedger: control exact FIRED (section 2: men at two clubs on load)
+simCmDifficulty exit=0 255s | simCmDifficulty: all green (sections 1,2,3,6,7,8)
+simClubManager exit=0 40s | ALL CLUB MANAGER SIMS PASSED
+simCmLedgerBound exit=0 287s | simCmLedgerBound: green, all four sections held
+simCustomClubValues exit=0 79s | simCustomClubValues: 26 checks, 0 failures
+simClubManagerGathered exit=1 2s | simClubManagerGathered: 1 failure(s) (G 1)
+simManagerWorldContinuity exit=1 21s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:541:24
+simClubManagerScore exit=0 83s | ALL SEASON SCORE CHECKS PASSED
+simClubManagerNewLeagues exit=0 106s | simClubManagerNewLeagues: all checks passed
