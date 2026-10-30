@@ -1208,7 +1208,10 @@ export interface CMPlayer {
   worldRosterSince?: number;
   /** Round 1600: the level his price gave him where his world reads age and it is not his rating
    *  (levelOf in src/lib/clubManagerEras.ts). Absent on every man of a world on curve 1, on every made up man
-   *  and on every man of a save written before. Read for his ceiling only (ceilingBase). */
+   *  and on every man of a save written before. Read for his ceiling (ceilingBase) and, once he leaves for
+   *  another club, for his row in the world ledger and the anchor of that slot (worldRosterFor). It is the level
+   *  of the day he was dealt and is NOT moved as he ages (agePlayer keeps it), so a man who grows or declines keeps
+   *  his first level there (both reviews of Round 1600, a minor: refreshing it would move every recorded world). */
   lv?: number;
   id: string;
   name: string;

@@ -446,7 +446,10 @@ export interface ProjectedPlayer {
   /** Original source identity, carried unchanged when a player moves. */
   worldRosterKey?: string;
   /** Round 1600: the LEVEL his price gave him on his world's scale in its year 0, carried only where that world
-   *  reads age and the level is not his rating (see levelOf). Absent on every row of a world on curve 1. */
+   *  reads age and the level is not his rating (see levelOf). Absent on every row of a world on curve 1. ageOne
+   *  carries it unchanged while his rating drifts, so in a projected year it is still the year 0 level, and
+   *  futureRead (the world exit) reads the higher of that and his rating (a known simplification, recorded by the
+   *  Round 1600 reviews: a declined veteran or a stalled boy exits on his year 0 level). */
   lv?: number;
 }
 
