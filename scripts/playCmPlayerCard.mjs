@@ -185,7 +185,13 @@ function controlScript({ control, key }) {
   const watch = fn => new MutationObserver(fn).observe(document, { subtree: true, childList: true, characterData: true });
   if (control === 'swap') watch(() => { const el = document.querySelector('[data-cm-card-line] .font-bold'); if (el && !el.dataset.swapped) { el.dataset.swapped = '1'; el.textContent = el.textContent.replace(/[0-9]+/, d => String(Number(d) + 1)); } });
   if (control === 'wide') document.addEventListener('DOMContentLoaded', () => { const st = document.createElement('style'); st.textContent = '[data-cm-card]{min-width:480px}'; document.head.appendChild(st); });
-  if (control === 'stack') watch(() => { if (document.querySelector('[data-cm-card]') && !document.querySelector('[data-stacked]')) { const d = document.createElement('div'); d.setAttribute('data-stacked', ''); d.setAttribute('data-cm-squad-list', ''); document.body.appendChild(d); } });
+  /* A squad list left in the document while a card is open, and only then (it goes when the card goes). */
+  if (control === 'stack') watch(() => {
+    const open = !!document.querySelector('[data-cm-card]');
+    const fake = document.querySelector('[data-stacked]');
+    if (open && !fake) { const d = document.createElement('div'); d.setAttribute('data-stacked', ''); d.setAttribute('data-cm-squad-list', ''); document.body.appendChild(d); }
+    if (!open && fake) fake.remove();
+  });
   if (control === 'nohold') {
     let carded = false;
     watch(() => {
