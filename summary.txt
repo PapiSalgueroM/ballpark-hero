@@ -1,0 +1,7 @@
+academy-base exit=0 12s | simSoccerAcademyPlacement: all sections green
+vitest-create exit=0 14s |    Duration  12.86s (transform 4.51s, setup 307ms, collect 11.74s, tests 20.37s, environment 1.66s, prepare 491ms)
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+dashscan exit=0 0s | 0
+simHarnessAnchors exit=0 43s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 62s | 
