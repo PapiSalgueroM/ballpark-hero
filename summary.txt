@@ -1,0 +1,4 @@
+ctl-takeover exit=0 30s | control run: takeover FIRED, 7g went red 78 time(s), 78 naming the sentinel
+simManagers exit=0 54s | simManagers: all green
+ctl-liveevent exit=0 42s | control run: liveevent FIRED, 7f went red 44 time(s), 44 naming the sentinel
+tsc exit=0 75s | 

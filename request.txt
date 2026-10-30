@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simManagers: node scripts/simManagers.mjs
+ctl-takeover: SIM_MANAGERS_CONTROL=takeover node scripts/simManagers.mjs
+ctl-liveevent: SIM_MANAGERS_CONTROL=liveevent node scripts/simManagers.mjs
