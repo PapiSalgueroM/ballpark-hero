@@ -43,7 +43,9 @@
         none over. (--write-verdicts writes before and after; read them.)
      4. completeness, a ratchet: every candidate in exactly one of additions,
         agrees, partial and pending; no name twice; pending may only shrink
-        (PENDING_MAX below is lowered by every batch that judges men).
+        (PENDING_MAX below is set to exactly the new count by every batch
+        that judges men; a count below it is red too, so a batch cannot
+        forget to lower it).
      5. sources: every added club and every agrees verdict carries two or more
         sources on different hosts, none crowd edited, each with a url, the
         date read (not after today, not before the fixture) and a quoted line;
@@ -99,6 +101,9 @@
      BINGO_CLUBS_CONTROL=onesource one sourced entry loses a source: red.
      BINGO_CLUBS_CONTROL=pending   one judged man put back in pending, so
                                    pending grows past PENDING_MAX: red.
+     BINGO_CLUBS_CONTROL=forgot    both ratchets read one more than their
+                                   counts (a batch that forgot to lower
+                                   them): section 4 red.
      BINGO_CLUBS_CONTROL=leak      one club added in memory to a man who is
                                    not in the record: red.
      BINGO_CLUBS_CONTROL=nomorton  Morton dropped from the derived file fed
@@ -195,7 +200,9 @@
      candidates), its rule beside the window rule in section 1, its harness
      section at the next free number; never renumber an earlier section.
      The two ratchets: PENDING_MAX (pending) and UNJUDGED_MAX (pending plus
-     every owed row, distinct names, suffixes stripped) only fall. A class
+     every owed row, distinct names, suffixes stripped) only fall, and each
+     must EQUAL its count (review 2026-10-30), so a batch that forgets to
+     lower one is red. A class
      opening step may raise them by exactly its new names, printed; nothing
      else raises them. Round 1576 opened the window class by moving its 98
      unjudged men from owed into pending: pending 0 to 98, unjudged 141 to
@@ -681,7 +688,12 @@ for (const e of roundKeyed) {
   else if (!classes[key].includes(e.name)) fail(`${e.name} carries class ${key} but is not a ${key} candidate`);
   if (!record.partial.includes(e) && e.fullCareer !== true) fail(`${e.name}: a judged round ${e.round} entry must carry fullCareer true`);
 }
-if (lists.pending.length > PENDING_MAX) fail(`pending holds ${lists.pending.length}, the ratchet allows ${PENDING_MAX} (it may only shrink)`);
+/* forgot (review 2026-10-30): both ratchets read one more than their counts, as a batch that forgot
+   to lower them would leave them; the old "may not exceed" test stayed green on that, equality is red. */
+const pendingRatchet = PENDING_MAX + (CONTROL === 'forgot' ? 1 : 0);
+const unjudgedRatchet = UNJUDGED_MAX + (CONTROL === 'forgot' ? 1 : 0);
+if (CONTROL === 'forgot') changed(`both ratchets read one more than their counts (${pendingRatchet}, ${unjudgedRatchet})`);
+if (lists.pending.length !== pendingRatchet) fail(`pending holds ${lists.pending.length}, the ratchet reads ${pendingRatchet}: every batch sets it to exactly the new count (it may only shrink)`);
 /* The second ratchet: the distinct names nobody has judged (pending plus every owed row), so a
    class that moves men from owed into pending can never hide growth. */
 const owedNames = record.owed.flatMap(o => o.names).map(stripSuffix);
@@ -694,7 +706,7 @@ if (CONTROL === 'unjudged') {
   }
 }
 const unjudged = new Set([...lists.pending, ...owedNames]);
-if (unjudged.size > UNJUDGED_MAX) fail(`pending plus owed holds ${unjudged.size} distinct names, the ratchet allows ${UNJUDGED_MAX} (it may only shrink)`);
+if (unjudged.size !== unjudgedRatchet) fail(`pending plus owed holds ${unjudged.size} distinct names, the ratchet reads ${unjudgedRatchet}: every batch sets it to exactly the new count (it may only shrink)`);
 for (const n of unjudged) if (judgedNames.has(n)) fail(`${n} is judged and still on a pending or owed list`);
 console.log(`   ${allCandidates.length} candidates (${candidates.length} hole, ${Object.entries(classes).map(([k, v]) => `${v.length} ${k}`).join(', ')}): ${lists.additions.length} additions, ${lists.agrees.length} agrees, ${lists.partial.length} partial, ${lists.pending.length} pending (ratchet ${PENDING_MAX}); round keyed entries ${roundKeyed.length} (${ROUNDS.map(r => `round ${r}: ${roundKeyed.filter(e => e.round === r).length}`).join(', ')}; ROUND ${ROUND})`);
 console.log(`   unjudged (pending plus owed, distinct): ${unjudged.size} (ratchet ${UNJUDGED_MAX}); owed rows: ${record.owed.map(o => `${o.round ?? 'unnumbered'} ${o.names.length}`).join(', ')}`);
