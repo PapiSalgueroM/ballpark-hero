@@ -1,0 +1,5 @@
+handover-base: git worktree add -q .rcbase1 4bd20c993 && cd .rcbase1 && node scripts/simCmHandoverDesk.mjs
+leaguerules-base: git worktree add -q .rcbase2 4bd20c993 && cd .rcbase2 && node scripts/simCmLeagueRules.mjs
+matchday-base: git worktree add -q .rcbase3 4bd20c993 && cd .rcbase3 && node scripts/simCmMatchDay.mjs
+oldcareers-base: git worktree add -q .rcbase4 4bd20c993 && cd .rcbase4 && node scripts/simCmOldCareersWorld.mjs
+ledgerbound-base: git worktree add -q .rcbase5 4bd20c993 && cd .rcbase5 && node scripts/simCmLedgerBound.mjs
