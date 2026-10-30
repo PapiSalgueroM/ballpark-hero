@@ -42,6 +42,8 @@
  *   section 5 TRIM          four more careers (TRIM_CAREERS) take 16 made up surplus men before season one's summer,
  *                           so the summer trim has to fire; every man it trims is on the free agent list after that
  *                           summer (and section 1 follows him at every later one). At least TRIM_FLOOR trimmed.
+ *                           Closing check fix: and he is listed as a man of mine (fromMyClub, marked trimmed), never
+ *                           barred as a man I released, so the desk answers 'justLeft' that season (FA-1 rule 4).
  *   section 6 LEDGER        FA-1 rule 2, over every summer of every career: a list man the ledger holds (exactly one
  *                           released or retired record with no owner, by name, birth year and position) carries that
  *                           record's age and rating and is not on the list if it says retired; and every man still on
@@ -66,6 +68,8 @@
  *   nodedupe    the old save pass forgets who is already on the list, so it lists him again          -> section 3
  *   norecover   the old save pass puts nobody back                                                    -> section 4
  *   notrimpool  the trim's men are written to a throwaway array, never the list (main's bug)          -> section 5
+ *   trimstranger the trim writes its men without fromMyClub or the trimmed mark (the build as reviewed) -> section 5
+ *   trimbar     releasedByYou ignores the trimmed mark, so a trimmed man is barred for ever          -> section 5
  *   ledgeroff   summerFreeAgents' ledger match is a birth year off, so the ledger path never runs    -> section 6
  *   staleseason summerFreeAgents reads the ledger at this year, so a ledger held man skips a year    -> section 6
  *   noloanrow   expiringDeals forgets the men out on loan (the round as first built)                 -> section 7
@@ -110,6 +114,11 @@ const EDITS = {
   /* Review fix (r1597-run-mutA and mutB): the three one token edits every section above passed. */
   notrimpool: [[CORE, '      walkedFree619.push(...squad.filter(p => cut.has(p.id)).map(p => ({\n',
     '      ([] as FreeAgent[]).push(...squad.filter(p => cut.has(p.id)).map(p => ({\n']],
+  /* Closing check fix (FA-1 rule 4): the trim's men as a stranger (the build as reviewed), or barred for ever. */
+  trimstranger: [[CORE, '        founderSaleRatio: p.founderSaleRatio, reason: \'released\' as const, fromMyClub: true as const, trimmed: true as const,\n',
+    '        founderSaleRatio: p.founderSaleRatio, reason: \'released\' as const,\n']],
+  trimbar: [[CORE, '  return fa.fromMyClub === true && fa.reason === \'released\' && fa.trimmed !== true;\n',
+    '  return fa.fromMyClub === true && fa.reason === \'released\';\n']],
   ledgeroff: [[CORE, '&& r.origin.birthYear === year - f.age && r.player.position === f.position);\n',
     '&& r.origin.birthYear === year - f.age - 1 && r.player.position === f.position);\n']],
   staleseason: [[CORE, '  const nextSeason = career.season + 1, year = worldYear(career);\n', '  const nextSeason = career.season, year = worldYear(career);\n']],
@@ -205,7 +214,7 @@ function placesOf(s, man, records) {
 const failures = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [] };
 const fail = (section, line) => { failures[section].push(line); if (failures[section].length <= 8) console.log(`  FAIL section ${section}: ${line}`); };
 const totals = { careers: 0, tracked: 0, checks: 0, lost: 0, twice: 0, poolRetired: 0, unseen: 0,
-  ledgerHeld: 0, aged: 0, trimmed: 0, lentFinal: 0, lentWalked: 0, lentRenewed: 0 };
+  ledgerHeld: 0, aged: 0, trimmed: 0, trimMine: 0, lentFinal: 0, lentWalked: 0, lentRenewed: 0 };
 const endAges = [], endSizes = [];
 
 /* One career. atSeasonEnd(s, season, tracked) may stop it (return true) after a season's finishSeason, before its summer.
@@ -382,6 +391,13 @@ for (const [club, eraId, seed, renewLent] of TRIM_CAREERS) {
         const f = (s.freeAgents ?? []).find(x => x.name === p.name);
         if (!f) { fail(5, `${club}: ${p.name}, trimmed at the summer (squad ${before.squad.length}, limit ${cm.SQUAD_LIMIT}), is not on the free agent list`); continue; }
         reasons[`${f.reason}${f.fromMyClub ? ' mine' : ''}`] = (reasons[`${f.reason}${f.fromMyClub ? ' mine' : ''}`] ?? 0) + 1;
+        /* Closing check fix (FA-1 rule 4): he left my club, so he is mine (the season away, no stranger's rule), and
+           the club cut him, not me, so he is never barred as a man I released. In the season he left that is exactly
+           the engine's 'justLeft' answer, which neither a stranger nor a barred man gets. */
+        const block = cm.freeAgentBlock(s, f);
+        if (!f.fromMyClub || !f.trimmed || cm.releasedByYou(f) || cm.releasedByYouNames(s).has(p.name) || block !== 'justLeft') {
+          fail(5, `${club}: ${p.name}, trimmed at the summer, is listed ${f.reason}${f.fromMyClub ? ', mine' : ', not mine'}${f.trimmed ? ', trimmed' : ''} and the desk answers ${block ?? 'Sign'} (want 'justLeft', never barred)`);
+        } else totals.trimMine += 1;
       }
       console.log(`  trim ${club} ${eraId}: squad ${before.squad.length} into the summer, ${s.squad.length} after; ${trimmed.length} trimmed, listed as ${JSON.stringify(reasons)}; lent out ${[...lentNames].join(', ') || 'nobody'}`);
     },
@@ -438,9 +454,9 @@ if (totals.ledgerHeld < HELD_FLOOR) fail(6, `only ${totals.ledgerHeld} list men 
 if (totals.aged < AGED_FLOOR) fail(6, `only ${totals.aged} list men were seen a summer on, under ${AGED_FLOOR}`);
 if (totals.lentFinal < LENT_FLOOR) fail(7, `only ${totals.lentFinal} men were out on loan in their last year at a summer, under ${LENT_FLOOR}`);
 if (totals.lentRenewed < RENEWED_LENT_FLOOR) fail(7, `only ${totals.lentRenewed} men out on loan were renewed, under ${RENEWED_LENT_FLOOR}`);
-console.log(`simCmFreeAgencyFleet: ${totals.careers} careers to season ${SEASONS + 1}, ${TRIM_CAREERS.length} trim and loan careers to season 4; ${totals.tracked} men left a squad, ${totals.checks} summer checks; lost ${totals.lost}, twice ${totals.twice}; ${totals.poolRetired} retired off the list (${totals.unseen} summers unseen); list size at the end median ${median(endSizes)}, its median age median ${median(endAges)}; trimmed ${totals.trimmed}; ledger held list men ${totals.ledgerHeld}, a summer on ${totals.aged}; out on loan in the last year ${totals.lentFinal} (left ${totals.lentWalked}, renewed ${totals.lentRenewed})${SKIP_OLD ? '; old saves skipped' : `; old saves recoverable ${recoverableTotal}, recovered ${recoveredTotal}`}`);
+console.log(`simCmFreeAgencyFleet: ${totals.careers} careers to season ${SEASONS + 1}, ${TRIM_CAREERS.length} trim and loan careers to season 4; ${totals.tracked} men left a squad, ${totals.checks} summer checks; lost ${totals.lost}, twice ${totals.twice}; ${totals.poolRetired} retired off the list (${totals.unseen} summers unseen); list size at the end median ${median(endSizes)}, its median age median ${median(endAges)}; trimmed ${totals.trimmed} (mine and never barred ${totals.trimMine}); ledger held list men ${totals.ledgerHeld}, a summer on ${totals.aged}; out on loan in the last year ${totals.lentFinal} (left ${totals.lentWalked}, renewed ${totals.lentRenewed})${SKIP_OLD ? '; old saves skipped' : `; old saves recoverable ${recoverableTotal}, recovered ${recoveredTotal}`}`);
 const red = Object.entries(failures).filter(([, list]) => list.length).map(([k, list]) => `${k} (${list.length})`);
-const TARGET = { deletepool: '1', noretire: '2', nodedupe: '3', norecover: '4', notrimpool: '5', ledgeroff: '6', staleseason: '6', noloanrow: '7', norenewloan: '7' }[CONTROL];
+const TARGET = { deletepool: '1', noretire: '2', nodedupe: '3', norecover: '4', notrimpool: '5', trimstranger: '5', trimbar: '5', ledgeroff: '6', staleseason: '6', noloanrow: '7', norenewloan: '7' }[CONTROL];
 if (CONTROL) {
   if (failures[TARGET].length) { console.log(`simCmFreeAgencyFleet: CONTROL ${CONTROL} FIRED: section ${TARGET} red${red.length > 1 ? ` (red: ${red.join(', ')})` : ''}`); process.exit(1); }
   console.log(`simCmFreeAgencyFleet: CONTROL ${CONTROL} DID NOT FIRE: section ${TARGET} stayed green (red: ${red.join(', ') || 'none'})`); process.exit(3);

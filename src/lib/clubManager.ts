@@ -7589,6 +7589,9 @@ export interface FreeAgent {
   reason: 'released' | 'expired' | 'unattached';
   /** Set only when I was the one who let him go. */
   fromMyClub?: true;
+  /** Round 1597: let go by the summer trim (a squad over the limit), not by my own release, so releasedByYou does
+      not bar him: after his season away he may sign for me again like any man whose deal ran out with me. */
+  trimmed?: true;
 }
 
 export interface SeveranceRow {
@@ -8187,7 +8190,9 @@ export function releasedByYouNames(career: CareerState): Set<string> {
  * City: 12.8m of renewal fees dodged for 37k of settlements.
  */
 export function releasedByYou(fa: FreeAgent): boolean {
-  return fa.fromMyClub === true && fa.reason === 'released';
+  /* Round 1597 closing check: a man the summer trim cut left my club, so he is mine (fromMyClub: the season away,
+     and no stranger's eleventh best man line), but I never pressed release on him, so he is not barred for ever. */
+  return fa.fromMyClub === true && fa.reason === 'released' && fa.trimmed !== true;
 }
 
 /** Why a free agent signing would be refused. The card shows the same reason the engine uses. */
@@ -22379,12 +22384,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       const cut = new Set(spare.slice(0, squad.length - SQUAD_LIMIT).map(p => p.id));
       for (const p of squad) if (cut.has(p.id)) { releasedNews.push(p.name); rosterExits.push({ player: p, kind: 'release' }); }
       /* Round 1597: and they go onto the free agent list like everyone else who leaves, where until now they were
-         never written and so were gone the same summer. Not as men I released (no fromMyClub, never onto
-         releasedNames): the club trimmed him, I did not, so he may sign for me again on the usual rules. */
+         never written and so were gone the same summer. As men who left my club (fromMyClub: the season away, as
+         for a deal that ran out, and none of a stranger's rules), marked trimmed and never onto releasedNames: the
+         club trimmed him, I did not release him, so releasedByYou does not bar him and he may sign for me again
+         on the usual rules. */
       walkedFree619.push(...squad.filter(p => cut.has(p.id)).map(p => ({
         name: p.name, position: p.position, age: p.age, rating: p.rating,
         value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: season,
-        founderSaleRatio: p.founderSaleRatio, reason: 'released' as const,
+        founderSaleRatio: p.founderSaleRatio, reason: 'released' as const, fromMyClub: true as const, trimmed: true as const,
       })));
       squad = squad.filter(p => !cut.has(p.id));
     }
