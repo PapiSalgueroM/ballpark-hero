@@ -1,0 +1,4 @@
+w-base exit=0 82s | weighBU base: done, 7 routes
+w-m3 exit=0 81s | weighBU m3: done, 7 routes
+w-m4 exit=0 80s | weighBU m4: done, 7 routes
+w-m8 exit=0 80s | weighBU m8: done, 7 routes
