@@ -1,0 +1,5 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+nofallback-E exit=1 143s | playGmCareer control nofallback: 4/4 guarded checks fired, 0 missed, 21 unrelated failure(s)
+walkE-nhl exit=0 298s | playGmCareer: green. 1 board(s) (nhl), 3 sizes, four walks each and the slow kit walk at 390 and 1280.
+walkE-nfl exit=0 314s | playGmCareer: green. 1 board(s) (nfl), 3 sizes, four walks each and the slow kit walk at 390 and 1280.
+walksABCD exit=0 426s | playGmCareer: green. 2 board(s) (nfl, nhl), 3 sizes, four walks each and the slow kit walk at 390 and 1280.

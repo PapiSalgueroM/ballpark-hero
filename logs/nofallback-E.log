@@ -1,0 +1,156 @@
+/front-office at 320 by 640
+/front-office at 390 by 844
+  PASS  nfl 390x844 E: the pick screen does not ask for the career kit (0 asks)
+  PASS  nfl 390x844 E: a new front office brings the kit with its league
+  PASS  nfl 390x844 E: mid season, the hub draws the Career box without the kit
+  PASS  nfl 390x844 E: mid season, the hub draws the GM level box without the kit
+  PASS  nfl 390x844 E: a season being played does not ask for the kit (0 asks)
+  FAIL  nfl 390x844 E: on a slow line the last week's press waits for the kit
+  PASS  nfl 390x844 E: the last week asks for the kit
+  PASS  nfl 390x844 E: fired, on the out of work screen
+  PASS  nfl 390x844 E: a reload on the fired screen holds while the kit is on its way
+  MEASURED nfl 390x844 E: fired reload holding box 19px at 307, out of work screen at 340, scroll 0
+  FAIL  nfl 390x844 E: the out of work screen lands where the holding box stood, the page not moving
+  PASS  nfl 390x844 E: the fired screen asks for the kit
+  PASS  nfl 390x844 E out of work: nothing wider than the screen (0px over)
+  FAIL  nfl 390x844 E out of work: every control at least 44 px tall (Start a new front office 21px)
+  PASS  nfl 390x844 E out of work: no text under its floor (none)
+  PASS  nfl 390x844 E: the market opens on the slow line, 1 offer(s)
+  PASS  nfl 390x844 E: a seat taken on the slow line (CLE, recap)
+  PASS  nfl 390x844 E: the arrival recap holds the re-sign box
+  PASS  nfl 390x844 E: the new club's re-sign box opens
+  PASS  nfl 390x844 E: the new club's draft runs to the hub
+  PASS  nfl 390x844 E: the new club's hub draws its boxes without asking for the kit
+  PASS  nfl 390x844 E: the GM level box holds, under its own header, while the kit is on its way (xp)
+  MEASURED nfl 390x844 E: the GM level holding box before the kit 19px, the landed screen 336px
+  CAUGHT  nfl 390x844 E: at 390 the holding box before the kit is the GM level screen's own height (19px for 336px)
+  PASS  nfl 390x844 E: the GM level box asks for the kit
+  PASS  nfl 390x844 E GM level: nothing wider than the screen (0px over)
+  FAIL  nfl 390x844 E GM level: every control at least 44 px tall (? 21px; Spend a point (0/5) 21px; ? 21px)
+  PASS  nfl 390x844 E GM level: no text under its floor (none)
+  PASS  nfl 390x844 E: reloaded again, the hub draws the Career box without asking for the kit
+  MEASURED nfl 390x844 E: the Career box before the kit 19.0 to 19.0px over 91 frame(s), its screen's own holding box 19.0 to 19.0px over 2 frame(s), the landed screen 208.0px, scroll 64 to 269
+  PASS  nfl 390x844 E: the Career box holds, under its own header, while the kit is on its way (91 frame(s), career)
+  CAUGHT  nfl 390x844 E: at 390 every holding frame of the Career box is the Career screen's own height (19.0 to 19.0px over 93 frame(s) for 208px)
+  FAIL  nfl 390x844 E: the Career screen lands where its holding box stood, the page not moving (top 467 to 467, scroll 64 to 269)
+  PASS  nfl 390x844 E: the Career box asks for the kit
+  PASS  nfl 390x844 E Career: nothing wider than the screen (0px over)
+  FAIL  nfl 390x844 E Career: every control at least 44 px tall (? 21px)
+  PASS  nfl 390x844 E Career: no text under its floor (none)
+  PASS  nfl 390x844 E: no console error (clean)
+/front-office at 1280 by 900
+  PASS  nfl 1280x900 E: the pick screen does not ask for the career kit (0 asks)
+  PASS  nfl 1280x900 E: a new front office brings the kit with its league
+  PASS  nfl 1280x900 E: mid season, the hub draws the Career box without the kit
+  PASS  nfl 1280x900 E: mid season, the hub draws the GM level box without the kit
+  PASS  nfl 1280x900 E: a season being played does not ask for the kit (0 asks)
+  FAIL  nfl 1280x900 E: on a slow line the last week's press waits for the kit
+  PASS  nfl 1280x900 E: the last week asks for the kit
+  PASS  nfl 1280x900 E: fired, on the out of work screen
+  PASS  nfl 1280x900 E: a reload on the fired screen holds while the kit is on its way
+  MEASURED nfl 1280x900 E: fired reload holding box 19px at 288, out of work screen at 321, scroll 0
+  FAIL  nfl 1280x900 E: the out of work screen lands where the holding box stood, the page not moving
+  PASS  nfl 1280x900 E: the fired screen asks for the kit
+  PASS  nfl 1280x900 E out of work: nothing wider than the screen (0px over)
+  FAIL  nfl 1280x900 E out of work: every control at least 44 px tall (Start a new front office 21px)
+  PASS  nfl 1280x900 E out of work: no text under its floor (none)
+  PASS  nfl 1280x900 E: the market opens on the slow line, 1 offer(s)
+  PASS  nfl 1280x900 E: a seat taken on the slow line (MIA, recap)
+  PASS  nfl 1280x900 E: the arrival recap holds the re-sign box
+  PASS  nfl 1280x900 E: the new club's re-sign box opens
+  PASS  nfl 1280x900 E: the new club's draft runs to the hub
+  PASS  nfl 1280x900 E: the new club's hub draws its boxes without asking for the kit
+  PASS  nfl 1280x900 E: the GM level box holds, under its own header, while the kit is on its way (xp)
+  MEASURED nfl 1280x900 E: the GM level holding box before the kit 19px, the landed screen 298px
+  PASS  nfl 1280x900 E: the GM level box asks for the kit
+  PASS  nfl 1280x900 E GM level: nothing wider than the screen (0px over)
+  FAIL  nfl 1280x900 E GM level: every control at least 44 px tall (? 21px; Spend a point (0/5) 21px; ? 21px)
+  PASS  nfl 1280x900 E GM level: no text under its floor (none)
+  PASS  nfl 1280x900 E: reloaded again, the hub draws the Career box without asking for the kit
+  MEASURED nfl 1280x900 E: the Career box before the kit 19.0 to 19.0px over 91 frame(s), its screen's own holding box 19.0 to 19.0px over 1 frame(s), the landed screen 208.0px, scroll 0 to 0
+  PASS  nfl 1280x900 E: the Career box holds, under its own header, while the kit is on its way (91 frame(s), career)
+  PASS  nfl 1280x900 E: the Career screen lands where its holding box stood, the page not moving (top 410 to 410, scroll 0 to 0)
+  PASS  nfl 1280x900 E: the Career box asks for the kit
+  PASS  nfl 1280x900 E Career: nothing wider than the screen (0px over)
+  FAIL  nfl 1280x900 E Career: every control at least 44 px tall (? 21px)
+  PASS  nfl 1280x900 E Career: no text under its floor (none)
+  PASS  nfl 1280x900 E: no console error (clean)
+/nhl-front-office at 320 by 640
+/nhl-front-office at 390 by 844
+  PASS  nhl 390x844 E: the pick screen does not ask for the career kit (0 asks)
+  PASS  nhl 390x844 E: a new front office brings the kit with its league
+  PASS  nhl 390x844 E: mid season, the hub draws the Career box without the kit
+  PASS  nhl 390x844 E: mid season, the hub draws the GM level box without the kit
+  PASS  nhl 390x844 E: a season being played does not ask for the kit (0 asks)
+  FAIL  nhl 390x844 E: on a slow line the last week's press waits for the kit
+  PASS  nhl 390x844 E: the last week asks for the kit
+  PASS  nhl 390x844 E: fired, on the out of work screen
+  PASS  nhl 390x844 E: a reload on the fired screen holds while the kit is on its way
+  MEASURED nhl 390x844 E: fired reload holding box 19px at 340, out of work screen at 340, scroll 0
+  PASS  nhl 390x844 E: the out of work screen lands where the holding box stood, the page not moving
+  PASS  nhl 390x844 E: the fired screen asks for the kit
+  PASS  nhl 390x844 E out of work: nothing wider than the screen (0px over)
+  FAIL  nhl 390x844 E out of work: every control at least 44 px tall (Start a new front office 21px)
+  PASS  nhl 390x844 E out of work: no text under its floor (none)
+  PASS  nhl 390x844 E: the market opens on the slow line, 1 offer(s)
+  PASS  nhl 390x844 E: a seat taken on the slow line (CGY, recap)
+  PASS  nhl 390x844 E: the arrival recap holds the re-sign box
+  PASS  nhl 390x844 E: the new club's re-sign box opens
+  PASS  nhl 390x844 E: the new club's draft runs to the hub
+  PASS  nhl 390x844 E: the new club's hub draws its boxes without asking for the kit
+  PASS  nhl 390x844 E: the GM level box holds, under its own header, while the kit is on its way (xp)
+  MEASURED nhl 390x844 E: the GM level holding box before the kit 19px, the landed screen 336px
+  CAUGHT  nhl 390x844 E: at 390 the holding box before the kit is the GM level screen's own height (19px for 336px)
+  PASS  nhl 390x844 E: the GM level box asks for the kit
+  PASS  nhl 390x844 E GM level: nothing wider than the screen (0px over)
+  FAIL  nhl 390x844 E GM level: every control at least 44 px tall (? 21px; Spend a point (0/5) 21px; ? 21px)
+  PASS  nhl 390x844 E GM level: no text under its floor (none)
+  PASS  nhl 390x844 E: reloaded again, the hub draws the Career box without asking for the kit
+  MEASURED nhl 390x844 E: the Career box before the kit 19.0 to 19.0px over 90 frame(s), its screen's own holding box not seen, the landed screen 208.0px, scroll 64 to 269
+  PASS  nhl 390x844 E: the Career box holds, under its own header, while the kit is on its way (90 frame(s), career)
+  CAUGHT  nhl 390x844 E: at 390 every holding frame of the Career box is the Career screen's own height (19.0 to 19.0px over 90 frame(s) for 208px)
+  FAIL  nhl 390x844 E: the Career screen lands where its holding box stood, the page not moving (top 467 to 467, scroll 64 to 269)
+  PASS  nhl 390x844 E: the Career box asks for the kit
+  PASS  nhl 390x844 E Career: nothing wider than the screen (0px over)
+  FAIL  nhl 390x844 E Career: every control at least 44 px tall (? 21px)
+  PASS  nhl 390x844 E Career: no text under its floor (none)
+  PASS  nhl 390x844 E: no console error (clean)
+/nhl-front-office at 1280 by 900
+  PASS  nhl 1280x900 E: the pick screen does not ask for the career kit (0 asks)
+  PASS  nhl 1280x900 E: a new front office brings the kit with its league
+  PASS  nhl 1280x900 E: mid season, the hub draws the Career box without the kit
+  PASS  nhl 1280x900 E: mid season, the hub draws the GM level box without the kit
+  PASS  nhl 1280x900 E: a season being played does not ask for the kit (0 asks)
+  FAIL  nhl 1280x900 E: on a slow line the last week's press waits for the kit
+  PASS  nhl 1280x900 E: the last week asks for the kit
+  PASS  nhl 1280x900 E: fired, on the out of work screen
+  PASS  nhl 1280x900 E: a reload on the fired screen holds while the kit is on its way
+  MEASURED nhl 1280x900 E: fired reload holding box 19px at 288, out of work screen at 321, scroll 0
+  FAIL  nhl 1280x900 E: the out of work screen lands where the holding box stood, the page not moving
+  PASS  nhl 1280x900 E: the fired screen asks for the kit
+  PASS  nhl 1280x900 E out of work: nothing wider than the screen (0px over)
+  FAIL  nhl 1280x900 E out of work: every control at least 44 px tall (Start a new front office 21px)
+  PASS  nhl 1280x900 E out of work: no text under its floor (none)
+  PASS  nhl 1280x900 E: the market opens on the slow line, 1 offer(s)
+  PASS  nhl 1280x900 E: a seat taken on the slow line (ANA, recap)
+  PASS  nhl 1280x900 E: the arrival recap holds the re-sign box
+  PASS  nhl 1280x900 E: the new club's re-sign box opens
+  PASS  nhl 1280x900 E: the new club's draft runs to the hub
+  PASS  nhl 1280x900 E: the new club's hub draws its boxes without asking for the kit
+  PASS  nhl 1280x900 E: the GM level box holds, under its own header, while the kit is on its way (xp)
+  MEASURED nhl 1280x900 E: the GM level holding box before the kit 19px, the landed screen 298px
+  PASS  nhl 1280x900 E: the GM level box asks for the kit
+  PASS  nhl 1280x900 E GM level: nothing wider than the screen (0px over)
+  FAIL  nhl 1280x900 E GM level: every control at least 44 px tall (? 21px; Spend a point (0/5) 21px; ? 21px)
+  PASS  nhl 1280x900 E GM level: no text under its floor (none)
+  PASS  nhl 1280x900 E: reloaded again, the hub draws the Career box without asking for the kit
+  MEASURED nhl 1280x900 E: the Career box before the kit 19.0 to 19.0px over 90 frame(s), its screen's own holding box 19.0 to 19.0px over 1 frame(s), the landed screen 208.0px, scroll 0 to 0
+  PASS  nhl 1280x900 E: the Career box holds, under its own header, while the kit is on its way (90 frame(s), career)
+  PASS  nhl 1280x900 E: the Career screen lands where its holding box stood, the page not moving (top 410 to 410, scroll 0 to 0)
+  PASS  nhl 1280x900 E: the Career box asks for the kit
+  PASS  nhl 1280x900 E Career: nothing wider than the screen (0px over)
+  FAIL  nhl 1280x900 E Career: every control at least 44 px tall (? 21px)
+  PASS  nhl 1280x900 E Career: no text under its floor (none)
+  PASS  nhl 1280x900 E: no console error (clean)
+
+playGmCareer control nofallback: 4/4 guarded checks fired, 0 missed, 21 unrelated failure(s)
