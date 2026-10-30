@@ -1,0 +1,12 @@
+vitest exit=0 12s |    Duration  10.45s (transform 4.37s, setup 628ms, collect 11.96s, tests 9.25s, environment 3.50s, prepare 678ms)
+simHarnessAnchors exit=0 75s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 118s | 
+simCmLeagueRules exit=0 87s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simManagerAppealIsolation exit=0 64s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simBoardObjectives exit=0 1s | simBoardObjectives: green. Every board talks like a board.
+simClubManagerCalendar exit=0 59s | simClubManagerCalendar: all green
+simClubManagerSaveSize exit=0 100s | simClubManagerSaveSize: all sections green
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simCmCopy exit=0 51s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+euro-a exit=0 436s | simWorldEuro: green, 37053 checks, 0 failures
+simWorldUcl exit=0 1701s | simWorldUcl: green, 498768 checks, 0 failures
