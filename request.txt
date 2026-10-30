@@ -1,0 +1,1 @@
+loanprobe: cp .rc/x/loanprobe.mjs scripts/loanprobe.mjs && node scripts/loanprobe.mjs

@@ -1,0 +1,1 @@
+loanprobe exit=0 4s | loanprobe: 3 final year men loaned out, 3 of them walked at the summer without a checkpoint row or a hub line
