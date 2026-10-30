@@ -345,7 +345,7 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
       </p>
 
       {/* Pinned confirm, same shape as the take-the-job bar. */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur-sm">
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur-sm [body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
           <div className="min-w-0 flex items-center gap-2">
             <CrestBadge crest={crest} size={24} />
