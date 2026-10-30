@@ -1,0 +1,65 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usCareerReports1569.test.tsx [2m([22m[2m56 tests[22m[2m)[22m[33m 46037[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the hub of a two season career [33m 1189[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the hub of a two season career [33m 1153[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the hub of a two season career [33m 1018[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the hub of a two season career [33m 1303[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the free agency window [33m 1392[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the free agency window [33m 1140[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the free agency window [33m 1058[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the free agency window [33m 879[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the extension talk [33m 1220[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the extension talk [33m 881[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the extension talk [33m 905[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the extension talk [33m 861[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the retired card and from the coaching career [33m 928[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the retired card and from the coaching career [33m 706[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the retired card and from the coaching career [33m 891[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the retired card and from the coaching career [33m 721[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NFL' starts over from the road to the draft [33m 816[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NBA' starts over from the road to the draft [33m 909[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'MLB' starts over from the road to the draft [33m 609[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report A: Start over from every screen[2m > [22m'NHL' starts over from the road to the draft [33m 713[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3, moved by Round 1570: a restart says where the Hall card goes[2m > [22m'NFL' names the Hall card on every restart prompt of a retired career and not on a live one [33m 1225[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3, moved by Round 1570: a restart says where the Hall card goes[2m > [22m'NBA' names the Hall card on every restart prompt of a retired career and not on a live one [33m 1306[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3, moved by Round 1570: a restart says where the Hall card goes[2m > [22m'MLB' names the Hall card on every restart prompt of a retired career and not on a live one [33m 1084[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3, moved by Round 1570: a restart says where the Hall card goes[2m > [22m'NHL' names the Hall card on every restart prompt of a retired career and not on a live one [33m 934[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3, moved by Round 1570: a restart says where the Hall card goes[2m > [22m'NFL' keeps the words that the card goes when the browser refused the Hall wall [33m 548[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3, moved by Round 1570: a restart says where the Hall card goes[2m > [22m'NBA' keeps the words that the card goes when the browser refused the Hall wall [33m 502[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3, moved by Round 1570: a restart says where the Hall card goes[2m > [22m'MLB' keeps the words that the card goes when the browser refused the Hall wall [33m 373[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 ruling R3, moved by Round 1570: a restart says where the Hall card goes[2m > [22m'NHL' keeps the words that the card goes when the browser refused the Hall wall [33m 495[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk in the last season says why, says it is the last, and retires in full [33m 1048[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk in the last season says why, says it is the last, and retires in full [33m 823[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk in the last season says why, says it is the last, and retires in full [33m 955[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk in the last season says why, says it is the last, and retires in full [33m 1101[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a talk before the season that reaches the season cap says it is the last (report B, "20 szn") [33m 386[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a talk before the season that reaches the season cap says it is the last (report B, "20 szn") [33m 599[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a talk before the season that reaches the season cap says it is the last (report B, "20 szn") [33m 655[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a talk before the season that reaches the season cap says it is the last (report B, "20 szn") [33m 619[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': one season short of the cap is not called the last [33m 441[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': one season short of the cap is not called the last [33m 635[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': one season short of the cap is not called the last [33m 630[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': one season short of the cap is not called the last [33m 592[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a pulled offer is not explained as no offer, and a pulled last season promises no market [33m 321[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': an offer in the last season promises no free agency either [33m 497[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': an offer in the last season promises no free agency either [33m 466[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': an offer in the last season promises no free agency either [33m 443[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': a no offer talk with seasons left keeps the market promise and still offers retirement [33m 411[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': a no offer talk with seasons left keeps the market promise and still offers retirement [33m 571[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': a no offer talk with seasons left keeps the market promise and still offers retirement [33m 661[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': a no offer talk with seasons left keeps the market promise and still offers retirement [33m 615[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NFL': free agency offers a veteran Retire instead, and a two season player none [33m 1853[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NBA': free agency offers a veteran Retire instead, and a two season player none [33m 1625[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'MLB': free agency offers a veteran Retire instead, and a two season player none [33m 1622[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1569 report B: no offer is never a dead end[2m > [22m'NHL': free agency offers a veteran Retire instead, and a two season player none [33m 1671[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m56 passed[39m[22m[90m (56)[39m
+[2m   Start at [22m 17:24:33
+[2m   Duration [22m 52.89s[2m (transform 3.17s, setup 131ms, collect 4.34s, tests 46.04s, environment 1.08s, prepare 444ms)[22m
+
