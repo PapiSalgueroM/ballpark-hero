@@ -1,0 +1,49 @@
+MUTATION pointsfirst APPLIED
+1) A fresh 2020 save is the real 2020 squad, untouched
+  FAIL: Bayern Munich's Alphonso Davies: bake says age 19 rating 89, squad says 19/87
+  FAIL: Bayern Munich's Robert Lewandowski: bake says age 31 rating 87, squad says 31/90
+   Bayern Munich: 26 in squad, 26 bake rows, 2 mismatches, 0 generated
+   PSG: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+   Manchester City: 24 in squad, 24 bake rows, 0 mismatches, 0 generated
+  FAIL: Barcelona's Lionel Messi: bake says age 32 rating 91, squad says 32/95
+  FAIL: Barcelona's Ansu Fati: bake says age 17 rating 89, squad says 17/87
+  FAIL: Barcelona's Miralem Pjanić: bake says age 29 rating 88, squad says 29/90
+   Barcelona: 24 in squad, 24 bake rows, 3 mismatches, 0 generated
+2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them leak
+   939 era-exclusive names checked against the 2026 market, 0 leaks
+   2020 and now: 835 shared names, 10 listed pairs of two men, 0 unexplained
+   2020 and era2015: 573 shared names, 5 listed pairs of two men, 0 unexplained
+   2020 and era2010: 164 shared names, 5 listed pairs of two men, 0 unexplained
+   2020 and era2005: 32 shared names, 13 listed pairs of two men, 0 unexplained
+3) Boards talk 2020-21: the giants told to win it, the promoted told to stay up
+   98 club demands checked across the five 2020-21 leagues
+4) Full seasons play out plausibly in all five leagues
+   Bayern 1,1,1,1,1,1 (mean 1.00) · PSG 1,1,1,1,1,1 (mean 1.00)
+   Manchester City 5,4,6,3,1,6 (mean 4.17) · Crotone 20,20,19,20,20,20 (mean 19.83)
+5) The bake file tells the truth about itself
+   98 clubs, 1774 players (META says 1774 in 98), 256 window corrections
+   one man one club: 0 duplicates; window sample: 31 of 31 movers landed, 12 of 12 leavers gone
+   no record placed, so left where the year-2020 row has them: Valentino Lazaro at Newcastle (Gladbach by 2021), Cristiano Biraghi at Inter Milan (Fiorentina by 2021), Bas Dost at Eintracht Frankfurt (Club Brugge by 2021)
+6) The uplift is small, keeps the order, and leaves the rank and file alone
+   top 50, uplifted 2020 against modern, mean gap 0.36 (band +-0.5)
+7) The real 2020-21 Champions League field, eight groups into a round of 16
+   32 clubs, 19 with baked 2020-21 squads; winner Chelsea
+8) Every past season's market files a man under the league his club plays in that season
+   era2010: 1710 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 364)
+   era2015: 1623 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 356)
+   era2005: 1699 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 421)
+   era2020: 1747 market players at era league clubs, 0 filed under the wrong league (today's lookup would file 331)
+   29 era-only clubs, 6 of them in more than one era; reversing ERA_LEAGUES moves 0
+   the eras are read as era2010, era2015, era2005, era2020; 6 of 6 pinned clubs read the league they always have
+9) Every past season's news and bidding wars name clubs of that season
+   era2010: 466 deals in the news of 100 new saves, 0 bought by a club not of that season; 544 buyers in their second summer's feed, 0 not of that season; 34 rivals in 60 negotiations, 0 not of that season
+   era2015: 419 deals in the news of 100 new saves, 0 bought by a club not of that season; 561 buyers in their second summer's feed, 0 not of that season; 32 rivals in 60 negotiations, 0 not of that season
+   era2005: 472 deals in the news of 100 new saves, 0 bought by a club not of that season; 557 buyers in their second summer's feed, 0 not of that season; 34 rivals in 60 negotiations, 0 not of that season
+   era2020: 439 deals in the news of 100 new saves, 0 bought by a club not of that season; 543 buyers in their second summer's feed, 0 not of that season; 33 rivals in 60 negotiations, 0 not of that season
+10) Every past season's out of work market offers jobs at clubs of that season
+   era2010: 133 calls in 60 sackings, 0 from a club not of that season, 0 with a card of another season; 60 jobs taken, 0 did not move the manager; 30 floors, 0 not a small club of that season
+   era2015: 94 calls in 60 sackings, 0 from a club not of that season, 0 with a card of another season; 60 jobs taken, 0 did not move the manager; 30 floors, 0 not a small club of that season
+   era2005: 107 calls in 60 sackings, 0 from a club not of that season, 0 with a card of another season; 60 jobs taken, 0 did not move the manager; 30 floors, 0 not a small club of that season
+   era2020: 110 calls in 60 sackings, 0 from a club not of that season, 0 with a card of another season; 60 jobs taken, 0 did not move the manager; 30 floors, 0 not a small club of that season
+
+simEra2020: 5 failure(s).

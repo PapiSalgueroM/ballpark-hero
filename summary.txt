@@ -1,0 +1,5 @@
+mut-2005 exit=1 16s | simEra2005: 4 failures
+mut-2010 exit=1 16s | simEra2010: 13 failures
+mut-2015 exit=1 14s | simEra2015: 17 failures
+mut-2020 exit=1 31s | simEra2020: 5 failure(s).
+clean-after exit=0 16s | simEra2010: green. 2010 is real, sealed, and plays like 2010.
