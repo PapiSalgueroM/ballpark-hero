@@ -26,6 +26,10 @@
  *     competitions, each night's log score is its record in orientation; the season review's line (summary.uelRun)
  *     is how far my club went, worked out here from the evaluation, a season with no Europa League has no line, and a
  *     winner's review says next season's Champions League. Control `mineflip`.
+ *  2b a job move in the middle of a participant season (three nights played; the first MOVE_SAVES such seasons), to
+ *     one of its entrants and to a club outside its field: the save stops playing it, and the season still crowns a
+ *     winner with all 36 clubs on eight league phase games (the critic's correction 3). Control `nocarry` (the carry
+ *     back on the watcher's rule: the move to an entrant drops the competition).
  *   3 the tie path: a two legged tie of mine is decided on its aggregate, penalties only when level, first legs and
  *     league phase nights never; the match report's through/out agrees. Control `legfromucl`.
  *   4 who plays: season one never (the critic's correction 1), from season two exactly on routes L, C and P.
@@ -51,7 +55,7 @@ const CONTROL = process.env.CM_EURO_PLAY_CONTROL || '';
 const ONLY = (process.env.CM_EURO_PLAY_ONLY || '').split(',').filter(Boolean).map(Number);
 const SEEDS = (process.env.CM_EURO_PLAY_SEEDS || '1,2').split(',').map(Number);
 const cannot = why => { console.log(`simCmEuroPlay: cannot run: ${why}`); process.exit(2); };
-const CONTROLS = { rawlength: [5, /^5.1 /], nothursday: [1, /^1 /], mineflip: [2, /^2 /], noplaygate: [4, /^4 /], noplayrevert: [6, /^6 /], legfromucl: [3, /^3 /] };
+const CONTROLS = { rawlength: [5, /^5.1 /], nothursday: [1, /^1 /], mineflip: [2, /^2 /], noplaygate: [4, /^4 /], noplayrevert: [6, /^6 /], legfromucl: [3, /^3 /], nocarry: [2, /^2b /] };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`no control named ${CONTROL}`);
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
 
@@ -221,6 +225,8 @@ const CONTROL_EDITS = {
   nothursday: [{ file: CAL_FILE, from: 'addDays(last, wasSaturday ? 5 : 1)', to: 'addDays(last, wasSaturday ? 4 : 1)' }],
   mineflip: [{ file: CM_FILE, from: '{ h: my.atHome ? mine : theirs, a: my.atHome ? theirs : mine }', to: '{ h: my.atHome ? theirs : mine, a: my.atHome ? mine : theirs }' }],
   noplaygate: [{ file: CM_FILE, from: "  if (play && tables && mine.clubs.length === UCL_LEAGUE.clubs && (earned === 'L'", to: "  if (mine.clubs.length === UCL_LEAGUE.clubs && (earned === 'L'" }],
+  /* Section 2b: carryWorldComp back on the watcher's rule, so a move to an entrant drops the competition. */
+  nocarry: [{ file: CM_FILE, from: '(!!slice.me || !names.some(c => slice.clubs.includes(c)))', to: '!names.some(c => slice.clubs.includes(c))' }],
 };
 const iso = d => `${d.y}-${String(d.m).padStart(2, '0')}-${String(d.d).padStart(2, '0')}`;
 const dayNo = d => Date.UTC(d.y, d.m - 1, d.d) / 86400000;
@@ -297,6 +303,35 @@ function competitionCheck(M, s, where, throughs = []) {
   return played.length;
 }
 
+/** Section 2b (the critic's correction 3): a job move in the middle of a participant season (three nights played), to
+ *  one of its entrants and to a club outside its field: the save no longer plays it, and the season still crowns a
+ *  winner with every club on eight league phase games (my old club's nights to come drawn from their streams). */
+const MOVE_SAVES = 3;
+function moveCheck(M, s, where, counts) {
+  const slice = s.worldComps.uel;
+  const leagues = M.cm.REAL_LEAGUES.filter(l => l.euro);
+  const home = leagues.find(l => l.clubs.includes(s.clubName));
+  const entrant = [...slice.clubs].sort().find(c => c !== s.clubName && leagues.some(l => l !== home && l.clubs.includes(c)));
+  const outside = leagues.filter(l => l !== home).map(l => l.clubs[l.clubs.length - 1]).find(c => !slice.clubs.includes(c));
+  for (const [kind, club] of [['entrant', entrant], ['outside', outside]]) {
+    if (!club) { ok(false, `2b ${where}: no ${kind} club to move to`); continue; }
+    const lg = leagues.find(l => l.clubs.includes(club));
+    const open = { club, league: lg.id, tier: 3, season: s.season, week: s.week, matchesLeft: 0, roll: 0, status: 'accepted' };
+    const base = JSON.parse(JSON.stringify(s));
+    let st = tape(0x2b000 + (counts.moves ?? 0), () => M.cal.joinClubNow({ ...base, jobHunt: { open, cooldowns: [], sentSeason: s.season, sent: 1, summerMove: null } })).value;
+    ok(!M.cm.uelParticipant(st), `2b ${where} to ${club} (${kind}): the save still plays the Europa League after the move`);
+    let over = false;
+    for (let i = 0; i < 300 && !over; i += 1) {
+      const r = tape(0x2b100 + i, () => M.cm.playNextEntry(st, { skipHalftime: true, noCoach: true })).value;
+      st = r.state; over = r.kind === 'seasonOver';
+    }
+    const res = M.cm.evalWorldComp(st, 'uel', Infinity);
+    ok(over && !!res?.done && !!res.winner, `2b ${where} to ${club} (${kind}): the Europa League crowned no winner after the move`);
+    ok((res?.table ?? []).length === 36 && res.table.every(r => r.w + r.d + r.l === 8), `2b ${where} to ${club} (${kind}): a club did not play eight league phase games after the move`);
+    counts.moves = (counts.moves ?? 0) + 1;
+  }
+}
+
 /** Section 2, the season review: the line says how far my club went, worked out here from the evaluation (never
  *  through the engine's uelRunWords), and a Europa League won says next season's Champions League (correction 13). */
 const RUN_WORDS = { PO: 'knockout play-off', R16: 'round of 16', QF: 'quarter-finals', SF: 'semi-finals', F: 'final' };
@@ -331,6 +366,7 @@ async function sectionPlay() {
   for (const club of PLAY_FLEET) for (const seed of PLAY_SEEDS) {
     const where0 = `${club} seed ${seed}`;
     let nights = false;
+    let movedHere = false;
     let prevEnd = null;
     const throughs = [];
     const onStep = (M, s, label, got) => {
@@ -354,6 +390,12 @@ async function sectionPlay() {
         else { counts.watcher += 1; if (runs(1)) ok(!s.calendar.some(e => e.type === 'uel'), `1 ${where0} season ${s.season}: a watcher's calendar holds a Europa League night`); }
       }
       if (/^s\d+-e\d+$/.test(label) && slice?.me === s.clubName) prevEnd = s;
+      if (runs(2) && !movedHere && (counts.moveSaves ?? 0) < MOVE_SAVES && /^s\d+-e\d+$/.test(label) && slice?.me === s.clubName
+        && slice.s === s.season && Object.keys(slice.mine ?? {}).length === 3) {
+        movedHere = true;
+        counts.moveSaves = (counts.moveSaves ?? 0) + 1;
+        moveCheck(M, s, `${where0} season ${s.season}`, counts);
+      }
       if (/-finish$/.test(label) && prevEnd && prevEnd.season === s.season - 0 && prevEnd.worldComps?.uel?.me === prevEnd.clubName) {
         if (runs(2) || runs(3)) counts.nightsPlayed += competitionCheck(M, prevEnd, `${where0} season ${prevEnd.season}`, throughs.splice(0));
         if (runs(2)) reviewCheck(M, prevEnd, got?.summary, `${where0} season ${prevEnd.season}`, counts);
@@ -376,6 +418,10 @@ async function sectionPlay() {
   if (runs(1) || runs(4)) ok(counts.participant >= PLAY_MIN, `1 only ${counts.participant} participant seasons in the fleet, at least ${PLAY_MIN} are needed`);
   console.log(`  play: ${PLAY_FLEET.length * PLAY_SEEDS.length} saves, ${counts.participant} participant seasons, ${counts.watcher} watcher seasons, ${counts.nightsPlayed} nights played, tails ${JSON.stringify(counts.tail)}, season one participants ${counts.seasonOneMe}, ties of mine checked ${counts3.ties}`);
   if (runs(2)) console.log(`  2 review: ${counts.review ?? 0} participant seasons read on the review, ${counts.uelWon ?? 0} of them won it`);
+  if (runs(2)) {
+    ok((counts.moves ?? 0) >= 2 * MOVE_SAVES, `2b only ${counts.moves ?? 0} job moves played, ${2 * MOVE_SAVES} are wanted`);
+    console.log(`  2b moves: ${counts.moves ?? 0} job moves out of ${counts.moveSaves ?? 0} participant seasons, each played to the season's end`);
+  }
   if (runs6) console.log(`  6 base ${BASE}: ${identical} saves byte equal to the base on the head, ${parted} parted (participants and super cup nights, by design)`);
 }
 
