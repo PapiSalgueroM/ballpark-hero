@@ -1,0 +1,2 @@
+#!playwright
+simWritesAreSent-base: git worktree add -f /tmp/bw 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/bw/node_modules && cd /tmp/bw && npm run build > /tmp/bw-build.log 2>&1 && ENGINES=chromium node scripts/simWritesAreSent.mjs
