@@ -1,0 +1,3 @@
+weightbase exit=0 58s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weightstub exit=0 57s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weighthead exit=1 55s | sweepWeight: 2 failures
