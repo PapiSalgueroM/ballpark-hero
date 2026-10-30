@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerTrajectory.test.ts src/lib/cmMatchDisplay.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmLevelReads: node scripts/simCmLevelReads.mjs
+simCmDailyView: node scripts/simCmDailyView.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure,drop4,cupless,shapes
+simBoardAsks: node scripts/simBoardAsks.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simCmDifficulty: node scripts/simCmDifficulty.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
