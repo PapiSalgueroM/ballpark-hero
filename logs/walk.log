@@ -1,0 +1,5 @@
+390-rm: found=true first=true rect={"x":36,"w":338,"h":273} scrollX=0 overflow=0 dashes=false font=14px links=[{"text":"Rarity Round","href":"/rarity-round"}] blocked=4 errors=4 clicked->/rarity-round h1=RARITY ROUND
+390-motion: found=true first=true rect={"x":36,"w":338,"h":273} scrollX=0 overflow=0 dashes=false font=14px links=[{"text":"Rarity Round","href":"/rarity-round"}] blocked=1 errors=1
+1280-rm: found=true first=true rect={"x":292,"w":716,"h":137} scrollX=0 overflow=0 dashes=false font=14px links=[{"text":"Rarity Round","href":"/rarity-round"}] blocked=1 errors=1
+1280-motion: found=true first=true rect={"x":292,"w":716,"h":137} scrollX=0 overflow=0 dashes=false font=14px links=[{"text":"Rarity Round","href":"/rarity-round"}] blocked=1 errors=1
+walk1587: 4 walks, 0 with a problem: green
