@@ -84,7 +84,9 @@ let ALIASES = {};
 }
 if (CONTROL === 'noalias') ALIASES = {};
 /* Round 1584: the namesake map is read out of the same source the same way, so
-   section 3 does not call the function's new refusals a contradiction. */
+   this mirror of clubMatches stays the function's. It is used by section 1 only
+   (the dead label check), where the map can only make a label dead: Arsenal
+   keeps Arsenal FC, so the label stays alive. */
 let NAMESAKES = {};
 {
   const at = SRC.indexOf('const CLUB_NAMESAKES');
