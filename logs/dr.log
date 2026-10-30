@@ -1,0 +1,17 @@
+1) The real routes, rendered: a finished daily survives a refresh and refuses a replay (ONLY=sports-millionaire)
+   vitest exit 0, 7 passed (7)
+   sports-millionaire: green  [✓✓✓✓✓]  handler restore, mark dependent, v1 payload
+2) NEGATIVE CONTROL clear: every prefixed key is dropped between the unmount and the remount, (2) must fail on every row
+   sports-millionaire: [✓×✓×✓] restore went red with the key gone, as designed
+   1 of 1 row(s) flipped
+3) NEGATIVE CONTROL silent: markRestoredFinish is a no-op, (4) must fail on every mark dependent row and stay green on every other
+   probe: the stub swallowed a mark and the real handshake could not consume it, the control is live
+   sports-millionaire: [✓✓✓×✓] recorded again without the mark, as designed
+   1 of 1 mark dependent row(s) flipped, 0 of 0 other row(s) held
+4) Source backstop: every mark dependent restore names markRestoredFinish(<slug>) ahead of its finished state set, as code
+   sports-millionaire: src/pages/SportsMillionaire.tsx marks 'sports-millionaire' 7 chars ahead of setPhase('done'); red without the call
+5) Every file that files a daily record reads the clock ONCE, pinned at mount
+   26 file(s) write a daily record, 26 of them read the clock once at mount
+   negative: src/hooks/useCbbProgram.ts with one write unpinned reads the clock 2 times, which this section rejects
+
+simDailyReload: all green (1 row(s), both controls fired)

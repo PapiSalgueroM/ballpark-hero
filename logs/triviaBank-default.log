@@ -1,0 +1,65 @@
+1. the fixture [0.1s]
+   5496 rows of 2026, position real for 2497; easy band 109 players on 17 values (biggest tie 18), medium 990, hard 4397
+   easy: 6 listed namesakes (Rodri, Gabriel, João Pedro, Luis Díaz, Matheus Cunha, Reece James)
+   medium: 49 listed namesakes (Antony, Diogo Costa, Wesley, Éderson, Rodrigo Mora, Evanilson, ...)
+   hard: 490 listed namesakes (Christian, Diego Costa, Emerson, Ephron Mason-Clark, Facundo Torres, Gilberto Mora, ...)
+2. 5000 daily ladders from 2026-10-25, and the same dates under the old rules as the baseline [0.1s]
+   old rules: 5000 ladders, 75000 questions (shirt 14232, club 14741, ballon 13823, nationality 14783, worth 4731, position 12690); worth the most by band easy 3100, medium 1176, hard 455
+   old rules: short ladders 0, ties 557, namesakes 6489, present tense 32162, not a club offered 169, a club's own reserve side or first team offered 6, wrong answer marked 0, unknown template 0, broken options 0
+      e.g. tense: Which club does Declan Rice play for?
+      e.g. namesake: Which club does Gabriel play for?
+      e.g. notAClub: Which club does Bandile Shandu play for? [Orlando Pirates / Rhode Island FC / FK Pardubice / Unknown]
+      e.g. ties: Ibrahima Konaté 54M / Pablo Barrios 65M / Eduardo Camavinga 54M / Lennart Karl 65M
+      e.g. clubFamily: Which club does Arda Güler play for? [Monterey Bay FC / Real Madrid Castilla / Real Madrid / Hamrun Spartans]
+   new rules: 5000 ladders, 75000 questions (shirt 14292, club 14703, position 12723, ballon 13782, nationality 14800, worth 4700); worth the most by band easy 3096, medium 1137, hard 467
+   new rules: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 0, wrong answer marked 0, unknown template 0, broken options 0
+3. 1000 unlimited ladders, and 1000 single questions at every difficulty (what Swap Question deals) [55.2s]
+   unlimited: 1000 ladders, 15000 questions (nationality 2925, shirt 2868, worth 927, position 2547, club 2984, ballon 2749); worth the most by band easy 624, medium 242, hard 61
+   unlimited: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 0, wrong answer marked 0, unknown template 0, broken options 0
+   swap: 0 ladders, 15000 questions (position 2549, worth 2483, nationality 2549, shirt 2489, club 2523, ballon 2407); worth the most by band easy 860, medium 820, hard 803
+   swap: short ladders 0, ties 0, namesakes 0, present tense 0, not a club offered 0, a club's own reserve side or first team offered 0, wrong answer marked 0, unknown template 0, broken options 0
+4. dates before 2026-10-25 deal exactly what the base generator dealt [63.8s]
+   2026-10-22: 36c088422c3d34a6 (base 36c088422c3d34a6)
+   2026-10-23: 94f0aa2002e3e1d9 (base 94f0aa2002e3e1d9)
+   2026-10-24: 1f6ffa5fd6af80b6 (base 1f6ffa5fd6af80b6)
+5. every band still deals every market question: 500 builds per band and type, new rules against old [63.8s]
+   easy: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 103 of 109
+   medium: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 941 of 990
+   hard: club 100.0% (was 100.0%), nationality 100.0% (was 100.0%), position 100.0% (was 100.0%), worth 100.0% (was 100.0%); askable names 3907 of 4397
+6. src/data/marketNamesakes.json is current with scripts/genMarketNamesakes.mjs [67.5s]
+   derived 62 from the saved rows, 548 from a live read; shipped 548
+   6b. 50 names of the 2026 slice show two men in one season of the saved rows; left off the list 0
+7. Face Off and the bank read one MIN_RATIO [67.5s]
+   MIN_RATIO 1.04
+8. a reserve side and its first team are never offered together (a planted pool) [67.5s]
+   500 club questions each: old rules offered the partner club 72 times, new rules 0 (built 500 of 500)
+9. every ladder is fifteen long: each fleet through the head and through the eight draw arm, same seed or date [67.5s]
+   the arm: the head bank with a cap of 8; pin signature d25ca436638e4830
+   planted unlimited: 1000 ladders, arm short 31 (dropped step easy 1, medium 13, hard 17), head short 0, identical 969, rescued 31; of the arm's short ladders 31 held a worth the most question before the drop, with 1.9 position questions on average [88.8s]
+      arm short at: seed 10 step 12, seed 24 step 9, seed 43 step 9, seed 49 step 12, seed 77 step 11, seed 162 step 15, ...
+   planted daily: 1000 ladders, arm short 37 (dropped step easy 1, medium 15, hard 21), head short 0, identical 963, rescued 37; of the arm's short ladders 37 held a worth the most question before the drop, with 1.9 position questions on average [110.1s]
+      arm short at: 2026-10-27 step 13, 2026-11-04 step 12, 2026-12-05 step 8, 2026-12-06 step 7, 2026-12-21 step 7, 2027-01-05 step 15, ...
+   degraded unlimited: 1000 ladders, arm short 3 (dropped step easy 0, medium 0, hard 3), head short 0, identical 997, rescued 3; of the arm's short ladders 3 held a worth the most question before the drop, with 4.0 position questions on average [128.5s]
+      arm short at: seed 478 step 11, seed 516 step 13, seed 628 step 13
+   degraded daily: 500 ladders, arm short 2 (dropped step easy 0, medium 1, hard 1), head short 0, identical 498, rescued 2; of the arm's short ladders 2 held a worth the most question before the drop, with 3.5 position questions on average [137.4s]
+      arm short at: 2027-02-28 step 15, 2027-03-19 step 8
+   real unlimited: 500 ladders, arm short 0 (dropped step easy 0, medium 0, hard 0), head short 0, identical 500, rescued 0 [142.3s]
+   real daily: 500 ladders, arm short 0 (dropped step easy 0, medium 0, hard 0), head short 0, identical 500, rescued 0 [147.0s]
+   driver daily: 3700 ladders, arm short 1 (dropped step easy 0, medium 0, hard 1), head short 0, identical 3699, rescued 1; of the arm's short ladders 1 held a worth the most question before the drop, with 2.0 position questions on average [148.6s]
+      arm short at: 2035-10-26 step 15
+   real legacy daily: 30 ladders, arm short 0 (dropped step easy 0, medium 0, hard 0), head short 0, identical 30, rescued 0 [148.8s]
+   KNOWN_SHORT pins: 10 ladders, arm short 10 (dropped step easy 0, medium 4, hard 6), head short 0, identical 0, rescued 10; of the arm's short ladders 10 held a worth the most question before the drop, with 2.4 position questions on average [149.0s]
+      arm short at: driver daily 2035-10-26 step 15, real unlimited 135581 step 9, real unlimited 143133 step 13, real unlimited 159321 step 12, real unlimited 164203 step 9, real unlimited 191878 step 12, real unlimited 198946 step 6, real unlimited 217857 step 15, real unlimited 219932 step 12, real unlimited 230263 step 10
+   (ii) compared, where the arm dealt whole: planted unlimited 969 of 1000, planted daily 963 of 1000, degraded unlimited 997 of 1000, degraded daily 498 of 500, real unlimited 500 of 500, real daily 500 of 500, driver daily 3699 of 3700, real legacy daily 30 of 30
+10. Swap Question never deals a question already on the ladder: every rung of four fleets, the head against the swap as it was [149.0s]
+   the base arm: the swap as it was (five draws, compared with the question on screen only)
+   real unlimited: 250 ladders (skipped 0 short), 3750 swaps; the base arm: repeats 749 (20.0%; asked before 502, still to come 247; worth 539, shirt 34, position 155, nationality 3, ballon 15, club 3), handed back 0, digest 94093f41fa2ac18a
+   real unlimited: the head: repeats 0, handed back 0; fresh before 3001, identical 3001; redrawn 749 [152.8s]
+   real daily: 250 ladders (skipped 0 short), 3750 swaps; the base arm: repeats 829 (22.1%; asked before 536, still to come 293; position 185, worth 571, ballon 18, nationality 4, shirt 49, club 2), handed back 0, digest 469de27f353f6ba9
+   real daily: the head: repeats 0, handed back 0; fresh before 2921, identical 2921; redrawn 829 [156.5s]
+   degraded unlimited: 250 ladders (skipped 0 short), 3750 swaps; the base arm: repeats 1252 (33.4%; asked before 886, still to come 366; worth 852, position 393, nationality 2, club 5), handed back 0, digest 467c7f6b97ee0ac6
+   degraded unlimited: the head: repeats 0, handed back 0; fresh before 2498, identical 2498; redrawn 1252 [162.9s]
+   planted unlimited: 250 ladders (skipped 0 short), 3750 swaps; the base arm: repeats 1777 (47.4%; asked before 1330, still to come 447; worth 879, position 888, nationality 5, club 5), handed back 0, digest 7381543df5bf82e6
+   planted unlimited: the head: repeats 0, handed back 0; fresh before 1973, identical 1973; redrawn 1777 [170.1s]
+
+simTriviaBank: all checks passed
