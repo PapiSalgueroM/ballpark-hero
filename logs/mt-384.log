@@ -1,0 +1,8 @@
+b1d1f1fbf
+src/hooks/useClubManager.ts
+
+Auto-merging src/components/club-manager/TacticsScreen.tsx
+Auto-merging src/hooks/useClubManager.ts
+CONFLICT (content): Merge conflict in src/hooks/useClubManager.ts
+Auto-merging src/lib/clubManager.ts
+384 merge-tree exit=1

@@ -1,0 +1,13 @@
+9ae24b23c
+scripts/simClubManagerSaveSize.mjs
+src/pages/ClubManager.tsx
+src/pages/WhatsNew.tsx
+
+Auto-merging scripts/simClubManagerSaveSize.mjs
+CONFLICT (content): Merge conflict in scripts/simClubManagerSaveSize.mjs
+Auto-merging src/lib/clubManager.ts
+Auto-merging src/pages/ClubManager.tsx
+CONFLICT (content): Merge conflict in src/pages/ClubManager.tsx
+Auto-merging src/pages/WhatsNew.tsx
+CONFLICT (content): Merge conflict in src/pages/WhatsNew.tsx
+1597 merge-tree exit=1

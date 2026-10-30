@@ -1,0 +1,15 @@
+51a666b75
+scripts/data/cmLeagueRulesDigest.json
+scripts/fixtures/managerAppealIsolation1081/manifest.json
+src/pages/WhatsNew.tsx
+
+Auto-merging scripts/data/cmLeagueRulesDigest.json
+CONFLICT (content): Merge conflict in scripts/data/cmLeagueRulesDigest.json
+Auto-merging scripts/fixtures/managerAppealIsolation1081/manifest.json
+CONFLICT (content): Merge conflict in scripts/fixtures/managerAppealIsolation1081/manifest.json
+Auto-merging src/components/club-manager/StatsScreen.tsx
+Auto-merging src/lib/clubManager.ts
+Auto-merging src/pages/ClubManager.tsx
+Auto-merging src/pages/WhatsNew.tsx
+CONFLICT (content): Merge conflict in src/pages/WhatsNew.tsx
+1593 merge-tree exit=1
