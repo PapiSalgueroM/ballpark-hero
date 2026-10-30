@@ -1,0 +1,10 @@
+vitest-b exit=0 43s |    Duration  41.67s (transform 6.50s, setup 1.69s, collect 20.98s, tests 74.50s, environment 8.70s, prepare 2.66s)
+vitest-c exit=0 12s |    Duration  11.62s (transform 2.47s, setup 884ms, collect 6.62s, tests 16.99s, environment 4.96s, prepare 1.36s)
+vitest-a exit=1 62s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmCareerDesk.test.tsx,title=src/components/front-office-shared/GmCareerDesk.
+simGmCareer-nhl exit=0 33s | simGmCareer: all checks passed (nhl)
+tsc exit=0 135s | 
+simGmDeskHost exit=0 66s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+simFoLazyDesk exit=0 34s | simFoLazyDesk: all checks passed
+simFoLazyDesk-hostimport exit=1 40s | simFoLazyDesk CONTROL hostimport FIRED: section 1 went red with 3 failures (red sections 1)
+simFoLazyDesk-eager exit=1 39s | simFoLazyDesk CONTROL eager FIRED: section 1 went red with 12 failures (red sections 1)
+simGmCareer-nfl exit=0 242s | simGmCareer: all checks passed (nfl)

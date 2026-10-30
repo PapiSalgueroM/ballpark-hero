@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-a: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/nhl-front-office/NhlLazyDesk.test.tsx src/components/front-office-shared/GmCareerDesk.test.tsx src/lib/gmCareerRules.test.ts src/lib/gmDeskHost.test.ts src/lib/gmXp.test.ts src/lib/gmSeat.test.ts --testTimeout=600000 --hookTimeout=120000
+vitest-b: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/test/frontOfficeSaveRecovery.test.tsx src/components/front-office/FrontOfficeCuts.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx src/components/front-office/FrontOfficeDraftCapital.test.tsx src/components/front-office/FrontOfficeTile.test.tsx src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficeSeasonStats.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-c: node_modules/.bin/vitest run src/test/nhlContributors.test.ts src/lib/nhlOpeningRatings.test.ts src/components/nhl-front-office/NhlTradeLists.test.tsx src/components/nhl-front-office/NhlWaiverReceipt.test.tsx src/components/nhl-front-office/NhlFrontOfficeRatingEvidence.test.tsx src/components/mlb-front-office/MlbGmDesk.test.tsx src/components/mlb-front-office/MlbDraftCapital.test.tsx --testTimeout=600000 --hookTimeout=120000
+simGmCareer-nfl: node scripts/simGmCareer.mjs
+simGmCareer-nhl: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+simFoLazyDesk-hostimport: SIM_FO_LAZY_DESK_CONTROL=hostimport node scripts/simFoLazyDesk.mjs
+simFoLazyDesk-eager: SIM_FO_LAZY_DESK_CONTROL=eager node scripts/simFoLazyDesk.mjs
