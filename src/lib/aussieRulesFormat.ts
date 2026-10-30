@@ -5,8 +5,9 @@
  * flag gameRule, which means the copy must call it this game's rule and never
  * the AFL's. The receipts live in docs/audits/AUSSIE-RULES-FORMAT-SOURCES-2026-10.md.
  *
- * The clubs and players stay fictional (see the header of aussieRulesLeague.ts
- * for why); only the shape of the competition is real.
+ * Players stay generated; a new career's club names are the real 2026 clubs
+ * (Round 1572, see the header of aussieRulesLeague.ts). Each part of the
+ * competition's shape below is either sourced or flagged as this game's rule.
  */
 import type { FinalsTie } from '@/lib/finalsBracket';
 

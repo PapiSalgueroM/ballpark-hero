@@ -61,7 +61,7 @@ describe('actual Aussie Rules Manager Board', () => {
     expect(localStorage.getItem(SAVE_KEY)).toBeNull(); expect(recordCompletion).not.toHaveBeenCalled();
     fireEvent.click(within(rules).getByRole('button', { name: "Let's Play!" }));
     expect(view.container.querySelectorAll('[data-arl-club]')).toHaveLength(18);
-    expect(view.getByText(/Eighteen fictional clubs and generated players/)).toBeVisible();
+    expect(view.getByText(/The 18 AFL clubs of 2026, by name/)).toBeVisible();
     fireEvent.click(view.getByRole('button', { name: 'How to play' })); expect(view.getByRole('dialog')).toBeVisible();
   });
 

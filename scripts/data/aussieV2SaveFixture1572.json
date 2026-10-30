@@ -1,0 +1,2277 @@
+{
+ "round": 1572,
+ "note": "Base record of the Aussie Rules Manager v2 save before club sets. Hashes and recipes only; scripts/simAflClubNames.mjs replays them.",
+ "base": "65b3e291a",
+ "smoke": false,
+ "more": 60,
+ "files": [
+  {
+   "path": "src/lib/aussieRulesFormat.ts",
+   "sha": "78c0612ed25e13285cd73b2226463815172d3b85614bd97d8cb94e0242fe1243"
+  },
+  {
+   "path": "src/lib/aussieRulesLeague.ts",
+   "sha": "ade026a933a911a4f23a9e9a3528ce7597b765a73b415231d61a8cfff679ad87"
+  },
+  {
+   "path": "src/lib/aussieRulesManager.ts",
+   "sha": "08e37d2fa0d85461c54e16a7040a15689b6aec50e99ce674c0db676eb44cc77c"
+  },
+  {
+   "path": "src/lib/careerEngine.ts",
+   "sha": "938c1d045008b14a973acc3e9f44fdc3a9614e92c7b121236bbc10189f37dbe6"
+  },
+  {
+   "path": "src/lib/careerHeadroom.ts",
+   "sha": "eca3130b86e5af0e5a6af5d361762023d0815f84235d81fd6e8bfcb6a736c085"
+  },
+  {
+   "path": "src/lib/finalsBracket.ts",
+   "sha": "94363eec12b9e2621bf8ed46b81cd1ecbc7bcd8826ed2603994805e8674030cd"
+  },
+  {
+   "path": "src/lib/gmDealTable.ts",
+   "sha": "5c83fb5102ad0440e90f02034f98fd175ab8cdfcda0d151ebe89d860c25f5170"
+  },
+  {
+   "path": "src/lib/leagueCore.ts",
+   "sha": "9c37a88f13585def063097e69db2cdc94a90aab24b470f3b564bda9c1f7d57f9"
+  }
+ ],
+ "fleet": [
+  {
+   "seed": 1,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 243,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "b4de2661d299d0cc3e38ba28d937068263f58c2094492bbdf8e0f8f456450dec",
+     "masked": "5ed650103ae80151bfdbfa7289b6da7c5c62a05f95603b47e3964be395a9b48f"
+    },
+    {
+     "at": 474,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "9f06e5ee67546fca2e66b1de9aefba49c9d2056698015e7fcd280f86092828a7",
+     "masked": "f2c3bf0fb2c705814c36c86ce7260c9d573519acbddd5500819eaf75e33a63e5"
+    },
+    {
+     "at": 477,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "1f6c7f3bd77cc994f6a950e1869e4d0d31bb95ed216eebcfc11b4d6d8bf5524e",
+     "masked": "c1020348e3af99e176f4ba03cb33bdd3b205f4c18289d560cef37d64deb39d4c"
+    }
+   ]
+  },
+  {
+   "seed": 1,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "a6cb516a8291e8292219998b853387bf233505e19f5c8f87f2df3ea396810975",
+     "masked": "a7b7d9f51f92e82277e649347fc77a508a261564d6208860989f06b702fdfd63"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "ca5272f144e499ee667ef418613e20b1c191009d4a107d101e66766c1c020486",
+     "masked": "dc9364caeef5099453fbf28a2977a7df9c7181175ecb62c2eda78ab94457f936"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "80972c93d0dc32401b6f7a917990d65a982c6c0c0b1accde4f5d35dd60acceaa",
+     "masked": "29d2ed1df71470d0ef8bafc8b3821dc6af9a70426ec23dabd52a8fb10c522ca4"
+    }
+   ]
+  },
+  {
+   "seed": 1,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 236,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "15c391d33d6d9ec70761458b7e8e717a5acf7c82011865c9126e446990fc79fe",
+     "masked": "efa0d7e10aafeb47ea4b67aa2f57e671bfd759a27bb89a0356806a2c926516b2"
+    },
+    {
+     "at": 476,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "f82255f33321debf1190975d1480aad933dedf19f5be82893ae59ac70b97a104",
+     "masked": "026a33ebbdcf901b4aa85ea8c473593df41527a1d9dbc9548a1d28616f658997"
+    },
+    {
+     "at": 480,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "1d57166d388f60c293454b8ed5074e5b81e596a889f2f64c254cecd5ecb3ed31",
+     "masked": "d2ef980ae25aade4af3153ccdeb747099ecd46c260fc1e77c0e8479deff2f198"
+    }
+   ]
+  },
+  {
+   "seed": 2,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "81e4b0cd9f34047be0015fca88c1a9d4f37e1f23feba98eb5ff32245ecff5eaf",
+     "masked": "0d7e84c2fbfaa79163697ac3e4a16f04b4c97143225370fe2fe9db3ee2447295"
+    },
+    {
+     "at": 468,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "e20d10bb25ecb102bf5a4966ca0310eecd7cab5d3a274c548fd4efbaaffc9ff7",
+     "masked": "62e049a35d81d0bf418464fb6b809b83e4cb85d4aa30a96ba6fe7a8c7870d0b5"
+    },
+    {
+     "at": 471,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "5230f1e9a6907f6a2632cf9896b816c1ebcf8fe7344ff0ba7b97f2ac0dad4ed1",
+     "masked": "9fdfe1a35f6a56b866b860e64eb00f77cd3be0cd219e0bee6b85e6331a889199"
+    }
+   ]
+  },
+  {
+   "seed": 2,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "ca3e4ab1ff884d86928a0811022c2b02e57cad144be5624d46847474db4572ce",
+     "masked": "61f9d52ef2e513cabadd51a99ce612761a6ffa9e899ee040a84e655c4efd8caa"
+    },
+    {
+     "at": 504,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "6379e1e8e1ac2d629707eb95aa4b96147d4a4dea22f5203e421ba35f3602d2b3",
+     "masked": "4ab5125ddda659240934fe2468b0992fcf5ec673827f09cad107b3b546baf54c"
+    },
+    {
+     "at": 508,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "5f51a1faf8cb1a93b05b22bd28a9fc266ac43a535ec7105659819254e797ae61",
+     "masked": "c398e5a202aef4eca37e4c6bfb09234c81bf40c46636ab86c5b12e4d29c8cf9e"
+    }
+   ]
+  },
+  {
+   "seed": 2,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "d708a39609fbe6f371eef2317f5e8dabe7914eff4563a641a535274a19ed059c",
+     "masked": "3ae4bf4a6b08d520a6aeda7f0b2b03c0d273daab08d44ab287abd4c4cd41f0ce"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "704ba4bf4689ac7864305ed501e05c80174f3b7a6997df1011f7a9dee5943762",
+     "masked": "cc313f9d9dadfdd108c12b6c54231669d75229ae79e1040f86952269613fcf7f"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "84c384b97fb660b4e89bb2f44d372ee664542213fd7ad82237ad29245e2b7432",
+     "masked": "f58e498534ad0217f860fe75169bd69d6b5622234433e6588e8079e3c60bcac9"
+    }
+   ]
+  },
+  {
+   "seed": 3,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 258,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "06ad43052285cd8cf9c6002850ce906d1a0453a32811ade74c20571a538e947d",
+     "masked": "2cc7ab7bfb03104b139b3eefbd28f51827fb4475e83b6eb957e9787cd9889259"
+    },
+    {
+     "at": 512,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "bd0fbc4bfea01074ed00b1366f342c032875ac62bc807ee9fa1333f21d569292",
+     "masked": "3085e601bf48174e10b421232bd8ab3a40d9d8338fd43470a488bf99ff0d95a9"
+    },
+    {
+     "at": 516,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "972617c14dad5d126cc2dd08d833743284d1194763d5c2c0f8cdc826c838f2f8",
+     "masked": "7a2e79b8d5eda3354d2b0ad2a4111564b2ff8c976d519268d4b9fbe7f7e6be09"
+    }
+   ]
+  },
+  {
+   "seed": 3,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 235,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "f6fcad613c17b45d307af156df87dccc8297a9ada243cb6a85372abd9bdfe1e6",
+     "masked": "ebdbf353edbce6836c4fcdbb2d0ed546eff90e4611d98e5effecd8bbb8c411c2"
+    },
+    {
+     "at": 467,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "d40cfcb94864e69253412f2e5059586c089b85979431b311cedbdd6be79765fa",
+     "masked": "12bcccc48ba8cf91f9048d34b901c5a5bbe1d16914d2277b6206d9857d37d5d6"
+    },
+    {
+     "at": 470,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "48da4def255f6ad18a10451c0bf54f6322fe28d96ffdca0353d5a54d6dc5a849",
+     "masked": "942385ce3747eda530da2c48ea34c33d75eaf8f78229f35a847b88b3b8a0cf3d"
+    }
+   ]
+  },
+  {
+   "seed": 3,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 236,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "e0c1968b060b6cbf0dff1d7e85cb50bc7412042d162303fb5ca4a2fbe54b88fc",
+     "masked": "8b05b56fda9e53215cff2e6b111ea831dbe13b13fdc8d2f5712af4902990ca3f"
+    },
+    {
+     "at": 468,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "7229aff74110b2d45d50c90751bbc4a30c251253793df125f27e19888ed28a11",
+     "masked": "6f59d2172189798d4e378bef92ffadef6fc0ee64d5cd8df4e1a286f175a06379"
+    },
+    {
+     "at": 471,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "ba12ca211e5b7822df5200f48299807710946e7010652f811274bb05689b7358",
+     "masked": "a1f6116873994ca67e6b17bb8f0f69fb1df097d26f787886478244a4c35a045b"
+    }
+   ]
+  },
+  {
+   "seed": 4,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "19da81aff58e8d77916308a93dc1d896b3a1ecc07f642b82a37e6932417cc817",
+     "masked": "6bbd0cc087e7ee18e087babe9c492b39f6ee21c51ef7cb6725df9bbe435c769b"
+    },
+    {
+     "at": 504,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "54013472542405d68e13e51b456f69f584427ba0b8d16378033dc3f343870279",
+     "masked": "ee2ca370582d2b31929279340c6f01d3217f310a7f9397dba7c0a9a1e4077229"
+    },
+    {
+     "at": 508,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "0cfe9170c2c053de64a10ae51038970d97db5d0d47338f4f672b25ca9ecd5a82",
+     "masked": "15ab8f76c246ffbb8514858a44b4def47a237dff578b8ff39cfc2ed4c7ff2f43"
+    }
+   ]
+  },
+  {
+   "seed": 4,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "96c8861f5593cbec5df5a5574718a57aca517a9ac7c1b847aed2e1863d2a008f",
+     "masked": "1a35d532c05cdd219a9c6b87655e56d3747983cb66ab05a4e8a59cf63c15a5ef"
+    },
+    {
+     "at": 474,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "9a451fb3698356840db856893c60801bf0dc6ac6be9c60d42dfe54c3c0143b7a",
+     "masked": "44de2a97cec2d656117e91a1356d396314669e3394b5f6bdef23824956c82c2e"
+    },
+    {
+     "at": 478,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "d75286dc12f7b56bd0126b0df928f9ee148c8177d7939e5dd513378133d0e6d7",
+     "masked": "ad9bcf3636489b445d1e69f2b51dc624ac8ca25ed811b7170742ed0750487963"
+    }
+   ]
+  },
+  {
+   "seed": 4,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "6514715c3666b3a4e35388d2a45b82a8e69df0b6263b2257b85cee9fdee92ad3",
+     "masked": "bdc789b1c71897e604c039d54f8aa7d15e2fe52f1665b60f84a74f24db4088b7"
+    },
+    {
+     "at": 459,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "12b144fa62ae00ca1d5e3bd84a6b75f23054cea2ffdb927ad058146f32a6e35b",
+     "masked": "15a46a19b5fce699d18aed64d49a8907deae0ef5cd1121b30a368598fc688ffd"
+    },
+    {
+     "at": 463,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "6146363cb8a1d51a683ad0c701dc0cc30e8d8dd79902bee32119d67a12d39089",
+     "masked": "355bb5d5203f1dca9fe268307c0f0fcfba66d32d291676e294de29aeae10ab70"
+    }
+   ]
+  },
+  {
+   "seed": 5,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "97189671f84977a4e06d0e5dd1ee3cbf0ee2b9528569c75ecc90dd638ba9d8d9",
+     "masked": "74dfd8d812fbd05e0e9b9d5759f09fd33cbabe8623e9d2ae557f14b5e9197a6b"
+    },
+    {
+     "at": 505,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "3e8284e280a37d1e5f0604fc2e93cf54dc971abb723872bc525acdde52c476e0",
+     "masked": "86498b0b5f8ff318a2c2c50ffc96c4aa350f14c607e8de13560c476fd9704fc6"
+    },
+    {
+     "at": 508,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "39e251d6d87af225ae1c75563db594d76edf34cadf813c77af177d71000e6b08",
+     "masked": "80614f03e1d08b3c408f69d6924f80baf4884e9d83ba299013ce6f874207a952"
+    }
+   ]
+  },
+  {
+   "seed": 5,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "a912080dbc6b774cce20030cc89ee83c38334d70eb9b3b51cfbb5d157c2b2c5c",
+     "masked": "0f21f74d21c9c7f4b81fd4309cb865c74e12f5eecb1c75c994a4b069ff9e901d"
+    },
+    {
+     "at": 459,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "ee90865f6a921b1421f5c4aaf047286d325e5d0593ac9add38179e9382f9ca60",
+     "masked": "b57c51c336b37e6b100def620bdc050bc65984a48012856a34098ad9212a8170"
+    },
+    {
+     "at": 463,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "8a1ca33802120f34afc13f8be003931010647de9a468746e8875e4d531d0b9b4",
+     "masked": "5042d4011885655c640c4cc861030fdc44417f21b17868a6f6ca1b22cd7d9e1f"
+    }
+   ]
+  },
+  {
+   "seed": 5,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "45cdea4e183d9e88b2150c5b1f0b952c8ccc76f104231831714b0265c2786239",
+     "masked": "3c856f8f70e3543ebacc2145b7fff13b6386726562ef3dc7feeb86ae098255b6"
+    },
+    {
+     "at": 459,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "01fc6993f6e2d5aa0aeef6de79e9b983bcc23f7faaace9b442138084475efe8f",
+     "masked": "1543da969567a520db861e0b4b3ee5894531fd3f41a1ec3738c65722c3dae923"
+    },
+    {
+     "at": 463,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "44e4b236e8feaf03298d235233f8ff939e8f9ad4990ae94e26d5523da164b533",
+     "masked": "a612057660c8025a1037b82d52decffb2f79afee3c425fed2fc178e583c22a09"
+    }
+   ]
+  },
+  {
+   "seed": 6,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "0b7fe19bc2e2bfe30fe99ecdce605e19f045dbdb4b4866c87a201ec52a8d31fe",
+     "masked": "0183eda16ea258142276632120f3ac897a0262964727cb5ddb3e27479115c97e"
+    },
+    {
+     "at": 489,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "037de9140b8d45cd54465300f9e48af3d1c043d37f3db9dbd2b6d9c1a6b73731",
+     "masked": "9fca275123c9619d8bc5fe6f8960aa3ed9d31ed7e941ad7d11abb7da5f11123d"
+    },
+    {
+     "at": 493,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "332b2b9865aaf1245f3ed38fdb3e438ccf0ccca4c9441c8436ee270d7e3a2a2f",
+     "masked": "2fe019747e486ade157bb1661023e9febe504d619e1b765cd2b397e8a03dee67"
+    }
+   ]
+  },
+  {
+   "seed": 6,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "9c8f1b6b4ce55c23a6c12eb1496ee448319fe0cc7d8fc4fc3e956c3ed26c88f7",
+     "masked": "607045911889381f464c68aa00f9c0b30d2c66cd9929d51fcd7abb9c4199ed32"
+    },
+    {
+     "at": 481,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "59607c5d8a3179c376daa2dfe86d6be201159037e36abdafa4f4279e02b1b4fb",
+     "masked": "0cd14c4fe342878701f39ce938448d5b9485115f13beb37fc3c316f37d3cf3fd"
+    },
+    {
+     "at": 485,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "a6958e28f6332b0992b9c5f8883e2aa489f61aeced5ae45df4555641d87797e4",
+     "masked": "90a80445f8c454fa51e4339cf2ea76ec28e6580343fe1e8d982571fd28d198eb"
+    }
+   ]
+  },
+  {
+   "seed": 6,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "f4ef2fa0e17648f546578653c2e67e8e7d7f2ff62a2e2fc967b07201709338ef",
+     "masked": "d5540a0d9407596fe5de1653d3c1d07b2d8963204590566bc63a2345cac97224"
+    },
+    {
+     "at": 468,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "069658a2681396f65f3570d0b27b0d031732ddc4ad076bb74ee0a16b6c99e3b0",
+     "masked": "fcf27050d9d2114a7a2f75abb6d124eec5027ce96c0d55c5b083a1c50a34e9be"
+    },
+    {
+     "at": 472,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "764dc60e2de052671f89cc282c746baa9360072593a5084f24b5211ab2e9dabd",
+     "masked": "4322379cd5615e814ccb07a7c15744c984ec10640231859a5cd8373bfde14e22"
+    }
+   ]
+  },
+  {
+   "seed": 7,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 235,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "db3c883b5c7bfd994cea621c2acfc0e4303273bf67504fd44e72a704c440c32e",
+     "masked": "95205295e9a29f1ce6ae2ed6ebf49a1a2246fb0d4865184817e6e2da926cd30e"
+    },
+    {
+     "at": 488,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "38fc075d003225f0c5d4442cc5261c66b13a4eb15f41879e78659694f9aa9da9",
+     "masked": "daccd0a9e487e5ba7898f6ae81e73f18a14ac6909a5dbe09d8fc8cdc1f6620d3"
+    },
+    {
+     "at": 492,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "5d3f7f6fbe6dfc72928423719cb0f0495857dc32a6c9e43943f47a3b94cba3dd",
+     "masked": "8a9897ade4b6c2d335b6550d44fa7ec21cca66d34308b08d4a9f81f8d546c769"
+    }
+   ]
+  },
+  {
+   "seed": 7,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 258,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "a84d315f00b8c097ed0ce0941c9381a1eb4411c4e8b78bdba1c8a512d031911d",
+     "masked": "f2042ab24b20518e7536e44e0800f48f145f4b5de05b80a1268d826d2f820cf5"
+    },
+    {
+     "at": 505,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "2343d2e584cbfd513482c87722764fc937c047d26cc8d07c1ce6d3e9ec5083ee",
+     "masked": "b7ca93f5d37c4f60f13936223b4432e793b65e0c6e094b3d0d67a0b58cb9662b"
+    },
+    {
+     "at": 509,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "29e417c96c66c941a33add52b5e6c9b8dfdfb0125604876b727da111ef7388fb",
+     "masked": "4670d9bbad1769a58e9c350942a115aaacddd93453b29b48e128b4fa538fea12"
+    }
+   ]
+  },
+  {
+   "seed": 7,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "539d61333a066fcb10aeef06487b0fead1b0edc1cd9a5a4b0708af183b833d76",
+     "masked": "97ff8d2875d586efa1479995b1eaf1e47166716a540da38f7cfb158be2250c5b"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "df4e2c8580d187cf708acb6fb6c535bd1bedc0a28a0c236fd0c37a00f8d74b58",
+     "masked": "d5f8bdd25d47d06e1b2d5332845570dfb2eb88f94535fddf5320b99624ccc9e5"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "ee1b46b267ff0197b8bee335849ea0af1b939152ff17b72a0534670809057c08",
+     "masked": "2435d7f0f5d19e80121031a1201f5384501b96191f6451a50d9dc4bfafcbf2f4"
+    }
+   ]
+  },
+  {
+   "seed": 8,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "a743c6971e3a1559279e4745b20498dae425a91485f4cdb22a34445218969efc",
+     "masked": "7c99fe150e0446f8cf751562d38c8448d28f0525f6eba48cbb0d916d1b7a3309"
+    },
+    {
+     "at": 497,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "c2293268ebe6da2ed3dc8b4004f268848fb6979732c6d79b01a06f6d2a26fc71",
+     "masked": "7c9c94ea90348284a513c6faf8c363fbfd162853a1df777a15564c572e799ba9"
+    },
+    {
+     "at": 501,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "73f6b4d72ea7d651334cafa9c8f7037b68ddc976fcefae4232c14c0d6730f90f",
+     "masked": "0317899547cc487be1d6274e84e945f69299eced08bf58ac11c323997028abcb"
+    }
+   ]
+  },
+  {
+   "seed": 8,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 236,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "0538c6d3ad3455820c599ff80c1afe58965da63e097265c5629e438f30ec11d8",
+     "masked": "201e5afd1b2279f57812aa9030e091bba84bd0eeaefae3571102d73e6ea57c8b"
+    },
+    {
+     "at": 468,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "a62bb34c0f729309fbb389db9470f3cebeec5d744c5cd36263cc491e96aebc1f",
+     "masked": "cd3fc2c5926921a20148e0d9ac36737d1e05eb2684e01f81e65641eb8e493fbd"
+    },
+    {
+     "at": 472,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "d3414a7ab1903df1d1fa91fa23359112c2909da6bca471be22e3b8f515b86e72",
+     "masked": "c65e20346eae55d526bbdf143358116705988d4bda54e1b55660434e71cd4dad"
+    }
+   ]
+  },
+  {
+   "seed": 8,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "882ff83a2280307fd5366bab918ab18876d8b54d45acc52e8f644454962d608e",
+     "masked": "0735421b4928d90f70648218dc99c0e7570a0d08d69fe9194cabd584f6359b40"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "daf30f3a169bfc7e4aa20e92a25b46ffd66a585a526636139a0f53c6fe3dac96",
+     "masked": "1ccec72d16a9d66b97163b31ef244c5f4dd0d540022e6af68cba1e83ffcfc424"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "50b0889ac4c52137a2a3a3ff925f86688737385b4ce6ec6d670b540611495077",
+     "masked": "224818f644017dee8b1243e0c71c20eb0778934c727f8a2afdc1da2921ff7085"
+    }
+   ]
+  },
+  {
+   "seed": 9,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 258,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "f7e83e16357f0a1d1be030533fdc18bacb9fdac9f409ea37f82092124c2eb240",
+     "masked": "6eb8a37615c9d37646bf2debd628a4fa76047978eadb95944f76ea520873c331"
+    },
+    {
+     "at": 520,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "6674feacff57e45b196209d2ab1c81210f36c8871f588a9af1e8d4df7dd40a8c",
+     "masked": "bdd4bf6e02494ab0ebbfbb3cecca4b49e49e15993575cc1e9e908df71b8fafb3"
+    },
+    {
+     "at": 524,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "81ee1adea180e1e5c0dddfe76e88a671bd36b7c7b257a281d16b89ca015ef5e0",
+     "masked": "957a8a0aa8587cbc6d4062b1fa17c6728572f9e8cd3da4837c519d6e7ef675e8"
+    }
+   ]
+  },
+  {
+   "seed": 9,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "138e57ead4ca46a4100df2e5625cffee010fea8f03ae855f4cac8c03710868b4",
+     "masked": "b27a90a26c6446fe1919245575143514e2622c6aea587b1c6074bf7b11bdcc00"
+    },
+    {
+     "at": 482,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "ba4265907b91df249f8561ea18bea2f0b447b600450c6d2ae08367ccc1de7f09",
+     "masked": "d941edb15175b55028eb073091fdae4c3d59f5d8bcb7afd3019e75d48c8584c4"
+    },
+    {
+     "at": 486,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "9fdffe3e9c1a5b071486c9d5517fcf24b56d9a4fba30ed0e190fcf4e84e47df8",
+     "masked": "12b11f632a6e33d804f689d81ad7e22aad691a39199bbd4c4daaa903449b5d9d"
+    }
+   ]
+  },
+  {
+   "seed": 9,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "37918dbba6f3d9343a823a835fedad88afc15929a53f3a7e4563891aa67e9d06",
+     "masked": "ef1463d17ca396d32e4fcc2b1e88788cf7c1c0ac4f7c27fc27d73ab242484b8a"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "7901d18cd80095f43aff790ad9356308d00eb94ef0f037a9616421e186728a92",
+     "masked": "1a4ce42e5be344c5ebcb1ee0f0738bcf511f0400e3752f49673e425cb498da24"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "ba3d5de0e39bb78ab030f621b126d265377800ab7cbdb9052d5e42fa6365ab22",
+     "masked": "48ec390c7e0f6dff3739cda95df7e84238a01fd377c886661ea1431f9006aacc"
+    }
+   ]
+  },
+  {
+   "seed": 10,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "b5a6bfca3ca47c152cfdcab69fb6f31008630b8fb8184688317b764c3badd2f3",
+     "masked": "89e6cd12e496a58ecb0d090a12a87da88ec50eef1a4c44c2f16b75451dfff857"
+    },
+    {
+     "at": 504,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "ff61137a893ed0281aeef20f6cfdaa5d13234fe5f8f536287f24a8070df4d49e",
+     "masked": "a10b22faf831ed86655f494aa013b2c5dad3785c3ad1eea6f6cd097c3c6a504f"
+    },
+    {
+     "at": 508,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "13318972bcd7887815577adff1a97ecb8d84e1a1197f5041d1b03a9df0049233",
+     "masked": "0aaae7ef109d7d71aa6060eeb96f7829b4074173a48d6b55662657025f8e7bf7"
+    }
+   ]
+  },
+  {
+   "seed": 10,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "aedfd055d1427cee904cbaeda5f920104c21952e06f300bbfd0c3794dd6203d0",
+     "masked": "355a6dcd6938e3118f5a90d8f90c31af2505d389d51aeeadcb5509c813667b88"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "3a7e31e4899f336d3982df80a5ec5ed76d3818887d038c0f7ac2271d77faebf2",
+     "masked": "bb1dc277874c146c237db7ba4f8174c9a9e27a902e9e9eec1b349a3366b8f792"
+    },
+    {
+     "at": 463,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "05d1ef5f6a099ee331411de1e40c82ea5396961f697db00992558b75376dc727",
+     "masked": "935454464e0285ea6bdfbe91b579c67046ace0938b8b04dd301370449ab7f4ac"
+    }
+   ]
+  },
+  {
+   "seed": 10,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "6c455c81a5e495af00d4d71ebdafca2626f53a96caac690920a31f21f1036a30",
+     "masked": "9d6b0a94083c22d73b5b73351cdf6d20b527f033b208c25bef7f76747b96b760"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "57701d7fd2534dda3071225fa562f61333f8edb2fc7c3809ba5629f010cf50b6",
+     "masked": "778329886f5bf3d208390e2922a5383e46fa36621cde85d57824a124e7abd295"
+    },
+    {
+     "at": 463,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "516648a28e5a9c08257beebe46b6bf233844ce1bfa84b9cb37c3e041edc69300",
+     "masked": "9b15c6735011069e0347d356933ab792cdfba588fec08e5c1c08fabf204c0649"
+    }
+   ]
+  },
+  {
+   "seed": 11,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 242,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "1aa506567ced31e3b935563f1609950a7db1d3175e31347ba38deee03d95a0f9",
+     "masked": "b410a69c0325070ac47155c418109d28a4c3fe0766520837fba637371982c42a"
+    },
+    {
+     "at": 474,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "9da8d89e35de13011fa78850bf3a7cc2ece57c28d65469ada43af7685dc0e8c0",
+     "masked": "7f0429a9ecd509de18ecc728629d9e9278ea8f98db639b1e46d7bcd2a00e1427"
+    },
+    {
+     "at": 477,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "1140c36a7149e219f29287ab4b6ed47c1ebb7df2e3f5f5bf9adda981d23ed297",
+     "masked": "60a0f05b5d6b74f34c1a4f6f4bec287cb6f6ecdcb072dabd439329ae70cf80e6"
+    }
+   ]
+  },
+  {
+   "seed": 11,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 236,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "2184a49e746d2d056ceef5e56fa9ef03cf7ec45071896a2ffe09c5c4be5716a1",
+     "masked": "1d8f6b06eb0711291ffae585d226c42502e31cb2077a62cffd36282a0291ebf4"
+    },
+    {
+     "at": 467,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "c9d636963f9bf4202665c214ce17465b8a92ce0196e91c4495ac019106d7499d",
+     "masked": "e7cdbfd39b3611b8151912a015062ef40d3f51000f24d7c0663086aca72ab9fd"
+    },
+    {
+     "at": 471,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "adb35ba3ebbb5cbc9c7c9fae878d1fd12007920fc6a407695206614fce2760ed",
+     "masked": "47bec595c31303de544bb11794462dea586cdc4eb9daf0af19d6aeb5d95d2b8e"
+    }
+   ]
+  },
+  {
+   "seed": 11,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "840e3af3e1b5dc019b5bb6c25c44106379dcd996b16f893bc00be5345edc6b8b",
+     "masked": "647311cc46629594fdddecf53fee2462bb87c3efbc960572d6f5ff7f3cb0dcfb"
+    },
+    {
+     "at": 459,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "86c0c0d1592f04e2df41ecd20b6d0f6e3d5d2edb088e16c66bffffb1ac7db448",
+     "masked": "d4f763466d1ccbe7251e557b389cde52e1afbb2a3d3f4b5fe0bfdad1c07eff41"
+    },
+    {
+     "at": 463,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "8512e72dc7def01419fe5ea8e65ed2ce036f44dcbd28e000dac1df0fc7573fcf",
+     "masked": "bdb21688b99b1c23308bc7c5a069d3ca97fb57e620ddfea68b112a3a5a10527c"
+    }
+   ]
+  },
+  {
+   "seed": 12,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "47303050bbbf3f0de34fa5c7adda0ed4a075ef213f886a459b36313274bb159b",
+     "masked": "e71c080c26362e00cafc92fe53a3f64f7999795d3ffa1e9bc97af4514741abb3"
+    },
+    {
+     "at": 467,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "f6e2669a4d9f9c0f22cec89a0c3d8aae683733873377df579fffbf9db348ecf2",
+     "masked": "971da3ab40e1caf667ab50e84eb843d31624efbdb064d6ddc12b3743f2d41744"
+    },
+    {
+     "at": 471,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "1c8cc2f28a8aead959eb9fd64766155e029ebe451e4bcfb776bd5fd0dca03840",
+     "masked": "115f143aa18b9a11abad0010873a102a60bf5e29c18cf59cee706eb01dde9aee"
+    }
+   ]
+  },
+  {
+   "seed": 12,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "d95fb19cacd87e1f92cb7da231ac01e31e61b340ba9b0bb0e7f653021abc0fd5",
+     "masked": "252c9e790acfc00c5dfecbe81ae51441cf5a8ff62c8f569519b2f03f5ae86ffe"
+    },
+    {
+     "at": 459,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "7aa5dbc82e260044fe5f1f13fe934680d0cedbecc39c5b0e6e625de7992c85c0",
+     "masked": "5ff799b20e50a4a6f0470ba88def5e2b7e87fdb2bc9706b3a6982036755ec726"
+    },
+    {
+     "at": 463,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "46588c6570cc7357cb407abeb012c11c06615c39b656dd899b865372482ee9c7",
+     "masked": "53390fdda0efe58005138a3b8b426c296d8a4f218cd1959c736bbcf36c13a609"
+    }
+   ]
+  },
+  {
+   "seed": 12,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "14eb1f61ef2ee30ef214138fed0c03de7aa4c139280a01950cb38223b47538d5",
+     "masked": "59b48e981a5fc2fb04fd43885e2d428da57c3d04cf929013bba76d07a2321c7b"
+    },
+    {
+     "at": 481,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "ff50a44d1c007e5d2b985a1537dd73b13b4a1df65d57e5c4902f4ca64bd4de70",
+     "masked": "b1fb9de7551e9121d2a5164bc4a524eb3174d6ec05fc53bac235c5a8145c4997"
+    },
+    {
+     "at": 485,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "d9cdeb545e1e93aa6bed3943f9218fe4c5f48402c708c6ea8ac774f7fdaa2ece",
+     "masked": "bdb702033e2642ca964aa0c2e195d60b80c95d0444fc3d57b1185b63685657f3"
+    }
+   ]
+  },
+  {
+   "seed": 13,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 242,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "5384763a6c61dcf3b4342203fd650b58022f5742fc65f9ce5e9ea2ac6478bad5",
+     "masked": "7a14fe9b23b161aebbeb6a90c5b179463961282e29cda7f52f1327bdffd01413"
+    },
+    {
+     "at": 487,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "6e7f38db1e1c99944f9f4871abe00a97c7cf8aa27455942d36d0c8cc86057f6b",
+     "masked": "dd2ea39222eb7f0ce0eda2e3717bc541a1b1014e4a6955f058246f8f61cbb773"
+    },
+    {
+     "at": 491,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "105933a4878a88eef70a4f1639908e8a88d3e9db28a351ace8d6380da7168c6b",
+     "masked": "eeb2de383e8f2089a2aa0cd4d6c4f1733ec191fbeb11bc4551f86bc795bbb256"
+    }
+   ]
+  },
+  {
+   "seed": 13,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "0706aed190a451e7c0d8a9679a4bf75646635a745433c941ee744b537ea38961",
+     "masked": "ffdae6015e175b3b9ed7b77445f744264180bd2c907ecf30572d8f79d14dc63d"
+    },
+    {
+     "at": 483,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "0bac52c4fda4c128b3329a061488b71cadaec08da2075ca5eab9f58fb9090a85",
+     "masked": "18ed122f1fab2a68180a1fca272e8257075128c3aae0b04bd971ce61eeed4474"
+    },
+    {
+     "at": 487,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "1f33bd5b34bad940986cd20959fc5986565d386e403e6f05ccf87cbe03bf4d21",
+     "masked": "27c6df293c20a304d9bb22ecf13bde3758a8a210c9b4aaa020cc0620ab33deaa"
+    }
+   ]
+  },
+  {
+   "seed": 13,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "5934cda443cd47d81dd9f8026bc22e09bc5c51650b8dd3991a275d7d550987fc",
+     "masked": "6adca49f9f9541abc633e7fcf6fb4e95c6e690fe564260fb145b410f74c565d4"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "4964caf27dc06ab5bb81445fb41df166d7699d0fdd6416d06b40cb6ff177ad58",
+     "masked": "03e062c24ca8a88cbce1d17511708cc406485a8c2d552476ab0ef075481c13d3"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "5f87a4903eb73c332d8642dfdf5491f8283c51b326f16dd926aadfcef4161b13",
+     "masked": "2b27a51f499ac6f81ef33e1271aa19fd94dec36c89a22b92c54717a4f6a42d94"
+    }
+   ]
+  },
+  {
+   "seed": 14,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "85c66a720b99342b990ed1e7d1bd5bb199533c6df7d8ecfc368328bb72a56be6",
+     "masked": "57d6017b81c91a99171c6c073b082323f85f2dc1c52dc58dd73397589d03f733"
+    },
+    {
+     "at": 504,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "e04dabbdea5ad572b028caa45e230b334c08babf5b60d19eef456391ea0487ac",
+     "masked": "0277f38d1df8c8c3970be57c735f198f09378c77e05b55be690ee1627de15661"
+    },
+    {
+     "at": 508,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "c4332887fe765395d998f8649795c809cf196732ea5871530102fc523d54d177",
+     "masked": "7161d2795a91c7e3df0a6720cc28b5ab4785368b4e9ee6fb8ec0a53748468b02"
+    }
+   ]
+  },
+  {
+   "seed": 14,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "725e120e7728af361aece1011208ec628c7ff633d957c3f2ead990974679d9dd",
+     "masked": "2cc30f53b8d0326e0d83fe7f5730cbebe49c592b19eff07b1db62f1e2afe908a"
+    },
+    {
+     "at": 504,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "84b521b4d31b97e02cecf52ac958af54567a579a8390c08ab7f7f48ba9012b8d",
+     "masked": "f92bbd6ce65e513364880434a95246881cabcf615ff1669184d1ac0f0c8525ae"
+    },
+    {
+     "at": 508,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "359efb1d9dd54a504444a66ec26218db40ca3dd77a8b81d9bef759ee7c97cae0",
+     "masked": "6cbf75f764cf21cd536e31e534d657f1a24e08f63817cb855456e543ab41f87b"
+    }
+   ]
+  },
+  {
+   "seed": 14,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "37a4632ff5b2689e25e82ea8f5ba97112336b31d681b4e4f2c9aa93823ade1c4",
+     "masked": "384bc1608fb6c30dc375d903603239c48700c3b9487a81dfe995ea3c5f707249"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "25bb08c8226cec9cd3b0ecd3137bda08e9cbc674ea7cec28ded05cc4e46dccab",
+     "masked": "0937322a1d5b607cf0997420fe9176c316aba30fa4d3c9123f7f716700ef4c47"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "a963ece272538df74280215e7a5b4ecc653d969a10ea4591863fef6b9bb7c329",
+     "masked": "5cca361816d0e544992e31ef230cac5d8ec7386b47f0f946ed7ad7f219f95027"
+    }
+   ]
+  },
+  {
+   "seed": 15,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 243,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "d7f796a9a3e16e2cd6877830451645bf914f2e4c7880695038bdba9cf0a34823",
+     "masked": "f52b8c85ac4999df28bec45a438a36d0f1e7d5afe04e7a75e3e4fd6c45014626"
+    },
+    {
+     "at": 483,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "1e25d71250f0cf0a35de2c80ad0ceb1ec00dbe8488e84c25896c98c3b14f6572",
+     "masked": "49d979c6b43f277015925285d4d6a1d7d5a6e9493ade8a38cb83b1b35a272e78"
+    },
+    {
+     "at": 487,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "c85a75523bca11b9dfdde7ffd28cc341e09ad76aec12be6f60d1391eebcc64f1",
+     "masked": "3ec5ac7f9b2156ee9f77df95718a0db30617002496d792caa6837d4387dc88e7"
+    }
+   ]
+  },
+  {
+   "seed": 15,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "ac25f6de72410992b75ed88f67c160bda7f819987b41d57af5d2b03ee7fe44bb",
+     "masked": "22944de830fa388fbe9e6fb9c64462a0d02d8d0dc126bf8ce577ad18d5378fbf"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "9e6799b5853b4a053a7f8b5e9153501288332d33e0915445d21bff22ad668726",
+     "masked": "39c37473146217289a27229d7826dc3dc4d6dd31eb3e2c6044c6ac30f21d404b"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "811854fe345b0afdd5dd3d2d941c3c10691635cb679264443bf70c9bef7ad6f8",
+     "masked": "f3cf5d46cc7655173b90f1ac574c958d7ec7d1e4ea429d35be6ee9f3a75c129d"
+    }
+   ]
+  },
+  {
+   "seed": 15,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "5dcc6d8f718e27c436dd740cc687305fc4597eceb91dc41035c3e831886d4cec",
+     "masked": "6bb6b77b7cf9d4638e88cd7a65816e34f2c62110e328d1a2e398f0dc069c6c19"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "6f98dd383be61fffeb3a588f69ce4546ae2decd1f9c0add9a8ee3409fc18df92",
+     "masked": "8379c519d00600154a323ecf1af004ff75f5cbfaf9215c5360f7f2fa545c197b"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "f97653ade03c87cb59ff7b2a64ac723528b3ccc9cf84f7d4b8a911378716209f",
+     "masked": "7bf33e1c510e721c3571ccead6049024ef86bdb9ed123e0fdd742e9a4c31538e"
+    }
+   ]
+  },
+  {
+   "seed": 16,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 236,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "6bfa6830d3455b870e78f9a556e0cfe0a0a361af0d81b895bd8439110119b53d",
+     "masked": "005005bb0074e257b98761f4c499cef6c07175db7e606c26172a6f448bba0ba2"
+    },
+    {
+     "at": 489,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "b37cc66417d1d3c15015a97bdcb761ddacc5e565ac1836ce78bae526a79c9332",
+     "masked": "d34d7b9c7573aeb8e29bec9f13b520bf0ffdaa822768cf3ba68908c84ebd2854"
+    },
+    {
+     "at": 493,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "0723ffe3daa710e0bacd596022ebb8992a661b17b4ea633185e007596ec07973",
+     "masked": "2e346e46dc94ebb286d8a5aafe9289e8be5116035bba6f10e60b9f9d865b9c7c"
+    }
+   ]
+  },
+  {
+   "seed": 16,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "92fd4a279cd48012ada2e41b1df6b40e7dc9fc74139977bd58041043a23889f1",
+     "masked": "905b9833097936a1019c5b4931e98d0c0f03230480fa8757b0baaed173f2304f"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "48f1eba31f73c94e033b539c5eff667f672860841db01e0e7f39f54702769d5c",
+     "masked": "b09ff57f12467559f7e1905631a1b107905f921b95dfda825d459688dfc720f8"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "5e1cb894c90e3ef5cd7d14c0c22584eb3b83950091a639f76e2490f14b6a2e2f",
+     "masked": "c89eb008413b6c4dd084ff27362011d666a8918c606ee7d2f893ac1da40f5dfd"
+    }
+   ]
+  },
+  {
+   "seed": 16,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "26d56b7bd49574e785a3f68127e717db40c80f8778f4c8f563d9324ea005c394",
+     "masked": "418c4847f1bb10ed77c4d751d3ef5c1cec251379d0ca46f5c55adbcdd2472a26"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "f5d402644e9009056ef3bc29242efc82951cdbc56ae94f323452e6b64b302cfa",
+     "masked": "3e468469c5b027edc8b211a38083b60362f32950c618aa1a861f734818465ebd"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "3662e082bdd8587eb4ab42706e05719212b8b37a7852dda363961acc6a8ba1c1",
+     "masked": "c53163c654a2a84c259346f3603212c790e688ad916bd5d3bb0af002512b240e"
+    }
+   ]
+  },
+  {
+   "seed": 17,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "5ed2055eddb86b8865ce505b0f04fbbd55bf608c7d5777c47970dd355aa8234c",
+     "masked": "4876e1caf5688f2a37af5da63653acd0117ab3cf673a26d072109be62e520c6d"
+    },
+    {
+     "at": 504,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "445647cdbfffa35f59f1beccf9782224a8e2969861d44afeceeb53964d0da32b",
+     "masked": "489ad136a188fcc9e870e1e56cb66f36b5058a30d997c63bec2700551dc01146"
+    },
+    {
+     "at": 508,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "010ade71032d5d1b5a771924fcef930ff3a97225ce21dfe4a9574e14db6ac4ba",
+     "masked": "c6707038fbf6d926bbaad78422100c06b6eb3c5fd61087574356830bb2b6d9d3"
+    }
+   ]
+  },
+  {
+   "seed": 17,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 243,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "07451f486d3dc6ab5a1bbaa876d24e623d546ea695205864768a016dbdbc485a",
+     "masked": "f7219b3bf720b71a6b50a7fb432c7377eab8faa019c12868e9769996b3f08f4e"
+    },
+    {
+     "at": 475,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "51631a8f2e99a29caf6d7e346c695cc7dc325d924a8049ea6c4b1925b664a56f",
+     "masked": "ad78e52ec9535c1a9b40caf07705afebb986102592711de919084190d07a293f"
+    },
+    {
+     "at": 479,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "14eef393c4ab46f0fbfda7fbcb2bfedc210c8c5512750e7d6fcf4c7cf16aba82",
+     "masked": "45149e9161501287f65be642bd5ef4d498816e14b8ca3059dc5f98e5f9753bc0"
+    }
+   ]
+  },
+  {
+   "seed": 17,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "ac2f5dc3f8230fe6e65ded18e9c7c44f8c21a13c209b78efa2781369cd71fcac",
+     "masked": "98c2987a86a9bdad7e464534ec791f65bc57ec71f332ef2b7c1bd72205ff0a93"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "505800652dd06799cd2773b6381652ef427c96850e148e37461df02ecddbaa22",
+     "masked": "47d289ae98c8300a246ebc5a445ba7a6f08284b729312333eaf790bcbb7d39f3"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "44a34090cd2c2dea96b6194e4a24a2dbe8a2a508ad4f5656e96e3359f17597b6",
+     "masked": "635785a01ebcd4686a89c47c8d304298c0c599b34def9211caff805574f287f3"
+    }
+   ]
+  },
+  {
+   "seed": 18,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 243,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "8934c9f84f27d457ea33638f96f472a6686bcba7de5a7853e38af16e701bbad1",
+     "masked": "a01be6e0d212d914cdff331ade4a2c9144e3aabdb2df133cd6b9b28d52b3b1db"
+    },
+    {
+     "at": 490,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "05c36e09850b101a3a790a13c70b6136b9b1ad38c3d6bed92be690c3878c21a9",
+     "masked": "47774dc9fb72cbeff95a6a9971f18a79af2e00b4791f25097de543758405c97c"
+    },
+    {
+     "at": 494,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "2d8ca20f3d285881409d0cbf19a0e3cb692946c1c7d2ee16dd6e309b1aa530ad",
+     "masked": "7296838562cdc59bb5110671d0002a0036eb3de3a46ed5c952cec77446d65cf3"
+    }
+   ]
+  },
+  {
+   "seed": 18,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "7a656beab859466e1497fe797baaba3bb2e27593e76c860f4c09b49888e1d7cc",
+     "masked": "fe945f4069cc241442d5ff1a72555e1d4f8c3573d71d9d4db9c36150719f6345"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "2c332e26b9334f460b82de9b040e3e11d46a854de46bebc35b8fa15375e4f0bb",
+     "masked": "a99c903fb168b64f4ba763ab58d9c3093d10f9e2f1bb8c3b2836ae12bf66b873"
+    },
+    {
+     "at": 463,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "df593a5d379365c5d549d9623dd0183f4ecd909461013d01f3892849e47c8676",
+     "masked": "1242cc8184fc3a65685e4148b8686171e3d2a2ebcb2a755a791243043a6ff6e1"
+    }
+   ]
+  },
+  {
+   "seed": 18,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "b690f9917ff89e9dcc44560635bb37eafa4e655552385196d0fa2f4545e3df88",
+     "masked": "f26d55a93a75478248d5ed298c19ba730ac5c4edbba84a7416eb06f45bc112ad"
+    },
+    {
+     "at": 468,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "f96a00d69cb64e739e9d4fc6b29de5c138e993da1551d2c43ee74f7a7f18c973",
+     "masked": "283a90e5fbb3a0ea6eed156f0f421ecaf3f0e276cb553987e092ad9a01d7883c"
+    },
+    {
+     "at": 471,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "472f3911e7646379af33b991dc7e00c8dc973ce50b6587c65ef28e02b5c33878",
+     "masked": "1ed6f5586b58c0a1a4c37ac2aed4639396f0b89c497405cddcadb4b2054667a4"
+    }
+   ]
+  },
+  {
+   "seed": 19,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "220a681b6a585bf5040926c0896ff1fd0bcc934843e0378933ffaa5975fbe7a6",
+     "masked": "03798c0b499f2de45136ae1c489e4cfb26a5e800b690df47db8da5cf32ed3a23"
+    },
+    {
+     "at": 481,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "ae6c56ddf0e5ebc66d9aa6def54cb43abd0719b9c675058a52d31f3acc945838",
+     "masked": "4434ef6b29a3d7993841f2412b29f44695a0629dca1343353324633dc297dfdc"
+    },
+    {
+     "at": 485,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "93c7a93b8c553bed287c0bc7294646dc1598fbe9357a509725489e364823950b",
+     "masked": "88f7d1703c1650154e15fac2007b878f27cb5ba3fb4401ed5840f51a253c1619"
+    }
+   ]
+  },
+  {
+   "seed": 19,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "6aa18ef8de01cf93bbb322faaac303e3f38fa460d3544dba7f5ae050c68c8d3e",
+     "masked": "83a0ef66d28be0742cc83885dcec442e2f5df467d782256de9b4e32ed946dbd2"
+    },
+    {
+     "at": 481,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "b2f3f40eb60ce0f70a055d02c19fd95e51aa813a18e93e311ef7fd51421f0678",
+     "masked": "54b051dc008f03b84419787396c723cf2c843fbf8c7a2e54b59be0053a3ab7ed"
+    },
+    {
+     "at": 485,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "ba1da16a876df375f44b6f864bfd3ea3581953233e2c4653b811d60b5e658515",
+     "masked": "6aac42382b059ccb3c9b365e0f30b9ad96862017c9944822943039cb2880524e"
+    }
+   ]
+  },
+  {
+   "seed": 19,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 236,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "738b318a26d3d1ae0957696fe48f6ad88694a96a9994653e9d7dde35d2cde5d6",
+     "masked": "6387867c435be3f9d3464a0b407b7bafafd4b65d7367aa4b56f20aee458c4ad8"
+    },
+    {
+     "at": 467,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "31f4faa676317334512f816756de957411a9defef0271e8e926ca380a454bb1f",
+     "masked": "f806901e5ff18e74eb2347ada36952b7ac1521efc725f74b0cd2fa5e9a69eacb"
+    },
+    {
+     "at": 471,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "63c72c8402c642ea01b36d306d8955a6dc65cc043094e87ee9b97a22dfcb82c2",
+     "masked": "dfacfa102419ac8f1ed6d80bd921fb331e09ff1d099590f4c68b454232867109"
+    }
+   ]
+  },
+  {
+   "seed": 20,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "3519dc50fd4f54606e2c40d5b1f35f0b7db54596c14d72842669a97070eea406",
+     "masked": "6e5c8bfe2e2eea5b69ac842f6a881e0cce497c600abae014a6829bfcae1a981e"
+    },
+    {
+     "at": 497,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "d04be63a150be33b6454784c9da6a97f58f493ef75239221dc2028a8015824b1",
+     "masked": "cf77a3834f33be48f44caaf6d35f473d1840d9500b4989505af6de6a06339d88"
+    },
+    {
+     "at": 501,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "e0964333553b17ffabbd85709e94c01f5fb6e044b45efff1ee390c8b9befd66a",
+     "masked": "205345a2bd0fb6871ea9d25d7dc355ffc1368c8295b71511c40208df73b7958a"
+    }
+   ]
+  },
+  {
+   "seed": 20,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 235,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "c489d8a425fecc13afd200c73939fd9f81d8c93e06ae1809d151aa437f93f834",
+     "masked": "f07deec7bb93a3d79b2ae9fd585ae7333e30f081c8a109821e9fa758a81c80a1"
+    },
+    {
+     "at": 482,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "3362e69d88b9e625afd4d53f5017a85bcfbcffe965f036f7c746ea70fe671e6a",
+     "masked": "6cd1e8f5a348bee9cd069e13de086d6d3011916f5a68779b039f40f4f3c3066b"
+    },
+    {
+     "at": 486,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "047116872cbe24feba3724c627538d68a072e25ec2f0845b5d50b7712f4c1a52",
+     "masked": "e9881f2fd83140141688f52d74508dfc059509299a6df9c4a870cd7ec962f82f"
+    }
+   ]
+  },
+  {
+   "seed": 20,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "73c31d744574de22aa5aaab1f18a3366936f4795723965d75deda33ac07e7074",
+     "masked": "4d415f7b7eb39f5301d0d61e5aaf9db43e98f729a83e2bddb5ab7449c7149bd1"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "96f103b85dccb5c38a0c3e79393e59323a22f099333334142b42eaf51be91237",
+     "masked": "03715a28ae2f69fb12b05da245a85dc52a20994b9eb534bcfdcf24fb92ed55f7"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "14fe23ce9e9bfd9a2d5cbf58b12c49baa21e7105e99c86d7e22dda5d5c6c7661",
+     "masked": "405a3e62c88061e858138cd1f7f4e6fa7a7c2586fe49a897966733e637f49f1d"
+    }
+   ]
+  },
+  {
+   "seed": 21,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "6cf36664f1f8857a0b09018e56c0214d5e90b97b20a3ccd571162a85501f6a6b",
+     "masked": "a0771ed70f5769af0783fc14239182b8827d90f1cf45747be1084713a07bd1d6"
+    },
+    {
+     "at": 473,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "678fc63a201773b600972655869f160d600c4ebbacf76c7fbb18afbae1124a7b",
+     "masked": "2fda05abcdf0c5e3ca341416cc8939561a218af91384d625766734e067b2023f"
+    },
+    {
+     "at": 477,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "810166047adfe09931f52dfdc8a00148277ca23167cbc7aa3d73e4634201c12b",
+     "masked": "9a30d92f55cefab733e560ea7ede9dcb529562b180589907698a39f3e52cde8e"
+    }
+   ]
+  },
+  {
+   "seed": 21,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "2ca878f8fdd41ed4adc2ebe0af15028277700c9882beebb6a98aafede8916feb",
+     "masked": "1d8ba5e1d9c30e8f7fc2517e626d357e9824b08958e78987b5f04c76473497ea"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "eabbe3791a54434ba045f72b7c8ffa6c79a57b9a7f1fddda95b08de4ac48d223",
+     "masked": "ac28839b9d8257dcf7ae5a3b1d149a6e2afb665e44414345da249b5462d78c9d"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "865e8e4d9c31216f820c59ef5f4f92530185ba793c6d0250c0bff04ae770b8c6",
+     "masked": "f45a36834e2546c8c0fae8367409f7085b10af3c7f498dba4d0c77d4097f6cef"
+    }
+   ]
+  },
+  {
+   "seed": 21,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "f09656c2a122368a2986178f5076afaa37ca6308637b6eb37ff40d5775b397bd",
+     "masked": "50b35d3cb480d321ec3b113d3135d66fa5b71d1d5360399fdb2068304305c26b"
+    },
+    {
+     "at": 468,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "8390ea1caf8dc379246f651c80cb0c092db1f52fc30cb233436782abb300b7ae",
+     "masked": "22382f3cbe71b914a0b97c4feb56efb391b8cfd6e24674209b0bc51cf796fe24"
+    },
+    {
+     "at": 472,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "9b1d5154a97e8f009e35abaa01af023fa259ffb40cb453fb2c95e9f61bc16a6e",
+     "masked": "d2c2959f09c79b0b364b13fc636e8cb17d60958c3420af6660b863ffd0a8779c"
+    }
+   ]
+  },
+  {
+   "seed": 22,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "8206f3fd0f5bfb503af86b054e3045b7c4bd629b4d7ffeda5ec4b4a87409d259",
+     "masked": "95b6608b95983b85a239a3c2935de27d4c3c9b35838eb71eb46db031bb627fe0"
+    },
+    {
+     "at": 505,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "26df8900d856ec3cf869dbd554a0248bbd4e85b9eea119beffa77536a56ed926",
+     "masked": "a0ebc59957e764ff684cb5db86e9517bf9a355efd2f96daa6353bc4c3e575a1f"
+    },
+    {
+     "at": 509,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "cb128323be81676e31e5bb56b31174f960e5df1ee6e72c417355cb3edf5c4667",
+     "masked": "9515e79639944893c7f68e7bc5dbc99a4c52f4f4c2eb4279e24b24f50d93a6a9"
+    }
+   ]
+  },
+  {
+   "seed": 22,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 236,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "747b9e17fe0a9e8d1eab7a0a2f5037f53c6d94129123c60a188fa28613381140",
+     "masked": "e2171c3a98d61f5f2825537fdd2e909deb2186d6e742dc1f1d78ecbf6e2af304"
+    },
+    {
+     "at": 483,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "8fad6437dd78c6fd6ee8b3f7dbca8d48808ace2bc740faadd6d29f62a80b27be",
+     "masked": "15147a3f903cac92cf42080bdf84322656b7bd4db6aaf0571699f86eb27ce5a4"
+    },
+    {
+     "at": 487,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "bc033aeb25e5a24e4a8547865c6196d59acda9a1714a92c761237287497ffda9",
+     "masked": "ca9db8a6ddfdd8eccad339ad09a41484daa7ed861f2d741c606a9a363a9ea4e1"
+    }
+   ]
+  },
+  {
+   "seed": 22,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "929cd5dfbb545364f30e1f84bec1d33a45b980e1a5fd9042246645d716b10790",
+     "masked": "731e4c7ae9ea7ea8215c2409a823fcecfe5fd9c0c2c54ca37dd6040de4b73361"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "16654894aeae0ca450e929e1535bd83ed7894fd8db3e5c7cc04a15b6d5d421a8",
+     "masked": "0ef600fd021ec459fc9c07702a660343b94ecd5ad4e9a35c7834a5fb12196c00"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "5da42fd7a1ebb9892857009c059633d592ced84931b22dea733f0342526e9254",
+     "masked": "39b1f9e272cd1cd4e5a14bfceaee22727c06a7aaf31a8ea3c921bd4d93dda15f"
+    }
+   ]
+  },
+  {
+   "seed": 23,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 258,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "266859ef06945c239259c340f830c179af29eeffe55b739ea2af003350eabae8",
+     "masked": "3b92e90f474f45116193f3191815bc9e3ad745a8d4384823d7c05cfff02fb9b6"
+    },
+    {
+     "at": 497,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "1287f872c4059c307be9e8356717e518f798803ccc8e4575f5b50f64c96c8ca8",
+     "masked": "ea46e6b34656574976247654fbc543518ba55e388ca903c4e1960e2be18b969a"
+    },
+    {
+     "at": 501,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "d7b66ded5936cc449c680047f5e1d9ba015521dcaf4e8a098b654718e664255c",
+     "masked": "dfe4d0942cbbb5b150d14b7c9639b2ebd179150ac477a4c716061fd8bfa2daf1"
+    }
+   ]
+  },
+  {
+   "seed": 23,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 236,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "bafa9b827edc1084432171075b5bc77e686cef615e647f2ba750b744ef451120",
+     "masked": "e858662eb675cfc41c41a4a7a5eb5d26af9f8d61b027924ce5ba7218fd668417"
+    },
+    {
+     "at": 490,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "47e583ae376a58586e744e577bd0ce984b4f9726f8954285eea96428d5d01d95",
+     "masked": "131f79adcc5f3fa47ce59b661edb6f9140a839ba00bff23b9cc72ffa495c60a3"
+    },
+    {
+     "at": 493,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "081213f9f83b3036b9bbec10dcf6492af27fca3cce1c5316ae9a513b8d2b219c",
+     "masked": "5ee497dd14ea11b04a7e8c3c02002887a5c27d19242385771a621c750e57a27d"
+    }
+   ]
+  },
+  {
+   "seed": 23,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "0e2b9e31608310f99cf68821aebb5aa0e547cc4c9d35339841c72177a74997b3",
+     "masked": "79b0fab94581f590e03ed37350d71af69a4c64b3d6abbf222d669144f1fdc8bf"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "3a8c6a439661bfecb581a15a1f2fe9707e3b742dfba8cfb404d3070af12961ed",
+     "masked": "d26eb8806d006330b5979825245e737b5fe43c4b253a898c21e0ca194ace7eca"
+    },
+    {
+     "at": 463,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "698379d4ec1c07877f8cb4d441eb610193e453be75517666b88519fa63259178",
+     "masked": "7638d47b39c48f977fa85bf600f41cb9e4df1efb41e8a43fedd682dadc04a49b"
+    }
+   ]
+  },
+  {
+   "seed": 24,
+   "club": "club-00",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "d9164d1bc8a5e2c1bb8fe2cc8c6479bcf28fbe0bf54267d4ffaa0e6889237e06",
+     "masked": "a370d4dd425477f88568c9b35d1c57b741883ca25cffbd9e2fd11ed8e2fc3749"
+    },
+    {
+     "at": 460,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "2abb340e9f93dd29d206515b4882e8d2a234389168951ece60e36fc34b543042",
+     "masked": "620358c2ab78701591ca21387e7771efaf8858aabdad5d29f2dd44a8ffef425b"
+    },
+    {
+     "at": 464,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "8780e0a4e521bf1c93e8c487e82e85fc680c47994b5c822fff858ebdd6a666eb",
+     "masked": "9a75e635640361c05d1dfbc181b57d882ee354124932fd23d00a8f93940a4d38"
+    }
+   ]
+  },
+  {
+   "seed": 24,
+   "club": "club-06",
+   "points": [
+    {
+     "at": 250,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "3e11652b5e2a8a3732f87d5e16615d0bf4e9e022f6105379e9af87db88ab8cb2",
+     "masked": "b41ad38d2120713e33a93ae29044a66c45aba214ec3e1533129cf4a9aa7e793d"
+    },
+    {
+     "at": 489,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "49b7bea995b563c30e95451cb95417d68e46e6bf8317a4eb0926bdf25163e041",
+     "masked": "4e20ccc2da53b09d41c234e75d23d924d9dd555a045551d9b1ae0f159409376c"
+    },
+    {
+     "at": 493,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "6cd6b4b296b4efcbe56b440b5dc2a99eb6d07ea82dfd141bec5b44549c00a45f",
+     "masked": "22c60575acd080a73501038620c8d99007a2581a96b98b78bae4f3e2cfa77684"
+    }
+   ]
+  },
+  {
+   "seed": 24,
+   "club": "club-17",
+   "points": [
+    {
+     "at": 228,
+     "season": 1,
+     "phase": "seasonOver",
+     "raw": "a0327a1b9dc17509785304ef3e029d69f66d6514918adb5101cd6df649660372",
+     "masked": "77621a4f482efba92d1935a3adceb8553e6f62ae60b0787b5e10e53d06c49616"
+    },
+    {
+     "at": 459,
+     "season": 2,
+     "phase": "seasonOver",
+     "raw": "1d4fac227ef875a37819587c1ce531533b53f8c09fd0977afd4c4b75c2239a11",
+     "masked": "91df1b6a6c0b63c46f39d07f73e61bcde52ded79a9a29f9370a30ccb3d4efffa"
+    },
+    {
+     "at": 463,
+     "season": 3,
+     "phase": "prepare",
+     "raw": "5bf6586586bf919dffc1cb206520d6b6ef405ab1be46d2dcaf1ec6a3b154f724",
+     "masked": "576bdd645a504b00a017bb54637dc33ba878eb3e6113013088836ea99175691b"
+    }
+   ]
+  }
+ ],
+ "recipes": [
+  {
+   "name": "breakAfterSwap",
+   "seed": 7,
+   "club": "club-06",
+   "at": 12,
+   "phase": "break",
+   "stage": "homeAway",
+   "season": 1,
+   "round": 1,
+   "week": 0,
+   "chars": 92401,
+   "raw": "e7aa150ac42a2ef783829f4c2ddbaee9e2dcd1ac82a74354bac3b183c25ae951",
+   "masked": "eedc4132d6105b2e82b954138ba4010c2e66f927b2bea92caf41b0b43b45b85e",
+   "after": {
+    "raw": "f595cf82baab388402cb84f08708ea05f5abe636f7ee1c1a186ef16bea0027bc",
+    "masked": "44e3b673206a13ac48f1ace9e9ae60099874d3f7c923fd080038daa9ba65f7b0"
+   }
+  },
+  {
+   "name": "prepare",
+   "seed": 7,
+   "club": "club-06",
+   "at": 19,
+   "phase": "prepare",
+   "stage": "homeAway",
+   "season": 1,
+   "round": 2,
+   "week": 0,
+   "chars": 94331,
+   "raw": "87b9c85ad44d9c8e2bf15e5261565de260a388bc7d6129c68aeefc43a246a755",
+   "masked": "fa4a5c727295bc2b2ee04d800a1caa2bd1cb42e9c25f3d2bee0e2d793dfe68be",
+   "after": {
+    "raw": "fa501dde84fe014e59de1a316c76e5aadfd6699c2c72610f4715ba720a1a9c66",
+    "masked": "0234df2d3c1830315aee4a2a91111fa36fb454b55cef414c3d137405fa4eaf53"
+   }
+  },
+  {
+   "name": "quarter",
+   "seed": 7,
+   "club": "club-06",
+   "at": 20,
+   "phase": "quarter",
+   "stage": "homeAway",
+   "season": 1,
+   "round": 2,
+   "week": 0,
+   "chars": 94554,
+   "raw": "3e1f0f055acd8e63a746d7ec5fdb0b5889ab67fec6276ffbe373f18d5e1549c6",
+   "masked": "6a698920721205447b304d5049e9608f3c37ad1e8d0ec4c54df341226d46a02f",
+   "after": {
+    "raw": "dcd422fe159518fe4910498cfbc863694dafda3ecf334901b9343a45ef4dbbb0",
+    "masked": "e7a9801415ca833e9a0fba5060aa01c2fdadf8b3c8116e56fdb5d08e66452925"
+   }
+  },
+  {
+   "name": "report",
+   "seed": 7,
+   "club": "club-06",
+   "at": 46,
+   "phase": "report",
+   "stage": "homeAway",
+   "season": 1,
+   "round": 4,
+   "week": 0,
+   "chars": 105294,
+   "raw": "e8b77c6572d609e2d8c9e179378ef662ce97a35a278c971ebd4cc4b1737c9d4f",
+   "masked": "b5f16bf296ef48c78f34415a954c9f349c588b4e50f44282055a87d5928bc2cd",
+   "after": {
+    "raw": "652ac996fb46ac6fd64cff0e84b4617c46b5744ff116c5ad96eda80adec56890",
+    "masked": "07068056d7ab5ccd93f131336b3d99deb47202815b81e7e7e150488cea34ce92"
+   }
+  },
+  {
+   "name": "lastHomeAway",
+   "seed": 7,
+   "club": "club-06",
+   "at": 209,
+   "phase": "prepare",
+   "stage": "homeAway",
+   "season": 1,
+   "round": 22,
+   "week": 0,
+   "chars": 133099,
+   "raw": "bfd765b1d084f4187ec714c92b76a55dfaa40889dc8c4617c6743e8ebc7f496e",
+   "masked": "a6a7888c91bee751dbe3fa243d7c13e4de15130f56dd23164706be29c5881f37",
+   "after": {
+    "raw": "90d1dcddefb987b1659a2901b0235af710c18870f00f4ed92c26f9d4ecaf9aac",
+    "masked": "2e01a85ac7491f36a2e2da1015d849f58a80d69360203d0a5db01bfee3871ec3"
+   }
+  },
+  {
+   "name": "finalsPrepare",
+   "seed": 7,
+   "club": "club-06",
+   "at": 218,
+   "phase": "prepare",
+   "stage": "finals",
+   "season": 1,
+   "round": 22,
+   "week": 0,
+   "chars": 134627,
+   "raw": "f3e50043ce9e9c5babded16be776700697fb1b27a0ac9c1807c8bc10ba8bad34",
+   "masked": "5f1186d0cb66f6c85a71eed68abf279abd50161b0f7d97c278b653696fb1034d",
+   "after": {
+    "raw": "aadbe19648d305dd5b76bbd8ddd5e50ad98599ef2922462c1e841bf69eb312c2",
+    "masked": "152c003eeb5fbff9557db1dfb0a601c59ef8324cb0e24784690015fd097a3f6a"
+   }
+  },
+  {
+   "name": "finalsReport",
+   "seed": 7,
+   "club": "club-06",
+   "at": 219,
+   "phase": "report",
+   "stage": "finals",
+   "season": 1,
+   "round": 22,
+   "week": 0,
+   "chars": 134848,
+   "raw": "d44347e8b3c8a74237c59f6edd846f30cd434c4343bbe116662e0ebde28b289c",
+   "masked": "d37d6287f0efe0b5c2c815db191fe73c7c8217e9216e3667edc4997f215cd896",
+   "after": {
+    "raw": "29f9c983912f608c0000a9cd19954426307f41471dc1b0a8966fc78d5bf4de62",
+    "masked": "bf7f1adaf3c3cc9bb0f4cecb6deaf9812590743e6090cb08cbf75d175a593ba5"
+   }
+  },
+  {
+   "name": "seasonOver",
+   "seed": 7,
+   "club": "club-06",
+   "at": 258,
+   "phase": "seasonOver",
+   "stage": "finals",
+   "season": 1,
+   "round": 22,
+   "week": 4,
+   "chars": 134113,
+   "raw": "a84d315f00b8c097ed0ce0941c9381a1eb4411c4e8b78bdba1c8a512d031911d",
+   "masked": "f2042ab24b20518e7536e44e0800f48f145f4b5de05b80a1268d826d2f820cf5",
+   "after": {
+    "raw": "976e772b0fea591bfe623bad640fe57e748428e747928a0915eee0ec5a9525aa",
+    "masked": "288d92ed90e683fb6f8be4c190b0f5355854e3cb9b070bed6b94501ec80e8bca"
+   }
+  },
+  {
+   "name": "summer",
+   "seed": 7,
+   "club": "club-06",
+   "at": 259,
+   "phase": "summer",
+   "stage": "finals",
+   "season": 1,
+   "round": 22,
+   "week": 4,
+   "chars": 133024,
+   "raw": "e843f91aa3ca1e076330d3eee819249fdccd1fed58c4e1671f913df0ef2be76e",
+   "masked": "905f2f4f589157b6970052c893c722f14a262e24b7fbb3f6233542915c207a47",
+   "after": {
+    "raw": "4db44274a3de24ac8e494290e70888171ac2d1e6386eb4a32668d3351e0dd7c2",
+    "masked": "adebac70fc8c62090d210764933b15caeb2d6f1010ea9d43fef51fd808d2de14"
+   }
+  },
+  {
+   "name": "draftPart",
+   "seed": 7,
+   "club": "club-06",
+   "at": 260,
+   "phase": "draft",
+   "stage": "finals",
+   "season": 1,
+   "round": 22,
+   "week": 4,
+   "chars": 138245,
+   "raw": "84e60ce2df75e5643fd12a51e294a28b96fd4acc727a82188082a57039f1c5c3",
+   "masked": "9e018bc24759abeb1d3fcfb37fe519bfb9f32370d486d56d833ce7471da5d643",
+   "after": {
+    "raw": "46eb7feb3712ad380b88829015e97dc5bd6b1f8a89c7106fa61a49accade2951",
+    "masked": "177a8b1da1c872eaa7ffca962a93e715c40694621fa311fc70e9b5ff67b85807"
+   }
+  },
+  {
+   "name": "season2Prepare",
+   "seed": 7,
+   "club": "club-06",
+   "at": 271,
+   "phase": "prepare",
+   "stage": "homeAway",
+   "season": 2,
+   "round": 1,
+   "week": 0,
+   "chars": 92198,
+   "raw": "03903cdae6b3afcbdc3065af72b3b1b934eaca33097f4fae8426374bc0c58b0e",
+   "masked": "9c623ff67bbb046037b8a8902a378832ad33a51fd4e5660262d28ab7e63fef8a",
+   "after": {
+    "raw": "b520f034aeaec6436a3e0c705b5d7b07c0c2c205f6c4bbf2861ea6c7237b8240",
+    "masked": "74f8c0a4069c0604e8477cf7727c7096bf6b1b3560f0de0cc27e4d8efb2eab9d"
+   }
+  },
+  {
+   "name": "season3Break",
+   "seed": 7,
+   "club": "club-06",
+   "at": 511,
+   "phase": "break",
+   "stage": "homeAway",
+   "season": 3,
+   "round": 0,
+   "week": 0,
+   "chars": 86541,
+   "raw": "2e02badae62e42f0f6c1f81b17bcdb53ebba2c092597f9df8e2bfbf669288dd6",
+   "masked": "4de752b8143c2e322c2591d9c9e7b84bacf2f8ebe6f6e4c9adb4749462d7e9a7",
+   "after": {
+    "raw": "7bb153f2a42b9f5a31ee83c697730841a0e0e309d9fc354a93d443dfc17b58c5",
+    "masked": "525d7e11fcba2005b46fb469efe0781dea0f79cc662fc85ea9ee6bcd5fa286e9"
+   }
+  },
+  {
+   "name": "tier1MidMatch",
+   "seed": 11,
+   "club": "club-00",
+   "at": 61,
+   "phase": "break",
+   "stage": "homeAway",
+   "season": 1,
+   "round": 6,
+   "week": 0,
+   "chars": 105717,
+   "raw": "3c50d7bea4bc8c123fe7f32379ddfdccf2c8f3434bd065174fdaa7226f7cb0c9",
+   "masked": "85cb170dde61304dccdda0ff8a58230bf9d172e1c5f6a57cdef806cce3393193",
+   "after": {
+    "raw": "82da00b8605b9d2a8187177b55c6229ce7149305b3c4e156f36a6d05c50d7630",
+    "masked": "5b51ce2a514e6165c7217b0f2f0931e7a0a0d9178552acc4a44e22db336a3a09"
+   }
+  },
+  {
+   "name": "tier2FinalsNoGame",
+   "seed": 12,
+   "club": "club-02",
+   "at": 218,
+   "phase": "prepare",
+   "stage": "finals",
+   "season": 1,
+   "round": 22,
+   "week": 0,
+   "chars": 135181,
+   "raw": "b1b272a20d543aabc20f1fb7961b4f4080150cea418d82b602ab67a9588c9c6a",
+   "masked": "a9a6af8812a5a82b786efc4a97602e6abb4f57356bbaacd4583495c1fa59283e",
+   "after": {
+    "raw": "9f9c32cb6da47c432ede2f96fc54cff6f3ab173d9efdd0e7b5f0bbe106eee0c2",
+    "masked": "27db99381e83b78388a3bad919f6b922c3c85fc8b2f52190213c8092c84dbde8"
+   }
+  },
+  {
+   "name": "tier4Break",
+   "seed": 13,
+   "club": "club-03",
+   "at": 82,
+   "phase": "break",
+   "stage": "homeAway",
+   "season": 1,
+   "round": 8,
+   "week": 0,
+   "chars": 111249,
+   "raw": "514816c6e1bc7c94f234bfb07a7f558358f3fad227bd226499f6c3f55d6cb0a2",
+   "masked": "d607bcc896170870749be96c0a8950f3f9a48d09b4f6da7d014cc3f3da0588d0",
+   "after": {
+    "raw": "efe362ab01f2d0f3a617551d7d41f066a96af899e65767d2f96f4205aa03643b",
+    "masked": "436287a57f5e514db1780fbeed9d8ca6dbe49367487e0a99f95219ecc3327333"
+   }
+  },
+  {
+   "name": "tier5Season2Report",
+   "seed": 14,
+   "club": "club-05",
+   "at": 240,
+   "phase": "report",
+   "stage": "homeAway",
+   "season": 2,
+   "round": 0,
+   "week": 0,
+   "chars": 97335,
+   "raw": "f4398a139177732b3f0d6dc88232ce48b61ed6d8ce4c90ed2948488cc7d5e898",
+   "masked": "55e52640728d5b0ff4f03dfaed7dde7160f4afcda84771fd8d5286ee7081258e",
+   "after": {
+    "raw": "9b2dd17157fd39e1cd516f6045e009d6d5fd8348a3e5eb5cef65fbc57180b014",
+    "masked": "2528c87e21c82f4f41257f025bf859fbf4135233b3fd611bd4645dd86415de9d"
+   }
+  }
+ ]
+}

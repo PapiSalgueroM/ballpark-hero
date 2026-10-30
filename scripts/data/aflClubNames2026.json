@@ -1,0 +1,1189 @@
+{
+ "round": 1572,
+ "verifiedOn": "2026-10-29",
+ "rule": "Every string the game prints is printed by two independent non wiki publishers, compared case insensitively with spaces and punctuation exact. AFL.com.au and the club sites are ONE publisher. The ladder place is the 2026 final home and away ladder, read from two publishers. Each ladder line names its club in the cell after its place: the full form, the short form, or the name that one source prints for it (printedOnLadderAs, two such names).",
+ "sources": [
+  {
+   "id": "afl",
+   "publisher": "AFL (AFL.com.au and every club site, one publisher)",
+   "url": "https://www.afl.com.au/ladder",
+   "where": "the \"Club Sites\" list",
+   "readOn": "2026-10-29",
+   "how": "raw page (curl)"
+  },
+  {
+   "id": "austadiums",
+   "publisher": "Austadiums",
+   "url": "https://www.austadiums.com/sport/comp/afl/teams",
+   "where": "the AFL teams list (\"AFL Teams | Austadiums\", footer \"(c) 2026 Austadiums\")",
+   "readOn": "2026-10-29",
+   "how": "raw page (curl), and a WebFetch read that printed the same 18 names"
+  },
+  {
+   "id": "afltables",
+   "publisher": "AFL Tables",
+   "url": "https://afltables.com/afl/seas/2026.html",
+   "where": "the \"2026 Ladder\" table after round 25 (columns # Team P W D L Home Away GF-BF For GA-BA Agn % Pts; an empty D cell means no draws)",
+   "readOn": "2026-10-29",
+   "how": "raw page (curl)"
+  },
+  {
+   "id": "zerohanger",
+   "publisher": "Zero Hanger",
+   "url": "https://www.zerohanger.com/afl/afl-ladder/",
+   "where": "the ladder table (columns TEAM P W L D B PTS PF PA %; movement arrows left out). It is the 2026 season: every row matches AFL Tables 2026 (P 23, points, for, against, percentage), the chart labels read \"FREMANTLE 2026\", and the \"2027\" text on the page is next season's fixture",
+   "readOn": "2026-10-29",
+   "how": "raw page (curl)"
+  },
+  {
+   "id": "abc-score",
+   "publisher": "ABC News",
+   "url": "https://www.abc.net.au/news/sport/score-centre/afl/2026-07-11/giants-cats/129901806",
+   "where": "the page title of the round 20, 2026 AFL score centre page",
+   "readOn": "2026-10-29",
+   "how": "raw page (curl)"
+  },
+  {
+   "id": "abc-article",
+   "publisher": "ABC News",
+   "url": "https://www.abc.net.au/news/2026-05-25/did-the-giants-just-end-the-lions-afl-2026-premiership-hopes/106717710",
+   "where": "the headline (the page's h1) of the article of 2026-05-25",
+   "readOn": "2026-10-29",
+   "how": "raw page (curl)"
+  },
+  {
+   "id": "foxsports",
+   "publisher": "Fox Sports Australia",
+   "url": "https://www.foxsports.com.au/afl/ladder",
+   "where": "the ladder data the page carries (name, played, points, position) and its AFL teams menu",
+   "readOn": "2026-10-29",
+   "how": "raw page (curl)"
+  }
+ ],
+ "clubs": [
+  {
+   "full": "Fremantle",
+   "short": "Fremantle",
+   "ladder2026": 1,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Fremantle"
+     },
+     {
+      "source": "austadiums",
+      "line": "Fremantle"
+     },
+     {
+      "source": "afltables",
+      "line": "1 Fremantle 23 19 4 11-0-0 8-0-4 332.294 (53%) 2286 238.238 (50%) 1666 137.2 76"
+     },
+     {
+      "source": "zerohanger",
+      "line": "1 - FREMANTLE FRE 23 19 4 0 2 76 2286 1666 137.2"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Fremantle"
+     },
+     {
+      "source": "austadiums",
+      "line": "Fremantle"
+     },
+     {
+      "source": "afltables",
+      "line": "1 Fremantle 23 19 4 11-0-0 8-0-4 332.294 (53%) 2286 238.238 (50%) 1666 137.2 76"
+     },
+     {
+      "source": "zerohanger",
+      "line": "1 - FREMANTLE FRE 23 19 4 0 2 76 2286 1666 137.2"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "1 Fremantle 23 19 4 11-0-0 8-0-4 332.294 (53%) 2286 238.238 (50%) 1666 137.2 76"
+     },
+     {
+      "source": "zerohanger",
+      "line": "1 - FREMANTLE FRE 23 19 4 0 2 76 2286 1666 137.2"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Sydney Swans",
+   "short": "Sydney",
+   "ladder2026": 2,
+   "fullSources": [
+    "afl",
+    "austadiums"
+   ],
+   "shortSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Sydney Swans"
+     },
+     {
+      "source": "austadiums",
+      "line": "Sydney Swans"
+     }
+    ],
+    "short": [
+     {
+      "source": "afltables",
+      "line": "2 Sydney 23 18 5 11-0-1 7-0-4 375.293 (56%) 2543 265.279 (49%) 1869 136.1 72"
+     },
+     {
+      "source": "zerohanger",
+      "line": "2 - SYDNEY SYD 23 18 5 0 2 72 2543 1869 136.1"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "2 Sydney 23 18 5 11-0-1 7-0-4 375.293 (56%) 2543 265.279 (49%) 1869 136.1 72"
+     },
+     {
+      "source": "zerohanger",
+      "line": "2 - SYDNEY SYD 23 18 5 0 2 72 2543 1869 136.1"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Brisbane Lions",
+   "short": "Brisbane",
+   "ladder2026": 3,
+   "fullSources": [
+    "austadiums",
+    "afltables"
+   ],
+   "shortSources": [
+    "afl",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "austadiums",
+      "line": "Brisbane Lions"
+     },
+     {
+      "source": "afltables",
+      "line": "3 Brisbane Lions 23 16 7 8-0-3 8-0-4 366.303 (55%) 2499 299.260 (53%) 2054 121.7 64"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Brisbane"
+     },
+     {
+      "source": "zerohanger",
+      "line": "3 - BRISBANE BL 23 16 7 0 2 64 2499 2054 121.7"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "3 Brisbane Lions 23 16 7 8-0-3 8-0-4 366.303 (55%) 2499 299.260 (53%) 2054 121.7 64"
+     },
+     {
+      "source": "zerohanger",
+      "line": "3 - BRISBANE BL 23 16 7 0 2 64 2499 2054 121.7"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Hawthorn",
+   "short": "Hawthorn",
+   "ladder2026": 4,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Hawthorn"
+     },
+     {
+      "source": "austadiums",
+      "line": "Hawthorn"
+     },
+     {
+      "source": "afltables",
+      "line": "4 Hawthorn 23 15 2 6 9-1-2 6-1-4 327.298 (52%) 2260 275.231 (54%) 1881 120.1 64"
+     },
+     {
+      "source": "zerohanger",
+      "line": "4 - HAWTHORN HAW 23 15 6 2 2 64 2260 1881 120.1"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Hawthorn"
+     },
+     {
+      "source": "austadiums",
+      "line": "Hawthorn"
+     },
+     {
+      "source": "afltables",
+      "line": "4 Hawthorn 23 15 2 6 9-1-2 6-1-4 327.298 (52%) 2260 275.231 (54%) 1881 120.1 64"
+     },
+     {
+      "source": "zerohanger",
+      "line": "4 - HAWTHORN HAW 23 15 6 2 2 64 2260 1881 120.1"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "4 Hawthorn 23 15 2 6 9-1-2 6-1-4 327.298 (52%) 2260 275.231 (54%) 1881 120.1 64"
+     },
+     {
+      "source": "zerohanger",
+      "line": "4 - HAWTHORN HAW 23 15 6 2 2 64 2260 1881 120.1"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Geelong Cats",
+   "short": "Geelong",
+   "ladder2026": 5,
+   "fullSources": [
+    "austadiums",
+    "abc-score",
+    "foxsports"
+   ],
+   "shortSources": [
+    "afl",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "austadiums",
+      "line": "Geelong Cats"
+     },
+     {
+      "source": "abc-score",
+      "line": "GWS Giants v Geelong Cats - Round 20, 2026 - AFL Score Centre - Live AFL Scores - ABC News"
+     },
+     {
+      "source": "foxsports",
+      "line": "{\"id\":20007,\"name\":\"Geelong Cats\",\"stats\":{... \"played\":23,\"points\":60,\"position\":5, ...},\"short_name\":\"Geelong\"}"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Geelong"
+     },
+     {
+      "source": "afltables",
+      "line": "5 Geelong 23 15 8 11-0-1 4-0-7 346.279 (55%) 2355 278.257 (52%) 1925 122.3 60"
+     },
+     {
+      "source": "zerohanger",
+      "line": "5 GEELONG GEEL 23 15 8 0 2 60 2355 1925 122.3"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "5 Geelong 23 15 8 11-0-1 4-0-7 346.279 (55%) 2355 278.257 (52%) 1925 122.3 60"
+     },
+     {
+      "source": "zerohanger",
+      "line": "5 GEELONG GEEL 23 15 8 0 2 60 2355 1925 122.3"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Adelaide Crows",
+   "short": "Adelaide",
+   "ladder2026": 6,
+   "fullSources": [
+    "afl",
+    "austadiums"
+   ],
+   "shortSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Adelaide Crows"
+     },
+     {
+      "source": "austadiums",
+      "line": "Adelaide Crows"
+     }
+    ],
+    "short": [
+     {
+      "source": "afltables",
+      "line": "6 Adelaide 23 15 8 9-0-3 6-0-5 322.237 (58%) 2169 264.265 (50%) 1849 117.3 60"
+     },
+     {
+      "source": "zerohanger",
+      "line": "6 ADELAIDE ADEL 23 15 8 0 2 60 2169 1849 117.3"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "6 Adelaide 23 15 8 9-0-3 6-0-5 322.237 (58%) 2169 264.265 (50%) 1849 117.3 60"
+     },
+     {
+      "source": "zerohanger",
+      "line": "6 ADELAIDE ADEL 23 15 8 0 2 60 2169 1849 117.3"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Melbourne",
+   "short": "Melbourne",
+   "ladder2026": 7,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Melbourne"
+     },
+     {
+      "source": "austadiums",
+      "line": "Melbourne"
+     },
+     {
+      "source": "afltables",
+      "line": "7 Melbourne 23 15 8 8-0-3 7-0-5 339.267 (56%) 2301 310.239 (56%) 2099 109.6 60"
+     },
+     {
+      "source": "zerohanger",
+      "line": "7 MELBOURNE MELB 23 15 8 0 2 60 2301 2099 109.6"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Melbourne"
+     },
+     {
+      "source": "austadiums",
+      "line": "Melbourne"
+     },
+     {
+      "source": "afltables",
+      "line": "7 Melbourne 23 15 8 8-0-3 7-0-5 339.267 (56%) 2301 310.239 (56%) 2099 109.6 60"
+     },
+     {
+      "source": "zerohanger",
+      "line": "7 MELBOURNE MELB 23 15 8 0 2 60 2301 2099 109.6"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "7 Melbourne 23 15 8 8-0-3 7-0-5 339.267 (56%) 2301 310.239 (56%) 2099 109.6 60"
+     },
+     {
+      "source": "zerohanger",
+      "line": "7 MELBOURNE MELB 23 15 8 0 2 60 2301 2099 109.6"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Western Bulldogs",
+   "short": "Western Bulldogs",
+   "ladder2026": 8,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "printedOnLadderAs": [
+    {
+     "source": "zerohanger",
+     "name": "BULLDOGS"
+    }
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Western Bulldogs"
+     },
+     {
+      "source": "austadiums",
+      "line": "Western Bulldogs"
+     },
+     {
+      "source": "afltables",
+      "line": "8 Western Bulldogs 23 13 1 9 6-1-4 7-0-5 275.251 (52%) 1901 283.294 (49%) 1992 95.4 54"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Western Bulldogs"
+     },
+     {
+      "source": "austadiums",
+      "line": "Western Bulldogs"
+     },
+     {
+      "source": "afltables",
+      "line": "8 Western Bulldogs 23 13 1 9 6-1-4 7-0-5 275.251 (52%) 1901 283.294 (49%) 1992 95.4 54"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "8 Western Bulldogs 23 13 1 9 6-1-4 7-0-5 275.251 (52%) 1901 283.294 (49%) 1992 95.4 54"
+     },
+     {
+      "source": "zerohanger",
+      "line": "8 BULLDOGS WB 23 13 9 1 2 54 1901 1992 95.4"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Collingwood",
+   "short": "Collingwood",
+   "ladder2026": 9,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Collingwood"
+     },
+     {
+      "source": "austadiums",
+      "line": "Collingwood"
+     },
+     {
+      "source": "afltables",
+      "line": "9 Collingwood 23 12 2 9 6-1-5 6-1-4 293.263 (53%) 2021 287.252 (53%) 1974 102.4 52"
+     },
+     {
+      "source": "zerohanger",
+      "line": "9 COLLINGWOOD COLL 23 12 9 2 2 52 2021 1974 102.4"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Collingwood"
+     },
+     {
+      "source": "austadiums",
+      "line": "Collingwood"
+     },
+     {
+      "source": "afltables",
+      "line": "9 Collingwood 23 12 2 9 6-1-5 6-1-4 293.263 (53%) 2021 287.252 (53%) 1974 102.4 52"
+     },
+     {
+      "source": "zerohanger",
+      "line": "9 COLLINGWOOD COLL 23 12 9 2 2 52 2021 1974 102.4"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "9 Collingwood 23 12 2 9 6-1-5 6-1-4 293.263 (53%) 2021 287.252 (53%) 1974 102.4 52"
+     },
+     {
+      "source": "zerohanger",
+      "line": "9 COLLINGWOOD COLL 23 12 9 2 2 52 2021 1974 102.4"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Carlton",
+   "short": "Carlton",
+   "ladder2026": 10,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Carlton"
+     },
+     {
+      "source": "austadiums",
+      "line": "Carlton"
+     },
+     {
+      "source": "afltables",
+      "line": "10 Carlton 23 12 1 10 7-0-4 5-1-6 289.273 (51%) 2007 288.250 (54%) 1978 101.5 50"
+     },
+     {
+      "source": "zerohanger",
+      "line": "10 - CARLTON CARL 23 12 10 1 2 50 2007 1978 101.5"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Carlton"
+     },
+     {
+      "source": "austadiums",
+      "line": "Carlton"
+     },
+     {
+      "source": "afltables",
+      "line": "10 Carlton 23 12 1 10 7-0-4 5-1-6 289.273 (51%) 2007 288.250 (54%) 1978 101.5 50"
+     },
+     {
+      "source": "zerohanger",
+      "line": "10 - CARLTON CARL 23 12 10 1 2 50 2007 1978 101.5"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "10 Carlton 23 12 1 10 7-0-4 5-1-6 289.273 (51%) 2007 288.250 (54%) 1978 101.5 50"
+     },
+     {
+      "source": "zerohanger",
+      "line": "10 - CARLTON CARL 23 12 10 1 2 50 2007 1978 101.5"
+     }
+    ]
+   }
+  },
+  {
+   "full": "St Kilda",
+   "short": "St Kilda",
+   "ladder2026": 11,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "St Kilda"
+     },
+     {
+      "source": "austadiums",
+      "line": "St Kilda"
+     },
+     {
+      "source": "afltables",
+      "line": "11 St Kilda 23 10 13 4-0-7 6-0-6 293.272 (52%) 2030 284.270 (51%) 1974 102.8 40"
+     },
+     {
+      "source": "zerohanger",
+      "line": "11 - ST KILDA STK 23 10 13 0 2 40 2030 1974 102.8"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "St Kilda"
+     },
+     {
+      "source": "austadiums",
+      "line": "St Kilda"
+     },
+     {
+      "source": "afltables",
+      "line": "11 St Kilda 23 10 13 4-0-7 6-0-6 293.272 (52%) 2030 284.270 (51%) 1974 102.8 40"
+     },
+     {
+      "source": "zerohanger",
+      "line": "11 - ST KILDA STK 23 10 13 0 2 40 2030 1974 102.8"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "11 St Kilda 23 10 13 4-0-7 6-0-6 293.272 (52%) 2030 284.270 (51%) 1974 102.8 40"
+     },
+     {
+      "source": "zerohanger",
+      "line": "11 - ST KILDA STK 23 10 13 0 2 40 2030 1974 102.8"
+     }
+    ]
+   }
+  },
+  {
+   "full": "GWS Giants",
+   "short": "GWS",
+   "ladder2026": 12,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "abc-score",
+    "foxsports"
+   ],
+   "shortSources": [
+    "zerohanger",
+    "abc-article"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "printedOnLadderAs": [
+    {
+     "source": "afltables",
+     "name": "Greater Western Sydney"
+    }
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "GWS GIANTS"
+     },
+     {
+      "source": "austadiums",
+      "line": "GWS Giants"
+     },
+     {
+      "source": "abc-score",
+      "line": "GWS Giants v Geelong Cats - Round 20, 2026 - AFL Score Centre - Live AFL Scores - ABC News"
+     },
+     {
+      "source": "foxsports",
+      "line": "{\"label\":\"GWS Giants\",\"url\":\"/afl/teams/greater-western-sydney-giants\"}"
+     }
+    ],
+    "short": [
+     {
+      "source": "zerohanger",
+      "line": "12 - GWS GWS 23 10 13 0 2 40 2073 2095 98.9"
+     },
+     {
+      "source": "abc-article",
+      "line": "How GWS exposed the back half problem threatening Brisbane's AFL flag hopes"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "12 Greater Western Sydney 23 10 13 8-0-4 2-0-9 300.273 (52%) 2073 306.259 (54%) 2095 98.9 40"
+     },
+     {
+      "source": "zerohanger",
+      "line": "12 - GWS GWS 23 10 13 0 2 40 2073 2095 98.9"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Gold Coast Suns",
+   "short": "Gold Coast",
+   "ladder2026": 13,
+   "fullSources": [
+    "afl",
+    "austadiums"
+   ],
+   "shortSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Gold Coast SUNS"
+     },
+     {
+      "source": "austadiums",
+      "line": "Gold Coast Suns"
+     }
+    ],
+    "short": [
+     {
+      "source": "afltables",
+      "line": "13 Gold Coast 23 9 14 6-0-5 3-0-9 291.265 (52%) 2011 309.274 (53%) 2128 94.5 36"
+     },
+     {
+      "source": "zerohanger",
+      "line": "13 GOLD COAST GC 23 9 14 0 2 36 2011 2128 94.5"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "13 Gold Coast 23 9 14 6-0-5 3-0-9 291.265 (52%) 2011 309.274 (53%) 2128 94.5 36"
+     },
+     {
+      "source": "zerohanger",
+      "line": "13 GOLD COAST GC 23 9 14 0 2 36 2011 2128 94.5"
+     }
+    ]
+   }
+  },
+  {
+   "full": "North Melbourne",
+   "short": "North Melbourne",
+   "ladder2026": 14,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "North Melbourne"
+     },
+     {
+      "source": "austadiums",
+      "line": "North Melbourne"
+     },
+     {
+      "source": "afltables",
+      "line": "14 North Melbourne 23 9 14 6-0-6 3-0-8 280.252 (53%) 1932 315.285 (53%) 2175 88.8 36"
+     },
+     {
+      "source": "zerohanger",
+      "line": "14 NORTH MELBOURNE NMFC 23 9 14 0 2 36 1932 2175 88.8"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "North Melbourne"
+     },
+     {
+      "source": "austadiums",
+      "line": "North Melbourne"
+     },
+     {
+      "source": "afltables",
+      "line": "14 North Melbourne 23 9 14 6-0-6 3-0-8 280.252 (53%) 1932 315.285 (53%) 2175 88.8 36"
+     },
+     {
+      "source": "zerohanger",
+      "line": "14 NORTH MELBOURNE NMFC 23 9 14 0 2 36 1932 2175 88.8"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "14 North Melbourne 23 9 14 6-0-6 3-0-8 280.252 (53%) 1932 315.285 (53%) 2175 88.8 36"
+     },
+     {
+      "source": "zerohanger",
+      "line": "14 NORTH MELBOURNE NMFC 23 9 14 0 2 36 1932 2175 88.8"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Port Adelaide",
+   "short": "Port Adelaide",
+   "ladder2026": 15,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Port Adelaide"
+     },
+     {
+      "source": "austadiums",
+      "line": "Port Adelaide"
+     },
+     {
+      "source": "afltables",
+      "line": "15 Port Adelaide 23 7 16 4-0-8 3-0-8 255.274 (48%) 1804 300.248 (55%) 2048 88.1 28"
+     },
+     {
+      "source": "zerohanger",
+      "line": "15 - PORT ADELAIDE PORT 23 7 16 0 2 28 1804 2048 88.1"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Port Adelaide"
+     },
+     {
+      "source": "austadiums",
+      "line": "Port Adelaide"
+     },
+     {
+      "source": "afltables",
+      "line": "15 Port Adelaide 23 7 16 4-0-8 3-0-8 255.274 (48%) 1804 300.248 (55%) 2048 88.1 28"
+     },
+     {
+      "source": "zerohanger",
+      "line": "15 - PORT ADELAIDE PORT 23 7 16 0 2 28 1804 2048 88.1"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "15 Port Adelaide 23 7 16 4-0-8 3-0-8 255.274 (48%) 1804 300.248 (55%) 2048 88.1 28"
+     },
+     {
+      "source": "zerohanger",
+      "line": "15 - PORT ADELAIDE PORT 23 7 16 0 2 28 1804 2048 88.1"
+     }
+    ]
+   }
+  },
+  {
+   "full": "West Coast Eagles",
+   "short": "West Coast",
+   "ladder2026": 16,
+   "fullSources": [
+    "afl",
+    "austadiums"
+   ],
+   "shortSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "West Coast Eagles"
+     },
+     {
+      "source": "austadiums",
+      "line": "West Coast Eagles"
+     }
+    ],
+    "short": [
+     {
+      "source": "afltables",
+      "line": "16 West Coast 23 4 19 3-0-8 1-0-11 226.259 (47%) 1615 342.281 (55%) 2333 69.2 16"
+     },
+     {
+      "source": "zerohanger",
+      "line": "16 - WEST COAST WCE 23 4 19 0 2 16 1615 2333 69.2"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "16 West Coast 23 4 19 3-0-8 1-0-11 226.259 (47%) 1615 342.281 (55%) 2333 69.2 16"
+     },
+     {
+      "source": "zerohanger",
+      "line": "16 - WEST COAST WCE 23 4 19 0 2 16 1615 2333 69.2"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Richmond",
+   "short": "Richmond",
+   "ladder2026": 17,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Richmond"
+     },
+     {
+      "source": "austadiums",
+      "line": "Richmond"
+     },
+     {
+      "source": "afltables",
+      "line": "17 Richmond 23 3 20 2-0-9 1-0-11 209.229 (48%) 1483 342.321 (52%) 2373 62.5 12"
+     },
+     {
+      "source": "zerohanger",
+      "line": "17 - RICHMOND RICH 23 3 20 0 2 12 1483 2373 62.5"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Richmond"
+     },
+     {
+      "source": "austadiums",
+      "line": "Richmond"
+     },
+     {
+      "source": "afltables",
+      "line": "17 Richmond 23 3 20 2-0-9 1-0-11 209.229 (48%) 1483 342.321 (52%) 2373 62.5 12"
+     },
+     {
+      "source": "zerohanger",
+      "line": "17 - RICHMOND RICH 23 3 20 0 2 12 1483 2373 62.5"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "17 Richmond 23 3 20 2-0-9 1-0-11 209.229 (48%) 1483 342.321 (52%) 2373 62.5 12"
+     },
+     {
+      "source": "zerohanger",
+      "line": "17 - RICHMOND RICH 23 3 20 0 2 12 1483 2373 62.5"
+     }
+    ]
+   }
+  },
+  {
+   "full": "Essendon",
+   "short": "Essendon",
+   "ladder2026": 18,
+   "fullSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "shortSources": [
+    "afl",
+    "austadiums",
+    "afltables",
+    "zerohanger"
+   ],
+   "ladderSources": [
+    "afltables",
+    "zerohanger"
+   ],
+   "receipts": {
+    "full": [
+     {
+      "source": "afl",
+      "line": "Essendon"
+     },
+     {
+      "source": "austadiums",
+      "line": "Essendon"
+     },
+     {
+      "source": "afltables",
+      "line": "18 Essendon 23 2 21 2-0-10 0-0-11 229.227 (50%) 1601 362.306 (54%) 2478 64.6 8"
+     },
+     {
+      "source": "zerohanger",
+      "line": "18 - ESSENDON ESS 23 2 21 0 2 8 1601 2478 64.6"
+     }
+    ],
+    "short": [
+     {
+      "source": "afl",
+      "line": "Essendon"
+     },
+     {
+      "source": "austadiums",
+      "line": "Essendon"
+     },
+     {
+      "source": "afltables",
+      "line": "18 Essendon 23 2 21 2-0-10 0-0-11 229.227 (50%) 1601 362.306 (54%) 2478 64.6 8"
+     },
+     {
+      "source": "zerohanger",
+      "line": "18 - ESSENDON ESS 23 2 21 0 2 8 1601 2478 64.6"
+     }
+    ],
+    "ladder": [
+     {
+      "source": "afltables",
+      "line": "18 Essendon 23 2 21 2-0-10 0-0-11 229.227 (50%) 1601 362.306 (54%) 2478 64.6 8"
+     },
+     {
+      "source": "zerohanger",
+      "line": "18 - ESSENDON ESS 23 2 21 0 2 8 1601 2478 64.6"
+     }
+    ]
+   }
+  }
+ ]
+}
