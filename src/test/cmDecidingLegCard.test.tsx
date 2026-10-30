@@ -81,7 +81,8 @@ describe('Club Manager: a deciding second leg is headlined by the tie (Round 160
     expect(away.night).toBe('Lost 0-2 on the night');
     const level = shown(report({
       homeGoals: 1, awayGoals: 1, won: false, drawn: true, decidedBy: 'regular',
-      tie: { leg: 2, aggMine: 2, aggTheirs: 2, byAwayGoals: true, through: true, leg1Mine: 1, leg1Theirs: 1, leg1Home: false },
+      /* A tie the engine can write: 2-2 away, then 1-1 at home, 3-3 on aggregate and through on away goals (two to one). */
+      tie: { leg: 2, aggMine: 3, aggTheirs: 3, byAwayGoals: true, through: true, leg1Mine: 2, leg1Theirs: 2, leg1Home: false },
     }));
     expect(level.head).toBe('THROUGH');
     expect(level.night).toBe('Drew 1-1 on the night');
