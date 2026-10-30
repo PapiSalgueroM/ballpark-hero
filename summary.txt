@@ -1,0 +1,7 @@
+simManagers exit=0 6s | simManagers: all green
+simManagers-sever exit=0 8s | control run: 3 failure(s) fired as expected
+simInventedNames exit=0 10s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+vitest-jobhunt exit=0 2s |    Duration  1.11s (transform 140ms, setup 143ms, collect 196ms, tests 178ms, environment 647ms, prepare 184ms)
+simNoInventedQuotes exit=0 22s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+tsc exit=0 54s | 

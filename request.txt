@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simManagers: node scripts/simManagers.mjs
+simManagers-sever: SIM_MANAGERS_CONTROL=sever node scripts/simManagers.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+vitest-jobhunt: node_modules/.bin/vitest run src/test/clubManagerJobHunt.test.ts src/lib/gmSeat.test.ts --testTimeout=300000 --hookTimeout=120000
