@@ -1,0 +1,222 @@
+{
+  "schema": 1,
+  "status": "SOURCE_ONLY_UNPREDICTED_ORIGINAL_PAGE_BASELINE",
+  "product": "931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "tree": "a4271bd0e49516db54d37e7cc2ad98112376ffb2",
+  "productFiles": 5502,
+  "branch": "rc/sc-centre-focus-baseline-20261030",
+  "page": "70e1f27988ec3891a15a5260282dfe9fd1502f18",
+  "sourcePins": {
+    "index.html": {
+      "gitBlob": "f6d81a169d0c98f3b86551665c5cc83c7919dc48",
+      "sha256": "4f948e82c43b2667fdbae1a5f27957b2b9fc6fa0e081c2a9fa16c2601b61ede6",
+      "bytes": 33238
+    },
+    "package-lock.json": {
+      "gitBlob": "97d6f12a052f25f400462938c241789a083f0bfe",
+      "sha256": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76",
+      "bytes": 309049
+    },
+    "package.json": {
+      "gitBlob": "2ff64986fb76ebc51b706f2fd24765768874008a",
+      "sha256": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "bytes": 3495
+    },
+    "scripts/data/soccerCareerFacts.json": {
+      "gitBlob": "9828e41da792eafeead8036879d49f05242a5164",
+      "sha256": "bc02c0d49e6d0b5fde50c2a2b1b78b30d6b1ec035a75d96265638cc9047b4ae6",
+      "bytes": 176880
+    },
+    "scripts/lib/answerConsent.mjs": {
+      "gitBlob": "c6d16997e4c06e8b35dcfd0bab5efcad3069d899",
+      "sha256": "00de3f510782d77e48a5535462c1770472beecbccf9413f9fd488a1bddda32aa",
+      "bytes": 5835
+    },
+    "scripts/lib/careerClubPool.mjs": {
+      "gitBlob": "16ccc6137958a1adf2e40e5d26b99de466b38e24",
+      "sha256": "ded92933aa4790e4c4a532647d09e5ee3c65b22dfec57432de18d25641d9dce0",
+      "bytes": 22296
+    },
+    "scripts/lib/hostLikeServer.mjs": {
+      "gitBlob": "21059d5e8114669df61106c125d5272d357b6236",
+      "sha256": "3958c9a3b4d9e49bb60a3b7dd72d81a997bd1caed56e82e4c3bae07e1a918ef0",
+      "bytes": 2690
+    },
+    "scripts/lib/offlineTransport.cjs": {
+      "gitBlob": "0fda542a2649fe5da937c6976fd0f5b6073e74b6",
+      "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221",
+      "bytes": 10660
+    },
+    "scripts/lib/playwrightLoader.mjs": {
+      "gitBlob": "4f7739e217e0a47ee82e6bfc8be1c04bed17454a",
+      "sha256": "94a07179be7ca6b9562d118b52c2d5d0dff0b6b2e29e49e4fea16fa2defb5a93",
+      "bytes": 2777
+    },
+    "scripts/qa/freeKickLab1070.mjs": {
+      "gitBlob": "1cf030d9182fd4fd68fca39f32e757c69bf9e58a",
+      "sha256": "6279c8f608e56439e73f0bbcda73f9ed69e15d48e9b13119de4d6a7f05fb46b7",
+      "bytes": 27126
+    },
+    "src/components/season-centre/SeasonCentre.tsx": {
+      "gitBlob": "286f0955b0abb0cd8a4d936954c7c37e3615f7c4",
+      "sha256": "df59581487914cd0bafe3e1d8269920948d58aea17cb3bec5390bc1c5b15b4ca",
+      "bytes": 48710
+    },
+    "src/components/soccer-career/careerMoments.ts": {
+      "gitBlob": "e9618355bc011458cde8930ceefdfec34d026b0d",
+      "sha256": "e668c21f443a8935798830c77af8f2627780c948eb1f4799dc09a767d3962bc0",
+      "bytes": 6752
+    },
+    "src/components/soccer-career/SoccerSeasonCentre.tsx": {
+      "gitBlob": "21fac3191f5d6294175b908c2584d29788e8fa2a",
+      "sha256": "94c3c55e9d5c46a84c9c17a5d17713114bc14c0e94e26e03391b363ce7895ce2",
+      "bytes": 31496
+    },
+    "src/data/leagueFormat.ts": {
+      "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b",
+      "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5",
+      "bytes": 7070
+    },
+    "src/data/soccerCareerClubPool.ts": {
+      "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+      "bytes": 49030
+    },
+    "src/index.css": {
+      "gitBlob": "775df500bd7c9730e5b04aedd3d6b2a1564d49b4",
+      "sha256": "ada9cc819db63d0e2eb013bd3c29eec16877e2a30166c390b81901142369fef3",
+      "bytes": 18051
+    },
+    "src/lib/clubManager.ts": {
+      "gitBlob": "962aab2c18611c40c1fc998c77c384ab02b2d7b6",
+      "sha256": "ea2bf9c72ad4097af2df77fa5c19e04cfbca0bcc9c39bf71dc7fc42f249b3cc2",
+      "bytes": 1245234
+    },
+    "src/lib/season/core.ts": {
+      "gitBlob": "fe54ceaef5baeede559502ee3dc16ce4466bf812",
+      "sha256": "450693bf1c6449105990e09c7799ee276a0a2389b42f04a156ac82ead05e90a0",
+      "bytes": 54412
+    },
+    "src/lib/season/soccer.ts": {
+      "gitBlob": "819e2d97d0435c4ef29a4c1ed441511a6906e986",
+      "sha256": "fefc54713b21160cc76530c7e0288fe6f2786ac23d0f8e696219505bd4f82294",
+      "bytes": 24509
+    },
+    "src/lib/soccerCareerCoachingStart.ts": {
+      "gitBlob": "e28c79d67d54950e5b554e392048483693abbc4b",
+      "sha256": "3864fc30c2edbd311f4f7e967530f92ffa84a9369d724a55bd9c2dffd28ae1fe",
+      "bytes": 4269
+    },
+    "src/lib/soccerCareerDerby.ts": {
+      "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba",
+      "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8",
+      "bytes": 23401
+    },
+    "src/lib/soccerCareerEngine.ts": {
+      "gitBlob": "6661bca7a583d57933a533f9edcabc1fc102c700",
+      "sha256": "7c79aef8322ea52d617c2390500bba5d2b93de8af2295f75dd3f2b079902711e",
+      "bytes": 552324
+    },
+    "src/lib/soccerCareerLeague.ts": {
+      "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844",
+      "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+      "bytes": 47020
+    },
+    "src/lib/soccerCareerSave.ts": {
+      "gitBlob": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+      "sha256": "b486dfd8c4073230b6967c674058e46c7b56a6afd2a8a165f1e215501205477a",
+      "bytes": 6287
+    },
+    "src/pages/SoccerCareer.tsx": {
+      "gitBlob": "70e1f27988ec3891a15a5260282dfe9fd1502f18",
+      "sha256": "ddc1056c3606f3f4bfac4e8bd257e8f6087b94b5dd8592e6f3ae3b7dee46b1a2",
+      "bytes": 283915
+    },
+    "vite.config.ts": {
+      "gitBlob": "0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d",
+      "sha256": "02fd27231ac2eb44864a8f0c7f568ff3ce44e5114302df6f110f1406e4b65e81",
+      "bytes": 10694
+    },
+    "src/lib/dialogA11y.ts": {
+      "gitBlob": "823eaec15df9fd5527295caf41f8cebe94efcb7e",
+      "sha256": "d43a2a4c7f3c895e8ab1d151337d2a532f2242f32284af5b09462dcf22a88aa5",
+      "bytes": 1274
+    }
+  },
+  "modules": [
+    "src/pages/SoccerCareer.tsx",
+    "src/lib/soccerCareerEngine.ts",
+    "src/lib/soccerCareerSave.ts",
+    "src/components/soccer-career/SoccerSeasonCentre.tsx",
+    "src/components/season-centre/SeasonCentre.tsx",
+    "src/lib/season/core.ts",
+    "src/lib/season/soccer.ts",
+    "src/data/soccerCareerClubPool.ts",
+    "src/components/soccer-career/careerMoments.ts",
+    "src/lib/soccerCareerLeague.ts",
+    "src/lib/dialogA11y.ts"
+  ],
+  "centreModule": "src/components/soccer-career/SoccerSeasonCentre.tsx",
+  "cases": [
+    {
+      "id": "replay-phone-escape",
+      "entry": "replay",
+      "close": "escape",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "target": "Exact connected Season replays opener"
+    },
+    {
+      "id": "replay-desktop-back",
+      "entry": "replay",
+      "close": "back",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "target": "Exact connected Season replays opener"
+    },
+    {
+      "id": "live-phone-back",
+      "entry": "live",
+      "close": "back",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "target": "Actual current NewspaperCard continuation"
+    },
+    {
+      "id": "live-desktop-escape",
+      "entry": "live",
+      "close": "escape",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "target": "Actual current NewspaperCard continuation"
+    }
+  ],
+  "ownedMarker": "SC_CENTRE_RETURN_FOCUS",
+  "now": 1791586800000,
+  "guest": "SteadyVolley-18",
+  "saveKey": "soccerCareerSave",
+  "bounds": {
+    "senior": 256,
+    "youth": 512
+  },
+  "outcomes": "UNPREDICTED",
+  "rawMeaning": {
+    "raw0": "All four passed with source, save, scroll and custody checks",
+    "raw2": "Any setup, runtime, source, save, scroll, transport or preservation refusal",
+    "raw1": "One or more owned focus assertions, no setup or preservation refusal"
+  },
+  "limits": [
+    "Node fixture preparation and official codec only, no browser onboarding claim",
+    "Exactly four fresh pending-module contexts; no loaded/error-centre or trophy claim",
+    "Whole original Page only; no product patch or physical old-page control yet",
+    "No source ref or publication action; Root API and peer source GO before launch"
+  ]
+}
