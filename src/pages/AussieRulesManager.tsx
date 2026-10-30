@@ -17,7 +17,7 @@ function firstBoard(): 'league' | 'legacy' | 'menu' {
 export default function AussieRulesManager() {
   const [board, setBoard] = useState(firstBoard);
   const [leaving, setLeaving] = useState(false);
-  return <><PageSeo title="Aussie Rules Manager - A Full Fictional Footy Season | DoUKnowBall" description="Manage a fictional Australian rules club through 23 rounds, the wildcard week and the finals, the Grand Final and a national draft into next season." path="/aussie-rules-manager" />
+  return <><PageSeo title="Aussie Rules Manager - Run an AFL Club Through a Full Season | DoUKnowBall" description="Pick one of the 18 AFL clubs and run it through 23 rounds, the wildcard week, the finals, the Grand Final and a national draft. Players and results are made up." path="/aussie-rules-manager" />
     <div className="min-h-screen bg-background text-foreground"><GameNavbar /><main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
       <header className="mb-4"><div className="flex items-center justify-between gap-3"><h1 className="text-2xl font-display font-bold text-primary">Aussie Rules Manager</h1>
         <RulesGate title="How to Play Aussie Rules Manager" floatingTrigger={false} className="min-h-11 min-w-11">
@@ -46,6 +46,6 @@ export default function AussieRulesManager() {
         </div>
         <AussieRulesManagerBoard onReset={() => setBoard('menu')} />
       </> : <AussieRulesLeagueBoard />}
-      <GameSeoContent pageHasOwnH1 title="Aussie Rules Manager: A Full Fictional Australian Rules Season" description="Choose one of 18 fictional clubs, pick your 23, play 23 rounds and the 2026 style finals, then age your list and draft into the next season." /><GameNav />
+      <GameSeoContent pageHasOwnH1 title="Aussie Rules Manager: A Full AFL Club Season" description="Choose one of the 18 AFL clubs, pick your 23 from a made up list, play 23 rounds and the 2026 style finals, then age your list and draft into the next season." /><GameNav />
     </main></div></>;
 }

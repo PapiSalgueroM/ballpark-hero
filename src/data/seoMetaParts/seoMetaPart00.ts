@@ -16,6 +16,6 @@ export const SEO_META_PART: Record<string, SeoMeta> = {
   },
   "/aussie-rules-manager": {
     title: "Aussie Rules Manager: Free Footy Season Game",
-    description: "Run a fictional Aussie rules club through 23 rounds, the finals and the draft. Pick your 23, call the quarters, chase a flag. Free footy manager.",
+    description: "Run an AFL club through 23 rounds, the finals and the draft. Pick your 23, call the quarters, chase a flag. Free footy manager.",
   },
 };
