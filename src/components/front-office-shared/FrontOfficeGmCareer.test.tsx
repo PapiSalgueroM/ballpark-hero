@@ -626,6 +626,8 @@ for (const row of BOARDS.filter(b => b.career)) {
       fireEvent.click(buttonNamed(/Go to the draft/)!);
       row.drive.runDraft(row);
       expect(readSave(row).phase).toBe('hub');
+      /* the draft night's card stands between the draft and the hub (one tap, the same on both boards) */
+      fireEvent.click(buttonNamed('Continue to the hub')!);
       openTile('Trades');
       expect(document.querySelector('[data-trade-talks]'), "the old club's call is not on the new club's desk").toBeNull();
       const partner = Object.keys(readSave(row).league.teams).find(x => x !== target)!;
