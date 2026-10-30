@@ -16,6 +16,7 @@ import { handOverCareer } from '@/lib/clubManagerHandOver';
 import { pointKeyPrefix, pointsIndexKey } from '@/lib/cmSavePointsStore';
 import { backupKeysOf, offeredBackup } from '@/lib/brokenSaveRecovery';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
+import { FENCE_PREFIX } from '@/lib/saveFence';
 import {
   canCarryOn,
   carryOnInClubManager,
@@ -189,6 +190,31 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
     });
     expect(carry(withVerdict('survived'), readSlots()[0])).toBe('failed');
     expect(snap()).toBe(full);
+  }, 90000);
+
+  /* Review fix (r1592-run-m m2): a replace of a PARKED slot swaps to it first,
+     so a refusal after that must swap back. Only the fence's generation may
+     move, as it does on any swap (src/lib/saveFence.ts). */
+  it('a refused replace of a parked slot swaps back, and nothing else moves', () => {
+    fillThree();
+    const unfenced = () => JSON.stringify((JSON.parse(snap()) as [string, string][]).filter(([k]) => !k.startsWith(FENCE_PREFIX)));
+    const before = unfenced();
+    const one = localStorage.getItem(KEY), two = localStorage.getItem(parkedKey(2));
+    const real = Storage.prototype.setItem;
+    const rules: [string, (k: string, v: string) => boolean][] = [
+      ['its kept aside copy', k => k.startsWith(`${KEY}.broken-`)],
+      ['the career after the swap', (k, v) => k === KEY && v !== one && v !== two],
+    ];
+    for (const [, refused] of rules) {
+      vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, k: string, v: string) {
+        if (refused(k, v)) throw new Error('quota');
+        return real.call(this, k, v);
+      });
+      expect(carry(withVerdict('survived'), readSlots()[1])).toBe('failed');
+      vi.restoreAllMocks();
+      expect(activeSlot()).toBe(1);
+      expect(unfenced()).toBe(before);
+    }
   }, 90000);
 
   it('goes across with Club Manager\'s takeover stamp, so the weeks before you are not scored as yours', () => {

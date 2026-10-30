@@ -53,10 +53,15 @@
         byte of the store moves; (e) an unreadable slot 2 counts as a career,
         so the job lands in slot 3 and the bytes stay; (f) the free slot's
         old save points go, the kept career's stay; (g) a refused write on
-        the swap, on the parked write and on a replace answers 'failed' and
-        not a byte moves; (h) a picked slot (all full) is kept aside first,
-        the same bytes, marked with its slot, and its points go; (i) a slot
-        that changed since the card read it is not replaced.
+        the swap, on the parked write, on an empty device, on a replace of
+        the slot being played and on a replace of a PARKED slot (refused at
+        its kept aside copy, and at the career's own write after the swap,
+        which must swap back) answers 'failed' and not a byte moves; (h) a
+        picked slot (all full) is kept aside first, the same bytes (slot 2
+        holds a second career of another club, so the copy is told apart
+        from slot 1's by its bytes), marked with its slot, and its points
+        go; (i) a slot that changed since the card read it, into an
+        unreadable save or into another career, is not replaced.
         Every sacked run, the silent arm's and the talk past the room arm's, is
         refused and writes nothing. In a full run the reprieves section 2
         played are handed over too, since the section's own runs rarely have
@@ -93,6 +98,12 @@
        free slot's parked key. Arm (g) must go red.
      HOT_SEAT_CONTROL=nobackup   a picked career is replaced with no kept
        aside copy. Arm (h) must go red.
+     HOT_SEAT_CONTROL=nochanged  the changed slot check is gone, so a slot
+       that changed under the chooser is replaced. Arm (i) must go red.
+     HOT_SEAT_CONTROL=noswapback a refused replace of a parked slot does not
+       swap back, so that slot stays active. Arm (g) must go red.
+     HOT_SEAT_CONTROL=emptysaved a refused write into the empty slot being
+       played reads as saved. Arm (g) must go red.
      HOT_SEAT_CONTROL=sackoffer  a sacked manager is offered the career.
        Must go red.
      HOT_SEAT_CONTROL=nostamp    the takeover goes across without the
@@ -167,7 +178,7 @@ const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.HOT_SEAT_CONTROL || '';
 /* Round 956: the handover controls aim at section 5 alone, so they run it
    alone and a red they cause is section 5's red. */
-const HANDOVER_CONTROLS = ['nocal', 'clobber', 'sackoffer', 'nostamp', 'card', 'damagedfree', 'nopoints', 'norollback', 'nobackup'];
+const HANDOVER_CONTROLS = ['nocal', 'clobber', 'sackoffer', 'nostamp', 'card', 'damagedfree', 'nopoints', 'norollback', 'nobackup', 'nochanged', 'noswapback', 'emptysaved'];
 if (CONTROL && !['flat', 'deaf', 'drift', 'leak', ...HANDOVER_CONTROLS].includes(CONTROL)) {
   console.error(`HOT_SEAT_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -284,6 +295,19 @@ if (CONTROL === 'nobackup') {
   rewriteHandOver([['  const copy = copyAside(entry, store);\n', '  const copy = { ok: true, backupKey: \'dukb-none\' };\n']], 'nobackup', 'the replaced career\'s kept aside copy');
   console.log('NEGATIVE CONTROL ON: a picked career is replaced without a kept aside copy; section 5 must go red');
 }
+/* Review fixes (r1592-run-m): the three hand over mutations no gate saw. */
+if (CONTROL === 'nochanged') {
+  rewriteHandOver([['  if (!named || named.damaged !== replace.damaged || JSON.stringify(named.summary) !== JSON.stringify(replace.summary)) {\n    return { ok: false, why: \'changed\' };\n  }\n', '']], 'nochanged', 'the changed slot check');
+  console.log('NEGATIVE CONTROL ON: a slot that changed under the chooser is replaced anyway; section 5 must go red');
+}
+if (CONTROL === 'noswapback') {
+  rewriteHandOver([['    if (slot !== from) switchSlot(from);\n', '']], 'noswapback', 'the refused replace\'s swap back');
+  console.log('NEGATIVE CONTROL ON: a refused replace of a parked slot leaves that slot active; section 5 must go red');
+}
+if (CONTROL === 'emptysaved') {
+  rewriteHandOver([['      if (!saveCareer(career)) return failed;\n', '      saveCareer(career);\n']], 'emptysaved', 'the empty slot\'s refused write');
+  console.log('NEGATIVE CONTROL ON: a refused write into the empty slot being played reads as saved; section 5 must go red');
+}
 if (CONTROL === 'sackoffer') {
   libPath = rewrite(LIB, [['  return (kind === \'survived\' || kind === \'reprieve\') && !run.state.sacked;\n', '  return kind !== undefined;\n']], 'managerHotSeat.sackoffer.ts', 'the survivors only rule');
   console.log('NEGATIVE CONTROL ON: a sacked manager is offered the job anyway; section 5 must go red');
@@ -309,11 +333,12 @@ execSync(`"${ESBUILD}" "${ENTRY}" --bundle --format=cjs --platform=node --alias:
 const store = new Map();
 /* Round 1592: it lists its keys (the save points clear and the kept aside
    copies need that), and `refuse` makes it refuse a write the way a full
-   browser store does, for the carry's roll back. */
+   browser store does, for the carry's roll back. It sees the value too, so
+   an arm can refuse one career's bytes and let another's through. */
 let refuse = () => false;
 globalThis.localStorage = {
   getItem: k => store.get(k) ?? null,
-  setItem: (k, v) => { if (refuse(k)) throw new Error('quota'); store.set(k, String(v)); },
+  setItem: (k, v) => { if (refuse(k, String(v))) throw new Error('quota'); store.set(k, String(v)); },
   removeItem: k => store.delete(k),
   clear: () => store.clear(),
   get length() { return store.size; },
@@ -529,6 +554,15 @@ const otherRaw = store.get(SAVE_KEY);
 if (typeof otherRaw !== 'string') fail(`saveCareer did not write ${SAVE_KEY}; the slots read the wrong key`);
 if (summarize(otherRaw)?.clubName !== other.clubName) fail('the slots do not see the career Club Manager saved');
 const otherSum = JSON.stringify(summarize(otherRaw));
+/* Review fix (r1592-run-m): a second career, of another club, so a kept aside
+   copy and a slot that changed under the chooser are told apart by their
+   bytes, not only by the slot mark. */
+store.clear();
+const second = startCareer(pool[0].club);
+if (!saveCareer(second)) fail('Club Manager\'s own saveCareer refused the second probe career');
+const twoRaw = store.get(SAVE_KEY);
+if (typeof twoRaw !== 'string' || twoRaw === otherRaw || JSON.stringify(summarize(twoRaw)) === otherSum) fail('the two probe careers cannot be told apart');
+store.clear();
 const BACKUP_PREFIX = `${SAVE_KEY}.broken-`;
 /* Every key and value in the store, in key order. */
 const snap = () => JSON.stringify([...store.keys()].sort().map(k => [k, store.get(k)]));
@@ -580,20 +614,24 @@ function slotArmsRest(run, tag) {
   /* (d) all three full: 'full', and not a byte moves. */
   store.clear();
   store.set(SAVE_KEY, otherRaw);
-  store.set(parkedKey(2), otherRaw);
+  store.set(parkedKey(2), twoRaw);
   store.set(parkedKey(3), '{broken');
   let was = snap();
   res = carryOnInClubManager(run);
   if (res !== 'full' || snap() !== was) fail(`${tag} (d): with all three slots full the carry answered ${res}${snap() !== was ? ' and the store changed' : ''}`);
   else arms.fullAsked += 1;
-  /* (i) a slot that changed since the card read it is not replaced. */
+  /* (i) a slot that changed since the card read it is not replaced, whether
+     it became unreadable or (review fix, r1592-run-m m1) another career. */
   const shown = readSlots()[1];
-  store.set(parkedKey(2), '{broken too');
-  was = snap();
-  res = carryOnInClubManager(run, shown);
-  if (res !== 'changed' || snap() !== was) fail(`${tag} (i): a changed slot answered ${res}${snap() !== was ? ' and the store changed' : ''}`);
-  else arms.changedRefused += 1;
-  store.set(parkedKey(2), otherRaw);
+  let unmoved = true;
+  for (const [into, bytes] of [['an unreadable save', '{broken too'], ['another career', otherRaw]]) {
+    store.set(parkedKey(2), bytes);
+    was = snap();
+    res = carryOnInClubManager(run, shown);
+    if (res !== 'changed' || snap() !== was) { unmoved = false; fail(`${tag} (i): a slot changed into ${into} answered ${res}${snap() !== was ? ' and the store changed' : ''}`); }
+  }
+  if (unmoved) arms.changedRefused += 1;
+  store.set(parkedKey(2), twoRaw);
   /* (h) a picked career: kept aside first, byte for byte, marked with its slot; its points go; the others stay. */
   store.set(pointsIndexKey(2), '{"v":1,"points":[],"credited":[1],"blocked":[]}');
   const twoWas = store.get(parkedKey(2));
@@ -612,16 +650,28 @@ function slotArmsRest(run, tag) {
   res = carryOnInClubManager(run);
   if (res !== 'saved' || activeSlot() !== 3 || store.get(parkedKey(2)) !== '{broken' || sumOfKey(parkedKey(1)) !== otherSum) fail(`${tag} (e): with slot 2 unreadable the carry answered ${res}, active slot ${activeSlot()}, slot 2 ${store.get(parkedKey(2)) === '{broken' ? 'kept' : 'written over'}`);
   else arms.damagedKept += 1;
-  /* (g) a browser that refuses the career's write: 'failed' and not a byte moves, on both paths. */
+  /* (g) a browser that refuses the career's write: 'failed' and not a byte
+     moves, on every path. Review fix (r1592-run-m m2 and m5): an empty
+     device, and a replace of a PARKED slot, refused at its kept aside copy
+     and at the career's own write after the swap, which must swap back. */
   let rolled = true;
-  for (const [what, refuseKey, pick] of [['the swap', SAVE_KEY, false], ['the parked write', parkedKey(2), false], ['the replace', SAVE_KEY, true]]) {
+  const atKey = key => k => k === key;
+  const careerOnly = (k, v) => k === SAVE_KEY && v !== otherRaw && v !== twoRaw;
+  for (const [what, rule, held, pick] of [
+    ['the swap', atKey(SAVE_KEY), 1, null],
+    ['the parked write', atKey(parkedKey(2)), 1, null],
+    ['an empty device', atKey(SAVE_KEY), 0, null],
+    ['the replace of the slot being played', atKey(SAVE_KEY), 3, 0],
+    ['a parked replace, its kept aside copy', k => k.startsWith(BACKUP_PREFIX), 3, 1],
+    ['a parked replace, the career after the swap', careerOnly, 3, 1],
+  ]) {
     store.clear();
-    store.set(SAVE_KEY, otherRaw);
-    if (pick) { store.set(parkedKey(2), otherRaw); store.set(parkedKey(3), otherRaw); }
+    if (held >= 1) store.set(SAVE_KEY, otherRaw);
+    if (held === 3) { store.set(parkedKey(2), twoRaw); store.set(parkedKey(3), otherRaw); }
     was = snap();
-    refuse = k => k === refuseKey;
-    try { res = carryOnInClubManager(run, pick ? readSlots()[0] : undefined); } finally { refuse = () => false; }
-    if (res !== 'failed' || snap() !== was) { rolled = false; fail(`${tag} (g): a refused write on ${what} answered ${res}${snap() !== was ? ' and the store changed' : ''}`); }
+    refuse = rule;
+    try { res = carryOnInClubManager(run, pick === null ? undefined : readSlots()[pick]); } finally { refuse = () => false; }
+    if (res !== 'failed' || snap() !== was) { rolled = false; fail(`${tag} (g): a refused write on ${what} answered ${res}, active slot ${activeSlot()}${snap() !== was ? ' and the store changed' : ''}`); }
   }
   if (rolled) arms.rolledBack += 1;
 }
