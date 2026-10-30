@@ -1,0 +1,3 @@
+1139 /home/runner/work/_temp/rc-out/full/simDailyStanding.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simDailyStanding.mjs/stderr.log
+1139 total

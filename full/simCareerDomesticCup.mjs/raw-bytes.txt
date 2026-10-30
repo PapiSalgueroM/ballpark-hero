@@ -1,0 +1,3 @@
+2898 /home/runner/work/_temp/rc-out/full/simCareerDomesticCup.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerDomesticCup.mjs/stderr.log
+2898 total

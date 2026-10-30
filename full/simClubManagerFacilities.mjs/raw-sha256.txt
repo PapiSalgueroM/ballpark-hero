@@ -1,0 +1,2 @@
+e718248a3c3e91153312627fce5ee150a91ea041f697a41ac96ce0b9f7f74732  /home/runner/work/_temp/rc-out/full/simClubManagerFacilities.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simClubManagerFacilities.mjs/stderr.log

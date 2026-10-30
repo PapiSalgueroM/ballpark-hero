@@ -1,0 +1,3 @@
+891 /home/runner/work/_temp/rc-out/full/simJobMarket.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simJobMarket.mjs/stderr.log
+891 total

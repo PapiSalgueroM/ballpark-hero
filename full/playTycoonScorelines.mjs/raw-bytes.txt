@@ -1,0 +1,3 @@
+1966 /home/runner/work/_temp/rc-out/full/playTycoonScorelines.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playTycoonScorelines.mjs/stderr.log
+1966 total

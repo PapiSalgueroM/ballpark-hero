@@ -1,0 +1,3 @@
+1395 /home/runner/work/_temp/rc-out/full/simCareerPendingPopularityGates.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerPendingPopularityGates.mjs/stderr.log
+1395 total

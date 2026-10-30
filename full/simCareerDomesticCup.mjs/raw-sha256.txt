@@ -1,0 +1,2 @@
+61226f14e637f45eda2e1a782f4eefe5af584a0ce37fb25d194a6e565e86272b  /home/runner/work/_temp/rc-out/full/simCareerDomesticCup.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerDomesticCup.mjs/stderr.log

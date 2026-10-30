@@ -1,0 +1,3 @@
+1716 /home/runner/work/_temp/rc-out/full/simNhlCareer.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNhlCareer.mjs/stderr.log
+1716 total

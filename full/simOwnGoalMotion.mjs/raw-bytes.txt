@@ -1,0 +1,3 @@
+7871 /home/runner/work/_temp/rc-out/full/simOwnGoalMotion.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simOwnGoalMotion.mjs/stderr.log
+7871 total

@@ -1,0 +1,3 @@
+13953 /home/runner/work/_temp/rc-out/full/simCmLeagueBook.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simCmLeagueBook.mjs/stderr.log
+13953 total

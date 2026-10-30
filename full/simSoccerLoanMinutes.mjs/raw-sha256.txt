@@ -1,0 +1,2 @@
+144aef812d9eed4e8da23c9a8b52a25c594082f5d56d0ad258af09b66ff6a5b9  /home/runner/work/_temp/rc-out/full/simSoccerLoanMinutes.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerLoanMinutes.mjs/stderr.log

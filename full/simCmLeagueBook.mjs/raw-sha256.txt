@@ -1,0 +1,2 @@
+496a312227a62a2dfc907be82b9d3b9a6043d49f7c59aab44748df116ef8d3a7  /home/runner/work/_temp/rc-out/full/simCmLeagueBook.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmLeagueBook.mjs/stderr.log

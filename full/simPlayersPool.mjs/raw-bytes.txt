@@ -1,0 +1,3 @@
+1391 /home/runner/work/_temp/rc-out/full/simPlayersPool.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simPlayersPool.mjs/stderr.log
+1391 total

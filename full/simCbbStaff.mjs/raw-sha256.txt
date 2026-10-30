@@ -1,0 +1,2 @@
+5355e8cbfeb06b4528b2a7c6645c35e7ac13c1d4fb9d01586e5c8697b20c07bc  /home/runner/work/_temp/rc-out/full/simCbbStaff.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCbbStaff.mjs/stderr.log

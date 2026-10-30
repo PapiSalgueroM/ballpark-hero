@@ -1,0 +1,2 @@
+cb7c898ac5936764e8214d14567be84bdcd93e8c5014f7ff3279e13fc2a2fb08  /home/runner/work/_temp/rc-out/full/simPlayersPool.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPlayersPool.mjs/stderr.log

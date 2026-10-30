@@ -1,0 +1,2 @@
+5d12d642dcb2ca1e8655c87719c0803343e5b6a3e22b3bb29b2b1b9e8aecc5ca  /home/runner/work/_temp/rc-out/full/simSearchAndDiscardFeedback.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSearchAndDiscardFeedback.mjs/stderr.log

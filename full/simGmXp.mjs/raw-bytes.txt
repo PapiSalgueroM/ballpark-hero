@@ -1,0 +1,3 @@
+3893 /home/runner/work/_temp/rc-out/full/simGmXp.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGmXp.mjs/stderr.log
+3893 total

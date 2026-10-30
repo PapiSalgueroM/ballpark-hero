@@ -1,0 +1,3 @@
+2694 /home/runner/work/_temp/rc-out/full/simSearchAndDiscardFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSearchAndDiscardFeedback.mjs/stderr.log
+2694 total

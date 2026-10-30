@@ -1,0 +1,3 @@
+472 /home/runner/work/_temp/rc-out/full/simTraining.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simTraining.mjs/stderr.log
+472 total

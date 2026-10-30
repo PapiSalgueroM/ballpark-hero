@@ -1,0 +1,2 @@
+5032fd87125b339df0353994a4bfa7e87559f94fc42eb00df5c98f3e1af67fb4  /home/runner/work/_temp/rc-out/full/simConquestExplore.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simConquestExplore.mjs/stderr.log

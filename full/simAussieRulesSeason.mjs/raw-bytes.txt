@@ -1,0 +1,3 @@
+11111 /home/runner/work/_temp/rc-out/full/simAussieRulesSeason.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simAussieRulesSeason.mjs/stderr.log
+11111 total

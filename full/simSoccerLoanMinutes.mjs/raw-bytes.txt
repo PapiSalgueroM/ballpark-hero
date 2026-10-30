@@ -1,0 +1,3 @@
+527 /home/runner/work/_temp/rc-out/full/simSoccerLoanMinutes.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerLoanMinutes.mjs/stderr.log
+527 total
