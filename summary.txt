@@ -1,0 +1,5 @@
+j-simWorldEuro exit=2 1302s | simWorldEuro: cannot run: section 3 needs WORLD_EURO_BASE, the commit before the board step
+j-simCmCopy exit=1 51s | Node.js v24.22.1
+j-dl exit=0 89s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+j-simWorldUcl exit=0 2078s | simWorldUcl: green, 498815 checks, 0 failures
+j-simOneOffCups exit=0 3138s | simOneOffCups: green, 270690 checks (3136 s)
