@@ -11,12 +11,23 @@
         Played for 4+ clubs, then the walk skips until Tyler Morton is dealt
         and taps that square: it locks with his name, the strikes stay where
         they were, and scrollY and the document height do not move.
+     c. the window case (Round 1576): seeds 1 to 200 are searched for a board
+        with WINDOW_TILE, the walk skips until WINDOW_MAN is dealt and taps
+        it, with the same checks. Marcus Rashford spent 2025-26 on loan at
+        Barcelona, a club the 2026 overlay wrote over; Round 1576 put it back.
+     d. /whats-new shows Round 1576's entry word for word, its link goes to
+        /player-bingo, and the page does not scroll sideways (a screenshot).
    Controls (each must make the walk red, and print what it changed):
      PLAY_BINGO_CLUBS_CONTROL=wrongtile  tap a From <nation> square that is
-                                         not England: the strike check red.
+                                         not England in both cases: the
+                                         strike check red.
      PLAY_BINGO_CLUBS_CONTROL=base       PLAY_BINGO_BUILD is a dist built
                                          from BASE (692590145): the Morton tap
-                                         strikes, red. Part a is not checked.
+                                         strikes, red. Only part b is checked.
+     PLAY_BINGO_CLUBS_CONTROL=base1571   PLAY_BINGO_BUILD is a dist built
+                                         from Round 1571's closed head
+                                         (32baab916): the window tap strikes,
+                                         red. Only part c is checked.
    Exit 0 green, 1 red or a control that fired, 2 could not run.
    Run: CI=1 SIM_NETWORK=offline node scripts/playBingoClubRules.mjs (after a build) */
 import './lib/offlineTransport.cjs';
@@ -44,6 +55,14 @@ const SECTION = [
   'Example: Tyler Morton came through Liverpool, went on loan to Blackburn Rovers and then Hull City, and joined Lyon. That is four clubs, so he fits Played for 4+ clubs, and he is not a One-club man.',
   "Some players' early clubs and loans are still missing from our lists, so now and then the board can say no to a club he really played for. If it does, use Report a problem.",
 ];
+const WINDOW_MAN = 'Marcus Rashford';
+const WINDOW_TILE = 'Played for Barcelona';
+const ENTRY_TITLE = "Player Bingo: last season's clubs are back for 13 players.";
+const ENTRY_TEXT = `${ENTRY_TITLE} When players moved in 2026 we wrote their new club over the old one, and for some of them that wiped out where they played in 2025-26. We've now checked 23 of those players one by one, their whole careers on two sources, and put back the clubs they were missing, so Marcus Rashford now fits Played for Barcelona on the board.`;
+const CASES = [
+  { key: 'morton', man: 'Tyler Morton', tile: 'Played for 4+ clubs', seeds: 60, shot: 'morton-tap' },
+  { key: 'window', man: WINDOW_MAN, tile: WINDOW_TILE, seeds: 200, shot: 'window-tap' },
+].filter(c => (CONTROL === 'base' ? c.key === 'morton' : CONTROL === 'base1571' ? c.key === 'window' : true));
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
@@ -97,27 +116,30 @@ try {
   }
   if (!ready) { console.error('COULD NOT RUN: the build is not served (' + serverLog.slice(0, 200) + ')'); process.exit(2); }
   browser = await pw.chromium.launch();
+  const fixtureRoute = async route => {
+    const request = route.request();
+    const url = new URL(request.url());
+    if (url.origin === base) return route.fallback();
+    const table = url.pathname.match(/^\/rest\/v1\/(player_market_values|world_cup_players|ballon_dor)$/)?.[1];
+    if (/\.supabase\.co$/.test(url.hostname) && table && ['GET', 'OPTIONS'].includes(request.method())) {
+      if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors, body: '' });
+      const body = table === 'player_market_values' ? marketRead(url) : [];
+      return route.fulfill({ status: 200, headers: { ...cors, 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    }
+    return route.abort();
+  };
   for (const [width, height] of [[390, 844], [1280, 900]]) {
     console.log(`viewport ${width}x${height}`);
+    for (const c of CASES) {
+    console.log(`  case ${c.key}: ${c.man} on ${c.tile}`);
     let found = null;
-    for (let seed = 1; seed <= 60 && !found; seed++) {
+    for (let seed = 1; seed <= c.seeds && !found; seed++) {
       const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
       await context.addInitScript(s => {
         let state = s >>> 0;
         Math.random = () => { state = (Math.imul(state, 1664525) + 1013904223) >>> 0; return state / 4294967296; };
       }, seed);
-      await context.route('**/*', async route => {
-        const request = route.request();
-        const url = new URL(request.url());
-        if (url.origin === base) return route.fallback();
-        const table = url.pathname.match(/^\/rest\/v1\/(player_market_values|world_cup_players|ballon_dor)$/)?.[1];
-        if (/\.supabase\.co$/.test(url.hostname) && table && ['GET', 'OPTIONS'].includes(request.method())) {
-          if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors, body: '' });
-          const body = table === 'player_market_values' ? marketRead(url) : [];
-          return route.fulfill({ status: 200, headers: { ...cors, 'content-type': 'application/json' }, body: JSON.stringify(body) });
-        }
-        return route.abort();
-      });
+      await context.route('**/*', fixtureRoute);
       const page = await context.newPage();
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
@@ -125,7 +147,7 @@ try {
       await answerConsent(page);
       const play = page.getByRole('button', { name: "Let's Play!", exact: true });
       await play.waitFor({ timeout: 30000 });
-      if (seed === 1 && CONTROL !== 'base') {
+      if (seed === 1 && c.key === 'morton' && CONTROL !== 'base') {
         const section = page.locator('section', { has: page.locator('h3', { hasText: 'Club squares' }) });
         const texts = (await section.locator('h3, p').allTextContents()).map(t => t.replace(/\s+/g, ' ').trim());
         if (JSON.stringify(texts) !== JSON.stringify(SECTION)) fail(`the Club squares section reads ${JSON.stringify(texts)}`);
@@ -140,24 +162,25 @@ try {
       const tiles = page.locator('div.grid-cols-5 > button[title]');
       await tiles.first().waitFor({ timeout: 30000 });
       const titles = await tiles.evaluateAll(list => list.map(b => b.getAttribute('title')));
-      if (titles.includes('Played for 4+ clubs')) found = { context, page, seed, titles, errors };
+      if (titles.includes(c.tile)) found = { context, page, seed, titles, errors };
       else await context.close();
     }
-    if (!found) { fail(`no seed from 1 to 60 dealt a board with Played for 4+ clubs at ${width}`); continue; }
+    if (!found) { fail(`no seed from 1 to ${c.seeds} dealt a board with ${c.tile} at ${width}`); continue; }
     const { context, page, seed, titles, errors } = found;
     const name = page.locator('div.text-2xl.font-bold');
     let skips = 0;
-    while ((await name.textContent())?.trim() !== 'Tyler Morton' && skips < 480) {
+    while ((await name.textContent())?.trim() !== c.man && skips < 480) {
       await page.getByRole('button', { name: 'Skip player' }).click();
       skips += 1;
     }
-    if ((await name.textContent())?.trim() !== 'Tyler Morton') { fail(`Tyler Morton was never dealt on seed ${seed} at ${width}`); await context.close(); continue; }
-    let target = 'Played for 4+ clubs';
+    if ((await name.textContent())?.trim() !== c.man) { fail(`${c.man} was never dealt on seed ${seed} at ${width}`); await context.close(); continue; }
+    let target = c.tile;
     if (CONTROL === 'wrongtile') {
       const other = titles.find(t => t.startsWith('From ') && t !== 'From England');
-      if (other) { target = other; controlFired = `tapped ${other} for Morton`; }
+      if (other) { target = other; controlFired = `tapped ${other} for ${c.man}`; }
     }
     if (CONTROL === 'base') controlFired = 'the walk ran on a dist built from BASE';
+    if (CONTROL === 'base1571') controlFired = 'the walk ran on a dist built from Round 1571\'s closed head';
     const strikes = () => page.locator('span[aria-label$="strikes used"]').getAttribute('aria-label');
     const before = { strikes: await strikes(), y: await page.evaluate(() => window.scrollY), h: await page.evaluate(() => document.documentElement.scrollHeight) };
     const tile = page.locator(`div.grid-cols-5 > button[title="${target}"]`);
@@ -165,12 +188,34 @@ try {
     await page.waitForTimeout(600);
     const after = { strikes: await strikes(), y: await page.evaluate(() => window.scrollY), h: await page.evaluate(() => document.documentElement.scrollHeight) };
     const lockedText = (await tile.textContent()) ?? '';
-    console.log(`   seed ${seed}: Morton dealt after ${skips} skips; tapped ${target}; strikes ${before.strikes} -> ${after.strikes}; tile reads "${lockedText.replace(/\s+/g, ' ').trim()}"; scrollY ${before.y} -> ${after.y}; height ${before.h} -> ${after.h}`);
+    console.log(`   seed ${seed}: ${c.man} dealt after ${skips} skips; tapped ${target}; strikes ${before.strikes} -> ${after.strikes}; tile reads "${lockedText.replace(/\s+/g, ' ').trim()}"; scrollY ${before.y} -> ${after.y}; height ${before.h} -> ${after.h}`);
     if (after.strikes !== before.strikes) fail(`the tap on ${target} cost a strike at ${width}`);
-    if (!lockedText.includes('Tyler Morton')) fail(`${target} did not lock with Tyler Morton at ${width}`);
+    if (!lockedText.includes(c.man)) fail(`${target} did not lock with ${c.man} at ${width}`);
     if (after.y !== before.y || after.h !== before.h) fail(`the page moved on the tap at ${width}`);
     if (errors.length) fail(`page errors: ${errors.slice(0, 3).join(' | ')}`);
-    await page.screenshot({ path: path.join(out, `morton-tap-${width}.png`) });
+    await page.screenshot({ path: path.join(out, `${c.shot}-${width}.png`) });
+    await context.close();
+    }
+    if (CONTROL === 'base' || CONTROL === 'base1571') continue;
+    /* d. Round 1576's What's New entry, word for word. */
+    const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
+    await context.route('**/*', fixtureRoute);
+    const page = await context.newPage();
+    await page.goto(base + '/whats-new', { waitUntil: 'domcontentloaded' });
+    await answerConsent(page);
+    const item = page.locator('li', { has: page.locator('strong', { hasText: ENTRY_TITLE }) });
+    await item.first().waitFor({ timeout: 30000 }).catch(() => {});
+    const count = await item.count();
+    const text = count ? (await item.first().textContent()).replace(/\s+/g, ' ').trim() : '';
+    const href = count ? await item.first().locator('a', { hasText: 'the board' }).getAttribute('href') : null;
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    console.log(`  part d: ${count} entry titled "${ENTRY_TITLE}", text ${text === ENTRY_TEXT ? 'word for word' : 'DIFFERENT'}, link ${href}, sideways overflow ${overflow} px`);
+    if (count !== 1) fail(`/whats-new holds ${count} entries titled "${ENTRY_TITLE}" at ${width}`);
+    else if (text !== ENTRY_TEXT) fail(`the entry reads "${text}" at ${width}`);
+    if (href !== '/player-bingo') fail(`the entry's link goes to ${href} at ${width}`);
+    if (overflow > 0) fail(`/whats-new scrolls sideways by ${overflow} px at ${width}`);
+    if (count) await item.first().scrollIntoViewIfNeeded();
+    await page.screenshot({ path: path.join(out, `whats-new-${width}.png`) });
     await context.close();
   }
 } finally {

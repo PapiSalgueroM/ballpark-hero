@@ -76,12 +76,55 @@
       ]
     },
     {
+      "n": "Antoine Semenyo",
+      "nat": "Ghana",
+      "by": 2000,
+      "pos": "Right Winger",
+      "clubs": [
+        "Bath City",
+        "Newport County",
+        "Sunderland AFC"
+      ]
+    },
+    {
+      "n": "Artem Dovbyk",
+      "nat": "Ukraine",
+      "by": 1997,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "FC Cherkaskyi Dnipro",
+        "FC Dnipro",
+        "FC Zaria Bălți",
+        "FC Midtjylland",
+        "SønderjyskE"
+      ]
+    },
+    {
       "n": "Bazoumana Touré",
       "nat": "Cote d'Ivoire",
       "by": 2006,
       "pos": "Left Winger",
       "clubs": [
         "ASEC Mimosas"
+      ]
+    },
+    {
+      "n": "Benjamin Pavard",
+      "nat": "France",
+      "by": 1996,
+      "pos": "Centre-Back",
+      "clubs": [
+        "Olympique Marseille"
+      ]
+    },
+    {
+      "n": "Brennan Johnson",
+      "nat": "Wales",
+      "by": 2001,
+      "pos": "Right Winger",
+      "clubs": [
+        "Lincoln City",
+        "Crystal Palace"
       ]
     },
     {
@@ -104,6 +147,16 @@
       ]
     },
     {
+      "n": "Crysencio Summerville",
+      "nat": "Netherlands",
+      "by": 2001,
+      "pos": "Left Winger",
+      "clubs": [
+        "FC Dordrecht",
+        "ADO Den Haag"
+      ]
+    },
+    {
       "n": "Dean Huijsen",
       "nat": "Spain",
       "by": 2005,
@@ -123,6 +176,24 @@
       ]
     },
     {
+      "n": "Douglas Luiz",
+      "nat": "Brazil",
+      "by": 1998,
+      "pos": "Central Midfield",
+      "clubs": [
+        "Nottingham Forest"
+      ]
+    },
+    {
+      "n": "Endrick",
+      "nat": "Brazil",
+      "by": 2006,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "Olympique Lyon"
+      ]
+    },
+    {
       "n": "Ethan Ampadu",
       "nat": "Wales",
       "by": 2000,
@@ -133,12 +204,33 @@
       ]
     },
     {
+      "n": "Evan Ferguson",
+      "nat": "Ireland",
+      "by": 2004,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "Bohemian FC",
+        "West Ham United",
+        "AS Roma"
+      ]
+    },
+    {
       "n": "Evanilson",
       "nat": "Brazil",
       "by": 1999,
       "pos": "Centre-Forward",
       "clubs": [
         "FC STK 1914 Šamorín"
+      ]
+    },
+    {
+      "n": "Evann Guessand",
+      "nat": "Cote d'Ivoire",
+      "by": 2001,
+      "pos": "Right Winger",
+      "clubs": [
+        "FC Lausanne-Sport",
+        "Aston Villa"
       ]
     },
     {
@@ -185,6 +277,15 @@
       "pos": "Defensive Midfield",
       "clubs": [
         "Watford FC"
+      ]
+    },
+    {
+      "n": "James Ward-Prowse",
+      "nat": "England",
+      "by": 1994,
+      "pos": "Central Midfield",
+      "clubs": [
+        "Burnley FC"
       ]
     },
     {
@@ -265,6 +366,15 @@
       ]
     },
     {
+      "n": "Marcus Rashford",
+      "nat": "England",
+      "by": 1997,
+      "pos": "Left Winger",
+      "clubs": [
+        "FC Barcelona"
+      ]
+    },
+    {
       "n": "Mario Gila",
       "nat": "Spain",
       "by": 2000,
@@ -293,6 +403,17 @@
       ]
     },
     {
+      "n": "Morgan Rogers",
+      "nat": "England",
+      "by": 2002,
+      "pos": "Attacking Midfield",
+      "clubs": [
+        "Lincoln City",
+        "AFC Bournemouth",
+        "Middlesbrough FC"
+      ]
+    },
+    {
       "n": "Morten Hjulmand",
       "nat": "Denmark",
       "by": 1999,
@@ -313,6 +434,25 @@
       ]
     },
     {
+      "n": "Nahuel Molina",
+      "nat": "Argentina",
+      "by": 1998,
+      "pos": "Right-Back",
+      "clubs": [
+        "Defensa y Justicia"
+      ]
+    },
+    {
+      "n": "Nathan Aké",
+      "nat": "Netherlands",
+      "by": 1995,
+      "pos": "Centre-Back",
+      "clubs": [
+        "Chelsea FC",
+        "Reading FC"
+      ]
+    },
+    {
       "n": "Nick Woltemade",
       "nat": "Germany",
       "by": 2002,
@@ -320,6 +460,15 @@
       "clubs": [
         "SV 07 Elversberg",
         "Newcastle United"
+      ]
+    },
+    {
+      "n": "Nico González",
+      "nat": "Argentina",
+      "by": 1998,
+      "pos": "Left Winger",
+      "clubs": [
+        "Atlético de Madrid"
       ]
     },
     {
@@ -332,12 +481,32 @@
       ]
     },
     {
+      "n": "Ollie Watkins",
+      "nat": "England",
+      "by": 1995,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "Exeter City",
+        "Weston-super-Mare"
+      ]
+    },
+    {
       "n": "Petar Sučić",
       "nat": "Croatia",
       "by": 2003,
       "pos": "Central Midfield",
       "clubs": [
         "HŠK Zrinjski Mostar"
+      ]
+    },
+    {
+      "n": "Randal Kolo Muani",
+      "nat": "France",
+      "by": 1998,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "US Boulogne",
+        "Tottenham Hotspur"
       ]
     },
     {
@@ -368,12 +537,33 @@
       ]
     },
     {
+      "n": "Simon Adingra",
+      "nat": "Cote d'Ivoire",
+      "by": 2002,
+      "pos": "Left Winger",
+      "clubs": [
+        "Sunderland AFC",
+        "AS Monaco"
+      ]
+    },
+    {
       "n": "Thierno Barry",
       "nat": "France",
       "by": 2002,
       "pos": "Centre-Forward",
       "clubs": [
         "SK Beveren"
+      ]
+    },
+    {
+      "n": "Tijjani Reijnders",
+      "nat": "Netherlands",
+      "by": 1998,
+      "pos": "Central Midfield",
+      "clubs": [
+        "PEC Zwolle",
+        "RKC Waalwijk",
+        "Manchester City"
       ]
     },
     {
@@ -384,6 +574,15 @@
       "clubs": [
         "Blackburn Rovers",
         "Hull City"
+      ]
+    },
+    {
+      "n": "Victor Boniface",
+      "nat": "Nigeria",
+      "by": 2000,
+      "pos": "Centre-Forward",
+      "clubs": [
+        "SV Werder Bremen"
       ]
     },
     {
