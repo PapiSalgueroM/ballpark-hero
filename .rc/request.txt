@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+# Release BU lane e3: Round 1561's closing gate g5: playGmCareer split by sport, the Front Office walks, nofallback.
+playGmCareer-nhl: PLAY_GM_CAREER_SPORT=nhl node scripts/playGmCareer.mjs
+playGmCareer-nfl: PLAY_GM_CAREER_SPORT=nfl node scripts/playGmCareer.mjs
+playFoHub: node scripts/playFoHub.mjs
+playOwnerMandate: node scripts/playOwnerMandate.mjs
+playDraftNight: node scripts/playDraftNight.mjs
+playGmPress: node scripts/playGmPress.mjs
+nofallback-nhl: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=AE PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=nofallback node scripts/playGmCareer.mjs
+nofallback-nfl: PLAY_GM_CAREER_SPORT=nfl PLAY_GM_CAREER_WALKS=AE PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=nofallback node scripts/playGmCareer.mjs
+wipebutton-nhl: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=wipebutton node scripts/playGmCareer.mjs
+eagerkit-nhl: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=E PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=eagerkit node scripts/playGmCareer.mjs
+eagerpanel-nhl: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=eagerpanel node scripts/playGmCareer.mjs
