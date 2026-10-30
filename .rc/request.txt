@@ -1,0 +1,15 @@
+simClubManagerDecisionDeadline: R=$PWD; git worktree add /tmp/m-simClubManagerDecisionDeadline 158969218 >/dev/null 2>&1 && cd /tmp/m-simClubManagerDecisionDeadline && ln -s $R/node_modules node_modules && node scripts/simClubManagerDecisionDeadline.mjs
+simCmHandoverDesk: R=$PWD; git worktree add /tmp/m-simCmHandoverDesk 158969218 >/dev/null 2>&1 && cd /tmp/m-simCmHandoverDesk && ln -s $R/node_modules node_modules && node scripts/simCmHandoverDesk.mjs
+simCmMatchDay: R=$PWD; git worktree add /tmp/m-simCmMatchDay 158969218 >/dev/null 2>&1 && cd /tmp/m-simCmMatchDay && ln -s $R/node_modules node_modules && node scripts/simCmMatchDay.mjs
+simCmOwnClubMarket: R=$PWD; git worktree add /tmp/m-simCmOwnClubMarket 158969218 >/dev/null 2>&1 && cd /tmp/m-simCmOwnClubMarket && ln -s $R/node_modules node_modules && node scripts/simCmOwnClubMarket.mjs
+simCmShootoutResults: R=$PWD; git worktree add /tmp/m-simCmShootoutResults 158969218 >/dev/null 2>&1 && cd /tmp/m-simCmShootoutResults && ln -s $R/node_modules node_modules && node scripts/simCmShootoutResults.mjs
+simManagerLiveLineups: R=$PWD; git worktree add /tmp/m-simManagerLiveLineups 158969218 >/dev/null 2>&1 && cd /tmp/m-simManagerLiveLineups && ln -s $R/node_modules node_modules && node scripts/simManagerLiveLineups.mjs
+simPitchRestartContinuity: R=$PWD; git worktree add /tmp/m-simPitchRestartContinuity 158969218 >/dev/null 2>&1 && cd /tmp/m-simPitchRestartContinuity && ln -s $R/node_modules node_modules && node scripts/simPitchRestartContinuity.mjs
+simSoccerDeck: R=$PWD; git worktree add /tmp/m-simSoccerDeck 158969218 >/dev/null 2>&1 && cd /tmp/m-simSoccerDeck && ln -s $R/node_modules node_modules && node scripts/simSoccerDeck.mjs
+simUclSeasonOne: R=$PWD; git worktree add /tmp/m-simUclSeasonOne 158969218 >/dev/null 2>&1 && cd /tmp/m-simUclSeasonOne && ln -s $R/node_modules node_modules && node scripts/simUclSeasonOne.mjs
+simDailyClubPool: R=$PWD; git worktree add /tmp/m-simDailyClubPool 158969218 >/dev/null 2>&1 && cd /tmp/m-simDailyClubPool && ln -s $R/node_modules node_modules && node scripts/simDailyClubPool.mjs
+simEraBakeExtend: R=$PWD; git worktree add /tmp/m-simEraBakeExtend 158969218 >/dev/null 2>&1 && cd /tmp/m-simEraBakeExtend && ln -s $R/node_modules node_modules && node scripts/simEraBakeExtend.mjs
+simCmSubs: R=$PWD; git worktree add /tmp/m-simCmSubs 158969218 >/dev/null 2>&1 && cd /tmp/m-simCmSubs && ln -s $R/node_modules node_modules && node scripts/simCmSubs.mjs
+simCmOwnGoals: R=$PWD; git worktree add /tmp/m-simCmOwnGoals 158969218 >/dev/null 2>&1 && cd /tmp/m-simCmOwnGoals && ln -s $R/node_modules node_modules && node scripts/simCmOwnGoals.mjs
+simManagerWorldContinuity: R=$PWD; git worktree add /tmp/m-simManagerWorldContinuity 158969218 >/dev/null 2>&1 && cd /tmp/m-simManagerWorldContinuity && ln -s $R/node_modules node_modules && node scripts/simManagerWorldContinuity.mjs
+simCareerLeagueSeasons: R=$PWD; git worktree add /tmp/m-simCareerLeagueSeasons 158969218 >/dev/null 2>&1 && cd /tmp/m-simCareerLeagueSeasons && ln -s $R/node_modules node_modules && node scripts/simCareerLeagueSeasons.mjs
