@@ -1,0 +1,9 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest exit=0 11s |    Duration  10.69s (transform 4.10s, setup 716ms, collect 11.34s, tests 11.13s, environment 4.35s, prepare 1.21s)
+walk exit=0 66s | playCmEuroPlay: green, three cases at three sizes, pictures in /home/runner/work/_temp/rc-out/files/shots
+walk-notile exit=1 56s | playCmEuroPlay: control notile FIRED (3 findings of "the Europa League tile", 6 in all)
+tsc exit=0 77s | 
+simCmCopy exit=0 33s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+walk-nofixture exit=1 64s | playCmEuroPlay: control nofixture FIRED (6 findings of "names no Europa League night", 6 in all)
+playWorldUcl exit=0 259s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots

@@ -1,0 +1,28 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/lib/worldCompetition.test.ts[2m > [22m[2mthe nights[2m > [22m[2mevery league size the game has, read off REAL_LEAGUES and ERA_LEAGUES, places its nights on their own rounds
+[22m[39mworldCompetition: league sizes the game has: 10, 12, 14, 15, 16, 18, 20, 24 (27 real leagues, 4 eras)
+
+ [32m✓[39m src/lib/worldCompetition.test.ts [2m([22m[2m75 tests[22m[2m)[22m[33m 1382[2mms[22m[39m
+   [33m[2m✓[22m[39m evaluateWorldComp[2m > [22mcrowns exactly one winner every finished season, over a few hundred seeds [33m 435[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldView.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 3397[2mms[22m[39m
+   [33m[2m✓[22m[39m the super cup where the game has no row[2m > [22msays Not confirmed with its reason on every league with no row, and names the cup where there is one [33m 957[2mms[22m[39m
+ [32m✓[39m src/test/cmLeagueLeadersCard.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 3499[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mnames the league's most assists and most clean sheets from the book, and an older summary prints as it did [33m 892[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22mwithholds the new awards in a league whose data is too thin, and says why [33m 509[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma league between the floor and 95 is settled by the book and still carries the honest line, on the card and on the review [33m 724[2mms[22m[39m
+   [33m[2m✓[22m[39m the season review[2m > [22ma season on a late book says the book covered only part of it, not that its data was thin [33m 602[2mms[22m[39m
+ [32m✓[39m src/lib/worldNights.test.ts [2m([22m[2m15 tests[22m[2m)[22m[33m 1369[2mms[22m[39m
+   [33m[2m✓[22m[39m placeNights on the engine calendars[2m > [22mfinds a slot that moves no date on every league size, with and without a cup, a round of 16 and two legs, in every year [33m 1171[2mms[22m[39m
+ [32m✓[39m src/lib/euroAccess.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 159[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerOfferConfirm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 655[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutCopy.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m src/test/cmSavePointsDoor.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 608[2mms[22m[39m
+   [33m[2m✓[22m[39m the save points button off the hub[2m > [22mopens the save points screen on the sacked screen, with the slot's points listed [33m 389[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m154 passed[39m[22m[90m (154)[39m
+[2m   Start at [22m 08:30:48
+[2m   Duration [22m 10.69s[2m (transform 4.10s, setup 716ms, collect 11.34s, tests 11.13s, environment 4.35s, prepare 1.21s)[22m
+
