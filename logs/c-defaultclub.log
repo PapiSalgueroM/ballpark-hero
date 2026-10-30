@@ -1,0 +1,48 @@
+MUT defaultclub applied to src/pages/LineupBuilder.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/defaultclub[39m
+
+ [31m❯[39m src/test/buildXiClubYearSetup.test.tsx [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2132[2mms[22m[39m
+[31m   [31m×[31m Build Your XI club year setup[2m > [22mkeeps the mixed draft and six formations available[39m[33m 563[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"aria-pressed"[32m[31m[2m, [22m[32m[32m"true"[32m[31m[2m) // element.getAttribute("aria-pressed") === "true"[22m
+
+Expected the element to have attribute:
+[32m  aria-pressed="true"[31m
+Received:
+[31m  aria-pressed="false"[31m[39m
+   [33m[2m✓[22m[39m Build Your XI club year setup[2m > [22moffers a recorded year club draft before formation [33m 1566[2mms[22m[39m
+ [32m✓[39m src/test/buildXiClubYear.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 34266[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI draws under a seeded generator[2m > [22ma Club year draft deals clubs only, never a withheld club, and every reroll moves to another club [33m 316[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mbrowses past eight records and reopens after Escape and outside focus [33m 3225[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mkeeps typed search at eight and admits the keyboard-selected matching keeper once [33m 1346[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mdistinguishes an empty matching record list from a failed read [33m 1577[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22muses the selected-row report once through review result and replay without a pundit call [33m 8428[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mshows an unrated completed draft when the selected rows lack numeric inputs [33m 19162[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/buildXiClubYearSetup.test.tsx[2m > [22mBuild Your XI club year setup[2m > [22mkeeps the mixed draft and six formations available
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"aria-pressed"[32m[31m[2m, [22m[32m[32m"true"[32m[31m[2m) // element.getAttribute("aria-pressed") === "true"[22m
+
+Expected the element to have attribute:
+[32m  aria-pressed="true"[31m
+Received:
+[31m  aria-pressed="false"[31m[39m
+[36m [2m❯[22m src/test/buildXiClubYearSetup.test.tsx:[2m50:8[22m[39m
+    [90m 48| [39m       new choice plays the game exactly as before. */[39m
+    [90m 49| [39m    expect(screen.getByRole('button', { name: 'Mixed' }), 'XI_SETUP_MI…
+    [90m 50| [39m      [33m.[39m[34mtoHaveAttribute[39m([32m'aria-pressed'[39m[33m,[39m [32m'true'[39m)[33m;[39m
+    [90m   | [39m       [31m^[39m
+    [90m 51| [39m    expect(screen.getByRole('button', { name: 'Club year draft' }), 'X…
+    [90m 52| [39m      [33m.[39m[34mtoHaveAttribute[39m([32m'aria-pressed'[39m[33m,[39m [32m'false'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 17:14:00
+[2m   Duration [22m 38.27s[2m (transform 1.49s, setup 315ms, collect 4.71s, tests 36.40s, environment 1.28s, prepare 620ms)[22m
+
+
+::error file=/tmp/defaultclub/src/test/buildXiClubYearSetup.test.tsx,title=src/test/buildXiClubYearSetup.test.tsx > Build Your XI club year setup > keeps the mixed draft and six formations available,line=50,column=8::Error: expect(element).toHaveAttribute("aria-pressed", "true") // element.getAttribute("aria-pressed") === "true"%0A%0AExpected the element to have attribute:%0A  aria-pressed="true"%0AReceived:%0A  aria-pressed="false"%0A ❯ src/test/buildXiClubYearSetup.test.tsx:50:8%0A%0A

@@ -1,0 +1,53 @@
+MUT rerollall applied to src/hooks/useLineupBuilder.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/rerollall[39m
+
+ [32m✓[39m src/test/buildXiClubYearSetup.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 3251[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI club year setup[2m > [22mkeeps the mixed draft and six formations available [33m 2281[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI club year setup[2m > [22moffers a recorded year club draft before formation [33m 967[2mms[22m[39m
+ [31m❯[39m src/test/buildXiClubYear.test.tsx [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 25071[2mms[22m[39m
+[31m   [31m×[31m Build Your XI draws under a seeded generator[2m > [22ma Club year draft deals clubs only, never a withheld club, and every reroll moves to another club[39m[32m 259[2mms[22m[39m
+[31m     → XI_CLUB_YEAR_WITHHELD: seed 5 roll 7: expected [ 'Arsenal' ] to deeply equal [][39m
+   [32m✓[39m Build Your XI draws under a seeded generator[2m > [22mMixed, the default, still deals clubs and nations[32m 122[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mkeeps club-only assignments and rerolls on the chosen recorded year[32m 10[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mrefuses nonmatching year club and position evidence before any provider or history request[32m 39[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mretains exact chosen metadata while preserving position and duplicate guards[32m 27[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mcompletes an exact eleven-record draft without either all-time evaluator[32m 23[2mms[22m[39m
+   [32m✓[39m Build Your XI recorded year admissions[2m > [22mignores a late history response after reset into another recorded year[32m 19[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mbrowses past eight records and reopens after Escape and outside focus [33m 2834[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mkeeps typed search at eight and admits the keyboard-selected matching keeper once [33m 689[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mdistinguishes an empty matching record list from a failed read [33m 1268[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22muses the selected-row report once through review result and replay without a pundit call [33m 4872[2mms[22m[39m
+   [33m[2m✓[22m[39m Build Your XI Club year Browse on the real page[2m > [22mshows an unrated completed draft when the selected rows lack numeric inputs [33m 14906[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/buildXiClubYear.test.tsx[2m > [22mBuild Your XI draws under a seeded generator[2m > [22ma Club year draft deals clubs only, never a withheld club, and every reroll moves to another club
+[31m[1mAssertionError[22m: XI_CLUB_YEAR_WITHHELD: seed 5 roll 7: expected [ 'Arsenal' ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "Arsenal",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/buildXiClubYear.test.tsx:[2m242:68[22m[39m
+    [90m240| [39m          'XI_CLUB_YEAR_CLUBS_ONLY: no nation, seed ' + seed + ' roll …
+    [90m241| [39m        expect(teams.filter(team => CLUB_YEAR_WITHHELD.has(team.name))…
+    [90m242| [39m          'XI_CLUB_YEAR_WITHHELD: seed ' + seed + ' roll ' + roll).toE…
+    [90m   | [39m                                                                   [31m^[39m
+    [90m243| [39m        expect(new Set(teams.map(team => team.name)).size, 'XI_CLUB_YE…
+    [90m244| [39m        teams[33m.[39m[34mforEach[39m(team [33m=>[39m seen[33m.[39m[34madd[39m(team[33m.[39mname))[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m13 passed[39m[22m[90m (14)[39m
+[2m   Start at [22m 17:14:41
+[2m   Duration [22m 28.87s[2m (transform 1.35s, setup 441ms, collect 3.77s, tests 28.32s, environment 1.50s, prepare 709ms)[22m
+
+
+::error file=/tmp/rerollall/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > a Club year draft deals clubs only%2C never a withheld club%2C and every reroll moves to another club,line=242,column=68::AssertionError: XI_CLUB_YEAR_WITHHELD: seed 5 roll 7: expected [ 'Arsenal' ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "Arsenal",%0A+ ]%0A%0A ❯ src/test/buildXiClubYear.test.tsx:242:68%0A%0A

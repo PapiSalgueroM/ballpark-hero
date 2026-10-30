@@ -1,0 +1,9 @@
+c-nocurtain exit=2 2s | MUT nocurtain ABORT: anchor found 0 times in src/components/us-career/UsCareerBoard.tsx
+c-nointl exit=2 2s | MUT nointl ABORT: anchor found 0 times in src/components/us-career/UsCareerBoard.tsx
+vitest-fix exit=0 43s |    Duration  41.90s (transform 8.41s, setup 754ms, collect 22.72s, tests 76.70s, environment 4.07s, prepare 1.32s)
+c-defaultclub exit=1 41s | ::error file=/tmp/defaultclub/src/test/buildXiClubYearSetup.test.tsx,title=src/test/buildXiClubYearSetup.test.tsx > Build Your XI club year setup > keeps the mixed draft 
+c-nations exit=1 42s | ::error file=/tmp/nations/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > a Club year draft dea
+c-rerollall exit=1 31s | ::error file=/tmp/rerollall/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > a Club year draft d
+c-drawall exit=1 31s | ::error file=/tmp/drawall/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > a Club year draft dea
+c-rerollsame exit=1 33s | ::error file=/tmp/rerollsame/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > a Club year draft 
+c-mixedclubs exit=1 20s | ::error file=/tmp/mixedclubs/src/test/buildXiClubYear.test.tsx,title=src/test/buildXiClubYear.test.tsx > Build Your XI draws under a seeded generator > Mixed%2C the defau
