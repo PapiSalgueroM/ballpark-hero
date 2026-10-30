@@ -2020,8 +2020,12 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   const missingPicks = [!nationality && "a nationality", !position && "a position", !era && "an era"].filter(Boolean) as string[];
   const pickList = missingPicks.length > 1 ? `${missingPicks.slice(0, -1).join(", ")} and ${missingPicks[missingPicks.length - 1]}` : (missingPicks[0] ?? "");
   const needName = !playerName.trim();
-  const missingLine = !needName && !missingPicks.length ? ""
-    : `${needName ? (missingPicks.length ? "Add your name, then pick " : "Add your name") : "Pick "}${pickList} to roll your potential.`;
+  /* Once a roll is on screen the name unlocks a reroll and Begin Career, not a
+     first roll, so the two lines say that instead. */
+  const missingFor = (goal: string) => !needName && !missingPicks.length ? ""
+    : `${needName ? (missingPicks.length ? "Add your name, then pick " : "Add your name") : "Pick "}${pickList} to ${goal}.`;
+  const missingLine = missingFor(rolledOvr !== null ? "roll again" : "roll your potential");
+  const missingBeginLine = missingFor(rolledOvr !== null ? "start your career" : "roll your potential");
 
   // Tile rule: the build editor takes over the whole screen with a back button
   if (buildOpen && previewStats && rolledOvr !== null) {
@@ -2212,7 +2216,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         {saving ? "Creating..." : "⚽ Begin Career"}
       </Button>
       {rolledOvr === null && canGenerate && <p className="text-xs text-muted-foreground text-center">Generate your starting potential to begin</p>}
-      {!canGenerate && <p className="text-xs text-muted-foreground text-center">{missingLine}</p>}
+      {!canGenerate && <p className="text-xs text-muted-foreground text-center">{missingBeginLine}</p>}
       {!user && <p className="text-xs text-muted-foreground text-center">Your career saves in this browser. No account needed.</p>}
     </div>
   );
