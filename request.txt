@@ -1,0 +1,3 @@
+#!serial
+rr-c11b-head: node .rc/x/rrc11b.mjs && node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C11" --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+rr-c11b-mutdeps: node .rc/x/rrc11b.mjs && node .rc/x/rrmutdeps.mjs && node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "C11b" --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
