@@ -1,0 +1,4 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playBingoClubRules exit=0 53s | playBingoClubRules: GREEN, both viewports held
+simPrerender exit=1 0s | simPrerender: 2 failures
+simPrerender-oldnews exit=0 1s | simPrerender: green. Every page answers with its own words, no JavaScript required.
