@@ -1,0 +1,8 @@
+head: git rev-parse HEAD && echo "changed since 4af2b8966:" && git diff --name-only 4af2b8966 HEAD -- . ':!.rc' && git merge-base --is-ancestor c0c66e087 HEAD && echo "main c0c66e087 is an ancestor"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simBingoClubCounts.mjs
+c-window: BINGO_CLUBS_CONTROL=window node scripts/simBingoClubCounts.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+dashes: git log --format=%B --first-parent 548be6c9f..HEAD > /tmp/msgs3.txt && node .rc/x/dashcheck.mjs /tmp/msgs3.txt
