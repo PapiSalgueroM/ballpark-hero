@@ -1,0 +1,1 @@
+simManagers: node scripts/simManagers.mjs
