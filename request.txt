@@ -1,0 +1,5 @@
+#!serial
+attr-digest: git checkout 14a9af704 -- src/lib/clubManager.ts scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD^ -- src scripts; echo "old digest with base clubManager.ts exit=$s"; exit $s
+attr-digest-neg: git checkout 14a9af704 -- scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD^ -- src scripts; echo "old digest with head clubManager.ts exit=$s"; exit $s
+attr-pin: git checkout 14a9af704 -- src/lib/clubManager.ts scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD^ -- src scripts; echo "old pin with base clubManager.ts exit=$s"; exit $s
+attr-pin-neg: git checkout 14a9af704 -- scripts/fixtures/managerAppealIsolation1081/manifest.json && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD^ -- src scripts; echo "old pin with head clubManager.ts exit=$s"; exit $s

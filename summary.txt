@@ -1,0 +1,4 @@
+attr-digest exit=0 37s | old digest with base clubManager.ts exit=0
+attr-digest-neg exit=1 37s | old digest with head clubManager.ts exit=1
+attr-pin exit=0 25s | old pin with base clubManager.ts exit=0
+attr-pin-neg exit=1 5s | old pin with head clubManager.ts exit=1
