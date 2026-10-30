@@ -1,0 +1,9 @@
+wcprobe exit=0 19s | probe done
+worldcont-head exit=1 45s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:541:24
+shootout exit=0 54s | simCmShootoutOrder: all sections passed
+so-keepcurve exit=1 39s | simCmShootoutOrder: 4 FAILURE(S)
+sr-keepcurve exit=2 2s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+shootoutResults exit=0 13s | ALL SHOOTOUT RESULTS CHECKS PASSED
+noRival exit=0 25s | No rival product names found. 0 findings.
+so-unsetpath exit=1 53s | simCmShootoutOrder: 4 FAILURE(S)
+anchors exit=0 60s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
