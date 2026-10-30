@@ -1,0 +1,2 @@
+rules-playoff exit=0 39s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rules-write exit=0 58s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
