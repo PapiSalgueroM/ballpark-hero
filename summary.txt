@@ -1,0 +1,4 @@
+euro-bindB-f9 exit=0 351s | simCmEuroPlay: green, 1728 checks, 0 failures
+euro-nobind-f9 exit=1 353s | simCmEuroPlay: RED, 1728 checks, 2 failures
+euro-bindA-f9 exit=0 354s | simCmEuroPlay: green, 1728 checks, 0 failures
+j-dl-f9 exit=0 41s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
