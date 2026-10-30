@@ -1,0 +1,16 @@
+  play: 44 saves, 12 participant seasons, 32 watcher seasons, 141 nights played, tails {"18":1,"20":0}, season one participants 0, ties of mine checked 23
+  2 review: 12 participant seasons read on the review, 1 of them won it
+  6 base 14a9af704: 32 saves byte equal to the base on the head, 12 parted (participants and super cup nights, by design)
+  5.4 not moved: Arsenal seed 1, nights by season 0/1
+  5.4 not moved: Arsenal seed 2, nights by season 0/1
+  5.4 not moved: Manchester City seed 1, nights by season 0/2
+  5.4 not moved: Manchester City seed 2, nights by season 0/1
+  5.4 not moved: Bayern Munich seed 1, nights by season 0/2
+  5.4 not moved: Bayern Munich seed 2, nights by season 0/1
+  5.4 not moved: Barcelona seed 1, nights by season 0/1
+  5.4 not moved: PSG seed 1, nights by season 0/2
+  5.4 not moved: PSG seed 2, nights by season 0/1
+  5.4 not moved: Celtic seed 2, nights by season 0/17
+  5.4 not moved: Everton seed 2, nights by season 0/1
+  5 weeks: 20 saves, 11 seasons with a night, 9 saves with none (byte equal to the step reverted), 0 moved by the step
+simCmEuroPlay: green, 1394 checks, 0 failures

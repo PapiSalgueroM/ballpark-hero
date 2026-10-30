@@ -1,0 +1,4 @@
+simCmEuroPlay-mineflip exit=1 122s | simCmEuroPlay: control mineflip FIRED (97 failures, all its own)
+simCmEuroPlay-rawlength exit=1 65s | simCmEuroPlay: control rawlength FIRED (22 failures, all its own)
+simCmEuroPlay-noplayrevert exit=1 324s | simCmEuroPlay: control noplayrevert FIRED (12 failures, all its own)
+simCmEuroPlay exit=0 400s | simCmEuroPlay: green, 1394 checks, 0 failures
