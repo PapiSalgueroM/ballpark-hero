@@ -1,0 +1,3 @@
+trimprobe exit=0 16s | trimprobe: trimmed 12, on the list after the summer 12 (released, not mine: 12), still somewhere two summers on 12; ledger held list men 80, agree 80, disagree 0, record 
+trimprobe-base exit=0 16s | base exit 1 (expect 1: the old code never lists trimmed men)
+trimprobe-notrim exit=0 16s | notrim probe exit 1 (expect 1: trimmed men not listed)

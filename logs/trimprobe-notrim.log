@@ -1,0 +1,7 @@
+MUT notrimpool applied (1 edit)
+  Everton: squad 36 into the summer, 30 after; trimmed 3, on the list 0
+  Ajax: squad 41 into the summer, 30 after; trimmed 5, on the list 0
+  Southampton: squad 37 into the summer, 30 after; trimmed 1, on the list 0
+  Freiburg: squad 40 into the summer, 30 after; trimmed 3, on the list 0
+trimprobe: trimmed 12, on the list after the summer 0 (released, not mine: 0), still somewhere two summers on 0; ledger held list men 77, agree 77, disagree 0, record retired but on list 0
+notrim probe exit 1 (expect 1: trimmed men not listed)
