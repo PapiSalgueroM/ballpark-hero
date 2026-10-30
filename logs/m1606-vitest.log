@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerJobHunt.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/test/clubDetailOwnClub.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 364[2mms[22m[39m
+ [32m✓[39m src/test/clubDetailDugout.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 895[2mms[22m[39m
+   [33m[2m✓[22m[39m the club page shows who is in the other dugout[2m > [22ma real opening day chair shows his name and the month he took the job, and no MADE UP [33m 341[2mms[22m[39m
+ [32m✓[39m src/test/clubDetailFixtures.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1194[2mms[22m[39m
+   [33m[2m✓[22m[39m Club detail saved league fixtures[2m > [22mfixtures show the saved directed score and calendar-prefix progress [33m 382[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m45 passed[39m[22m[90m (45)[39m
+[2m   Start at [22m 17:21:41
+[2m   Duration [22m 5.47s[2m (transform 2.39s, setup 596ms, collect 8.01s, tests 2.47s, environment 2.23s, prepare 493ms)[22m
+

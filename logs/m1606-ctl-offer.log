@@ -1,0 +1,33 @@
+7) real dugouts: a sentinel registered as real is a display fact and nothing else
+   sentinel "Testa Realmann" is in no src file; 47 leagues across 5 eras hold it
+  FAIL: 7b: now premier seed 0: an offer names Testa Realmann: "🪑 They are moving on from Testa Realmann · 👑 Elite club · Premier League · £167m budget · the board wants: Win the Premier League"
+  FAIL: 7b: now premier seed 0: the offer for the emptied real chair does not say only that the club is making a change: "🪑 They are moving on from Testa Realmann · 👑 Elite club · Premier League · £167m budget · the board wants: Win the Premier League"
+  FAIL: 7b: now premier seed 0: the season end says Testa Realmann outside the record: "e,"signings":[],"offers":[{"club":"Arsenal","blurb":"🪑 They are moving on from Testa Realmann · 👑 Elite club · Premier"
+  FAIL: 7b: era2020 premier2020 seed 0: an offer names Testa Realmann: "🪑 They are moving on from Testa Realmann · 👑 Elite club · Premier League · £81m budget · the board wants: Qualify for the Europa League"
+  FAIL: 7b: era2020 premier2020 seed 0: the offer for the emptied real chair does not say only that the club is making a change: "🪑 They are moving on from Testa Realmann · 👑 Elite club · Premier League · £81m budget · the board wants: Qualify for the Europa League"
+  FAIL: 7b: era2020 premier2020 seed 0: the season end says Testa Realmann outside the record: "e,"signings":[],"offers":[{"club":"Arsenal","blurb":"🪑 They are moving on from Testa Realmann · 👑 Elite club · Premier"
+   7b: 200 summers, 200 with the sentinel's chair emptied (17 by the sim's own draw), 200 with a second chair to recycle into, 149 offers read (2 for the emptied real chair, all saying only that the club is making a change), 4 failures (21 s)
+   7c: 200 of 200 sentinel careers equal their empty table twin after the strip, draw for draw
+   7a: 47 of 47 sentinel chairs held on day one, 47 partial chairs made up and marked
+  FAIL: 7a: only 1 of 3 partial mark reads ran, the check tests too little
+   7a: a later world and a season two repair seat nobody real; an outside club shows him in season one only
+   7g: 47 summers took the sentinel's own job, 39 takeover lines read (all "You take over at {club}."), 0 failures
+  FAIL: 7h: now premier: the offer from Arsenal names Testa Realmann: "🪑 They are moving on from Testa Realmann · 👑 Elite club · Premier League · £167m budget · the board wants: Win the Premier League"
+  FAIL: 7h: now seriea: the offer from AC Milan names Testa Realmann: "🪑 They are moving on from Testa Realmann · ⚔️ Challengers club · Serie A · £56m budget · the board wants: Win Serie A"
+  FAIL: 7h: era2020 premier2020: the offer from Arsenal names Testa Realmann: "🪑 They are moving on from Testa Realmann · 👑 Elite club · Premier League · £81m budget · the board wants: Qualify for the Europa League"
+  FAIL: 7h: era2020 seriea2020: the offer from AC Milan names Testa Realmann: "🪑 They are moving on from Testa Realmann · 🥇 Contenders club · Serie A · £62m budget · the board wants: Win Serie A"
+  FAIL: 7h: era2015 premier2015: the offer from Arsenal names Testa Realmann: "🪑 They are moving on from Testa Realmann · 👑 Elite club · Premier League · £53m budget · the board wants: Win the Premier League"
+  FAIL: 7h: era2015 laliga2015: the offer from Athletic Club names Testa Realmann: "🪑 They are moving on from Testa Realmann · ⚔️ Challengers club · La Liga · £18m budget · the board wants: Qualify for the Europa League"
+  FAIL: 7h: era2015 seriea2015: the offer from AC Milan names Testa Realmann: "🪑 They are moving on from Testa Realmann · 🥇 Contenders club · Serie A · £29m budget · the board wants: Qualify for the Champions League"
+  FAIL: 7h: era2010 premier2010: the offer from Arsenal names Testa Realmann: "🪑 They are moving on from Testa Realmann · 🥇 Contenders club · Premier League · £43m budget · the board wants: Qualify for the Champions League"
+  FAIL: 7h: era2010 laliga2010: the offer from Almería names Testa Realmann: "🪑 They are moving on from Testa Realmann · ⚔️ Challengers club · La Liga · £8m budget · the board wants: Finish in the top half"
+  FAIL: 7h: era2010 seriea2010: the offer from AC Milan names Testa Realmann: "🪑 They are moving on from Testa Realmann · 👑 Elite club · Serie A · £38m budget · the board wants: Win Serie A"
+  FAIL: 7h: era2010 bundesliga2010: the offer from Bayer Leverkusen names Testa Realmann: "🪑 They are moving on from Testa Realmann · 🥇 Contenders club · Bundesliga · £20m budget · the board wants: Win the Bundesliga"
+  FAIL: 7h: era2005 premier2005: the offer from Arsenal names Testa Realmann: "🪑 They are moving on from Testa Realmann · 👑 Elite club · Premier League · £29m budget · the board wants: Win the Premier League"
+  FAIL: 7h: era2005 seriea2005: the offer from AC Milan names Testa Realmann: "🪑 They are moving on from Testa Realmann · 👑 Elite club · Serie A · £35m budget · the board wants: Win Serie A"
+   7h: 13 leagues with a club below his, 13 offers from his emptied chair read and 13 accepted (all saying only that the club is making a change), 0 skipped unseated, 13 failures
+   7d: Arsenal left the league over that summer under this control, so the chair you left is not read
+   7d: nothing at Arsenal as your club, the club you left, a club you managed, Hot Seat or a mid season start
+   7e: the old save loads with its 19 chairs byte identical (Arsenal: Youri Sagna)
+
+control run: offer FIRED, 7h went red 13 time(s), 13 naming the sentinel

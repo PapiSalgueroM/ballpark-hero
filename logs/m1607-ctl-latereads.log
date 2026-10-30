@@ -1,0 +1,126 @@
+control latereads: mutation applied, section 6 must go red
+section 0: the shipped table equals the receipt
+  96 rows, 0 partial, 5 stored months, 123 sources on 115 registrable domains
+section 1: two hosts on two registrable domains per chair, none a wiki
+section 2: every chair belongs to its league table
+section 3: covered leagues are complete
+  Premier League: 20 verified, 0 partial, of 20
+  La Liga: 20 verified, 0 partial, of 20
+  Serie A: 20 verified, 0 partial, of 20
+  Bundesliga: 18 verified, 0 partial, of 18
+  Ligue 1: 18 verified, 0 partial, of 18
+  not declared (listed, not failed): 22 leagues: championship, eredivisie, saudi, mlsEast, mlsWest, primeira, scottish, superlig, bundesliga2, proleague, austria, greece, denmark, switzerland, croatia, brasileirao, ligamx, aleague, serieb, ligue2, segunda, russia
+section 4: names agree after accent folding, stored months are two hosted and unopposed
+section 5: table names that are also player names (listed, not failed)
+  2026 world rosters (same era): 1: Carlos Cuesta = Carlos Cuesta (Vasco da Gama)
+  era 2020 bake: 1: Cesc Fàbregas = Cesc Fàbregas (Monaco)
+  era 2015 bake: 14: Mikel Arteta = Mikel Arteta (Arsenal); Xabi Alonso = Xabi Alonso (Bayern Munich); Álvaro Arbeloa = Álvaro Arbeloa (Real Madrid); Gary O'Neil = Gary O'Neil (Norwich City); Andoni Iraola = Andoni Iraola (Athletic Club); Michael Carrick = Michael Carrick (Manchester United); Cesc Fàbregas = Cesc Fàbregas (Chelsea); Daniele De Rossi = Daniele De Rossi (Roma); Alberto Aquilani = Alberto Aquilani (Fiorentina); Ignazio Abate = Ignazio Abate (AC Milan); Vincent Kompany = Vincent Kompany (Manchester City); Eugen Polanski = Eugen Polanski (Hoffenheim); Didier Digard = Didier Digard (Real Betis); Filipe Luís = Filipe Luís (Chelsea)
+  era 2010 bake: 21: Mikel Arteta = Mikel Arteta (Everton); Keith Andrews = Keith Andrews (Blackburn Rovers); Xabi Alonso = Xabi Alonso (Real Madrid); Frank Lampard = Frank Lampard (Chelsea); Álvaro Arbeloa = Álvaro Arbeloa (Real Madrid); Andoni Iraola = Andoni Iraola (Athletic Club); Michael Carrick = Michael Carrick (Manchester United); Cesc Fàbregas = Cesc Fàbregas (Arsenal); Fabio Grosso = Fabio Grosso (Juventus); Daniele De Rossi = Daniele De Rossi (Roma); Cristian Chivu = Cristian Chivu (Inter Milan); Gennaro Gattuso = Gennaro Gattuso (AC Milan); Alberto Aquilani = Alberto Aquilani (Juventus); Ignazio Abate = Ignazio Abate (AC Milan); Vincent Kompany = Vincent Kompany (Manchester City); Eugen Polanski = Eugen Polanski (Mainz); Julian Schuster = Julian Schuster (Freiburg); Martín Demichelis = Martín Demichelis (Bayern Munich); Didier Digard = Didier Digard (Nice); Filipe Luís = Filipe Luís (Deportivo La Coruña); Stéphane Dumont = Stéphane Dumont (Lille)
+  era 2005 bake: 18: Mikel Arteta = Mikel Arteta (Real Sociedad); Xabi Alonso = Xabi Alonso (Liverpool); Frank Lampard = Frank Lampard (Chelsea); Álvaro Arbeloa = Álvaro Arbeloa (Real Madrid); Gary O'Neil = Gary O'Neil (Portsmouth); Andoni Iraola = Andoni Iraola (Athletic Club); Enzo Maresca = Enzo Maresca (Sevilla); Michael Carrick = Michael Carrick (Tottenham); Cesc Fàbregas = Cesc Fàbregas (Arsenal); Fabio Grosso = Fabio Grosso (Palermo); Daniele De Rossi = Daniele De Rossi (Roma); Cristian Chivu = Cristian Chivu (Roma); Gennaro Gattuso = Gennaro Gattuso (AC Milan); Alberto Aquilani = Alberto Aquilani (Roma); Niko Kovac = Niko Kovac (Hertha BSC); Martín Demichelis = Martín Demichelis (Bayern Munich); Liam Rosenior = Liam Rosenior (Fulham); Stéphane Dumont = Stéphane Dumont (Lille)
+  generator set (160 by 200 = 32000 names) met in the table: 0 (expected none)
+section 6: every chair rests on a read published on or before its league's opener, or a matchday 1 report
+  premier: opens 2026-08-21 (premierleague.com, skysports.com)
+  laliga: opens 2026-08-15 (futbolfantasy.com, beinsports.com)
+  seriea: opens 2026-08-22 (lapresse.it, fantacalcio-online.com)
+  bundesliga: opens 2026-08-28 (sky.de, sport1.de)
+  ligue1: opens 2026-08-21 (ligue1.com, info.fr)
+  FAIL [6]: Arsenal: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Aston Villa: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Bournemouth: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Brentford: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Brighton: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Chelsea: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Coventry City: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Crystal Palace: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Everton: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Fulham: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Hull City: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Ipswich Town: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Leeds United: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Liverpool: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Manchester City: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Manchester United: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Newcastle: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Nottingham Forest: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Sunderland: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Tottenham: no read published on or before the premier opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Alavés: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Athletic Club: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Atlético Madrid: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Barcelona: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Real Betis: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Celta Vigo: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Deportivo La Coruña: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Elche: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Espanyol: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Getafe: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Levante: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Málaga: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Osasuna: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Racing Santander: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Rayo Vallecano: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Real Madrid: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Real Sociedad: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Sevilla: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Valencia: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Villarreal: no read published on or before the laliga opener 2026-08-15, and no matchday 1 report
+  FAIL [6]: Atalanta: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Bologna: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Cagliari: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Como: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Fiorentina: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Frosinone: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Genoa: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Inter Milan: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Juventus: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Lazio: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Lecce: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: AC Milan: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Monza: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Napoli: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Parma: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Roma: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Sassuolo: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Torino: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Udinese: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Venezia: no read published on or before the seriea opener 2026-08-22, and no matchday 1 report
+  FAIL [6]: Augsburg: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Bayer Leverkusen: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Bayern Munich: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Borussia Dortmund: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Gladbach: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Eintracht Frankfurt: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Freiburg: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Hamburg: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Hoffenheim: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Köln: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Mainz: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: RB Leipzig: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Schalke 04: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Elversberg: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Paderborn: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Stuttgart: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Union Berlin: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Werder Bremen: no read published on or before the bundesliga opener 2026-08-28, and no matchday 1 report
+  FAIL [6]: Angers: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Auxerre: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Brest: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Le Havre: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Le Mans: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Lens: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Lille: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Lorient: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Lyon: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Marseille: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Monaco: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Nice: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Paris FC: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: PSG: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Rennes: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Strasbourg: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Toulouse: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  FAIL [6]: Troyes: no read published on or before the ligue1 opener 2026-08-21, and no matchday 1 report
+  0 of 96 chairs rest on a read from on or before their opener (or a matchday 1 report)
+section 7: every stored name is the club's own spelling (accents exact, case free)
+  96 of 96 stored names are the club's own spelling
+control latereads FIRED: section 6 red (96 failure(s) in all)
