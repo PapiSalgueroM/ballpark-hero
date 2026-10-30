@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+weight-head: ENGINES=chromium node scripts/sweepWeight.mjs
