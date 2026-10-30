@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: CI=1 SIM_NETWORK=offline node .rc/x/rv-walk1576.mjs
+playBingoClubRules: CI=1 SIM_NETWORK=offline RC_OUT=$RC_OUT/builder node scripts/playBingoClubRules.mjs
+simPlayerBingoLineFeedback: node scripts/simPlayerBingoLineFeedback.mjs
