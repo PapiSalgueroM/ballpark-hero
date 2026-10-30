@@ -1,0 +1,4 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk-notile exit=1 60s | playCmEuroPlay: control notile FIRED (3 findings of "the Europa League tile", 3 in all)
+walk exit=1 67s | playCmEuroPlay: 3 FINDINGS
+walk-nofixture exit=1 105s | playCmEuroPlay: control nofixture FIRED (6 findings of "names no Europa League night", 6 in all)
