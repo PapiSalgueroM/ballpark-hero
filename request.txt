@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+m6-nflhub-vitest: node .rc/x/mutNfl.mjs && node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office-shared/GmCareerDesk.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx --testTimeout=600000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+m6-nflhub-walk: node .rc/x/mutNfl.mjs && node_modules/.bin/vite build > /tmp/vb7.log 2>&1 || exit 2; PLAY_GM_CAREER_SPORT=nfl PLAY_GM_CAREER_SIZE=390 node scripts/playGmCareer.mjs > /tmp/b.log 2>&1; f=$?; grep -aE "FAIL" /tmp/b.log | head -4 | cut -c1-220; echo "M6 nflhub playGmCareer nfl 390 exit=$f"; node scripts/playFoHub.mjs > /tmp/c.log 2>&1; echo "M6 nflhub playFoHub exit=$?"; git checkout -- src scripts; exit $f
