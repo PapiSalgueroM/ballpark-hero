@@ -50,6 +50,15 @@
  *                           expiringDeals (what the review's checkpoint and the hub line read), a man out on loan
  *                           included; the trim careers lend their best final year man before seasons one and two,
  *                           and at Ajax and Freiburg renew him on loan at the season's end: he must not walk.
+ *   MEASURED (remote check r1597-fx3, head 843e19bef): 762 men left a squad over the 16 careers, lost 0; the trim
+ *   let 12 go (Everton 3, Ajax 5, Freiburg 4, Southampton 2015 none: its walkers alone brought it to 30), all 12
+ *   listed as released and not mine; 684 ledger held list men all agreed with their records, 1,860 list men seen a
+ *   summer on were all exactly a year older; 4 men out on loan in their last year left at a summer, every one of
+ *   them listed first, and the 4 renewed on loan came home. The probe the review used found the same: 12 trimmed,
+ *   12 listed; ledger agreement 80 of 80 (r1597-run-trim2). Controls, each exit 1 and FIRED for its own section:
+ *   notrimpool 12 trimmed men unlisted (and section 1 lost 12); ledgeroff "Christian Nørgaard is on the list and his
+ *   ledger record says retired"; staleseason "Jordan Pickford was 32 on the list a summer ago and is 32 now";
+ *   noloanrow 4 lent men's deals ran out unlisted; norenewloan 3 of the 4 men renewed on loan walked (refused).
  *
  * CONTROLS (CM_FA_CONTROL=name), each must turn its own section red (exit 1, the last line says FIRED):
  *   deletepool  decayFreeAgents deletes every man two summers after he arrived again (the old bug)   -> section 1
@@ -421,8 +430,9 @@ const TRACK_FLOOR = 60, RETIRE_FLOOR = 13;
 if (totals.tracked < TRACK_FLOOR) fail(1, `only ${totals.tracked} men left a squad over the fleet, under ${TRACK_FLOOR}`);
 if (totals.poolRetired < RETIRE_FLOOR) fail(2, `only ${totals.poolRetired} men retired off the list over the fleet, under ${RETIRE_FLOOR}`);
 /* Sections 5 to 7's floors, so a run that stops trimming, stops reaching the ledger or stops lending cannot pass by
-   having nothing to check (provisional until measured; the header gives the measured numbers). */
-const TRIM_FLOOR = 4, HELD_FLOOR = 60, AGED_FLOOR = 100, LENT_FLOOR = 2, RENEWED_LENT_FLOOR = 1;
+   having nothing to check: a tenth of the first measured run for the ledger counts (684 held, 1,860 a summer on),
+   a third for the 12 trimmed and half for the 4 and 4 men out on loan (remote check r1597-fx3). */
+const TRIM_FLOOR = 4, HELD_FLOOR = 68, AGED_FLOOR = 186, LENT_FLOOR = 2, RENEWED_LENT_FLOOR = 2;
 if (totals.trimmed < TRIM_FLOOR) fail(5, `only ${totals.trimmed} men were trimmed at a summer, under ${TRIM_FLOOR}`);
 if (totals.ledgerHeld < HELD_FLOOR) fail(6, `only ${totals.ledgerHeld} list men were held by the ledger at a summer, under ${HELD_FLOOR}`);
 if (totals.aged < AGED_FLOOR) fail(6, `only ${totals.aged} list men were seen a summer on, under ${AGED_FLOOR}`);
