@@ -1,0 +1,21 @@
+MUT m-rank: applied to src/lib/clubManager.ts
+--- sim1234 exit 0
+simCmEuroPlay: green, 1250 checks, 0 failures
+  2 review: 12 participant seasons read on the review, 1 of them won it
+  2b moves: 6 job moves out of 3 participant seasons, each played to the season's end
+simCmEuroPlay: green, 1250 checks, 0 failures
+--- board exit 0
+   Eredivisie: 6 bands over 18 clubs
+      3x Win the Eredivisie
+simBoardObjectives: green. Every board talks like a board.
+   3087 labels checked
+
+simBoardObjectives: green. Every board talks like a board.
+--- vitest exit 0
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m90 passed[39m[22m[90m (90)[39m
+[2m   Duration [22m 2.29s[2m (transform 993ms, setup 95ms, collect 2.29s, tests 1.08s, environment 406ms, prepare 152ms)[22m
+[2m      Tests [22m [1m[32m90 passed[39m[22m[90m (90)[39m
+[2m   Start at [22m 10:18:51
+[2m   Duration [22m 2.29s[2m (transform 993ms, setup 95ms, collect 2.29s, tests 1.08s, environment 406ms, prepare 152ms)[22m
+MUT m-rank: SURVIVED (sim1234=0 board=0 vitest=0)

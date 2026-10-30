@@ -1,0 +1,17 @@
+MUT m-pens: applied to src/lib/clubManager.ts
+--- sim1234 exit 1
+  FAIL 3 Real Sociedad seed 1 season 2: the R16 second leg told the manager out, the competition says Real Sociedad
+  FAIL 3 AZ Alkmaar seed 4 season 2: the SF second leg told the manager out, the competition says AZ Alkmaar
+  FAIL 3 Real Betis seed 4 season 2: the R16 second leg told the manager out, the competition says Real Betis
+simCmEuroPlay: RED, 1271 checks, 3 failures
+  FAIL 3 AZ Alkmaar seed 4 season 2: the SF second leg told the manager out, the competition says AZ Alkmaar
+  FAIL 3 Real Betis seed 4 season 2: the R16 second leg told the manager out, the competition says Real Betis
+simCmEuroPlay: RED, 1271 checks, 3 failures
+--- vitest exit 0
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m90 passed[39m[22m[90m (90)[39m
+[2m   Duration [22m 2.30s[2m (transform 1.00s, setup 94ms, collect 2.32s, tests 1.11s, environment 374ms, prepare 88ms)[22m
+[2m      Tests [22m [1m[32m90 passed[39m[22m[90m (90)[39m
+[2m   Start at [22m 10:21:45
+[2m   Duration [22m 2.30s[2m (transform 1.00s, setup 94ms, collect 2.32s, tests 1.11s, environment 374ms, prepare 88ms)[22m
+MUT m-pens: KILLED (sim1234=1 vitest=0)

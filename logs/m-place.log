@@ -1,0 +1,19 @@
+MUT m-place: applied to src/lib/clubManager.ts
+--- sim1234 exit 0
+simCmEuroPlay: green, 1250 checks, 0 failures
+  2 review: 12 participant seasons read on the review, 1 of them won it
+  2b moves: 6 job moves out of 3 participant seasons, each played to the season's end
+simCmEuroPlay: green, 1250 checks, 0 failures
+--- board exit 0
+   Eredivisie: 6 bands over 18 clubs
+      3x Win the Eredivisie
+simBoardObjectives: green. Every board talks like a board.
+   3087 labels checked
+
+simBoardObjectives: green. Every board talks like a board.
+--- boardsim exit 0
+ALL BOARD CHECKS PASSED
+   Inter Miami: 5/8 met, 0 unresolved at final whistle
+
+ALL BOARD CHECKS PASSED
+MUT m-place: SURVIVED (sim1234=0 board=0 boardsim=0)

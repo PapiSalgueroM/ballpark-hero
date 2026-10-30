@@ -1,0 +1,23 @@
+MUT m-tail: applied to src/lib/clubManagerCalendar.ts
+--- sim1234 exit 0
+simCmEuroPlay: green, 1250 checks, 0 failures
+  2 review: 12 participant seasons read on the review, 1 of them won it
+  2b moves: 6 job moves out of 3 participant seasons, each played to the season's end
+simCmEuroPlay: green, 1250 checks, 0 failures
+--- calendar exit 0
+simClubManagerCalendar: all green
+   joining Arsenal two entries in: in 2020-21 the summer window runs 7 matches (5 left), in 2021-22 4 (2 left, window summer)
+   a pre-round 2020-21 save migrated at week 9: 1 break(s) already played stay behind it, 4 of 4 played once each by the end, its four match window shut on entry 3 and the grid agrees
+simClubManagerCalendar: all green
+--- vitest exit 1
+ [31m❯[39m src/lib/worldNights.test.ts [2m([22m[2m15 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 594[2mms[22m[39m
+   [32m✓[39m placeNights[2m > [22mtakes no gap that would move a date when the caller can redraw the calendar[32m 0[2mms[22m[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m89 passed[39m[22m[90m (90)[39m
+[2m   Duration [22m 2.21s[2m (transform 992ms, setup 75ms, collect 2.28s, tests 1.06s, environment 374ms, prepare 111ms)[22m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/lib/worldNights.test.ts[2m > [22mThursday nights on the engine calendars[2m > [22mdates a tail night a week after a night drawn the day after a midweek, and never moves last
+    [90m269| [39m    [35mconst[39m d2 [33m=[39m [34mdateOfEntries[39m([34m2026[39m[33m,[39m mid[33m,[39m [35mnull[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+MUT m-tail: KILLED (sim1234=0 calendar=0 vitest=1)

@@ -1,0 +1,5 @@
+m-rank exit=1 58s | MUT m-rank: SURVIVED (sim1234=0 board=0 vitest=0)
+m-noP exit=0 54s | MUT m-noP: KILLED (sim1234=1)
+m-place exit=1 60s | MUT m-place: SURVIVED (sim1234=0 board=0 boardsim=0)
+m-pens exit=0 59s | MUT m-pens: KILLED (sim1234=1 vitest=0)
+m-tail exit=0 80s | MUT m-tail: KILLED (sim1234=0 calendar=0 vitest=1)

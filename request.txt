@@ -1,0 +1,6 @@
+#!serial
+m-rank: node .rc/x/mut1593.mjs m-rank sim1234 board vitest
+m-noP: node .rc/x/mut1593.mjs m-noP sim1234
+m-place: node .rc/x/mut1593.mjs m-place sim1234 board boardsim
+m-pens: node .rc/x/mut1593.mjs m-pens sim1234 vitest
+m-tail: node .rc/x/mut1593.mjs m-tail sim1234 calendar vitest

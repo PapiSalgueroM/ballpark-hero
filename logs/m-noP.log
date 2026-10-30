@@ -1,0 +1,11 @@
+MUT m-noP: applied to src/lib/clubManager.ts
+--- sim1234 exit 1
+  FAIL 4 Lyon seed 1 season 2: plays false, earned P
+  FAIL 4 AZ Alkmaar seed 3 season 2: plays false, earned P
+  FAIL 4 AZ Alkmaar seed 4 season 2: plays false, earned P
+  FAIL 4 Braga seed 1 season 2: plays false, earned P
+simCmEuroPlay: RED, 917 checks, 4 failures
+  FAIL 4 AZ Alkmaar seed 4 season 2: plays false, earned P
+  FAIL 4 Braga seed 1 season 2: plays false, earned P
+simCmEuroPlay: RED, 917 checks, 4 failures
+MUT m-noP: KILLED (sim1234=1)
