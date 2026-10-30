@@ -1,0 +1,22 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/hooks/useConnectionsRelabel.test.ts src/hooks/useConnectionsLoss.test.ts src/hooks/useConnectionsShake.test.ts src/test/nbaPlanningBench.test.tsx src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx --testTimeout=300000 --hookTimeout=120000
+plain: node scripts/simUsConnectionsFacts.mjs
+othersbytes: git worktree add -q /tmp/r74 a6295d759 && ln -s "$PWD/node_modules" /tmp/r74/node_modules && (cd /tmp/r74 && US_CONN_DUMP=/tmp/d74.txt node scripts/simUsConnectionsFacts.mjs > /dev/null 2>&1); US_CONN_DUMP=/tmp/dhead.txt node scripts/simUsConnectionsFacts.mjs > /dev/null 2>&1; grep -v "^nba" /tmp/dhead.txt > /tmp/dhead3.txt; cmp /tmp/d74.txt /tmp/dhead3.txt && echo "baseball, nfl and nhl verdicts byte equal to 1574's head a6295d759 ($(wc -l < /tmp/dhead3.txt) lines; nba adds $(grep -c '^nba' /tmp/dhead.txt))"
+reportnba: US_CONN_TABLES=nba node scripts/simUsConnectionsFacts.mjs > /tmp/r.txt 2>&1; s=$?; grep -E "^   nba|^report" /tmp/r.txt | cut -c1-300; tail -1 /tmp/r.txt; exit $s
+reportnone: US_CONN_TABLES=mls node scripts/simUsConnectionsFacts.mjs
+pgl: npm install --silent --prefix /tmp/pgl @electric-sql/pglite > /tmp/pgl.log 2>&1; s=$?; ls /tmp/pgl/node_modules/@electric-sql/pglite/dist/index.js; exit $s
+rehearse: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-nohash: REHEARSE_CONTROL=nohash PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-dupname: REHEARSE_CONTROL=dupname PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh1574: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+mig1583: node scripts/qa/nbaConnections1583Migration.mjs check
+mig1574: node scripts/qa/usConnections1574Migration.mjs check
+mig1567: node scripts/qa/usConnections1567Migration.mjs check
+dealt1558bytes: git worktree add -q /tmp/base b4a331a9cb1db7411b91538eaeaf29385d2ce3a9 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node scripts/qa/connectionsDealtDay1558.mjs file 2026-10-30 +60 > /tmp/d0.txt 2>&1); node scripts/qa/connectionsDealtDay1558.mjs file 2026-10-30 +60 > /tmp/d1.txt 2>&1; cmp /tmp/d0.txt /tmp/d1.txt && echo "1558 dealer output byte equal to the base ($(wc -l < /tmp/d1.txt) lines)"
+dealt-reshaped: DEALT_CONTROL=reshaped node scripts/qa/connectionsDealtDay1583.mjs nba=/dev/null 2026-10-30 +40
+recordgrows: node .rc/x/recordgrows.mjs
+recordgrows-control: RECORD_CONTROL=1 node .rc/x/recordgrows.mjs

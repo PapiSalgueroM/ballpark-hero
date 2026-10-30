@@ -1,0 +1,15 @@
+   nba: 3 present tense or unheld recent year labels
+   nba: 1 refuted claims held off every board, 0 found
+   nba: 1 gray pairs the round took off their boards, 0 back
+   nba: 320 table members, each to be held by a fact
+   nba: 82 facts, 0 on one host; 16 flagged groups, 80 members held; 2 fixed findings
+   nba: 109 MEN ON THE TABLE ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: Charles Barkley, Shaquille O'Neal, Michael Finley, Rolando Blackman, Josh Howard, Clyde Dr
+   nba: 20 boards, 40 of 80 groups judged; members 130 judged (70 unknown), other tiles 399 judged (201 unknown); 0 findings
+   nba: 1 watched men beside a group they may join
+   nba: 0 men dealt twice
+   nba: 40 groups nothing judges (ceiling 0), 70 members the record cannot place (ceiling 0), 201 other tiles it cannot judge (ceiling 0): nbaconn-005 "Born outside the USA", nbaconn-005 "Played for the Wizards or Bullets", nbaconn-006 "Played for BOTH the Lakers and Celtics", nbaconn-010 "Won back-
+   nba: 7 dated club groups, 22 undated, 34 active men one move from a club group beside them
+   nba: 16 table rows, 0 decisions (RECORD 0, LIST 0, PERMAN 0, REBUILD 0), 64 problems
+   nba: kinds career 6, club 29, draft 2, born 2, continent 1; 0 problems
+report: 419 failure lines over the files and the table rows of nba; findings by rule: no-fact 314, watch 1, trade 34, undecided 64
+REPORT ONLY
