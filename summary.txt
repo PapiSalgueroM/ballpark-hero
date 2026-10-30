@@ -1,0 +1,12 @@
+simUclField exit=0 8s | simUclField: all green
+simWorldEditor exit=0 14s | simWorldEditor: 2478 checks, 0 failures
+simUclSeasonOne exit=0 25s | simUclSeasonOne: all green
+simDeadlineDay exit=0 6s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simClubManagerCalendar exit=0 59s | simClubManagerCalendar: all green
+simManagerHotSeat exit=0 79s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simCmShootoutOrder exit=0 36s | simCmShootoutOrder: all sections passed
+simClubManagerSaveSize exit=0 101s | simClubManagerSaveSize: all sections green
+tieGolden exit=0 1s | recordWorldTieGolden1347: SAME: 44 cases recorded from HEAD equal the 44 of scripts/data/worldTieGolden1347.json
+simExtraTime exit=0 111s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
+simWorldUcl exit=1 1651s | simWorldUcl: RED, 498822 checks, 10 failures
