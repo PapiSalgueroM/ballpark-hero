@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simBoardAsks: node scripts/simBoardAsks.mjs
+ba-nopromise: BOARD_ASKS_CONTROL=nopromise node scripts/simBoardAsks.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+cv-capall: CUSTOM_VALUES_CONTROL=capall node scripts/simCustomClubValues.mjs
+simCmLevelReads: node scripts/simCmLevelReads.mjs
+sack-head: SECTION=0 LEVELS=normal SEEDS=20 SEASONS=1 DRIVERS=steady node scripts/simCmDifficulty.mjs
+sack-base: git worktree add -q /tmp/base 14a9af704 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && SECTION=0 LEVELS=normal SEEDS=20 SEASONS=1 DRIVERS=steady node scripts/simCmDifficulty.mjs
+rules-base: sleep 30 && cd /tmp/base && node scripts/simCmLeagueRules.mjs --part=modern,eras,pure

@@ -1,0 +1,9 @@
+simBoardAsks exit=1 72s | simBoardAsks: 1 failure
+ba-nopromise exit=1 79s | simBoardAsks: 1 failure
+tsc exit=0 114s | 
+simCmLevelReads exit=0 2s | simCmLevelReads: 27 checks, 0 failures
+simCustomClubValues exit=1 141s | simCustomClubValues: 25 checks, 1 failure (sections 1)
+cv-capall exit=1 146s | simCustomClubValues: 25 checks, 1 failure (sections 1)
+rules-base exit=0 79s | simCmLeagueRules: all checks passed (modern, eras, pure)
+sack-head exit=0 200s | simCmDifficulty: all green (sections 0)
+sack-base exit=0 169s | simCmDifficulty: all green (sections 0)
