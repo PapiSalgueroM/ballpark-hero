@@ -1,0 +1,2 @@
+ctl-liveevent exit=1 37s | control run: liveevent changed NOTHING in 7f (0 failures, 0 naming the sentinel), the check is dead
+simManagers exit=1 40s | simManagers: 1 failure(s)

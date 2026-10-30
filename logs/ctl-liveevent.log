@@ -1,0 +1,14 @@
+7) real dugouts: a sentinel registered as real is a display fact and nothing else
+   sentinel "Testa Realmann" is in no src file; 47 leagues across 5 eras hold it
+   7b: 200 summers, 200 with the sentinel's chair emptied (17 by the sim's own draw), 200 with a second chair to recycle into, 149 offers read (2 for the emptied real chair, all saying only that the club is making a change), 0 failures (15 s)
+   7c: 200 of 200 sentinel careers equal their empty table twin after the strip, draw for draw
+   7f: 20 whole seasons with the sentinel seated, 823 entries, 0 matches against his club, 1532 distinct lines read, 20 of 20 equal to their empty table twin, 0 failures (17 s)
+  FAIL: 7f: only 0 matches against the sentinel's club (floor 20)
+   7a: 47 of 47 sentinel chairs held on day one, 47 partial chairs made up and marked
+   7a: a later world and a season two repair seat nobody real; an outside club shows him in season one only
+   7g: 47 summers took the sentinel's own job, 39 takeover lines read (all "You take over at {club}."), 0 failures
+  FAIL: 7d: Arsenal has nobody in its dugout after you left
+   7d: nothing at Arsenal as your club, the club you left, a club you managed, Hot Seat or a mid season start
+   7e: the old save loads with its 19 chairs byte identical (Arsenal: Youri Sagna)
+
+control run: liveevent changed NOTHING in 7f (0 failures, 0 naming the sentinel), the check is dead
