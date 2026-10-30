@@ -1,0 +1,4 @@
+simCmEuroPlay-nouelucl: CM_EURO_PLAY_CONTROL=nouelucl node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-noplaygate: CM_EURO_PLAY_CONTROL=noplaygate node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-nothursday: CM_EURO_PLAY_CONTROL=nothursday node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-legfromucl: CM_EURO_PLAY_CONTROL=legfromucl node scripts/simCmEuroPlay.mjs
