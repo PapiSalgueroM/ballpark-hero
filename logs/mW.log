@@ -1,0 +1,45 @@
+MUTATED W
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/managerHotSeatTieStamp.test.tsx [2m([22m[2m3 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 996[2mms[22m[39m
+[31m   [31m×[31m Manager Hot Seat: a free run carries the 1603 tie stamp[2m > [22ma new free run is opened with the stamp, so it reads the tie, and its save says so[39m[32m 205[2mms[22m[39m
+[31m     → expected { v: 1, club: 'Udinese', …(4) } to match object { v: 1, club: 'Udinese', …(2) }
+(3 matching properties omitted from actual)[39m
+   [32m✓[39m Manager Hot Seat: a free run carries the 1603 tie stamp[2m > [22ma saved free run hands its stamp back to the engine, and one saved without it stays on the night[32m 278[2mms[22m[39m
+   [32m✓[39m Manager Hot Seat: a free run carries the 1603 tie stamp[2m > [22ma finished free run that kept the job reopens with its stamp[32m 154[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/managerHotSeatTieStamp.test.tsx[2m > [22mManager Hot Seat: a free run carries the 1603 tie stamp[2m > [22ma new free run is opened with the stamp, so it reads the tie, and its save says so
+[31m[1mAssertionError[22m: expected { v: 1, club: 'Udinese', …(4) } to match object { v: 1, club: 'Udinese', …(2) }
+(3 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "club": "Udinese",[22m
+[2m    "rules": 1331,[22m
+[32m-   "tie": 1603,[39m
+[2m    "v": 1,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/managerHotSeatTieStamp.test.tsx:[2m80:66[22m[39m
+    [90m 78| [39m    [34mexpect[39m([34mtieRulesOf[39m(setup))[33m.[39m[34mtoBeUndefined[39m()[33m;[39m
+    [90m 79| [39m    fireEvent.click(view.getByRole('button', { name: 'Take the job' })…
+    [90m 80| [39m    expect(JSON.parse(localStorage.getItem(FREE_KEY) ?? 'null')).toMat…
+    [90m   | [39m                                                                 [31m^[39m
+    [90m 81| [39m  }[33m,[39m [34m120000[39m)[33m;[39m
+    [90m 82| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 10:48:34
+[2m   Duration [22m 3.35s[2m (transform 1.29s, setup 55ms, collect 1.72s, tests 996ms, environment 235ms, prepare 50ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/managerHotSeatTieStamp.test.tsx,title=src/test/managerHotSeatTieStamp.test.tsx > Manager Hot Seat%3A a free run carries the 1603 tie stamp > a new free run is opened with the stamp%2C so it reads the tie%2C and its save says so,line=80,column=66::AssertionError: expected { v: 1, club: 'Udinese', …(4) } to match object { v: 1, club: 'Udinese', …(2) }%0A(3 matching properties omitted from actual)%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "club": "Udinese",%0A    "rules": 1331,%0A-   "tie": 1603,%0A    "v": 1,%0A  }%0A%0A ❯ src/test/managerHotSeatTieStamp.test.tsx:80:66%0A%0A

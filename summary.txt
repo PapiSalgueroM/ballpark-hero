@@ -1,0 +1,4 @@
+mF exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/managerHotSeatTieStamp.test.tsx,title=src/test/managerHotSeatTieStamp.test.tsx > Manager Hot Seat%3A a
+mP exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/managerHotSeatTieStamp.test.tsx,title=src/test/managerHotSeatTieStamp.test.tsx > Manager Hot Seat%3A a
+mW exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/managerHotSeatTieStamp.test.tsx,title=src/test/managerHotSeatTieStamp.test.tsx > Manager Hot Seat%3A a
+mFIN exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/managerHotSeatTieStamp.test.tsx,title=src/test/managerHotSeatTieStamp.test.tsx > Manager Hot Seat%3A a

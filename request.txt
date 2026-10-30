@@ -1,0 +1,5 @@
+#!serial
+mF: node .rc/x/mutstamp.mjs F && node_modules/.bin/vitest run src/test/managerHotSeatTieStamp.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mP: node .rc/x/mutstamp.mjs P && node_modules/.bin/vitest run src/test/managerHotSeatTieStamp.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mW: node .rc/x/mutstamp.mjs W && node_modules/.bin/vitest run src/test/managerHotSeatTieStamp.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mFIN: node .rc/x/mutstamp.mjs FIN && node_modules/.bin/vitest run src/test/managerHotSeatTieStamp.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout -- src scripts; exit $s
