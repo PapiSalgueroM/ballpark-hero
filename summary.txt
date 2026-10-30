@@ -1,0 +1,17 @@
+vitest-rules exit=0 3s |    Duration  2.74s (transform 677ms, setup 452ms, collect 1.77s, tests 1.38s, environment 1.86s, prepare 526ms)
+vitest-fo1 exit=0 13s |    Duration  12.29s (transform 4.27s, setup 349ms, collect 7.95s, tests 19.31s, environment 2.41s, prepare 810ms)
+vitest-fo2 exit=0 16s |    Duration  15.46s (transform 3.09s, setup 509ms, collect 9.11s, tests 25.95s, environment 2.88s, prepare 803ms)
+vitest-ca exit=0 34s |    Duration  33.22s (transform 3.76s, setup 285ms, collect 778ms, tests 34.87s, environment 1.22s, prepare 602ms)
+simFoLazyDesk-eager exit=1 18s | simFoLazyDesk CONTROL eager FIRED: section 1 went red with 12 failures (red sections 1)
+fobcheck exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 50 controls is in the board exactly once.
+simFoLazyDesk exit=0 19s | simFoLazyDesk: all checks passed
+tsc exit=0 84s | 
+fob-askalways exit=0 34s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+fob-blank exit=1 35s | controlFrontOfficeBoard: 0 of 1 control(s) fired. NOT FIRED: blank
+fob-recapnever exit=1 11s | controlFrontOfficeBoard: 0 of 1 control(s) fired. NOT FIRED: recapnever
+simGmReload exit=0 8s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+simFoHub exit=0 1s | simFoHub: green. Four hubs, five boxes each, every one of them saying something true.
+fob-nowait exit=0 29s | controlFrontOfficeBoard: 1 of 1 control(s) fired, the board tests can fail for each named reason.
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simGmCareer-nfl exit=0 134s | simGmCareer: all checks passed (nfl)

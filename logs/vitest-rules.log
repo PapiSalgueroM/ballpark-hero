@@ -1,0 +1,13 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmCareerRules.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 426[2mms[22m[39m
+ [32m✓[39m src/lib/gmDeskHost.test.ts [2m([22m[2m43 tests[22m[2m)[22m[33m 914[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 711[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m70 passed[39m[22m[90m (70)[39m
+[2m   Start at [22m 00:56:09
+[2m   Duration [22m 2.74s[2m (transform 677ms, setup 452ms, collect 1.77s, tests 1.38s, environment 1.86s, prepare 526ms)[22m
+
