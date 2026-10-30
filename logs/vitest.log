@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerNoSack.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1582[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mstarts with No sacking off and Skip hands nothing on [33m 452[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mthe switch rides on both buttons [33m 589[2mms[22m[39m
+ [32m✓[39m src/test/dailyMenuResume.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1679[2mms[22m[39m
+   [33m[2m✓[22m[39m Deadline Day: Menu and back keeps the window[2m > [22mreopens the daily at the same hour with the same actions, and the store keeps them [33m 557[2mms[22m[39m
+   [33m[2m✓[22m[39m Manager Hot Seat: Menu and back keeps the job[2m > [22mreopens the daily on the next match, not on the brief, and the store keeps the match [33m 968[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDifficultyPick.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 2362[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22moffers five levels with Medium pressed, and Skip on Medium hands nothing on [33m 422[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mImpossible and No sacking ride on both buttons [33m 855[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dugout step[2m > [22mEasy and Very Easy say plainly that the career posts no leaderboard scores [33m 363[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerOfferConfirm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 618[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerWorldEditorPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 1738[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager page: the world editor reaches the career[2m > [22mstarts Celtic in the Premier League after a swap made on the World editor tile [33m 1737[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m29 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 07:16:35
+[2m   Duration [22m 8.14s[2m (transform 2.42s, setup 331ms, collect 7.83s, tests 7.98s, environment 2.26s, prepare 797ms)[22m
+
