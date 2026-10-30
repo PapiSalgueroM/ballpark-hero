@@ -172,7 +172,10 @@ function placement(view: ReturnType<typeof render>) {
   const row = [...card.querySelectorAll('div')].find(d => d.className.includes('font-bold') && / Youth$/.test(d.textContent!.trim()));
   const tier = card.textContent!.match(/Tier (\d)/);
   expect(row, 'the placement card names no club').toBeTruthy(); expect(tier, 'the placement card shows no tier').toBeTruthy();
-  return { name: row!.textContent!.trim().replace(/ Youth$/, ''), tier: Number(tier![1]) };
+  /* The row's own text only: FlagImg keeps a hidden emoji fallback in a span
+     before the name for most nations (not England's). */
+  const own = [...row!.childNodes].filter(n => n.nodeType === Node.TEXT_NODE).map(n => n.textContent).join('').trim();
+  return { name: own.replace(/ Youth$/, ''), tier: Number(tier![1]) };
 }
 function fresh(seed: number) {
   cleanup(); localStorage.clear(); localStorage.setItem(OTHER, 'untouched');
