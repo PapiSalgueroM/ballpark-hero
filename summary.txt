@@ -1,0 +1,14 @@
+simApproaches exit=0 3s | ALL APPROACH CHECKS PASSED
+simBracketMoment exit=1 29s | 1 FAILURES (by section {"3":1})
+simClubManagerDecisions exit=0 54s | simClubManagerDecisions: 0 findings
+simClubManagerStaff exit=0 32s | simClubManagerStaff: PASS. Four made up men who cost what the desk says, lift only their own half of the pitch, tax nobody who ignores them, and can be taken off you.
+simCmFixtureFleet exit=0 7s | simCmFixtureFleet: green. 10 registered league(s), 9 in a file of their own. nofetch NOT RUN, oldsaves NOT RUN, dailies 11 clubs.
+simCmQuickLegs exit=0 87s | simCmQuickLegs: PASS, 10 sections green
+simClubManagerNewLeagues exit=0 202s | simClubManagerNewLeagues: all checks passed
+simCreateClub exit=1 13s | simCreateClub: 1 failure
+simCmMadeUpNations exit=0 157s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+simCmSubs exit=0 71s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+simFixtureBalance exit=0 6s | simFixtureBalance: PASS. Generated schedules keep the run-of-two contract at every league size, old saves keep their generated list, rollovers converge the flag, the AI w
+simManagers exit=0 7s | simManagers: all green
+simSaveFence exit=0 53s | simSaveFence: all green (tabs, source, fleet)
+simWorld exit=0 75s | ALL WORLD CHECKS PASSED
