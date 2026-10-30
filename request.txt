@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+playCmDecidingLeg: node scripts/playCmDecidingLeg.mjs
