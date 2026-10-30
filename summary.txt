@@ -1,0 +1,8 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+roster-head exit=0 109s | Current-roster browser: passed; 1144 checks, 21 saved page journeys, 1 effective controls, 22 originals, 0 failures, 0 setup failures.
+tsc exit=0 120s | 
+simNoRivalNames exit=0 25s | No rival product names found. 0 findings.
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+roster-base exit=0 158s | Current-roster browser: passed; 1144 checks, 21 saved page journeys, 1 effective controls, 22 originals, 0 failures, 0 setup failures.
+sweepWeight exit=1 31s | sweepWeight: 3 failures
+simHarnessAnchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
