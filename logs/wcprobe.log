@@ -1,0 +1,26 @@
+engines loaded; curve 1 files served: 4
+Everton now seed 17: state json 809676 chars; head differs (draws 2187 vs 2187); curve1 differs (draws 2187)
+   head first diff $.reads.market.0.age: 26 vs 25
+   curve1 first diff $.reads.market.0: same keys, different shape
+Everton now seed 311: state json 807593 chars; head differs (draws 2080 vs 2080); curve1 differs (draws 2080)
+   head first diff $.reads.market.0.age: 26 vs 25
+   curve1 first diff $.reads.market.0: same keys, different shape
+Barcelona now seed 17: state json 817768 chars; head differs (draws 2380 vs 2380); curve1 differs (draws 2380)
+   head first diff $.reads.market.0: same keys, different shape
+   curve1 first diff $.reads.market.0: same keys, different shape
+Barcelona now seed 311: state json 823270 chars; head differs (draws 2380 vs 2380); curve1 differs (draws 2380)
+   head first diff $.reads.market.0.age: 26 vs 25
+   curve1 first diff $.reads.market.0: same keys, different shape
+Everton era2010 seed 17: state json 323106 chars; head differs (draws 961 vs 961); curve1 differs (draws 961)
+   head first diff $.reads.market.0: same keys, different shape
+   curve1 first diff $.reads.market.0: same keys, different shape
+Everton era2010 seed 311: state json 322287 chars; head differs (draws 882 vs 882); curve1 differs (draws 882)
+   head first diff $.reads.market.0: same keys, different shape
+   curve1 first diff $.reads.market.0: same keys, different shape
+PSG era2015 seed 17: state json 307753 chars; head differs (draws 914 vs 916); curve1 differs (draws 914)
+   head first diff $.reads.market.0: same keys, different shape
+   curve1 first diff $.reads.market.0: same keys, different shape
+PSG era2015 seed 311: state json 313192 chars; head differs (draws 986 vs 988); curve1 differs (draws 986)
+   head first diff $.reads.market.0: same keys, different shape
+   curve1 first diff $.reads.market.0: same keys, different shape
+probe done
