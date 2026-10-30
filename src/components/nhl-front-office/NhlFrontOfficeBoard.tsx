@@ -77,7 +77,7 @@ import { GmCareerKitHolding } from '@/components/front-office-shared/GmCareerKit
 import { careerBindingOf } from '@/components/front-office-shared/careerBinding';
 import { GM_CAREER_PANELS, gmCareerFloor } from '@/components/front-office-shared/gmCareerDesk';
 
-/* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
+/* Round 180: 'fired' is new. Round 1561: zero trust upstairs ends the job, not the save (the out of work screen). */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'round' | 'standings';
 
