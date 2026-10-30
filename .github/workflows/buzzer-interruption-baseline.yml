@@ -1,0 +1,159 @@
+name: Buzzer native interruption baseline only
+on:
+  push:
+    branches: [codex/buzzer-interruption-baseline-20261030]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_PARENT: 14a9af7042793e487d12af0bffcaf030a0d0da9a
+      EXPECTED_TREE: ed90479be53fae5d4d38a68ad59b56e3fc056e30
+      DRIVER_SHA256: 02aa0d5a60a29781c5b1496274a76343baabbbdba8e9ef7f35c4172ccc4d630d
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind QA-only source and headed executable preconditions
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/buzzer-interruption-baseline"; test ! -e "$out"; mkdir -p "$out/helpers" "$out/runtime-tmp"
+          echo "BUZZER_OUT=$out" >> "$GITHUB_ENV"; echo "BUZZER_BROWSER_OUT=$out/browser" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"; echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/buzzer-interruption-baseline-20261030
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5454
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.paths"
+          printf 'A\t.github/workflows/buzzer-interruption-baseline.yml\nA\tscripts/qa/playBuzzerInterruptionBaseline.mjs\n' > "$out/expected-proof.paths"; cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(sha256sum scripts/qa/playBuzzerInterruptionBaseline.mjs | cut -d' ' -f1)" = "$DRIVER_SHA256"
+          git ls-files -z | sort -z > "$out/source.members"; xargs -0 sha256sum < "$out/source.members" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt"; git rev-parse 'HEAD^{tree}' > "$out/tree.txt"; git archive --format=tar HEAD > "$out/source.tar"
+          command -v xvfb-run > "$out/xvfb-run.path"; command -v Xvfb > "$out/Xvfb.path"; command -v xauth > "$out/xauth.path"
+          dpkg-query -W xvfb > "$out/xvfb-package.txt"
+          raw=0; node --check scripts/qa/playBuzzerInterruptionBaseline.mjs > "$out/syntax.stdout" 2> "$out/syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"; test "$raw" -eq 0
+          cat > "$out/helpers/run.sh" <<'RUN'
+          run() {
+            local id="$1" budget="$2"; shift 2
+            local raw=0; : > "$BUZZER_OUT/$id.transport"
+            { printf '%q ' "$@"; printf '\n'; } > "$BUZZER_OUT/$id.command"
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$BUZZER_OUT/$id.transport" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s "$budget" "$@" > "$BUZZER_OUT/$id.stdout" 2> "$BUZZER_OUT/$id.stderr" || raw=$?
+            printf '%s\n' "$raw" > "$BUZZER_OUT/$id.exit"
+            test ! -s "$BUZZER_OUT/$id.transport"
+          }
+          RUN
+          sha256sum "$out/helpers/run.sh" > "$out/helpers.sha256"
+      - name: Locked packages and existing isolated Chromium font preparation
+        run: |
+          set -euo pipefail
+          out="$BUZZER_OUT"; tools="$RUNNER_TEMP/buzzer-baseline-tools"; test ! -e "$tools"
+          raw=0; env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?; printf '%s\n' "$raw" > "$out/npm-ci.exit"; test "$raw" -eq 0
+          env -u NODE_OPTIONS npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright; ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          export PLAYWRIGHT_BROWSERS_PATH="$tools/browsers"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"; echo "BUZZER_TOOLS=$tools" >> "$GITHUB_ENV"
+          executable=$(node -e 'const a=require("node:assert/strict");a.equal(require("playwright/package.json").version,"1.64.0");a.equal(require("playwright-core/package.json").version,"1.64.0");process.stdout.write(require("playwright").chromium.executablePath())')
+          if test ! -f "$executable"; then env -u NODE_OPTIONS node "$tools/node_modules/playwright/cli.js" install chromium > "$out/chromium-install.log" 2>&1; fi
+          test -f "$executable"; printf '%s\n' "$executable" > "$out/chromium.path"
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d' ' -f1); echo "FONT_CACHE_MANIFEST_SHA256=$sha" >> "$GITHUB_ENV"
+      - name: Unchanged existing checks then the actual Vite production build
+        run: |
+          set -euo pipefail
+          out="$BUZZER_OUT"; source "$out/helpers/run.sh"
+          run types 3m node_modules/.bin/tsc --noEmit -p tsconfig.app.json; test "$(cat "$out/types.exit")" -eq 0; test ! -s "$out/types.stdout"; test ! -s "$out/types.stderr"
+          run hold 3m node scripts/simArcadeHoldRelease.mjs; test "$(cat "$out/hold.exit")" -eq 0
+          grep -Fqx 'simArcadeHoldRelease: 30 actual board outcomes pass, none skipped.' "$out/hold.stdout"
+          run pause 3m node scripts/simArcadePause.mjs; test "$(cat "$out/pause.exit")" -eq 0
+          grep -Fqx 'simArcadePause: sixteen actual hook/Board checks passed for active time, stale callbacks, backup settlement, fresh input, keyboard routing and one daily save/completion.' "$out/pause.stdout"
+          run physics 5m node scripts/simBuzzerBeater.mjs; test "$(cat "$out/physics.exit")" -eq 0
+          grep -Fqx 'simBuzzerBeater: green. Arc pays, the hand is real, and no one release solves ten shots.' "$out/physics.stdout"
+          run build 5m npm run build -- --manifest; test "$(cat "$out/build.exit")" -eq 0
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.prebrowser.sha256"; cmp "$out/source.initial.sha256" "$out/source.prebrowser.sha256"
+          for pair in "deps:node_modules" "tools:$BUZZER_TOOLS" "fonts:$FREE_KICK_FONT_CACHE" "dist:dist"; do
+            label="${pair%%:*}"; dir="${pair#*:}"; find "$dir" -type f -print0 | sort -z > "$out/$label.members"; xargs -0 sha256sum < "$out/$label.members" > "$out/$label.sha256"
+          done
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.before"
+          tar -cf "$out/dist.tar" -C dist .; tar -cf "$out/font-cache.tar" -C "$FREE_KICK_FONT_CACHE" .
+      - name: Actual native headed interruption and exact scoped baseline admission
+        run: |
+          set -euo pipefail
+          out="$BUZZER_OUT"; source "$out/helpers/run.sh"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/server.transport" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 & server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          for i in $(seq 1 50); do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then break; fi; sleep .1; done
+          curl --fail --silent http://127.0.0.1:4173/ > /dev/null
+          run browser 3m xvfb-run -a node scripts/qa/playBuzzerInterruptionBaseline.mjs
+          raw=0
+          node <<'ADMIT' > "$out/admission.stdout" 2> "$out/admission.stderr" || raw=$?
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),{createHash}=require('node:crypto'),out=process.env.BUZZER_OUT,dir=process.env.BUZZER_BROWSER_OUT;
+          const read=n=>fs.readFileSync(path.join(dir,n)),sha=b=>createHash('sha256').update(b).digest('hex'),r=JSON.parse(read('BASELINE-REPORT.json')),raw=Number(fs.readFileSync(path.join(out,'browser.exit'),'utf8'));
+          a.equal(r.methodFailures,0);a.equal(r.headed,true);a(r.display);a.equal(r.parent,process.env.EXPECTED_PARENT);a.equal(r.parentTree,process.env.EXPECTED_TREE);
+          a.deepEqual(r.contexts.map(x=>x.spec.id),['global-space','button-space','button-enter']);
+          let owned=0,diagnostics=0;const allowed=new Set(['BUZZER_ONE_RETURNED_KEYUP_SPENDS_SHOT']);
+          for(const row of r.contexts){
+            a.deepEqual(JSON.parse(read(row.spec.id+'.json')),row);a.equal(row.methodError,null);
+            a.equal(row.initial.mode,'unlimited');a.equal(row.initial.phase,'aiming');a.equal(row.initial.shot,1);a.equal(row.initial.rounds,10);a.equal(row.initial.court,true);
+            a(row.help.opened&&row.help.closed&&row.help.text.length>0);a(row.held.charging);
+            a(Number.isInteger(row.beforeHold.power)&&Number.isInteger(row.held.power)&&row.beforeHold.power>=0&&row.beforeHold.power<=100&&row.held.power>=0&&row.held.power<=100&&row.held.power!==row.beforeHold.power);
+            a(row.away.focused===false||row.away.visibility==='hidden');a(row.returned.focused&&row.returned.visibility==='visible');
+            const events=row.returned.trace.filter(x=>x.seq>=row.mark);a(events.some(x=>x.trusted&&(x.type==='blur'||x.type==='visibilitychange'&&x.visibility==='hidden')));a(!events.some(x=>x.type==='keyup'&&x.key===row.spec.key));
+            a.equal(row.normalBefore.after.phase,'shotEnd');a.equal(row.fresh.after.phase,'shotEnd');a.deepEqual(row.beforeHold.storage,row.afterRelease.storage);a.deepEqual(row.beforeHold.storage,row.fresh.after.storage);
+            a(row.failures.every(x=>allowed.has(x)));const actual=[];
+            const diagnostic={returnedCharging:row.returned.charging,powerContinues:row.returned.power!==row.beforeRelease.power,postKeyupProgressed:row.afterRelease.phase!=='aiming'||['shot','made','points'].some(k=>row.afterRelease[k]!==row.beforeRelease[k])};
+            a.deepEqual(row.diagnostics,diagnostic);if(Object.values(diagnostic).some(Boolean))diagnostics++;
+            if(row.beforeRelease.charging&&row.beforeRelease.phase==='aiming'&&row.afterRelease.phase==='shotEnd'&&row.afterRelease.shot===row.beforeRelease.shot)actual.push('BUZZER_ONE_RETURNED_KEYUP_SPENDS_SHOT');
+            a.deepEqual(row.failures,actual);if(actual.length)owned++;
+            a.equal(row.wire.pageErrors.length,0);a.equal(row.wire.sockets.length,0);a(!row.io.some(x=>x.kind==='unknown-refused'));
+            for(const im of row.images){const bytes=read(im.file);a.equal(bytes.length,im.bytes);a.equal(sha(bytes),im.sha256);a.equal(im.original,true);}
+          }
+          a.equal(r.controls.length,3);a.deepEqual(r.controls.map(x=>x.id),['native-focus','native-power','native-witness']);
+          for(const c of r.controls){a.equal(c.sameCopyRestored,true);a.equal(c.featureGreenCredit,false);a.equal(c.beforeSHA256,c.restoredSHA256);a.notEqual(c.changedSHA256,c.beforeSHA256);a.equal(sha(read(c.working)),c.restoredSHA256);a.equal(sha(read(c.changed)),c.changedSHA256);a.equal(c.refusal.name,'AssertionError');}
+          a.equal(r.ownedCases,owned);a.equal(r.diagnosticCases,diagnostics);const err=fs.readFileSync(path.join(out,'browser.stderr'),'utf8').trim();
+          if(owned){a.equal(raw,1);a.equal(r.status,'OWNED_NATIVE_CHARGE_INTERRUPTION_RED');a.equal(err,'BUZZER_OWNED_NATIVE_CHARGE_INTERRUPTION_RED:'+owned+'/3');}
+          else{a.equal(raw,0);a.equal(r.status,diagnostics?'NATIVE_DIAGNOSTICS_WITHOUT_OWNED_RED':'HYPOTHESIS_NOT_REPRODUCED');a.equal(err,'');}
+          fs.writeFileSync(path.join(out,'BASELINE-ADMISSION.json'),JSON.stringify({status:owned?'ACTUAL_OWNED_NATIVE_RED_OBSERVED':diagnostics?'DIAGNOSTIC_ONLY_NO_FIX':'HYPOTHESIS_NOT_REPRODUCED_NO_FIX',raw,contexts:3,ownedCases:owned,diagnosticCases:diagnostics,driverControllerRaw:0,sourceFixOrFeatureReady:false})+'\n',{flag:'wx'});
+          console.log('BUZZER_BASELINE_ADMITTED:3 actual native journeys; ownedCases='+owned+'; no product fix or readiness credit.');
+          ADMIT
+          printf '%s\n' "$raw" > "$out/admission.exit"; cat "$out/admission.stdout"; cat "$out/admission.stderr"; test "$raw" -eq 0
+          test ! -s "$out/server.transport"
+      - name: Always preserve source and all post-build inventories
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="${BUZZER_OUT:-$RUNNER_TEMP/buzzer-interruption-baseline}"; mkdir -p "$out"; failed=0
+          git ls-files -z | sort -z > "$out/source.members.final"; cmp "$out/source.members" "$out/source.members.final" || failed=1
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"; cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git diff --exit-code HEAD > "$out/working-source.diff" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"; cmp "$out/refs.before" "$out/refs.after" || failed=1
+          for pair in "deps:node_modules" "tools:${BUZZER_TOOLS:-$RUNNER_TEMP/buzzer-baseline-tools}" "fonts:${FREE_KICK_FONT_CACHE:-$out/font-cache}" "dist:dist"; do
+            label="${pair%%:*}"; dir="${pair#*:}"
+            if test -f "$out/$label.sha256"; then find "$dir" -type f -print0 | sort -z > "$out/$label.members.final"; cmp "$out/$label.members" "$out/$label.members.final" || failed=1; sha256sum -c "$out/$label.sha256" > "$out/$label-held.log" 2>&1 || failed=1; fi
+          done
+          if test -f "$out/dependency-links.before"; then find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.after"; cmp "$out/dependency-links.before" "$out/dependency-links.after" || failed=1; fi
+          sha256sum -c "$out/helpers.sha256" > "$out/helpers-held.log" 2>&1 || failed=1
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"NATIVE_BUZZER_BASELINE_ONLY","productFix":false,"headfulRequired":true,"contexts":3,"themes":"light-only","viewport":"1280x900","fullSEO":"UNRUN","caps":"UNRUN","globalSims":"UNRUN","defaultFullVitest":"UNRUN","broaderModes":"UNRUN","layoutVisualOrTouchQualification":false}\n' > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/buzzer-baseline-evidence.sha256"; cp "$RUNNER_TEMP/buzzer-baseline-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: buzzer-interruption-baseline-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/buzzer-interruption-baseline
+          if-no-files-found: error
+          retention-days: 14
