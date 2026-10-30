@@ -1,0 +1,38 @@
+mutExact: applied (freeAgentRecord reads the birth year exactly)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/cmFreeAgentOldLedger1600.test.ts [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 77[2mms[22m[39m
+[31m   [31m×[31m Round 1600 merge: the free agent resolver reads an old ledger a year either side[2m > [22mrestores the saved card of a man a year on from his record in a ledger from before the age read[39m[32m 56[2mms[22m[39m
+[31m     → CM_FA_OLD_LEDGER_LINKED: expected undefined to be '["now","Volos","Ondrej Okonjo (Youth)…' // Object.is equality[39m
+   [32m✓[39m Round 1600 merge: the free agent resolver reads an old ledger a year either side[2m > [22mstill reads a stamped ledger exactly: the same man a year on is signed fresh[32m 20[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmFreeAgentOldLedger1600.test.ts[2m > [22mRound 1600 merge: the free agent resolver reads an old ledger a year either side[2m > [22mrestores the saved card of a man a year on from his record in a ledger from before the age read
+[31m[1mAssertionError[22m: CM_FA_OLD_LEDGER_LINKED: expected undefined to be '["now","Volos","Ondrej Okonjo (Youth)…' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"[\"now\",\"Volos\",\"Ondrej Okonjo (Youth)\",\"GK\",2008,null]"
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/cmFreeAgentOldLedger1600.test.ts:[2m60:60[22m[39m
+    [90m 58| [39m  it('restores the saved card of a man a year on from his record in a …
+    [90m 59| [39m    [35mconst[39m { key[33m,[39m padId[33m,[39m back } [33m=[39m [34moneYearOn[39m([35mfalse[39m)[33m;[39m
+    [90m 60| [39m    [34mexpect[39m(back[33m.[39mworldRosterKey[33m,[39m [32m'CM_FA_OLD_LEDGER_LINKED'[39m)[33m.[39m[34mtoBe[39m(key)[33m;[39m
+    [90m   | [39m                                                           [31m^[39m
+    [90m 61| [39m    [34mexpect[39m(back[33m.[39mid[33m,[39m [32m'CM_FA_OLD_LEDGER_CARD'[39m)[33m.[39m[34mtoBe[39m(padId)[33m;[39m
+    [90m 62| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m   Start at [22m 21:45:29
+[2m   Duration [22m 1.64s[2m (transform 897ms, setup 38ms, collect 1.09s, tests 77ms, environment 159ms, prepare 39ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmFreeAgentOldLedger1600.test.ts,title=src/test/cmFreeAgentOldLedger1600.test.ts > Round 1600 merge%3A the free agent resolver reads an old ledger a year either side > restores the saved card of a man a year on from his record in a ledger from before the age read,line=60,column=60::AssertionError: CM_FA_OLD_LEDGER_LINKED: expected undefined to be '["now","Volos","Ondrej Okonjo (Youth)…' // Object.is equality%0A%0A- Expected: %0A"[\"now\",\"Volos\",\"Ondrej Okonjo (Youth)\",\"GK\",2008,null]"%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/cmFreeAgentOldLedger1600.test.ts:60:60%0A%0A

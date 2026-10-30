@@ -1,0 +1,6 @@
+tsc exit=2 45s |   Type 'Record<string, unknown>' is missing the following properties from type 'WorldRosterState': version, eraId, records
+vitest-oldledger exit=0 2s |    Duration  1.79s (transform 975ms, setup 89ms, collect 2.37s, tests 147ms, environment 391ms, prepare 111ms)
+vitest-oldledger-exact exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmFreeAgentOldLedger1600.test.ts,title=src/test/cmFreeAgentOldLedger1600.test.ts > Round 1600 merge%3A
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 11s | No rival product names found. 0 findings.
+worldcont-main exit=1 18s |     at async file:///tmp/m/scripts/simManagerWorldContinuity.mjs:527:24

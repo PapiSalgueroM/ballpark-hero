@@ -1,0 +1,4 @@
+src/test/cmFreeAgentOldLedger1600.test.ts(32,18): error TS2352: Conversion of type 'WorldRosterState' to type 'Record<string, unknown>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Index signature for type 'string' is missing in type 'WorldRosterState'.
+src/test/cmFreeAgentOldLedger1600.test.ts(36,59): error TS2352: Conversion of type 'Record<string, unknown>' to type 'WorldRosterState' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Record<string, unknown>' is missing the following properties from type 'WorldRosterState': version, eraId, records
