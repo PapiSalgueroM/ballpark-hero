@@ -1,0 +1,7 @@
+#!serial
+lr-head: node scripts/simCmLeagueRules.mjs
+lr-bu: git checkout 6b558934c -- src && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src; exit $s
+lr-merge: git checkout 9a8445ef8 -- src && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src; exit $s
+lr-write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json" && git diff --stat -- scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- scripts/data; exit $s
+appeal-head: node scripts/simManagerAppealIsolation.mjs
+appeal-bu: git checkout 6b558934c -- src && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src; exit $s
