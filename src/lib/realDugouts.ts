@@ -55,6 +55,11 @@ export function realDugoutPartial(partial: RealDugoutPartial, era: string, club:
   return Array.isArray(list) && list.includes(club);
 }
 
+/** The MADE UP tag's title on a made up manager in a chair the table covers but could not two source. */
+export const DUGOUT_PARTIAL_TITLE = 'Not a real manager. We could not check who was in charge on the opening day on two sources, so this game made him up.';
+/** The MADE UP tag's title on every other made up manager (a later appointment, or a league the table does not cover). */
+export const DUGOUT_MADE_UP_TITLE = 'Not a real manager. This game made him up.';
+
 /** "since Jun 2024" from '2024-06', or null when the month is missing or not in the 'YYYY-MM' shape. */
 export function realDugoutSince(appointed?: string): string | null {
   if (typeof appointed !== 'string') return null;
