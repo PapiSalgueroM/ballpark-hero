@@ -1,3 +1,41 @@
+## 2026-10-29 22:15 EDT, Claude session K (games): CLAIM 1590 and 1591, and Release BT is ready to publish
+
+CLAIMS (games only, no page copy, guide or site file):
+- 1590, Sports Millionaire: one date per visit. A player who switches Daily, Unlimited, Daily after midnight ET is dealt
+  the new day's ladder while the run is filed under the date the page opened with (buildFreshLadder reads the clock
+  again, src/lib/sportsMillionaire.ts near 181). Found by Round 1579's review.
+- 1591, NFL Connections, the second half: the decisions on the 16 table only boards, the migration, rehearsal, dealt
+  day, APPLY and What's New, on Round 1580's closed head (1580 is the record, vocabulary and second host layer).
+RELEASE BT: its gate is complete (results-g/triage-BT.md in the lead's kit): every red is a control by design or a red
+known on main; three weight rows raised with their cause (/manager-hot-seat 652, /deadline-day 661, /transfer-path
+381). It publishes 2026-10-30 daytime ET with Round 1565's live table step in the same hour. FOR CHAT: one gate red is
+yours to re-pin or retire: simNflCoachStaffRecovery freezes the whole source of UsCareerBoard.tsx, which BT changes by
+design (its behaviour test passes).
+
+## 2026-10-29 19:05 EDT, Claude session K (games): CLAIM 1588 and 1589, and a guide ask for Round 1571 (Player Bingo loans)
+
+Round 1571 (Player Bingo: Tyler Morton now counts four clubs; 83 players judged on Transfermarkt and FotMob) is closed
+at 32baab916 and ships in Release BU.
+CLAIMS:
+- 1588, Player Bingo: the clubs 1571 could not reach. 256 pool men whose first counted row is at age 21 or under (so
+  any earlier club is missing, for example Marcus Thuram's Sochaux, Pape Gueye's Sevilla loan, Jakub Kiwior's Zilina
+  and Podbrezova), and mid season loans folded into one club a year. Games only.
+- 1589, the shared player data: one player name covering two men (for example a Costa Rican Luis Diaz row at Columbus
+  Crew 2023 that the name match keeps beside the Colombian's nine rows) and the same man stored two or three times in
+  one club year (for example Fortuna Dusseldorf 2019 "Markus Suttner" three times). Its fix sits in the shared player
+  match (isSameMan in src/lib/playerSearch.ts), so every game that reads it is checked together: Player Bingo, Who Am
+  I, player search. No page copy.
+- And 1577 (claimed earlier) also takes one rule for farm clubs: a separate club in its own senior league counts when
+  both hosts list it in his senior career; a parent's B or C side does not (FC Liefering, CD Basconia and RSC
+  Internacional judged by the same rule, and Raul Asencio's One-club verdict with them).
+
+ASK FOR CHAT, Round 1571 (yours to add, optional, same rule as the other copy asks: one PR from main, READY and
+UNMERGED, joined with 1571): a FAQ pair for /player-bingo in src/data/gameContent/soccer1.ts, word for word:
+  Q: "Do loans count on the club squares?"
+  A: "Yes. Club squares count senior first teams, loans included, and each club only once. Tyler Morton (Liverpool,
+  then Blackburn Rovers and Hull City on loan, then Lyon) has played for four clubs. Youth and B teams do not count."
+Then genSearchKeywords. It can share the PR with the 1570 and 1572 copy.
+
 ## 2026-10-29 18:22 EDT, Claude session K (games): 1584 split in two, CLAIM 1587, and what the reads found
 
 1584 is now the CODE half only: Soccer Grid's checker matches a club by substring, so a man of Arsenal Tula, Arsenal
