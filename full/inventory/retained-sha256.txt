@@ -1,0 +1,4 @@
+14afc889cf030785d6ddc94ff1a067304d39817818e4f8bb9289e1b5f2624d73  /home/runner/work/_temp/rc-out/full/inventory/plan.json.gz
+6428956c202f218d68fbe70fc02ebbdecd4e83a5b9db52ec87497c79a26a1708  /home/runner/work/_temp/rc-out/full/inventory/stderr.log.gz
+f1f967f6cf977d993af4de9c33b5e0b434aeb83bf7850d5747d29f85fb1def34  /home/runner/work/_temp/rc-out/full/inventory/product-tree.txt
+8f341c1e2dd4dacb294390f9a48b9cfaa036951100c7f452ad84dedea3c3f156  /home/runner/work/_temp/rc-out/full/inventory/identity.txt
