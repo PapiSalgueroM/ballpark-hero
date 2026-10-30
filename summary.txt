@@ -1,0 +1,11 @@
+buildseo exit=0 2246s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simUsCareerActionConfirm exit=0 11s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+simUsCareerProspect exit=0 17s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+simUsCareerPractice exit=0 31s | simUsCareerPractice: 32 actual-board outcomes passed across NFL, NBA, MLB and NHL
+simUsBoardParity exit=0 94s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
+simUsCareerRecovery exit=0 6s | Career recovery: fictional offline engine fixtures, no native UI, full-career completion, medical effect or real sports-stat claim.
+simUsCareerDeckC exit=0 70s | simUsCareerDeckC: all checks passed
+simUsCareerAnnualBenefits exit=0 6s | Career yearly support: fictional offline engine fixtures only, no native UI, full career completion or historical-data validation claim.
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simUsCareerDefects exit=0 15s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+simUsCareerSummer exit=0 4623s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
