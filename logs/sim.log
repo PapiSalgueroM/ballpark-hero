@@ -1,0 +1,50 @@
+D) the detection finds the merged club on the fixture
+  ok: the mirror returns the committed list exactly (22 rows)
+  ok: Arsenal FC is flagged where the critic measured it: S2 2010, 2011, 2015, 2016 and S1 2010, 2011
+  ok: S1 flags only Arsenal FC (2 club years)
+  ok: the quartile interpolates as percentile_cont does (1, 2, 3, 4 gives 1.75)
+G) the grid rule changes only the (Arsenal, namesake) cells
+  ok: the function excludes exactly the 7 strings gridNamesakes.json sources
+  ok: 100 club labels by 342 stint club strings; the Arsenal label reads "Played for Arsenal"
+  ok: 7 cells changed, every one ("Arsenal", a club with an excluded part)
+  ok: each of the 7 excluded strings no longer satisfies the Arsenal label
+  ok: no cell went from no to yes (the map only removes)
+  ok: London stays matched: Arsenal FC, U21, U18 and a split season
+  ok: gridNamesakes.json keeps exactly London's 4 strings
+  ok: all 10 of Q3b's 10 strings the old rule reads as Arsenal are kept or excluded (4 kept, 6 excluded)
+  ok: no label lost its last matching club
+  ok: the mirror agrees with the function on all 34200 cells
+N) every excluded string stands on two hosts
+  ok: 7 strings, each on two registrable hosts, no wiki, at most one Transfermarkt, url, date and summary
+L) every judged man stands on two hosts, and the ledger is what its generator writes
+  ok: arsenalLedger.json equals genArsenalLedger1587's output from the 64 committed pages and the Q2 export
+  ok: 74 men, every verdict sarandi or london (56 and 18), none held or pending
+  ok: every man has two registrable hosts, no wiki, at most one Transfermarkt, url, date and summary
+  ok: the stored name 'Arsenal de Sarandí' stands on two hosts
+T) every tripwire row and every roster net row belongs to exactly one judged man
+  ok: 110 roster net rows (names on 42 Sarandí pages), every one judged
+  ok: no row id sits in two men (162 judged rows)
+  ok: 160 tripwire rows, every one judged; 2 men came in by the roster net only
+M) the payload is the ledger's sarandi rows plus the stints critic 2's rule moves, and both SQL files carry it
+  ok: the market payload is exactly the ledger's 110 sarandi rows
+  ok: the generator, rerun on the committed exports, gives the committed payload (56 stints, 0 held)
+  ok: every Arsenal FC stint moves exactly when its span covers rows of one sarandi man and nobody else (56 of 243)
+  ok: the record and the applied form carry one payload line, its md5 3ffefa34360b317d34796f515b42ce9a and N 110, M 56
+  ok: the committed migration is byte for byte what the generator writes from this payload
+  ok: every one of the 166 parts the payload writes is in the function's CLUB_NAMESAKES.arsenal (Arsenal de Sarandí)
+  ok: the function's clubMatches reads none of the 166 payload clubs as "Arsenal"
+F) the apply's steps 2 and 3 on fresh exports under dated names decide by content, never by file name
+  ok: unchanged exports saved as arsenalMarket-2026-11-03.json and arsenalStints-2026-11-03.json: step 2 exit 0, step 3 exit 0 with "same:" for both SQL files
+  ok: one payload row's value moved (row 60080, h recomputed): step 3 exit 1 with DIFFERS
+  ok: the payload generator refuses to write from a fresh export (--market without --check exits 2)
+C) the Build Your XI and Soccer Connect 4 cache purge removes exactly the sarandi men's Arsenal yeses
+  ok: on a made up cache of 10 rows (Cristian Llama sarandi, Edú Gaspar london): 3 deleted (a Build Your XI yes, a Connect 4 pair yes and fact), 1 held (a last name only key), 6 kept (refusals, the london man, another club, a Soccer Grid row)
+  ok: the purge form carries the 3 rows, its payload md5 and K
+  ok: the generator run as the lead runs it exits 0 with K 3
+P) the state after the apply, and R) Rarity Round's Arsenal pool in it
+  ok: after the apply no sarandi row reads Arsenal FC, all 110 read 'Arsenal de Sarandí' in its place, the other 553 are byte equal
+  ok: no post apply export committed yet (the lead adds arsenalMarketPost-<date>.json after the apply; it is then compared row for row)
+  ok: R reads the shipped filter for "Arsenal FC": eq "Arsenal FC", like "Arsenal FC / *", like "* / Arsenal FC"
+  ok: R: the club-arsenal pool holds no sarandi man after the apply (217 names before, 161 after)
+
+simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.

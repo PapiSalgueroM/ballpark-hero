@@ -1,0 +1,17 @@
+A) Postgres computes every export row's guard hash exactly as the export carries it
+  ok: all 663 Q2 and 243 Q3 hashes recompute equal in Postgres (775 market and 1125 stint rows loaded)
+B) the record migration rewrites exactly the payload, and a second run is a no op
+  ok: the record ran without raising ("Round 1587: 110 market rows and 56 stint rows rewritten, 0 already current, 0 drifted, 0 missing")
+  ok: the record: the 110 market and 56 stint payload rows read their new club with every other column kept; the other 665 market and 1069 stint rows (decoys included) are unchanged
+  ok: the record's second run ("Round 1587: 0 market rows and 0 stint rows rewritten, 166 already current, 0 drifted, 0 missing"): nothing changed
+C) the applied form rewrites exactly the payload or nothing, and a second run is a no op
+  ok: the applied form ran without raising ("Round 1587: 110 market rows and 56 stint rows rewritten, 0 already current, 0 drifted, 0 missing")
+  ok: the applied form: the 110 market and 56 stint payload rows read their new club with every other column kept; the other 665 market and 1069 stint rows (decoys included) are unchanged
+  ok: the applied form's second run ("Round 1587: 0 market rows and 0 stint rows rewritten, 166 already current, 0 drifted, 0 missing"): nothing changed
+D) the Build Your XI and Soccer Connect 4 cache purge, from Q6 as the lead reads it, removes exactly its rows or nothing
+  ok: D: from the 9 rows Q6 reads, the generator lists the 3 yeses of Cristian Llama and holds the last name only key
+  ok: D: the form ran and removed exactly the 3 yeses (Build Your XI, the Connect 4 pair and its fact)
+  ok: D: all or nothing (3 of 3), and every row left is byte for byte as it was
+  ok: D: a second run raises (0 of 3 still match) and removes nothing
+
+rehearseClubNamesakes1587: green. Both forms move exactly the 110 market rows and 56 stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.

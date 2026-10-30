@@ -1,0 +1,17 @@
+sim exit=0 3s | simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+c-namesakedrift exit=1 3s | simClubNamesakes: 2 finding(s).
+c-nonet exit=1 3s | simClubNamesakes: 1 finding(s).
+c-widepool exit=1 3s | simClubNamesakes: 1 finding(s).
+c-purgeblind exit=1 3s | simClubNamesakes: 2 finding(s).
+c-freshmoved exit=1 3s | simClubNamesakes: 1 finding(s).
+c-freshstill exit=1 3s | simClubNamesakes: 1 finding(s).
+rh exit=0 8s | rehearseClubNamesakes1587: green. Both forms move exactly the 110 market rows and 56 stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.
+rh-cachedrift exit=1 7s | rehearseClubNamesakes1587: 1 finding(s).
+rh-parity exit=1 7s | rehearseClubNamesakes1587: 1 finding(s).
+rh-tamper exit=1 7s | rehearseClubNamesakes1587: 1 finding(s).
+rh-drift exit=1 7s | rehearseClubNamesakes1587: 2 finding(s).
+rh-noguard exit=1 7s | rehearseClubNamesakes1587: 3 finding(s).
+mut-oldgen exit=1 3s | simClubNamesakes: 2 finding(s).
+mut-A-regen exit=1 4s | simClubNamesakes: 2 finding(s).
+mut-B-regen exit=1 2s | simClubNamesakes: 1 finding(s).
+clean exit=0 0s | 0
