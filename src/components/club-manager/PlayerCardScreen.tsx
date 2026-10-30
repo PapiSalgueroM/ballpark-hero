@@ -120,7 +120,7 @@ export function PlayerCardScreen({ card: ref, career, onBack }: { card: CardRef;
         <div className={tile} data-cm-card-past>
           <div className="text-xs text-muted-foreground uppercase tracking-wider">Seasons here</div>
           {card.past.length === 0
-            ? <p className="text-xs text-muted-foreground">No finished season with you yet. His row is written when this season ends.</p>
+            ? <p data-cm-card-past-empty className="text-xs text-muted-foreground">Nothing kept for him yet. A season is kept when it ends, for a man who played in it and is still yours.</p>
             : <table className="w-full text-xs">
               <thead><tr className="text-muted-foreground text-left">
                 <th className="font-normal py-1">Season</th><th className="font-normal">Apps</th><th className="font-normal">G</th><th className="font-normal">A</th>

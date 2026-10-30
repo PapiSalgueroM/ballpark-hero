@@ -375,10 +375,10 @@ export function SquadRowDetail({ p, career, scoutLevel, money }: { p: CMPlayer; 
           His wage and years left are this game's numbers, not his real contract.
         </p>
       )}
-      {/* Round 1601: his card, this season and every season he has played for you (drawn only under the page's stack). */}
+      {/* Round 1601: his card, this season and the seasons the game kept for him (drawn only under the page's stack). */}
       <CmCardLink only card={{ k: 'mine', id: p.id }}
         className="col-span-2 md:col-span-4 min-h-[44px] rounded-xl border border-border bg-background/40 px-3 text-left text-xs font-bold text-foreground hover:border-primary">
-        Seasons: this one and every one he has played for you
+        Seasons: this one and the ones the game kept
       </CmCardLink>
     </div>
   );

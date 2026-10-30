@@ -19,7 +19,8 @@
  *     after Back, window.scrollY (sampled until it has held still for a second) is what it was before the tap, give
  *     or take a pixel, and the host is as it was: the Squad row open again, the board open again.
  *   4 THE LINES word for word, each on the save that earns it and on no other: S2 a rival's thin data line with the
- *     reader's share, S1 none; S3 the kept from line naming season 3, S1 none.
+ *     reader's share, S1 none; S3 the kept from line naming season 3, S1 none; S3's empty seasons tile says nothing
+ *     is kept yet, never that a man who played finished seasons here has none.
  *   5 A MATCH WITH CARDS OPENED IS THE MATCH WITHOUT: two contexts open S1 on one page seed and one clock; one opens
  *     and closes six cards, the other none; both press Quick Sim once; the page drew the same count before the press
  *     and the two saves are equal, no key left out.
@@ -170,6 +171,7 @@ const drawn = page => page.evaluate(() => {
     seasons: [...card.querySelectorAll('[data-cm-card-season]')].map(tr => [...tr.querySelectorAll('td')].map(td => td.textContent ?? '')),
     notes: [...card.querySelectorAll('[data-cm-card-note]')].map(el => el.getAttribute('data-cm-card-note')),
     texts: [...card.querySelectorAll('[data-cm-card-note]')].map(el => el.textContent ?? ''),
+    empty: card.querySelector('[data-cm-card-past-empty]')?.textContent ?? null,
   };
 });
 
@@ -442,6 +444,9 @@ for (const size of SIZES) {
   for (const c of mine3) {
     const t = c.texts[c.notes.indexOf('keptfrom')] ?? '';
     if (t !== `Seasons before ${label3} were played before the game kept them.`) fail('4', `S3 ${c.name}: the kept from line reads "${t}"`);
+    /* S3 is S1 with its rows taken off: men who played finished seasons here. The empty tile says nothing is KEPT,
+       never that he has no finished season with you (review of 2026-10-30, finding 7). */
+    if (c.empty !== 'Nothing kept for him yet. A season is kept when it ends, for a man who played in it and is still yours.') fail('4', `S3 ${c.name}: the empty seasons tile reads "${c.empty}"`);
   }
   console.log(`4       lines read on ${rivals1.length} S1 rival cards (share ${lb1.share}), ${rivals4.length} S4 rival cards (share ${lb4.share}), ${mine1.length} S1 cards of mine, ${rivals2.length} S2 rival cards (share ${lb2.share}), ${mine3.length} S3 cards of mine (kept from ${label3})`);
 }
