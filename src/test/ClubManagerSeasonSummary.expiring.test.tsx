@@ -8,6 +8,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { useState } from 'react';
 import ClubManagerSeasonSummary from '@/components/club-manager/ClubManagerSeasonSummary';
+import { ContractsCard } from '@/components/club-manager/ContractsCard';
 import { expiringDeals, expiringPlayers, finishSeason, money, renewalTerms, renewContract, renewContractWithClause, startCareer, startNextSeason, type CareerState, type CMPlayer, type SeasonSummary } from '@/lib/clubManager';
 import { expiringDealsLine } from '@/lib/clubManagerHubLines';
 
@@ -167,6 +168,39 @@ describe('Round 1597: no deal ends unseen', () => {
     const walked = startNextSeason(c0);
     expect(walked.squad.some(p => p.name === lentMan.name)).toBe(false);
     expect((walked.freeAgents ?? []).some(f => f.name === lentMan.name)).toBe(true);
+  }, 120000);
+
+  /* Closing check fix: the hub line's button opens the contracts desk, so the man it names "(on loan)" is on the desk
+     too, with both renewals, and the desk reads the renewal back off the deal where he is. */
+  it('the contracts desk lists a final year man out on loan, with both renewals', () => {
+    const { state } = finishSeason(startCareer('OB'));
+    const squad = state.squad.map(p => ({ ...p, contractYears: 3 }));
+    const best = squad.filter(p => !p.onLoan && p.position !== 'GK').sort((a, b) => b.rating - a.rating)[0];
+    const lentMan = { ...best, age: 25, isYouth: false, contractYears: 1 };
+    const c0: CareerState = { ...state, budget: 999, squad: squad.filter(p => p.id !== lentMan.id),
+      loanedOut: [{ player: lentMan, club: 'Loan Club Test', fee: 1, season: state.season }] };
+    const onRenew = vi.fn(), onRenewWithClause = vi.fn();
+    const view = render(<ContractsCard career={c0} onRenew={onRenew} onRenewWithClause={onRenewWithClause} />);
+    const deskRow = view.container.querySelector(`[data-cm-final-year="${lentMan.id}"]`) as HTMLElement;
+    expect(deskRow).not.toBeNull();
+    expect(deskRow.getAttribute('data-cm-deal-loan')).toBe('Loan Club Test');
+    expect(deskRow.textContent).toContain('on loan at Loan Club Test');
+    const [plain, clause] = [...deskRow.querySelectorAll('button')];
+    expect(plain.disabled).toBe(false);
+    expect(clause.disabled).toBe(false);
+    fireEvent.click(plain);
+    expect(onRenew).toHaveBeenCalledWith(lentMan.id);
+    fireEvent.click(clause);
+    expect(onRenewWithClause).toHaveBeenCalledWith(lentMan.id);
+    /* A man at home is not labelled as lent, and with nobody out on loan the desk's list is expiringPlayers. */
+    const three = squad.filter(p => !p.onLoan).sort((a, b) => b.rating - a.rating).slice(0, 3).map(p => p.id);
+    const home: CareerState = { ...state, budget: 999, loanedOut: [], squad: squad.map(p => (three.includes(p.id) ? { ...p, contractYears: 1 } : p)) };
+    expect(expiringDeals(home).map(d => d.player)).toEqual(expiringPlayers(home));
+    cleanup();
+    const view2 = render(<ContractsCard career={home} onRenew={onRenew} onRenewWithClause={onRenewWithClause} />);
+    const listed = [...view2.container.querySelectorAll('[data-cm-final-year]')];
+    expect(listed.map(e => e.getAttribute('data-cm-final-year'))).toEqual(expiringPlayers(home).map(p => p.id));
+    expect(listed.every(e => !e.hasAttribute('data-cm-deal-loan') && !(e.textContent ?? '').includes('on loan at'))).toBe(true);
   }, 120000);
 
   it('the ? opens the rules with a worked example off the engine\'s numbers, and no dash anywhere', () => {

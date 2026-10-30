@@ -6,6 +6,7 @@ import { ratingTint, MadeUpTag, isRealPlayer } from '@/components/club-manager/S
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import { DeskCueLine, useDeskCue } from '@/components/club-manager/deskCue';
 import type { DeskCueRead } from '@/components/club-manager/deskCue';
+import { expiringDeals } from '@/lib/clubManager';
 
 /* Round 619 review: what the button says when the engine would refuse, so a
    disabled button always says why. Keyed on the engine's own reason codes, so
@@ -63,6 +64,10 @@ interface ContractsCardProps {
   onSignFreeAgent?: (name: string) => void;
 }
 
+/* Round 1597 fix: where a man's deal is, in the squad or out on loan from me (the renewals write it there). */
+const dealOf = (s: CareerState, id: string): CMPlayer | undefined =>
+  s.squad.find(x => x.id === id) ?? (s.loanedOut ?? []).find(l => l.player.id === id)?.player;
+
 /**
  * Round 105: the wage bill and everyone whose deal is running out.
  *
@@ -102,11 +107,11 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
      that does not match (a refusal, a save that moved some other way) gives
      null, and null says nothing. */
   const renewRead = (id: string, next: CareerState | null): DeskCueRead<CareerState> | null => {
-    const before = career.squad.find(x => x.id === id);
-    const want = next?.squad.find(x => x.id === id);
+    const before = dealOf(career, id);
+    const want = next && dealOf(next, id);
     if (!next || !before || !want) return null;
     return after => {
-      const got = after.squad.find(x => x.id === id);
+      const got = dealOf(after, id);
       if (!got || got.contractYears !== want.contractYears || got.wage !== want.wage
         || (got.releaseClause ?? 0) !== (want.releaseClause ?? 0) || after.budget !== next.budget) return null;
       const clause = (got.releaseClause ?? 0) > 0 ? `exit clause ${money(got.releaseClause as number)}`
@@ -144,7 +149,12 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
   const cap = career.wageCap ?? wageCapFrom(bill);
   const pct = Math.round((bill / Math.max(1, cap)) * 100);
   const over = bill > cap;
-  const expiring = expiringPlayers(career);
+  /* Round 1597 fix: a man out on loan from me in his last year is listed too (expiringDeals), so the man the hub
+     line names "(on loan)" is here when its button opens the desk. With nobody out on loan this is expiringPlayers,
+     in the same order. */
+  const deals = expiringDeals(career);
+  const expiring = deals.map(d => d.player);
+  const loanClub = new Map(deals.filter(d => d.loanClub).map(d => [d.player.id, d.loanClub as string]));
   /* Round 619: who the Let somebody go list offers. Round 1325: the desk's
      note shows when a list that prints a wage and years holds a real man. */
   const releasable = career.squad.filter(p => !p.onLoan && !p.isYouth && p.age >= 20);
@@ -177,14 +187,14 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
     const affordable = terms.fee <= career.budget;
     const clauseAffordable = withClause.fee <= career.budget;
     return (
-      <div key={p.id} data-cm-final-year={p.id} className="py-1.5 border-b border-border/30 last:border-0">
+      <div key={p.id} data-cm-final-year={p.id} data-cm-deal-loan={loanClub.get(p.id)} className="py-1.5 border-b border-border/30 last:border-0">
         <div className="flex items-center gap-2">
           <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.position}</span>
           <div className="flex-1 min-w-0">
             <div className="text-xs text-foreground truncate" title={p.name}>{p.name}</div>
             {/* Round 1325: a real man's wage and years are this game's, and the line says so. */}
             <div className="text-xs text-muted-foreground break-words">
-              {p.age}y · {isRealPlayer(p) && <><span data-cm-deal-label>this game's deal</span>: </>}{p.wage ?? 0}k a week, final year{(p.releaseClause ?? 0) > 0 ? ` · clause ${money(p.releaseClause as number)}` : ''}
+              {p.age}y · {isRealPlayer(p) && <><span data-cm-deal-label>this game's deal</span>: </>}{p.wage ?? 0}k a week, final year{(p.releaseClause ?? 0) > 0 ? ` · clause ${money(p.releaseClause as number)}` : ''}{loanClub.has(p.id) ? ` · on loan at ${loanClub.get(p.id)}` : ''}
             </div>
           </div>
           <span className={cn('text-sm font-bold font-display', ratingTint(p.rating))}>{p.rating}</span>
