@@ -1,0 +1,37 @@
+simCmPlayerCard: 6 careers of 3 seasons, engines: candidate (control nocap), off; PAST_KEPT 10
+cards   7861 checks: my men at 160 points, 3508 rival book rows at season ends, on the first seed of every club; notes seen {"thisclub":3499,"leftclub":9,"thin":917}
+stream  862 of 862 faces equal to the off engine (every entry, season end and summer, with the draw count)
+stream  base arm NOT RUN: set CARDS_BASE to a worktree of the base commit
+archive 829 checks; 377 rows written and checked, 3 of them for a man out on loan at the season end, the most rows one man held 3
+cards   the namesake case at Coventry City: each of two men of one name reads his own row
+  FAIL cap: Everton renewing, 15 seasons, season 11: p-jarrad-branthwaite holds 11 rows, over 10
+  FAIL cap: Everton renewing, 15 seasons, season 11: p-james-garner holds 11 rows, over 10
+  FAIL cap: Everton renewing, 15 seasons, season 11: p-brennan-johnson holds 11 rows, over 10
+  FAIL cap: Everton renewing, 15 seasons, season 11: p-hayden-hackney holds 11 rows, over 10
+  FAIL cap: Everton renewing, 15 seasons, season 11: p-thierno-barry holds 11 rows, over 10
+  FAIL cap: Everton renewing, 15 seasons, season 11: p-tyler-dibling holds 11 rows, over 10
+  FAIL cap: Everton renewing, 15 seasons, season 11: p-tyrique-george holds 11 rows, over 10
+  FAIL cap: Everton renewing, 15 seasons, season 11: p-jake-o-brien holds 11 rows, over 10
+  FAIL cap: Everton renewing, 15 seasons, season 11: p-merlin-rohl holds 11 rows, over 10
+  FAIL cap: Everton renewing, 15 seasons, season 11: p-harrison-armstrong holds 11 rows, over 10
+  FAIL cap: Everton renewing, 15 seasons, season 12: youth-muwv75s0-129-112 holds 11 rows, over 10
+cap     Everton renewing, 15 seasons: 15 seasons, the most rows one man held 11
+size    candidate bytes a season: 162809 176313 187579 187347 192154 227014 202728 203788 206474 206462 207133 207076 211580 209878 212072
+size    archive bytes a season:   836 1219 1584 1941 2193 2543 2871 2999 3141 3308 3489 3729 3619 3321 3602
+size    season 15: 212072 bytes, of which the archive 3602; slope over seasons 4 to 15 1242 bytes a season (printed for the lead, not gated here)
+  FAIL cap: a constructed squad archived 12 times holds 11 rows a man, not 10
+oldsave the committed save of Round 1052 (Sevilla): six entries on, book 34 (late round index), 146 rival rows held, kept from no line
+oldsave the committed save of Round 1052 (Sevilla): loaded clean, season 1 played out, pastFrom 1, 20 men with a row
+oldsave the committed second tier save (Valencia): six entries on, book 34 (late round index), 136 rival rows held, kept from no line
+oldsave the committed second tier save (Valencia): loaded clean, season 1 played out, pastFrom 1, 17 men with a row
+oldsave a save parked on its season 1 review: nothing on load or at the summer, pastFrom 2 after season 2
+dailies 38 states of 4 Hot Seat days and 2 Deadline Day runs looked at
+markup  12 of 12 renders (Squad, Stats, a leaders board, a club page, on 3 saves) with no provider free of any card link (base arm NOT RUN: set CARDS_BASE)
+  cards    8189 checks, 0 failed
+  archive  829 checks, 0 failed
+  stream   6 checks, 0 failed
+  cap      332 checks, 47 failed
+  oldsave  12 checks, 0 failed
+  dailies  38 checks, 0 failed
+  markup   12 checks, 0 failed
+simCmPlayerCard: control nocap FIRED, 47 failures in section cap (47 in all) (58s)
