@@ -33,6 +33,13 @@
  *   exit     the world exit reads the rating (section 2: survival)
  *   ceiling  the day one ceiling roll reads the rating (section 2: ceilings)
  *   nostamp  the load reads age whatever the stamp says (section 1: arm A moves)
+ *   pointsfirst  the past seasons add the points under the stretch, Round 1102's order (section 4)
+ *   noeraread    the past seasons do not read age (section 4)
+ *
+ * SECTION 4 (Proposal 4): every past season is read at load the same way, the stretch first (the level), then the
+ * points on the season's own top: every row's level is the stretch of its file rating and its shown rating the read
+ * (scripts/lib/cmEraRead.mjs), nobody past the top, each top the stretch of the season's best man, the rows changed
+ * per season and Round 1214's table rows as its notes give them.
  *
  * MEASURED (runner, see docs/audits/ROUND-1600-NOTES.md): the counts printed per section are the numbers.
  */
@@ -45,6 +52,7 @@ import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { stampedSquads, agedSquads, unflippedSquads, unstampedLeague, isStamped } from './lib/cmSquadAges.mjs';
+import { eraShown } from './lib/cmEraRead.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CM_LEVEL_READS_CONTROL || '';
@@ -66,6 +74,10 @@ const CONTROLS = {
   exit: ['src/lib/clubManagerEras.ts', 'worldExitChance(age, futureRead(pl), pl.p)', 'worldExitChance(age, pl.r, pl.p)'],
   ceiling: ['src/lib/clubManager.ts', 'p.potential = rollPotential(ceilingBase(p), p.age);', 'p.potential = rollPotential(p.rating, p.age);'],
   nostamp: ['src/data/clubManagerWorldRosters.ts', '  if (curve !== CM_AGE_CURVE) return rosters;\n', ''],
+  /* Round 1214's mutation: the points under the stretch, as Round 1102 had them (2010 Messi 95, not 97). */
+  pointsfirst: ['src/lib/clubManagerEras.ts', '      const shown = readInWorld(b.r, b.a, world).rating;',
+    '      const shown = eraUpliftRating(eraId, readInWorld(b.r, b.a, { ageShift: ERA_RATING_AGE_SHIFT }).rating);'],
+  noeraread: ['src/lib/clubManagerEras.ts', 'const PAST_SEASONS_READ_AGE = true;', 'const PAST_SEASONS_READ_AGE = false;'],
 };
 if (CONTROL) {
   const c = CONTROLS[CONTROL];
@@ -239,6 +251,49 @@ for (const [club, name, want] of [['Inter Miami', 'Lionel Messi', 86], ['Al-Nass
   const a = who(A, club, name), b = who(B2, club, name);
   console.log(`   ${name} (${club}): curve 1 ${a?.r ?? '-'} at ${a?.a ?? '-'}, flipped ${b?.r ?? '-'} at ${b?.a ?? '-'} on level ${b ? (b.lv ?? b.r) : '-'}`);
   check(b?.r === want && (b?.lv ?? b?.r) === a?.r, `arm B2: ${name} shows ${b?.r} on level ${b?.lv ?? b?.r}, the table says ${want} on ${a?.r}`);
+}
+
+/* ---------- section 4: every past season read the same way (Proposal 4) ---------- */
+section = 4;
+console.log('4. the past seasons, read at load: the stretch (the level), then the points on the season\'s top');
+{
+  const { eras } = B2;
+  /* Round 1214's counts of the rows the read changes in each season, and its 2005 to 2020 table rows (the notes'
+     table, two other people's arithmetic on the same files). */
+  const CHANGED = { era2005: 829, era2010: 890, era2015: 738, era2020: 862 };
+  const TABLE = [
+    ['era2005', 'Barcelona', 'Ronaldinho', 96], ['era2005', 'Arsenal', 'Thierry Henry', 96], ['era2005', 'Barcelona', 'Lionel Messi', 67],
+    ['era2005', 'Manchester United', 'Cristiano Ronaldo', 84], ['era2010', 'Barcelona', 'Lionel Messi', 97], ['era2010', 'Real Madrid', 'Cristiano Ronaldo', 97],
+    ['era2010', 'Barcelona', 'Xavi', 95], ['era2010', 'Tottenham', 'Luka Modrić', 83], ['era2015', 'Real Madrid', 'Cristiano Ronaldo', 98],
+    ['era2015', 'Barcelona', 'Lionel Messi', 98], ['era2015', 'Barcelona', 'Neymar', 95], ['era2015', 'Real Madrid', 'Luka Modrić', 92],
+    ['era2020', 'Barcelona', 'Lionel Messi', 94], ['era2020', 'Juventus', 'Cristiano Ronaldo', 92], ['era2020', 'Real Madrid', 'Luka Modrić', 83],
+  ];
+  for (const era of Object.keys(CHANGED)) {
+    const raw = eras.eraRostersRaw(era), shown = eras.eraRosters(era);
+    const rawTop = Math.max(...Object.values(raw).flat().map(b => b.r));
+    let rows = 0, changed = 0, offLevel = 0, offRead = 0, over = 0;
+    for (const [club, list] of Object.entries(raw)) {
+      list.forEach((b, i) => {
+        const s = shown[club][i];
+        rows += 1;
+        if ((s.lv ?? s.r) !== eras.eraUpliftRating(era, b.r)) offLevel += 1;
+        if (s.r !== eraShown(eras, era, b)) offRead += 1;
+        if (s.r !== (s.lv ?? s.r)) changed += 1;
+        if (s.r > eras.eraTop(era)) over += 1;
+      });
+    }
+    console.log(`   ${era}: top ${eras.eraTop(era)} (the stretch of the file's best, raw ${rawTop}), ${rows} rows, ${changed} read differently from their level, ${offLevel} levels off the stretch, ${offRead} off the read, ${over} past the top`);
+    check(eras.eraTop(era) === eras.eraUpliftRating(era, rawTop), `${era}: its top ${eras.eraTop(era)} is not the stretch of its best man (${rawTop})`);
+    check(offLevel === 0 && offRead === 0 && over === 0, `${era}: ${offLevel} levels off the stretch, ${offRead} ratings off the read, ${over} past the top`);
+    check(changed === CHANGED[era], `${era}: the read changes ${changed} rows, Round 1214 counted ${CHANGED[era]}`);
+  }
+  let wrong = 0;
+  for (const [era, club, name, want] of TABLE) {
+    const s = (eras.eraRosters(era)[club] ?? []).find(b => b.n === name);
+    if (s?.r !== want) { wrong += 1; console.log(`    ${era} ${name} (${club}) shows ${s?.r}, the table says ${want}`); }
+  }
+  console.log(`   the table: ${TABLE.length - wrong} of ${TABLE.length} rows as Round 1214 worked them out`);
+  check(wrong === 0, `${wrong} past season rows of the table are off`);
 }
 
 const total = Object.values(failures).reduce((s, n) => s + n, 0);

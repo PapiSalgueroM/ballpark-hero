@@ -658,6 +658,14 @@ export function historicEraIds(): string[] {
  * below the pivot stay exactly as baked. Monotone, so no two players ever
  * swap order, and applied at load, so the AUTO-GENERATED data file stays
  * byte for byte the real bake.
+ *
+ * Round 1600: what this stretch gives is a man's LEVEL. Since then the rating
+ * a past season SHOWS is that level plus Round 1214's points for his age, on
+ * the season's own top (eraTop below; eraRosters applies both, in that order),
+ * so the order and "exactly as baked" above are true of the level, and a man
+ * of 30 or more shows a few points over it, a boy under 24 a few under. The
+ * comments on each gain below speak of levels: 2005-06 Messi is level 73 and
+ * shows 67 at 18, the rule applied to every 18 year old.
  */
 const ERA_RATING_UPLIFT: Record<string, { pivot: number; gain: number }> = {
   era2010: { pivot: 80, gain: 0.7 },
@@ -718,7 +726,7 @@ export function eraTop(eraId: string | undefined): number {
 
 /* Round 1600: whether the past seasons show their men through the age read (Proposal 4): read at load in
    eraRosters, the stretch first and then the points, on each season's own top. */
-const PAST_SEASONS_READ_AGE = false;
+const PAST_SEASONS_READ_AGE = true;
 
 /**
  * Round 640: the money the bakes put on a bake rating, in pounds millions,

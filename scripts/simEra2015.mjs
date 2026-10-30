@@ -64,6 +64,8 @@
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+// Round 1600: a past season's squad is held to the read THROUGH both steps (scripts/lib/cmEraRead.mjs).
+import { eraShown, eraLevel } from './lib/cmEraRead.mjs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -172,9 +174,9 @@ console.log('1) A fresh 2015 save is the real 2015 squad, untouched');
   for (const p of s.squad.filter(p => !p.isYouth)) {
     const b = bake.get(p.name);
     if (!b) { mismatches += 1; fail(`${p.name} is in the 2015 Barcelona squad but not in the bake`); continue; }
-    if (b.a !== p.age || eraUpliftRating('era2015', b.r) !== p.rating) {
+    if (b.a !== p.age || eraShown(ER, 'era2015', b) !== p.rating) {
       mismatches += 1;
-      fail(`${p.name}: bake says age ${b.a} rating ${b.r} (uplift ${eraUpliftRating('era2015', b.r)}), squad says ${p.age}/${p.rating}`);
+      fail(`${p.name}: bake says age ${b.a} rating ${b.r} (read ${eraShown(ER, 'era2015', b)}), squad says ${p.age}/${p.rating}`);
     }
   }
   const gen = s.squad.filter(p => p.generated).length;
@@ -212,7 +214,7 @@ console.log('1) A fresh 2015 save is the real 2015 squad, untouched');
     for (const p of save.squad.filter(p => !p.isYouth && !p.generated)) {
       const b = rows.get(p.name);
       if (!b) { off += 1; fail(`${p.name} is in the 2015 ${club} squad but not in the bake`); continue; }
-      if (b.a !== p.age || eraUpliftRating('era2015', b.r) !== p.rating) {
+      if (b.a !== p.age || eraShown(ER, 'era2015', b) !== p.rating) {
         off += 1;
         fail(`${club}'s ${p.name}: bake says age ${b.a} rating ${b.r}, squad says ${p.age}/${p.rating}`);
       }
@@ -630,12 +632,12 @@ console.log('6) Legends rate like legends; pre-title Leicester stay honest');
   const liftedLei = lifted['Leicester City'];
   for (const p of liftedLei) {
     const raw = rawLei.get(p.n);
-    if (raw !== undefined && raw <= 80 && p.r !== raw) fail(`${p.n} lifted from ${raw} to ${p.r}, pre-title Leicester must stay honest`);
+    if (raw !== undefined && raw <= 80 && eraLevel(p) !== raw) fail(`${p.n} lifted from ${raw} to ${p.r}, pre-title Leicester must stay honest`);
   }
   // Monotone, values untouched, capped, sealed to its era.
   for (const [club, raw] of Object.entries(ERA2015_ROSTERS)) {
     const before = [...raw].sort((a, b) => b.r - a.r).map(p => p.n).join('|');
-    const after = [...lifted[club]].sort((a, b) => b.r - a.r).map(p => p.n).join('|');
+    const after = [...lifted[club]].sort((a, b) => eraLevel(b) - eraLevel(a)).map(p => p.n).join('|');
     if (before !== after) fail(`${club}: the uplift reordered the squad`);
     for (let i = 0; i < raw.length; i++) {
       if (lifted[club][i].v !== raw[i].v) fail(`${raw[i].n}: the uplift touched his VALUE`);
