@@ -1,0 +1,43 @@
+PROBE before summer of season 1 worldYear 2026 list [] squad [{"age":28,"rating":77,"cy":2}] retired false
+PROBE   raw ledger []
+PROBE   ahead ledger []
+PROBE after summer: worldYear 2027 list [] squad [{"age":29,"rating":77,"cy":1}] retired false left []
+PROBE   raw ledger []
+PROBE before summer of season 2 worldYear 2027 list [] squad [{"age":29,"rating":77,"cy":1}] retired false
+PROBE   raw ledger []
+PROBE   ahead ledger []
+PROBE after summer: worldYear 2028 list [{"name":"Ainsley Maitland-Niles","position":"RB","age":30,"rating":77,"value":8.3,"since":3,"reason":"expired","fromMyClub":true}] squad [] retired false left []
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2028,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":30,"rating":77,"pos":"RB"}]
+PROBE before summer of season 3 worldYear 2028 list [{"name":"Ainsley Maitland-Niles","position":"RB","age":30,"rating":77,"value":8.3,"since":3,"reason":"expired","fromMyClub":true}] squad [] retired false
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2028,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":30,"rating":77,"pos":"RB"}]
+PROBE   ahead ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2029,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":31,"rating":77,"pos":"RB"}]
+PROBE after summer: worldYear 2029 list [{"name":"Ainsley Maitland-Niles","position":"RB","age":31,"rating":77,"value":7.1,"since":3,"reason":"expired","fromMyClub":true}] squad [] retired false left []
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2029,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":31,"rating":77,"pos":"RB"}]
+PROBE before summer of season 4 worldYear 2029 list [{"name":"Ainsley Maitland-Niles","position":"RB","age":31,"rating":77,"value":7.1,"since":3,"reason":"expired","fromMyClub":true}] squad [] retired false
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2029,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":31,"rating":77,"pos":"RB"}]
+PROBE   ahead ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2030,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":32,"rating":75,"pos":"RB"}]
+PROBE after summer: worldYear 2030 list [{"name":"Ainsley Maitland-Niles","position":"RB","age":32,"rating":75,"value":4.2,"since":3,"reason":"expired","fromMyClub":true}] squad [] retired false left []
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2030,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":32,"rating":75,"pos":"RB"}]
+PROBE before summer of season 5 worldYear 2030 list [{"name":"Ainsley Maitland-Niles","position":"RB","age":32,"rating":75,"value":4.2,"since":3,"reason":"expired","fromMyClub":true}] squad [] retired false
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2030,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":32,"rating":75,"pos":"RB"}]
+PROBE   ahead ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2031,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":33,"rating":73,"pos":"RB"}]
+PROBE after summer: worldYear 2031 list [{"name":"Ainsley Maitland-Niles","position":"RB","age":33,"rating":73,"value":2.5,"since":3,"reason":"expired","fromMyClub":true}] squad [] retired false left []
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2031,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":33,"rating":73,"pos":"RB"}]
+PROBE before summer of season 6 worldYear 2031 list [{"name":"Ainsley Maitland-Niles","position":"RB","age":33,"rating":73,"value":2.5,"since":3,"reason":"expired","fromMyClub":true}] squad [] retired false
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2031,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":33,"rating":73,"pos":"RB"}]
+PROBE   ahead ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2032,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":34,"rating":71,"pos":"RB"}]
+PROBE after summer: worldYear 2032 list [] squad [{"age":34,"rating":71,"cy":2}] retired false left []
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2032,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":34,"rating":71,"pos":"RB"}]
+PROBE before summer of season 7 worldYear 2032 list [] squad [{"age":34,"rating":71,"cy":2}] retired false
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2032,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":34,"rating":71,"pos":"RB"}]
+PROBE   ahead ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2033,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":35,"rating":66,"pos":"RB"}]
+PROBE after summer: worldYear 2033 list [] squad [{"age":35,"rating":69,"cy":1}] retired false left []
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2033,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":35,"rating":66,"pos":"RB"}]
+PROBE before summer of season 8 worldYear 2033 list [] squad [{"age":35,"rating":69,"cy":1}] retired false
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"released","owner":null,"year":2033,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":35,"rating":66,"pos":"RB"}]
+PROBE   ahead ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"retired","owner":null,"year":2034,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":36,"rating":60,"pos":"RB"}]
+PROBE after summer: worldYear 2034 list [{"name":"Ainsley Maitland-Niles","position":"RB","age":36,"rating":66,"value":0.4,"since":9,"reason":"expired","fromMyClub":true}] squad [] retired false left []
+PROBE   raw ledger [{"key":"[\"now\",\"Everton\",\"Ainsley Maitland-Niles\",\"RB\",1998,0]","status":"retired","owner":null,"year":2034,"oClub":"Everton","oBirth":1998,"oPos":"RB","age":36,"rating":60,"pos":"RB"}]
+  FAIL section 6: Everton none, season 9: Ainsley Maitland-Niles is on the list and his ledger record says retired
+  Everton now none: 66 men left, lost 0, twice 0, 13 retired off the list; at season 9 35 on the list besides the journeymen, median age 24
+PROBE DONE
