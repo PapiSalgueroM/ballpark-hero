@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: git worktree add /tmp/mainwt c0c66e087 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/mainwt/node_modules && (cd /tmp/mainwt && node_modules/.bin/vite build --logLevel error) && MAIN_DIR=/tmp/mainwt/dist node .rc/x/walk1606.mjs
