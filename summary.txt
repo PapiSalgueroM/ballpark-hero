@@ -1,0 +1,12 @@
+noRival exit=0 20s | No rival product names found. 0 findings.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+anchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+shootout exit=0 38s | simCmShootoutOrder: all sections passed
+shootoutResults exit=0 7s | ALL SHOOTOUT RESULTS CHECKS PASSED
+sr-keepcurve exit=2 2s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+tsc exit=0 89s | 
+so-keepcurve exit=1 31s | simCmShootoutOrder: 4 FAILURE(S)
+levelReads exit=0 2s | simCmLevelReads: 32 checks, 0 failures
+dailyView exit=0 28s | simCmDailyView: 5 checks, 0 failures
+subs-pressedge exit=1 35s | control pressedge FIRED: 1 of 4 checks red
+subs exit=0 56s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
