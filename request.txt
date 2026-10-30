@@ -1,0 +1,6 @@
+shootout-base: R=$PWD; git worktree add /tmp/sb 14a9af704 >/dev/null 2>&1 && cd /tmp/sb && ln -s $R/node_modules node_modules && node scripts/simCmShootoutOrder.mjs
+var-base: R=$PWD; git worktree add /tmp/vb 14a9af704 >/dev/null 2>&1 && cd /tmp/vb && ln -s $R/node_modules node_modules && node scripts/simCmVar.mjs
+shootout-prev: R=$PWD; git worktree add /tmp/sp cd95e82f4 >/dev/null 2>&1 && cd /tmp/sp && ln -s $R/node_modules node_modules && node scripts/simCmShootoutOrder.mjs
+var-prev: R=$PWD; git worktree add /tmp/vp cd95e82f4 >/dev/null 2>&1 && cd /tmp/vp && ln -s $R/node_modules node_modules && node scripts/simCmVar.mjs
+shootout-main: R=$PWD; git worktree add /tmp/sm 158969218 >/dev/null 2>&1 && cd /tmp/sm && ln -s $R/node_modules node_modules && node scripts/simCmShootoutOrder.mjs
+var-main: R=$PWD; git worktree add /tmp/vm 158969218 >/dev/null 2>&1 && cd /tmp/vm && ln -s $R/node_modules node_modules && node scripts/simCmVar.mjs

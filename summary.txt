@@ -1,0 +1,6 @@
+var-base exit=1 2s | Node.js v24.22.1
+shootout-prev exit=1 4s | section 1's base (seed 782002) drew Espanyol, whose roster of 14 (0 keepers) cannot name an eleven, so their order would be read off nobody; pick a base seed whose first 
+var-prev exit=1 2s | Node.js v24.22.1
+var-main exit=1 2s | Node.js v24.22.1
+shootout-base exit=0 32s | simCmShootoutOrder: all sections passed
+shootout-main exit=0 30s | simCmShootoutOrder: all sections passed
