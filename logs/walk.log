@@ -1,0 +1,188 @@
+Liverpool now: none
+Manchester City now: deciding leg at week 34
+save: Manchester City now week 34, QF second leg
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   through-quick-390: seed try 1: "THROUGH" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 73,778 | 45+2'Added time90+5' | THROUGH | Drew 1-1 on the night | Through 5-1 on aggregate | Manchester City1 - 1Roma | First leg 4-0 away · Agg 5-1
+ok   through-quick-390: headline tone [text-2xl text-correct]
+ok   through-quick-390: night line inside the card
+ok   through-quick-390: no sideways scroll
+ok   through-quick-390: no overlapping rows in the card
+ok   through-quick-390: no page error
+ok   through-quick-390: the card pulses [cmWinPulse]
+   through-quick-390 hub meters: board=100 BoardSafe ; fans=71 FansSinging
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   out-quick-390: seed try 1: "OUT" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 73,778 | 45+2'Added time90+5' | OUT | Drew 1-1 on the night | Out 1-5 on aggregate | Manchester City1 - 1Roma | First leg 0-4 away · Agg 1-5
+ok   out-quick-390: headline tone [text-2xl text-destructive]
+ok   out-quick-390: night line inside the card
+ok   out-quick-390: no sideways scroll
+ok   out-quick-390: no overlapping rows in the card
+ok   out-quick-390: no page error
+ok   out-quick-390: the card shakes [cmLossShake]
+   out-quick-390 hub meters: board=83 BoardSafe ; fans=60 FansGrumbling
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   pens-quick-390: seed try 4: "THROUGH (PENS)" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 63,137 | 45+4'Added time90+8'AET 120+2' | THROUGH (PENS) | Drew 1-1 on the night | Still level 2-2 on aggregate after extra time. Through 4-2 on penalties | Manchester City1 - 1Roma | First leg 1-1 away · Agg 2-2
+ok   pens-quick-390: headline tone [text-2xl text-correct]
+ok   pens-quick-390: night line inside the card
+ok   pens-quick-390: no sideways scroll
+ok   pens-quick-390: no overlapping rows in the card
+ok   pens-quick-390: no page error
+ok   pens-quick-390: the card pulses [cmWinPulse]
+   pens-quick-390 hub meters: board=100 BoardSafe ; fans=71 FansSinging
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+FAIL pensLost-quick-390: a card for the case [30 tries, last THROUGH / Lost 0-1 on the night]
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   through-quick-390-rm: seed try 1: "THROUGH" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 73,778 | 45+2'Added time90+5' | THROUGH | Drew 1-1 on the night | Through 5-1 on aggregate | Manchester City1 - 1Roma | First leg 4-0 away · Agg 5-1
+ok   through-quick-390-rm: headline tone [text-2xl text-correct]
+ok   through-quick-390-rm: night line inside the card
+ok   through-quick-390-rm: no sideways scroll
+ok   through-quick-390-rm: no overlapping rows in the card
+ok   through-quick-390-rm: no page error
+ok   through-quick-390-rm: reduced motion, the card does not pulse or shake [none]
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   out-quick-390-rm: seed try 1: "OUT" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 73,778 | 45+2'Added time90+5' | OUT | Drew 1-1 on the night | Out 1-5 on aggregate | Manchester City1 - 1Roma | First leg 0-4 away · Agg 1-5
+ok   out-quick-390-rm: headline tone [text-2xl text-destructive]
+ok   out-quick-390-rm: night line inside the card
+ok   out-quick-390-rm: no sideways scroll
+ok   out-quick-390-rm: no overlapping rows in the card
+ok   out-quick-390-rm: no page error
+ok   out-quick-390-rm: reduced motion, the card does not pulse or shake [none]
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   pens-quick-390-rm: seed try 1: "THROUGH (PENS)" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 63,137 | 45+4'Added time90+8'AET 120+2' | THROUGH (PENS) | Drew 1-1 on the night | Still level 2-2 on aggregate after extra time. Through 4-2 on penalties | Manchester City1 - 1Roma | First leg 1-1 away · Agg 2-2
+ok   pens-quick-390-rm: headline tone [text-2xl text-correct]
+ok   pens-quick-390-rm: night line inside the card
+ok   pens-quick-390-rm: no sideways scroll
+ok   pens-quick-390-rm: no overlapping rows in the card
+ok   pens-quick-390-rm: no page error
+ok   pens-quick-390-rm: reduced motion, the card does not pulse or shake [none]
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   through-quick-1280: seed try 1: "THROUGH" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 73,778 | 45+2'Added time90+5' | THROUGH | Drew 1-1 on the night | Through 5-1 on aggregate | Manchester City1 - 1Roma | First leg 4-0 away · Agg 5-1
+ok   through-quick-1280: headline tone [text-2xl text-correct]
+ok   through-quick-1280: night line inside the card
+ok   through-quick-1280: no sideways scroll
+ok   through-quick-1280: no overlapping rows in the card
+ok   through-quick-1280: no page error
+ok   through-quick-1280: the card pulses [cmWinPulse]
+   through-quick-1280 hub meters: board=100 BoardSafe ; fans=71 FansSinging
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   out-quick-1280: seed try 1: "OUT" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 73,778 | 45+2'Added time90+5' | OUT | Drew 1-1 on the night | Out 1-5 on aggregate | Manchester City1 - 1Roma | First leg 0-4 away · Agg 1-5
+ok   out-quick-1280: headline tone [text-2xl text-destructive]
+ok   out-quick-1280: night line inside the card
+ok   out-quick-1280: no sideways scroll
+ok   out-quick-1280: no overlapping rows in the card
+ok   out-quick-1280: no page error
+ok   out-quick-1280: the card shakes [cmLossShake]
+   out-quick-1280 hub meters: board=83 BoardSafe ; fans=60 FansGrumbling
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   pens-quick-1280: seed try 1: "THROUGH (PENS)" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 63,137 | 45+4'Added time90+8'AET 120+2' | THROUGH (PENS) | Drew 1-1 on the night | Still level 2-2 on aggregate after extra time. Through 4-2 on penalties | Manchester City1 - 1Roma | First leg 1-1 away · Agg 2-2
+ok   pens-quick-1280: headline tone [text-2xl text-correct]
+ok   pens-quick-1280: night line inside the card
+ok   pens-quick-1280: no sideways scroll
+ok   pens-quick-1280: no overlapping rows in the card
+ok   pens-quick-1280: no page error
+ok   pens-quick-1280: the card pulses [cmWinPulse]
+   pens-quick-1280 hub meters: board=100 BoardSafe ; fans=71 FansSinging
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+FAIL pensLost-quick-1280: a card for the case [30 tries, last THROUGH / Lost 0-1 on the night]
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   through-quick-1280-rm: seed try 1: "THROUGH" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 73,778 | 45+2'Added time90+5' | THROUGH | Drew 1-1 on the night | Through 5-1 on aggregate | Manchester City1 - 1Roma | First leg 4-0 away · Agg 5-1
+ok   through-quick-1280-rm: headline tone [text-2xl text-correct]
+ok   through-quick-1280-rm: night line inside the card
+ok   through-quick-1280-rm: no sideways scroll
+ok   through-quick-1280-rm: no overlapping rows in the card
+ok   through-quick-1280-rm: no page error
+ok   through-quick-1280-rm: reduced motion, the card does not pulse or shake [none]
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   out-quick-1280-rm: seed try 1: "OUT" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 73,778 | 45+2'Added time90+5' | OUT | Drew 1-1 on the night | Out 1-5 on aggregate | Manchester City1 - 1Roma | First leg 0-4 away · Agg 1-5
+ok   out-quick-1280-rm: headline tone [text-2xl text-destructive]
+ok   out-quick-1280-rm: night line inside the card
+ok   out-quick-1280-rm: no sideways scroll
+ok   out-quick-1280-rm: no overlapping rows in the card
+ok   out-quick-1280-rm: no page error
+ok   out-quick-1280-rm: reduced motion, the card does not pulse or shake [none]
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   through-live-390: seed try 1: "THROUGH" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 65,238 | 45+2'Added time90+7' | THROUGH | Lost 1-2 on the night | Through 5-2 on aggregate | Manchester City1 - 2Roma | First leg 4-0 away · Agg 5-2
+ok   through-live-390: headline tone [text-2xl text-correct]
+ok   through-live-390: night line inside the card
+ok   through-live-390: no sideways scroll
+ok   through-live-390: no overlapping rows in the card
+ok   through-live-390: no page error
+ok   through-live-390: the card pulses [cmWinPulse]
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   out-live-390: seed try 2: "OUT" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 59,338 | 45+5'Added time90+8' | OUT | Won 2-1 on the night | Out 2-5 on aggregate | Manchester City2 - 1Roma | First leg 0-4 away · Agg 2-5
+ok   out-live-390: headline tone [text-2xl text-destructive]
+ok   out-live-390: night line inside the card
+ok   out-live-390: no sideways scroll
+ok   out-live-390: no overlapping rows in the card
+ok   out-live-390: no page error
+ok   out-live-390: the card shakes [cmLossShake]
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+   out-live-1280-rm: seed try 1: "OUT" lines: Champions League · Quarter-final · second leg | 🏟️ Your ground · crowd 59,338 | 45+5'Added time90+8' | OUT | Won 2-1 on the night | Out 2-5 on aggregate | Manchester City2 - 1Roma | First leg 0-4 away · Agg 2-5
+ok   out-live-1280-rm: headline tone [text-2xl text-destructive]
+ok   out-live-1280-rm: night line inside the card
+ok   out-live-1280-rm: no sideways scroll
+ok   out-live-1280-rm: no overlapping rows in the card
+ok   out-live-1280-rm: no page error
+ok   out-live-1280-rm: reduced motion, the card does not pulse or shake [none]
+walk1603 RED: 84 of 86 checks green
