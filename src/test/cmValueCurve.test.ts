@@ -961,7 +961,8 @@ describe('what every 2026 age will stand on (the basis file), man for man agains
        scripts/genCmAgesBasis2026.mjs prints all three. */
     expect(basisCount).toEqual({ born: 427, moved: 3974 });
     /* Round 1600: the squads file ships these August ages now (before it, one over for 4,221 men, the same
-       for 176 and one under for 4). */
+       for 176 and one under for 4). The one input proof (Round 1600's fixer, remote check r1600-rr, line rr3-proof,
+       head 178a1fd8c): with the squads file put back to the base's (14a9af704) the old count replays green. */
     expect(againstShipped).toEqual({ '0': 4401 });
     expect(changed).toBe(2078);
     console.log(`2026 at the flip: ${changed} of 4401 ratings change; by points ${JSON.stringify(swing)}`);
