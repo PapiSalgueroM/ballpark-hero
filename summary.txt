@@ -1,0 +1,12 @@
+prepare exit=0 67s | ordinary-build raw=0
+playClubManagerDecisionDeadline exit=1 2s | playClubManagerDecisionDeadline.mjs raw=1
+playClubManagerDecisionDepth exit=1 2s | playClubManagerDecisionDepth.mjs raw=1
+playClubManagerNewCountries exit=0 58s | playClubManagerNewCountries.mjs raw=0
+playClubManagerSaveLeave exit=1 23s | playClubManagerSaveLeave.mjs raw=1
+playClubManagerSlots exit=0 11s | playClubManagerSlots.mjs raw=0
+playCmBoardVerdict exit=0 80s | playCmBoardVerdict.mjs raw=0
+playCmDataOnDemand exit=0 30s | playCmDataOnDemand.mjs raw=0
+playCmDifficulty exit=0 116s | playCmDifficulty.mjs raw=0
+playCmFinanceDesk exit=0 28s | playCmFinanceDesk.mjs raw=0
+playCmHubLanding exit=1 95s | playCmHubLanding.mjs raw=1
+finish exit=0 7s | 

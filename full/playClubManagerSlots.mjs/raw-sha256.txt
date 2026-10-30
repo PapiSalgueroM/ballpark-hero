@@ -1,0 +1,2 @@
+d9003912b894f63208ce50f103431ffa20348baba1073897a0cf51ae90d93147  /home/runner/work/_temp/rc-out/full/playClubManagerSlots.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playClubManagerSlots.mjs/stderr.log

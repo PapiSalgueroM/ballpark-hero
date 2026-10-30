@@ -1,0 +1,2 @@
+aa288ebd341d5a21717ecbf29f0bfb64ed7f21eac19261fe0bce3b5f7e3c7ca4  /home/runner/work/_temp/rc-out/full/playClubManagerDecisionDepth.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playClubManagerDecisionDepth.mjs/stderr.log

@@ -1,0 +1,2 @@
+f99050f943ee5f66fb0a266599f215b5df4bcb55d510891f4ea4bbfa1f1cbc7e  /home/runner/work/_temp/rc-out/full/playClubManagerNewCountries.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playClubManagerNewCountries.mjs/stderr.log

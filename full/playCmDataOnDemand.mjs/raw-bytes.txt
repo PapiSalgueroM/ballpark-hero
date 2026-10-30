@@ -1,0 +1,3 @@
+2958 /home/runner/work/_temp/rc-out/full/playCmDataOnDemand.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playCmDataOnDemand.mjs/stderr.log
+2958 total

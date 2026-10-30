@@ -1,0 +1,3 @@
+1266 /home/runner/work/_temp/rc-out/full/playClubManagerNewCountries.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playClubManagerNewCountries.mjs/stderr.log
+1266 total

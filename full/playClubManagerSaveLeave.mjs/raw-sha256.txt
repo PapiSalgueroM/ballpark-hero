@@ -1,0 +1,2 @@
+c3704c9ef36b2f3605dbb3baad6a78b904efae8f72751a2766cdd3b5ad2466d9  /home/runner/work/_temp/rc-out/full/playClubManagerSaveLeave.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playClubManagerSaveLeave.mjs/stderr.log

@@ -1,0 +1,3 @@
+800 /home/runner/work/_temp/rc-out/full/playClubManagerSlots.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playClubManagerSlots.mjs/stderr.log
+800 total

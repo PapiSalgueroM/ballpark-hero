@@ -1,0 +1,2 @@
+1955f131d25cb94df3c460510703b4e074dcd0cb153d35bd2cf176fc951ccce4  /home/runner/work/_temp/rc-out/full/playCmFinanceDesk.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmFinanceDesk.mjs/stderr.log

@@ -1,0 +1,2 @@
+958dca6189532ab4a403fbba731b17b41309695132e4873285d1639eaeae19aa  /home/runner/work/_temp/rc-out/full/playCmBoardVerdict.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmBoardVerdict.mjs/stderr.log

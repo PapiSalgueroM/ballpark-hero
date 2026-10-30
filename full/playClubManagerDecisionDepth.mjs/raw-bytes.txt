@@ -1,0 +1,3 @@
+772 /home/runner/work/_temp/rc-out/full/playClubManagerDecisionDepth.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playClubManagerDecisionDepth.mjs/stderr.log
+772 total

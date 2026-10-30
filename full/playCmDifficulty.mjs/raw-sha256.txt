@@ -1,0 +1,2 @@
+956b888e2329a7b0c096214e523a9eb6bc31ea8b56f2876f5e46142fd313dc4a  /home/runner/work/_temp/rc-out/full/playCmDifficulty.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCmDifficulty.mjs/stderr.log
