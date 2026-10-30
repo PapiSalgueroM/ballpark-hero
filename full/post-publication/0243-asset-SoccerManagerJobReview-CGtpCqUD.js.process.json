@@ -1,0 +1,31 @@
+{
+  "label": "asset-SoccerManagerJobReview-CGtpCqUD.js",
+  "url": "https://douknowball.com/assets/SoccerManagerJobReview-CGtpCqUD.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:58.260Z",
+  "end": "2026-10-30T21:53:58.826Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0243-asset-SoccerManagerJobReview-CGtpCqUD.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0243-asset-SoccerManagerJobReview-CGtpCqUD.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SoccerManagerJobReview-CGtpCqUD.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0243-asset-SoccerManagerJobReview-CGtpCqUD.js.body",
+  "headerFile": "0243-asset-SoccerManagerJobReview-CGtpCqUD.js.headers",
+  "bytes": 4002,
+  "sha256": "89be470aa45f25a1f9e75f850ff31ace2ae9c687d188bf52e9165b1f39153e43",
+  "headersSHA256": "17c261f2fb1273791f5152421aa8326953f72a65f0ebdd26ceb9858ce360e162"
+}

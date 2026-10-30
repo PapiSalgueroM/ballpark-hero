@@ -1,0 +1,31 @@
+{
+  "label": "asset-GuessTennisPlayer-BJV-i7my.css",
+  "url": "https://douknowball.com/assets/GuessTennisPlayer-BJV-i7my.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:56.941Z",
+  "end": "2026-10-30T21:52:57.151Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0019-asset-GuessTennisPlayer-BJV-i7my.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0019-asset-GuessTennisPlayer-BJV-i7my.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/GuessTennisPlayer-BJV-i7my.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0019-asset-GuessTennisPlayer-BJV-i7my.css.body",
+  "headerFile": "0019-asset-GuessTennisPlayer-BJV-i7my.css.headers",
+  "bytes": 766,
+  "sha256": "ba10e0a08371c7e8947c9842c1710a74154952e579a437439f9075564a8a3340",
+  "headersSHA256": "4590232a4647373343543bb7c73d3ffa82791525008b51f8c514ef3cacae45cc"
+}

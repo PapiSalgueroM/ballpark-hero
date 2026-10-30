@@ -1,0 +1,31 @@
+{
+  "label": "asset-ClubManagerSeasonSummary-bnTZqPPZ.js",
+  "url": "https://douknowball.com/assets/ClubManagerSeasonSummary-bnTZqPPZ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:33.633Z",
+  "end": "2026-10-30T21:53:33.850Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0130-asset-ClubManagerSeasonSummary-bnTZqPPZ.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0130-asset-ClubManagerSeasonSummary-bnTZqPPZ.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/ClubManagerSeasonSummary-bnTZqPPZ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0130-asset-ClubManagerSeasonSummary-bnTZqPPZ.js.body",
+  "headerFile": "0130-asset-ClubManagerSeasonSummary-bnTZqPPZ.js.headers",
+  "bytes": 16967,
+  "sha256": "da73a72614f78b0f4c83e73a9ef749cfaba0dd4bfc2b1e00273c5c459ffc0e85",
+  "headersSHA256": "7bc07e5609a80d116c17a8c96c2f5df820766d468709c5de9475c59c0e557f0b"
+}

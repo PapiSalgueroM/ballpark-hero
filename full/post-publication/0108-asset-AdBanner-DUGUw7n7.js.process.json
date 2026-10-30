@@ -1,0 +1,31 @@
+{
+  "label": "asset-AdBanner-DUGUw7n7.js",
+  "url": "https://douknowball.com/assets/AdBanner-DUGUw7n7.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:29.282Z",
+  "end": "2026-10-30T21:53:29.421Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0108-asset-AdBanner-DUGUw7n7.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0108-asset-AdBanner-DUGUw7n7.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/AdBanner-DUGUw7n7.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0108-asset-AdBanner-DUGUw7n7.js.body",
+  "headerFile": "0108-asset-AdBanner-DUGUw7n7.js.headers",
+  "bytes": 2095,
+  "sha256": "f748e62af51a8520e4113c13325d5dadee675c1fd7b3350522e16c1f3ff5912a",
+  "headersSHA256": "931ff55968b3ba541be8aacd703d82435718386849603597aa1934b4d1cada8d"
+}

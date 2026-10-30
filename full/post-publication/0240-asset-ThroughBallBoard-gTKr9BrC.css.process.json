@@ -1,0 +1,31 @@
+{
+  "label": "asset-ThroughBallBoard-gTKr9BrC.css",
+  "url": "https://douknowball.com/assets/ThroughBallBoard-gTKr9BrC.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:56.468Z",
+  "end": "2026-10-30T21:53:56.632Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0240-asset-ThroughBallBoard-gTKr9BrC.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0240-asset-ThroughBallBoard-gTKr9BrC.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/ThroughBallBoard-gTKr9BrC.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0240-asset-ThroughBallBoard-gTKr9BrC.css.body",
+  "headerFile": "0240-asset-ThroughBallBoard-gTKr9BrC.css.headers",
+  "bytes": 670,
+  "sha256": "8771f5fbe5a99fa1cc5d87ec919b94dcc118db71448f79108e32b9479a79bfc8",
+  "headersSHA256": "314420b8c056d7d3ce99f7df4f5016a87171e2e8ff1f94a701a3d19736e415ae"
+}

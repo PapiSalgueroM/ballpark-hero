@@ -1,0 +1,3 @@
+8109 /home/runner/work/_temp/rc-out/full/post-publication-desktop-report/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/post-publication-desktop-report/stderr.log
+8109 total

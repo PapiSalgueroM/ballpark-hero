@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerTactics-BRo_wcPX.js",
+  "url": "https://douknowball.com/assets/clubManagerTactics-BRo_wcPX.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:06.818Z",
+  "end": "2026-10-30T21:53:07.043Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0041-asset-clubManagerTactics-BRo_wcPX.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0041-asset-clubManagerTactics-BRo_wcPX.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerTactics-BRo_wcPX.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0041-asset-clubManagerTactics-BRo_wcPX.js.body",
+  "headerFile": "0041-asset-clubManagerTactics-BRo_wcPX.js.headers",
+  "bytes": 11902,
+  "sha256": "22a5968288d9d3bbc228ec3a09bf5aa63b052783c623ae103bf6f3c83edac8cb",
+  "headersSHA256": "3561a5065e7bfdac9633bd6f28e5830c9c2895e1e1200fa6d0921dda615df2e6"
+}

@@ -1,0 +1,31 @@
+{
+  "label": "asset-SoccerOfferReview-DWl0YFn-.js",
+  "url": "https://douknowball.com/assets/SoccerOfferReview-DWl0YFn-.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:54.001Z",
+  "end": "2026-10-30T21:53:54.137Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0225-asset-SoccerOfferReview-DWl0YFn-.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0225-asset-SoccerOfferReview-DWl0YFn-.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SoccerOfferReview-DWl0YFn-.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0225-asset-SoccerOfferReview-DWl0YFn-.js.body",
+  "headerFile": "0225-asset-SoccerOfferReview-DWl0YFn-.js.headers",
+  "bytes": 7397,
+  "sha256": "e9b332914967b92c59276c16dcf25368e23aef0a345a0dde27ee0f9b997a34ec",
+  "headersSHA256": "663f96966bae6641a641c46c672b5900d9d07d94636853aa098594c217d5183e"
+}

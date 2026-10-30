@@ -1,0 +1,31 @@
+{
+  "label": "asset-DailyLegendOverlay-B_sKKL9t.js",
+  "url": "https://douknowball.com/assets/DailyLegendOverlay-B_sKKL9t.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:22.441Z",
+  "end": "2026-10-30T21:53:23.134Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0085-asset-DailyLegendOverlay-B_sKKL9t.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0085-asset-DailyLegendOverlay-B_sKKL9t.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/DailyLegendOverlay-B_sKKL9t.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0085-asset-DailyLegendOverlay-B_sKKL9t.js.body",
+  "headerFile": "0085-asset-DailyLegendOverlay-B_sKKL9t.js.headers",
+  "bytes": 2402,
+  "sha256": "45cec97fb84b9a843ec5fccfb98bbca66141d1b297a8087c568cbafaa6244f37",
+  "headersSHA256": "c0ee143f7776a77cb2076d7684fb7993f0370842c474adf1acfa35036103b874"
+}

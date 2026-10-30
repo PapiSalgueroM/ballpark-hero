@@ -1,0 +1,31 @@
+{
+  "label": "asset-lz-string-CA3vCBTu.js",
+  "url": "https://douknowball.com/assets/lz-string-CA3vCBTu.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:19.257Z",
+  "end": "2026-10-30T21:53:19.445Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0068-asset-lz-string-CA3vCBTu.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0068-asset-lz-string-CA3vCBTu.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/lz-string-CA3vCBTu.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0068-asset-lz-string-CA3vCBTu.js.body",
+  "headerFile": "0068-asset-lz-string-CA3vCBTu.js.headers",
+  "bytes": 8450,
+  "sha256": "39a54fd772e7f21cb31b14a1afa7a7ecf7bb443de221343c092ca38246b5e3a5",
+  "headersSHA256": "c0731b7d113e1001ad6ccc41b3bd1bfd8c2ba6ad142c2a59c48c63659439d4f2"
+}

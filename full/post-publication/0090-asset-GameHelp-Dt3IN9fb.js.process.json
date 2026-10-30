@@ -1,0 +1,31 @@
+{
+  "label": "asset-GameHelp-Dt3IN9fb.js",
+  "url": "https://douknowball.com/assets/GameHelp-Dt3IN9fb.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:24.313Z",
+  "end": "2026-10-30T21:53:24.509Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0090-asset-GameHelp-Dt3IN9fb.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0090-asset-GameHelp-Dt3IN9fb.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/GameHelp-Dt3IN9fb.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0090-asset-GameHelp-Dt3IN9fb.js.body",
+  "headerFile": "0090-asset-GameHelp-Dt3IN9fb.js.headers",
+  "bytes": 1655,
+  "sha256": "20570e1ca60ac97791ea90f3d49c67dceb232cbce3c661ead0683080af62350b",
+  "headersSHA256": "5195436eacd2413e0e4af12864275e7abf75fa9f3f8c544a4c99818eea71ac92"
+}

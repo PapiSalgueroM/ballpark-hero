@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerEra2020-Bej21k8N.js",
+  "url": "https://douknowball.com/assets/clubManagerEra2020-Bej21k8N.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:17.167Z",
+  "end": "2026-10-30T21:53:17.832Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0059-asset-clubManagerEra2020-Bej21k8N.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0059-asset-clubManagerEra2020-Bej21k8N.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerEra2020-Bej21k8N.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0059-asset-clubManagerEra2020-Bej21k8N.js.body",
+  "headerFile": "0059-asset-clubManagerEra2020-Bej21k8N.js.headers",
+  "bytes": 78997,
+  "sha256": "1f4c95dc257152a3f90de3500ce36acb0a9fe2fa736610c687ce5569d577c803",
+  "headersSHA256": "10b5e9a2fd60412a248a04985b1d968dbc9649e623e30d820dac298d93eb4d30"
+}

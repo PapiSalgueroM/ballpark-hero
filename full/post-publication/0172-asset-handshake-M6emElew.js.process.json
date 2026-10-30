@@ -1,0 +1,31 @@
+{
+  "label": "asset-handshake-M6emElew.js",
+  "url": "https://douknowball.com/assets/handshake-M6emElew.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:43.593Z",
+  "end": "2026-10-30T21:53:43.678Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0172-asset-handshake-M6emElew.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0172-asset-handshake-M6emElew.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/handshake-M6emElew.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0172-asset-handshake-M6emElew.js.body",
+  "headerFile": "0172-asset-handshake-M6emElew.js.headers",
+  "bytes": 615,
+  "sha256": "b9184b9fbe86ae641eac6d783b1779356952873b6a2bdf6f17061d122cd2b6b4",
+  "headersSHA256": "e3fccefbef69ff948e25b868287a33ccd60026cd914676ea1d2c1a8679e06051"
+}

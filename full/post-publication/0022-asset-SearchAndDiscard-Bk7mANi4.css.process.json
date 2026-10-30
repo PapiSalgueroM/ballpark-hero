@@ -1,0 +1,31 @@
+{
+  "label": "asset-SearchAndDiscard-Bk7mANi4.css",
+  "url": "https://douknowball.com/assets/SearchAndDiscard-Bk7mANi4.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:58.125Z",
+  "end": "2026-10-30T21:52:58.738Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0022-asset-SearchAndDiscard-Bk7mANi4.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0022-asset-SearchAndDiscard-Bk7mANi4.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SearchAndDiscard-Bk7mANi4.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0022-asset-SearchAndDiscard-Bk7mANi4.css.body",
+  "headerFile": "0022-asset-SearchAndDiscard-Bk7mANi4.css.headers",
+  "bytes": 829,
+  "sha256": "2ab3ad2756ef9b669e6ebfe674002fdfd76e3edc06951b6c920828cdd338b4f6",
+  "headersSHA256": "61d7014b2bc0ce809dd113da8cdde27ab04bdb2ac3a0951443652751700c2217"
+}

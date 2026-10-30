@@ -1,0 +1,31 @@
+{
+  "label": "asset-careerAwardsNight-B2tgOqvu.js",
+  "url": "https://douknowball.com/assets/careerAwardsNight-B2tgOqvu.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:52.503Z",
+  "end": "2026-10-30T21:53:52.647Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0216-asset-careerAwardsNight-B2tgOqvu.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0216-asset-careerAwardsNight-B2tgOqvu.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/careerAwardsNight-B2tgOqvu.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0216-asset-careerAwardsNight-B2tgOqvu.js.body",
+  "headerFile": "0216-asset-careerAwardsNight-B2tgOqvu.js.headers",
+  "bytes": 2575,
+  "sha256": "6a974a6dec4d0ffb5f9d51e6ab7ac5e896aa1a10e6d6ab39e76895074c80a2d6",
+  "headersSHA256": "8c42e0a14f7a5878d4c3e4c6c11a22b33a861b381eab15ea07c9b1232673e3e7"
+}

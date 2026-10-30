@@ -1,0 +1,1 @@
+function f(s,e){const t=s.slice();for(let o=t.length-1;o>0;o-=1){const n=Math.floor(e()*(o+1)),c=t[o];t[o]=t[n],t[n]=c}return t}export{f as s};

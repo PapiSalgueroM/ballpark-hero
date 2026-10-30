@@ -1,0 +1,31 @@
+{
+  "label": "asset-GmTradeBuilder-CsXt162F.css",
+  "url": "https://douknowball.com/assets/GmTradeBuilder-CsXt162F.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:01.553Z",
+  "end": "2026-10-30T21:53:01.729Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0028-asset-GmTradeBuilder-CsXt162F.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0028-asset-GmTradeBuilder-CsXt162F.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/GmTradeBuilder-CsXt162F.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0028-asset-GmTradeBuilder-CsXt162F.css.body",
+  "headerFile": "0028-asset-GmTradeBuilder-CsXt162F.css.headers",
+  "bytes": 1609,
+  "sha256": "fc40f8a7c288926667ae66a624eb03d99c68b2ba4786c5dc4b2f850488fe2570",
+  "headersSHA256": "c6a3a1fb443f4340a04ddb7e4957c31fa749c0edd35628724903815cef3b7ba1"
+}

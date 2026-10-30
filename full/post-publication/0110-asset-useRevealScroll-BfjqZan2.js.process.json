@@ -1,0 +1,31 @@
+{
+  "label": "asset-useRevealScroll-BfjqZan2.js",
+  "url": "https://douknowball.com/assets/useRevealScroll-BfjqZan2.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:29.580Z",
+  "end": "2026-10-30T21:53:29.711Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0110-asset-useRevealScroll-BfjqZan2.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0110-asset-useRevealScroll-BfjqZan2.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/useRevealScroll-BfjqZan2.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0110-asset-useRevealScroll-BfjqZan2.js.body",
+  "headerFile": "0110-asset-useRevealScroll-BfjqZan2.js.headers",
+  "bytes": 1963,
+  "sha256": "5b1bb620bafc3e3a71f8a7625e8089fe43d41781e4ddf3dd4be8671682b06ed2",
+  "headersSHA256": "b83834484275c70cadf1b9991d930364c4b734e37cfaac31002803768761d7d2"
+}

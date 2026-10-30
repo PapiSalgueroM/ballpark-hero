@@ -1,0 +1,31 @@
+{
+  "label": "asset-UclBracketCard-BmQ6d1-V.js",
+  "url": "https://douknowball.com/assets/UclBracketCard-BmQ6d1-V.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:40.146Z",
+  "end": "2026-10-30T21:53:40.691Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0155-asset-UclBracketCard-BmQ6d1-V.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0155-asset-UclBracketCard-BmQ6d1-V.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/UclBracketCard-BmQ6d1-V.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0155-asset-UclBracketCard-BmQ6d1-V.js.body",
+  "headerFile": "0155-asset-UclBracketCard-BmQ6d1-V.js.headers",
+  "bytes": 4989,
+  "sha256": "1acbdff1c2c599d9087515f585a1b83269c6ea49a8f4fe6b29557a4431dbe856",
+  "headersSHA256": "27cc9dac88d4c35e588637538380970effb56408676364d945c9f8957300931e"
+}

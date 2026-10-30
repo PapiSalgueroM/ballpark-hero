@@ -1,0 +1,2 @@
+9949cb2baf24d1fed27e1db2c74d69bed82bb5d9949afa27b94e46c2b27b4e77  /home/runner/work/_temp/rc-out/full/post-publication-raw-audit/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/post-publication-raw-audit/stderr.log

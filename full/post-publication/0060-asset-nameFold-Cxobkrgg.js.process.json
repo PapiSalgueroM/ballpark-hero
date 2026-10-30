@@ -1,0 +1,31 @@
+{
+  "label": "asset-nameFold-Cxobkrgg.js",
+  "url": "https://douknowball.com/assets/nameFold-Cxobkrgg.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:17.833Z",
+  "end": "2026-10-30T21:53:17.978Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0060-asset-nameFold-Cxobkrgg.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0060-asset-nameFold-Cxobkrgg.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/nameFold-Cxobkrgg.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0060-asset-nameFold-Cxobkrgg.js.body",
+  "headerFile": "0060-asset-nameFold-Cxobkrgg.js.headers",
+  "bytes": 279,
+  "sha256": "ee9b7b3e9f10c1e09d14b6eea13097b6378ffa5b761c433d7118ca65578c59ab",
+  "headersSHA256": "295394de36cd87f64815ea42a2a81a532e0f09f0665f4a8aed7cb9f564877a8c"
+}

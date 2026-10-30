@@ -1,0 +1,31 @@
+{
+  "label": "asset-PuckDetective-CNwlavUM.css",
+  "url": "https://douknowball.com/assets/PuckDetective-CNwlavUM.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:00.929Z",
+  "end": "2026-10-30T21:53:01.553Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0027-asset-PuckDetective-CNwlavUM.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0027-asset-PuckDetective-CNwlavUM.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/PuckDetective-CNwlavUM.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0027-asset-PuckDetective-CNwlavUM.css.body",
+  "headerFile": "0027-asset-PuckDetective-CNwlavUM.css.headers",
+  "bytes": 457,
+  "sha256": "7125d8c5909f83a6ff658243da0b3aef0dfedcc4827231ebfa65fb155308fcf0",
+  "headersSHA256": "e6f1d7cec1a6e157da6632bba01453cf7a4b30b131d19b33b0dd5773930a09e1"
+}

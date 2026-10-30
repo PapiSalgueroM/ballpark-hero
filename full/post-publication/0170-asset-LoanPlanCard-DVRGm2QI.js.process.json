@@ -1,0 +1,31 @@
+{
+  "label": "asset-LoanPlanCard-DVRGm2QI.js",
+  "url": "https://douknowball.com/assets/LoanPlanCard-DVRGm2QI.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:43.231Z",
+  "end": "2026-10-30T21:53:43.373Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0170-asset-LoanPlanCard-DVRGm2QI.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0170-asset-LoanPlanCard-DVRGm2QI.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/LoanPlanCard-DVRGm2QI.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0170-asset-LoanPlanCard-DVRGm2QI.js.body",
+  "headerFile": "0170-asset-LoanPlanCard-DVRGm2QI.js.headers",
+  "bytes": 9083,
+  "sha256": "8ebc62cf4d4bc3dc065941e465dc81f8c6bb7fe08480b17740088e746ee463b0",
+  "headersSHA256": "2017975d687f0fa06e95e3ae89f0c2cc0fc94a99528ef96cf025ac94b332eb1f"
+}

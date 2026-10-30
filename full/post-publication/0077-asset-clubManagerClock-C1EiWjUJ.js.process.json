@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerClock-C1EiWjUJ.js",
+  "url": "https://douknowball.com/assets/clubManagerClock-C1EiWjUJ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:20.838Z",
+  "end": "2026-10-30T21:53:21.027Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0077-asset-clubManagerClock-C1EiWjUJ.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0077-asset-clubManagerClock-C1EiWjUJ.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerClock-C1EiWjUJ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0077-asset-clubManagerClock-C1EiWjUJ.js.body",
+  "headerFile": "0077-asset-clubManagerClock-C1EiWjUJ.js.headers",
+  "bytes": 245,
+  "sha256": "e0c6bd45cb144a1afde374e35a9f845119fb09c2427002d97746ce5e828211d5",
+  "headersSHA256": "ec75867a2b89c3389e7b1d94d45ba943d73c4b2394af5a68de725756fc607ec9"
+}

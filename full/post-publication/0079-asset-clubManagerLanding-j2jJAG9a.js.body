@@ -1,0 +1,1 @@
+const t="dukb-cm-land-on-hub";function e(){try{sessionStorage.setItem(t,"1")}catch{}}function n(){try{return sessionStorage.getItem(t)!=="1"?!1:(sessionStorage.removeItem(t),!0)}catch{return!1}}export{e as m,n as t};

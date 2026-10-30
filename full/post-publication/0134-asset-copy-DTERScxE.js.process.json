@@ -1,0 +1,31 @@
+{
+  "label": "asset-copy-DTERScxE.js",
+  "url": "https://douknowball.com/assets/copy-DTERScxE.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:34.436Z",
+  "end": "2026-10-30T21:53:34.575Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0134-asset-copy-DTERScxE.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0134-asset-copy-DTERScxE.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/copy-DTERScxE.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0134-asset-copy-DTERScxE.js.body",
+  "headerFile": "0134-asset-copy-DTERScxE.js.headers",
+  "bytes": 405,
+  "sha256": "23f97d68663a205d13f727a1eafaf947e72e50dcb51a92893dbba218edddb07d",
+  "headersSHA256": "51d728c5be85f72684b0f70ad2dfeca4bc57d652f4dbda303809a200ebc4db9f"
+}

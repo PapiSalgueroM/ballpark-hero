@@ -1,0 +1,275 @@
+{
+ "about": "Round 836 live rendered audit of every sitemap URL at both addresses, plus a phone sample. Produced by scripts/playLiveRenderedAudit.mjs MODE=report. Page text is left out on purpose; every number is kept.",
+ "base": "https://douknowball.com",
+ "measured": [
+  "2026-10-30"
+ ],
+ "sitemapRoutes": 172,
+ "userAgents": {
+  "ua phone": "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html) DUKB-LiveRenderedAudit/836"
+ },
+ "rules": {
+  "lossOnMount": "lost >= 300 saved page characters and >= 25% of the saved page text",
+  "clusterJaccard": 0.3
+ },
+ "linkGraph": {},
+ "templateClusters": [],
+ "pages": [
+  {
+   "route": "/club-manager",
+   "form": "plain",
+   "vp": "phone",
+   "rawStatus": 200,
+   "status": 200,
+   "finalUrl": "https://douknowball.com/club-manager",
+   "mounted": true,
+   "settled": true,
+   "settleMs": 5396,
+   "title": "Club Manager: Free Football Management Game | DoUKnowBall",
+   "description": "Manage any of 454 real clubs across 27 leagues, today or in a real past season. Transfers, tactics, the board and the sack race. Free soccer management sim.",
+   "canonicals": [
+    "https://douknowball.com/club-manager"
+   ],
+   "h1": [
+    "CLUB MANAGER"
+   ],
+   "h1InDom": 1,
+   "savedPageChars": 37370,
+   "savedPageWords": 6448,
+   "settledPageChars": 37605,
+   "settledPageWords": 6493,
+   "settledInnerChars": 39421,
+   "guideState": "ready",
+   "guideWords": 4813,
+   "lostOnMountChars": 0,
+   "lostOnMountBlocks": 0,
+   "internalLinks": 28,
+   "bodyLinks": 12,
+   "rawInternalLinks": 24,
+   "jsonld": [
+    "Answer",
+    "BreadcrumbList",
+    "FAQPage",
+    "Game",
+    "ListItem",
+    "Offer",
+    "Organization",
+    "Question",
+    "WebApplication",
+    "WebSite"
+   ],
+   "rawJsonld": [
+    "Answer",
+    "BreadcrumbList",
+    "FAQPage",
+    "Game",
+    "ListItem",
+    "Offer",
+    "Organization",
+    "Question",
+    "WebApplication",
+    "WebSite"
+   ],
+   "consoleErrors": [
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "failedRequests": [
+    "GET https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores net::ERR_CONNECTION_REFUSED"
+   ],
+   "flags": {}
+  },
+  {
+   "route": "/club-manager",
+   "form": "slash",
+   "vp": "phone",
+   "rawStatus": 200,
+   "status": 200,
+   "finalUrl": "https://douknowball.com/club-manager/",
+   "mounted": true,
+   "settled": true,
+   "settleMs": 7061,
+   "title": "Club Manager: Free Football Management Game | DoUKnowBall",
+   "description": "Manage any of 454 real clubs across 27 leagues, today or in a real past season. Transfers, tactics, the board and the sack race. Free soccer management sim.",
+   "canonicals": [
+    "https://douknowball.com/club-manager"
+   ],
+   "h1": [
+    "CLUB MANAGER"
+   ],
+   "h1InDom": 1,
+   "savedPageChars": 37370,
+   "savedPageWords": 6448,
+   "settledPageChars": 37605,
+   "settledPageWords": 6493,
+   "settledInnerChars": 39421,
+   "guideState": "ready",
+   "guideWords": 4813,
+   "lostOnMountChars": 0,
+   "lostOnMountBlocks": 0,
+   "internalLinks": 28,
+   "bodyLinks": 12,
+   "rawInternalLinks": 24,
+   "jsonld": [
+    "Answer",
+    "BreadcrumbList",
+    "FAQPage",
+    "Game",
+    "ListItem",
+    "Offer",
+    "Organization",
+    "Question",
+    "WebApplication",
+    "WebSite"
+   ],
+   "rawJsonld": [
+    "Answer",
+    "BreadcrumbList",
+    "FAQPage",
+    "Game",
+    "ListItem",
+    "Offer",
+    "Organization",
+    "Question",
+    "WebApplication",
+    "WebSite"
+   ],
+   "consoleErrors": [
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "failedRequests": [
+    "GET https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores net::ERR_CONNECTION_REFUSED"
+   ],
+   "flags": {}
+  },
+  {
+   "route": "/soccer-career",
+   "form": "plain",
+   "vp": "phone",
+   "rawStatus": 200,
+   "status": 200,
+   "finalUrl": "https://douknowball.com/soccer-career",
+   "mounted": true,
+   "settled": true,
+   "settleMs": 5894,
+   "title": "Soccer Career: Free Football Career Simulator | DoUKnowBall",
+   "description": "Start at 16 in a youth academy and live a whole soccer career: transfers, trophies, feuds, scandals and a legacy verdict. A free football life sim game.",
+   "canonicals": [
+    "https://douknowball.com/soccer-career"
+   ],
+   "h1": [
+    "⚽ Soccer Career"
+   ],
+   "h1InDom": 1,
+   "savedPageChars": 16804,
+   "savedPageWords": 2994,
+   "settledPageChars": 16804,
+   "settledPageWords": 2994,
+   "settledInnerChars": 17698,
+   "guideState": "ready",
+   "guideWords": 2924,
+   "lostOnMountChars": 0,
+   "lostOnMountBlocks": 0,
+   "internalLinks": 26,
+   "bodyLinks": 9,
+   "rawInternalLinks": 25,
+   "jsonld": [
+    "Answer",
+    "BreadcrumbList",
+    "FAQPage",
+    "Game",
+    "ListItem",
+    "Offer",
+    "Organization",
+    "Question",
+    "WebApplication",
+    "WebSite"
+   ],
+   "rawJsonld": [
+    "Answer",
+    "BreadcrumbList",
+    "FAQPage",
+    "Game",
+    "ListItem",
+    "Offer",
+    "Organization",
+    "Question",
+    "WebApplication",
+    "WebSite"
+   ],
+   "consoleErrors": [
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "failedRequests": [
+    "GET https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores net::ERR_CONNECTION_REFUSED"
+   ],
+   "flags": {}
+  },
+  {
+   "route": "/soccer-career",
+   "form": "slash",
+   "vp": "phone",
+   "rawStatus": 200,
+   "status": 200,
+   "finalUrl": "https://douknowball.com/soccer-career/",
+   "mounted": true,
+   "settled": true,
+   "settleMs": 5398,
+   "title": "Soccer Career: Free Football Career Simulator | DoUKnowBall",
+   "description": "Start at 16 in a youth academy and live a whole soccer career: transfers, trophies, feuds, scandals and a legacy verdict. A free football life sim game.",
+   "canonicals": [
+    "https://douknowball.com/soccer-career"
+   ],
+   "h1": [
+    "⚽ Soccer Career"
+   ],
+   "h1InDom": 1,
+   "savedPageChars": 16804,
+   "savedPageWords": 2994,
+   "settledPageChars": 16804,
+   "settledPageWords": 2994,
+   "settledInnerChars": 17698,
+   "guideState": "ready",
+   "guideWords": 2924,
+   "lostOnMountChars": 0,
+   "lostOnMountBlocks": 0,
+   "internalLinks": 26,
+   "bodyLinks": 9,
+   "rawInternalLinks": 25,
+   "jsonld": [
+    "Answer",
+    "BreadcrumbList",
+    "FAQPage",
+    "Game",
+    "ListItem",
+    "Offer",
+    "Organization",
+    "Question",
+    "WebApplication",
+    "WebSite"
+   ],
+   "rawJsonld": [
+    "Answer",
+    "BreadcrumbList",
+    "FAQPage",
+    "Game",
+    "ListItem",
+    "Offer",
+    "Organization",
+    "Question",
+    "WebApplication",
+    "WebSite"
+   ],
+   "consoleErrors": [
+    "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "Failed to load resource: net::ERR_FAILED"
+   ],
+   "failedRequests": [
+    "GET https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores net::ERR_CONNECTION_REFUSED"
+   ],
+   "flags": {}
+  }
+ ]
+}

@@ -1,0 +1,3 @@
+226 /home/runner/work/_temp/rc-out/full/post-publication-raw-audit/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/post-publication-raw-audit/stderr.log
+226 total

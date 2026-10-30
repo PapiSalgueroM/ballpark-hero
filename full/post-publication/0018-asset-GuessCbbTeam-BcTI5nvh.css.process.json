@@ -1,0 +1,31 @@
+{
+  "label": "asset-GuessCbbTeam-BcTI5nvh.css",
+  "url": "https://douknowball.com/assets/GuessCbbTeam-BcTI5nvh.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:56.244Z",
+  "end": "2026-10-30T21:52:56.941Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0018-asset-GuessCbbTeam-BcTI5nvh.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0018-asset-GuessCbbTeam-BcTI5nvh.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/GuessCbbTeam-BcTI5nvh.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0018-asset-GuessCbbTeam-BcTI5nvh.css.body",
+  "headerFile": "0018-asset-GuessCbbTeam-BcTI5nvh.css.headers",
+  "bytes": 774,
+  "sha256": "a945cb7234fe918adcbc079bd80e7832fe5859bdf661bbfbd3e58834f359f2c4",
+  "headersSHA256": "c174a0b7443cd03c6180b0d0d89061105ed21d63a33da6ce240dae7eb1d18da4"
+}

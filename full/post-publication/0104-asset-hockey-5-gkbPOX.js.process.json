@@ -1,0 +1,31 @@
+{
+  "label": "asset-hockey-5-gkbPOX.js",
+  "url": "https://douknowball.com/assets/hockey-5-gkbPOX.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:28.512Z",
+  "end": "2026-10-30T21:53:28.751Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0104-asset-hockey-5-gkbPOX.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0104-asset-hockey-5-gkbPOX.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/hockey-5-gkbPOX.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0104-asset-hockey-5-gkbPOX.js.body",
+  "headerFile": "0104-asset-hockey-5-gkbPOX.js.headers",
+  "bytes": 61511,
+  "sha256": "8d7a1d3e3b66ea221e62cc4759fa1f84765832f4ea2f820e5cc89a0f5d64917d",
+  "headersSHA256": "e55981a4bd198667bb661546322f9c2a6a42e56d9e89330df9fe9c6d4d684fe0"
+}

@@ -1,0 +1,31 @@
+{
+  "label": "asset-CoachingStartChooser-D-W8M-aT.js",
+  "url": "https://douknowball.com/assets/CoachingStartChooser-D-W8M-aT.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:57.387Z",
+  "end": "2026-10-30T21:53:58.259Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0242-asset-CoachingStartChooser-D-W8M-aT.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0242-asset-CoachingStartChooser-D-W8M-aT.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/CoachingStartChooser-D-W8M-aT.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0242-asset-CoachingStartChooser-D-W8M-aT.js.body",
+  "headerFile": "0242-asset-CoachingStartChooser-D-W8M-aT.js.headers",
+  "bytes": 4192,
+  "sha256": "e8aab75d67b5b3dc57d57d0c4f5206d559d4949b95e94904f2fc2e4b91fa882d",
+  "headersSHA256": "3508ab529399857ab03707d0dc60b99c5c536d40ca87cf9de45fb7943c54810f"
+}

@@ -1,0 +1,31 @@
+{
+  "label": "asset-AppearanceBuilder-DwwsYeHR.js",
+  "url": "https://douknowball.com/assets/AppearanceBuilder-DwwsYeHR.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:50.557Z",
+  "end": "2026-10-30T21:53:50.639Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0202-asset-AppearanceBuilder-DwwsYeHR.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0202-asset-AppearanceBuilder-DwwsYeHR.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/AppearanceBuilder-DwwsYeHR.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0202-asset-AppearanceBuilder-DwwsYeHR.js.body",
+  "headerFile": "0202-asset-AppearanceBuilder-DwwsYeHR.js.headers",
+  "bytes": 33617,
+  "sha256": "096fd4ade6215fbc691ce67c4c83850dc07431ae9f2ccc520492c968bbefcf0b",
+  "headersSHA256": "e2b2bc432bb4c7ecfb8f6f1f7f6b94e9a662da6847456de373c024e0a484194f"
+}

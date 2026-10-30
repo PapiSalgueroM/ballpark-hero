@@ -1,0 +1,31 @@
+{
+  "label": "asset-ownGoalRule-J3XQry1d.js",
+  "url": "https://douknowball.com/assets/ownGoalRule-J3XQry1d.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:19.575Z",
+  "end": "2026-10-30T21:53:19.766Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0070-asset-ownGoalRule-J3XQry1d.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0070-asset-ownGoalRule-J3XQry1d.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/ownGoalRule-J3XQry1d.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0070-asset-ownGoalRule-J3XQry1d.js.body",
+  "headerFile": "0070-asset-ownGoalRule-J3XQry1d.js.headers",
+  "bytes": 179,
+  "sha256": "429872db3c8ff95d979e20c77adf793a66537433b1c4c5b49849cd000d60a144",
+  "headersSHA256": "8204cdf406be755736b475e9bb3d137c36535bafd03380b797e1ef23af1578b5"
+}

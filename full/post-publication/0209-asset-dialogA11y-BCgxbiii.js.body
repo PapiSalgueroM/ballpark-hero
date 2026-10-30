@@ -1,0 +1,1 @@
+function u(s){s&&!s.dataset.dukbFocused&&(s.dataset.dukbFocused="1",s.focus())}function a(s){return o=>{o.key==="Escape"&&s()}}export{a as e,u as f};

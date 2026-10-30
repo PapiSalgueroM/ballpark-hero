@@ -1,0 +1,31 @@
+{
+  "label": "asset-PlayerAvatar-Dy2Tdu8d.js",
+  "url": "https://douknowball.com/assets/PlayerAvatar-Dy2Tdu8d.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:31.403Z",
+  "end": "2026-10-30T21:53:31.591Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0118-asset-PlayerAvatar-Dy2Tdu8d.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0118-asset-PlayerAvatar-Dy2Tdu8d.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/PlayerAvatar-Dy2Tdu8d.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0118-asset-PlayerAvatar-Dy2Tdu8d.js.body",
+  "headerFile": "0118-asset-PlayerAvatar-Dy2Tdu8d.js.headers",
+  "bytes": 16500,
+  "sha256": "0bd69a5e9cf548e52720febd10a9846283ae0452a6790021f079131807bfa106",
+  "headersSHA256": "ef7f4d8541e7f51b60b708ef9e151613e37f75496452b3bc43afd3058274c0c0"
+}

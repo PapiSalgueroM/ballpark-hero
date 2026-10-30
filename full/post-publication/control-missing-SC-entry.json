@@ -1,0 +1,19 @@
+{
+  "name": "missing-SC-entry",
+  "mutations": [
+    {
+      "file": "0007-asset-index-BZVvQX7Z.js.body",
+      "beforeSHA256": "85d1abbde4cfe6fbd5c26420742808913f208b3c6859d9c6004f937106363ba1",
+      "afterSHA256": "a7b4b14830f7d104c9b66e1386f24634f61b3d8e26b52522326b56ef7e4972d2",
+      "occurrences": 2,
+      "replaced": "SoccerCareer-C24Gu_PL.js"
+    }
+  ],
+  "error": {
+    "name": "AssertionError",
+    "firstLine": "One actual SC lazy import in entry",
+    "message": "One actual SC lazy import in entry\n\n0 !== 1\n"
+  },
+  "noGET": true,
+  "originalMutation": false
+}

@@ -1,0 +1,31 @@
+{
+  "label": "asset-SoccerCareer-C24Gu_PL.js",
+  "url": "https://douknowball.com/assets/SoccerCareer-C24Gu_PL.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:49.516Z",
+  "end": "2026-10-30T21:53:50.137Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0198-asset-SoccerCareer-C24Gu_PL.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0198-asset-SoccerCareer-C24Gu_PL.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SoccerCareer-C24Gu_PL.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0198-asset-SoccerCareer-C24Gu_PL.js.body",
+  "headerFile": "0198-asset-SoccerCareer-C24Gu_PL.js.headers",
+  "bytes": 1371540,
+  "sha256": "5cdcb130ce09eb367bc6e9e7e5e3282d4c48ff22341cd4c0fb6f1eca1e332da0",
+  "headersSHA256": "cd5c0e90c868066347e1e6084c659a55cb815ab8941fd29650b019a15e0de254"
+}

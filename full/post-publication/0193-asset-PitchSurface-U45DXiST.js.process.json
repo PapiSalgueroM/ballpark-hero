@@ -1,0 +1,31 @@
+{
+  "label": "asset-PitchSurface-U45DXiST.js",
+  "url": "https://douknowball.com/assets/PitchSurface-U45DXiST.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:46.981Z",
+  "end": "2026-10-30T21:53:47.162Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0193-asset-PitchSurface-U45DXiST.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0193-asset-PitchSurface-U45DXiST.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/PitchSurface-U45DXiST.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0193-asset-PitchSurface-U45DXiST.js.body",
+  "headerFile": "0193-asset-PitchSurface-U45DXiST.js.headers",
+  "bytes": 12459,
+  "sha256": "d2f304b5b0e550bafded44f6f458e236b3a06a33d566f26de546527267304a9d",
+  "headersSHA256": "877b594f34571a365e99972371db0db7b93c345089b5e5d29b009972b08dc408"
+}

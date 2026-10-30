@@ -1,0 +1,1 @@
+const n={ø:"o",Ø:"o",đ:"d",Đ:"d",ð:"d",Ð:"d",ł:"l",Ł:"l",æ:"ae",Æ:"ae",œ:"oe",Œ:"oe",ß:"ss",þ:"th",Þ:"th",ħ:"h",Ħ:"h",ı:"i",İ:"i",ŋ:"n",Ŋ:"n"},t=new RegExp(`[${Object.keys(n).join("")}]`,"g");function a(o){return(o||"").replace(t,e=>n[e]??e)}export{a as f};

@@ -1,0 +1,85 @@
+# https://douknowball.com: 0 desktop URLs (0 plain, 0 slash), 4 phone URLs, sitemap 172
+errors: 0
+not mounted within 25s: 0 
+hit the 15s settle cap: 0 
+
+## (a) lost on mount
+pages that lose content on mount (rule: lost >= 300 chars and >= 25% of saved page text): 0
+pages with SOME saved text missing after mount, under the rule: 0
+pages where saved text is still in the DOM but not visible: 0
+plain pages whose settled visible page text is under 75% of the saved copy: 0
+
+## (a2) slash versus plain (desktop)
+routes whose slash form differs from the plain form: 0 of 0
+URLs whose final address is another route: 0 
+URLs that redirected: 0 
+raw status not 200: 0 
+plain pages with no single self canonical after mount: 0 
+URLs with a blocking robots directive raw or settled: 0 
+plain pages whose title changes on mount: 0
+plain pages without exactly one visible h1 after mount: 0
+
+## phone sample versus desktop plain
+  /club-manager: no desktop record
+  /club-manager/: no desktop record
+  /soccer-career: no desktop record
+  /soccer-career/: no desktop record
+
+## (b) thinnest 25 by settled page words (desktop plain)
+median settled page words 0, median guide words 0
+plain pages with no guide section at all: 0 
+game pages whose guide article is under 600 words: 0 
+
+## (c) duplicate and near duplicate titles, descriptions, h1s
+exact duplicate titles: 0
+exact duplicate descriptions: 0
+exact duplicate h1s: 0
+near duplicate titles (brand suffix removed) (word set Jaccard >= 0.6): 0 pairs
+near duplicate descriptions (word set Jaccard >= 0.5): 0 pairs
+near duplicate h1s (word set Jaccard >= 0.7): 0 pairs
+
+## (d) template similarity (settled page text, outside the chrome)
+5 word shingle Jaccard across 0 page pairs: >=0.1: 0, >=0.2: 0, >=0.3: 0, >=0.4: 0, >=0.5: 0, >=0.6: 0, >=0.7: 0
+clusters at Jaccard >= 0.3: 0
+median share of page text in blocks repeated on 6 or more pages: 0%
+most repeated page blocks (outside the chrome):
+
+## (e) internal link graph (desktop plain, distinct source pages)
+settled DOM: pages with fewer than 3 inlinking pages: 0
+settled DOM: pages more than 3 clicks from home or unreachable: 0
+settled DOM: click depth distribution {}
+settled DOM: inlinking pages per page, median 0, min Infinity
+settled DOM: internal link targets not in the sitemap: 0 
+raw HTML: pages with fewer than 3 inlinking pages: 0
+raw HTML: pages more than 3 clicks from home or unreachable: 0
+raw HTML: click depth distribution {}
+raw HTML: inlinking pages per page, median 0, min Infinity
+raw HTML: internal link targets not in the sitemap: 0 
+settled DOM, page body only (chrome links removed): pages with fewer than 3 inlinking pages: 0
+settled DOM, page body only (chrome links removed): pages more than 3 clicks from home or unreachable: 0
+settled DOM, page body only (chrome links removed): click depth distribution {}
+settled DOM, page body only (chrome links removed): inlinking pages per page, median 0, min Infinity
+settled DOM, page body only (chrome links removed): internal link targets not in the sitemap: 0 
+fewest inlinks from page bodies (contextual links, chrome excluded):
+
+## (f) console errors, page errors, failed requests, 4xx and 5xx
+URLs with any: 4 of 4
+  4 URL(s): console: Failed to load resource: net::ERR_CONNECTION_REFUSED [phone /club-manager, phone /club-manager/, phone /soccer-career, phone /soccer-career/]
+  4 URL(s): console: Failed to load resource: net::ERR_FAILED [phone /club-manager, phone /club-manager/, phone /soccer-career, phone /soccer-career/]
+  4 URL(s): failed: GET https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores net::ERR_CONNECTION_REFUSED [phone /club-manager, phone /club-manager/, phone /soccer-career, phone /soccer-career/]
+URLs where the audit blocked a write request: 4 POST https://douknowball.com/__l5e/trackevents
+read RPCs allowed through: 0 
+
+## (g) loading, error, placeholder and account wording, spinners, ad slots
+loading: 0 URL(s)
+error: 0 URL(s)
+placeholder: 0 URL(s)
+account: 0 URL(s)
+spinners or skeletons still visible after settle: 0 
+guide section still loading after settle: 0 
+ad slots in the DOM before consent: 0 URL(s)
+game pages with no visible button or input outside the chrome after settle: 0 
+external link hosts on plain pages: 
+plain pages with no JSON-LD after mount: 0 
+URLs with unparsable JSON-LD: 0
+JSON-LD types on plain pages: 

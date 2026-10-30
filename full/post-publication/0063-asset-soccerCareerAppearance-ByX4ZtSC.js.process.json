@@ -1,0 +1,31 @@
+{
+  "label": "asset-soccerCareerAppearance-ByX4ZtSC.js",
+  "url": "https://douknowball.com/assets/soccerCareerAppearance-ByX4ZtSC.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:18.360Z",
+  "end": "2026-10-30T21:53:18.529Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0063-asset-soccerCareerAppearance-ByX4ZtSC.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0063-asset-soccerCareerAppearance-ByX4ZtSC.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/soccerCareerAppearance-ByX4ZtSC.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0063-asset-soccerCareerAppearance-ByX4ZtSC.js.body",
+  "headerFile": "0063-asset-soccerCareerAppearance-ByX4ZtSC.js.headers",
+  "bytes": 6547,
+  "sha256": "bb12711d5c1aee1dd533d275f8a768759a4a49f069dec9b9a8bb32d94f8ee883",
+  "headersSHA256": "3eff6711643ae9f696c844714917176eb43aa26d91a6075f58b62a80e94e17d9"
+}

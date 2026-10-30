@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerPrimeiraFixtures2026-DHKbixmh.js",
+  "url": "https://douknowball.com/assets/clubManagerPrimeiraFixtures2026-DHKbixmh.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:10.570Z",
+  "end": "2026-10-30T21:53:11.258Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0048-asset-clubManagerPrimeiraFixtures2026-DHKbixmh.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0048-asset-clubManagerPrimeiraFixtures2026-DHKbixmh.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerPrimeiraFixtures2026-DHKbixmh.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0048-asset-clubManagerPrimeiraFixtures2026-DHKbixmh.js.body",
+  "headerFile": "0048-asset-clubManagerPrimeiraFixtures2026-DHKbixmh.js.headers",
+  "bytes": 9136,
+  "sha256": "7cec975501004167cc742ffbf4e29d26d4d811a9a80a3d79bda9df053e7fec3c",
+  "headersSHA256": "de2c975dfc7deb942785761d201808debe4f5442993815ab58855a36985c8a98"
+}

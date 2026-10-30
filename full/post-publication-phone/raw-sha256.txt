@@ -1,0 +1,2 @@
+9ada7398ad6dd0ac03a9f5605120958778036da645d1c26963c4cc2961d42f88  /home/runner/work/_temp/rc-out/full/post-publication-phone/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/post-publication-phone/stderr.log

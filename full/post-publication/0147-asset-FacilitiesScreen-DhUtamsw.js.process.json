@@ -1,0 +1,31 @@
+{
+  "label": "asset-FacilitiesScreen-DhUtamsw.js",
+  "url": "https://douknowball.com/assets/FacilitiesScreen-DhUtamsw.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:38.250Z",
+  "end": "2026-10-30T21:53:38.949Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0147-asset-FacilitiesScreen-DhUtamsw.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0147-asset-FacilitiesScreen-DhUtamsw.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/FacilitiesScreen-DhUtamsw.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0147-asset-FacilitiesScreen-DhUtamsw.js.body",
+  "headerFile": "0147-asset-FacilitiesScreen-DhUtamsw.js.headers",
+  "bytes": 4222,
+  "sha256": "e8fa43b2b07d84ee6e172daf653c44c8003f3a47a42c228dd185d5a111f57e7a",
+  "headersSHA256": "1fc5794688108076b006268281955de337d3a1312c5b7405967cd49de3b7bb10"
+}

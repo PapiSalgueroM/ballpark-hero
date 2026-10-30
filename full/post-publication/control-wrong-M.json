@@ -1,0 +1,19 @@
+{
+  "name": "wrong-M",
+  "mutations": [
+    {
+      "file": "0001-home.body",
+      "beforeSHA256": "bad4892320856ef1dba7f9f21ee9fdea747fd9c23fffb535a732384e3c92250a",
+      "afterSHA256": "2cf334d110c5dceb1c455f1b5d7800130114622de96545da5d178c221cd00a77",
+      "occurrences": 1,
+      "replaced": "931308159c967c3ab9af404ed01e0b8483f90bd7"
+    }
+  ],
+  "error": {
+    "name": "AssertionError",
+    "firstLine": "Actual HTML platform commit is M home",
+    "message": "Actual HTML platform commit is M home\n+ actual - expected\n\n  [\n+   '0000000000000000000000000000000000000000'\n-   '931308159c967c3ab9af404ed01e0b8483f90bd7'\n  ]\n"
+  },
+  "noGET": true,
+  "originalMutation": false
+}

@@ -1,0 +1,31 @@
+{
+  "label": "asset-arrow-down-DYdrxcFJ.js",
+  "url": "https://douknowball.com/assets/arrow-down-DYdrxcFJ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:35.214Z",
+  "end": "2026-10-30T21:53:35.396Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0138-asset-arrow-down-DYdrxcFJ.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0138-asset-arrow-down-DYdrxcFJ.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/arrow-down-DYdrxcFJ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0138-asset-arrow-down-DYdrxcFJ.js.body",
+  "headerFile": "0138-asset-arrow-down-DYdrxcFJ.js.headers",
+  "bytes": 333,
+  "sha256": "c22c1e65df561f92c6794b5c4856725599130f73c8e55140f2ef58670d66848a",
+  "headersSHA256": "4631d5959d3a1a8fa696144d2b620ed7b218a311084de8ea98baa451308eeedd"
+}

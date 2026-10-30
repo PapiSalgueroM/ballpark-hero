@@ -1,0 +1,31 @@
+{
+  "label": "asset-ResultScreen-DaR2wG-u.js",
+  "url": "https://douknowball.com/assets/ResultScreen-DaR2wG-u.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:33.851Z",
+  "end": "2026-10-30T21:53:34.020Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0131-asset-ResultScreen-DaR2wG-u.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0131-asset-ResultScreen-DaR2wG-u.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/ResultScreen-DaR2wG-u.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0131-asset-ResultScreen-DaR2wG-u.js.body",
+  "headerFile": "0131-asset-ResultScreen-DaR2wG-u.js.headers",
+  "bytes": 2276,
+  "sha256": "4a5cbbe6289ad10cf78bacebb821296bc7e8f5fc4d007aaae1e11f041ab9df41",
+  "headersSHA256": "97d598549672a9466fb2a5d2647e4461f21b703c2d3070828dd395483284833f"
+}

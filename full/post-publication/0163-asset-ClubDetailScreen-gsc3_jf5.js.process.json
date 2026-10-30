@@ -1,0 +1,31 @@
+{
+  "label": "asset-ClubDetailScreen-gsc3_jf5.js",
+  "url": "https://douknowball.com/assets/ClubDetailScreen-gsc3_jf5.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:42.028Z",
+  "end": "2026-10-30T21:53:42.249Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0163-asset-ClubDetailScreen-gsc3_jf5.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0163-asset-ClubDetailScreen-gsc3_jf5.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/ClubDetailScreen-gsc3_jf5.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0163-asset-ClubDetailScreen-gsc3_jf5.js.body",
+  "headerFile": "0163-asset-ClubDetailScreen-gsc3_jf5.js.headers",
+  "bytes": 9783,
+  "sha256": "fae0d63bc5e4ddd6347033c8dc58a2d1a5544dba0e903ee23360d2b747719b4a",
+  "headersSHA256": "015c7687de1fada6269df4977fcdbe362f847f19c75ebd8b247d70dd858e08ab"
+}

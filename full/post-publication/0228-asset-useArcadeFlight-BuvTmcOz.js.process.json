@@ -1,0 +1,31 @@
+{
+  "label": "asset-useArcadeFlight-BuvTmcOz.js",
+  "url": "https://douknowball.com/assets/useArcadeFlight-BuvTmcOz.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:54.427Z",
+  "end": "2026-10-30T21:53:54.585Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0228-asset-useArcadeFlight-BuvTmcOz.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0228-asset-useArcadeFlight-BuvTmcOz.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/useArcadeFlight-BuvTmcOz.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0228-asset-useArcadeFlight-BuvTmcOz.js.body",
+  "headerFile": "0228-asset-useArcadeFlight-BuvTmcOz.js.headers",
+  "bytes": 1509,
+  "sha256": "b9a40aaa0c87b986652107923d7beebe1e8a6a0a8f75ed868ae30bac0487a249",
+  "headersSHA256": "47b8b877c394d356f4fa7d31c6ac4610d400bd90ae3b1f9f1cbc1d8401ecd340"
+}

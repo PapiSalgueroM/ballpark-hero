@@ -1,0 +1,31 @@
+{
+  "label": "asset-soccerInternational-FiWGI8ks.js",
+  "url": "https://douknowball.com/assets/soccerInternational-FiWGI8ks.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:18.218Z",
+  "end": "2026-10-30T21:53:18.359Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0062-asset-soccerInternational-FiWGI8ks.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0062-asset-soccerInternational-FiWGI8ks.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/soccerInternational-FiWGI8ks.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0062-asset-soccerInternational-FiWGI8ks.js.body",
+  "headerFile": "0062-asset-soccerInternational-FiWGI8ks.js.headers",
+  "bytes": 21073,
+  "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47",
+  "headersSHA256": "52ee92f0ad831a01595c27b91ee365c2a26dfc781df4c4b6fae1b6a5b278c257"
+}

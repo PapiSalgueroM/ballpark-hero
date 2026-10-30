@@ -1,0 +1,2 @@
+94caa805cb353564975d00a83ba3e8dcfc81cc74786faab8699995979afe600c  /home/runner/work/_temp/rc-out/full/post-publication-desktop-report/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/post-publication-desktop-report/stderr.log

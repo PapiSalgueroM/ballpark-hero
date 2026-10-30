@@ -1,0 +1,31 @@
+{
+  "label": "asset-MissingNine-BLGcLOj1.css",
+  "url": "https://douknowball.com/assets/MissingNine-BLGcLOj1.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:05.219Z",
+  "end": "2026-10-30T21:53:05.362Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0037-asset-MissingNine-BLGcLOj1.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0037-asset-MissingNine-BLGcLOj1.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/MissingNine-BLGcLOj1.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0037-asset-MissingNine-BLGcLOj1.css.body",
+  "headerFile": "0037-asset-MissingNine-BLGcLOj1.css.headers",
+  "bytes": 879,
+  "sha256": "92549901991fc5bc4c5dc073ea8eeda464629e713b6c51f6905230c768613ed8",
+  "headersSHA256": "c1ca22894497c2bfdfaefeeee09c164d4bc6ede6467d7ea47fd0cb7be76dcc5d"
+}

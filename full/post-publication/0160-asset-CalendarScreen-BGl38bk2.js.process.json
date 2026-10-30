@@ -1,0 +1,31 @@
+{
+  "label": "asset-CalendarScreen-BGl38bk2.js",
+  "url": "https://douknowball.com/assets/CalendarScreen-BGl38bk2.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:41.514Z",
+  "end": "2026-10-30T21:53:41.674Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0160-asset-CalendarScreen-BGl38bk2.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0160-asset-CalendarScreen-BGl38bk2.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/CalendarScreen-BGl38bk2.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0160-asset-CalendarScreen-BGl38bk2.js.body",
+  "headerFile": "0160-asset-CalendarScreen-BGl38bk2.js.headers",
+  "bytes": 13662,
+  "sha256": "8d2acc6818f741a8776f7db5f1e64f0c7a5beaf1893f7e71ecd844021e33866f",
+  "headersSHA256": "4df2ca1f5b9cdeb3847350857d0141b07bca7e71676a1551999c1dc0a9c1868d"
+}

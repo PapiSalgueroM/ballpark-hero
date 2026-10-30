@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerBundesligaFixtures2026-c7ZzROUC.js",
+  "url": "https://douknowball.com/assets/clubManagerBundesligaFixtures2026-c7ZzROUC.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:09.362Z",
+  "end": "2026-10-30T21:53:10.017Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0046-asset-clubManagerBundesligaFixtures2026-c7ZzROUC.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0046-asset-clubManagerBundesligaFixtures2026-c7ZzROUC.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerBundesligaFixtures2026-c7ZzROUC.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0046-asset-clubManagerBundesligaFixtures2026-c7ZzROUC.js.body",
+  "headerFile": "0046-asset-clubManagerBundesligaFixtures2026-c7ZzROUC.js.headers",
+  "bytes": 9663,
+  "sha256": "41f2013182bd93213f3da9f0786ceb8a7ed5286683b6eac43e9ee7d4b7a02685",
+  "headersSHA256": "db14d7f51805140979bae6b9ab2be3a8fcb5819403372b9d1854d1c48978813f"
+}

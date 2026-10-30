@@ -1,0 +1,31 @@
+{
+  "label": "asset-QuizBoard-CBcAEXDf.css",
+  "url": "https://douknowball.com/assets/QuizBoard-CBcAEXDf.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:02.935Z",
+  "end": "2026-10-30T21:53:03.576Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0033-asset-QuizBoard-CBcAEXDf.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0033-asset-QuizBoard-CBcAEXDf.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/QuizBoard-CBcAEXDf.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0033-asset-QuizBoard-CBcAEXDf.css.body",
+  "headerFile": "0033-asset-QuizBoard-CBcAEXDf.css.headers",
+  "bytes": 1017,
+  "sha256": "e4a871a69683a73edc8f1cc112d0e9da3f4c651062a7655f95bf7a6b40b8e80d",
+  "headersSHA256": "4c831971e18fa424289bd640256ea4e78bc89d2c18e0545f343eff6ff6110d50"
+}

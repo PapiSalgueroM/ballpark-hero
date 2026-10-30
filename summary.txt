@@ -1,0 +1,8 @@
+prepare exit=0 68s | ordinary-build raw=0
+readback exit=0 75s | post-publication-readback raw=0
+raw-audit exit=0 124s | post-publication-raw-audit raw=0
+desktop exit=0 26s | post-publication-desktop raw=0
+desktop-report exit=0 1s | post-publication-desktop-report raw=0
+phone exit=0 27s | post-publication-phone raw=0
+phone-report exit=0 1s | post-publication-phone-report raw=0
+finish exit=0 9s | 

@@ -1,0 +1,31 @@
+{
+  "label": "asset-VictoryMoment-D01EOXnt.js",
+  "url": "https://douknowball.com/assets/VictoryMoment-D01EOXnt.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:44.945Z",
+  "end": "2026-10-30T21:53:45.094Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0181-asset-VictoryMoment-D01EOXnt.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0181-asset-VictoryMoment-D01EOXnt.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/VictoryMoment-D01EOXnt.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0181-asset-VictoryMoment-D01EOXnt.js.body",
+  "headerFile": "0181-asset-VictoryMoment-D01EOXnt.js.headers",
+  "bytes": 3669,
+  "sha256": "0ac8cd8a15d6f366db96e2bf79543d1b69465c38312d214cb8527180b84f4c8f",
+  "headersSHA256": "678846b50a52d348bf898e8180f77467b5511f526fae2b3764df602799fbf740"
+}

@@ -1,0 +1,31 @@
+{
+  "label": "asset-MlbFrontOffice-CBF51_-Q.css",
+  "url": "https://douknowball.com/assets/MlbFrontOffice-CBF51_-Q.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:01.859Z",
+  "end": "2026-10-30T21:53:02.557Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0030-asset-MlbFrontOffice-CBF51_-Q.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0030-asset-MlbFrontOffice-CBF51_-Q.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/MlbFrontOffice-CBF51_-Q.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0030-asset-MlbFrontOffice-CBF51_-Q.css.body",
+  "headerFile": "0030-asset-MlbFrontOffice-CBF51_-Q.css.headers",
+  "bytes": 458,
+  "sha256": "9dae0fc2b176aa5e739dc2051e7bda3e2202a05f34b1b93d9cfc753df4473d7b",
+  "headersSHA256": "38c46fed984ab7834b868eb0cac370e7538d0ddf07a3295781f531abc4dbdc69"
+}

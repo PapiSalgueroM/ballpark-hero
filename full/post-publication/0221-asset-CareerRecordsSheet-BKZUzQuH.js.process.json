@@ -1,0 +1,31 @@
+{
+  "label": "asset-CareerRecordsSheet-BKZUzQuH.js",
+  "url": "https://douknowball.com/assets/CareerRecordsSheet-BKZUzQuH.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:53.366Z",
+  "end": "2026-10-30T21:53:53.543Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0221-asset-CareerRecordsSheet-BKZUzQuH.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0221-asset-CareerRecordsSheet-BKZUzQuH.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/CareerRecordsSheet-BKZUzQuH.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0221-asset-CareerRecordsSheet-BKZUzQuH.js.body",
+  "headerFile": "0221-asset-CareerRecordsSheet-BKZUzQuH.js.headers",
+  "bytes": 7593,
+  "sha256": "61f88b849e8d1d63d630ed4df5c1946f35168e52c659efdde310371cd6bb1de3",
+  "headersSHA256": "004db86464ebae7b596501ef5f49d15378265320dba55d4923aa5b51faee0d2c"
+}

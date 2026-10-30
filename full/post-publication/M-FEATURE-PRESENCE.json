@@ -1,0 +1,1346 @@
+{
+  "M": "931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "features": [
+    {
+      "id": "cm-price-mode:cm-market-max-ask",
+      "role": "cm",
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "blob": "1157975509a11dc6ce7d75d1d02221787716ad1b",
+      "literal": "cm-market-max-ask",
+      "hits": [
+        {
+          "file": "assets/TransferScreen-37T6-GQj.js",
+          "offset": 39024,
+          "literal": "cm-market-max-ask",
+          "context": "rst\"}),t.jsx(\"option\",{value:\"cheap\",children:\"Cheapest first\"})]})]}),t.jsxs(\"div\",{children:[t.jsxs(\"label\",{htmlFor:\"cm-market-max-ask\",className:\"block text-[10px] font-bold text-foreground mb-1\",children:[\"Maximum asking price (\",Kr(e),\"m)\"]}),t.jsx(z,"
+        },
+        {
+          "file": "assets/TransferScreen-37T6-GQj.js",
+          "offset": 39166,
+          "literal": "cm-market-max-ask",
+          "context": "ssName:\"block text-[10px] font-bold text-foreground mb-1\",children:[\"Maximum asking price (\",Kr(e),\"m)\"]}),t.jsx(z,{id:\"cm-market-max-ask\",type:\"text\",inputMode:\"decimal\",value:lt,onChange:r=>{Ie(r.target.value),Me(\"any\")},\"aria-invalid\":_e||void 0,\"aria-de"
+        },
+        {
+          "file": "assets/TransferScreen-37T6-GQj.js",
+          "offset": 39315,
+          "literal": "cm-market-max-ask",
+          "context": "\",inputMode:\"decimal\",value:lt,onChange:r=>{Ie(r.target.value),Me(\"any\")},\"aria-invalid\":_e||void 0,\"aria-describedby\":\"cm-market-max-ask-note\",placeholder:\"Any asking price\",className:\"min-h-11 bg-card border-border text-sm\"}),t.jsx(\"p\",{id:\"cm-market-max-"
+        },
+        {
+          "file": "assets/TransferScreen-37T6-GQj.js",
+          "offset": 39438,
+          "literal": "cm-market-max-ask",
+          "context": "market-max-ask-note\",placeholder:\"Any asking price\",className:\"min-h-11 bg-card border-border text-sm\"}),t.jsx(\"p\",{id:\"cm-market-max-ask-note\",className:\"h-4 text-[10px] text-muted-foreground\",children:_e?\"Enter a valid amount. No custom ceiling applied.\":"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "cm-price-mode:Maximum asking price (",
+      "role": "cm",
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "blob": "1157975509a11dc6ce7d75d1d02221787716ad1b",
+      "literal": "Maximum asking price (",
+      "hits": [
+        {
+          "file": "assets/TransferScreen-37T6-GQj.js",
+          "offset": 39115,
+          "literal": "Maximum asking price (",
+          "context": "en:[t.jsxs(\"label\",{htmlFor:\"cm-market-max-ask\",className:\"block text-[10px] font-bold text-foreground mb-1\",children:[\"Maximum asking price (\",Kr(e),\"m)\"]}),t.jsx(z,{id:\"cm-market-max-ask\",type:\"text\",inputMode:\"decimal\",value:lt,onChange:r=>{Ie(r.target.value)"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "cm-price-mode:Blank means no custom ceiling.",
+      "role": "cm",
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "blob": "1157975509a11dc6ce7d75d1d02221787716ad1b",
+      "literal": "Blank means no custom ceiling.",
+      "hits": [
+        {
+          "file": "assets/TransferScreen-37T6-GQj.js",
+          "offset": 39576,
+          "literal": "Blank means no custom ceiling.",
+          "context": "note\",className:\"h-4 text-[10px] text-muted-foreground\",children:_e?\"Enter a valid amount. No custom ceiling applied.\":\"Blank means no custom ceiling.\"})]}),t.jsx(z,{value:ve,onChange:r=>tt(r.target.value),placeholder:\"Search player or club…\",\"aria-label\":\"Search player"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "cm-price-mode:Free agents (",
+      "role": "cm",
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "blob": "1157975509a11dc6ce7d75d1d02221787716ad1b",
+      "literal": "Free agents (",
+      "hits": [
+        {
+          "file": "assets/TransferScreen-37T6-GQj.js",
+          "offset": 35550,
+          "literal": "Free agents (",
+          "context": "-primary\":\"bg-card border-border text-foreground hover:border-primary\"),children:[t.jsx(Et,{className:\"w-3.5 h-3.5\"}),\" Free agents (\",(e.freeAgents??[]).length,\")\"]}),t.jsxs(\"button\",{onClick:()=>_(\"sell\"),className:u(\"rounded-lg border py-2 text-xs fo"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "cm-closed-pool:, and the window being shut does not stop these",
+      "role": "cm",
+      "path": "src/components/club-manager/FreeAgentPool.tsx",
+      "blob": "a85232cafe27b0a4bafc9914be2a8c74a7ee96e9",
+      "literal": ", and the window being shut does not stop these",
+      "hits": [
+        {
+          "file": "assets/FreeAgentPool-ShCuqvtJ.js",
+          "offset": 1280,
+          "literal": ", and the window being shut does not stop these",
+          "context": "sName:\"text-[10px] uppercase tracking-wide text-muted-foreground mb-1\",children:[\"Free agents\",r.transferWindow===null?\", and the window being shut does not stop these\":\"\"]}),i.length===0&&e.jsx(\"p\",{className:\"text-xs text-muted-foreground\",children:\"No free agents available right now."
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-page:Season replays",
+      "role": "sc",
+      "path": "src/pages/SoccerCareer.tsx",
+      "blob": "70e1f27988ec3891a15a5260282dfe9fd1502f18",
+      "literal": "Season replays",
+      "hits": [
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 1351353,
+          "literal": "Season replays",
+          "context": "son-replays\":!0,className:\"text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11\",children:\"📺 Season replays\"})]})]}),Sr&&s.jsx(Sr,{career:e,at:it,onOpen:Jn}),s.jsx(\"div\",{className:\"mt-2 space-y-1\",children:se.events.slice(-3)."
+        },
+        {
+          "file": "assets/SoccerSeasonCentre-8_thBs25.js",
+          "offset": 26432,
+          "literal": "Season replays",
+          "context": "hday before. Close it whenever you like: the 📺 Resume chip on your career page takes you back to the same matchday. 📺 Season replays, next to Ratings, opens seasons with a saved league world, seasons you won and results only seasons. An older season wi"
+        },
+        {
+          "file": "assets/SoccerSeasonCentre-8_thBs25.js",
+          "offset": 38707,
+          "literal": "Season replays",
+          "context": "null?void 0:j.world)==null?void 0:i.year,n.year)||F(n)||ie(e,n).length>0?void 0:ye}}),[e,a]);return s.jsx(fs,{title:\"📺 Season replays\",rows:o,exitLabel:\"Back to your career\",onPick:n=>t(e.seasons[Number(n)]),onClose:r})}function $s({career:e,clubs:a,row"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-page:Week by week: watch your season match by match",
+      "role": "sc",
+      "path": "src/pages/SoccerCareer.tsx",
+      "blob": "70e1f27988ec3891a15a5260282dfe9fd1502f18",
+      "literal": "Week by week: watch your season match by match",
+      "hits": [
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 1356241,
+          "literal": "Week by week: watch your season match by match",
+          "context": "eason\",\" \",s.jsx(_n,{className:\"w-5 h-5\"})]}),e.phase===\"playing\"&&s.jsxs(P,{onClick:ot,variant:\"outline\",\"aria-label\":\"Week by week: watch your season match by match\",className:\"h-12 w-11 shrink-0 px-0 text-base font-bold sm:w-auto sm:px-3 sm:text-sm gap-1.5\",\"data-week-by-week\":!0,ch"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "ticker:Live scores ticker",
+      "role": "entry",
+      "path": "src/components/layout/TopTicker.tsx",
+      "blob": "7fa37e32723aa511e4bf47bcd0f7c3a399db0375",
+      "literal": "Live scores ticker",
+      "hits": [
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 681590,
+          "literal": "Live scores ticker",
+          "context": "${A?\"\":\"hidden md:block\"} bg-[hsl(var(--ticker))] border-b border-border/60 overflow-hidden h-8 relative`,\"aria-label\":\"Live scores ticker\",onPointerEnter:F=>{F.pointerType===\"mouse\"&&P(!0)},onPointerMove:F=>{F.pointerType===\"mouse\"&&P(!0)},onPointerLeave:F="
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "ticker:onPointerMove",
+      "role": "entry",
+      "path": "src/components/layout/TopTicker.tsx",
+      "blob": "7fa37e32723aa511e4bf47bcd0f7c3a399db0375",
+      "literal": "onPointerMove",
+      "hits": [
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 199885,
+          "literal": "onPointerMove",
+          "context": "KeyDownRef.current=!0,z()))}),onPointerDown:Y(e.onPointerDown,D=>{D.button===0&&(x.current={x:D.clientX,y:D.clientY})}),onPointerMove:Y(e.onPointerMove,D=>{if(!x.current)return;const H=D.clientX-x.current.x,G=D.clientY-x.current.y,q=!!_.current,A=[\"left"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 199903,
+          "literal": "onPointerMove",
+          "context": "=!0,z()))}),onPointerDown:Y(e.onPointerDown,D=>{D.button===0&&(x.current={x:D.clientX,y:D.clientY})}),onPointerMove:Y(e.onPointerMove,D=>{if(!x.current)return;const H=D.clientX-x.current.x,G=D.clientY-x.current.y,q=!!_.current,A=[\"left\",\"right\"].include"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 264638,
+          "literal": "onPointerMove",
+          "context": "ismiss)==null||zt.call(p,p),te(Q===\"x\"?Bt>0?\"right\":\"left\":ar>0?\"down\":\"up\"),ir(),Mo(!0),Ln(!1);return}_e(!1),ee(null)},onPointerMove:ne=>{var he,Ee,zt,Bt;if(!Bo.current||!Uo||((he=window.getSelection())==null?void 0:he.toString().length)>0)return;let a"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 301904,
+          "literal": "onPointerMove",
+          "context": "!0,...i,children:c.jsx(me.button,{\"aria-describedby\":o.open?o.contentId:void 0,\"data-state\":o.stateAttribute,...r,ref:l,onPointerMove:Y(e.onPointerMove,m=>{m.pointerType!==\"touch\"&&!f.current&&!s.isPointerInTransitRef.current&&(o.onTriggerEnter(),f.curr"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 301922,
+          "literal": "onPointerMove",
+          "context": ".jsx(me.button,{\"aria-describedby\":o.open?o.contentId:void 0,\"data-state\":o.stateAttribute,...r,ref:l,onPointerMove:Y(e.onPointerMove,m=>{m.pointerType!==\"touch\"&&!f.current&&!s.isPointerInTransitRef.current&&(o.onTriggerEnter(),f.current=!0)}),onPointe"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 658426,
+          "literal": "onPointerMove",
+          "context": "se(),w3(te)}),onBlur:Y(e.onBlur,T=>{T.currentTarget.contains(T.target)||(window.clearTimeout(P.current),O.current=\"\")}),onPointerMove:Y(e.onPointerMove,ja(T=>{const N=T.target,B=D.current!==T.clientX;if(T.currentTarget.contains(N)&&B){const U=T.clientX>"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 658444,
+          "literal": "onPointerMove",
+          "context": "ur:Y(e.onBlur,T=>{T.currentTarget.contains(T.target)||(window.clearTimeout(P.current),O.current=\"\")}),onPointerMove:Y(e.onPointerMove,ja(T=>{const N=T.target,B=D.current!==T.clientX;if(T.currentTarget.contains(N)&&B){const U=T.clientX>D.current?\"right\":"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 660197,
+          "literal": "onPointerMove",
+          "context": "me.div,{role:\"menuitem\",\"data-highlighted\":f?\"\":void 0,\"aria-disabled\":r||void 0,\"data-disabled\":r?\"\":void 0,...s,ref:u,onPointerMove:Y(e.onPointerMove,ja(v=>{r?i.onItemLeave(v):(i.onItemEnter(v),v.defaultPrevented||v.currentTarget.focus({preventScroll:"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 660215,
+          "literal": "onPointerMove",
+          "context": "item\",\"data-highlighted\":f?\"\":void 0,\"aria-disabled\":r||void 0,\"data-disabled\":r?\"\":void 0,...s,ref:u,onPointerMove:Y(e.onPointerMove,ja(v=>{r?i.onItemLeave(v):(i.onItemEnter(v),v.defaultPrevented||v.currentTarget.focus({preventScroll:!0}))})),onPointer"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 662853,
+          "literal": "onPointerMove",
+          "context": "=e.onClick)==null||m.call(e,h),!(e.disabled||h.defaultPrevented)&&(h.currentTarget.focus(),n.open||n.onOpenChange(!0))},onPointerMove:Y(e.onPointerMove,ja(h=>{s.onItemEnter(h),!h.defaultPrevented&&!e.disabled&&!n.open&&!i.current&&(s.onPointerGraceInten"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 662871,
+          "literal": "onPointerMove",
+          "context": "|m.call(e,h),!(e.disabled||h.defaultPrevented)&&(h.currentTarget.focus(),n.open||n.onOpenChange(!0))},onPointerMove:Y(e.onPointerMove,ja(h=>{s.onItemEnter(h),!h.defaultPrevented&&!e.disabled&&!n.open&&!i.current&&(s.onPointerGraceIntentChange(null),i.cu"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 681661,
+          "literal": "onPointerMove",
+          "context": "r/60 overflow-hidden h-8 relative`,\"aria-label\":\"Live scores ticker\",onPointerEnter:F=>{F.pointerType===\"mouse\"&&P(!0)},onPointerMove:F=>{F.pointerType===\"mouse\"&&P(!0)},onPointerLeave:F=>{F.pointerType===\"mouse\"&&P(!1)},onFocus:()=>P(!0),onBlur:()=>P(!"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "ticker:pointerType",
+      "role": "entry",
+      "path": "src/components/layout/TopTicker.tsx",
+      "blob": "7fa37e32723aa511e4bf47bcd0f7c3a399db0375",
+      "literal": "pointerType",
+      "hits": [
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 60994,
+          "literal": "pointerType",
+          "context": "eyCode:0}}),YT=Ct(qT),QT=je({},tu,{pointerId:0,width:0,height:0,pressure:0,tangentialPressure:0,tiltX:0,tiltY:0,twist:0,pointerType:0,isPrimary:0}),_g=Ct(QT),JT=je({},Da,{touches:0,targetTouches:0,changedTouches:0,altKey:0,metaKey:0,ctrlKey:0,shiftKey"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 188132,
+          "literal": "pointerType",
+          "context": "Effect(()=>{const s=a=>{if(a.target&&!r.current){let l=function(){hx(tR,n,u,{discrete:!0})};const u={originalEvent:a};a.pointerType===\"touch\"?(t.removeEventListener(\"click\",o.current),o.current=l,t.addEventListener(\"click\",o.current,{once:!0})):l()}el"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 200147,
+          "literal": "pointerType",
+          "context": "].includes(g.swipeDirection),T=[\"left\",\"up\"].includes(g.swipeDirection)?Math.min:Math.max,N=A?T(0,H):0,B=A?0:T(0,G),U=D.pointerType===\"touch\"?10:2,Q={x:N,y:B},ee={originalEvent:D,delta:Q};q?(_.current=Q,pl(ER,h,ee,{discrete:!1})):ky(Q,g.swipeDirection"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 301942,
+          "literal": "pointerType",
+          "context": "a-describedby\":o.open?o.contentId:void 0,\"data-state\":o.stateAttribute,...r,ref:l,onPointerMove:Y(e.onPointerMove,m=>{m.pointerType!==\"touch\"&&!f.current&&!s.isPointerInTransitRef.current&&(o.onTriggerEnter(),f.current=!0)}),onPointerLeave:Y(e.onPoint"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 665749,
+          "literal": "pointerType",
+          "context": "o)}return o}function E3(e,t){if(!t)return!1;const n={x:e.clientX,y:e.clientY};return _3(n,t)}function ja(e){return t=>t.pointerType===\"mouse\"?e(t):void 0}var S3=M1,k3=Mm,T3=F1,C3=U1,j3=zm,R3=z1,P3=Ku,O3=V1,A3=W1,N3=K1,I3=Y1,L3=Q1,D3=J1,M3=Z1,$3=tS,qu="
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 681631,
+          "literal": "pointerType",
+          "context": "icker))] border-b border-border/60 overflow-hidden h-8 relative`,\"aria-label\":\"Live scores ticker\",onPointerEnter:F=>{F.pointerType===\"mouse\"&&P(!0)},onPointerMove:F=>{F.pointerType===\"mouse\"&&P(!0)},onPointerLeave:F=>{F.pointerType===\"mouse\"&&P(!1)},"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 681681,
+          "literal": "pointerType",
+          "context": " h-8 relative`,\"aria-label\":\"Live scores ticker\",onPointerEnter:F=>{F.pointerType===\"mouse\"&&P(!0)},onPointerMove:F=>{F.pointerType===\"mouse\"&&P(!0)},onPointerLeave:F=>{F.pointerType===\"mouse\"&&P(!1)},onFocus:()=>P(!0),onBlur:()=>P(!1),children:c.jsxs"
+        },
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 681732,
+          "literal": "pointerType",
+          "context": "PointerEnter:F=>{F.pointerType===\"mouse\"&&P(!0)},onPointerMove:F=>{F.pointerType===\"mouse\"&&P(!0)},onPointerLeave:F=>{F.pointerType===\"mouse\"&&P(!1)},onFocus:()=>P(!0),onBlur:()=>P(!1),children:c.jsxs(\"div\",{className:\"flex items-center h-full\",childr"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "ticker:Pause the scores ticker",
+      "role": "entry",
+      "path": "src/components/layout/TopTicker.tsx",
+      "blob": "7fa37e32723aa511e4bf47bcd0f7c3a399db0375",
+      "literal": "Pause the scores ticker",
+      "hits": [
+        {
+          "file": "assets/index-BZVvQX7Z.js",
+          "offset": 682354,
+          "literal": "Pause the scores ticker",
+          "context": "ton\",onClick:()=>z(F=>!F),onMouseDown:F=>F.preventDefault(),\"aria-pressed\":O,\"aria-label\":O?\"Resume the scores ticker\":\"Pause the scores ticker\",className:\"shrink-0 z-10 h-full px-2 text-[10px] text-muted-foreground hover:text-foreground transition-colors\",childr"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-league-format:Ligue 2",
+      "role": "sc",
+      "path": "src/lib/soccerCareerLeague.ts",
+      "blob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844",
+      "literal": "Ligue 2",
+      "hits": [
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 51279,
+          "literal": "Ligue 2",
+          "context": "Na(e){const a=He(e);return!!a&&e.seasons.length===a.sourceCount+1&&e.seasons[a.sourceCount].type===\"playing\"}const lg={\"Ligue 2\":[\"Metz\",\"Nantes\",\"Saint-Étienne\",\"Red Star FC\",\"Reims\",\"Montpellier\",\"Nancy\",\"Annecy\",\"Sochaux\",\"Dijon\",\"Pau\",\"Guingam"
+        },
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 52062,
+          "literal": "Ligue 2",
+          "context": "remier League\",lower:\"Championship\",count:3},{upper:\"Bundesliga\",lower:\"2. Bundesliga\",count:2},{upper:\"Ligue 1\",lower:\"Ligue 2\",count:2},{upper:\"Serie A\",lower:\"Serie B\",count:3},{upper:\"La Liga\",lower:\"Segunda Division\",count:3}],ea=e=>(fd[e]??e"
+        },
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 55184,
+          "literal": "Ligue 2",
+          "context": "{const m=ea(c);u.has(m)||(i.push(o.get(m)??{id:`career-lower-${m.replace(/[^a-z0-9]+/g,\"-\")}`,name:c,country:d.lower===\"Ligue 2\"?\"France\":d.lower===\"Serie B\"?\"Italy\":c===\"FC Andorra\"?\"Andorra\":\"Spain\",tier:4,color:\"#64748b\",league:d.lower}),u.add("
+        },
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 101338,
+          "literal": "Ligue 2",
+          "context": "eague\":[{from:2026,meetings:2}],\"Belgian Pro League\":[{from:2026,meetings:2}],\"2. Bundesliga\":[{from:2026,meetings:2}],\"Ligue 2\":[{from:2026,meetings:2}],\"Serie B\":[{from:2026,meetings:2}]};function Mc(e,a){const n=gC[e];if(!n)return null;for(cons"
+        },
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 112566,
+          "literal": "Ligue 2",
+          "context": "{leagues:[\"Premier League\",\"Championship\",\"League One\",\"League Two\"],association:\"England\"},Monaco:{leagues:[\"Ligue 1\",\"Ligue 2\"],association:\"France\"}};function hr(e,a){const n=JC[e];return n&&n.leagues.includes(a)?n.association:e}function pr(e,a"
+        },
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 764834,
+          "literal": "Ligue 2",
+          "context": "aly\",tier:4,color:\"#A61C2E\",league:\"Serie A\"},{id:\"fb-70\",name:\"Nantes\",country:\"France\",tier:4,color:\"#FCE300\",league:\"Ligue 2\"},{id:\"fb-71\",name:\"Strasbourg\",country:\"France\",tier:4,color:\"#0072BB\",league:\"Ligue 1\"},{id:\"fb-72\",name:\"Utrecht\",co"
+        },
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 903463,
+          "literal": "Ligue 2",
+          "context": ".legacy=Pn(a),a.phase=\"retirement_ceremony\",a}function fb(e,a){return!e||a>=2026||!ms.some(n=>n.id===e.id&&(n.league===\"Ligue 2\"||n.league===\"Serie B\")&&Sp[n.name]===2026)}function zm(e,a,n,r){var u,o;const i={...e};if(i.postRetirementChoice=a,a=="
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115226,
+          "literal": "Ligue 2",
+          "context": "aly\",tier:4,color:\"#c9c9c9\",league:\"Serie B\"},{id:\"cm-metz\",name:\"Metz\",country:\"France\",tier:4,color:\"#a01d3c\",league:\"Ligue 2\"},{id:\"cm-saint-etienne\",name:\"Saint-Etienne\",country:\"France\",tier:4,color:\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-red-sta"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115328,
+          "literal": "Ligue 2",
+          "context": "\"#a01d3c\",league:\"Ligue 2\"},{id:\"cm-saint-etienne\",name:\"Saint-Etienne\",country:\"France\",tier:4,color:\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-red-star-fc\",name:\"Red Star FC\",country:\"France\",tier:4,color:\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-reims\",name"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115426,
+          "literal": "Ligue 2",
+          "context": "lor:\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-red-star-fc\",name:\"Red Star FC\",country:\"France\",tier:4,color:\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-reims\",name:\"Reims\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-montpellier\",name:\"Mont"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115512,
+          "literal": "Ligue 2",
+          "context": "e\",tier:4,color:\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-reims\",name:\"Reims\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-montpellier\",name:\"Montpellier\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-nancy\",name"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115610,
+          "literal": "Ligue 2",
+          "context": "lor:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-montpellier\",name:\"Montpellier\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-nancy\",name:\"Nancy\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-annecy\",name:\"Annecy\",c"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115696,
+          "literal": "Ligue 2",
+          "context": "e\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-nancy\",name:\"Nancy\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-annecy\",name:\"Annecy\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-sochaux\",name:\"Sochau"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115784,
+          "literal": "Ligue 2",
+          "context": ",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-annecy\",name:\"Annecy\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-sochaux\",name:\"Sochaux\",country:\"France\",tier:4,color:\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-dijon\",name:\"Dijon\""
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115874,
+          "literal": "Ligue 2",
+          "context": "ier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-sochaux\",name:\"Sochaux\",country:\"France\",tier:4,color:\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-dijon\",name:\"Dijon\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-pau\",name:\"Pau\",country"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115960,
+          "literal": "Ligue 2",
+          "context": "e\",tier:4,color:\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-dijon\",name:\"Dijon\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-pau\",name:\"Pau\",country:\"France\",tier:4,color:\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-guingamp\",name:\"Guingamp\",c"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116042,
+          "literal": "Ligue 2",
+          "context": "rance\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-pau\",name:\"Pau\",country:\"France\",tier:4,color:\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-guingamp\",name:\"Guingamp\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-dunkerque\",name:\""
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116134,
+          "literal": "Ligue 2",
+          "context": "r:4,color:\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-guingamp\",name:\"Guingamp\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-dunkerque\",name:\"Dunkerque\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-grenoble\",name:"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116228,
+          "literal": "Ligue 2",
+          "context": "4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-dunkerque\",name:\"Dunkerque\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-grenoble\",name:\"Grenoble\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-rodez\",name:\"Rode"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116320,
+          "literal": "Ligue 2",
+          "context": "r:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-grenoble\",name:\"Grenoble\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-rodez\",name:\"Rodez\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-clermont\",name:\"Clermon"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116406,
+          "literal": "Ligue 2",
+          "context": "e\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-rodez\",name:\"Rodez\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-clermont\",name:\"Clermont\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-boulogne\",name:\"B"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116498,
+          "literal": "Ligue 2",
+          "context": "r:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-clermont\",name:\"Clermont\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-boulogne\",name:\"Boulogne\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-laval\",name:\"Lava"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116590,
+          "literal": "Ligue 2",
+          "context": "r:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-boulogne\",name:\"Boulogne\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-laval\",name:\"Laval\",country:\"France\",tier:4,color:\"#ff6600\",league:\"Ligue 2\"}],qe={\"Premier League\":[[\"Arsena"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116676,
+          "literal": "Ligue 2",
+          "context": "e\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-laval\",name:\"Laval\",country:\"France\",tier:4,color:\"#ff6600\",league:\"Ligue 2\"}],qe={\"Premier League\":[[\"Arsenal\"],[\"Man City\"],[\"Liverpool\"],[\"Chelsea\"],[\"Man United\"],[\"Tottenham\"],[\"Newcastle\"],"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 122620,
+          "literal": "Ligue 2",
+          "context": ",\"Cremonese\",\"Empoli\",\"Entella\",\"Juve Stabia\",\"Mantova\",\"Modena\",\"Padova\",\"Palermo\",\"Sampdoria\",\"Sudtirol\",\"Vicenza\"]],\"Ligue 2\":[[\"Nantes\"],[\"Saint-Etienne\"],[\"Reims\"],[\"Annecy\",\"Boulogne\",\"Clermont\",\"Dijon\",\"Dunkerque\",\"Grenoble\",\"Guingamp\",\"Lav"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 269510,
+          "literal": "Ligue 2",
+          "context": "8}],\"Belgian Pro League\":[{from:2026,size:18}],\"2. Bundesliga\":[{from:2026,size:18}],Brasileirao:[{from:2026,size:20}],\"Ligue 2\":[{from:2026,size:18}],\"Serie B\":[{from:2026,size:20}]},ea={\"Segunda Division\":[{from:2026,size:22}],\"Russian Premier L"
+        },
+        {
+          "file": "assets/soccerMoments-B9RnJTq3.js",
+          "offset": 1101,
+          "literal": "Ligue 2",
+          "context": "i Pro League\":[{from:2026}],\"Belgian Pro League\":[{from:2026}],\"2. Bundesliga\":[{from:2026}],Brasileirao:[{from:2026}],\"Ligue 2\":[{from:2026}],\"Serie B\":[{from:2026}]};function De(e,s){const n=We[e];if(!n)return null;for(const i of n)if(s>=i.from&"
+        },
+        {
+          "file": "assets/clubManagement-BlY7ARie.js",
+          "offset": 193,
+          "literal": "Ligue 2",
+          "context": "ull management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A, L"
+        },
+        {
+          "file": "assets/clubManagement-BlY7ARie.js",
+          "offset": 9059,
+          "literal": "Ligue 2",
+          "context": "026 one, PSG against Aston Villa): win the Champions League or the Europa League and you play it.\",\"Serie B (20 clubs), Ligue 2 (18) and the Segunda División (20) sit under Serie A, Ligue 1 and La Liga, so the bottom three of Serie A and La Liga a"
+        },
+        {
+          "file": "assets/clubManagement-BlY7ARie.js",
+          "offset": 9669,
+          "literal": "Ligue 2",
+          "context": "second division squads are thin in the game's data (only Pisa and Verona in Serie B, Nantes, Saint-Étienne and Reims in Ligue 2, and Girona and Mallorca in the Segunda have eight or more real players), so the rest get topped up with made up youth "
+        },
+        {
+          "file": "assets/clubManager-DubLtB1q.js",
+          "offset": 573735,
+          "literal": "Ligue 2",
+          "context": "er:\"ligue2\",ladder:\"top\",season:\"autumnSpring\",simplified:\"The real relegation barrage (sixteenth against the winner of Ligue 2's playoffs) is not played: two go straight down and two straight up.\"},eredivisie:{nationId:\"netherlands\",flag:\"Netherl"
+        },
+        {
+          "file": "assets/clubManager-DubLtB1q.js",
+          "offset": 583791,
+          "literal": "Ligue 2",
+          "context": "pring\",lateStart:{kickoff:{y:2020,m:8,d:22},summerClose:uo},simplified:`The real relegation playoff (eighteenth against Ligue 2's third) is not played: two go straight down. ${Fi}`}},LS={nationId:\"\",flag:\"\",cup:null,europe:null,drop:3,ladder:\"top\""
+        },
+        {
+          "file": "assets/clubManager-DubLtB1q.js",
+          "offset": 590339,
+          "literal": "Ligue 2",
+          "context": "antova\",\"Modena\",\"Padova\",\"Palermo\",\"Sampdoria\",\"Südtirol\",\"Vicenza\",\"Arezzo\",\"Benevento\",\"Ascoli\"]},{id:\"ligue2\",name:\"Ligue 2\",clubs:[\"Metz\",\"Nantes\",\"Saint-Étienne\",\"Red Star FC\",\"Reims\",\"Montpellier\",\"Nancy\",\"Annecy\",\"Sochaux\",\"Dijon\",\"Pau\",\"G"
+        },
+        {
+          "file": "assets/players-BvqkSYM9.js",
+          "offset": 89905,
+          "literal": "Ligue 2",
+          "context": "Number:1,age:33,marketValue:4,difficulty:\"insane\"},{name:\"Mostafa Mohamed\",club:\"FC Nantes\",nationality:\"Egypt\",league:\"Ligue 2\",goals:2,assists:0,position:\"CF\",kitNumber:null,age:28,marketValue:4,difficulty:\"insane\"},{name:\"Pascal Groß\",club:\"Bri"
+        },
+        {
+          "file": "assets/players-BvqkSYM9.js",
+          "offset": 92578,
+          "literal": "Ligue 2",
+          "context": ":null,age:31,marketValue:3,difficulty:\"insane\"},{name:\"Mohamed Daramy\",club:\"Stade Reims\",nationality:\"Denmark\",league:\"Ligue 2\",goals:4,assists:0,position:\"LW\",kitNumber:null,age:23,marketValue:3,difficulty:\"insane\"},{name:\"Paul Pogba\",club:\"AS M"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-league-format:Serie B",
+      "role": "sc",
+      "path": "src/lib/soccerCareerLeague.ts",
+      "blob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844",
+      "literal": "Serie B",
+      "hits": [
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 51472,
+          "literal": "Serie B",
+          "context": "ier\",\"Nancy\",\"Annecy\",\"Sochaux\",\"Dijon\",\"Pau\",\"Guingamp\",\"Dunkerque\",\"Grenoble\",\"Rodez\",\"Clermont\",\"Boulogne\",\"Laval\"],\"Serie B\":[\"Cremonese\",\"Verona\",\"Pisa\",\"Avellino\",\"Carrarese\",\"Catanzaro\",\"Cesena\",\"Empoli\",\"Entella\",\"Juve Stabia\",\"Mantova\",\"M"
+        },
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 52104,
+          "literal": "Serie B",
+          "context": "3},{upper:\"Bundesliga\",lower:\"2. Bundesliga\",count:2},{upper:\"Ligue 1\",lower:\"Ligue 2\",count:2},{upper:\"Serie A\",lower:\"Serie B\",count:3},{upper:\"La Liga\",lower:\"Segunda Division\",count:3}],ea=e=>(fd[e]??e).normalize(\"NFD\").replace(/[\\u0300-\\u036f"
+        },
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 55213,
+          "literal": "Serie B",
+          "context": "ush(o.get(m)??{id:`career-lower-${m.replace(/[^a-z0-9]+/g,\"-\")}`,name:c,country:d.lower===\"Ligue 2\"?\"France\":d.lower===\"Serie B\"?\"Italy\":c===\"FC Andorra\"?\"Andorra\":\"Spain\",tier:4,color:\"#64748b\",league:d.lower}),u.add(m))}const l=new Map;for(const"
+        },
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 101373,
+          "literal": "Serie B",
+          "context": "lgian Pro League\":[{from:2026,meetings:2}],\"2. Bundesliga\":[{from:2026,meetings:2}],\"Ligue 2\":[{from:2026,meetings:2}],\"Serie B\":[{from:2026,meetings:2}]};function Mc(e,a){const n=gC[e];if(!n)return null;for(const r of n)if(a>=r.from&&(r.to===void"
+        },
+        {
+          "file": "assets/SoccerCareer-C24Gu_PL.js",
+          "offset": 903485,
+          "literal": "Serie B",
+          "context": "\"retirement_ceremony\",a}function fb(e,a){return!e||a>=2026||!ms.some(n=>n.id===e.id&&(n.league===\"Ligue 2\"||n.league===\"Serie B\")&&Sp[n.name]===2026)}function zm(e,a,n,r){var u,o;const i={...e};if(i.postRetirementChoice=a,a===\"retire\")return i.pha"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113443,
+          "literal": "Serie B",
+          "context": "4,color:\"#d02128\",league:\"A-League\"},{id:\"cm-cremonese\",name:\"Cremonese\",country:\"Italy\",tier:4,color:\"#e3546c\",league:\"Serie B\"},{id:\"cm-verona\",name:\"Verona\",country:\"Italy\",tier:4,color:\"#ffdd00\",league:\"Serie B\"},{id:\"cm-pisa\",name:\"Pisa\",coun"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113530,
+          "literal": "Serie B",
+          "context": "\",tier:4,color:\"#e3546c\",league:\"Serie B\"},{id:\"cm-verona\",name:\"Verona\",country:\"Italy\",tier:4,color:\"#ffdd00\",league:\"Serie B\"},{id:\"cm-pisa\",name:\"Pisa\",country:\"Italy\",tier:4,color:\"#3a6fc4\",league:\"Serie B\"},{id:\"cm-avellino\",name:\"Avellino\","
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113613,
+          "literal": "Serie B",
+          "context": "taly\",tier:4,color:\"#ffdd00\",league:\"Serie B\"},{id:\"cm-pisa\",name:\"Pisa\",country:\"Italy\",tier:4,color:\"#3a6fc4\",league:\"Serie B\"},{id:\"cm-avellino\",name:\"Avellino\",country:\"Italy\",tier:4,color:\"#0a7040\",league:\"Serie B\"},{id:\"cm-carrarese\",name:\"C"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113704,
+          "literal": "Serie B",
+          "context": "er:4,color:\"#3a6fc4\",league:\"Serie B\"},{id:\"cm-avellino\",name:\"Avellino\",country:\"Italy\",tier:4,color:\"#0a7040\",league:\"Serie B\"},{id:\"cm-carrarese\",name:\"Carrarese\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-catanzaro\",name:"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113797,
+          "literal": "Serie B",
+          "context": ":4,color:\"#0a7040\",league:\"Serie B\"},{id:\"cm-carrarese\",name:\"Carrarese\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-catanzaro\",name:\"Catanzaro\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-cesena\",name:\"Ce"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113890,
+          "literal": "Serie B",
+          "context": ":4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-catanzaro\",name:\"Catanzaro\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-cesena\",name:\"Cesena\",country:\"Italy\",tier:4,color:\"#d5d5d5\",league:\"Serie B\"},{id:\"cm-empoli\",name:\"Empoli\","
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113977,
+          "literal": "Serie B",
+          "context": "\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-cesena\",name:\"Cesena\",country:\"Italy\",tier:4,color:\"#d5d5d5\",league:\"Serie B\"},{id:\"cm-empoli\",name:\"Empoli\",country:\"Italy\",tier:4,color:\"#1a5dad\",league:\"Serie B\"},{id:\"cm-entella\",name:\"Entella"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114064,
+          "literal": "Serie B",
+          "context": "\",tier:4,color:\"#d5d5d5\",league:\"Serie B\"},{id:\"cm-empoli\",name:\"Empoli\",country:\"Italy\",tier:4,color:\"#1a5dad\",league:\"Serie B\"},{id:\"cm-entella\",name:\"Entella\",country:\"Italy\",tier:4,color:\"#87d8f7\",league:\"Serie B\"},{id:\"cm-juve-stabia\",name:\"J"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114153,
+          "literal": "Serie B",
+          "context": "tier:4,color:\"#1a5dad\",league:\"Serie B\"},{id:\"cm-entella\",name:\"Entella\",country:\"Italy\",tier:4,color:\"#87d8f7\",league:\"Serie B\"},{id:\"cm-juve-stabia\",name:\"Juve Stabia\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-mantova\",nam"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114250,
+          "literal": "Serie B",
+          "context": "olor:\"#87d8f7\",league:\"Serie B\"},{id:\"cm-juve-stabia\",name:\"Juve Stabia\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-mantova\",name:\"Mantova\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-modena\",name:\"Modena"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114339,
+          "literal": "Serie B",
+          "context": "tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-mantova\",name:\"Mantova\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-modena\",name:\"Modena\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-padova\",name:\"Padova\","
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114426,
+          "literal": "Serie B",
+          "context": "\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-modena\",name:\"Modena\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-padova\",name:\"Padova\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-palermo\",name:\"Palermo"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114513,
+          "literal": "Serie B",
+          "context": "\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-padova\",name:\"Padova\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-palermo\",name:\"Palermo\",country:\"Italy\",tier:4,color:\"#e75ba5\",league:\"Serie B\"},{id:\"cm-sampdoria\",name:\"Sam"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114602,
+          "literal": "Serie B",
+          "context": "tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-palermo\",name:\"Palermo\",country:\"Italy\",tier:4,color:\"#e75ba5\",league:\"Serie B\"},{id:\"cm-sampdoria\",name:\"Sampdoria\",country:\"Italy\",tier:4,color:\"#1b5497\",league:\"Serie B\"},{id:\"cm-sudtirol\",name:\""
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114695,
+          "literal": "Serie B",
+          "context": ":4,color:\"#e75ba5\",league:\"Serie B\"},{id:\"cm-sampdoria\",name:\"Sampdoria\",country:\"Italy\",tier:4,color:\"#1b5497\",league:\"Serie B\"},{id:\"cm-sudtirol\",name:\"Sudtirol\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-vicenza\",name:\"Vic"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114786,
+          "literal": "Serie B",
+          "context": "er:4,color:\"#1b5497\",league:\"Serie B\"},{id:\"cm-sudtirol\",name:\"Sudtirol\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-vicenza\",name:\"Vicenza\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-arezzo\",name:\"Arezzo"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114875,
+          "literal": "Serie B",
+          "context": "tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-vicenza\",name:\"Vicenza\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-arezzo\",name:\"Arezzo\",country:\"Italy\",tier:4,color:\"#7d1c2a\",league:\"Serie B\"},{id:\"cm-benevento\",name:\"Benev"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114962,
+          "literal": "Serie B",
+          "context": "\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-arezzo\",name:\"Arezzo\",country:\"Italy\",tier:4,color:\"#7d1c2a\",league:\"Serie B\"},{id:\"cm-benevento\",name:\"Benevento\",country:\"Italy\",tier:4,color:\"#f5d800\",league:\"Serie B\"},{id:\"cm-ascoli\",name:\"As"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115055,
+          "literal": "Serie B",
+          "context": ":4,color:\"#7d1c2a\",league:\"Serie B\"},{id:\"cm-benevento\",name:\"Benevento\",country:\"Italy\",tier:4,color:\"#f5d800\",league:\"Serie B\"},{id:\"cm-ascoli\",name:\"Ascoli\",country:\"Italy\",tier:4,color:\"#c9c9c9\",league:\"Serie B\"},{id:\"cm-metz\",name:\"Metz\",coun"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115142,
+          "literal": "Serie B",
+          "context": "\",tier:4,color:\"#f5d800\",league:\"Serie B\"},{id:\"cm-ascoli\",name:\"Ascoli\",country:\"Italy\",tier:4,color:\"#c9c9c9\",league:\"Serie B\"},{id:\"cm-metz\",name:\"Metz\",country:\"France\",tier:4,color:\"#a01d3c\",league:\"Ligue 2\"},{id:\"cm-saint-etienne\",name:\"Sain"
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 122396,
+          "literal": "Serie B",
+          "context": "ry\"],[\"Perth Glory\"],[\"Wellington Phoenix\"],[\"Western Sydney Wanderers\"],[\"Brisbane Roar\"],[\"Central Coast Mariners\"]],\"Serie B\":[[\"Pisa\"],[\"Verona\"],[\"Arezzo\",\"Ascoli\",\"Avellino\",\"Benevento\",\"Carrarese\",\"Catanzaro\",\"Cesena\",\"Cremonese\",\"Empoli\",\""
+        },
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 269542,
+          "literal": "Serie B",
+          "context": "2026,size:18}],\"2. Bundesliga\":[{from:2026,size:18}],Brasileirao:[{from:2026,size:20}],\"Ligue 2\":[{from:2026,size:18}],\"Serie B\":[{from:2026,size:20}]},ea={\"Segunda Division\":[{from:2026,size:22}],\"Russian Premier League\":[{from:2026,size:16}]};fu"
+        },
+        {
+          "file": "assets/soccerMoments-B9RnJTq3.js",
+          "offset": 1125,
+          "literal": "Serie B",
+          "context": "6}],\"Belgian Pro League\":[{from:2026}],\"2. Bundesliga\":[{from:2026}],Brasileirao:[{from:2026}],\"Ligue 2\":[{from:2026}],\"Serie B\":[{from:2026}]};function De(e,s){const n=We[e];if(!n)return null;for(const i of n)if(s>=i.from&&(i.to===void 0||s<=i.to"
+        },
+        {
+          "file": "assets/clubManagement-BlY7ARie.js",
+          "offset": 184,
+          "literal": "Serie B",
+          "context": " one: a full management sim in your browser. 454 real clubs across 27 leagues in 21 countries, from the Premier League, Serie B, Ligue 2 and the Segunda División to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's S"
+        },
+        {
+          "file": "assets/clubManagement-BlY7ARie.js",
+          "offset": 9039,
+          "literal": "Serie B",
+          "context": "career follows the 2026 one, PSG against Aston Villa): win the Champions League or the Europa League and you play it.\",\"Serie B (20 clubs), Ligue 2 (18) and the Segunda División (20) sit under Serie A, Ligue 1 and La Liga, so the bottom three of S"
+        },
+        {
+          "file": "assets/clubManagement-BlY7ARie.js",
+          "offset": 9462,
+          "literal": "Serie B",
+          "context": "ad B and Celta Fortuna are reserve sides that don't play the Copa del Rey, so they're left out. The promotion playoffs, Serie B's playout and the French barrages aren't played, so it's a straight swap. Most second division squads are thin in the g"
+        },
+        {
+          "file": "assets/clubManagement-BlY7ARie.js",
+          "offset": 9625,
+          "literal": "Serie B",
+          "context": "ren't played, so it's a straight swap. Most second division squads are thin in the game's data (only Pisa and Verona in Serie B, Nantes, Saint-Étienne and Reims in Ligue 2, and Girona and Mallorca in the Segunda have eight or more real players), s"
+        },
+        {
+          "file": "assets/clubManager-DubLtB1q.js",
+          "offset": 18635,
+          "literal": "Serie B",
+          "context": "sliga\",\"SuperSport HNL\",\"Saudi Pro League\",\"2. Bundesliga\",\"Danish Superliga\",\"Super League Greece\",\"Segunda División\",\"Serie B\",\"MLS Eastern Conference\",\"MLS Western Conference\",\"Brasileirão Série A\",\"A-League Men\",\"Russian Premier League\",\"Champ"
+        },
+        {
+          "file": "assets/clubManager-DubLtB1q.js",
+          "offset": 590096,
+          "literal": "Serie B",
+          "context": "ictory\",\"Newcastle Jets\",\"Perth Glory\",\"Sydney FC\",\"Wellington Phoenix\",\"Western Sydney Wanderers\"]},{id:\"serieb\",name:\"Serie B\",clubs:[\"Cremonese\",\"Verona\",\"Pisa\",\"Avellino\",\"Carrarese\",\"Catanzaro\",\"Cesena\",\"Empoli\",\"Entella\",\"Juve Stabia\",\"Manto"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-cremonese",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-cremonese",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113365,
+          "literal": "cm-cremonese",
+          "context": "rn-sydney-wanderers\",name:\"Western Sydney Wanderers\",country:\"Australia\",tier:4,color:\"#d02128\",league:\"A-League\"},{id:\"cm-cremonese\",name:\"Cremonese\",country:\"Italy\",tier:4,color:\"#e3546c\",league:\"Serie B\"},{id:\"cm-verona\",name:\"Verona\",country:\"Italy"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-verona",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-verona",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113458,
+          "literal": "cm-verona",
+          "context": "8\",league:\"A-League\"},{id:\"cm-cremonese\",name:\"Cremonese\",country:\"Italy\",tier:4,color:\"#e3546c\",league:\"Serie B\"},{id:\"cm-verona\",name:\"Verona\",country:\"Italy\",tier:4,color:\"#ffdd00\",league:\"Serie B\"},{id:\"cm-pisa\",name:\"Pisa\",country:\"Italy\",tier:"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-pisa",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-pisa",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113545,
+          "literal": "cm-pisa",
+          "context": "\"#e3546c\",league:\"Serie B\"},{id:\"cm-verona\",name:\"Verona\",country:\"Italy\",tier:4,color:\"#ffdd00\",league:\"Serie B\"},{id:\"cm-pisa\",name:\"Pisa\",country:\"Italy\",tier:4,color:\"#3a6fc4\",league:\"Serie B\"},{id:\"cm-avellino\",name:\"Avellino\",country:\"Italy\""
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-avellino",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-avellino",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113628,
+          "literal": "cm-avellino",
+          "context": "lor:\"#ffdd00\",league:\"Serie B\"},{id:\"cm-pisa\",name:\"Pisa\",country:\"Italy\",tier:4,color:\"#3a6fc4\",league:\"Serie B\"},{id:\"cm-avellino\",name:\"Avellino\",country:\"Italy\",tier:4,color:\"#0a7040\",league:\"Serie B\"},{id:\"cm-carrarese\",name:\"Carrarese\",country:\""
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-carrarese",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-carrarese",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113719,
+          "literal": "cm-carrarese",
+          "context": "6fc4\",league:\"Serie B\"},{id:\"cm-avellino\",name:\"Avellino\",country:\"Italy\",tier:4,color:\"#0a7040\",league:\"Serie B\"},{id:\"cm-carrarese\",name:\"Carrarese\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-catanzaro\",name:\"Catanzaro\",country:"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-catanzaro",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-catanzaro",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113812,
+          "literal": "cm-catanzaro",
+          "context": "40\",league:\"Serie B\"},{id:\"cm-carrarese\",name:\"Carrarese\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-catanzaro\",name:\"Catanzaro\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-cesena\",name:\"Cesena\",country:\"Italy"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-cesena",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-cesena",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113905,
+          "literal": "cm-cesena",
+          "context": "17\",league:\"Serie B\"},{id:\"cm-catanzaro\",name:\"Catanzaro\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-cesena\",name:\"Cesena\",country:\"Italy\",tier:4,color:\"#d5d5d5\",league:\"Serie B\"},{id:\"cm-empoli\",name:\"Empoli\",country:\"Italy\",t"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-empoli",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-empoli",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 113992,
+          "literal": "cm-empoli",
+          "context": "\"#d02128\",league:\"Serie B\"},{id:\"cm-cesena\",name:\"Cesena\",country:\"Italy\",tier:4,color:\"#d5d5d5\",league:\"Serie B\"},{id:\"cm-empoli\",name:\"Empoli\",country:\"Italy\",tier:4,color:\"#1a5dad\",league:\"Serie B\"},{id:\"cm-entella\",name:\"Entella\",country:\"Italy\""
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-entella",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-entella",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114079,
+          "literal": "cm-entella",
+          "context": "\"#d5d5d5\",league:\"Serie B\"},{id:\"cm-empoli\",name:\"Empoli\",country:\"Italy\",tier:4,color:\"#1a5dad\",league:\"Serie B\"},{id:\"cm-entella\",name:\"Entella\",country:\"Italy\",tier:4,color:\"#87d8f7\",league:\"Serie B\"},{id:\"cm-juve-stabia\",name:\"Juve Stabia\",countr"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-juve-stabia",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-juve-stabia",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114168,
+          "literal": "cm-juve-stabia",
+          "context": "1a5dad\",league:\"Serie B\"},{id:\"cm-entella\",name:\"Entella\",country:\"Italy\",tier:4,color:\"#87d8f7\",league:\"Serie B\"},{id:\"cm-juve-stabia\",name:\"Juve Stabia\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-mantova\",name:\"Mantova\",country:\"I"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-mantova",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-mantova",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114265,
+          "literal": "cm-mantova",
+          "context": "league:\"Serie B\"},{id:\"cm-juve-stabia\",name:\"Juve Stabia\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-mantova\",name:\"Mantova\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-modena\",name:\"Modena\",country:\"Italy\","
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-modena",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-modena",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114354,
+          "literal": "cm-modena",
+          "context": "f7d417\",league:\"Serie B\"},{id:\"cm-mantova\",name:\"Mantova\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-modena\",name:\"Modena\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-padova\",name:\"Padova\",country:\"Italy\",t"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-padova",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-padova",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114441,
+          "literal": "cm-padova",
+          "context": "\"#d02128\",league:\"Serie B\"},{id:\"cm-modena\",name:\"Modena\",country:\"Italy\",tier:4,color:\"#f7d417\",league:\"Serie B\"},{id:\"cm-padova\",name:\"Padova\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-palermo\",name:\"Palermo\",country:\"Italy\""
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-palermo",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-palermo",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114528,
+          "literal": "cm-palermo",
+          "context": "\"#f7d417\",league:\"Serie B\"},{id:\"cm-padova\",name:\"Padova\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-palermo\",name:\"Palermo\",country:\"Italy\",tier:4,color:\"#e75ba5\",league:\"Serie B\"},{id:\"cm-sampdoria\",name:\"Sampdoria\",country:\"I"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-sampdoria",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-sampdoria",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114617,
+          "literal": "cm-sampdoria",
+          "context": "d02128\",league:\"Serie B\"},{id:\"cm-palermo\",name:\"Palermo\",country:\"Italy\",tier:4,color:\"#e75ba5\",league:\"Serie B\"},{id:\"cm-sampdoria\",name:\"Sampdoria\",country:\"Italy\",tier:4,color:\"#1b5497\",league:\"Serie B\"},{id:\"cm-sudtirol\",name:\"Sudtirol\",country:\"I"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-sudtirol",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-sudtirol",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114710,
+          "literal": "cm-sudtirol",
+          "context": "a5\",league:\"Serie B\"},{id:\"cm-sampdoria\",name:\"Sampdoria\",country:\"Italy\",tier:4,color:\"#1b5497\",league:\"Serie B\"},{id:\"cm-sudtirol\",name:\"Sudtirol\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-vicenza\",name:\"Vicenza\",country:\"Ital"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-vicenza",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-vicenza",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114801,
+          "literal": "cm-vicenza",
+          "context": "5497\",league:\"Serie B\"},{id:\"cm-sudtirol\",name:\"Sudtirol\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-vicenza\",name:\"Vicenza\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-arezzo\",name:\"Arezzo\",country:\"Italy\","
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-arezzo",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-arezzo",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114890,
+          "literal": "cm-arezzo",
+          "context": "d02128\",league:\"Serie B\"},{id:\"cm-vicenza\",name:\"Vicenza\",country:\"Italy\",tier:4,color:\"#d02128\",league:\"Serie B\"},{id:\"cm-arezzo\",name:\"Arezzo\",country:\"Italy\",tier:4,color:\"#7d1c2a\",league:\"Serie B\"},{id:\"cm-benevento\",name:\"Benevento\",country:\"It"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-benevento",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-benevento",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 114977,
+          "literal": "cm-benevento",
+          "context": "\"#d02128\",league:\"Serie B\"},{id:\"cm-arezzo\",name:\"Arezzo\",country:\"Italy\",tier:4,color:\"#7d1c2a\",league:\"Serie B\"},{id:\"cm-benevento\",name:\"Benevento\",country:\"Italy\",tier:4,color:\"#f5d800\",league:\"Serie B\"},{id:\"cm-ascoli\",name:\"Ascoli\",country:\"Italy"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-ascoli",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-ascoli",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115070,
+          "literal": "cm-ascoli",
+          "context": "2a\",league:\"Serie B\"},{id:\"cm-benevento\",name:\"Benevento\",country:\"Italy\",tier:4,color:\"#f5d800\",league:\"Serie B\"},{id:\"cm-ascoli\",name:\"Ascoli\",country:\"Italy\",tier:4,color:\"#c9c9c9\",league:\"Serie B\"},{id:\"cm-metz\",name:\"Metz\",country:\"France\",tier"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-metz",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-metz",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115157,
+          "literal": "cm-metz",
+          "context": "\"#f5d800\",league:\"Serie B\"},{id:\"cm-ascoli\",name:\"Ascoli\",country:\"Italy\",tier:4,color:\"#c9c9c9\",league:\"Serie B\"},{id:\"cm-metz\",name:\"Metz\",country:\"France\",tier:4,color:\"#a01d3c\",league:\"Ligue 2\"},{id:\"cm-saint-etienne\",name:\"Saint-Etienne\",coun"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-saint-etienne",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-saint-etienne",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115241,
+          "literal": "cm-saint-etienne",
+          "context": "or:\"#c9c9c9\",league:\"Serie B\"},{id:\"cm-metz\",name:\"Metz\",country:\"France\",tier:4,color:\"#a01d3c\",league:\"Ligue 2\"},{id:\"cm-saint-etienne\",name:\"Saint-Etienne\",country:\"France\",tier:4,color:\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-red-star-fc\",name:\"Red Star FC\""
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-red-star-fc",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-red-star-fc",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115343,
+          "literal": "cm-red-star-fc",
+          "context": "e:\"Ligue 2\"},{id:\"cm-saint-etienne\",name:\"Saint-Etienne\",country:\"France\",tier:4,color:\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-red-star-fc\",name:\"Red Star FC\",country:\"France\",tier:4,color:\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-reims\",name:\"Reims\",country:\"Fran"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-reims",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-reims",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115441,
+          "literal": "cm-reims",
+          "context": "eague:\"Ligue 2\"},{id:\"cm-red-star-fc\",name:\"Red Star FC\",country:\"France\",tier:4,color:\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-reims\",name:\"Reims\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-montpellier\",name:\"Montpellier\",country"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-montpellier",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-montpellier",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115527,
+          "literal": "cm-montpellier",
+          "context": ":\"#0a7040\",league:\"Ligue 2\"},{id:\"cm-reims\",name:\"Reims\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-montpellier\",name:\"Montpellier\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-nancy\",name:\"Nancy\",country:\"Fran"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-nancy",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-nancy",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115625,
+          "literal": "cm-nancy",
+          "context": "eague:\"Ligue 2\"},{id:\"cm-montpellier\",name:\"Montpellier\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-nancy\",name:\"Nancy\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-annecy\",name:\"Annecy\",country:\"France\","
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-annecy",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-annecy",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115711,
+          "literal": "cm-annecy",
+          "context": ":\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-nancy\",name:\"Nancy\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-annecy\",name:\"Annecy\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-sochaux\",name:\"Sochaux\",country:\"Franc"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-sochaux",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-sochaux",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115799,
+          "literal": "cm-sochaux",
+          "context": "#d02128\",league:\"Ligue 2\"},{id:\"cm-annecy\",name:\"Annecy\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-sochaux\",name:\"Sochaux\",country:\"France\",tier:4,color:\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-dijon\",name:\"Dijon\",country:\"France\","
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-dijon",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-dijon",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115889,
+          "literal": "cm-dijon",
+          "context": "02128\",league:\"Ligue 2\"},{id:\"cm-sochaux\",name:\"Sochaux\",country:\"France\",tier:4,color:\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-dijon\",name:\"Dijon\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-pau\",name:\"Pau\",country:\"France\",tier:4"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-pau",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-pau",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 115975,
+          "literal": "cm-pau",
+          "context": ":\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-dijon\",name:\"Dijon\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-pau\",name:\"Pau\",country:\"France\",tier:4,color:\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-guingamp\",name:\"Guingamp\",country:\"France"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-guingamp",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-guingamp",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116057,
+          "literal": "cm-guingamp",
+          "context": "olor:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-pau\",name:\"Pau\",country:\"France\",tier:4,color:\"#f7d417\",league:\"Ligue 2\"},{id:\"cm-guingamp\",name:\"Guingamp\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-dunkerque\",name:\"Dunkerque\",country:"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-dunkerque",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-dunkerque",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116149,
+          "literal": "cm-dunkerque",
+          "context": "417\",league:\"Ligue 2\"},{id:\"cm-guingamp\",name:\"Guingamp\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-dunkerque\",name:\"Dunkerque\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-grenoble\",name:\"Grenoble\",country:\""
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-grenoble",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-grenoble",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116243,
+          "literal": "cm-grenoble",
+          "context": "8\",league:\"Ligue 2\"},{id:\"cm-dunkerque\",name:\"Dunkerque\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-grenoble\",name:\"Grenoble\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-rodez\",name:\"Rodez\",country:\"France\""
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-rodez",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-rodez",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116335,
+          "literal": "cm-rodez",
+          "context": "58f\",league:\"Ligue 2\"},{id:\"cm-grenoble\",name:\"Grenoble\",country:\"France\",tier:4,color:\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-rodez\",name:\"Rodez\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-clermont\",name:\"Clermont\",country:\"Fran"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-clermont",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-clermont",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116421,
+          "literal": "cm-clermont",
+          "context": ":\"#1b458f\",league:\"Ligue 2\"},{id:\"cm-rodez\",name:\"Rodez\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-clermont\",name:\"Clermont\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-boulogne\",name:\"Boulogne\",country:\"F"
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-boulogne",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-boulogne",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116513,
+          "literal": "cm-boulogne",
+          "context": "128\",league:\"Ligue 2\"},{id:\"cm-clermont\",name:\"Clermont\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-boulogne\",name:\"Boulogne\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-laval\",name:\"Laval\",country:\"France\""
+        }
+      ],
+      "present": true
+    },
+    {
+      "id": "sc-playing-pool:cm-laval",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-laval",
+      "hits": [
+        {
+          "file": "assets/useCareerMoment-CbP11KsW.js",
+          "offset": 116605,
+          "literal": "cm-laval",
+          "context": "128\",league:\"Ligue 2\"},{id:\"cm-boulogne\",name:\"Boulogne\",country:\"France\",tier:4,color:\"#d02128\",league:\"Ligue 2\"},{id:\"cm-laval\",name:\"Laval\",country:\"France\",tier:4,color:\"#ff6600\",league:\"Ligue 2\"}],qe={\"Premier League\":[[\"Arsenal\"],[\"Man City\"]"
+        }
+      ],
+      "present": true
+    }
+  ],
+  "scope": "Predeclared source-pinned literal/property presence in actual role-reached hosted bodies. Not AST equivalence, engine behavior or ticker-hover gameplay."
+}

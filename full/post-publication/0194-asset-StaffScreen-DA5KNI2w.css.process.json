@@ -1,0 +1,31 @@
+{
+  "label": "asset-StaffScreen-DA5KNI2w.css",
+  "url": "https://douknowball.com/assets/StaffScreen-DA5KNI2w.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:47.163Z",
+  "end": "2026-10-30T21:53:48.050Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0194-asset-StaffScreen-DA5KNI2w.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0194-asset-StaffScreen-DA5KNI2w.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/StaffScreen-DA5KNI2w.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0194-asset-StaffScreen-DA5KNI2w.css.body",
+  "headerFile": "0194-asset-StaffScreen-DA5KNI2w.css.headers",
+  "bytes": 343,
+  "sha256": "df25c80fb97d22c829f31402bbc6fd0d7ca36445d7af4882fb8b9a35be79f24b",
+  "headersSHA256": "35e2fca6a1988e19399b1822647ac157004514d00b8a81b9ae5e384158b03dcc"
+}

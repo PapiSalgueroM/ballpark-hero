@@ -1,0 +1,31 @@
+{
+  "label": "asset-InstructionsPicker-DkSDbxqm.js",
+  "url": "https://douknowball.com/assets/InstructionsPicker-DkSDbxqm.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:42.895Z",
+  "end": "2026-10-30T21:53:43.059Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0168-asset-InstructionsPicker-DkSDbxqm.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0168-asset-InstructionsPicker-DkSDbxqm.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/InstructionsPicker-DkSDbxqm.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0168-asset-InstructionsPicker-DkSDbxqm.js.body",
+  "headerFile": "0168-asset-InstructionsPicker-DkSDbxqm.js.headers",
+  "bytes": 1971,
+  "sha256": "9459615c04f17c719cdd0d67aa2c49057d7a49a659ce65b741d19aafe0317413",
+  "headersSHA256": "a192549f282aba3d924fc03f85c6718b09b68500e9fb031efe76389c468169c6"
+}

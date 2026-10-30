@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerSerieAFixtures2026-Df6OuJqm.js",
+  "url": "https://douknowball.com/assets/clubManagerSerieAFixtures2026-Df6OuJqm.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:08.782Z",
+  "end": "2026-10-30T21:53:09.362Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0045-asset-clubManagerSerieAFixtures2026-Df6OuJqm.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0045-asset-clubManagerSerieAFixtures2026-Df6OuJqm.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerSerieAFixtures2026-Df6OuJqm.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0045-asset-clubManagerSerieAFixtures2026-Df6OuJqm.js.body",
+  "headerFile": "0045-asset-clubManagerSerieAFixtures2026-Df6OuJqm.js.headers",
+  "bytes": 8977,
+  "sha256": "0af6354eaf515f0c851c53ae94e87af4f728ca58327db025964065788ee73bb4",
+  "headersSHA256": "30fb82e39583af22c1dbc6ff89d0e8d615a9cc95be5290e85785a5bd29af96bc"
+}

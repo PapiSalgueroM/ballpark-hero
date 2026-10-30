@@ -1,0 +1,31 @@
+{
+  "label": "asset-CareerChanceWheel-DSBvY97B.js",
+  "url": "https://douknowball.com/assets/CareerChanceWheel-DSBvY97B.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:59.391Z",
+  "end": "2026-10-30T21:53:59.588Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0248-asset-CareerChanceWheel-DSBvY97B.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0248-asset-CareerChanceWheel-DSBvY97B.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/CareerChanceWheel-DSBvY97B.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0248-asset-CareerChanceWheel-DSBvY97B.js.body",
+  "headerFile": "0248-asset-CareerChanceWheel-DSBvY97B.js.headers",
+  "bytes": 2896,
+  "sha256": "5ef1d2b3fad5d80ccc1c111ee113832b7af80bc5b2c1f4c0aa76ee0c4241c23d",
+  "headersSHA256": "1204ac5a786ca803d073deec4ea6d94024b48a4b505ff8f99bf55325e6c3864d"
+}

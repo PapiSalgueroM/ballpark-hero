@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerEra2015-BUxVBSOC.js",
+  "url": "https://douknowball.com/assets/clubManagerEra2015-BUxVBSOC.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:15.624Z",
+  "end": "2026-10-30T21:53:16.443Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0057-asset-clubManagerEra2015-BUxVBSOC.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0057-asset-clubManagerEra2015-BUxVBSOC.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerEra2015-BUxVBSOC.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0057-asset-clubManagerEra2015-BUxVBSOC.js.body",
+  "headerFile": "0057-asset-clubManagerEra2015-BUxVBSOC.js.headers",
+  "bytes": 73687,
+  "sha256": "910222dd0a1a907c61d59ea3ae83f6cd5153790ecb08b855bfac70843ad36d4c",
+  "headersSHA256": "ffbf526c69b904a78dfe6b46bf55a6e654ec088c4b3f4ebafc28a3efbc02a38d"
+}

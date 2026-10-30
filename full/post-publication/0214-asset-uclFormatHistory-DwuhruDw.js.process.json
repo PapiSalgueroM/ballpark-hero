@@ -1,0 +1,31 @@
+{
+  "label": "asset-uclFormatHistory-DwuhruDw.js",
+  "url": "https://douknowball.com/assets/uclFormatHistory-DwuhruDw.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:52.234Z",
+  "end": "2026-10-30T21:53:52.318Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0214-asset-uclFormatHistory-DwuhruDw.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0214-asset-uclFormatHistory-DwuhruDw.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/uclFormatHistory-DwuhruDw.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0214-asset-uclFormatHistory-DwuhruDw.js.body",
+  "headerFile": "0214-asset-uclFormatHistory-DwuhruDw.js.headers",
+  "bytes": 12334,
+  "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71",
+  "headersSHA256": "356c32684a9660564a0b0af30a9eeb8cd8b77326236af9952a4303146e3ad801"
+}

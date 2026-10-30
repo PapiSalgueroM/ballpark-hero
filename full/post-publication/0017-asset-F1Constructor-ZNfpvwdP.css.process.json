@@ -1,0 +1,31 @@
+{
+  "label": "asset-F1Constructor-ZNfpvwdP.css",
+  "url": "https://douknowball.com/assets/F1Constructor-ZNfpvwdP.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:55.601Z",
+  "end": "2026-10-30T21:52:56.244Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0017-asset-F1Constructor-ZNfpvwdP.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0017-asset-F1Constructor-ZNfpvwdP.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/F1Constructor-ZNfpvwdP.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0017-asset-F1Constructor-ZNfpvwdP.css.body",
+  "headerFile": "0017-asset-F1Constructor-ZNfpvwdP.css.headers",
+  "bytes": 541,
+  "sha256": "f1706c29e65f20720def099f12ee5b34f54d535dcfa79bdb808ece9f827c4435",
+  "headersSHA256": "2bf44eb7780240338fa8d353fd6c2fdd34f585ceec3aa6a889578d4e2238df65"
+}

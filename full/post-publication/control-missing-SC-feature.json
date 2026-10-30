@@ -1,0 +1,19 @@
+{
+  "name": "missing-SC-feature",
+  "mutations": [
+    {
+      "file": "0200-asset-useCareerMoment-CbP11KsW.js.body",
+      "beforeSHA256": "c503b517567061d3360b2c2468c8a9224774617bc46f59aa44bbe64ce91af2c0",
+      "afterSHA256": "e8c6a495cae74bad42f6921fb1f0d717ec0b2a92ae34609f8a3edd4601e9104e",
+      "occurrences": 1,
+      "replaced": "cm-red-star-fc"
+    }
+  ],
+  "error": {
+    "name": "AssertionError",
+    "firstLine": "All predeclared M feature literals are present in actual role graphs",
+    "message": "All predeclared M feature literals are present in actual role graphs"
+  },
+  "noGET": true,
+  "originalMutation": false
+}

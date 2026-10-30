@@ -1,0 +1,31 @@
+{
+  "label": "asset-InboxCard-CAqbKeiw.js",
+  "url": "https://douknowball.com/assets/InboxCard-CAqbKeiw.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:41.845Z",
+  "end": "2026-10-30T21:53:42.028Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0162-asset-InboxCard-CAqbKeiw.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0162-asset-InboxCard-CAqbKeiw.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/InboxCard-CAqbKeiw.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0162-asset-InboxCard-CAqbKeiw.js.body",
+  "headerFile": "0162-asset-InboxCard-CAqbKeiw.js.headers",
+  "bytes": 8775,
+  "sha256": "9ef66ae1bbac16002210aebc0512909045cfd76f4b8cdcc5a94c782e95bd9492",
+  "headersSHA256": "5136512654d9068398e9fda84eb2083c03cd912f416a97bac3c3219cef4c0340"
+}

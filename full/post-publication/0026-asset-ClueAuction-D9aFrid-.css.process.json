@@ -1,0 +1,31 @@
+{
+  "label": "asset-ClueAuction-D9aFrid-.css",
+  "url": "https://douknowball.com/assets/ClueAuction-D9aFrid-.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:00.289Z",
+  "end": "2026-10-30T21:53:00.928Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0026-asset-ClueAuction-D9aFrid-.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0026-asset-ClueAuction-D9aFrid-.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/ClueAuction-D9aFrid-.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0026-asset-ClueAuction-D9aFrid-.css.body",
+  "headerFile": "0026-asset-ClueAuction-D9aFrid-.css.headers",
+  "bytes": 1423,
+  "sha256": "5ce6752fc67f7d4e74e27ccd041d3f33d2653858a4b2c6031b688688150cf54c",
+  "headersSHA256": "bd1bb7f2068a9f62dff427b5f5fc30e7ae516942e41771d3074c056a2748cc59"
+}

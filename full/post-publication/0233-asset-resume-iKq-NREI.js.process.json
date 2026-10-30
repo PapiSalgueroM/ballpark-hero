@@ -1,0 +1,31 @@
+{
+  "label": "asset-resume-iKq-NREI.js",
+  "url": "https://douknowball.com/assets/resume-iKq-NREI.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:55.287Z",
+  "end": "2026-10-30T21:53:55.471Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0233-asset-resume-iKq-NREI.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0233-asset-resume-iKq-NREI.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/resume-iKq-NREI.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0233-asset-resume-iKq-NREI.js.body",
+  "headerFile": "0233-asset-resume-iKq-NREI.js.headers",
+  "bytes": 670,
+  "sha256": "2921cc3af2bde88afae3eea6ab19640952224509721968a152a4a98fa05ff7ed",
+  "headersSHA256": "e928ae0aa5072dbcae00e1910374049a90bee53211d47f847b33f152992937ad"
+}

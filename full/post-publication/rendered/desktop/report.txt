@@ -1,0 +1,103 @@
+# https://douknowball.com: 4 desktop URLs (2 plain, 2 slash), 0 phone URLs, sitemap 172
+errors: 0
+not mounted within 25s: 0 
+hit the 15s settle cap: 0 
+
+## (a) lost on mount
+pages that lose content on mount (rule: lost >= 300 chars and >= 25% of saved page text): 0
+pages with SOME saved text missing after mount, under the rule: 0
+pages where saved text is still in the DOM but not visible: 0
+plain pages whose settled visible page text is under 75% of the saved copy: 0
+
+## (a2) slash versus plain (desktop)
+routes whose slash form differs from the plain form: 0 of 2
+URLs whose final address is another route: 0 
+URLs that redirected: 0 
+raw status not 200: 0 
+plain pages with no single self canonical after mount: 0 
+URLs with a blocking robots directive raw or settled: 0 
+plain pages whose title changes on mount: 0
+plain pages without exactly one visible h1 after mount: 0
+
+## phone sample versus desktop plain
+
+## (b) thinnest 25 by settled page words (desktop plain)
+median settled page words 6493, median guide words 4813
+  /soccer-career                           page  2994w  guide  2924w  saved  2994w  game guide  "Soccer Career: Free Football Career Simulator | DoUKnowBall"
+  /club-manager                            page  6493w  guide  4813w  saved  6448w  game guide  "Club Manager: Free Football Management Game | DoUKnowBall"
+plain pages with no guide section at all: 0 
+game pages whose guide article is under 600 words: 0 
+
+## (c) duplicate and near duplicate titles, descriptions, h1s
+exact duplicate titles: 0
+exact duplicate descriptions: 0
+exact duplicate h1s: 0
+near duplicate titles (brand suffix removed) (word set Jaccard >= 0.6): 0 pairs
+near duplicate descriptions (word set Jaccard >= 0.5): 0 pairs
+near duplicate h1s (word set Jaccard >= 0.7): 0 pairs
+
+## (d) template similarity (settled page text, outside the chrome)
+5 word shingle Jaccard across 1 page pairs: >=0.1: 0, >=0.2: 0, >=0.3: 0, >=0.4: 0, >=0.5: 0, >=0.6: 0, >=0.7: 0
+  J 0.00 containment 0.00 /club-manager ~ /soccer-career
+clusters at Jaccard >= 0.3: 0
+median share of page text in blocks repeated on 6 or more pages: 0%
+  /club-manager: 0% of 37605 chars
+  /soccer-career: 0% of 16804 chars
+most repeated page blocks (outside the chrome):
+  on 1 pages: "27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-"
+  on 1 pages: "No future eras, ever: nobody knows the future and we will not pretend to. The 2020-21, 2015-16, 2010"
+  on 1 pages: "How the real Champions League format changed, and what each era here plays"
+  on 1 pages: "Club Manager: Free Football Management Game"
+  on 1 pages: "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier Leagu"
+  on 1 pages: "Club Manager is the site's big one: a full management sim in your browser. 454 real clubs across 27 "
+  on 1 pages: "Pick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bell"
+  on 1 pages: "How to play Club Manager, a free online football management game"
+  on 1 pages: "Pick an era, a nation and a real club"
+  on 1 pages: "Pick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your"
+  on 1 pages: "You pick how hard Club Manager plays when you start, from Very Easy through Easy, Medium and Hard to"
+  on 1 pages: "OR FOUND A CLUB OF YOUR OWN"
+  on 1 pages: "Or tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium,"
+  on 1 pages: "OR MOVE CLUBS BETWEEN LEAGUES WITH THE WORLD EDITOR"
+  on 1 pages: "In today's world, the World editor tile on the nation step lets you rebuild the map before you pick:"
+
+## (e) internal link graph (desktop plain, distinct source pages)
+settled DOM: pages with fewer than 3 inlinking pages: 2 /club-manager (1), /soccer-career (1)
+settled DOM: pages more than 3 clicks from home or unreachable: 2 /club-manager (unreachable), /soccer-career (unreachable)
+settled DOM: click depth distribution {"x":2}
+settled DOM: inlinking pages per page, median 1, min 1
+settled DOM: internal link targets not in the sitemap: 32 / (2), /about (2), /accessibility (2), /baseball (2), /college (2), /conquest (2), /contact (2), /cookie-policy (2), /hockey (2), /leaderboard (2), /privacy (2), /pro-basketball (2), /pro-football (2), /records (2), /search (2), /soccer (2), /terms (2), /whats-new (2), /afl-higher-lower (1), /champions-league-format-history (1), /deadline-day (1), /f1-constructor (1), /golf-higher-lower (1), /manager-hot-seat (1), /mlb-gauntlet-draft (1), /soccer-conquest (1), /contract-chaos (1), /fantasy-draft (1), /score-predictor (1), /squad-deal (1)
+raw HTML: pages with fewer than 3 inlinking pages: 2 /club-manager (1), /soccer-career (1)
+raw HTML: pages more than 3 clicks from home or unreachable: 2 /club-manager (unreachable), /soccer-career (unreachable)
+raw HTML: click depth distribution {"x":2}
+raw HTML: inlinking pages per page, median 1, min 1
+raw HTML: internal link targets not in the sitemap: 29 / (2), /about (2), /accessibility (2), /baseball (2), /college (2), /conquest (2), /contact (2), /cookie-policy (2), /hockey (2), /leaderboard (2), /privacy (2), /pro-basketball (2), /pro-football (2), /records (2), /search (2), /soccer (2), /terms (2), /whats-new (2), /champions-league-format-history (1), /deadline-day (1), /f1-constructor (1), /manager-hot-seat (1), /soccer-conquest (1), /contract-chaos (1), /fantasy-draft (1), /score-predictor (1), /squad-deal (1), /transfer-path (1), /wonderkid-factory (1)
+settled DOM, page body only (chrome links removed): pages with fewer than 3 inlinking pages: 2 /club-manager (1), /soccer-career (1)
+settled DOM, page body only (chrome links removed): pages more than 3 clicks from home or unreachable: 2 /club-manager (unreachable), /soccer-career (unreachable)
+settled DOM, page body only (chrome links removed): click depth distribution {"x":2}
+settled DOM, page body only (chrome links removed): inlinking pages per page, median 1, min 1
+settled DOM, page body only (chrome links removed): internal link targets not in the sitemap: 16 /conquest (2), / (1), /afl-higher-lower (1), /champions-league-format-history (1), /deadline-day (1), /f1-constructor (1), /golf-higher-lower (1), /manager-hot-seat (1), /mlb-gauntlet-draft (1), /soccer-conquest (1), /contract-chaos (1), /fantasy-draft (1), /score-predictor (1), /squad-deal (1), /transfer-path (1), /wonderkid-factory (1)
+fewest inlinks from page bodies (contextual links, chrome excluded):
+  /club-manager: 1 /soccer-career
+  /soccer-career: 1 /club-manager
+
+## (f) console errors, page errors, failed requests, 4xx and 5xx
+URLs with any: 4 of 4
+  4 URL(s): console: Failed to load resource: net::ERR_CONNECTION_REFUSED [/club-manager, /club-manager/, /soccer-career, /soccer-career/]
+  4 URL(s): console: Failed to load resource: net::ERR_FAILED [/club-manager, /club-manager/, /soccer-career, /soccer-career/]
+  4 URL(s): failed: GET https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores net::ERR_CONNECTION_REFUSED [/club-manager, /club-manager/, /soccer-career, /soccer-career/]
+URLs where the audit blocked a write request: 4 POST https://douknowball.com/__l5e/trackevents
+read RPCs allowed through: 0 
+
+## (g) loading, error, placeholder and account wording, spinners, ad slots
+loading: 0 URL(s)
+error: 0 URL(s)
+placeholder: 0 URL(s)
+account: 0 URL(s)
+spinners or skeletons still visible after settle: 0 
+guide section still loading after settle: 0 
+ad slots in the DOM before consent: 0 URL(s)
+game pages with no visible button or input outside the chrome after settle: 0 
+external link hosts on plain pages: 
+plain pages with no JSON-LD after mount: 0 
+URLs with unparsable JSON-LD: 0
+JSON-LD types on plain pages: Answer 2, BreadcrumbList 2, FAQPage 2, Game 2, ListItem 2, Offer 2, Organization 2, Question 2, WebApplication 2, WebSite 2

@@ -1,0 +1,31 @@
+{
+  "label": "asset-eye-DCP5eYR2.js",
+  "url": "https://douknowball.com/assets/eye-DCP5eYR2.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:42.250Z",
+  "end": "2026-10-30T21:53:42.415Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0164-asset-eye-DCP5eYR2.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0164-asset-eye-DCP5eYR2.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/eye-DCP5eYR2.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0164-asset-eye-DCP5eYR2.js.body",
+  "headerFile": "0164-asset-eye-DCP5eYR2.js.headers",
+  "bytes": 425,
+  "sha256": "814eaaae8c20b2e30552b56d9df7e5c908b04660c05c2eafe0f6ccb0038e1496",
+  "headersSHA256": "08aa2b032e638c350b51b3aa43b213993ac91b7df6d91c1372a3a734aedd8b63"
+}

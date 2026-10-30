@@ -1,0 +1,31 @@
+{
+  "label": "asset-zap-BBaa5hYn.js",
+  "url": "https://douknowball.com/assets/zap-BBaa5hYn.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:43.949Z",
+  "end": "2026-10-30T21:53:44.116Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0175-asset-zap-BBaa5hYn.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0175-asset-zap-BBaa5hYn.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/zap-BBaa5hYn.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0175-asset-zap-BBaa5hYn.js.body",
+  "headerFile": "0175-asset-zap-BBaa5hYn.js.headers",
+  "bytes": 431,
+  "sha256": "5740543f6ccf5cea5caba0ae2753ac78b5d6082bb9e5205a915b91a0770b4ca5",
+  "headersSHA256": "ef083f1d679f039f2143454395b57ec11bbc55901282a77fb67746d2713dfe56"
+}

@@ -1,0 +1,1 @@
+._card_1k4y4_1{min-width:0;overflow-wrap:anywhere}._committed_1k4y4_6{animation:_inboxResolved_1k4y4_1 .42s ease-out}@keyframes _inboxResolved_1k4y4_1{0%{box-shadow:0 0 0 2px hsl(var(--gold) / .55)}to{box-shadow:0 0 0 0 transparent}}@media (prefers-reduced-motion: reduce){._committed_1k4y4_6{animation:none}}

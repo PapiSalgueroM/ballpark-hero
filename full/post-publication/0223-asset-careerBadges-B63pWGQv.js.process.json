@@ -1,0 +1,31 @@
+{
+  "label": "asset-careerBadges-B63pWGQv.js",
+  "url": "https://douknowball.com/assets/careerBadges-B63pWGQv.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:53.715Z",
+  "end": "2026-10-30T21:53:53.889Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0223-asset-careerBadges-B63pWGQv.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0223-asset-careerBadges-B63pWGQv.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/careerBadges-B63pWGQv.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0223-asset-careerBadges-B63pWGQv.js.body",
+  "headerFile": "0223-asset-careerBadges-B63pWGQv.js.headers",
+  "bytes": 16336,
+  "sha256": "2696447ed3e6a5b1f5b4f155c22216c45fbea67388e1c221c86f93cd39d221e4",
+  "headersSHA256": "34e7bf8c0a342dbe607fd76570fbf5c479342d287577ead18b1edb304915db1c"
+}

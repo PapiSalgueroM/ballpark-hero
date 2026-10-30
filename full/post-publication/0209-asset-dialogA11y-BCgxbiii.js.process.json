@@ -1,0 +1,31 @@
+{
+  "label": "asset-dialogA11y-BCgxbiii.js",
+  "url": "https://douknowball.com/assets/dialogA11y-BCgxbiii.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:51.601Z",
+  "end": "2026-10-30T21:53:51.766Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0209-asset-dialogA11y-BCgxbiii.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0209-asset-dialogA11y-BCgxbiii.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/dialogA11y-BCgxbiii.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0209-asset-dialogA11y-BCgxbiii.js.body",
+  "headerFile": "0209-asset-dialogA11y-BCgxbiii.js.headers",
+  "bytes": 150,
+  "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7",
+  "headersSHA256": "d68c7911c66c109f44f0c7c83ad144ebda402a3b23d3119bbd54392a6a71c4cb"
+}

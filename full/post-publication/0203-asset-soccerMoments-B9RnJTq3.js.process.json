@@ -1,0 +1,31 @@
+{
+  "label": "asset-soccerMoments-B9RnJTq3.js",
+  "url": "https://douknowball.com/assets/soccerMoments-B9RnJTq3.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:50.640Z",
+  "end": "2026-10-30T21:53:50.807Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0203-asset-soccerMoments-B9RnJTq3.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0203-asset-soccerMoments-B9RnJTq3.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/soccerMoments-B9RnJTq3.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0203-asset-soccerMoments-B9RnJTq3.js.body",
+  "headerFile": "0203-asset-soccerMoments-B9RnJTq3.js.headers",
+  "bytes": 22194,
+  "sha256": "803fe6af6a41cc6b3f538bdc0445bb054d5223e368d562f254994bd3a05ed992",
+  "headersSHA256": "a0fe610dae1287d4fb089b3bd1398c624db9a9695c0750154733ca36238eb5e5"
+}

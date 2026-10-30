@@ -1,0 +1,31 @@
+{
+  "label": "asset-BallIq-BjxfiyZ_.css",
+  "url": "https://douknowball.com/assets/BallIq-BjxfiyZ_.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:03.577Z",
+  "end": "2026-10-30T21:53:03.711Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0034-asset-BallIq-BjxfiyZ_.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0034-asset-BallIq-BjxfiyZ_.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/BallIq-BjxfiyZ_.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0034-asset-BallIq-BjxfiyZ_.css.body",
+  "headerFile": "0034-asset-BallIq-BjxfiyZ_.css.headers",
+  "bytes": 778,
+  "sha256": "de32ffb7b8100b5b6314381999cb8cf901220c5838683e6869af05bb7c9ddb08",
+  "headersSHA256": "4dbe68f9d39acac1ea87988394dda975c8aa46c43eefedea2cdb4682c48cffea"
+}

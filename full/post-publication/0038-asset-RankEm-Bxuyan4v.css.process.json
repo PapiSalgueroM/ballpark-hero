@@ -1,0 +1,31 @@
+{
+  "label": "asset-RankEm-Bxuyan4v.css",
+  "url": "https://douknowball.com/assets/RankEm-Bxuyan4v.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:05.362Z",
+  "end": "2026-10-30T21:53:05.967Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0038-asset-RankEm-Bxuyan4v.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0038-asset-RankEm-Bxuyan4v.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/RankEm-Bxuyan4v.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0038-asset-RankEm-Bxuyan4v.css.body",
+  "headerFile": "0038-asset-RankEm-Bxuyan4v.css.headers",
+  "bytes": 1325,
+  "sha256": "10a32658e47f13d7964a89dacbd558b84f6957c3f27534896eaf876bb6c5f19d",
+  "headersSHA256": "1200211b67e9f3a9a63050e091d3a1416cdf0bc7a1904a473406cd3dee323302"
+}

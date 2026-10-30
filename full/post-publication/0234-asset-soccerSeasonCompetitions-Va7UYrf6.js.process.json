@@ -1,0 +1,31 @@
+{
+  "label": "asset-soccerSeasonCompetitions-Va7UYrf6.js",
+  "url": "https://douknowball.com/assets/soccerSeasonCompetitions-Va7UYrf6.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:55.471Z",
+  "end": "2026-10-30T21:53:55.602Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0234-asset-soccerSeasonCompetitions-Va7UYrf6.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0234-asset-soccerSeasonCompetitions-Va7UYrf6.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/soccerSeasonCompetitions-Va7UYrf6.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0234-asset-soccerSeasonCompetitions-Va7UYrf6.js.body",
+  "headerFile": "0234-asset-soccerSeasonCompetitions-Va7UYrf6.js.headers",
+  "bytes": 3300,
+  "sha256": "062aa1c12d1c99cfba879a23abe2ba651f9b06dcfda24dbcad61fa05a705d6b3",
+  "headersSHA256": "8a157cc27a3aa3f78d06e3cb673bf3238878096396800f61331904fc1a0962dc"
+}

@@ -1,0 +1,31 @@
+{
+  "label": "asset-dumbbell-Cx3CiOsD.js",
+  "url": "https://douknowball.com/assets/dumbbell-Cx3CiOsD.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:45.607Z",
+  "end": "2026-10-30T21:53:45.716Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0185-asset-dumbbell-Cx3CiOsD.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0185-asset-dumbbell-Cx3CiOsD.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/dumbbell-Cx3CiOsD.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0185-asset-dumbbell-Cx3CiOsD.js.body",
+  "headerFile": "0185-asset-dumbbell-Cx3CiOsD.js.headers",
+  "bytes": 728,
+  "sha256": "e5b4f6d91f08c2fd58ee36f7c8797d5795959ba6273cdea8c0bf35ce0eb81ed6",
+  "headersSHA256": "bd5ce72397d71d7732f091adb388785d552363070eb0f5e07087365f2ddafc1d"
+}

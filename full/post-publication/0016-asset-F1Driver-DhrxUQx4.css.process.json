@@ -1,0 +1,31 @@
+{
+  "label": "asset-F1Driver-DhrxUQx4.css",
+  "url": "https://douknowball.com/assets/F1Driver-DhrxUQx4.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:54.871Z",
+  "end": "2026-10-30T21:52:55.601Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0016-asset-F1Driver-DhrxUQx4.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0016-asset-F1Driver-DhrxUQx4.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/F1Driver-DhrxUQx4.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0016-asset-F1Driver-DhrxUQx4.css.body",
+  "headerFile": "0016-asset-F1Driver-DhrxUQx4.css.headers",
+  "bytes": 936,
+  "sha256": "608f400c692fddcaf85da6ec6003552e3dcc761e84e59968110594693def4fb4",
+  "headersSHA256": "382f575e37d7b85825c6fd58b1c3f65422480736f6b58b904720a41f1a13eb0b"
+}

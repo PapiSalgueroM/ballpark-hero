@@ -1,0 +1,31 @@
+{
+  "label": "asset-Celebration-q6YOm-BA.js",
+  "url": "https://douknowball.com/assets/Celebration-q6YOm-BA.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:32.641Z",
+  "end": "2026-10-30T21:53:32.791Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0125-asset-Celebration-q6YOm-BA.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0125-asset-Celebration-q6YOm-BA.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/Celebration-q6YOm-BA.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0125-asset-Celebration-q6YOm-BA.js.body",
+  "headerFile": "0125-asset-Celebration-q6YOm-BA.js.headers",
+  "bytes": 1527,
+  "sha256": "0e66f5282a2ea7e377fbcbd8c4408f4a3725660638d831a719c49b97533b8914",
+  "headersSHA256": "60113095bd7ff5d2c75285b0c94b236ca57722417efb55389a66e3b0bc77e8e4"
+}

@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerEredivisieFixtures2026-BoKvrAyQ.js",
+  "url": "https://douknowball.com/assets/clubManagerEredivisieFixtures2026-BoKvrAyQ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:10.017Z",
+  "end": "2026-10-30T21:53:10.570Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0047-asset-clubManagerEredivisieFixtures2026-BoKvrAyQ.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0047-asset-clubManagerEredivisieFixtures2026-BoKvrAyQ.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerEredivisieFixtures2026-BoKvrAyQ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0047-asset-clubManagerEredivisieFixtures2026-BoKvrAyQ.js.body",
+  "headerFile": "0047-asset-clubManagerEredivisieFixtures2026-BoKvrAyQ.js.headers",
+  "bytes": 8964,
+  "sha256": "bb86c6bdcef47b3cc61d0d3cc5b6421b424fd65296df31165ebfb1685ae860bf",
+  "headersSHA256": "d6bf275e2e87cdb49cccc2c9e0c2dd8b8f755c3b8a7f529acb86742ad1d71651"
+}

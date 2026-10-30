@@ -1,0 +1,31 @@
+{
+  "label": "asset-GuessTheNation-BPrjB6wp.css",
+  "url": "https://douknowball.com/assets/GuessTheNation-BPrjB6wp.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:54.163Z",
+  "end": "2026-10-30T21:52:54.870Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0015-asset-GuessTheNation-BPrjB6wp.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0015-asset-GuessTheNation-BPrjB6wp.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/GuessTheNation-BPrjB6wp.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0015-asset-GuessTheNation-BPrjB6wp.css.body",
+  "headerFile": "0015-asset-GuessTheNation-BPrjB6wp.css.headers",
+  "bytes": 609,
+  "sha256": "5d6bc0584b675acbc6f9ea8cd6a5ce61bd94cc4cc5c31771bbe201cb50bcc430",
+  "headersSHA256": "2a8402ed4cf2289bec0acbbc3d49a9809f1a6e933feea816af3d31a50d7e58df"
+}

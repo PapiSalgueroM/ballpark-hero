@@ -1,0 +1,19 @@
+{
+  "name": "missing-CM-entry",
+  "mutations": [
+    {
+      "file": "0007-asset-index-BZVvQX7Z.js.body",
+      "beforeSHA256": "85d1abbde4cfe6fbd5c26420742808913f208b3c6859d9c6004f937106363ba1",
+      "afterSHA256": "6980829eb1086c58288097ab5cb411c59c5dbf7a1c3769ea8003d294d535c1b7",
+      "occurrences": 2,
+      "replaced": "ClubManager-_qcYE7FR.js"
+    }
+  ],
+  "error": {
+    "name": "AssertionError",
+    "firstLine": "One actual CM lazy import in entry",
+    "message": "One actual CM lazy import in entry\n\n0 !== 1\n"
+  },
+  "noGET": true,
+  "originalMutation": false
+}

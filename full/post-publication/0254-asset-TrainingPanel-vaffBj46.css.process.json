@@ -1,0 +1,31 @@
+{
+  "label": "asset-TrainingPanel-vaffBj46.css",
+  "url": "https://douknowball.com/assets/TrainingPanel-vaffBj46.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:54:00.541Z",
+  "end": "2026-10-30T21:54:00.684Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0254-asset-TrainingPanel-vaffBj46.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0254-asset-TrainingPanel-vaffBj46.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/TrainingPanel-vaffBj46.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0254-asset-TrainingPanel-vaffBj46.css.body",
+  "headerFile": "0254-asset-TrainingPanel-vaffBj46.css.headers",
+  "bytes": 588,
+  "sha256": "ac7508f699ba1d72579263951109dc6207af12ad08c9d8a72f6ac82091c2c6c6",
+  "headersSHA256": "bed5c07c4d914640a85d8c8533f4078ce659262da1a62abdf0b4226a22386e6b"
+}

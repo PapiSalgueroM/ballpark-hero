@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerLigue2Fixtures2026-CWGEvRlM.js",
+  "url": "https://douknowball.com/assets/clubManagerLigue2Fixtures2026-CWGEvRlM.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:12.464Z",
+  "end": "2026-10-30T21:53:13.069Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0051-asset-clubManagerLigue2Fixtures2026-CWGEvRlM.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0051-asset-clubManagerLigue2Fixtures2026-CWGEvRlM.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerLigue2Fixtures2026-CWGEvRlM.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0051-asset-clubManagerLigue2Fixtures2026-CWGEvRlM.js.body",
+  "headerFile": "0051-asset-clubManagerLigue2Fixtures2026-CWGEvRlM.js.headers",
+  "bytes": 7485,
+  "sha256": "0d0743a4c63541119449a603fe5a010234bc7089031baadd1d9620ccb7cd17f2",
+  "headersSHA256": "08ac91955170729a7e3da98a63d6f946e5a2d15290d4b76caebcf4845adecbd6"
+}

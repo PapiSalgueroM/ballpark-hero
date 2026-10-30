@@ -1,0 +1,31 @@
+{
+  "label": "asset-SquadScreen-DidXOvXh.js",
+  "url": "https://douknowball.com/assets/SquadScreen-DidXOvXh.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:34.840Z",
+  "end": "2026-10-30T21:53:35.051Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0136-asset-SquadScreen-DidXOvXh.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0136-asset-SquadScreen-DidXOvXh.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SquadScreen-DidXOvXh.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0136-asset-SquadScreen-DidXOvXh.js.body",
+  "headerFile": "0136-asset-SquadScreen-DidXOvXh.js.headers",
+  "bytes": 19475,
+  "sha256": "a7b9c5cd169660ae3069211ef3fa15ff012a06826a1aa4c5104b902d670dca8b",
+  "headersSHA256": "242ab56efa70b4504c8c219457787cf2a00c634c0f83ee17b8b1939b51e0d2ec"
+}

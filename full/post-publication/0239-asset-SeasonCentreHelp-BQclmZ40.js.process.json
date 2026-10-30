@@ -1,0 +1,31 @@
+{
+  "label": "asset-SeasonCentreHelp-BQclmZ40.js",
+  "url": "https://douknowball.com/assets/SeasonCentreHelp-BQclmZ40.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:56.290Z",
+  "end": "2026-10-30T21:53:56.467Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0239-asset-SeasonCentreHelp-BQclmZ40.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0239-asset-SeasonCentreHelp-BQclmZ40.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SeasonCentreHelp-BQclmZ40.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0239-asset-SeasonCentreHelp-BQclmZ40.js.body",
+  "headerFile": "0239-asset-SeasonCentreHelp-BQclmZ40.js.headers",
+  "bytes": 1967,
+  "sha256": "5f9ad79391acc5ad3ff747dc5a3c767facccb8f79ffde63ea3b5ee6a998e6046",
+  "headersSHA256": "3c3f329dc9f15f9522ec041d56870ebde29eb8ea23c74c906e7c3981ca1d6659"
+}

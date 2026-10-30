@@ -1,0 +1,31 @@
+{
+  "label": "asset-MysteryBox-6MFZ-n4f.css",
+  "url": "https://douknowball.com/assets/MysteryBox-6MFZ-n4f.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:04.545Z",
+  "end": "2026-10-30T21:53:05.219Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0036-asset-MysteryBox-6MFZ-n4f.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0036-asset-MysteryBox-6MFZ-n4f.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/MysteryBox-6MFZ-n4f.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0036-asset-MysteryBox-6MFZ-n4f.css.body",
+  "headerFile": "0036-asset-MysteryBox-6MFZ-n4f.css.headers",
+  "bytes": 783,
+  "sha256": "9c0399ce2daa9d915c978b9e30742ec97f9a44640b07127a981180c5a2357955",
+  "headersSHA256": "6e0b7a1256b70b43fb499b1d929249d5412da54140afbaa2edb93a202154d707"
+}

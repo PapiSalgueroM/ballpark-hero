@@ -1,0 +1,2 @@
+2dd73c0b4f21587238d80909154f9f9244ac87b047edef63a0edc5435df3802d  /home/runner/work/_temp/rc-out/full/post-publication-readback/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/post-publication-readback/stderr.log

@@ -1,0 +1,31 @@
+{
+  "label": "asset-intlNames-DiJYNZJt.js",
+  "url": "https://douknowball.com/assets/intlNames-DiJYNZJt.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:52.138Z",
+  "end": "2026-10-30T21:53:52.234Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0213-asset-intlNames-DiJYNZJt.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0213-asset-intlNames-DiJYNZJt.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/intlNames-DiJYNZJt.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0213-asset-intlNames-DiJYNZJt.js.body",
+  "headerFile": "0213-asset-intlNames-DiJYNZJt.js.headers",
+  "bytes": 13296,
+  "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55",
+  "headersSHA256": "8a0abecf85137737142675c47347a75bc8da61c097946ae11fbed760a50f5b1f"
+}

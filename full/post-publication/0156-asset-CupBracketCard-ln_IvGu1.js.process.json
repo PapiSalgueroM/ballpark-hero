@@ -1,0 +1,31 @@
+{
+  "label": "asset-CupBracketCard-ln_IvGu1.js",
+  "url": "https://douknowball.com/assets/CupBracketCard-ln_IvGu1.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:40.692Z",
+  "end": "2026-10-30T21:53:40.938Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0156-asset-CupBracketCard-ln_IvGu1.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0156-asset-CupBracketCard-ln_IvGu1.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/CupBracketCard-ln_IvGu1.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0156-asset-CupBracketCard-ln_IvGu1.js.body",
+  "headerFile": "0156-asset-CupBracketCard-ln_IvGu1.js.headers",
+  "bytes": 6725,
+  "sha256": "9caf730cb13feee0cd60051c8cd6025b6a180ef77b310eb8b670a0eab2e0ff83",
+  "headersSHA256": "d2c3160f9e62d8e7ae2f86a5f4211ead9bd4e5cac6a125728f61b32494c82780"
+}

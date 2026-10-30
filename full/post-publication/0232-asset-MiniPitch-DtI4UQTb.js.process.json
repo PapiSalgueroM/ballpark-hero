@@ -1,0 +1,31 @@
+{
+  "label": "asset-MiniPitch-DtI4UQTb.js",
+  "url": "https://douknowball.com/assets/MiniPitch-DtI4UQTb.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:55.076Z",
+  "end": "2026-10-30T21:53:55.287Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0232-asset-MiniPitch-DtI4UQTb.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0232-asset-MiniPitch-DtI4UQTb.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/MiniPitch-DtI4UQTb.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0232-asset-MiniPitch-DtI4UQTb.js.body",
+  "headerFile": "0232-asset-MiniPitch-DtI4UQTb.js.headers",
+  "bytes": 4097,
+  "sha256": "8e2d3294d4ae46a50f57d1089096cf09d7fb24f0b5cab621d7bfda2ef9c9280c",
+  "headersSHA256": "ee4b2c7bb40f86543e5dca850d59f801f3938b53a298a1dc72457909a9d9e185"
+}

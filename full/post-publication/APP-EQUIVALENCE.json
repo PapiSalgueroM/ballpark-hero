@@ -1,0 +1,4199 @@
+{
+  "M": "931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "TREE": "a4271bd0e49516db54d37e7cc2ad98112376ffb2",
+  "sourceFiles": 5502,
+  "P": "f296854dc83b4337487dec8a5af50a348cd0d3cc",
+  "PT": "0e457d0a519a196828529ec0a25d066b2aae450c",
+  "explicitDocsOnlyAllowed": [
+    "docs/WORKBOARD.md",
+    "docs/PROJECT-STATE.md"
+  ],
+  "actualChangedPaths": [
+    "docs/PROJECT-STATE.md",
+    "docs/WORKBOARD.md"
+  ],
+  "allOtherRepositoryBodiesModesHeld": true,
+  "actualLocalDistFiles": [
+    {
+      "name": "16211a5a50cff8f3434e5db883a21d8f.txt",
+      "bytes": 32,
+      "sha256": "c42c3c91e0aee24ae111f71483a082a99c0289ef43c7d1c3fa5c925b5d1529a3"
+    },
+    {
+      "name": "_redirects",
+      "bytes": 3366,
+      "sha256": "2f9e46a144f768b29496ec7d40b23170534911927b7d07f5c03bbbd59887afc4"
+    },
+    {
+      "name": "about/index.html",
+      "bytes": 20789,
+      "sha256": "f3adf211268ef7fb7ff30f77485592d476723100ccb2b23b29c89352db67cd64"
+    },
+    {
+      "name": "accessibility/index.html",
+      "bytes": 19181,
+      "sha256": "ab64d61156777abf524f03021114dbb1341ef0a440aab0f80642a52a19565d4b"
+    },
+    {
+      "name": "admin/login/index.html",
+      "bytes": 1393,
+      "sha256": "abc21e6914a356054ad1b9259df031c059a28c532399ffdb78a4c2766f5884d3"
+    },
+    {
+      "name": "admin/reports/index.html",
+      "bytes": 1391,
+      "sha256": "532b8a590a4749cb9f10ac15ac7e3f4168505517b01d5131f71d278cd4faa6da"
+    },
+    {
+      "name": "ads.txt",
+      "bytes": 59,
+      "sha256": "28d0816aadf466bcb351957fc8aed691f21a6ef771e597c9886fb0ae94154038"
+    },
+    {
+      "name": "afl-higher-lower/index.html",
+      "bytes": 22050,
+      "sha256": "a2076bc0248c034b55cb8fc738a60bb94b0a313a4530cf2ccfc1cc1626434744"
+    },
+    {
+      "name": "alphabet-sprint/index.html",
+      "bytes": 22758,
+      "sha256": "4aa96f7b9ea3ec025a960580257dd4081e2be4439762479b95c2b6bdcfecfc54"
+    },
+    {
+      "name": "apple-touch-icon.png",
+      "bytes": 5909,
+      "sha256": "12d1600f24dacbf71c724b7393da684a2b01d3aa934800dc0b545b9a0d8035c2"
+    },
+    {
+      "name": "arenas/baseball.webp",
+      "bytes": 194668,
+      "sha256": "bd15f739f05d822da0c1b1cec3a3a709009e303f8675c1adfc5b4d63342456c7"
+    },
+    {
+      "name": "arenas/basketball.webp",
+      "bytes": 137460,
+      "sha256": "e6f9ee0338c9ff482dbfc754cfc131534bb64c567f3cdab67ceddd206a056428"
+    },
+    {
+      "name": "arenas/football.webp",
+      "bytes": 153694,
+      "sha256": "f74f19d94fc92f16c44e48fae0e0acdd5da003608759d60ab73add41e874b070"
+    },
+    {
+      "name": "arenas/hockey.webp",
+      "bytes": 138154,
+      "sha256": "87081fed36fb3e3bafe41970bf6edb0963d0ae6e0e0b8486ab8d0283c0b14046"
+    },
+    {
+      "name": "arenas/soccer.webp",
+      "bytes": 166192,
+      "sha256": "e3c4e5f38ea6eee93b68d06c986a4c05d9be643c412f5953247f93b0a4c6ad8d"
+    },
+    {
+      "name": "assets/About-BzWivMOd.js",
+      "bytes": 7643,
+      "sha256": "23f604dd26682bf6abe8ae43a86993549fd2d814072a7b25ff3279b986e1d042"
+    },
+    {
+      "name": "assets/AcademyLegacyPanel-LiJAHu4J.js",
+      "bytes": 3472,
+      "sha256": "4c9307b494e0559180f5612775980ef0f43206b4f16f3eb4e77f632c53a7e66c"
+    },
+    {
+      "name": "assets/AcademyPanel-DViTFG69.js",
+      "bytes": 21234,
+      "sha256": "9f8cda9a0496d6ee4211dfa35c1f4b6d46e4401adce3be9e35f6d8e4caf2e495"
+    },
+    {
+      "name": "assets/AcademyProspects-QdlyzrA5.js",
+      "bytes": 2190,
+      "sha256": "1a664f26e21631a08f1910603d5b10480122d79348d81dedd5bebc08c2cbcdb8"
+    },
+    {
+      "name": "assets/AcademyScreen-DtgKvPY5.js",
+      "bytes": 11589,
+      "sha256": "27862741affcbb5f076d45f3f4af516ac02e46804bd8fcc75f521133a65b920e"
+    },
+    {
+      "name": "assets/Accessibility-BZLBcC3s.js",
+      "bytes": 5175,
+      "sha256": "fdd0b246b89828fb0062b35e138078f2a1eb3af4c3e937a433fdcf2643b7d752"
+    },
+    {
+      "name": "assets/AccountMenu-CrtH39uO.js",
+      "bytes": 2273,
+      "sha256": "005b56efe68a3e6b78c19820ed105d88caf8b8d6180cca007facb00ac14c40c7"
+    },
+    {
+      "name": "assets/AdBanner-xmjFZX5i.js",
+      "bytes": 2095,
+      "sha256": "7a4759303bfa6e5470c2d9d7adf292bfd26af27c20e49446a24dc14b373d9a25"
+    },
+    {
+      "name": "assets/AdminLogin-B7XHXPj4.js",
+      "bytes": 2592,
+      "sha256": "292bc81fb92a2d45873bfda18a29eadb05f6d46e36646d742328f33ba655b153"
+    },
+    {
+      "name": "assets/AdminReports-vpjw1ffi.js",
+      "bytes": 11046,
+      "sha256": "7f0cb799dd4d9fe05cc0eea351f77e43451acc8ef29ae8c203c4b042e12597e2"
+    },
+    {
+      "name": "assets/AflHigherLower-B6xf3u5Y.js",
+      "bytes": 8829,
+      "sha256": "473aa73a6259af5fa652d1bf3ea21b92a3eec5777eaddd7b89b8a7f3570175c4"
+    },
+    {
+      "name": "assets/AlphabetSprint-BqxzyhY6.js",
+      "bytes": 14917,
+      "sha256": "5ff7db015a08ba64b7352eaf4ce071f0b2e9322504c3e83cb4a200e98faf3aec"
+    },
+    {
+      "name": "assets/AppearanceBuilder-Bp2rY0nP.js",
+      "bytes": 33617,
+      "sha256": "5ce90df3fc43e4a411434cb87ef241e7e6ab40a09061be6414b01904b3a25147"
+    },
+    {
+      "name": "assets/ArcadeShotFeedback--eiU5Aah.css",
+      "bytes": 2937,
+      "sha256": "8ef6cdb5d751c1854c6d5b299b25480dc00f24e28a83c1a024fd7e1a95b69831"
+    },
+    {
+      "name": "assets/ArcadeShotFeedback-2JUzxsSB.js",
+      "bytes": 1955,
+      "sha256": "82db7159b75166d381bf82083c6e375106933d10b9b7d573038d31650f8aa536"
+    },
+    {
+      "name": "assets/AussieRulesManager-BqM_ufTV.js",
+      "bytes": 76923,
+      "sha256": "5c467dab5cf2581fffa9025d48afdd81adafb1903bf96881250fde16aa07c4d9"
+    },
+    {
+      "name": "assets/AussieRulesManager-zdcvwuMp.css",
+      "bytes": 4099,
+      "sha256": "c429c48a415e43e166ad3eed7f12cfddaedce25a679e044ef55739e604fe14e0"
+    },
+    {
+      "name": "assets/AuthModalBody-HuEiVsyf.js",
+      "bytes": 7798,
+      "sha256": "3652b3d58bf84c822756e8e9a7f722864512fb2ada91cc463dcf54a5e5d021de"
+    },
+    {
+      "name": "assets/BallIq-BRt6z2aq.js",
+      "bytes": 11759,
+      "sha256": "7a61089a16a9b23afd4106b6aca527b6f1d5db777ab790f84e234791162f03a9"
+    },
+    {
+      "name": "assets/BallIq-BjxfiyZ_.css",
+      "bytes": 778,
+      "sha256": "de32ffb7b8100b5b6314381999cb8cf901220c5838683e6869af05bb7c9ddb08"
+    },
+    {
+      "name": "assets/BaseballCareer-CirLATyJ.js",
+      "bytes": 32689,
+      "sha256": "7714eb8ba3e28177ff9b5b3b2c21d902ea2be3c8d956f79da770146737c90dcc"
+    },
+    {
+      "name": "assets/BaseballConnections-ShTmgstE.js",
+      "bytes": 49176,
+      "sha256": "c954633b5945abe3088cb45873b18c85746a947bc2fe20b5773d9c4fa095e972"
+    },
+    {
+      "name": "assets/BootRoom-Dj2TOuwD.js",
+      "bytes": 6872,
+      "sha256": "2816da9610d340f76578066e05510da4115a54e4e5c45e51cf627a7efa773f0c"
+    },
+    {
+      "name": "assets/BudgetBuilder-BMPKocqF.css",
+      "bytes": 744,
+      "sha256": "acef5ef159e660e55986b6f9b5b6b66a7421182a7471644948eca6fcc2c9f11d"
+    },
+    {
+      "name": "assets/BudgetBuilder-hKTiFfNg.js",
+      "bytes": 21688,
+      "sha256": "4eae4c8f1fcaab9feed671147332ed1091a5972f28998ff8252d6eae917e2a05"
+    },
+    {
+      "name": "assets/BuzzerBeater-CoSoFtWG.js",
+      "bytes": 41930,
+      "sha256": "3ac1de4e840d5f5aa5beb2204fd7c9676fe023bc311bacafcff459a58e0a80a0"
+    },
+    {
+      "name": "assets/CageClash-CZYzfgdI.js",
+      "bytes": 52229,
+      "sha256": "70bf53bfccc7f74b6286f93ae2d39edae865803f9a5fd679dc059c8a26eedd9c"
+    },
+    {
+      "name": "assets/CalendarScreen-Dkdqqfuu.js",
+      "bytes": 13662,
+      "sha256": "9ff898e8dca716bebf0d47602fdcc22ddd9d1a6adb4892235d4f4783abb3cc5c"
+    },
+    {
+      "name": "assets/CareerChanceWheel-Cx_AZdbw.js",
+      "bytes": 2896,
+      "sha256": "2635cbb1f8be34e282eaa69cec592a72881f0d002c170eddb0591af432da0e10"
+    },
+    {
+      "name": "assets/CareerFx-Cw9ykNap.js",
+      "bytes": 1581,
+      "sha256": "5e50c2ae75620045829bf365aacf734ac2d9961eaf1f1844329ad7435e81b0f3"
+    },
+    {
+      "name": "assets/CareerGame-D0J4MTNh.js",
+      "bytes": 16070,
+      "sha256": "ea650683c3de52ecf19e8d8cee06115733e0a604d132bb01af146b12e42e1072"
+    },
+    {
+      "name": "assets/CareerLadder-D9I7WBgB.js",
+      "bytes": 32677,
+      "sha256": "07dd903321df75f345996dc9b4a21858453a20a3982eb3b81f8dd7316cf2e20d"
+    },
+    {
+      "name": "assets/CareerRecordsSheet-CrGNU1f0.js",
+      "bytes": 7593,
+      "sha256": "c92a4387d6cc7c7c86ab33077b88b7ef5113e1017a8439b642696e2b7aed230f"
+    },
+    {
+      "name": "assets/CareerSeasonReview-DBDRP8vh.js",
+      "bytes": 15768,
+      "sha256": "6bfdc152ada64794ad891039f2dfc6ebf6e9f8da061f7c605923ad41c76f4982"
+    },
+    {
+      "name": "assets/CareerStory-D9k8KfJA.js",
+      "bytes": 7613,
+      "sha256": "a6f6379237639256ad0f09c45d8bb78840f67523a6d27b3e2c88ed1822a62b91"
+    },
+    {
+      "name": "assets/CbbDynasty-BYDFIecQ.js",
+      "bytes": 23328,
+      "sha256": "97ca178a0c7fd9fc69c674b2b407aa0741dd1458acadb4b8ab62b5b0afc3369c"
+    },
+    {
+      "name": "assets/CbbGrid-DNWIi_wJ.js",
+      "bytes": 14139,
+      "sha256": "bac5d07035f71a63be6d27552690b8e794dae2bb165b4f5a1a2dc9cdf60af1a6"
+    },
+    {
+      "name": "assets/Celebration-Blu8sZgk.js",
+      "bytes": 1527,
+      "sha256": "2e5e42ca475c7ba823a20cd194395d09b310d2118f13710d35c23353df1284f9"
+    },
+    {
+      "name": "assets/CelebrationStyles-DFmwdz-g.js",
+      "bytes": 2126,
+      "sha256": "894dce91d629b0111a3ab75077284e47837a489c46bd358b77a77821a1ffc5a9"
+    },
+    {
+      "name": "assets/CfbDynasty-Bl1FS0-o.js",
+      "bytes": 26828,
+      "sha256": "69b2d0fcef455c5cc30223829979b2ff29e36a257e1c262d88134c6e5f220670"
+    },
+    {
+      "name": "assets/CfbHigherLower-BP_AoSBM.js",
+      "bytes": 8848,
+      "sha256": "6f54aaaced82ded46ed2e4d86c8205f8cc05a7fcdc295817d43e41b95426f3ad"
+    },
+    {
+      "name": "assets/ChainLinkMotion-CvpbwvEe.css",
+      "bytes": 509,
+      "sha256": "169035b4b507221eca3b9414deda2d45ecd20a00043295d38b1434997941180a"
+    },
+    {
+      "name": "assets/ChainLinkMotion.module-CU3oOeKl.js",
+      "bytes": 117,
+      "sha256": "0ad71c3c3b715c5f37b11c4b0bb6715fefd2447f7a890c36bd303de69fd57c1b"
+    },
+    {
+      "name": "assets/ChampOrNot-B106cPlx.js",
+      "bytes": 31216,
+      "sha256": "a7044663397b17b0256f621c3b61031ccc93504ae7a94425b054129673f20e2c"
+    },
+    {
+      "name": "assets/ChampionsLeagueFormatHistory-SITqu2G2.js",
+      "bytes": 12458,
+      "sha256": "eed5bf8e78eed41fd5033d954e9dcdd7d93cecfee18263b20c287723f3ec475a"
+    },
+    {
+      "name": "assets/ClubDetailScreen-7CcRs1bw.js",
+      "bytes": 9783,
+      "sha256": "cfa47de1deaa68976249c2349913d53d106ad3c22bf27fedc12344e37d3da8f6"
+    },
+    {
+      "name": "assets/ClubManager-Bb-k3Da7.js",
+      "bytes": 93083,
+      "sha256": "d2945071d07a595d8b1f889ce8ea09f69482775cb3256481c2e3f2431a541493"
+    },
+    {
+      "name": "assets/ClubManagerBoardPanel-DB84gydQ.js",
+      "bytes": 2809,
+      "sha256": "7f497026ec53a3eaf5a4c6dc6529bcb90eaf6a951f1996db1f4fb2d0f2f2b5ed"
+    },
+    {
+      "name": "assets/ClubManagerCareerPanel-DLD3WJjp.js",
+      "bytes": 21357,
+      "sha256": "6d27a28e6fb33b5264fc2fd131849dcf2dd58006c60c349a7592d07dda9fea91"
+    },
+    {
+      "name": "assets/ClubManagerFarewell-BjASl88U.js",
+      "bytes": 6090,
+      "sha256": "0c8c7acb5dce3758dd2010657128e0d2d709730148cb8d3f382b4563b8292087"
+    },
+    {
+      "name": "assets/ClubManagerHelp-COp7O1_m.js",
+      "bytes": 76270,
+      "sha256": "e3ad3368245741623c57b806998fd3dac980ac7955506b9a9bfca9976b424c19"
+    },
+    {
+      "name": "assets/ClubManagerSeasonSummary-CMRCDxU3.js",
+      "bytes": 16967,
+      "sha256": "cd79f8957a9a20d35c5a4133eacc5b3818a7cd22bd57a28950a10f5f4658eaa7"
+    },
+    {
+      "name": "assets/ClubManagerTreatmentPanel-B7Lp535t.js",
+      "bytes": 1235,
+      "sha256": "fd6ae42a94ff45dace5ee21eef5b21f4c51ca040da79e58798245420800cbfea"
+    },
+    {
+      "name": "assets/ClueAuction-D9aFrid-.css",
+      "bytes": 1423,
+      "sha256": "5ce6752fc67f7d4e74e27ccd041d3f33d2653858a4b2c6031b688688150cf54c"
+    },
+    {
+      "name": "assets/ClueAuction-DND5Ev3b.js",
+      "bytes": 19975,
+      "sha256": "43130075ba19f17170b6eb54104774794d50739ef8a7d9237408f7c153c3e7ee"
+    },
+    {
+      "name": "assets/CmRetireDoor-YTmJ9lRU.js",
+      "bytes": 6139,
+      "sha256": "a00a7c89712f386a424895a2e136ed74f7939d3adea01c17938f930fe8e0456d"
+    },
+    {
+      "name": "assets/CoachingStartChooser-B3EjQ5oz.js",
+      "bytes": 4192,
+      "sha256": "4cdc09baf62f9cd451cd2d3711b717a0716483780d6752fd8b95ed8452137398"
+    },
+    {
+      "name": "assets/CollegeGrid-DHFvLrrs.js",
+      "bytes": 37691,
+      "sha256": "a144e8a627eaebad4a179f435d6853c8de36d07befe8e70b74bbbefa0649c4d7"
+    },
+    {
+      "name": "assets/Confetti-BL913ZuV.js",
+      "bytes": 904,
+      "sha256": "2d503f94928d451afe97f9a28ee97a2399a27fe22057fac3636c22c8b96f00a2"
+    },
+    {
+      "name": "assets/Connect4Finish-DZwVlnML.js",
+      "bytes": 2064,
+      "sha256": "15f5001a039ee62ba940acf2ecf933881ba492b425d4d840ef414f75bbda3e1c"
+    },
+    {
+      "name": "assets/Connections-DJEFKuwF.js",
+      "bytes": 196676,
+      "sha256": "3b9a8714801cba00c7473b0ebe72571bae4ca9b6338036eadcecb105de440ea1"
+    },
+    {
+      "name": "assets/Conquest-BsjsiJA-.js",
+      "bytes": 55822,
+      "sha256": "8cefaeaf622ba8dd81a1210807736a9a12240e094aa5b3d7c2fc6f89ab5e6172"
+    },
+    {
+      "name": "assets/ConquestActionScene-Bk9xHPHH.js",
+      "bytes": 17699,
+      "sha256": "2dab54d0ff004f1ad8a85f80c4270895497b724163e930b3d6630d96589f29e6"
+    },
+    {
+      "name": "assets/ConquestMlb-Dpse2T8v.js",
+      "bytes": 3957,
+      "sha256": "44d1f81ff50913c11d19b69a24b9b48850b9f7444fb31b4ddc5064ddaf361ad3"
+    },
+    {
+      "name": "assets/ConquestNba-DceOOD1C.js",
+      "bytes": 55446,
+      "sha256": "f784b0d4f3f5d65431764451515b8778b259684038f6f19d8a5471fc81e9b767"
+    },
+    {
+      "name": "assets/ConquestNhl-DJEEkNZR.js",
+      "bytes": 3996,
+      "sha256": "a252ab11bedf97649698a527ca27cec2bf782b4208fcf399a5c4e387c76cacb6"
+    },
+    {
+      "name": "assets/Contact-CqMcYdE9.js",
+      "bytes": 3377,
+      "sha256": "866a42ef41c7d7e986f2521dac4d4401146745a0cbe757fd99bd127621e6ac63"
+    },
+    {
+      "name": "assets/ContractChaos-GNhgcUMR.js",
+      "bytes": 24016,
+      "sha256": "93581f86ca8c9fc80ef1fff2011ae30cf874229351a66e5e28d12034823a6817"
+    },
+    {
+      "name": "assets/ContractsCard-CD0QJQi7.js",
+      "bytes": 13732,
+      "sha256": "2c5624c838ab55a6b2d4f1a2baee60f0851ac79c9b5121799740ae2ba47ca5da"
+    },
+    {
+      "name": "assets/CookiePolicy-Qeeclp-5.js",
+      "bytes": 5596,
+      "sha256": "ecd0f5514eca9d9ffe2187abec83e727ff7fd8c37fd17164a02e250a4ea3cd51"
+    },
+    {
+      "name": "assets/CupBracketCard-CNkr2bdC.js",
+      "bytes": 6725,
+      "sha256": "250ebaa7622e89c9aea862f426cd8db47e32601533deb306a288e8363b58970a"
+    },
+    {
+      "name": "assets/CustomClubForm-UxENld6X.js",
+      "bytes": 11221,
+      "sha256": "05515a13247ca2a08f43412b045ce06f797aebf052bc3ff2fa4d55c515c98ce8"
+    },
+    {
+      "name": "assets/DailyLegendOverlay-B6ChI6pJ.js",
+      "bytes": 2402,
+      "sha256": "c46a7a9e9ee37b05873f0e57ae622f62208054ff8633e6d4677de7aa03f0cb92"
+    },
+    {
+      "name": "assets/DartDraft-C8Lf4VfI.js",
+      "bytes": 176906,
+      "sha256": "a2c6368d3b62ea3b49abeb3c4d3d272ea0882fb44db4a6c235d287092a007c27"
+    },
+    {
+      "name": "assets/DeadlineDay-L0lH-PhB.js",
+      "bytes": 46318,
+      "sha256": "4fcf7e5b4cf88681aecadd3835468013a570af713bb5db3927431b3f1d0ab2e9"
+    },
+    {
+      "name": "assets/DirtyMoneyDesk-Ci0WleuA.js",
+      "bytes": 6360,
+      "sha256": "17a53624e5926eec39636405347e3e8b7287629ac1ac86eb54e9eecdcc70cbf4"
+    },
+    {
+      "name": "assets/DraftNightCard-BiVFcLih.js",
+      "bytes": 3978,
+      "sha256": "12ae01aec362c205b2b77a36e8a1eb1751836027e2e7c872a13dc70860e6ab84"
+    },
+    {
+      "name": "assets/DraftNightSequence-DuKcBfl3.js",
+      "bytes": 7297,
+      "sha256": "66f3a523f2fb21f5a4574c66c9efe169dda0a08ca9b18844bdb3640179f4e1a5"
+    },
+    {
+      "name": "assets/DrillBoard-DkWy0xXq.js",
+      "bytes": 26014,
+      "sha256": "e195c8833c95eabbf0ec18a53551b9e56784f07bcd51e89346d8786c31f458e7"
+    },
+    {
+      "name": "assets/EmojiGuess-D9ZuO3Jy.js",
+      "bytes": 24062,
+      "sha256": "263dcf8dc3315dc5345d25b737c7458a18cb0220f293b380609358f10a9cab8a"
+    },
+    {
+      "name": "assets/EmojiGuess-MeLdLiyY.css",
+      "bytes": 827,
+      "sha256": "57608e157ee625aa77058178fccc708e215ba5b7f82b7f1b153feda0354731d0"
+    },
+    {
+      "name": "assets/F1Constructor-DgUz7qff.js",
+      "bytes": 24907,
+      "sha256": "fa3bbff8cca5a7a975728c549ffa9f5c02a63e5a5906ca2a3233d5afd8c6c40c"
+    },
+    {
+      "name": "assets/F1Constructor-ZNfpvwdP.css",
+      "bytes": 541,
+      "sha256": "f1706c29e65f20720def099f12ee5b34f54d535dcfa79bdb808ece9f827c4435"
+    },
+    {
+      "name": "assets/F1Driver-DOhO6ZgZ.js",
+      "bytes": 26746,
+      "sha256": "b27b67b97de40dcab868488d7b5eb5f976bca811cf4553022eba366ceeb22fec"
+    },
+    {
+      "name": "assets/F1Driver-DhrxUQx4.css",
+      "bytes": 936,
+      "sha256": "608f400c692fddcaf85da6ec6003552e3dcc761e84e59968110594693def4fb4"
+    },
+    {
+      "name": "assets/F1HigherLower-CEp4eaWm.js",
+      "bytes": 8968,
+      "sha256": "b8a1cc2c6c7b7c8ea0fba822b4ec9dd0bc84bfafb7e3e022d3d39d2c3623afb7"
+    },
+    {
+      "name": "assets/FaceOff-CbvwyIco.js",
+      "bytes": 27426,
+      "sha256": "5dc86a31d8c247957793f0cdc1a96119a66dc317218667cde27507dd0b9af7d6"
+    },
+    {
+      "name": "assets/FacilitiesScreen-DIUQYmjN.js",
+      "bytes": 4222,
+      "sha256": "2aa41a317a093c936a49dfa1a5867d36ecf84756924444139f6089e9306cc965"
+    },
+    {
+      "name": "assets/FantasyDraft-BBpfFIJM.css",
+      "bytes": 510,
+      "sha256": "25c38688778605cdc7352daad2a38b800df3aa921e675fefa0a479ed11c56a65"
+    },
+    {
+      "name": "assets/FantasyDraft-C_nI0Thz.js",
+      "bytes": 30901,
+      "sha256": "423a9df81acf693c85295f09b79c7421c4abfb0bc41e2297ebd8c282055de5a5"
+    },
+    {
+      "name": "assets/FarewellCard-Lrj4fWgP.js",
+      "bytes": 3158,
+      "sha256": "16009dbc34e48a1a29c2d67f9d4aa302210da4bc4dbf3c5cebca162e550ee3f5"
+    },
+    {
+      "name": "assets/FightCareer-D1dM9-ks.js",
+      "bytes": 95903,
+      "sha256": "84340fedd4ee5054b1b8a2336198adb58c71cce2840d6c35761daa40b7e8e066"
+    },
+    {
+      "name": "assets/FightGym-BjKT5ZPU.js",
+      "bytes": 32316,
+      "sha256": "2214cc5601a2a6eae611926c58e61adc1e8b21b43684354c0025c62d8cb5f876"
+    },
+    {
+      "name": "assets/FightPromoter-bu-44Sq7.js",
+      "bytes": 68649,
+      "sha256": "661e012ce62f16a2abcc27b3700a1c58312771c57d9984cda4078cb0dfd0f4a4"
+    },
+    {
+      "name": "assets/FinancesScreen-D1msQOWI.js",
+      "bytes": 17540,
+      "sha256": "50c8284595a9963b0131803e1b6fd33379694deb9eea9c903e922b1436395733"
+    },
+    {
+      "name": "assets/FirstTeamPanel-pwuNgGLQ.js",
+      "bytes": 6499,
+      "sha256": "09b840bf9a91227f7a75a3831877aa36dffb7267c0f8405c5f0ccefc54194a71"
+    },
+    {
+      "name": "assets/FlagImg-BXbR9tHG.js",
+      "bytes": 5846,
+      "sha256": "952189645d846671d214da40ba048eb87807732c1fa95d9eb7c6371dc33e3203"
+    },
+    {
+      "name": "assets/FoAwardBadge-CrDaF6M7.js",
+      "bytes": 3310,
+      "sha256": "af32e382303de462f4eb7d389fdd37ad6f1c6d1c99e0013ddf8caaa37aedb2f1"
+    },
+    {
+      "name": "assets/FoSeasonStatsCard-B3v6hFV2.js",
+      "bytes": 3800,
+      "sha256": "ee33991fdc14a1cc868e7f7896692664136f5b0cad5c0a95a5b2aff7e963bc69"
+    },
+    {
+      "name": "assets/FootballConnect4-CldZmJqR.js",
+      "bytes": 22317,
+      "sha256": "ba994af255fa182f1180b09ddadf6f648a69091d837f2c3f875d9819f49be6b1"
+    },
+    {
+      "name": "assets/FootballGrid-CKhBeOIV.js",
+      "bytes": 14381,
+      "sha256": "1c0cfd42bec8222510dd7793e81ff1ee06c30472cc7573a5037e379e90deb034"
+    },
+    {
+      "name": "assets/FootballTimeline-DmtmmlJU.js",
+      "bytes": 12737,
+      "sha256": "cf596a664a7f19d07cab4a461bbb5c731c23cf3a3d08a7fdad45eec1500fac2c"
+    },
+    {
+      "name": "assets/Footle-COoZn0Y1.js",
+      "bytes": 54352,
+      "sha256": "deade7d49bac7c345301a44cfbe3deda380e40d91c8f71885a6462f9fc13660a"
+    },
+    {
+      "name": "assets/Footle-pT74gEft.css",
+      "bytes": 3203,
+      "sha256": "d1bed6d876914a27496fe514ed3fc1fd5ba1a4641b11950bf536bec6bc36f5e0"
+    },
+    {
+      "name": "assets/FreeAgentPool-B8z-yNUM.js",
+      "bytes": 2778,
+      "sha256": "2a10c4ad4a6ce13f1a40a035c41b3c9456562846d38a601c0490d12d8924e040"
+    },
+    {
+      "name": "assets/FreeKick-5HwJesk5.js",
+      "bytes": 27226,
+      "sha256": "f6fe140d7753b84ea78f9af75e431d16297ff57836871cb9d9933cd5b4edd623"
+    },
+    {
+      "name": "assets/FreeKick-Db_P_VAd.css",
+      "bytes": 483,
+      "sha256": "afbf2f276b261341725e4dc402a0e0f8c56582793e444f1927c78c4a014280c8"
+    },
+    {
+      "name": "assets/FrontOffice-DGo7COQK.js",
+      "bytes": 132624,
+      "sha256": "1d21fe9b5e36039ab5a924d6fc5a07e86a9a4223c2cde7b3baa283e7ac667bac"
+    },
+    {
+      "name": "assets/GameHelp-C5sLeEdq.js",
+      "bytes": 1655,
+      "sha256": "d83b72ed7fdacfab2cd25ddd8c46339b8ada21d33bbfa6a5cef9790c6e1f653f"
+    },
+    {
+      "name": "assets/GameNav-BYL0r_xw.js",
+      "bytes": 3697,
+      "sha256": "56ebc5cb5fb9dc19a48cf313a53454ac15f8d246a07d25d78f23fc9d26825a70"
+    },
+    {
+      "name": "assets/GameNavbar-Q-xnuI8e.js",
+      "bytes": 10449,
+      "sha256": "eaa8f9b0942b1ad7b8b92794ad876845c08dc6444957d46c39065b3973e9f6ee"
+    },
+    {
+      "name": "assets/GameReportContext-CXc_TjG6.js",
+      "bytes": 8562,
+      "sha256": "e823c694a82f287832b35b10e7e20d3f4df5b898cfb3d60f10768cffb5922c28"
+    },
+    {
+      "name": "assets/GameSeoContent-eyr80rer.js",
+      "bytes": 7404,
+      "sha256": "6714d282ce7618bdead1b16d25d4b5f43757fd22e700820c19cdd8c4703838b8"
+    },
+    {
+      "name": "assets/GameShell-91B6PVN6.js",
+      "bytes": 1460,
+      "sha256": "38875471fc05647d22e58d32fc97c8254cd4de2ace8c15f9f106598460bc60cd"
+    },
+    {
+      "name": "assets/GauntletBoard-CUVOrHSU.js",
+      "bytes": 7134,
+      "sha256": "a58fb612d43b2f7c12edc2b6a5bbd17bd8859ee4d08e618df24dc38bd685e30e"
+    },
+    {
+      "name": "assets/GauntletDraft-Lo948zdU.js",
+      "bytes": 11022,
+      "sha256": "6e99217df733b072d76a3275a5bf10e4b004e935973f10e0e2668eccc638f5ec"
+    },
+    {
+      "name": "assets/GenericLineupBoard-SBTy7uAt.js",
+      "bytes": 12220,
+      "sha256": "3cb23582147b08846c8913b90607de2f79ff0f76e7de403eb292398138bc4ff1"
+    },
+    {
+      "name": "assets/GiveUpButton-BbP_Jsn1.js",
+      "bytes": 1189,
+      "sha256": "df5c6018da39ecc0a8b182b5ecb22092aaa8269da8505a5efa371f5f59a9e354"
+    },
+    {
+      "name": "assets/GmCareerPanel-Cs64V-wy.js",
+      "bytes": 3247,
+      "sha256": "ba896ac91dcedd6382e88dfdcc44dad492172c85fb1afe5d2deb653d80be3a92"
+    },
+    {
+      "name": "assets/GmJobMarketPanel-DwCUj9LG.js",
+      "bytes": 5567,
+      "sha256": "1e9eed43f8681ba79ca4ee17e7e354269ba5d4687c91d61039e7ceafa9a70894"
+    },
+    {
+      "name": "assets/GmLotteryCard-CwBOPbEZ.js",
+      "bytes": 1927,
+      "sha256": "9660cf61fc8f23c0da274231bce806b4bce9988a40afa4e1182f94aa3b3a3701"
+    },
+    {
+      "name": "assets/GmTradeBuilder-CsXt162F.css",
+      "bytes": 1609,
+      "sha256": "fc40f8a7c288926667ae66a624eb03d99c68b2ba4786c5dc4b2f850488fe2570"
+    },
+    {
+      "name": "assets/GmTradeBuilder-I9qYkk00.js",
+      "bytes": 101907,
+      "sha256": "930bc64e4a0538a1b6bfcd3036b798ececb717565b2ea2821622b769c2d9b8e4"
+    },
+    {
+      "name": "assets/GmXpDeskPanel-B3r9otlW.js",
+      "bytes": 6128,
+      "sha256": "f728b8a0d9778dad03f6d1e936a92da45ae74d0c3d5d3762b19799d89e739b05"
+    },
+    {
+      "name": "assets/GolfHigherLower-B3RL8cfT.js",
+      "bytes": 8890,
+      "sha256": "0d7911faf1e07a09b417f65a874803688bf44a948dc270b6518372806ea3c7b6"
+    },
+    {
+      "name": "assets/GridArchive-CJe5QkvD.js",
+      "bytes": 520722,
+      "sha256": "dd21983243fb229edc1b04752d3f29c7c67150c339800201aef7123b7ecf98c9"
+    },
+    {
+      "name": "assets/GridBoard-B17fVJvu.js",
+      "bytes": 3268,
+      "sha256": "1f508910c451f1ed364f93d1765189aa6fdd4124c8f94e4588c5b1fe308dad01"
+    },
+    {
+      "name": "assets/GridBoardSkeleton-C8HzZv5s.js",
+      "bytes": 1318,
+      "sha256": "cbd07784113d5a57b76c040769daf1b149ff514ca08b43d75ce5aad4b1bc6b98"
+    },
+    {
+      "name": "assets/GridCellLayout-D70wq1lC.css",
+      "bytes": 1192,
+      "sha256": "c0ff2f4d994b1478b2b289e2539ab46ec78d8a478c8f2b360fb1768cfa06e536"
+    },
+    {
+      "name": "assets/GridCellLayout.module-BrZZmB8D.js",
+      "bytes": 331,
+      "sha256": "c3075d28e46e816964df2d15c9cb21561e774ac0b104bec966757291fa7c72b9"
+    },
+    {
+      "name": "assets/GuessCbbTeam-BcTI5nvh.css",
+      "bytes": 774,
+      "sha256": "a945cb7234fe918adcbc079bd80e7832fe5859bdf661bbfbd3e58834f359f2c4"
+    },
+    {
+      "name": "assets/GuessCbbTeam-Tc8RRWVc.js",
+      "bytes": 16692,
+      "sha256": "6bdd2f7cf656fa027b1557c5550974e16d3c9f270f190264fbb5b93f4bfa1ea0"
+    },
+    {
+      "name": "assets/GuessFinish-CXX6PFl5.js",
+      "bytes": 1131,
+      "sha256": "b7e4f123d2eaaaef23907de6d9eb7582ca1b2c95567c06c6deff88fd79d22800"
+    },
+    {
+      "name": "assets/GuessNascarDriver-B4spQIn2.css",
+      "bytes": 768,
+      "sha256": "63c39b0836ee4bd4f49930ddb65f4cf0695676bcba657283e04a43a5d4a16d04"
+    },
+    {
+      "name": "assets/GuessNascarDriver-CP7YVR00.js",
+      "bytes": 39159,
+      "sha256": "3098c896c36285c4ed530ae6d894755298aa4c662f07b16ce4258ebd5adf9d9e"
+    },
+    {
+      "name": "assets/GuessNflTeam-D6z9crWe.js",
+      "bytes": 37871,
+      "sha256": "22278c9cb761d42f5f69d8f47f82c6fe5fc53222a99fa8f72f7c8e443cb102a1"
+    },
+    {
+      "name": "assets/GuessTennisPlayer-BJV-i7my.css",
+      "bytes": 766,
+      "sha256": "ba10e0a08371c7e8947c9842c1710a74154952e579a437439f9075564a8a3340"
+    },
+    {
+      "name": "assets/GuessTennisPlayer-BWVw8YzM.js",
+      "bytes": 16976,
+      "sha256": "c4a0d35c0e26d13581b82b8bf0dd300e90fa43ef4dcb87f86d8be6096e1a6af7"
+    },
+    {
+      "name": "assets/GuessTheCollege-BiONEkSD.js",
+      "bytes": 84853,
+      "sha256": "f4fe2c3e03238d0c5ee51ede4704c7510571f0ef7395f27e16c1a367fa9c083c"
+    },
+    {
+      "name": "assets/GuessTheGolfer-BTsWjYbv.js",
+      "bytes": 8013,
+      "sha256": "d61d78dd4e6f8cc10e80db40f77a4504a8d53ee799fc55e1988c86251326b4d7"
+    },
+    {
+      "name": "assets/GuessTheNation-BPrjB6wp.css",
+      "bytes": 609,
+      "sha256": "5d6bc0584b675acbc6f9ea8cd6a5ce61bd94cc4cc5c31771bbe201cb50bcc430"
+    },
+    {
+      "name": "assets/GuessTheNation-Z90HNu11.js",
+      "bytes": 20735,
+      "sha256": "76ce65e9daab70f236872082c38fa76f6730b2c861f6f1a700bde1c551b67d88"
+    },
+    {
+      "name": "assets/GuessTheYear-CunLCvoj.js",
+      "bytes": 31263,
+      "sha256": "e5d07e7c0fe15c687445a147a2c9de0f8cbf79af60ae719ebc0642e0e9d514af"
+    },
+    {
+      "name": "assets/HalftimeScreen-BDkqfjJ1.js",
+      "bytes": 16952,
+      "sha256": "db4bf292e1d493939ca41b451327c962dd2133727c31278355bc3e7b29f215b1"
+    },
+    {
+      "name": "assets/HallOfChampions-8WfwfPbB.js",
+      "bytes": 25476,
+      "sha256": "35249ba65e12f1919a7e813754cb7bb7ad4af853abe697ecd42a5a9b073b8d9b"
+    },
+    {
+      "name": "assets/HallOfFameCard-CZfL6U56.js",
+      "bytes": 5474,
+      "sha256": "c27de58f58af1751648d29917b8e91f4f8ba40ad308de108f424efdd13d9d381"
+    },
+    {
+      "name": "assets/HigherLower-BJb13D63.js",
+      "bytes": 13392,
+      "sha256": "966ddbbd7d4e04b329b46e786d630226b55b585079964e21b7b28b35b33091ac"
+    },
+    {
+      "name": "assets/HigherLowerThrough-BuUznw7x.js",
+      "bytes": 223,
+      "sha256": "efbb52b43f37670f9c264993398e264e4dea28d8722a99fc6df12129ab8c8c15"
+    },
+    {
+      "name": "assets/HigherLowerTransfers-BUOAXih9.js",
+      "bytes": 6252,
+      "sha256": "56e556852aa5009c7f5d66c8c0bf9f4f7dfa541cd70f15801417cd8c42030cf7"
+    },
+    {
+      "name": "assets/HockeyCareer-D0uaBRWg.js",
+      "bytes": 32555,
+      "sha256": "540528eaaed63d51ef2f28ff890525a07be7ed1f13e32646715d4bf940cd3427"
+    },
+    {
+      "name": "assets/HockeyGrid-pK5AqNC_.js",
+      "bytes": 10944,
+      "sha256": "9d49d26a123939752f3e117a433eba438887c327d9940d710f5754e511de752a"
+    },
+    {
+      "name": "assets/HockeyHigherLower-B0U724em.js",
+      "bytes": 11710,
+      "sha256": "b037538e3ecf699982ea1be2b731c87f8f179a3cbe7c302519f94f620da0b1a2"
+    },
+    {
+      "name": "assets/HofOrBust-D3JZz4wO.js",
+      "bytes": 20120,
+      "sha256": "98cbe146d0e3855e3728db4b32a8bda543146adc81bcdbf957d0648d229165e3"
+    },
+    {
+      "name": "assets/HomeAbout-BPfvn8LT.js",
+      "bytes": 9543,
+      "sha256": "8b8ac1a5b573cf80ca7137ddbb05b1dd4662eaa8489b20b41ac9aa564ec99e30"
+    },
+    {
+      "name": "assets/HomeArt--nkCrUeP.js",
+      "bytes": 8856,
+      "sha256": "f1a8f6f8f3f4b9c800441099a48bd5ba1d5aca1c78be3156558b0509c6c24544"
+    },
+    {
+      "name": "assets/HomelandSelect-xoMMFedW.js",
+      "bytes": 6836,
+      "sha256": "d865bb44ac7224265d6b6467a04c4e53c1455b036a09e006d36b187ff1e349ea"
+    },
+    {
+      "name": "assets/HowToPlayPopover-lyJMPxzE.js",
+      "bytes": 1367,
+      "sha256": "f7af266de7f33c040550bda4a884fb7e34579afe9347a7df7ecebc2da194ba0d"
+    },
+    {
+      "name": "assets/HubTiles-cTi3CCd2.js",
+      "bytes": 1388,
+      "sha256": "2a00d4e70f3010f4db91d29e37e8c77dabcdc9196c70aadb333e8bda45a6eeac"
+    },
+    {
+      "name": "assets/IdleArena-Bl7a6wnh.js",
+      "bytes": 34099,
+      "sha256": "8b66e04c8ae9093bf3f8ce11de9dedf08e19a54db38dac9e97ec4e23fc1a804b"
+    },
+    {
+      "name": "assets/ImperialismBoardShared-CkeUsGzS.js",
+      "bytes": 76483,
+      "sha256": "9da2d2477865776453e02d3015f86eab8daa19cbcc246925c5e97fbfd7c015e5"
+    },
+    {
+      "name": "assets/InboxCard-D7k90clS.js",
+      "bytes": 8737,
+      "sha256": "c46851f96c0b1b5ee85002372e6e868d09c4fd416fe4ae91e320cac397494ab2"
+    },
+    {
+      "name": "assets/InboxCard-DDfoldLS.css",
+      "bytes": 310,
+      "sha256": "d7fe892ad53aa647899da471037d8edc15662926d10a5be3764a19e14d73b919"
+    },
+    {
+      "name": "assets/InstructionsPicker-DvCgl7X4.js",
+      "bytes": 1971,
+      "sha256": "271e7c1654769a32ca948ff934a8b4879011e5fc9da16abac8e2811b2328f693"
+    },
+    {
+      "name": "assets/IntlCallUpCard-ue2gjmqR.js",
+      "bytes": 1886,
+      "sha256": "cb34f1a1038b697bc84241948379bf99469464c418d46d346588ebd046982669"
+    },
+    {
+      "name": "assets/IntlSummerResult-BEoJNsi2.js",
+      "bytes": 8941,
+      "sha256": "b6371fa09685f8925a2873a303a80d530af7b8a13443dfa3e4f0a24f47dfccbf"
+    },
+    {
+      "name": "assets/Leaderboard-BslBnV80.js",
+      "bytes": 12658,
+      "sha256": "d0367e035951f729258e40d11f59f66e49e3593b7b125179470ce5fab464c44b"
+    },
+    {
+      "name": "assets/LeagueTableCard-B6seM1JC.js",
+      "bytes": 3018,
+      "sha256": "8dc604828636db3c304b24cd8884af962cd81dc91598563c1bfd56f9c43f75d6"
+    },
+    {
+      "name": "assets/LineupBuilder-BCuHeJre.js",
+      "bytes": 52114,
+      "sha256": "8066a680fa7c8819abadfb94099c0ce32f8123becbe592d12211a41f15ff517e"
+    },
+    {
+      "name": "assets/ListQuiz-8ppD1VDI.js",
+      "bytes": 26200,
+      "sha256": "51e0b8cf96015e263aaa79601ccbc8f18443eeebfee32c21900873a4aa9ecd70"
+    },
+    {
+      "name": "assets/ListQuiz-CfGTEzvO.css",
+      "bytes": 625,
+      "sha256": "b83d449ed9acfea1b41b4cfb9a4c9efa6248af5a49aab270ca94c857a125239e"
+    },
+    {
+      "name": "assets/LiveSimScreen-C5U_8CyA.css",
+      "bytes": 3806,
+      "sha256": "487c9061bc2a5b0405853bb5e92256a54bfdc26de0c5b1f77d8d2673b9b056e8"
+    },
+    {
+      "name": "assets/LiveSimScreen-CzS8qhi2.js",
+      "bytes": 75953,
+      "sha256": "494eb65f13f1947cd8382c735ad05367180988eda44f595765709e672075572c"
+    },
+    {
+      "name": "assets/LoanPlanCard-CexSx8Qn.js",
+      "bytes": 9083,
+      "sha256": "097d5cea4e64c0f03ca7a69f8c474c05ee634277019e1db20919999ff1748c3b"
+    },
+    {
+      "name": "assets/LotteryReveal-DKoq5dBJ.js",
+      "bytes": 5132,
+      "sha256": "570ee9297cdea1b0fc5a4adeef6228cf91b4cb421f85a1ddd591cce1d6a78c19"
+    },
+    {
+      "name": "assets/ManagerForm-BcXdTnFE.js",
+      "bytes": 9249,
+      "sha256": "e7c9218a767b6f159ffb1663bffe27eb54c3144b97ee94df5ac8e2e553b54c84"
+    },
+    {
+      "name": "assets/ManagerHotSeat-jMVQoxRx.js",
+      "bytes": 24912,
+      "sha256": "b7599ab80c6696de810c37faaff18edd911dcdc326c623199ad3e039e487144c"
+    },
+    {
+      "name": "assets/ManagerSlotsScreen-h6XXQ2FZ.js",
+      "bytes": 5035,
+      "sha256": "cb00b6b018ef9b0215b987db1721b5fdde161621bf038da867c24c71ba0d71f0"
+    },
+    {
+      "name": "assets/MatchCentre-D9iw8vaO.js",
+      "bytes": 8892,
+      "sha256": "98b1f2812b220d380117eeaa4869cdd1eb8fd2e1afd231c493853910e44847f0"
+    },
+    {
+      "name": "assets/MatchClock-BimV0ZnZ.js",
+      "bytes": 3000,
+      "sha256": "6e51f8125543563b4d75ae0c0cb4bd15893c232be0230215fa6aadacd30d0e2d"
+    },
+    {
+      "name": "assets/MatchReportCard-DqTsb9sJ.js",
+      "bytes": 26588,
+      "sha256": "66085907d79c821e4df185aa53097868ee01fb7c39e61d3db53c091db122291b"
+    },
+    {
+      "name": "assets/MetersStrip-CtwQGZFj.js",
+      "bytes": 2177,
+      "sha256": "577e28bc05a639ee4de3dc4885f01fc2bde1334b2c445cb86aebfa1cd27b5e07"
+    },
+    {
+      "name": "assets/Minefield-Bauj4fnm.js",
+      "bytes": 22538,
+      "sha256": "952988d1f3f51f5856d476d119235e1807ceaa9bbfb06178e1b476e2f9cbffda"
+    },
+    {
+      "name": "assets/MiniPitch-Bglu8nYx.js",
+      "bytes": 4097,
+      "sha256": "b6d00367dcade8ba49e8ae682f768c7745ff3299c20721dd81b2140e25468867"
+    },
+    {
+      "name": "assets/MissingEleven-BwLAh4N2.js",
+      "bytes": 58040,
+      "sha256": "413bc0fd859ba66bf85380186ab953f9593bb0b150585d34a2ce74a5a3e5a99d"
+    },
+    {
+      "name": "assets/MissingFive-CUwrY48Y.js",
+      "bytes": 44871,
+      "sha256": "7f94a1a3ba53deed175829ed3859395d9df44f7bf7fbd1c79389e31ae80e52c9"
+    },
+    {
+      "name": "assets/MissingNine-BLGcLOj1.css",
+      "bytes": 879,
+      "sha256": "92549901991fc5bc4c5dc073ea8eeda464629e713b6c51f6905230c768613ed8"
+    },
+    {
+      "name": "assets/MissingNine-BeD-0KxT.js",
+      "bytes": 44272,
+      "sha256": "65cde6d66ad8aa1dae5a39ca1c9dc98025cb8b95ca5e75d50c1be67fd25d7018"
+    },
+    {
+      "name": "assets/MissingXi-35HamUwU.js",
+      "bytes": 264486,
+      "sha256": "2a510d917978fb5d52944036d95cba0ce69f443942f0a358542c0e2d584c1664"
+    },
+    {
+      "name": "assets/MlbConnect4-DPkJsigz.js",
+      "bytes": 14027,
+      "sha256": "fd6736120e2c1cb1627bbc81775f7f5c9ab9230f2db0fbe8caabfb1d95ffe544"
+    },
+    {
+      "name": "assets/MlbFrontOffice-CBF51_-Q.css",
+      "bytes": 458,
+      "sha256": "9dae0fc2b176aa5e739dc2051e7bda3e2202a05f34b1b93d9cfc753df4473d7b"
+    },
+    {
+      "name": "assets/MlbFrontOffice-CZthRZZE.js",
+      "bytes": 107811,
+      "sha256": "5659c7b520c2530e4cab9cf10a396ddede4b8d88f048ef86cd797f4e4637035d"
+    },
+    {
+      "name": "assets/MlbGauntletDraft-v1Lto8Vm.js",
+      "bytes": 21821,
+      "sha256": "209ae1b7b4158c11427c63dbc82baabf22b4eb7b936767baee890bd39f2b522a"
+    },
+    {
+      "name": "assets/MlbGrid-PkRY1y51.js",
+      "bytes": 11099,
+      "sha256": "0b198cd653a7c5c885b9e2048f8c7b49d2cedf36fcb1b1d7560264618e91c55a"
+    },
+    {
+      "name": "assets/MlbHigherLower-C8jYC_0f.js",
+      "bytes": 8741,
+      "sha256": "c75c152b83b4c6a34f3b50088e686da978c8928bc0f4e34461db6c274a6c6877"
+    },
+    {
+      "name": "assets/MlbMyCareer-KapAbISh.js",
+      "bytes": 245170,
+      "sha256": "e912f5285089d739e07cc457b20eda8594a49a20404770cc011397307521b8dc"
+    },
+    {
+      "name": "assets/MlbPostseasonFormatHistory-ZBa9_ZCN.js",
+      "bytes": 18300,
+      "sha256": "cbf71d48cfdc27dee42bc75a2e65671535f4453de84937705c385f4e90a1d368"
+    },
+    {
+      "name": "assets/MysteryBox-6MFZ-n4f.css",
+      "bytes": 783,
+      "sha256": "9c0399ce2daa9d915c978b9e30742ec97f9a44640b07127a981180c5a2357955"
+    },
+    {
+      "name": "assets/MysteryBox-QRz53FgV.js",
+      "bytes": 13529,
+      "sha256": "fd960f1f701d9850a0b6bfba6d87290c75cec2e8ec28190fdaf21b1a9da68a34"
+    },
+    {
+      "name": "assets/NFLCareer-Cx74YKLZ.js",
+      "bytes": 27055,
+      "sha256": "82cc7ad166cf7d7a981414390bb048dbdb609e4effaf6b10e84c62628819deca"
+    },
+    {
+      "name": "assets/NascarChain-BwOlVLXp.js",
+      "bytes": 13940,
+      "sha256": "e56e5587c3a71df32decdc6b16a24e4d55a555c9e3781d6e6dc77d3628a47c45"
+    },
+    {
+      "name": "assets/NbaCareer-BFNFm1Jp.js",
+      "bytes": 28662,
+      "sha256": "d0731b5607c28a76efa0c1b399f6af18775af84d2258dce53c6148fbbca15666"
+    },
+    {
+      "name": "assets/NbaChain-COMs1moS.css",
+      "bytes": 736,
+      "sha256": "1f40b68762aeb3da1e0f886b88347d9ceb94ae827738df076125397ce4a6aaec"
+    },
+    {
+      "name": "assets/NbaChain-StktGOMi.js",
+      "bytes": 16032,
+      "sha256": "b94f3390c0598063960db89b9b79e86722e429b6ea5cff7525665035191f67eb"
+    },
+    {
+      "name": "assets/NbaConnect4-BkgYTbhd.js",
+      "bytes": 16143,
+      "sha256": "3f23833b4b289d338c854f48a28f149409c7751b7b841698a3ceb4d1b43bfd35"
+    },
+    {
+      "name": "assets/NbaConnections-C2tMqtUB.js",
+      "bytes": 21996,
+      "sha256": "068c5d5a2c4862e6eaea7ccfb06530a1d41f48354118f19d2faa4b207b7c79ae"
+    },
+    {
+      "name": "assets/NbaFrontOffice-B3ZRtysy.js",
+      "bytes": 120723,
+      "sha256": "63dfef7afe902dd55637e1cea1968625d265fb64b24eaec2944352c4682544d8"
+    },
+    {
+      "name": "assets/NbaGauntletDraft-DVKgwJ7R.js",
+      "bytes": 3163,
+      "sha256": "6a3e510010ef8a8dd5600d8159879e671a61d5f877737be66e0e0264ce3def7b"
+    },
+    {
+      "name": "assets/NbaGrid-BDwUpS4J.js",
+      "bytes": 12696,
+      "sha256": "07eef102e86a8fbcd053ebae9de28b8a31fb07282a4feb928368f576d5d8addb"
+    },
+    {
+      "name": "assets/NbaHigherLower-D2iZ_rJ8.js",
+      "bytes": 8976,
+      "sha256": "7a824e870d71f72b03ef322276564dd592856c62a9eaa74a97a302bb55339887"
+    },
+    {
+      "name": "assets/NbaLineup-DtB6lJ8C.js",
+      "bytes": 36162,
+      "sha256": "bf22261479bc4c652a45174f0ea945c6953512b45236dcc636079f1a1afc3abb"
+    },
+    {
+      "name": "assets/NbaMyCareer-Bc-0A7c8.js",
+      "bytes": 264389,
+      "sha256": "328fdeab23eb26822b39e0b6ca754aef6fe4046bf5d7b85ee6fcfb3b6615a290"
+    },
+    {
+      "name": "assets/NbaPlayoffFormatHistory-B0K2fFvg.js",
+      "bytes": 27580,
+      "sha256": "3c0eacebd4749e1714fb282dfc8e27703783ce2f137967a1b45d88462c6943e1"
+    },
+    {
+      "name": "assets/NbaStatLine-BiqnAxVl.js",
+      "bytes": 19763,
+      "sha256": "9eba2d70738c6d4cf9eba40fb0224fd1fc35049c5160472bf2798114a546cea6"
+    },
+    {
+      "name": "assets/NbaStatLine-DajvjVkC.css",
+      "bytes": 854,
+      "sha256": "737c2bc5b9f83f1914bb0f107ce78d839099f91f15c54763109ab2410896f7f2"
+    },
+    {
+      "name": "assets/NflBracket-CHJHN0Dm.js",
+      "bytes": 10006,
+      "sha256": "3282838dca2e25bb056f074e5755cbd9deefb39a2e5d0d082c07007474de52ef"
+    },
+    {
+      "name": "assets/NflConnect4-pl86jGZ3.js",
+      "bytes": 14395,
+      "sha256": "e4c6965e218750c1d26799044c53fe893d61e85b4adf7bf3f54f4706079d3162"
+    },
+    {
+      "name": "assets/NflConnections-fYCt3GIu.js",
+      "bytes": 15212,
+      "sha256": "bfe7ef84781d8daaa9395ea72f9bfe93cdeeb460723b04b03e8dc63e123273da"
+    },
+    {
+      "name": "assets/NflGameDay-wwu7vJLB.js",
+      "bytes": 15533,
+      "sha256": "d6263f4aeb275a86ad72f527e02e28b4c11e496d8b04c5097ae74f9ece18cec7"
+    },
+    {
+      "name": "assets/NflGauntletDraft-DWI5Fjzo.js",
+      "bytes": 3521,
+      "sha256": "3ff9e172f97ced214d4a7d9e1d1e05b010919cd40f1b4c94f9bd6568a2e71191"
+    },
+    {
+      "name": "assets/NflHigherLower-DWbnB4D_.js",
+      "bytes": 9279,
+      "sha256": "accd7eb77335331b2607132f9af31c0c5da62ccee4da6d72a24955f542711dd2"
+    },
+    {
+      "name": "assets/NflMyCareer-Bk5QtsEK.js",
+      "bytes": 15859,
+      "sha256": "0b36ceff54a2bafd3c54ce2f9c92179b48606afff7e63259c14c97f8442c66dd"
+    },
+    {
+      "name": "assets/NflPlayoffFormatHistory-C2tfbpEJ.js",
+      "bytes": 17042,
+      "sha256": "7dea98f8ef1367ba2729b5bdaffadef46156cebfe24e031f1e4776c24af77657"
+    },
+    {
+      "name": "assets/NflSeasonStats-E0q-zk91.js",
+      "bytes": 6201,
+      "sha256": "1404a5dbe337e4a9b84adaa1f62f6219f0b4d589dcafac70bc77b798e4cdd461"
+    },
+    {
+      "name": "assets/NhlConnect4-BcZOcUSi.js",
+      "bytes": 14098,
+      "sha256": "fedcc5c0f4dc15a998a7e1a3dacb73818fe5f7ae75856d25ffe605016cb850c8"
+    },
+    {
+      "name": "assets/NhlConnections-oljA_qDt.js",
+      "bytes": 22046,
+      "sha256": "182a409ffa238edddf901f883c0318465656a80cc1de50a207d66527ff2cb3f7"
+    },
+    {
+      "name": "assets/NhlFrontOffice-Ce_3hBzp.css",
+      "bytes": 2662,
+      "sha256": "4480b2e085dfbde0ed241f87171dd204e6578fe9c517464c4b4718cde1454076"
+    },
+    {
+      "name": "assets/NhlFrontOffice-D0wXESM2.js",
+      "bytes": 79401,
+      "sha256": "f4ed20a2881e31eddecb3f47b1ab4bc051eef34443678a02ab72ddc5cbf252b2"
+    },
+    {
+      "name": "assets/NhlGauntletDraft-SVHP3mTU.js",
+      "bytes": 3858,
+      "sha256": "dd1637a976e3769f390f293cec49b44f01edf27ad2b6cefd023c49df71860288"
+    },
+    {
+      "name": "assets/NhlMyCareer-DPuAEQFk.js",
+      "bytes": 250745,
+      "sha256": "c5dda1c49de738c99ff20fb6ae98ccc595c07bd9ddea94ff558f0f685b84cf84"
+    },
+    {
+      "name": "assets/NhlPlayoffFormatHistory-CHyQwjWF.js",
+      "bytes": 25963,
+      "sha256": "6480c08f705f5ba82f8e1c91eec34d36a1eb3b5f3f7723d70a575a37472d6849"
+    },
+    {
+      "name": "assets/Olympics-BBGgaMeW.js",
+      "bytes": 29110,
+      "sha256": "98f23fdc9353be490721a9ba1070c7d3ff0b1976d5861d721f77a587323d4bce"
+    },
+    {
+      "name": "assets/OwnerTail-BCEIu2oM.js",
+      "bytes": 6719,
+      "sha256": "1543860ab0883a0f5b2f9d4e07998f58c059fee3ff7c794f4ced38a846e9ffe9"
+    },
+    {
+      "name": "assets/PackBattle-CI9H3Hq7.js",
+      "bytes": 10268,
+      "sha256": "2023d1b01d4483f529ad228a6cefb98011ea177453f311142af510043f9a29e9"
+    },
+    {
+      "name": "assets/PacksPanel-Y7h23vmY.js",
+      "bytes": 4403,
+      "sha256": "df8d8a39992ffb94d2f3d74a6c5f5f05944dd53b86ee4a774696ad6575b9187f"
+    },
+    {
+      "name": "assets/PerfectLineupF1-IBS517F6.js",
+      "bytes": 6339,
+      "sha256": "8f5307627f4d27afcc6668d5ca6a5c0a355eb548cb0fdf9aa190f0595449fcb3"
+    },
+    {
+      "name": "assets/PerfectLineupNba-Cu6re0No.js",
+      "bytes": 2236,
+      "sha256": "24c00dbffacf118f4de18d168de08ad9d009e597040d3558dbaba0ec32ee53c8"
+    },
+    {
+      "name": "assets/PerfectLineupNhl-BO74nKzY.js",
+      "bytes": 6887,
+      "sha256": "a258ba43db36db96a17526e9bf94a984c50cbf08b16c9da1eaf06e611e2b76b9"
+    },
+    {
+      "name": "assets/PerfectSeasonMlb-Du1JKTYr.js",
+      "bytes": 20747,
+      "sha256": "82186e6f528c87d2d59d7ea2211ef559097c41a99371054bc114d49f262a3b13"
+    },
+    {
+      "name": "assets/PerfectSeasonNba-CR2Mm2-b.js",
+      "bytes": 25966,
+      "sha256": "36fe27bb9a7b1d8e601172183084c2bc0cd158a1c783ed534f31687b1a7f7b8a"
+    },
+    {
+      "name": "assets/PerfectSeasonNfl-CF1Fhr4p.js",
+      "bytes": 31050,
+      "sha256": "6fed92c61ee775aee59d74c0b534a0a0f284a404f64ac578788ea17cd528b6a1"
+    },
+    {
+      "name": "assets/PerfectSeasonNhl-By80rAZ5.js",
+      "bytes": 23201,
+      "sha256": "57bea6df425d9b85a74512465d11ac35fb13b01c6ad7e7f45735e92f99058511"
+    },
+    {
+      "name": "assets/PhonePanel-DFBhFWdG.js",
+      "bytes": 48145,
+      "sha256": "749d8d22ea010b0ed12a898e962458cccd771cab45698ba51054a4a53107da8b"
+    },
+    {
+      "name": "assets/PitchSurface-DuzIHU55.js",
+      "bytes": 12449,
+      "sha256": "613d61abeda02fd474dec944a14357b38ffafcb38696278893ca7964912ee7dc"
+    },
+    {
+      "name": "assets/PitchSurface-Dw4pbVg-.css",
+      "bytes": 3804,
+      "sha256": "4aafa3aec483494ba6f01490c06476a35936aa963d27d53e8b591cfadffcfa0c"
+    },
+    {
+      "name": "assets/PlayerAutocomplete-Dji19lSg.js",
+      "bytes": 6675,
+      "sha256": "68ae2bb743b2ece80981f96e77ca1d29b101c5c605e51e183f9a3a4dccaa7cf7"
+    },
+    {
+      "name": "assets/PlayerAvatar-QvdT8s1y.js",
+      "bytes": 16500,
+      "sha256": "fbd9caf94739acbe9e1b1d17c21ee7e735e9f399af38356c53b3769a54098020"
+    },
+    {
+      "name": "assets/PlayerBingo-CieW4C3H.js",
+      "bytes": 31633,
+      "sha256": "322f00a86a372b8bfecdeaf3700f45f0f10c81c573f83cb43e84c5ea2de6e0ea"
+    },
+    {
+      "name": "assets/PlayerStockMarket-BU3Obt7a.js",
+      "bytes": 19183,
+      "sha256": "26493870949764cbd99ccbc0149fe74f55f6ed74378bbebe0fca3e35fb02cd9b"
+    },
+    {
+      "name": "assets/PollOfTheDay-DOxZx3AV.js",
+      "bytes": 9747,
+      "sha256": "3bf40baa9097ac16152fa2d9b9cb7c86bbb67f9b80c86909c9b0dbb3b999fa3e"
+    },
+    {
+      "name": "assets/PostGameStats-BU9pP-gY.js",
+      "bytes": 2524,
+      "sha256": "c3c3b2466b6773162e497d6924a8b451f4f91964872248e6fd69b9e7a9ae4346"
+    },
+    {
+      "name": "assets/PressRoom-vqT2hdtG.js",
+      "bytes": 9237,
+      "sha256": "a55d3b993c88fc8d102d7c12c83b508b0934020fbaafa0c24c74a8f844b8a400"
+    },
+    {
+      "name": "assets/PressScreen-C51HBQy7.js",
+      "bytes": 4726,
+      "sha256": "831da14324fbdf41474ce20991a6fc0a9852b4cbd39c5fbbd142a34c8eed0c2a"
+    },
+    {
+      "name": "assets/PrivacyPolicy-B_EHieuX.js",
+      "bytes": 23100,
+      "sha256": "d9e36ed57a4eb84f602df7404150f1a8c0eb88825f88de5060f4a08b495ea95e"
+    },
+    {
+      "name": "assets/Profile-CNu-BAUL.js",
+      "bytes": 70435,
+      "sha256": "9986aa88b167d928de3032f2c2218a7fd797ef7cd525155548be6581e6d2b1e1"
+    },
+    {
+      "name": "assets/PuckDetective-BgIKGE-x.js",
+      "bytes": 20105,
+      "sha256": "06814b0490efc99ccce668bba56ff95c76a47087e97f804054f74a7c3aaaa22a"
+    },
+    {
+      "name": "assets/PuckDetective-CNwlavUM.css",
+      "bytes": 457,
+      "sha256": "7125d8c5909f83a6ff658243da0b3aef0dfedcc4827231ebfa65fb155308fcf0"
+    },
+    {
+      "name": "assets/QuizBoard-CBcAEXDf.css",
+      "bytes": 1017,
+      "sha256": "e4a871a69683a73edc8f1cc112d0e9da3f4c651062a7655f95bf7a6b40b8e80d"
+    },
+    {
+      "name": "assets/QuizBoard-CK-yxAvL.js",
+      "bytes": 11190,
+      "sha256": "e89cce41c36e0559f75c004fa256d2c0b4a9c931c9e43a308a0d851670889a6b"
+    },
+    {
+      "name": "assets/RankEm-B-1V0V1v.js",
+      "bytes": 27442,
+      "sha256": "3c3757ab09f68fc3b1ba53b858874aa5cd3fcd241c45abede3a9e360da798311"
+    },
+    {
+      "name": "assets/RankEm-Bxuyan4v.css",
+      "bytes": 1325,
+      "sha256": "10a32658e47f13d7964a89dacbd558b84f6957c3f27534896eaf876bb6c5f19d"
+    },
+    {
+      "name": "assets/RarityRound-t3CwzanC.js",
+      "bytes": 27037,
+      "sha256": "ac4e0124248001039d3c267b22885a9ff2654256b2bb9ef5fc39c7c27f1a080d"
+    },
+    {
+      "name": "assets/Rebuild-Ciicodju.js",
+      "bytes": 117672,
+      "sha256": "a526ee7e4eb81531ea9d23ce04fc024b2e78d72f7e167ef81009b365c6e9b269"
+    },
+    {
+      "name": "assets/RecordPage-C-EtbQo3.js",
+      "bytes": 8600,
+      "sha256": "5d10ebf6316dfafffbc06e4532ec475f1f04019ea8da0a38f150b2cae0b0a64a"
+    },
+    {
+      "name": "assets/Records-DpZZs1Kh.js",
+      "bytes": 4765,
+      "sha256": "aa57eb37a896708ee683aa090dd44544a6264b4edbce9307c9e5cafddb0095c0"
+    },
+    {
+      "name": "assets/RecruitmentBoard-DwbjdFGt.js",
+      "bytes": 8778,
+      "sha256": "08e0824fe59469b5d952b5e68b528fcc177fdddbbf6137ec3d638f5e7a635390"
+    },
+    {
+      "name": "assets/ReferenceSources-DyqsFosp.js",
+      "bytes": 492,
+      "sha256": "a896b0e50e980acb879fa77ae0cc47f2d9ba17cdbac2aa9463b9253d9a08c4c0"
+    },
+    {
+      "name": "assets/ResetPassword-DLE0abYi.js",
+      "bytes": 4087,
+      "sha256": "362828678d47df1a42d1492c57bdb94da1ccf83e39ff5589f0ab82407a775e4e"
+    },
+    {
+      "name": "assets/RestoredResult-GX4Tgq8o.js",
+      "bytes": 856,
+      "sha256": "d923581a8a4ecaf7b3e4de2b3841818a06adf827d9ce0d23508dfbe8738ade44"
+    },
+    {
+      "name": "assets/ResultMoment-BiPB1sse.js",
+      "bytes": 3752,
+      "sha256": "f3c985d8148dff6e3b33bedf015314e19d8e597dba5c27955d25951da0738a05"
+    },
+    {
+      "name": "assets/ResultScreen-CHyEx-J8.js",
+      "bytes": 2276,
+      "sha256": "dffbd741e5e869e8600e48322560791f58da704f560b3deaf2617f3e075785db"
+    },
+    {
+      "name": "assets/RolesScreen-B2T5iNUQ.js",
+      "bytes": 9569,
+      "sha256": "4f09765967cfa31f0fe95f3e28a58478571eb56506e459acb3fc4165f7829807"
+    },
+    {
+      "name": "assets/RulesGate-PrlvTmXq.js",
+      "bytes": 1422,
+      "sha256": "d28f88f8482b9802c4d46c8ba5c7e5082ab841bc4b7a49be51b1f7253f46e146"
+    },
+    {
+      "name": "assets/SaveMovedNotice-8kO4SOi3.js",
+      "bytes": 1457,
+      "sha256": "b99e2fd71285a4e838f86f72f1bfa4650341a2622a736921bf6e4ce7c3f9cf6c"
+    },
+    {
+      "name": "assets/SavePointsDoor-BVUSHoCS.js",
+      "bytes": 2453,
+      "sha256": "b8f499fccdc6c845c1e7d64f74b198ad260096833a255cf58d9e35372c86fa2e"
+    },
+    {
+      "name": "assets/SavePointsScreen-DVMHAw_T.js",
+      "bytes": 11265,
+      "sha256": "6e34477568506479a051a2173cfe89b5f83524dc2ac625e53ec3ceef2b187c5f"
+    },
+    {
+      "name": "assets/ScorePredictor-D-a_mw-a.js",
+      "bytes": 18845,
+      "sha256": "3284303ba694dd0170b2e7bb5d69355d0c95e738d8f6c157d6732c9a4968ff20"
+    },
+    {
+      "name": "assets/Search-SKNZVLEp.js",
+      "bytes": 8276,
+      "sha256": "5f16003322489a8b1e195e625e969eb11918c98b780eed73325db0791eaabf04"
+    },
+    {
+      "name": "assets/SearchAndDiscard-Bk7mANi4.css",
+      "bytes": 829,
+      "sha256": "2ab3ad2756ef9b669e6ebfe674002fdfd76e3edc06951b6c920828cdd338b4f6"
+    },
+    {
+      "name": "assets/SearchAndDiscard-D5sws9u4.js",
+      "bytes": 11857,
+      "sha256": "11377798831c30c16e10fd8992820f0bd061ea84370bbcaa591c6718900dae1a"
+    },
+    {
+      "name": "assets/SeasonCentre-C-iP2Zm5.js",
+      "bytes": 41072,
+      "sha256": "53024a64c8b2ab5e07ee6bedb5e0796ff3c00a34dd61570f78175d558ae46c32"
+    },
+    {
+      "name": "assets/SeasonCentreHelp-K0tnkw4V.js",
+      "bytes": 1967,
+      "sha256": "e7a8e16cb57ecb2dff93375ed10f592fda860b27e85e797620603cdf7ae40982"
+    },
+    {
+      "name": "assets/SeasonHonoursCard-BTmn7law.js",
+      "bytes": 2137,
+      "sha256": "61bfeaaf61dae8847311307b1c786b8cdfdcdab22b98b4c004f24a163254ba01"
+    },
+    {
+      "name": "assets/SeasonRatings-Cx2Nlst_.js",
+      "bytes": 20636,
+      "sha256": "249409a74e68e48a2cb8eabbddb6f23a9c3440a4b4d92ef9819ededac125a4ff"
+    },
+    {
+      "name": "assets/SeasonReportTabs-BZ529FWD.js",
+      "bytes": 29711,
+      "sha256": "88d65ea166246f4d516b3af472699c988c71ea4cb73a6e37d8141294dff9b1dd"
+    },
+    {
+      "name": "assets/SeasonResumeChip-Bi4mZ_80.js",
+      "bytes": 715,
+      "sha256": "8d7df9e14546e5a1580ce0cb15195a60e3a53a95294ad98aed1c2c7ddc29b357"
+    },
+    {
+      "name": "assets/SeasonVerdict-OFRjrYJ5.js",
+      "bytes": 18296,
+      "sha256": "58f46745c9bcea4d59ef6887ed8649739d1e6226d91b8f259afc5c353a74563e"
+    },
+    {
+      "name": "assets/SetPieceBoard-BIg86Bhl.css",
+      "bytes": 1497,
+      "sha256": "9e02550f6ddb6b3c16f5019deb77531d79c0f20d0e5487b30eb205349d8d532c"
+    },
+    {
+      "name": "assets/SetPieceBoard-bYciPW1l.js",
+      "bytes": 12967,
+      "sha256": "7d5be314eb71f4645a641bd444252bf8655b2f9143078d2750004fcb5e87ff8e"
+    },
+    {
+      "name": "assets/ShareButtons-BS8aDLzB.js",
+      "bytes": 11645,
+      "sha256": "096b2c83e63250dfc5534daf2fb734e9d77094fe8a7fcd3fa72a53e89a769709"
+    },
+    {
+      "name": "assets/ShirtNumber-Dh9vPF7c.js",
+      "bytes": 13710,
+      "sha256": "08b0c2758db963c89cf1eee8e082543fee41c800b76bc0711eee4b43628efd8e"
+    },
+    {
+      "name": "assets/ShootoutKicks-DCskyRFI.js",
+      "bytes": 5324,
+      "sha256": "cb6645909bd84d322559cdd1cbaf8074b966d9f0b0777e0743c34ba19232d170"
+    },
+    {
+      "name": "assets/SignThePlayer-BLscXOeY.js",
+      "bytes": 23876,
+      "sha256": "f4199cb2ade3e144e250b4ead9a634550d90ed14427eae756b32f1c8132b2051"
+    },
+    {
+      "name": "assets/SilverwareSort-BavzESMg.js",
+      "bytes": 13929,
+      "sha256": "8192bb745044bbe6fcf122162f6af149d8bd5bac88896e729b0e687bc2703ac5"
+    },
+    {
+      "name": "assets/SiteMenuPanel-D6xTdU1I.js",
+      "bytes": 4336,
+      "sha256": "d1ffe755c08697b999461c61bfd5deed476a6a98650bb71f43b53b9763c35a7f"
+    },
+    {
+      "name": "assets/SoccerCareer-DorwNTMP.js",
+      "bytes": 1371465,
+      "sha256": "543b156c8aafb233ffb35444e985c09083411fb8c04d779a2542b19de0cdd48d"
+    },
+    {
+      "name": "assets/SoccerCareerBuildEditor-kdeQ16gb.js",
+      "bytes": 13358,
+      "sha256": "0cc1f3955570615f7ec0a71627e1a48c9e88acf0cf82f5bdd8505302e11e8925"
+    },
+    {
+      "name": "assets/SoccerCareerProgramme-ynu02AIf.js",
+      "bytes": 8859,
+      "sha256": "93819ea76d675db377edc0e63809b91f808462a5d098d61ad8bb25d149ffbdbf"
+    },
+    {
+      "name": "assets/SoccerConquest-ZdD_K-d_.js",
+      "bytes": 21729,
+      "sha256": "0eba1d0c2df18afc4adb180878f53c4e5fe8d511221c027eb75addafea16b62a"
+    },
+    {
+      "name": "assets/SoccerDerbyHistory-Depltha-.js",
+      "bytes": 16459,
+      "sha256": "770423fff3ac126cd7f503c91c8750317d6ec12a323e1b096d2843fef4433fa5"
+    },
+    {
+      "name": "assets/SoccerGrid-CxmTwaNV.js",
+      "bytes": 27993,
+      "sha256": "15e05dc8f98c4caf7fadc51e16b8b05feb76c3259611ab6150ceb1eae40bac87"
+    },
+    {
+      "name": "assets/SoccerManagerJobReview-BR_bzIUx.js",
+      "bytes": 4002,
+      "sha256": "31e48c8e483185e9040d0a0cb5c2f25caa229e894e09d42e218bf05bf127aa1a"
+    },
+    {
+      "name": "assets/SoccerOfferReview-DtLa8P5A.js",
+      "bytes": 7397,
+      "sha256": "6ab2adac34680415b87ddc52fc8f5f1353f8f685a459b100adf1e7c19662c942"
+    },
+    {
+      "name": "assets/SoccerSeasonCentre-snfQvPUf.js",
+      "bytes": 41531,
+      "sha256": "9153953709a7ef373012cd019e53580be07372f34eaa8646a045ccf860302258"
+    },
+    {
+      "name": "assets/SportHub-C-eQ-dlJ.js",
+      "bytes": 58704,
+      "sha256": "615a315504bed5a219759ecffe563c48cf3e546fe625ec18e09279d6b12cdc08"
+    },
+    {
+      "name": "assets/SportHub-wXzienJm.css",
+      "bytes": 9447,
+      "sha256": "59dd8f19d9829e0df569b475f3ec6c0451258023be0474700e1c0029bd547308"
+    },
+    {
+      "name": "assets/SportsBingo-BDakIMs_.js",
+      "bytes": 32796,
+      "sha256": "859ca26bc968cc32ac68f527edbbe961b13bb02afbfef5df2903ff542ff68654"
+    },
+    {
+      "name": "assets/SportsMillionaire-CFR9IoHu.js",
+      "bytes": 31537,
+      "sha256": "6e7596579c3c898ae8e0319f074df28a903cdba74b954fe59d7c9b31c70c7b6f"
+    },
+    {
+      "name": "assets/SquadDeal-Be9Eef-T.js",
+      "bytes": 25444,
+      "sha256": "3d47a9c992cff4f83e82e1f659968dc319a8d44ce398f7884c9fc40845385860"
+    },
+    {
+      "name": "assets/SquadScreen-CkCYuu8e.js",
+      "bytes": 19475,
+      "sha256": "a0eeb5e99e78823b29c5ad5256dcf97dce3ee32db4d1c4400729d2baa6b6dba2"
+    },
+    {
+      "name": "assets/SquadSheet-ByFRXmL0.js",
+      "bytes": 22492,
+      "sha256": "c59ee43dcad207cb889ecb2c1f8bf5dfe5601c7d6bca1ab2b8572763f5788d1a"
+    },
+    {
+      "name": "assets/StadiumTycoon-z6VaROR8.js",
+      "bytes": 69971,
+      "sha256": "e4532f027c3443a1951903bb6de18228a930d8f36a8ea0b4a79cb3ae3a91fa3c"
+    },
+    {
+      "name": "assets/StaffScreen-DA5KNI2w.css",
+      "bytes": 343,
+      "sha256": "df25c80fb97d22c829f31402bbc6fd0d7ca36445d7af4882fb8b9a35be79f24b"
+    },
+    {
+      "name": "assets/StaffScreen-Dj-Imr4R.js",
+      "bytes": 9879,
+      "sha256": "c07024632a752b3082597afa933a3ef5f665100ed83620ce4d521eaeacab14db"
+    },
+    {
+      "name": "assets/StartOptionsScreen-Oq9R6M5S.js",
+      "bytes": 9169,
+      "sha256": "a15aca9c940c277b0d3faa3d3e59f120feb7dde628b55b7600db01fb8b724152"
+    },
+    {
+      "name": "assets/StatDetective-D6N_cvHt.css",
+      "bytes": 1083,
+      "sha256": "47722191c98600fa971e3cff689012dbf10816946fe3c694cec7dba87074a8be"
+    },
+    {
+      "name": "assets/StatDetective-O0zxX6jj.js",
+      "bytes": 24244,
+      "sha256": "7d921447007b5b0ee414f58925decbca69f3b8b23ce1021c6bdc5ce8fd496cf1"
+    },
+    {
+      "name": "assets/StatsScreen-6ASr9FqK.js",
+      "bytes": 25174,
+      "sha256": "f8863dc7b6de78ad2f3dff4f05ccd334eedaaa5d90d309df97c06c774691d046"
+    },
+    {
+      "name": "assets/TacticsScreen-CqDAF3Bd.js",
+      "bytes": 38522,
+      "sha256": "efef1e97ff08fbb8e18c7c2d996b2f1661a5941860a07923ae97b4eb66b35e55"
+    },
+    {
+      "name": "assets/TeamTalkRow-B1jvDoBH.js",
+      "bytes": 1731,
+      "sha256": "d8f98a056a027cb51ab5c4a4bb24d53fb3d85a6000d686519a539c13b62dbee1"
+    },
+    {
+      "name": "assets/Teammates-Bv7DpX58.js",
+      "bytes": 34904,
+      "sha256": "bd74f82e6e37109cd3616f61c6b7f20de984cbb2118cb6fc7224ddc9020c9652"
+    },
+    {
+      "name": "assets/TennisChain-BEzq0BVI.js",
+      "bytes": 13947,
+      "sha256": "50a0dfb71ff56310ccef4c03dcab82ae03346d6bf9bf63ccf475a4bb40964fac"
+    },
+    {
+      "name": "assets/TennisHigherLower-BbMaADtW.js",
+      "bytes": 8969,
+      "sha256": "9b65151edc44bcf03e93082a4db4f2ed8e5b81df49dfee398f0decd9fc3dc994"
+    },
+    {
+      "name": "assets/TermsOfService-C19-e00K.js",
+      "bytes": 11553,
+      "sha256": "dca6e19a149540c0339e57513647d3bd8e0cfe9baaf02b560c67ba5f674de259"
+    },
+    {
+      "name": "assets/ThroughBallBoard-Zk99p5O5.js",
+      "bytes": 17244,
+      "sha256": "0aaf8fbdce143821ccdde208e8923e300298b68ed0ae4e10d264989fd108bf87"
+    },
+    {
+      "name": "assets/ThroughBallBoard-gTKr9BrC.css",
+      "bytes": 670,
+      "sha256": "8771f5fbe5a99fa1cc5d87ec919b94dcc118db71448f79108e32b9479a79bfc8"
+    },
+    {
+      "name": "assets/TrainingPanel-DQ_WX-ER.js",
+      "bytes": 32538,
+      "sha256": "3cb046c119f9f573ed741e03563a72e584b0404519251314d957eaf08776b951"
+    },
+    {
+      "name": "assets/TrainingPanel-vaffBj46.css",
+      "bytes": 588,
+      "sha256": "ac7508f699ba1d72579263951109dc6207af12ad08c9d8a72f6ac82091c2c6c6"
+    },
+    {
+      "name": "assets/TrainingScreen-Bn1wgWH8.js",
+      "bytes": 9321,
+      "sha256": "37bb6cc6316d5f839d190c20f13ba08c9eb72a23ff668bf7827a0e3e9a387be5"
+    },
+    {
+      "name": "assets/TransferPath-7eB88W__.js",
+      "bytes": 35368,
+      "sha256": "d1959ef87a86ab269da265aba77f36687967e70550f453d91ef4336c063f366f"
+    },
+    {
+      "name": "assets/TransferScreen-9iyvQ_GM.js",
+      "bytes": 56611,
+      "sha256": "3c000d9abbccac51bdcfdb3d8f53fd08675f3682f0c44baa1b21d6aa88ed1602"
+    },
+    {
+      "name": "assets/TrophyCabinet-3XBnB6lI.js",
+      "bytes": 12340,
+      "sha256": "93b7dd241f48081f818abd4e946a2e4fd63812b1605f83c9caec4b6a60fed5d6"
+    },
+    {
+      "name": "assets/UclBracketCard-CCQmtz0w.js",
+      "bytes": 4989,
+      "sha256": "1545840f273a568b4f50fbcf8aded7134a6fb35863d33089295a3dd2831e5fc7"
+    },
+    {
+      "name": "assets/UclGroupsCard-sr88m7dM.js",
+      "bytes": 3633,
+      "sha256": "9f31cfe5e63e73b66f44e30d4a84f9d4721bfac43970a41e49137958b457eb9b"
+    },
+    {
+      "name": "assets/UfcChain-CahNphIP.js",
+      "bytes": 33106,
+      "sha256": "843a6ca8b30a595d5351daa3858dce7f45da4e6214a183218f6d2b6526c5ecb2"
+    },
+    {
+      "name": "assets/UfcGame-DaWtIsD8.js",
+      "bytes": 37161,
+      "sha256": "6da3c02be88c559e4deb65ee6595fa7f4a0ac45eaf90520e548d4e1fffe8fc59"
+    },
+    {
+      "name": "assets/UsCareerPractice-CexO0QVP.js",
+      "bytes": 20191,
+      "sha256": "24a687dad33c501fe51baab9bca206949875b6a2fd00ef6e6b9f1ff6bfaded36"
+    },
+    {
+      "name": "assets/UsSeasonCentre-QI4Vr4HD.js",
+      "bytes": 10907,
+      "sha256": "4ee7359d9bc906d20a5ce5949f317cc5d38fe6248cc13f24337be2cfb60cdce2"
+    },
+    {
+      "name": "assets/VictoryMoment-B88oGMag.js",
+      "bytes": 3669,
+      "sha256": "ac8c406218eb6a292d0ec5b06056afac14bcbc625d04db68b068bf756f74999c"
+    },
+    {
+      "name": "assets/WhatsNew-DhPSZrz1.js",
+      "bytes": 434919,
+      "sha256": "7e40dcec651971cbe18abd5aa157dd075565f09d72d90a08d45d0b86f6f8c7b8"
+    },
+    {
+      "name": "assets/WhoAmI-sYXlpvMN.js",
+      "bytes": 18740,
+      "sha256": "660116302805b4bc44de3e2763eb7e8e6a051e6cd63b3fda18726583b1d242f8"
+    },
+    {
+      "name": "assets/WhodTheyBeat-DFIAHJvW.js",
+      "bytes": 14257,
+      "sha256": "8c9573ef1f1a033554085ba3e436cb8b3fa0cf92f4b2e5c1a3ade2e657bbd489"
+    },
+    {
+      "name": "assets/WonderkidFactory-CGinkrXc.js",
+      "bytes": 1917,
+      "sha256": "0d6029c8a68412431bfda028967eb0f7d0a6f44813d20343a0570a6b6fa1e85b"
+    },
+    {
+      "name": "assets/WorldCompScreen-BUx_Y3aQ.js",
+      "bytes": 47024,
+      "sha256": "7db359d613512ea98f845ef634f34a066f81f574756e71bf57c1994554db6f59"
+    },
+    {
+      "name": "assets/WorldCup2026Results-BGPbj4ha.js",
+      "bytes": 9572,
+      "sha256": "ab3924155b241051e6eb3743884e8fcf3127a1163c7a7bc8412d50da7c369f73"
+    },
+    {
+      "name": "assets/WorldCupPredictor-YDYqnauH.js",
+      "bytes": 75076,
+      "sha256": "0476e3fcdf0f61f02d4e71d96d57119e5dc0d5a8484296583f166cc30bc58434"
+    },
+    {
+      "name": "assets/WorldEditorScreen-2zFk3ymM.js",
+      "bytes": 6144,
+      "sha256": "a863a3a0294a8a524ffcd84d44dc76acfd7c86dc923556dc7bbb5760aa23a946"
+    },
+    {
+      "name": "assets/WorldTablesCard-DzKz3zFu.js",
+      "bytes": 6412,
+      "sha256": "28bced4319b58621e9c11a07d7a5c3e58762852aa17440868cc20c9875f19ba2"
+    },
+    {
+      "name": "assets/WorldXi-5-6M8YkC.js",
+      "bytes": 21312,
+      "sha256": "531a45f6e2ca1feedf21cc836aa035896a8124a866b0abefb7cf186357d4b5de"
+    },
+    {
+      "name": "assets/XpScreen-Dg8CAKqE.js",
+      "bytes": 4740,
+      "sha256": "835ea5066f1840080ef1184b4058dc458a0429f6cbdb78f3208470d7e1ced628"
+    },
+    {
+      "name": "assets/aboveConsentBanner-DxB9-z5a.js",
+      "bytes": 415,
+      "sha256": "5eabea40b6a84e633b4a9fdc3a204ca0806bc3706eeae1ae5565cbbe9bc88f95"
+    },
+    {
+      "name": "assets/academyManagement-DZZqTLIl.js",
+      "bytes": 8664,
+      "sha256": "7eaab8ae9e5da60d2f6438e4c7f95e8bd71aa9f573250980a7c26295f31f7a60"
+    },
+    {
+      "name": "assets/aflGoalKickers-BGnz1-kA.js",
+      "bytes": 5102,
+      "sha256": "5a1b307f27c2e7683d2aa6414b9c03a12e700ba97d91c26ba91a75566c10bb7e"
+    },
+    {
+      "name": "assets/arcade-CUT7KVjC.js",
+      "bytes": 489,
+      "sha256": "4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"
+    },
+    {
+      "name": "assets/arcadeRecord-Ccbsg8hp.js",
+      "bytes": 314,
+      "sha256": "8fc0d5b84072e90e0fbc3f741f3d54e8ec12ba43a41894de48da23cce741ddb0"
+    },
+    {
+      "name": "assets/arrow-down-kEXkJvY-.js",
+      "bytes": 333,
+      "sha256": "7f72dd449a9b89ab925c49ff35b6ff32af4ad07ca4ae08bd6729a05db78187eb"
+    },
+    {
+      "name": "assets/arrow-left-CyrS_-8T.js",
+      "bytes": 333,
+      "sha256": "a2c2d80b89f9c2e74c4bb9422c43c4b1a2df3d71fa6b7e681c374b76b9dbc7f4"
+    },
+    {
+      "name": "assets/arrow-left-right-CuQ3AUlQ.js",
+      "bytes": 415,
+      "sha256": "846ee869038f6089b2fe009c6755a81e2dabdd5358e619d151acbace7f73b2ed"
+    },
+    {
+      "name": "assets/arrow-up-CevVTvJG.js",
+      "bytes": 330,
+      "sha256": "b042f9d4f0a5ebde8d92abcfc94ec8a166e14655c4597522e3aa2b7e09e6d677"
+    },
+    {
+      "name": "assets/aussieRulesManagement-4TlVLY3z.js",
+      "bytes": 8562,
+      "sha256": "69ebb131c789ad8148707e07169cf21ff35b545d649b8596f18984a76a3da4d0"
+    },
+    {
+      "name": "assets/awardDecision-aIUMdt9Z.js",
+      "bytes": 416,
+      "sha256": "5a085b014d56daa0485be8b1614c78da40029987ccc7a7c9f6228196d1980a87"
+    },
+    {
+      "name": "assets/badge-CRD2XkfE.js",
+      "bytes": 710,
+      "sha256": "1003b542e5fece2ecc47d753b5e055daf4e73b0bb552de0f3c7b2c9337609413"
+    },
+    {
+      "name": "assets/badges-DEjgtupJ.js",
+      "bytes": 5811,
+      "sha256": "01ba60630be84a5985824d573dc3bddeb1cb4eadd0847bf82d99f8145e592813"
+    },
+    {
+      "name": "assets/baseball-BY3wd-W6.js",
+      "bytes": 55296,
+      "sha256": "d8abcf69a3ccf4e2c022a7d5ce2b93c98500ca0a0245c71ef68247019b7ceabb"
+    },
+    {
+      "name": "assets/basketball-CaTNapzL.js",
+      "bytes": 86262,
+      "sha256": "7a2e22a8235160cc765d0cbc79dbfe3311f6de7b2fec44756608629f5006fe84"
+    },
+    {
+      "name": "assets/briefcase-BqTciN2G.js",
+      "bytes": 389,
+      "sha256": "5e62448a1ac0afb6fd022c5eaaa349c49eedc903492524649789ebaf8d984c07"
+    },
+    {
+      "name": "assets/calendar-CgpfEJAx.js",
+      "bytes": 426,
+      "sha256": "2487634919da611eceba3f0880e2e037c94118369174cb1f0c09c86ba2761a61"
+    },
+    {
+      "name": "assets/card-Bzld8gWl.js",
+      "bytes": 987,
+      "sha256": "7687f2c30fec0081c243f5196edff528373d7b5d6d49edda6b8dbcd543dbc0ff"
+    },
+    {
+      "name": "assets/careerAwardsNight-BDQnO6dK.js",
+      "bytes": 2575,
+      "sha256": "1fa94f499889b61e63917a3ca07b35862c3ba634a14526edf99926b0aafa3abf"
+    },
+    {
+      "name": "assets/careerBadges-B63pWGQv.js",
+      "bytes": 16336,
+      "sha256": "2696447ed3e6a5b1f5b4f155c22216c45fbea67388e1c221c86f93cd39d221e4"
+    },
+    {
+      "name": "assets/careerEngine-C0YCb0dd.js",
+      "bytes": 859,
+      "sha256": "5631ea71fa11fc4ac62cda73606e5d185275a8693f4c049ac4c707d1dc2af06a"
+    },
+    {
+      "name": "assets/careerHallSpeech-D8aXsOEv.js",
+      "bytes": 1953,
+      "sha256": "a9df52112ef69700adb3819de8083a1cafb37fd863002e2e46cfc90b8cc2e0fb"
+    },
+    {
+      "name": "assets/careerHeadroom-B6hg86bq.js",
+      "bytes": 258,
+      "sha256": "1a6b64a3ff158c086cb38aafaad10ab8d73b5940f25527ed4aa66f99048d50d6"
+    },
+    {
+      "name": "assets/careerLadder-DVz2O0v6.js",
+      "bytes": 20391,
+      "sha256": "f8968260cd7e818ef7db604cdf3170a8a7a7b9b325bb1ba6d2107c35f0e2f1ed"
+    },
+    {
+      "name": "assets/careerPlayers-DOIUlYXN.js",
+      "bytes": 335465,
+      "sha256": "d110a2172d25736a44e7543ed8048d9ead71e1b9cb47a74c5a2395c18618961f"
+    },
+    {
+      "name": "assets/careerRivalryChoices-B2c2ZYXB.js",
+      "bytes": 5988,
+      "sha256": "a4b123da1b68e0519315d81cfa28fae296916c7c5208e46da1daeca5fc3a527d"
+    },
+    {
+      "name": "assets/cfbHLPlayers-TgDMTX1-.js",
+      "bytes": 6034,
+      "sha256": "e272cc2685d4b1868667abf34176768767dc11eda04296738c3aa74f7232b290"
+    },
+    {
+      "name": "assets/champOrNot-C7_WDZef.js",
+      "bytes": 5078,
+      "sha256": "fc07e6f8b7f556db8b12825143282862ee469c752daac03c08af05b14535f38c"
+    },
+    {
+      "name": "assets/chemistry-DIs7dgmv.js",
+      "bytes": 1187,
+      "sha256": "985a2271ac13c8b53fc268496c5eb4421ac9beabc186717800bcbbc68f87d87b"
+    },
+    {
+      "name": "assets/chevron-down-qFO-qaEG.js",
+      "bytes": 296,
+      "sha256": "6447a0cc41f813a949a2cb9fda4ecbd78613ad7940364b50b45bbebcd0910a9f"
+    },
+    {
+      "name": "assets/chevron-up-7VbOPdFc.js",
+      "bytes": 296,
+      "sha256": "b5347f8975fe3fb2cdd25e11485e35e60dab577b56ff439e29565fbd4b6dca93"
+    },
+    {
+      "name": "assets/circle-alert-BKiXiUc_.js",
+      "bytes": 418,
+      "sha256": "fd93f72f378c4e11b29682ff7d13c8f6b14a336b94d2eb028a23008cd4481e4d"
+    },
+    {
+      "name": "assets/circle-help-B5L2wDkW.js",
+      "bytes": 407,
+      "sha256": "f085f7e856933f84841ebbb32027da620ee3c33c84bc146b8ccbb96b59999817"
+    },
+    {
+      "name": "assets/clearWinner-CIqTgqT6.js",
+      "bytes": 94,
+      "sha256": "f14d83b2db16d85bb7544bfe1da2aecdac9e7203b3a06c301c360d0171acaefe"
+    },
+    {
+      "name": "assets/clipboard-list-D9eEN31l.js",
+      "bytes": 579,
+      "sha256": "54cfdc1e757c3447c4e4d1ac56905820a351467da0745a8db01f4bc303267ba5"
+    },
+    {
+      "name": "assets/clock-ApnR4sqv.js",
+      "bytes": 352,
+      "sha256": "dcf7bdc231078054b84f6598096629f971cb271cb8146dfa1d2d4b293ce3a2cf"
+    },
+    {
+      "name": "assets/clubManagement-BlY7ARie.js",
+      "bytes": 26997,
+      "sha256": "6c339314df266bb15464f9885197c0f7930b4297f54b4100547498f770c76467"
+    },
+    {
+      "name": "assets/clubManager-DelenyW-.js",
+      "bytes": 888447,
+      "sha256": "3a4b28b079bee9658029c758ea281cac817483d644a9f5e41d57d73d4d14a697"
+    },
+    {
+      "name": "assets/clubManagerBundesliga2Fixtures2026-kg6AnCOp.js",
+      "bytes": 10115,
+      "sha256": "e59d1dd9b0c368aa16cfec3af73b342af945157a01f25eb444f85e6b4eeb29b9"
+    },
+    {
+      "name": "assets/clubManagerBundesligaFixtures2026-c7ZzROUC.js",
+      "bytes": 9663,
+      "sha256": "41f2013182bd93213f3da9f0786ceb8a7ed5286683b6eac43e9ee7d4b7a02685"
+    },
+    {
+      "name": "assets/clubManagerChampionshipFixtures2026-DYlsM6ie.js",
+      "bytes": 17662,
+      "sha256": "c8b215f44fec016069d01349d0350bcc70905af11d81e594db6ea9f86b405a77"
+    },
+    {
+      "name": "assets/clubManagerClock-C1EiWjUJ.js",
+      "bytes": 245,
+      "sha256": "e0c6bd45cb144a1afde374e35a9f845119fb09c2427002d97746ce5e828211d5"
+    },
+    {
+      "name": "assets/clubManagerEra2005-DZSwQTfX.js",
+      "bytes": 76381,
+      "sha256": "d08fd3a6dd647947ce5f61a0fdcb513123c974e0647ca63810a3f50c8836364a"
+    },
+    {
+      "name": "assets/clubManagerEra2010-CiScj6R7.js",
+      "bytes": 77314,
+      "sha256": "0a522c3ca565a12b5561d60c583e446cd7e93fab6e2031895ac27ab9d52f876a"
+    },
+    {
+      "name": "assets/clubManagerEra2015-BUxVBSOC.js",
+      "bytes": 73687,
+      "sha256": "910222dd0a1a907c61d59ea3ae83f6cd5153790ecb08b855bfac70843ad36d4c"
+    },
+    {
+      "name": "assets/clubManagerEra2020-Bej21k8N.js",
+      "bytes": 78997,
+      "sha256": "1f4c95dc257152a3f90de3500ce36acb0a9fe2fa736610c687ce5569d577c803"
+    },
+    {
+      "name": "assets/clubManagerEredivisieFixtures2026-BoKvrAyQ.js",
+      "bytes": 8964,
+      "sha256": "bb86c6bdcef47b3cc61d0d3cc5b6421b424fd65296df31165ebfb1685ae860bf"
+    },
+    {
+      "name": "assets/clubManagerLaLigaFixtures2026-brDX3MxS.js",
+      "bytes": 11565,
+      "sha256": "7e4743dc06d9430b43d5bc2fd3b5f5b8cb38c5c09ee4c1c684e70415d8fa2075"
+    },
+    {
+      "name": "assets/clubManagerLanding-j2jJAG9a.js",
+      "bytes": 217,
+      "sha256": "36840ebd221ea8a58b29d98c79cb598b7eb743e9de06199fd38f2b092e889a3c"
+    },
+    {
+      "name": "assets/clubManagerLigue2Fixtures2026-CWGEvRlM.js",
+      "bytes": 7485,
+      "sha256": "0d0743a4c63541119449a603fe5a010234bc7089031baadd1d9620ccb7cd17f2"
+    },
+    {
+      "name": "assets/clubManagerPrimeiraFixtures2026-DHKbixmh.js",
+      "bytes": 9136,
+      "sha256": "7cec975501004167cc742ffbf4e29d26d4d811a9a80a3d79bda9df053e7fec3c"
+    },
+    {
+      "name": "assets/clubManagerSerieAFixtures2026-Df6OuJqm.js",
+      "bytes": 8977,
+      "sha256": "0af6354eaf515f0c851c53ae94e87af4f728ca58327db025964065788ee73bb4"
+    },
+    {
+      "name": "assets/clubManagerSuperLigFixtures2026-CWs7044H.js",
+      "bytes": 9533,
+      "sha256": "9b62551b873e2e9ef69355a9d81a4246dc767ab65955340ede04a5fc19589583"
+    },
+    {
+      "name": "assets/clubManagerTactics-D-wYDYSQ.js",
+      "bytes": 11902,
+      "sha256": "054d101e19e211b2f25e445e47ad1cbd459c4bacdc4ec595f94725acd4c69bd5"
+    },
+    {
+      "name": "assets/clubRivalries-DuNC-DyB.js",
+      "bytes": 36634,
+      "sha256": "5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"
+    },
+    {
+      "name": "assets/college-DiQCZ3hy.js",
+      "bytes": 36936,
+      "sha256": "dd3bbcb69528aed7920a86fe96163826b01bb12fbe960c16cbe6acd00d6ec78c"
+    },
+    {
+      "name": "assets/collegeGridJudge-BnVqn2Y8.json",
+      "bytes": 542050,
+      "sha256": "f6a9af6ff957779728218b3cdcc7edecd1ce120d533e734cca5c4536bdc4bc90"
+    },
+    {
+      "name": "assets/collegeGridSearch-Bs7o3gLM.json",
+      "bytes": 599136,
+      "sha256": "d39161d5865e1ba0cdd1bc5e81f05102c98e414a50b48f5afba080cee0ea3057"
+    },
+    {
+      "name": "assets/collegeRivalries-CZhkK25M.js",
+      "bytes": 62142,
+      "sha256": "3a86b195f735a3f8b2c4404a00315c9300bd8fa0961e1fccdd2e3873eae50653"
+    },
+    {
+      "name": "assets/confederationGroups-8jgsrX6T.js",
+      "bytes": 1449,
+      "sha256": "fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"
+    },
+    {
+      "name": "assets/conquestDataMlb-B4MKOeDm.js",
+      "bytes": 2926,
+      "sha256": "82a92749a3e4f0ca975204b1a10d7b44ad0c635328964f5163bd2f8b84ea981c"
+    },
+    {
+      "name": "assets/conquestDataNba-C-3ztOpY.js",
+      "bytes": 31036,
+      "sha256": "88f93744956363b0cbdab803c0374e098a69e834f897d36024d788f53f3187e1"
+    },
+    {
+      "name": "assets/conquestDataNhl-BBvewyKz.js",
+      "bytes": 3062,
+      "sha256": "399ba89a4dfe852a0adb8d7d0a8bedae21255714c3312163541d6abcbaf0a404"
+    },
+    {
+      "name": "assets/conquestMapGeometry-DMIJk1yA.js",
+      "bytes": 3099,
+      "sha256": "77bd4b6689ea8594e3f74ca2f327f3619dae9e7c04dd4a956a8164114c980cc2"
+    },
+    {
+      "name": "assets/conquestSports-DIW_7Bi3.js",
+      "bytes": 37175,
+      "sha256": "e2914acc790832e66eb352b5500252de58e2b8294a480655337559e6fa27f93c"
+    },
+    {
+      "name": "assets/copy-CS5iIhJz.js",
+      "bytes": 405,
+      "sha256": "3a19ec1a3f3d4a107116d5ac3e4f610719c9078db4d9a118fe0cdf728ea17a18"
+    },
+    {
+      "name": "assets/core-Dsglyqbx.js",
+      "bytes": 18979,
+      "sha256": "776b700241560c51c00f73e11ce26112a8b4e103e684e8197ba263bdd5419dbf"
+    },
+    {
+      "name": "assets/crown-B8eyt22Y.js",
+      "bytes": 531,
+      "sha256": "8d23fdae5b0765565170d3f84cfed3aeb4500bc407faaa2ec93b294c4077d312"
+    },
+    {
+      "name": "assets/dailyRecord-CX9SdYxa.js",
+      "bytes": 558,
+      "sha256": "3bcefc50ca8384cd1e8a61bfc99e2f86c542ffe4043cd087d9c34a2042ae3ca0"
+    },
+    {
+      "name": "assets/dailySaveShapes-CmYZfx9m.js",
+      "bytes": 3053,
+      "sha256": "1e0fadf74e3f189dfca7e5b7c4068ee0a7850b19bb1c8b8a40476eb02faac1eb"
+    },
+    {
+      "name": "assets/dartDraft-CVNDztxl.js",
+      "bytes": 3821,
+      "sha256": "3a75f7319e51e9077f37bbefdd5c047d8b45c0837ff14860c88be75b7cba49aa"
+    },
+    {
+      "name": "assets/dealPlayers-BXVLSUV_.js",
+      "bytes": 3823,
+      "sha256": "f8fae9bf93ed785688b02e1d3e943d8c698fcc9605285087c17611bd79b837f7"
+    },
+    {
+      "name": "assets/deskCue-D0_vMU1p.js",
+      "bytes": 1627,
+      "sha256": "d6261ac27bfc4f44efded58284be2bfd2608a5c202abf8c4ee84f189c80b3951"
+    },
+    {
+      "name": "assets/dialogA11y-BCgxbiii.js",
+      "bytes": 150,
+      "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"
+    },
+    {
+      "name": "assets/dumbbell-PbASli-T.js",
+      "bytes": 728,
+      "sha256": "4ed56f0c5b4b31bfb791da21d69a72d68cad38a43f1eda0a170fcc58fc75fdde"
+    },
+    {
+      "name": "assets/ensureAnswerInOptions-ip2BqsWb.js",
+      "bytes": 266,
+      "sha256": "0941d212db6051fb367d1d7155ca11f1f6730e64a7d8a7fd4cfac4c1941373dd"
+    },
+    {
+      "name": "assets/entityIds-L4Nd6Y8C.js",
+      "bytes": 505,
+      "sha256": "4760155a09f8093561e31ab012b0a889d232e6fe8f3ca2b826dd79b608db6c32"
+    },
+    {
+      "name": "assets/era2005-B29vZjuX.js",
+      "bytes": 45798,
+      "sha256": "7f29bbd10ccde06273513ad85fff17206b772e3313cca0b31477071560a420c6"
+    },
+    {
+      "name": "assets/era2010-YNeWL_4t.js",
+      "bytes": 46135,
+      "sha256": "58669a81e18294fdafcf97d8a468213d7e041bb7352b2ebb6e7f8347a78d2379"
+    },
+    {
+      "name": "assets/era2015-CKBLW-Gg.js",
+      "bytes": 43871,
+      "sha256": "6fb44cbd6a16d2e9ea2d896b424045ec57874885167072708588d4d5e0e65ef6"
+    },
+    {
+      "name": "assets/era2020-7P0IGSTf.js",
+      "bytes": 47046,
+      "sha256": "3cef3e6b2df766aac5c1b66b7bfabe9539a4b8b0f02add0af0fe05fca0b020dd"
+    },
+    {
+      "name": "assets/eye-CWlaYKIj.js",
+      "bytes": 425,
+      "sha256": "0da5334adc00ef350190fb87e2233e6ecf62a9fac18bf5b5a87777d101461549"
+    },
+    {
+      "name": "assets/f1HLDrivers-Dd4g5TlY.js",
+      "bytes": 5395,
+      "sha256": "a7e9ceffddf92b8286cf7c9a0cfba8632e0f6a2c7e479d2b7d5d27cd10e02e4d"
+    },
+    {
+      "name": "assets/fast-forward-Bm2qP1oP.js",
+      "bytes": 370,
+      "sha256": "c0bfa2e5b265c9baf4f5b27819c083f4a60e9e812df1e57f445074cad5eefed5"
+    },
+    {
+      "name": "assets/fetchAllRows-CkoDCTo8.js",
+      "bytes": 923,
+      "sha256": "89854bcd536c779cd59f9191919be35b0be5c219997aa4e0452a618a698f1c9f"
+    },
+    {
+      "name": "assets/fetchCareerPlayers-DaHUV9XL.js",
+      "bytes": 1163,
+      "sha256": "ca20f6de48735871a425d63dbfbe7db3747ef72add0cd7205a13d088b0839731"
+    },
+    {
+      "name": "assets/fetchQuizBoard-DlmRchrb.js",
+      "bytes": 656,
+      "sha256": "1eebb50b59fa613fa556d4a77b738ea475b432080fd3b43da87da16dfb52ebaf"
+    },
+    {
+      "name": "assets/fightCareer-CTS4Q8H_.js",
+      "bytes": 13666,
+      "sha256": "b14ab1ad9509fcee79b775fd9ea10346489baeec71de5bc7b4b6c0368557aabe"
+    },
+    {
+      "name": "assets/finalsBracket-DQg8LGI5.js",
+      "bytes": 1199,
+      "sha256": "2fb78fd1404ba446732da74fda3aad28ea186b56a039f08910a95e307705ff83"
+    },
+    {
+      "name": "assets/firstDraw-DhshXfEx.js",
+      "bytes": 96,
+      "sha256": "3255349772671587f5a52b7071654415e65c1be17a3e430303e0a354693911f4"
+    },
+    {
+      "name": "assets/flag-BVCk5GSJ.js",
+      "bytes": 388,
+      "sha256": "18e1d399e5ca0f1f3b79c86937aa0c6aa56683fbc50f55e87d5f7c7c692492e8"
+    },
+    {
+      "name": "assets/foOwnerMandate-ahYp_LFg.js",
+      "bytes": 3802,
+      "sha256": "efb77227e857b044bb6d540428f9d25240ba7a953c6fea7e85c57a908117ec46"
+    },
+    {
+      "name": "assets/foSchedule-BzpgxJRf.js",
+      "bytes": 1569,
+      "sha256": "9631cda5651a32f821afc58f47f13144643ce7b6a784d87467ed42ccefb2b715"
+    },
+    {
+      "name": "assets/foSeasonStats-Bc8et4-5.js",
+      "bytes": 1690,
+      "sha256": "3b7f8b5cbc1d15d59489fd8219751f9c272d2e40dbfe9c7ce8bb8c77f1e872b5"
+    },
+    {
+      "name": "assets/football-CAKGzx0j.js",
+      "bytes": 65041,
+      "sha256": "3ee8cbdf1832af08e32b93e0bb27b29264d12196f6227e1ab8097317a579b49e"
+    },
+    {
+      "name": "assets/footleEnrichment-BOt-YWCc.js",
+      "bytes": 20080,
+      "sha256": "b0d2c14801bd8df0f01c34c00f8cc19ba9d0fbad1931e7c00a4d5c1b460d0481"
+    },
+    {
+      "name": "assets/formatNumber-CGuttX8h.js",
+      "bytes": 152,
+      "sha256": "58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"
+    },
+    {
+      "name": "assets/freeKick-Dr1e2vyh.js",
+      "bytes": 1965,
+      "sha256": "7b51f072528908c26c95a60a5599e76a4df8caaf236054d6c3b4ff5b6a87c193"
+    },
+    {
+      "name": "assets/frontOfficeDepth-hFZ-rvc7.js",
+      "bytes": 505585,
+      "sha256": "53e359d699e449d65f956a51944d6240f3959622ce636db247624d6a84fab00e"
+    },
+    {
+      "name": "assets/frontOfficePlayers-BMdaeFxZ.js",
+      "bytes": 34475,
+      "sha256": "d1eb61a51855866d1f74d6f45df082e061341b642a81e86c6bd96031ff374001"
+    },
+    {
+      "name": "assets/frontOfficeSave-LTb4SYA5.js",
+      "bytes": 2391,
+      "sha256": "1016ed7f6d61ae2128154621011b4db3032fd971a47da9c94a458a4943edd7b8"
+    },
+    {
+      "name": "assets/gamepad-2-Ca_ClaKa.js",
+      "bytes": 789,
+      "sha256": "104253d478abccdb2b9175876d659b89ab74d27fac43dcf41a81b03165eac889"
+    },
+    {
+      "name": "assets/gauntletEngine-C9egvck2.js",
+      "bytes": 3866,
+      "sha256": "6eafab03abdcf9ff9fbfaa80afbee3d64f100f6f1591321e4a2ce06fc1d32cfd"
+    },
+    {
+      "name": "assets/gmDealTable-DYyD4N4_.js",
+      "bytes": 772,
+      "sha256": "f90120c05c24ea7f6c9e4fb88dc535986659f2e2da012f8793b06932a0555ea8"
+    },
+    {
+      "name": "assets/gmDeskHost-DZ2l5-B4.js",
+      "bytes": 13805,
+      "sha256": "fff8de83da13dc8e6aa401a3d28fd905bdcd096fc81cba6915986edfdc3061fd"
+    },
+    {
+      "name": "assets/gmSeat-BEQuE0DE.js",
+      "bytes": 4146,
+      "sha256": "8f7e84208b8468d973e12e18f1bd2da2da689d8afe2f33678ee812d11a92dd4a"
+    },
+    {
+      "name": "assets/gmSeatRecord-Cnr4rCr3.js",
+      "bytes": 1624,
+      "sha256": "d41e6adf1ccca654249ab8cb6911dd8c38190b1869e8af86f6ece8ddaf389a4e"
+    },
+    {
+      "name": "assets/gmStaff-CQgWbtVe.js",
+      "bytes": 9220,
+      "sha256": "04399c1a6d3cd2d16faa11abea49c0c04fcf8902955ac981f534b4d5abeadc1f"
+    },
+    {
+      "name": "assets/gmXp-C7Mhtk-f.js",
+      "bytes": 4995,
+      "sha256": "b4bf137585d7e0aa556d8ba26b7ecf0894eb33b012143f3d5e0847957e87c45b"
+    },
+    {
+      "name": "assets/golfLegends-wbmLaE0U.js",
+      "bytes": 6416,
+      "sha256": "968e99bde62aa24ee5bbcafa7ee07488cc0aa8b87487c9c8ee62d749f53345dd"
+    },
+    {
+      "name": "assets/graduation-cap-DhImwYBL.js",
+      "bytes": 500,
+      "sha256": "eae4136a17bcba41278e3b5da8241e3245b81bbb7b0f97bc0915147a70ebba37"
+    },
+    {
+      "name": "assets/gridEngine-CG3P1KA-.js",
+      "bytes": 4133,
+      "sha256": "e89d9329269667cb53fbd0ac0b8d660940a9c38134643f404cd2227408423cad"
+    },
+    {
+      "name": "assets/handshake-MWlI1SRY.js",
+      "bytes": 615,
+      "sha256": "1f5ae1a1ac6dd3742d1f81ab9fabc083162d402cd89ee949968f21a3d1d53133"
+    },
+    {
+      "name": "assets/higherLowerPlayers-CyK6rra4.js",
+      "bytes": 23648,
+      "sha256": "4fd826fcae3ea7f700f4756f6b7e40303af81b588705091294b25f6d9b5b034f"
+    },
+    {
+      "name": "assets/hockey-5-gkbPOX.js",
+      "bytes": 61511,
+      "sha256": "8d7a1d3e3b66ea221e62cc4759fa1f84765832f4ea2f820e5cc89a0f5d64917d"
+    },
+    {
+      "name": "assets/hockeyGrid-Bs3gOE0H.js",
+      "bytes": 1921,
+      "sha256": "d7069725f31679e4300ebbccb640f0bbed3ad34e4134e753d3da8c024a637db6"
+    },
+    {
+      "name": "assets/hockeyHLPlayers-BftZ_j6A.js",
+      "bytes": 6826,
+      "sha256": "beea3b32cc0a348a8eb63e2da72ccabb3cc83a07ad3d73fc7697be3f31ad7489"
+    },
+    {
+      "name": "assets/html2canvas.esm-CBrSDip1.js",
+      "bytes": 202301,
+      "sha256": "b4f3add809a6d59f46260e8fd56cab240f3153def977386b230a839e8cb0b281"
+    },
+    {
+      "name": "assets/index-C6JmvRVc.css",
+      "bytes": 205498,
+      "sha256": "9caa3e205f4d7db2c647db3769109d72d9236cbb95f5dc3d9cc63f3921989a37"
+    },
+    {
+      "name": "assets/index-Cj63wQAv.js",
+      "bytes": 798032,
+      "sha256": "a40b8b41258444bead9e5803ffc331c173009df7ee8e75bb2b38d93fa2ccc297"
+    },
+    {
+      "name": "assets/infinity-D87Sw2IR.js",
+      "bytes": 383,
+      "sha256": "3c7ee0fceaee506463ab9b8e9e3fb4f88de767fc0a74d290987e5303be549a2f"
+    },
+    {
+      "name": "assets/input-CeJjnrIV.js",
+      "bytes": 580,
+      "sha256": "f02251cb63c985df365b5ebb3a596ea2dc6a0594fc113467a6d6095508e2b4e5"
+    },
+    {
+      "name": "assets/intlNames-DiJYNZJt.js",
+      "bytes": 13296,
+      "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"
+    },
+    {
+      "name": "assets/key-round-DZVX-_tF.js",
+      "bytes": 523,
+      "sha256": "549a9895fc7d8482beaf50f0a2139378829ce872c8972a7aef3d7875a77f20b4"
+    },
+    {
+      "name": "assets/keyedRng-BKZQ2UGv.js",
+      "bytes": 254,
+      "sha256": "ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"
+    },
+    {
+      "name": "assets/keyedShuffle-CJAps3xO.js",
+      "bytes": 144,
+      "sha256": "d3a78deb57b4135d45c23a9507a0c0374b0b296a166155667b5b14c1fa14cacc"
+    },
+    {
+      "name": "assets/label-CXsMSkZM.js",
+      "bytes": 554,
+      "sha256": "1b4b01e2573bb8c1ed56528196d7655bc094ba8f1002f2a018455b1231364593"
+    },
+    {
+      "name": "assets/law-BvUdq2_w.js",
+      "bytes": 289,
+      "sha256": "4c0d4b3f9b4cafb0d93206bd946dcc129d4d4404f6fb7d27db592d1a5cac2f4d"
+    },
+    {
+      "name": "assets/leagueCore--DUG-EXw.js",
+      "bytes": 671,
+      "sha256": "d4de939f32c16be245e082dc10ab932e36f78734720c82832a7b9e5e49577ec9"
+    },
+    {
+      "name": "assets/lightbulb-CVdMZ8fX.js",
+      "bytes": 455,
+      "sha256": "2f2358e310cf340f900a06382c26527afa1825e93b28bd569c1dc0987c7295d7"
+    },
+    {
+      "name": "assets/link-2-DIRWW2Co.js",
+      "bytes": 410,
+      "sha256": "e93e8df40df3e1f447f741fce759a5f8eeaca8a345692f2f54d6438ca121c488"
+    },
+    {
+      "name": "assets/lock-DiuXwwTY.js",
+      "bytes": 375,
+      "sha256": "0e66e18c4a6ee9eb410ae5b20144489b9a9886122e4afc4f24ba2b85bdad00ce"
+    },
+    {
+      "name": "assets/log-out-BZqkj5QE.js",
+      "bytes": 427,
+      "sha256": "4b388eda2e108e36b5b09b4c7eb6135afd9a0d49606ddd26a2af132bf82fe873"
+    },
+    {
+      "name": "assets/lotteryReveal-DDnhoqbO.js",
+      "bytes": 1532,
+      "sha256": "89aff1a41b00e6f2edaf347b5b7a56726bbcbe001bc7fa8ef450f81fc69c2a51"
+    },
+    {
+      "name": "assets/lz-string-cemwgVSj.js",
+      "bytes": 8440,
+      "sha256": "b0be66c2d6eb99906414162d14ff829d8b5085055f1a7c0a726bcac5684280f5"
+    },
+    {
+      "name": "assets/managerHotSeat-CrSmFL23.js",
+      "bytes": 32140,
+      "sha256": "b259b1b048669aa32d0018a9a36b38df84017526b1144c5ca096e84c40442f75"
+    },
+    {
+      "name": "assets/managerOffers-EoQ6k_gA.js",
+      "bytes": 3116,
+      "sha256": "6d3f7af52d40a704720867847db92e1776f0730ea2369040e2dcbb54b63ed053"
+    },
+    {
+      "name": "assets/medal-DqKuJ_lk.js",
+      "bytes": 604,
+      "sha256": "21f6effcdf50c7a31d1056f6179dccd6afa7b837126bb5878cd54221e4e5dfc6"
+    },
+    {
+      "name": "assets/mlb-DNG6EtYq.js",
+      "bytes": 17504,
+      "sha256": "8dfe228a8a410d4c9c568335aa2c28c906722240f498ee1db205e108814eb016"
+    },
+    {
+      "name": "assets/mlbCareerTraining-DzkR2JX5.js",
+      "bytes": 3562,
+      "sha256": "5bd9cdfdc4d72d3b7931a53d1dada1925c051239f1fceb9eebb1b61df02d9700"
+    },
+    {
+      "name": "assets/mlbGrid-B7HiGWrx.js",
+      "bytes": 1829,
+      "sha256": "c28e42376b224714783be7474af5a1c96ef5bd77efefb14d77af1ed7db76d2ed"
+    },
+    {
+      "name": "assets/mlbHLPlayers-DHB7Z7Uh.js",
+      "bytes": 4451,
+      "sha256": "5f4b8ea54b0554c9d602d83c6649382ba57b5bd4feb711c233567c2ac752563b"
+    },
+    {
+      "name": "assets/moreSports-DmWPlYMz.js",
+      "bytes": 85950,
+      "sha256": "8918ec022eea8e7e34cc6e8900b9e3ec64086eb7826d2495d0cebe5647feae7a"
+    },
+    {
+      "name": "assets/nameFold-Cxobkrgg.js",
+      "bytes": 279,
+      "sha256": "ee9b7b3e9f10c1e09d14b6eea13097b6378ffa5b761c433d7118ca65578c59ab"
+    },
+    {
+      "name": "assets/nba-ClG_qn_Q.js",
+      "bytes": 7897,
+      "sha256": "581a2eac2e6f2b9b12b4e8b9831d78786a754933f008c2d01d7a7c711a986cf4"
+    },
+    {
+      "name": "assets/nbaCareerIntl-n_AB-ZCF.js",
+      "bytes": 20084,
+      "sha256": "b9f78935855b209c2eff4c73a2372a5957d5ff189d11f3ced22f2cd93827b08d"
+    },
+    {
+      "name": "assets/nbaCareerTraining-BcKw0hcM.js",
+      "bytes": 3079,
+      "sha256": "69469078cec182098470294d8df6ec04ea767899c5e12d1f0498d4b7294f105b"
+    },
+    {
+      "name": "assets/nbaHLPlayers-B_Is_VJ-.js",
+      "bytes": 8085,
+      "sha256": "1e483e2fab22afad22f6d17f78f74e0859eaa8ba029a162728d564af71231650"
+    },
+    {
+      "name": "assets/nbaOpeningRatings-DmYGOL8G.js",
+      "bytes": 50055,
+      "sha256": "53aac720bfc28ca5f48762d731f0b7147ff5e113a803561654d5c064ed97b4e7"
+    },
+    {
+      "name": "assets/nbaPerfectLineupPool-CcCQ221O.js",
+      "bytes": 5237,
+      "sha256": "643b48254aba41c2ea3b8cfa78311376b9a9e1eb69ac2c9df16329e87f9f8e9d"
+    },
+    {
+      "name": "assets/newspaper-CB4RqoiZ.js",
+      "bytes": 511,
+      "sha256": "d2cf396d679df085ba1aa13dc1cd412671568f9e01efe830608ceaf2f91fc950"
+    },
+    {
+      "name": "assets/nfl-BRp-VenW.js",
+      "bytes": 1328,
+      "sha256": "95eb2d78c6d794dca4ec786584988131c4691974f62319ec4557d0502af5e378"
+    },
+    {
+      "name": "assets/nfl-CGPxCrKM.js",
+      "bytes": 18669,
+      "sha256": "069721b8b62afa2445cd3dcad8d3c01cd0cdb2444163fce97cc4d49f425fedc9"
+    },
+    {
+      "name": "assets/nflCareerKit-DW_jNdR3.js",
+      "bytes": 5950,
+      "sha256": "a2038d9100c0a99c5aafd2fb14195b334516e15ac54c7c6b34f95e8bc3685288"
+    },
+    {
+      "name": "assets/nflCareerTraining-Cnr8wUTG.js",
+      "bytes": 3643,
+      "sha256": "837bfe11b4bb1623ee470b63286494823ec34496375fd0b6732680412a8ff44a"
+    },
+    {
+      "name": "assets/nflDrives-BQPwDUqv.js",
+      "bytes": 1251,
+      "sha256": "0f92c9361d5e90144ff95ef265f44a94d59bdad5729869d1f57996fcb864f301"
+    },
+    {
+      "name": "assets/nflHLCategories-D2O6E_Hm.js",
+      "bytes": 13348,
+      "sha256": "82e380174a0e2dee155837412ddc8e1eb1a4fadc989b5ec8580eb61e710ff68a"
+    },
+    {
+      "name": "assets/nhlCareerTraining-DgQ3pu7U.js",
+      "bytes": 3724,
+      "sha256": "30927543c2f370840f3d95b841cdda313952f89ca01d8b64924a0424082a0639"
+    },
+    {
+      "name": "assets/nhlFoPlayers-j0YE08i0.js",
+      "bytes": 19061,
+      "sha256": "263af173a143b907c486c2687d31dc78f1e27fc88b946f8a596b8777e94a0ca5"
+    },
+    {
+      "name": "assets/nhlOpeningRatings-Y9x0bvK7.js",
+      "bytes": 80499,
+      "sha256": "4d418ae347d5804f7d3fb03e54b4bc249be3fc19e695974beef54db08e6d9586"
+    },
+    {
+      "name": "assets/notCurrentPlayers-monyGCOh.js",
+      "bytes": 282,
+      "sha256": "4204ee67e9f54b19b38ced7e9cb706afdced126c584773f206c038e7e0d09f4b"
+    },
+    {
+      "name": "assets/ownGoalRule-J3XQry1d.js",
+      "bytes": 179,
+      "sha256": "429872db3c8ff95d979e20c77adf793a66537433b1c4c5b49849cd000d60a144"
+    },
+    {
+      "name": "assets/package-BP01Ryxs.js",
+      "bytes": 555,
+      "sha256": "e908f73e388c8b24fdcfb71cdb5ca9664f0de2032632522028c0f072e1619d0e"
+    },
+    {
+      "name": "assets/packs-Dq2S54Go.js",
+      "bytes": 3677,
+      "sha256": "3228450d381a9743211963a480f279ace57c1f26b44571080e41b1452a956d01"
+    },
+    {
+      "name": "assets/perfectSeason-VFAYJ8Ap.js",
+      "bytes": 4613,
+      "sha256": "01302ff883c02843f1b959d0fef794291d7598c181b9a6f898bad6cc9c775f05"
+    },
+    {
+      "name": "assets/phone-NNWUl0RS.js",
+      "bytes": 563,
+      "sha256": "efd6adf3aec9e6c644805d32474491ff3ba319413c7bf404096946999a0923b5"
+    },
+    {
+      "name": "assets/playerSearch-CQH-bU0g.js",
+      "bytes": 7402,
+      "sha256": "97f6af1a678dbd5b5297b0c8aa508f632cffbcd9aec95de6b8274452318dd5ef"
+    },
+    {
+      "name": "assets/players-BvqkSYM9.js",
+      "bytes": 97896,
+      "sha256": "2ab2c9fbde6c49fc6305fd154c268a45e2c2414078c1cb04134e40128d1cc9b1"
+    },
+    {
+      "name": "assets/positionFit-BbUnYZIs.js",
+      "bytes": 1421,
+      "sha256": "86101a2012ed27905d4ef71e19e5717d2517ef3dde737f88a0770b41764fc872"
+    },
+    {
+      "name": "assets/recordBooks-BBzc-N87.js",
+      "bytes": 109045,
+      "sha256": "84b4d570d7061549522713029d67f062f81555559663a43c5498c888d4e997c4"
+    },
+    {
+      "name": "assets/resume-iKq-NREI.js",
+      "bytes": 670,
+      "sha256": "2921cc3af2bde88afae3eea6ab19640952224509721968a152a4a98fa05ff7ed"
+    },
+    {
+      "name": "assets/rotate-ccw-BPDJhkkF.js",
+      "bytes": 368,
+      "sha256": "ab49887c77a94058d944155d3f9f244410e5029ead7c40214283badafc4cf0e1"
+    },
+    {
+      "name": "assets/searchDiscard-oOpZz4oY.js",
+      "bytes": 3051,
+      "sha256": "1475879f17979aa9f25f50fd30ae73d1649841c9968aa7026a635f30726b5d5d"
+    },
+    {
+      "name": "assets/seasonCalendar-DPg0JF0y.js",
+      "bytes": 1959,
+      "sha256": "0a0a60f3ac79f74966200e1b8407055b9ecbc7ed135722bb8e65b6ed2c068fd4"
+    },
+    {
+      "name": "assets/select-CfXR3Tro.js",
+      "bytes": 21290,
+      "sha256": "41caa8120d82754b6b2b897cf0e3e55efb2d015b0d738e83d349a2c80deff544"
+    },
+    {
+      "name": "assets/send-C2OfriA3.js",
+      "bytes": 459,
+      "sha256": "16fb4b6195a0b2b17960c086fd6db5cebdb49af049ecab382e43088193fce074"
+    },
+    {
+      "name": "assets/seoMetaPart00-CuVEcdvG.js",
+      "bytes": 746,
+      "sha256": "0db6061b7f1881e65b828c701ed2546d91d035d3bd8668ec40eaba89a47ff772"
+    },
+    {
+      "name": "assets/seoMetaPart01-DtjgkM8Q.js",
+      "bytes": 749,
+      "sha256": "bfa3b3046f789a494c52c337941c734f9c19bcd5bf0188aa94ed7549426cea71"
+    },
+    {
+      "name": "assets/seoMetaPart02-BYbZNxRj.js",
+      "bytes": 736,
+      "sha256": "61ce0a110c108b615d4a381f2f86b051588162ec8111af2d0928723fd4fb49ef"
+    },
+    {
+      "name": "assets/seoMetaPart03-BOxIFoUd.js",
+      "bytes": 759,
+      "sha256": "0193d1fcb6fc1b8202a31d8eb818c0802877431bad327cc7d5b407df96df62a7"
+    },
+    {
+      "name": "assets/seoMetaPart04-DRX4FtX_.js",
+      "bytes": 988,
+      "sha256": "0b08a57628887f5ae1dd41d03e9820b898d7b8a5798f7ab90ca29e82463717e6"
+    },
+    {
+      "name": "assets/seoMetaPart05-BnXoXrsk.js",
+      "bytes": 1008,
+      "sha256": "91be5f8ea02d50d407d283317e859c96ef4e91d8b8881867ef9d8d33edf884f3"
+    },
+    {
+      "name": "assets/seoMetaPart06-N4xfX3Sj.js",
+      "bytes": 1203,
+      "sha256": "e97ad3cfdbda9bd374b23cfb1286b89e94b38586c3dbc8f1c6b09e7f37a8ee42"
+    },
+    {
+      "name": "assets/seoMetaPart07-ympky3rW.js",
+      "bytes": 510,
+      "sha256": "65fe0ec5d4c0a5c68c9bb514945d0360933651d9ea3d6c8b154c571abb11f66c"
+    },
+    {
+      "name": "assets/seoMetaPart08-IZEXs0WU.js",
+      "bytes": 273,
+      "sha256": "c194d9fd584b5209f5dcc0adf8842083e49abf163784b175affdcf6dd9487a41"
+    },
+    {
+      "name": "assets/seoMetaPart09-DnyHg2Rd.js",
+      "bytes": 2174,
+      "sha256": "7fc1b4115414e295dc11b4daa64ee31df2591c3dfb161dc009287d4b5eecc945"
+    },
+    {
+      "name": "assets/seoMetaPart10-CPgkU0Ug.js",
+      "bytes": 745,
+      "sha256": "cdf46a121c609a2e59464ec8f4bcaa1837419369100aeef985755614eb37f7f6"
+    },
+    {
+      "name": "assets/seoMetaPart11-oLlb_0nk.js",
+      "bytes": 754,
+      "sha256": "55030edcbd8c88cef6701029b9fcaa08c24517647c16364b4abd06c003e62346"
+    },
+    {
+      "name": "assets/seoMetaPart12-BJfl671y.js",
+      "bytes": 1214,
+      "sha256": "474acc76b8d6bf2ba9c00d1b834d1d93a16e6cb130dec00c85553195832048b2"
+    },
+    {
+      "name": "assets/seoMetaPart13-Ig-3KGy2.js",
+      "bytes": 512,
+      "sha256": "f650f2861e160fcd215d4a5033a6b98ee05d7943786a54dca0072a5221cc41c6"
+    },
+    {
+      "name": "assets/seoMetaPart14-Ca8w5qDt.js",
+      "bytes": 1212,
+      "sha256": "921bfa3029af7e9b33775448669040ac2eb7b20bf55078f226fc373a090cbe2d"
+    },
+    {
+      "name": "assets/seoMetaPart15-9v6Tzod_.js",
+      "bytes": 992,
+      "sha256": "edfa146f3edc1238f514e56f1681ff939fb671228a4affe310fea6f4ac2e44ad"
+    },
+    {
+      "name": "assets/seoMetaPart16-CmMlK9Np.js",
+      "bytes": 745,
+      "sha256": "ef7086258385cd8060d1e8627681d4c11648812d0c80527f137118811c98eefd"
+    },
+    {
+      "name": "assets/seoMetaPart17-DdtdxoPB.js",
+      "bytes": 1943,
+      "sha256": "49dfe2d6cfde79a01cf2c38323ca1e0910cc8b395ff03deb09c3427f797ed1ee"
+    },
+    {
+      "name": "assets/seoMetaPart18-Beou92RL.js",
+      "bytes": 992,
+      "sha256": "a3628c0bb8b8ebce382df0ab9879e01a62a720a217e1c21ed4e3438b6bba3b0d"
+    },
+    {
+      "name": "assets/seoMetaPart19-CpToAW9C.js",
+      "bytes": 997,
+      "sha256": "039cd63a897f2fadf53bb69585526f28a46221737b6426513d3d957b6830490a"
+    },
+    {
+      "name": "assets/seoMetaPart20-D3Jt8qZ_.js",
+      "bytes": 503,
+      "sha256": "bcaf8bd2c244a62ff6affe48d5c6ce87f2bb6460f4dc1f09892c0518e974ecd5"
+    },
+    {
+      "name": "assets/seoMetaPart21-BhVVnIEN.js",
+      "bytes": 1007,
+      "sha256": "4bf12e7e5079ddb5b47f023cf2d5b8201199969d5d2caabb3a41fd12f0cc217d"
+    },
+    {
+      "name": "assets/seoMetaPart22-S-3F3LJ6.js",
+      "bytes": 1008,
+      "sha256": "6038430ed957f0dcffa0a961d3f2e62d28c9f43f834183030e6bcfcd1dfaee07"
+    },
+    {
+      "name": "assets/seoMetaPart23-RMiEDEGg.js",
+      "bytes": 995,
+      "sha256": "a703059e3ae6c0e5fc555a055b1659e365e69f1bb848032eee02c9be504349c3"
+    },
+    {
+      "name": "assets/seoMetaPart24-CQTtSrLB.js",
+      "bytes": 982,
+      "sha256": "582945cb0bfa15adfd7a4ab2c8e79201a1cd1fb750b21a90d8b71600e0c0dcb0"
+    },
+    {
+      "name": "assets/seoMetaPart25-Cf_pDGZt.js",
+      "bytes": 1002,
+      "sha256": "5a8d44391626cf191f4ad4e56e003e7930ceb43b6b48b8354d3a76483586b6e5"
+    },
+    {
+      "name": "assets/seoMetaPart26-BXx6PSW7.js",
+      "bytes": 1709,
+      "sha256": "7464859eeb38986e62c6b987db4a4dc97e1b07fb40b4af2d5b97c19096cf98f5"
+    },
+    {
+      "name": "assets/seoMetaPart27-CP2Svxjt.js",
+      "bytes": 1215,
+      "sha256": "8a090b4b27ee005cfa321575d36de69314917d05fe5de18c10a05568522c3bb3"
+    },
+    {
+      "name": "assets/seoMetaPart28-g2Jhz3O3.js",
+      "bytes": 1222,
+      "sha256": "db3ebb040eceaec6a8d953eb88ae825acc4a932660378dc8d0dc2edb4ee84f4d"
+    },
+    {
+      "name": "assets/seoMetaPart29-DFpfKJo-.js",
+      "bytes": 1466,
+      "sha256": "06846d2ccb3d3ef2a3884a39892e55572cd9cf449d168fe893d3393c93931f61"
+    },
+    {
+      "name": "assets/seoMetaPart30-C2bf-ABQ.js",
+      "bytes": 1935,
+      "sha256": "fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"
+    },
+    {
+      "name": "assets/seoMetaPart31-BPitkLcI.js",
+      "bytes": 524,
+      "sha256": "c0499c449407d7fc60110c96c24b7c92338c6954099b438ce5bad8b8685faeed"
+    },
+    {
+      "name": "assets/shareGrids-BBcTDnrG.js",
+      "bytes": 423,
+      "sha256": "27bca7323274713b2c9b3e999fa2d03082d285a27a34484d4bae8edc6e4ddbb0"
+    },
+    {
+      "name": "assets/sheet-r4ayxVN4.js",
+      "bytes": 2182,
+      "sha256": "afdd17c77b0512da64e677155311a435f5915d8f0b811994766ff4d70ac8ce05"
+    },
+    {
+      "name": "assets/shuffle-DHDdY0iG.js",
+      "bytes": 552,
+      "sha256": "2ba90492698951d2f5939583165ce37231c98bcdb3b43be44a11986193427e94"
+    },
+    {
+      "name": "assets/silverwareSort-veyVx7cR.js",
+      "bytes": 1626,
+      "sha256": "2c5f080cb1c8383be3f5462021824e194cbf55e333205895f944500051ecd7d6"
+    },
+    {
+      "name": "assets/siteSearch-D-tXBlys.js",
+      "bytes": 16794,
+      "sha256": "9c387303a9848454459264989a8445a45aa627a19fa83025d587d2b17629841e"
+    },
+    {
+      "name": "assets/skeleton-CzDI2jUA.js",
+      "bytes": 172,
+      "sha256": "727955cae057f583dcf91bc90583cff3a51fd863bd957a410fdbccc1189d4cd5"
+    },
+    {
+      "name": "assets/skip-forward-CfXDWC6h.js",
+      "bytes": 365,
+      "sha256": "13787696405216ad8c719d910072b354579d234ba7b16ac09649b402a31d34a2"
+    },
+    {
+      "name": "assets/smartSearch-DxQivxxe.js",
+      "bytes": 1575,
+      "sha256": "ed613ff510d46b28e7ddc9a0d6ca38d84d7f0413860b1007d470d9867c5f5673"
+    },
+    {
+      "name": "assets/soccer1-MOKhqnXB.js",
+      "bytes": 60800,
+      "sha256": "b40b22e6563290a249a41a7c672904a0752f6b43818e35e8924eea1d5afcb9f4"
+    },
+    {
+      "name": "assets/soccer2-Cc_vV8OU.js",
+      "bytes": 112927,
+      "sha256": "060814813ea5102b4248679c85e9c6717c9a14c9d3fadf82d9f937f3ad22c129"
+    },
+    {
+      "name": "assets/soccerBootIds-BWkyFIXk.js",
+      "bytes": 293,
+      "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"
+    },
+    {
+      "name": "assets/soccerBoots-BK_dXNrV.js",
+      "bytes": 2017,
+      "sha256": "5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"
+    },
+    {
+      "name": "assets/soccerCareerAppearance-DvnUwYbX.js",
+      "bytes": 6547,
+      "sha256": "4e5e4a79ad25cbc2f7c11dc8d92b3c6f5c0b0065c46c8a890a118b59104d7770"
+    },
+    {
+      "name": "assets/soccerCareerOwner-DovJkT2_.js",
+      "bytes": 6780,
+      "sha256": "f3e70acdc3c8f17f2e9f0e35d2f92d89c4912896709bd7a7fca293a1f472b799"
+    },
+    {
+      "name": "assets/soccerDeck-Dy-7Z20y.js",
+      "bytes": 33245,
+      "sha256": "d1a449dcfd6addd6cd315f86e08f5edf419a9e4e5c987351723a7e8e02249530"
+    },
+    {
+      "name": "assets/soccerInternational-FiWGI8ks.js",
+      "bytes": 21073,
+      "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"
+    },
+    {
+      "name": "assets/soccerMoments-lIHr0X7n.js",
+      "bytes": 22194,
+      "sha256": "ac108fceada4899fdc06b8b7a462230e62e812bf885403f7d136ab958cc2a3b3"
+    },
+    {
+      "name": "assets/soccerSeasonCompetitions-CFra-2EI.js",
+      "bytes": 3300,
+      "sha256": "a68a4dfbec33b2f15f08f9b3e43fb03d50d6e6684ca90ddd458bd17b32c98b01"
+    },
+    {
+      "name": "assets/soundKit-CyE0SzIh.js",
+      "bytes": 5318,
+      "sha256": "3f0359d7d98e28651af71b895b57ea8695c6ea908274aafe7ba6637c55b11cce"
+    },
+    {
+      "name": "assets/squadDeal-2wJ8an2n.js",
+      "bytes": 18482,
+      "sha256": "32d2a0c038300f0854be2fa09522e22ea13963bf1838b8d5cfd03d2033a2a408"
+    },
+    {
+      "name": "assets/squadShape-DzJQ1wtR.js",
+      "bytes": 3031,
+      "sha256": "3e659ead1d6ac28beb910b16a1738fff3e027d4c1a4f36a4330c58886f2f6057"
+    },
+    {
+      "name": "assets/stadiumManagement-CX9Eo5X_.js",
+      "bytes": 13719,
+      "sha256": "5b787b24141169e8c2cab7f7d38ee48cbcb1fe02eb830884597194ddadbfb6a9"
+    },
+    {
+      "name": "assets/stadiumTycoon-CmC8Dblg.js",
+      "bytes": 29343,
+      "sha256": "60a06820ef66e08b81057065ca373b2a0afd830cea0e72f4182cb4a17f84ce71"
+    },
+    {
+      "name": "assets/star-DGYwVS4d.js",
+      "bytes": 641,
+      "sha256": "781a049a606e3ed464f36babc27cb5c8872a6f82b9e4d1a9f697c10b6ca3e207"
+    },
+    {
+      "name": "assets/swords-CfoOjTg4.js",
+      "bytes": 719,
+      "sha256": "5c7b577742c0ad18ec003dd3ea23701a566116e726043c03c54161889de24c22"
+    },
+    {
+      "name": "assets/tabs-DOtwebmd.js",
+      "bytes": 3194,
+      "sha256": "18d1def1f0668988a5624d8df601bf656657ad1e0b994c90c68a11d537a6866a"
+    },
+    {
+      "name": "assets/target-Do-KeFxy.js",
+      "bytes": 395,
+      "sha256": "024e4f091c7f31efa281f71a00d9ba7434c733deb6e23164c0b831e8d8552758"
+    },
+    {
+      "name": "assets/tennisHLPlayers-C-D6596O.js",
+      "bytes": 3097,
+      "sha256": "9bf4000a14b12aaffe97a5a1a6691df5922eca840680b1ff65a0da7ebd11f568"
+    },
+    {
+      "name": "assets/throughBallDrill-B9fNBoXH.js",
+      "bytes": 4784,
+      "sha256": "ab5ddf11e0270d06e80ec67f0f60f4d657e9c41bc9c17157c4e4a3774a5b9b87"
+    },
+    {
+      "name": "assets/timer-BYL1gZUx.js",
+      "bytes": 407,
+      "sha256": "fb7b3fcb6be27c08ca5d6f48d52522c3f5d1b4257e75da1f4425062d963bd2b1"
+    },
+    {
+      "name": "assets/trash-2-DbhpRjcP.js",
+      "bytes": 526,
+      "sha256": "407c35f5e2d7509524793ff65b6bebc476b22f1b61aa6143d0fac313d6d7e4fe"
+    },
+    {
+      "name": "assets/trending-down-D4aUjo6c.js",
+      "bytes": 371,
+      "sha256": "c18f1035155a6d89c59672b28619b42de0c12e7b6f4294c1b5ea413626ae0e75"
+    },
+    {
+      "name": "assets/trending-up-C8jv9dc4.js",
+      "bytes": 368,
+      "sha256": "fa2e8bd9b4c037918e2ab0d3e235d63812e9d158ae6ec052de55b259a56683c0"
+    },
+    {
+      "name": "assets/uclFormatHistory-DwuhruDw.js",
+      "bytes": 12334,
+      "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"
+    },
+    {
+      "name": "assets/us-BhZwfRyv.js",
+      "bytes": 7297,
+      "sha256": "70c13719da3b8235d6dc33f57f4f2ba230279b5963b7bbc849bdd10149845988"
+    },
+    {
+      "name": "assets/usCareerFreeAgency-ViodNrE8.js",
+      "bytes": 4119,
+      "sha256": "da24fb7364eaa048864fe2204c99390470e18a659803bbfdb6cf4931d6a56b8f"
+    },
+    {
+      "name": "assets/usCareerReveal-BW47Ke0-.js",
+      "bytes": 959,
+      "sha256": "b7d5a87d73f80cafe131385f9d08232c1f2d0c6abf4de585e1e558aced97d3d7"
+    },
+    {
+      "name": "assets/usCareerSeasonReview-CFU15qoy.css",
+      "bytes": 10137,
+      "sha256": "e106b5065a97bf52fc2151cc0fd0a0dc3038f5c5019086a0ef9a59e79f323e8c"
+    },
+    {
+      "name": "assets/usCareerSeasonReview-CcZdcKhW.js",
+      "bytes": 497609,
+      "sha256": "75f95c905bfda0347ef8f9452f1157f82ff1562320a2eea9f239366de0f5db3e"
+    },
+    {
+      "name": "assets/usLeagueShape-D2-42-br.js",
+      "bytes": 1680,
+      "sha256": "271e96414c09dfd670398865bbcdf6a6e9bb573893181193c0eab5a11ddafa92"
+    },
+    {
+      "name": "assets/usSeasonShape-V_lK5AYQ.js",
+      "bytes": 10958,
+      "sha256": "f92e8481311596185c518dd4ec08ae8f01d914c56f14265ae44ae8b8b4a85b7d"
+    },
+    {
+      "name": "assets/usStatesPaths-DfX_GtuE.js",
+      "bytes": 15665,
+      "sha256": "d6ab9bbc35920fb66567df4509a42098f80361f96af009a36cbeb35029da1224"
+    },
+    {
+      "name": "assets/useArcadeFlight-DHEeroVK.js",
+      "bytes": 1509,
+      "sha256": "bbd6783e909a174c70fff4e42fa0a9be17be0aca9624dc6a200fd4e334c1b1b1"
+    },
+    {
+      "name": "assets/useArrivalTop-Bmsz7GVK.js",
+      "bytes": 609,
+      "sha256": "a24a1c1f02a271548eb96bf240a3355fa56d5ed8f35872ce55063f0e33cd10cd"
+    },
+    {
+      "name": "assets/useBodyLock-BMfU4rOt.js",
+      "bytes": 449,
+      "sha256": "f9e27ff025a7a43282eec1c85f501506a7bfc5f2310923cb4e62f267daee7d0f"
+    },
+    {
+      "name": "assets/useCareerMoment-CDrCJe1N.js",
+      "bytes": 281376,
+      "sha256": "a0b9f7bdeaf9cdfde97ff0b7e5d29006e35a24b1f37c8b1c95fc104832cbf598"
+    },
+    {
+      "name": "assets/useDailyPuzzle-D4zt8F7r.js",
+      "bytes": 3128,
+      "sha256": "7f6ec28431b94bcdf41a5c646ac758d7cd6f1fa4d660b7714d40f08d35cb8359"
+    },
+    {
+      "name": "assets/useGameCompletion-WqLiHy_J.js",
+      "bytes": 803,
+      "sha256": "2d82af63338c1e6c9f369937acad8e391d2a99df966b564bc0c6b4661611053d"
+    },
+    {
+      "name": "assets/usePracticeClock-ClTOd3XX.css",
+      "bytes": 1088,
+      "sha256": "9a7b159ebe7b7b9ca9e9d1eaf4f8d3e8104c851c9a500580cb0d2cc5d0d20637"
+    },
+    {
+      "name": "assets/usePracticeClock-D-UyARXB.js",
+      "bytes": 1657,
+      "sha256": "7270b408df344c3f3160a48388c8c25d6932bd36747141ae1ea661bbd56757be"
+    },
+    {
+      "name": "assets/useRevealScroll-D4PJN7kt.js",
+      "bytes": 1963,
+      "sha256": "10b1f258f88a45f78efc4a83be901d9a3701dc58b2f708d1b4d81846f452b4e4"
+    },
+    {
+      "name": "assets/useScrollToGame-DFKUXBUK.js",
+      "bytes": 300,
+      "sha256": "dee9f99b3e5c207e4f614c9e6859ee57b603b87b4dc1d2ba4fcebd90a8d7a70b"
+    },
+    {
+      "name": "assets/useTycoonRewards-D04Dhs3F.js",
+      "bytes": 20351,
+      "sha256": "109d5b518ff14a4993dfd42b6fcf369a7383ea8bec638b8df2a6dc9297d11bdc"
+    },
+    {
+      "name": "assets/user-CuPcl0TB.js",
+      "bytes": 365,
+      "sha256": "5896fc7fa71c869d5789987559fe5beca99aa187c5e71a1b2ae1c02b1378409b"
+    },
+    {
+      "name": "assets/users-CMzlATXy.js",
+      "bytes": 473,
+      "sha256": "4ffb8a9dc210f1d8e3917a8747939d0384bfaa4fd147bb79abdbcdea2ade8eb9"
+    },
+    {
+      "name": "assets/validationReason-Bdi7tqty.js",
+      "bytes": 259,
+      "sha256": "17060637499ea71c6e808115cd9647b3685a4f30e058bc1780c46b1b5462d6a7"
+    },
+    {
+      "name": "assets/wc2026Results-bxFApXs8.js",
+      "bytes": 5439,
+      "sha256": "8958173b27c08e9671d393933d7396b11b1c579896ca8530c6bb465878f3bb05"
+    },
+    {
+      "name": "assets/whoAmI-qQAQ2Qr-.js",
+      "bytes": 6828,
+      "sha256": "527586491c1d061f5d8e71acd2ac5e2f081d2fec6c325906d8cc69d5e845bb43"
+    },
+    {
+      "name": "assets/world-Bs1qmFNC.js",
+      "bytes": 83592,
+      "sha256": "067f67143a12c96a26ad79f9d66965bd242d112710f191d759afadf93a51405c"
+    },
+    {
+      "name": "assets/zap-DjaSP-Ho.js",
+      "bytes": 431,
+      "sha256": "10acf0c08c4ba5955e6012b9749bc1b1dfa026f850fce5b11905a3009a454357"
+    },
+    {
+      "name": "aussie-rules-manager/index.html",
+      "bytes": 28523,
+      "sha256": "90fa735aa016727e6d59ea2e9de6cf83d43c0833ddd2883fa248a35cfd098990"
+    },
+    {
+      "name": "ball-iq/index.html",
+      "bytes": 22130,
+      "sha256": "a03378b0b303ea682b58a892b812aefea2b5025e3649638d8aca3348f5344f1e"
+    },
+    {
+      "name": "baseball/index.html",
+      "bytes": 25939,
+      "sha256": "cf1fc981bb7a6b2030ed31ea5b8aa1e578fa0446e7665cc1d826a4519f1eccb4"
+    },
+    {
+      "name": "baseball-career/index.html",
+      "bytes": 22199,
+      "sha256": "9bc003b284fc2cbf8a7f122b63aff905b7a08cf8cf089ea74fa5eec9b5dd84c2"
+    },
+    {
+      "name": "baseball-connections/index.html",
+      "bytes": 22220,
+      "sha256": "fdb3ef0f34e25b17b66490d70b0121450746bcd5cdaacca6492cdec42643edaa"
+    },
+    {
+      "name": "budget-builder/index.html",
+      "bytes": 23073,
+      "sha256": "6724ad1ca8728666b857ef1068f64445a68245d4213e1505baa2431bc26cd39b"
+    },
+    {
+      "name": "build-your-xi/index.html",
+      "bytes": 27020,
+      "sha256": "5ab9c36ab2a65faafc538a517dd776dc975e22c022cbe5405872d9fdffc8b306"
+    },
+    {
+      "name": "buzzer-beater/index.html",
+      "bytes": 26307,
+      "sha256": "a733be2f2a00e713cdd49cd1d7c2cb00ecc423d7ecb8b43f61757c53599d5af7"
+    },
+    {
+      "name": "cage-clash/index.html",
+      "bytes": 27239,
+      "sha256": "cf0477bfdb8773496aedf219b87aee8a52aff89e783800d1d570c2a2280c641b"
+    },
+    {
+      "name": "career/index.html",
+      "bytes": 21698,
+      "sha256": "1d0901477427eb08f36c20d53b23deceb849cf21e2a0e396cd47ba8811822302"
+    },
+    {
+      "name": "career-ladder/index.html",
+      "bytes": 22248,
+      "sha256": "e8cf25bcabbe2ebf7f9b85de0e06064813a300cb9c9d3c0b65defca3122b5e84"
+    },
+    {
+      "name": "cbb-dynasty/index.html",
+      "bytes": 25905,
+      "sha256": "e89e794777373888e42d4bd18e747c84a82c8f4175cb8ec55864a3ba4bb17047"
+    },
+    {
+      "name": "cbb-grid/archive/index.html",
+      "bytes": 161927,
+      "sha256": "7485d6f8275b30bc043f5a041205de3062b717e79ccff369a3c80bbfab6d6433"
+    },
+    {
+      "name": "cbb-grid/index.html",
+      "bytes": 26753,
+      "sha256": "fa3ee0e35c567e8a88a3868930eae82754bf1f7899ce37965d46804b15f3b8ec"
+    },
+    {
+      "name": "cfb-dynasty/index.html",
+      "bytes": 26571,
+      "sha256": "cfb95f83d31d46cc67490964bfde51c362596c4fc9f66a36a43c61752ce7fbfd"
+    },
+    {
+      "name": "cfb-higher-lower/index.html",
+      "bytes": 22314,
+      "sha256": "2168fa12384e67f2eb43f6cb27eb61c4191532689afda46ca4db2027d55871dd"
+    },
+    {
+      "name": "champ-or-not/index.html",
+      "bytes": 23158,
+      "sha256": "1e1193911ac3b2a46ec1e6a36f7269c9833bb60259d051619de5af685af214e8"
+    },
+    {
+      "name": "champions-league-format-history/index.html",
+      "bytes": 39151,
+      "sha256": "55dbbe22e462c38613c744ef5484f66943dddf61cdfdc6420a9812fe4ad472ca"
+    },
+    {
+      "name": "club-manager/index.html",
+      "bytes": 62175,
+      "sha256": "9f77aae850189111054dc99ae6c990842fc4e418edf6c41b13bf450bfd04ed97"
+    },
+    {
+      "name": "clue-auction/index.html",
+      "bytes": 22247,
+      "sha256": "1b6aa57f8e836bdcc3565af4635a5437286dc8622c1d0742ab88c2fbf0c84223"
+    },
+    {
+      "name": "college/index.html",
+      "bytes": 25586,
+      "sha256": "b57802af4a54cb9e1acd650cbda87c3e4d275c7aa82591d316d1adb985977b3a"
+    },
+    {
+      "name": "college-grid/index.html",
+      "bytes": 27355,
+      "sha256": "78d3a0eb6abd039e71c362ee0e532b3bb8a417cd5c273f62c728f1c0bc433bb9"
+    },
+    {
+      "name": "connections/index.html",
+      "bytes": 21945,
+      "sha256": "6bf0ec25bbfe31a8e34b75bf30252f5a454f424dfe55ba0418325fa8c8f55366"
+    },
+    {
+      "name": "conquest/index.html",
+      "bytes": 26691,
+      "sha256": "a4079ec9593fd2753f3ad93522c0ce37117a1bf6edf211ff36cd8c80ef337c19"
+    },
+    {
+      "name": "conquest-mlb/index.html",
+      "bytes": 24386,
+      "sha256": "645a617e9141c2ca0aa4cb49d13a1ef9d5b4f61bf6e0a3a0fddc8c5c0ee66012"
+    },
+    {
+      "name": "conquest-nba/index.html",
+      "bytes": 24287,
+      "sha256": "7fd86ab4501af4c53204ea7eaef9851b969f871246ba4492287e02096816cbbf"
+    },
+    {
+      "name": "conquest-nhl/index.html",
+      "bytes": 24310,
+      "sha256": "e58e6507794c7f98193a8485857a953f7cedceadf51995a3da16800c201a399b"
+    },
+    {
+      "name": "contact/index.html",
+      "bytes": 17282,
+      "sha256": "9f2b26baca42ed041a7557576f6459c1d936103f46e14ea9143b384c533177f0"
+    },
+    {
+      "name": "contract-chaos/index.html",
+      "bytes": 25753,
+      "sha256": "aee2d802679a3e8ab26dd0d375dcbde475051ec47f783a0ceb4dcfdc6235e5e7"
+    },
+    {
+      "name": "cookie-policy/index.html",
+      "bytes": 19378,
+      "sha256": "db5b657f9f798e6fd49c2844dea62344d11a7275f523ac8d848c8f57386459e1"
+    },
+    {
+      "name": "dart-draft/index.html",
+      "bytes": 23294,
+      "sha256": "5bf69c6f9ceb3c4baeaa94a7272b6404ea554566e90eef0cb5b3aa06a46c187a"
+    },
+    {
+      "name": "deadline-day/index.html",
+      "bytes": 29071,
+      "sha256": "49220bdcfaec45a90214a20f0da7f7ebe73660d80f29c4154a8291a8dc6cd08b"
+    },
+    {
+      "name": "deal-or-no-deal/index.html",
+      "bytes": 878,
+      "sha256": "2fc42bc6f10855bf2faa374c3963013d5335ed3a654a4dbb15a018f20650cad6"
+    },
+    {
+      "name": "emoji-guess/index.html",
+      "bytes": 22451,
+      "sha256": "fa7b5053a5679ea4170240813b3d8989e65b7245f08167d6869eaf259c127955"
+    },
+    {
+      "name": "f1-constructor/index.html",
+      "bytes": 21721,
+      "sha256": "f1b0873c1bed20c2bb077869836d252d4060889f53b613486b416b13ea36820c"
+    },
+    {
+      "name": "f1-driver/index.html",
+      "bytes": 22013,
+      "sha256": "c662140e3360345668f77f2f54310df1cec87740a7b9ca6ba2132465e6d48ef2"
+    },
+    {
+      "name": "f1-higher-lower/index.html",
+      "bytes": 22296,
+      "sha256": "6509a99883d02e4cb09a39915b36f04307178da92c169e2858ec484fe62f18a8"
+    },
+    {
+      "name": "face-off/index.html",
+      "bytes": 26123,
+      "sha256": "efc7416e1b327431808c3d71ddeebefb04abe8d7752332c2041b55325729926b"
+    },
+    {
+      "name": "fantasy-draft/index.html",
+      "bytes": 22510,
+      "sha256": "daa1cbb72ccdb7c46c2317126954fdc45cdfa159594890bf14f68ce8442bc350"
+    },
+    {
+      "name": "favicon-16.png",
+      "bytes": 495,
+      "sha256": "fa601cd4abfaf6079fcd7b11631e4e8d351cc068789d24499bbdfcb2503f0181"
+    },
+    {
+      "name": "favicon-32.png",
+      "bytes": 987,
+      "sha256": "6a650458af213165a194849eeccb0a19e93d60e4e8fe12864054cf9912b95e1c"
+    },
+    {
+      "name": "favicon.ico",
+      "bytes": 5410,
+      "sha256": "033a38152e2e5b271fa508335eb4b2d64ac0233f3d878630c3fc8b5aff24b172"
+    },
+    {
+      "name": "favicon.svg",
+      "bytes": 1748,
+      "sha256": "ad3ce0f4d935bf16bb9c377e64bb62fc1bf53560b5eeb8de38b493a655ca0797"
+    },
+    {
+      "name": "fight-career/index.html",
+      "bytes": 31931,
+      "sha256": "66be2b59534fbaf318822ea370d14ce32fcf58d7b19d2a035ace69bbb8e223b6"
+    },
+    {
+      "name": "fight-gym/index.html",
+      "bytes": 25154,
+      "sha256": "1df33d7ca9d76628dd4a16b84d2fbca5912aba9b4d7bd577324f985ab9ce6223"
+    },
+    {
+      "name": "fight-promoter/index.html",
+      "bytes": 29310,
+      "sha256": "cec0cbbf47f4fe2fc3bf155d3fb57e6a5687f6a67c7ebf44cf9baa60ab5a8aec"
+    },
+    {
+      "name": "football-connect-4/index.html",
+      "bytes": 22230,
+      "sha256": "8bc2167716e6e9419655bcb30a390b8e256801b10fea4a30edb2c5d23b42c8fa"
+    },
+    {
+      "name": "football-draft/index.html",
+      "bytes": 849,
+      "sha256": "82572ec7d7227563d8c274c0e337f5f41aa60dc8f03b3c180717cf00d4be065c"
+    },
+    {
+      "name": "football-grid/index.html",
+      "bytes": 25150,
+      "sha256": "2f213bd52d44e71c3676059ce11b3d215e47354cf9e5afd402f60f64a548f2c2"
+    },
+    {
+      "name": "football-timeline/index.html",
+      "bytes": 16512,
+      "sha256": "bc8e9474d4d217b6dc6cdcf7c92ee004a0b94ca0a850b4e9ec643bcc284e6c08"
+    },
+    {
+      "name": "footle/index.html",
+      "bytes": 22491,
+      "sha256": "66591ac677c452c72e5047a0c9ef05f814b1f86f02f6df240f01f01b485d0efc"
+    },
+    {
+      "name": "free-kick/index.html",
+      "bytes": 23547,
+      "sha256": "77a4d1acc70ca5ddd5de233ea549721f78732d36182556373e8b6f93f88aa716"
+    },
+    {
+      "name": "front-office/index.html",
+      "bytes": 31747,
+      "sha256": "9cfb1cc93b10888ab05ce62a5c90b2c2a44f71035c81b63ccb4f51ab562ccb30"
+    },
+    {
+      "name": "gauntlet-draft/index.html",
+      "bytes": 23233,
+      "sha256": "40a71a35678d3abba5921774658f2f864604c19bdb92f89e44530756f4db1b05"
+    },
+    {
+      "name": "golf-higher-lower/index.html",
+      "bytes": 21785,
+      "sha256": "fa2e3d5551b660fdebe16522b78ef21e44cbfceb34dfe7c6694d54ce79545ea2"
+    },
+    {
+      "name": "grade-transfer/index.html",
+      "bytes": 849,
+      "sha256": "11af81f9b53891f1d3016a9efcf9d6a41ab90f66ab4d72c46a6d6675716a19ca"
+    },
+    {
+      "name": "guess-cbb-team/index.html",
+      "bytes": 22338,
+      "sha256": "6079678d77155c1ed4e84b209dfc0ee84fd9b7c328f400da1e77091b6f8b914c"
+    },
+    {
+      "name": "guess-nascar-driver/index.html",
+      "bytes": 23873,
+      "sha256": "23b286dc31e1254619495023af6ed2570aecc42a69d86ac753dd22c86b49d29f"
+    },
+    {
+      "name": "guess-nfl-team/index.html",
+      "bytes": 16442,
+      "sha256": "77eab07296290cd76bd96adbf965d4609fc0733be6671b5d8700c92e1fea5ffa"
+    },
+    {
+      "name": "guess-soccer-club/index.html",
+      "bytes": 852,
+      "sha256": "2227c84313516983e8c017eb55e2bac6f0baa0610f7c2607a7aa788291c62f42"
+    },
+    {
+      "name": "guess-tennis-player/index.html",
+      "bytes": 22121,
+      "sha256": "783a6c9d825b5235cf46b51ee8fb8c1bea56b397bf92020001e9c45ab32d311e"
+    },
+    {
+      "name": "guess-the-college/index.html",
+      "bytes": 22127,
+      "sha256": "0bd448e8fc5fc143a95464064e95c78ed36a9fafba57f05e42fdcc1f45593277"
+    },
+    {
+      "name": "guess-the-golfer/index.html",
+      "bytes": 21870,
+      "sha256": "f1ddc64a9feec1a342baf2c66a708d249d2fb762a999585fb39d5e2265094258"
+    },
+    {
+      "name": "guess-the-nation/index.html",
+      "bytes": 22163,
+      "sha256": "1609a85d21c746e3a256febb874882eeb382ba82ffc52a3d2250452614c1d734"
+    },
+    {
+      "name": "guess-the-year/index.html",
+      "bytes": 22329,
+      "sha256": "741391b91705223579e7a216daf25c187c3777ddbadb5c8f0db98cc72e2fcb7f"
+    },
+    {
+      "name": "guess-transfer-value/index.html",
+      "bytes": 855,
+      "sha256": "366ef7b23158ad670297360ff4591ac4f4ff2698b848459aadebf54e2c38832f"
+    },
+    {
+      "name": "hall-of-champions/index.html",
+      "bytes": 24475,
+      "sha256": "ed04f5cf68aa1c82e439ce4d9118b8dd6c691d4898d65caabba74f4f037671b2"
+    },
+    {
+      "name": "higher-lower/index.html",
+      "bytes": 22564,
+      "sha256": "406c70e37e1f7e53341920d93aa2f5f2b7d13a7eeaef8eb1497d56d146ecd322"
+    },
+    {
+      "name": "higher-lower-transfers/index.html",
+      "bytes": 16576,
+      "sha256": "d642fa2f891e9552aa1b404921ec689f5ce578b633235d5f32013a9fea3e944e"
+    },
+    {
+      "name": "hockey/index.html",
+      "bytes": 26097,
+      "sha256": "35e5783f550d8b682d549d004228b192239873e63bb9a26147584c19d41cc301"
+    },
+    {
+      "name": "hockey-career/index.html",
+      "bytes": 21704,
+      "sha256": "5d5c55d57e870fb36ae54bc3bf48ec56fc83052d0c5ebae0989bde43d64d112b"
+    },
+    {
+      "name": "hockey-grid/archive/index.html",
+      "bytes": 151778,
+      "sha256": "7152c451e65fee26a1ba757a671d98344786f9868739acd5c26f8b8db08dc344"
+    },
+    {
+      "name": "hockey-grid/index.html",
+      "bytes": 22161,
+      "sha256": "013ea3b8c3e413188bf21a9a349d1edf1b2230ec14099d075794b71adae7e342"
+    },
+    {
+      "name": "hockey-higher-lower/index.html",
+      "bytes": 21774,
+      "sha256": "3cda27151e1d940a9887226373d33edd10c805de2a135a43e05c58122696a716"
+    },
+    {
+      "name": "hof-or-bust/index.html",
+      "bytes": 22325,
+      "sha256": "3aa24182fae889a0a0eb3f5568542e0066e0b80e6d8e3ba63e19e3ad95f27034"
+    },
+    {
+      "name": "icon-192.png",
+      "bytes": 6273,
+      "sha256": "e9c410b905250d778d3b128f27c60c7d005de2bc6dc5ef8eb7981873c8067a11"
+    },
+    {
+      "name": "icon-512.png",
+      "bytes": 19914,
+      "sha256": "8fd2f32a7bf65d3b231a676eb4ceeefe89b85c54272bae79daa2a78aa44966ff"
+    },
+    {
+      "name": "idle-arena/index.html",
+      "bytes": 28002,
+      "sha256": "2dd1f2d707f7fbbb25cd7cf93c9f1bc515a3a1d73edf03ccabd7e9d5f25d6f16"
+    },
+    {
+      "name": "index.html",
+      "bytes": 33332,
+      "sha256": "064e51a6b5477729783f4703e91e69b87c1a202057a016550447b449f138e382"
+    },
+    {
+      "name": "jeopardy/index.html",
+      "bytes": 871,
+      "sha256": "2cda38e77f0b6fe8c86872d1bd06330b9ebc8363f3bf275c945c92b0212dbf28"
+    },
+    {
+      "name": "leaderboard/index.html",
+      "bytes": 19274,
+      "sha256": "36f24d13a905ebac0668c3a3071f08b2c58e8a6a1072b987482832a6b12e0e89"
+    },
+    {
+      "name": "list-quiz/index.html",
+      "bytes": 22403,
+      "sha256": "54d49a4debbeabdd6d4ccc406149647b133f336ce08de4c904569501be28cba4"
+    },
+    {
+      "name": "llms.txt",
+      "bytes": 1849,
+      "sha256": "5f1dd7052088ff6ade839abff67bf1c8e4b8bc3e029f0f47e55d744157614876"
+    },
+    {
+      "name": "logo-mark.svg",
+      "bytes": 1691,
+      "sha256": "7404613bf7b8fe37134f706b0cc24a0db4845c6df0df0de3620639e49283cba8"
+    },
+    {
+      "name": "logo-wordmark.svg",
+      "bytes": 6101,
+      "sha256": "8c5573a5645195a8ba3ce67685ac613d3e90d3b4322817b621be5d221b2c0694"
+    },
+    {
+      "name": "logo.svg",
+      "bytes": 7789,
+      "sha256": "cc5e8ee6321c85aef703e3033a6744870913feb6d29cdb5a9dee821e1388c015"
+    },
+    {
+      "name": "manager-hot-seat/index.html",
+      "bytes": 26092,
+      "sha256": "a3c9d612c3e9a20b0af377cba609405c2a48a730759450287bfad89f0d4ca2ca"
+    },
+    {
+      "name": "manifest.json",
+      "bytes": 1121,
+      "sha256": "7f55b96e5bb77b26a1a6b328e4784837da7d1902aab01f9732c03dbad9a68588"
+    },
+    {
+      "name": "minefield/index.html",
+      "bytes": 22291,
+      "sha256": "8ce25fa277760bdb8cea843b7399ac5635d26d11d6735f475240cc82df645549"
+    },
+    {
+      "name": "missing-eleven/index.html",
+      "bytes": 22218,
+      "sha256": "c2981c0dd747df0e1ea237e722cbf628601e241a37d9b6548ebea5cc31c87213"
+    },
+    {
+      "name": "missing-five/index.html",
+      "bytes": 22293,
+      "sha256": "e4615ddb8305efe2a109565f45d39dd175ecc05f853685b6d5c549168afdbecb"
+    },
+    {
+      "name": "missing-nine/index.html",
+      "bytes": 22107,
+      "sha256": "0b18d00b9692827437aa269f69ee50beb28f2aeaf446cab041e40dc150703332"
+    },
+    {
+      "name": "missing-xi/index.html",
+      "bytes": 22000,
+      "sha256": "111b34c8d2879193770739b5d6845ccfcfe87e61e3bb75c0cf378c0b8a4f9cd2"
+    },
+    {
+      "name": "mlb-connect-4/index.html",
+      "bytes": 22303,
+      "sha256": "ec6c9d28f0b3de1fd3d93d9479db130a03431d90d7ad6bf3c997e7139fdc7005"
+    },
+    {
+      "name": "mlb-front-office/index.html",
+      "bytes": 26571,
+      "sha256": "480aa3a5c438b2c286a7098f81b13c68f9c78e0d7efe33c71ff045dec17d299a"
+    },
+    {
+      "name": "mlb-gauntlet-draft/index.html",
+      "bytes": 25189,
+      "sha256": "ca61f8afd09964e2f4c9212b8da633dbf7ec25e46300a5c6f4e35adf5cc1625a"
+    },
+    {
+      "name": "mlb-grid/archive/index.html",
+      "bytes": 149301,
+      "sha256": "04176263de66699af67e5b5408b174c574bf18847a6707587af008ea3941f28b"
+    },
+    {
+      "name": "mlb-grid/index.html",
+      "bytes": 22604,
+      "sha256": "47d1172e89840d63d2000816220bba7e61465b2434d57afb6951eeddc5acade5"
+    },
+    {
+      "name": "mlb-higher-lower/index.html",
+      "bytes": 22153,
+      "sha256": "1322b63a8e755860dd9e38d5a66ffe32440ad39ab22528a6bf2252eec2ed63ed"
+    },
+    {
+      "name": "mlb-my-career/index.html",
+      "bytes": 36333,
+      "sha256": "8c7c0e344399aeba702b95a2258ded2a371acd89a1903de7d9373c3c18c7a6ca"
+    },
+    {
+      "name": "mlb-postseason-format-history/index.html",
+      "bytes": 35772,
+      "sha256": "f77b0520e6edcdfd379f7f24267ca1aafbd26a9737c162212ef079520412c6f7"
+    },
+    {
+      "name": "mystery-box/index.html",
+      "bytes": 22069,
+      "sha256": "267de9736c635b33971ad6038b52dc4c4e8befc7da4a0a47f9b49712d8c90cb4"
+    },
+    {
+      "name": "nascar-chain/index.html",
+      "bytes": 22326,
+      "sha256": "daeff545065684cbf015b551a012cda0a970ba0e2d79588ba4447a6a65603f7d"
+    },
+    {
+      "name": "nba-career/index.html",
+      "bytes": 22152,
+      "sha256": "9cb0039fe3160458cd867a554ab3257490870659529a056d4443c7c9c896047f"
+    },
+    {
+      "name": "nba-chain/index.html",
+      "bytes": 22217,
+      "sha256": "572f17b329b512c22f5b3a401815fb3c07fd1593156147c2b698d08e95dd55bc"
+    },
+    {
+      "name": "nba-connect-4/index.html",
+      "bytes": 22286,
+      "sha256": "6beeeac67cec0cbce8f5e777f66fa6fa2205fb497d91e474aca771c1f8c6e40a"
+    },
+    {
+      "name": "nba-connections/index.html",
+      "bytes": 24835,
+      "sha256": "1c0b1e2d481547563eacdc955f53b36d6ee264db64ae59d526dbdde3df848367"
+    },
+    {
+      "name": "nba-front-office/index.html",
+      "bytes": 31682,
+      "sha256": "ed06085b112107e009cd5a36dc060e201f5b330234c64d58b9606e13ddafa509"
+    },
+    {
+      "name": "nba-gauntlet-draft/index.html",
+      "bytes": 23849,
+      "sha256": "55959adeec69e97b79ef86c2938fae51bc19492c64cf528c64a802e1ddb62835"
+    },
+    {
+      "name": "nba-grid/archive/index.html",
+      "bytes": 152442,
+      "sha256": "019ef6a94ffe8782ea0b385c48988de0b4df9f80f52564803ed422e619226759"
+    },
+    {
+      "name": "nba-grid/index.html",
+      "bytes": 22654,
+      "sha256": "9dc74f902a46d88465692c7d452cc1b50b2151850faafacda54ac60f07093eda"
+    },
+    {
+      "name": "nba-higher-lower/index.html",
+      "bytes": 22195,
+      "sha256": "8c20b5a52dc6a97d339e60607b03c069ef29f74e82fad2176b90a85831879275"
+    },
+    {
+      "name": "nba-my-career/index.html",
+      "bytes": 37284,
+      "sha256": "00268117752397247b7f240382cf0bbea2b9cc490f05df492b196e06cf8fc4f1"
+    },
+    {
+      "name": "nba-playoff-format-history/index.html",
+      "bytes": 50334,
+      "sha256": "a86eab5888605e925d984ad1d22cb1039ecbcc7664fa942a8ea28f8677ced450"
+    },
+    {
+      "name": "nba-starting-5/index.html",
+      "bytes": 22513,
+      "sha256": "d1352ec877b82a2fe1ceb2d173a6c583d945af1979e090f0bb13d56a92076ea9"
+    },
+    {
+      "name": "nba-stat-line/index.html",
+      "bytes": 24507,
+      "sha256": "93745c416348863e2802c3aa782c18a829480d92427f1280b68a51f4f1713206"
+    },
+    {
+      "name": "nfl-career/index.html",
+      "bytes": 21947,
+      "sha256": "cf58da2f57a8545f124f7de77338ec82c5eac9283c7d96118e55620398ea89f4"
+    },
+    {
+      "name": "nfl-connect-4/index.html",
+      "bytes": 22262,
+      "sha256": "d4bb645f6f2193f7ef7c313cf6125064952834ab8a878d0a6ca5f0a09c1a01c4"
+    },
+    {
+      "name": "nfl-connections/index.html",
+      "bytes": 21962,
+      "sha256": "0b1dc4b29d56bbd6f3c16097ad47ba7ecef872f40bd72f57bf992f3c26df4da1"
+    },
+    {
+      "name": "nfl-gauntlet-draft/index.html",
+      "bytes": 25178,
+      "sha256": "5bcd3307c3deb1df19e838f477ba2763cab96172949f76abc770cfe71cf30b58"
+    },
+    {
+      "name": "nfl-higher-lower/index.html",
+      "bytes": 22265,
+      "sha256": "d9d5226694cfbcd5ab38fc97812eb883cf2c3ef502fd32694049be2f8d380eaf"
+    },
+    {
+      "name": "nfl-my-career/index.html",
+      "bytes": 37485,
+      "sha256": "2227f16df538b9dea0acac0564a0d35d106fb29788375d19dd03db4750dec4ad"
+    },
+    {
+      "name": "nfl-playoff-format-history/index.html",
+      "bytes": 33519,
+      "sha256": "d73fec8aa844caf50b940220bda467f9349c91c0e2a6b1344306706e92add85c"
+    },
+    {
+      "name": "nhl-connect-4/index.html",
+      "bytes": 21890,
+      "sha256": "133a7b374421541aa14e89bb8fa0c43e585e31b6f78729ec4123527f76c35ef9"
+    },
+    {
+      "name": "nhl-connections/index.html",
+      "bytes": 21863,
+      "sha256": "3526604948e39aa452c40d26fdca2ef568a1a7456925628f3826875757fee33b"
+    },
+    {
+      "name": "nhl-front-office/index.html",
+      "bytes": 31079,
+      "sha256": "85ceba567c4893334e381b9bd9e63f3d0495ec45780dad9e2e08e7fb36df9ed3"
+    },
+    {
+      "name": "nhl-gauntlet-draft/index.html",
+      "bytes": 25962,
+      "sha256": "0348266acc1eb0f1743474c6acf2b07243edf04672b6c16851682fdb03848f87"
+    },
+    {
+      "name": "nhl-my-career/index.html",
+      "bytes": 35035,
+      "sha256": "3caa3e32b370a623c6ea044bd6231ba1a1e58d7daaea9391d7cda117bc202e91"
+    },
+    {
+      "name": "nhl-playoff-format-history/index.html",
+      "bytes": 45694,
+      "sha256": "0c1e7a2a73e5597328c2de752beb27d9fd2661c14aa3ff810fc6f28b13c9e5e5"
+    },
+    {
+      "name": "og-image.png",
+      "bytes": 70505,
+      "sha256": "40e6a590037ba244bee01c47b38e8538d370c6ed4963891d52f7c8681603c4e8"
+    },
+    {
+      "name": "olympics/index.html",
+      "bytes": 22114,
+      "sha256": "db99c30bbc7c05ceee427b0c73548002e23d09a9c649de0e21f26e99c5815992"
+    },
+    {
+      "name": "overrated-underrated/index.html",
+      "bytes": 867,
+      "sha256": "751da6dd622c094ccdd40506cbc52d22e2f4fbe6b81c55b5a1743f61665b2758"
+    },
+    {
+      "name": "pack-battle/index.html",
+      "bytes": 16561,
+      "sha256": "9798c14652466c38eeaebdf2f9bd3ac9e7390e0b9e9cec6fea4d920425795fe4"
+    },
+    {
+      "name": "perfect-lineup/index.html",
+      "bytes": 849,
+      "sha256": "9468ac84fc0f1fcc648b51e3a9f9222d1a568ad2bf4e772fce448c7d56e9b7b0"
+    },
+    {
+      "name": "perfect-lineup-f1/index.html",
+      "bytes": 22260,
+      "sha256": "e1f23e233d95ce8c8ea176e14bec3c92ab1fc2df1b552f2157b320bcbebcb25b"
+    },
+    {
+      "name": "perfect-lineup-nba/index.html",
+      "bytes": 22682,
+      "sha256": "985bf041b2b8973170b700c9455aafb929af2945433bce9a372db4076b451af9"
+    },
+    {
+      "name": "perfect-lineup-nhl/index.html",
+      "bytes": 22397,
+      "sha256": "bb9338c795ce1fe04f444353e0662cc0e6e6dbc73ebdf0c032b9554532c1f1e1"
+    },
+    {
+      "name": "perfect-season-mlb/index.html",
+      "bytes": 22789,
+      "sha256": "71ad4181c98176b1f262b7bd166d12309aebd99194d780a9465ea73bd8b54f3b"
+    },
+    {
+      "name": "perfect-season-nba/index.html",
+      "bytes": 23068,
+      "sha256": "785517bb74fd54f31c47a84df2ac9eee4519cba2deef1f8240c49e82de215577"
+    },
+    {
+      "name": "perfect-season-nfl/index.html",
+      "bytes": 22760,
+      "sha256": "13a50956e69198d2ecbd8e8f00bb8c1e7d9649024025e3a3c37be383dd142a5d"
+    },
+    {
+      "name": "perfect-season-nhl/index.html",
+      "bytes": 22936,
+      "sha256": "35fb98a00dc166e64b6f8c23be7d94812ffb0bd184cf046b39dbe2cdfe3ac574"
+    },
+    {
+      "name": "placeholder.svg",
+      "bytes": 3253,
+      "sha256": "64badf7aabda0b9630b87020ffb6095cb858ccbcf66b355c2aa08b1063954d3b"
+    },
+    {
+      "name": "player-bingo/index.html",
+      "bytes": 22258,
+      "sha256": "25d548b3c402809f4439ed4354ae545898910e880464072aab7f1849f953a980"
+    },
+    {
+      "name": "player-stock-market/index.html",
+      "bytes": 26239,
+      "sha256": "7ee7fed7ea166ef6ca583e05a45bc09593837e2c0497c44bee2278bd2b09d5e2"
+    },
+    {
+      "name": "prerender-boot.js",
+      "bytes": 3049,
+      "sha256": "c5da547fd0b4b0920dfeb100f3d5f3f73ca5317e38135ddc132649cd43f85c70"
+    },
+    {
+      "name": "privacy/index.html",
+      "bytes": 33162,
+      "sha256": "1409fc4acb550704697377ae4d5274e91714d73f2e70570e72a539e39c175ec3"
+    },
+    {
+      "name": "pro-basketball/index.html",
+      "bytes": 27759,
+      "sha256": "9b2e0c920818b6e92ab9ff2190400762e67582032c9040fbfe15c73ff682198d"
+    },
+    {
+      "name": "pro-football/index.html",
+      "bytes": 25677,
+      "sha256": "23fb11e1228b412dfc9867de260e18c58974b015ed5bb1fca2bf24970b46ad5a"
+    },
+    {
+      "name": "profile/index.html",
+      "bytes": 1375,
+      "sha256": "9fb816273ffa0d886b89f75e483b69f1d1df9329a83eacf0b9b5a0657dbff3f7"
+    },
+    {
+      "name": "puck-detective/index.html",
+      "bytes": 22013,
+      "sha256": "047e4b531c6676689955b2690b79ff5506df38e81dc682bc066550aaf52275ab"
+    },
+    {
+      "name": "quiz-board/index.html",
+      "bytes": 22213,
+      "sha256": "c56f78ffe30e41fac20bd266492adc31bee542b31c63e2e1f435aaef93aa2bcf"
+    },
+    {
+      "name": "rank-em/index.html",
+      "bytes": 22390,
+      "sha256": "dfed39ad70d39896f34cea787ab354f10f1133f51ab0a1673407c705edd8d504"
+    },
+    {
+      "name": "rarity-round/index.html",
+      "bytes": 22360,
+      "sha256": "207ad6e533b8e8865ed73bb26055d2604c25feffd616201147bc7af204903cda"
+    },
+    {
+      "name": "rebuild/index.html",
+      "bytes": 35210,
+      "sha256": "53cdce7e84fafddbd476d1d54dd9624d5b1beeb0465badc4dab8dd8ab3d6748f"
+    },
+    {
+      "name": "records/afl-premiers/index.html",
+      "bytes": 27601,
+      "sha256": "ef6ac46a357a27339b7f17af036b172c969944c4537490c7f72c81a286947dc5"
+    },
+    {
+      "name": "records/brownlow-medal-winners/index.html",
+      "bytes": 31020,
+      "sha256": "27ab8f03b98f6a059435d1e44dd35e21a69e345667275e2b0625a939c7f1f844"
+    },
+    {
+      "name": "records/college-football-national-champions/index.html",
+      "bytes": 26928,
+      "sha256": "7963fd5bf78ef261d87bfc5814c65e2c1af3b788043050060d453a280bc6c3ee"
+    },
+    {
+      "name": "records/dally-m-medal-winners/index.html",
+      "bytes": 23320,
+      "sha256": "1fb10d0acf93089b7af53b2ec26bd7a85cfd0b9054803e66e61f4f4915168e3a"
+    },
+    {
+      "name": "records/english-football-champions/index.html",
+      "bytes": 28826,
+      "sha256": "6cf29fb221cf9529817717ff3405654a9cafcf334bda215d522ec2bb4d4b3658"
+    },
+    {
+      "name": "records/heisman-trophy-winners/index.html",
+      "bytes": 27718,
+      "sha256": "89dc6d69dfbdb2321831474b55e086646ec1fc37f39f66d2e558d7d51d0d30f3"
+    },
+    {
+      "name": "records/index.html",
+      "bytes": 36569,
+      "sha256": "54ca26e874bd053577f618a0cbdc9b8e6057a95d7cf87eff11d8aa147034cd67"
+    },
+    {
+      "name": "records/nba-champions/index.html",
+      "bytes": 31854,
+      "sha256": "228da211fe1a71864dcc6311b841addc741f4469664659ae06e70af2844f4834"
+    },
+    {
+      "name": "records/ncaa-basketball-champions/index.html",
+      "bytes": 28515,
+      "sha256": "3e7344f0d148639e99d1f2a6932db5d6315a71f200597da4a3974e6577d533bc"
+    },
+    {
+      "name": "records/nrl-premiers/index.html",
+      "bytes": 30550,
+      "sha256": "169f8eaf1c7331b78c4e593faac3de618d543acbf0e78802edddb796429f4f0c"
+    },
+    {
+      "name": "records/stanley-cup-winners/index.html",
+      "bytes": 32806,
+      "sha256": "1ba02c4baaebb2497e9622b8100016215bdbb6e42c0396ab5e31f696ded9cef9"
+    },
+    {
+      "name": "records/super-bowl-winners/index.html",
+      "bytes": 32546,
+      "sha256": "7210d2641e8fbe7f1b4651c3b733fe981bbcab03776fcdd9bf6963e9500b78c8"
+    },
+    {
+      "name": "records/wnba-champions/index.html",
+      "bytes": 24518,
+      "sha256": "c798249490ceb72355ef93ebd4eb995583e9927f1afc4b88b620b68dff4764c3"
+    },
+    {
+      "name": "records/world-series-winners/index.html",
+      "bytes": 33986,
+      "sha256": "a766fcc7c4ab1e76829072e9b21cb9ba2f7cc1f36cfdb4bf26d2f1241cba1194"
+    },
+    {
+      "name": "reset-password/index.html",
+      "bytes": 15567,
+      "sha256": "6f5e58bf886153375ba6eca77e60f412302709a3d4fcca68ff84fec6ca4ab8f1"
+    },
+    {
+      "name": "robots.txt",
+      "bytes": 1304,
+      "sha256": "f0a4f1fa28bbdba81e20b3005fa3502056ba981814380ec43fa42611aca5c2c8"
+    },
+    {
+      "name": "score-predictor/index.html",
+      "bytes": 21973,
+      "sha256": "2a73d840224f74ced58b6dcc55dd4ce1302907acc72faf2698c88cb106434e84"
+    },
+    {
+      "name": "search/index.html",
+      "bytes": 30810,
+      "sha256": "e2e019032a6c70754643727ca910ebd5549ce531b61080dd5afbb591b2797179"
+    },
+    {
+      "name": "search-and-discard/index.html",
+      "bytes": 23246,
+      "sha256": "6f7d363b852aabb7b04594e74182e02ab76ea3725583a1c5f949c3d75ab01107"
+    },
+    {
+      "name": "shirt-number/index.html",
+      "bytes": 15960,
+      "sha256": "45a6d4962dc5df7eb520d10ddd38ec222b2ae05222a467cbfd312865c9e84f0d"
+    },
+    {
+      "name": "sign-the-player/index.html",
+      "bytes": 23371,
+      "sha256": "85f20aaf743592e0cf2bccb84b566f58bd7699462d42d74af770ede0d1dd6a2d"
+    },
+    {
+      "name": "silverware-sort/index.html",
+      "bytes": 23482,
+      "sha256": "4e17ade8b3feb1009359f8190633b3cdcf9d828b33fbf375f8a021ea036b279c"
+    },
+    {
+      "name": "sitemap.xml",
+      "bytes": 25678,
+      "sha256": "a394b3f49fb5ee2e76e89982c96c2af49b6f36c6ca79a33c5848226a9c10d917"
+    },
+    {
+      "name": "soccer/index.html",
+      "bytes": 29999,
+      "sha256": "26d6af1fef40e037b553d65aaa02b384bd240344f0e766a029a5e0faaf7eed39"
+    },
+    {
+      "name": "soccer-career/index.html",
+      "bytes": 38374,
+      "sha256": "ab26a061c8a02bc174c0e38b6b9b2bb43233cd7ed2ad22951463aa44b04c0c3b"
+    },
+    {
+      "name": "soccer-conquest/index.html",
+      "bytes": 26493,
+      "sha256": "6e18249d26ccdb733822973a955c50068b7d0341bf87879bc93cb4d2ced483a5"
+    },
+    {
+      "name": "soccer-grid/index.html",
+      "bytes": 22478,
+      "sha256": "b165dcc87c6c50ed540b3c5e3477a2de8f21261041bb164347d9b956003805c4"
+    },
+    {
+      "name": "sport-glyphs.svg",
+      "bytes": 3074,
+      "sha256": "8f312c574b9b992722cd661bcb924f63702b3fb73f0e0281e261ce491a5e4a33"
+    },
+    {
+      "name": "sports-bingo/index.html",
+      "bytes": 27712,
+      "sha256": "444e1f28811fce9a0820690f3cd4c85aed3acbe8aea8cd616bda93830278d72d"
+    },
+    {
+      "name": "sports-millionaire/index.html",
+      "bytes": 22248,
+      "sha256": "a31116314855c72f242bf4fae40089a858b6c84d7e045668e9e81193ab8f0ae2"
+    },
+    {
+      "name": "squad-deal/index.html",
+      "bytes": 22712,
+      "sha256": "801c90bcff3b29ab0f7a88276bd0da7a0e9914a3a5b83e13c343df531b4c99c6"
+    },
+    {
+      "name": "stadium-tycoon/index.html",
+      "bytes": 34147,
+      "sha256": "ece42b73e7c9afe76b8472e63d78a746bb926c0f8a0ace837c3cc7a0a9e7bb34"
+    },
+    {
+      "name": "stat-detective/index.html",
+      "bytes": 22393,
+      "sha256": "2401f746d9275fe2c5dc82f8a5ead72930c54443103261c09837540fc5d0d67b"
+    },
+    {
+      "name": "teammates/index.html",
+      "bytes": 23023,
+      "sha256": "a40a9cf32ddde93f805b3c57988d96b87ea7f311aaa7e24e8f8a3ce3027fbe6b"
+    },
+    {
+      "name": "tennis-chain/index.html",
+      "bytes": 22197,
+      "sha256": "540bcd943c50c175d682f0446737ffc47912a5cb5715173f7c3ae43b4969c4e6"
+    },
+    {
+      "name": "tennis-higher-lower/index.html",
+      "bytes": 21741,
+      "sha256": "5e5f3d8b7ccd21a4bed02831e3b69d38d6790c42967c1f58f8e6dc336be60dd1"
+    },
+    {
+      "name": "terms/index.html",
+      "bytes": 23712,
+      "sha256": "a71faa39eaa625ea9ee84cc5b30d9c1a6251943c0bb9dfc0afbb9c6c894ee0da"
+    },
+    {
+      "name": "tier-list/index.html",
+      "bytes": 844,
+      "sha256": "d76093c3d0f37e84b426e2bcea3b31e8d717926bfc4bd78fc0d0ace750f08e3e"
+    },
+    {
+      "name": "transfer-path/index.html",
+      "bytes": 23767,
+      "sha256": "30569ebe0a17b9f831613e428b186e809cf58a5f572b352a7342d744721192ac"
+    },
+    {
+      "name": "ufc/index.html",
+      "bytes": 22189,
+      "sha256": "57ea1c46348d2f14da9c99053921a61d9e677cac6fd8ee002f9ab62d2cb918ef"
+    },
+    {
+      "name": "ufc-chain/index.html",
+      "bytes": 22300,
+      "sha256": "bc3d76bbfdbdc78a442e88be9def646bd72bcd51ce3f80f3f46b3a3b71ef2f57"
+    },
+    {
+      "name": "whats-new/index.html",
+      "bytes": 390448,
+      "sha256": "fb59036970b0faa77b74992712063c4fcd7851a38fd52a5dee2e4ff0c7a2112e"
+    },
+    {
+      "name": "who-am-i/index.html",
+      "bytes": 22181,
+      "sha256": "191359efc5bee39836ddd63033633d0a02d3c9a82753043598aec0de6bd6d4ba"
+    },
+    {
+      "name": "whod-they-beat/index.html",
+      "bytes": 22690,
+      "sha256": "a40e72ec182c4fe2b37fa2ddea331bd8e64a9c416fe65adf9199afd66bf99d70"
+    },
+    {
+      "name": "wonderkid-factory/index.html",
+      "bytes": 28304,
+      "sha256": "f9bf09e0fc515913909b2ac0fd18955a316e3169548371aebc2d99cab41b92f6"
+    },
+    {
+      "name": "world-cup/index.html",
+      "bytes": 844,
+      "sha256": "b45ab66529d1fec9c6113f88f4c895482d96c64b1e1b4b9bce2f83a81dd514a8"
+    },
+    {
+      "name": "world-cup-2026-results/index.html",
+      "bytes": 27486,
+      "sha256": "265c43223cbdc49c24394ae5bce4fc4bf48ed64a24a9dc7ede89ea0538f65f3f"
+    },
+    {
+      "name": "world-cup-bracket/index.html",
+      "bytes": 25221,
+      "sha256": "812cb0846bf532abff5190f0ff7e75b33050892c79a53893741d5183cd32e4ef"
+    },
+    {
+      "name": "world-cup-predictor/index.html",
+      "bytes": 938,
+      "sha256": "2a49b79076e4d0b8b7d5ffe8710b6b6376f4af27ed207310b47a5ff1d622aaa2"
+    },
+    {
+      "name": "world-xi/index.html",
+      "bytes": 23087,
+      "sha256": "3288c62f72cf66814f1997342f8eb53bd86051dad66197d12f4c7fae0ba91c2f"
+    }
+  ],
+  "pDistLedgerSHA256": "2e392f0bc17ca9c8ad4dccfb6bd959d75f9f0af9a1d019f13fcc69d011c55f97"
+}

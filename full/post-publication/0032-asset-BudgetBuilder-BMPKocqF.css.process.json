@@ -1,0 +1,31 @@
+{
+  "label": "asset-BudgetBuilder-BMPKocqF.css",
+  "url": "https://douknowball.com/assets/BudgetBuilder-BMPKocqF.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:02.745Z",
+  "end": "2026-10-30T21:53:02.935Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0032-asset-BudgetBuilder-BMPKocqF.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0032-asset-BudgetBuilder-BMPKocqF.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/BudgetBuilder-BMPKocqF.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0032-asset-BudgetBuilder-BMPKocqF.css.body",
+  "headerFile": "0032-asset-BudgetBuilder-BMPKocqF.css.headers",
+  "bytes": 744,
+  "sha256": "acef5ef159e660e55986b6f9b5b6b66a7421182a7471644948eca6fcc2c9f11d",
+  "headersSHA256": "8967e80c17bfd46cae9f7640ed176c6c248ddc7e36b5b0ec16bac2510dbacf20"
+}

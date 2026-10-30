@@ -1,0 +1,31 @@
+{
+  "label": "asset-SoccerSeasonCentre-8_thBs25.js",
+  "url": "https://douknowball.com/assets/SoccerSeasonCentre-8_thBs25.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:54.137Z",
+  "end": "2026-10-30T21:53:54.276Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0226-asset-SoccerSeasonCentre-8_thBs25.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0226-asset-SoccerSeasonCentre-8_thBs25.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SoccerSeasonCentre-8_thBs25.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0226-asset-SoccerSeasonCentre-8_thBs25.js.body",
+  "headerFile": "0226-asset-SoccerSeasonCentre-8_thBs25.js.headers",
+  "bytes": 41531,
+  "sha256": "fe3fddef14df1ccd5bbf6577ae7053f9065b53db73049081ffaf9151bbaf96fe",
+  "headersSHA256": "289661d7ded3d9c1ae0405008b71a94f1f97fb89c1ed9fb377031116c9e6a88f"
+}

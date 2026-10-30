@@ -1,0 +1,31 @@
+{
+  "label": "asset-ManagerSlotsScreen-zHrLtPbu.js",
+  "url": "https://douknowball.com/assets/ManagerSlotsScreen-zHrLtPbu.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:33.309Z",
+  "end": "2026-10-30T21:53:33.467Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0128-asset-ManagerSlotsScreen-zHrLtPbu.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0128-asset-ManagerSlotsScreen-zHrLtPbu.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/ManagerSlotsScreen-zHrLtPbu.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0128-asset-ManagerSlotsScreen-zHrLtPbu.js.body",
+  "headerFile": "0128-asset-ManagerSlotsScreen-zHrLtPbu.js.headers",
+  "bytes": 5035,
+  "sha256": "17c2bb28e57913a04e4bc4785c7bd6e8e2391e68dc5dd4e25258938f230ef582",
+  "headersSHA256": "0c3f66bc1917160c5cd1b97ffdfd6d98a705725a4a91d583a1aac3aeaa980b5b"
+}

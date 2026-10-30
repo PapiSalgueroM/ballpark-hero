@@ -1,0 +1,31 @@
+{
+  "label": "asset-PressRoom-D4zCZjPL.js",
+  "url": "https://douknowball.com/assets/PressRoom-D4zCZjPL.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:53.198Z",
+  "end": "2026-10-30T21:53:53.365Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0220-asset-PressRoom-D4zCZjPL.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0220-asset-PressRoom-D4zCZjPL.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/PressRoom-D4zCZjPL.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0220-asset-PressRoom-D4zCZjPL.js.body",
+  "headerFile": "0220-asset-PressRoom-D4zCZjPL.js.headers",
+  "bytes": 9237,
+  "sha256": "d1b803a91ac3d56ac3402d9356aa67be9dbd37c67f35f0a3c805f0efed796c58",
+  "headersSHA256": "d44f46fcb57a467b8396bcb3504786722fe9b4de5da30dcaf7a804bf1a3b3860"
+}

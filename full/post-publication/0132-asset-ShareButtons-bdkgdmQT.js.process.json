@@ -1,0 +1,31 @@
+{
+  "label": "asset-ShareButtons-bdkgdmQT.js",
+  "url": "https://douknowball.com/assets/ShareButtons-bdkgdmQT.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:34.020Z",
+  "end": "2026-10-30T21:53:34.187Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0132-asset-ShareButtons-bdkgdmQT.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0132-asset-ShareButtons-bdkgdmQT.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/ShareButtons-bdkgdmQT.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0132-asset-ShareButtons-bdkgdmQT.js.body",
+  "headerFile": "0132-asset-ShareButtons-bdkgdmQT.js.headers",
+  "bytes": 11645,
+  "sha256": "d7faef199d1452006ab2024b70a6b55a0955fc5515df7f0d831af8b0397375df",
+  "headersSHA256": "ab19a8afaf1b8fe491a846bcc64b39667a1af3c690844d71eabd7f1662570620"
+}

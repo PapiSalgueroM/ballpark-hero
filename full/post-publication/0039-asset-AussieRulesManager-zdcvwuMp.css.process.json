@@ -1,0 +1,31 @@
+{
+  "label": "asset-AussieRulesManager-zdcvwuMp.css",
+  "url": "https://douknowball.com/assets/AussieRulesManager-zdcvwuMp.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:05.968Z",
+  "end": "2026-10-30T21:53:06.669Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0039-asset-AussieRulesManager-zdcvwuMp.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0039-asset-AussieRulesManager-zdcvwuMp.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/AussieRulesManager-zdcvwuMp.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0039-asset-AussieRulesManager-zdcvwuMp.css.body",
+  "headerFile": "0039-asset-AussieRulesManager-zdcvwuMp.css.headers",
+  "bytes": 4099,
+  "sha256": "c429c48a415e43e166ad3eed7f12cfddaedce25a679e044ef55739e604fe14e0",
+  "headersSHA256": "647a2e7a9d98b1d8a7314b0efc3523f0d38b081e3d1b8ef67b4b36941022d183"
+}

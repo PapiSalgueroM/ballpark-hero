@@ -1,0 +1,31 @@
+{
+  "label": "asset-NhlFrontOffice-Ce_3hBzp.css",
+  "url": "https://douknowball.com/assets/NhlFrontOffice-Ce_3hBzp.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:02.557Z",
+  "end": "2026-10-30T21:53:02.745Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0031-asset-NhlFrontOffice-Ce_3hBzp.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0031-asset-NhlFrontOffice-Ce_3hBzp.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/NhlFrontOffice-Ce_3hBzp.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0031-asset-NhlFrontOffice-Ce_3hBzp.css.body",
+  "headerFile": "0031-asset-NhlFrontOffice-Ce_3hBzp.css.headers",
+  "bytes": 2662,
+  "sha256": "4480b2e085dfbde0ed241f87171dd204e6578fe9c517464c4b4718cde1454076",
+  "headersSHA256": "10c553196d041442bace6584f5741d0aee6a453ac5dd794a0c47591ea09b7249"
+}

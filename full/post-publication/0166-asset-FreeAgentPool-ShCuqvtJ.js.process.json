@@ -1,0 +1,31 @@
+{
+  "label": "asset-FreeAgentPool-ShCuqvtJ.js",
+  "url": "https://douknowball.com/assets/FreeAgentPool-ShCuqvtJ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:42.578Z",
+  "end": "2026-10-30T21:53:42.727Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0166-asset-FreeAgentPool-ShCuqvtJ.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0166-asset-FreeAgentPool-ShCuqvtJ.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/FreeAgentPool-ShCuqvtJ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0166-asset-FreeAgentPool-ShCuqvtJ.js.body",
+  "headerFile": "0166-asset-FreeAgentPool-ShCuqvtJ.js.headers",
+  "bytes": 2778,
+  "sha256": "bfa70e891fa198a77ae482fb4651e8da1a6cab9a17f1d4c4c1ace698a48926a7",
+  "headersSHA256": "11475400b3865139d745015604ed6211732915e9d6a0f70cf350d7522f7b7d86"
+}

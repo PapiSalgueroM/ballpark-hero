@@ -1,0 +1,31 @@
+{
+  "label": "asset-Footle-pT74gEft.css",
+  "url": "https://douknowball.com/assets/Footle-pT74gEft.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:50.988Z",
+  "end": "2026-10-30T21:52:51.670Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0008-asset-Footle-pT74gEft.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0008-asset-Footle-pT74gEft.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/Footle-pT74gEft.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0008-asset-Footle-pT74gEft.css.body",
+  "headerFile": "0008-asset-Footle-pT74gEft.css.headers",
+  "bytes": 3203,
+  "sha256": "d1bed6d876914a27496fe514ed3fc1fd5ba1a4641b11950bf536bec6bc36f5e0",
+  "headersSHA256": "e28ba49f93f7ce7ae26c59775f85c5df9b5a51c9fb322b003b6a034c11fa7ec1"
+}

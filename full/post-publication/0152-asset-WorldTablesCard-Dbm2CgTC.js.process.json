@@ -1,0 +1,31 @@
+{
+  "label": "asset-WorldTablesCard-Dbm2CgTC.js",
+  "url": "https://douknowball.com/assets/WorldTablesCard-Dbm2CgTC.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:39.609Z",
+  "end": "2026-10-30T21:53:39.778Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0152-asset-WorldTablesCard-Dbm2CgTC.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0152-asset-WorldTablesCard-Dbm2CgTC.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/WorldTablesCard-Dbm2CgTC.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0152-asset-WorldTablesCard-Dbm2CgTC.js.body",
+  "headerFile": "0152-asset-WorldTablesCard-Dbm2CgTC.js.headers",
+  "bytes": 6412,
+  "sha256": "59b0fad28903d01b40357da343bd6ef96e8db39be84ada3751bef7828818f5e9",
+  "headersSHA256": "df4229692efc40c538a579b5497c5a0baef02eb0a3fbe035fda7122a34913f65"
+}

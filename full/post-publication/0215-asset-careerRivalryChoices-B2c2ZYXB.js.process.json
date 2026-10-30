@@ -1,0 +1,31 @@
+{
+  "label": "asset-careerRivalryChoices-B2c2ZYXB.js",
+  "url": "https://douknowball.com/assets/careerRivalryChoices-B2c2ZYXB.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:52.318Z",
+  "end": "2026-10-30T21:53:52.503Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0215-asset-careerRivalryChoices-B2c2ZYXB.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0215-asset-careerRivalryChoices-B2c2ZYXB.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/careerRivalryChoices-B2c2ZYXB.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0215-asset-careerRivalryChoices-B2c2ZYXB.js.body",
+  "headerFile": "0215-asset-careerRivalryChoices-B2c2ZYXB.js.headers",
+  "bytes": 5988,
+  "sha256": "a4b123da1b68e0519315d81cfa28fae296916c7c5208e46da1daeca5fc3a527d",
+  "headersSHA256": "910999a992bd848f23c5ebda618e4b5bde6e95b3a70ea1e5b0a9f487a1d8c672"
+}

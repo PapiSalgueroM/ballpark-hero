@@ -1,0 +1,31 @@
+{
+  "label": "asset-GuessNascarDriver-B4spQIn2.css",
+  "url": "https://douknowball.com/assets/GuessNascarDriver-B4spQIn2.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:57.152Z",
+  "end": "2026-10-30T21:52:57.856Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0020-asset-GuessNascarDriver-B4spQIn2.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0020-asset-GuessNascarDriver-B4spQIn2.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/GuessNascarDriver-B4spQIn2.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0020-asset-GuessNascarDriver-B4spQIn2.css.body",
+  "headerFile": "0020-asset-GuessNascarDriver-B4spQIn2.css.headers",
+  "bytes": 768,
+  "sha256": "63c39b0836ee4bd4f49930ddb65f4cf0695676bcba657283e04a43a5d4a16d04",
+  "headersSHA256": "a15efbb33bc59e1e9807e2572fcfdb49662adf301101561f5d61fd2eb501d5c7"
+}

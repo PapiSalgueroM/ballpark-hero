@@ -1,0 +1,31 @@
+{
+  "label": "asset-squadShape-DzJQ1wtR.js",
+  "url": "https://douknowball.com/assets/squadShape-DzJQ1wtR.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:19.000Z",
+  "end": "2026-10-30T21:53:19.256Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0067-asset-squadShape-DzJQ1wtR.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0067-asset-squadShape-DzJQ1wtR.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/squadShape-DzJQ1wtR.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0067-asset-squadShape-DzJQ1wtR.js.body",
+  "headerFile": "0067-asset-squadShape-DzJQ1wtR.js.headers",
+  "bytes": 3031,
+  "sha256": "3e659ead1d6ac28beb910b16a1738fff3e027d4c1a4f36a4330c58886f2f6057",
+  "headersSHA256": "340534b0a5ecb825ceab048a79e222645c22c9c1a67d90af176430a074af16cc"
+}

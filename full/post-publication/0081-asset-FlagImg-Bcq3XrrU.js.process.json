@@ -1,0 +1,31 @@
+{
+  "label": "asset-FlagImg-Bcq3XrrU.js",
+  "url": "https://douknowball.com/assets/FlagImg-Bcq3XrrU.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:21.704Z",
+  "end": "2026-10-30T21:53:21.873Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0081-asset-FlagImg-Bcq3XrrU.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0081-asset-FlagImg-Bcq3XrrU.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/FlagImg-Bcq3XrrU.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0081-asset-FlagImg-Bcq3XrrU.js.body",
+  "headerFile": "0081-asset-FlagImg-Bcq3XrrU.js.headers",
+  "bytes": 5846,
+  "sha256": "010d570fc96262104a76e78b9fa981d8b9432cbc55d301fe19ec5a6450738b97",
+  "headersSHA256": "9719e12948fd3a3a5fbbc1bd36495c295a2a2e7d38f02ffea5f54f00ff9da799"
+}

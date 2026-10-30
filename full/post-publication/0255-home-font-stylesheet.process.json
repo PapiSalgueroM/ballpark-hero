@@ -1,0 +1,31 @@
+{
+  "label": "home-font-stylesheet",
+  "url": "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+  "method": "GET",
+  "start": "2026-10-30T21:54:00.685Z",
+  "end": "2026-10-30T21:54:00.766Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0255-home-font-stylesheet.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0255-home-font-stylesheet.body",
+    "--write-out",
+    "%{http_code}",
+    "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0255-home-font-stylesheet.body",
+  "headerFile": "0255-home-font-stylesheet.headers",
+  "bytes": 1864,
+  "sha256": "f867cc05f0d31bbbdad175a4301931100be7a1316ead1b8f83bf492d38ba6b3b",
+  "headersSHA256": "ef1670963d381e9b6b343da5d577c8390a5799bda9ee36c8449577945028da96"
+}

@@ -1,0 +1,31 @@
+{
+  "label": "asset-SoccerDerbyHistory-ByG4b1RZ.js",
+  "url": "https://douknowball.com/assets/SoccerDerbyHistory-ByG4b1RZ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:59.091Z",
+  "end": "2026-10-30T21:53:59.235Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0246-asset-SoccerDerbyHistory-ByG4b1RZ.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0246-asset-SoccerDerbyHistory-ByG4b1RZ.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SoccerDerbyHistory-ByG4b1RZ.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0246-asset-SoccerDerbyHistory-ByG4b1RZ.js.body",
+  "headerFile": "0246-asset-SoccerDerbyHistory-ByG4b1RZ.js.headers",
+  "bytes": 16459,
+  "sha256": "66e4d19a2032d0cfc6ca3b108de8588aad336e2d7e3ad387dc2645a5fa0453f6",
+  "headersSHA256": "cc683a3d34d7cf06b02278e3e94513652b28509d533dba8f74e5b21ed02be4bf"
+}

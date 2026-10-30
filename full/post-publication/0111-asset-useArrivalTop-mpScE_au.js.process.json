@@ -1,0 +1,31 @@
+{
+  "label": "asset-useArrivalTop-mpScE_au.js",
+  "url": "https://douknowball.com/assets/useArrivalTop-mpScE_au.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:29.711Z",
+  "end": "2026-10-30T21:53:29.902Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0111-asset-useArrivalTop-mpScE_au.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0111-asset-useArrivalTop-mpScE_au.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/useArrivalTop-mpScE_au.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0111-asset-useArrivalTop-mpScE_au.js.body",
+  "headerFile": "0111-asset-useArrivalTop-mpScE_au.js.headers",
+  "bytes": 609,
+  "sha256": "e8d97ee0459e2bf19467a1f84da6c9d2196ee20310b0863aab49c523a57ab1c3",
+  "headersSHA256": "914253e8d45215b86f46b090c3fe2bf5bea3323a2c7ca76d2a391503aff28186"
+}

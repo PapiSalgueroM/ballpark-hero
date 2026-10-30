@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerLanding-j2jJAG9a.js",
+  "url": "https://douknowball.com/assets/clubManagerLanding-j2jJAG9a.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:21.335Z",
+  "end": "2026-10-30T21:53:21.514Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0079-asset-clubManagerLanding-j2jJAG9a.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0079-asset-clubManagerLanding-j2jJAG9a.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerLanding-j2jJAG9a.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0079-asset-clubManagerLanding-j2jJAG9a.js.body",
+  "headerFile": "0079-asset-clubManagerLanding-j2jJAG9a.js.headers",
+  "bytes": 217,
+  "sha256": "36840ebd221ea8a58b29d98c79cb598b7eb743e9de06199fd38f2b092e889a3c",
+  "headersSHA256": "7546ed3fcc4ddc6f2b4e98241740c7d2e69b3af0a33f63ed0d1a2aa0d7215c6b"
+}

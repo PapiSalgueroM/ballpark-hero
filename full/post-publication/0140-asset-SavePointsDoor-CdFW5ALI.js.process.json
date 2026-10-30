@@ -1,0 +1,31 @@
+{
+  "label": "asset-SavePointsDoor-CdFW5ALI.js",
+  "url": "https://douknowball.com/assets/SavePointsDoor-CdFW5ALI.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:35.527Z",
+  "end": "2026-10-30T21:53:35.663Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0140-asset-SavePointsDoor-CdFW5ALI.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0140-asset-SavePointsDoor-CdFW5ALI.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SavePointsDoor-CdFW5ALI.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0140-asset-SavePointsDoor-CdFW5ALI.js.body",
+  "headerFile": "0140-asset-SavePointsDoor-CdFW5ALI.js.headers",
+  "bytes": 2453,
+  "sha256": "c663ed4028e01132721a65e588e9e03b90038b649af0477fbdccc6d9eefb6ade",
+  "headersSHA256": "5ac332b1d5a5b56ea2589e413763602649a981d775c81aeff96365f42a9a8ff7"
+}

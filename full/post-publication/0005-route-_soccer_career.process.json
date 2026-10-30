@@ -1,0 +1,31 @@
+{
+  "label": "route-_soccer_career",
+  "url": "https://douknowball.com/soccer-career?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:50.351Z",
+  "end": "2026-10-30T21:52:50.558Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0005-route-_soccer_career.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0005-route-_soccer_career.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/soccer-career?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0005-route-_soccer_career.body",
+  "headerFile": "0005-route-_soccer_career.headers",
+  "bytes": 48686,
+  "sha256": "fb85098c0468d4a7db09a25b5a06075e8fb6dd07271452bdb67257e9d951ed64",
+  "headersSHA256": "eadd0eaa61b641be1cbbbd0f543abbfead8c839c3d51fd84fbf2aa8da4424cd9"
+}

@@ -1,0 +1,356 @@
+{
+  "M": "931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "features": [
+    {
+      "id": "cm-price-mode:cm-market-max-ask",
+      "role": "cm",
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "blob": "1157975509a11dc6ce7d75d1d02221787716ad1b",
+      "literal": "cm-market-max-ask"
+    },
+    {
+      "id": "cm-price-mode:Maximum asking price (",
+      "role": "cm",
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "blob": "1157975509a11dc6ce7d75d1d02221787716ad1b",
+      "literal": "Maximum asking price ("
+    },
+    {
+      "id": "cm-price-mode:Blank means no custom ceiling.",
+      "role": "cm",
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "blob": "1157975509a11dc6ce7d75d1d02221787716ad1b",
+      "literal": "Blank means no custom ceiling."
+    },
+    {
+      "id": "cm-price-mode:Free agents (",
+      "role": "cm",
+      "path": "src/components/club-manager/TransferScreen.tsx",
+      "blob": "1157975509a11dc6ce7d75d1d02221787716ad1b",
+      "literal": "Free agents ("
+    },
+    {
+      "id": "cm-closed-pool:, and the window being shut does not stop these",
+      "role": "cm",
+      "path": "src/components/club-manager/FreeAgentPool.tsx",
+      "blob": "a85232cafe27b0a4bafc9914be2a8c74a7ee96e9",
+      "literal": ", and the window being shut does not stop these"
+    },
+    {
+      "id": "sc-page:Season replays",
+      "role": "sc",
+      "path": "src/pages/SoccerCareer.tsx",
+      "blob": "70e1f27988ec3891a15a5260282dfe9fd1502f18",
+      "literal": "Season replays"
+    },
+    {
+      "id": "sc-page:Week by week: watch your season match by match",
+      "role": "sc",
+      "path": "src/pages/SoccerCareer.tsx",
+      "blob": "70e1f27988ec3891a15a5260282dfe9fd1502f18",
+      "literal": "Week by week: watch your season match by match"
+    },
+    {
+      "id": "ticker:Live scores ticker",
+      "role": "entry",
+      "path": "src/components/layout/TopTicker.tsx",
+      "blob": "7fa37e32723aa511e4bf47bcd0f7c3a399db0375",
+      "literal": "Live scores ticker"
+    },
+    {
+      "id": "ticker:onPointerMove",
+      "role": "entry",
+      "path": "src/components/layout/TopTicker.tsx",
+      "blob": "7fa37e32723aa511e4bf47bcd0f7c3a399db0375",
+      "literal": "onPointerMove"
+    },
+    {
+      "id": "ticker:pointerType",
+      "role": "entry",
+      "path": "src/components/layout/TopTicker.tsx",
+      "blob": "7fa37e32723aa511e4bf47bcd0f7c3a399db0375",
+      "literal": "pointerType"
+    },
+    {
+      "id": "ticker:Pause the scores ticker",
+      "role": "entry",
+      "path": "src/components/layout/TopTicker.tsx",
+      "blob": "7fa37e32723aa511e4bf47bcd0f7c3a399db0375",
+      "literal": "Pause the scores ticker"
+    },
+    {
+      "id": "sc-league-format:Ligue 2",
+      "role": "sc",
+      "path": "src/lib/soccerCareerLeague.ts",
+      "blob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844",
+      "literal": "Ligue 2"
+    },
+    {
+      "id": "sc-league-format:Serie B",
+      "role": "sc",
+      "path": "src/lib/soccerCareerLeague.ts",
+      "blob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844",
+      "literal": "Serie B"
+    },
+    {
+      "id": "sc-playing-pool:cm-cremonese",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-cremonese"
+    },
+    {
+      "id": "sc-playing-pool:cm-verona",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-verona"
+    },
+    {
+      "id": "sc-playing-pool:cm-pisa",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-pisa"
+    },
+    {
+      "id": "sc-playing-pool:cm-avellino",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-avellino"
+    },
+    {
+      "id": "sc-playing-pool:cm-carrarese",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-carrarese"
+    },
+    {
+      "id": "sc-playing-pool:cm-catanzaro",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-catanzaro"
+    },
+    {
+      "id": "sc-playing-pool:cm-cesena",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-cesena"
+    },
+    {
+      "id": "sc-playing-pool:cm-empoli",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-empoli"
+    },
+    {
+      "id": "sc-playing-pool:cm-entella",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-entella"
+    },
+    {
+      "id": "sc-playing-pool:cm-juve-stabia",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-juve-stabia"
+    },
+    {
+      "id": "sc-playing-pool:cm-mantova",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-mantova"
+    },
+    {
+      "id": "sc-playing-pool:cm-modena",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-modena"
+    },
+    {
+      "id": "sc-playing-pool:cm-padova",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-padova"
+    },
+    {
+      "id": "sc-playing-pool:cm-palermo",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-palermo"
+    },
+    {
+      "id": "sc-playing-pool:cm-sampdoria",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-sampdoria"
+    },
+    {
+      "id": "sc-playing-pool:cm-sudtirol",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-sudtirol"
+    },
+    {
+      "id": "sc-playing-pool:cm-vicenza",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-vicenza"
+    },
+    {
+      "id": "sc-playing-pool:cm-arezzo",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-arezzo"
+    },
+    {
+      "id": "sc-playing-pool:cm-benevento",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-benevento"
+    },
+    {
+      "id": "sc-playing-pool:cm-ascoli",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-ascoli"
+    },
+    {
+      "id": "sc-playing-pool:cm-metz",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-metz"
+    },
+    {
+      "id": "sc-playing-pool:cm-saint-etienne",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-saint-etienne"
+    },
+    {
+      "id": "sc-playing-pool:cm-red-star-fc",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-red-star-fc"
+    },
+    {
+      "id": "sc-playing-pool:cm-reims",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-reims"
+    },
+    {
+      "id": "sc-playing-pool:cm-montpellier",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-montpellier"
+    },
+    {
+      "id": "sc-playing-pool:cm-nancy",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-nancy"
+    },
+    {
+      "id": "sc-playing-pool:cm-annecy",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-annecy"
+    },
+    {
+      "id": "sc-playing-pool:cm-sochaux",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-sochaux"
+    },
+    {
+      "id": "sc-playing-pool:cm-dijon",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-dijon"
+    },
+    {
+      "id": "sc-playing-pool:cm-pau",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-pau"
+    },
+    {
+      "id": "sc-playing-pool:cm-guingamp",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-guingamp"
+    },
+    {
+      "id": "sc-playing-pool:cm-dunkerque",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-dunkerque"
+    },
+    {
+      "id": "sc-playing-pool:cm-grenoble",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-grenoble"
+    },
+    {
+      "id": "sc-playing-pool:cm-rodez",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-rodez"
+    },
+    {
+      "id": "sc-playing-pool:cm-clermont",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-clermont"
+    },
+    {
+      "id": "sc-playing-pool:cm-boulogne",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-boulogne"
+    },
+    {
+      "id": "sc-playing-pool:cm-laval",
+      "role": "sc",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "blob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26",
+      "literal": "cm-laval"
+    }
+  ],
+  "scope": "Source-pinned stable literal/property presence only. No full hosted code equivalence or behavior claim."
+}

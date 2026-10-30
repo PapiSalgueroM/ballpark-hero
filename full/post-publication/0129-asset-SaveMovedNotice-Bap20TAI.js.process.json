@@ -1,0 +1,31 @@
+{
+  "label": "asset-SaveMovedNotice-Bap20TAI.js",
+  "url": "https://douknowball.com/assets/SaveMovedNotice-Bap20TAI.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:33.468Z",
+  "end": "2026-10-30T21:53:33.632Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0129-asset-SaveMovedNotice-Bap20TAI.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0129-asset-SaveMovedNotice-Bap20TAI.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SaveMovedNotice-Bap20TAI.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0129-asset-SaveMovedNotice-Bap20TAI.js.body",
+  "headerFile": "0129-asset-SaveMovedNotice-Bap20TAI.js.headers",
+  "bytes": 1457,
+  "sha256": "be48cc3ea1a332e25643c9d2f16c02b035cd51fa2a56c46f75419b8181e9d95a",
+  "headersSHA256": "221be49fad1550c2026b19aba5f8a49a4880b5a290fbbad6ac15462fbc376293"
+}

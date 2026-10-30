@@ -1,0 +1,31 @@
+{
+  "label": "asset-XpScreen-hkMQ-0Mj.js",
+  "url": "https://douknowball.com/assets/XpScreen-hkMQ-0Mj.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:46.024Z",
+  "end": "2026-10-30T21:53:46.283Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0188-asset-XpScreen-hkMQ-0Mj.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0188-asset-XpScreen-hkMQ-0Mj.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/XpScreen-hkMQ-0Mj.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0188-asset-XpScreen-hkMQ-0Mj.js.body",
+  "headerFile": "0188-asset-XpScreen-hkMQ-0Mj.js.headers",
+  "bytes": 4740,
+  "sha256": "33fd145371d867eece2568d940949ee9d44e9d846186046db3b61d9830ca3b84",
+  "headersSHA256": "4aae519be1820c1faf446a0d453c3b04fdc7639f6536c88a1bab76987b7bba24"
+}

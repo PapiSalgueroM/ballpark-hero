@@ -1,0 +1,31 @@
+{
+  "label": "asset-LiveSimScreen-C5U_8CyA.css",
+  "url": "https://douknowball.com/assets/LiveSimScreen-C5U_8CyA.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:48.828Z",
+  "end": "2026-10-30T21:53:49.516Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0197-asset-LiveSimScreen-C5U_8CyA.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0197-asset-LiveSimScreen-C5U_8CyA.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/LiveSimScreen-C5U_8CyA.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0197-asset-LiveSimScreen-C5U_8CyA.css.body",
+  "headerFile": "0197-asset-LiveSimScreen-C5U_8CyA.css.headers",
+  "bytes": 3806,
+  "sha256": "487c9061bc2a5b0405853bb5e92256a54bfdc26de0c5b1f77d8d2673b9b056e8",
+  "headersSHA256": "6611bcc0ba781e1c9c81a913808f492a977f6359a400c7d3e6bd9c6a06daf28e"
+}

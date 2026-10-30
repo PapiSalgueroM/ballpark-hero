@@ -1,0 +1,31 @@
+{
+  "label": "asset-clipboard-list-5OnakvxL.js",
+  "url": "https://douknowball.com/assets/clipboard-list-5OnakvxL.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:30.916Z",
+  "end": "2026-10-30T21:53:31.066Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0115-asset-clipboard-list-5OnakvxL.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0115-asset-clipboard-list-5OnakvxL.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clipboard-list-5OnakvxL.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0115-asset-clipboard-list-5OnakvxL.js.body",
+  "headerFile": "0115-asset-clipboard-list-5OnakvxL.js.headers",
+  "bytes": 579,
+  "sha256": "5cb95114b3bccfae060551e0778e8f2954388c9677ccb9ed2977a3bca2cebfed",
+  "headersSHA256": "b84a1369814485d839d8dd9be4a8fba5c43fe2c7883c4d68cc67287378f56477"
+}

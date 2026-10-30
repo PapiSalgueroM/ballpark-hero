@@ -1,0 +1,31 @@
+{
+  "label": "asset-soccerBootIds-BWkyFIXk.js",
+  "url": "https://douknowball.com/assets/soccerBootIds-BWkyFIXk.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:18.672Z",
+  "end": "2026-10-30T21:53:18.854Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0065-asset-soccerBootIds-BWkyFIXk.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0065-asset-soccerBootIds-BWkyFIXk.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/soccerBootIds-BWkyFIXk.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0065-asset-soccerBootIds-BWkyFIXk.js.body",
+  "headerFile": "0065-asset-soccerBootIds-BWkyFIXk.js.headers",
+  "bytes": 293,
+  "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b",
+  "headersSHA256": "3d4dcf720d7f90f4051ed237fd100267b6ca27de769d6ee1f03108679a968c72"
+}

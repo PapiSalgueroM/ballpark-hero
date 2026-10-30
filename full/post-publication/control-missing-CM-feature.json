@@ -1,0 +1,19 @@
+{
+  "name": "missing-CM-feature",
+  "mutations": [
+    {
+      "file": "0169-asset-TransferScreen-37T6-GQj.js.body",
+      "beforeSHA256": "92718e7cb53b039ad1787b617dea58e22e4e79c0ed991889844319fe06cfde9a",
+      "afterSHA256": "f2c100f845a2573e132f7a9a3fc540e4d20b3316f1930e06b46ee111a6f14bdc",
+      "occurrences": 4,
+      "replaced": "cm-market-max-ask"
+    }
+  ],
+  "error": {
+    "name": "AssertionError",
+    "firstLine": "All predeclared M feature literals are present in actual role graphs",
+    "message": "All predeclared M feature literals are present in actual role graphs"
+  },
+  "noGET": true,
+  "originalMutation": false
+}

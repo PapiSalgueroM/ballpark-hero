@@ -1,0 +1,31 @@
+{
+  "label": "asset-useCareerMoment-CbP11KsW.js",
+  "url": "https://douknowball.com/assets/useCareerMoment-CbP11KsW.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:50.274Z",
+  "end": "2026-10-30T21:53:50.394Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0200-asset-useCareerMoment-CbP11KsW.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0200-asset-useCareerMoment-CbP11KsW.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/useCareerMoment-CbP11KsW.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0200-asset-useCareerMoment-CbP11KsW.js.body",
+  "headerFile": "0200-asset-useCareerMoment-CbP11KsW.js.headers",
+  "bytes": 281371,
+  "sha256": "c503b517567061d3360b2c2468c8a9224774617bc46f59aa44bbe64ce91af2c0",
+  "headersSHA256": "9857205552f8c45bc8aaf0e110bf504f5564b81ac8af6f51982f4f972b6fb8c2"
+}

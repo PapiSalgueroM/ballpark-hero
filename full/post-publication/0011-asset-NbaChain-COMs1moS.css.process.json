@@ -1,0 +1,31 @@
+{
+  "label": "asset-NbaChain-COMs1moS.css",
+  "url": "https://douknowball.com/assets/NbaChain-COMs1moS.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:52.420Z",
+  "end": "2026-10-30T21:52:53.038Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0011-asset-NbaChain-COMs1moS.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0011-asset-NbaChain-COMs1moS.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/NbaChain-COMs1moS.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0011-asset-NbaChain-COMs1moS.css.body",
+  "headerFile": "0011-asset-NbaChain-COMs1moS.css.headers",
+  "bytes": 736,
+  "sha256": "1f40b68762aeb3da1e0f886b88347d9ceb94ae827738df076125397ce4a6aaec",
+  "headersSHA256": "ffffc7590528b31c3a6be9ab4d01643764b6256a009190ef79a9f34187854547"
+}

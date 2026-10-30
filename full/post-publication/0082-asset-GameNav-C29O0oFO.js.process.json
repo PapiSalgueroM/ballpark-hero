@@ -1,0 +1,31 @@
+{
+  "label": "asset-GameNav-C29O0oFO.js",
+  "url": "https://douknowball.com/assets/GameNav-C29O0oFO.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:21.874Z",
+  "end": "2026-10-30T21:53:22.106Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0082-asset-GameNav-C29O0oFO.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0082-asset-GameNav-C29O0oFO.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/GameNav-C29O0oFO.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0082-asset-GameNav-C29O0oFO.js.body",
+  "headerFile": "0082-asset-GameNav-C29O0oFO.js.headers",
+  "bytes": 3697,
+  "sha256": "b7cbfcb0435d51d45941e13ccde86ffbe1eff83cc9ed4e50ffc2eaa115632abc",
+  "headersSHA256": "d188a69832f13afca282f8058c85e0820270b4cb903f60ae4527df7031f0775a"
+}

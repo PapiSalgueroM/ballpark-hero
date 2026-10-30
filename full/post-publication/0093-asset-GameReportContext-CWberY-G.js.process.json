@@ -1,0 +1,31 @@
+{
+  "label": "asset-GameReportContext-CWberY-G.js",
+  "url": "https://douknowball.com/assets/GameReportContext-CWberY-G.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:24.800Z",
+  "end": "2026-10-30T21:53:24.984Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0093-asset-GameReportContext-CWberY-G.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0093-asset-GameReportContext-CWberY-G.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/GameReportContext-CWberY-G.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0093-asset-GameReportContext-CWberY-G.js.body",
+  "headerFile": "0093-asset-GameReportContext-CWberY-G.js.headers",
+  "bytes": 8562,
+  "sha256": "8fe09e708c1de554741b767e3ebaec1562e4edeb93063586095b58dfb6610ae3",
+  "headersSHA256": "808cbe286d29d9d56f0c1cc9fdab9dda69cc63a58caf71da36ba02d55111156d"
+}

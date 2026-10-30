@@ -1,0 +1,31 @@
+{
+  "label": "asset-law-BvUdq2_w.js",
+  "url": "https://douknowball.com/assets/law-BvUdq2_w.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:51.110Z",
+  "end": "2026-10-30T21:53:51.227Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0206-asset-law-BvUdq2_w.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0206-asset-law-BvUdq2_w.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/law-BvUdq2_w.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0206-asset-law-BvUdq2_w.js.body",
+  "headerFile": "0206-asset-law-BvUdq2_w.js.headers",
+  "bytes": 289,
+  "sha256": "4c0d4b3f9b4cafb0d93206bd946dcc129d4d4404f6fb7d27db592d1a5cac2f4d",
+  "headersSHA256": "5ed1d1999d015b9b348be6662c7ba9a1d8ff6e48733e9a514a30146b7df8f354"
+}

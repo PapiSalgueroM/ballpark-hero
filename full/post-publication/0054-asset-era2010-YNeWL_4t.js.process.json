@@ -1,0 +1,31 @@
+{
+  "label": "asset-era2010-YNeWL_4t.js",
+  "url": "https://douknowball.com/assets/era2010-YNeWL_4t.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:14.421Z",
+  "end": "2026-10-30T21:53:14.614Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0054-asset-era2010-YNeWL_4t.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0054-asset-era2010-YNeWL_4t.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/era2010-YNeWL_4t.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0054-asset-era2010-YNeWL_4t.js.body",
+  "headerFile": "0054-asset-era2010-YNeWL_4t.js.headers",
+  "bytes": 46135,
+  "sha256": "58669a81e18294fdafcf97d8a468213d7e041bb7352b2ebb6e7f8347a78d2379",
+  "headersSHA256": "4c20ab0df1c2a0f91f52b5c65d8217cc977459ac51650588809c3d37843014be"
+}

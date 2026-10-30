@@ -1,0 +1,31 @@
+{
+  "label": "asset-ListQuiz-CfGTEzvO.css",
+  "url": "https://douknowball.com/assets/ListQuiz-CfGTEzvO.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:58.738Z",
+  "end": "2026-10-30T21:52:59.368Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0023-asset-ListQuiz-CfGTEzvO.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0023-asset-ListQuiz-CfGTEzvO.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/ListQuiz-CfGTEzvO.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0023-asset-ListQuiz-CfGTEzvO.css.body",
+  "headerFile": "0023-asset-ListQuiz-CfGTEzvO.css.headers",
+  "bytes": 625,
+  "sha256": "b83d449ed9acfea1b41b4cfb9a4c9efa6248af5a49aab270ca94c857a125239e",
+  "headersSHA256": "8115b66216980c74a2db60d76cfbebe108e02ea71d3d5d39698e294c9940610b"
+}

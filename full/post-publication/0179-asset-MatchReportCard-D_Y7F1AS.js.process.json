@@ -1,0 +1,31 @@
+{
+  "label": "asset-MatchReportCard-D_Y7F1AS.js",
+  "url": "https://douknowball.com/assets/MatchReportCard-D_Y7F1AS.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:44.645Z",
+  "end": "2026-10-30T21:53:44.796Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0179-asset-MatchReportCard-D_Y7F1AS.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0179-asset-MatchReportCard-D_Y7F1AS.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/MatchReportCard-D_Y7F1AS.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0179-asset-MatchReportCard-D_Y7F1AS.js.body",
+  "headerFile": "0179-asset-MatchReportCard-D_Y7F1AS.js.headers",
+  "bytes": 26588,
+  "sha256": "b3e09bcf8e67f63f51d30afb28f30d015b757a5fdac8d5fe05008460b2c19cb3",
+  "headersSHA256": "7d8699e17ae228ef634073a34dd33cc993a14a43a57804079acb8ddc0ef931dc"
+}

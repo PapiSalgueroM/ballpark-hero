@@ -1,0 +1,47 @@
+{
+  "name": "missing-ticker-feature",
+  "mutations": [
+    {
+      "file": "0007-asset-index-BZVvQX7Z.js.body",
+      "beforeSHA256": "85d1abbde4cfe6fbd5c26420742808913f208b3c6859d9c6004f937106363ba1",
+      "afterSHA256": "39e85b6d8af961bf2af00fc676079d570488a71d7acfe7f9a2716d45f3728e72",
+      "occurrences": 12,
+      "replaced": "onPointerMove"
+    },
+    {
+      "file": "0120-asset-select-BKLCSO9W.js.body",
+      "beforeSHA256": "1097d65b6f4a7a4a637b71cdd9012666792394bf3a187c5bc4eb17ba269ed2d8",
+      "afterSHA256": "f161e5602f25c89238fb970ba4233d195beaeedc0f271185f30bd654d57462a0",
+      "occurrences": 4,
+      "replaced": "onPointerMove"
+    },
+    {
+      "file": "0167-asset-TacticsScreen-Dt5_UOBD.js.body",
+      "beforeSHA256": "882145d45b8c8511f44db41b7399565d9397a566086e18f7964fc5e979bffcdc",
+      "afterSHA256": "79d57b0854fa0883c0e581fe49b14f2042c659e1ebc912643abbee4de986c665",
+      "occurrences": 1,
+      "replaced": "onPointerMove"
+    },
+    {
+      "file": "0227-asset-DrillBoard-W5n76jD7.js.body",
+      "beforeSHA256": "5af911942833a0b68b4af44a02070ac1b2830bea95793de26485c57d1f4dd20f",
+      "afterSHA256": "dde4163662fd0908d2e04e49ea0bfc0f51c7b61bf1af509c691be2852cdc4167",
+      "occurrences": 1,
+      "replaced": "onPointerMove"
+    },
+    {
+      "file": "0231-asset-ThroughBallBoard-B9w3W57D.js.body",
+      "beforeSHA256": "dcc330f7088d2959a992012fd210ac4ad53bafbdbdf2a06f9c77a611a72c919f",
+      "afterSHA256": "68cc60069bd4fb44a7deae02fb29f30723a28677b46d96bb17cc90adf3731849",
+      "occurrences": 1,
+      "replaced": "onPointerMove"
+    }
+  ],
+  "error": {
+    "name": "AssertionError",
+    "firstLine": "All predeclared M feature literals are present in actual role graphs",
+    "message": "All predeclared M feature literals are present in actual role graphs"
+  },
+  "noGET": true,
+  "originalMutation": false
+}

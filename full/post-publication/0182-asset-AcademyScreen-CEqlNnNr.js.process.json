@@ -1,0 +1,31 @@
+{
+  "label": "asset-AcademyScreen-CEqlNnNr.js",
+  "url": "https://douknowball.com/assets/AcademyScreen-CEqlNnNr.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:45.095Z",
+  "end": "2026-10-30T21:53:45.305Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0182-asset-AcademyScreen-CEqlNnNr.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0182-asset-AcademyScreen-CEqlNnNr.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/AcademyScreen-CEqlNnNr.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0182-asset-AcademyScreen-CEqlNnNr.js.body",
+  "headerFile": "0182-asset-AcademyScreen-CEqlNnNr.js.headers",
+  "bytes": 11589,
+  "sha256": "ff0a380be88b873b41144d1b35aa48125f19650e5bc1a9e3c159e2b87af3ce65",
+  "headersSHA256": "4340c069524c204b6360f60c1d806a0321da56708c7c64df1f3e1c4d9482acfb"
+}

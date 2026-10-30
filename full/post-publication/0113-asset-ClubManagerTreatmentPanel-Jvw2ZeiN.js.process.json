@@ -1,0 +1,31 @@
+{
+  "label": "asset-ClubManagerTreatmentPanel-Jvw2ZeiN.js",
+  "url": "https://douknowball.com/assets/ClubManagerTreatmentPanel-Jvw2ZeiN.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:30.095Z",
+  "end": "2026-10-30T21:53:30.753Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0113-asset-ClubManagerTreatmentPanel-Jvw2ZeiN.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0113-asset-ClubManagerTreatmentPanel-Jvw2ZeiN.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/ClubManagerTreatmentPanel-Jvw2ZeiN.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0113-asset-ClubManagerTreatmentPanel-Jvw2ZeiN.js.body",
+  "headerFile": "0113-asset-ClubManagerTreatmentPanel-Jvw2ZeiN.js.headers",
+  "bytes": 1235,
+  "sha256": "0a0dc7ccb6588e2e0453a9380f105d9dc5b255d10fee541e9351dd6d5917b90d",
+  "headersSHA256": "af95700e4288c2170477936f4949853fb373db3d5e32e71d32d7aecbe881dc2f"
+}

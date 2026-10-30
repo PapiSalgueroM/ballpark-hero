@@ -1,0 +1,31 @@
+{
+  "label": "asset-StatDetective-D6N_cvHt.css",
+  "url": "https://douknowball.com/assets/StatDetective-D6N_cvHt.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:59.368Z",
+  "end": "2026-10-30T21:53:00.117Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0024-asset-StatDetective-D6N_cvHt.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0024-asset-StatDetective-D6N_cvHt.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/StatDetective-D6N_cvHt.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0024-asset-StatDetective-D6N_cvHt.css.body",
+  "headerFile": "0024-asset-StatDetective-D6N_cvHt.css.headers",
+  "bytes": 1083,
+  "sha256": "47722191c98600fa971e3cff689012dbf10816946fe3c694cec7dba87074a8be",
+  "headersSHA256": "0aa07ed7b3194bc5a0faec6bb4b3843ec76cd8323346d5c7e399477b90755f41"
+}

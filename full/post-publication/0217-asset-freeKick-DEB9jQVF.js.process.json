@@ -1,0 +1,31 @@
+{
+  "label": "asset-freeKick-DEB9jQVF.js",
+  "url": "https://douknowball.com/assets/freeKick-DEB9jQVF.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:52.648Z",
+  "end": "2026-10-30T21:53:52.806Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0217-asset-freeKick-DEB9jQVF.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0217-asset-freeKick-DEB9jQVF.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/freeKick-DEB9jQVF.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0217-asset-freeKick-DEB9jQVF.js.body",
+  "headerFile": "0217-asset-freeKick-DEB9jQVF.js.headers",
+  "bytes": 1965,
+  "sha256": "f8a8f147ac275b891da73cd093848bb21b2c8b3001a9e9844489a0dc9631856d",
+  "headersSHA256": "0da44e02fba5ab6e7d528e1cd5b0173a65ec29d7ccde8e01cfd2a96ea6c60e42"
+}

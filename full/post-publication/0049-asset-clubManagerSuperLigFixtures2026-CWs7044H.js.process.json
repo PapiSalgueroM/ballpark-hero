@@ -1,0 +1,31 @@
+{
+  "label": "asset-clubManagerSuperLigFixtures2026-CWs7044H.js",
+  "url": "https://douknowball.com/assets/clubManagerSuperLigFixtures2026-CWs7044H.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:11.259Z",
+  "end": "2026-10-30T21:53:11.809Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0049-asset-clubManagerSuperLigFixtures2026-CWs7044H.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0049-asset-clubManagerSuperLigFixtures2026-CWs7044H.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/clubManagerSuperLigFixtures2026-CWs7044H.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0049-asset-clubManagerSuperLigFixtures2026-CWs7044H.js.body",
+  "headerFile": "0049-asset-clubManagerSuperLigFixtures2026-CWs7044H.js.headers",
+  "bytes": 9533,
+  "sha256": "9b62551b873e2e9ef69355a9d81a4246dc767ab65955340ede04a5fc19589583",
+  "headersSHA256": "bd458ebf5ace05b9a8a5665190435d119337a7c7498af34f0f9614435798d055"
+}

@@ -1,0 +1,31 @@
+{
+  "label": "asset-CelebrationStyles-DWREoilf.js",
+  "url": "https://douknowball.com/assets/CelebrationStyles-DWREoilf.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:32.791Z",
+  "end": "2026-10-30T21:53:32.985Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0126-asset-CelebrationStyles-DWREoilf.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0126-asset-CelebrationStyles-DWREoilf.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/CelebrationStyles-DWREoilf.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0126-asset-CelebrationStyles-DWREoilf.js.body",
+  "headerFile": "0126-asset-CelebrationStyles-DWREoilf.js.headers",
+  "bytes": 2126,
+  "sha256": "593fdd49336981ef526ed14dca1107ec901e4385249748b5e5b41f5cab123c7b",
+  "headersSHA256": "a2da2a3367962a3d67526828cebba2743dca6b4cefafbf6658c99ca33639ff1b"
+}

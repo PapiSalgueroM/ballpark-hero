@@ -1,0 +1,31 @@
+{
+  "label": "asset-FantasyDraft-BBpfFIJM.css",
+  "url": "https://douknowball.com/assets/FantasyDraft-BBpfFIJM.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:57.857Z",
+  "end": "2026-10-30T21:52:58.124Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0021-asset-FantasyDraft-BBpfFIJM.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0021-asset-FantasyDraft-BBpfFIJM.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/FantasyDraft-BBpfFIJM.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0021-asset-FantasyDraft-BBpfFIJM.css.body",
+  "headerFile": "0021-asset-FantasyDraft-BBpfFIJM.css.headers",
+  "bytes": 510,
+  "sha256": "25c38688778605cdc7352daad2a38b800df3aa921e675fefa0a479ed11c56a65",
+  "headersSHA256": "7e065d4faf8b18c77bac1c73c41036a99a43b47b21e697929d12d64c27fa7a17"
+}

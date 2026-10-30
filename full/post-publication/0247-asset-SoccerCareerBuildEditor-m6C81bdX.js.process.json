@@ -1,0 +1,31 @@
+{
+  "label": "asset-SoccerCareerBuildEditor-m6C81bdX.js",
+  "url": "https://douknowball.com/assets/SoccerCareerBuildEditor-m6C81bdX.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:59.236Z",
+  "end": "2026-10-30T21:53:59.390Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0247-asset-SoccerCareerBuildEditor-m6C81bdX.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0247-asset-SoccerCareerBuildEditor-m6C81bdX.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/SoccerCareerBuildEditor-m6C81bdX.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0247-asset-SoccerCareerBuildEditor-m6C81bdX.js.body",
+  "headerFile": "0247-asset-SoccerCareerBuildEditor-m6C81bdX.js.headers",
+  "bytes": 13358,
+  "sha256": "176132e83508ed2a33bf625cef518d93b555040b2d8cb4e304a57bb515228d99",
+  "headersSHA256": "89fdf4e894c90c115300a9d7b9655354e2b8a0369007e3964c40ace08f23499c"
+}

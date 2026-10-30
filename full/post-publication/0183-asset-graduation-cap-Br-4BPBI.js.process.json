@@ -1,0 +1,31 @@
+{
+  "label": "asset-graduation-cap-Br-4BPBI.js",
+  "url": "https://douknowball.com/assets/graduation-cap-Br-4BPBI.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:45.305Z",
+  "end": "2026-10-30T21:53:45.466Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0183-asset-graduation-cap-Br-4BPBI.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0183-asset-graduation-cap-Br-4BPBI.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/graduation-cap-Br-4BPBI.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0183-asset-graduation-cap-Br-4BPBI.js.body",
+  "headerFile": "0183-asset-graduation-cap-Br-4BPBI.js.headers",
+  "bytes": 500,
+  "sha256": "4de451efe5ad1830681be9c3aac0f2305b64a68de150b4601da5d4e2c31b2530",
+  "headersSHA256": "0168484d012106795dd91943515e25cae977f36bd25d72b7db9fc996f9b42087"
+}

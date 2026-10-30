@@ -1,0 +1,31 @@
+{
+  "label": "asset-academyManagement-DZZqTLIl.js",
+  "url": "https://douknowball.com/assets/academyManagement-DZZqTLIl.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:26.603Z",
+  "end": "2026-10-30T21:53:27.211Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0097-asset-academyManagement-DZZqTLIl.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0097-asset-academyManagement-DZZqTLIl.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/academyManagement-DZZqTLIl.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0097-asset-academyManagement-DZZqTLIl.js.body",
+  "headerFile": "0097-asset-academyManagement-DZZqTLIl.js.headers",
+  "bytes": 8664,
+  "sha256": "7eaab8ae9e5da60d2f6438e4c7f95e8bd71aa9f573250980a7c26295f31f7a60",
+  "headersSHA256": "5374b6def1cc4ac80fec74e19a82fc4f787a0827db69d1b3f96f32c08f291a0c"
+}

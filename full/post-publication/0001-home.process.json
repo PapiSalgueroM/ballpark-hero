@@ -1,0 +1,31 @@
+{
+  "label": "home",
+  "url": "https://douknowball.com/?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:52:48.917Z",
+  "end": "2026-10-30T21:52:49.540Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0001-home.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0001-home.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0001-home.body",
+  "headerFile": "0001-home.headers",
+  "bytes": 43644,
+  "sha256": "bad4892320856ef1dba7f9f21ee9fdea747fd9c23fffb535a732384e3c92250a",
+  "headersSHA256": "106b64f0c94ae20c135fb5ee20a21f3adf7954a1067ba759fb6efb90bc06ea2a"
+}

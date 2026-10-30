@@ -1,0 +1,31 @@
+{
+  "label": "asset-aussieRulesManagement-4TlVLY3z.js",
+  "url": "https://douknowball.com/assets/aussieRulesManagement-4TlVLY3z.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:24.985Z",
+  "end": "2026-10-30T21:53:25.642Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0094-asset-aussieRulesManagement-4TlVLY3z.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0094-asset-aussieRulesManagement-4TlVLY3z.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/aussieRulesManagement-4TlVLY3z.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0094-asset-aussieRulesManagement-4TlVLY3z.js.body",
+  "headerFile": "0094-asset-aussieRulesManagement-4TlVLY3z.js.headers",
+  "bytes": 8562,
+  "sha256": "69ebb131c789ad8148707e07169cf21ff35b545d649b8596f18984a76a3da4d0",
+  "headersSHA256": "9abbfcc78c9cf7102c49092e0d7cbea2f890ff9f9172e90e5db56de7fa2b4136"
+}

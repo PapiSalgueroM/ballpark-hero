@@ -1,0 +1,31 @@
+{
+  "label": "asset-usCareerSeasonReview-CFU15qoy.css",
+  "url": "https://douknowball.com/assets/usCareerSeasonReview-CFU15qoy.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:01.729Z",
+  "end": "2026-10-30T21:53:01.859Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0029-asset-usCareerSeasonReview-CFU15qoy.css.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0029-asset-usCareerSeasonReview-CFU15qoy.css.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/usCareerSeasonReview-CFU15qoy.css?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0029-asset-usCareerSeasonReview-CFU15qoy.css.body",
+  "headerFile": "0029-asset-usCareerSeasonReview-CFU15qoy.css.headers",
+  "bytes": 10137,
+  "sha256": "e106b5065a97bf52fc2151cc0fd0a0dc3038f5c5019086a0ef9a59e79f323e8c",
+  "headersSHA256": "5e1e0d6344dd969a89ad6f5cef8e2796c2e553b809b83e18a47909d09192eae0"
+}

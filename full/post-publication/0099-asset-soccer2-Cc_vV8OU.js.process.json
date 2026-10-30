@@ -1,0 +1,31 @@
+{
+  "label": "asset-soccer2-Cc_vV8OU.js",
+  "url": "https://douknowball.com/assets/soccer2-Cc_vV8OU.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7",
+  "method": "GET",
+  "start": "2026-10-30T21:53:27.435Z",
+  "end": "2026-10-30T21:53:27.715Z",
+  "command": "curl",
+  "args": [
+    "--silent",
+    "--show-error",
+    "--compressed",
+    "--proto",
+    "=https",
+    "--dump-header",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0099-asset-soccer2-Cc_vV8OU.js.headers",
+    "--output",
+    "/home/runner/work/_temp/rc-out/full/post-publication/0099-asset-soccer2-Cc_vV8OU.js.body",
+    "--write-out",
+    "%{http_code}",
+    "https://douknowball.com/assets/soccer2-Cc_vV8OU.js?v=931308159c967c3ab9af404ed01e0b8483f90bd7"
+  ],
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "httpStatus": 200,
+  "bodyFile": "0099-asset-soccer2-Cc_vV8OU.js.body",
+  "headerFile": "0099-asset-soccer2-Cc_vV8OU.js.headers",
+  "bytes": 112927,
+  "sha256": "060814813ea5102b4248679c85e9c6717c9a14c9d3fadf82d9f937f3ad22c129",
+  "headersSHA256": "5e0c05fc5c4d879c419ff7e7ca16e51f25f36c17cad2007dd023f383f63633c3"
+}
