@@ -1,0 +1,11 @@
+#!build
+#!playwright
+head: git log -1 --format='%H parent %P' && git log -1 --format=%H HEAD~1
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simBingoClubCounts.mjs
+moved: node .rc/x/mvround.mjs a && node scripts/xMoved-a.mjs
+moved-old: git worktree add -q .wt-old 0ade4ec7b && cd .wt-old && node ../.rc/x/mvround.mjs old && node scripts/xMoved-old.mjs 2>&1 | grep -E "FAIL|^[0-9]\)|entries|simBingoClubCounts:" | head -40; exit ${PIPESTATUS[0]}
+moved-nowindow: node .rc/x/mvround.mjs b && BINGO_CLUBS_CONTROL=nowindow node scripts/xMoved-b.mjs
+moved-bornone: node .rc/x/mvround.mjs c && BINGO_CLUBS_CONTROL=bornone node scripts/xMoved-c.mjs
+moved-windowseason: node .rc/x/mvround.mjs d && BINGO_CLUBS_CONTROL=windowseason node scripts/xMoved-d.mjs
+playBingoClubRules: CI=1 SIM_NETWORK=offline RC_OUT=$RC_OUT node scripts/playBingoClubRules.mjs
