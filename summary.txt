@@ -1,0 +1,1 @@
+worldcont-head exit=1 29s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:541:24

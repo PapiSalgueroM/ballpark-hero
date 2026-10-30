@@ -1,0 +1,1 @@
+worldcont-head: bash .rc/x/wd.sh node scripts/simManagerWorldContinuity.mjs
