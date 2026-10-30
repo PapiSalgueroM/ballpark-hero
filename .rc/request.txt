@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+ctl-norecover: CM_FA_CONTROL=norecover CM_FA_SEASONS=2 node scripts/simCmFreeAgencyFleet.mjs
+ctl-noretire: CM_FA_SKIP_OLD=1 CM_FA_CONTROL=noretire node scripts/simCmFreeAgencyFleet.mjs
+fa-rollseed: FA_CONTROL=rollseed node scripts/simFreeAgents.mjs
