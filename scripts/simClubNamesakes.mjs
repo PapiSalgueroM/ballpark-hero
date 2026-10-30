@@ -52,7 +52,9 @@
  *    generator rerun on the committed exports gives the committed payload (56 stints, 0 held), every Arsenal FC stint
  *    of Q3 moves exactly when critic 2's rule says so (written a second time here, so the generator is not its own
  *    judge), the record and the applied form carry one payload line with its md5 and N and M, and the committed
- *    migration is byte for byte the generator's.
+ *    migration is byte for byte the generator's. Every part the payload writes in place of Arsenal FC is in
+ *    soccer-grid-validate's own CLUB_NAMESAKES.arsenal after its norm, and its clubMatches reads no payload club as
+ *    Arsenal (review 1587 minor 2: the stored name and the grid's exclusion are tied by the code, not by two copies).
  * F, THE APPLY'S FRESH EXPORT STEPS (review 1587 major 1). APPLY-1587 steps 2 and 3, run as the lead runs them (the
  *    two generators as child processes with --check) on the committed exports copied byte for byte under DATED names:
  *    both exit 0 with "same:" twice; the same pair with one payload row's value moved (h recomputed) stops step 3
@@ -68,7 +70,8 @@
  *    londonspan (a london row of a moved stint's name and nationality added inside its span, critic 2): the stint
  *    must be held, so M is red. leak (one sarandi row put back to Arsenal FC in the state after): P and R red.
  *    unmerge now removes the ledger's sarandi rows by id. freshmoved (the "unchanged" fresh Q2 carries a moved value)
- *    and freshstill (the "moved" fresh Q2 is left unchanged): F is red.
+ *    and freshstill (the "moved" fresh Q2 is left unchanged): F is red. namesakedrift (every payload club spelled
+ *    'Arsenal Sarandí' in memory): M's tie to the grid's exclusion is red.
  *
  * Run: node scripts/simClubNamesakes.mjs            (green: the closing line and exit 0) */
 import fs from 'node:fs';
@@ -87,7 +90,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'scripts', 'data', 'clubNamesakes1584');
 const MIGRATION_PATH = 'supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql';
 const CONTROLS = ['blind', 'unmerge', 'noexclude', 'wide', 'mirrordrift', 'onehost', 'forget',
-  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak', 'freshmoved', 'freshstill'];
+  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak', 'freshmoved', 'freshstill', 'namesakedrift'];
 const WIKI_HOST = /(^|\.)(wikipedia|wikidata|wikimedia|fandom|wikiwand)\./i;
 const regDomain = h => h.toLowerCase().replace(/^www\./, '').split('.').slice(-2).join('.');
 /* two registrable hosts (soccerway's and ESPN's regional mirrors are one host each), no wiki, at most one Transfermarkt,
@@ -191,6 +194,7 @@ if (CONTROL === 'forget') {
   fired.push(`forget: "${FORGOTTEN}" dropped from the function and from gridNamesakes.json together`);
 }
 const head = buildRule(headRaw, 'the function');
+let ARSENAL_VALUE = null;
 const baseRaw = NAMESAKE_BLOCK.test(FN_RAW) ? FN_RAW.replace(NAMESAKE_BLOCK, 'const CLUB_NAMESAKES: Record<string, string[]> = {};') : FN_RAW;
 const base = buildRule(baseRaw, 'the function with the map emptied');
 
@@ -211,6 +215,7 @@ if (head && base) {
   for (const m of puzzles.matchAll(/label:\s*'([^']+)',\s*type:\s*'club'/g)) labelTexts.add(m[1]);
   const labels = [...labelTexts].map(t => ({ t, c: head.parseCriterion(t) })).filter(x => x.c.kind === 'club');
   const arsenal = labels.filter(x => head.norm(x.c.value) === 'arsenal');
+  if (arsenal.length) ARSENAL_VALUE = arsenal[0].c.value;
   if (arsenal.length) ok(`${labels.length} club labels by ${clubs.size} stint club strings; the Arsenal label reads "${arsenal[0].t}"`);
   else fail('no grid label reads Played for Arsenal');
   const flipped = [];
@@ -411,6 +416,26 @@ let PAY = JSON.parse(payloadLine(APPLIED_SQL).replace(/''/g, "'"));
   const rec = SQL1587.writeSql({ market: PAY.market, stints: PAY.stints }, { strict: false, source: 'arsenalMarket-2026-10-29.json and arsenalStints-2026-10-29.json' });
   if (rec.sql === RECORD_SQL) ok('the committed migration is byte for byte what the generator writes from this payload');
   else fail('the committed migration is not what genClubNamesakes1587.mjs writes: regenerate it');
+  /* review 1587 minor 2: the club the payload writes is one the GRID excludes. Every part written in place of
+     "Arsenal FC" must be in soccer-grid-validate's CLUB_NAMESAKES.arsenal after the function's own norm (that list is
+     an exact match, so another spelling would let the grid confirm the men again), and the function's clubMatches
+     must read no payload club as Arsenal. Both read the function's code, never this file's idea of the name. */
+  let news = PAY.market.concat(PAY.stints).map(p => ({ id: p.id, old: p.old, new: p.new }));
+  if (CONTROL === 'namesakedrift') {
+    if (!news.length || !news.every(p => p.new.includes(SQL1587.NAMESAKE))) abort(`not every payload club carries '${SQL1587.NAMESAKE}'`);
+    news = news.map(p => ({ ...p, new: p.new.split(SQL1587.NAMESAKE).join('Arsenal Sarandí') }));
+    fired.push(`namesakedrift: every payload club spelled 'Arsenal Sarandí' in memory`);
+  }
+  if (head && ARSENAL_VALUE) {
+    const excl = (head.CLUB_NAMESAKES.arsenal ?? []).map(head.norm);
+    const written = news.flatMap(p => p.new.split(' / ').filter((part, i) => p.old.split(' / ')[i] === 'Arsenal FC'));
+    const unlisted = [...new Set(written.filter(w => !excl.includes(head.norm(w))))];
+    if (written.length && !unlisted.length) ok(`every one of the ${written.length} parts the payload writes is in the function's CLUB_NAMESAKES.arsenal (${[...new Set(written)].join(', ')})`);
+    else fail(`the payload writes ${unlisted.join(', ') || 'nothing'}, which soccer-grid-validate's CLUB_NAMESAKES.arsenal does not exclude`);
+    const still = news.filter(p => head.clubMatches(p.new, ARSENAL_VALUE));
+    if (!still.length) ok(`the function's clubMatches reads none of the ${news.length} payload clubs as "${ARSENAL_VALUE}"`);
+    else fail(`the function still reads ${still.length} payload clubs as "${ARSENAL_VALUE}" (${still.slice(0, 2).map(p => p.id + ' ' + p.new).join('; ')})`);
+  } else fail('the function or its Arsenal label could not be read, so the payload club is not tied to the grid');
 }
 
 /* ---------------------------------------------------------------- F (Round 1587, review major 1) */

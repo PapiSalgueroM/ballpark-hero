@@ -190,4 +190,7 @@ if (CONTROL) {
   console.log(`control ${CONTROL} FIRED: applied (${fired.join('; ')}) and ${failures} check(s) went red`);
 }
 if (failures) { console.log(`rehearseClubNamesakes1587: ${failures} finding(s).`); process.exit(1); }
-console.log(`rehearseClubNamesakes1587: green. Both forms move exactly the ${N} market rows and ${M} stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.`);
+/* review 1587 minor 2: the club named here is read off the payload, never typed (simClubNamesakes section M ties it to
+   the grid's exclusion list) */
+const writtenClubs = [...new Set(PAYLOAD.market.concat(PAYLOAD.stints).flatMap(p => p.new.split(' / ').filter((x, i) => p.old.split(' / ')[i] === 'Arsenal FC')))];
+console.log(`rehearseClubNamesakes1587: green. Both forms move exactly the ${N} market rows and ${M} stints to ${writtenClubs.join(', ')} and nothing else, and a second run changes nothing.`);
