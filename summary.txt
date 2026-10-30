@@ -1,0 +1,7 @@
+treediff exit=1 0s |  3 files changed, 112 insertions(+), 12 deletions(-)
+dash-diff exit=0 1s | git diff 158969218 HEAD: 0 added lines with an en or em dash 
+dash-log exit=0 1s | commit messages 158969218..HEAD: 0 lines with an en or em dash
+simNoRivalNames exit=0 32s | No rival product names found. 0 findings.
+gen-owed exit=0 1s | ok: owedToChat1587.json equals the generator's output
+simHarnessAnchors exit=0 64s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 93s | 
