@@ -53,6 +53,10 @@
  *    of Q3 moves exactly when critic 2's rule says so (written a second time here, so the generator is not its own
  *    judge), the record and the applied form carry one payload line with its md5 and N and M, and the committed
  *    migration is byte for byte the generator's.
+ * F, THE APPLY'S FRESH EXPORT STEPS (review 1587 major 1). APPLY-1587 steps 2 and 3, run as the lead runs them (the
+ *    two generators as child processes with --check) on the committed exports copied byte for byte under DATED names:
+ *    both exit 0 with "same:" twice; the same pair with one payload row's value moved (h recomputed) stops step 3
+ *    (exit 1, DIFFERS); and the payload generator refuses to write from a fresh export (exit 2).
  * P, THE STATE AFTER (Round 1587). Q2 with the payload applied: no sarandi row reads Arsenal FC, each reads its old
  *    club with Arsenal FC replaced by 'Arsenal de Sarandí', every other row byte equal; once the lead commits
  *    arsenalMarketPost-<date>.json it must equal that state row for row.
@@ -63,7 +67,8 @@
  *    in memory): T is red once the migration exists. payload (one market row dropped from the parsed payload): M red.
  *    londonspan (a london row of a moved stint's name and nationality added inside its span, critic 2): the stint
  *    must be held, so M is red. leak (one sarandi row put back to Arsenal FC in the state after): P and R red.
- *    unmerge now removes the ledger's sarandi rows by id.
+ *    unmerge now removes the ledger's sarandi rows by id. freshmoved (the "unchanged" fresh Q2 carries a moved value)
+ *    and freshstill (the "moved" fresh Q2 is left unchanged): F is red.
  *
  * Run: node scripts/simClubNamesakes.mjs            (green: the closing line and exit 0) */
 import fs from 'node:fs';
@@ -74,12 +79,15 @@ import { buildGridRule, stripComments, braceEnd, onceAt } from './lib/gridRuleFr
 import * as ARSENAL from './qa/genArsenalLedger1587.mjs';
 import * as SQL1587 from './qa/genClubNamesakes1587.mjs';
 import { createHash } from 'node:crypto';
+import os from 'node:os';
+import { spawnSync } from 'node:child_process';
+import { marketHash } from './lib/arsenalGuard1587.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'scripts', 'data', 'clubNamesakes1584');
 const MIGRATION_PATH = 'supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql';
 const CONTROLS = ['blind', 'unmerge', 'noexclude', 'wide', 'mirrordrift', 'onehost', 'forget',
-  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak'];
+  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak', 'freshmoved', 'freshstill'];
 const WIKI_HOST = /(^|\.)(wikipedia|wikidata|wikimedia|fandom|wikiwand)\./i;
 const regDomain = h => h.toLowerCase().replace(/^www\./, '').split('.').slice(-2).join('.');
 /* two registrable hosts (soccerway's and ESPN's regional mirrors are one host each), no wiki, at most one Transfermarkt,
@@ -403,6 +411,48 @@ let PAY = JSON.parse(payloadLine(APPLIED_SQL).replace(/''/g, "'"));
   const rec = SQL1587.writeSql({ market: PAY.market, stints: PAY.stints }, { strict: false, source: 'arsenalMarket-2026-10-29.json and arsenalStints-2026-10-29.json' });
   if (rec.sql === RECORD_SQL) ok('the committed migration is byte for byte what the generator writes from this payload');
   else fail('the committed migration is not what genClubNamesakes1587.mjs writes: regenerate it');
+}
+
+/* ---------------------------------------------------------------- F (Round 1587, review major 1) */
+console.log('F) the apply\'s steps 2 and 3 on fresh exports under dated names decide by content, never by file name');
+{
+  const T = fs.mkdtempSync(path.join(os.tmpdir(), 'r1587-fresh-'));
+  const Q2N = 'arsenalMarket-2026-11-03.json', Q3N = 'arsenalStints-2026-11-03.json';
+  const sarRow = AL.men.find(m => m.verdict === 'sarandi')?.rows[0];
+  const movedQ2 = () => {
+    const rows = MARKET.map(r => ({ ...r }));
+    const r = rows.find(x => x.id === sarRow);
+    if (!r) abort(`the first sarandi row ${sarRow} is not in the Q2 export`);
+    r.market_value_usd = Number(r.market_value_usd) + 1000000;
+    r.h = marketHash(r);
+    return JSON.stringify(rows);
+  };
+  /* a pair of fresh files in its own folder: the committed bytes copied, or Q2 with one payload row's value moved */
+  const pair = (name, moved) => {
+    const d = path.join(T, name);
+    fs.mkdirSync(d);
+    if (moved) fs.writeFileSync(path.join(d, Q2N), movedQ2());
+    else fs.copyFileSync(path.join(DATA, ARSENAL.MARKET_FILE), path.join(d, Q2N));
+    fs.copyFileSync(path.join(DATA, 'arsenalStints-2026-10-29.json'), path.join(d, Q3N));
+    return [path.join(d, Q2N), path.join(d, Q3N)];
+  };
+  const run = (script, args) => spawnSync(process.execPath, [path.join(ROOT, 'scripts', 'qa', script), ...args], { encoding: 'utf8' });
+  let sameMoved = false, movedMoved = true;
+  if (CONTROL === 'freshmoved') { sameMoved = true; fired.push('freshmoved: the "unchanged" fresh Q2 carries one moved value'); }
+  if (CONTROL === 'freshstill') { movedMoved = false; fired.push('freshstill: the "moved" fresh Q2 is left unchanged'); }
+  const [sm, ss] = pair('same', sameMoved);
+  const led = run('genArsenalLedger1587.mjs', ['--market', sm, '--check']);
+  const pay = run('genClubNamesakes1587.mjs', ['--market', sm, '--stints', ss, '--check']);
+  const sames = (pay.stdout || '').split('\n').filter(l => l.startsWith('same: ')).length;
+  if (led.status === 0 && pay.status === 0 && sames === 2) ok(`unchanged exports saved as ${Q2N} and ${Q3N}: step 2 exit 0, step 3 exit 0 with "same:" for both SQL files`);
+  else fail(`unchanged exports under dated names: step 2 exit ${led.status}, step 3 exit ${pay.status} with ${sames} "same:" lines (the apply would stop on a table that has not moved)`);
+  const [mm, ms] = pair('moved', movedMoved);
+  const payM = run('genClubNamesakes1587.mjs', ['--market', mm, '--stints', ms, '--check']);
+  if (payM.status === 1 && /DIFFERS: /.test(payM.stdout || '')) ok(`one payload row's value moved (row ${sarRow}, h recomputed): step 3 exit 1 with DIFFERS`);
+  else fail(`one payload row's value moved: step 3 exit ${payM.status}, no DIFFERS (the apply would go ahead on a moved table)`);
+  const wr = run('genClubNamesakes1587.mjs', ['--market', sm, '--stints', ss]);
+  if (wr.status === 2 && /^REFUSED/.test((wr.stdout || '').trim())) ok('the payload generator refuses to write from a fresh export (--market without --check exits 2)');
+  else fail(`the payload generator given --market without --check exited ${wr.status}, not 2 with REFUSED`);
 }
 
 /* ---------------------------------------------------------------- P and R (Round 1587) */

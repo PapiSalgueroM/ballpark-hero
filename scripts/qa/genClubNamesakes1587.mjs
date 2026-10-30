@@ -6,7 +6,10 @@
 //       raises, applying nothing, unless every payload row of both tables still matches its read or is already current)
 // Run: node scripts/qa/genClubNamesakes1587.mjs [--market <Q2.json>] [--stints <Q3.json>] [--check]
 //   --check exits 1 when either committed file differs from what this run would write (the apply's "has the table
-//   moved since the export" step: at the apply the lead passes FRESH exports and expects no difference).
+//   moved since the export" step: at the apply the lead passes FRESH exports and expects no difference). The header
+//   names the COMMITTED exports whatever --market and --stints say, so a fresh file saved under a dated name compares
+//   by content only (review 1587 major 1); --market or --stints without --check is refused, so the committed files are
+//   only ever written from the committed exports.
 // THE MARKET PAYLOAD is every Q2 row of every sarandi man of arsenalLedger.json; its new club is its old club with every
 //   " / " part equal to "Arsenal FC" replaced by 'Arsenal de Sarandí'.
 // THE STINTS PAYLOAD (critic 1584 correction 2: the stints table has no age and keys careers by player_name plus
@@ -23,13 +26,17 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { SQL_MARKET_HASH, SQL_STINT_HASH, marketHash, stintHash } from '../lib/arsenalGuard1587.mjs';
+import { NAMESAKE, MARKET_FILE } from './genArsenalLedger1587.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const DATA = path.join(ROOT, 'scripts', 'data', 'clubNamesakes1584');
 export const MIGRATION = 'supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql';
 export const APPLIED = 'scripts/qa/clubNamesakes1587Applied.sql';
+export const STINTS_FILE = 'arsenalStints-2026-10-29.json';
+export const SOURCE = `${MARKET_FILE} and ${STINTS_FILE}`;
 export const STORED = 'Arsenal FC';
-export const NAMESAKE = 'Arsenal de Sarandí';
+// the stored name lives in ONE place, the ledger generator (review 1587 minor 2)
+export { NAMESAKE };
 export const rewriteClub = (club) => String(club).split(' / ').map((p) => (p === STORED ? NAMESAKE : p)).join(' / ');
 const hasStoredPart = (club) => String(club).split(' / ').includes(STORED);
 
@@ -137,8 +144,10 @@ export function writeSql(payload, { strict, source }) {
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
   const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
-  const marketFile = arg('--market', path.join(DATA, 'arsenalMarket-2026-10-29.json'));
-  const stintsFile = arg('--stints', path.join(DATA, 'arsenalStints-2026-10-29.json'));
+  const fresh = process.argv.includes('--market') || process.argv.includes('--stints');
+  if (fresh && !process.argv.includes('--check')) { console.log('REFUSED: --market and --stints only check (the SQL files are written from the committed exports)'); process.exit(2); }
+  const marketFile = arg('--market', path.join(DATA, MARKET_FILE));
+  const stintsFile = arg('--stints', path.join(DATA, STINTS_FILE));
   const ledger = JSON.parse(fs.readFileSync(path.join(DATA, 'arsenalLedger.json'), 'utf8'));
   const market = JSON.parse(fs.readFileSync(marketFile, 'utf8'));
   const stints = JSON.parse(fs.readFileSync(stintsFile, 'utf8'));
@@ -148,9 +157,8 @@ if (isMain) {
   if (pending.length) { console.error(`${pending.length} men are neither sarandi nor london (${pending.map((m) => m.name).join(', ')}). Nothing written.`); process.exit(1); }
   const payload = computePayload(ledger, market, stints);
   for (const h of payload.held) console.log(`  HELD stint ${h.id} ${h.name} ${h.span.join('-')}: ${h.why}`);
-  const source = `${path.basename(marketFile)} and ${path.basename(stintsFile)}`;
-  const rec = writeSql(payload, { strict: false, source });
-  const app = writeSql(payload, { strict: true, source });
+  const rec = writeSql(payload, { strict: false, source: SOURCE });
+  const app = writeSql(payload, { strict: true, source: SOURCE });
   console.log(`market ${rec.N} rows, stints ${rec.M} rows, held ${payload.held.length}; payload md5 ${rec.md5}`);
   let differ = 0;
   for (const [rel, text] of [[MIGRATION, rec.sql], [APPLIED, app.sql]]) {
