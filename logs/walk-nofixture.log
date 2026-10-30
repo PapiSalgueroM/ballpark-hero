@@ -1,0 +1,27 @@
+(a) Everton season 2, week 4: next "Europa League · League phase, matchday 1" v Fenerbahçe on Thu 2 Sep
+(b) after the night: Everton 0-1 Fenerbahçe
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+control nofixture: built src/lib/clubManager.ts with its line patched into /home/runner/work/_temp/t-walk-nofixture/dukb-euro-play-walk-qqAn0D/dist-nofixture (served on 36719); the file is back as it was
+   FAIL (a) Everton before matchday 1 320: the hub names no Europa League night: "league phase, matchday 1" against Fenerbahçe is not on it
+   (a) Everton before matchday 1 320 tiles: 5 controls measured
+   (a) Everton before matchday 1 320 screen: 6 controls measured
+   FAIL (c) Everton's calendar 320: the month grid names no Europa League night "Thu 2 Sep: vs Fenerbahçe · Europa League · League phase, matchday 1" (its Europa League days: Thu 28 Oct: draw to come · Europa League)
+   FAIL (a) Everton before matchday 1 390: the hub names no Europa League night: "league phase, matchday 1" against Fenerbahçe is not on it
+   (a) Everton before matchday 1 390 tiles: 5 controls measured
+   (a) Everton before matchday 1 390 screen: 6 controls measured
+   FAIL (c) Everton's calendar 390: the month grid names no Europa League night "Thu 2 Sep: vs Fenerbahçe · Europa League · League phase, matchday 1" (its Europa League days: Thu 28 Oct: draw to come · Europa League)
+   FAIL (a) Everton before matchday 1 1280: the hub names no Europa League night: "league phase, matchday 1" against Fenerbahçe is not on it
+   (a) Everton before matchday 1 1280 tiles: 5 controls measured
+   (a) Everton before matchday 1 1280 screen: 6 controls measured
+   FAIL (c) Everton's calendar 1280: the month grid names no Europa League night "Thu 2 Sep: vs Fenerbahçe · Europa League · League phase, matchday 1" (its Europa League days: Thu 28 Oct: draw to come · Europa League)
+playCmEuroPlay: control nofixture FIRED (6 findings of "names no Europa League night", 6 in all)
