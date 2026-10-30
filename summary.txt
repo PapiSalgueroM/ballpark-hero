@@ -1,0 +1,25 @@
+m1606-vitest exit=0 8s |    Duration  6.86s (transform 2.95s, setup 600ms, collect 10.06s, tests 3.06s, environment 3.04s, prepare 578ms)
+m1606-ctl-namedsack exit=0 36s | control run: namedsack FIRED, 7b went red 184 time(s), 184 naming the sentinel
+m1606-simManagers exit=0 69s | simManagers: all green
+m1606-ctl-recycle exit=0 37s | control run: recycle FIRED, 7b went red 203 time(s), 203 naming the sentinel
+m1606-ctl-takeover exit=0 36s | control run: takeover FIRED, 7g went red 78 time(s), 78 naming the sentinel
+m1606-simManagers-fleet exit=0 138s | simManagers: all green
+m1606-ctl-offer exit=0 37s | control run: offer FIRED, 7h went red 13 time(s), 13 naming the sentinel
+m1606-ctl-bogus exit=2 0s | SIM_MANAGERS_CONTROL=bogus is not a control this harness knows (sever, namedsack, recycle, takeover, liveevent, offer)
+m1606-ctl-liveevent exit=0 63s | control run: liveevent FIRED, 7f went red 44 time(s), 44 naming the sentinel
+m1606-ctl-sever exit=0 8s | control run: 3 failure(s) FIRED as expected
+m1606-quotes-dugout exit=1 21s | control run: dugout FIRED, pass 1 caught 1 planted quote(s) from a real manager
+m1607-fence exit=0 1s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+m1607-ctl-spelling exit=1 1s | control spelling FIRED: section 7 red (1 failure(s) in all)
+m1607-ctl-twochairs exit=1 1s | control twochairs FIRED: section 0 red (2 failure(s) in all)
+m1607-ctl-onehost exit=1 1s | control onehost FIRED: section 1 red (1 failure(s) in all)
+m1607-ctl-samedomain exit=1 1s | control samedomain FIRED: section 1 red (1 failure(s) in all)
+m1607-ctl-wikimirror exit=1 1s | control wikimirror FIRED: section 1 red (1 failure(s) in all)
+m1607-ctl-orphan exit=1 1s | control orphan FIRED: section 2 red (3 failure(s) in all)
+m1607-ctl-gap exit=1 1s | control gap FIRED: section 3 red (2 failure(s) in all)
+m1607-ctl-monthclash exit=1 1s | control monthclash FIRED: section 4 red (2 failure(s) in all)
+m1607-ctl-monthsamedomain exit=1 1s | control monthsamedomain FIRED: section 4 red (1 failure(s) in all)
+m1607-ctl-latereads exit=1 1s | control latereads FIRED: section 6 red (96 failure(s) in all)
+m1607-ctl-bogus exit=2 0s | unknown DUGOUTS_CONTROL=bogus
+m1606-quotes-desk exit=1 33s | simNoInventedQuotes: 1 failure
+m1606-simManagerHotSeat exit=0 67s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
