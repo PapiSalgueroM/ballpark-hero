@@ -1,0 +1,2 @@
+fdfa1dcf2fb525f10b70691572ffb2b5ef0c2733af2b5f6770ec5219968c21f6  /home/runner/work/_temp/rc-out/full/simUsDirtyMoney.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simUsDirtyMoney.mjs/stderr.log

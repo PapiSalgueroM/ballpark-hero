@@ -1,0 +1,2 @@
+3dab746d21cf4e6a73f2c47133ca3ca7d62162f6dbf075a9a40bf7160843522e  /home/runner/work/_temp/rc-out/full/simNoInventedQuotes.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNoInventedQuotes.mjs/stderr.log

@@ -1,0 +1,2 @@
+6286036466fb71ad881d62a486b85451db5687e58c30778e86a5ec49166b25d1  /home/runner/work/_temp/rc-out/full/simSoccerCareerPendingMorale.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerCareerPendingMorale.mjs/stderr.log

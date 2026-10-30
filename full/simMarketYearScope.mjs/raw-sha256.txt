@@ -1,0 +1,2 @@
+d9ab671445f7a17781261daee5bf7b84bac37bf0d67a5dde03810d985d432264  /home/runner/work/_temp/rc-out/full/simMarketYearScope.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simMarketYearScope.mjs/stderr.log

@@ -1,0 +1,3 @@
+1843 /home/runner/work/_temp/rc-out/full/simCmRealFixtures.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmRealFixtures.mjs/stderr.log
+1843 total

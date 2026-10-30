@@ -1,0 +1,3 @@
+1577 /home/runner/work/_temp/rc-out/full/simLiveIndexability.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simLiveIndexability.mjs/stderr.log
+1577 total

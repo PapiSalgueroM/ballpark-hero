@@ -1,0 +1,3 @@
+1890 /home/runner/work/_temp/rc-out/full/simCompletionSlugs.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCompletionSlugs.mjs/stderr.log
+1890 total

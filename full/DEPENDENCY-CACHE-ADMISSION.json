@@ -1,0 +1,21 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 713,
+      "sha256": "6417dacfa2aa36458b6996ea4266932eb17b0a2df5356c3a62d1066d5b481c60",
+      "tests": [
+        ":src/test/boxingShowForecast.test.tsx",
+        ":src/test/careerTrainingGround.test.tsx",
+        ":src/test/hallOfChampionsLongPlay.test.tsx",
+        ":src/test/inboxCard.test.tsx",
+        ":src/test/playerBingoLineFeedback.test.tsx",
+        ":src/test/throughBallBoard.test.tsx",
+        ":src/test/throughBallDrill.test.ts",
+        ":src/test/tycoonAway.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

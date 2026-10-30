@@ -1,0 +1,2 @@
+397b87c481c570dc4e46e1f8c3b8bb0bed2afd635b35c9af10190cb53c70b8fd  /home/runner/work/_temp/rc-out/full/simCompletionSlugs.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCompletionSlugs.mjs/stderr.log

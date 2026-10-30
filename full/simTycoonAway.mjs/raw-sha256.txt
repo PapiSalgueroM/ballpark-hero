@@ -1,0 +1,2 @@
+01e31ed45f80e32be9a7242bb0a5f578fc229c9a653f9cd834500303de1c0b66  /home/runner/work/_temp/rc-out/full/simTycoonAway.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTycoonAway.mjs/stderr.log

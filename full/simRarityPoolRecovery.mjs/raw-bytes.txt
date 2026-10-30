@@ -1,0 +1,3 @@
+518 /home/runner/work/_temp/rc-out/full/simRarityPoolRecovery.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simRarityPoolRecovery.mjs/stderr.log
+518 total

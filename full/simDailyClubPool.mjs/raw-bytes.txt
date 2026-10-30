@@ -1,0 +1,3 @@
+2914 /home/runner/work/_temp/rc-out/full/simDailyClubPool.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simDailyClubPool.mjs/stderr.log
+2914 total

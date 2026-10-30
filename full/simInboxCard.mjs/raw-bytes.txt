@@ -1,0 +1,3 @@
+2551 /home/runner/work/_temp/rc-out/full/simInboxCard.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simInboxCard.mjs/stderr.log
+2551 total

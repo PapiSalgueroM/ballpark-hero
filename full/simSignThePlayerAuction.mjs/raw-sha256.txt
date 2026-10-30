@@ -1,0 +1,2 @@
+67dd8d75a2bf8ddc01b66e34530067e879f7311d2ec9b3688bbd692c5fd66eeb  /home/runner/work/_temp/rc-out/full/simSignThePlayerAuction.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSignThePlayerAuction.mjs/stderr.log

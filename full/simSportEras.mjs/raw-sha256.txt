@@ -1,0 +1,2 @@
+5c535732ee7376f90612f4da3bf2b5ae573e725ac94057e31121c953274c1765  /home/runner/work/_temp/rc-out/full/simSportEras.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSportEras.mjs/stderr.log

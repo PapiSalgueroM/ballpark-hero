@@ -1,0 +1,3 @@
+8498 /home/runner/work/_temp/rc-out/full/simUsDirtyMoney.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simUsDirtyMoney.mjs/stderr.log
+8498 total

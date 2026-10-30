@@ -1,0 +1,3 @@
+2818 /home/runner/work/_temp/rc-out/full/simWindow2026SerieA.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simWindow2026SerieA.mjs/stderr.log
+2818 total

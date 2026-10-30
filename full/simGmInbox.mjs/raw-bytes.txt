@@ -1,0 +1,3 @@
+2035 /home/runner/work/_temp/rc-out/full/simGmInbox.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGmInbox.mjs/stderr.log
+2035 total

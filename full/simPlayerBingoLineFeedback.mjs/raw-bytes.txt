@@ -1,0 +1,3 @@
+878 /home/runner/work/_temp/rc-out/full/simPlayerBingoLineFeedback.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simPlayerBingoLineFeedback.mjs/stderr.log
+878 total

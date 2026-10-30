@@ -1,0 +1,2 @@
+5c2c7909a9327cd2b90e3ee1bb8549e203ddc2ad3f515404798b31e68e90101a  /home/runner/work/_temp/rc-out/full/simClubManagerCalendar.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simClubManagerCalendar.mjs/stderr.log

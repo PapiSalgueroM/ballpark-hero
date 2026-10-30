@@ -1,0 +1,3 @@
+6324 /home/runner/work/_temp/rc-out/full/simClubManagerCalendar.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simClubManagerCalendar.mjs/stderr.log
+6324 total

@@ -1,0 +1,3 @@
+3204 /home/runner/work/_temp/rc-out/full/simFightCareerRetire.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFightCareerRetire.mjs/stderr.log
+3204 total

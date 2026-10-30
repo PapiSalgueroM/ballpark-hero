@@ -1,0 +1,2 @@
+334862ba5e915ba46e362f814cedf65602d51d5fea5f8d98ede3c059325cd34c  /home/runner/work/_temp/rc-out/full/simPlayerBingoLineFeedback.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPlayerBingoLineFeedback.mjs/stderr.log
