@@ -1,0 +1,16 @@
+MUTATION APPLIED: hookwaits in src/components/front-office-shared/useGmCareerKit.ts
++   0
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simNhlWaiverReceipt.mjs:102:49 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ 0 ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.1
+M4 hookwaits simNhlWaiverReceipt exit=1

@@ -1,0 +1,8 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+m4-base-rl exit=0 2s | M4 unmutated simNhlRosterLimit exit=0
+m4-base-wr exit=0 2s | M4 unmutated simNhlWaiverReceipt exit=0
+m4-mut-rl exit=0 2s | M4 hookwaits simNhlRosterLimit exit=1
+m4-mut-rlall exit=0 2s | M4 hookwaits simNhlRosterLimit-all exit=1
+m4-mut-wr exit=0 2s | M4 hookwaits simNhlWaiverReceipt exit=1
+m4-base-pom exit=0 27s | M4 unmutated playOwnerMandate exit=0
+m4-mut-walks exit=0 282s | M4 hookwaits playGmCareer nhl 390 exit=1

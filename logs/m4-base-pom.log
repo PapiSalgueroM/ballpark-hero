@@ -1,0 +1,13 @@
+  PASS  the second tap returns to the picker
+  PASS  no page errors on the NFL walk (clean)
+5) The NBA, NHL and MLB owners exist too
+  PASS  /nba-front-office: the ownership card is on the hub
+  PASS  /nba-front-office: fresh trust renders
+  PASS  /nhl-front-office: the ownership card is on the hub
+  PASS  /nhl-front-office: fresh trust renders
+  PASS  /mlb-front-office: the ownership card is on the hub
+  PASS  /mlb-front-office: fresh trust renders
+  PASS  no page errors on the tri-sport walk (clean)
+
+ALL OWNER MANDATE WALK CHECKS PASSED
+M4 unmutated playOwnerMandate exit=0

@@ -1,0 +1,10 @@
+MUTATION APPLIED: hookwaits in src/components/front-office-shared/useGmCareerKit.ts
+  name: 'TimeoutError'
+}
+
+Node.js v24.22.1
+M4 hookwaits playOwnerMandate exit=1
+  FAIL  nhl 390x844 walkA: the walk could not finish (TimeoutError: locator.click: Timeout 30000ms exceeded.)
+
+playGmCareer: 1 failure
+M4 hookwaits playGmCareer nhl 390 exit=1
