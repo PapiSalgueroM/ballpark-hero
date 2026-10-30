@@ -1,0 +1,3 @@
+simCmShirtSales exit=0 3s | CM_SHIRTS_RESULT status=passed cases=15/15 passed=15 failed=0 prefixes=6/6 chargedWeeks=72/72 sourceHold=true network=0
+ooc-2 exit=0 361s | simOneOffCups: green, 6458 checks (360 s)
+simOneOffCups exit=0 2556s | simOneOffCups: green, 270840 checks (2555 s)
