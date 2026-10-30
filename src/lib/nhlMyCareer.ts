@@ -541,7 +541,7 @@ export function simNhlSeason(
       line.poPoints = (line.poGoals ?? 0) + (line.poAssists ?? 0);
       notes.push(`📊 Playoffs: ${poG} games, ${line.poGoals}G ${line.poAssists}A ${line.poPoints}P.`);
     }
-    const cn = clutchNote(clutch, poDepth, 'nhl');
+    const cn = clutchNote(clutch, poDepth, 'nhl', poForm);
     if (cn) notes.push(cn);
   }
 

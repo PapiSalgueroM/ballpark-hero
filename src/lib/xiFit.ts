@@ -12,13 +12,11 @@ import { canonicalClubName } from '@/data/lineupTeams';
  * Nothing here is new data. Every input is the row the player picked from
  * the dropdown (his recorded position, club and nationality), the verified
  * position history where the game looked it up, and the slot he was put in.
- * Nothing here is a new rule either, where an old one exists:
  *
- *   ROLE FIT is Club Manager's Round 505 table (FIT_PENALTY and gradeFit,
- *   both in positionFit.ts): nothing for a slot his positions cover, 2 for
- *   next door, 6 for another line, 14 for a keeper swap, on that man, and
- *   averaged over the eleven exactly the way Club Manager's xiFitReport
- *   averages it.
+ *   ROLE FIT uses the shared FIT_PENALTY and gradeFit table. Build Your XI
+ *   treats a primary LB at LWB or RB at RWB as natural too. Every other fit
+ *   keeps the shared rule: 2 for next door, 6 for another line and 14 for a
+ *   keeper swap, on that man, averaged over the eleven.
  *
  *   CHEMISTRY is the shared engine (computeChemistry) and its weights, told
  *   to count neighbours on the pitch only. A club link is 3 chemistry points
@@ -238,6 +236,8 @@ export function xiFitBreakdown(slots: XiFitSlot[]): XiFitBreakdown {
   const grades: (FitGrade | null)[] = slots.map(s => {
     if (!s.man) return null;
     const held = heldOf(s.man);
+    if (s.role === 'LWB' && s.man.position === 'LB') return 'natural';
+    if (s.role === 'RWB' && s.man.position === 'RB') return 'natural';
     return held ? gradeFit(held, s.allowed) : 'natural';
   });
   const perMan = grades.map(g => (g ? FIT_PENALTY[g] : null));

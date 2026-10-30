@@ -82,8 +82,12 @@ const canonTop = v => Array.isArray(v) ? v.map(canonTop) : v && typeof v === 'ob
   const { connectionsPuzzles } = await import(pathToFileURL(path.join(tmp, 'bundle.mjs')).href);
   const fileBoard = new Map(connectionsPuzzles.map(b => [b.id, b.groups.map(g => ({ category: g.category, players: g.players, difficulty: g.difficulty }))]));
   let tied = 0;
+  /* Round 1565 rebuilt three of these boards again (puzzle-81, 90 and 109) and its own migration carries them on from
+     here, so for those the file is held to that migration (scripts/qa/rehearseConnections1565.mjs), not to this one */
+  const later = new Set([...fs.readFileSync(path.join(ROOT, 'supabase/migrations/20261029120000_round_1565_connections_live.sql'), 'utf8').matchAll(/^ {4}\('([a-z]+-[0-9-]+)', '/gm)].map(m => m[1]));
   for (const r of rows) {
     const f = fileBoard.get(r.id);
+    if (later.has(r.id)) { console.log(`   ${r.id}: rebuilt again by Round 1565, held to that migration`); continue; }
     if (!f) fail(`${r.id} is in the migration and not in src/data/connectionsPuzzles.ts`);
     else if (JSON.stringify(canonTop(f)) !== JSON.stringify(canonTop(r.now))) fail(`${r.id}: the migration's new board is not the file's board; regenerate the migration from the file`);
     else tied += 1;

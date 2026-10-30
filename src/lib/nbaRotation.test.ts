@@ -4,7 +4,7 @@ import * as engine from '@/lib/nbaFrontOffice';
 import * as stats from '@/lib/nbaSeasonStats';
 import { NBA_ROTATION_MINUTES, nbaRotation, nbaRotationSlots, nbaRotationPreferences, nbaSetRotationSlot, nbaAutoRotation, nbaReconcileRotation } from '@/lib/nbaRotation';
 import { leagueNames } from '@/lib/foNames';
-import { foNewSeasonStats } from '@/lib/foSeasonStats';
+import { foNewSaved } from '@/lib/foStatsCodec';
 import type { NbaGmPlayer, NbaGmTeam, NbaLeague } from '@/lib/nbaFrontOffice';
 
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
@@ -26,7 +26,7 @@ export function fixtureLeague(): NbaLeague {
     if (abbr !== 'BOS') t.players.forEach(p => { p.ovr = 80; p.pot = 80; });
     return [abbr, t];
   }));
-  return { season: 2026, cap: engine.NBA_CAP_BASE, teams, freeAgents: [], round: 1, champions: [], stats: foNewSeasonStats(2026) };
+  return { season: 2026, cap: engine.NBA_CAP_BASE, teams, freeAgents: [], round: 1, champions: [], stats: foNewSaved(2026) };
 }
 const weighted = (slots: (NbaGmPlayer | undefined)[]) => {
   const avg = (group: (NbaGmPlayer | undefined)[]) => {
@@ -88,46 +88,64 @@ export function automaticCampaign(api: typeof engine, box: typeof stats, seed: n
     if (new Set(entries.map(([key]) => key)).size !== entries.length) throw new Error('Campaign identity projection collided');
     return Object.fromEntries(entries);
   };
-  const normalized = normalize(JSON.parse(JSON.stringify(result)));
+  /* Round 1566: the season's lines are saved in the shared short shape now (src/lib/foStatsCodec.ts), club by club, so
+     the digest reads each block as the named rows it stands for (the one expand, its club columns aside) with the
+     lines in the order of their projected keys, which neither shape can move. On a tree from before the round the
+     block already is named rows and only the order applies; the references were taken that way (see below). */
+  const plain = JSON.parse(JSON.stringify(result)) as { closed: NbaLeague; league: NbaLeague };
+  for (const lg of [plain.closed, plain.league]) {
+    if (lg.stats && 'clubs' in lg.stats) {
+      const rows: Partial<ReturnType<typeof box.nbaFoStats>> = { ...box.nbaFoStats(lg.stats) };
+      delete rows.club;
+      (lg as { stats: unknown }).stats = rows;
+    }
+  }
+  const normalized = normalize(plain) as { closed: { stats?: { lines: Record<string, unknown> } }; league: { stats?: { lines: Record<string, unknown> } } };
+  for (const lg of [normalized.closed, normalized.league]) {
+    if (lg.stats) lg.stats.lines = Object.fromEntries(Object.entries(lg.stats.lines).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+  }
   return { digest: createHash('sha256').update(JSON.stringify(normalized)).digest('hex'), draws, normalized,
     games: Object.values(closed.teams).map(t => t.wins + t.losses), booked: !!closed.schedule };
 }
 
+/* Round 1566: the six digests were taken with the season blocks read shape free (above) on 5d1198389, the commit
+   before the round, whose engine still saves named rows (this file copied into a checkout of it, runner result
+   r1566-s3, line rot-base); the head gave the same six and the same draws. The draws are the original ones. */
 const ORIGINAL_REFERENCES: { seed: number; legacy?: boolean; digest: string; draws: number }[] = [
   {
     "seed": 117,
     "legacy": false,
-    "digest": "32a869d8c5d69f54ebc81a9fe96c3bc62e758729357156b13c2bcc666eb4b79d",
+    "digest": "ccf6088208b43998f04015fdbe44d4c9c1dc0dc1be19d745bd787e6f48a1728b",
     "draws": 12648
   },
   {
     "seed": 431,
     "legacy": false,
-    "digest": "c8932bfe7bb8972ade1654767a37e1efcb42d2cb7204338ea9dc83c92b59b610",
+    "digest": "05a1352ceec4de67d22fd319b8560b927f435d70070d367ad6dff019897bf6d7",
     "draws": 12619
   },
   {
     "seed": 907,
     "legacy": false,
-    "digest": "18bc0a486ee1eb2fe6483b86a1b6a377a9c0077314a4d2a61752aefeb6203488",
+    "digest": "b56c4d1df8d71e9709ba6da003698117f318ca09b371e8acbce022f0b7d6e6f7",
     "draws": 12685
   },
   {
     "seed": 117,
     "legacy": true,
-    "digest": "b787f10068a3b8813f4aae761bfa49943a80c28747840edebf67cffecf92fdc6",
+    "digest": "f25f738705ea2c8bb338d4d55e680dd50cff00e0dbdadfbbf721a864722475ed",
     "draws": 17256
   },
   {
     "seed": 431,
     "legacy": true,
-    "digest": "e274495d96f0f7fa600a0a0a397d4fbc53369361f68489654bdb0aeeecb9ba6e",
+    "digest": "26048e582b52b90f13be0ca2d41dbe0e3328a7a9e2e92d0932a039cfbce7debc",
     "draws": 17207
   },
   {
     "seed": 907,
     "legacy": true,
-    "digest": "605d11b4071934263e341d07b4dc9dbc7ed5f7d9148142f10e74f9bf20340e6a",
+    "digest": "d83f6c619d8fd673f3d4b8c00009a65883ac96e79512ca4580103be8bdb5d8cb",
     "draws": 17317
   }
 ];
@@ -135,8 +153,9 @@ const ORIGINAL_REFERENCES: { seed: number; legacy?: boolean; digest: string; dra
 describe('NBA manual rotation engine outcomes', () => {
   it('holds physical original automatic campaigns and RNG fingerprints as an independent baseline', () => {
     expect(ORIGINAL_REFERENCES).toHaveLength(6);
-    for (const reference of ORIGINAL_REFERENCES) {
-      const result = automaticCampaign(engine, stats, reference.seed, reference.legacy);
+    const runs = ORIGINAL_REFERENCES.map(reference => ({ reference, result: automaticCampaign(engine, stats, reference.seed, reference.legacy) }));
+    if (process.env.PRINT_NBA_ROTATION) for (const { reference, result } of runs) console.log(`NBA_ROTATION_PRINT ${reference.seed} ${!!reference.legacy} ${result.digest} ${result.draws}`);
+    for (const { reference, result } of runs) {
       expect(result.digest).toBe(reference.digest); expect(result.draws).toBe(reference.draws);
       expect(result.booked).toBe(!reference.legacy);
       if (!reference.legacy) expect(result.games).toEqual(Array(30).fill(80));

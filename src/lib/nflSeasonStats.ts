@@ -51,6 +51,10 @@
 import type { GmPlayer, GmTeamState, LeagueState } from './frontOffice';
 import { DEF_POS, DEF_SLOTS, OL_SLOTS, REPLACEMENT_OVR, SKILL_POS, SKILL_SLOTS, unitStarters } from './frontOffice';
 import type { FoSeasonStats, FoStatLine } from './foSeasonStats';
+import {
+  type FoExpandedStats, type FoSavedStats, type FoStatsCodec,
+  foClubGame, foExpand, foLineAdd, foLineGame, foOpenLine, foReadSaved,
+} from './foStatsCodec';
 import { FO_HISTORY_CAP } from './foSeasonClose';
 import { keyedRng } from './keyedRng';
 import { gmStoryKey, type ToldGame } from './gmGameScore';
@@ -58,6 +62,9 @@ import { nflDrivePair } from './gameLaws/nflDrives';
 
 export const NFL_STAT_COLS = ['ptd', 'rtd', 'ctd', 'sk'] as const;
 export type NflStatCol = typeof NFL_STAT_COLS[number];
+/** Round 1566: the NFL's binding of the shared save shape (src/lib/foStatsCodec.ts): its four columns, no starts kept
+ *  apart (the pool is the starters), and a club's touchdowns, field goals and safeties. */
+export const NFL_CODEC: FoStatsCodec = { cols: NFL_STAT_COLS, gs: false, clubCols: ['td', 'fg', 'sf'] };
 
 /** The pass chance of a touchdown: this at a quarterback rated NFL_PASS_PIVOT, plus NFL_PASS_SLOPE a point above it, kept inside NFL_PASS_RANGE. */
 export const NFL_PASS_BASE = 0.55;
@@ -101,12 +108,11 @@ export type NflSavedLine = [string, string, number, number, number, number, numb
 export type NflSavedClub = [number, number, number, number, number, number, number];
 
 /* THE BLOCK IS KEPT SMALL. A full roster league already opens near the NFL save budget (simNflFullRosters.mjs,
-   700K; the man's opening rating evidence alone is about a third of it), and the NBA's line shape (FoStatLine, named
-   fields) cost about 68K a season there: the board's real save on the recap went from 660K to 728K. So the save
-   keeps lines as short arrays, nested by club then man (about 28K a season), and nflFoStats spells them out as the
-   shared FoSeasonStats whenever the shared helpers (foSeasonPlayers, foRankAward) or the shared card read them. */
-export interface NflSeasonStats {
-  season: number;
+   700K; the man's opening rating evidence alone is about a third of it), and the NBA's old line shape (FoStatLine,
+   named fields) cost about 68K a season there: the board's real save on the recap went from 660K to 728K. So the save
+   keeps lines as short arrays, nested by club then man (about 28K a season). Since Round 1566 that is every sport's
+   save shape (src/lib/foStatsCodec.ts, NFL_CODEC above), and nflFoStats is the shared expand. */
+export interface NflSeasonStats extends FoSavedStats {
   /** By club, then by man id: his line for the games he played for that club. */
   lines: Record<string, Record<string, NflSavedLine>>;
   /** Every club's regular season. */
@@ -115,23 +121,11 @@ export interface NflSeasonStats {
   plays: Record<string, [NflCredit[], NflCredit[]]>;
 }
 
-/** The block spelled out as the shared lines (src/lib/foSeasonStats.ts): one FoStatLine a man and club, keyed
- *  `${team}|${id}`, gs equal to g, a zero column left out; the club totals; and each club's [touchdowns, field goals,
+/** The block spelled out as the shared lines, the shared expand (foExpand) with the NFL's columns: one FoStatLine a
+ *  man and club, keyed `${team}|${id}`, gs equal to g; the club totals; and each club's [touchdowns, field goals,
  *  safeties]. A fresh object: nothing written to it reaches the save. */
-export function nflFoStats(s: NflSeasonStats): FoSeasonStats & { club: Record<string, [number, number, number]> } {
-  const out: FoSeasonStats & { club: Record<string, [number, number, number]> } = { season: s.season, lines: {}, teams: {}, club: {} };
-  for (const [team, men] of Object.entries(s.lines)) {
-    for (const [id, l] of Object.entries(men)) {
-      const tot: Record<string, number> = {};
-      NFL_STAT_COLS.forEach((c, i) => { const n = l[3 + i] as number; if (n > 0) tot[c] = n; });
-      out.lines[`${team}|${id}`] = { id, name: l[0], team, pos: l[1], g: l[2], gs: l[2], tot, ...(l[7] === 1 ? { rookie: true } : {}) };
-    }
-  }
-  for (const [team, c] of Object.entries(s.clubs)) {
-    out.teams[team] = { g: c[0], w: c[1], pts: c[2], opp: c[3] };
-    out.club[team] = [c[4], c[5], c[6]];
-  }
-  return out;
+export function nflFoStats(s: NflSeasonStats): FoExpandedStats {
+  return foExpand(NFL_CODEC, s);
 }
 
 export interface NflAwardPick { id: string; name: string; team: string; pos: string; g: number; ptd: number; rtd: number; ctd: number; sk: number }
@@ -273,9 +267,8 @@ export function nflNewStats(season: number): NflSeasonStats {
 }
 
 const creditsOf = (s: NflSideCredit): NflCredit[] => s.credits.map(c => [c.passer ? c.passer.name : null, c.scorer.name]);
-/** The column of a saved line: 3 thrown, 4 run in, 5 caught, 6 sacks. */
-const COL_AT: Record<NflStatCol, number> = { ptd: 3, rtd: 4, ctd: 5, sk: 6 };
-const bump = (line: NflSavedLine, col: NflStatCol, n = 1) => { (line as unknown as number[])[COL_AT[col]] += n; };
+/** Add to a saved line's column, through the shared shape (3 thrown, 4 run in, 5 caught, 6 sacks). */
+const bump = (line: NflSavedLine, col: NflStatCol, n = 1) => foLineAdd(NFL_CODEC, line, col, n);
 
 /**
  * Add one told game to the league's live block. `regular`: a regular season
@@ -291,14 +284,10 @@ export function nflRecordGame(lg: LeagueState, told: NflToldGame, my: string, re
   if (!c) return false;
   if (regular) {
     for (const [s, pts, opp] of [[c.home, told.homeScore, told.awayScore], [c.away, told.awayScore, told.homeScore]] as const) {
-      const club = stats.clubs[s.team] ?? [0, 0, 0, 0, 0, 0, 0];
-      stats.clubs[s.team] = [club[0] + 1, club[1] + (pts > opp ? 1 : 0), club[2] + pts, club[3] + opp, club[4] + s.tds, club[5] + s.fgs, club[6] + s.safeties];
+      foClubGame(NFL_CODEC, stats, s.team, pts, opp, [s.tds, s.fgs, s.safeties]);
       const men = stats.lines[s.team] ?? (stats.lines[s.team] = {});
       for (const m of nflPoolMen(s.pool)) {
-        const line: NflSavedLine = men[m.id] ?? (m.rookieSeason === lg.season ? [m.name, m.pos, 0, 0, 0, 0, 0, 1] : [m.name, m.pos, 0, 0, 0, 0, 0]);
-        line[0] = m.name;
-        line[2] += 1;
-        men[m.id] = line;
+        foLineGame(NFL_CODEC, foOpenLine(NFL_CODEC, stats, s.team, m.id, m.name, m.pos, m.rookieSeason === lg.season), true);
       }
       for (const cr of s.credits) {
         if (cr.passer) { bump(men[cr.passer.id], 'ptd'); bump(men[cr.scorer.id], 'ctd'); }
@@ -381,22 +370,15 @@ const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object
 const isCount = (v: unknown): v is number => typeof v === 'number' && Number.isInteger(v) && v >= 0;
 const isText = (v: unknown): v is string => typeof v === 'string' && v !== '';
 
-/** A saved line: two words, then five counts, then a 1 for a first year man or nothing. */
-function readLine(v: unknown): boolean {
-  if (!Array.isArray(v) || (v.length !== 7 && v.length !== 8) || !isText(v[0]) || !isText(v[1])) return false;
-  if (!v.slice(2, 7).every(isCount)) return false;
-  return v.length === 7 || v[7] === 1;
-}
-const readClub = (c: unknown): boolean => Array.isArray(c) && c.length === 7 && c.every(isCount) && c[1] <= c[0];
 const readCredit = (c: unknown): boolean => Array.isArray(c) && c.length === 2 && (c[0] === null || isText(c[0])) && isText(c[1]);
 
-/** A saved block that reads whole, or null. Never throws. */
+/** A saved block that reads whole, or null: the shared shape with the NFL's columns (foReadSaved: a line is two words,
+ *  then five counts, then a 1 for a first year man or nothing; a club is seven counts), and the plays. Never throws. */
 export function readNflStats(v: unknown): NflSeasonStats | null {
   try {
-    if (!isObj(v) || !Number.isInteger(v.season) || !isObj(v.lines) || !isObj(v.clubs) || !isObj(v.plays)) return null;
-    if (!Object.values(v.lines).every(men => isObj(men) && Object.values(men).every(readLine))) return null;
-    if (!Object.values(v.clubs).every(readClub)) return null;
-    if (!Object.values(v.plays).every(p => Array.isArray(p) && p.length === 2 && p.every(side => Array.isArray(side) && side.every(readCredit)))) return null;
+    if (!foReadSaved(NFL_CODEC, v) || !isObj((v as unknown as Record<string, unknown>).plays)) return null;
+    const plays = (v as unknown as { plays: Record<string, unknown> }).plays;
+    if (!Object.values(plays).every(p => Array.isArray(p) && p.length === 2 && p.every(side => Array.isArray(side) && side.every(readCredit)))) return null;
     return v as unknown as NflSeasonStats;
   } catch {
     return null;

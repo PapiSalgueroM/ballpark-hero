@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
-import { FORMATIONS, type Formation } from '@/types/lineupBuilder';
+import { FORMATIONS, type Formation, type DraftChoice, type AIVerdict } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
 import { FlagImg } from '@/components/FlagImg';
 import { GameShell } from '@/components/game/GameShell';
@@ -32,6 +32,7 @@ const LineupBuilder = () => {
   const {
     formation,
     phase,
+    draftChoice,
     selectedPositionIndex,
     currentTeam,
     positions,
@@ -48,6 +49,7 @@ const LineupBuilder = () => {
     selectPosition,
     submitPlayer,
     evaluateTeam,
+    completeRecordedYearDraft,
     resetGame,
     finishSpin,
     rerollTeam,
@@ -57,6 +59,22 @@ const LineupBuilder = () => {
   const [playerInput, setPlayerInput] = useState('');
   const inputRevision = useRef(0);
   const [showRules, setShowRules] = useState(false);
+  const [setupMode, setSetupMode] = useState<DraftChoice['mode']>('mixed');
+  const [setupYear, setSetupYear] = useState(2026);
+  const [browsingPlayers, setBrowsingPlayers] = useState(false);
+  const [browseActivation, setBrowseActivation] = useState(0);
+  const inputOwner = useRef<HTMLDivElement>(null);
+  const isClubYear = draftChoice.mode === 'club-year';
+  const recordedYear = draftChoice.mode === 'club-year' ? draftChoice.year : null;
+  const searchDisabled = isValidating || selectedPositionIndex === null || !currentTeam || isSpinning || checkingDown;
+
+  useEffect(() => {
+    setBrowsingPlayers(false);
+  }, [currentTeam, selectedPositionIndex, draftChoice, phase]);
+
+  useLayoutEffect(() => {
+    if (browseActivation > 0) inputOwner.current?.querySelector('input')?.focus({ preventScroll: true });
+  }, [browseActivation]);
 
   useEffect(() => {
     const seen = localStorage.getItem('lineup-rules-seen');
@@ -126,13 +144,16 @@ const LineupBuilder = () => {
      shared search config cannot express today. */
   const teamScopedSource: PlayerSourceConfig | null = useMemo(() => {
     if (!currentTeam) return null;
-    return {
+    const source: PlayerSourceConfig = {
       ...SOCCER_MARKET_VALUE_SOURCE,
       filters: currentTeam.isNation
         ? [{ column: 'nationality', op: 'eq', value: nationSearchTerm(currentTeam.name) }]
         : [{ column: 'club', op: 'in', value: clubTableNames(currentTeam.name) }],
     };
-  }, [currentTeam]);
+    return recordedYear === null ? source : {
+      ...source, filters: [...(source.filters ?? []), { column: 'year', op: 'eq', value: recordedYear }],
+    };
+  }, [currentTeam, recordedYear]);
 
   /* Round 442: the whole dropdown row rides along to the hook now. It is what
      the position gate reads, and it is what the season report is built from,
@@ -176,21 +197,26 @@ const LineupBuilder = () => {
       filledSlotsArray.map((slot) => {
         const value = slot.pick?.value ?? 0;
         const age = slot.pick?.age;
+        const recordedInputs = Number.isFinite(value) && value > 0 && typeof age === 'number' && Number.isFinite(age);
         return {
           slot,
           value,
-          rating: value > 0 ? playerRating({ marketValue: value / 1_000_000, age: age ?? 27 } as Parameters<typeof playerRating>[0]) : null,
+          rating: isClubYear
+            ? (recordedInputs ? playerRating({ marketValue: value / 1_000_000, age } as Parameters<typeof playerRating>[0]) : null)
+            : value > 0 ? playerRating({ marketValue: value / 1_000_000, age: age ?? 27 } as Parameters<typeof playerRating>[0]) : null,
         };
       }),
-    [filledSlotsArray]
+    [filledSlotsArray, isClubYear]
   );
 
   /* The sim needs a value for every man, and every pick comes from a dropdown
      row that has one, so this is a guard rather than a common case: if a squad
      ever reaches the result screen without values, it gets the verdict and no
      invented season. */
+  const canShowSeasonReport = phase === 'result' || (isClubYear && phase === 'reviewing');
   const seasonReport = useMemo(() => {
-    if (phase !== 'result' || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)) return null;
+    if (!canShowSeasonReport || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)
+      || (isClubYear && ratedXi.some((r) => r.rating === null))) return null;
     const squad: WxPlayer[] = ratedXi.map(({ slot, value }) => ({
       name: slot.playerName,
       country: slot.pick?.nationality ?? '',
@@ -200,7 +226,20 @@ const LineupBuilder = () => {
       age: slot.pick?.age,
     }));
     return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown));
-  }, [phase, ratedXi, formation, fitBreakdown]);
+  }, [canShowSeasonReport, ratedXi, formation, fitBreakdown, isClubYear]);
+
+  const recordedYearVerdict = useMemo<AIVerdict | null>(() => {
+    if (recordedYear === null) return null;
+    const headline = `Club year draft: recorded year ${recordedYear}`;
+    if (!seasonReport) return {
+      rating: 'Unrated recorded draft', headline,
+      analysis: 'Draft complete. Some selected records are missing a value or age, so we cannot rate the full XI.',
+    };
+    return {
+      rating: `${seasonReport.squadRating}/100`, headline,
+      analysis: `Your XI finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points in this simulated season. Ratings use your selected ${recordedYear} records, plus role fit, chemistry and balance.`,
+    };
+  }, [recordedYear, seasonReport]);
 
   /* Which third of the pitch this XI is actually built on, averaged from the
      same card ratings. Slots are bucketed by the slot the player filled, not by
@@ -234,13 +273,15 @@ const LineupBuilder = () => {
     <>
       <PageSeo
         title="Build Your XI - Soccer Lineup Builder Game | DoUKnowBall"
-        description="Spin a random challenge, pick two teams, and build the ultimate starting XI. AI rates your lineup."
+        description="Spin clubs or nations, or draft from one recorded year. Build your starting XI and see your team report."
         path="/build-your-xi"
       />
       <GameShell
         width="wide"
         title="BUILD YOUR XI"
-        subtitle="Pick a formation, fill each position with a player from the given club or nation"
+        subtitle={isClubYear && phase !== 'formation'
+          ? `Fill each position with a ${recordedYear} record from the club you are given`
+          : 'Pick a formation, fill each position with a player from the given club or nation'}
         headerExtra={
           <div className="flex justify-center">
             <button
@@ -256,12 +297,35 @@ const LineupBuilder = () => {
         {/* Formation Selection */}
         {phase === 'formation' && (
           <div className="max-w-lg mx-auto">
+            <fieldset className="mb-5 space-y-3">
+              <legend className="text-center text-sm font-semibold text-foreground mb-2">Choose your draft</legend>
+              <div className="grid grid-cols-2 gap-2">
+                <button type="button" aria-pressed={setupMode === 'mixed'} onClick={() => setSetupMode('mixed')}
+                  className={cn('min-h-11 rounded-xl border px-3 py-2 text-sm font-semibold', setupMode === 'mixed' ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card text-foreground')}>
+                  Mixed
+                </button>
+                <button type="button" aria-pressed={setupMode === 'club-year'} onClick={() => setSetupMode('club-year')}
+                  className={cn('min-h-11 rounded-xl border px-3 py-2 text-sm font-semibold', setupMode === 'club-year' ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card text-foreground')}>
+                  Club year draft
+                </button>
+              </div>
+              {setupMode === 'club-year' && (
+                <div className="space-y-2">
+                  <label htmlFor="lineup-recorded-year" className="block text-sm font-semibold text-foreground">Recorded year</label>
+                  <select id="lineup-recorded-year" value={setupYear} onChange={event => setSetupYear(Number(event.target.value))}
+                    className="min-h-11 w-full rounded-xl border border-border bg-card px-3 text-foreground">
+                    {Array.from({ length: 23 }, (_, index) => 2026 - index).map(year => <option key={year} value={year}>{year}</option>)}
+                  </select>
+                  <p className="text-xs text-muted-foreground">Draft from our club records for that year. Some players may be missing.</p>
+                </div>
+              )}
+            </fieldset>
             <h2 className="text-center text-lg font-semibold text-foreground mb-4">Choose Your Formation</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {formationOptions.map((f) => (
                 <button
                   key={f}
-                  onClick={() => selectFormation(f)}
+                  onClick={() => setupMode === 'mixed' ? selectFormation(f) : selectFormation(f, { mode: 'club-year', year: setupYear })}
                   className="rounded-xl border border-border bg-card hover:bg-primary hover:text-primary-foreground transition-all p-6 text-center group"
                 >
                   <span className="text-2xl font-bold font-display group-hover:scale-110 transition-transform inline-block">
@@ -302,12 +366,13 @@ const LineupBuilder = () => {
                   targetIndex={filledCount}
                   isSpinning={isSpinning}
                   onFinish={finishSpin}
+                  recordedYear={recordedYear ?? undefined}
                 />
                 {!isSpinning && currentTeam && (
                   <button
                     onClick={rerollTeam}
-                    className="absolute top-2 right-2 flex items-center justify-center w-10 h-10 rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
-                    title="Reroll: get a different team"
+                    className={cn('absolute top-2 right-2 flex items-center justify-center rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all', isClubYear ? 'w-11 h-11' : 'w-10 h-10')}
+                    title={isClubYear ? 'Reroll club' : 'Reroll: get a different team'}
                   >
                     <Shuffle className="w-4 h-4" />
                   </button>
@@ -324,22 +389,38 @@ const LineupBuilder = () => {
                 </p>
               )}
 
-              {selectedPositionIndex !== null && currentTeam && !isSpinning && !checkingDown && (
+              {(isClubYear || (selectedPositionIndex !== null && currentTeam && !isSpinning && !checkingDown)) && (
                 <div className="animate-fade-in space-y-3">
                   <p className="text-sm text-center text-muted-foreground">
-                    Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span>
+                    {selectedPositionIndex === null ? 'Select a position on the pitch' : <>Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span></>}
                   </p>
 
+                  {isClubYear && (
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <p className="text-xs text-muted-foreground">Matching records, recorded year {recordedYear}</p>
+                      <button type="button" disabled={searchDisabled} className="min-h-11 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold text-secondary-foreground disabled:opacity-50"
+                        onClick={() => {
+                          inputRevision.current += 1;
+                          setPlayerInput('');
+                          setBrowsingPlayers(true);
+                          setBrowseActivation(value => value + 1);
+                        }}>
+                        Browse players
+                      </button>
+                    </div>
+                  )}
                   <div className="flex items-start gap-2">
-                    <div className="flex-1">
+                    <div className="flex-1" ref={inputOwner}>
                       <PlayerAutocomplete
+                        key={browseActivation}
                         value={playerInput}
-                        onChange={value => { inputRevision.current += 1; setPlayerInput(value); }}
+                        onChange={value => { inputRevision.current += 1; setBrowsingPlayers(false); setPlayerInput(value); }}
                         onSelect={handleSelectPlayer}
-                        searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames }}
+                        searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames, ...(isClubYear && browsingPlayers ? { minChars: 0, limit: 50 } : {}) }}
                         placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
-                        disabled={isValidating}
-                        autoFocus
+                        disabled={searchDisabled}
+                        autoFocus={!isClubYear}
+                        emptyText={isClubYear ? 'No matching records. Try another name or reroll the club.' : undefined}
                         validateOnly
                       />
                     </div>
@@ -359,7 +440,7 @@ const LineupBuilder = () => {
                 </div>
               )}
 
-              {selectedPositionIndex === null && !isSpinning && (
+              {!isClubYear && selectedPositionIndex === null && !isSpinning && (
                 <p className="text-center text-sm text-muted-foreground animate-fade-in">
                   ↓ Select a position on the pitch
                 </p>
@@ -392,7 +473,7 @@ const LineupBuilder = () => {
               <h2 className="text-center text-xl font-bold text-foreground font-display mb-1">
                 Your {formation} Starting XI
               </h2>
-              <p className="text-center text-sm text-muted-foreground mb-4">Review your team before submitting</p>
+              <p className="text-center text-sm text-muted-foreground mb-4">{isClubYear ? `Club year draft, recorded year ${recordedYear}` : 'Review your team before submitting'}</p>
               <div className="space-y-2">
                 {filledSlotsArray.map((slot, i) => (
                   <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-4 py-2.5">
@@ -416,7 +497,11 @@ const LineupBuilder = () => {
                 Start Over
               </button>
               <button
-                onClick={evaluateTeam}
+                onClick={() => {
+                  if (isClubYear) {
+                    if (recordedYearVerdict) completeRecordedYearDraft(recordedYearVerdict);
+                  } else void evaluateTeam();
+                }}
                 disabled={isEvaluating}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
               >
@@ -438,16 +523,16 @@ const LineupBuilder = () => {
               emojiGrid={
                 seasonReport
                   ? [
-                      `Build Your XI: ${formation} rated ${verdict.rating}`,
+                      `Build Your XI: ${formation} rated ${verdict.rating}${isClubYear ? ` (recorded year ${recordedYear})` : ''}`,
                       `Season sim: ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points`,
                       ...(seasonReport.topScorer ? [`Top scorer: ${seasonReport.topScorer.name} (${seasonReport.topScorer.goals})`] : []),
                       ...(seasonReport.playerOfSeason ? [`Player of the season: ${seasonReport.playerOfSeason.name}`] : []),
                     ].join('\n')
-                  : `Build Your XI: ${formation} rated ${verdict.rating}`
+                  : `Build Your XI: ${formation} rated ${verdict.rating}${isClubYear ? ` (recorded year ${recordedYear})` : ''}`
               }
               share={{
-                score: seasonReport ? `${verdict.rating}, ${seasonReport.squadRating}/100` : verdict.rating,
-                gameName: 'Build Your XI',
+                score: isClubYear ? `${recordedYear}: ${verdict.rating}` : seasonReport ? `${verdict.rating}, ${seasonReport.squadRating}/100` : verdict.rating,
+                gameName: isClubYear ? 'Build Your XI Club year draft' : 'Build Your XI',
                 gamePath: '/build-your-xi',
               }}
               onPlayAgain={resetGame}
@@ -488,7 +573,7 @@ const LineupBuilder = () => {
                   <div className="text-center mb-3">
                     <div className="text-2xl mb-1">📋</div>
                     <h3 className="text-base font-bold text-primary font-display">Season Report</h3>
-                    <p className="text-xs text-muted-foreground">One season with this XI, every player at his peak</p>
+                    <p className="text-xs text-muted-foreground">{isClubYear ? `A fictional season from your selected ${recordedYear} records` : 'One season with this XI, every player at his peak'}</p>
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
@@ -543,11 +628,12 @@ const LineupBuilder = () => {
           title="Build Your XI | DoUKnowBall"
           description="Build your ultimate starting eleven from players who match specific criteria. Test your football knowledge across positions, teams and eras."
           howToPlay={[
-            "Choose a formation for your starting eleven",
+            "Choose Mixed clubs and nations, or Club year draft with one recorded year, then a formation",
             "Spin to get a random team assignment for each position",
-            "Name a player from that team who fits the position",
+            "Pick a matching player who fits the position; Club year draft requires that club record from your chosen year",
+            "Use Browse players in Club year draft for matching records, not a complete squad; missing data can be retried or rerolled",
             "Check the role fit, chemistry and balance tiles under the pitch: the season sim plays all three",
-            "Submit your full XI for an AI-powered evaluation and rating",
+            "Submit your full XI: Mixed uses the existing evaluation; Club year draft uses its selected records for a fictional season report",
           ]}
           examples={[
             "GK from Real Madrid: Thibaut Courtois",

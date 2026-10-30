@@ -128,6 +128,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 import { answerConsent, storedConsent } from './lib/answerConsent.mjs';
+import { noteIntlCalls, watchIntlCalls } from './lib/intlCallNote.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, process.env.DIST ?? 'dist');
@@ -346,6 +347,8 @@ async function journey(sport, arm) {
     return r.continue();
   });
   const page = await ctx.newPage();
+  /* Round 1557 (critic-1541 correction 9): an NBA journey prints whether its career met the national team's call. */
+  if (sport === 'nba') await watchIntlCalls(page);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e?.message ?? e).split('\n')[0].slice(0, 160)));
   try {
@@ -412,6 +415,7 @@ async function journey(sport, arm) {
     const seen = await page.evaluate(() => (document.body.innerText || '').replace(/\s+/g, ' ').slice(0, 200)).catch(() => 'nothing readable');
     check(arm, false, `${tag}: the walk stopped: ${String(e).split('\n')[0].slice(0, 200)}; the page reads "${seen}"${errors.length ? `; it said: ${errors.slice(0, 2).join(' | ')}` : ''}`);
   }
+  if (sport === 'nba') noteIntlCalls(tag, page);
   await ctx.close();
 }
 
@@ -501,6 +505,8 @@ async function quotaJourney(name, sport, seeds, walk) {
     return r.continue();
   });
   const page = await ctx.newPage();
+  /* Round 1557 (critic-1541 correction 9): an NBA journey prints whether its career met the national team's call. */
+  if (sport === 'nba') await watchIntlCalls(page);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e?.message ?? e).split('\n')[0].slice(0, 160)));
   const toBoard = async () => {
@@ -519,6 +525,7 @@ async function quotaJourney(name, sport, seeds, walk) {
     const seen = await page.evaluate(() => (document.body.innerText || '').replace(/\s+/g, ' ').slice(0, 200)).catch(() => 'nothing readable');
     check(name === 'kept' ? 'kept' : 'quota', false, `${tag}: the walk stopped: ${String(e).split('\n')[0].slice(0, 200)}; the page reads "${seen}"${errors.length ? `; it said: ${errors.slice(0, 2).join(' | ')}` : ''}`);
   }
+  if (sport === 'nba') noteIntlCalls(tag, page);
   await ctx.close();
 }
 const WC_KEYS = [['wc2026-predictions', '{}'], ['wc2026-show-bracket', 'false'], ['wc2026-selected-thirds', '[]'], ['wc2026-playoff-picks', '{}']];

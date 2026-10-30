@@ -1,9 +1,9 @@
 /**
  * Round 1542: a man's sim awards on his roster row, shared. The shape the NBA
  * board has drawn since Round 824 (NbaFrontOfficeBoard.tsx, the badge under a
- * roster row), lifted so the NFL board draws it from here now and the NBA,
- * MLB and NHL boards can switch to it (owed: the NBA's board is not edited in
- * the round that wrote this). The last two awards, newest first, each with
+ * roster row), lifted so the NFL board draws it from here. Round 1566: the
+ * NBA's board draws it from here too, in place of its own 10 px copy; the MLB
+ * and NHL boards can switch to it. The last two awards, newest first, each with
  * "Sim" in front, and "+N more"; the title says they are this save's sim
  * awards. The names on a roster are real, so every award says it is a sim one.
  * Nothing at all for a man with none.

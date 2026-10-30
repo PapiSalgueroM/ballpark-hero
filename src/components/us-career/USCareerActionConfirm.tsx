@@ -19,20 +19,23 @@ interface Props {
   sport: Sport;
   onConfirm: () => void;
   children: ReactElement;
+  /** Round 1569 (the lead's ruling R3): the career being cleared is retired and has a Hall of Fame card. The
+      card is drawn from this one save, so a restart takes it too, and the prompt says so. */
+  hallCard?: boolean;
 }
 
 /* Round 1346: one copy table, so the coaching retirement reuses the prompt Round 886 proved
    (one accept per opening, Cancel first, focus back without scrolling, nothing on unmount). */
-const COPY: Record<Action, (sport: Sport) => { title: string; description: string; cancel: string; confirm: string }> = {
+const COPY: Record<Action, (sport: Sport, hallCard: boolean) => { title: string; description: string; cancel: string; confirm: string }> = {
   retire: () => ({
     title: 'Retire this player?',
     description: 'Your seasons and stats stay saved, and you can start or resume coaching afterward. You cannot play another season with this player.',
     cancel: 'Keep playing',
     confirm: 'Retire this player',
   }),
-  restart: sport => ({
+  restart: (sport, hallCard) => ({
     title: 'Start a new career?',
-    description: `This deletes your saved ${sport} player and coaching career on this device. You cannot undo this.`,
+    description: `This deletes your saved ${sport} player and coaching career on this device.${hallCard ? ' The Hall of Fame card goes too.' : ''} You cannot undo this.`,
     cancel: 'Keep this career',
     confirm: 'Start new career',
   }),
@@ -44,11 +47,11 @@ const COPY: Record<Action, (sport: Sport) => { title: string; description: strin
   }),
 };
 
-export default function USCareerActionConfirm({ action, sport, onConfirm, children }: Props) {
+export default function USCareerActionConfirm({ action, sport, onConfirm, children, hallCard = false }: Props) {
   const [open, setOpen] = useState(false);
   const acceptedRef = useRef(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const copy = COPY[action](sport);
+  const copy = COPY[action](sport, hallCard);
 
   const changeOpen = (nextOpen: boolean) => {
     if (nextOpen) acceptedRef.current = false;

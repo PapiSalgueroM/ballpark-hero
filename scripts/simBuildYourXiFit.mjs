@@ -96,7 +96,11 @@
      nocap     the chemistry cap is gone.                     section 3
      tileraw   the chemistry tile shows the uncapped sum.     section 3
      nogate    the slot check takes anybody anywhere.         section 3
-     leak      World XI's season gets a half point nudge.     section 4
+     nowingback  a same side full back at wing back pays 2.   section 3
+               (Release BT: the random elevens never put a
+               primary LB at LWB, so section 3 builds those
+               elevens on purpose)
+     leak     World XI's season gets a half point nudge.     section 4
      oldcrash  the worth tiles read a report's fit unguarded. section 5
 
    Run: node scripts/simBuildYourXiFit.mjs
@@ -212,6 +216,12 @@ const CONTROLS = {
     from: "{ kind: 'chemistry', label: 'Chemistry', value: b.chemistry.value,",
     to: "{ kind: 'chemistry', label: 'Chemistry', value: b.chemistry.raw,",
     note: 'the chemistry tile shows the links before the cap while the season plays the capped number; section 3 must go red',
+  },
+  nowingback: {
+    sections: [3], file: 'xifit',
+    from: "    if (s.role === 'LWB' && s.man.position === 'LB') return 'natural';\n    if (s.role === 'RWB' && s.man.position === 'RB') return 'natural';\n",
+    to: '',
+    note: 'a left back at LWB and a right back at RWB pay next door again (PR 400 undone); section 3 must go red',
   },
   leak: {
     sections: [4], file: 'wxi',
@@ -592,8 +602,11 @@ for (const { formationName, slots, b } of seen) {
       return;
     }
     const held = s.man.position ? [s.man.position, ...(s.man.played ?? [])] : null;
-    const g = held ? gradeFit(held, s.allowed) : 'natural';
-    if (b.roleFit.grades[i] !== g) fail(`${formationName}: slot ${i} graded ${b.roleFit.grades[i]}, the shared rule says ${g}`);
+    // Build Your XI keeps same-side primary fullbacks at full value at wingback.
+    const sameSideWingback = (s.role === 'LWB' && s.man.position === 'LB')
+      || (s.role === 'RWB' && s.man.position === 'RB');
+    const g = sameSideWingback ? 'natural' : held ? gradeFit(held, s.allowed) : 'natural';
+    if (b.roleFit.grades[i] !== g) fail(`${formationName}: slot ${i} graded ${b.roleFit.grades[i]}, the Build Your XI rule says ${g}`);
     const p = b.roleFit.perMan[i];
     if (!PENALTIES.has(p) || p !== FIT_PENALTY[g]) fail(`${formationName}: slot ${i} pays ${p}, the table says ${FIT_PENALTY[g]}`);
     sum += p ?? 0;
@@ -615,6 +628,40 @@ for (const { formationName, slots, b } of seen) {
 console.log(`   material: ${noHolding} elevens with no holding midfielder, ${narrowSeen} with a narrow flank, ${familySeen} with somebody next door`);
 for (const [what, n] of [['no holding midfielder', noHolding], ['a narrow flank', narrowSeen], ['somebody next door', familySeen]]) {
   if (n < 50) fail(`only ${n} elevens with ${what}, too few for the bound on it to mean anything`);
+}
+/* Release BT (review rBTG-xi400 finding 1): PR 400's rule, built on purpose.
+   naturalXi draws each man from his own slot's set, which for LWB and RWB
+   holds no LB or RB, and the two wing back shapes have no full back slot, so
+   the random elevens above never reach the rule. Here, in each wing back
+   shape, the LWB is a primary left back and the RWB a primary right back,
+   once with no history and once with a history that does not cover the slot
+   (a centre back's), and both must read natural and pay nothing, while a
+   left back at RWB stays refused territory (wrong). */
+{
+  let reached = 0;
+  for (const f of FORM_NAMES) {
+    const roles = BY_FORMATIONS[f].map(s => s.role);
+    const lwb = roles.indexOf('LWB'), rwb = roles.indexOf('RWB');
+    if (lwb < 0 || rwb < 0) continue;
+    for (const played of [undefined, ['CB']]) {
+      const men = naturalXi(seeded(5150 + reached), f, 5150 + reached);
+      men[lwb] = { ...men[lwb], position: 'LB', played };
+      men[rwb] = { ...men[rwb], position: 'RB', played };
+      const b = breakdownOf(f, men);
+      for (const [i, who] of [[lwb, 'a left back at LWB'], [rwb, 'a right back at RWB']]) {
+        if (b.roleFit.grades[i] !== 'natural' || b.roleFit.perMan[i] !== 0) {
+          fail(`${f}: ${who}${played ? ' with a CB history' : ''} graded ${b.roleFit.grades[i]} paying ${b.roleFit.perMan[i]}, PR 400 says natural and 0`);
+        }
+      }
+      reached += 1;
+    }
+    const crossed = naturalXi(seeded(5190), f, 5190);
+    crossed[rwb] = { ...crossed[rwb], position: 'LB', played: undefined };
+    const bx = breakdownOf(f, crossed);
+    if (bx.roleFit.grades[rwb] !== 'wrong') fail(`${f}: a left back at RWB graded ${bx.roleFit.grades[rwb]}, the rule keeps him wrong`);
+  }
+  if (reached < 4) fail(`only ${reached} wing back elevens built, the rule was not reached in both wing back shapes`);
+  console.log(`   same side full back at wing back: ${reached} elevens built on purpose, each LB at LWB and RB at RWB natural and free`);
 }
 /* An eleven of one club and one country: the cap has to bind. */
 {

@@ -16,7 +16,7 @@ import type { MlbCareerState, MlbSeasonLine } from './mlbMyCareer';
 import { mlbCareerTotals, mlbLegacyOf, mlbTeamLabelOf, mlbWorkSlate } from './mlbMyCareer';
 import { MLB_BADGES, earnedBadges } from './careerBadges';
 import type { BadgeDef, MlbBadgeFacts } from './careerBadges';
-import { fanComments, followersFromFanbase, fmtFollowers, mlbSeasonHeadlines } from './careerSocial';
+import { conductOnRecord, fanComments, followersFromFanbase, fmtFollowers, mlbSeasonHeadlines } from './careerSocial';
 import { mlbMoneyWealth } from './mlbCareerMoney';
 import { US_ENGINE_SEASON, fullSeasonOf, slateOf, toSlate } from './usSeasonShape';
 
@@ -86,6 +86,7 @@ export function mlbFanComments(c: MlbCareerState): string[] {
     pos: c.pos,
     standing: c.fanbase,
     followers: fmtFollowers(mlbFollowers(c)),
+    conduct: conductOnRecord(c),
   });
 }
 

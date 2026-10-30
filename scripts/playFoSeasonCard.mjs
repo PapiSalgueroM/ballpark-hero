@@ -25,6 +25,18 @@
  *   page  no horizontal page scroll;
  *   still with the card on screen, switching tabs moves neither the page's
  *         scrollY nor the card's top (the card may grow below).
+ * Round 1566 added, the phone leftovers of 1562's reviews and the one save shape:
+ *   room  Your lines shows at least eleven men whole before its own scroll
+ *         (every man of a smaller club): the base before 1562 showed 11 of 12
+ *         at 390, and the stacked rows had halved it;
+ *   cue   where a club line stacks (below 640 px), every man after the first
+ *         is set apart from the man above by a visible rule or a 4 px gap;
+ *   badge.nfl, badge.nba  on each board's Roster box the planted man's sim
+ *         award badge is 12 px or more and not cut or held to one line (the
+ *         NBA's own 10 px copy is gone; both draw FoAwardBadge);
+ *   old   the NBA board on the same save as it was saved before the round
+ *         (its season block in named rows, the "nbaold" board) draws the card
+ *         word for word as it does on the shared shape, every tab, every size.
  * PRINTED, not held: the card's height on each tab, how many leader rows take
  * more than one line (the brief's measurement for the wrap it chose), whether
  * a club line puts its numbers under the name, and a hash of each tab's text,
@@ -34,7 +46,11 @@
  * CONTROLS (a mutated tree copy built and served on the runner; the request
  * line makes it): PLAY_FO_CARD_CONTROL=smalltext (one 10 px line put back:
  * point size red) and =truncate (the leader name's truncate class put back:
- * point cut red). Exit 0 green, 1 red or a control that fired at its point,
+ * point cut red); Round 1566: =nocue (the rule between stacked men taken
+ * out: point cue red), =shortbox (Your lines capped at 14rem on a phone
+ * again: point room red), =oldbadge (the shared badge back at 10 px and
+ * truncated: badge.nfl AND badge.nba red, which proves both boards draw it).
+ * Exit 0 green, 1 red or a control that fired at its point,
  * 2 could not run, 3 a control that did not fire as aimed.
  *
  * Pictures: with RC_OUT set, one png a board a size a tab, the card alone
@@ -53,7 +69,9 @@ import { answerConsent } from './lib/answerConsent.mjs';
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 const CONTROL = process.env.PLAY_FO_CARD_CONTROL || '';
-const CONTROLS = { smalltext: 'size', truncate: 'cut' };
+/* Round 1566 added nocue, shortbox and oldbadge; oldbadge must turn BOTH rosters red, which only happens when both
+   boards draw the one shared badge */
+const CONTROLS = { smalltext: ['size'], truncate: ['cut'], nocue: ['cue'], shortbox: ['room'], oldbadge: ['badge.nba', 'badge.nfl'] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`playFoSeasonCard: unknown control "${CONTROL}"`); process.exit(2); }
 const OUT = process.env.RC_OUT || '';
 const SIZES = [{ w: 320, h: 640 }, { w: 390, h: 844 }, { w: 1280, h: 900 }];
@@ -77,6 +95,7 @@ try {
     "export * as S from './src/lib/nflSeasonStats.ts';",
     "export * as B from './src/lib/frontOfficeGameDay.ts';",
     "export * as N from './src/lib/nbaFrontOffice.ts';",
+    "export * as T from './src/lib/nbaSeasonStats.ts';",
   ], [], 'focard'));
 } catch (e) { console.error(`playFoSeasonCard: could not bundle: ${e.message}`); process.exit(2); }
 
@@ -105,7 +124,7 @@ function plantNfl() {
       S.nflRecordWeek(lg, games.map(g => B.nflTell(g, lg.teams, lg.season, B.nflWhere(lg.week)).last).filter(Boolean), user);
       lg.week += 1;
     }
-    return { save: shape(lg, user), longest: longestOf(lg.teams, lg.freeAgents) };
+    return { save: shape(lg, user), longest: longestOf(lg.teams, lg.freeAgents), badge: wearAwards(lg, user, NFL_AWARDS) };
   }).value;
 }
 /** NBA: a league at its last round, as the board's own test plants it (NbaSeasonStats.test.tsx). */
@@ -115,8 +134,25 @@ function plantNba() {
     const lg = N.initNbaLeague(Math.random);
     const user = clubOfLongest(lg.teams);
     for (let r = 1; r < N.NBA_ROUNDS; r += 1) { N.simRound(lg, user, Math.random); lg.round += 1; }
-    return { save: shape(lg, user), longest: longestOf(lg.teams, lg.freeAgents) };
+    return { save: shape(lg, user), longest: longestOf(lg.teams, lg.freeAgents), badge: wearAwards(lg, user, NBA_AWARDS) };
   }).value;
+}
+/* Round 1566: three sim awards on the longest name of his club, for the roster badge (point badge). */
+const NFL_AWARDS = ['2024 MVP', '2025 Defensive Rookie of the Year', '2025 MVP'];
+const NBA_AWARDS = ['2024 All-League First Team', '2025 Defensive Player of the Year', '2025 MVP'];
+function wearAwards(lg, user, awards) {
+  const man = lg.teams[user].players.reduce((a, p) => (p.name.length > a.name.length ? p : a));
+  man.awards = [...awards];
+  return man.id;
+}
+/** Round 1566: the same NBA save as a save from before the round, its season block in named rows (point old). */
+function plantNbaOld(planted) {
+  const save = JSON.parse(JSON.stringify(planted.save));
+  const { club, ...rows } = M.T.nbaFoStats(save.league.stats);
+  void club;
+  save.league.stats = rows;
+  if (!rows.teams || 'clubs' in rows) throw new Error('the old plant is not named rows');
+  return { ...planted, save };
 }
 
 const BOARDS = [
@@ -139,6 +175,9 @@ const BOARDS = [
     },
   },
 ];
+/* Round 1566: the NBA board again on the same save as it was saved before the round (named rows); its card must read
+   word for word as the NBA's (point old). Planted from the NBA's plant, so it is walked after it. */
+BOARDS.push({ ...BOARDS[1], key: 'nbaold', plant: null });
 
 /* ─── page side: what is measured inside the card (installed as an init script, so no page policy can refuse it) ─── */
 function foMeasure(sel) {
@@ -218,6 +257,43 @@ function foShape(sel) {
   };
 }
 
+/**
+ * Round 1566, Your lines: how many men the box shows whole before its own scroll (from its top), and how many rows
+ * after the first are set apart from the row above by a visible rule (a top border of 1 px or more in a colour that is
+ * not transparent) or a gap of 4 px or more. Stacked: the numbers sit under the name.
+ */
+function foLines(sel) {
+  const box = document.querySelector(`${sel} [data-stats-team]`);
+  if (!box) return null;
+  box.scrollTop = 0;
+  const rows = [...box.querySelectorAll('[data-stats-team-row]')];
+  const top = box.getBoundingClientRect().top + box.clientTop;
+  const shown = rows.filter(r => { const x = r.getBoundingClientRect(); return x.top >= top - 0.5 && x.bottom <= top + box.clientHeight + 0.5; }).length;
+  const alpha = c => { const m = /^rgba?\(([^)]*)\)$/.exec(c); if (!m) return c === 'transparent' ? 0 : 1; const p = m[1].split(/[\s,/]+/).filter(Boolean); return p.length > 3 ? parseFloat(p[3]) : 1; };
+  const cued = rows.slice(1).filter((r, i) => {
+    const cs = getComputedStyle(r);
+    const rule = parseFloat(cs.borderTopWidth) >= 1 && cs.borderTopStyle !== 'none' && alpha(cs.borderTopColor) > 0;
+    return rule || r.getBoundingClientRect().top - rows[i].getBoundingClientRect().bottom >= 4;
+  }).length;
+  const first = rows[0];
+  const stacked = !!first && first.lastElementChild.getBoundingClientRect().top > first.firstElementChild.getBoundingClientRect().top + 2;
+  return { men: rows.length, shown, cued, stacked, boxH: box.clientHeight, fullH: box.scrollHeight };
+}
+/** Round 1566, the roster badge of one man: its size, and whether it is cut, held to one line or split. */
+function foBadge(id) {
+  const b = document.querySelector(`[data-roster-row="${id}"] [data-award-badge]`);
+  if (!b) return null;
+  const cs = getComputedStyle(b);
+  const hides = cs.overflowX === 'hidden' || cs.overflowX === 'clip';
+  return {
+    text: (b.textContent || '').trim(), px: parseFloat(cs.fontSize),
+    cut: b.scrollWidth > b.clientWidth + 1, held: cs.textOverflow === 'ellipsis' || (hides && cs.whiteSpace === 'nowrap'),
+    lines: Math.round(b.getBoundingClientRect().height / parseFloat(cs.lineHeight)),
+  };
+}
+/* the base build showed 11 of a 12 man club's lines at 390 before Round 1562 stacked them: the floor */
+const ROOM = 11;
+
 /* ─── the walk ─── */
 const sha = s => crypto.createHash('sha1').update(s).digest('hex').slice(0, 12);
 const some = a => a.slice(0, 3).join('; ');
@@ -225,7 +301,7 @@ const some = a => a.slice(0, 3).join('; ');
 async function newPage(browser, size) {
   const ctx = await browser.newContext({ viewport: { width: size.w, height: size.h } });
   await ctx.addInitScript(s0 => { let s = s0; Math.random = () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }, 20261562);
-  await ctx.addInitScript({ content: `window.__foMeasure = ${foMeasure.toString()}; window.__foProbe = ${foProbe.toString()}; window.__foShape = ${foShape.toString()};` });
+  await ctx.addInitScript({ content: `window.__foMeasure = ${foMeasure.toString()}; window.__foProbe = ${foProbe.toString()}; window.__foShape = ${foShape.toString()}; window.__foLines = ${foLines.toString()}; window.__foBadge = ${foBadge.toString()};` });
   const page = await ctx.newPage();
   for (const host of BLOCK) await page.route(host, r => r.abort());
   const errors = [];
@@ -276,6 +352,13 @@ async function walk(browser, board, size, planted) {
       const pm = p ? p.m.cut.length + p.m.held.length + p.m.split.length : -1;
       say('cut', !!p && p.whole && pm === 0, `${where}, ${word}: the league's longest name shown whole in a copied row (${p ? `"${p.text.slice(0, 60)}", ${p.lines} line${p.lines === 1 ? '' : 's'}` : 'no row to copy'}${p && pm ? `; clipped: ${some(p.m.cut) || 'none'}; held: ${some(p.m.held) || 'none'}; split: ${some(p.m.split) || 'none'}` : ''})`);
       const text = await page.$eval(board.root, e => e.textContent || '');
+      TEXTS.set(`${board.key}|${size.w}|${tab}`, sha(text));
+      if (tab === 'lines') {
+        const L = await page.evaluate(s => window.__foLines(s), board.root);
+        say('room', !!L && L.men > 0 && L.shown >= Math.min(L.men, ROOM), `${where}, Your lines: ${L ? `${L.shown} of ${L.men} men shown whole before the box scrolls (the floor ${Math.min(L.men, ROOM)}; the box ${L.boxH} of ${L.fullH} px)` : 'no box'}`);
+        if (L && L.stacked) say('cue', L.men > 1 && L.cued === L.men - 1, `${where}, Your lines, stacked: ${L.cued} of ${L.men - 1} men after the first set apart from the man above by a rule or a gap`);
+        else console.log(`  (printed) ${where}, Your lines: one row a man, ${L ? L.cued : 0} of ${L ? L.men - 1 : 0} set apart`);
+      }
       const h = await page.$eval(board.root, e => Math.round(e.getBoundingClientRect().height));
       console.log(`  (printed) text ${board.key} ${size.w} ${tab} ${sha(text)} ${text.length} chars; the card ${h} px tall`);
       if (tab !== 'awards') {
@@ -292,11 +375,29 @@ async function walk(browser, board, size, planted) {
   await ctx.close();
 }
 
+/* Round 1566: the planted man's sim award badge on his own Roster box, both boards drawing the one shared badge */
+async function badgeWalk(browser, board, size, planted) {
+  const { ctx, page, errors } = await newPage(browser, size);
+  const where = `${board.key} ${size.w}`;
+  await page.goto(`${BASE}/robots.txt`);
+  await page.evaluate(([k, v]) => { localStorage.clear(); localStorage.setItem(k, v); }, [board.saveKey, JSON.stringify(planted.save)]);
+  await page.goto(`${BASE}${board.route}`, { waitUntil: 'networkidle' });
+  await page.waitForTimeout(800);
+  await answerConsent(page);
+  await page.locator('button:has-text("Roster")').first().click().catch(() => {});
+  await page.waitForTimeout(600);
+  const b = await page.evaluate(id => window.__foBadge(id), planted.badge);
+  say(`badge.${board.key}`, !!b && b.px >= 12 && !b.cut && !b.held && b.text.includes('Sim 2025'), `${where}, Roster: the sim award badge ${b ? `"${b.text.slice(0, 70)}" ${b.px} px, ${b.lines} line${b.lines === 1 ? '' : 's'}${b.cut ? ', CUT' : ''}${b.held ? ', HELD to one line' : ''}` : 'not drawn'}`);
+  say('card', errors.length === 0, `${where}, Roster: no page error${errors.length ? `: ${errors[0]}` : ''}`);
+  await ctx.close();
+}
+
 /* ─── run ─── */
 if (OUT) fs.mkdirSync(OUT, { recursive: true });
 const planted = {};
+const TEXTS = new Map();
 for (const b of BOARDS) {
-  try { planted[b.key] = b.plant(); } catch (e) { console.error(`playFoSeasonCard: could not plant the ${b.key} save: ${e.stack || e.message}`); process.exit(2); }
+  try { planted[b.key] = b.key === 'nbaold' ? plantNbaOld(planted.nba) : b.plant(); } catch (e) { console.error(`playFoSeasonCard: could not plant the ${b.key} save: ${e.stack || e.message}`); process.exit(2); }
   const L = planted[b.key].longest;
   console.log(`${b.key}: planted, his club ${planted[b.key].save.myTeam}; the league's longest name is ${L.name} (${L.team}, ${L.name.length} letters)`);
   if (!L.name) { console.error(`playFoSeasonCard: the ${b.key} league has no names`); process.exit(2); }
@@ -308,6 +409,11 @@ try {
     console.log('');
     console.log(`${size.w} by ${size.h}`);
     for (const board of BOARDS) await walk(browser, board, size, planted[board.key]);
+    for (const [tab] of TABS) {
+      const a = TEXTS.get(`nba|${size.w}|${tab}`), o = TEXTS.get(`nbaold|${size.w}|${tab}`);
+      say('old', !!a && a === o, `nba ${size.w}, ${tab}: a save from before Round 1566 (named rows) draws the same card, word for word (${a ?? 'none'} and ${o ?? 'none'})`);
+    }
+    for (const board of BOARDS.filter(b => b.key !== 'nbaold')) await badgeWalk(browser, board, size, planted[board.key]);
   }
 } catch (e) {
   console.error(`playFoSeasonCard: the walk broke: ${e.stack || e.message}`);
@@ -319,8 +425,8 @@ console.log('');
 const red = [...redPoints].sort();
 if (CONTROL) {
   const aim = CONTROLS[CONTROL];
-  const ok = red.includes(aim) && red.every(p => p === aim);
-  console.log(ok ? `control ${CONTROL}: FIRED at point ${aim}` : `control ${CONTROL}: DID NOT FIRE as aimed (points red: ${red.join(', ') || 'none'})`);
+  const ok = aim.every(p => red.includes(p)) && red.every(p => aim.includes(p));
+  console.log(ok ? `control ${CONTROL}: FIRED at point ${aim.join(' and ')}` : `control ${CONTROL}: DID NOT FIRE as aimed (points red: ${red.join(', ') || 'none'})`);
   console.log(`playFoSeasonCard: ${checks} checks, ${failures} failed (control ${CONTROL})`);
   process.exit(ok ? 1 : 3);
 }

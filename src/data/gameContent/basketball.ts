@@ -1954,7 +1954,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
   '/nba-my-career': {
     intro: [
       "Draft night is where it starts: a made up prospect with your name, landing in a real NBA locker room. Where it ends is up to your summers.",
-      "Each season prints a stat line shaped by your rating, archetype, health and team quality. Each summer drops up to three decisions on your desk, one card at a time, drawn from over a hundred of them: contracts, surgeries, trade demands, tunnel fits, a rookie who idolises you, a mural in your neighborhood.",
+      "Each season prints a stat line shaped by your rating, archetype, health and team quality. Each summer drops up to three cards on your desk, one at a time, drawn from over a hundred of them: contracts, surgeries, trade demands, tunnel fits, a rookie who idolises you, a mural in your neighborhood.",
       "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Taking the under on your own rebound totals, faking load management for a bettor, tanking in March, an agent advance you were never supposed to mention. Every dirty choice raises a hidden league integrity meter, and at the top of it is an indefinite suspension and a comeback on the minimum.",
     ],
     headings: {
@@ -2004,7 +2004,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
           {
             heading: "Collecting badges in the Trophy Case",
             items: [
-              "Collect badges in the Trophy Case: 23 of them, from a first ring and Rookie of the Year to an All-Star nod, 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+              "Collect badges in the Trophy Case: 26 of them, from a first ring and Rookie of the Year to an All-Star nod, 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
             ],
           },
           {
@@ -2034,7 +2034,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
           "Sim each season for a full line: games, minutes, points, rebounds, assists, steals, blocks, awards, team result.",
           "Press 📺 Week by week instead of Play the season to watch that season one game at a time, with your stat line and your team's record after every game. It is the same season either way.",
           "Throwback careers play against unnamed teams, and the real seasons that were not a full 82 games (2011-12, 2012-13, 2019-20 and 2020-21) have no game by game view. The game tells you before you press.",
-          "Handle the summer, up to three decisions one card at a time. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
+          "Handle the summer, up to three cards one at a time. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
           "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
           "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         ],
@@ -2173,7 +2173,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       { q: "What does the legacy score reward most?", a: "MVPs and rings move it hardest, then Finals MVPs and All-NBA nods, plus longevity and points. The top verdict is the GOAT conversation, and it takes a stacked case." },
       { q: "What is in the Bank?", a: "Four tabs. Account holds your cash, a savings account that pays 2.5% a season, and a statement of your last 12 moves. Market is five prices that move every season, each with its own risk word and a read on whether it is cheap or dear against what it usually goes for. Cards is the card school on the team plane, one sitting a season, on odds the screen prints before you play. Shop is the 7 aisles. It is the same engine Soccer Career's phone runs on, in dollars." },
       { q: "Who is my rival?", a: "A generated player drafted the same year at your position. He plays his own seasons on the same scale you do, can win a ring before you and retire before you, and the head to head is kept for good. He is fictional, like your own player, so no real player's career is being simulated." },
-      { q: "How do I earn badges?", a: "By doing the thing. Each of the 23 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, an All-Star nod, twenty thousand points, five seasons with all 82 games played, a million dollars to your name. The 30 point season badge sits a long way under the single season scoring record, Wilt Chamberlain's 50.4 a game in 1961-62, which is where it belongs." },
+      { q: "How do I earn badges?", a: "By doing the thing. Each of the 26 badges is a test on the facts of your career, checked every time you open the case: a ring, an MVP, an All-Star nod, twenty thousand points, five seasons with all 82 games played, a million dollars to your name. The 30 point season badge sits a long way under the single season scoring record, Wilt Chamberlain's 50.4 a game in 1961-62, which is where it belongs." },
       { q: "Is my career saved?", a: "Yes, progress auto saves in your browser. One career at a time, and starting fresh means retiring first." },
     ],
   },

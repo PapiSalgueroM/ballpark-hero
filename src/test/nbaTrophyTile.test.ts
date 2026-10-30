@@ -115,3 +115,32 @@ describe("Round 1112: the lesser awards are not an empty case", () => {
     expect(NBA_CAREER_SPORT.honours(c).find(r => r.label === 'in other awards')?.n).toBe(3);
   });
 });
+
+/* Round 1557: a medal from a summer with the national team lives in the summer's row, never in a season's
+   awards, so the tile adds it through a row of its own: tile = rings plus the case plus the medals. */
+describe('Round 1557: a medal from a summer with the national team', () => {
+  const went = (year: number, edition: string, place: string) => ({ year, edition, went: true, age: 26, place, games: 6, wins: 4, avg: { pts: 18 }, hurt: false });
+
+  it('is counted once on the tile, and a summer with no medal changes nothing', () => {
+    const c = careerWith([['All-Star'], []], { allStars: 1 });
+    const before = trophyTile(c);
+    expect(NBA_CAREER_SPORT.honours(c).some(r => /medal/.test(r.label))).toBe(false);
+    const noMedal = { ...c, intl: { v: 1, summers: [{ year: 2027, edition: 'wc-2027', went: false }, went(2028, 'oly-2028', 'quarter')] } };
+    expect(trophyTile(noMedal)).toEqual(before);
+    expect(NBA_CAREER_SPORT.honours(noMedal)).toEqual(NBA_CAREER_SPORT.honours(c));
+    const medal = { ...c, intl: { v: 1, summers: [went(2028, 'oly-2028', 'gold')] } };
+    const inCase = trophyLines(medal.seasons).reduce((n, l) => n + l.n, 0);
+    expect(trophyLines(medal.seasons)).toEqual(trophyLines(c.seasons));
+    expect(trophyTile(medal).value).toBe(`${medal.rings + inCase + 1} honours`);
+    expect(NBA_CAREER_SPORT.honours(medal).filter(r => /medal/.test(r.label))).toEqual([{ label: 'international medal', n: 1 }]);
+    const two = { ...c, intl: { v: 1, summers: [went(2027, 'wc-2027', 'bronze'), went(2028, 'oly-2028', 'gold')] } };
+    expect(trophyTile(two).value).toBe(`${two.rings + inCase + 2} honours`);
+  });
+
+  it('the old saves draw the tile they drew: none of them carries a summer', () => {
+    for (const { key, save } of fixture.entries) {
+      expect((save as { intl?: unknown }).intl, key).toBeUndefined();
+      expect(NBA_CAREER_SPORT.honours(save).some(r => /medal/.test(r.label)), key).toBe(false);
+    }
+  });
+});
