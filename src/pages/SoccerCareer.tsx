@@ -670,7 +670,7 @@ function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept
 }
 
 /* ─── Newspaper Card ─── */
-function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArticle[]; seasonKey: number; onContinue: () => void }) {
+function NewspaperCard({ articles, seasonKey, onContinue, continueRef }: { articles: NewsArticle[]; seasonKey: number; onContinue: () => void; continueRef: React.RefObject<HTMLButtonElement> }) {
   const typeColor = (t: string) => {
     switch (t) {
       case "positive": return "text-emerald-400";
@@ -724,7 +724,7 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
         </div>
         </div>
       ))}
-      <Button onClick={onContinue} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
+      <Button ref={continueRef} onClick={onContinue} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
         Continue to Season Summary →
       </Button>
     </div>
@@ -3767,10 +3767,13 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const [watchRow, setWatchRow] = useState<SeasonRecord | null>(null);
   /* Round 1046: the list of seasons he can watch again, opened from Latest Events */
   const [replaysOpen, setReplaysOpen] = useState(false);
+  const centreOpener = useRef<HTMLElement | null>(null);
+  const newspaperContinueRef = useRef<HTMLButtonElement>(null);
+  const returnCentreFocus = useRef(false);
   const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
   /* Round 1046: where he stopped watching a season is kept in this browser only, never in the save. The Resume chip
      (and the rule for whose season a kept place is) loads only when a place is kept at all: one storage read here. */
-  const [Chip, setChip] = useState<ComponentType<{ career: CareerState; at: number; onOpen: (row: SeasonRecord) => void }> | null>(null);
+  const [Chip, setChip] = useState<ComponentType<{ career: CareerState; at: number; onOpen: (row: SeasonRecord, opener?: HTMLButtonElement) => void }> | null>(null);
   const [chipAt, setChipAt] = useState(0);
   const peekResume = () => {
     setChipAt(n => n + 1);
@@ -3780,7 +3783,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(peekResume, []);
-  const closeCentre = () => { setCentreFor(null); setWatchRow(null); setReplaysOpen(false); peekResume(); };
+  const closeCentre = () => { returnCentreFocus.current = true; setCentreFor(null); setWatchRow(null); setReplaysOpen(false); peekResume(); };
+  useLayoutEffect(() => {
+    if (!returnCentreFocus.current || centreFor !== null || watchRow !== null || replaysOpen) return;
+    returnCentreFocus.current = false;
+    const target = centreOpener.current?.isConnected ? centreOpener.current : newspaperContinueRef.current;
+    centreOpener.current = null;
+    if (target?.isConnected) target.focus({ preventScroll: true });
+  }, [centreFor, watchRow, replaysOpen]);
   useEffect(() => {
     /* a press that opened nothing (a ban year) is forgotten at the next
        season start, and a new career never inherits it */
@@ -4024,7 +4034,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           )}
           {/* OVERLAY: Newspaper Articles */}
           {career.phase === "newspaper" && career.pendingNews.length > 0 && (
-            <NewspaperCard articles={visibleCareer.pendingNews} seasonKey={career.seasons.length} onContinue={onDismissNewspaper} />
+            <NewspaperCard articles={visibleCareer.pendingNews} seasonKey={career.seasons.length} onContinue={onDismissNewspaper} continueRef={newspaperContinueRef} />
           )}
 
           {/* OVERLAY: Season Summary */}
@@ -4037,7 +4047,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Round 1045: the season just summed up, match by match. Only a
               season he played: a ban, prison or doping year has nothing to watch. */}
           {career.phase === "season_summary" && career.pendingSummary && career.pendingSummary.type === "playing" && career.pendingSummary.apps > 0 && (
-            <Button variant="outline" onClick={() => setWatchRow(career.pendingSummary)} className="w-full h-10 text-sm font-semibold" data-watch-week-by-week>
+            <Button variant="outline" onClick={event => { centreOpener.current = event.currentTarget; setWatchRow(career.pendingSummary); }} className="w-full h-10 text-sm font-semibold" data-watch-week-by-week>
               📺 Watch it week by week
             </Button>
           )}
@@ -4585,11 +4595,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 className="text-[11px] font-bold text-emerald-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📈 Ratings</button>
               <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
                 className="min-h-11 text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
-              {career.seasons.some(r => r.type === "playing" && r.apps > 0) && <button type="button" onClick={() => setReplaysOpen(true)} data-open-season-replays
+              {career.seasons.some(r => r.type === "playing" && r.apps > 0) && <button type="button" onClick={event => { centreOpener.current = event.currentTarget; setReplaysOpen(true); }} data-open-season-replays
                 className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📺 Season replays</button>}
             </div>
           </div>
-          {Chip && <Chip career={career} at={chipAt} onOpen={setWatchRow} />}
+          {Chip && <Chip career={career} at={chipAt} onOpen={(row, opener) => { centreOpener.current = opener ?? null; setWatchRow(row); }} />}
           <div className="mt-2 space-y-1">
             {visibleCareer.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
@@ -4701,7 +4711,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 match by match. Last in DOM order, so every test and walker that
                 presses the bar's first button still presses Next Season. */}
             {career.phase === "playing" && (
-              <Button onClick={onWeekByWeek} variant="outline" aria-label="Week by week: watch your season match by match" className="h-12 w-11 shrink-0 px-0 text-base font-bold sm:w-auto sm:px-3 sm:text-sm gap-1.5" data-week-by-week>
+              <Button onClick={event => { centreOpener.current = event.currentTarget; onWeekByWeek(); }} variant="outline" aria-label="Week by week: watch your season match by match" className="h-12 w-11 shrink-0 px-0 text-base font-bold sm:w-auto sm:px-3 sm:text-sm gap-1.5" data-week-by-week>
                 <span aria-hidden="true">📺</span>
                 <span className="hidden sm:inline">Week by week</span>
                 <span className="hidden sm:inline rounded bg-emerald-500/20 px-1 text-[9px] font-black text-emerald-400">NEW</span>
