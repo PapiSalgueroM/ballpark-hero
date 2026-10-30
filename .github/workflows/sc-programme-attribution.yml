@@ -1,0 +1,75 @@
+name: Soccer Programme historical input attribution qualification
+on:
+  push:
+    branches: [codex/sc-programme-historical-inputs-fixed-20261030]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sc-programme-attribution-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  qualify:
+    if: github.ref == 'refs/heads/codex/sc-programme-historical-inputs-fixed-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: External evidence and source binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/sc-attribution-${GITHUB_RUN_ID}-a${GITHUB_RUN_ATTEMPT}"
+          mkdir "$out"
+          echo "SC_ATTRIBUTION_OUT=$out" >> "$GITHUB_ENV"
+          printf '%s  %s\n' c03c22de3ce27d53237d526f4546d50bc85ad12817a74afd76bc3154a9c01b9a scripts/qa/proveProgrammeAttribution.mjs | sha256sum --check
+          printf '%s  %s\n' 17f9a051993cfe964f17019baa6f9d4d9102e0f2487c94e63f614d0cc1731094 qa/sc-programme-attribution-v1/CONTRACT.json | sha256sum --check
+          printf '%s  %s\n' 1ccfedbcf3efe3008ac26fb631cac2309b803966c1d3e95fd2e240720fbac06e scripts/simCareerProgramme.mjs | sha256sum --check
+          printf '%s  %s\n' 208700df982d962f686f4c96b0fb66f16198d9f7b724dc4bcd96f446eb905484 scripts/lib/careerProgrammePoolAttribution.mjs | sha256sum --check
+      - name: Ordinary locked dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw=0
+          npm ci --no-audit --no-fund > "$SC_ATTRIBUTION_OUT/npm-ci.stdout.log" 2> "$SC_ATTRIBUTION_OUT/npm-ci.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$SC_ATTRIBUTION_OUT/npm-ci.exit"
+          exit "$raw"
+      - name: Cheap source syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in scripts/simCareerProgramme.mjs scripts/lib/careerProgrammePoolAttribution.mjs scripts/qa/proveProgrammeAttribution.mjs; do
+            node --check "$file"
+          done > "$SC_ATTRIBUTION_OUT/syntax.stdout.log" 2> "$SC_ATTRIBUTION_OUT/syntax.stderr.log"
+      - name: Actual types, preserved scopes, six source refusals and eight full normal runs
+        shell: bash
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: |
+          set -euo pipefail
+          raw=0
+          SIM_OFFLINE_RECEIPT="$SC_ATTRIBUTION_OUT/controller.transport.jsonl" node scripts/qa/proveProgrammeAttribution.mjs > "$SC_ATTRIBUTION_OUT/controller.stdout.log" 2> "$SC_ATTRIBUTION_OUT/controller.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$SC_ATTRIBUTION_OUT/controller.exit"
+          exit "$raw"
+      - name: Retain original evidence on success or failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-programme-attribution-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/sc-attribution-${{ github.run_id }}-a${{ github.run_attempt }}/
+            !${{ runner.temp }}/sc-attribution-${{ github.run_id }}-a${{ github.run_attempt }}/matched-source/**
+            !${{ runner.temp }}/sc-attribution-${{ github.run_id }}-a${{ github.run_attempt }}/**/tmp/**
+          if-no-files-found: error
+          retention-days: 14
