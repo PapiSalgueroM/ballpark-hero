@@ -20,7 +20,9 @@
  *
  * WHAT IT MEASURES, and none of it is "the page did not crash".
  *   1. It reaches a career with a QUALIFIED Champions League campaign that
- *      contains at least one two legged tie. If it never does, that is a
+ *      contains at least one two legged tie settled on aggregate (since Round
+ *      1604; an extra time tie alone left the noagg control nothing to fire
+ *      on). If it never does, that is a
  *      COVERAGE FAILURE and it says so loudly rather than passing quietly
  *      having checked nothing, which is the failure mode that let Round 563
  *      ship unseen in the first place.
@@ -325,6 +327,11 @@ async function stepOnce(page) {
       phase: before.phase, age: before.age, action: label,
       options: usable.map(b => b.textContent.trim().slice(0, 30)),
       qualified: !!(u && u.qualified && (u.matches || []).length),
+      /* Round 1604: a tie settled on aggregate, the one case Round 563 fixed
+         and the only one the noagg control can turn red. A campaign whose only
+         tie went to extra time (seed 20260914 after the 1604 re-record) checks
+         the card but leaves that control with nothing to fire on. */
+      aggTie: !!(u && (u.matches || []).some(m => m.leg === 2 && m.aggFor !== undefined && m.decidedBy === 'aggregate')),
       retired: !!after.retired,
       cardMounted: !![...document.querySelectorAll('span,div')].find(e => e.textContent.trim() === '⭐ Champions League'),
     };
@@ -347,7 +354,7 @@ async function playOneCareer(seed) {
     if (r.phase === 'transfer_window') say(`window @${r.age}: chose "${r.action}" from [${(r.options || []).join(' / ')}]`);
     if (r.action === 'STUCK') { stuckPhases.add(r.phase || 'unknown'); if (stuckPhases.size > 3) break; }
     if (r.retired) { say('the career retired before a campaign'); break; }
-    if (r.qualified && r.cardMounted) { reached = true; break; }
+    if (r.qualified && r.aggTie && r.cardMounted) { reached = true; break; }
   }
   /* The campaign can exist while the card is not mounted, because some
      phases do not render it. Advance a little to bring it on screen. */
@@ -355,7 +362,7 @@ async function playOneCareer(seed) {
     for (let extra = 0; extra < 12 && steps < MAX_STEPS; extra++, steps++) {
       const r = await stepOnce(page);
       trail.push(r);
-      if (r.qualified && r.cardMounted) { reached = true; break; }
+      if (r.qualified && r.aggTie && r.cardMounted) { reached = true; break; }
       if (r.retired || r.action === 'STUCK') break;
     }
   }
