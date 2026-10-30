@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+treediff: git diff --stat af22e8a382defc9d4cf252dbcc085d81032607fe HEAD -- . ':!.rc'; test "$(git diff --name-only af22e8a382defc9d4cf252dbcc085d81032607fe HEAD -- . ':!.rc' | tr '\n' ' ')" = "scripts/data/clubNamesakes1584/owedToChat1587.json scripts/playBingoClubRules.mjs " && echo "only the owed list and the Bingo walk differ from af22e8a38"
+dash-diff: node .rc/x/dashScan.mjs diff 158969218
+dash-log: node .rc/x/dashScan.mjs log 158969218
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+gen-owed: node scripts/qa/genArsenalOwed1587.mjs --check
