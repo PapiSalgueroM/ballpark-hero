@@ -1,0 +1,7 @@
+cvp-capall exit=1 132s | simCustomClubValues: 25 checks, 4 failures (sections 1, 2) (control capall)
+cvp-overprice exit=1 138s | simCustomClubValues: 25 checks, 2 failures (sections 1) (control overprice)
+cvp-default exit=0 140s | simCustomClubValues: 25 checks, 0 failures
+cvp-seed1 exit=0 139s | simCustomClubValues: 25 checks, 0 failures
+cvp-seed2 exit=0 135s | simCustomClubValues: 25 checks, 0 failures
+cvp-seed3 exit=0 135s | simCustomClubValues: 25 checks, 0 failures
+cv-noerabake exit=1 98s | simCustomClubValues: 25 checks, 1 failure (sections 1) (control noerabake)

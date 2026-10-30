@@ -1,0 +1,7 @@
+cvp-capall: node .rc/x/addProbe.mjs c && CUSTOM_VALUE_CONTROL=capall node scripts/cvProbe-c.mjs
+cvp-default: node .rc/x/addProbe.mjs d && node scripts/cvProbe-d.mjs
+cvp-overprice: node .rc/x/addProbe.mjs o && CUSTOM_VALUE_CONTROL=overprice node scripts/cvProbe-o.mjs
+cvp-seed1: node .rc/x/addProbe.mjs s1 && SIM_SEED=1 node scripts/cvProbe-s1.mjs
+cvp-seed2: node .rc/x/addProbe.mjs s2 && SIM_SEED=2 node scripts/cvProbe-s2.mjs
+cvp-seed3: node .rc/x/addProbe.mjs s3 && SIM_SEED=3 node scripts/cvProbe-s3.mjs
+cv-noerabake: CUSTOM_VALUE_CONTROL=noerabake node scripts/simCustomClubValues.mjs
