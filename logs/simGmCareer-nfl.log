@@ -1,0 +1,39 @@
+1) the default path: a desk on save graded through the host is the base's, season for season, and gains only seat and xp
+   95 checkpoints over 48 seasons against 6d2d7a7d (0 moved); fired at ["7:3"]; digest 01d932fd8b0b7c3df6ef50b600d6f0359f3e72c9
+2) the verdict on every club's real season: desk off it is today's two calls, desk on it records once and pays once
+   1152 desk off closes equal today's two calls; 384 desk on closes recorded once (42599 XP paid, the median club 111 a season), 384 reloads paid nothing, 384 older saves started on time
+   OWNERSHIP: 211 losing and 173 winning club seasons walked at levels 0 to 5; from trust 60 a season costs badly 28, 26, 24, 22, 20, 18; missed 16, 15, 14, 13, 12, 10; trust 16, missed: level 0 fired (0), level 1 keeps the job on 1
+2t) the rule of thumb: three bad years from trust 60 fire Ownership levels 0 to 4 on the grades alone and not 5, and the press can change that
+   from trust 60, three badly seasons of BUF: level 0 fired after 3, level 1 fired after 3, level 2 fired after 3, level 3 fired after 3, level 4 fired after 3, level 5 kept; with "Say the right, empty things" after each: kept at levels 4 (level 4: 60 > 40 > 41 > 21 > 22 > 2 > 3)
+3) Media: every gamble lands exactly one step more often a level, the safe answers and the tilt never move, one draw an answer
+   4 pressers, 6 gambles and 6 safe answers at levels 0 to 5; landed of 1000: Intro 700/730/760/790/820/850; Intro 500/530/560/590/620/650; Podium 600/630/660/690/720/750; Scrum 450/480/510/540/570/600; Trade 700/730/760/790/820/850; Trade 550/580/610/640/670/700
+8) the words: never empty, no dash, no quote, no placeholder, no player's name, a closed line never says sit, every box fits
+   24106 strings and 3976 boxes read over 4 leagues, every roster name checked
+4) the market after real firings: every club graded as a GM's club, the first out of work screen and the next two
+   MEASURE 20 seeds x 12 seasons: 475 firings
+   first screen with the host's rule: offers 475 (100.0%), quiet 0 (0.0%), closed 0 (0.0%); first calls 283
+   first screen on the raw feed:      offers 192 (40.4%), quiet 228 (48.0%), closed 55 (11.6%)
+   of the screens with offers, last calls: host 87 of 475 (18.3%), raw 32 of 192 (16.7%)
+   re hired within three feeds (firings with two seasons left to read, 377): host 377 (100.0%), raw 209 (55.4%); 249 later feeds read
+   ASSERTED on 475 first feeds (311 straight after a badly season): never the club that fired him, no top tier after badly, every ask for next season, keyed
+5) taking a seat: 487 offers taken (487 with a planted depth chart), 475 followed through the draft and the summer, 0 refused
+6) a season out: the league plays a whole season without him, his record gains a year out and nothing else, and refusals touch nothing
+   60 years out over 20 seeds (0 stopped early); refusals: 20 in a seat, 20 closed, 20 last calls
+   drafted men on the other clubs' rosters after the years out: away 1071, idle GM 1080 (ratio 0.992); mean roster after a summer: away 52.26, idle GM 52.24
+   the old club drafted 8 men in its 60 years out (printed, not asserted: 2, 0, 6 and 4 on the NHL's four seed sets, r1559-fx2)
+   drafts out replayed against the board's draft with nobody in the chair: 60, 0 differed
+   rounds out replayed against the board's round with no user club: 1020, 0 differed
+7) whole careers: the save, the record and the counters agree at every step across firings, takes and years out
+   10 careers, 62 seasons run: 22 sackings forced, 20 firings, 11 seats taken, 22 years out, 7 closed for good; 168 checkpoints
+9) the bands: the firing rate, the offers, re hiring, the closed share and the XP pace, seed by seed against the calibrated bands
+   S9 nfl seeds 1-20: fireRate mean 0.0618 sd 0.0084 se 0.0019 min 0.0469 max 0.0755 over 20 seeds
+   S9 nfl seeds 1-20: twoPlus mean 0.0366 sd 0.0453 se 0.0101 min 0.0000 max 0.1667 over 20 seeds
+   S9 nfl seeds 1-20: meanOffers mean 1.0366 sd 0.0453 se 0.0101 min 1.0000 max 1.1667 over 20 seeds
+   S9 nfl seeds 1-20: hired3 mean 1.0000 sd 0.0000 se 0.0000 min 1.0000 max 1.0000 over 20 seeds
+   S9 nfl seeds 1-20: closedNext mean 0.5082 sd 0.0977 se 0.0218 min 0.3043 max 0.6957 over 20 seeds
+   S9 nfl seeds 1-20: xpMean mean 111.8107 sd 1.6678 se 0.3729 min 107.5130 max 114.3620 over 20 seeds
+   S9 nfl seeds 1-20: xpMedian 95 over 7680 graded club seasons; hostXpHelp's .500 season that meets the ask pays 110 (ratio 0.864)
+   nfl bands held on 20 seeds: fireRate 0.0618 in [0.0524,0.0675]; twoPlus 0.0366 in [0.0058,0.0767]; meanOffers 1.0366 in [1.0058,1.0767]; closedNext 0.5082 in [0.4329,0.6257]; xpMean 111.8107 in [110.69,113.35]
+10) the lift: the shared legacy read, season counted rule, retained step and take equal what the NFL wrote inline
+   1536 legacy reads equal the old body and the nfl wrapper; 15 season counted rows; 108 retained rows through both summers' old step; the take: 950 moves (475 desk off), 475 refusals
+simGmCareer: all checks passed (nfl)

@@ -1,0 +1,9 @@
+1) the page carries the boxes and the loader, and not one module of the career kit
+   113 files reached from src/pages/FrontOffice.tsx, 56 dynamic edges seen, 13 kit modules and 5 season modules checked absent
+3) NHL row: /nhl-front-office carries the boxes and its loader, and not one module of any career kit
+   104 files reached from src/pages/NhlFrontOffice.tsx, 53 dynamic edges seen, 16 kit modules and 0 season modules checked absent
+2) the Career box drawn before the kit is the box drawn with it, save by save (the GM level box reads the desk alone, the same on both)
+   55296 saves over 3 leagues: the records differ in 30348, the kit's tier is not the bottom one in 39744, a last grade in 9216, a stored record read as itself in 13824
+4) NHL row: the Career box drawn before the kit is the box the NHL kit draws, save by save
+   55296 saves over 3 leagues: the records differ in 31584, the kit's tier is not the bottom one in 41472, a last grade in 9216, a stored record read as itself in 13824
+simFoLazyDesk: all checks passed

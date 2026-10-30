@@ -1,0 +1,11 @@
+vitest-boards exit=0 26s |    Duration  25.05s (transform 5.00s, setup 559ms, collect 11.02s, tests 36.90s, environment 4.39s, prepare 1.09s)
+vitest-round exit=0 44s |    Duration  43.08s (transform 5.13s, setup 1.05s, collect 9.56s, tests 60.82s, environment 6.73s, prepare 1.39s)
+simFoLazyDesk exit=0 27s | simFoLazyDesk: all checks passed
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+tsc exit=0 98s | 
+simHarnessAnchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simGmGameDay exit=0 71s | simGmGameDay: 462 checks, 0 failed
+fob-check exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 64 controls is in the board exactly once.
+simGmCareer-nhl exit=0 30s | simGmCareer: all checks passed (nhl)
+simGmCareer-nfl exit=0 166s | simGmCareer: all checks passed (nfl)
