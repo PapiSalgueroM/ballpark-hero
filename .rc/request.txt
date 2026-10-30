@@ -1,0 +1,6 @@
+#!serial
+# Supplemental immutable-main baseline only. No final-F or1022-default credit.
+prepare: bash .rc/default-support.sh prepare
+playLiveTicker: bash .rc/default-support.sh run playLiveTicker.mjs
+playCmHubLanding: bash .rc/default-support.sh run playCmHubLanding.mjs
+finish: bash .rc/default-support.sh finish
