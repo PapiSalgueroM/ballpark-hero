@@ -1,0 +1,9 @@
+simCmLevelReads exit=0 2s | simCmLevelReads: 8 checks, 0 failures
+ctl-xi exit=1 2s | simCmLevelReads: 8 checks, 2 failures (control xi)
+ctl-anchor exit=1 2s | simCmLevelReads: 8 checks, 2 failures (control anchor)
+ctl-scale exit=1 2s | simCmLevelReads: 8 checks, 1 failures (control scale)
+ctl-exit exit=1 2s | simCmLevelReads: 8 checks, 1 failures (control exit)
+ctl-ceiling exit=1 2s | simCmLevelReads: 8 checks, 1 failures (control ceiling)
+ctl-nostamp exit=1 3s | simCmLevelReads: 8 checks, 4 failures (control nostamp)
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 54s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

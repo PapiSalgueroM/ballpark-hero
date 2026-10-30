@@ -1,0 +1,9 @@
+simCmLevelReads: node scripts/simCmLevelReads.mjs
+ctl-xi: CM_LEVEL_READS_CONTROL=xi node scripts/simCmLevelReads.mjs
+ctl-anchor: CM_LEVEL_READS_CONTROL=anchor node scripts/simCmLevelReads.mjs
+ctl-scale: CM_LEVEL_READS_CONTROL=scale node scripts/simCmLevelReads.mjs
+ctl-exit: CM_LEVEL_READS_CONTROL=exit node scripts/simCmLevelReads.mjs
+ctl-ceiling: CM_LEVEL_READS_CONTROL=ceiling node scripts/simCmLevelReads.mjs
+ctl-nostamp: CM_LEVEL_READS_CONTROL=nostamp node scripts/simCmLevelReads.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
