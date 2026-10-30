@@ -1,0 +1,9 @@
+vitest exit=0 12s |    Duration  10.50s (transform 3.83s, setup 491ms, collect 10.25s, tests 12.42s, environment 2.74s, prepare 670ms)
+cards-linkalways exit=1 57s | simCmPlayerCard: control linkalways FIRED, 3 failures in section markup (3 in all) (56s)
+simHarnessAnchors exit=0 64s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simSquadRows exit=0 3s | simSquadRows: all green
+simStatsCentre exit=0 5s | ALL STATS CENTRE CHECKS PASSED
+tsc exit=0 94s | 
+simStaleChunk exit=0 1s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+simEarlyReturnScope exit=0 11s | simEarlyReturnScope: all green
+simCmLeagueBook exit=0 70s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (70s)
