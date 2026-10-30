@@ -1,0 +1,25 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/oldLedgerProbe.test.ts[2m > [22m[2mold ledger probe[2m > [22m[2mphase write
+[22m[39mPROBE write offers 58, window summer, squad 20
+PROBE write bought [["Bukayo Saka","Arsenal",24],["Cole Palmer","Chelsea",24],["Declan Rice","Arsenal",27]], ledger records 6, seed 347063080
+PROBE write-same-tree Bukayo Saka sold by Arsenal: at seller [], in my squad ["24/91"]
+PROBE write-same-tree Cole Palmer sold by Chelsea: at seller [], in my squad ["24/91"]
+PROBE write-same-tree Declan Rice sold by Arsenal: at seller [], in my squad ["27/91"]
+PROBE write-same-tree RESURRECTED 0 of 3
+PROBE write-same-tree REC Erling Haaland owned from Manchester City (born 2000) to Real Madrid: at origin 0, at owner 1
+PROBE write-same-tree REC Felix Nmecha owned from Borussia Dortmund (born 2000) to Inter Milan: at origin 0, at owner 1
+PROBE write-same-tree REC Amad Diallo owned from Manchester United (born 2002) to Juventus: at origin 0, at owner 1
+PROBE write-same-tree REC Bukayo Saka owned from Arsenal (born 2002) to Everton: at origin 0, at owner 1
+PROBE write-same-tree REC Cole Palmer owned from Chelsea (born 2002) to Everton: at origin 0, at owner 1
+PROBE write-same-tree REC Declan Rice owned from Arsenal (born 1999) to Everton: at origin 0, at owner 1
+PROBE write-same-tree RECORDS 6, still listed at the club they left 0
+
+ [32m✓[39m src/test/oldLedgerProbe.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 133[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 11:58:21
+[2m   Duration [22m 2.59s[2m (transform 1.39s, setup 68ms, collect 1.68s, tests 133ms, environment 296ms, prepare 125ms)[22m
+

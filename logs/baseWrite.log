@@ -1,0 +1,27 @@
+Preparing worktree (detached HEAD 14a9af7042)
+HEAD is now at 14a9af7042 Board: the owner asks both lanes to lock in on Soccer Career and Club Manager; his eight CM asks and a proposed split
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/base[39m
+
+[90mstdout[2m | src/test/oldLedgerProbe.test.ts[2m > [22m[2mold ledger probe[2m > [22m[2mphase write
+[22m[39mPROBE write offers 62, window summer, squad 20
+PROBE write bought [["Bukayo Saka","Arsenal",24],["Cole Palmer","Chelsea",23],["Declan Rice","Arsenal",26]], ledger records 6, seed 2118007532
+PROBE write-same-tree Bukayo Saka sold by Arsenal: at seller [], in my squad ["24/91"]
+PROBE write-same-tree Cole Palmer sold by Chelsea: at seller [], in my squad ["23/91"]
+PROBE write-same-tree Declan Rice sold by Arsenal: at seller [], in my squad ["26/91"]
+PROBE write-same-tree RESURRECTED 0 of 3
+PROBE write-same-tree REC Erling Haaland owned from Manchester City (born 2001) to Real Madrid: at origin 0, at owner 1
+PROBE write-same-tree REC Christian Pulisic owned from AC Milan (born 1999) to Inter Milan: at origin 0, at owner 1
+PROBE write-same-tree REC Tijjani Reijnders owned from Al-Qadsiah (born 1999) to Inter Milan: at origin 0, at owner 1
+PROBE write-same-tree REC Bukayo Saka owned from Arsenal (born 2002) to Everton: at origin 0, at owner 1
+PROBE write-same-tree REC Cole Palmer owned from Chelsea (born 2003) to Everton: at origin 0, at owner 1
+PROBE write-same-tree REC Declan Rice owned from Arsenal (born 2000) to Everton: at origin 0, at owner 1
+PROBE write-same-tree RECORDS 6, still listed at the club they left 0
+
+ [32m✓[39m src/test/oldLedgerProbe.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 125[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 11:58:10
+[2m   Duration [22m 2.58s[2m (transform 1.39s, setup 73ms, collect 1.66s, tests 125ms, environment 313ms, prepare 116ms)[22m
+

@@ -1,0 +1,5 @@
+baseWrite exit=0 4s |    Duration  2.58s (transform 1.39s, setup 73ms, collect 1.66s, tests 125ms, environment 313ms, prepare 116ms)
+baseReadBase exit=0 4s |    Duration  2.61s (transform 1.38s, setup 70ms, collect 1.66s, tests 173ms, environment 305ms, prepare 115ms)
+headReadBase exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/oldLedgerProbe.test.ts,title=src/test/oldLedgerProbe.test.ts > old ledger probe > phase read,line=82,c
+headWrite exit=0 3s |    Duration  2.59s (transform 1.39s, setup 68ms, collect 1.68s, tests 133ms, environment 296ms, prepare 125ms)
+headReadHead exit=0 3s |    Duration  2.63s (transform 1.39s, setup 70ms, collect 1.67s, tests 182ms, environment 299ms, prepare 127ms)
