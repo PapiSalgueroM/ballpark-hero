@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+walk-builder: PHASE=fixed PORT=4199 node .rc/x/walk1604.mjs
+walk-review: SHOTS=0 node .rc/x/walkRev1604.mjs
+playSoccerLanding: PORT=4197 ENGINES=chromium node scripts/playSoccerLanding.mjs
+playStartingXi: ENGINES=chromium node scripts/playStartingXi.mjs
+playTwoTabs: PORT=4198 ENGINES=chromium node scripts/playTwoTabs.mjs
+playTranslatedPage: ENGINES=chromium node scripts/playTranslatedPage.mjs
