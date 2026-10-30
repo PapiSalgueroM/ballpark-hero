@@ -1,0 +1,16 @@
+NEGATIVE CONTROL mathrandom: the pot draw uses Math.random (section 6 must fail)
+section 6: one engine and the stream
+  FAIL [6] career 2 played wc-2006 two ways
+  FAIL [6] career 10 played wc-2014 two ways
+  FAIL [6] career 12 played oly-2016 two ways
+  FAIL [6] career 15 played wc-2019 two ways
+  FAIL [6] career 17 played oly-2021 two ways
+  FAIL [6] career 20 played oly-2024 two ways
+  FAIL [6] career 23 played wc-2027 two ways
+  FAIL [6] career 24 played oly-2028 two ways
+  FAIL [6] career 27 played wc-2031 two ways
+  FAIL [6] career 31 played wc-2035 two ways
+  FAIL [6] career 35 played wc-2039 two ways
+  FAIL [6] career 39 played wc-2043 two ways
+  1660 src files fenced, 60 tournaments played twice, Math.random calls 5817
+simCareerIntl: control mathrandom FIRED (section 6, 42 failures)

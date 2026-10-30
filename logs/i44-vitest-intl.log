@@ -1,0 +1,249 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/careerIntl.test.ts [2m([22m[2m30 tests[22m[2m)[22m[33m 2965[2mms[22m[39m
+   [33m[2m✓[22m[39m the tournament[2m > [22mplays every shape to one champion, never level [33m 1631[2mms[22m[39m
+   [33m[2m✓[22m[39m the tournament[2m > [22mplays every shape to one champion, groups may draw [33m 923[2mms[22m[39m
+[90mstdout[2m | src/test/nbaCareerIntl.test.ts[2m > [22m[2mhis line and his medals[2m > [22m[2mscales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1
+[22m[39mnbaIntlLine means over 4000 keyed games: pts 15.011, reb 3.754, ast 3.103
+
+ [32m✓[39m src/test/nbaCareerIntl.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 347[2mms[22m[39m
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+[90mstdout[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39musCareerIntlBoard: 19 fixed NBA fixture saves meet no call and draw the same board; 0 meet one
+
+[90mstderr[2m | src/test/usCareerIntlBoard.test.tsx[2m > [22m[2mthe board fixture's fixed NBA saves with the bind mounted[2m > [22m[2mdraw the board they drew without it where no call is met, and a raised save meets the beat
+[22m[39mWarning: An update to UsCareerBoard inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+    at UsCareerBoard (/home/runner/work/ballpark-hero/ballpark-hero/src/components/us-career/UsCareerBoard.tsx:172:26)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+
+ [32m✓[39m src/test/usCareerIntlBoard.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 3542[2mms[22m[39m
+   [33m[2m✓[22m[39m NBA My Career: the national team on the board[2m > [22ma 2003-04 season at 90 meets the 2004 call: the holding box, then the card in place; Go, the result, a reload [33m 819[2mms[22m[39m
+   [33m[2m✓[22m[39m the board fixture's fixed NBA saves with the bind mounted[2m > [22mdraw the board they drew without it where no call is met, and a raised save meets the beat [33m 2142[2mms[22m[39m
+ [32m✓[39m src/test/careerSeasonReview.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 6678[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mkeeps zero highs while excluding missing nonfinite and suspended seasons [33m 452[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mopens the original tied high season and restores each navigation focus [33m 353[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mcompares every saved position field in its existing units without postseason prose [33m 727[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mopens each live Career Log and returns without saves draws or completion calls [33m 2911[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mopens Career Log during a pending choice and restores that exact choice [33m 346[2mms[22m[39m
+   [33m[2m✓[22m[39m saved career season review[2m > [22mreviews retired careers and restores the retirement opener without paying again [33m 603[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m75 passed[39m[22m[90m (75)[39m
+[2m   Start at [22m 17:30:07
+[2m   Duration [22m 13.09s[2m (transform 3.98s, setup 419ms, collect 9.51s, tests 13.53s, environment 2.46s, prepare 624ms)[22m
+

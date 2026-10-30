@@ -1,0 +1,68 @@
+NEGATIVE CONTROL nobronze: no bronze game is played (section 5 must fail)
+section 5: the tournament, 8000 tournaments an edition kind, ten seed sets
+  FAIL [5] oly-2004 set 1 #0: podium Argentina,USA
+  FAIL [5] oly-2004 set 1 #1: podium Italy,Argentina
+  FAIL [5] oly-2004 set 1 #2: podium Argentina,USA
+  FAIL [5] oly-2004 set 1 #3: podium Argentina,USA
+  FAIL [5] wc-2006 set 1 #4: podium Argentina,Greece
+  FAIL [5] wc-2006 set 1 #5: podium USA,Spain
+  FAIL [5] wc-2006 set 1 #6: podium Spain,Greece
+  FAIL [5] wc-2006 set 1 #7: podium Spain,USA
+  FAIL [5] oly-2008 set 1 #8: podium Spain,USA
+  FAIL [5] oly-2008 set 1 #9: podium USA,Spain
+  FAIL [5] oly-2008 set 1 #10: podium USA,Spain
+  FAIL [5] oly-2008 set 1 #11: podium USA,Spain
+  played (gold/medal percent by tier 87-89, 90-92, 93-95, 96-99):
+    set 1: 47.8/64.4  56.1/70.8  64.0/78.9  65.7/80.0
+    set 2: 47.6/64.9  54.3/72.0  62.4/78.5  64.2/80.0
+    set 3: 46.9/63.8  55.8/70.9  65.0/79.5  66.3/81.0
+    set 4: 46.6/64.7  54.6/71.4  63.5/77.8  65.3/79.7
+    set 5: 47.3/64.3  57.1/72.6  62.8/78.0  66.7/81.2
+    set 6 (held out): 46.1/63.9  54.5/70.4  64.2/77.7  65.0/80.7
+    set 7 (held out): 47.8/65.5  55.0/71.2  63.7/78.2  66.5/80.5
+    set 8 (held out): 47.7/63.8  57.0/71.2  64.0/78.1  65.0/80.1
+    set 9 (held out): 48.0/63.5  55.8/72.0  64.6/78.5  65.8/80.7
+    set 10 (held out): 47.4/63.9  56.1/71.5  64.6/78.5  65.0/80.2
+    sets 1 to 5 gold range by tier: 46.6 to 47.8, 54.3 to 57.1, 62.4 to 65.0, 64.2 to 66.7
+    held out pooled gold by tier: 47.4, 55.7, 64.2, 65.5; rises 8.3, 8.5, 1.3
+  future (gold/medal percent by tier 87-89, 90-92, 93-95, 96-99):
+    set 1: 44.6/64.4  55.1/72.8  63.9/79.4  65.1/80.0
+    set 2: 41.8/62.0  54.8/72.0  62.6/78.4  69.8/82.7
+    set 3: 45.5/64.8  54.2/71.7  63.9/78.2  66.7/81.2
+    set 4: 43.9/61.9  54.0/72.2  64.2/79.2  67.0/81.6
+    set 5: 43.4/62.6  57.0/73.5  64.3/78.8  66.4/82.0
+    set 6 (held out): 43.9/62.5  56.2/73.2  65.7/81.0  66.2/80.1
+    set 7 (held out): 44.5/63.5  55.1/72.4  65.3/80.1  68.3/82.0
+    set 8 (held out): 44.8/63.8  54.3/71.6  67.0/79.5  68.8/82.0
+    set 9 (held out): 44.4/62.8  56.1/73.6  64.0/79.7  66.9/79.8
+    set 10 (held out): 47.0/64.8  55.0/71.9  64.3/78.6  66.0/79.2
+    sets 1 to 5 gold range by tier: 41.8 to 45.5, 54.0 to 57.0, 62.6 to 64.3, 65.1 to 69.8
+    held out pooled gold by tier: 44.9, 55.4, 65.3, 67.3; rises 10.4, 9.9, 2.0
+  projected (gold/medal percent by tier 87-89, 90-92, 93-95, 96-99):
+    set 1: 48.0/67.0  55.0/72.1  64.7/79.5  67.8/81.8
+    set 2: 44.5/63.2  56.9/75.3  66.3/81.5  69.0/82.3
+    set 3: 47.6/66.2  57.5/74.7  66.8/81.7  68.8/83.2
+    set 4: 48.1/66.8  56.8/73.0  66.1/80.5  67.8/82.5
+    set 5: 46.6/66.0  57.7/73.8  67.3/81.0  68.1/82.3
+    set 6 (held out): 47.9/66.6  57.4/74.0  64.4/79.2  69.3/83.3
+    set 7 (held out): 45.2/64.7  56.1/74.3  64.9/80.3  68.2/82.2
+    set 8 (held out): 47.6/65.7  57.4/74.8  67.3/81.0  65.6/81.0
+    set 9 (held out): 44.9/65.2  56.8/74.0  65.2/80.5  66.6/81.0
+    set 10 (held out): 46.4/64.3  58.6/74.3  66.5/81.8  70.0/83.1
+    sets 1 to 5 gold range by tier: 44.5 to 48.1, 55.0 to 57.7, 64.7 to 67.3, 67.8 to 69.0
+    held out pooled gold by tier: 46.4, 57.3, 65.7, 68.0; rises 10.9, 8.4, 2.3
+  the knock (hurt percent by age 26, 30, 33, 36; the rule says 8, 8, 11, 14):
+    set 1: 7.4 of 6040  8.2 of 6032  10.5 of 5964  14.3 of 5964
+    set 2: 8.1 of 6040  8.0 of 6032  10.0 of 5964  13.1 of 5964
+    set 3: 8.1 of 6040  8.2 of 6032  11.5 of 5964  14.3 of 5964
+    set 4: 8.0 of 6040  8.0 of 6032  11.2 of 5964  13.9 of 5964
+    set 5: 8.1 of 6040  8.2 of 6032  11.0 of 5964  14.4 of 5964
+    set 6 (held out): 8.1 of 6040  7.9 of 6032  11.0 of 5964  13.8 of 5964
+    set 7 (held out): 7.9 of 6040  8.1 of 6032  11.7 of 5964  14.1 of 5964
+    set 8 (held out): 8.3 of 6040  8.1 of 6032  11.3 of 5964  13.8 of 5964
+    set 9 (held out): 7.6 of 6040  8.4 of 6032  10.9 of 5964  14.2 of 5964
+    set 10 (held out): 8.1 of 6040  7.4 of 6032  11.4 of 5964  13.9 of 5964
+    sets 1 to 5 range by age: 7.4 to 8.1, 8.0 to 8.2, 10.0 to 11.5, 13.1 to 14.4; pooled 7.9, 8.1, 10.8, 14.0
+    held out pooled by age: 8.0, 8.0, 11.3, 14.0; rise from 26 to 36: 6.0
+  240000 tournaments held to the invariants
+simCareerIntl: control nobronze FIRED (section 5, 240060 failures)

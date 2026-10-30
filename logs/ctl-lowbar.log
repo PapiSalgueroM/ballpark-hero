@@ -1,0 +1,21 @@
+NEGATIVE CONTROL lowbar: the bar is five points lower in the gate (section 4 must fail)
+sections 2b and 4: the call, 400 careers an era through the real NBA engine
+  FAIL [4] now 0 summer 2031: the gate says 2031, the oracle says false
+  FAIL [4] now 0 summer 2031: the curtain line and the oracle disagree
+  FAIL [4] now 0 summer 2031: ovr 82 age 25 health 100 edition wc-2031, called true, the oracle says false
+  FAIL [4] now 0 summer 2032: the gate says 2032, the oracle says false
+  FAIL [4] now 0 summer 2032: the curtain line and the oracle disagree
+  FAIL [4] now 0 summer 2032: ovr 83 age 26 health 100 edition oly-2032, called true, the oracle says false
+  FAIL [4] now 1 summer 2032: the gate says 2032, the oracle says false
+  FAIL [4] now 1 summer 2032: the curtain line and the oracle disagree
+  FAIL [4] now 1 summer 2032: ovr 82 age 26 health 100 edition oly-2032, called true, the oracle says false
+  FAIL [4] now 1 summer 2035: the gate says 2035, the oracle says false
+  FAIL [4] now 1 summer 2035: the curtain line and the oracle disagree
+  FAIL [4] now 1 summer 2035: ovr 86 age 29 health 100 edition wc-2035, called true, the oracle says false
+  now: 400 careers, 7340 summers, first summer 2027; called at least once 358 (89.5 percent), 1742 calls (4.36 a career, 4.87 a called career)
+  now: share of careers ever called if the bar were 84 to 92: 84 75.5, 85 66.3, 86 57.5, 87 48.8, 88 37.3, 89 27.0, 90 19.0, 91 11.0, 92 4.8
+  now: 655 edition summers rated 87 or more; held back by health under 50: 3 (0.5 percent), by age over 36: 4; by a career ending with that season: 4
+  y2004: 400 careers, 7324 summers, first summer 2004; called at least once 362 (90.5 percent), 1660 calls (4.15 a career, 4.59 a called career)
+  y2004: share of careers ever called if the bar were 84 to 92: 84 82.0, 85 70.3, 86 59.8, 87 47.3, 88 37.3, 89 29.0, 90 18.8, 91 12.3, 92 4.5
+  y2004: 616 edition summers rated 87 or more; held back by health under 50: 1 (0.2 percent), by age over 36: 3; by a career ending with that season: 4
+simCareerIntl: control lowbar FIRED (section 4, 6450 failures)

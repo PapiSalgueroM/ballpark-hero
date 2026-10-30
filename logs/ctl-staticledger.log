@@ -1,0 +1,6 @@
+NEGATIVE CONTROL staticledger: the NBA binding imports the ledger statically (section 12 must fail)
+section 12: the static graph of /nba-my-career
+  FAIL [12] src/data/basketballIntl.ts is in the static graph of /nba-my-career
+  FAIL [12] src/data/basketballIntl.ts is in no lazy chunk, so the page cannot load it
+  25 static outputs (286 modules) of 96; ledger static: true, bracket runner static: false, gate static: true
+simCareerIntl: control staticledger FIRED (section 12, 2 failures)

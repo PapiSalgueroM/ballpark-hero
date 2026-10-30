@@ -1,0 +1,60 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 2716[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 605[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center with MLB bound[2m > [22mwalks a CF season from the first pitch card to the review: innings on the clock, his line, the record and his totals [33m 507[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center with MLB bound[2m > [22mwalks a C season from the first pitch card to the review: innings on the clock, his line, the record and his totals [33m 395[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center with MLB bound[2m > [22mwalks a DH season from the first pitch card to the review: innings on the clock, his line, the record and his totals [33m 364[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerProgramme.test.ts [2m([22m[2m55 tests[22m[2m)[22m[32m 252[2mms[22m[39m
+ [32m✓[39m src/test/nbaOldSaveLines.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m src/test/careerDecisionOutcome.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 7806[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mapplies the real third-season NBA trade once before its quality draw and keeps the full save on return [33m 1226[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mshows each real sport choice as the actual capped change and saves it once [33m 905[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreports negative effects and real endorsement earnings with the Cash a banked fee adds [33m 1145[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mconsumes same-frame choices once and accepts the next ordinary event [33m 533[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mcontinues with no extra draws writes season or completion and restores Play focus [33m 1736[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mreloads the applied career without replaying its transient receipt or choice [33m 1242[2mms[22m[39m
+   [33m[2m✓[22m[39m ordinary career decision outcomes[2m > [22mpreserves real ordinary engine choices and the existing rivalry receipt independently [33m 779[2mms[22m[39m
+ [32m✓[39m src/test/nbaCourtRecap1517.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 976[2mms[22m[39m
+   [33m[2m✓[22m[39m the real lazy NBA Season Center host[2m > [22mopens, replays and closes the court without changing career bytes or drawing random numbers [33m 613[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreScreens.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 3947[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mdraws every screen exactly as the base did [33m 880[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: a group label changed moves a recorded screen [33m 674[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the halfway line changed moves a recorded screen [33m 546[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the first tile's label changed moves a recorded screen [33m 647[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: a review note changed moves a recorded screen [33m 632[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the help's footnote changed moves a recorded screen [33m 564[2mms[22m[39m
+ [32m✓[39m src/test/careerHallV1Replay.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 6690[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnfl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 1969[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnba: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 1647[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mmlb: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 1848[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1051: the recorded saves through the real board[2m > [22mnhl: the board shows each save the verdict, the legacy and the ballot it was told, and writes nothing [33m 1018[2mms[22m[39m
+ [32m✓[39m src/test/seasonCentreWords.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 962[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: soccer markup, recorded on the base (Round 1048)[2m > [22mprints the soccer shaped season exactly as the base viewer did, with no new field set [33m 445[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: a sport that brings its own words (Round 1048)[2m > [22mprints the US words, the record panel and the playoff path on the true layout (desktop) [33m 312[2mms[22m[39m
+ [32m✓[39m src/test/nbaTrophyTile.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m src/test/usTrophyTile.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 994[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1149: on the real engines the tile is the rings plus every award on the seasons[2m > [22mMLB: 120 seeded careers, each tile equal to its rings plus its awards [33m 326[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1149: on the real engines the tile is the rings plus every award on the seasons[2m > [22mNHL: 120 seeded careers, each tile equal to its rings plus its awards [33m 381[2mms[22m[39m
+ [32m✓[39m src/test/usProgrammeCardTruth.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 687[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m64 tests[22m[2m)[22m[33m 21362[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 4548[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 1191[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 3372[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 1225[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 3814[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 1485[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mopens the viewer or the plain tile, never a throw, for a last line from an older build [33m 307[2mms[22m[39m
+   [33m[2m✓[22m[39m a held year, a banned year, and the sports with no Season Center[2m > [22mMLB: Watch again asks about the club he played that season for [33m 369[2mms[22m[39m
+ [32m✓[39m src/test/careerBadgeMotion.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 162[2mms[22m[39m
+ [32m✓[39m src/test/nbaIntlResultLines.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 87[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m      Tests [22m [1m[32m265 passed[39m[22m[90m (265)[39m
+[2m   Start at [22m 17:24:45
+[2m   Duration [22m 28.48s[2m (transform 5.82s, setup 1.47s, collect 18.08s, tests 46.80s, environment 8.77s, prepare 2.45s)[22m
+

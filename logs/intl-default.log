@@ -1,0 +1,29 @@
+section 1: the ledger
+  69 facts, 165 reads, partial: oly-2028 oly-2032 wc-2027 wc-2031
+section 2: the calendar
+  2004 to 2050: 23 summers with an edition, 24 without
+  oly-2004 - wc-2006 - oly-2008 - wc-2010 - oly-2012 - wc-2014 - oly-2016 - - wc-2019 - oly-2021 - wc-2023 oly-2024 - - wc-2027 oly-2028 - - wc-2031 oly-2032 - - wc-2035 oly-2036 - - wc-2039 oly-2040 - - wc-2043 oly-2044 - - wc-2047 oly-2048 - -
+  the static gate: 47 of 47 summers 2004 to 2050 agree with the ledger's calendar; help facts equal
+section 3: the fields
+  11 played fields, 47 nations, no flag: Puerto Rico, Serbia and Montenegro
+  12 summers 2025 to 2050 draw their field (the same for every career)
+section 6: one engine and the stream
+  1660 src files fenced, 60 tournaments played twice, Math.random calls 0
+sections 2b and 4: the call, 400 careers an era through the real NBA engine
+  now: 400 careers, 7340 summers, first summer 2027; called at least once 195 (48.8 percent), 644 calls (1.61 a career, 3.30 a called career)
+  now: share of careers ever called if the bar were 84 to 92: 84 75.5, 85 66.3, 86 57.5, 87 48.8, 88 37.3, 89 27.0, 90 19.0, 91 11.0, 92 4.8
+  now: 655 edition summers rated 87 or more; held back by health under 50: 3 (0.5 percent), by age over 36: 4; by a career ending with that season: 4
+  y2004: 400 careers, 7324 summers, first summer 2004; called at least once 189 (47.3 percent), 608 calls (1.52 a career, 3.22 a called career)
+  y2004: share of careers ever called if the bar were 84 to 92: 84 82.0, 85 70.3, 86 59.8, 87 47.3, 88 37.3, 89 29.0, 90 18.8, 91 12.3, 92 4.5
+  y2004: 616 edition summers rated 87 or more; held back by health under 50: 1 (0.2 percent), by age over 36: 3; by a career ending with that season: 4
+section 12: the static graph of /nba-my-career
+  25 static outputs (285 modules) of 96; ledger static: false, bracket runner static: false, gate static: true
+sections 9 and 10: the case and the badges, 200 careers an era, always go and always rest
+  now: 91 of 200 went at least once, 86 brought home a medal, 70 a gold
+  y2004: 87 of 200 went at least once, 87 brought home a medal, 80 a gold
+  section 9: 173 careers with a medal (490 medals), 178 careers that only rested
+  section 10: lit in the always go fleet: intl_medal 173, olympic_gold 125, world_cup_gold 117; in the always rest fleet: 0
+  sections 9 and 10 took 132.3 s
+section 11: the words of the national team's files
+  156 capitalised words read in 9 sources, 69 ledger words, 54 fixed words, 0 strays
+simCareerIntl: GREEN, 56410 checks over sections 1,2,3,4,6,9,10,11,12

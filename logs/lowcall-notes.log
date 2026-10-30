@@ -1,0 +1,10 @@
+MUT lowcall applied to src/lib/nbaCareerIntlGate.ts
+note usCareerActionConfirm > 'NBA' preserves live restore and engine state as an independent baseline: 1 NBA career saves read, 1 meeting the national team's call; the call on screen 0 times, its curtain line 0
+note usCareerReveals: 9 tests, 2 NBA career saves read (written or left by a test), 0 of them meeting the national team's call; the call on screen 0 times, its curtain line 0
+note usCareerActionConfirm > 'NBA' keeps retirement pending until explicit acceptance and records its real legacy once: 1 NBA career saves read, 1 meeting the national team's call; the call on screen 0 times, its curtain line 0
+note usCareerStatLines: 117 tests, 10 NBA career saves read (written or left by a test), 0 of them meeting the national team's call; the call on screen 0 times, its curtain line 0
+note rivalryChoiceBoard: 8 tests, 3 NBA career saves read (written or left by a test), 0 of them meeting the national team's call; the call on screen 0 times, its curtain line 0
+note usCareerActionConfirm: 19 tests, 3 NBA career saves read (written or left by a test), 2 of them meeting the national team's call; the call on screen 0 times, its curtain line 0
+note myCareerRestore: 4 tests, 1 NBA career saves read (written or left by a test), 0 of them meeting the national team's call; the call on screen 0 times, its curtain line 0
+ Test Files  1 failed | 4 passed (5)
+      Tests  2 failed | 155 passed (157)
