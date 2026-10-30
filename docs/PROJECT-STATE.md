@@ -19747,3 +19747,8 @@ Clean delivery uses freshly verified main plus the 18 qualified product bodies a
 ## 2026-10-30, report email status copy (Codex)
 
 The admin report badge now explains provider acceptance separately from actual inbox receipt. A missing email status can also come from a fresh backup submission, so it no longer claims every unknown status is an old report. No report, email, auth, delivery, triage or database behavior changes. This copy-only branch depends on ready Menu PR424. Existing report checks, genuine app types and ordinary build are pending on a remote proof branch. No new test mirrors the wording. No report marked fixed, reporter contacted, or production mutation. Claude K retains integration and publication.
+
+
+## 2026-10-30 06:12 UTC, report email status copy verified
+
+Remote proof0520e4c0/run41011706589/a1 succeeded. Genuine app types,46 existing report tests, ordinary build, the relay harness and all8 existing owned controls pass. Every relay column probe is explicitly skipped after the offline guard blocks its one attempted database fetch; no test email or production transport occurred. All source, package, index and ref holds pass. Original artifact12957454270 retained once,43552155 bytes/SHA193a8b67ab96dd299bb7063d9640fd7b3e77cd09a5869edbf3ab69083ec76d6a;95 outer,5457 source and832 dist bodies hashed before JSON. Exact AdminReports bodya0acccb0 and all application bodies stay unchanged after the proof. PR431 is ready for integration after Menu PR424. Full suites, full sims, SEO and browser are unrun here and remain release integration checks. This copy correction does not repair the external mail provider or prove inbox delivery. No merge or publication.
