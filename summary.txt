@@ -1,0 +1,13 @@
+view-off exit=1 41s | simCmDailyView: 5 checks, 1 failures (control off)
+simCmDailyView exit=1 41s | simCmDailyView: 5 checks, 1 failures
+view-halfswap exit=1 34s | simCmDailyView: 5 checks, 1 failures (control halfswap)
+genview-check exit=0 0s | genCmCurve1View: the committed view is 14a9af7042793e487d12af0bffcaf030a0d0da9a's squads file, byte for byte
+simCmLevelReads exit=0 2s | simCmLevelReads: 8 checks, 0 failures
+view-untagged exit=1 39s | simCmDailyView: 5 checks, 1 failures (control untagged)
+simDeadlineDay exit=0 5s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simDailyClubPool exit=0 5s | simDailyClubPool: all sections green
+tsc exit=0 122s | 
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+simManagerHotSeat exit=0 79s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+fleet exit=0 171s | FLEET_EQUAL 207 lines
