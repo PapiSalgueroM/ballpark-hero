@@ -28,7 +28,11 @@
    DUGOUTS_CONTROL=orphan    a chair for a club in no league is added to table and receipt (section 2)
    DUGOUTS_CONTROL=gap       Arsenal's chair leaves table and receipt (section 3)
    DUGOUTS_CONTROL=monthclash one read of a dated chair prints another month (section 4)
-   A control run prints "control <name> FIRED" and exits 1 when its section went red, and exits 3 if not.
+   DUGOUTS_CONTROL=samedomain a two read chair rests on two source ids on one registrable domain (section 1; pins
+                              that the two host rule counts domains, not source ids)
+   DUGOUTS_CONTROL=monthsamedomain a stored month is printed by two source ids on one domain (section 4; same)
+   A control run prints "control <name> FIRED" and exits 1 when its section went red, exits 3 if it did not
+   fire, and exits 2 when it refuses to run (unknown name, or its mutation could not be applied or changed nothing).
 
    Measured on the committed table (2026-10-30): 96 chairs, 0 partial, 6 stored months, 27 sources on 19
    registrable domains. Nothing here is statistical, so there are no bands.
@@ -44,8 +48,8 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = `${ROOT.replaceAll('\\', '/')}/src`;
 const CONTROL = process.env.DUGOUTS_CONTROL || '';
-const CONTROLS = { twochairs: 0, onehost: 1, orphan: 2, gap: 3, monthclash: 4 };
-if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`unknown DUGOUTS_CONTROL=${CONTROL}`); process.exit(1); }
+const CONTROLS = { twochairs: 0, onehost: 1, samedomain: 1, orphan: 2, gap: 3, monthclash: 4, monthsamedomain: 4 };
+if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`unknown DUGOUTS_CONTROL=${CONTROL}`); process.exit(2); }
 
 const failed = new Set();
 let failures = 0;
@@ -74,10 +78,21 @@ const table = JSON.parse(JSON.stringify(mod.CM_DUGOUTS));
 const partialTable = JSON.parse(JSON.stringify(mod.CM_DUGOUTS_PARTIAL));
 const ERA = receipt.era;
 
+/* ---- helpers ---- */
+const fold = s => String(s).normalize('NFD').replace(/\p{M}/gu, '').replace(/ß/g, 'ss').replace(/[øØ]/g, 'o').replace(/[łŁ]/g, 'l')
+  .replace(/[đĐ]/g, 'd').replace(/[‘’`´]/g, "'").toLowerCase().replace(/\s+/g, ' ').trim();
+const TWO_LEVEL = new Set(['co.uk', 'org.uk', 'com.br', 'com.ar', 'com.au', 'com.mx', 'co.za', 'co.jp', 'com.co', 'com.pt', 'com.es']);
+const domainOf = url => {
+  const host = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
+  const parts = host.split('.');
+  return TWO_LEVEL.has(parts.slice(-2).join('.')) ? parts.slice(-3).join('.') : parts.slice(-2).join('.');
+};
+
 /* ---- the controls: mutate the in memory copies, and refuse if the mutation changed nothing ---- */
 if (CONTROL) {
   const before = JSON.stringify([receipt, table]);
-  const refuse = m => { console.error(`control ${CONTROL}: ${m}, refusing a dead control`); process.exit(1); };
+  const refuse = m => { console.error(`control ${CONTROL}: ${m}, refusing a dead control`); process.exit(2); };
+  const srcDomain = id => domainOf(receipt.sources.find(s => s.id === id)?.url ?? 'https://x.invalid');
   if (CONTROL === 'twochairs') {
     const a = receipt.chairs.find(c => c.club === 'Arsenal');
     const v = receipt.chairs.find(c => c.club === 'Aston Villa');
@@ -89,6 +104,39 @@ if (CONTROL) {
     const c = receipt.chairs[0];
     if (!c || c.reads.length < 2 || new Set(c.reads.map(r => r.source)).size < 2) refuse('the first chair has no second source to remove');
     for (const r of c.reads) r.source = c.reads[0].source;
+  } else if (CONTROL === 'samedomain') {
+    /* Two DIFFERENT source ids on ONE registrable domain: a fence that counted ids instead of domains stays green. */
+    let hit = null;
+    for (const c of receipt.chairs) {
+      if (c.reads.length !== 2 || c.reads.some(r => r.month)) continue;
+      const ids = c.reads.map(r => r.source);
+      for (const [keep, swap] of [[0, 1], [1, 0]]) {
+        const twin = receipt.sources.find(s => !ids.includes(s.id) && domainOf(s.url) === srcDomain(ids[keep]));
+        if (twin && srcDomain(ids[swap]) !== srcDomain(ids[keep])) { hit = { c, swap, twin }; break; }
+      }
+      if (hit) break;
+    }
+    if (!hit) refuse('no two read chair has a second source id on the domain of one of its reads');
+    hit.c.reads[hit.swap].source = hit.twin.id;
+    console.log(`control samedomain: ${hit.c.club} now rests on ${hit.c.reads.map(r => r.source).join(' and ')}, both on ${srcDomain(hit.twin.id)}`);
+  } else if (CONTROL === 'monthsamedomain') {
+    /* A stored month printed by two DIFFERENT source ids on ONE domain: a section 4 that counted ids stays green.
+       Prefer a chair whose reads still span two domains afterwards, so section 1 stays out of it. */
+    const cands = [];
+    for (const c of receipt.chairs) {
+      if (!c.appointed) continue;
+      const mr = c.reads.filter(r => r.month === c.appointed);
+      const doms = [...new Set(mr.map(r => srcDomain(r.source)))];
+      if (mr.length !== 2 || doms.length !== 2) continue;
+      const twin = receipt.sources.find(s => !c.reads.some(r => r.source === s.id) && domainOf(s.url) === srcDomain(mr[1].source));
+      if (!twin) continue;
+      const after = new Set(c.reads.map(r => (r === mr[0] ? domainOf(twin.url) : srcDomain(r.source))));
+      cands.push({ c, r: mr[0], twin, clean: after.size >= 2 });
+    }
+    const hit = cands.find(x => x.clean) ?? cands[0];
+    if (!hit) refuse('no stored month is printed by exactly two reads with a spare source id on one of their domains');
+    hit.r.source = hit.twin.id;
+    console.log(`control monthsamedomain: ${hit.c.club}'s month ${hit.c.appointed} now printed only on ${domainOf(hit.twin.url)}`);
   } else if (CONTROL === 'orphan') {
     const club = 'Testa Realmann FC';
     if (mod.REAL_LEAGUES.some(l => l.clubs.includes(club)) || table[ERA]?.[club]) refuse('the orphan club already exists');
@@ -111,15 +159,7 @@ if (CONTROL) {
   console.log(`control ${CONTROL}: mutation applied, section ${CONTROLS[CONTROL]} must go red`);
 }
 
-/* ---- helpers ---- */
-const fold = s => String(s).normalize('NFD').replace(/\p{M}/gu, '').replace(/ß/g, 'ss').replace(/[øØ]/g, 'o').replace(/[łŁ]/g, 'l')
-  .replace(/[đĐ]/g, 'd').replace(/[‘’`´]/g, "'").toLowerCase().replace(/\s+/g, ' ').trim();
-const TWO_LEVEL = new Set(['co.uk', 'org.uk', 'com.br', 'com.ar', 'com.au', 'com.mx', 'co.za', 'co.jp', 'com.co', 'com.pt', 'com.es']);
-const domainOf = url => {
-  const host = new URL(url).hostname.toLowerCase().replace(/^www\./, '');
-  const parts = host.split('.');
-  return TWO_LEVEL.has(parts.slice(-2).join('.')) ? parts.slice(-3).join('.') : parts.slice(-2).join('.');
-};
+/* ---- the receipt's view ---- */
 const WIKI_DOMAINS = new Set(['wikipedia.org', 'wikimedia.org', 'wikidata.org', 'fandom.com', 'wikia.com', 'wikia.org', 'wikiwand.com', 'dbpedia.org', 'alchetron.com', 'everybodywiki.com', 'wiki2.org']);
 const isWiki = url => WIKI_DOMAINS.has(domainOf(url)) || /wiki/i.test(new URL(url).hostname);
 const sources = new Map(receipt.sources.map(s => [s.id, s]));
