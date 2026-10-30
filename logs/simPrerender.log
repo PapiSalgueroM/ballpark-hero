@@ -1,0 +1,4 @@
+  FAIL: /whats-new drops the entry "Player Bingo: last season's clubs are back for 23 players.", which means the extractor is throwing away real content again
+  FAIL: /whats-new drops the entry "Player Bingo: missing loans and clubs added.", which means the extractor is throwing away real content again
+   482 of 484 changelog entries reach the shipped page
+simPrerender: 2 failures
