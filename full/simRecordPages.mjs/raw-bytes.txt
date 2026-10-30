@@ -1,0 +1,3 @@
+2066 /home/runner/work/_temp/rc-out/full/simRecordPages.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simRecordPages.mjs/stderr.log
+2066 total

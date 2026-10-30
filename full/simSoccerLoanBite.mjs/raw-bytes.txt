@@ -1,0 +1,3 @@
+1675 /home/runner/work/_temp/rc-out/full/simSoccerLoanBite.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerLoanBite.mjs/stderr.log
+1675 total

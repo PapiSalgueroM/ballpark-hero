@@ -1,0 +1,2 @@
+4524d0f202a3195326c9961252f05420daf060376cb240537c25a1b8e52cb013  /home/runner/work/_temp/rc-out/full/simFirstTouchDrill.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFirstTouchDrill.mjs/stderr.log

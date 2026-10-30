@@ -1,0 +1,2 @@
+28fb72b1641c0d6051d3c150be9256c6d58c9dc52f13e1d3226b995c3f704913  /home/runner/work/_temp/rc-out/full/chromium-install/stdout.log
+18bce92f9d611f9a465ad6d7b33dcab4270a04b84bb9db691c437c798a607784  /home/runner/work/_temp/rc-out/full/chromium-install/stderr.log

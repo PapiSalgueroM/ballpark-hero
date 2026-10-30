@@ -1,0 +1,2 @@
+8262cb591ece3d1c93cfaabdef720b863e6153c522af913c13002ee3a69439bc  /home/runner/work/_temp/rc-out/full/simNbaRotation.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNbaRotation.mjs/stderr.log

@@ -1,0 +1,2 @@
+0814a20529d28a127e676ca9b5a8513f1123b5896a17784a5bd13d36a9e0cca6  /home/runner/work/_temp/rc-out/full/simMissingNineSources.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simMissingNineSources.mjs/stderr.log

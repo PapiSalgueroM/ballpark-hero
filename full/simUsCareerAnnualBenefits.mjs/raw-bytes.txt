@@ -1,0 +1,3 @@
+971 /home/runner/work/_temp/rc-out/full/simUsCareerAnnualBenefits.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simUsCareerAnnualBenefits.mjs/stderr.log
+971 total

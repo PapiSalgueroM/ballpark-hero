@@ -1,0 +1,2 @@
+70050914b0f132d1f37dd412d4838f38fc58bd7b0b36b5a176cc3f25301ac097  /home/runner/work/_temp/rc-out/full/simSoccerLoanBite.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerLoanBite.mjs/stderr.log

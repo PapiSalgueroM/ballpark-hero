@@ -1,0 +1,3 @@
+7948 /home/runner/work/_temp/rc-out/full/simNflTruth.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNflTruth.mjs/stderr.log
+7948 total

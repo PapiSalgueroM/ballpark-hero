@@ -1,0 +1,2 @@
+0a6f469f6848a6b62ad3d8444af5483c57517568f05e4de2a313ea0051cae499  /home/runner/work/_temp/rc-out/full/playNbaLotteryNight.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playNbaLotteryNight.mjs/stderr.log

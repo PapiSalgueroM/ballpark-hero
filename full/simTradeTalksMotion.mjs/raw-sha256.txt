@@ -1,0 +1,2 @@
+4a1e65e7e6ff0bf7b8cbc15d27118e71324c27cae4fd4d1e1f103b3f58056e70  /home/runner/work/_temp/rc-out/full/simTradeTalksMotion.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTradeTalksMotion.mjs/stderr.log

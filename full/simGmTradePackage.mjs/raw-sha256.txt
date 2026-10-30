@@ -1,0 +1,2 @@
+73c87ba450c1a7ebd833405ab14f7a5dcf371006f391180ae5d82f873e6af83b  /home/runner/work/_temp/rc-out/full/simGmTradePackage.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGmTradePackage.mjs/stderr.log

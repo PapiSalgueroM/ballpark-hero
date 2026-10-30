@@ -1,0 +1,2 @@
+a25c78586822e69038673a93ae6eb160a077871cc3a6bee13f65cc16a8c18b26  /home/runner/work/_temp/rc-out/full/simPlayerSearchKeyboard.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPlayerSearchKeyboard.mjs/stderr.log

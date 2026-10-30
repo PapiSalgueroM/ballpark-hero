@@ -1,0 +1,2 @@
+af1f5181a880fd167d8d39466050eaaf78f294a1ed820f5052db8b7e1577b037  /home/runner/work/_temp/rc-out/full/simCareerDilemmaTruth.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerDilemmaTruth.mjs/stderr.log

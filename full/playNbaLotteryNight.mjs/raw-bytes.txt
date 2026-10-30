@@ -1,0 +1,3 @@
+1957 /home/runner/work/_temp/rc-out/full/playNbaLotteryNight.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playNbaLotteryNight.mjs/stderr.log
+1957 total

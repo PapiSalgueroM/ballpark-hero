@@ -1,0 +1,3 @@
+6950 /home/runner/work/_temp/rc-out/full/simCmSubs.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmSubs.mjs/stderr.log
+6950 total

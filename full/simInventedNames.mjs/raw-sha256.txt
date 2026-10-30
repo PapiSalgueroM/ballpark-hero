@@ -1,0 +1,2 @@
+a4c44c93796aa32c14b06588103ad5f56ab6f8f9cbcca57933f6a1ac0691779b  /home/runner/work/_temp/rc-out/full/simInventedNames.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simInventedNames.mjs/stderr.log

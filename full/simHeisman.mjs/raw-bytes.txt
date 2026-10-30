@@ -1,0 +1,3 @@
+1074 /home/runner/work/_temp/rc-out/full/simHeisman.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simHeisman.mjs/stderr.log
+1074 total

@@ -1,0 +1,3 @@
+3714 /home/runner/work/_temp/rc-out/full/simNascarDriverFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNascarDriverFeedback.mjs/stderr.log
+3714 total

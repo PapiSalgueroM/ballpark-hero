@@ -1,0 +1,3 @@
+742 /home/runner/work/_temp/rc-out/full/simFrontOfficeSaveRecovery.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simFrontOfficeSaveRecovery.mjs/stderr.log
+742 total

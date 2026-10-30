@@ -1,0 +1,28 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 1299,
+      "sha256": "bf26dff963570c6a33b5a821be37091cbecfa5d9b43b30e317615076af8595b7",
+      "tests": [
+        ":src/test/aussieRulesManagerBoard.test.tsx",
+        ":src/test/buzzerContestRecap.test.tsx",
+        ":src/test/cbbRecruitFilters.test.tsx",
+        ":src/test/dailySaveHardening.test.tsx",
+        ":src/test/dailySaveShapes.test.tsx",
+        ":src/test/dailySaveParity.test.tsx",
+        ":src/test/skipTarget.test.tsx",
+        ":src/test/firstTouchBoard.test.tsx",
+        ":src/test/firstTouchDrill.test.ts",
+        ":src/test/frontOfficeSaveRecovery.test.tsx",
+        ":src/test/nascarDriverFeedback.test.tsx",
+        ":src/lib/nbaRotation.test.ts",
+        ":src/test/playerSearchKeyboard.test.tsx",
+        ":src/test/tradeTalksMotion.test.tsx",
+        ":src/lib/usCareerAnnualBenefits.test.ts"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

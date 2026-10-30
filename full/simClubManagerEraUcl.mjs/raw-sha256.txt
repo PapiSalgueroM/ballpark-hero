@@ -1,0 +1,2 @@
+469580931bc2db6d8f5ace20a422dbae7591ae4b89aa58f75ac06110b30ccab2  /home/runner/work/_temp/rc-out/full/simClubManagerEraUcl.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simClubManagerEraUcl.mjs/stderr.log

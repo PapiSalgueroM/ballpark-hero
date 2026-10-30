@@ -1,0 +1,3 @@
+1383 /home/runner/work/_temp/rc-out/full/simCareerPendingOverallGates.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerPendingOverallGates.mjs/stderr.log
+1383 total

@@ -1,0 +1,3 @@
+1636 /home/runner/work/_temp/rc-out/full/simStaleChunk.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simStaleChunk.mjs/stderr.log
+1636 total

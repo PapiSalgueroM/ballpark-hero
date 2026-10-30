@@ -1,0 +1,3 @@
+853 /home/runner/work/_temp/rc-out/full/simLoanSpell.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simLoanSpell.mjs/stderr.log
+853 total

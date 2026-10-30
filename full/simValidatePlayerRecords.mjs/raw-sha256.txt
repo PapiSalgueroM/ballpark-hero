@@ -1,0 +1,2 @@
+fa352f391ab63f36e9be85d2d7e168dd316c60700aa13795ed8bbad53de6548f  /home/runner/work/_temp/rc-out/full/simValidatePlayerRecords.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simValidatePlayerRecords.mjs/stderr.log

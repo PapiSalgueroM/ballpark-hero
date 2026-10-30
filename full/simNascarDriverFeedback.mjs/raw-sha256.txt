@@ -1,0 +1,2 @@
+27e368a137396b443643c98ac91b1e46d1a4be95c23e49f81c97b202351d0443  /home/runner/work/_temp/rc-out/full/simNascarDriverFeedback.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNascarDriverFeedback.mjs/stderr.log

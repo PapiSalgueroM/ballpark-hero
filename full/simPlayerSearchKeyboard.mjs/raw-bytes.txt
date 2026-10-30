@@ -1,0 +1,3 @@
+735 /home/runner/work/_temp/rc-out/full/simPlayerSearchKeyboard.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simPlayerSearchKeyboard.mjs/stderr.log
+735 total

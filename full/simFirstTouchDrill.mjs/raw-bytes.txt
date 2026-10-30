@@ -1,0 +1,3 @@
+4232 /home/runner/work/_temp/rc-out/full/simFirstTouchDrill.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFirstTouchDrill.mjs/stderr.log
+4232 total

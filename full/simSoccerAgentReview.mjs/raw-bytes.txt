@@ -1,0 +1,3 @@
+86531 /home/runner/work/_temp/rc-out/full/simSoccerAgentReview.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simSoccerAgentReview.mjs/stderr.log
+86531 total
