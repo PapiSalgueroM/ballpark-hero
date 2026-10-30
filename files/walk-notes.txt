@@ -1,0 +1,136 @@
+ok   r390: after a reload mid season the Play Round 4 press is live
+ok   r390: the round plays after the reload (4 to 5)
+ok   r390: no console error (clean)
+ok   p390 hub start: nothing wider than the screen (0px over)
+ok   p390 hub start: no overlapping text (none)
+info p390 hub start: clipped text candidates: Your biggest chip is David Pas | 5 places short of the cut, 20  | +0.87 team strength from the b | Nobody is out of contract this | 15 rounds to the deadline
+ok   p390: the introduction presser is there to answer
+ok   p390 recap: nothing wider than the screen (0px over)
+BAD  p390 recap: no overlapping text ("Central Final: Minnesota" x "Cups 0" 73x11; "Central Final: Minnesota" x "Seasons 1" 91x11; "Pacific Semi: St. Louis " x "Cups 0" 73x17; "Pacific Semi: St. Louis " x "0" 9x12; "Pacific Semi: St. Louis " x "Seasons 1" 91x17; "Pacific Semi: St. Louis " x "1" 6x12)
+info p390 recap: clipped text candidates: Nobody is out of contract this
+info p390 recap xp line: GM XP +231. Level 1.
+ok   p390: the recap names the Cup
+ok   p390: the draft runs to the hub
+ok   p390: season two's hub has the Career box
+ok   p390: the Career screen takes the hub (the board's Play box is not drawn under it)
+ok   p390 Career: nothing wider than the screen (0px over)
+ok   p390 Career: no overlapping text (none)
+ok   p390: season two's hub has the GM level box
+ok   p390: the GM level screen takes the hub (the board's Play box is not drawn under it)
+ok   p390 GM level: nothing wider than the screen (0px over)
+ok   p390 GM level: no overlapping text (none)
+ok   p390: the ? panel carries the career rules
+ok   p390: the ? panel's hockey rule says the save goes on
+ok   p390: no rule left saying firing ends the save
+ok   p390: no console error (clean)
+ok   f390 fired recap: nothing wider than the screen (0px over)
+BAD  f390 fired recap: no overlapping text ("Central Final: St. Louis" x "Cups 0" 73x11; "Central Final: St. Louis" x "Seasons 1" 91x11; "Pacific Semi: Los Angele" x "Cups 0" 73x17; "Pacific Semi: Los Angele" x "0" 9x12; "Pacific Semi: Los Angele" x "Seasons 1" 91x17; "Pacific Semi: Los Angele" x "1" 6x12)
+info f390: animations on the fired recap: cmSlam@cm-slam, cmRise@cm-rise, cmTickIn@cm-tick-in, cmLossShake@cm-loss-shake
+ok   f390: the fired recap offers See who is calling
+ok   f390: the out of work screen draws
+ok   f390 out of work: nothing wider than the screen (0px over)
+ok   f390 out of work: no overlapping text (none)
+info f390: animations out of work: pulse@animate-pulse
+info f390 out of work text: 🪑 Let go by the Boston Bruins Ownership made the call: you are out after 1 season and no titles with the Boston Bruins. 1 franchise called. Pass, and next year the phone rings only if the Boston Bruins have climbed into the second tier of the league by then. 📞 JOB MARKET 1 offer Next year hangs on your old club 📖 CAREER Out of work 1 club, no titles 🎖️ GM LEVEL GM level 1 400 XP to level 2 Sta
+ok   f390 Career: nothing wider than the screen (0px over)
+ok   f390 Career: no overlapping text (none)
+ok   f390 GM level: nothing wider than the screen (0px over)
+ok   f390 GM level: no overlapping text (none)
+ok   f390 Job market: nothing wider than the screen (0px over)
+ok   f390 Job market: no overlapping text (none)
+info f390 market: Ownership made the call: you are out after 1 season and no titles with the Boston Bruins. 1 franchise called. Pass, and next year the phone rings only if the Boston Bruins have climbed into the second tier of the league by then. ? BOTTOM TIER Calgary Flames 1-1-2 Stay out for a year
+ok   f390: the seat is taken (BOS to CGY, phase recap)
+ok   f390 arrival: nothing wider than the screen (0px over)
+BAD  f390 arrival: no overlapping text ("Central Final: St. Louis" x "Cups 0" 73x11; "Central Final: St. Louis" x "Seasons 1" 91x11; "Pacific Semi: Los Angele" x "Cups 0" 73x17; "Pacific Semi: Los Angele" x "0" 9x12; "Pacific Semi: Los Angele" x "Seasons 1" 91x17; "Pacific Semi: Los Angele" x "1" 6x12)
+info f390 arrival: clipped text candidates: Nobody is out of contract this
+info f390 arrival text: Florida Panthers lift the 2027 Stanley Cup You take over the Calgary Flames. They finished 1-1-2, 23rd in the league. Trust upstairs: 60 of 100. Cup Final: Florida Panthers beat Vegas Golden Knights 4-3 Atlantic Semi: Toronto Maple Leafs 4-2 Atlantic Semi: Florida Panthers 4-2 Atlantic Final: Florid
+ok   f390: the draft runs to the hub
+ok   f390 new hub: nothing wider than the screen (0px over)
+ok   f390 new hub: no overlapping text (none)
+info f390 new hub: clipped text candidates: Roster full at 15. Cut or trad | 7 places short of the cut, 20  | +0.33 team strength from the b | 4 deals end this summer | 15 rounds to the deadline
+ok   f390: no console error (clean)
+ok   f390-rm fired recap: nothing wider than the screen (0px over)
+BAD  f390-rm fired recap: no overlapping text ("Central Final: Colorado " x "Cups 0" 73x11; "Central Final: Colorado " x "Seasons 1" 91x11; "Pacific Semi: Seattle Kr" x "Cups 0" 73x17; "Pacific Semi: Seattle Kr" x "0" 9x12; "Pacific Semi: Seattle Kr" x "Seasons 1" 91x17; "Pacific Semi: Seattle Kr" x "1" 6x12)
+ok   f390-rm: reduced motion, nothing animates on the fired recap (none)
+ok   f390-rm: the fired recap offers See who is calling
+ok   f390-rm: the out of work screen draws
+ok   f390-rm out of work: nothing wider than the screen (0px over)
+ok   f390-rm out of work: no overlapping text (none)
+ok   f390-rm: reduced motion, nothing animates out of work (none)
+info f390-rm out of work text: 🪑 Let go by the Boston Bruins Ownership made the call: you are out after 1 season and no titles with the Boston Bruins. 1 franchise called. Pass, and next year the phone rings only if the Boston Bruins have climbed into the second tier of the league by then. 📞 JOB MARKET 1 offer Next year hangs on your old club 📖 CAREER Out of work 1 club, no titles 🎖️ GM LEVEL GM level 1 400 XP to level 2 Sta
+ok   f390-rm Career: nothing wider than the screen (0px over)
+ok   f390-rm Career: no overlapping text (none)
+ok   f390-rm GM level: nothing wider than the screen (0px over)
+ok   f390-rm GM level: no overlapping text (none)
+ok   f390-rm Job market: nothing wider than the screen (0px over)
+ok   f390-rm Job market: no overlapping text (none)
+info f390-rm market: Ownership made the call: you are out after 1 season and no titles with the Boston Bruins. 1 franchise called. Pass, and next year the phone rings only if the Boston Bruins have climbed into the second tier of the league by then. ? BOTTOM TIER Calgary Flames 3-1-0 Stay out for a year
+ok   f390-rm: the seat is taken (BOS to CGY, phase recap)
+ok   f390-rm arrival: nothing wider than the screen (0px over)
+BAD  f390-rm arrival: no overlapping text ("Central Final: Colorado " x "Cups 0" 73x11; "Central Final: Colorado " x "Seasons 1" 91x11; "Pacific Semi: Seattle Kr" x "Cups 0" 73x17; "Pacific Semi: Seattle Kr" x "0" 9x12; "Pacific Semi: Seattle Kr" x "Seasons 1" 91x17; "Pacific Semi: Seattle Kr" x "1" 6x12)
+info f390-rm arrival: clipped text candidates: Nobody is out of contract this
+ok   f390-rm: reduced motion, nothing animates on the arrival (none)
+info f390-rm arrival text: Los Angeles Kings lift the 2027 Stanley Cup You take over the Calgary Flames. They finished 3-1-0, 9th in the league. Trust upstairs: 60 of 100. Cup Final: Los Angeles Kings beat Detroit Red Wings 4-1 Atlantic Semi: Detroit Red Wings 4-3 Atlantic Semi: Toronto Maple Leafs 4-3 Atlantic Final: Detroit
+ok   f390-rm: the draft runs to the hub
+ok   f390-rm new hub: nothing wider than the screen (0px over)
+ok   f390-rm new hub: no overlapping text (none)
+info f390-rm new hub: clipped text candidates: Roster full at 15. Cut or trad | 6 places short of the cut, 20  | +0.33 team strength from the b | 4 deals end this summer | 15 rounds to the deadline
+ok   f390-rm: no console error (clean)
+ok   f1280 fired recap: nothing wider than the screen (0px over)
+BAD  f1280 fired recap: no overlapping text ("Central Final: Minnesota" x "Cups 0" 73x11; "Central Final: Minnesota" x "Seasons 1" 91x11; "Pacific Semi: Vegas Gold" x "Cups 0" 73x17; "Pacific Semi: Vegas Gold" x "0" 9x12; "Pacific Semi: Vegas Gold" x "Seasons 1" 91x17; "Pacific Semi: Vegas Gold" x "1" 6x12)
+info f1280: animations on the fired recap: cmSlam@cm-slam, cmRise@cm-rise, cmTickIn@cm-tick-in, cmLossShake@cm-loss-shake
+ok   f1280: the fired recap offers See who is calling
+ok   f1280: the out of work screen draws
+ok   f1280 out of work: nothing wider than the screen (0px over)
+ok   f1280 out of work: no overlapping text (none)
+info f1280: animations out of work: pulse@animate-pulse
+info f1280 out of work text: 🪑 Let go by the Boston Bruins Ownership made the call: you are out after 1 season and no titles with the Boston Bruins. 1 franchise called. Pass, and next year the phone rings only if the Boston Bruins have climbed into the second tier of the league by then. 📞 JOB MARKET 1 offer Next year hangs on your old club 📖 CAREER Out of work 1 club, no titles 🎖️ GM LEVEL GM level 1 400 XP to level 2 Sta
+ok   f1280 Career: nothing wider than the screen (0px over)
+ok   f1280 Career: no overlapping text (none)
+ok   f1280 GM level: nothing wider than the screen (0px over)
+ok   f1280 GM level: no overlapping text (none)
+ok   f1280 Job market: nothing wider than the screen (0px over)
+ok   f1280 Job market: no overlapping text (none)
+info f1280 market: Ownership made the call: you are out after 1 season and no titles with the Boston Bruins. 1 franchise called. Pass, and next year the phone rings only if the Boston Bruins have climbed into the second tier of the league by then. ? BOTTOM TIER Calgary Flames 2-1-1 Stay out for a year
+ok   f1280: the seat is taken (BOS to CGY, phase recap)
+ok   f1280 arrival: nothing wider than the screen (0px over)
+BAD  f1280 arrival: no overlapping text ("Central Final: Minnesota" x "Cups 0" 73x11; "Central Final: Minnesota" x "Seasons 1" 91x11; "Pacific Semi: Vegas Gold" x "Cups 0" 73x17; "Pacific Semi: Vegas Gold" x "0" 9x12; "Pacific Semi: Vegas Gold" x "Seasons 1" 91x17; "Pacific Semi: Vegas Gold" x "1" 6x12)
+info f1280 arrival text: Minnesota Wild lift the 2027 Stanley Cup You take over the Calgary Flames. They finished 2-1-1, 16th in the league. Trust upstairs: 60 of 100. Cup Final: Minnesota Wild beat Washington Capitals 4-1 Atlantic Semi: Toronto Maple Leafs 4-3 Atlantic Semi: Tampa Bay Lightning 4-1 Atlantic Final: Toronto 
+ok   f1280: the draft runs to the hub
+ok   f1280 new hub: nothing wider than the screen (0px over)
+ok   f1280 new hub: no overlapping text (none)
+ok   f1280: no console error (clean)
+ok   f1280-rm fired recap: nothing wider than the screen (0px over)
+BAD  f1280-rm fired recap: no overlapping text ("Central Final: Seattle K" x "Cups 0" 73x11; "Central Final: Seattle K" x "Seasons 1" 91x11; "Pacific Semi: Dallas Sta" x "Cups 0" 73x17; "Pacific Semi: Dallas Sta" x "0" 9x12; "Pacific Semi: Dallas Sta" x "Seasons 1" 91x17; "Pacific Semi: Dallas Sta" x "1" 6x12)
+ok   f1280-rm: reduced motion, nothing animates on the fired recap (none)
+ok   f1280-rm: the fired recap offers See who is calling
+ok   f1280-rm: the out of work screen draws
+ok   f1280-rm out of work: nothing wider than the screen (0px over)
+ok   f1280-rm out of work: no overlapping text (none)
+ok   f1280-rm: reduced motion, nothing animates out of work (none)
+info f1280-rm out of work text: 🪑 Let go by the Boston Bruins Ownership made the call: you are out after 1 season and no titles with the Boston Bruins. 1 franchise called. Pass, and next year the phone rings only if the Boston Bruins have climbed into the second tier of the league by then. 📞 JOB MARKET 1 offer Next year hangs on your old club 📖 CAREER Out of work 1 club, no titles 🎖️ GM LEVEL GM level 1 400 XP to level 2 Sta
+ok   f1280-rm Career: nothing wider than the screen (0px over)
+ok   f1280-rm Career: no overlapping text (none)
+ok   f1280-rm GM level: nothing wider than the screen (0px over)
+ok   f1280-rm GM level: no overlapping text (none)
+ok   f1280-rm Job market: nothing wider than the screen (0px over)
+ok   f1280-rm Job market: no overlapping text (none)
+info f1280-rm market: Ownership made the call: you are out after 1 season and no titles with the Boston Bruins. 1 franchise called. Pass, and next year the phone rings only if the Boston Bruins have climbed into the second tier of the league by then. ? BOTTOM TIER Anaheim Ducks 4-0-0 Stay out for a year
+ok   f1280-rm: the seat is taken (BOS to ANA, phase recap)
+ok   f1280-rm arrival: nothing wider than the screen (0px over)
+BAD  f1280-rm arrival: no overlapping text ("Central Final: Seattle K" x "Cups 0" 73x11; "Central Final: Seattle K" x "Seasons 1" 91x11; "Pacific Semi: Dallas Sta" x "Cups 0" 73x17; "Pacific Semi: Dallas Sta" x "0" 9x12; "Pacific Semi: Dallas Sta" x "Seasons 1" 91x17; "Pacific Semi: Dallas Sta" x "1" 6x12)
+ok   f1280-rm: reduced motion, nothing animates on the arrival (none)
+info f1280-rm arrival text: Montreal Canadiens lift the 2027 Stanley Cup You take over the Anaheim Ducks. They finished 4-0-0, 2nd in the league. Trust upstairs: 60 of 100. Cup Final: Montreal Canadiens beat Seattle Kraken 4-0 Atlantic Semi: Tampa Bay Lightning 4-0 Atlantic Semi: Detroit Red Wings 4-1 Atlantic Final: Tampa Bay
+ok   f1280-rm: the draft runs to the hub
+ok   f1280-rm new hub: nothing wider than the screen (0px over)
+ok   f1280-rm new hub: no overlapping text (none)
+info f1280-rm new hub: clipped text candidates: Roster full at 15. Cut or trad
+ok   f1280-rm: no console error (clean)
+ok   y390: the league is a season on (2026 to 2027)
+ok   y390: his counters stay and he is still between seats
+ok   y390 after year out: nothing wider than the screen (0px over)
+ok   y390 after year out: no overlapping text (none)
+info y390 feed: NHL Front Office A roster snapshot. Original simulation ratings. Sixteen teams, one Cup. 🪑 Out of work, 1 season 1 season out of work since the Boston Bruins let you go. Nobody called, and nobody will: the phone has stopped. A new front office is the way back in. The Washington Capitals won the Sta
+ok   y390: a reload lands out of work again
+ok   y390: the reload writes nothing
+ok   y390: no console error (clean)
