@@ -1,0 +1,6 @@
+#!serial
+# Release BU lane j3: the two Club Manager harnesses that swap ClubDetailScreen.tsx in the checkout while they run (one at a time: run beside each other they race, rBUg-kj), and the player card stream against two bases: the BU base as the brief names it (red by construction on the joined head, since 1597 and 1607 move the career stream), and the merge just before Round 1601 (80cc5c6d5) against the merge that brought it (4310e6714), which isolates 1601.
+simClubDetailFixtures: node scripts/simClubDetailFixtures.mjs
+simClubDetailCurrentRoster: CI=1 SIM_NETWORK=offline CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$RC_OUT/roster" node scripts/simClubDetailCurrentRoster.mjs
+cards-full: git worktree add -f /tmp/cbase 158969218 -q && ln -s "$PWD/node_modules" /tmp/cbase/node_modules && CARDS_SEEDS=5 CARDS_BASE=/tmp/cbase node scripts/simCmPlayerCard.mjs
+cards-1601: git worktree add -f /tmp/c15 4310e67145f8c662a7a3d52768a319aa0fb3965c -q && git worktree add -f /tmp/c14 80cc5c6d5 -q && ln -s "$PWD/node_modules" /tmp/c15/node_modules && ln -s "$PWD/node_modules" /tmp/c14/node_modules && cd /tmp/c15 && CARDS_SEEDS=5 CARDS_BASE=/tmp/c14 node scripts/simCmPlayerCard.mjs
