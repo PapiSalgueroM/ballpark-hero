@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-lazy: node_modules/.bin/vitest run src/components/nhl-front-office/NhlLazyDesk.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-career: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000
+ctl-waitsalways: node scripts/controlFrontOfficeBoard.mjs waitsalways
+ctl-nhl-waitsalways: node scripts/controlFrontOfficeBoard.mjs nhl-waitsalways
+ctl-hubstack: node scripts/controlFrontOfficeBoard.mjs hubstack
+ctl-nhl-hubstack: node scripts/controlFrontOfficeBoard.mjs nhl-hubstack
+ctl-talkskept: node scripts/controlFrontOfficeBoard.mjs talkskept
+ctl-nhl-talkskept: node scripts/controlFrontOfficeBoard.mjs nhl-talkskept

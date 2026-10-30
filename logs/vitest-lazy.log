@@ -1,0 +1,40 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/components/front-office/FrontOfficeLazyDesk.test.tsx[2m > [22m[2mNFL front office: the GM career kit loads when it is needed[2m > [22m[2ma season being played never asks for it, and the Career box reads the same before and after it
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office/FrontOfficeLazyDesk.test.tsx[2m > [22m[2mNFL front office: the GM career kit loads when it is needed[2m > [22m[2ma save that loads on the recap waits in a holding box, then draws the recap
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [32m✓[39m src/components/front-office/FrontOfficeLazyDesk.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 2821[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL front office: the GM career kit loads when it is needed[2m > [22ma season being played never asks for it, and the Career box reads the same before and after it [33m 2004[2mms[22m[39m
+ [32m✓[39m src/components/nhl-front-office/NhlLazyDesk.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2934[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma season being played never asks for it, and the Career box reads the same before and after it [33m 1943[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 05:30:06
+[2m   Duration [22m 4.16s[2m (transform 1.82s, setup 142ms, collect 396ms, tests 5.76s, environment 635ms, prepare 234ms)[22m
+
