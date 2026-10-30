@@ -1,0 +1,32 @@
+MUTATED m1 in src/pages/ClubManager.tsx
+  NONE     /club-manager 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /club-manager 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /club-manager 1280x900: no first visit dialog, banner 735 to 900 (pending)
+
+3 route widths walked over 1 routes: 0 dialogs tapped and closed, 0 expected site reds, 3 without a first visit dialog, 0 red
+
+THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner
+  BARS PASS     /club-manager#club-picked 320x640: 1 fixed control, none meets the banner 335 to 640; the closest, "Take the job", 12 px above it
+  BARS PASS     /club-manager#club-picked 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Take the job", 12 px above it
+  BARS PASS     /club-manager#club-picked 1280x900: 1 fixed control, none meets the banner 735 to 900; the closest, "Take the job", 12 px above it
+  BARS PASS     /club-manager#custom-club 320x640: 1 fixed control, none meets the banner 335 to 640; the closest, "Found the club", 15 px above it
+  BARS PASS     /club-manager#custom-club 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Found the club", 12 px above it
+  BARS PASS     /club-manager#custom-club 1280x900: 1 fixed control, none meets the banner 735 to 900; the closest, "Found the club", 12 px above it
+9 bar lines (6 of them scripted states): 9 green over 6 fixed controls, 0 red, 0 with no pending banner; the closest green control sat 12 px above the banner ("Take the job", /club-manager#club-picked 320x640)
+playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+cm-320x640 picked pending=true banner=335..640 scroll=0/30882 take[279..323 static b=auto hit=y gap=12]
+cm-320x640 picked pagebottom pending=true banner=335..640 scroll=30882/30882 take[279..323 static b=auto hit=y gap=12]
+cm-320x640 picked answered(Reject all) pending=false banner=none scroll=0/30882 take[354..398 static b=auto hit=y gap=242]
+cm-390x844 picked pending=true banner=611..844 scroll=0/24385 take[555..599 static b=auto hit=y gap=12]
+cm-390x844 picked pagebottom pending=true banner=611..844 scroll=24385/24385 take[555..599 static b=auto hit=y gap=12]
+cm-390x844 picked answered(Reject all) pending=false banner=none scroll=0/24385 take[558..602 static b=auto hit=y gap=242]
+cm-390x844-rm picked pending=true banner=611..844 scroll=0/24385 take[555..599 static b=auto hit=y gap=12]
+cm-390x844-rm picked pagebottom pending=true banner=611..844 scroll=24385/24385 take[555..599 static b=auto hit=y gap=12]
+cm-390x844-rm picked answered(Reject all) pending=false banner=none scroll=0/24385 take[558..602 static b=auto hit=y gap=242]
+cm-1280x900 picked pending=true banner=735..900 scroll=0/13866 take[679..723 static b=auto hit=y gap=12]
+cm-1280x900 picked pagebottom pending=true banner=735..900 scroll=13866/13866 take[679..723 static b=auto hit=y gap=12]
+cm-1280x900 picked answered(Reject all) pending=false banner=none scroll=0/13866 take[614..658 static b=auto hit=y gap=242]
+cm-844x390 picked pending=true banner=225..390 scroll=0/14416 take[169..213 static b=auto hit=y gap=12]
+cm-844x390 picked pagebottom pending=true banner=225..390 scroll=14416/14416 take[169..213 static b=auto hit=y gap=12]
+cm-844x390 picked answered(Reject all) pending=false banner=none scroll=0/14416 take[104..148 static b=auto hit=y gap=242]
+review walk DONE: 18 reads, 0 flags

@@ -1,0 +1,2 @@
+MUTATED m5 in src/pages/SoccerCareer.tsx
+playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift strips [body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)], and src/pages/SoccerCareer.tsx no longer holds it, so it would strip nothing. Refusing to run.

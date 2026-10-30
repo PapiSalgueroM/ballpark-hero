@@ -1,0 +1,4 @@
+m5needle exit=2 1s | playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift strips [body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)], and src/pages/SoccerCar
+m1always exit=0 174s | review walk DONE: 18 reads, 0 flags
+m3nosm exit=0 118s | review walk DONE: 32 reads, 27 flags
+m4nomeasure exit=1 86s | playFirstVisitDialogs: RED. 4 bar lines: /world-cup-bracket 320x640, /club-manager#club-picked 320x640, /club-manager#custom-club 320x640, /soccer-career#hub 320x640

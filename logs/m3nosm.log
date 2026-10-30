@@ -1,0 +1,16 @@
+MUTATED m3 in src/pages/SoccerCareer.tsx
+  NONE     /soccer-career 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /soccer-career 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /soccer-career 1280x900: no first visit dialog, banner 735 to 900 (pending)
+
+3 route widths walked over 1 routes: 0 dialogs tapped and closed, 0 expected site reds, 3 without a first visit dialog, 0 red
+
+THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner
+  BARS PASS     /soccer-career#hub 320x640: 1 fixed control, none meets the banner 335 to 640; the closest, "Next Year", 18 px above it
+  BARS PASS     /soccer-career#hub 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Next Year", 18 px above it
+  BARS PASS     /soccer-career#hub 1280x900: 3 fixed controls, none meets the banner 735 to 900; the closest, "Next Year", 18 px above it
+6 bar lines (3 of them scripted states): 6 green over 5 fixed controls, 0 red, 0 with no pending banner; the closest green control sat 18 px above the banner ("Next Year", /soccer-career#hub 320x640)
+playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+hub-320x640 top pending=true banner=335..640 scroll=0/14777 bar[251..335 fixed b=305px hit=y gap=0] training[-200..-156 relative b=393px hit=NO(button) gap=491] phone[193..237 relative b=0px hit=y gap=98]
+hub-390x844 top pending=true banner=611..844 scroll=0/12250 bar[527..611 fixed b=233px hit=y gap=0] training[-128..-84 relative b=321px hit=NO(div) gap=695] phone[193..237 relative b=0px hit=y gap=374]
+review walk DONE: 32 reads, 27 flags

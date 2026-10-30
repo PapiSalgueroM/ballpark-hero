@@ -1,0 +1,26 @@
+MUTATED m4 in src/components/CookieConsent.tsx
+  NONE     /club-manager 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /club-manager 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /club-manager 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /world-cup-bracket 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /world-cup-bracket 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /world-cup-bracket 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /soccer-career 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /soccer-career 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /soccer-career 1280x900: no first visit dialog, banner 735 to 900 (pending)
+
+9 route widths walked over 3 routes: 0 dialogs tapped and closed, 0 expected site reds, 9 without a first visit dialog, 0 red
+
+THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner
+  BARS FAIL     /world-cup-bracket 320x640: 1 fixed control meets the banner 335 to 640: "⚡Auto Fill Everything" 334 to 386, 51 px under the banner, in button.fixed.bottom-6.[body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-heigh (z 50)
+  BARS FAIL     /club-manager#club-picked 320x640: 1 fixed control meets the banner 335 to 640: "Take the job" 354 to 398, 44 px under the banner, in div.fixed.bottom-0.left-0.right-0.z-40.border-t.border-border.bg-background/95 (z 40)
+  BARS PASS     /club-manager#club-picked 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Take the job", 9 px above it
+  BARS PASS     /club-manager#club-picked 1280x900: 1 fixed control, none meets the banner 735 to 900; the closest, "Take the job", 77 px above it
+  BARS FAIL     /club-manager#custom-club 320x640: 1 fixed control meets the banner 335 to 640: "Found the club" 351 to 395, 44 px under the banner, in div.fixed.bottom-0.left-0.right-0.z-40.border-t.border-border.bg-background/95 (z 40)
+  BARS PASS     /club-manager#custom-club 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Found the club", 9 px above it
+  BARS PASS     /club-manager#custom-club 1280x900: 1 fixed control, none meets the banner 735 to 900; the closest, "Found the club", 77 px above it
+  BARS FAIL     /soccer-career#hub 320x640: 1 fixed control meets the banner 335 to 640: "Next Year" 344 to 392, 48 px under the banner, in div.flex.items-center.gap-3.max-[399px]:gap-2.fixed.bottom-0.left-0.right-0 (z 40)
+  BARS PASS     /soccer-career#hub 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Next Year", 15 px above it
+  BARS PASS     /soccer-career#hub 1280x900: 3 fixed controls, none meets the banner 735 to 900; the closest, "Next Year", 83 px above it
+18 bar lines (9 of them scripted states): 14 green over 12 fixed controls, 4 red, 0 with no pending banner; the closest green control sat 9 px above the banner ("Take the job", /club-manager#club-picked 390x844)
+playFirstVisitDialogs: RED. 4 bar lines: /world-cup-bracket 320x640, /club-manager#club-picked 320x640, /club-manager#custom-club 320x640, /soccer-career#hub 320x640
