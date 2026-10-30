@@ -1,0 +1,6 @@
+simRoles: node scripts/simRoles.mjs
+simPress: node scripts/simPress.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs

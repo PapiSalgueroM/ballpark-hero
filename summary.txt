@@ -1,0 +1,6 @@
+tsc exit=0 112s | 
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 64s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simRoles exit=0 1525s | ALL ROLE CHECKS PASSED
+simPress exit=0 2167s | ALL PRESS AND TEAM TALK CHECKS PASSED
