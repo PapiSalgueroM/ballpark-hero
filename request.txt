@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+nhl-wipebutton: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=wipebutton node scripts/playGmCareer.mjs
+nhl-nofallback: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=nofallback node scripts/playGmCareer.mjs
+nhl-eagerpanel: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=eagerpanel node scripts/playGmCareer.mjs
+nhl-eagerkit: PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=E PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_CONTROL=eagerkit node scripts/playGmCareer.mjs

@@ -1,0 +1,4 @@
+/nhl-front-office at 390 by 844
+  CAUGHT  nhl 390x844 E: the pick screen does not ask for the career kit (1 asks)
+
+playGmCareer control eagerkit: all 1 guarded checks fired (mutations landed: {"eagerkit":4})
