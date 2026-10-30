@@ -1,0 +1,23 @@
+3) Self test: the detector still catches what Round 137 removed
+   10 of 10 known bad lines flagged
+   7 of 7 defensible lines left alone
+1) Runtime: every line real seasons can put on screen
+   harvested 1442 distinct lines across 8 clubs
+   0 of them put words in a real player's mouth
+2) Static: hand written copy in src
+   scanned 2184 files, 5 offending lines
+     src/lib/nbaCareerInbox.ts:427 real name (Still) shares a line with quoted speech "Watched you on national TV Tuesday. Still remember you at 1
+       text: "Watched you on national TV Tuesday. Still remember you at 14 refusing to run the offense we called. Proud of you kid.",
+     src/lib/nflCareerInbox.ts:281 real name (Still) shares a line with quoted speech "Watched you on TV Sunday. Still remember you at 14 refusing
+       text: "Watched you on TV Sunday. Still remember you at 14 refusing to run the route we called. Proud of you kid.",
+     src/lib/nhlCareerInbox.ts:300 real name (Still) shares a line with quoted speech "Watched you on TV Saturday. Still remember you at 15 refusi
+       text: "Watched you on TV Saturday. Still remember you at 15 refusing to dump the puck in like I told you. Proud of you kid.",
+     src/lib/nhlCareerInbox.ts:308 real name (Still) shares a line with quoted speech "Still can't believe the kid who ate us out of house and cab
+       text: "Still can't believe the kid who ate us out of house and cabin during junior is on TV every night. We're so proud of you.",
+     src/lib/soccerPhone.ts:351 real name (Still) shares a line with quoted speech "Still got my seat. Row H. Been in that row since 1974 and I
+       B("Still got my seat. Row H. Been in that row since 1974 and I am not moving for anybody.",
+  FAIL: 5 source lines put invented words or conduct on a real player
+   flags: a real player speaking in the first person, in a page file
+   flags: the same line in what used to be the exempt directory
+
+simNoInventedQuotes: 1 failure

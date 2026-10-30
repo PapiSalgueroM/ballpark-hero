@@ -1,0 +1,8 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simClubManagerDugouts: node scripts/simClubManagerDugouts.mjs
+simManagers-notest: mv src/test/clubDetailDugout.test.tsx /tmp/cdd.tsx && node scripts/simManagers.mjs; s=$?; mv /tmp/cdd.tsx src/test/clubDetailDugout.test.tsx; exit $s
+simManagers-fleet-notest: mv src/test/clubDetailDugout.test.tsx /tmp/cdd.tsx && SIM_MANAGERS_BASE=c0c66e087 node scripts/simManagers.mjs; s=$?; mv /tmp/cdd.tsx src/test/clubDetailDugout.test.tsx; exit $s
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+vitest-dugout: node_modules/.bin/vitest run src/test/clubDetailDugout.test.tsx src/test/clubDetailOwnClub.test.tsx --testTimeout=300000 --hookTimeout=120000

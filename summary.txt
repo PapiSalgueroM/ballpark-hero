@@ -1,0 +1,7 @@
+tsc exit=0 49s | 
+simClubManagerDugouts exit=0 0s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+simManagers-notest exit=0 18s | simManagers: all green
+simManagers-fleet-notest exit=0 48s | simManagers: all green
+simNoInventedQuotes exit=1 17s | simNoInventedQuotes: 1 failure
+simInventedNames exit=0 6s | simInventedNames: green. Every invented man on this site is invented all the way down.
+vitest-dugout exit=0 2s |    Duration  2.28s (transform 1.10s, setup 85ms, collect 2.84s, tests 477ms, environment 404ms, prepare 202ms)
