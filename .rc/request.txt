@@ -1,0 +1,2 @@
+worldcont-head: R=$PWD; git worktree add /tmp/h-wc 1a46f4bd9 >/dev/null 2>&1 && cd /tmp/h-wc && ln -s $R/node_modules node_modules && timeout 1200 node --max-old-space-size=3000 scripts/simManagerWorldContinuity.mjs
+memwatch: for i in $(seq 1 60); do echo "$(date -u +%H:%M:%S) $(free -m | sed -n 2p) disk $(df -m /tmp | tail -1 | tr -s ' ' | cut -d' ' -f4)MB free"; sleep 20; done
