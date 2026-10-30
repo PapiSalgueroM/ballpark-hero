@@ -1,0 +1,2 @@
+euro-1593-alone exit=0 241s | simCmEuroPlay: green, 1413 checks, 0 failures
+euro-merged exit=1 243s | simCmEuroPlay: RED, 1413 checks, 2 failures
