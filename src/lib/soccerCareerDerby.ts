@@ -156,6 +156,8 @@ export const DERBY_CADENCE: Record<string, CadenceWindow[]> = {
   "Saudi Pro League": [{ from: 2026, meetings: 2 }],
   "Belgian Pro League": [{ from: 2026, meetings: 2 }],
   "2. Bundesliga": [{ from: 2026, meetings: 2 }],
+  "Ligue 2": [{ from: 2026, meetings: 2 }],
+  "Serie B": [{ from: 2026, meetings: 2 }],
 };
 
 /** League meetings per season between two clubs of that league in the
