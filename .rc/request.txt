@@ -1,0 +1,12 @@
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simGmXp: node scripts/simGmXp.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmCareer-nfl: SIM_GM_CAREER_SPORT=nfl node scripts/simGmCareer.mjs
