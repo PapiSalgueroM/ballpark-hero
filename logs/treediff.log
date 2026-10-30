@@ -1,0 +1,5 @@
+ .github/workflows/lane-remote-check.yml   |  62 +++++++
+ scripts/lib/connectionsRehearsal.mjs      | 280 +++++++++++++++++++++++++++++
+ scripts/qa/rehearseNbaConnections1583.mjs | 284 ++++--------------------------
+ scripts/qa/rehearseUsConnections1574.mjs  | 280 ++++-------------------------
+ 4 files changed, 417 insertions(+), 489 deletions(-)
