@@ -1,0 +1,25 @@
+1) careers in lockstep, HEAD against OLD (16 careers)
+   Real Madrid now: parted at week 34; Champions League out
+   Bayern Munich now: equal to week 33; Champions League out
+   Manchester City now: parted at week 34; Champions League out
+   Liverpool now: not in the Champions League, skipped
+   Arsenal now: equal to week 24; Champions League out
+   Inter Milan now: parted at week 34; Champions League out
+   Barcelona now: equal to week 52; Champions League out
+   Barcelona era2005: parted at week 31; Champions League won
+   Chelsea era2005: parted at week 31; Champions League out
+   Real Madrid era2010: parted at week 36; Champions League won
+   Bayern Munich era2010: equal to week 30; Champions League out
+   Barcelona era2015: equal to week 54; Champions League won
+   Juventus era2015: equal to week 32; Champions League out
+   Liverpool era2020: parted at week 31; Champions League won
+   Bayern Munich era2020: equal to week 44; Champions League out
+   Chelsea era2020: BROKE; Champions League out
+   15 careers in the Champions League, 7 parted at a deciding leg: Real Madrid now week 34 (QF, night L, tie W, aet); Manchester City now week 34 (QF, night D, tie L, pens); Inter Milan now week 34 (QF, night W, tie L, regular); Barcelona era2005 week 31 (R16, night D, tie W, regular); Chelsea era2005 week 31 (R16, night D, tie W, regular); Real Madrid era2010 week 36 (QF, night L, tie W, regular); Liverpool era2020 week 31 (R16, night L, tie W, regular)
+  FAIL careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ) (Chelsea era2020 week 31 (uclKo))
+   29 deciding second legs met (11 differing on the walk's own dice)
+5) the haul words
+  FAIL hauls: planted lines, three a hat-trick, four and five by their count, two nothing (4: ⚽ Planted Striker bagged a hat-trick!; 5: ⚽ Planted Striker bagged a hat-trick!)
+   the fleet's matches scored 19 hauls of three or more (18 of three, 1 of four or more)
+  FAIL hauls: every haul the fleet scored is announced by its own count (Kai Havertz scored 4 and was given a hat-trick)
+simCmDecidingLeg: control hattrick FIRED (hauls: planted went red; red in all: careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ) | hauls: planted lines | hauls: every haul the fleet scored is announced by its own count)

@@ -1,0 +1,6 @@
+simCmDecidingLeg exit=0 59s | simCmDecidingLeg: PASS, 19 of 19 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+tsc exit=0 69s | 
+simCmDecidingLeg-base exit=1 82s | simCmDecidingLeg: FAIL, 2 of 21 checks red (careers, hotseat)
+ctl-board exit=1 30s | simCmDecidingLeg: control board FIRED (legs: board went red; red in all: legs: board moves the tie's way on every differing leg)
+ctl-hattrick exit=1 21s | simCmDecidingLeg: control hattrick FIRED (hauls: planted went red; red in all: careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ) | 
+ctl-cutover exit=1 19s | simCmDecidingLeg: control cutover FIRED (gate: cutover went red; red in all: gate: cutover)

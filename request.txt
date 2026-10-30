@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmDecidingLeg: node scripts/simCmDecidingLeg.mjs
+simCmDecidingLeg-base: git worktree add -q .rcbase 4bd20c993 && DECIDING_LEG_BASE=.rcbase DECIDING_LEG_SECTION=careers,hotseat node scripts/simCmDecidingLeg.mjs
+ctl-board: DECIDING_LEG_CONTROL=board DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs
+ctl-hattrick: DECIDING_LEG_CONTROL=hattrick DECIDING_LEG_SECTION=hauls node scripts/simCmDecidingLeg.mjs
+ctl-cutover: DECIDING_LEG_CONTROL=cutover DECIDING_LEG_SECTION=gate node scripts/simCmDecidingLeg.mjs

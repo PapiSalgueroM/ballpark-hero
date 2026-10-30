@@ -1,0 +1,32 @@
+1) careers in lockstep, HEAD against OLD (16 careers)
+   Real Madrid now: parted at week 34; Champions League out
+   Bayern Munich now: equal to week 33; Champions League out
+   Manchester City now: parted at week 34; Champions League out
+   Liverpool now: not in the Champions League, skipped
+   Arsenal now: equal to week 24; Champions League out
+   Inter Milan now: parted at week 34; Champions League out
+   Barcelona now: equal to week 52; Champions League out
+   Barcelona era2005: parted at week 31; Champions League won
+   Chelsea era2005: parted at week 31; Champions League out
+   Real Madrid era2010: parted at week 36; Champions League won
+   Bayern Munich era2010: equal to week 30; Champions League out
+   Barcelona era2015: equal to week 54; Champions League won
+   Juventus era2015: equal to week 32; Champions League out
+   Liverpool era2020: parted at week 31; Champions League won
+   Bayern Munich era2020: equal to week 44; Champions League out
+   Chelsea era2020: parted at week 46; Champions League out
+   15 careers in the Champions League, 8 parted at a deciding leg: Real Madrid now week 34 (QF, night L, tie W, aet); Manchester City now week 34 (QF, night D, tie L, pens); Inter Milan now week 34 (QF, night W, tie L, regular); Barcelona era2005 week 31 (R16, night D, tie W, regular); Chelsea era2005 week 31 (R16, night D, tie W, regular); Real Madrid era2010 week 36 (QF, night L, tie W, regular); Liverpool era2020 week 31 (R16, night L, tie W, regular); Chelsea era2020 week 46 (SF, night W, tie L, regular)
+  ok   careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ) (15 careers)
+   29 deciding second legs met (11 differing on the walk's own dice)
+2) the leg fleet: every deciding leg replayed on 8 more streams through both engines
+   261 deciding legs played: 164 where night and tie agree, 97 where they differ (61 through, 36 out; 10 on penalties, 2 in extra time)
+   through: board 0.00 and squad morale 3.83 above the old reading on average
+   out: board 0.00 and squad morale -6.05 against the old reading on average
+  ok   legs: at least 30 deciding legs where the night and the tie differ (97)
+  ok   legs: the record is the night on both engines (log, form, totals, head to head, bracket, ratings)
+  ok   legs: tie is logged exactly where the tie and the night differ
+  ok   legs: where night and tie agree, board, morale and fans are the old engine's
+  FAIL legs: board moves the tie's way on every differing leg (Real Madrid now QF week 34 stream 2112437016: night L, tie W, board 99.3 to 99.3; Real Madrid now QF week 34 stream 2560158649: night L, tie W, board 99.3 to 99.3)
+  ok   legs: morale moves the tie's way on every differing leg
+  ok   legs: fans count the tie, to the last digit, on every differing leg
+simCmDecidingLeg: control board FIRED (legs: board went red; red in all: legs: board moves the tie's way on every differing leg)
