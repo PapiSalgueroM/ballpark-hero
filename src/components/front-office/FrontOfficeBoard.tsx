@@ -1392,9 +1392,11 @@ export default function FrontOfficeBoard() {
             agents, swing trades, survive the injury report, draft the future, and chase a dynasty
             across as many seasons as you can. Saves automatically.
           </p>
+          {/* Round 1561 (closing check, finding 12, the NHL line's twin): the rosters or the career kit (Round 1550)
+              failed, so the line names neither */}
           {startError && (
             <p data-start-error className="mt-2 text-xs text-destructive">
-              The rosters did not load. Check your connection and tap your team again.
+              The new front office did not load. Check your connection and tap your team again.
             </p>
           )}
         </div>

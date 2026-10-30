@@ -426,7 +426,9 @@ export default function NhlFrontOfficeBoard() {
     setXpLine(null); setLandedAt(null);
     persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
     } catch {
-      if (alive.current) setStartError('We could not load the opening ratings. Try your team again. Your existing save is unchanged.');
+      /* Round 1561 (closing check, finding 12): either fetch fails here, the ratings or the career kit, so the line names
+         neither */
+      if (alive.current) setStartError('We could not load the new front office. Try your team again. Your existing save is unchanged.');
     } finally {
       startPending.current = false;
       if (alive.current) setStarting(false);
