@@ -6,6 +6,11 @@
       equal what scripts/lib/clubNamesakeDetect.mjs returns on the same rows: same signals, clubs, years, counts,
       ranks, blocs, the percentile_cont quartiles and medians, and the same names (as a set: the SQL's order among
       equal values is not defined). So the JS twin that section D of simClubNamesakes trusts is the lead's Q1.
+   A2, THE CLAUSES THE FIXTURE CANNOT REACH. The fixture has no row without a nationality and no split season row, so
+      the same comparison runs again with synthetic rows added to the PGlite table only: one FC Barcelona 2011 row
+      with no nationality (S1 Arsenal FC 2011 must drop, margin 5 to 4) and twelve rows of one split season club in
+      2005 holding a cheap bloc (flagged under a plain name, left out as a split). Each is asserted to move the JS
+      result first, so the comparison is known to reach both clauses.
    B, THE CACHE PURGE. A synthetic ai_validation_cache (two Tula men's Arsenal yeses, one with the label as the
       column; a refusal; a London man's yes; a Tula man's yes for another club; the same key under Soccer Connect 4;
       a surname only key) is read with the exact Q6 text, scripts/qa/genClubNamesakePurge1584.mjs writes the form from
@@ -15,8 +20,10 @@
    PGlite is not a dependency of this repo on purpose. Install it anywhere and say where:
      npm install --prefix /tmp/pgl @electric-sql/pglite
      PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1584.mjs
-   Negative controls, REHEARSE_CONTROL=<name>, each must exit 1 and say what fired; one that cannot find what it
-   changes exits 2 (ABORTED):
+   Negative controls, REHEARSE_CONTROL=<name>, each must exit 1 and print FIRED (applied and a check went red); one
+   that cannot find what it changes exits 2 (ABORTED); one applied with every check green exits 3 (DID NOT FIRE):
+     sql14    Q1's S1 sized from the nationality rows only (critic advice 14 reverted): A2 must disagree.
+     sqlsplit Q1's split season exclusion dropped: A2 must disagree.
      parity   the top value of Arsenal FC's 2010 Argentine bloc raised above the rest's quartile in the PGlite table
               only (critic 22): the SQL drops that row and the JS does not, so A must disagree.
      tamper   one character of the purge payload changed after its checksum: the form raises, nothing is removed.
@@ -32,7 +39,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { detectNamesakes } from '../lib/clubNamesakeDetect.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const CONTROLS = ['parity', 'tamper', 'drift', 'noguard'];
+const CONTROLS = ['parity', 'tamper', 'drift', 'noguard', 'sql14', 'sqlsplit'];
 const CONTROL = process.env.REHEARSE_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`REHEARSE_CONTROL=${CONTROL} is not a control this script knows, ABORTED`); process.exit(2); }
 const dir = process.env.PGLITE_DIR;
@@ -49,16 +56,46 @@ const fired = [];
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8').replace(/\r\n/g, '\n');
 const DATA = 'scripts/data/clubNamesakes1584';
 
-/* ---------------------------------------------------------------- A */
-console.log('A) the detection SQL and its JS twin return the same rows');
-{
-  const fx = JSON.parse(read(`${DATA}/detectFixture.json`));
+/* Q1's text, with the two clause controls applied to it before either pass reads it */
+let SQL = read('scripts/qa/clubNamesakes1584Detect.sql').trim().replace(/;$/, '');
+const SQL_EDITS = {
+  sql14: ['count(*)::int as n_all from base_all group by club, year', 'count(*)::int as n_all from base group by club, year',
+    'S1 sized from the nationality rows only (critic advice 14 reverted)'],
+  sqlsplit: [" and strpos(club, ' / ') = 0", '', 'the split season exclusion dropped from Q1'],
+};
+if (SQL_EDITS[CONTROL]) {
+  const [from, to, what] = SQL_EDITS[CONTROL];
+  if (SQL.split(from).length !== 2) abort(`the clause "${from.trim()}" is not in Q1 once`);
+  SQL = SQL.replace(from, to);
+  fired.push(`${CONTROL}: ${what}`);
+}
+const loadMarket = async rows => {
   const db = new PGlite();
   await db.exec(`create table public.player_market_values (id bigint primary key, player_name text, club text,
     year integer, nationality text, market_value_usd bigint)`);
   await db.query(`insert into public.player_market_values (id, player_name, club, year, nationality, market_value_usd)
     select id, player_name, club, year, nationality, market_value_usd from jsonb_to_recordset($1::jsonb)
-    as x(id bigint, player_name text, club text, year integer, nationality text, market_value_usd bigint)`, [JSON.stringify(fx.rows)]);
+    as x(id bigint, player_name text, club text, year integer, nationality text, market_value_usd bigint)`, [JSON.stringify(rows)]);
+  return db;
+};
+const num = v => (v == null ? null : Number(v));
+const shape = d => JSON.stringify({
+  signal: d.signal, club: d.club, year: num(d.year), n: num(d.n), size_rank: num(d.size_rank), nat: d.nat ?? null,
+  k: num(d.k), bloc_max: num(d.bloc_max), bloc_med: num(d.bloc_med), rest_q1: num(d.rest_q1), rest_med: num(d.rest_med),
+  names: d.names == null ? null : (Array.isArray(d.names) ? d.names : String(d.names).split(', ')).slice().sort(),
+});
+const parity = (sqlRows, jsRows, what) => {
+  const a = sqlRows.map(shape).sort(), b = jsRows.map(shape).sort();
+  const onlySql = a.filter(x => !b.includes(x)), onlyJs = b.filter(x => !a.includes(x));
+  if (!onlySql.length && !onlyJs.length) ok(`${what}: the SQL and the JS twin agree on all ${a.length} rows (${a.filter(x => x.includes('"S2"')).length} S2, ${a.filter(x => x.includes('"S1"')).length} S1)`);
+  else fail(`${what}: the SQL returns ${a.length} rows and the JS ${b.length}; ${onlySql.length} only in the SQL, ${onlyJs.length} only in the JS: ${(onlySql[0] || onlyJs[0]).slice(0, 160)}`);
+};
+
+/* ---------------------------------------------------------------- A */
+console.log('A) the detection SQL and its JS twin return the same rows');
+{
+  const fx = JSON.parse(read(`${DATA}/detectFixture.json`));
+  const db = await loadMarket(fx.rows);
   const n = Number((await db.query('select count(*)::int as n from public.player_market_values')).rows[0].n);
   if (n === fx.rows.length) ok(`${n} fixture rows loaded`);
   else fail(`${n} rows loaded of ${fx.rows.length}`);
@@ -72,20 +109,35 @@ console.log('A) the detection SQL and its JS twin return the same rows');
     await db.query('update public.player_market_values set market_value_usd = $1 where id = $2', [raised, top.id]);
     fired.push(`parity: ${top.player_name} (id ${top.id}) raised from ${top.market_value_usd} to ${raised} in PGlite only, above the rest's quartile ${bloc.rest_q1}`);
   }
-  const sql = read('scripts/qa/clubNamesakes1584Detect.sql').trim().replace(/;$/, '');
-  const got = (await db.query(sql)).rows;
-  const num = v => (v == null ? null : Number(v));
-  const shape = d => JSON.stringify({
-    signal: d.signal, club: d.club, year: num(d.year), n: num(d.n), size_rank: num(d.size_rank), nat: d.nat ?? null,
-    k: num(d.k), bloc_max: num(d.bloc_max), bloc_med: num(d.bloc_med), rest_q1: num(d.rest_q1), rest_med: num(d.rest_med),
-    names: d.names == null ? null : (Array.isArray(d.names) ? d.names : String(d.names).split(', ')).slice().sort(),
-  });
-  const a = got.map(shape).sort(), b = js.map(shape).sort();
-  const onlySql = a.filter(x => !b.includes(x)), onlyJs = b.filter(x => !a.includes(x));
-  if (!onlySql.length && !onlyJs.length) ok(`the SQL and the JS twin agree on all ${a.length} rows (${a.filter(x => x.includes('"S2"')).length} S2, ${a.filter(x => x.includes('"S1"')).length} S1)`);
-  else fail(`the SQL returns ${a.length} rows and the JS ${b.length}; ${onlySql.length} only in the SQL, ${onlyJs.length} only in the JS: ${(onlySql[0] || onlyJs[0]).slice(0, 160)}`);
+  parity((await db.query(SQL)).rows, js, 'the fixture');
   if (JSON.stringify(js) === JSON.stringify(fx.expected)) ok('the JS twin returns the fixture\'s committed expected list');
   else fail('the JS twin no longer returns the fixture\'s committed expected list');
+  await db.close();
+}
+
+/* ---------------------------------------------------------------- A2 */
+/* The fixture and the lead's pulls carry no row without a nationality and no split season row, so two clauses of Q1
+   could be wrong with A green (review M2). Synthetic rows, in this PGlite table only, never in a committed fixture:
+   one FC Barcelona 2011 row with no nationality (Barcelona 31 becomes 32, Arsenal FC's 36 is then 4 clear, so S1
+   2011 must drop, and it drops only if S1 is sized from every row), and twelve rows of one split season club in 2005,
+   a cheap bloc of three in it (they would be an S2 row of their own if the split exclusion were missing). */
+console.log('A2) the two clauses the fixture cannot reach: S1 sized from every row, and split seasons left out');
+{
+  const fx = JSON.parse(read(`${DATA}/detectFixture.json`));
+  const SPLIT = 'Synthetic FC / Other FC';
+  const synth = [{ id: 900000000001, year: 2011, club: 'FC Barcelona', nationality: null, player_name: 'Synthetic No Nationality', market_value_usd: 1000000 }];
+  for (let i = 0; i < 12; i += 1) synth.push({ id: 900000000100 + i, year: 2005, club: SPLIT, nationality: i < 3 ? 'Synthland' : 'Otherland',
+    player_name: `Synthetic Split ${i + 1}`, market_value_usd: i < 3 ? 100000 + i * 10000 : 5000000 + i * 1000000 });
+  const rows = [...fx.rows, ...synth];
+  const plain = detectNamesakes(fx.rows), js = detectNamesakes(rows);
+  const has = (list, s, club, year) => list.some(d => d.signal === s && d.club === club && d.year === year);
+  if (has(plain, 'S1', 'Arsenal FC', 2011) && !has(js, 'S1', 'Arsenal FC', 2011)) ok('the row with no nationality takes S1 Arsenal FC 2011 off the JS list (margin 5 to 4)');
+  else fail('the row with no nationality does not move S1 Arsenal FC 2011 in the JS twin, so it exercises nothing');
+  const unsplit = detectNamesakes(rows.map(r => (r.club === SPLIT ? { ...r, club: 'Synthetic FC' } : r)));
+  if (has(unsplit, 'S2', 'Synthetic FC', 2005) && !js.some(d => d.club === SPLIT)) ok('the twelve split rows would be an S2 row under a plain club name, and as a split season they are left out');
+  else fail('the split rows do not exercise the split exclusion (no S2 row under a plain name, or flagged as a split)');
+  const db = await loadMarket(rows);
+  parity((await db.query(SQL)).rows, js, 'the fixture plus the synthetic rows');
   await db.close();
 }
 
@@ -176,6 +228,11 @@ console.log('B) the cache purge removes exactly the stale Arsenal yeses, all or 
 }
 
 console.log('');
-if (CONTROL) console.log(`control ${CONTROL} ${fired.length ? 'FIRED' : 'DID NOT FIRE'}: ${fired.join('; ') || 'nothing changed'}`);
+/* FIRED only when applied AND a check went red; applied with every check green exits 3 and never prints green */
+if (CONTROL) {
+  if (!fired.length) { console.log(`control ${CONTROL} DID NOT FIRE: nothing changed`); process.exit(3); }
+  if (!failures) { console.log(`control ${CONTROL} DID NOT FIRE: applied (${fired.join('; ')}) but every check stayed green`); process.exit(3); }
+  console.log(`control ${CONTROL} FIRED: applied (${fired.join('; ')}) and ${failures} check(s) went red`);
+}
 if (failures) { console.log(`rehearseClubNamesakes1584: ${failures} finding(s).`); process.exit(1); }
 console.log('rehearseClubNamesakes1584: green. Q1 and its JS twin agree in Postgres, and the purge form removes exactly the stale Arsenal yeses or nothing.');

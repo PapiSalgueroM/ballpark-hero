@@ -3,6 +3,8 @@
 -- scripts/lib/clubNamesakeDetect.mjs computes the same rows from an array, and
 -- scripts/qa/rehearseClubNamesakes1584.mjs runs this exact text in PGlite over
 -- scripts/data/clubNamesakes1584/detectFixture.json and requires the two to agree (control REHEARSE_CONTROL=parity).
+-- Its pass A2 adds synthetic rows (one without a nationality, twelve of a split season) so the two clauses the
+-- fixture cannot reach are compared too (controls REHEARSE_CONTROL=sql14 and sqlsplit).
 --
 -- S1, two squads in one: the largest club year of its year, at least 5 rows above the second largest.
 --     Sized from every usable row, with or without a nationality (critic advice 14).
