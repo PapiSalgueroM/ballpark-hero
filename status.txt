@@ -1,0 +1,14 @@
+tick 1 at 17:00:07, node pid 2770 alive: yes
+               total        used        free      shared  buff/cache   available
+Mem:           15983        1339        9026          45        6006       14643
+Swap:           3071           0        3071
+/dev/root         147814 62899     84899  43% /
+    PID    PPID   RSS     ELAPSED COMMAND
+   2428    2424 149468      01:36 /tmp/provjobd282535923
+   2486    2469 141684      01:19 /home/runner/actions-runner/cached/2.338.2/bin/Runner.Worker spawnclient 142 145
+   2469    2411 98096       01:20 /home/runner/actions-runner/cached/2.338.2/bin/Runner.Listener run
+   1455       1 84852       01:41 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+   1107       1 56160       01:43 php-fpm: master process (/etc/php/8.5/fpm/php-fpm.conf)
+   2775    2770 50344       00:00 node --max-old-space-size=3000 scripts/simManagerWorldContinuity.mjs
+   1299       1 50040       01:42 /usr/bin/containerd
+log bytes 0
