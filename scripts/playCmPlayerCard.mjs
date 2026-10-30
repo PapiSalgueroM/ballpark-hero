@@ -112,17 +112,25 @@ function toSeasonEnd(s) {
   return s;
 }
 const S = {};
-S.S1 = onStream(0x160101, () => {
+/* A club that keeps its manager on the seed it is played on: the first seed of a few that does. */
+function kept(make, seed) {
+  for (let k = 0; k < 6; k += 1) {
+    const s = onStream(seed + k * 7919, make);
+    if (s && !s.sacked && !s.pendingSummary?.sacked) return s;
+  }
+  return null;
+}
+S.S1 = kept(() => {
   let s = cm.startCareer('Everton');
-  for (let season = 0; season < 2; season += 1) s = cm.startNextSeason(cm.finishSeason(toSeasonEnd(s)).state);
-  return playTo(s, 20);
-});
+  for (let season = 0; season < 2 && !s.sacked; season += 1) s = cm.startNextSeason(cm.finishSeason(toSeasonEnd(s)).state);
+  return s.sacked ? s : playTo(s, 20);
+}, 0x160101);
 S.S2 = onStream(0x160102, () => playTo(cm.startCareer('Hertha BSC'), 20));
 S.S3 = JSON.parse(JSON.stringify(S.S1));
 delete S.S3.pastLines;
 S.S3.pastFrom = 3;
 for (const [name, s] of Object.entries(S)) {
-  if (!s || s.sacked) cannot(`${name} could not be built (sacked or empty)`);
+  if (!s || s.sacked) cannot(`${name} could not be built (${s ? `sacked in season ${s.season}` : 'no seed of six kept the job'})`);
   fs.writeFileSync(path.join(OUT, `save-${name}.json`), JSON.stringify(s));
 }
 const wake = s => { cm.registerCustomClub?.(s.customClub ?? null, s.eraId); cm.registerLeagueOverrides?.(s.leagueOverrides ?? null); return s; };
