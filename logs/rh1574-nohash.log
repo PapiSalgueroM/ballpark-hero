@@ -1,0 +1,20 @@
+0) the migration against its generator and the table file
+   nhl: 16 rows, 16 new values equal the table file, 16 old values are the export's
+A) export: the guarded form on the table as exported
+   nhl: 21 rows (20 valid before, 20 after); 16 rewritten in place
+B) drift: one planned row changed first; the guard leaves it alone
+   nhl: 15 rewritten, 1 drifted row left alone (nhlconn-009)
+C) checksum: the all or nothing form from an export of the table
+   16 rows in the payload; 16 rewritten in place; a second run is a no-op
+D) tamper: one character of the payload changed
+   refused: Round 1574: payload checksum mismatch, nothing applied; table unchanged
+E) late drift: a row changed between the export and the apply
+  FAIL: a row that drifted after the export did not stop the step (no error)
+  FAIL: a step with a drifted row changed the table (all or nothing broken)
+   refused: NOT REFUSED; table CHANGED
+G) the table after A, held to every section by the harness in strict live mode
+   simUsConnectionsFacts with US_CONN_LIVE=nhl and US_CONN_LIVE_STRICT=nhl: exit 0; simUsConnectionsFacts: green. Every Baseball, NFL, NHL and NBA Connections group is held to the record, and no
+H) the board the game deals, 400 dates, before and after
+   pools 20 before, 20 after; 400 of 400 dates deal the same puzzle_id
+
+rehearseUsConnections1574 control nohash: FIRED, caught by check E (2 failures; checks E)

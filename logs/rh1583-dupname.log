@@ -1,0 +1,20 @@
+0) the migration against its generator and the file
+   nba: 4 rows, 4 new values equal the decided file, 4 old values are the base file's
+A) export: the guarded form on the table as exported
+   nba: 21 rows (20 valid before, 20 after); 4 rewritten in place
+B) drift: one planned row changed first; the guard leaves it alone
+   nba: 3 rewritten, 1 drifted row left alone (nbaconn-002)
+C) checksum: the all or nothing form from an export of the table
+   4 rows in the payload; 4 rewritten in place; a second run is a no-op
+D) tamper: one character of the payload changed
+   refused: Round 1583: payload checksum mismatch, nothing applied; table unchanged
+E) late drift: a row changed between the export and the apply
+   refused: Round 1583: 3 rewritten, 0 already current, drifted {nba:nbaconn-002}: nothing applied; table unchanged
+G) the four rows after A, held to every section by the harness in strict live mode
+   simUsConnectionsFacts with US_CONN_LIVE=nba and US_CONN_LIVE_STRICT=nba: exit 0; simUsConnectionsFacts: green. Every Baseball, NFL, NHL and NBA Connections group is held to the record, and no
+H) the board the game deals, 400 dates, before and after
+REHEARSE_CONTROL=dupname: nbaconn-002 now deals Derrick Rose twice
+  FAIL: 378 of 400 dates deal another board after the migration, the first 2026-10-30 (nbaconn-003 before, nbaconn-006 after)
+   pools 20 before, 19 after; 22 of 400 dates deal the same puzzle_id; first moved 2026-10-30 (nbaconn-003 before, nbaconn-006 after)
+
+rehearseNbaConnections1583 control dupname: FIRED, caught by check H (1 failure; checks H)

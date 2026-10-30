@@ -1,0 +1,26 @@
+0) the migration against its generator and the files
+   baseball: 31 boards, 55 of 55 new values equal the shipped file, 55 of 55 old values are the base file's or the seed's
+   nfl: 4 boards, 4 of 4 new values equal the shipped file, 4 of 4 old values are the base file's or the seed's
+   nhl: 4 boards, 4 of 4 new values equal the shipped file, 4 of 4 old values are the base file's or the seed's
+A) file: the guarded form on the base file boards
+   baseball: 62 rows (61 valid before, 61 after); 31 rewritten in place
+   nfl: 6 rows (5 valid before, 5 after); 4 rewritten in place
+   nhl: 6 rows (5 valid before, 5 after); 4 rewritten in place
+B) seed: baseball as its seed migration left it
+   baseball: 62 rows; 31 rewritten in place from the seed's boards
+C) drift: one named row per table changed first; the guard leaves it alone
+   baseball: 30 rewritten, 1 drifted row left alone (bconn-018)
+   nfl: 3 rewritten, 1 drifted row left alone (nflconn-004)
+   nhl: 3 rewritten, 1 drifted row left alone (nhlconn-004)
+D) checksum: the all or nothing form from an export of the file tables
+   39 rows in the payload; 39 rewritten in place; a second run is a no-op
+E) tamper: one character of the payload changed
+   refused: Round 1567: payload checksum mismatch, nothing applied; tables unchanged
+F) late drift: a row changed between the export and the apply
+  FAIL: a row that drifted after the export did not stop the step (no error)
+  FAIL: a step with a drifted row changed a table (all or nothing broken)
+   refused: NOT REFUSED; tables CHANGED
+G) the generator stops on an export holding a drifted row
+   drifted nhl:nhlconn-004; 38 rows without it, 39 once the lead accepts it
+
+rehearseUsConnections1567 control nohash: FIRED, caught by check F (2 failures; checks F)
