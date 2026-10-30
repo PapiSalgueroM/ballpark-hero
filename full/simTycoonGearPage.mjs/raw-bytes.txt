@@ -1,0 +1,3 @@
+2036 /home/runner/work/_temp/rc-out/full/simTycoonGearPage.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simTycoonGearPage.mjs/stderr.log
+2036 total

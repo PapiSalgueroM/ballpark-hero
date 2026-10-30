@@ -1,0 +1,2475 @@
+{
+  "phase": "fixed",
+  "baselineBlob": "a505743537b383bc7885bb81f5a72c11e154b566",
+  "candidateBlob": "962aab2c18611c40c1fc998c77c384ab02b2d7b6",
+  "baselineSha256": "05de3cfca8d978e6117979fb29b82b2ece7b9fb6ee1f2ce3c051e379e36de86e",
+  "candidateSha256": "ea2bf9c72ad4097af2df77fa5c19e04cfbca0bcc9c39bf71dc7fc42f249b3cc2",
+  "cases": [
+    {
+      "mode": "absent",
+      "seed": 782100,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "d8ab912c1193f32bd69504c4e438d31d890a7b3095f5b282966fc70d3b727fb6",
+      "candidateState": "d8ab912c1193f32bd69504c4e438d31d890a7b3095f5b282966fc70d3b727fb6",
+      "globalDraws": 604
+    },
+    {
+      "mode": "absent",
+      "seed": 782101,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "3d0138dbb8c7e0ed5311ae306cd822e3b8d7d19b48b8dcc1e8eabdc020a91ad5",
+      "candidateState": "3d0138dbb8c7e0ed5311ae306cd822e3b8d7d19b48b8dcc1e8eabdc020a91ad5",
+      "globalDraws": 429
+    },
+    {
+      "mode": "absent",
+      "seed": 782102,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "e55ee52b727e376443f853c1b425ffd045bf56bba95b53df698b7362c1619aba",
+      "candidateState": "e55ee52b727e376443f853c1b425ffd045bf56bba95b53df698b7362c1619aba",
+      "globalDraws": 499
+    },
+    {
+      "mode": "absent",
+      "seed": 782103,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "64f908458cdf0fa522715c5baae8cf9bab04f97e53b0b0b9892592c21812cabc",
+      "candidateState": "64f908458cdf0fa522715c5baae8cf9bab04f97e53b0b0b9892592c21812cabc",
+      "globalDraws": 491
+    },
+    {
+      "mode": "absent",
+      "seed": 782104,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "ba14237da89a121f7e4c6cd135702b93d7f6da37d55065c0a5b7545013144e35",
+      "candidateState": "ba14237da89a121f7e4c6cd135702b93d7f6da37d55065c0a5b7545013144e35",
+      "globalDraws": 438
+    },
+    {
+      "mode": "absent",
+      "seed": 782105,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "3f2ab9515ae0fdd584521adffaf57df1b0e150a6c370deb29cfcd2d15206d90c",
+      "candidateState": "3f2ab9515ae0fdd584521adffaf57df1b0e150a6c370deb29cfcd2d15206d90c",
+      "globalDraws": 502
+    },
+    {
+      "mode": "absent",
+      "seed": 782106,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "a7756c521d7b3655fc9db3e4cd601efc35c899da234fa7fd4bcf1c809069dd9d",
+      "candidateState": "a7756c521d7b3655fc9db3e4cd601efc35c899da234fa7fd4bcf1c809069dd9d",
+      "globalDraws": 514
+    },
+    {
+      "mode": "absent",
+      "seed": 782107,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "d84ecdd9ac80b8f38fdc6f0d1e6678c8cbe72dba446eea96c62ec1688b61203a",
+      "candidateState": "d84ecdd9ac80b8f38fdc6f0d1e6678c8cbe72dba446eea96c62ec1688b61203a",
+      "globalDraws": 542
+    },
+    {
+      "mode": "absent",
+      "seed": 782108,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "7d14afb43d2ac34f0aac6f5172766a2fee42cd3fa6666d204c8162f222c2d787",
+      "candidateState": "7d14afb43d2ac34f0aac6f5172766a2fee42cd3fa6666d204c8162f222c2d787",
+      "globalDraws": 433
+    },
+    {
+      "mode": "absent",
+      "seed": 782109,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "77d19a73acc8799ae33053988099254ca857a1d7e3338223518d10a1d39d3aa3",
+      "candidateState": "77d19a73acc8799ae33053988099254ca857a1d7e3338223518d10a1d39d3aa3",
+      "globalDraws": 481
+    },
+    {
+      "mode": "absent",
+      "seed": 782110,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "d4ad0a7cb910d9a8d049aaefce70766d6d6c637d3cbf31847887d9c897903f8c",
+      "candidateState": "d4ad0a7cb910d9a8d049aaefce70766d6d6c637d3cbf31847887d9c897903f8c",
+      "globalDraws": 547
+    },
+    {
+      "mode": "absent",
+      "seed": 782111,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "dcb91937e184156277d1fcbf5c0a47f8be06dec340e30b187cd21ed6a7cd5c08",
+      "candidateState": "dcb91937e184156277d1fcbf5c0a47f8be06dec340e30b187cd21ed6a7cd5c08",
+      "globalDraws": 499
+    },
+    {
+      "mode": "absent",
+      "seed": 782112,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "317503be711c60c2d86b4a27bfe7f16d41bb4738426681e15269246ec28a011d",
+      "candidateState": "317503be711c60c2d86b4a27bfe7f16d41bb4738426681e15269246ec28a011d",
+      "globalDraws": 495
+    },
+    {
+      "mode": "absent",
+      "seed": 782113,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "b64b2b6f08ac417ce7622de7583f80a72389fe7af5f54fabd809cfc72a6b5096",
+      "candidateState": "b64b2b6f08ac417ce7622de7583f80a72389fe7af5f54fabd809cfc72a6b5096",
+      "globalDraws": 463
+    },
+    {
+      "mode": "absent",
+      "seed": 782114,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "cd7602e0c9495dd7106a36b33e169fdef8ed7cbcbaf17b44449cacaaa03b63ea",
+      "candidateState": "cd7602e0c9495dd7106a36b33e169fdef8ed7cbcbaf17b44449cacaaa03b63ea",
+      "globalDraws": 488
+    },
+    {
+      "mode": "absent",
+      "seed": 782115,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "8dbec588048e30dd9caea08266e6b75a5a45092bd0425666eae6df30f1b17c18",
+      "candidateState": "8dbec588048e30dd9caea08266e6b75a5a45092bd0425666eae6df30f1b17c18",
+      "globalDraws": 527
+    },
+    {
+      "mode": "absent",
+      "seed": 782116,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "bcde318f15b2d74026dc06d03244076426909a0d34594e2945b704ef73b47bbf",
+      "candidateState": "bcde318f15b2d74026dc06d03244076426909a0d34594e2945b704ef73b47bbf",
+      "globalDraws": 502
+    },
+    {
+      "mode": "absent",
+      "seed": 782117,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "16088daad0710d3648661133d562122253cdd218bd4fd67e930c8354e943f6a5",
+      "candidateState": "16088daad0710d3648661133d562122253cdd218bd4fd67e930c8354e943f6a5",
+      "globalDraws": 535
+    },
+    {
+      "mode": "absent",
+      "seed": 782118,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "e813ada506f71bd06d3166a5d60e8343e4997864e2883d60efea53c505c451f8",
+      "candidateState": "e813ada506f71bd06d3166a5d60e8343e4997864e2883d60efea53c505c451f8",
+      "globalDraws": 445
+    },
+    {
+      "mode": "absent",
+      "seed": 782119,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "f75498d0b1fff2ef240b15f04b8264482f3dd7d1d00b7b8f5c5cf1114a9019b6",
+      "candidateState": "f75498d0b1fff2ef240b15f04b8264482f3dd7d1d00b7b8f5c5cf1114a9019b6",
+      "globalDraws": 495
+    },
+    {
+      "mode": "absent",
+      "seed": 782120,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "282918284b75dcdba4d842b2024a0b4ffdb733b30ec9caf95243f102f59eb522",
+      "candidateState": "282918284b75dcdba4d842b2024a0b4ffdb733b30ec9caf95243f102f59eb522",
+      "globalDraws": 485
+    },
+    {
+      "mode": "absent",
+      "seed": 782121,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "9134b6b1d391b82f992a6a7caa418d4e11a6e753ab35884645f7d1174698afea",
+      "candidateState": "9134b6b1d391b82f992a6a7caa418d4e11a6e753ab35884645f7d1174698afea",
+      "globalDraws": 502
+    },
+    {
+      "mode": "absent",
+      "seed": 782122,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "e63696600bdd8f3c3c49dd1d54147ab19d3a3d877126d912873a9292cd505e6f",
+      "candidateState": "e63696600bdd8f3c3c49dd1d54147ab19d3a3d877126d912873a9292cd505e6f",
+      "globalDraws": 497
+    },
+    {
+      "mode": "absent",
+      "seed": 782123,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "a281af93797d421eabee6d33c18ebd860e9f1944b787c0c290662597576dc45d",
+      "candidateState": "a281af93797d421eabee6d33c18ebd860e9f1944b787c0c290662597576dc45d",
+      "globalDraws": 536
+    },
+    {
+      "mode": "absent",
+      "seed": 782124,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "4b6e7d27ba08876d5cca1304d074318211663b3f6a375ecb0b48d00b3bc304f0",
+      "candidateState": "4b6e7d27ba08876d5cca1304d074318211663b3f6a375ecb0b48d00b3bc304f0",
+      "globalDraws": 444
+    },
+    {
+      "mode": "absent",
+      "seed": 782125,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "4b2b9487b1b455610138c379df2116bbedb8076265245f7c26c654f3dce753bf",
+      "candidateState": "4b2b9487b1b455610138c379df2116bbedb8076265245f7c26c654f3dce753bf",
+      "globalDraws": 466
+    },
+    {
+      "mode": "absent",
+      "seed": 782126,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "8ed5a14901f326b9dc17a3c9babbe38c23e0ca4dfa3d451d0dadc81078a75ed4",
+      "candidateState": "8ed5a14901f326b9dc17a3c9babbe38c23e0ca4dfa3d451d0dadc81078a75ed4",
+      "globalDraws": 498
+    },
+    {
+      "mode": "absent",
+      "seed": 782127,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "ea74dfe302cca47214730815c63a7969b28a422012f401b7dd5876296304c13d",
+      "candidateState": "ea74dfe302cca47214730815c63a7969b28a422012f401b7dd5876296304c13d",
+      "globalDraws": 491
+    },
+    {
+      "mode": "absent",
+      "seed": 782128,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "5e330a8072d330e3e97e0c4927801b8252ad6a993a4d4d02e00a866ac45b8dda",
+      "candidateState": "5e330a8072d330e3e97e0c4927801b8252ad6a993a4d4d02e00a866ac45b8dda",
+      "globalDraws": 493
+    },
+    {
+      "mode": "absent",
+      "seed": 782129,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "2873f1abc06101c923044fb9759c51de532211e2b594f02a31828e1b026cabeb",
+      "candidateState": "2873f1abc06101c923044fb9759c51de532211e2b594f02a31828e1b026cabeb",
+      "globalDraws": 473
+    },
+    {
+      "mode": "absent",
+      "seed": 782130,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "9cf87d66cdf340be6e11f5edac0060a6bf4adba66f4c2e6f5aec936dd97a635a",
+      "candidateState": "9cf87d66cdf340be6e11f5edac0060a6bf4adba66f4c2e6f5aec936dd97a635a",
+      "globalDraws": 519
+    },
+    {
+      "mode": "absent",
+      "seed": 782131,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "27cbc07b1fa48b3e3031a05be84e717f7f064ebfa1d33681840802206a9c70f4",
+      "candidateState": "27cbc07b1fa48b3e3031a05be84e717f7f064ebfa1d33681840802206a9c70f4",
+      "globalDraws": 501
+    },
+    {
+      "mode": "absent",
+      "seed": 782132,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "224959859446b0b9ac6d3a112c113ed10af26251f7de1af627bb153003a7e780",
+      "candidateState": "224959859446b0b9ac6d3a112c113ed10af26251f7de1af627bb153003a7e780",
+      "globalDraws": 448
+    },
+    {
+      "mode": "absent",
+      "seed": 782133,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "83f5acbab6d4bd6a7925ebac6bc24c3ee38e8407f9823722b30528ccd03eb998",
+      "candidateState": "83f5acbab6d4bd6a7925ebac6bc24c3ee38e8407f9823722b30528ccd03eb998",
+      "globalDraws": 484
+    },
+    {
+      "mode": "absent",
+      "seed": 782134,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "517de357a00eaba092592feb20799ee7187c66d5d56e892c65262889d6b0d212",
+      "candidateState": "517de357a00eaba092592feb20799ee7187c66d5d56e892c65262889d6b0d212",
+      "globalDraws": 547
+    },
+    {
+      "mode": "absent",
+      "seed": 782135,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "c85b5dc6cd0ce34041780c384a82ac93cdc7c1da9a7230714e294b5bfe73b2a3",
+      "candidateState": "c85b5dc6cd0ce34041780c384a82ac93cdc7c1da9a7230714e294b5bfe73b2a3",
+      "globalDraws": 497
+    },
+    {
+      "mode": "absent",
+      "seed": 782136,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "e6c55544b49368f7b146488b160ef596ef0be9fe8eb165b81e88b8c31f5d9525",
+      "candidateState": "e6c55544b49368f7b146488b160ef596ef0be9fe8eb165b81e88b8c31f5d9525",
+      "globalDraws": 566
+    },
+    {
+      "mode": "absent",
+      "seed": 782137,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "718756194ca71a5ce5a773ed27160d3001d162943e9ed8ad3faf9d2cea01d0e2",
+      "candidateState": "718756194ca71a5ce5a773ed27160d3001d162943e9ed8ad3faf9d2cea01d0e2",
+      "globalDraws": 448
+    },
+    {
+      "mode": "absent",
+      "seed": 782138,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "ce19fbe2ca87d2eed791f02cacd912453bfc5a611bd138d729ee38e2ac7963ec",
+      "candidateState": "ce19fbe2ca87d2eed791f02cacd912453bfc5a611bd138d729ee38e2ac7963ec",
+      "globalDraws": 506
+    },
+    {
+      "mode": "absent",
+      "seed": 782139,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "6cc3c6a055209348c0b12df7e7acf4252bc49c9c6be54fa5c4cf18c1e6b160d6",
+      "candidateState": "6cc3c6a055209348c0b12df7e7acf4252bc49c9c6be54fa5c4cf18c1e6b160d6",
+      "globalDraws": 432
+    },
+    {
+      "mode": "absent",
+      "seed": 782140,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "956368abd29f5e1cbbd369431e7b0c8d2b11f811f9b9cb2a2f38679174bec57e",
+      "candidateState": "956368abd29f5e1cbbd369431e7b0c8d2b11f811f9b9cb2a2f38679174bec57e",
+      "globalDraws": 456
+    },
+    {
+      "mode": "absent",
+      "seed": 782141,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "6dc49eefcdea24ed5df7be69836d40d468b618819c727fe01e7686284d6e405e",
+      "candidateState": "6dc49eefcdea24ed5df7be69836d40d468b618819c727fe01e7686284d6e405e",
+      "globalDraws": 463
+    },
+    {
+      "mode": "absent",
+      "seed": 782142,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "005c257ac9827d621dad106e543682185766d2d98b308f910bd9a09086f7ff28",
+      "candidateState": "005c257ac9827d621dad106e543682185766d2d98b308f910bd9a09086f7ff28",
+      "globalDraws": 491
+    },
+    {
+      "mode": "absent",
+      "seed": 782143,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "eedcf7ca17378933af4002c23bb39231d1595928091f595f08499830b941cc0a",
+      "candidateState": "eedcf7ca17378933af4002c23bb39231d1595928091f595f08499830b941cc0a",
+      "globalDraws": 447
+    },
+    {
+      "mode": "absent",
+      "seed": 782144,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "0f22b39349e77462b9e0c10bff1cc3cc7bb579d08a7998ad5fb07da55edd067c",
+      "candidateState": "0f22b39349e77462b9e0c10bff1cc3cc7bb579d08a7998ad5fb07da55edd067c",
+      "globalDraws": 454
+    },
+    {
+      "mode": "absent",
+      "seed": 782145,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "c605e2d046668e910b59dd959bc653463fefd673c3621b68ba590880dbce8527",
+      "candidateState": "c605e2d046668e910b59dd959bc653463fefd673c3621b68ba590880dbce8527",
+      "globalDraws": 490
+    },
+    {
+      "mode": "absent",
+      "seed": 782146,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "b591518428e340e0c81b34541958ec2ca9d5fdb1a89dcc3d18f22d2cd31bcc2b",
+      "candidateState": "b591518428e340e0c81b34541958ec2ca9d5fdb1a89dcc3d18f22d2cd31bcc2b",
+      "globalDraws": 540
+    },
+    {
+      "mode": "absent",
+      "seed": 782147,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "045a4d946f22deffb13dfd728547751a91471143039d5e039eba85abfd048997",
+      "candidateState": "045a4d946f22deffb13dfd728547751a91471143039d5e039eba85abfd048997",
+      "globalDraws": 496
+    },
+    {
+      "mode": "absent",
+      "seed": 782148,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "458d0d6d9a0c03d2abe9a549f13deed5bd6e126daae7054df36b94fc811621d3",
+      "candidateState": "458d0d6d9a0c03d2abe9a549f13deed5bd6e126daae7054df36b94fc811621d3",
+      "globalDraws": 561
+    },
+    {
+      "mode": "absent",
+      "seed": 782149,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "dbcc570fe1f8e63f1dac6fedc2802e32142628772272b75baa9e25827e1dc7df",
+      "candidateState": "dbcc570fe1f8e63f1dac6fedc2802e32142628772272b75baa9e25827e1dc7df",
+      "globalDraws": 557
+    },
+    {
+      "mode": "absent",
+      "seed": 782150,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "34c43a3154cd44e554e81f5a14fc644adde8366c15c3c69208763c78e51535a0",
+      "candidateState": "34c43a3154cd44e554e81f5a14fc644adde8366c15c3c69208763c78e51535a0",
+      "globalDraws": 484
+    },
+    {
+      "mode": "absent",
+      "seed": 782151,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "09fab773935a01c14ff0fd558095bd09eb83b3dfd68073823040708374f41d7a",
+      "candidateState": "09fab773935a01c14ff0fd558095bd09eb83b3dfd68073823040708374f41d7a",
+      "globalDraws": 527
+    },
+    {
+      "mode": "absent",
+      "seed": 782152,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "d6eec8a630d3e5e5fbcb49b64d3106c25406d3c8fdc545ac75aacdb399c7415e",
+      "candidateState": "d6eec8a630d3e5e5fbcb49b64d3106c25406d3c8fdc545ac75aacdb399c7415e",
+      "globalDraws": 446
+    },
+    {
+      "mode": "absent",
+      "seed": 782153,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "884766837c9948964f3bc672dec9b99fd8b9ff68ba7a28f294cd6b240417a7f1",
+      "candidateState": "884766837c9948964f3bc672dec9b99fd8b9ff68ba7a28f294cd6b240417a7f1",
+      "globalDraws": 431
+    },
+    {
+      "mode": "absent",
+      "seed": 782154,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "57fcb437d0fc569168a78dc00ccb17f61b962e16e2f5512680f43188166e8303",
+      "candidateState": "57fcb437d0fc569168a78dc00ccb17f61b962e16e2f5512680f43188166e8303",
+      "globalDraws": 547
+    },
+    {
+      "mode": "absent",
+      "seed": 782155,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "6f537ac1d8fd2199574c949839d36f51ae23e86e5283cab80d5b1b6453220e88",
+      "candidateState": "6f537ac1d8fd2199574c949839d36f51ae23e86e5283cab80d5b1b6453220e88",
+      "globalDraws": 486
+    },
+    {
+      "mode": "absent",
+      "seed": 782156,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "2f125178a10bc4cbee6ef12b3d561ffebbb7a31267ed278d34700849ad7739f8",
+      "candidateState": "2f125178a10bc4cbee6ef12b3d561ffebbb7a31267ed278d34700849ad7739f8",
+      "globalDraws": 455
+    },
+    {
+      "mode": "absent",
+      "seed": 782157,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "b9495c5937bdc867b9e42aae9c1547395f358bdd84765556d40735aaf2831de8",
+      "candidateState": "b9495c5937bdc867b9e42aae9c1547395f358bdd84765556d40735aaf2831de8",
+      "globalDraws": 527
+    },
+    {
+      "mode": "absent",
+      "seed": 782158,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "6c3979aa4681750841d9c805476174e6d6c52158fa5f38ef64606d8a6af37add",
+      "candidateState": "6c3979aa4681750841d9c805476174e6d6c52158fa5f38ef64606d8a6af37add",
+      "globalDraws": 442
+    },
+    {
+      "mode": "absent",
+      "seed": 782159,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "5b26b6f114ec6574684a938423879c671bc2f0a934ccfbd070551e6d94358783",
+      "candidateState": "5b26b6f114ec6574684a938423879c671bc2f0a934ccfbd070551e6d94358783",
+      "globalDraws": 436
+    },
+    {
+      "mode": "absent",
+      "seed": 782160,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "6a3d066b5b5c8eddc8dac15b766ad3060554cd7f039c06b5c9534e0d3780151d",
+      "candidateState": "6a3d066b5b5c8eddc8dac15b766ad3060554cd7f039c06b5c9534e0d3780151d",
+      "globalDraws": 500
+    },
+    {
+      "mode": "absent",
+      "seed": 782161,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "fdc5f8a4bd9fa65512dff75af02bb59f92209811c8b93ac8c168688e0a522e78",
+      "candidateState": "fdc5f8a4bd9fa65512dff75af02bb59f92209811c8b93ac8c168688e0a522e78",
+      "globalDraws": 423
+    },
+    {
+      "mode": "absent",
+      "seed": 782162,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "8cf66c64921f9e66ffff6b93f439172823ee7acf76d790382c61cba76de6c703",
+      "candidateState": "8cf66c64921f9e66ffff6b93f439172823ee7acf76d790382c61cba76de6c703",
+      "globalDraws": 493
+    },
+    {
+      "mode": "absent",
+      "seed": 782163,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "b3ec28eede504f5d8dad4d20b76313549e46d15a57b9df11e9d361eca683cf96",
+      "candidateState": "b3ec28eede504f5d8dad4d20b76313549e46d15a57b9df11e9d361eca683cf96",
+      "globalDraws": 507
+    },
+    {
+      "mode": "absent",
+      "seed": 782164,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "fd7d2debaf8777fa5df1bde9163299b3d5a0de67333cfa555ba55d0c589443a4",
+      "candidateState": "fd7d2debaf8777fa5df1bde9163299b3d5a0de67333cfa555ba55d0c589443a4",
+      "globalDraws": 549
+    },
+    {
+      "mode": "absent",
+      "seed": 782165,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "daf0c9200a00ad4892d6480686f2a54535c80b76d67a85a80345e59f4c022944",
+      "candidateState": "daf0c9200a00ad4892d6480686f2a54535c80b76d67a85a80345e59f4c022944",
+      "globalDraws": 478
+    },
+    {
+      "mode": "absent",
+      "seed": 782166,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "20f6a8faf8e8f2472f5df1ea2b1663c95de2f183b8d21f8b611e06d1b7293cd6",
+      "candidateState": "20f6a8faf8e8f2472f5df1ea2b1663c95de2f183b8d21f8b611e06d1b7293cd6",
+      "globalDraws": 449
+    },
+    {
+      "mode": "absent",
+      "seed": 782167,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "3c12a46d9c7cd8e4388a764f22dc8c032acf2ddc0c47db764c3bba936ca617dd",
+      "candidateState": "3c12a46d9c7cd8e4388a764f22dc8c032acf2ddc0c47db764c3bba936ca617dd",
+      "globalDraws": 483
+    },
+    {
+      "mode": "absent",
+      "seed": 782168,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "be10843cead4a51c841d33b5f80793c1a5033f18410fca899ae860e3db309880",
+      "candidateState": "be10843cead4a51c841d33b5f80793c1a5033f18410fca899ae860e3db309880",
+      "globalDraws": 511
+    },
+    {
+      "mode": "absent",
+      "seed": 782169,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "19b05402aa63a129eb02ee5de14a6d9d0a291f927160319a4486e25ae1031494",
+      "candidateState": "19b05402aa63a129eb02ee5de14a6d9d0a291f927160319a4486e25ae1031494",
+      "globalDraws": 507
+    },
+    {
+      "mode": "absent",
+      "seed": 782170,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "cf39dd2ce6a51bc22cb23e6a0e054174bfccaad442bb61cc8fe1bc2912df70e2",
+      "candidateState": "cf39dd2ce6a51bc22cb23e6a0e054174bfccaad442bb61cc8fe1bc2912df70e2",
+      "globalDraws": 472
+    },
+    {
+      "mode": "absent",
+      "seed": 782171,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "b04638d73ed7b9a2322149bb21e32ee51e236128000addedc5e0c9c1e05ddf61",
+      "candidateState": "b04638d73ed7b9a2322149bb21e32ee51e236128000addedc5e0c9c1e05ddf61",
+      "globalDraws": 491
+    },
+    {
+      "mode": "absent",
+      "seed": 782172,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "7683948cd177d1328b29ff4d4c7797db1554ef0ee7a3f1ec97d1dc8fa41abe24",
+      "candidateState": "7683948cd177d1328b29ff4d4c7797db1554ef0ee7a3f1ec97d1dc8fa41abe24",
+      "globalDraws": 505
+    },
+    {
+      "mode": "absent",
+      "seed": 782173,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "8e84ac1f341975010a6854d31cc7fdb05c879d07f2894f87e088b99edf4f034e",
+      "candidateState": "8e84ac1f341975010a6854d31cc7fdb05c879d07f2894f87e088b99edf4f034e",
+      "globalDraws": 495
+    },
+    {
+      "mode": "absent",
+      "seed": 782174,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "10e994dab41e3b5c332f906f75081bdfccecf991e6f113015f9124c7a1bf7628",
+      "candidateState": "10e994dab41e3b5c332f906f75081bdfccecf991e6f113015f9124c7a1bf7628",
+      "globalDraws": 520
+    },
+    {
+      "mode": "absent",
+      "seed": 782175,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "c2878463d99f44921105955c7baad4ae3d5cdf246b6963793fe246363dffc4d5",
+      "candidateState": "c2878463d99f44921105955c7baad4ae3d5cdf246b6963793fe246363dffc4d5",
+      "globalDraws": 441
+    },
+    {
+      "mode": "absent",
+      "seed": 782176,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "ebbfa6ff9aacee213cbaaa2db9c823fc3cd674e47792c57340fc963aba7186df",
+      "candidateState": "ebbfa6ff9aacee213cbaaa2db9c823fc3cd674e47792c57340fc963aba7186df",
+      "globalDraws": 491
+    },
+    {
+      "mode": "absent",
+      "seed": 782177,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "478539ab38995bc2bf591e2fcd2b3b4232a89eb3fe5ed06fdc3aac48c0f0d5d2",
+      "candidateState": "478539ab38995bc2bf591e2fcd2b3b4232a89eb3fe5ed06fdc3aac48c0f0d5d2",
+      "globalDraws": 519
+    },
+    {
+      "mode": "absent",
+      "seed": 782178,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "ad68f52f75b225003cf24b708a4953a55ec5b256fff0140818e1d657f7da228c",
+      "candidateState": "ad68f52f75b225003cf24b708a4953a55ec5b256fff0140818e1d657f7da228c",
+      "globalDraws": 438
+    },
+    {
+      "mode": "absent",
+      "seed": 782179,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "a2723c1d4260374941e6f3b54fd1ef49fd6a3dc1f75e997840750ba836b70839",
+      "candidateState": "a2723c1d4260374941e6f3b54fd1ef49fd6a3dc1f75e997840750ba836b70839",
+      "globalDraws": 511
+    },
+    {
+      "mode": "absent",
+      "seed": 782180,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "c49cc2ec7878f2bef48e98756636e1a93defbbd23f4e68da4735cd61dc7e5778",
+      "candidateState": "c49cc2ec7878f2bef48e98756636e1a93defbbd23f4e68da4735cd61dc7e5778",
+      "globalDraws": 455
+    },
+    {
+      "mode": "absent",
+      "seed": 782181,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "e5b6df6da1f39246b74fba76e0146a6b49c64dd78bb75189942cdd49dacd6563",
+      "candidateState": "e5b6df6da1f39246b74fba76e0146a6b49c64dd78bb75189942cdd49dacd6563",
+      "globalDraws": 543
+    },
+    {
+      "mode": "absent",
+      "seed": 782182,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "88b9c07b458da6d916c161cc26e422e63b0d6e84f481fb74f2845cd19e4f3032",
+      "candidateState": "88b9c07b458da6d916c161cc26e422e63b0d6e84f481fb74f2845cd19e4f3032",
+      "globalDraws": 485
+    },
+    {
+      "mode": "absent",
+      "seed": 782183,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "9e25d64d9aa03121526036d4a39d1d977fdfd02a1c2b2595bdf5ff6a659bf008",
+      "candidateState": "9e25d64d9aa03121526036d4a39d1d977fdfd02a1c2b2595bdf5ff6a659bf008",
+      "globalDraws": 468
+    },
+    {
+      "mode": "absent",
+      "seed": 782184,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "f25f2a2687442bbf70862d2e1d06c64565d1ab01a0d5ae906b147eb101150c65",
+      "candidateState": "f25f2a2687442bbf70862d2e1d06c64565d1ab01a0d5ae906b147eb101150c65",
+      "globalDraws": 507
+    },
+    {
+      "mode": "absent",
+      "seed": 782185,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "1184275748454b2deb7a30e56552ded2fde7500701b013e5255f44374543f1db",
+      "candidateState": "1184275748454b2deb7a30e56552ded2fde7500701b013e5255f44374543f1db",
+      "globalDraws": 464
+    },
+    {
+      "mode": "absent",
+      "seed": 782186,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "8c5f51a97256ca2cd4d86cc3cee5802d9fedea7919b51129d9c99a3106d1c89d",
+      "candidateState": "8c5f51a97256ca2cd4d86cc3cee5802d9fedea7919b51129d9c99a3106d1c89d",
+      "globalDraws": 524
+    },
+    {
+      "mode": "absent",
+      "seed": 782187,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "2c9411f4825a6fe77959637e9047621eeabbbaaa87e330d5fd85822089e492bf",
+      "candidateState": "2c9411f4825a6fe77959637e9047621eeabbbaaa87e330d5fd85822089e492bf",
+      "globalDraws": 501
+    },
+    {
+      "mode": "absent",
+      "seed": 782188,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "b55d23be0b81f62020df5264e1ceb682d728200c6d0e3d8fa928cf54ed585770",
+      "candidateState": "b55d23be0b81f62020df5264e1ceb682d728200c6d0e3d8fa928cf54ed585770",
+      "globalDraws": 453
+    },
+    {
+      "mode": "absent",
+      "seed": 782189,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "8cf74376fd4a27b03c0dcc6c1cc43e25b0d27b6c246a9282e58267b946a6d2f5",
+      "candidateState": "8cf74376fd4a27b03c0dcc6c1cc43e25b0d27b6c246a9282e58267b946a6d2f5",
+      "globalDraws": 460
+    },
+    {
+      "mode": "absent",
+      "seed": 782190,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "067fca3b72b699bc48b7d2b4fcb30052cf2320460af695aa289b6322f53e55bc",
+      "candidateState": "067fca3b72b699bc48b7d2b4fcb30052cf2320460af695aa289b6322f53e55bc",
+      "globalDraws": 479
+    },
+    {
+      "mode": "absent",
+      "seed": 782191,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "c3a09867d628c31f89f105e7af7c50a874b07b3de49b82f94be899d2a1b61586",
+      "candidateState": "c3a09867d628c31f89f105e7af7c50a874b07b3de49b82f94be899d2a1b61586",
+      "globalDraws": 504
+    },
+    {
+      "mode": "absent",
+      "seed": 782192,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "ee344094691f15e3148b6c93b0280c219a7923103470a16325756b10412ad0a0",
+      "candidateState": "ee344094691f15e3148b6c93b0280c219a7923103470a16325756b10412ad0a0",
+      "globalDraws": 488
+    },
+    {
+      "mode": "absent",
+      "seed": 782193,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "ed1a0507aac5d45be1de0fa08582c58825066be7c026df484bbeebc90f3c1628",
+      "candidateState": "ed1a0507aac5d45be1de0fa08582c58825066be7c026df484bbeebc90f3c1628",
+      "globalDraws": 516
+    },
+    {
+      "mode": "absent",
+      "seed": 782194,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "e01c757997c84f3237efadc35cd31753809f0aeda96ab86fa6d291b4e8e9c266",
+      "candidateState": "e01c757997c84f3237efadc35cd31753809f0aeda96ab86fa6d291b4e8e9c266",
+      "globalDraws": 545
+    },
+    {
+      "mode": "absent",
+      "seed": 782195,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "3faae434d08ef81c65ef6afcc501aeed852b3e004df0e9b480f3aea8407bbf8e",
+      "candidateState": "3faae434d08ef81c65ef6afcc501aeed852b3e004df0e9b480f3aea8407bbf8e",
+      "globalDraws": 453
+    },
+    {
+      "mode": "absent",
+      "seed": 782196,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "0329e647c88789e4a3b3399a0f57dee5461d7a581f605d3f6d46366688a35715",
+      "candidateState": "0329e647c88789e4a3b3399a0f57dee5461d7a581f605d3f6d46366688a35715",
+      "globalDraws": 398
+    },
+    {
+      "mode": "absent",
+      "seed": 782197,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "7642de524f93f3977662e244fdeb0e1b17d4fbffe0685fe50db24f0385b732d6",
+      "candidateState": "7642de524f93f3977662e244fdeb0e1b17d4fbffe0685fe50db24f0385b732d6",
+      "globalDraws": 428
+    },
+    {
+      "mode": "absent",
+      "seed": 782198,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "b666d3bbf41cb216c8754abebb270b2aa301ce55a2c2afa4a49640ed4d02068a",
+      "candidateState": "b666d3bbf41cb216c8754abebb270b2aa301ce55a2c2afa4a49640ed4d02068a",
+      "globalDraws": 434
+    },
+    {
+      "mode": "absent",
+      "seed": 782199,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "7f99078df6bde93c211779b2fedeaa2e1a5e5728d2f563c8f18f92089d3ae2ba",
+      "candidateState": "7f99078df6bde93c211779b2fedeaa2e1a5e5728d2f563c8f18f92089d3ae2ba",
+      "globalDraws": 449
+    },
+    {
+      "mode": "absent",
+      "seed": 782200,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "618a72f85681016aa5ff0f4da625cf0335f387bcfe2665e1ab3d5e82fa2dff03",
+      "candidateState": "618a72f85681016aa5ff0f4da625cf0335f387bcfe2665e1ab3d5e82fa2dff03",
+      "globalDraws": 447
+    },
+    {
+      "mode": "absent",
+      "seed": 782201,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "e5cc2512ec5815a061eb981ee7fb099f79dd1bc9d120e31705c829da32a8c121",
+      "candidateState": "e5cc2512ec5815a061eb981ee7fb099f79dd1bc9d120e31705c829da32a8c121",
+      "globalDraws": 499
+    },
+    {
+      "mode": "absent",
+      "seed": 782202,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "91347aa01c417493410adeb059ec24d0301c9c5073d438dbb61d89d9671b6771",
+      "candidateState": "91347aa01c417493410adeb059ec24d0301c9c5073d438dbb61d89d9671b6771",
+      "globalDraws": 510
+    },
+    {
+      "mode": "absent",
+      "seed": 782203,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "1c9b085285cdd0903e51dbbb33aeda81ad746a9b3f837153345a56d904519749",
+      "candidateState": "1c9b085285cdd0903e51dbbb33aeda81ad746a9b3f837153345a56d904519749",
+      "globalDraws": 566
+    },
+    {
+      "mode": "absent",
+      "seed": 782204,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "3c5a9f50226e33a929c568c551e97c1f83338b6faed47b1b760515af08598b75",
+      "candidateState": "3c5a9f50226e33a929c568c551e97c1f83338b6faed47b1b760515af08598b75",
+      "globalDraws": 448
+    },
+    {
+      "mode": "absent",
+      "seed": 782205,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "b479bd0a3d210df046cbf73a8d64e42bc7759174cce96d0ab8de1c6bcf5ca210",
+      "candidateState": "b479bd0a3d210df046cbf73a8d64e42bc7759174cce96d0ab8de1c6bcf5ca210",
+      "globalDraws": 420
+    },
+    {
+      "mode": "absent",
+      "seed": 782206,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "f8102b717669112bd6f062fd2277bb0436ad14c73a81d68441f228e12322525c",
+      "candidateState": "f8102b717669112bd6f062fd2277bb0436ad14c73a81d68441f228e12322525c",
+      "globalDraws": 469
+    },
+    {
+      "mode": "absent",
+      "seed": 782207,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "bcec299e86079a11d0a0bb5e1c9364f995c4e9b741a3543803eeab44be1e3c28",
+      "candidateState": "bcec299e86079a11d0a0bb5e1c9364f995c4e9b741a3543803eeab44be1e3c28",
+      "globalDraws": 461
+    },
+    {
+      "mode": "absent",
+      "seed": 782208,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "d747327034113ea96b62627b546d79f8db30bb56c089a3f6807ebc7a85e77f2a",
+      "candidateState": "d747327034113ea96b62627b546d79f8db30bb56c089a3f6807ebc7a85e77f2a",
+      "globalDraws": 502
+    },
+    {
+      "mode": "absent",
+      "seed": 782209,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "4164a805d5b98f061d850cc70ddcd2e366f7f823a15f484f0878d4340280c871",
+      "candidateState": "4164a805d5b98f061d850cc70ddcd2e366f7f823a15f484f0878d4340280c871",
+      "globalDraws": 461
+    },
+    {
+      "mode": "absent",
+      "seed": 782210,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "721988dbe9c2b5e7bde4545c048b9dadcfda2f9aa249f7522a4bbb7f2ac54502",
+      "candidateState": "721988dbe9c2b5e7bde4545c048b9dadcfda2f9aa249f7522a4bbb7f2ac54502",
+      "globalDraws": 495
+    },
+    {
+      "mode": "absent",
+      "seed": 782211,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "9b530827c6607ff5de1eb3493d4ed839b5b3fa8ebbee356ca4536e544ba5ebc9",
+      "candidateState": "9b530827c6607ff5de1eb3493d4ed839b5b3fa8ebbee356ca4536e544ba5ebc9",
+      "globalDraws": 528
+    },
+    {
+      "mode": "absent",
+      "seed": 782212,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "6bc426039a8dca0a7229878668bde9e1a80683bd3ddc2dcb6ebb961d7d870113",
+      "candidateState": "6bc426039a8dca0a7229878668bde9e1a80683bd3ddc2dcb6ebb961d7d870113",
+      "globalDraws": 471
+    },
+    {
+      "mode": "absent",
+      "seed": 782213,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "b72f82e8fa3938dc55d57f096aac5b2559369744ab79a9ba50f6e1d660d179a7",
+      "candidateState": "b72f82e8fa3938dc55d57f096aac5b2559369744ab79a9ba50f6e1d660d179a7",
+      "globalDraws": 462
+    },
+    {
+      "mode": "absent",
+      "seed": 782214,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "1cb855b1a85ca67cf3711c713e09e42177378998bd8922368453fd06bfdabe42",
+      "candidateState": "1cb855b1a85ca67cf3711c713e09e42177378998bd8922368453fd06bfdabe42",
+      "globalDraws": 445
+    },
+    {
+      "mode": "absent",
+      "seed": 782215,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "8d62d428cc1707695072d696771cf18295976b9f57dccd8485e61393cf1514cc",
+      "candidateState": "8d62d428cc1707695072d696771cf18295976b9f57dccd8485e61393cf1514cc",
+      "globalDraws": 508
+    },
+    {
+      "mode": "absent",
+      "seed": 782216,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "5fb098835c1ab879f644e761d2fc06a692c862fb6e7ec88e2e2c00db0063246e",
+      "candidateState": "5fb098835c1ab879f644e761d2fc06a692c862fb6e7ec88e2e2c00db0063246e",
+      "globalDraws": 511
+    },
+    {
+      "mode": "absent",
+      "seed": 782217,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "4edff2b45980f427e65f2ef0b929a5f23c51a0a662ecda2f64503e7cca2882e0",
+      "candidateState": "4edff2b45980f427e65f2ef0b929a5f23c51a0a662ecda2f64503e7cca2882e0",
+      "globalDraws": 475
+    },
+    {
+      "mode": "absent",
+      "seed": 782218,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "3181d5e8ef212b10a4b3e00b837026787c28c564bf3120c4bf8ce194bd81e0ba",
+      "candidateState": "3181d5e8ef212b10a4b3e00b837026787c28c564bf3120c4bf8ce194bd81e0ba",
+      "globalDraws": 446
+    },
+    {
+      "mode": "absent",
+      "seed": 782219,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "11bdfea977a5921a049e04d1d561ec143a91cee0b832341b6cce87bdd94827c8",
+      "candidateState": "11bdfea977a5921a049e04d1d561ec143a91cee0b832341b6cce87bdd94827c8",
+      "globalDraws": 462
+    },
+    {
+      "mode": "absent",
+      "seed": 782220,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "186b2581fc5cdb541c5b3f3b18320b2d87f6d66f6940b5262e442499415be864",
+      "candidateState": "186b2581fc5cdb541c5b3f3b18320b2d87f6d66f6940b5262e442499415be864",
+      "globalDraws": 534
+    },
+    {
+      "mode": "absent",
+      "seed": 782221,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "8440dbf0e56b90669323b9c6960f9f9d981ddc8d92fcc7aa5b8598fe6a5940d1",
+      "candidateState": "8440dbf0e56b90669323b9c6960f9f9d981ddc8d92fcc7aa5b8598fe6a5940d1",
+      "globalDraws": 449
+    },
+    {
+      "mode": "absent",
+      "seed": 782222,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "91a1bd14831f2860f332f855d8626034af3154ea88b1c2aad7574d6f63652ed9",
+      "candidateState": "91a1bd14831f2860f332f855d8626034af3154ea88b1c2aad7574d6f63652ed9",
+      "globalDraws": 520
+    },
+    {
+      "mode": "absent",
+      "seed": 782223,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "a4abc50ab022807702f2858d14d55105bbfb18dfe9820f173d04cbcb21c3a6d7",
+      "candidateState": "a4abc50ab022807702f2858d14d55105bbfb18dfe9820f173d04cbcb21c3a6d7",
+      "globalDraws": 444
+    },
+    {
+      "mode": "absent",
+      "seed": 782224,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "2f8e6bcc268aa3a1031940c50028a49f4f2d9db3013d5aa36b3f7b1a831e2f7b",
+      "candidateState": "2f8e6bcc268aa3a1031940c50028a49f4f2d9db3013d5aa36b3f7b1a831e2f7b",
+      "globalDraws": 501
+    },
+    {
+      "mode": "absent",
+      "seed": 782225,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "f9b147237b3c01b4c1436df2414fe2bef702bd270e811dcac20085f10127e9c9",
+      "candidateState": "f9b147237b3c01b4c1436df2414fe2bef702bd270e811dcac20085f10127e9c9",
+      "globalDraws": 463
+    },
+    {
+      "mode": "absent",
+      "seed": 782226,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "dddedf1129e86d1130950d7e11d227e38b25b46223e49a45ed33cc8222ff01cd",
+      "candidateState": "dddedf1129e86d1130950d7e11d227e38b25b46223e49a45ed33cc8222ff01cd",
+      "globalDraws": 492
+    },
+    {
+      "mode": "absent",
+      "seed": 782227,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "5deb353e75bf53050366737cb22cdf6afa5349636877a536beb64f4f8f6994c2",
+      "candidateState": "5deb353e75bf53050366737cb22cdf6afa5349636877a536beb64f4f8f6994c2",
+      "globalDraws": 506
+    },
+    {
+      "mode": "absent",
+      "seed": 782228,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "56ba127808c7a56ee2460ec90ad6f48aa5ce3dd3f458a7422d41c29a8f1fed73",
+      "candidateState": "56ba127808c7a56ee2460ec90ad6f48aa5ce3dd3f458a7422d41c29a8f1fed73",
+      "globalDraws": 483
+    },
+    {
+      "mode": "absent",
+      "seed": 782229,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "6c3624ce12b1010d8fa393dcee3e374417d221b648e462b5e98db17ff7169a91",
+      "candidateState": "6c3624ce12b1010d8fa393dcee3e374417d221b648e462b5e98db17ff7169a91",
+      "globalDraws": 484
+    },
+    {
+      "mode": "absent",
+      "seed": 782230,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "55170b68d5b434e979e99a97bc5712da7ded236ca3c66c094e59393904379838",
+      "candidateState": "55170b68d5b434e979e99a97bc5712da7ded236ca3c66c094e59393904379838",
+      "globalDraws": 407
+    },
+    {
+      "mode": "absent",
+      "seed": 782231,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "4318c2c5745a4ad12a584b75fd8d6f085de2d4ab8bf26c9617d6a3cdc2832559",
+      "candidateState": "4318c2c5745a4ad12a584b75fd8d6f085de2d4ab8bf26c9617d6a3cdc2832559",
+      "globalDraws": 503
+    },
+    {
+      "mode": "absent",
+      "seed": 782232,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "f629e4deee5446d692c70411d5014197b059f23af63b0a206cd40c4775fdaf88",
+      "candidateState": "f629e4deee5446d692c70411d5014197b059f23af63b0a206cd40c4775fdaf88",
+      "globalDraws": 516
+    },
+    {
+      "mode": "absent",
+      "seed": 782233,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "120161c12a712596dc7b928651c5e7d54235c1edf76f85f97917d5f460e9c25e",
+      "candidateState": "120161c12a712596dc7b928651c5e7d54235c1edf76f85f97917d5f460e9c25e",
+      "globalDraws": 477
+    },
+    {
+      "mode": "absent",
+      "seed": 782234,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "365d5f580b2760516c77d4ada1fea8555a56ebad23d00ece55d76cd68562a39a",
+      "candidateState": "365d5f580b2760516c77d4ada1fea8555a56ebad23d00ece55d76cd68562a39a",
+      "globalDraws": 393
+    },
+    {
+      "mode": "absent",
+      "seed": 782235,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "90689c097dcf73d137e988f949cf09c1c5c8385c454fb47d5dc6b2300107774b",
+      "candidateState": "90689c097dcf73d137e988f949cf09c1c5c8385c454fb47d5dc6b2300107774b",
+      "globalDraws": 446
+    },
+    {
+      "mode": "absent",
+      "seed": 782236,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "56d8de3c0d00c338c098fa84c122dc81afd2c98ec2cb612b32257591de9edbae",
+      "candidateState": "56d8de3c0d00c338c098fa84c122dc81afd2c98ec2cb612b32257591de9edbae",
+      "globalDraws": 445
+    },
+    {
+      "mode": "absent",
+      "seed": 782237,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "f4c0ae996ec7ca47039e600ec7dadc6baa9bd0c51ab074c2dfc418bf9b51c41b",
+      "candidateState": "f4c0ae996ec7ca47039e600ec7dadc6baa9bd0c51ab074c2dfc418bf9b51c41b",
+      "globalDraws": 448
+    },
+    {
+      "mode": "absent",
+      "seed": 782238,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "0697c9cad9356796fe04cbdbbd8c96b2eaf090bfc5e54884919d28a87454d528",
+      "candidateState": "0697c9cad9356796fe04cbdbbd8c96b2eaf090bfc5e54884919d28a87454d528",
+      "globalDraws": 491
+    },
+    {
+      "mode": "absent",
+      "seed": 782239,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "9e6b93af34ad4a5bf21461958acd75a413cd046a4b3d8b5a14d219135ef1a9f0",
+      "candidateState": "9e6b93af34ad4a5bf21461958acd75a413cd046a4b3d8b5a14d219135ef1a9f0",
+      "globalDraws": 473
+    },
+    {
+      "mode": "absent",
+      "seed": 782240,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "9cba7eed37bf8933f1867dca8956357d2aaac74d1db50948494f45b8aeb93ab1",
+      "candidateState": "9cba7eed37bf8933f1867dca8956357d2aaac74d1db50948494f45b8aeb93ab1",
+      "globalDraws": 494
+    },
+    {
+      "mode": "absent",
+      "seed": 782241,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "4fd8dcf8579286d7feba10807d0d40ec87d47c9c6448cbf1252a2af59e6ec499",
+      "candidateState": "4fd8dcf8579286d7feba10807d0d40ec87d47c9c6448cbf1252a2af59e6ec499",
+      "globalDraws": 546
+    },
+    {
+      "mode": "absent",
+      "seed": 782242,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "a46756a51649a7d70081e1949377c854a06762f1bd429e5eea9630e4957e6917",
+      "candidateState": "a46756a51649a7d70081e1949377c854a06762f1bd429e5eea9630e4957e6917",
+      "globalDraws": 522
+    },
+    {
+      "mode": "absent",
+      "seed": 782243,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "a48b389394a964256b8fdb428c20a7ac799457e44fd585eb37a116f258ebfd89",
+      "candidateState": "a48b389394a964256b8fdb428c20a7ac799457e44fd585eb37a116f258ebfd89",
+      "globalDraws": 531
+    },
+    {
+      "mode": "absent",
+      "seed": 782244,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "72ffa8ecf05603840dff58b0665c8985b67fa522946dc27d64bf4e7e76873eba",
+      "candidateState": "72ffa8ecf05603840dff58b0665c8985b67fa522946dc27d64bf4e7e76873eba",
+      "globalDraws": 565
+    },
+    {
+      "mode": "absent",
+      "seed": 782245,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "bd78b92bde8f3e16fa771715adb61f6016e75ddedee3dbd282dd4155a9346d54",
+      "candidateState": "bd78b92bde8f3e16fa771715adb61f6016e75ddedee3dbd282dd4155a9346d54",
+      "globalDraws": 473
+    },
+    {
+      "mode": "absent",
+      "seed": 782246,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "66ecbe04c9469f2095e17d82cbfd6af62f422f052b473bdaad6d518e98a69d74",
+      "candidateState": "66ecbe04c9469f2095e17d82cbfd6af62f422f052b473bdaad6d518e98a69d74",
+      "globalDraws": 495
+    },
+    {
+      "mode": "absent",
+      "seed": 782247,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "e1161ea71a9e0604f4586149b1510eb68a5b4a59f45bf2c55090f004fa39870f",
+      "candidateState": "e1161ea71a9e0604f4586149b1510eb68a5b4a59f45bf2c55090f004fa39870f",
+      "globalDraws": 446
+    },
+    {
+      "mode": "absent",
+      "seed": 782248,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "6766a4bb3c19d4e89dd97f4b2a988a1482f0d7ac91c0c84c119a8d580a7ac74b",
+      "candidateState": "6766a4bb3c19d4e89dd97f4b2a988a1482f0d7ac91c0c84c119a8d580a7ac74b",
+      "globalDraws": 414
+    },
+    {
+      "mode": "absent",
+      "seed": 782249,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "3a6702f35a9774831801a379f30b2e1b2e889f0c3396994ce45cb0fc47aad57b",
+      "candidateState": "3a6702f35a9774831801a379f30b2e1b2e889f0c3396994ce45cb0fc47aad57b",
+      "globalDraws": 447
+    },
+    {
+      "mode": "empty",
+      "seed": 782112,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "20c4507ede988efc08089f1f7b57432bae4540037d06b8de29905f91734d36dd",
+      "candidateState": "20c4507ede988efc08089f1f7b57432bae4540037d06b8de29905f91734d36dd",
+      "globalDraws": 495
+    },
+    {
+      "mode": "departed",
+      "seed": 782112,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "233d285c95ccd57a93fa49bc1d50a2681ca8a80a4f342a245a608c9e89a1f9a5",
+      "candidateState": "233d285c95ccd57a93fa49bc1d50a2681ca8a80a4f342a245a608c9e89a1f9a5",
+      "globalDraws": 495
+    },
+    {
+      "mode": "explicit",
+      "seed": 782112,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "explicit-kicks"
+      ],
+      "baselineState": "e78bc0979dd98cbee5910c22812e9f44a3655ba79926a2f77e034621a07652c5",
+      "candidateState": "e78bc0979dd98cbee5910c22812e9f44a3655ba79926a2f77e034621a07652c5",
+      "globalDraws": 515
+    },
+    {
+      "mode": "empty",
+      "seed": 782114,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "13db2ede27af074268a5b63b1f5aaae0db4d4b955421bc35b20059b0b8d041d1",
+      "candidateState": "13db2ede27af074268a5b63b1f5aaae0db4d4b955421bc35b20059b0b8d041d1",
+      "globalDraws": 488
+    },
+    {
+      "mode": "departed",
+      "seed": 782114,
+      "decidedBy": "pens",
+      "won": false,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "new-detail"
+      ],
+      "baselineState": "e529fa74148c09b54705c329e4c65359bd07337f4fe4c07376f6479b30e1aab0",
+      "candidateState": "e529fa74148c09b54705c329e4c65359bd07337f4fe4c07376f6479b30e1aab0",
+      "globalDraws": 488
+    },
+    {
+      "mode": "explicit",
+      "seed": 782114,
+      "decidedBy": "pens",
+      "won": true,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "explicit-kicks"
+      ],
+      "baselineState": "88f147e6169728b1691995552c0c4b188e9a8d3aeba261995ac0a29ba8532465",
+      "candidateState": "88f147e6169728b1691995552c0c4b188e9a8d3aeba261995ac0a29ba8532465",
+      "globalDraws": 497
+    },
+    {
+      "mode": "empty",
+      "seed": 782100,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "d3d1257447cea9f1ece93b47684f58acdbcb70686360e156df520ab3581460d8",
+      "candidateState": "d3d1257447cea9f1ece93b47684f58acdbcb70686360e156df520ab3581460d8",
+      "globalDraws": 604
+    },
+    {
+      "mode": "departed",
+      "seed": 782100,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "47d0a36bb77b501dbd8406d22d895f47a0c18a85c5f8bd4b4db722734c365d56",
+      "candidateState": "47d0a36bb77b501dbd8406d22d895f47a0c18a85c5f8bd4b4db722734c365d56",
+      "globalDraws": 604
+    },
+    {
+      "mode": "explicit",
+      "seed": 782100,
+      "decidedBy": "regular",
+      "won": null,
+      "passed": [
+        "whole-state",
+        "global-draw-values-and-count",
+        "all-other-report-content",
+        "no-details-for-ordinary-match"
+      ],
+      "baselineState": "89281ab0db4b9253e9ffcf61e77d9e0a7f12f3d71b7706b7dc96845968b11d1b",
+      "candidateState": "89281ab0db4b9253e9ffcf61e77d9e0a7f12f3d71b7706b7dc96845968b11d1b",
+      "globalDraws": 604
+    }
+  ],
+  "failures": [],
+  "controls": [
+    {
+      "label": "whole-state",
+      "changed": true,
+      "rejected": true,
+      "original": "e78bc0979dd98cbee5910c22812e9f44a3655ba79926a2f77e034621a07652c5",
+      "fault": "37f0836c52001b390ba1e72f753ccd9a15e2004c422d7a66909d8ee60a9ab19c"
+    },
+    {
+      "label": "global-draw-count",
+      "changed": true,
+      "rejected": true,
+      "original": "e90005bf28660587cf8406e6ec385e587924f79bd9fad8ed7dd9f81a91b0126b",
+      "fault": "5d681d68486be475bdf75b86f5c1c405b3768c25f5d7a1c321d033dc24942ead"
+    },
+    {
+      "label": "global-draw-value",
+      "changed": true,
+      "rejected": true,
+      "original": "e90005bf28660587cf8406e6ec385e587924f79bd9fad8ed7dd9f81a91b0126b",
+      "fault": "cd1e48d26b669c2320576b4f0a72dbc3e4a000eaf1752c702b00c64605dc894c"
+    },
+    {
+      "label": "report-preservation",
+      "changed": true,
+      "rejected": true,
+      "original": "3a2068898a1a70f2adff4847f56399f04129ace136c4dd24ebbd09c57b852e13",
+      "fault": "61d41b646c5e11c137c7a6aa4d2ba3df232d12059c147d1ba67fa633808f3abb"
+    },
+    {
+      "label": "penalty-event-allowance",
+      "changed": true,
+      "rejected": true,
+      "original": "3a2068898a1a70f2adff4847f56399f04129ace136c4dd24ebbd09c57b852e13",
+      "fault": "58245a582981eb8ed68af8b48b88f48b2681ee595db1d0247e2cbf9ef46ee412"
+    },
+    {
+      "label": "recorded-running-count",
+      "changed": true,
+      "rejected": true,
+      "original": "3a2068898a1a70f2adff4847f56399f04129ace136c4dd24ebbd09c57b852e13",
+      "fault": "34bbe1f6034a714de6ad8d451f04d7c946bc91e8931fbde47dd840f63645445d"
+    },
+    {
+      "label": "recorded-final-count",
+      "changed": true,
+      "rejected": true,
+      "original": "3a2068898a1a70f2adff4847f56399f04129ace136c4dd24ebbd09c57b852e13",
+      "fault": "0e67cccb888ec80f1ac6e9889eeb69dfabedb1ec51794d950a00398764ff1ece"
+    },
+    {
+      "label": "recorded-winner",
+      "changed": true,
+      "rejected": true,
+      "original": "3a2068898a1a70f2adff4847f56399f04129ace136c4dd24ebbd09c57b852e13",
+      "fault": "f6fe46f1230a79de3e1839698d6525cfd53de37b8bd35fa0e3d188b972e461f2"
+    },
+    {
+      "label": "eligible-taker",
+      "changed": true,
+      "rejected": true,
+      "original": "3a2068898a1a70f2adff4847f56399f04129ace136c4dd24ebbd09c57b852e13",
+      "fault": "658de5d2fe22a4ccd94df720cbd01f2740be1a2ef01fe017689f9b3cd4f8bb5d"
+    },
+    {
+      "label": "ordinary-report",
+      "changed": true,
+      "rejected": true,
+      "original": "d4141bde0cccabbbb08ec0cbd2a1dacdcd922acc95998133688f22dad192622d",
+      "fault": "85571b78651b1a2e70f58b340ecdbf6026fdff5b3bf3781fb64cc3b3012e4ec5"
+    }
+  ],
+  "witnesses": {
+    "win": 782112,
+    "loss": 782114,
+    "regular": 782100
+  },
+  "preservationPassed": true,
+  "expectedBaselineRed": false,
+  "status": "passed"
+}

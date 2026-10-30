@@ -1,0 +1,2 @@
+19733f4151dfb60be2542a33c045b4a0b679a786a6f4d1d973d9f7a8f8202cde  /home/runner/work/_temp/rc-out/full/simCmFixtureFleet.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmFixtureFleet.mjs/stderr.log

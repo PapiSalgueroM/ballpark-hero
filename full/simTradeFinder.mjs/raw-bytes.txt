@@ -1,0 +1,3 @@
+876 /home/runner/work/_temp/rc-out/full/simTradeFinder.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simTradeFinder.mjs/stderr.log
+876 total

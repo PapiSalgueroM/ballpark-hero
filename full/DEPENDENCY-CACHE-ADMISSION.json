@@ -1,0 +1,26 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 1185,
+      "sha256": "acd03a792e2f8d7ad2255799ae78f1e810395d8c38b280a4502ded7e9d3b031e",
+      "tests": [
+        ":src/test/aussieRulesLeagueBoard.test.tsx",
+        ":src/test/aussieRulesLeague.test.ts",
+        ":src/test/cbbProgramFeedback.test.tsx",
+        ":src/test/clubManagerDeskCues.test.tsx",
+        ":src/hooks/useConnectionsShake.test.ts",
+        ":src/test/dailyRecord.test.tsx",
+        ":src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx",
+        ":src/components/front-office/FrontOfficeCuts.test.tsx",
+        ":src/test/liveSimCelebration.test.tsx",
+        ":src/test/numberFormatting.test.tsx",
+        ":src/test/soccerCareerSaveRetry.test.tsx",
+        ":src/test/tycoonGear.test.tsx",
+        ":src/test/usBoardFixture.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

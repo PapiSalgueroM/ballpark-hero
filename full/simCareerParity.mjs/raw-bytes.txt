@@ -1,0 +1,3 @@
+3169 /home/runner/work/_temp/rc-out/full/simCareerParity.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerParity.mjs/stderr.log
+3169 total

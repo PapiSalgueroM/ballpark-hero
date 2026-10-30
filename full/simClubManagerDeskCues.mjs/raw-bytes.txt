@@ -1,0 +1,3 @@
+752 /home/runner/work/_temp/rc-out/full/simClubManagerDeskCues.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simClubManagerDeskCues.mjs/stderr.log
+752 total

@@ -1,0 +1,2 @@
+1400a66f5ba9d1f992e3df528223c823c5f1685133b96768dd8d1191de0db147  /home/runner/work/_temp/rc-out/full/simTradeFinder.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTradeFinder.mjs/stderr.log

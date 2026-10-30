@@ -1,0 +1,3 @@
+630 /home/runner/work/_temp/rc-out/full/simNumberFormatting.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNumberFormatting.mjs/stderr.log
+630 total

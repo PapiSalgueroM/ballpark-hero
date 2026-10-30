@@ -1,0 +1,2 @@
+e13fe472a75ac1d3ff9126617a869154c519966f2d78d3f9991789b603bb1cf3  /home/runner/work/_temp/rc-out/full/simLiveSimCelebration.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simLiveSimCelebration.mjs/stderr.log

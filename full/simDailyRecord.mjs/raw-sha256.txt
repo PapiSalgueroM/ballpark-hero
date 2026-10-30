@@ -1,0 +1,2 @@
+4609804cb9c83ac1a8b040888189aab2d234a4fa09eca6a33bb64f9edcb78bc3  /home/runner/work/_temp/rc-out/full/simDailyRecord.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simDailyRecord.mjs/stderr.log

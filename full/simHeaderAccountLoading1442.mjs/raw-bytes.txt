@@ -1,0 +1,3 @@
+1170 /home/runner/work/_temp/rc-out/full/simHeaderAccountLoading1442.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simHeaderAccountLoading1442.mjs/stderr.log
+1170 total

@@ -1,0 +1,2 @@
+79389626d49cb7a8f7aa93615266b0dd6d83c045b0e5a2ea02051fd6f9173f72  /home/runner/work/_temp/rc-out/full/simCmShootoutResults.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmShootoutResults.mjs/stderr.log

@@ -1,0 +1,3 @@
+6944 /home/runner/work/_temp/rc-out/full/simCareerDerbies.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerDerbies.mjs/stderr.log
+6944 total

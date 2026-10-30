@@ -1,0 +1,2 @@
+be1cf1d12131e1d7ec77bf6ff347adb7bbb7096019b07f72db8721c04c9224a2  /home/runner/work/_temp/rc-out/full/simCareerDerbies.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerDerbies.mjs/stderr.log

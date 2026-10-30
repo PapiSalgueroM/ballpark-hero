@@ -1,0 +1,3 @@
+674 /home/runner/work/_temp/rc-out/full/simSoccerLeagueWorldLookup.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerLeagueWorldLookup.mjs/stderr.log
+674 total

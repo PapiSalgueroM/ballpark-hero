@@ -1,0 +1,2 @@
+b0b9301132295dd1e7cdf9e8e3f21c058a22cc41e6e894bb5d2de31ae463722c  /home/runner/work/_temp/rc-out/full/simFinance.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFinance.mjs/stderr.log

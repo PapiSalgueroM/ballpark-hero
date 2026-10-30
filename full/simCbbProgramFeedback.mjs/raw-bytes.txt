@@ -1,0 +1,3 @@
+3472 /home/runner/work/_temp/rc-out/full/simCbbProgramFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCbbProgramFeedback.mjs/stderr.log
+3472 total

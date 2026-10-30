@@ -1,0 +1,2 @@
+ff148901761739ccf4d36d92500f327544ebaeb37721387264dd6b9657545d35  /home/runner/work/_temp/rc-out/full/simNumberFormatting.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNumberFormatting.mjs/stderr.log

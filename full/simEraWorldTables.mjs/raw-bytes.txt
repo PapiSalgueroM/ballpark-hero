@@ -1,0 +1,3 @@
+1350 /home/runner/work/_temp/rc-out/full/simEraWorldTables.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simEraWorldTables.mjs/stderr.log
+1350 total

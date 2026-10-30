@@ -1,0 +1,2 @@
+da1e52f82e700f934dd7d7b64e805fd92aebfd4a8f5dc09bd26f43329799d2f8  /home/runner/work/_temp/rc-out/full/simSitemap.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSitemap.mjs/stderr.log
