@@ -1,0 +1,7 @@
+head-writes exit=0 1s | Node.js v24.22.1
+head-result exit=0 1s | Node.js v24.22.1
+main-writes exit=0 2s | Node.js v24.22.1
+main-result exit=0 0s | Node.js v24.22.1
+base-writes exit=0 0s | Node.js v24.22.1
+base-result exit=0 0s | Node.js v24.22.1
+main-edge exit=0 0s | simEdgeSync: 1 finding(s).

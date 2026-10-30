@@ -1,0 +1,13 @@
+6eefda2eca Round 1584: the mirror hunk's comment in simSoccerGridLabels says where the map is used (section 1, the dead label check)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at node:internal/modules/esm/loader:636:32
+    at TracingChannel.tracePromise (node:diagnostics_channel:370:14) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/claude/.npm-global/lib/node_modules/playwright/index.js'
+}
+
+Node.js v24.22.1

@@ -1,0 +1,13 @@
+14a9af7042 Board: the owner asks both lanes to lock in on Soccer Career and Club Manager; his eight CM asks and a proposed split
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:705:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:725:38)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:763:56)
+    at #resolve (node:internal/modules/esm/loader:687:17)
+    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:607:35)
+    at node:internal/modules/esm/loader:636:32
+    at TracingChannel.tracePromise (node:diagnostics_channel:370:14) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///home/claude/.npm-global/lib/node_modules/playwright/index.js'
+}
+
+Node.js v24.22.1
