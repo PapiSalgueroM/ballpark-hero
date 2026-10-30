@@ -32,7 +32,7 @@
   "Lautaro Guzmán",
   "Lucas Souto"
  ],
- "files": 27,
+ "files": 30,
  "byFile": {
   "pzzad-resync/01_connections.sql": [
    "Lisandro López"
@@ -51,6 +51,9 @@
   ],
   "scripts/data/cmOldCareersWorldFixture.json": [
    "Valentín Serrano"
+  ],
+  "scripts/data/connectionsVerified2026-10/ledger.json": [
+   "Lisandro López"
   ],
   "scripts/data/marketNamesakesLive.json": [
    "Gabriel Alanís"
@@ -131,6 +134,10 @@
   "src/data/connectionsPuzzles.ts": [
    "Lisandro López"
   ],
+  "src/data/lineupTeams.ts": [
+   "Cristian Campestrini",
+   "Iván Marcone"
+  ],
   "src/data/marketNamesakes.json": [
    "Gabriel Alanís"
   ],
@@ -187,6 +194,9 @@
    "Lisandro López"
   ],
   "supabase/migrations/20261023120000_round_1553_connections_drifted_rows.sql": [
+   "Lisandro López"
+  ],
+  "supabase/migrations/20261029120000_round_1565_connections_live.sql": [
    "Lisandro López"
   ]
  },
@@ -274,6 +284,20 @@
    "file": "scripts/data/cmOldCareersWorldFixture.json",
    "line": 30,
    "text": "0,0,0,0,0,0,0,0]},{\\\"id\\\":\\\"p-valentin-serrano\\\",\\\"name\\\":\\\"Valentín Serrano\\\",\\\"position\\\":\\\"LM\\\",\\\"rating\\\":64,\\\"age\\\":19,\\\"fitness\\\":100,\\\"morale\\\":80.379999"
+  },
+  {
+   "name": "Lisandro López",
+   "form": "Lisandro Lopez",
+   "file": "scripts/data/connectionsVerified2026-10/ledger.json",
+   "line": 1254,
+   "text": "held Angel Di Maria (never Porto), Simao (never Porto) and Lisandro Lopez (two namesakes, neither at both). Replaced by a group two lists hold.\","
+  },
+  {
+   "name": "Lisandro López",
+   "form": "Lisandro Lopez",
+   "file": "scripts/data/connectionsVerified2026-10/ledger.json",
+   "line": 1740,
+   "text": "r played for Benfica), Ricardo Quaresma (never Benfica) and Lisandro Lopez (two namesakes). Replaced by a group two lists hold.\","
   },
   {
    "name": "Gabriel Alanís",
@@ -787,18 +811,18 @@
    "text": "['Karim Benzema', 'Alexandre Lacazette', 'Michael Essien', 'Lisandro López'], difficulty: 'easy' },"
   },
   {
-   "name": "Lisandro López",
-   "form": "Lisandro López",
-   "file": "src/data/connectionsPuzzles.ts",
-   "line": 1129,
-   "text": "'Played for Porto and Benfica', players: ['Simão Sabrosa', 'Lisandro López', 'Ángel Di María', 'Enzo Pérez'], difficulty: 'hard' },"
+   "name": "Cristian Campestrini",
+   "form": "Cristian Campestrini",
+   "file": "src/data/lineupTeams.ts",
+   "line": 102,
+   "text": "* 2021; for example Cristian Campestrini and Ivan Marcone). The Club year"
   },
   {
-   "name": "Lisandro López",
-   "form": "Lisandro López",
-   "file": "src/data/connectionsPuzzles.ts",
-   "line": 1381,
-   "text": "for both Benfica and Porto', players: ['James Rodríguez', 'Lisandro López', 'Ricardo Quaresma', 'Deco'], difficulty: 'hard' },"
+   "name": "Iván Marcone",
+   "form": "Ivan Marcone",
+   "file": "src/data/lineupTeams.ts",
+   "line": 102,
+   "text": "* 2021; for example Cristian Campestrini and Ivan Marcone). The Club year"
   },
   {
    "name": "Gabriel Alanís",
@@ -1099,6 +1123,20 @@
    "form": "Lisandro López",
    "file": "supabase/migrations/20261023120000_round_1553_connections_drifted_rows.sql",
    "line": 55,
+   "text": "land\",\"difficulty\":\"medium\"},{\"players\":[\"James Rodríguez\",\"Lisandro López\",\"Ricardo Quaresma\",\"Deco\"],\"category\":\"Played for both Benfica and Porto\",\"difficult"
+  },
+  {
+   "name": "Lisandro López",
+   "form": "Lisandro López",
+   "file": "supabase/migrations/20261029120000_round_1565_connections_live.sql",
+   "line": 50,
+   "text": "igeria\",\"difficulty\":\"medium\"},{\"players\":[\"Simão Sabrosa\",\"Lisandro López\",\"Ángel Di María\",\"Enzo Pérez\"],\"category\":\"Played for Porto and Benfica\",\"difficulty"
+  },
+  {
+   "name": "Lisandro López",
+   "form": "Lisandro López",
+   "file": "supabase/migrations/20261029120000_round_1565_connections_live.sql",
+   "line": 57,
    "text": "land\",\"difficulty\":\"medium\"},{\"players\":[\"James Rodríguez\",\"Lisandro López\",\"Ricardo Quaresma\",\"Deco\"],\"category\":\"Played for both Benfica and Porto\",\"difficult"
   }
  ]
