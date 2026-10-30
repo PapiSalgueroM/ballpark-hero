@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-a: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office-shared/gmCareerKitPieces.test.tsx src/components/nhl-front-office/NhlLazyDesk.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx --testTimeout=600000 --hookTimeout=120000
+ctl-talkskept: node scripts/controlFrontOfficeBoard.mjs talkskept
+ctl-nhl-talkskept: node scripts/controlFrontOfficeBoard.mjs nhl-talkskept
