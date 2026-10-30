@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walkRev1604.mjs
+natflags-base: git worktree add -f /tmp/b2 4bd20c993 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/b2/node_modules && (cd /tmp/b2 && node scripts/simNationalityFlags.mjs 2>&1 | grep -E "FAIL|failure|green" | cut -c1-200; exit ${PIPESTATUS[0]})
