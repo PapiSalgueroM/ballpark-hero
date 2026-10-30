@@ -17444,3 +17444,10 @@ The first fixed run39956209636 stays failed:18/19 cases passed, then the loading
 Football intake20413a09 was appended to the actual primary WORKBOARD and continuation checkpoint with full original-prefix backups/readback and both index guards. Receipt: football-improvements/football-intake-append.json, SHA256 803191c540cbdf300f080ee4b841adb52953a34a096194f9094ff2d732258aa9. This remote closure records that action and does not re-append the note to either local target.
 
 I keeps Club Manager/Soccer Career integration and sole publication; J keeps the other game lanes. Root has not published this menu correction and claims no new live deployment. Football animations, free kicks, ratings/potential, national management, missing stars, squad numbers, traits/tactics, valuation and free positioning remain intake/design work, not implemented features. No local app execution, cleanup, data/provider/account/dependency change, old-checkout reset or protected game adoption occurred. Historic785/1441 preservation gaps remain unwaived.
+
+
+## 2026-10-30 UTC: bounded soccer publication lease RELEASED
+
+Publication lease 441 is RELEASED after PR429/439 reached live source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5a7b-46ae-abce-1c8859e8a441. Hosted-M scoped admission d3492ce7 retains 172 raw routes, exact 8 mount records and all network/report findings; broad defaults remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT.
+
+K retains the 20-round BU integration/publication lane. This release does not adopt K1597 or other held K work. The separate Season Centre focus product 51da27a2367cc84ca0c622def41029dbc2580b68 is not live. All earlier K notes and reservations stay intact.
