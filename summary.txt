@@ -1,0 +1,3 @@
+record exit=0 1s | simCmLevelReads: recorded 454 clubs into scripts/data/cmStatureRecording.json
+tsc exit=0 60s | 
+fleet exit=0 115s | FLEET_EQUAL 207 lines
