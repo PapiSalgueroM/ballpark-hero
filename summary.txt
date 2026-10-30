@@ -1,0 +1,5 @@
+simClubManagerDugouts exit=0 0s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+quotes exit=0 40s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+vitest-dugout exit=0 6s |    Duration  5.62s (transform 2.59s, setup 200ms, collect 6.69s, tests 1.32s, environment 1.09s, prepare 449ms)
+simManagers-fleet exit=0 83s | simManagers: all green
+tsc exit=0 91s | 
