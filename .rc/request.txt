@@ -1,0 +1,11 @@
+#!build
+#!playwright
+#!serial
+playBingoClubRules: CI=1 SIM_NETWORK=offline RC_OUT=$RC_OUT node scripts/playBingoClubRules.mjs
+ctl-wrongtile: CI=1 SIM_NETWORK=offline PLAY_BINGO_CLUBS_CONTROL=wrongtile RC_OUT=$RC_OUT/wrongtile node scripts/playBingoClubRules.mjs
+ctl-base1571: git worktree add -q /tmp/base1571 32baab916 && ln -s "$PWD/node_modules" /tmp/base1571/node_modules && (cd /tmp/base1571 && node_modules/.bin/vite build --outDir /tmp/base1571-dist > /tmp/base1571-build.log 2>&1; tail -2 /tmp/base1571-build.log) && CI=1 SIM_NETWORK=offline PLAY_BINGO_CLUBS_CONTROL=base1571 PLAY_BINGO_BUILD=/tmp/base1571-dist PLAY_BINGO_PORT=4197 RC_OUT=$RC_OUT/base1571 node scripts/playBingoClubRules.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs 2>&1 | tail -15; exit ${PIPESTATUS[0]}
+simWritesAreSent-again: node scripts/simWritesAreSent.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+simWritesAreSent-on1571: git worktree add -q /tmp/w1571 32baab916 && ln -s "$PWD/node_modules" /tmp/w1571/node_modules && cd /tmp/w1571 && node_modules/.bin/vite build > /tmp/w1571-build.log 2>&1; tail -1 /tmp/w1571-build.log; node scripts/simWritesAreSent.mjs 2>&1 | tail -8; exit ${PIPESTATUS[0]}
+simResultMoment: node scripts/simResultMoment.mjs
+simPrerender: node scripts/simPrerender.mjs 2>&1 | grep -E "FAIL|changelog|simPrerender:"; exit ${PIPESTATUS[0]}
