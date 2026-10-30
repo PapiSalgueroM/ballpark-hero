@@ -21888,8 +21888,8 @@ function fillSquadGaps(
       value: mp.value,
       generated: mp.generated,
       ...(mp.nation ? { nation: mp.nation } : {}),
-      /* Round 1600: the summer top up keeps the level too (critic correction 7). */
-      ...(mp.lv === undefined ? {} : { lv: mp.lv }),
+      /* Round 1600: the summer top up keeps the level too (critic correction 7); a free agent row has none. */
+      ...((mp as { lv?: number }).lv === undefined ? {} : { lv: (mp as { lv?: number }).lv }),
       contractYears: mp.age >= 31 ? 2 : 3,
       wage: 0,
     };
