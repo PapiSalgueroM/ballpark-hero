@@ -59,8 +59,8 @@ export function ExpiringDealsCheckpoint({ c, ids, letGo, onRenew, onLetGo, onLet
       </div>
       {help && (
         <div data-cm-deals-rules className="text-[11px] text-foreground bg-card border border-border rounded-lg p-2.5 mb-2 space-y-1.5">
-          <p>Every man below is in the last year of his deal. Answer each one before the summer starts: renew him on the contracts desk&apos;s terms, or let him go. A man you lent out is here too: renew him and the new deal is waiting when he comes home.</p>
-          <p>Let him go and he leaves for nothing when the summer starts. He goes onto the free agent list and stays there, a year older each summer, until a club signs him or he retires.</p>
+          <p>Every man below is in the last year of his deal. Answer each one before the summer starts: renew him on the contracts desk&apos;s plain terms (the cheaper deal with a release clause is on the desk while the season runs), or let him go. A man you lent out is here too: renew him and the new deal is waiting when he comes home.</p>
+          <p>Let him go and he leaves for nothing when the summer starts. He goes onto the free agent list and stays there, a year older each summer, until you sign him again or he retires.</p>
           <p className="text-muted-foreground">Say your right winger, 24, has a year left. Renew him here and he signs for {ex.years} years at {ex.wage}k a week, with a {money(ex.fee)} signing on fee out of your budget. Let him go and the wage is off your books from the summer.</p>
         </div>
       )}
@@ -98,7 +98,7 @@ export function ExpiringDealsCheckpoint({ c, ids, letGo, onRenew, onLetGo, onLet
                     data-cm-deal-letgo
                     onClick={() => onLetGo(id)}
                     disabled={answer === 'letGo'}
-                    className={cn('shrink-0 min-h-11 px-2.5 rounded-lg text-[10px] font-bold border transition-all',
+                    className={cn('shrink-0 min-h-11 w-20 px-2 rounded-lg text-[10px] font-bold border transition-all',
                       answer === 'letGo' ? 'border-border text-muted-foreground' : 'border-border text-foreground hover:bg-primary/10')}
                   >
                     {answer === 'letGo' ? 'Let go' : 'Let him go'}
