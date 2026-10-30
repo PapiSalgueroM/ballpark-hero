@@ -316,7 +316,7 @@ export function myMatchWeeks(state: CareerState): number[] {
   /* Round 1510: a night (a super cup) is a match but never a window week (the engine's countdown skips it), so it
      is left out on both sides. */
   for (const r of state.resultLog ?? []) {
-    if (r.week < state.week && r.competition !== 'oneOff') weeks.add(r.week);
+    if (r.week < state.week && r.competition !== 'oneOff' && r.competition !== 'uel') weeks.add(r.week);
   }
   for (let w = state.week; w < state.calendar.length; w++) {
     const entry = state.calendar[w];
@@ -440,6 +440,8 @@ export function dayEmoji(day: CalendarDay): string {
     if (day.competition === 'uclGroup' || day.competition === 'uclKo') return '⭐';
     /* Round 1510: a super cup night. */
     if (day.competition === 'oneOff') return '🛡️';
+    /* Round 1593: a Europa League night. */
+    if (day.competition === 'uel') return '🟠';
     return '⚽';
   }
   return '';
@@ -496,6 +498,8 @@ export function potentialEntry(state: CareerState, entry: CalendarEntry): boolea
 function pendingLabel(state: CareerState, entry: CalendarEntry): string {
   /* Round 1510: a super cup night names its cup. */
   if (entry.type === 'oneOff') return oneOffEntryLabel(state, entry) ?? 'Super cup';
+  /* Round 1593: a Europa League night whose match is not known yet. */
+  if (entry.type === 'uel') return 'Europa League';
   const league = careerLeagueOf(state);
   if (entry.type === 'cup' && entry.cupRound) return `${league.cupName} · ${CUP_LABELS[entry.cupRound]}`;
   if (entry.type === 'uclKo' && entry.uclRound) return `Champions League · ${UCL_LABELS[entry.uclRound]}`;

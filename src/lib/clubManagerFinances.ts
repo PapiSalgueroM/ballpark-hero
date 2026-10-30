@@ -372,7 +372,8 @@ export function staffWagesWeekly(state: CareerState): number {
 /** One away trip in millions: dearer for a bigger club, dearer again for Europe. */
 export function travelCost(state: CareerState, competition: Competition): number {
   const base = [0.12, 0.09, 0.06, 0.04][careerTier(state) - 1] ?? 0.04;
-  const europe = competition === 'uclGroup' || competition === 'uclKo' ? 2.5 : 1;
+  /* Round 1593: a Europa League trip is a European one. */
+  const europe = competition === 'uclGroup' || competition === 'uclKo' || competition === 'uel' ? 2.5 : 1;
   return round3(base * europe * (eraHistOf(state) ? ERA_MONEY : 1));
 }
 
@@ -463,7 +464,7 @@ export function certainFixturesLeft(state: CareerState): { home: number; away: n
     const fx = fixtureFor(state, entry);
     if (!fx) continue;
     if (fx.home === true) home += 1;
-    else if (fx.home === false) { away += 1; if (entry.type === 'uclGroup' || entry.type === 'uclKo') euroAway += 1; }
+    else if (fx.home === false) { away += 1; if (entry.type === 'uclGroup' || entry.type === 'uclKo' || entry.type === 'uel') euroAway += 1; }
   }
   return { home, away, euroAway };
 }
