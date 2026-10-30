@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1593.mjs
+playCmEuroPlay: node scripts/playCmEuroPlay.mjs
+notile: PLAY_EURO_CONTROL=notile node scripts/playCmEuroPlay.mjs
+nofixture: PLAY_EURO_CONTROL=nofixture node scripts/playCmEuroPlay.mjs
