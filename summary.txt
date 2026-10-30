@@ -1,0 +1,14 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest exit=0 13s |    Duration  12.25s (transform 4.17s, setup 933ms, collect 12.92s, tests 13.07s, environment 3.97s, prepare 1.22s)
+tsc exit=0 73s | 
+walk exit=0 64s | playCmEuroPlay: green, three cases at three sizes, pictures in /home/runner/work/_temp/rc-out/files/shots
+simManagerAppealIsolation exit=0 50s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simWorldEuro-0 exit=0 0s | simWorldEuro: green, 706 checks, 0 failures
+simCmLeagueRules exit=0 68s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+simCmCopy exit=0 38s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simBoardObjectives exit=0 1s | simBoardObjectives: green. Every board talks like a board.
+simHarnessAnchors exit=0 59s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simClubManagerCalendar exit=0 39s | simClubManagerCalendar: all green
+sim exit=0 343s | simCmEuroPlay: green, 1728 checks, 0 failures
