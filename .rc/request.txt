@@ -1,0 +1,14 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+playConsentPrivacy1442: bash .rc/default-support.sh run playConsentPrivacy1442.mjs
+playCookiePolicy1446: bash .rc/default-support.sh run playCookiePolicy1446.mjs
+playCorruptSaves: bash .rc/default-support.sh run playCorruptSaves.mjs
+playDealDesk: bash .rc/default-support.sh run playDealDesk.mjs
+playDepthChart: bash .rc/default-support.sh run playDepthChart.mjs
+playDerbyHistory1195: bash .rc/default-support.sh run playDerbyHistory1195.mjs
+playDraftDetectiveReports: bash .rc/default-support.sh run playDraftDetectiveReports.mjs
+playDraftNight: bash .rc/default-support.sh run playDraftNight.mjs
+playEra2005: bash .rc/default-support.sh run playEra2005.mjs
+playEra2010: bash .rc/default-support.sh run playEra2010.mjs
+finish: bash .rc/default-support.sh finish
