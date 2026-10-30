@@ -1,0 +1,10 @@
+sim7: CM_EURO_PLAY_ONLY=7 node scripts/simCmEuroPlay.mjs
+sim2: CM_EURO_PLAY_ONLY=2 node scripts/simCmEuroPlay.mjs
+c-carryall: CM_EURO_PLAY_CONTROL=carryall node scripts/simCmEuroPlay.mjs
+c-uelrank: CM_EURO_PLAY_CONTROL=uelrank node scripts/simCmEuroPlay.mjs
+c-noplace: CM_EURO_PLAY_CONTROL=noplace node scripts/simCmEuroPlay.mjs
+c-nowinnerucl: CM_EURO_PLAY_CONTROL=nowinnerucl node scripts/simCmEuroPlay.mjs
+c-notneutral: CM_EURO_PLAY_CONTROL=notneutral node scripts/simCmEuroPlay.mjs
+c-noet: CM_EURO_PLAY_CONTROL=noet node scripts/simCmEuroPlay.mjs
+c-inplace: CM_EURO_PLAY_CONTROL=inplace node scripts/simCmEuroPlay.mjs
+c-nouelucl-s5to8: CM_EURO_PLAY_PLAY_SEEDS=5,6,7,8 CM_EURO_PLAY_CONTROL=nouelucl node scripts/simCmEuroPlay.mjs
