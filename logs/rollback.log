@@ -1,0 +1,20 @@
+RB PATCHED: three dumps
+[2m      Tests [22m [1m[32m4 passed[39m[22m[2m | [22m[33m32 skipped[39m[90m (36)[39m
+total 2372
+drwxr-xr-x  2 runner runner   4096 Oct 30 05:46 .
+drwxrwxrwt 23 root   root     4096 Oct 30 05:46 ..
+-rw-r--r--  1 runner runner 652556 Oct 30 05:46 nfl-seat-arrival.json
+-rw-r--r--  1 runner runner 649200 Oct 30 05:46 nfl-seat-hub.json
+-rw-r--r--  1 runner runner 646100 Oct 30 05:46 nfl-year-out.json
+-rw-r--r--  1 runner runner 155094 Oct 30 05:46 nhl-seat-arrival.json
+-rw-r--r--  1 runner runner 154725 Oct 30 05:46 nhl-seat-hub.json
+-rw-r--r--  1 runner runner 153542 Oct 30 05:46 nhl-year-out.json
+Preparing worktree (detached HEAD c68bce0396)
+HEAD is now at c68bce0396 Round 1559 closing fix: merge origin/main at bd0c07bf7 (a board commit, docs/WORKBOARD.md only)
+[22m[39mROLLBACK|nfl-seat-arrival.json|saved phase recap fired false team CLE|2 buttons: Go to the draft / ✍️Re-sign desk4 deals end this spring4 still waiting on you|storage byte equal|console errors 2: Warning: An update to %s inside a test was not wrapped in act(...).
+[22m[39mROLLBACK|nfl-seat-hub.json|saved phase hub fired false team CLE|12 buttons: 👔Roster53 under contractMike Hall Jr. leads them at 90 / 💼Free agency$129M of roomRoster full at 53. Cut or trade someone first. / 🤝Trades53 to offerYour biggest chip is Mike Hall Jr. / 🏟️This weekvs Bengals0-0 with 17 weeks to play / 📊Standings#15 in the AFC8 places short of the cut, 17 to pla|storage byte equal|console errors 0|Fired by false|hub boxes true
+[22m[39mROLLBACK|nfl-year-out.json|saved phase fired fired true team KC|4 buttons: 📞Job marketNobody calledNext year open, as things stand / 📖CareerOut of work1 club, no titles / 🎖️GM levelGM level 1400 XP to level 2 / Start a new front office|storage byte equal|console errors 0|Fired by false|hub boxes false
+[22m[39mROLLBACK|nhl-seat-arrival.json|saved phase recap fired false team VAN|2 buttons: Go to the draft / ✍️Re-sign deskNobody expiringNobody is out of contract this summer|storage byte equal|console errors 0|Fired by false|hub boxes false
+[22m[39mROLLBACK|nhl-seat-hub.json|saved phase hub fired false team VAN|10 buttons: 👔Roster15 under contractFilip Hronek leads them at 88 / 💼Free agency$38M of roomRoster full at 15. Cut or trade someone first. / 🤝Trades15 to offerYour biggest chip is Filip Hronek / 🏟️PlayRound 1 of 200-0 with 20 rounds to play / 📊Standings#13 in the West5 places short of the cut, 20 to play /|storage byte equal|console errors 0|Fired by false|hub boxes true
+[22m[39mROLLBACK|nhl-year-out.json|saved phase fired fired true team DET|1 buttons: Take another front office|storage byte equal|console errors 0|Fired by true|hub boxes false
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
