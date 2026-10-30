@@ -1,0 +1,4 @@
+worldmoves-base: git worktree add -q .rcbase1 4bd20c993 && cd .rcbase1 && node scripts/simCmWorldMoves.mjs
+appeal-base: git worktree add -q .rcbase2 4bd20c993 && cd .rcbase2 && node scripts/simManagerAppealIsolation.mjs
+halftime-base: git worktree add -q .rcbase3 4bd20c993 && cd .rcbase3 && node scripts/simManagerHalftimeLineups.mjs
+livelineups-base: git worktree add -q .rcbase4 4bd20c993 && cd .rcbase4 && node scripts/simManagerLiveLineups.mjs
