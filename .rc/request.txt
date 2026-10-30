@@ -1,0 +1,6 @@
+#!serial
+simClubManagerDecisionDeadline: R=$PWD; git worktree add /tmp/h-simClubManagerDecisionDeadline f255de685ea22182cec484cd0b7f764f6b43965c >/dev/null 2>&1 && cd /tmp/h-simClubManagerDecisionDeadline && ln -s $R/node_modules node_modules && node scripts/simClubManagerDecisionDeadline.mjs
+simCmHandoverDesk: R=$PWD; git worktree add /tmp/h-simCmHandoverDesk f255de685ea22182cec484cd0b7f764f6b43965c >/dev/null 2>&1 && cd /tmp/h-simCmHandoverDesk && ln -s $R/node_modules node_modules && node scripts/simCmHandoverDesk.mjs
+simManagerLiveLineups: R=$PWD; git worktree add /tmp/h-simManagerLiveLineups f255de685ea22182cec484cd0b7f764f6b43965c >/dev/null 2>&1 && cd /tmp/h-simManagerLiveLineups && ln -s $R/node_modules node_modules && node scripts/simManagerLiveLineups.mjs
+simPitchRestartContinuity: R=$PWD; git worktree add /tmp/h-simPitchRestartContinuity f255de685ea22182cec484cd0b7f764f6b43965c >/dev/null 2>&1 && cd /tmp/h-simPitchRestartContinuity && ln -s $R/node_modules node_modules && node scripts/simPitchRestartContinuity.mjs
+simManagerWorldContinuity: R=$PWD; git worktree add /tmp/h-simManagerWorldContinuity f255de685ea22182cec484cd0b7f764f6b43965c >/dev/null 2>&1 && cd /tmp/h-simManagerWorldContinuity && ln -s $R/node_modules node_modules && node scripts/simManagerWorldContinuity.mjs
