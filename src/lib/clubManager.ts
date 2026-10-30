@@ -22456,6 +22456,22 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       const man = squad.find(p => p.name === name);
       if (man) rosterCareer = recordActualRosterTransfer(rosterCareer, man, club, clubName, 'permanent');
     }
+    /* Round 1597 closing check: a man the fill signed off the free agent list is recorded as mine again, the way
+       signFreeAgent records a man I sign off it (a 'permanent' deal from no club, on his released record's key).
+       Until this his record stayed released with no owner and aged and retired on its own while he played for me,
+       so once the list kept men for years, a man the fill took back and who later walked again was listed alive
+       beside a ledger that said he had retired (simCmFreeAgencyFleet section 6, Everton, summer into season 9). */
+    let poolSigned = false;
+    for (const name of freeAgentsIn) {
+      const man = squad.find(p => p.name === name);
+      if (!man || emergencyFrom.has(name)) continue;
+      const released = worldRosterView(rosterCareer)?.records.filter(record => record.status === 'released' && record.owner === null
+        && record.player.name === name && record.origin.birthYear === worldYear(rosterCareer) - man.age);
+      if (released?.length !== 1) continue;
+      rosterCareer = recordWorldRosterTransfer(rosterCareer, { player: man, from: null, to: clubName, kind: 'permanent', key: released[0].key });
+      poolSigned = true;
+    }
+    if (poolSigned) squad = rosterCareer.squad;
     /* Release AZ fix (closing check, NEW-A): the record copies its key onto the man in rosterCareer's squad only,
        and the new season is built from this one, so the ledger held him as mine while no man of my squad carried
        his key. The exits above write no squad, so this takes exactly the emergency signings' keys. */
