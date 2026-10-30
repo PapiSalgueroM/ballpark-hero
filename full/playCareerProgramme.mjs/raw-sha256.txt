@@ -1,0 +1,2 @@
+14fd100fcf886d6e539017cf725305b1f7c4559b8c3e0b5f486276c1b0c220d1  /home/runner/work/_temp/rc-out/full/playCareerProgramme.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCareerProgramme.mjs/stderr.log

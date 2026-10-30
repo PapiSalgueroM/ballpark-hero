@@ -1,0 +1,2 @@
+a91fcfcb014ab7526157ec5939637501891789e7038c9a5c78ea8b9132771683  /home/runner/work/_temp/rc-out/full/playClubDetailCurrentRoster.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playClubDetailCurrentRoster.mjs/stderr.log

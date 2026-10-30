@@ -1,0 +1,12 @@
+prepare exit=0 68s | ordinary-build raw=0
+playCareerPressMarket exit=1 1s | playCareerPressMarket.mjs raw=1
+playCareerProgramme exit=1 1s | playCareerProgramme.mjs raw=1
+playCareerSquad exit=1 10s | playCareerSquad.mjs raw=1
+playCareerStoryRole exit=0 48s | playCareerStoryRole.mjs raw=0
+playCareerTransferBrief exit=1 1s | playCareerTransferBrief.mjs raw=1
+playCareerTrophyRuns exit=1 2s | playCareerTrophyRuns.mjs raw=1
+playChainTimelineMotion exit=0 40s | playChainTimelineMotion.mjs raw=0
+playChunkReloadWait exit=0 98s | playChunkReloadWait.mjs raw=0
+playClubDetailCurrentRoster exit=1 1s | playClubDetailCurrentRoster.mjs raw=1
+playClubManager exit=0 292s | playClubManager.mjs raw=0
+finish exit=0 7s | 

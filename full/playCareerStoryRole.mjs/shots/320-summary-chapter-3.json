@@ -1,0 +1,28 @@
+{
+  "expected": {
+    "key": "now",
+    "heading": "2050, this season",
+    "identity": "Age 41 at Twente",
+    "lines": [
+      "⚠️ Your contract is expiring!",
+      "🌍 Morocco won the World Cup.",
+      "📋 Left out of the Netherlands squad for the World Cup. You watch it at home.",
+      "👕 Sent signed shirts to the children's ward",
+      "😂 Rang the rival manager to explain the quote was not about him. He put it on his own wall anyway",
+      "📝 Signed 1-year extension with Twente (€13k/wk)"
+    ]
+  },
+  "actual": {
+    "key": "now",
+    "heading": "2050, this season",
+    "identity": "Age 41 at Twente",
+    "lines": [
+      "⚠️ Your contract is expiring!",
+      "🌍 Morocco won the World Cup.",
+      "📋 Left out of the Netherlands squad for the World Cup. You watch it at home.",
+      "👕 Sent signed shirts to the children's ward",
+      "😂 Rang the rival manager to explain the quote was not about him. He put it on his own wall anyway",
+      "📝 Signed 1-year extension with Twente (€13k/wk)"
+    ]
+  }
+}

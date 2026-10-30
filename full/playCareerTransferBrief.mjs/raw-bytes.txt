@@ -1,0 +1,3 @@
+990 /home/runner/work/_temp/rc-out/full/playCareerTransferBrief.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playCareerTransferBrief.mjs/stderr.log
+990 total

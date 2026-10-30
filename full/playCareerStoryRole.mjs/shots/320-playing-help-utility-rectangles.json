@@ -1,0 +1,40 @@
+{
+  "mobile": true,
+  "viewport": [
+    320,
+    568
+  ],
+  "pageY": 0,
+  "help": {
+    "x": 0,
+    "y": 97,
+    "width": 44,
+    "height": 44
+  },
+  "wrapper": {
+    "x": 0,
+    "y": 97,
+    "width": 320,
+    "height": 44
+  },
+  "utilities": [
+    {
+      "id": "training",
+      "rect": {
+        "x": 12,
+        "y": 157,
+        "width": 144,
+        "height": 44
+      }
+    },
+    {
+      "id": "phone",
+      "rect": {
+        "x": 164,
+        "y": 157,
+        "width": 144,
+        "height": 44
+      }
+    }
+  ]
+}

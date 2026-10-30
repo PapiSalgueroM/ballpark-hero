@@ -1,0 +1,14 @@
+{
+  "expected": {
+    "inline": "",
+    "computed": "visible",
+    "y": 0
+  },
+  "actual": {
+    "inline": "",
+    "computed": "visible",
+    "y": 0,
+    "activeMatches": true
+  },
+  "active": "<button type=\"button\" data-career-utility=\"training\" aria-label=\"Open the training ground\" class=\"relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700\"><span aria-hidden=\"true\">🏋️</span><span class=\"sm:hidden\">Training</span><span class=\"absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900\"><span class=\"sr-only\">Drill ready</span></span></button>"
+}

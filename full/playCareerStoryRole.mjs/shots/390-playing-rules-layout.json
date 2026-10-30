@@ -1,0 +1,54 @@
+{
+  "x": 0,
+  "y": 63.3046875,
+  "width": 390,
+  "height": 717.390625,
+  "viewport": [
+    390,
+    844
+  ],
+  "pageY": 0,
+  "ownScroll": 0,
+  "opacity": "1",
+  "inside": true,
+  "painted": true,
+  "finite": 0,
+  "overflow": false,
+  "controls": [
+    {
+      "label": "Close",
+      "width": 32,
+      "height": 32,
+      "points": [
+        {
+          "x": 365,
+          "y": 88.3046875,
+          "painted": true
+        },
+        {
+          "x": 357,
+          "y": 80.3046875,
+          "painted": true
+        },
+        {
+          "x": 373,
+          "y": 80.3046875,
+          "painted": true
+        },
+        {
+          "x": 357,
+          "y": 96.3046875,
+          "painted": true
+        },
+        {
+          "x": 373,
+          "y": 96.3046875,
+          "painted": true
+        }
+      ]
+    }
+  ],
+  "stable": 4,
+  "toastObserved": 0,
+  "toastRemaining": 0
+}

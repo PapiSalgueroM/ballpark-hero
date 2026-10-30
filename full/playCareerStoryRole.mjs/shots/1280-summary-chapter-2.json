@@ -1,0 +1,32 @@
+{
+  "expected": {
+    "key": "s1",
+    "heading": "2028",
+    "identity": "Age 19 at Twente",
+    "lines": [
+      "🚑 Injury: Groin strain, out 10 weeks, missed matches",
+      "😤 A new rival emerges: Bukayo Costa ( Monaco)",
+      "⭐ Named Young Player of the Year!",
+      "🏆 Won the European Championship with Netherlands!",
+      " Manager chose Bukayo Costa over you.",
+      " National Team Battle",
+      "🩻 The scan was clear but you took three weeks anyway. The knee has never complained since",
+      "🧢 Signed with Cousin Ricky. What could go wrong"
+    ]
+  },
+  "actual": {
+    "key": "s1",
+    "heading": "2028",
+    "identity": "Age 19 at Twente",
+    "lines": [
+      "🚑 Injury: Groin strain, out 10 weeks, missed matches",
+      "😤 A new rival emerges: Bukayo Costa ( Monaco)",
+      "⭐ Named Young Player of the Year!",
+      "🏆 Won the European Championship with Netherlands!",
+      " Manager chose Bukayo Costa over you.",
+      " National Team Battle",
+      "🩻 The scan was clear but you took three weeks anyway. The knee has never complained since",
+      "🧢 Signed with Cousin Ricky. What could go wrong"
+    ]
+  }
+}

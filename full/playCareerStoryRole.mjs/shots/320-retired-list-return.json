@@ -1,0 +1,11 @@
+{
+  "expected": {
+    "top": 0,
+    "y": 5245
+  },
+  "actual": {
+    "top": 0,
+    "y": 5245,
+    "focus": true
+  }
+}

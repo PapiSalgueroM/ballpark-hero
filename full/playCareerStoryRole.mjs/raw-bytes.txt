@@ -1,0 +1,3 @@
+45695 /home/runner/work/_temp/rc-out/full/playCareerStoryRole.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playCareerStoryRole.mjs/stderr.log
+45695 total

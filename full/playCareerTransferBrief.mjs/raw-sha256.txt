@@ -1,0 +1,2 @@
+ce9679551b811f1fb728901272edeb6af2bef905b9f7ab06cd73c19ae6242a30  /home/runner/work/_temp/rc-out/full/playCareerTransferBrief.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCareerTransferBrief.mjs/stderr.log

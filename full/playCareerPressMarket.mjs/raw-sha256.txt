@@ -1,0 +1,2 @@
+f6182f7d2b09a9864ac26daceb4b2345f995c1ccfef813112adb61fd3c945ff4  /home/runner/work/_temp/rc-out/full/playCareerPressMarket.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCareerPressMarket.mjs/stderr.log

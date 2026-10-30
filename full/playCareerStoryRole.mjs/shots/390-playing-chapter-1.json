@@ -1,0 +1,26 @@
+{
+  "expected": {
+    "key": "s24",
+    "heading": "2049",
+    "identity": "Age 40 at Twente",
+    "lines": [
+      "⚠️ Your contract is expiring!",
+      "🎙️ Warned both of them before the podcast dropped. Awkward calls, no ambush",
+      "🧒 Brought the gate regulars inside to watch a full session. The kid told him he could not sleep the night before",
+      "🧊 Cancelled the cryo chamber and did up the family house instead. Recovered better anyway",
+      "📝 Signed 1-year extension with Twente (€16k/wk)"
+    ]
+  },
+  "actual": {
+    "key": "s24",
+    "heading": "2049",
+    "identity": "Age 40 at Twente",
+    "lines": [
+      "⚠️ Your contract is expiring!",
+      "🎙️ Warned both of them before the podcast dropped. Awkward calls, no ambush",
+      "🧒 Brought the gate regulars inside to watch a full session. The kid told him he could not sleep the night before",
+      "🧊 Cancelled the cryo chamber and did up the family house instead. Recovered better anyway",
+      "📝 Signed 1-year extension with Twente (€16k/wk)"
+    ]
+  }
+}

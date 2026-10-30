@@ -1,0 +1,20 @@
+{
+  "expected": {
+    "key": "s0",
+    "heading": "2027",
+    "identity": "Age 18 at Twente",
+    "lines": [
+      "🚑 Injury: Dead leg, out 4 weeks, missed matches",
+      " First international call-up for Netherlands!"
+    ]
+  },
+  "actual": {
+    "key": "s0",
+    "heading": "2027",
+    "identity": "Age 18 at Twente",
+    "lines": [
+      "🚑 Injury: Dead leg, out 4 weeks, missed matches",
+      " First international call-up for Netherlands!"
+    ]
+  }
+}

@@ -1,0 +1,3 @@
+795 /home/runner/work/_temp/rc-out/full/playClubDetailCurrentRoster.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playClubDetailCurrentRoster.mjs/stderr.log
+795 total

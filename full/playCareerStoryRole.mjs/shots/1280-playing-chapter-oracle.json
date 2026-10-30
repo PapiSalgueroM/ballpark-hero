@@ -1,0 +1,746 @@
+[
+  {
+    "year": 2025,
+    "age": 16,
+    "club": "Ajax Youth",
+    "lines": [
+      "📋 Joined Ajax Youth Academy aged 16"
+    ],
+    "key": "s0",
+    "current": false,
+    "textLines": [
+      "📋 Joined Ajax Youth Academy aged 16"
+    ]
+  },
+  {
+    "year": 2026,
+    "age": 17,
+    "club": "Ajax Youth",
+    "lines": [
+      "📈 Stats improved during youth development (OVR 71)",
+      "📩 Professional contract offers received!",
+      "✍️ Signed with Twente 🇳🇱 (5yr, €20k/wk)"
+    ],
+    "key": "s1",
+    "current": false,
+    "textLines": [
+      "📈 Stats improved during youth development (OVR 71)",
+      "📩 Professional contract offers received!",
+      "✍️ Signed with Twente  (5yr, €20k/wk)"
+    ]
+  },
+  {
+    "year": 2027,
+    "age": 18,
+    "club": "Twente",
+    "lines": [
+      "🚑 Injury: Dead leg, out 4 weeks, missed matches",
+      "🇺🇳 First international call-up for Netherlands!",
+      "🎭 You leaned into it: The Showman is born",
+      "🥅 Scored on international debut for Netherlands!",
+      "🐕 Adopted a rescue dog. He has his own fan account now",
+      "🦝 Gaffer Two is now official staff. Attendance: perfect",
+      "🍝 Made peace with your camp roommate over room service. He still kicks you, but he apologises now"
+    ],
+    "key": "s2",
+    "current": false,
+    "textLines": [
+      "🚑 Injury: Dead leg, out 4 weeks, missed matches",
+      " First international call-up for Netherlands!",
+      "🎭 You leaned into it: The Showman is born",
+      "🥅 Scored on international debut for Netherlands!",
+      "🐕 Adopted a rescue dog. He has his own fan account now",
+      "🦝 Gaffer Two is now official staff. Attendance: perfect",
+      "🍝 Made peace with your camp roommate over room service. He still kicks you, but he apologises now"
+    ]
+  },
+  {
+    "year": 2028,
+    "age": 19,
+    "club": "Twente",
+    "lines": [
+      "🚑 Injury: Groin strain, out 10 weeks, missed matches",
+      "😤 A new rival emerges: Bukayo Costa (🇲🇨 Monaco)",
+      "⭐ Named Young Player of the Year!",
+      "🏆 Won the European Championship with Netherlands!",
+      "🇺🇳 Manager chose Bukayo Costa over you.",
+      "🇺🇳 National Team Battle",
+      "🩻 The scan was clear but you took three weeks anyway. The knee has never complained since",
+      "🧢 Signed with Cousin Ricky. What could go wrong"
+    ],
+    "key": "s3",
+    "current": false,
+    "textLines": [
+      "🚑 Injury: Groin strain, out 10 weeks, missed matches",
+      "😤 A new rival emerges: Bukayo Costa ( Monaco)",
+      "⭐ Named Young Player of the Year!",
+      "🏆 Won the European Championship with Netherlands!",
+      " Manager chose Bukayo Costa over you.",
+      " National Team Battle",
+      "🩻 The scan was clear but you took three weeks anyway. The knee has never complained since",
+      "🧢 Signed with Cousin Ricky. What could go wrong"
+    ]
+  },
+  {
+    "year": 2029,
+    "age": 20,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won the KNVB Cup with Twente!",
+      "🏆 Won Player of the Month (October 2029)!",
+      "🏆 Won Player of the Month (November 2029)!",
+      "🏆 Won Player of the Month (December 2029)!",
+      "🏠 Pushed the club into hiring a family liaison officer. Every foreign signing since has had a soft landing",
+      "🔥 Reported the flares that landed six feet from a ball boy. That city will boo you until you retire",
+      "🎲 The poker habit made the back pages",
+      "👟 Rejected sponsorship offers"
+    ],
+    "key": "s4",
+    "current": false,
+    "textLines": [
+      "🏆 Won the KNVB Cup with Twente!",
+      "🏆 Won Player of the Month (October 2029)!",
+      "🏆 Won Player of the Month (November 2029)!",
+      "🏆 Won Player of the Month (December 2029)!",
+      "🏠 Pushed the club into hiring a family liaison officer. Every foreign signing since has had a soft landing",
+      "🔥 Reported the flares that landed six feet from a ball boy. That city will boo you until you retire",
+      "🎲 The poker habit made the back pages",
+      "👟 Rejected sponsorship offers"
+    ]
+  },
+  {
+    "year": 2030,
+    "age": 21,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won Player of the Month (May 2031)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 Portugal won the World Cup.",
+      "🤬 Tunnel Bust-Up",
+      "🏦 Kept cash instead of investing",
+      "👕 Sent signed shirts to the children's ward",
+      "🎯 Said nothing about the bonuses and quietly had your best passing season",
+      "📝 Signed 3-year extension with Twente (€23k/wk)"
+    ],
+    "key": "s5",
+    "current": false,
+    "textLines": [
+      "🏆 Won Player of the Month (May 2031)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 Portugal won the World Cup.",
+      "🤬 Tunnel Bust-Up",
+      "🏦 Kept cash instead of investing",
+      "👕 Sent signed shirts to the children's ward",
+      "🎯 Said nothing about the bonuses and quietly had your best passing season",
+      "📝 Signed 3-year extension with Twente (€23k/wk)"
+    ]
+  },
+  {
+    "year": 2031,
+    "age": 22,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won the KNVB Cup with Twente!",
+      "🏆 Won Player of the Month (August 2031)!",
+      "🏆 Won Player of the Month (September 2031)!",
+      "🏆 Won Player of the Month (May 2032)!",
+      "🧤 Had the lucky pigeon relocated to a nice loft. The club lost the next three at home and everyone blamed you",
+      "🕵️ Never found the leaker. You trust no one now",
+      "⛰️ Made the club build a proper altitude protocol. The whole squad benefited and nobody said thank you",
+      "😶 Said nothing when they sacked the man who made you. Started 38 games for the next one"
+    ],
+    "key": "s6",
+    "current": false,
+    "textLines": [
+      "🏆 Won the KNVB Cup with Twente!",
+      "🏆 Won Player of the Month (August 2031)!",
+      "🏆 Won Player of the Month (September 2031)!",
+      "🏆 Won Player of the Month (May 2032)!",
+      "🧤 Had the lucky pigeon relocated to a nice loft. The club lost the next three at home and everyone blamed you",
+      "🕵️ Never found the leaker. You trust no one now",
+      "⛰️ Made the club build a proper altitude protocol. The whole squad benefited and nobody said thank you",
+      "😶 Said nothing when they sacked the man who made you. Started 38 games for the next one"
+    ]
+  },
+  {
+    "year": 2032,
+    "age": 23,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won Player of the Month (February 2033)!",
+      "🏆 Won Player of the Month (March 2033)!",
+      "🏆 Won Player of the Month (May 2033)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 Slovenia won the European Championship.",
+      "👟 Won the European Championship Golden Boot with 5 goals!",
+      "🚐 Slept 11 of the 12 hours on the minibus and was the only player who looked awake at kickoff",
+      "💼 Passed on restaurant investment",
+      "⌚ Bought your Secret Santa a watch. The other nineteen gifts were socks",
+      "📝 Signed 4-year extension with Twente (€26k/wk)"
+    ],
+    "key": "s7",
+    "current": false,
+    "textLines": [
+      "🏆 Won Player of the Month (February 2033)!",
+      "🏆 Won Player of the Month (March 2033)!",
+      "🏆 Won Player of the Month (May 2033)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 Slovenia won the European Championship.",
+      "👟 Won the European Championship Golden Boot with 5 goals!",
+      "🚐 Slept 11 of the 12 hours on the minibus and was the only player who looked awake at kickoff",
+      "💼 Passed on restaurant investment",
+      "⌚ Bought your Secret Santa a watch. The other nineteen gifts were socks",
+      "📝 Signed 4-year extension with Twente (€26k/wk)"
+    ]
+  },
+  {
+    "year": 2033,
+    "age": 24,
+    "club": "Twente",
+    "lines": [
+      "©️ Handed the Twente armband. The manager wants his voice on the pitch",
+      "🏆 Won Player of the Month (September 2033)!",
+      "🏆 Won Player of the Month (December 2033)!",
+      "🏆 Won Player of the Month (January 2034)!",
+      "🏆 Won Player of the Month (March 2034)!",
+      "🥸 The lookalike defense fooled no one. The meme lives forever. Popularity -5.",
+      "🪙 Deleted the crypto posts, but screenshots live forever",
+      "🕴️ Fumed about the streaker. Fans called you no fun"
+    ],
+    "key": "s8",
+    "current": false,
+    "textLines": [
+      "©️ Handed the Twente armband. The manager wants his voice on the pitch",
+      "🏆 Won Player of the Month (September 2033)!",
+      "🏆 Won Player of the Month (December 2033)!",
+      "🏆 Won Player of the Month (January 2034)!",
+      "🏆 Won Player of the Month (March 2034)!",
+      "🥸 The lookalike defense fooled no one. The meme lives forever. Popularity -5.",
+      "🪙 Deleted the crypto posts, but screenshots live forever",
+      "🕴️ Fumed about the streaker. Fans called you no fun"
+    ]
+  },
+  {
+    "year": 2034,
+    "age": 25,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won Player of the Month (October 2034)!",
+      "🏆 Won Player of the Month (January 2035)!",
+      "🏆 Won Player of the Month (February 2035)!",
+      "🏆 Won Player of the Month (May 2035)!",
+      "🌍 England won the World Cup.",
+      "⚽ Head to Head Victory!",
+      "👟 Stayed loyal to the brand that believed in you first",
+      "🏃 Finished first in every run and dragged the stragglers home. The armband talk started here",
+      "📢 Said the old ground should have stayed and got fined €80k for the privilege",
+      "🎤 Went silent for a month. No quotes, no noise, and the best training block of your career"
+    ],
+    "key": "s9",
+    "current": false,
+    "textLines": [
+      "🏆 Won Player of the Month (October 2034)!",
+      "🏆 Won Player of the Month (January 2035)!",
+      "🏆 Won Player of the Month (February 2035)!",
+      "🏆 Won Player of the Month (May 2035)!",
+      "🌍 England won the World Cup.",
+      "⚽ Head to Head Victory!",
+      "👟 Stayed loyal to the brand that believed in you first",
+      "🏃 Finished first in every run and dragged the stragglers home. The armband talk started here",
+      "📢 Said the old ground should have stayed and got fined €80k for the privilege",
+      "🎤 Went silent for a month. No quotes, no noise, and the best training block of your career"
+    ]
+  },
+  {
+    "year": 2035,
+    "age": 26,
+    "club": "Twente",
+    "lines": [
+      "🧘 Social media detox paid off: +2 to all stats!",
+      "🏆 Won Player of the Month (October 2035)!",
+      "🏆 Won Player of the Month (January 2036)!",
+      "🏆 Won Player of the Month (May 2036)!",
+      "🏛️ Granted Club Legend status at Twente! (300+ appearances)",
+      "⚠️ Your contract is expiring!",
+      "🏅 Rival Wins Ballon d'Or",
+      "🏠 Pushed the club into hiring a family liaison officer. Every foreign signing since has had a soft landing",
+      "📣 Came off with the head knock and said why on camera. Youth coaches keep sending you thank yous",
+      "📝 Signed 2-year extension with Twente (€30k/wk)"
+    ],
+    "key": "s10",
+    "current": false,
+    "textLines": [
+      "🧘 Social media detox paid off: +2 to all stats!",
+      "🏆 Won Player of the Month (October 2035)!",
+      "🏆 Won Player of the Month (January 2036)!",
+      "🏆 Won Player of the Month (May 2036)!",
+      "🏛️ Granted Club Legend status at Twente! (300+ appearances)",
+      "⚠️ Your contract is expiring!",
+      "🏅 Rival Wins Ballon d'Or",
+      "🏠 Pushed the club into hiring a family liaison officer. Every foreign signing since has had a soft landing",
+      "📣 Came off with the head knock and said why on camera. Youth coaches keep sending you thank yous",
+      "📝 Signed 2-year extension with Twente (€30k/wk)"
+    ]
+  },
+  {
+    "year": 2036,
+    "age": 27,
+    "club": "Twente",
+    "lines": [
+      "🚑 Injury: Groin strain, out 5 weeks, missed matches",
+      "🏆 Won the KNVB Cup with Twente!",
+      "🏆 Won Player of the Month (August 2036)!",
+      "🏆 Won Player of the Month (September 2036)!",
+      "🏆 Won Player of the Month (December 2036)!",
+      "🏆 Won Player of the Month (March 2037)!",
+      "🤝 Won the Fair Play Award for exemplary conduct!",
+      "⚠️ Your contract is expiring!",
+      "🌍 France won the European Championship.",
+      "🎬⭐ Declined movie role",
+      "⚽ Turned down the podcast. Reps over takes",
+      "⌚ Bought your Secret Santa a watch. The other nineteen gifts were socks",
+      "📝 Signed 3-year extension with Twente (€35k/wk)"
+    ],
+    "key": "s11",
+    "current": false,
+    "textLines": [
+      "🚑 Injury: Groin strain, out 5 weeks, missed matches",
+      "🏆 Won the KNVB Cup with Twente!",
+      "🏆 Won Player of the Month (August 2036)!",
+      "🏆 Won Player of the Month (September 2036)!",
+      "🏆 Won Player of the Month (December 2036)!",
+      "🏆 Won Player of the Month (March 2037)!",
+      "🤝 Won the Fair Play Award for exemplary conduct!",
+      "⚠️ Your contract is expiring!",
+      "🌍 France won the European Championship.",
+      "🎬⭐ Declined movie role",
+      "⚽ Turned down the podcast. Reps over takes",
+      "⌚ Bought your Secret Santa a watch. The other nineteen gifts were socks",
+      "📝 Signed 3-year extension with Twente (€35k/wk)"
+    ]
+  },
+  {
+    "year": 2037,
+    "age": 28,
+    "club": "Twente",
+    "lines": [
+      "🎖️ INTERNATIONAL LEGEND: reached 100 caps for Netherlands!",
+      "🏆 Won the league with Twente!",
+      "🏆 Won Player of the Month (August 2037)!",
+      "🏆 Won Player of the Month (September 2037)!",
+      "🏆 Won Player of the Month (October 2037)!",
+      "🏆 Won Player of the Month (December 2037)!",
+      "🌍 Named International Player of the Year!",
+      "😅 Handed the proposal to the captain. He dropped the ring. They still said yes",
+      "🛌 Rested the knee. Better safe than sorry",
+      "🚪 Lost the armband at 9am and asked for a transfer by 2pm"
+    ],
+    "key": "s12",
+    "current": false,
+    "textLines": [
+      "🎖️ INTERNATIONAL LEGEND: reached 100 caps for Netherlands!",
+      "🏆 Won the league with Twente!",
+      "🏆 Won Player of the Month (August 2037)!",
+      "🏆 Won Player of the Month (September 2037)!",
+      "🏆 Won Player of the Month (October 2037)!",
+      "🏆 Won Player of the Month (December 2037)!",
+      "🌍 Named International Player of the Year!",
+      "😅 Handed the proposal to the captain. He dropped the ring. They still said yes",
+      "🛌 Rested the knee. Better safe than sorry",
+      "🚪 Lost the armband at 9am and asked for a transfer by 2pm"
+    ]
+  },
+  {
+    "year": 2038,
+    "age": 29,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won the KNVB Cup with Twente!",
+      "🏆 Won Player of the Month (August 2038)!",
+      "🏆 Won Player of the Month (September 2038)!",
+      "🏆 Won Player of the Month (January 2039)!",
+      "🏆 Won Player of the Month (May 2039)!",
+      "🌍 Named International Player of the Year!",
+      "⚠️ Your contract is expiring!",
+      "🌍 Algeria won the World Cup.",
+      "🤝 Rival Shows Respect",
+      "🏖️ Paid €90k to relay a sand pitch for a club that beat you. The town put a plaque on the gate",
+      "🔟 Given the iconic number 10 shirt",
+      "🧘 Never even watched the clip",
+      "🧠 Passed on the teammate coin. Your accountant sends a fruit basket",
+      "📝 Signed 4-year extension with Twente (€40k/wk)"
+    ],
+    "key": "s13",
+    "current": false,
+    "textLines": [
+      "🏆 Won the KNVB Cup with Twente!",
+      "🏆 Won Player of the Month (August 2038)!",
+      "🏆 Won Player of the Month (September 2038)!",
+      "🏆 Won Player of the Month (January 2039)!",
+      "🏆 Won Player of the Month (May 2039)!",
+      "🌍 Named International Player of the Year!",
+      "⚠️ Your contract is expiring!",
+      "🌍 Algeria won the World Cup.",
+      "🤝 Rival Shows Respect",
+      "🏖️ Paid €90k to relay a sand pitch for a club that beat you. The town put a plaque on the gate",
+      "🔟 Given the iconic number 10 shirt",
+      "🧘 Never even watched the clip",
+      "🧠 Passed on the teammate coin. Your accountant sends a fruit basket",
+      "📝 Signed 4-year extension with Twente (€40k/wk)"
+    ]
+  },
+  {
+    "year": 2039,
+    "age": 30,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won Player of the Month (October 2039)!",
+      "🏆 Won Player of the Month (January 2040)!",
+      "🏆 Won Player of the Month (March 2040)!",
+      "🏆 Won Player of the Month (April 2040)!",
+      "🎖️ Made 500th career appearance!",
+      "📋 Negotiated the aux schedule. Whales on Wednesdays only",
+      "🕴️ Fumed about the streaker. Fans called you no fun",
+      "⚽ Redirected the statue budget to youth pitches. Better than bronze"
+    ],
+    "key": "s14",
+    "current": false,
+    "textLines": [
+      "🏆 Won Player of the Month (October 2039)!",
+      "🏆 Won Player of the Month (January 2040)!",
+      "🏆 Won Player of the Month (March 2040)!",
+      "🏆 Won Player of the Month (April 2040)!",
+      "🎖️ Made 500th career appearance!",
+      "📋 Negotiated the aux schedule. Whales on Wednesdays only",
+      "🕴️ Fumed about the streaker. Fans called you no fun",
+      "⚽ Redirected the statue budget to youth pitches. Better than bronze"
+    ]
+  },
+  {
+    "year": 2040,
+    "age": 31,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won the KNVB Cup with Twente!",
+      "🏆 Won Player of the Month (September 2040)!",
+      "🏆 Won Player of the Month (November 2040)!",
+      "🏆 Won Player of the Month (April 2041)!",
+      "🏆 Won the European Championship with Netherlands!",
+      "🌟 Named Best Player of the European Championship!",
+      "👟 Won the European Championship Golden Boot with 7 goals!",
+      "🎤 Gave the media nothing to work with",
+      "🌳 Turned down the development. The park still has your name on a bench now",
+      "😤 Fired back at rival in media",
+      "😂 Rang the rival manager to explain the quote was not about him. He put it on his own wall anyway"
+    ],
+    "key": "s15",
+    "current": false,
+    "textLines": [
+      "🏆 Won the KNVB Cup with Twente!",
+      "🏆 Won Player of the Month (September 2040)!",
+      "🏆 Won Player of the Month (November 2040)!",
+      "🏆 Won Player of the Month (April 2041)!",
+      "🏆 Won the European Championship with Netherlands!",
+      "🌟 Named Best Player of the European Championship!",
+      "👟 Won the European Championship Golden Boot with 7 goals!",
+      "🎤 Gave the media nothing to work with",
+      "🌳 Turned down the development. The park still has your name on a bench now",
+      "😤 Fired back at rival in media",
+      "😂 Rang the rival manager to explain the quote was not about him. He put it on his own wall anyway"
+    ]
+  },
+  {
+    "year": 2041,
+    "age": 32,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won Player of the Month (September 2041)!",
+      "🏆 Won Player of the Month (December 2041)!",
+      "🏆 Won Player of the Month (January 2042)!",
+      "🏆 Won Player of the Month (May 2042)!",
+      "🤝 Won the Fair Play Award for exemplary conduct!",
+      "⚠️ Your contract is expiring!",
+      "⚽ Head to Head Victory!",
+      "🏠 Pushed the club into hiring a family liaison officer. Every foreign signing since has had a soft landing",
+      "📵 Kept reading every reply and turned spite into a legitimate energy source. Sleep suffered, numbers did not",
+      "🏦 Helped a teammate get a real loan instead of cash",
+      "📸 Laughed off party scandal, fans loved it",
+      "📝 Signed 2-year extension with Twente (€40k/wk)"
+    ],
+    "key": "s16",
+    "current": false,
+    "textLines": [
+      "🏆 Won Player of the Month (September 2041)!",
+      "🏆 Won Player of the Month (December 2041)!",
+      "🏆 Won Player of the Month (January 2042)!",
+      "🏆 Won Player of the Month (May 2042)!",
+      "🤝 Won the Fair Play Award for exemplary conduct!",
+      "⚠️ Your contract is expiring!",
+      "⚽ Head to Head Victory!",
+      "🏠 Pushed the club into hiring a family liaison officer. Every foreign signing since has had a soft landing",
+      "📵 Kept reading every reply and turned spite into a legitimate energy source. Sleep suffered, numbers did not",
+      "🏦 Helped a teammate get a real loan instead of cash",
+      "📸 Laughed off party scandal, fans loved it",
+      "📝 Signed 2-year extension with Twente (€40k/wk)"
+    ]
+  },
+  {
+    "year": 2042,
+    "age": 33,
+    "club": "Twente",
+    "lines": [
+      "🚑 Injury: Hip knock, out 2 weeks, missed matches",
+      "©️ Named captain of Netherlands! Legacy +15",
+      "🏆 Won Player of the Month (August 2042)!",
+      "🏆 Won Player of the Month (October 2042)!",
+      "🏆 Won Player of the Month (November 2042)!",
+      "🏆 Won Player of the Month (March 2043)!",
+      "💯 Reached 100 career goals!",
+      "⚠️ Your contract is expiring!",
+      "🌍 Spain won the World Cup.",
+      "🛌 Rested the knee. Better safe than sorry",
+      "🤐 The karaoke video lives on in the group chat only",
+      "🏥💔 Flew home between matches for family",
+      "📄 Traded a big raise for a written release clause. Cheapest insurance you ever bought",
+      "📝 Signed 2-year extension with Twente (€42k/wk)"
+    ],
+    "key": "s17",
+    "current": false,
+    "textLines": [
+      "🚑 Injury: Hip knock, out 2 weeks, missed matches",
+      "©️ Named captain of Netherlands! Legacy +15",
+      "🏆 Won Player of the Month (August 2042)!",
+      "🏆 Won Player of the Month (October 2042)!",
+      "🏆 Won Player of the Month (November 2042)!",
+      "🏆 Won Player of the Month (March 2043)!",
+      "💯 Reached 100 career goals!",
+      "⚠️ Your contract is expiring!",
+      "🌍 Spain won the World Cup.",
+      "🛌 Rested the knee. Better safe than sorry",
+      "🤐 The karaoke video lives on in the group chat only",
+      "🏥💔 Flew home between matches for family",
+      "📄 Traded a big raise for a written release clause. Cheapest insurance you ever bought",
+      "📝 Signed 2-year extension with Twente (€42k/wk)"
+    ]
+  },
+  {
+    "year": 2043,
+    "age": 34,
+    "club": "Twente",
+    "lines": [
+      "🚑 Injury: Bruised ribs, out 2 weeks, missed matches",
+      "🏆 Won Player of the Month (December 2043)!",
+      "🏆 Won Player of the Month (January 2044)!",
+      "🏆 Won Player of the Month (February 2044)!",
+      "🏆 Won Player of the Month (March 2044)!",
+      "⚠️ Your contract is expiring!",
+      "🎯 Scored a Puskas-nominated goal!",
+      "📞 Reported the approach. The league called you an example. The grey suit called you nothing at all",
+      "📝 Signed 1-year extension with Twente (€42k/wk)"
+    ],
+    "key": "s18",
+    "current": false,
+    "textLines": [
+      "🚑 Injury: Bruised ribs, out 2 weeks, missed matches",
+      "🏆 Won Player of the Month (December 2043)!",
+      "🏆 Won Player of the Month (January 2044)!",
+      "🏆 Won Player of the Month (February 2044)!",
+      "🏆 Won Player of the Month (March 2044)!",
+      "⚠️ Your contract is expiring!",
+      "🎯 Scored a Puskas-nominated goal!",
+      "📞 Reported the approach. The league called you an example. The grey suit called you nothing at all",
+      "📝 Signed 1-year extension with Twente (€42k/wk)"
+    ]
+  },
+  {
+    "year": 2044,
+    "age": 35,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won the league with Twente!",
+      "🏆 Won Player of the Month (December 2044)!",
+      "🏆 Won Player of the Month (January 2045)!",
+      "🏆 Won Player of the Month (May 2045)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 Spain won the European Championship.",
+      "👕 The Shirt Swap",
+      "💸 You sent the donation and skipped the cameras. The quiet kind of good. Integrity +3.",
+      "🕴️ Fumed about the streaker. Fans called you no fun",
+      "🌏 Spent your only tour day off coaching 200 kids in a school yard with two cones and no shade",
+      "🥫 Gave 8 weeks of wages (€0.33M) to the supporters' food bank. The banner came down that night",
+      "📝 Signed 1-year extension with Twente (€36k/wk)"
+    ],
+    "key": "s19",
+    "current": false,
+    "textLines": [
+      "🏆 Won the league with Twente!",
+      "🏆 Won Player of the Month (December 2044)!",
+      "🏆 Won Player of the Month (January 2045)!",
+      "🏆 Won Player of the Month (May 2045)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 Spain won the European Championship.",
+      "👕 The Shirt Swap",
+      "💸 You sent the donation and skipped the cameras. The quiet kind of good. Integrity +3.",
+      "🕴️ Fumed about the streaker. Fans called you no fun",
+      "🌏 Spent your only tour day off coaching 200 kids in a school yard with two cones and no shade",
+      "🥫 Gave 8 weeks of wages (€0.33M) to the supporters' food bank. The banner came down that night",
+      "📝 Signed 1-year extension with Twente (€36k/wk)"
+    ]
+  },
+  {
+    "year": 2045,
+    "age": 36,
+    "club": "Twente",
+    "lines": [
+      "💪 Decided to push on, not ready to hang up the boots yet",
+      "🚑 Injury: Dislocated shoulder, out 8 weeks, missed matches",
+      "🏆 Won Player of the Month (October 2045)!",
+      "🏆 Won Player of the Month (March 2046)!",
+      "©️ Passed the captaincy on after 13 seasons wearing it. The dressing room stood and clapped",
+      "⚠️ Your contract is expiring!",
+      "👋 Rival Retires",
+      "📢 Turned down the sanctioned money out loud. A clean brand doubled its offer within a week",
+      "⚽🏫 Postponed football academy plans",
+      "📝 Signed 1-year extension with Twente (€30k/wk)"
+    ],
+    "key": "s20",
+    "current": false,
+    "textLines": [
+      "💪 Decided to push on, not ready to hang up the boots yet",
+      "🚑 Injury: Dislocated shoulder, out 8 weeks, missed matches",
+      "🏆 Won Player of the Month (October 2045)!",
+      "🏆 Won Player of the Month (March 2046)!",
+      "©️ Passed the captaincy on after 13 seasons wearing it. The dressing room stood and clapped",
+      "⚠️ Your contract is expiring!",
+      "👋 Rival Retires",
+      "📢 Turned down the sanctioned money out loud. A clean brand doubled its offer within a week",
+      "⚽🏫 Postponed football academy plans",
+      "📝 Signed 1-year extension with Twente (€30k/wk)"
+    ]
+  },
+  {
+    "year": 2046,
+    "age": 37,
+    "club": "Twente",
+    "lines": [
+      "🏆 Won Player of the Month (September 2046)!",
+      "🏆 Won Player of the Month (October 2046)!",
+      "🏆 Won Player of the Month (May 2047)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 England won the World Cup.",
+      "📋 Left out of the Netherlands squad for the World Cup. You watch it at home.",
+      "🏚️ Put on a testimonial for your old academy. Nine internationals turned up and the under-14s survived",
+      "🎧 Waited out the breakdown in silence",
+      "📝 Signed 1-year extension with Twente (€26k/wk)"
+    ],
+    "key": "s21",
+    "current": false,
+    "textLines": [
+      "🏆 Won Player of the Month (September 2046)!",
+      "🏆 Won Player of the Month (October 2046)!",
+      "🏆 Won Player of the Month (May 2047)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 England won the World Cup.",
+      "📋 Left out of the Netherlands squad for the World Cup. You watch it at home.",
+      "🏚️ Put on a testimonial for your old academy. Nine internationals turned up and the under-14s survived",
+      "🎧 Waited out the breakdown in silence",
+      "📝 Signed 1-year extension with Twente (€26k/wk)"
+    ]
+  },
+  {
+    "year": 2047,
+    "age": 38,
+    "club": "Twente",
+    "lines": [
+      "⚠️ Your contract is expiring!",
+      "✋ Refused performance enhancing drugs. Integrity preserved. Legacy +10 at retirement.",
+      "🎙️ Warned both of them before the podcast dropped. Awkward calls, no ambush",
+      "⌚ Bought your Secret Santa a watch. The other nineteen gifts were socks",
+      "📝 Signed 1-year extension with Twente (€22k/wk)"
+    ],
+    "key": "s22",
+    "current": false,
+    "textLines": [
+      "⚠️ Your contract is expiring!",
+      "✋ Refused performance enhancing drugs. Integrity preserved. Legacy +10 at retirement.",
+      "🎙️ Warned both of them before the podcast dropped. Awkward calls, no ambush",
+      "⌚ Bought your Secret Santa a watch. The other nineteen gifts were socks",
+      "📝 Signed 1-year extension with Twente (€22k/wk)"
+    ]
+  },
+  {
+    "year": 2048,
+    "age": 39,
+    "club": "Twente",
+    "lines": [
+      "💪 Decided to push on, not ready to hang up the boots yet",
+      "🏆 Won Player of the Month (April 2049)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 England won the European Championship.",
+      "📋 Left out of the Netherlands squad for the European Championship. You watch it at home.",
+      "🤝 Pointed the coaching course at the captain. He is already correcting the gaffer",
+      "😴 Told the sleep guy that 2am is a lifestyle. Happier, marginally slower",
+      "🎤 Gave the media nothing to work with",
+      "⚽🏫 Postponed football academy plans",
+      "📝 Signed 1-year extension with Twente (€19k/wk)"
+    ],
+    "key": "s23",
+    "current": false,
+    "textLines": [
+      "💪 Decided to push on, not ready to hang up the boots yet",
+      "🏆 Won Player of the Month (April 2049)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 England won the European Championship.",
+      "📋 Left out of the Netherlands squad for the European Championship. You watch it at home.",
+      "🤝 Pointed the coaching course at the captain. He is already correcting the gaffer",
+      "😴 Told the sleep guy that 2am is a lifestyle. Happier, marginally slower",
+      "🎤 Gave the media nothing to work with",
+      "⚽🏫 Postponed football academy plans",
+      "📝 Signed 1-year extension with Twente (€19k/wk)"
+    ]
+  },
+  {
+    "year": 2049,
+    "age": 40,
+    "club": "Twente",
+    "lines": [
+      "⚠️ Your contract is expiring!",
+      "🎙️ Warned both of them before the podcast dropped. Awkward calls, no ambush",
+      "🧒 Brought the gate regulars inside to watch a full session. The kid told him he could not sleep the night before",
+      "🧊 Cancelled the cryo chamber and did up the family house instead. Recovered better anyway",
+      "📝 Signed 1-year extension with Twente (€16k/wk)"
+    ],
+    "key": "s24",
+    "current": false,
+    "textLines": [
+      "⚠️ Your contract is expiring!",
+      "🎙️ Warned both of them before the podcast dropped. Awkward calls, no ambush",
+      "🧒 Brought the gate regulars inside to watch a full session. The kid told him he could not sleep the night before",
+      "🧊 Cancelled the cryo chamber and did up the family house instead. Recovered better anyway",
+      "📝 Signed 1-year extension with Twente (€16k/wk)"
+    ]
+  },
+  {
+    "key": "now",
+    "year": 2050,
+    "age": 41,
+    "club": "Twente",
+    "lines": [
+      "⚠️ Your contract is expiring!",
+      "🌍 Morocco won the World Cup.",
+      "📋 Left out of the Netherlands squad for the World Cup. You watch it at home.",
+      "👕 Sent signed shirts to the children's ward",
+      "😂 Rang the rival manager to explain the quote was not about him. He put it on his own wall anyway",
+      "📝 Signed 1-year extension with Twente (€13k/wk)"
+    ],
+    "current": true,
+    "textLines": [
+      "⚠️ Your contract is expiring!",
+      "🌍 Morocco won the World Cup.",
+      "📋 Left out of the Netherlands squad for the World Cup. You watch it at home.",
+      "👕 Sent signed shirts to the children's ward",
+      "😂 Rang the rival manager to explain the quote was not about him. He put it on his own wall anyway",
+      "📝 Signed 1-year extension with Twente (€13k/wk)"
+    ]
+  }
+]

@@ -1,0 +1,2 @@
+57c3fb3815b6f758bb8e230dccd2c238c45c7631ebf382480321ec3a73e8eae6  /home/runner/work/_temp/rc-out/full/playCareerSquad.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCareerSquad.mjs/stderr.log

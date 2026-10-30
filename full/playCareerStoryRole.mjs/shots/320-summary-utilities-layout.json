@@ -1,0 +1,86 @@
+{
+  "x": 12,
+  "y": 157,
+  "width": 296,
+  "height": 44,
+  "viewport": [
+    320,
+    568
+  ],
+  "pageY": 0,
+  "ownScroll": 0,
+  "opacity": "1",
+  "inside": true,
+  "painted": true,
+  "finite": 0,
+  "overflow": false,
+  "controls": [
+    {
+      "label": "Open the training ground",
+      "width": 144,
+      "height": 44,
+      "points": [
+        {
+          "x": 84,
+          "y": 179,
+          "painted": true
+        },
+        {
+          "x": 48,
+          "y": 168,
+          "painted": true
+        },
+        {
+          "x": 120,
+          "y": 168,
+          "painted": true
+        },
+        {
+          "x": 48,
+          "y": 190,
+          "painted": true
+        },
+        {
+          "x": 120,
+          "y": 190,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Open your phone",
+      "width": 144,
+      "height": 44,
+      "points": [
+        {
+          "x": 236,
+          "y": 179,
+          "painted": true
+        },
+        {
+          "x": 200,
+          "y": 168,
+          "painted": true
+        },
+        {
+          "x": 272,
+          "y": 168,
+          "painted": true
+        },
+        {
+          "x": 200,
+          "y": 190,
+          "painted": true
+        },
+        {
+          "x": 272,
+          "y": 190,
+          "painted": true
+        }
+      ]
+    }
+  ],
+  "stable": 4,
+  "toastObserved": 0,
+  "toastRemaining": 0
+}

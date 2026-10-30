@@ -1,0 +1,182 @@
+{
+  "x": 12,
+  "y": 34.0859375,
+  "width": 296,
+  "height": 499.828125,
+  "viewport": [
+    320,
+    568
+  ],
+  "pageY": 3751,
+  "ownScroll": 0,
+  "opacity": "1",
+  "inside": true,
+  "painted": true,
+  "finite": 0,
+  "overflow": false,
+  "controls": [
+    {
+      "label": "‹ All seasons",
+      "width": 91,
+      "height": 44,
+      "points": [
+        {
+          "x": 74.5,
+          "y": 158.0859375,
+          "painted": true
+        },
+        {
+          "x": 51.75,
+          "y": 147.0859375,
+          "painted": true
+        },
+        {
+          "x": 97.25,
+          "y": 147.0859375,
+          "painted": true
+        },
+        {
+          "x": 51.75,
+          "y": 169.0859375,
+          "painted": true
+        },
+        {
+          "x": 97.25,
+          "y": 169.0859375,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "‹ Previous chapter",
+      "width": 127,
+      "height": 44,
+      "points": [
+        {
+          "x": 92.5,
+          "y": 270.0859375,
+          "painted": true
+        },
+        {
+          "x": 60.75,
+          "y": 259.0859375,
+          "painted": true
+        },
+        {
+          "x": 124.25,
+          "y": 259.0859375,
+          "painted": true
+        },
+        {
+          "x": 60.75,
+          "y": 281.0859375,
+          "painted": true
+        },
+        {
+          "x": 124.25,
+          "y": 281.0859375,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Next chapter ›",
+      "width": 127,
+      "height": 44,
+      "points": [
+        {
+          "x": 227.5,
+          "y": 270.0859375,
+          "painted": true
+        },
+        {
+          "x": 195.75,
+          "y": 259.0859375,
+          "painted": true
+        },
+        {
+          "x": 259.25,
+          "y": 259.0859375,
+          "painted": true
+        },
+        {
+          "x": 195.75,
+          "y": 281.0859375,
+          "painted": true
+        },
+        {
+          "x": 259.25,
+          "y": 281.0859375,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Back to your career",
+      "width": 262,
+      "height": 44,
+      "points": [
+        {
+          "x": 160,
+          "y": 498.9140625,
+          "painted": true
+        },
+        {
+          "x": 94.5,
+          "y": 487.9140625,
+          "painted": true
+        },
+        {
+          "x": 225.5,
+          "y": 487.9140625,
+          "painted": true
+        },
+        {
+          "x": 94.5,
+          "y": 509.9140625,
+          "painted": true
+        },
+        {
+          "x": 225.5,
+          "y": 509.9140625,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Close",
+      "width": 44,
+      "height": 44,
+      "points": [
+        {
+          "x": 277,
+          "y": 65.0859375,
+          "painted": true
+        },
+        {
+          "x": 266,
+          "y": 54.0859375,
+          "painted": true
+        },
+        {
+          "x": 288,
+          "y": 54.0859375,
+          "painted": true
+        },
+        {
+          "x": 266,
+          "y": 76.0859375,
+          "painted": true
+        },
+        {
+          "x": 288,
+          "y": 76.0859375,
+          "painted": true
+        }
+      ]
+    }
+  ],
+  "stable": 4,
+  "toastObserved": 0,
+  "toastRemaining": 0
+}

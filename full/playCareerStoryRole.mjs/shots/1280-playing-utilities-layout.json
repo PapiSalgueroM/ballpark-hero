@@ -1,0 +1,54 @@
+{
+  "x": 1208,
+  "y": 824,
+  "width": 56,
+  "height": 56,
+  "viewport": [
+    1280,
+    900
+  ],
+  "pageY": 0,
+  "ownScroll": 0,
+  "opacity": "1",
+  "inside": true,
+  "painted": true,
+  "finite": 0,
+  "overflow": false,
+  "controls": [
+    {
+      "label": "Open your phone",
+      "width": 56,
+      "height": 56,
+      "points": [
+        {
+          "x": 1236,
+          "y": 852,
+          "painted": true
+        },
+        {
+          "x": 1222,
+          "y": 838,
+          "painted": true
+        },
+        {
+          "x": 1250,
+          "y": 838,
+          "painted": true
+        },
+        {
+          "x": 1222,
+          "y": 866,
+          "painted": true
+        },
+        {
+          "x": 1250,
+          "y": 866,
+          "painted": true
+        }
+      ]
+    }
+  ],
+  "stable": 4,
+  "toastObserved": 0,
+  "toastRemaining": 0
+}

@@ -1,0 +1,14 @@
+{
+  "expected": {
+    "inline": "",
+    "computed": "visible",
+    "y": 2964
+  },
+  "actual": {
+    "inline": "",
+    "computed": "visible",
+    "y": 2964,
+    "activeMatches": true
+  },
+  "active": "<button type=\"button\" data-open-career-story=\"true\" class=\"min-h-11 text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5\">📖 Career Story</button>"
+}

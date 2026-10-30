@@ -1,0 +1,36 @@
+{
+  "expected": {
+    "key": "s23",
+    "heading": "2048",
+    "identity": "Age 39 at Twente",
+    "lines": [
+      "💪 Decided to push on, not ready to hang up the boots yet",
+      "🏆 Won Player of the Month (April 2049)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 England won the European Championship.",
+      "📋 Left out of the Netherlands squad for the European Championship. You watch it at home.",
+      "🤝 Pointed the coaching course at the captain. He is already correcting the gaffer",
+      "😴 Told the sleep guy that 2am is a lifestyle. Happier, marginally slower",
+      "🎤 Gave the media nothing to work with",
+      "⚽🏫 Postponed football academy plans",
+      "📝 Signed 1-year extension with Twente (€19k/wk)"
+    ]
+  },
+  "actual": {
+    "key": "s23",
+    "heading": "2048",
+    "identity": "Age 39 at Twente",
+    "lines": [
+      "💪 Decided to push on, not ready to hang up the boots yet",
+      "🏆 Won Player of the Month (April 2049)!",
+      "⚠️ Your contract is expiring!",
+      "🌍 England won the European Championship.",
+      "📋 Left out of the Netherlands squad for the European Championship. You watch it at home.",
+      "🤝 Pointed the coaching course at the captain. He is already correcting the gaffer",
+      "😴 Told the sleep guy that 2am is a lifestyle. Happier, marginally slower",
+      "🎤 Gave the media nothing to work with",
+      "⚽🏫 Postponed football academy plans",
+      "📝 Signed 1-year extension with Twente (€19k/wk)"
+    ]
+  }
+}

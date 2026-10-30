@@ -1,0 +1,2 @@
+7f9f8d2ddc1812aa27ba0562c4db0e97fd66c014869e98545364002fdc3a4fa6  /home/runner/work/_temp/rc-out/full/playCareerTrophyRuns.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCareerTrophyRuns.mjs/stderr.log

@@ -1,0 +1,14 @@
+{
+  "expected": {
+    "inline": "",
+    "computed": "visible",
+    "y": 0
+  },
+  "actual": {
+    "inline": "",
+    "computed": "visible",
+    "y": 0,
+    "activeMatches": true
+  },
+  "active": "<button type=\"button\" aria-label=\"How to play\" class=\"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 h-11 w-11 sm:h-auto sm:w-auto\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><path d=\"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3\"></path><path d=\"M12 17h.01\"></path></svg></button>"
+}
