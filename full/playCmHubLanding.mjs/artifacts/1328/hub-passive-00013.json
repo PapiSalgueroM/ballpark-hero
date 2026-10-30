@@ -1,0 +1,486 @@
+{
+  "status": "UNQUALIFIED_PASSIVE_DIAGNOSTIC_ONLY",
+  "geometry": {
+    "phase": "after-original-calendar-wait",
+    "context": {
+      "tag": "celta-320",
+      "what": "a match day, a real click",
+      "label": "Sat 8 Aug: vs Osasuna · La Liga · Round 1",
+      "how": "locator"
+    },
+    "point": {
+      "top": 301.5,
+      "bottom": 347.5,
+      "x": 273.140625,
+      "y": 324.5
+    },
+    "scrollY": 766,
+    "viewport": {
+      "width": 320,
+      "height": 640
+    },
+    "consentPending": null,
+    "consentHeight": "",
+    "strip": {
+      "element": {
+        "tag": "DIV",
+        "id": "",
+        "testid": "cm-calendar-day",
+        "role": null,
+        "label": null
+      },
+      "rect": {
+        "x": 29,
+        "y": 478,
+        "width": 262,
+        "height": 150,
+        "top": 478,
+        "right": 291,
+        "bottom": 628,
+        "left": 29
+      },
+      "inlineBottom": "",
+      "bottom": "12px",
+      "position": "sticky",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "transform": "none",
+      "contain": "none"
+    },
+    "banner": null,
+    "ancestors": [
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": 152.5,
+          "width": 288,
+          "height": 803,
+          "top": 152.5,
+          "right": 304,
+          "bottom": 955.5,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": 42.5,
+          "width": 288,
+          "height": 1416,
+          "top": 42.5,
+          "right": 304,
+          "bottom": 1458.5,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -13.5,
+          "width": 288,
+          "height": 1472,
+          "top": -13.5,
+          "right": 304,
+          "bottom": 1458.5,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "radix-:r56:-content-overview",
+          "testid": null,
+          "role": "tabpanel",
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -329,
+          "width": 288,
+          "height": 1787.5,
+          "top": -329,
+          "right": 304,
+          "bottom": 1458.5,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -385,
+          "width": 288,
+          "height": 1843.5,
+          "top": -385,
+          "right": 304,
+          "bottom": 1458.5,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -595,
+          "width": 288,
+          "height": 2053.5,
+          "top": -595,
+          "right": 304,
+          "bottom": 1458.5,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -595,
+          "width": 288,
+          "height": 2053.5,
+          "top": -595,
+          "right": 304,
+          "bottom": 1458.5,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "0px",
+        "position": "relative",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -619,
+          "width": 320,
+          "height": 32885.25,
+          "top": -619,
+          "right": 320,
+          "bottom": 32266.25,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "0px",
+        "position": "relative",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "MAIN",
+          "id": "dukb-main",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -766,
+          "width": 320,
+          "height": 33032.25,
+          "top": -766,
+          "right": 320,
+          "bottom": 32266.25,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "root",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -766,
+          "width": 320,
+          "height": 33542.75,
+          "top": -766,
+          "right": 320,
+          "bottom": 32776.75,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "BODY",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -766,
+          "width": 320,
+          "height": 33542.75,
+          "top": -766,
+          "right": 320,
+          "bottom": 32776.75,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "HTML",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -766,
+          "width": 320,
+          "height": 33542.75,
+          "top": -766,
+          "right": 320,
+          "bottom": 32776.75,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      }
+    ],
+    "hits": [
+      {
+        "tag": "SPAN",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": "Sat 8 Aug: vs Osasuna · La Liga · Round 1"
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": "cm-calendar-grid",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "radix-:r56:-content-overview",
+        "testid": null,
+        "role": "tabpanel",
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "MAIN",
+        "id": "dukb-main",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "root",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "HTML",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      }
+    ]
+  }
+}

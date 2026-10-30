@@ -1,0 +1,404 @@
+{
+  "status": "UNQUALIFIED_PASSIVE_DIAGNOSTIC_ONLY",
+  "geometry": {
+    "phase": "stripBox",
+    "context": {
+      "original": {
+        "top": 507,
+        "bottom": 579,
+        "text": "Sat 1 Aug\nRest day\nAlready played.",
+        "vh": 844,
+        "bannerTop": 591
+      }
+    },
+    "point": null,
+    "scrollY": 677,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "consentPending": "1",
+    "consentHeight": "253px",
+    "strip": {
+      "element": {
+        "tag": "DIV",
+        "id": "",
+        "testid": "cm-calendar-day",
+        "role": null,
+        "label": null
+      },
+      "rect": {
+        "x": 29,
+        "y": 507,
+        "width": 332,
+        "height": 72,
+        "top": 507,
+        "right": 361,
+        "bottom": 579,
+        "left": 29
+      },
+      "inlineBottom": "265px",
+      "bottom": "265px",
+      "position": "sticky",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "transform": "none",
+      "contain": "none"
+    },
+    "banner": {
+      "element": {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": "region",
+        "label": "Cookie choices"
+      },
+      "rect": {
+        "x": 0,
+        "y": 591,
+        "width": 390,
+        "height": 253,
+        "top": 591,
+        "right": 390,
+        "bottom": 844,
+        "left": 0
+      },
+      "inlineBottom": "",
+      "bottom": "0px",
+      "position": "fixed",
+      "overflow": "auto",
+      "overflowX": "auto",
+      "overflowY": "auto",
+      "transform": "none",
+      "contain": "none"
+    },
+    "ancestors": [
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": 178,
+          "width": 358,
+          "height": 711,
+          "top": 178,
+          "right": 374,
+          "bottom": 889,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": 68,
+          "width": 358,
+          "height": 1267,
+          "top": 68,
+          "right": 374,
+          "bottom": 1335,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": 12,
+          "width": 358,
+          "height": 1323,
+          "top": 12,
+          "right": 374,
+          "bottom": 1335,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "radix-:r56:-content-overview",
+          "testid": null,
+          "role": "tabpanel",
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -290,
+          "width": 358,
+          "height": 1625,
+          "top": -290,
+          "right": 374,
+          "bottom": 1335,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -346,
+          "width": 358,
+          "height": 1681,
+          "top": -346,
+          "right": 374,
+          "bottom": 1335,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -556,
+          "width": 358,
+          "height": 1891,
+          "top": -556,
+          "right": 374,
+          "bottom": 1335,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -556,
+          "width": 358,
+          "height": 1891,
+          "top": -556,
+          "right": 374,
+          "bottom": 1335,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "0px",
+        "position": "relative",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -580,
+          "width": 390,
+          "height": 26277.75,
+          "top": -580,
+          "right": 390,
+          "bottom": 25697.75,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "0px",
+        "position": "relative",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "MAIN",
+          "id": "dukb-main",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -677,
+          "width": 390,
+          "height": 26374.75,
+          "top": -677,
+          "right": 390,
+          "bottom": 25697.75,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "root",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -677,
+          "width": 390,
+          "height": 26798.25,
+          "top": -677,
+          "right": 390,
+          "bottom": 26121.25,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "BODY",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -677,
+          "width": 390,
+          "height": 26798.25,
+          "top": -677,
+          "right": 390,
+          "bottom": 26121.25,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "HTML",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -677,
+          "width": 390,
+          "height": 26798.25,
+          "top": -677,
+          "right": 390,
+          "bottom": 26121.25,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      }
+    ],
+    "hits": null
+  }
+}

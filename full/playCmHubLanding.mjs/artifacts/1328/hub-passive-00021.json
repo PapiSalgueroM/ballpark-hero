@@ -1,0 +1,503 @@
+{
+  "status": "UNQUALIFIED_PASSIVE_DIAGNOSTIC_ONLY",
+  "geometry": {
+    "phase": "cellBox",
+    "context": {
+      "label": "Mon 31 Aug: Training day",
+      "original": {
+        "top": 698,
+        "bottom": 744,
+        "x": 99.5625,
+        "y": 721
+      }
+    },
+    "point": {
+      "top": 698,
+      "bottom": 744,
+      "x": 99.5625,
+      "y": 721
+    },
+    "scrollY": 498,
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "consentPending": null,
+    "consentHeight": "",
+    "strip": {
+      "element": {
+        "tag": "DIV",
+        "id": "",
+        "testid": "cm-calendar-day",
+        "role": null,
+        "label": null
+      },
+      "rect": {
+        "x": 29,
+        "y": 752,
+        "width": 332,
+        "height": 72,
+        "top": 752,
+        "right": 361,
+        "bottom": 824,
+        "left": 29
+      },
+      "inlineBottom": "",
+      "bottom": "12px",
+      "position": "sticky",
+      "overflow": "visible",
+      "overflowX": "visible",
+      "overflowY": "visible",
+      "transform": "none",
+      "contain": "none"
+    },
+    "banner": null,
+    "ancestors": [
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": 357,
+          "width": 358,
+          "height": 711,
+          "top": 357,
+          "right": 374,
+          "bottom": 1068,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": 247,
+          "width": 358,
+          "height": 1267,
+          "top": 247,
+          "right": 374,
+          "bottom": 1514,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": 191,
+          "width": 358,
+          "height": 1323,
+          "top": 191,
+          "right": 374,
+          "bottom": 1514,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "radix-:r56:-content-overview",
+          "testid": null,
+          "role": "tabpanel",
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -111,
+          "width": 358,
+          "height": 1625,
+          "top": -111,
+          "right": 374,
+          "bottom": 1514,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -167,
+          "width": 358,
+          "height": 1681,
+          "top": -167,
+          "right": 374,
+          "bottom": 1514,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -377,
+          "width": 358,
+          "height": 1891,
+          "top": -377,
+          "right": 374,
+          "bottom": 1514,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 16,
+          "y": -377,
+          "width": 358,
+          "height": 1891,
+          "top": -377,
+          "right": 374,
+          "bottom": 1514,
+          "left": 16
+        },
+        "inlineBottom": "",
+        "bottom": "0px",
+        "position": "relative",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -401,
+          "width": 390,
+          "height": 26277.75,
+          "top": -401,
+          "right": 390,
+          "bottom": 25876.75,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "0px",
+        "position": "relative",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "MAIN",
+          "id": "dukb-main",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -498,
+          "width": 390,
+          "height": 26374.75,
+          "top": -498,
+          "right": 390,
+          "bottom": 25876.75,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "DIV",
+          "id": "root",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -498,
+          "width": 390,
+          "height": 26798.25,
+          "top": -498,
+          "right": 390,
+          "bottom": 26300.25,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "BODY",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -498,
+          "width": 390,
+          "height": 26798.25,
+          "top": -498,
+          "right": 390,
+          "bottom": 26300.25,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      },
+      {
+        "element": {
+          "tag": "HTML",
+          "id": "",
+          "testid": null,
+          "role": null,
+          "label": null
+        },
+        "rect": {
+          "x": 0,
+          "y": -498,
+          "width": 390,
+          "height": 26798.25,
+          "top": -498,
+          "right": 390,
+          "bottom": 26300.25,
+          "left": 0
+        },
+        "inlineBottom": "",
+        "bottom": "auto",
+        "position": "static",
+        "overflow": "visible",
+        "overflowX": "visible",
+        "overflowY": "visible",
+        "transform": "none",
+        "contain": "none"
+      }
+    ],
+    "hits": [
+      {
+        "tag": "rect",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "polygon",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "svg",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": "Mon 31 Aug: Training day"
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": "cm-calendar-grid",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "radix-:r56:-content-overview",
+        "testid": null,
+        "role": "tabpanel",
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "MAIN",
+        "id": "dukb-main",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "root",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "HTML",
+        "id": "",
+        "testid": null,
+        "role": null,
+        "label": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "status": "UNQUALIFIED_PASSIVE_DIAGNOSTIC_ONLY",
+  "originalFailures": 0,
+  "extra": null,
+  "observation": {
+    "phase": "before-original-tap",
+    "point": {
+      "x": 32.6015625,
+      "y": 15.5
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "scrollY": 0,
+    "bar": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 32,
+      "top": 0,
+      "bottom": 32
+    },
+    "hover": true,
+    "hits": [
+      {
+        "tag": "SPAN",
+        "id": "",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "SECTION",
+        "id": "",
+        "role": null,
+        "label": "Live scores ticker"
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "root",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "HTML",
+        "id": "",
+        "role": null,
+        "label": null
+      }
+    ],
+    "pointerEvents": [
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.199999999953434,
+        "target": null,
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.29999999998836,
+        "target": {
+          "tag": "HTML",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.29999999998836,
+        "target": {
+          "tag": "BODY",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.29999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "root",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.29999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "dukb-boot",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointermove",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.29999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "dukb-boot",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 200.79999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 200.79999999998836,
+        "target": {
+          "tag": "SECTION",
+          "id": "",
+          "role": null,
+          "label": "Live scores ticker"
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 200.79999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 200.89999999996508,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      }
+    ]
+  }
+}

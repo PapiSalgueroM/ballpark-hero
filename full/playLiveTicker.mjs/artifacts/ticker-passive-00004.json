@@ -1,0 +1,1152 @@
+{
+  "status": "UNQUALIFIED_PASSIVE_DIAGNOSTIC_ONLY",
+  "originalFailures": 2,
+  "extra": null,
+  "observation": {
+    "phase": "supplemental-outside",
+    "point": {
+      "x": 195,
+      "y": 64,
+      "geometricallyOutside": true
+    },
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "scrollY": 0,
+    "bar": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 32,
+      "top": 0,
+      "bottom": 32
+    },
+    "hover": false,
+    "hits": [
+      {
+        "tag": "SPAN",
+        "id": "",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "HEADER",
+        "id": "",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "DIV",
+        "id": "root",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "role": null,
+        "label": null
+      },
+      {
+        "tag": "HTML",
+        "id": "",
+        "role": null,
+        "label": null
+      }
+    ],
+    "pointerEvents": [
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.199999999953434,
+        "target": null,
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.29999999998836,
+        "target": {
+          "tag": "HTML",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.29999999998836,
+        "target": {
+          "tag": "BODY",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.29999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "root",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.29999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "dukb-boot",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointermove",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 42.29999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "dukb-boot",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "DIV"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 200.79999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 200.79999999998836,
+        "target": {
+          "tag": "SECTION",
+          "id": "",
+          "role": null,
+          "label": "Live scores ticker"
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 200.79999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 0,
+        "y": 0,
+        "trusted": true,
+        "at": 200.89999999996508,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 422.19999999995343,
+        "target": null,
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 422.19999999995343,
+        "target": {
+          "tag": "HTML",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 422.29999999998836,
+        "target": {
+          "tag": "BODY",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 422.29999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "root",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 422.29999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 422.29999999998836,
+        "target": {
+          "tag": "SECTION",
+          "id": "",
+          "role": null,
+          "label": "Live scores ticker"
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 422.29999999998836,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 422.29999999998836,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 424.3999999999651,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 424.3999999999651,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 424.3999999999651,
+        "target": {
+          "tag": "SECTION",
+          "id": "",
+          "role": null,
+          "label": "Live scores ticker"
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 424.3999999999651,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 424.3999999999651,
+        "target": {
+          "tag": "DIV",
+          "id": "root",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 424.3999999999651,
+        "target": {
+          "tag": "BODY",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 424.3999999999651,
+        "target": {
+          "tag": "HTML",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "touch",
+        "x": 32.599998474121094,
+        "y": 15.5,
+        "trusted": true,
+        "at": 424.3999999999651,
+        "target": null,
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4453.899999999965,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4454,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4454,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4454,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4454,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4454.099999999977,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4454.099999999977,
+        "target": {
+          "tag": "A",
+          "id": "",
+          "role": null,
+          "label": "Valencia 1 v Real Betis 2, Second Half"
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4454.099999999977,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointermove",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4454.199999999953,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4470.199999999953,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "A"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4470.199999999953,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "A"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4470.299999999988,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "A"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 4470.299999999988,
+        "target": {
+          "tag": "A",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "A"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 6403.399999999965,
+        "target": {
+          "tag": "A",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 6403.399999999965,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 6403.399999999965,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 6420.199999999953,
+        "target": {
+          "tag": "A",
+          "id": "",
+          "role": null,
+          "label": "1  at 1 , 5:00 PM"
+        },
+        "targetInBar": true,
+        "hit": "A"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 6620,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 6620.099999999977,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 6720,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 6803.399999999965,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 7070.099999999977,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 7153.399999999965,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 7253.299999999988,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "A"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 7253.299999999988,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "A"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 16,
+        "trusted": true,
+        "at": 7336.799999999988,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.299999999988,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.299999999988,
+        "target": {
+          "tag": "A",
+          "id": "",
+          "role": null,
+          "label": "1  at 1 , 5:00 PM"
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.299999999988,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.299999999988,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.399999999965,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.399999999965,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.399999999965,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.399999999965,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.399999999965,
+        "target": {
+          "tag": "SECTION",
+          "id": "",
+          "role": null,
+          "label": "Live scores ticker"
+        },
+        "targetInBar": true,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerleave",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.399999999965,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.399999999965,
+        "target": {
+          "tag": "HEADER",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.399999999965,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.399999999965,
+        "target": {
+          "tag": "DIV",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.399999999965,
+        "target": {
+          "tag": "A",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointerenter",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.5,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      },
+      {
+        "type": "pointermove",
+        "pointerType": "mouse",
+        "x": 195,
+        "y": 64,
+        "trusted": true,
+        "at": 7570.5,
+        "target": {
+          "tag": "SPAN",
+          "id": "",
+          "role": null,
+          "label": null
+        },
+        "targetInBar": false,
+        "hit": "SPAN"
+      }
+    ]
+  }
+}
