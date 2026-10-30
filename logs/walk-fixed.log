@@ -1,0 +1,12 @@
+A@320: RED A@320: threw locator.click: Timeout 20000ms exceeded. {}
+B@320: RED B@320: threw locator.click: Timeout 20000ms exceeded. {}
+C@320: RED C@320: threw locator.click: Timeout 20000ms exceeded. {}
+A@390: RED A@390: threw locator.click: Timeout 20000ms exceeded. {}
+B@390: RED B@390: threw locator.click: Timeout 20000ms exceeded. {}
+C@390: ok {"lines":2,"bothLines":2}
+A@1280: ok {"first":{"text":"Leeds United Youth","flag":null},"started":{"currentClub":"Leeds United Youth","academyClubName":"Leeds United","country":"England","nationality":"England"}}
+B@1280: RED B@1280: shown 🇧🇷
+Internacional Youth, started Internacional Youth; B@1280: academyClubName Internacional is not the shown 🇧🇷
+Internacional Youth {"first":{"text":"Lincoln City Youth","flag":null},"after":{"text":"🇧🇷\nInternacional Youth","flag":"Brazil"},"started":{"currentClub":"Internacional Youth","academyClubName":"Internacional","country":"Brazil","nationality":"Brazil"}}
+C@1280: ok {"lines":2,"bothLines":2}
+walk1604 fixed: 34 checks, 7 failed, red paths: A, B, C
