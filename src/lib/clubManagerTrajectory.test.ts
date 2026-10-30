@@ -34,7 +34,9 @@ describe('Club Manager save-bound player trajectories', () => {
     const pool = fullPool();
     expect(pool.length).toBeGreaterThan(4000);
     for (const [club, players] of Object.entries(projectedWorldFor('now', 0))) {
-      /* Round 1600: a row of a world that reads age carries its level (lv), and year zero carries it too */
+      /* Round 1600: a row of a world that reads age carries its level (lv), and year zero carries it too. The one
+         input proof (Round 1600's fixer, remote check r1600-rr, line rr4-proof, head 178a1fd8c): with the four
+         modern data files put back to the base's (14a9af704), this file as the base had it passes, 44 of 44. */
       expect(players.map(({ n, p, a, r, v, lv }) => ({ n, p, a, r, v, ...(lv === undefined ? {} : { lv }) }))).toEqual(CM_WORLD_ROSTERS[club]);
     }
     for (const { player } of pool) {
