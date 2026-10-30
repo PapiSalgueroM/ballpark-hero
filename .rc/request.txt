@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+diag-a: node .rc/x/pscDiag.mjs && ATTEMPTS=1 MAX_STEPS=240 ENGINES=chromium node scripts/pscDiag.mjs
+diag-b: node .rc/x/pscDiag.mjs && SEED=20268833 PORT=4189 ATTEMPTS=1 MAX_STEPS=240 ENGINES=chromium node scripts/pscDiag.mjs
