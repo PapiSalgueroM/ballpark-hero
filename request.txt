@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+psc-m2: sed -i 's/physique, attrShape, academyPreview);/physique, attrShape);/' src/pages/SoccerCareer.tsx && ! grep -q "attrShape, academyPreview)" src/pages/SoccerCareer.tsx && echo "M2 applied: initCareer gets no name" && node_modules/.bin/vite build --outDir /tmp/m2-dist --emptyOutDir > /tmp/m2.log 2>&1 && git checkout -- src && (node scripts/lib/hostLikeServer.mjs /tmp/m2-dist 4177 >/dev/null 2>&1 &) && sleep 3 && SWEEP_BASE=http://localhost:4177 ENGINES=chromium node scripts/playSoccerCareer.mjs; s=$?; git checkout -- src; exit $s
+psc-branch-8: ATTEMPTS=8 ENGINES=chromium node scripts/playSoccerCareer.mjs
