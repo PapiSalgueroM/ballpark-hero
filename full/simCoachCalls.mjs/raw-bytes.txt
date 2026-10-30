@@ -1,0 +1,3 @@
+7909 /home/runner/work/_temp/rc-out/full/simCoachCalls.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCoachCalls.mjs/stderr.log
+7909 total

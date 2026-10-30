@@ -1,0 +1,3 @@
+818 /home/runner/work/_temp/rc-out/full/simCareerFallback.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simCareerFallback.mjs/stderr.log
+818 total

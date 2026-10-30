@@ -1,0 +1,3 @@
+1702 /home/runner/work/_temp/rc-out/full/simNhlGmDesk.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNhlGmDesk.mjs/stderr.log
+1702 total

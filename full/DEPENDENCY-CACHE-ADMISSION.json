@@ -1,0 +1,29 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 1454,
+      "sha256": "55c2375a8e63ec2960fa2a63d54cd77af50047b7b96a8837cb21111eccc70177",
+      "tests": [
+        ":src/test/cageGrappleMotion.test.tsx",
+        ":src/test/chainRequestOwnership.test.tsx",
+        ":src/test/clubManagerSaveSize.test.tsx",
+        ":src/test/consentSynchronization1442.test.tsx",
+        ":src/test/consentWithdrawal1442.test.ts",
+        ":src/test/consentPrivacy1442.test.ts",
+        ":src/test/f1DriverFeedback.test.tsx",
+        ":src/test/footleClueDesk.test.tsx",
+        ":src/test/gridCellMotion.test.tsx",
+        ":src/test/lineupPickerFilters.test.tsx",
+        ":src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx",
+        ":src/test/mlbFullRosters.test.tsx",
+        ":src/test/dartDraftPools.test.ts",
+        ":src/test/statDetectiveScope.test.tsx",
+        ":src/hooks/useTransferPathGuidance.test.ts",
+        ":src/test/tycoonRooms.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

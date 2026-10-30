@@ -1,0 +1,3 @@
+3147 /home/runner/work/_temp/rc-out/full/simTransferPathGuidance.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simTransferPathGuidance.mjs/stderr.log
+3147 total

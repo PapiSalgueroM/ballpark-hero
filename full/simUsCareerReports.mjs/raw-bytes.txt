@@ -1,0 +1,3 @@
+8180 /home/runner/work/_temp/rc-out/full/simUsCareerReports.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simUsCareerReports.mjs/stderr.log
+8180 total

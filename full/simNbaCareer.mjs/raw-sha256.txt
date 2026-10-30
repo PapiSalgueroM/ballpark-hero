@@ -1,0 +1,2 @@
+5448cc400bcf5b980b94a3afa5969802fe076619d897154d8a9891a4db771951  /home/runner/work/_temp/rc-out/full/simNbaCareer.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNbaCareer.mjs/stderr.log

@@ -1,0 +1,3 @@
+940 /home/runner/work/_temp/rc-out/full/simWhoAmIAccuracy.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simWhoAmIAccuracy.mjs/stderr.log
+940 total

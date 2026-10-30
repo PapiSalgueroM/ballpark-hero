@@ -1,0 +1,3 @@
+94316 /home/runner/work/_temp/rc-out/full/ordinary-build/stdout.log
+  767 /home/runner/work/_temp/rc-out/full/ordinary-build/stderr.log
+95083 total

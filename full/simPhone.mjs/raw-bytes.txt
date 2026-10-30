@@ -1,0 +1,3 @@
+476 /home/runner/work/_temp/rc-out/full/simPhone.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simPhone.mjs/stderr.log
+476 total

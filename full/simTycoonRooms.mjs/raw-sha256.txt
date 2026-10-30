@@ -1,0 +1,2 @@
+328a1b93ac53b2ef56e8711af15e73c261c8c4d5d23a9f9152cc15ccadc9c567  /home/runner/work/_temp/rc-out/full/simTycoonRooms.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTycoonRooms.mjs/stderr.log

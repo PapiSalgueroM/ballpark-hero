@@ -1,0 +1,3 @@
+3382 /home/runner/work/_temp/rc-out/full/simF1DriverFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simF1DriverFeedback.mjs/stderr.log
+3382 total

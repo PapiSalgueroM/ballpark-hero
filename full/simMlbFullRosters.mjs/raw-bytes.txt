@@ -1,0 +1,3 @@
+1470 /home/runner/work/_temp/rc-out/full/simMlbFullRosters.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simMlbFullRosters.mjs/stderr.log
+1470 total

@@ -1,0 +1,2 @@
+c169c93af160c510cca0d7fe70f0812562ff981cb90082b7df6b1c1f92818c6a  /home/runner/work/_temp/rc-out/full/simWhoAmIAccuracy.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simWhoAmIAccuracy.mjs/stderr.log

@@ -1,0 +1,3 @@
+1897 /home/runner/work/_temp/rc-out/full/simBadges.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simBadges.mjs/stderr.log
+1897 total

@@ -1,0 +1,3 @@
+6285 /home/runner/work/_temp/rc-out/full/simCareerRealism.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerRealism.mjs/stderr.log
+6285 total

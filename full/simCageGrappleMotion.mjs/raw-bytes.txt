@@ -1,0 +1,3 @@
+2525 /home/runner/work/_temp/rc-out/full/simCageGrappleMotion.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCageGrappleMotion.mjs/stderr.log
+2525 total

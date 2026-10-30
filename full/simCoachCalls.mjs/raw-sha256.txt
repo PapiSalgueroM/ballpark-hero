@@ -1,0 +1,2 @@
+7ae15a9f6fc44e171fb42284d118dabf2707ce1667971ec0b5c0df7b90b6794e  /home/runner/work/_temp/rc-out/full/simCoachCalls.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCoachCalls.mjs/stderr.log

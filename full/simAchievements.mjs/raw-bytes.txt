@@ -1,0 +1,3 @@
+3359 /home/runner/work/_temp/rc-out/full/simAchievements.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simAchievements.mjs/stderr.log
+3359 total

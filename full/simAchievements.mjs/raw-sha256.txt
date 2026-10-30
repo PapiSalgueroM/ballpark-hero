@@ -1,0 +1,2 @@
+268afaec5bde4a00641512658cd2f627b5d9283d5d27860594706fe6d4300b94  /home/runner/work/_temp/rc-out/full/simAchievements.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAchievements.mjs/stderr.log

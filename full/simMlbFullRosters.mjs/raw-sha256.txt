@@ -1,0 +1,2 @@
+01cbbf53f9e380ca040cf8922e9afbb07e01a6406acb4881ea269a42a7caacbf  /home/runner/work/_temp/rc-out/full/simMlbFullRosters.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simMlbFullRosters.mjs/stderr.log
