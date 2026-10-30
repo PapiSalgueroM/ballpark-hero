@@ -1,0 +1,1 @@
+scan: bash .rc/x/seedscan.sh
