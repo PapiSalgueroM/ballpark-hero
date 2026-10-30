@@ -329,7 +329,9 @@ console.log('1) Runtime: every line real seasons can put on screen');
         guard += 1;
         const r = playNextEntry(s, { skipHalftime: true });
         s = r.state;
-        for (const e of r.result?.events ?? []) keep(e);
+        /* Round 1606: the match is r.report. PlayResult has no result field, so this line read nothing and pass 1
+           never saw a live event until the fix (one run: 1774 lines harvested instead of about 230). */
+        for (const e of r.report?.events ?? []) keep(e);
         for (const h of s.aiHeadlines ?? []) keep(h);
         /* Round 979: the decisions desk (s.decisions) sits on the inbox screen
            and names squad players, so it is read the same way, buttons too.
@@ -370,7 +372,9 @@ console.log('1) Runtime: every line real seasons can put on screen');
      will not flake, while still catching the failure this guards against:
      the harvest loop silently stopping (a changed playNextEntry signature,
      an inbox that no longer populates) and dropping the count to single
-     figures. */
+     figures. Round 1606: those trials predate the events read above; with
+     it one run harvested 1774. The floor stays at 150, still a dead loop
+     catch, until ten new trials set a tighter one. */
   if (harvested.length < 150) {
     fail(`only ${harvested.length} lines harvested, so this pass did not actually exercise the narrative and its green result is meaningless`);
   }
