@@ -281,10 +281,20 @@ const ACTIONS = [
      header or nav button), not the card. This speech has no gate, and the
      button is gone once it is given, so Continue is next. */
   '😭 Cry through',
+  /* Round 1604: the season's social media card offers only its own actions
+     (an emoji, then the label) and no Continue until one is taken, so with no
+     entry here the fallback pressed the site's Menu button, then its Close,
+     for the rest of the walk: 228 of 240 steps of seed 20260914 went round
+     that loop (rc r1604-fx-diag), and no seeded career reached a campaign.
+     The plainest post, and the cover offer it can lead to. */
+  String.fromCodePoint(0x1F3CB, 0xFE0F) + 'Post training video',
+  '✅ Accept: Become the Cover Star',
   'Next Year', 'Next Season', 'Continue', 'Sign Contract',
   'Accept', 'Confirm', 'Proceed', 'Next', 'Done', 'Close',
 ];
-const SKIP = /Retire|New Career|Report a problem|Light mode|Sound: |Cookie|Sign up|^Back$|Full attributes|Reject all|Essential only|^Accept all$|^Accept$|^Save choices$|^⏸$|^🏋️$|^📱/;
+/* ^Menu$ is the site's own menu (Round 1604): opening it is never a step of
+   the game, and pressing it as a fallback is what trapped the walk above. */
+const SKIP = /Retire|New Career|Report a problem|Light mode|Sound: |Cookie|Sign up|^Back$|^Menu$|Full attributes|Reject all|Essential only|^Accept all$|^Accept$|^Save choices$|^⏸$|^🏋️$|^📱/;
 
 async function stepOnce(page) {
   return page.evaluate(async ([actions, skipSrc]) => {
