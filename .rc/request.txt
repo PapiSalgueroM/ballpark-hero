@@ -1,0 +1,6 @@
+#!playwright
+#!serial
+weightbase: git worktree add /tmp/base 14a9af704 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4180 > /dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4180 SWEEP_BASE=http://localhost:4180 ENGINES=chromium node scripts/sweepWeight.mjs
+weighthead: node_modules/.bin/vite build > /tmp/head-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4181 > /dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4181 SWEEP_BASE=http://localhost:4181 ENGINES=chromium node scripts/sweepWeight.mjs
+walk1592: (curl -s -o /dev/null http://localhost:4181/ || (node scripts/lib/hostLikeServer.mjs dist 4181 > /dev/null 2>&1 &)) ; sleep 3 ; BASE=http://localhost:4181 SWEEP_BASE=http://localhost:4181 node .rc/x/walk1592.mjs
+playTwoTabs: SWEEP_BASE=http://localhost:4181 BASE=http://localhost:4181 ENGINES=chromium SIZES=390x844 CASES=3,4,9 node scripts/playTwoTabs.mjs
