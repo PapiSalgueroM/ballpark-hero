@@ -1,0 +1,111 @@
+name: Footle kit offline refusal proof only
+on:
+  push:
+    branches: [codex/footle-kit-offline-bounds-20261030]
+permissions:
+  contents: read
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: 'true'
+      TZ: UTC
+      SIM_NETWORK: offline
+      SIM_FULL_OUTPUT: '1'
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_BASE: a23b1e9a98a20c88fd173da4981343627ff3fdb3
+      EXPECTED_PRODUCT: 07e0659c638f7a8f8adffca8140aacd1bc42de2d
+      EXPECTED_TREE: fae6dfea3e40436e110377ffe85877af05017a73
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind one harness change, one proof addition and frozen app source
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/footle-kit-offline";test ! -e "$out";mkdir "$out";echo "FOOTLE_PROOF_OUT=$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/footle-kit-offline-bounds-20261030
+          [[ "$EXPECTED_BASE" =~ ^[a-f0-9]{40}$ && "$EXPECTED_PRODUCT" =~ ^[a-f0-9]{40}$ && "$EXPECTED_TREE" =~ ^[a-f0-9]{40}$ ]]
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PRODUCT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PRODUCT")" = "$EXPECTED_PRODUCT $EXPECTED_BASE"
+          test "$(git rev-parse "$EXPECTED_PRODUCT^{tree}")" = "$EXPECTED_TREE"
+          git diff --name-status "$EXPECTED_BASE" "$EXPECTED_PRODUCT" > "$out/product-diff.txt";printf 'M\tscripts/simFootleKitNumbers.mjs\n' | cmp - "$out/product-diff.txt"
+          git diff --name-status "$EXPECTED_PRODUCT" HEAD > "$out/proof-diff.txt";printf 'A\t.github/workflows/footle-kit-offline-proof.yml\n' | cmp - "$out/proof-diff.txt"
+          test "$(git rev-parse "$EXPECTED_BASE:scripts/simFootleKitNumbers.mjs")" = 7156493c7aa31e8ef74e5ec418a34d8cb447914a
+          test "$(git rev-parse HEAD:scripts/simFootleKitNumbers.mjs)" = 8aae063c6b06d99d631f583096662c7174930749
+          test "$(git rev-parse HEAD:scripts/lib/offlineTransport.cjs)" = 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          test "$(git rev-parse HEAD:scripts/lib/fetchWithTransportRetry.mjs)" = 4aec15286f77d6f3869f9e6991a5b6f79f6c7798
+          git ls-files -z | sort -z > "$out/source-members.before";xargs -0 sha256sum < "$out/source-members.before" > "$out/source.before.sha256"
+          sha256sum package.json package-lock.json > "$out/packages.before.sha256";sha256sum "$(git rev-parse --git-path index)" > "$out/index.before.sha256"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git archive --format=tar HEAD > "$out/source.tar";mkdir "$out/matched";tar -xf "$out/source.tar" -C "$out/matched"
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$out/matched/node_modules"
+          git cat-file blob 7156493c7aa31e8ef74e5ec418a34d8cb447914a > "$out/original.mjs";cp scripts/simFootleKitNumbers.mjs "$out/fixed.mjs"
+          printf '{"scope":"HARNESS_ONLY_CAUSAL_OFFLINE_REFUSAL","dataVerification":false,"appChanges":false,"fullDefaultSims":"UNRUN","StadiumPriorRun":"REMAINS_CANCELLED_OR_FAILED_NOT_PASS","liveDataAndOriginalTrustingControl":"UNRUN"}\n' > "$out/SCOPE.json"
+      - name: Actual locked dependencies
+        run: |
+          set -euo pipefail
+          raw=0;npm ci > "$FOOTLE_PROOF_OUT/npm-ci.stdout.log" 2> "$FOOTLE_PROOF_OUT/npm-ci.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$FOOTLE_PROOF_OUT/npm-ci.raw.exit";test "$raw" -eq 0
+      - name: Bounded original red, fixed refusal, physical original control and exact restoration
+        run: |
+          set -euo pipefail
+          out="$FOOTLE_PROOF_OUT";cd "$out/matched";unset FOOTLE_KIT_CONTROL ONLY BROWSER DB_PROBE NODE_OPTIONS
+          target=scripts/simFootleKitNumbers.mjs;trap 'cp "$out/fixed.mjs" "$target"' EXIT
+          run() {
+            local id="$1" want="$2" limit="$3";shift 3;local dir="$out/$id";mkdir "$dir";printf '%q ' "$@" > "$dir/command.txt";: > "$dir/transport.log";local raw=0
+            SIM_OFFLINE_RECEIPT="$dir/transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" FORCE_COLOR=0 timeout --signal=TERM --kill-after=3s "$limit" "$@" > "$dir/stdout.log" 2> "$dir/stderr.log" || raw=$?
+            printf '%s\n' "$raw" > "$dir/raw.exit";cat "$dir/stdout.log" "$dir/stderr.log" > "$dir/combined.log";test "$raw" -eq "$want"
+          }
+          blocked() { test "$(wc -l < "$out/$1/transport.log")" -ge "$2";test "$(grep -Fxc '[SIM_OFFLINE_BLOCK] database fetch https://flawuiqbvjobmkfkauhw.supabase.co' "$out/$1/transport.log")" -eq "$(wc -l < "$out/$1/transport.log")"; }
+          original() {
+            cp "$out/original.mjs" "$target";test "$(git hash-object "$target")" = 7156493c7aa31e8ef74e5ec418a34d8cb447914a;cp "$target" "$out/$1.actual-source.mjs"
+            run "$1" 124 20s node "$target";blocked "$1" 2;! grep -q 'NOTHING WAS CHECKED' "$out/$1/combined.log"
+          }
+          fixed() {
+            cp "$out/fixed.mjs" "$target";test "$(git hash-object "$target")" = 8aae063c6b06d99d631f583096662c7174930749;cp "$target" "$out/$1.actual-source.mjs"
+            run "$1" 1 20s node "$target";blocked "$1" 3;test "$(wc -l < "$out/$1/transport.log")" -eq 3;test "$(grep -c 'NOTHING WAS CHECKED' "$out/$1/combined.log")" -eq 1
+          }
+          runner() {
+            run "$1" 0 30s env ONLY=simFootleKitNumbers node scripts/runAllSims.mjs;test ! -s "$out/$1/transport.log"
+            test "$(grep -Ec '^  SKIP[[:space:]]+simFootleKitNumbers\.mjs' "$out/$1/combined.log")" -eq 1
+            test "$(grep -Fxc 'All 0 harnesses green, 1 skipped above.' "$out/$1/combined.log")" -eq 1
+            ! grep -Eq '^  PASS[[:space:]]+simFootleKitNumbers\.mjs' "$out/$1/combined.log"
+          }
+          run syntax 0 10s node --check "$target";test ! -s "$out/syntax/transport.log"
+          original original-baseline
+          fixed fixed-direct;runner fixed-runner-skip
+          original original-source-control
+          fixed restored-direct;runner restored-runner-skip
+          cmp "$out/fixed-direct.actual-source.mjs" "$out/restored-direct.actual-source.mjs"
+          sha256sum -c "$out/source.before.sha256" > "$out/matched-source-held.log"
+          printf '{"status":"CAUSAL_OFFLINE_REFUSAL_PROVED_NOT_DATA_VERIFIED","originalRaw":124,"fixedDirectRaw":1,"actualRunnerVerdict":"SKIP","physicalOriginalControlRaw":124,"fixedRestoredRaw":1,"actualRunnerRestoredVerdict":"SKIP","allOtherAppAndHarnessSourceHeld":true,"fullDefaultSims":"UNRUN","liveDataChecks":"UNRUN","featureReady":false}\n' > "$out/ADMISSION.json"
+      - name: Always retain source, raw outputs and final immutable holds
+        if: ${{ always() }}
+        env:
+          PRIOR_STATUS: ${{ job.status }}
+        run: |
+          set -uo pipefail
+          out="$FOOTLE_PROOF_OUT";failed=0;git ls-files -z | sort -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after" || failed=1;sha256sum -c "$out/source.before.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          sha256sum -c "$out/packages.before.sha256" > "$out/packages-held.log" 2>&1 || failed=1;sha256sum -c "$out/index.before.sha256" > "$out/index-held.log" 2>&1 || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after";cmp "$out/refs.before" "$out/refs.after" || failed=1
+          (cd "$out/matched";sha256sum -c "$out/source.before.sha256") > "$out/matched-final-held.log" 2>&1 || failed=1
+          printf '{"priorStatus":"%s","finalHoldsRaw":%s,"dataVerified":false,"StadiumAppChanged":false,"fullDefaultSims":"UNRUN","publication":false}\n' "$PRIOR_STATUS" "$failed" > "$out/FINAL-HOLDS.json"
+          find "$out" -path "$out/matched" -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/footle-kit-evidence.sha256";cp "$RUNNER_TEMP/footle-kit-evidence.sha256" "$out/evidence.sha256";exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: footle-kit-offline-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/footle-kit-offline
+            !${{ runner.temp }}/footle-kit-offline/matched/**
+          if-no-files-found: error
+          retention-days: 14
