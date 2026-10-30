@@ -1,0 +1,7 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+weighthead exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+walkfix-head exit=0 39s | walkfix: green, every case at both sizes with reduced motion on and off
+playTwoTabs-390 exit=0 32s | playTwoTabs: green at 390x844
+playClubManagerSlots exit=0 11s | playClubManagerSlots: green
+keeper-baseloss exit=0 772s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
+keeper-K exit=1 109s | playSaveKeeper: RED, 1 problem(s).

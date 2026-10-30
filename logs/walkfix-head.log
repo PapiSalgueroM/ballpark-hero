@@ -1,0 +1,43 @@
+fixtures from the head: Hot Seat Chelsea (survived), careers Liverpool, Aston Villa, Newcastle United, Fulham
+== 390x844-rm
+   D card: "This job goes into Club Manager slot 3. Your careers in slot 1 (Liverpool, 2026-27, season 1) and slot 2 (a save this browser can't read) stay exactly as they are."
+  ok    390x844-rm D: the job went to slot 3, the unreadable slot 2 kept its bytes, slot 1 kept Liverpool
+  ok    390x844-rm S: slot 2 filled after the card read it was left byte equal, the job went to slot 3
+   X options: "Replace slot 1 (Liverpool, 2026-27, season 1)" | "Replace slot 2 (Aston Villa, 2026-27, season 1)" | "Replace slot 3 (Newcastle United, 2026-27, season 1, started in 2010-11)"
+   X layout: sideways 0px, overlaps 0, clipped 0
+  ok    390x844-rm X: a slot changed under the open chooser was not replaced, and the chooser now names Fulham
+   X note box: {"top":570,"bottom":618,"vh":844,"inChooser":true}
+  ok    390x844-rm X: the changed note is on screen after the press (top 570, bottom 618 of 844)
+  ok    390x844-rm X: the old era career was kept aside byte for byte, marked slot 3; slots 1 and 2 unmoved
+== 390x844-motion
+   D card: "This job goes into Club Manager slot 3. Your careers in slot 1 (Liverpool, 2026-27, season 1) and slot 2 (a save this browser can't read) stay exactly as they are."
+  ok    390x844-motion D: the job went to slot 3, the unreadable slot 2 kept its bytes, slot 1 kept Liverpool
+  ok    390x844-motion S: slot 2 filled after the card read it was left byte equal, the job went to slot 3
+   X options: "Replace slot 1 (Liverpool, 2026-27, season 1)" | "Replace slot 2 (Aston Villa, 2026-27, season 1)" | "Replace slot 3 (Newcastle United, 2026-27, season 1, started in 2010-11)"
+   X layout: sideways 0px, overlaps 0, clipped 0
+  ok    390x844-motion X: a slot changed under the open chooser was not replaced, and the chooser now names Fulham
+   X note box: {"top":570,"bottom":618,"vh":844,"inChooser":true}
+  ok    390x844-motion X: the changed note is on screen after the press (top 570, bottom 618 of 844)
+  ok    390x844-motion X: the old era career was kept aside byte for byte, marked slot 3; slots 1 and 2 unmoved
+== 1280x900-rm
+   D card: "This job goes into Club Manager slot 3. Your careers in slot 1 (Liverpool, 2026-27, season 1) and slot 2 (a save this browser can't read) stay exactly as they are."
+  ok    1280x900-rm D: the job went to slot 3, the unreadable slot 2 kept its bytes, slot 1 kept Liverpool
+  ok    1280x900-rm S: slot 2 filled after the card read it was left byte equal, the job went to slot 3
+   X options: "Replace slot 1 (Liverpool, 2026-27, season 1)" | "Replace slot 2 (Aston Villa, 2026-27, season 1)" | "Replace slot 3 (Newcastle United, 2026-27, season 1, started in 2010-11)"
+   X layout: sideways 0px, overlaps 0, clipped 0
+  ok    1280x900-rm X: a slot changed under the open chooser was not replaced, and the chooser now names Fulham
+   X note box: {"top":688,"bottom":720,"vh":900,"inChooser":true}
+  ok    1280x900-rm X: the changed note is on screen after the press (top 688, bottom 720 of 900)
+  ok    1280x900-rm X: the old era career was kept aside byte for byte, marked slot 3; slots 1 and 2 unmoved
+== 1280x900-motion
+   D card: "This job goes into Club Manager slot 3. Your careers in slot 1 (Liverpool, 2026-27, season 1) and slot 2 (a save this browser can't read) stay exactly as they are."
+  ok    1280x900-motion D: the job went to slot 3, the unreadable slot 2 kept its bytes, slot 1 kept Liverpool
+  ok    1280x900-motion S: slot 2 filled after the card read it was left byte equal, the job went to slot 3
+   X options: "Replace slot 1 (Liverpool, 2026-27, season 1)" | "Replace slot 2 (Aston Villa, 2026-27, season 1)" | "Replace slot 3 (Newcastle United, 2026-27, season 1, started in 2010-11)"
+   X layout: sideways 0px, overlaps 0, clipped 0
+  ok    1280x900-motion X: a slot changed under the open chooser was not replaced, and the chooser now names Fulham
+   X note box: {"top":688,"bottom":720,"vh":900,"inChooser":true}
+  ok    1280x900-motion X: the changed note is on screen after the press (top 688, bottom 720 of 900)
+  ok    1280x900-motion X: the old era career was kept aside byte for byte, marked slot 3; slots 1 and 2 unmoved
+
+walkfix: green, every case at both sizes with reduced motion on and off

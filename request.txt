@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+weighthead: SWEEP_OFFLINE=1 BASE=http://localhost:4173 SWEEP_BASE=http://localhost:4173 ENGINES=chromium node scripts/sweepWeight.mjs
+walkfix-head: RC_OUT=$RC_OUT/head node .rc/x/walkfix.mjs
+playTwoTabs-390: SIZES=390x844 CASES=3,4,9 node scripts/playTwoTabs.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+keeper-baseloss: R=$PWD; git worktree add /tmp/kb 09df145a > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/kb/node_modules && (cd /tmp/kb && node_modules/.bin/vite build > /tmp/kb-build.log 2>&1) && KEEPER_DIST=$R/dist KEEPER_BASE_DIST=/tmp/kb/dist PARTS=fresh,planted,cross,toggle node scripts/playSaveKeeper.mjs
+keeper-K: R=$PWD; git worktree add /tmp/kk 14a9af704 > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/kk/node_modules && (cd /tmp/kk && node_modules/.bin/vite build > /tmp/kk-build.log 2>&1) && KEEPER_DIST=$R/dist KEEPER_BASE_DIST=/tmp/kk/dist PARTS=K node scripts/playSaveKeeper.mjs
