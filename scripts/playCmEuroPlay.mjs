@@ -71,12 +71,15 @@ const saves = {};
   if (p.uclGroup || !slice || slice.me !== 'Everton' || slice.earned !== 'C' || nights !== 17) {
     cannot(`the crafted Everton season two does not play the Europa League by its cup (me ${slice?.me ?? 'none'}, route ${slice?.earned ?? 'none'}, ${nights} nights)`);
   }
-  for (let i = 0; i < 80 && p.calendar[p.week]?.type !== 'uel'; i += 1) p = tape(0x1593a + i, () => M.cm.playNextEntry(p, opts)).value.state;
-  const entry = p.calendar[p.week];
-  if (entry?.type !== 'uel' || entry.night?.n !== 0) cannot(`the save never reached its first Europa League night (week ${p.week}, ${JSON.stringify(entry)})`);
+  /* On until my next match is the first night (the hub's own nextFixture: a Champions League night before it is not
+     mine and is passed over by the same playNextEntry call that plays the night). */
+  for (let i = 0; i < 80 && M.cm.nextFixture(p)?.competition !== 'uel'; i += 1) p = tape(0x1593a + i, () => M.cm.playNextEntry(p, opts)).value.state;
+  const at = p.calendar.findIndex((e, w) => w >= p.week && M.cm.fixtureFor(p, e));
+  const entry = p.calendar[at];
+  if (entry?.type !== 'uel' || entry.night?.n !== 0) cannot(`the save never reached its first Europa League night (week ${p.week}, entry ${at}, ${JSON.stringify(entry)})`);
   const fx = M.cm.fixtureFor(p, entry);
   if (!fx || fx.competition !== 'uel') cannot(`the engine gives no fixture for the first night (${JSON.stringify(fx)})`);
-  const dateLabel = M.cal.shortDate(M.cal.entryDatesOf(p)[p.week]);
+  const dateLabel = M.cal.shortDate(M.cal.entryDatesOf(p)[at]);
   saves.a = { items: saved(M, p), opp: fx.opponent, label: fx.compLabel, home: fx.home, dateLabel };
   console.log(`(a) Everton season ${p.season}, week ${p.week}: next "${fx.compLabel}" ${fx.home ? 'v' : 'at'} ${fx.opponent} on ${dateLabel}`);
   const after = tape(0x1593b, () => M.cm.playNextEntry(JSON.parse(JSON.stringify(p)), opts)).value.state;
