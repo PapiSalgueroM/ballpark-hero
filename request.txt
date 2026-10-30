@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+# Release BT kit: 3 of the 13 request lines of Release BS's rc-BSa.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 10 line(s) outside those areas left out: playLiveMatchFit livefit-bar livefit-silentlist livefit-earlyscore livefit-nocard playLiveMatchFit-fresh lmf-tabout playCmRealFixtures playCmVar walk1521.
+# Release BS kit, Round 1568 (results-g/rc-1568.txt Blocks A and C, fix2-1568.md section 6): the live match walk, its controls (exit 1 and FIRED), the fresh seed, the weight, Club Manager's walks with their setup lines (extra walkrun1521.mjs).
+# Added: lmf-tabout (fix2-1568.md section 6 item 2; exit 1 with "control tabout turned section 6 red"). DROPPED from rc-1568.txt: Block F (every base- line, an attribution on b20ec6664 that must be red there, by design) and Block B's dashscan and dashscan-ctl (against b20ec6664, which no longer bounds one round on a joined head; the join's dash scan is rc-BSg).
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simCmRealFixtures-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
