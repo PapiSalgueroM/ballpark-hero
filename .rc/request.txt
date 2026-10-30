@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+statesB: ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
+inflow: CONSENT_BAR_CONTROL=inflow ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
+offtop: CONSENT_BAR_CONTROL=offtop ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
