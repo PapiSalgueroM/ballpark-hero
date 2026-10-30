@@ -1,0 +1,14 @@
+simBoard: node scripts/simBoard.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simCmBoardVerdict: node scripts/simCmBoardVerdict.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmOldCareersWorld: node scripts/simCmOldCareersWorld.mjs
+simCmRetire: node scripts/simCmRetire.mjs
+simCmUnseededWorld: node scripts/simCmUnseededWorld.mjs
+simDealDepth: node scripts/simDealDepth.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simOneOffCups: node scripts/simOneOffCups.mjs
+simTransfers: node scripts/simTransfers.mjs
+simWorldUcl: node scripts/simWorldUcl.mjs
