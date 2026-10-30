@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/fx-walk.mjs
+mut-ids1-samedomain: node .rc/x/fxmut.mjs ids1 && node scripts/simClubManagerDugouts.mjs && DUGOUTS_CONTROL=samedomain node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- scripts; exit $s
+mut-ids4-monthsamedomain: node .rc/x/fxmut.mjs ids4 && node scripts/simClubManagerDugouts.mjs && DUGOUTS_CONTROL=monthsamedomain node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- scripts; exit $s
+mut-fold7-spelling: node .rc/x/fxmut.mjs fold7 && node scripts/simClubManagerDugouts.mjs && DUGOUTS_CONTROL=spelling node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- scripts; exit $s
+mut-nodate6-latereads: node .rc/x/fxmut.mjs nodate6 && node scripts/simClubManagerDugouts.mjs && DUGOUTS_CONTROL=latereads node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- scripts; exit $s
+mut-nomirrorlist-wikimirror: node .rc/x/fxmut.mjs nomirrorlist && DUGOUTS_CONTROL=wikimirror node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- scripts; exit $s
