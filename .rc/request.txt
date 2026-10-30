@@ -1,0 +1,6 @@
+vitest-nlz: node_modules/.bin/vitest run src/components/nhl-front-office/NhlLazyDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGmGameDay: node scripts/simGmGameDay.mjs
+nhl-nowait: node scripts/controlFrontOfficeBoard.mjs nhl-nowait
+nhl-askalways: node scripts/controlFrontOfficeBoard.mjs nhl-askalways
+nhl-recapnever: node scripts/controlFrontOfficeBoard.mjs nhl-recapnever
+nhl-blank: node scripts/controlFrontOfficeBoard.mjs nhl-blank
