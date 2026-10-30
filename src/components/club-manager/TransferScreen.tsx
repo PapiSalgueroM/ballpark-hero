@@ -9,6 +9,8 @@ import { bannerClearance } from '@/components/club-manager/deskCue';
 import { FlagImg } from '@/components/FlagImg';
 import { groupByConfederation } from '@/lib/confederationGroups';
 import { Input } from '@/components/ui/input';
+import { currencySymbol } from '@/lib/clubManagerStart';
+import { FreeAgentPool } from '@/components/club-manager/FreeAgentPool';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
 import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, careerLeagueOf, loanOutRefusal, shownNation } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
@@ -82,6 +84,7 @@ interface TransferScreenProps {
   onEndLoanEarly: (playerId: string) => void;
   /* Round 508: bring one of MY loans back early. */
   onRecallLoanee: (playerId: string) => void;
+  onSignFreeAgent?: (name: string) => void;
   /* Round 634 review: why the last press did nothing, and a way to clear it. */
   deskNote?: string | null;
   onClearNote?: () => void;
@@ -111,7 +114,7 @@ export function TransferScreen({
   career, market,
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
-  onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee,
+  onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee, onSignFreeAgent,
   deskNote, onClearNote, onCommitLoanPlan, onCommitRecruitment,
 }: TransferScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
@@ -119,7 +122,7 @@ export function TransferScreen({
   const money = moneyIn(career);
   const [filter, setFilter] = useState<PosFilter>('ALL');
   const [query, setQuery] = useState('');
-  const [mode, setMode] = useState<'buy' | 'sell' | 'news'>('buy');
+  const [mode, setMode] = useState<'buy' | 'sell' | 'news' | 'free'>('buy');
   const [shortlist, setShortlist] = useState<RecruitmentPick | null | false>(false);
   const shortlistOpener = useRef<HTMLButtonElement | null>(null);
   /* Release BS fix: a row's Save opens the board in place of the market list, so Back puts the
@@ -134,6 +137,7 @@ export function TransferScreen({
   const [posExact, setPosExact] = useState<'any' | Position>('any');
   const [ageBand, setAgeBand] = useState<(typeof AGE_BANDS)[number]['id']>('any');
   const [priceBand, setPriceBand] = useState<(typeof PRICE_BANDS)[number]['id']>('any');
+  const [maxAskText, setMaxAskText] = useState('');
   const [leaguePick, setLeaguePick] = useState('any');
   const [natPick, setNatPick] = useState('any');
   const [sortKey, setSortKey] = useState<SortKey>('rating');
@@ -249,6 +253,11 @@ export function TransferScreen({
     return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
   }, [market, career.eraId]);
 
+  const maxAskTrimmed = maxAskText.trim();
+  const maxAskInvalid = maxAskTrimmed !== ''
+    && (!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(maxAskTrimmed) || !Number.isFinite(Number(maxAskTrimmed)));
+  const maxAsk = maxAskTrimmed !== '' && !maxAskInvalid ? Number(maxAskTrimmed) : Infinity;
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     const age = AGE_BANDS.find(b => b.id === ageBand) ?? AGE_BANDS[0];
@@ -258,6 +267,7 @@ export function TransferScreen({
       .filter(m => posExact === 'any' || m.position === posExact)
       .filter(m => m.age >= age.lo && m.age <= age.hi)
       .filter(m => m.price <= price.max)
+      .filter(m => m.price <= maxAsk)
       .filter(m => leaguePick === 'any' || careerLeagueOf({ clubName: m.club, eraId: career.eraId }).name === leaguePick)
       .filter(m => natPick === 'any' || shownNation(career.eraId, m) === natPick)
       .filter(m => !q || m.name.toLowerCase().includes(q) || m.club.toLowerCase().includes(q));
@@ -267,7 +277,7 @@ export function TransferScreen({
     else if (sortKey === 'young') sorted.sort((a, b) => a.age - b.age || b.rating - a.rating);
     else sorted.sort((a, b) => a.price - b.price || b.rating - a.rating);
     return sorted.slice(0, 50);
-  }, [market, filter, posExact, ageBand, priceBand, leaguePick, natPick, sortKey, query, career.eraId]);
+  }, [market, filter, posExact, ageBand, priceBand, maxAsk, leaguePick, natPick, sortKey, query, career.eraId]);
 
   const sellable = useMemo(
     () => [...career.squad].sort((a, b) => b.rating - a.rating),
@@ -381,7 +391,7 @@ export function TransferScreen({
     };
     return <Suspense fallback={<div className="space-y-2"><p role="status">Opening shortlist...</p><button className="min-h-11 min-w-11 px-3 rounded-lg border" onClick={close}>Back</button></div>}>
       <RecruitmentBoard career={career} market={market} initial={shortlist || undefined} onCommit={onCommitRecruitment} onBack={close} onFind={player => {
-        setMode('buy'); setFilter('ALL'); setPosExact('any'); setAgeBand('any'); setPriceBand('any'); setLeaguePick('any'); setNatPick('any'); setQuery(player.name);
+        setMode('buy'); setFilter('ALL'); setPosExact('any'); setAgeBand('any'); setPriceBand('any'); setMaxAskText(''); setLeaguePick('any'); setNatPick('any'); setQuery(player.name);
         marketPlace.current = null;
         close();
       }} />
@@ -404,7 +414,7 @@ export function TransferScreen({
           <div className="text-[10px] text-muted-foreground">
             {windowOpen
               ? `${(career.windowWeeksLeft ?? 1) <= 1 ? 'DEADLINE: shuts after your next match' : `${career.windowWeeksLeft} match weeks until the deadline`} · offers can arrive any week · loans used ${loansUsed}/2`
-              : 'Reopens in January / next summer · free agents still sign from the contracts desk on the Squad tab'}
+              : 'Reopens in January / next summer · open Free agents here to sign without a window'}
           </div>
         </div>
         <div className="text-right">
@@ -804,7 +814,7 @@ export function TransferScreen({
       {onCommitRecruitment && <button data-cm-shortlist-open className="min-h-11 min-w-11 w-full rounded-lg border border-border px-3 text-sm font-bold" onClick={e => { shortlistOpener.current = e.currentTarget; marketPlace.current = null; setShortlist(null); }}>Shortlist</button>}
 
       {/* Mode toggle */}
-      <div className="grid grid-cols-3 gap-1.5">
+      <div className={cn('grid gap-1.5', onSignFreeAgent ? 'grid-cols-2 sm:grid-cols-4 [&>button]:min-h-11' : 'grid-cols-3')}>
         <button
           onClick={() => setMode('buy')}
           className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all',
@@ -812,6 +822,17 @@ export function TransferScreen({
         >
           <ArrowDownToLine className="w-3.5 h-3.5" /> Buy
         </button>
+        {onSignFreeAgent && (
+          <button
+            type="button"
+            onClick={() => setMode('free')}
+            aria-pressed={mode === 'free'}
+            className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all',
+              mode === 'free' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
+          >
+            <Handshake className="w-3.5 h-3.5" /> Free agents ({(career.freeAgents ?? []).length})
+          </button>
+        )}
         <button
           onClick={() => setMode('sell')}
           className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all',
@@ -865,7 +886,7 @@ export function TransferScreen({
             </select>
             <select
               value={priceBand}
-              onChange={e => setPriceBand(e.target.value as (typeof PRICE_BANDS)[number]['id'])}
+              onChange={e => { setPriceBand(e.target.value as (typeof PRICE_BANDS)[number]['id']); setMaxAskText(''); }}
               className="bg-card border border-border rounded-lg px-2 py-1.5 text-[10px] font-bold text-foreground"
               aria-label="Price range"
             >
@@ -907,6 +928,25 @@ export function TransferScreen({
               <option value="young">Youngest first</option>
               <option value="cheap">Cheapest first</option>
             </select>
+          </div>
+          <div>
+            <label htmlFor="cm-market-max-ask" className="block text-[10px] font-bold text-foreground mb-1">
+              Maximum asking price ({currencySymbol(career)}m)
+            </label>
+            <Input
+              id="cm-market-max-ask"
+              type="text"
+              inputMode="decimal"
+              value={maxAskText}
+              onChange={e => { setMaxAskText(e.target.value); setPriceBand('any'); }}
+              aria-invalid={maxAskInvalid || undefined}
+              aria-describedby="cm-market-max-ask-note"
+              placeholder="Any asking price"
+              className="min-h-11 bg-card border-border text-sm"
+            />
+            <p id="cm-market-max-ask-note" className="h-4 text-[10px] text-muted-foreground">
+              {maxAskInvalid ? 'Enter a valid amount. No custom ceiling applied.' : 'Blank means no custom ceiling.'}
+            </p>
           </div>
           <Input
             value={query}
@@ -995,6 +1035,8 @@ export function TransferScreen({
       ) : (
         <ClosedWindowBusiness career={career} />
       ))}
+
+      {mode === 'free' && <FreeAgentPool career={career} onSignFreeAgent={onSignFreeAgent} />}
 
       {mode === 'sell' && (
         <div className="space-y-2">
@@ -1116,7 +1158,7 @@ export function TransferScreen({
               <p className="text-[9px] text-muted-foreground px-1 pb-1.5 border-b border-border/40">
                 {windowOpen
                   ? 'Nobody sells a player over the counter. Transfer list him and clubs will come to you with offers, sometimes two of them fighting over the same man, and the bids land in Incoming above.'
-                  : 'The window is shut, so no transfers today. Free agents are the exception: sign them from the contracts desk on the Squad tab. You can still tell the club who is available, who is off limits and who you want out on loan, and it will be waiting when it reopens.'}
+                  : 'The window is shut, so no transfers today. Free agents are the exception: open Free agents here or use the contracts desk on the Squad tab. You can still tell the club who is available, who is off limits and who you want out on loan, and it will be waiting when it reopens.'}
               </p>
               {sellable.map(p => {
                 const st = p.transferStatus;

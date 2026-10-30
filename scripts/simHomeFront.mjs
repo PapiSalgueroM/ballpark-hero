@@ -79,6 +79,7 @@
  */
 import { build } from 'esbuild';
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -127,6 +128,8 @@ homeFrontSrc = controlled('stage', homeFrontSrc, "path: '/nba-my-career'", "path
 homeFrontSrc = controlled('savekey', homeFrontSrc, "saveKey: 'soccerCareerSave'", "saveKey: 'soccerCareerSav'");
 let css = read('src/index.css');
 let glyphSrc = read('src/components/home/SportGlyph.tsx');
+const originalGlyphSprite = read('public/sport-glyphs.svg');
+let glyphSprite = originalGlyphSprite;
 if (CONTROL === 'nocolour') {
   const light = css.indexOf(':root.light');
   const at = css.indexOf('--sport-tennis:', light);
@@ -135,7 +138,10 @@ if (CONTROL === 'nocolour') {
   css = css.slice(0, at) + css.slice(end + 1);
   console.log('NEGATIVE CONTROL nocolour ON: the light theme tennis ink is deleted');
 }
-glyphSrc = controlled('noglyph', glyphSrc, "case 'golf':", "case 'golf-removed':");
+glyphSprite = controlled('noglyph', glyphSprite, 'id="sport-golf"', 'id="sport-golf-removed"');
+if (CONTROL === 'noglyph' && glyphSprite === originalGlyphSprite) {
+  console.error('control noglyph refused: sprite bytes did not change'); process.exit(1);
+}
 let railSrc = read('src/components/home/DailyRail.tsx');
 railSrc = controlled('rail', railSrc, 'const all = dailyGames();', 'const all = dailyGames().slice(0, -1);');
 railSrc = controlled('progress', railSrc, '{game.label}',
@@ -380,6 +386,15 @@ console.log('3) every category has an ink in both themes and a drawn glyph');
     if (!sport) { fail(3, `the category ${JSON.stringify(cat.title)} maps to no sport`); continue; }
     sports.add(sport);
   }
+  const glyphProblem = (sport, markup, sprite) => {
+    const missing = 'SPORT_GLYPH_SYMBOL_MISSING';
+    if (!markup.includes(`<use href="/sport-glyphs.svg#sport-${sport}">`)) return missing;
+    const groups = [...sprite.replace(/<!--[\s\S]*?-->|<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, '').matchAll(/<g id="([^"]+)">([\s\S]*?)<\/g>/g)]
+      .filter(match => match[1] === `sport-${sport}`);
+    if (groups.length !== 1) return missing;
+    return /<(path|circle|ellipse|rect)\b[^>]*\b(d|r|rx|width)="[^"]+"[^>]*\/>/.test(groups[0][2])
+      ? null : 'SPORT_GLYPH_SYMBOL_EMPTY';
+  };
   const worst = [];
   for (const sport of sports) {
     for (const [theme, src] of [['dark', dark], ['light', light]]) {
@@ -391,10 +406,42 @@ console.log('3) every category has an ink in both themes and a drawn glyph');
         if (r < 3) fail(3, `--sport-${sport} measures ${r.toFixed(2)} to 1 on the ${theme} surface, under 3`);
       }
     }
-    const svg = front.renderGlyph(sport);
-    if (!/<(path|circle|ellipse|rect)\b/.test(svg)) fail(3, `the ${sport} glyph draws nothing`);
+    const problem = glyphProblem(sport, front.renderGlyph(sport), glyphSprite);
+    if (problem) fail(3, `${problem}: the ${sport} glyph has no unique drawn local target`);
   }
-  if (!failedSections.has(3)) console.log(`   ${CATEGORIES.length} categories, ${sports.size} sports, every ink in both themes (lowest ${Math.min(...worst).toFixed(2)} to 1), every glyph drawn`);
+  if (!failedSections.has(3)) {
+    const markup = front.renderGlyph('golf');
+    const golf = /<g id="sport-golf">[\s\S]*?<\/g>/.exec(glyphSprite)?.[0];
+    if (!golf) fail(3, 'sprite controls refused: actual golf target is missing');
+    else {
+      const hash = text => createHash('sha256').update(text).digest('hex');
+      let copy = glyphSprite;
+      for (const [name, replacement, marker] of [
+        ['missing-symbol', golf.replace('id="sport-golf"', 'id="sport-golf-removed"'), 'SPORT_GLYPH_SYMBOL_MISSING'],
+        ['empty-symbol', '<g id="sport-golf"></g>', 'SPORT_GLYPH_SYMBOL_EMPTY'],
+      ]) {
+        const before = copy;
+        const beforeSHA256 = hash(before);
+        let changedSHA256, refusal;
+        try {
+          if (glyphProblem('golf', markup, copy) !== null || copy.split(golf).length !== 2) throw new Error(`${name}: copied actual foundation refused`);
+          copy = copy.replace(golf, replacement);
+          changedSHA256 = hash(copy);
+          if (copy === before || changedSHA256 === beforeSHA256) throw new Error(`${name}: sprite bytes did not change`);
+          refusal = glyphProblem('golf', markup, copy);
+          if (refusal !== marker) throw new Error(`${name}: expected ${marker}, got ${refusal}`);
+        } catch (error) {
+          fail(3, String(error));
+        } finally {
+          copy = before;
+        }
+        const restoredSHA256 = hash(copy);
+        if (copy !== before || restoredSHA256 !== beforeSHA256 || glyphProblem('golf', markup, copy) !== null) fail(3, `${name}: same-copy restore refused`);
+        else if (refusal === marker) console.log(`   sprite control ${name}: ${JSON.stringify({ marker, beforeSHA256, changedSHA256, restoredSHA256, changed: true, refused: true, sameCopyRestored: true })}`);
+      }
+    }
+  }
+  if (!failedSections.has(3)) console.log(`   ${CATEGORIES.length} categories, ${sports.size} sports, every ink in both themes (lowest ${Math.min(...worst).toFixed(2)} to 1), every referenced glyph drawn; 2 copied symbol controls refused and restored`);
 }
 
 /* ── 4: the dailies rail ──────────────────────────────────────────────── */

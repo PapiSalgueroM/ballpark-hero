@@ -473,6 +473,7 @@ export function TopTicker({ scores = [], status = 'ok', checkedAt = null }: TopT
       className={`${home ? '' : 'hidden md:block'} bg-[hsl(var(--ticker))] border-b border-border/60 overflow-hidden h-8 relative`}
       aria-label="Live scores ticker"
       onPointerEnter={(e) => { if (e.pointerType === 'mouse') setPaused(true); }}
+      onPointerMove={(e) => { if (e.pointerType === 'mouse') setPaused(true); }}
       onPointerLeave={(e) => { if (e.pointerType === 'mouse') setPaused(false); }}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
