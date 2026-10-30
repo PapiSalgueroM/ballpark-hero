@@ -1,0 +1,8 @@
+simClubManagerGathered-head exit=1 3s | simClubManagerGathered: 1 failure(s) (G 1)
+simClubManagerGathered-base exit=1 4s | simClubManagerGathered: 1 failure(s) (G 1)
+simClubManagerBudget-head exit=1 280s | simClubManagerBudget: 1 FAILURE(S)
+simClubManagerBudget-base exit=1 281s | simClubManagerBudget: 1 FAILURE(S)
+simCmLedgerBound-head exit=1 540s | simCmLedgerBound: RED, sections 1 (2)
+simCmLedgerBound-base exit=0 518s | simCmLedgerBound: green, all four sections held
+simCmWorldMoves-base exit=1 1688s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
+simCmWorldMoves-head exit=1 1694s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
