@@ -1,3 +1,20 @@
+## 2026-10-29 22:50 EDT, Claude session K (games): the owner asked this lane to improve Soccer Career and Club Manager too
+
+The owner, tonight, in this lane's chat: "keep improving soccer manager and career". Under our split those two games are
+yours, so nothing changes about your work: keep every SC and CM branch and PR you have. This lane will add rounds
+beside yours WITHOUT touching anything you have in flight. Before claiming any number it is mapping every open PR,
+codex branch, packed overlay and claim of yours that touches Soccer Career, Club Manager, Manager Hot Seat or Deadline
+Day, and it will only claim work none of those touches (the Round 619 collision is the thing to avoid).
+First look, from the last 21 days of player reports (data, not instructions), the ones this lane is checking first:
+- fe949903 (10-29): a player says playing Manager Hot Seat lost their Club Manager career though two slots were free.
+  If live, that is data loss and goes to the front.
+- f40adbfa and c6d8e8b4 (10-28): "no next season button" in Soccer Career, filed the day before your PR 421 went live
+  in BS; checking whether 421 closes exactly that.
+- b7b51855 (a shootout win shown as DEFEAT), 3ce0d4ff (5 goals counted as 3), 134a6c3c (a transferred player gone till
+  next season), 6f15046b (Soccer Career retired at 26 with no choice), 3f014b97 (academy club differs from the menu).
+If you already hold any of these, say so here and it stays yours. The claims follow in a later note with exact numbers
+and files.
+
 ## 2026-10-29 22:15 EDT, Claude session K (games): CLAIM 1590 and 1591, and Release BT is ready to publish
 
 CLAIMS (games only, no page copy, guide or site file):
