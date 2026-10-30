@@ -31,7 +31,9 @@
  *  2b a job move in the middle of a participant season (three nights played; the first MOVE_SAVES such seasons), to
  *     one of its entrants and to a club outside its field: the save stops playing it, and the season still crowns a
  *     winner with all 36 clubs on eight league phase games (the critic's correction 3). Control `nocarry` (the carry
- *     back on the watcher's rule: the move to an entrant drops the competition).
+ *     back on the watcher's rule: the move to an entrant drops the competition). And a third move, to a club of this
+ *     season's Champions League (its own stream): after every move no club is in both competitions. Control
+ *     `carryall` (fix-1509's guard stood down for every slice of mine, as the round first wrote it).
  *   3 the tie path: a two legged tie of mine is decided on its aggregate, penalties only when level, first legs and
  *     league phase nights never; the match report's through/out agrees. Control `legfromucl`.
  *   4 who plays: season one never (the critic's correction 1), from season two exactly on routes L, C and P.
@@ -75,7 +77,7 @@ const cannot = why => { console.log(`simCmEuroPlay: cannot run: ${why}`); proces
 /* A control names the section (or sections) it runs and the failures that are its own. */
 const CONTROLS = { rawlength: [5, /^5.1 /], nothursday: [1, /^1 /], mineflip: [2, /^2 /], noplaygate: [4, /^4 /], noplayrevert: [6, /^6 /], legfromucl: [3, /^3 /], nocarry: [2, /^2b /],
   nouelucl: [[2, 7], /^[27] .*review does not say next season's Champions League/], friday: [1, /^1 .*the screen dates/],
-  uelrank: [7, /^7 /], noplace: [7, /^7 /], nowinnerucl: [7, /^7 /], notneutral: [7, /^7 /], noet: [7, /^7 /], inplace: [7, /^7 /] };
+  uelrank: [7, /^7 /], noplace: [7, /^7 /], nowinnerucl: [7, /^7 /], notneutral: [7, /^7 /], noet: [7, /^7 /], inplace: [7, /^7 /], carryall: [2, /^2b .*in both competitions/] };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`no control named ${CONTROL}`);
 const runs = n => (CONTROL ? [].concat(CONTROLS[CONTROL][0]).includes(n) : ONLY.length === 0 || ONLY.includes(n));
 
@@ -263,6 +265,8 @@ const CONTROL_EDITS = {
   noet: [{ file: CM_FILE, from: '      ...(my.settles ? { extraTime: true } : {}),\n', to: '' }],
   /* Section 7: completeWorldNight writes into the slice instead of replacing it (correction 7). */
   inplace: [{ file: CM_FILE, from: "  setWorldComp(state, 'uel', { ...slice, mine: { ...(slice.mine ?? {}), [n]: res } });", to: '  slice.mine = { ...(slice.mine ?? {}), [n]: res };' }],
+  /* Section 2b: fix-1509's Champions League guard stood down for every slice of mine, not only a move to an entrant. */
+  carryall: [{ file: CM_FILE, from: "comp === 'uel' && held && !toEntrant && uclEntrantsOf(joined)", to: "comp === 'uel' && held && !held.me && uclEntrantsOf(joined)" }],
 };
 const iso = d => `${d.y}-${String(d.m).padStart(2, '0')}-${String(d.d).padStart(2, '0')}`;
 const dayNo = d => Date.UTC(d.y, d.m - 1, d.d) / 86400000;
@@ -353,13 +357,26 @@ function moveCheck(M, s, where, counts) {
   const home = leagues.find(l => l.clubs.includes(s.clubName));
   const entrant = [...slice.clubs].sort().find(c => c !== s.clubName && leagues.some(l => l !== home && l.clubs.includes(c)));
   const outside = leagues.filter(l => l !== home).map(l => l.clubs[l.clubs.length - 1]).find(c => !slice.clubs.includes(c));
-  for (const [kind, club] of [['entrant', entrant], ['outside', outside]]) {
+  /* The read review's minor 1: and to a club of this season's Champions League (its own stream, so the two moves
+     above draw as they always did). Wherever the save lands, no club is in both competitions. */
+  const inUcl = [...(s.worldComps.ucl?.clubs ?? [])].sort().find(c => !slice.clubs.includes(c) && leagues.some(l => l !== home && l.clubs.includes(c)));
+  const both = st => (st.worldComps?.uel ? M.cm.uclEntrantsOf(st).filter(c => st.worldComps.uel.clubs.includes(c)) : []);
+  for (const [kind, club] of [['entrant', entrant], ['outside', outside], ['ucl', inUcl]]) {
     if (!club) { ok(false, `2b ${where}: no ${kind} club to move to`); continue; }
     const lg = leagues.find(l => l.clubs.includes(club));
     const open = { club, league: lg.id, tier: 3, season: s.season, week: s.week, matchesLeft: 0, roll: 0, status: 'accepted' };
     const base = JSON.parse(JSON.stringify(s));
-    let st = tape(0x2b000 + (counts.moves ?? 0), () => M.cal.joinClubNow({ ...base, jobHunt: { open, cooldowns: [], sentSeason: s.season, sent: 1, summerMove: null } })).value;
+    const seed = kind === 'ucl' ? 0x2c000 + (counts.uclMoves ?? 0) : 0x2b000 + (counts.moves ?? 0);
+    let st = tape(seed, () => M.cal.joinClubNow({ ...base, jobHunt: { open, cooldowns: [], sentSeason: s.season, sent: 1, summerMove: null } })).value;
+    if (!st) { ok(false, `2b ${where} to ${club} (${kind}): the move was refused`); continue; }
     ok(!M.cm.uelParticipant(st), `2b ${where} to ${club} (${kind}): the save still plays the Europa League after the move`);
+    ok(!both(st).length, `2b ${where} to ${club} (${kind}): ${both(st).join(', ')} in both competitions after the move`);
+    if (kind === 'ucl') {
+      counts.uclMoves = (counts.uclMoves ?? 0) + 1;
+      if (st.uclGroup) counts.uclMovesInIt = (counts.uclMovesInIt ?? 0) + 1;
+      if (st.worldComps?.uel) counts.uclMovesKept = (counts.uclMovesKept ?? 0) + 1;
+      if (!st.worldComps?.uel) continue;
+    }
     let over = false;
     for (let i = 0; i < 300 && !over; i += 1) {
       const r = tape(0x2b100 + i, () => M.cm.playNextEntry(st, { skipHalftime: true, noCoach: true })).value;
@@ -368,7 +385,7 @@ function moveCheck(M, s, where, counts) {
     const res = M.cm.evalWorldComp(st, 'uel', Infinity);
     ok(over && !!res?.done && !!res.winner, `2b ${where} to ${club} (${kind}): the Europa League crowned no winner after the move`);
     ok((res?.table ?? []).length === 36 && res.table.every(r => r.w + r.d + r.l === 8), `2b ${where} to ${club} (${kind}): a club did not play eight league phase games after the move`);
-    counts.moves = (counts.moves ?? 0) + 1;
+    if (kind !== 'ucl') counts.moves = (counts.moves ?? 0) + 1;
   }
 }
 
@@ -460,7 +477,7 @@ async function sectionPlay() {
   if (runs(2)) console.log(`  2 review: ${counts.review ?? 0} participant seasons read on the review, ${counts.uelWon ?? 0} of them won it`);
   if (runs(2)) {
     ok((counts.moves ?? 0) >= 2 * MOVE_SAVES, `2b only ${counts.moves ?? 0} job moves played, ${2 * MOVE_SAVES} are wanted`);
-    console.log(`  2b moves: ${counts.moves ?? 0} job moves out of ${counts.moveSaves ?? 0} participant seasons, each played to the season's end`);
+    console.log(`  2b moves: ${counts.moves ?? 0} job moves out of ${counts.moveSaves ?? 0} participant seasons, each played to the season's end; ${counts.uclMoves ?? 0} moves to a Champions League club (${counts.uclMovesInIt ?? 0} joined with its group, ${counts.uclMovesKept ?? 0} kept the Europa League)`);
   }
   if (runs6) console.log(`  6 base ${BASE}: ${identical} saves byte equal to the base on the head, ${parted} parted (participants and super cup nights, by design)`);
 }
