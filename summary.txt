@@ -1,0 +1,4 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+nolift-nohub exit=2 1s | playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift acts on the Soccer Career hub, and /soccer-career is not in this run
+probeLift exit=0 29s | probeLift: green, every lift lands where it says and only at its widths
+nolift exit=1 50s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift FIRED. 12 of 12 lines with the lift stripped read red, the Soccer Career hub among them
