@@ -1,0 +1,15 @@
+simClubManagerDecisionDeadline exit=1 1s | Node.js v24.22.1
+simCmHandoverDesk exit=1 1s | Node.js v24.22.1
+simCmShootoutResults exit=0 10s | ALL SHOOTOUT RESULTS CHECKS PASSED
+simManagerLiveLineups exit=1 1s | Node.js v24.22.1
+simPitchRestartContinuity exit=1 1s | Node.js v24.22.1
+simCmMatchDay exit=0 30s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+simUclSeasonOne exit=0 19s | simUclSeasonOne: all green
+simDailyClubPool exit=0 5s | simDailyClubPool: all sections green
+simEraBakeExtend exit=0 1s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simCmSubs exit=0 58s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+simCmOwnGoals exit=0 81s | simCmOwnGoals: PASS, 8 sections green
+simSoccerDeck exit=0 195s | simSoccerDeck: green. Every section.
+simManagerWorldContinuity exit=1 34s |     at async file:///tmp/m-simManagerWorldContinuity/scripts/simManagerWorldContinuity.mjs:527:24
+simCareerLeagueSeasons exit=0 22s | simCareerLeagueSeasons: all sections green
+simCmOwnClubMarket exit=0 316s | simCmOwnClubMarket: green (mode rule, sections 1, 2, 3, 4, 5): the market lists nobody at my own club in every old save and moves nothing else
