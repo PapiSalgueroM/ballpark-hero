@@ -1,0 +1,37 @@
+MUTATED N1
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/cmDecidingLegCard.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 60[2mms[22m[39m
+   [32m✓[39m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mlost 1-2 at home, through on penalties: THROUGH, the 1-2 still printed, a pulse and no shake[32m 29[2mms[22m[39m
+   [32m✓[39m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mwon 2-1 at home, out on aggregate: OUT, the 2-1 still printed, a shake and no pulse[32m 6[2mms[22m[39m
+[31m   [31m×[31m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mreads the night in my orientation away from home, and a drawn night through on away goals[39m[32m 13[2mms[22m[39m
+[31m     → expected 'Lost 1-1 on the night' to be 'Drew 1-1 on the night' // Object.is equality[39m
+   [32m✓[39m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mkeeps the night's word on a first leg, a league game and a report from before the tie line[32m 11[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmDecidingLegCard.test.tsx[2m > [22mClub Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mreads the night in my orientation away from home, and a drawn night through on away goals
+[31m[1mAssertionError[22m: expected 'Lost 1-1 on the night' to be 'Drew 1-1 on the night' // Object.is equality[39m
+
+Expected: [32m"[7mDrew[27m 1-1 on the night"[39m
+Received: [31m"[7mLost[27m 1-1 on the night"[39m
+
+[36m [2m❯[22m src/test/cmDecidingLegCard.test.tsx:[2m87:25[22m[39m
+    [90m 85| [39m    }))[33m;[39m
+    [90m 86| [39m    [34mexpect[39m(level[33m.[39mhead)[33m.[39m[34mtoBe[39m([32m'THROUGH'[39m)[33m;[39m
+    [90m 87| [39m    [34mexpect[39m(level[33m.[39mnight)[33m.[39m[34mtoBe[39m([32m'Drew 1-1 on the night'[39m)[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m 88| [39m  })[33m;[39m
+    [90m 89| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 09:41:40
+[2m   Duration [22m 1.82s[2m (transform 983ms, setup 38ms, collect 1.30s, tests 60ms, environment 171ms, prepare 44ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding second leg is headlined by the tie (Round 1603) > reads the night in my orientation away from home%2C and a drawn night through on away goals,line=87,column=25::AssertionError: expected 'Lost 1-1 on the night' to be 'Drew 1-1 on the night' // Object.is equality%0A%0AExpected: "Drew 1-1 on the night"%0AReceived: "Lost 1-1 on the night"%0A%0A ❯ src/test/cmDecidingLegCard.test.tsx:87:25%0A%0A

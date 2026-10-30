@@ -1,0 +1,56 @@
+MUTATED Q
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/cmDecidingLegCard.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 60[2mms[22m[39m
+[31m   [31m×[31m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mlost 1-2 at home, through on penalties: THROUGH, the 1-2 still printed, a pulse and no shake[39m[32m 33[2mms[22m[39m
+[31m     → expected 'text-2xl font-display font-bold mb-3 …' to contain 'text-correct'[39m
+[31m   [31m×[31m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mwon 2-1 at home, out on aggregate: OUT, the 2-1 still printed, a shake and no pulse[39m[32m 7[2mms[22m[39m
+[31m     → expected 'text-2xl font-display font-bold mb-3 …' to contain 'text-destructive'[39m
+   [32m✓[39m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mreads the night in my orientation away from home, and a drawn night through on away goals[32m 9[2mms[22m[39m
+   [32m✓[39m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mkeeps the night's word on a first leg, a league game and a report from before the tie line[32m 10[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmDecidingLegCard.test.tsx[2m > [22mClub Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mlost 1-2 at home, through on penalties: THROUGH, the 1-2 still printed, a pulse and no shake
+[31m[1mAssertionError[22m: expected 'text-2xl font-display font-bold mb-3 …' to contain 'text-correct'[39m
+
+Expected: [32m"text-[7mcorrect[27m"[39m
+Received: [31m"text-[7m2xl font-display font-bold mb-3 text-destructive cm-slam[27m"[39m
+
+[36m [2m❯[22m src/test/cmDecidingLegCard.test.tsx:[2m50:20[22m[39m
+    [90m 48| [39m    }))[33m;[39m
+    [90m 49| [39m    [34mexpect[39m(s[33m.[39mhead)[33m.[39m[34mtoBe[39m([32m'THROUGH (PENS)'[39m)[33m;[39m
+    [90m 50| [39m    [34mexpect[39m(s[33m.[39mtone)[33m.[39m[34mtoContain[39m([32m'text-correct'[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 51| [39m    [34mexpect[39m(s[33m.[39mtone)[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'text-destructive'[39m)[33m;[39m
+    [90m 52| [39m    [34mexpect[39m(s[33m.[39mnight)[33m.[39m[34mtoBe[39m([32m'Lost 1-2 on the night'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmDecidingLegCard.test.tsx[2m > [22mClub Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mwon 2-1 at home, out on aggregate: OUT, the 2-1 still printed, a shake and no pulse
+[31m[1mAssertionError[22m: expected 'text-2xl font-display font-bold mb-3 …' to contain 'text-destructive'[39m
+
+Expected: [32m"text-[7mdestructive[27m"[39m
+Received: [31m"text-[7m2xl font-display font-bold mb-3 text-correct cm-slam[27m"[39m
+
+[36m [2m❯[22m src/test/cmDecidingLegCard.test.tsx:[2m66:20[22m[39m
+    [90m 64| [39m    }))[33m;[39m
+    [90m 65| [39m    [34mexpect[39m(s[33m.[39mhead)[33m.[39m[34mtoBe[39m([32m'OUT'[39m)[33m;[39m
+    [90m 66| [39m    [34mexpect[39m(s[33m.[39mtone)[33m.[39m[34mtoContain[39m([32m'text-destructive'[39m)[33m;[39m
+    [90m   | [39m                   [31m^[39m
+    [90m 67| [39m    [34mexpect[39m(s[33m.[39mnight)[33m.[39m[34mtoBe[39m([32m'Won 2-1 on the night'[39m)[33m;[39m
+    [90m 68| [39m    [34mexpect[39m(s[33m.[39mtext)[33m.[39m[34mtoContain[39m([32m'2 - 1'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 09:41:37
+[2m   Duration [22m 1.84s[2m (transform 963ms, setup 40ms, collect 1.29s, tests 60ms, environment 164ms, prepare 40ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding second leg is headlined by the tie (Round 1603) > lost 1-2 at home%2C through on penalties%3A THROUGH%2C the 1-2 still printed%2C a pulse and no shake,line=50,column=20::AssertionError: expected 'text-2xl font-display font-bold mb-3 …' to contain 'text-correct'%0A%0AExpected: "text-correct"%0AReceived: "text-2xl font-display font-bold mb-3 text-destructive cm-slam"%0A%0A ❯ src/test/cmDecidingLegCard.test.tsx:50:20%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding second leg is headlined by the tie (Round 1603) > won 2-1 at home%2C out on aggregate%3A OUT%2C the 2-1 still printed%2C a shake and no pulse,line=66,column=20::AssertionError: expected 'text-2xl font-display font-bold mb-3 …' to contain 'text-destructive'%0A%0AExpected: "text-destructive"%0AReceived: "text-2xl font-display font-bold mb-3 text-correct cm-slam"%0A%0A ❯ src/test/cmDecidingLegCard.test.tsx:66:20%0A%0A

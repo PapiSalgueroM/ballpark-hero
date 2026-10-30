@@ -1,0 +1,4 @@
+mP1-vt exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding seco
+mP2-vt exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding seco
+mQ-vt exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding seco
+mN1-vt exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding seco

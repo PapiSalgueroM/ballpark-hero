@@ -1,0 +1,62 @@
+MUTATED P2
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/cmDecidingLegCard.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 58[2mms[22m[39m
+[31m   [31m×[31m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mlost 1-2 at home, through on penalties: THROUGH, the 1-2 still printed, a pulse and no shake[39m[32m 33[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+[31m   [31m×[31m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mwon 2-1 at home, out on aggregate: OUT, the 2-1 still printed, a shake and no pulse[39m[32m 5[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mreads the night in my orientation away from home, and a drawn night through on away goals[32m 8[2mms[22m[39m
+   [32m✓[39m Club Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mkeeps the night's word on a first leg, a league game and a report from before the tie line[32m 11[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmDecidingLegCard.test.tsx[2m > [22mClub Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mlost 1-2 at home, through on penalties: THROUGH, the 1-2 still printed, a pulse and no shake
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/test/cmDecidingLegCard.test.tsx:[2m57:21[22m[39m
+    [90m 55| [39m    [34mexpect[39m(s[33m.[39mtext)[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'DEFEAT'[39m)[33m;[39m
+    [90m 56| [39m    [34mexpect[39m(s[33m.[39mpulse)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m 57| [39m    [34mexpect[39m(s[33m.[39mshake)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m 58| [39m  })[33m;[39m
+    [90m 59| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmDecidingLegCard.test.tsx[2m > [22mClub Manager: a deciding second leg is headlined by the tie (Round 1603)[2m > [22mwon 2-1 at home, out on aggregate: OUT, the 2-1 still printed, a shake and no pulse
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/cmDecidingLegCard.test.tsx:[2m71:21[22m[39m
+    [90m 69| [39m    [34mexpect[39m(s[33m.[39mtext)[33m.[39m[34mtoContain[39m([32m'Out 2-4 on aggregate'[39m)[33m;[39m
+    [90m 70| [39m    [34mexpect[39m(s[33m.[39mtext)[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'VICTORY'[39m)[33m;[39m
+    [90m 71| [39m    [34mexpect[39m(s[33m.[39mshake)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m 72| [39m    [34mexpect[39m(s[33m.[39mpulse)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 73| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 09:41:34
+[2m   Duration [22m 1.85s[2m (transform 989ms, setup 39ms, collect 1.31s, tests 58ms, environment 162ms, prepare 41ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding second leg is headlined by the tie (Round 1603) > lost 1-2 at home%2C through on penalties%3A THROUGH%2C the 1-2 still printed%2C a pulse and no shake,line=57,column=21::AssertionError: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/test/cmDecidingLegCard.test.tsx:57:21%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmDecidingLegCard.test.tsx,title=src/test/cmDecidingLegCard.test.tsx > Club Manager%3A a deciding second leg is headlined by the tie (Round 1603) > won 2-1 at home%2C out on aggregate%3A OUT%2C the 2-1 still printed%2C a shake and no pulse,line=71,column=21::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/cmDecidingLegCard.test.tsx:71:21%0A%0A
