@@ -176,10 +176,17 @@ const real = new Set();
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export { NATIONALITY_BY_WORLD } from '${ROOT.replaceAll('\\', '/')}/src/data/nationalities/allWorlds.ts';
 export { allIntlNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts';
+export { CM_DUGOUTS } from '${ROOT.replaceAll('\\', '/')}/src/data/clubManagerDugouts.ts';
+export { realDugoutNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/realDugouts.ts';
 `);
   execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-  const { NATIONALITY_BY_WORLD, allIntlNames } = await import(pathToFileURL(BUNDLE).href);
+  const { NATIONALITY_BY_WORLD, allIntlNames, CM_DUGOUTS, realDugoutNames } = await import(pathToFileURL(BUNDLE).href);
   for (const world of Object.values(NATIONALITY_BY_WORLD)) for (const n of Object.keys(world)) real.add(n);
+  /* Round 1606: Club Manager's real opening day managers are real people too, whatever shape their rows take,
+     so no generator anywhere may build one of their names. Read through the module, not a source regex. */
+  const dugoutNames = realDugoutNames(CM_DUGOUTS);
+  for (const n of dugoutNames) real.add(n);
+  console.log(`   ${dugoutNames.length} real managers from the Club Manager dugout table`);
   globalThis.__intl = allIntlNames();
   if (real.size < 8000) fail(`only ${real.size} real names harvested, the check is not checking much`);
   /* Round 971: every sealed world feeds the guard, the 2020-21 one included

@@ -302,7 +302,7 @@ async function realDugoutsSection() {
   /* 7b and 7c. Summers with the sentinel's chair emptied: the vacancy list finishSeason decided gets the
      sentinel's chair and one more (so the recycle draw has a real name to pick), in both twins alike. */
   const PER_ERA = 40;
-  let summers = 0, emptied = 0, natural = 0, offersChecked = 0, recycleChances = 0, sameStrip = 0;
+  let summers = 0, emptied = 0, natural = 0, offersChecked = 0, recycleChances = 0, sameStrip = 0, realOffers = 0;
   const t0 = Date.now();
   for (const era of ERAS) {
     const pool = byEra(era);
@@ -332,7 +332,14 @@ async function realDugoutsSection() {
       if (s.start.managers?.[L.sentinel]?.name !== SENTINEL) { fail(`7b: ${era} ${L.id} seed ${k}: the sentinel was not in his chair to be emptied`); continue; }
       emptied += 1;
       if ((s.fin.pendingVacancies ?? []).length >= 2) recycleChances += 1;
-      for (const o of s.offers) { offersChecked += 1; if (JSON.stringify(o).includes(SENTINEL)) failB(`${era} ${L.id} seed ${k}: an offer names ${SENTINEL}: "${o.blurb}"`); }
+      for (const o of s.offers) {
+        offersChecked += 1;
+        if (JSON.stringify(o).includes(SENTINEL)) failB(`${era} ${L.id} seed ${k}: an offer names ${SENTINEL}: "${o.blurb}"`);
+        if (o.club === L.sentinel && s.wasDecided) {
+          realOffers += 1;
+          if (!o.blurb.includes('making a change in the dugout')) fail(`7b: ${era} ${L.id} seed ${k}: the offer for the emptied real chair does not say only that the club is making a change: "${o.blurb}"`);
+        }
+      }
       for (const [label, state] of [['the season end', s.fin], ['the new season', s.next]]) {
         const said = spoken(state);
         if (said.includes(SENTINEL)) {
@@ -355,7 +362,7 @@ async function realDugoutsSection() {
       }
     }
   }
-  console.log(`   7b: ${summers} summers, ${emptied} with the sentinel's chair emptied (${natural} by the sim's own draw), ${recycleChances} with a second chair to recycle into, ${offersChecked} offers read, ${bFails} failures (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
+  console.log(`   7b: ${summers} summers, ${emptied} with the sentinel's chair emptied (${natural} by the sim's own draw), ${recycleChances} with a second chair to recycle into, ${offersChecked} offers read (${realOffers} for the emptied real chair, all saying only that the club is making a change), ${bFails} failures (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
   console.log(`   7c: ${sameStrip} of ${summers} sentinel careers equal their empty table twin after the strip, draw for draw`);
   if (emptied < 200) fail(`7b: only ${emptied} summers emptied the sentinel's chair (floor 200)`);
   /* 7a runs after 7b and 7c on purpose: the engine numbers its youth ids with a counter, so the two twins must have run the same calls before they are compared. */
