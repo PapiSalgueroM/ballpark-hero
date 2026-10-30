@@ -1,0 +1,7 @@
+dailyView: node scripts/simCmDailyView.mjs
+deadlineDay: node scripts/simDeadlineDay.mjs
+hotSeat: node scripts/simManagerHotSeat.mjs
+ledgerBound: node scripts/simCmLedgerBound.mjs
+ledgerJourney: node scripts/simCmLedgerJourney.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+var: node scripts/simCmVar.mjs
