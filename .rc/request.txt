@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: git worktree add -f /tmp/wbase 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/wbase/node_modules && OLD_BASE=/tmp/wbase node .rc/x/walk1601.mjs
