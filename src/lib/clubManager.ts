@@ -18005,7 +18005,15 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
   if (entry.type === 'uel') {
     const my = uelMyNight(state, entry);
     if (!my) return null;
-    return { competition: 'uel', compLabel: uelNightLabel(my), opponent: my.opponent, home: my.night.stage === 'F' ? null : my.atHome };
+    /* Like every decider (Round 670), a night that settles its tie draws its ninety minutes at the extra time
+       deflator: a second leg or the final, never a league phase night or a first leg. */
+    return {
+      competition: 'uel',
+      compLabel: uelNightLabel(my),
+      opponent: my.opponent,
+      home: my.night.stage === 'F' ? null : my.atHome,
+      ...(my.settles ? { extraTime: true } : {}),
+    };
   }
   /* Round 1510: a super cup night, my fixture of it (on a neutral ground nobody is at home). */
   if (entry.type === 'oneOff') {
