@@ -1,0 +1,3 @@
+euro-bindB-fa exit=0 550s | simCmEuroPlay: green, 1728 checks, 0 failures
+euro-bindA-fa exit=0 555s | simCmEuroPlay: green, 1728 checks, 0 failures
+euro-nobind-fa exit=1 564s | simCmEuroPlay: RED, 1728 checks, 2 failures
