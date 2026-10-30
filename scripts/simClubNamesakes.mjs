@@ -48,9 +48,22 @@
  * T, THE TRIPWIRE (Round 1587). Every Q2 row with a CONMEBOL nationality token, an empty nationality or Arsenal FC as
  *    the middle of a three part split (160 rows) belongs to a judged man, and no row id sits in two men. While the
  *    migration does not exist it may print pending; once it exists pending must be 0.
+ * M, THE PAYLOAD (Round 1587). The applied form's market payload is exactly the ledger's sarandi rows (110), the
+ *    generator rerun on the committed exports gives the committed payload (56 stints, 0 held), every Arsenal FC stint
+ *    of Q3 moves exactly when critic 2's rule says so (written a second time here, so the generator is not its own
+ *    judge), the record and the applied form carry one payload line with its md5 and N and M, and the committed
+ *    migration is byte for byte the generator's.
+ * P, THE STATE AFTER (Round 1587). Q2 with the payload applied: no sarandi row reads Arsenal FC, each reads its old
+ *    club with Arsenal FC replaced by 'Arsenal de Sarandí', every other row byte equal; once the lead commits
+ *    arsenalMarketPost-<date>.json it must equal that state row for row.
+ * R, RARITY ROUND (Round 1587). rarityRound.ts's club-arsenal pool (the bare string and both loan shapes) built from
+ *    the state after holds no sarandi man (measured: 217 names before, 161 after).
  * Round 1587 controls: manhost (the first two source sarandi man loses one), wiki (his statscrew source becomes
  *    en.wikipedia.org), twotm (both his sources Transfermarkt): L is red. unjudged (a made up Argentine row added to Q2
- *    in memory): T is red once the migration exists. unmerge now removes the ledger's sarandi rows by id.
+ *    in memory): T is red once the migration exists. payload (one market row dropped from the parsed payload): M red.
+ *    londonspan (a london row of a moved stint's name and nationality added inside its span, critic 2): the stint
+ *    must be held, so M is red. leak (one sarandi row put back to Arsenal FC in the state after): P and R red.
+ *    unmerge now removes the ledger's sarandi rows by id.
  *
  * Run: node scripts/simClubNamesakes.mjs            (green: the closing line and exit 0) */
 import fs from 'node:fs';
@@ -59,12 +72,14 @@ import { fileURLToPath } from 'node:url';
 import * as detectLib from './lib/clubNamesakeDetect.mjs';
 import { buildGridRule, stripComments, braceEnd, onceAt } from './lib/gridRuleFromSource.mjs';
 import * as ARSENAL from './qa/genArsenalLedger1587.mjs';
+import * as SQL1587 from './qa/genClubNamesakes1587.mjs';
+import { createHash } from 'node:crypto';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'scripts', 'data', 'clubNamesakes1584');
 const MIGRATION_PATH = 'supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql';
 const CONTROLS = ['blind', 'unmerge', 'noexclude', 'wide', 'mirrordrift', 'onehost', 'forget',
-  'manhost', 'wiki', 'twotm', 'unjudged'];
+  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak'];
 const WIKI_HOST = /(^|\.)(wikipedia|wikidata|wikimedia|fandom|wikiwand)\./i;
 const regDomain = h => h.toLowerCase().replace(/^www\./, '').split('.').slice(-2).join('.');
 /* two registrable hosts (soccerway's and ESPN's regional mirrors are one host each), no wiki, at most one Transfermarkt,
@@ -337,6 +352,92 @@ console.log('T) every tripwire row and every roster net row belongs to exactly o
   if (!pending.length) ok(`${trip.length} tripwire rows, every one judged; ${AL.men.filter(m => m.nets.includes('roster')).length} men came in by the roster net only`);
   else if (!migrationThere) ok(`pending ${pending.length} (allowed while the migration does not exist)`);
   else fail(`pending ${pending.length} tripwire rows with the migration written: ${pending.slice(0, 3).map(r => r.player_name + ' ' + r.year).join(', ')}`);
+}
+
+/* ---------------------------------------------------------------- M (Round 1587) */
+console.log('M) the payload is the ledger\'s sarandi rows plus the stints critic 2\'s rule moves, and both SQL files carry it');
+const STINTS = readJson('arsenalStints-2026-10-29.json');
+const APPLIED_SQL = readText(SQL1587.APPLIED), RECORD_SQL = readText(SQL1587.MIGRATION);
+const payloadLine = sql => (/payload text := '(.*)';/.exec(sql) || [])[1];
+let PAY = JSON.parse(payloadLine(APPLIED_SQL).replace(/''/g, "'"));
+{
+  let ledger = AL, market = MARKET;
+  if (CONTROL === 'payload') {
+    if (PAY.market.length < 2) abort('the payload holds fewer than two market rows');
+    fired.push(`payload: market row ${PAY.market[0].id} dropped from the parsed payload`);
+    PAY = { ...PAY, market: PAY.market.slice(1) };
+  }
+  if (CONTROL === 'londonspan') {
+    const s = STINTS.find(x => PAY.stints[0] && x.id === PAY.stints[0].id);
+    if (!s) abort('the payload moves no stint');
+    const extra = { ...market.find(r => r.player_name === s.player_name && r.nationality === s.nationality), id: 99999992, year: s.first_year };
+    market = market.concat([extra]);
+    ledger = { ...AL, men: AL.men.concat([{ name: 'Made up London twin', verdict: 'london', rows: [99999992] }]) };
+    fired.push(`londonspan: a london row of ${s.player_name}'s name and nationality added inside his moved stint's span (${s.first_year})`);
+  }
+  const again = SQL1587.computePayload(ledger, market, STINTS);
+  const sarRows = AL.men.filter(m => m.verdict === 'sarandi').flatMap(m => m.rows).sort((a, b) => a - b);
+  const payIds = PAY.market.map(p => p.id).sort((a, b) => a - b);
+  if (JSON.stringify(payIds) === JSON.stringify(sarRows)) ok(`the market payload is exactly the ledger's ${sarRows.length} sarandi rows`);
+  else fail(`the market payload holds ${payIds.length} ids, the ledger's sarandi rows are ${sarRows.length}`);
+  if (JSON.stringify({ market: again.market, stints: again.stints }) === JSON.stringify(PAY) && !again.held.length) ok(`the generator, rerun on the committed exports, gives the committed payload (${again.stints.length} stints, 0 held)`);
+  else fail(`the generator now gives ${again.market.length} market rows, ${again.stints.length} stints and ${again.held.length} held, not the committed payload`);
+  /* the stints rule, written a second time here so the generator is not its own judge */
+  const owner = new Map(); for (const m of ledger.men) for (const id of m.rows) owner.set(id, m);
+  const ruleBreaks = [];
+  for (const s of STINTS) {
+    if (!s.club.split(' / ').includes('Arsenal FC')) continue;
+    const cov = market.filter(r => r.player_name === s.player_name && r.nationality === s.nationality && r.year >= s.first_year && r.year <= s.last_year);
+    const men = new Set(cov.map(r => owner.get(r.id)));
+    const moves = cov.length > 0 && men.size === 1 && [...men][0]?.verdict === 'sarandi';
+    if (moves !== PAY.stints.some(p => p.id === s.id)) ruleBreaks.push(`${s.player_name} ${s.first_year}-${s.last_year}`);
+  }
+  if (!ruleBreaks.length) ok(`every Arsenal FC stint moves exactly when its span covers rows of one sarandi man and nobody else (${PAY.stints.length} of ${STINTS.length})`);
+  else fail(`the stints payload breaks the rule at ${ruleBreaks.slice(0, 3).join(', ')}`);
+  const sum = createHash('md5').update(payloadLine(APPLIED_SQL), 'utf8').digest('hex');
+  const want = (sql, k) => Number((new RegExp(`${k}_want int := (\\d+)`).exec(sql) || [])[1]);
+  const consistent = [APPLIED_SQL, RECORD_SQL].every(sql => payloadLine(sql) === payloadLine(APPLIED_SQL) && sql.includes(`if md5(payload) <> '${sum}'`)
+    && want(sql, 'm') === PAY.market.length && want(sql, 's') === PAY.stints.length);
+  if (consistent) ok(`the record and the applied form carry one payload line, its md5 ${sum} and N ${PAY.market.length}, M ${PAY.stints.length}`);
+  else fail(`the two SQL files disagree with the payload (${PAY.market.length} market rows, ${PAY.stints.length} stints), its md5 or N and M`);
+  const rec = SQL1587.writeSql({ market: PAY.market, stints: PAY.stints }, { strict: false, source: 'arsenalMarket-2026-10-29.json and arsenalStints-2026-10-29.json' });
+  if (rec.sql === RECORD_SQL) ok('the committed migration is byte for byte what the generator writes from this payload');
+  else fail('the committed migration is not what genClubNamesakes1587.mjs writes: regenerate it');
+}
+
+/* ---------------------------------------------------------------- P and R (Round 1587) */
+console.log('P) the state after the apply, and R) Rarity Round\'s Arsenal pool in it');
+{
+  const newClub = new Map(PAY.market.map(p => [p.id, p.new]));
+  let after = MARKET.map(r => (newClub.has(r.id) ? { ...r, club: newClub.get(r.id) } : r));
+  const sar = AL.men.filter(m => m.verdict === 'sarandi');
+  const sarIds = new Set(sar.flatMap(m => m.rows));
+  if (CONTROL === 'leak') {
+    const id = sar[0].rows[0];
+    after = after.map(r => (r.id === id ? { ...r, club: 'Arsenal FC' } : r));
+    fired.push(`leak: ${sar[0].name}'s row ${id} put back to Arsenal FC in the state after`);
+  }
+  const leaked = after.filter(r => sarIds.has(r.id) && r.club.split(' / ').includes('Arsenal FC'));
+  const wrong = after.filter(r => sarIds.has(r.id) && r.club !== SQL1587.rewriteClub(MARKET.find(x => x.id === r.id).club));
+  const others = after.filter(r => !sarIds.has(r.id)).filter(r => JSON.stringify(r) !== JSON.stringify(MARKET.find(x => x.id === r.id)));
+  if (!leaked.length && !wrong.length && !others.length) ok(`after the apply no sarandi row reads Arsenal FC, all ${sarIds.size} read '${SQL1587.NAMESAKE}' in its place, the other ${MARKET.length - sarIds.size} are byte equal`);
+  else fail(`after the apply: ${leaked.length} sarandi rows still read Arsenal FC, ${wrong.length} read another club, ${others.length} other rows changed`);
+  const post = fs.readdirSync(DATA).filter(f => /^arsenalMarketPost-\d{4}-\d{2}-\d{2}\.json$/.test(f)).sort().pop();
+  if (!post) ok('no post apply export committed yet (the lead adds arsenalMarketPost-<date>.json after the apply; it is then compared row for row)');
+  else {
+    const live = readJson(post), byId = new Map(live.map(r => [r.id, r]));
+    const diff = after.filter(r => { const l = byId.get(r.id); return !l || l.club !== r.club || l.player_name !== r.player_name || l.year !== r.year; });
+    if (!diff.length && live.length === after.length) ok(`${post} equals the state after, row for row (${live.length} rows)`);
+    else fail(`${post} differs from the state after on ${diff.length} rows (${live.length} live rows, ${after.length} expected)`);
+  }
+  /* R: rarityRound.ts fetchClubPool('Arsenal FC'): the bare string and both loan shapes, by player_name */
+  const inPool = c => c === 'Arsenal FC' || c.startsWith('Arsenal FC / ') || c.endsWith(' / Arsenal FC');
+  const before = new Set(MARKET.filter(r => inPool(r.club)).map(r => r.player_name));
+  const pool = new Set(after.filter(r => inPool(r.club)).map(r => r.player_name));
+  const sarNames = new Set(sar.map(m => MARKET.find(r => r.id === m.rows[0]).player_name));
+  const left = [...pool].filter(n => sarNames.has(n));
+  if (!left.length) ok(`R: the club-arsenal pool holds no sarandi man after the apply (${before.size} names before, ${pool.size} after)`);
+  else fail(`R: the club-arsenal pool still holds ${left.join(', ')}`);
 }
 
 console.log('');
