@@ -1,0 +1,16 @@
+#!serial
+pgl: npm install --silent --prefix /tmp/pgl @electric-sql/pglite > /tmp/pgl.log 2>&1; s=$?; tail -2 /tmp/pgl.log; ls /tmp/pgl/node_modules/@electric-sql/pglite/dist/index.js; exit $s
+rehearse: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-nohash: REHEARSE_CONTROL=nohash PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-dupname: REHEARSE_CONTROL=dupname PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh1574: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseUsConnections1574.mjs
+mig1583: node scripts/qa/nbaConnections1583Migration.mjs check
+mig1574: node scripts/qa/usConnections1574Migration.mjs check
+mig1567: node scripts/qa/usConnections1567Migration.mjs check
+dealt1558bytes: git worktree add -q /tmp/base b4a331a9cb1db7411b91538eaeaf29385d2ce3a9 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node scripts/qa/connectionsDealtDay1558.mjs file 2026-10-30 +60 > /tmp/d0.txt 2>&1); node scripts/qa/connectionsDealtDay1558.mjs file 2026-10-30 +60 > /tmp/d1.txt 2>&1; cmp /tmp/d0.txt /tmp/d1.txt && echo "1558 dealer output byte equal to the base for the three sports ($(wc -l < /tmp/d1.txt) lines)"
+dealt-reshaped: DEALT_CONTROL=reshaped node scripts/qa/connectionsDealtDay1583.mjs nba=/dev/null 2026-10-30 +40
+plain: node scripts/simUsConnectionsFacts.mjs
+recordgrows: node -e "const {execSync}=require('child_process');const f='scripts/data/nbaConnectionsRecord-2026-10.json';const a=JSON.parse(execSync('git show 5620589b4:'+f,{maxBuffer:1<<26})).men;const b=JSON.parse(require('fs').readFileSync(f,'utf8')).men;let d=0,n=0;for(const [k,m] of Object.entries(a))for(const [x,v] of Object.entries(m)){n++;if(JSON.stringify(b[k]?.[x])!==JSON.stringify(v)){d++;console.log('DIFF',k,x)}}console.log(n+' fields of '+Object.keys(a).length+' step 2 men compared, '+d+' differences');process.exit(d?1:0)"
