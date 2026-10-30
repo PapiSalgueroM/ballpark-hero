@@ -1,0 +1,14 @@
+c-draw: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=draw node scripts/simCmPlayerCard.mjs
+c-emptykey: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=emptykey node scripts/simCmPlayerCard.mjs
+c-offbyone: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=offbyone node scripts/simCmPlayerCard.mjs
+c-noarchive: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=noarchive node scripts/simCmPlayerCard.mjs
+c-nocap: CARDS_SEEDS=1 CARDS_CONTROL=nocap node scripts/simCmPlayerCard.mjs
+c-loadwrite: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=loadwrite node scripts/simCmPlayerCard.mjs
+c-allcomps: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=allcomps node scripts/simCmPlayerCard.mjs
+c-namekey: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=namekey node scripts/simCmPlayerCard.mjs
+c-linkalways: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=linkalways node scripts/simCmPlayerCard.mjs
+c-hotseat: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=hotseat node scripts/simCmPlayerCard.mjs
+c-bogus: CARDS_CONTROL=bogus node scripts/simCmPlayerCard.mjs
+cards-default: node scripts/simCmPlayerCard.mjs
+size-d: node scripts/simClubManagerSaveSize.mjs
+size-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
