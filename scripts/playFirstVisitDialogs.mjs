@@ -565,7 +565,7 @@ for (const { route, w, h, key, scene } of lines) {
 /* Round 1605: the scripted states, each in a fresh context with the banner left unanswered */
 const stateResults = [];
 for (const st of stateRuns) for (const [w, h] of WIDTHS) {
-  const res = { state: st.key, route: st.route, width: w, height: h, key: `${st.key}@${w}`, dismissed: [], missed: '', missing: [] };
+  const res = { scripted: st.key, route: st.route, width: w, height: h, key: `${st.key}@${w}`, dismissed: [], missed: '', missing: [] };
   const ctx = await browser.newContext({ viewport: { width: w, height: h } });
   const page = await ctx.newPage();
   await page.route(/supabase\.co/, r => r.abort());
@@ -688,7 +688,7 @@ console.log('THE BOTTOM BAR NET (Round 1605): fixed buttons and links against th
 const barFailures = [], barNoBanner = [], barLines = [];
 let barPassed = 0, barControls = 0, barClosest = null;
 for (const r of [...results, ...stateResults]) {
-  const where = `${r.state ?? r.scene ?? r.route} ${r.width}x${r.height}`;
+  const where = `${r.scripted ?? r.scene ?? r.route} ${r.width}x${r.height}`;
   const reads = [r.barsLoad, r.barsAfter].filter(Boolean);
   const pending = reads.filter(b => b.pending);
   const seen = new Set();
@@ -698,9 +698,9 @@ for (const r of [...results, ...stateResults]) {
   const banner = pending[0]?.banner;
   const closest = pending.map(b => b.closest).filter(Boolean).sort((a, b) => a.gap - b.gap)[0] ?? null;
   let state, why;
-  if (r.error) { if (!r.state) continue; state = 'FAIL'; why = `the page did not load: ${r.error}`; }
-  else if (r.state && r.missed) { state = 'FAIL'; why = `the script did not reach its state: ${r.missed}`; }
-  else if (r.state && r.missing.length) { state = 'FAIL'; why = `the state is reached but ${r.missing.join(', ')} is not on screen`; }
+  if (r.error) { if (!r.scripted) continue; state = 'FAIL'; why = `the page did not load: ${r.error}`; }
+  else if (r.scripted && r.missed) { state = 'FAIL'; why = `the script did not reach its state: ${r.missed}`; }
+  else if (r.scripted && r.missing.length) { state = 'FAIL'; why = `the state is reached but ${r.missing.join(', ')} is not on screen`; }
   else if (!pending.length) { state = 'NOBANNER'; why = 'the banner was never pending on this line, so it measured nothing'; barNoBanner.push(where); }
   else if (offenders.length) {
     state = 'FAIL';
@@ -713,16 +713,16 @@ for (const r of [...results, ...stateResults]) {
     if (closest && (barClosest === null || closest.gap < barClosest.gap)) barClosest = { ...closest, where };
     why = `${n} fixed control${n === 1 ? '' : 's'}, none meets the banner ${banner.top} to ${banner.bottom}${closest ? `; the closest, "${closest.label}", ${closest.gap} px above it` : ''}`;
   }
-  if (r.state && r.dismissed.length) why += ` (closed first: ${r.dismissed.join(', ')})`;
+  if (r.scripted && r.dismissed.length) why +=` (closed first: ${r.dismissed.join(', ')})`;
   line.state = state;
   if (state === 'FAIL') barFailures.push(`${where}: ${why}`);
   if (state === 'PASS') barPassed += 1;
-  if (state !== 'PASS' || r.state) console.log(`  BARS ${state.padEnd(8)} ${where}: ${why}`);
+  if (state !== 'PASS' || r.scripted) console.log(`  BARS ${state.padEnd(8)} ${where}: ${why}`);
 }
 console.log(`${barLines.length} bar lines (${stateResults.length} of them scripted states): ${barPassed} green over ${barControls} fixed controls, ${barFailures.length} red, ${barNoBanner.length} with no pending banner${barClosest ? `; the closest green control sat ${barClosest.gap} px above the banner ("${barClosest.label}", ${barClosest.where})` : ''}`);
 if (BAR_CONTROL === 'nolift') {
   const acted = barLines.filter(l => l.stripped > 0);
-  const hub = acted.filter(l => l.r.state === '/soccer-career#hub');
+  const hub = acted.filter(l => l.r.scripted === '/soccer-career#hub');
   if (!acted.length || !hub.length) {
     console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift stripped ${acted.length ? 'nothing on the Soccer Career hub' : 'nothing on any line'}, so the lift class was not in the page`);
     process.exit(2);
