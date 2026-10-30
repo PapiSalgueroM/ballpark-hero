@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+roster-head: export CI=1 SIM_NETWORK=offline CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CORE_REF=HEAD ENGINES=chromium CM_OWN_ROSTER_OUT="$RC_OUT/roster-head" FREE_KICK_FONT_CACHE=/tmp/fk-head && node .rc/x/rosterInstalled.mjs && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubDetailCurrentRoster.mjs
+roster-base: X="$PWD/.rc/x/rosterInstalled.mjs" && git worktree add -f /tmp/wb 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/wb/node_modules && cd /tmp/wb && npm run build > /tmp/wb-build.log 2>&1 && export CI=1 SIM_NETWORK=offline CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CORE_REF=HEAD ENGINES=chromium CM_OWN_ROSTER_OUT="$RC_OUT/roster-base" FREE_KICK_FONT_CACHE=/tmp/fk-base && node "$X" && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubDetailCurrentRoster.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
