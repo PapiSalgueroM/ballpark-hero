@@ -1,0 +1,8 @@
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   baseball: 0 raw labels, receipt not shown, dialog date 2026 (boards carry 2026)
+   nfl: 0 raw labels, receipt not shown, dialog date 2025 (boards carry 2025)
+   nhl: 0 raw labels, receipt shown, dialog date 2025-26 (boards carry 2025-26)
+  FAIL raw-label nba: src/pages/NbaConnections.tsx renders {group.theme} as text, so a dated label can break inside its date
+  FAIL raw-label nba: src/pages/NbaConnections.tsx renders no group label through ConnectionsGroupLabel
+   nba: 1 raw labels, receipt shown, dialog date 2025-26 (boards carry 2025-26)
+simConnectionsDatedCopy: 2 finding(s)

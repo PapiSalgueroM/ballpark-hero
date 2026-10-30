@@ -1,0 +1,7 @@
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+   baseball: 0 raw labels, receipt not shown, dialog date 2026 (boards carry 2026)
+   nfl: 0 raw labels, receipt not shown, dialog date 2025 (boards carry 2025)
+   nhl: 0 raw labels, receipt shown, dialog date 2025-26 (boards carry 2025-26)
+  FAIL no-sentence nba: src/components/nba-connections/NbaConnectionsHowToPlay.tsx does not say what "as of" means
+   nba: 0 raw labels, receipt shown, dialog date missing (boards carry 2025-26)
+simConnectionsDatedCopy: 1 finding(s)
