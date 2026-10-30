@@ -69,6 +69,9 @@ import './lib/seedRandom.mjs';
    Unlimited ladders (seeds 1 to 240,000; none below 120,000, 9 above) and on none of 36,525 dailies
    (2026-10-25 to 2126-10-24); the head dropped none and dealt the other 276,516 JSON identical. The 9 seeds
    are pinned in KNOWN_SHORT, so the real pool's rescue is proved on every run.
+   Round 1579 took the 1573 review's minors: (ii) has a floor and (vi) a ceiling, so an arm that drops every
+   ladder is its own red (TRIVIA_CONTROL=shared), and the pin signature also hashes the code of the bank's other
+   imports (clearWinner.ts, dateUtils.ts, dealPlayers.ts), so an edit there reads as stale, not as a moved pin.
    Knobs: TRIVIA_ARM_FILE=<path> makes the arm that file as it is, the tie to origin/main's own bank (git show
      origin/main:src/lib/triviaQuestionBank.ts > base-bank.ts). Its imports resolve to this tree, so the tie
      holds while src/data/marketNamesakes.json and src/lib/clearWinner.ts, dateUtils.ts and dealPlayers.ts
@@ -76,6 +79,21 @@ import './lib/seedRandom.mjs';
    TRIVIA_BIG=unlimited:<from>-<to> or daily:<fromOffset>-<toOffset> deals that range of the real pool through
      head and arm only (sections 2 to 9 skipped), prints every ladder the arm drops a step on, and ends
      "simTriviaBank big fleet: N ladders, arm short A, head short H, identical I".
+
+   ROUND 1579: Swap Question never deals a question already on the ladder. swapQuestion compared its draw with
+   the question on screen only, so a swap could bring back a rung already answered (sometimes with the same right
+   answer) or one still to come, mostly the one worth the most text nearly every ladder holds. It now refuses
+   every text on the ladder and draws up to LADDER_ATTEMPTS. Section 10 swaps every rung of four fleets of 250
+   ladders through the head and through the swap as it was, on one named stream per swap.
+   MEASURED (runner r1579-s1, 2026-10-29, at 71f17732e): the swap as it was dealt a ladder text on 749 of 3,750
+   real Unlimited swaps (20.0%: 502 already asked, 247 still to come), 829 of 3,750 daily (22.1%), 1,252 of 3,750
+   degraded (33.4%) and 1,777 of 3,750 planted (47.4%), and never handed back the question on screen; the head
+   dealt none, handed back none, and dealt JSON identical on every swap the old one dealt fresh (3,001, 2,921,
+   2,498 and 1,973). The (e) floors (249, 276, 417, 592) are a third of those repeats. Section 10 never draws from
+   the harness's seeded Math.random, so its numbers do not move with SIM_SEED.
+   Knob: TRIVIA_SWAP_ARM_FILE=<path> makes section 10's base arm that file's own swapQuestion (called with pool,
+     current and ladder), the tie to the base commit's own file (git show 5f9303bf8:src/lib/sportsMillionaire.ts
+     > base-sm.ts): the four base digests then equal the default run's. Its imports resolve to this tree.
 
    Run: node scripts/simTriviaBank.mjs
    Negative controls (each edits a copy of the bank, refuses to run if its target string is not
@@ -90,9 +108,20 @@ import './lib/seedRandom.mjs';
      TRIVIA_CONTROL=short     a step gives up after eight draws again                 (section 9, check i)
      TRIVIA_CONTROL=redeal    a step draws from five types, every ladder dealt anew   (sections 4 and 9, ii and iii)
      TRIVIA_CONTROL=dupe      a step keeps a question the ladder already holds        (sections 4 and 9, iv and ii)
+     TRIVIA_CONTROL=shared    a step's draw counter is shared by the whole ladder     (section 9, the ii floor and vi ceiling)
+   and four on a copy of src/lib/sportsMillionaire.ts, which only section 10's head arm reads:
+     TRIVIA_CONTROL=swaprepeat  the swap compares with the question on screen only    (section 10, a)
+     TRIVIA_CONTROL=swapfive    the swap gives up after five draws again              (section 10, c)
+     TRIVIA_CONTROL=swapmove    the swap draws from five types                        (section 10, b)
+     TRIVIA_CONTROL=swapeasy    the swap deals the easiest band                       (section 10, d and b)
    Under the first seven the arm is the controlled bank with a cap of 8, so section 9 adds only its (v) lines
    (4 each for ties, namesake, tense and postense, 3 for family, none for legacy and rulec), plus a
-   "KNOWN_SHORT stale" line wherever the control edits the bank.
+   "KNOWN_SHORT stale" line wherever the control edits the bank. Section 10 adds no line under any of the first
+   eleven but short: its swap reads the bank's LADDER_ATTEMPTS, so at 8 it hands back the question on screen 12
+   times on the planted fleet, check (c). shared ends with 11 lines (the ii floor on all eight fleets, the vi
+   ceiling on both planted fleets, KNOWN_SHORT stale). swaprepeat fires (a) on every fleet with the base arm's
+   repeats; swapfive (c) 1, 1, 26 and 115; swapmove (b) on every fresh swap; swapeasy (d) on 14 rungs in 15 with
+   (b) beside it.
    Re-measure the legacy hashes from any copy of the bank (the base of this round was c75d04dad):
      TRIVIA_BANK_FILE=<path> node scripts/simTriviaBank.mjs --print-legacy
 */
@@ -103,7 +132,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'family', 'legacy', 'rulec', 'short', 'redeal', 'dupe'];
+const CONTROLS = ['ties', 'namesake', 'tense', 'postense', 'family', 'legacy', 'rulec', 'short', 'redeal', 'dupe', 'shared', 'swaprepeat', 'swapfive', 'swapmove', 'swapeasy'];
 const CONTROL = process.env.TRIVIA_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`TRIVIA_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const PRINT_LEGACY = process.argv.includes('--print-legacy');
@@ -161,7 +190,12 @@ const SWAPS = {
   short: ['export const LADDER_ATTEMPTS = 64;', 'export const LADDER_ATTEMPTS = 8;', 'a step gives up after eight draws again'],
   redeal: ['q = generateQuestion(pool, i, rng, [], rules);', "q = generateQuestion(pool, i, rng, ['ballon-dor'], rules);", 'every step draws from five types, so a ladder that was whole is dealt anew'],
   dupe: ['if (q && !seenQuestions.has(q.question)) break;', 'if (q) break;', 'a step keeps a question the ladder already holds'],
+  /* Round 1579 (the 1573 review's F1): the draw counter is declared once for the whole ladder, so the eight draw arm
+     runs out of draws on every ladder while the head's 64 still deal it whole; the (ii) floor and (vi) ceiling see it */
+  shared: ['    let attempts = 0;', '    var attempts = attempts ?? 0;', "a step's draw counter is shared by the whole ladder"],
 };
+/* the controls whose anchor must be in the bank exactly once */
+const ANCHOR_ONCE = ['short', 'redeal', 'dupe', 'shared'];
 /* the three controls of section 9 change the cap or the loop, so the eight draw arm is built from the bank as it was
    before the swap; under every other control the arm is the controlled bank with a cap of 8, so head and arm differ
    by the cap alone */
@@ -170,13 +204,33 @@ const ARM_FROM_PRISTINE = ['short', 'redeal', 'dupe'];
 const GEN_SWAPS = {
   rulec: ['if (seen.size >= 2) {', 'if (false) {', "the generator's rule C (two different rows in one season are two men) is gone"],
 };
+/* Round 1579, section 10: a control on Swap Question edits a copy of src/lib/sportsMillionaire.ts, which section 10
+   bundles as the head's swap; the base arm never reads the copy, so a control moves the head alone */
+const SM_SWAPS = {
+  swaprepeat: ['    if (candidate && !onLadder.has(candidate.question)) return candidate;', '    if (candidate && candidate.question !== current.question) return candidate;', 'the swap compares with the question on screen only, as it did'],
+  swapfive: ['  for (let attempt = 0; attempt < LADDER_ATTEMPTS; attempt++) {', '  for (let attempt = 0; attempt < 5; attempt++) {', 'the swap gives up after five draws again'],
+  swapmove: ['    const candidate = generateQuestion(pool, current.difficulty, rng);', "    const candidate = generateQuestion(pool, current.difficulty, rng, ['ballon-dor']);", 'the swap draws from five types'],
+  swapeasy: ['    const candidate = generateQuestion(pool, current.difficulty, rng);', '    const candidate = generateQuestion(pool, 1, rng);', 'the swap deals the easiest band'],
+};
+const SM_IMPORT = "} from '@/lib/triviaQuestionBank';";
+/* TRIVIA_SWAP_ARM_FILE=<path>: section 10's base arm is that file's own swapQuestion (the one time tie to the base
+   commit's src/lib/sportsMillionaire.ts), always called with (pool, current, ladder) */
+const SWAP_ARM_FILE = process.env.TRIVIA_SWAP_ARM_FILE ? path.resolve(process.env.TRIVIA_SWAP_ARM_FILE) : '';
+let smSource = read('src/lib/sportsMillionaire.ts');
+if (smSource.split(SM_IMPORT).length !== 2) { console.error(`cannot run: src/lib/sportsMillionaire.ts does not hold ${JSON.stringify(SM_IMPORT)} once`); process.exit(1); }
+if (SM_SWAPS[CONTROL]) {
+  const [from, to, what] = SM_SWAPS[CONTROL];
+  if (smSource.split(from).length !== 2) { console.error(`control cannot run: src/lib/sportsMillionaire.ts does not hold ${JSON.stringify(from.trim())} once`); process.exit(1); }
+  smSource = smSource.replace(from, to);
+  console.log(`NEGATIVE CONTROL ON: ${what}`);
+}
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-trivia-'));
 let bankSource = fs.readFileSync(BANK_FILE, 'utf8').replace(/\r\n/g, '\n');
 const pristineSource = bankSource;
 if (SWAPS[CONTROL]) {
   const [from, to, what] = SWAPS[CONTROL];
   if (!bankSource.includes(from)) { console.error(`control cannot run: the bank does not contain ${JSON.stringify(from.trim())}`); process.exit(1); }
-  if (ARM_FROM_PRISTINE.includes(CONTROL) && bankSource.split(from).length !== 2) { console.error(`control cannot run: the bank holds ${JSON.stringify(from)} more than once`); process.exit(1); }
+  if (ANCHOR_ONCE.includes(CONTROL) && bankSource.split(from).length !== 2) { console.error(`control cannot run: the bank holds ${JSON.stringify(from)} more than once`); process.exit(1); }
   bankSource = bankSource.replace(from, to);
   console.log(`NEGATIVE CONTROL ON: ${what}`);
 }
@@ -326,12 +380,14 @@ const addDays = (d, k) => new Date(Date.parse(`${d}T12:00:00Z`) + k * 86400000).
    The cap is LADDER_ATTEMPTS now. Section 9 deals every fleet twice with the same seed or date, through the head
    and through the eight draw arm (the same bank with a cap of 8, or TRIVIA_ARM_FILE as it is), and holds:
      (i)   every head ladder is 15 long;
-     (ii)  where the arm is 15 long, the head is JSON identical to it (a ladder that was whole is dealt as before);
+     (ii)  where the arm is 15 long, the head is JSON identical to it (a ladder that was whole is dealt as before),
+           and the arm is 15 long on at least half of every fleet, so the comparison is never empty;
      (iii) where the arm is short, the head equals it up to the first dropped step (the rescue starts there);
      (iv)  every head ladder holds 15 distinct question texts;
      (v)   the questions are sound: the full one right answer checks on the real and degraded pools under the new
            rules, the structural part (four distinct options, the right one in range, a known template) elsewhere;
-     (vi)  the baseline sees the defect: the arm drops steps on the planted fleets, and at every KNOWN_SHORT pin. */
+     (vi)  the baseline sees the defect: the arm drops steps on the planted fleets (between a floor and a ceiling, so
+           a broken arm is not read as the defect), and at every KNOWN_SHORT pin. */
 const CAP_LINE = 'export const LADDER_ATTEMPTS = 64;';
 async function buildArm() {
   let src;
@@ -373,10 +429,14 @@ const DRIVER = {
 };
 const DRIVER_FROM = '2026-09-25';
 /* what a KNOWN_SHORT pin depends on: the arm's code with its comments and its cap taken out (so the head's arm and
-   origin/main's own bank read the same), the four fixture files, the namesake list and the driver pool */
+   origin/main's own bank read the same), the code of the bank's three other imports (Round 1579, the 1573 review's
+   F2: an edit there that moves a pin names itself as stale), the four fixture files, the namesake list and the driver pool */
 const capFree = s => stripComments(s).replace(/^[ \t]*export const LADDER_ATTEMPTS = \d+;[ \t]*$/m, '').replace(/attempts < LADDER_ATTEMPTS/g, 'attempts < 8').split('\n').map(l => l.trimEnd()).filter(Boolean).join('\n');
+const codeOnly = s => stripComments(s).split('\n').map(l => l.trimEnd()).filter(Boolean).join('\n');
+const PIN_IMPORTS = ['src/lib/clearWinner.ts', 'src/lib/dateUtils.ts', 'src/lib/dealPlayers.ts'];
 function pinSignature(armSrc) {
   const h = crypto.createHash('sha256').update(capFree(armSrc));
+  for (const f of PIN_IMPORTS) h.update(codeOnly(read(f)));
   for (const f of ['scripts/data/alphabetSprintPool.json', 'scripts/data/auctionMarketRows.json', 'scripts/data/stockMarketPools.json', 'scripts/data/ballonDorVerified2026-09.json', 'src/data/marketNamesakes.json']) h.update(read(f));
   return h.update(JSON.stringify(DRIVER)).digest('hex').slice(0, 16);
 }
@@ -455,6 +515,8 @@ mustBeClean('daily', daily);
 for (const k of ['ties', 'namesake', 'tense', 'notAClub']) if (before[k] === 0) fail(`the old rules dealt no ${k} over ${LADDERS} dates, so this checker may be blind to it`);
 
 /* ---------------- 3. unlimited and the swap lifeline's generator ---------------- */
+/* what generateQuestion deals at each difficulty; the filter swapQuestion adds over it (no text already on the
+   ladder) is section 10's */
 section(`3. ${UNLIMITED} unlimited ladders, and ${UNLIMITED} single questions at every difficulty (what Swap Question deals)`);
 const unlimited = newTally();
 for (let k = 0; k < UNLIMITED; k++) checkLadder(T.generateRandomLadder(POOL, 15), unlimited);
@@ -582,8 +644,10 @@ if (plantedTally.built < CALLS) fail(`the new rules built ${plantedTally.built} 
 /* every ladder the eight draw arm is known to drop a step on outside the default fleets, as [pool, fleet, seed or
    date, the step it drops], measured on the pin signature below (a pin on any other signature is stale) */
 const KNOWN_SHORT = {
-  signature: 'a49cdf0d3c20de20',
+  signature: 'd25ca436638e4830',
   measured: '2026-10-29: the driver date on runner r1573-s1 at da635feb5 (inside the default driver fleet too); the real pool seeds by the big fleet, TRIVIA_BIG=unlimited:1-240000 with TRIVIA_ARM_FILE set to 692590145\'s bank, runners r1573-s3a and r1573-s3b at a64581b66',
+  /* Round 1579 re-keyed the signature from a49cdf0d3c20de20 to take in PIN_IMPORTS; no pin was re-measured, because
+     clearWinner.ts, dateUtils.ts and dealPlayers.ts are the same at 692590145, a64581b66 and 5f9303bf8 */
   pins: [
     ['driver', 'daily', '2035-10-26', 15],
     ['real', 'unlimited', 135581, 9], ['real', 'unlimited', 143133, 13], ['real', 'unlimited', 159321, 12],
@@ -593,6 +657,12 @@ const KNOWN_SHORT = {
 };
 /* (vi) the planted fleets must show the defect on the arm: 31 and 37 of 1,000 measured, see the header */
 const PLANTED_FLOOR = 10;
+/* Round 1579 (the 1573 review's F1): an arm that drops a step on every ladder leaves (ii) comparing nothing while
+   green. (vi) has a ceiling on the planted fleets, about three times the 31 and 37 measured (the ten old controls
+   give 20 to 37, runner r1573-fa), and (ii) a floor: the arm deals whole at least half of every fleet's ladders
+   (measured 963 of 1,000 at the lowest, planted daily). TRIVIA_CONTROL=shared drops every ladder and fires both. */
+const PLANTED_CEILING = 100;
+const COMPARED_SHARE = 0.5;
 section('9. every ladder is fifteen long: each fleet through the head and through the eight draw arm, same seed or date');
 const arm = await buildArm();
 if (arm.error) fail(`section 9 cannot run: ${arm.error}`);
@@ -632,6 +702,120 @@ else {
   }
   if (KNOWN_SHORT.pins.length) settle(known, Infinity);
   for (const name of ['planted unlimited', 'planted daily']) if (fleets[name].armShort < PLANTED_FLOOR) fail(`(vi) the eight draw arm dropped a step on ${fleets[name].armShort} ${name} ladders, under the floor of ${PLANTED_FLOOR}, so section 9 may be blind to the defect`);
+  const paired = [...Object.values(fleets), legacy];
+  console.log(`   (ii) compared, where the arm dealt whole: ${paired.map(f => `${f.name} ${f.ladders - f.armShort} of ${f.ladders}`).join(', ')}`);
+  for (const f of paired) if (f.ladders - f.armShort < Math.ceil(f.ladders * COMPARED_SHARE)) fail(`(ii) compared only ${f.ladders - f.armShort} of ${f.ladders} ${f.name} ladders, under the floor of ${COMPARED_SHARE * 100}%, so the eight draw arm is broken and the identity proof is empty`);
+  for (const name of ['planted unlimited', 'planted daily']) if (fleets[name].armShort > PLANTED_CEILING) fail(`(vi) the eight draw arm dropped a step on ${fleets[name].armShort} ${name} ladders, over the ceiling of ${PLANTED_CEILING}, so the arm is broken rather than showing the defect`);
+}
+
+/* ---------------- 10. Swap Question never deals a question already on the ladder ---------------- */
+/* Round 1579. swapQuestion compared its draw with the question on screen only, so about one swap in five dealt a
+   text the ladder already held: a rung already answered, or one still to come. Every rung of every whole ladder of
+   four fleets is swapped twice on the same named stream, through the head's swapQuestion (a copy of
+   src/lib/sportsMillionaire.ts over this run's bank copy, a swap control applied) and through the swap as it was
+   (or TRIVIA_SWAP_ARM_FILE's own), and the section holds:
+     (a) the head's swap is never a text on the ladder, other than the question on screen handed back;
+     (b) where the base arm's swap is fresh (a text not on the ladder), the head's swap is JSON identical to it;
+     (c) the head's swap never hands back the question on screen;
+     (d) the head's swap keeps the difficulty on screen and is sound (four distinct options, the right one in
+         range, a known template); structural only, since what generateQuestion deals is section 3's;
+     (e) the base arm repeats a ladder text at least SWAP_FLOOR times on each fleet, or the section may be blind.
+   A swap's stream is mulberry32((key * 16 + rung + 1) >>> 0), key the seed or dateSeed(date), set before each arm.
+   The seeded Math.random the harness runs on is put back afterwards untouched, so this section never draws from it
+   and its counts do not move with SIM_SEED. */
+/* a third of the base arm's repeats measured on each fleet (749, 829, 1,252 and 1,777, see the header) */
+const SWAP_FLOOR = { 'real unlimited': 249, 'real daily': 276, 'degraded unlimited': 417, 'planted unlimited': 592 };
+section('10. Swap Question never deals a question already on the ladder: every rung of four fleets, the head against the swap as it was');
+{
+  const seeded = Math.random;
+  const swapDir = fs.mkdtempSync(path.join(tmp, 'swap-'));
+  const bundleSwap = async (src, name) => {
+    if (src.split(SM_IMPORT).length !== 2) return { error: `${name} does not hold ${JSON.stringify(SM_IMPORT)} once` };
+    if (/from '\.\.?\//.test(src)) return { error: `${name} imports by relative path, so a copy of it cannot be bundled` };
+    const file = path.join(swapDir, `${name}.ts`);
+    fs.writeFileSync(file, src.replace(SM_IMPORT, `} from '${fwd(bankCopy)}';`));
+    const outFile = path.join(swapDir, `${name}.mjs`);
+    await build({ entryPoints: [file], bundle: true, format: 'esm', platform: 'node', outfile: outFile, logLevel: 'error', absWorkingDir: ROOT,
+      alias: { '@/integrations/supabase/client': STUB, '@': path.join(ROOT, 'src') } });
+    return { S: await import(pathToFileURL(outFile).href) };
+  };
+  /* the swap as it was at 5f9303bf8 (src/lib/sportsMillionaire.ts), over the head bank T */
+  function swapBefore(pool, current) {
+    const rng = () => Math.random();
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const candidate = T.generateQuestion(pool, current.difficulty, rng);
+      if (candidate && candidate.question !== current.question) return candidate;
+    }
+    return current;
+  }
+  const headSwap = await bundleSwap(smSource, 'head');
+  let base = swapBefore;
+  let baseWhat = 'the swap as it was (five draws, compared with the question on screen only)';
+  let ready = !headSwap.error;
+  if (headSwap.error) fail(`section 10 cannot run: ${headSwap.error}`);
+  if (SWAP_ARM_FILE) {
+    const b = await bundleSwap(fs.readFileSync(SWAP_ARM_FILE, 'utf8').replace(/\r\n/g, '\n'), 'base');
+    if (b.error) { fail(`section 10 cannot run: ${b.error}`); ready = false; }
+    else { base = b.S.swapQuestion; baseWhat = `${fwd(SWAP_ARM_FILE)} as it is`; }
+  }
+  console.log(`   the base arm: ${baseWhat}`);
+  const typeOf = text => (TEMPLATES.find(([, re]) => re.test(text)) || ['unknown'])[0];
+  const SWAP_FLEETS = [['real unlimited', POOL, 'unlimited'], ['real daily', POOL, 'daily'], ['degraded unlimited', DEGRADED, 'unlimited'], ['planted unlimited', PLANTED, 'unlimited']];
+  for (const [name, P, kind] of ready ? SWAP_FLEETS : []) {
+    const s = { ladders: 0, skipped: 0, swaps: 0, repeats: 0, asked: 0, toCome: 0, byType: {}, baseBack: 0, headRepeats: 0, headBack: 0, fresh: 0, identical: 0, redrawn: 0, fails: {} };
+    const digest = crypto.createHash('sha256');
+    for (let k = 1; k <= 250; k++) {
+      const d = kind === 'daily' ? addDays(T.ONE_ANSWER_FROM, k - 1) : '';
+      const ladder = kind === 'daily' ? T.generateDailyLadder(P, d, 15) : T.generateQuestionLadder(P, 15, mulberry32(k));
+      const key = kind === 'daily' ? dateSeed(d) : k;
+      s.ladders += 1;
+      if (ladder.length !== 15) { s.skipped += 1; continue; }
+      const texts = ladder.map(q => q.question);
+      const onLadder = new Set(texts);
+      for (let i = 0; i < 15; i++) {
+        const current = ladder[i];
+        const at = `${kind === 'daily' ? d : `seed ${k}`} rung ${i + 1}`;
+        let was;
+        let now;
+        try {
+          Math.random = mulberry32((key * 16 + i + 1) >>> 0);
+          was = base(P, current, ladder);
+          Math.random = mulberry32((key * 16 + i + 1) >>> 0);
+          now = headSwap.S.swapQuestion(P, current, ladder);
+        } finally {
+          Math.random = seeded;
+        }
+        s.swaps += 1;
+        digest.update(JSON.stringify(was));
+        const wasBack = was === current || was.question === current.question;
+        const wasFresh = !wasBack && !onLadder.has(was.question);
+        if (wasBack) s.baseBack += 1;
+        else if (!wasFresh) {
+          s.repeats += 1;
+          if (texts.indexOf(was.question) < i) s.asked += 1; else s.toCome += 1;
+          const t = typeOf(was.question);
+          s.byType[t] = (s.byType[t] || 0) + 1;
+        }
+        const nowBack = now === current || now.question === current.question;
+        if (nowBack) { s.headBack += 1; flunk(s, '(c) the swap handed back the question on screen', at); }
+        else if (onLadder.has(now.question)) { s.headRepeats += 1; flunk(s, '(a) the swap dealt a question already on the ladder', at); }
+        else if (!wasFresh) s.redrawn += 1;
+        if (wasFresh) {
+          s.fresh += 1;
+          if (JSON.stringify(now) === JSON.stringify(was)) s.identical += 1;
+          else flunk(s, '(b) the swap moved where the old one dealt a fresh question', at);
+        }
+        if (now.difficulty !== current.difficulty) flunk(s, '(d) the swap moved the difficulty', at);
+        if (now.options.length !== 4 || new Set(now.options).size !== 4 || !(now.correctIndex >= 0 && now.correctIndex < 4)) flunk(s, '(d) broken options', at);
+        if (typeOf(now.question) === 'unknown') flunk(s, '(d) unknown template', at);
+      }
+    }
+    const pct = s.swaps ? ((s.repeats / s.swaps) * 100).toFixed(1) : '0.0';
+    console.log(`   ${name}: ${s.ladders} ladders (skipped ${s.skipped} short), ${s.swaps} swaps; the base arm: repeats ${s.repeats} (${pct}%; asked before ${s.asked}, still to come ${s.toCome}; ${Object.entries(s.byType).map(([t, n]) => `${t} ${n}`).join(', ') || 'none'}), handed back ${s.baseBack}, digest ${digest.digest('hex').slice(0, 16)}`);
+    console.log(`   ${name}: the head: repeats ${s.headRepeats}, handed back ${s.headBack}; fresh before ${s.fresh}, identical ${s.identical}; redrawn ${s.redrawn} [${((Date.now() - T0) / 1000).toFixed(1)}s]`);
+    for (const [check, b] of Object.entries(s.fails)) fail(`10 ${name}: ${b.n} x ${check} (first: ${b.keys.join(', ')})`);
+    if (s.repeats < SWAP_FLOOR[name]) fail(`(e) 10 ${name}: the base arm repeated a ladder text ${s.repeats} times, under the floor of ${SWAP_FLOOR[name]}, so section 10 may be blind to the defect`);
+  }
 }
 
 console.log(`\nsimTriviaBank: ${failures === 0 ? 'all checks passed' : `${failures} failure(s)`}${CONTROL ? ` (NEGATIVE CONTROL ${CONTROL} ON)` : ''}`);

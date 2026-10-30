@@ -627,9 +627,11 @@ export function generateQuestion(
  * three of the six types have few texts: every worth the most question reads
  * the same, a position question names one of about a dozen labels, and a
  * Ballon d'Or question one of 17 to 27 years in its band. With eight draws
- * 9 of 240,000 Unlimited ladders dealt over the saved 2026 pool lost a step,
- * came back 14 long and showed the page's error screen (3 of 1,000 when the
- * Ballon d'Or and shirt number reads fail, since those two types then build
+ * 9 of 240,000 Unlimited ladders dealt over simTriviaBank's 2026 fixture (the
+ * saved 2026 market rows, with a position filled in by a hash of the name
+ * where the saved pull has none) lost a step and came back 14 long, which on
+ * the page is the error screen (3 of 1,000 on that fixture when the Ballon
+ * d'Or and shirt number reads fail, since those two types then build
  * nothing). The loop stops at the first fresh question, so a step that finds
  * one within eight draws makes exactly the draws it always made: every ladder
  * that was whole, the daily's included, is dealt exactly as before, and only

@@ -6,6 +6,7 @@ import {
   generateDailyLadder,
   generateRandomLadder,
   generateQuestion,
+  LADDER_ATTEMPTS,
 } from '@/lib/triviaQuestionBank';
 import { getTodayET } from '@/lib/dateUtils';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
@@ -233,16 +234,30 @@ export function saveDailyRecord(dateStr: string, record: MillionaireDailyRecord)
  * generated one at the SAME difficulty, drawn from the same pool. Uses
  * generateQuestion() directly (not generateRandomLadder, which always ramps
  * from difficulty 1) so a swap on a hard, late-ladder question stays hard
- * instead of quietly handing back an easy replacement. Retries a handful of
- * times to avoid handing back the exact same question text, then falls back
- * to the original question if generation fails (extremely unlikely given
- * pool size, but keeps the game from breaking).
+ * instead of quietly handing back an easy replacement.
+ *
+ * Round 1579: it never deals a question whose text is already on this
+ * ladder, the rungs answered, the one on screen and the ones still to come.
+ * It used to compare only with the question on screen, so about one swap in
+ * five brought back a question already asked or one still waiting further up
+ * (scripts/simTriviaBank.mjs section 10 measures it every run). It draws on a
+ * ladder step's own bound, LADDER_ATTEMPTS, so refusing more texts does not
+ * make it give up sooner: it hands back the question on screen only on a pool
+ * that has nothing else to give. The draws come from Math.random, never from
+ * the daily's seeded stream, so no date's ladder changes, and a swap that did
+ * not repeat deals exactly what it dealt before.
  */
-export function swapQuestion(pool: TriviaPool, current: TriviaQuestion): TriviaQuestion {
+export function swapQuestion(
+  pool: TriviaPool,
+  current: TriviaQuestion,
+  ladder: readonly TriviaQuestion[],
+): TriviaQuestion {
   const rng = () => Math.random();
-  for (let attempt = 0; attempt < 5; attempt++) {
+  const onLadder = new Set(ladder.map((q) => q.question));
+  onLadder.add(current.question);
+  for (let attempt = 0; attempt < LADDER_ATTEMPTS; attempt++) {
     const candidate = generateQuestion(pool, current.difficulty, rng);
-    if (candidate && candidate.question !== current.question) return candidate;
+    if (candidate && !onLadder.has(candidate.question)) return candidate;
   }
   return current;
 }

@@ -236,7 +236,7 @@ const SportsMillionaire = () => {
 
   const useSwapQuestion = () => {
     if (phase !== 'playing' || lifelines.used['swap-question'] || !question || !pool) return;
-    const swapped = swapQuestion(pool, question);
+    const swapped = swapQuestion(pool, question, ladder);
     setLadder((prev) => {
       const next = [...prev];
       next[currentIndex] = swapped;
@@ -314,8 +314,9 @@ const SportsMillionaire = () => {
                 <h3 className="font-bold text-foreground mb-2">🧰 Lifelines</h3>
                 <p className="text-muted-foreground">
                   50:50 removes two wrong answers. Ask the Crowd shows a poll of how others answered.
-                  Swap Question trades your current question for a new one at the same difficulty. Each
-                  lifeline can be used once per game.
+                  Swap Question trades your current question for a new one at the same difficulty. It never
+                  deals a question that's already on your ladder: swap on question 12 and you get another
+                  hard one you haven't seen and won't see later. Each lifeline can be used once per game.
                 </p>
               </section>
               <section>
@@ -342,7 +343,7 @@ const SportsMillionaire = () => {
               ))}
             </div>
             {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's ladder, {getTodayET()}. Same 15 questions for everyone.</p>
+              <p className="text-xs text-muted-foreground mt-3">Today's ladder, {todayStr}. Same 15 questions for everyone.</p>
             )}
           </>
         }
