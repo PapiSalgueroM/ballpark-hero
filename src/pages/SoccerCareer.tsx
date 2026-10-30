@@ -2113,7 +2113,9 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
       <div className="bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4">
         <h2 className="text-base font-bold text-center">Starting Potential</h2>
 
-        {clubsLoading && (
+        {/* Only a complete form waits on the clubs, so an empty one never
+            flashes a loading box on its first frame. */}
+        {clubsLoading && canGenerate && (
           <div className="rounded-xl border border-border bg-muted/10 p-4 text-center text-sm text-muted-foreground animate-pulse">
             Loading clubs...
           </div>
@@ -2152,7 +2154,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
             className={`flex-1 h-11 text-sm font-bold text-black ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
             variant={rolledOvr !== null ? "outline" : "default"}
           >
-            {clubsLoading ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Roll again" : "🎲 Generate Starting Potential"}
+            {clubsLoading && canGenerate ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Roll again" : "🎲 Generate Starting Potential"}
           </Button>
         </div>
         {!canGenerate && <p className="text-[11px] text-muted-foreground text-center">{missingLine}</p>}
