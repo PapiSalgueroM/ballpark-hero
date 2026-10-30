@@ -1,0 +1,15 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The browser proof runs only after fixed real-engine screen outcomes.
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playClubDetailCurrentRoster.mjs:19:1 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.22.1

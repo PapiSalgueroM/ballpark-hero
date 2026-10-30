@@ -1,0 +1,17 @@
+1) Take a job and build a record worth a country
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4173/club-manager
+Call log:
+  - navigating to "http://localhost:4173/club-manager", waiting until "networkidle"
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playNationJob.mjs:98:12 {
+  log: [
+    '  - navigating to "http://localhost:4173/club-manager", waiting until "networkidle"'
+  ],
+  name: 'Error'
+}
+
+Node.js v24.22.1
