@@ -1,0 +1,9 @@
+c-moralesize exit=1 90s | simCmDecidingLeg: control moralesize FIRED (legs: morale size went red; red in all: legs: morale size)
+c-boardsize exit=1 93s | simCmDecidingLeg: control boardsize FIRED (legs: board size went red; red in all: legs: board size)
+dl exit=0 95s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+c-relief exit=1 92s | simCmDecidingLeg: control relief FIRED (legs: morale size went red; red in all: legs: morale size)
+c-morale exit=1 90s | simCmDecidingLeg: control morale FIRED (legs: morale went red; red in all: legs: morale moves the tie's way on every differing leg | legs: morale size)
+c-board exit=1 94s | simCmDecidingLeg: control board FIRED (legs: board went red; red in all: legs: board moves the tie's way on every differing leg (the report's swing | legs: board size)
+salt-a exit=0 42s | simCmDecidingLeg: PASS, 10 of 10 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+salt-b exit=0 44s | simCmDecidingLeg: PASS, 10 of 10 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+salt-c exit=0 46s | simCmDecidingLeg: PASS, 10 of 10 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.

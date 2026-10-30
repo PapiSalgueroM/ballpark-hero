@@ -1,0 +1,9 @@
+dl: node scripts/simCmDecidingLeg.mjs
+c-boardsize: DECIDING_LEG_CONTROL=boardsize node scripts/simCmDecidingLeg.mjs
+c-moralesize: DECIDING_LEG_CONTROL=moralesize node scripts/simCmDecidingLeg.mjs
+c-relief: DECIDING_LEG_CONTROL=relief node scripts/simCmDecidingLeg.mjs
+c-board: DECIDING_LEG_CONTROL=board node scripts/simCmDecidingLeg.mjs
+c-morale: DECIDING_LEG_CONTROL=morale node scripts/simCmDecidingLeg.mjs
+salt-a: DECIDING_LEG_SALT=a DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs
+salt-b: DECIDING_LEG_SALT=b DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs
+salt-c: DECIDING_LEG_SALT=c DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs

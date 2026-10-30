@@ -1,0 +1,35 @@
+1) careers in lockstep, HEAD against OLD (16 careers)
+   Real Madrid now: parted at week 34; Champions League out
+   Bayern Munich now: parted at week 32; Champions League won
+   Manchester City now: parted at week 44; Champions League out
+   Liverpool now: not in the Champions League, skipped
+   Arsenal now: equal to week 24; Champions League out
+   Inter Milan now: equal to week 24; Champions League out
+   Barcelona now: equal to week 52; Champions League won
+   Barcelona era2005: equal to week 32; Champions League out
+   Chelsea era2005: parted at week 31; Champions League out
+   Real Madrid era2010: equal to week 37; Champions League out
+   Bayern Munich era2010: equal to week 35; Champions League out
+   Barcelona era2015: equal to week 24; Champions League out
+   Juventus era2015: equal to week 24; Champions League out
+   Liverpool era2020: equal to week 54; Champions League out
+   Bayern Munich era2020: equal to week 21; Champions League out
+   Chelsea era2020: equal to week 32; Champions League out
+   15 careers in the Champions League, 4 parted at a deciding leg: Real Madrid now week 34 (QF, night D, tie W, regular); Bayern Munich now week 32 (QF, night L, tie W, pens); Manchester City now week 44 (SF, night D, tie L, regular); Chelsea era2005 week 31 (R16, night D, tie W, regular)
+  ok   careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ) (15 careers)
+   20 deciding second legs met (5 differing on the walk's own dice)
+2) the leg fleet: every deciding leg replayed on 8 more streams through both engines
+   180 deciding legs played: 116 where night and tie agree, 64 where they differ (31 through, 33 out; 13 on penalties, 3 in extra time)
+   through: board swing 5.01 and squad morale 2.97 above the old reading on average
+   out: board swing -8.20 and squad morale -5.91 against the old reading on average
+   sizes: the board's swing held to the tenth on 180 legs; 4311 men's shifts held exactly (1543 on differing legs, 559 of them men who played under the captain on the losing side of night or tie, where his relief decides the number)
+  ok   legs: at least 30 deciding legs where the night and the tie differ (64)
+  ok   legs: the record is the night on both engines (log, form, totals, head to head, bracket, ratings)
+  ok   legs: tie is logged exactly where the tie and the night differ
+  ok   legs: where night and tie agree, board, morale and fans are the old engine's
+  ok   legs: board moves the tie's way on every differing leg (the report's swing, before the clamp)
+  ok   legs: board size, on every deciding leg the swing is exactly what the same tie gives won or lost on the night (patience, press and level applied, to the tenth)
+  ok   legs: morale moves the tie's way on every differing leg
+  ok   legs: morale size, on every deciding leg each man's shift is exactly the tie's (the captain's relief and lift included) (4311 men, 559 under the captain's relief)
+  ok   legs: fans count the tie, to the last digit, on every differing leg
+simCmDecidingLeg: PASS, 10 of 10 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
