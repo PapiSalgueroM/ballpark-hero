@@ -1,0 +1,46 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/ClubManagerSeasonSummary.expiring.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2889[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut [33m 617[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22manswering two keeps it shut, the third opens it, and a renewal is the desk's own [33m 441[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22ma final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal [33m 926[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerWorldRoster.test.ts [2m([22m[2m96 tests[22m[2m)[22m[33m 5750[2mms[22m[39m
+   [33m[2m✓[22m[39m save-scoped world roster ownership[2m > [22mpreserves the complete actual buy result, original buyer and seller exclusion across serialization [33m 458[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mkeeps the fresh world seed and complete constructor draw vector stable across other careers and clocks [33m 805[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mrecords a first purchase from the actual seeded future market [33m 344[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mpreserves an already higher seeded rating without raising the inherited growth ceiling [33m 880[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mbuys, joins another job, saves, reloads and rejoins the buyer without seller resurrection [33m 1128[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mkeeps the permanent buyer and seller consistent after actual summer moves and aging [33m 577[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mreturns a temporary loan to its parent, then records an actually exercised permanent option [33m 340[2mms[22m[39m
+   [33m[2m✓[22m[39m actual world roster continuity through manager callbacks[2m > [22mrecords an actual sale and lets the actual buyer sell the same identity back on new terms [33m 306[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerOwnClubLevel.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 3391[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mhis club screen average is the base read in season one, however many men he released [33m 442[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mhis club strength at the summer rollover is the base read, so the free agent level rule reads the base [33m 580[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22mthe one club read is the world read, club for club, in today and in a past era, cold and cached [33m 943[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22ma job taken mid season (the door joinClubNow opens) reads the club he left off the world roster [33m 315[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager's own club is read from his club, never the world roster[2m > [22min every career the market lists nobody at his own club, ledger or none, and the club he leaves is listed at once [33m 613[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerHandoverDesk.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 7919[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager appointment desk ownership[2m > [22mhandover desk missing: picker cannot claim predecessor funds [33m 4105[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager appointment desk ownership[2m > [22mhandover desk missing: job cannot claim predecessor funds [33m 3398[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerCustomPromotion.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 14863[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mpromotes created champions in every configured pair while preserving all real clubs [33m 3201[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mpromotes an ordinary champion through the same existing slots [33m 2137[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mkeeps the created club outside the automatic places in its current division [33m 1415[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22muses the saved own-name head-to-head before mapping the promotion slot [33m 343[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mrelegates a promoted created club without replacing a second real club [33m 572[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mleaves a missing or incomplete paired table unpromoted [33m 550[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mkeeps historic and unpaired created-club exemptions [33m 379[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mstarts a fresh created club on the real memberships after a promoted custom save [33m 309[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mkeeps qualified non-English created clubs apart from their domestic opponents in Europe [33m 4461[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mrestores the real proxy on summer departure and removes the departed name from Europe [33m 300[2mms[22m[39m
+   [33m[2m✓[22m[39m created clubs use the existing modern promotion slots[2m > [22mrestores the real proxy when leaving a created European club during a season [33m 437[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgencyJoinNow.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1851[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: a mid season job move loses nobody off the free agent list[2m > [22mcarries the men who left me, my released names and the once only pass, and leaves the old journeymen [33m 1254[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: a mid season job move loses nobody off the free agent list[2m > [22ma save with nothing of the kind joins exactly as before [33m 596[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m137 passed[39m[22m[90m (137)[39m
+[2m   Start at [22m 11:59:33
+[2m   Duration [22m 23.97s[2m (transform 5.62s, setup 1.01s, collect 18.07s, tests 36.66s, environment 6.93s, prepare 2.03s)[22m
+

@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmFreeAgencyJoinNow.test.ts src/test/clubManagerHandoverDesk.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerCustomPromotion.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/test/ClubManagerSeasonSummary.expiring.test.tsx --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
