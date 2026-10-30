@@ -1,0 +1,1 @@
+simManagers exit=0 25s | simManagers: all green
