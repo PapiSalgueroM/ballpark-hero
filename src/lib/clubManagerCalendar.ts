@@ -1044,9 +1044,6 @@ export function joinClubNow(career: CareerState): CareerState | null {
     startOptions: career.startOptions,
     h2h: career.h2h,
     retiredNames: career.retiredNames,
-    /* Round 1597 closing check: the free agent list (but the new club's own journeymen), the men I released and the
-       once only list pass come along, as a summer move keeps them. */
-    ...freeAgencyCarry(career, s),
     /* Round 1344, the lead's ruling (brief decision 3): the run in started from the departed career's ledger and
        wrote every deal it played (the new club's opening window and any January between other clubs, a sale through
        a release clause), so the joined career takes the run in's ledger whole. A career with no seed writes none,
@@ -1060,6 +1057,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
        and in a career with no seed adopted at an earlier summer (adoptLivingWorld), which plays the same world. */
     ...(!livingWorldOf(departed) ? {} : seededJoinCarry(career, s, movedElsewhere)),
     retiredLastSummer: career.retiredLastSummer,
+    /* Round 1597 closing check: the free agent list (but the new club's own journeymen), the men I released and the
+       once only list pass come along, as a summer move keeps them. */
+    ...freeAgencyCarry(career, s),
     leagueOverrides: career.leagueOverrides,
     managers,
     inbox: [reaction],
