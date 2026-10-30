@@ -1,0 +1,18 @@
+   FAIL now Aston Villa mid season: played on from the base save, the branch writes different bytes
+      first difference: .squad.18.id: "youth-mv0wy2o0-6-799" vs "youth-mv0wy2o0-264-799"
+      PROBE CHECK: the base engine played twice from one save differs from itself: .squad.18.id: "youth-mv0wy2o0-10-799" vs "youth-mv0wy2o0-14-799"
+   FAIL now Aston Villa season end: played on from the base save, the branch writes different bytes
+      first difference: .squad.18.id: "youth-mv0wy2o0-18-740" vs "youth-mv0wy2o0-276-740"
+   FAIL now Aston Villa summer: played on from the base save, the branch writes different bytes
+      first difference: .squad.15.id: "youth-mv0wy2o0-22-929" vs "youth-mv0wy2o0-280-929"
+   FAIL now Fiorentina mid season: played on from the base save, the branch writes different bytes
+   FAIL now Fiorentina season end: played on from the base save, the branch writes different bytes
+   FAIL now Fiorentina summer: played on from the base save, the branch writes different bytes
+   FAIL now PEC Zwolle mid season: played on from the base save, the branch writes different bytes
+   FAIL now PEC Zwolle season end: played on from the base save, the branch writes different bytes
+   FAIL now PEC Zwolle summer: played on from the base save, the branch writes different bytes
+   FAIL now Colorado Rapids mid season: played on from the base save, the branch writes different bytes
+   FAIL now Colorado Rapids season end: played on from the base save, the branch writes different bytes
+   FAIL now Colorado Rapids summer: played on from the base save, the branch writes different bytes
+oldSaveRun1606: 90 base saves loaded on the branch, 180 comparisons, 30 loaded under a filled sentinel table (30 sentinel chairs read), 88 failures (17 s, base c0c66e087)
+oldSaveRun1606: 88 failure(s)
