@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+psc: PORT=4191 ENGINES=chromium node scripts/playSoccerCareer.mjs
+psc-noagg: PORT=4193 SC_WALK_CONTROL=noagg ENGINES=chromium node scripts/playSoccerCareer.mjs
+psc-noreach: PORT=4192 SC_WALK_CONTROL=noreach ENGINES=chromium node scripts/playSoccerCareer.mjs
+psc-s2: PORT=4194 SEED=20260101 ENGINES=chromium node scripts/playSoccerCareer.mjs
+psc-s3: PORT=4195 SEED=16040 ENGINES=chromium node scripts/playSoccerCareer.mjs
+psc-s4: PORT=4196 SEED=1 ENGINES=chromium node scripts/playSoccerCareer.mjs
