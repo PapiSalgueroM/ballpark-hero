@@ -1,0 +1,12 @@
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simSiteSearch exit=0 1s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simCompletionOnce exit=0 5s | simCompletionOnce: all green
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simGmXp exit=0 0s | simGmXp: all checks passed
+simInventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoInventedQuotes exit=0 23s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simGmDeskHost exit=0 38s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+simGmSeat exit=0 54s | simGmSeat: all checks passed
+simGmCareer-nfl exit=0 121s | simGmCareer: all checks passed (nfl)
