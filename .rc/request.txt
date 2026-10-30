@@ -1,0 +1,3 @@
+#!serial
+lr-old-tieoff: git show 4bd20c993:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && sed -i 's/const tieJudged = judgedByTie(state, tieLine);/const tieJudged = false;/' src/lib/clubManager.ts && grep -c 'const tieJudged = false;' src/lib/clubManager.ts && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
+lr-old-head: git show 4bd20c993:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
