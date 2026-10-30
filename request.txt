@@ -1,0 +1,9 @@
+simCmDecidingLeg-base: git worktree add -q .rcbase 4bd20c993 && DECIDING_LEG_BASE=.rcbase node scripts/simCmDecidingLeg.mjs
+salt-a: DECIDING_LEG_SALT=a DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs
+salt-b: DECIDING_LEG_SALT=b DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs
+salt-c: DECIDING_LEG_SALT=c DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs
+ctl-morale: DECIDING_LEG_CONTROL=morale DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs
+ctl-fans: DECIDING_LEG_CONTROL=fans DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs
+ctl-tieall: DECIDING_LEG_CONTROL=tieall node scripts/simCmDecidingLeg.mjs
+ctl-nogate: DECIDING_LEG_CONTROL=nogate DECIDING_LEG_SECTION=gate node scripts/simCmDecidingLeg.mjs
+vitest-new: node_modules/.bin/vitest run src/test/cmDecidingLegCard.test.tsx --testTimeout=300000 --hookTimeout=120000

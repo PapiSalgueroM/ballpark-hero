@@ -1,0 +1,9 @@
+salt-a exit=0 42s | simCmDecidingLeg: PASS, 8 of 8 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+salt-b exit=0 46s | simCmDecidingLeg: PASS, 8 of 8 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+ctl-morale exit=1 45s | simCmDecidingLeg: control morale FIRED (legs: morale went red; red in all: legs: morale moves the tie's way on every differing leg)
+salt-c exit=0 51s | simCmDecidingLeg: PASS, 8 of 8 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+simCmDecidingLeg-base exit=0 130s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+ctl-fans exit=1 47s | simCmDecidingLeg: control fans FIRED (legs: fans went red; red in all: legs: fans count the tie)
+vitest-new exit=0 5s |    Duration  4.55s (transform 2.38s, setup 102ms, collect 3.20s, tests 145ms, environment 503ms, prepare 204ms)
+ctl-nogate exit=1 34s | simCmDecidingLeg: control nogate FIRED (gate: night went red; red in all: gate: night | gate: base)
+ctl-tieall exit=1 78s | simCmDecidingLeg: control tieall FIRED (careers: identity went red; red in all: careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ) |
