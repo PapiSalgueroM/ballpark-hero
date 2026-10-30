@@ -1,0 +1,11 @@
+#!serial
+m-bornone: node .rc/x/rv-mut.mjs bornone && node scripts/simBingoClubCounts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-family: node .rc/x/rv-mut.mjs family && node scripts/simBingoClubCounts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-stalerange: node .rc/x/rv-mut.mjs stalerange && node scripts/simBingoClubCounts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-noround: node .rc/x/rv-mut.mjs noround && node scripts/simBingoClubCounts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-holefilter: node .rc/x/rv-mut.mjs holefilter && node scripts/simBingoClubCounts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-fromswap: node .rc/x/rv-mut.mjs fromswap && node scripts/simBingoClubCounts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-mancity: node .rc/x/rv-mut.mjs mancity && node scripts/simBingoClubCounts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-namesake: node .rc/x/rv-mut.mjs namesake && node scripts/simBingoClubCounts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-fleet: node .rc/x/rv-mut.mjs fleet && node scripts/simBingoClubCounts.mjs; s=$?; git checkout -- src scripts; exit $s
+clean: git status --short | head -5; git diff --exit-code && echo "tree restored"
