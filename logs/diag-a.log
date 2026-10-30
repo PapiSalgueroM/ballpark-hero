@@ -1,0 +1,136 @@
+scripts/pscDiag.mjs written
+playSoccerCareer: base seed 20260914, era "Current era", up to 1 career(s) of 240 steps
+  step 0 youth age 16 -> Next Year | Pace / Shooting / Passing / Dribbling / Defending / Physical / 🏅0Ballon d'Or / 📈 Ratings
+  step 1 contract_offer age 17 -> Review contract | Review contract / Review contract / Review contract / Review contract / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story
+  step 2 contract_offer age 17 -> Sign contract | Review contract / Review contract / Review contract / Review contract / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story
+  step 3 playing age 17 -> Next Season | 👥 SquadYour teammatesThe plan / 🎯 Season targetChoose a perso / 🏃 Preseason planBalanced, or  / Your next seasonRoles, contrac / Open your phoneBank, market, e / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story
+  step 4 newspaper age 18 -> Continue to Season Summary → | Continue to Season Summary → / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 5 season_summary age 18 -> Continue → | Continue → / 📺 Watch it week by week / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 6 ballon_dor age 18 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 7 ballon_dor age 18 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 8 ballon_dor age 18 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 9 ballon_dor age 18 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 10 ballon_dor age 18 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 11 ballon_dor age 18 -> Continue → | Continue → / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 12 social_media_action age 18 -> 🏋️Post training videoShow off you | 🏋️Post training videoShow off / 🎬Go viral with celebration cl / 🔥Post controversial opinionSh / ❤️Announce charity workHighlig / 📸Post about personal lifeShar / 😈Troll your rival on social m / 🧘Stay off social mediaFocus o / 🏅0Ballon d'Or
+  step 13 social_media_action age 18 -> Continue → | Continue → / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 14 random_events age 18 -> 📋Do the sprint workMorale -1, Pac | 🎭The ShowmanFame comes easy:  / 🧊Ice ColdUnshakeable: steadie / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 15 random_events age 18 -> 🎭The ShowmanFame comes easy: foll | 🤝Accept lower wage, stay loya / 💰Push for more money50% chanc / 🚶Walk away when contract expi / 📐The ProfessorStudent of the  / 🃏The EnigmaPure wildcard: cul / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story
+  step 16 random_events age 18 -> 🤝Accept lower wage, stay loyalWag | 💪Accept the armbandLeadership / 💰Push for more money50% chanc / 🚶Walk away when contract expi / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 17 random_events age 18 -> 💪Accept the armbandLeadership rol | 😔Apologize publiclyPopularity / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 18 random_events age 18 -> 😔Apologize publiclyPopularity -3 | 🐾Adopt himMorale +8, Follower / 😔Not right nowNo change / 😂Laugh it off on social media / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 19 random_events age 18 -> 🐾Adopt himMorale +8, Followers +0 | 🐾Adopt himMorale +8, Follower / 😔Not right nowNo change / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 20 transfer_window age 18 -> Request transfer 📤 | Set transfer priority / Stay and fight for place 💪 / Request transfer 📤 / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 21 transfer_window age 18 -> Review contract | Review contract / Changed my mind, stay at Watfo / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 22 transfer_window age 18 -> Sign contract | Review contract / Changed my mind, stay at Watfo / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 23 playing age 18 -> Next Season | 👥 SquadYour teammatesThe plan / 🎯 Season targetChoose a perso / 🏃 Preseason planBalanced, or  / 📖 Record bookYour best season / Your next seasonRoles, contrac / 🎙️ Press roomAnswer for your  / Open your phoneBank, market, e / 🏅0Ballon d'Or
+  step 24 newspaper age 19 -> Continue to Season Summary → | Continue to Season Summary → / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 25 season_summary age 19 -> Continue → | Continue → / 📺 Watch it week by week / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 26 ballon_dor age 19 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 27 ballon_dor age 19 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 28 ballon_dor age 19 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 29 ballon_dor age 19 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 30 ballon_dor age 19 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 31 ballon_dor age 19 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 32 rivalry_event age 19 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 33 social_media_action age 19 -> 🏋️Post training videoShow off you | 🏋️Post training videoShow off / 🎬Go viral with celebration cl / 🔥Post controversial opinionSh / ❤️Announce charity workHighlig / 📸Post about personal lifeShar / 😈Troll your rival on social m / 🧘Stay off social mediaFocus o / 🏅0Ballon d'Or
+  step 34 social_media_action age 19 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 35 random_events age 19 -> 📋Do the weaker foot workShooting  | 🧢Cousin RickyFamily rates: ti / 🦈Marco De Luca, the sharkSoli / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 36 random_events age 19 -> 🧢Cousin RickyFamily rates: tiny 3 | ⚽Let your feet do the talkingA / 🎙️Fire back in the mediaPopul / 👑Zara Blackwood, super agentE / 🤝Represent yourselfNo cuts at / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings
+  step 37 random_events age 19 -> ⚽Let your feet do the talkingAll s | 🥅Accept: five penalties, €200 / 🐻Accept, but he takes them in / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 38 random_events age 19 -> 🥅Accept: five penalties, €200k to | 🥅Accept: five penalties, €200 / 🐻Accept, but he takes them in / ⛔Decline. You are not a conten / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story
+  step 39 transfer_window age 19 -> Request transfer 📤 | Set transfer priority / Stay and fight for place 💪 / Request transfer 📤 / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings
+  step 40 transfer_window age 19 -> Review contract | Review contract / Changed my mind, stay at Kilma / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story
+  step 41 transfer_window age 19 -> Sign contract | Review contract / Changed my mind, stay at Kilma / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story
+  step 42 playing age 19 -> Next Season | 👥 SquadYour teammatesThe plan / 🎯 Season targetChoose a perso / 🏃 Preseason planBalanced, or  / 📖 Record bookYour best season / Your next seasonRoles, contrac / 🎙️ Press roomAnswer for your  / Review representation / Open your phoneBank, market, e
+  step 43 newspaper age 20 -> Continue to Season Summary → | Continue to Season Summary → / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 44 season_summary age 20 -> Continue → | Continue → / 📺 Watch it week by week / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 45 ballon_dor age 20 -> Close | 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 46 ballon_dor age 20 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 47 ballon_dor age 20 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 48 ballon_dor age 20 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 49 ballon_dor age 20 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 50 ballon_dor age 20 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 51 social_media_action age 20 -> 🏋️Post training videoShow off you | 🏋️Post training videoShow off / 🎬Go viral with celebration cl / 🔥Post controversial opinionSh / ❤️Announce charity workHighlig / 📸Post about personal lifeShar / 😈Troll your rival on social m / 🧘Stay off social mediaFocus o / 🏅0Ballon d'Or
+  step 52 social_media_action age 20 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 53 random_events age 20 -> 📋Put your name downShooting next  | 🎤Answer him, on the record, i / 🤐Say nothing. Let next season / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 54 random_events age 20 -> 🎤Answer him, on the record, in th | 🎉Celebrate wildlyPopularity + / 🤝Stay humbleMorale +10 / 🚪Invite him in to watch a wee / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story
+  step 55 random_events age 20 -> Close | 🎉Celebrate wildlyPopularity + / 🤝Stay humbleMorale +10 / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 56 random_events age 20 -> 🎉Celebrate wildlyPopularity +10,  | 🥅Every single day, all season / 🦵Twice a week and keep your l / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 57 random_events age 20 -> 🥅Every single day, all seasonShoo | 🎙️Speak out publiclyMarket va / 🤫Stay silent, let lawyers han / 📺Hold press conferenceMarket  / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story
+  step 58 random_events age 20 -> 🎙️Speak out publiclyMarket value  | 🎯Score and go find him in the / 🎟️Get him a seat in the famil / ✍️Sign a shirt for his whole p / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story
+  step 59 random_events age 20 -> 🎯Score and go find him in the cro | 🎯Score and go find him in the / 🎟️Get him a seat in the famil / ✍️Sign a shirt for his whole p / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it / 📈 Ratings / 📖 Career Story
+  step 60 transfer_window age 20 -> Review contract | Sign Extension with Toulouse � / Review contract / Review contract / Review contract / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it
+  step 61 transfer_window age 20 -> Sign contract | Sign Extension with Toulouse � / Review contract / Review contract / Review contract / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments1 played out / 🏆Euros 2028Spain won it
+  step 62 playing age 20 -> Next Season | 👥 SquadYour teammatesThe plan / 🎯 Season targetChoose a perso / 🏃 Preseason planBalanced, or  / 📖 Record bookYour best season / Your next seasonRoles, contrac / 🎙️ Press roomAnswer for your  / Review representation / Open your phoneBank, market, e
+  step 63 newspaper age 21 -> Continue to Season Summary → | Continue to Season Summary → / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 64 season_summary age 21 -> Continue → | Continue → / 📺 Watch it week by week / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 65 ballon_dor age 21 -> Close | 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 66 ballon_dor age 21 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 67 ballon_dor age 21 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 68 ballon_dor age 21 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 69 ballon_dor age 21 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 70 ballon_dor age 21 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 71 rivalry_event age 21 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 72 social_media_action age 21 -> 🏋️Post training videoShow off you | 🏋️Post training videoShow off / 🎬Go viral with celebration cl / 🔥Post controversial opinionSh / ❤️Announce charity workHighlig / 📸Post about personal lifeShar / 😈Troll your rival on social m / 🧘Stay off social mediaFocus o / 🏅0Ballon d'Or
+  step 73 social_media_action age 21 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 74 random_events age 21 -> 📋Do the one on one workDribbling  | 🪂Put it in the air and bully  / 🦶Master the surface: first to / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 75 random_events age 21 -> 🪂Put it in the air and bully them | 💸Full access, €3MNet worth +€ / 🎬Pitch and press only, €800kN / 🚫No cameras. None. Anywhere.M / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story
+  step 76 random_events age 21 -> 💸Full access, €3MNet worth +€3M,  | 💸Full access, €3MNet worth +€ / 🎬Pitch and press only, €800kN / 🚫No cameras. None. Anywhere.M / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story
+  step 77 transfer_window age 21 -> Review contract | Set transfer priority / Review contract / Reject & Stay / Reject & Request Transfer 📤 / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it
+  step 78 transfer_window age 21 -> Sign contract | Set transfer priority / Review contract / Reject & Stay / Reject & Request Transfer 📤 / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it
+  step 79 playing age 21 -> Next Season | 👥 SquadYour teammatesThe plan / 🎯 Season targetChoose a perso / 🏃 Preseason planBalanced, or  / 📖 Record bookYour best season / Your next seasonRoles, contrac / 🎙️ Press roomAnswer for your  / Review representation / Open your phoneBank, market, e
+  step 80 newspaper age 22 -> Continue to Season Summary → | Continue to Season Summary → / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 81 season_summary age 22 -> Continue → | Continue → / 📺 Watch it week by week / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 82 ballon_dor age 22 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 83 ballon_dor age 22 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 84 ballon_dor age 22 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 85 ballon_dor age 22 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 86 ballon_dor age 22 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 87 ballon_dor age 22 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 88 rivalry_event age 22 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 89 social_media_action age 22 -> 🏋️Post training videoShow off you | 🏋️Post training videoShow off / 🎬Go viral with celebration cl / 🔥Post controversial opinionSh / ❤️Announce charity workHighlig / 📸Post about personal lifeShar / 😈Troll your rival on social m / 🧘Stay off social mediaFocus o / 🏅0Ballon d'Or
+  step 90 social_media_action age 22 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 91 random_events age 22 -> 📋Extra finishingMorale -1, Shooti | 📋Check the factsIntegrity +2, / 🏠Ask to keep family scenes ou / ✋Carry on as normalNothing cha / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story
+  step 92 random_events age 22 -> 📋Check the factsIntegrity +2, Mor | 🧍Walk to the away end at full / ⚡Play out of your skin and say / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 93 random_events age 22 -> 🧍Walk to the away end at full tim | 💍Deliver the ring with a flou / 😅Pass the ring to the captain / 🥫Hand 8 weeks of wages to the / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story
+  step 94 random_events age 22 -> 💍Deliver the ring with a flourish | 🔊Let it run completely unedit / ✂️Pay €200k to get the last ho / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 95 random_events age 22 -> 🔊Let it run completely uneditedFo | 🐾Adopt himMorale +8, Follower / 😔Not right nowNo change / 📞Ring the teammate and the ch / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story
+  step 96 random_events age 22 -> 🐾Adopt himMorale +8, Followers +0 | 🐾Adopt himMorale +8, Follower / 😔Not right nowNo change / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 97 transfer_window age 22 -> Review contract | Sign Extension with Fiorentina / Review contract / Review contract / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings
+  step 98 transfer_window age 22 -> Sign contract | Sign Extension with Fiorentina / Review contract / Review contract / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments2 played out / 🏆World Cup 2030Spain won it / 📈 Ratings
+  step 99 playing age 22 -> Next Season | 👥 SquadYour teammatesThe plan / 🎯 Season targetChoose a perso / 🏃 Preseason planBalanced, or  / 📖 Record bookYour best season / Your next seasonRoles, contrac / 🎙️ Press roomAnswer for your  / Review representation / Open your phoneBank, market, e
+  step 100 newspaper age 23 -> Continue to Season Summary → | Continue to Season Summary → / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 101 season_summary age 23 -> Continue → | Continue → / 📺 Watch it week by week / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 102 ballon_dor age 23 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 103 ballon_dor age 23 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 104 ballon_dor age 23 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 105 ballon_dor age 23 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 106 ballon_dor age 23 -> 🏅0Ballon d'Or | 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back / ?
+  step 107 ballon_dor age 23 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 108 social_media_action age 23 -> 🏋️Post training videoShow off you | 🏋️Post training videoShow off / 🎬Go viral with celebration cl / 🔥Post controversial opinionSh / ❤️Announce charity workHighlig / 📸Post about personal lifeShar / 😈Troll your rival on social m / 🧘Stay off social mediaFocus o / 🏅0Ballon d'Or
+  step 109 social_media_action age 23 -> Continue → | Continue → / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays / ‹ Back
+  step 110 random_events age 23 -> 🤝Take the full breakMorale +2 | ✈️Pay to fly the whole squad:  / 🎵Take the bus and take the au / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 111 random_events age 23 -> ✈️Pay to fly the whole squad: €70k | 🏥Focus on recoveryPace -2, Mo / ⚡Rush back earlyPace -1, with  / 😴Neck pillow, earplugs, sleep / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story
+  step 112 random_events age 23 -> 🏥Focus on recoveryPace -2, Morale | ✍️Sign it: €4M€4M dirty, Heat  / 🌳Read the paperwork and refus / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 113 random_events age 23 -> ✍️Sign it: €4M€4M dirty, Heat +14, | ✂️Take the money, cut the ribb / 🥫Do it and give the fee to th / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story / 📺 Season replays
+  step 114 random_events age 23 -> ✂️Take the money, cut the ribbonNe | ✂️Take the money, cut the ribb / 🥫Do it and give the fee to th / ⚽Decline and spend the afterno / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it / 📈 Ratings / 📖 Career Story
+  step 115 transfer_window age 23 -> Review contract | Sign Extension with Toronto FC / Review contract / Review contract / Review contract / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it
+  step 116 transfer_window age 23 -> Sign contract | Sign Extension with Toronto FC / Review contract / Review contract / Review contract / Your next seasonRoles, contrac / 🏅0Ballon d'Or / 🗂️Tournaments3 played out / 🏆Euros 2032Switzerland won it
+  step 117 playing age 23 -> Next Season | 👥 SquadYour teammatesThe plan / 🎯 Season targetChoose a perso / 🏃 Preseason planBalanced, or  / 📖 Record bookYour best season / Your next seasonRoles, contrac / 🎙️ Press roomAnswer for your  / Review representation / Open your phoneBank, market, e
+
+The walk
+  PASS  1. the walk reached a qualified Champions League campaign: seed 20260914 after 117 steps, 10 distinct phases driven (attempts: 20260914:reached in 117)
+
+The card a player actually saw
+      ⭐ CHAMPIONS LEAGUE R16 LEAGUE PHASE 8TH OF 36 4-4-0, 16 pts · 8th had 16 pts, 24th had 9 All 8 games Level on points splits on goal difference, then goals scored. KNOCKOUTS R16 L1 Athletic Bilbao 1 - 1 Real Madrid R16 L2 Real Madrid 2 - 1 Athletic Bilbao L 2-3
+  PASS  2. every two legged tie shows its aggregate on screen: 1 of 1 ties are two legged and every one prints its aggregate (R16 2-3 by extraTime)
+  PASS  3. both legs of a two legged tie are labelled: L1 and L2 present for all 1
+  PASS  4. no first leg claims a result: a first leg wins nothing, and none claims to
+
+The page survived
+  PASS  5. the error boundary never appeared and the root is not empty: root holds 20816 characters
+  FAIL  6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+6 checks, 1 failed
+  - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
