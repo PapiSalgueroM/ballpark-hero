@@ -206,3 +206,29 @@ What changed, and what did not:
   (about three points a season harder for a mid club), small 0.62 to 0.59, sacks at mid and small clubs 199 to 215 of 480. So the mid
   club drop is real and smaller than the first 20 seeds said, the small club drop mostly was not, and the sack jump
   did not repeat. The floors are green; whether three points a season is acceptable is the lead's to rule.
+
+## The lead's rulings on the three stops and the sack rate (fix3, 2026-10-30)
+
+### The steady driver's sack rate (R4): noise, recorded and stopped
+
+The builder's 20 seeds (simCmDifficulty section 0, runner r1600-s12) read the steady driver's sack rate up at every
+tier: mid 0.25 to 0.38, small 0.50 to 0.58, big 0.07 to 0.12. Measured again on 60 seeds (0 to 59) x the same nine
+clubs, one season, normal, steady, base 14a9af704 and head 4950135f6 (the engine of 752c5fe50) on the same runner
+kit (runner r1600-f3a, lines sack-head-0 to 2 and sack-base-0 to 2, all exit 0; base on a runner worktree with its
+own harness), rows pooled and paired by club and seed (`.tmp-fx/run-1793387141/pool.mjs`, not committed):
+
+    tier        sacked head          sacked base          shift (se)              points a game, paired
+    big         15/180 0.083 (0.021)  21/180 0.117 (0.024)  -0.033 (0.032), -1.05 se  1.964 vs 1.956, +0.008 (0.028)
+    mid         62/180 0.344 (0.036)  52/180 0.289 (0.034)  +0.056 (0.049), +1.13 se  1.173 vs 1.271, -0.099 (0.036)
+    small      102/180 0.567 (0.037) 100/180 0.556 (0.037)  +0.011 (0.052), +0.21 se  0.590 vs 0.614, -0.024 (0.025)
+    mid+small  164/360 0.456 (0.026) 152/360 0.422 (0.026)  +0.033 (0.037), +0.90 se  0.881 vs 0.942, -0.061 (0.022)
+
+(paired by club and seed the mid plus small shift is 0.98 standard errors). The mid plus small shift is under 2
+standard errors, so by the ruling it is noise and nothing was changed for it. The cause the ruling feared (the board
+expecting more of a squad the read rates higher) is not what the rows show: each club's expected finish is the same
+on both arms (1, 11 and 20 by tier), and the top eleven by shown rating at the start is lower on the head at eight
+of the nine clubs (by 0.3 to 1.3; equal at Arsenal), so a steady manager is not asked for more. What does move is
+the points: mid clubs take 0.099 fewer points a game (2.7 standard errors paired; Brentford 1.486 to 1.343, Espanyol
+1.172 to 1.025, Torino 1.155 to 1.150), the move the first fixer measured at 0.063 (1.9 se) on seeds 20 to 79. It is
+a result moving with a weaker shown eleven, not a scoring mismatch, and it stays the lead's to rule (about three
+points a season for a mid club). The board's lowest confidence at mid clubs is 32.0 against 37.2.
