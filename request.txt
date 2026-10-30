@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerCareerLines.test.ts src/lib/clubManagerCards.test.ts src/test/cmPlayerCard.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerWorldEditorPage.test.tsx --testTimeout=300000 --hookTimeout=300000
+cards-full: git worktree add -f /tmp/cbase 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/cbase/node_modules && CARDS_SEEDS=5 CARDS_BASE=/tmp/cbase node scripts/simCmPlayerCard.mjs
+size-d: node scripts/simClubManagerSaveSize.mjs
+size-1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+size-2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+size-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+size-4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+size-5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+size-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simClubDetailFixtures: node scripts/simClubDetailFixtures.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simClubDetailCurrentRoster: CI=1 SIM_NETWORK=offline CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$RC_OUT/roster" node scripts/simClubDetailCurrentRoster.mjs
+simClubManagerDecisionDeadline: CI=1 SIM_NETWORK=offline CM_DEADLINE_CORE_REF=HEAD MANAGER_DEADLINE_OUT="$RC_OUT/deadline" node scripts/simClubManagerDecisionDeadline.mjs
