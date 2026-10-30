@@ -1,0 +1,6 @@
+simManagers-namedsack exit=0 31s | control run: namedsack FIRED, 7b went red 184 time(s), 184 naming the sentinel
+simManagers exit=0 37s | simManagers: all green
+quotes-dugout exit=1 21s | control run: dugout FIRED, pass 1 caught 1 planted quote(s) from a real manager
+simManagers-recycle exit=0 31s | control run: recycle FIRED, 7b went red 205 time(s), 205 naming the sentinel
+simNoInventedQuotes exit=0 24s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simManagers-fleet exit=0 85s | simManagers: all green
