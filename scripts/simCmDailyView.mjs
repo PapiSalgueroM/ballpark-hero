@@ -23,6 +23,7 @@
  *   off       onStaticWorld never takes the view (section 1)
  *   untagged  the caches stop telling the two worlds apart (sections 1 or 3)
  *   halfswap  the eras module keeps the live world inside the view (section 1)
+ *   stuck     the view never retires (section 2)
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -44,6 +45,7 @@ const CONTROLS = {
   off: [HOT, VIEW_LINE, ''],
   untagged: [WORLD, "  return ACTIVE_WORLD ? 'curve1|' : '';\n", "  return '';\n"],
   halfswap: [ERAS, '  return cmWorld();\n}', '  return CM_ROSTERS;\n}'],
+  stuck: [HOT, '  if (daily !== undefined && daily < CM_DAILY_NEW_NUMBERS_FROM) return', '  if (daily !== undefined) return'],
 };
 function rewrite(src, [file, from, to], label) {
   if (src[file].split(from).length !== 2) { console.log(`simCmDailyView: ${label} ABORTED, its anchor is not in ${file} exactly once`); process.exit(2); }
@@ -146,9 +148,14 @@ check(moved > 0, 'the flip moves no daily, so this section proves nothing about 
 
 /* ---------- section 2: from the cutover the view is gone ---------- */
 section = 2;
+/* Fresh instances of both arms: the engine keeps module counters (makeYouth's sequence, which goes into a youth
+   pad's id), and section 1 walked F on the view and F0 on the live world, so their counters no longer agree. */
+const F2 = await bundle('F2', srcF, FLIPPED);
+const F02 = await bundle('F02', srcF0, FLIPPED);
+for (const arm of [F2, F02]) await arm.cm.ensureAllEraRosters();
 const LATE = datesFrom(CUTOVER, day(CUTOVER, 14));
 let lateSame = 0;
-for (const date of LATE) if (dealt(F, date) === dealt(F0, date)) lateSame += 1;
+for (const date of LATE) if (dealt(F2, date) === dealt(F02, date)) lateSame += 1;
 console.log(`2. from the cutover: arm F deals what F0 deals on ${lateSame} of ${LATE.length} dates`);
 check(lateSame === LATE.length, `${LATE.length - lateSame} dates from the cutover still deal on the view`);
 
