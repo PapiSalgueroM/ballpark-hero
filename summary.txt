@@ -1,0 +1,15 @@
+simClubManagerMeters exit=0 22s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simDeadlineDay exit=0 4s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simJobMarket exit=0 1s | ALL JOB MARKET CHECKS PASSED
+simManagerEpilogue exit=0 1s | simManagerEpilogue: green. The dugout season is a table, and the table cannot lie.
+simManagerHotSeat exit=0 46s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simManagerOffers exit=0 0s | ALL MANAGER OFFER CHECKS PASSED
+simCmApplications exit=0 75s | simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
+simClubManagerScore exit=0 87s | ALL SEASON SCORE CHECKS PASSED
+simManagerSpec exit=0 86s | simManagerSpec: all green
+simPromotion exit=0 3s | simPromotion: all green
+simOpposition exit=0 1136s | ALL OPPOSITION CHECKS PASSED
+simUclSeasonOne exit=0 14s | simUclSeasonOne: all green
+simWilderness exit=0 1s | simWilderness: green. The sack is the start of something now, and the phone always rings in the end.
+simRoles exit=0 1210s | ALL ROLE CHECKS PASSED
+simPress exit=0 1678s | ALL PRESS AND TEAM TALK CHECKS PASSED

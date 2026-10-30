@@ -1,0 +1,15 @@
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simJobMarket: node scripts/simJobMarket.mjs
+simManagerEpilogue: node scripts/simManagerEpilogue.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simManagerOffers: node scripts/simManagerOffers.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+simOpposition: node scripts/simOpposition.mjs
+simPress: node scripts/simPress.mjs
+simPromotion: node scripts/simPromotion.mjs
+simRoles: node scripts/simRoles.mjs
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs
+simWilderness: node scripts/simWilderness.mjs
