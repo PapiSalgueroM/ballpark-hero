@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+shard1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+shard3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
+sweepWeight: node scripts/sweepWeight.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
