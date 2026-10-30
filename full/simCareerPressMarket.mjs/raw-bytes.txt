@@ -1,0 +1,3 @@
+86556 /home/runner/work/_temp/rc-out/full/simCareerPressMarket.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simCareerPressMarket.mjs/stderr.log
+86556 total

@@ -1,0 +1,3 @@
+1273 /home/runner/work/_temp/rc-out/full/simSeasonCentreTable.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSeasonCentreTable.mjs/stderr.log
+1273 total

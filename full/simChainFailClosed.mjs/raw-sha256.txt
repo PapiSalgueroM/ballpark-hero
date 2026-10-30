@@ -1,0 +1,2 @@
+bd3e6e99bdea26d2fd55630319b66b28d6efa0cfa2ac80cba6fa0318d06a85a6  /home/runner/work/_temp/rc-out/full/simChainFailClosed.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simChainFailClosed.mjs/stderr.log

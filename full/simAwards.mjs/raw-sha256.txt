@@ -1,0 +1,2 @@
+aeee8ba8316e16432193f8708bb0519d4360cbffcf818035458e2b3d33806428  /home/runner/work/_temp/rc-out/full/simAwards.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAwards.mjs/stderr.log

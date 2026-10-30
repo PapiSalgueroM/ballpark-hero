@@ -1,0 +1,3 @@
+706 /home/runner/work/_temp/rc-out/full/simDealDepth.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simDealDepth.mjs/stderr.log
+706 total

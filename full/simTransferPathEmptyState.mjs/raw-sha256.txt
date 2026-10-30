@@ -1,0 +1,2 @@
+2878e1e2b89a58965e8bd99b303a5046a31d87dee5b19e61060e3a906ca80ceb  /home/runner/work/_temp/rc-out/full/simTransferPathEmptyState.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTransferPathEmptyState.mjs/stderr.log

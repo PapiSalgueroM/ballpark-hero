@@ -1,0 +1,3 @@
+548 /home/runner/work/_temp/rc-out/full/simManagerEraWorldOracles.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simManagerEraWorldOracles.mjs/stderr.log
+548 total

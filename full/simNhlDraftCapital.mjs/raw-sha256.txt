@@ -1,0 +1,2 @@
+6ab252908bbb462d26f71204951aff96dbdd70bd6ae582ab67224cbb176031f7  /home/runner/work/_temp/rc-out/full/simNhlDraftCapital.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNhlDraftCapital.mjs/stderr.log

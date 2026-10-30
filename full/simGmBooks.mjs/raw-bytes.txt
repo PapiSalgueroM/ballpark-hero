@@ -1,0 +1,3 @@
+3679 /home/runner/work/_temp/rc-out/full/simGmBooks.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGmBooks.mjs/stderr.log
+3679 total

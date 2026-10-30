@@ -1,0 +1,2 @@
+97f9ed08b3dd9f686bab871dba3d8a6c6d2058ff30d46aee8108383288199f75  /home/runner/work/_temp/rc-out/full/simMlbDraftCapital.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simMlbDraftCapital.mjs/stderr.log

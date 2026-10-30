@@ -1,0 +1,25 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 1070,
+      "sha256": "495e31da800d999e8c444d0bab192ef3934bef12e8f7557085b0cc7f4f1791b5",
+      "tests": [
+        ":src/lib/accountPrivacy.test.ts",
+        ":src/test/cageFightStats.test.tsx",
+        ":src/test/clubManagerSave.test.tsx",
+        ":src/test/f1ConstructorGuideScore.test.tsx",
+        ":src/lib/fetchFootlePlayerPool.test.ts",
+        ":src/test/gridCellLayout.test.tsx",
+        ":src/test/higherLowerReveal.test.tsx",
+        ":src/components/mlb-front-office/MlbDraftCapital.test.tsx",
+        ":src/test/nbaStatLinePicker.test.tsx",
+        ":src/test/soccerSeasonAvailability.test.ts",
+        ":src/test/playerAutocompleteEmptyText.test.tsx",
+        ":src/lib/usCareerRecovery.test.ts"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

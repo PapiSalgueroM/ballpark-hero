@@ -1,0 +1,3 @@
+3097 /home/runner/work/_temp/rc-out/full/simReportRelay.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simReportRelay.mjs/stderr.log
+3097 total

@@ -1,0 +1,3 @@
+5282 /home/runner/work/_temp/rc-out/full/simConquestScenes.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simConquestScenes.mjs/stderr.log
+5282 total

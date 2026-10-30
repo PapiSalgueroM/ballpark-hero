@@ -1,0 +1,2 @@
+2a2666e45bdf57ff38c71efe20a5b70869ac6c64992b81e8916dce6b777bc6c6  /home/runner/work/_temp/rc-out/full/simAccountPrivacy.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAccountPrivacy.mjs/stderr.log

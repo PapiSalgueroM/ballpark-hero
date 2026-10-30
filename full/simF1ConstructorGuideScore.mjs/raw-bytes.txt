@@ -1,0 +1,3 @@
+1905 /home/runner/work/_temp/rc-out/full/simF1ConstructorGuideScore.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simF1ConstructorGuideScore.mjs/stderr.log
+1905 total

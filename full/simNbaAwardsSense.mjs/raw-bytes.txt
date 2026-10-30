@@ -1,0 +1,3 @@
+42070 /home/runner/work/_temp/rc-out/full/simNbaAwardsSense.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simNbaAwardsSense.mjs/stderr.log
+42070 total

@@ -1,0 +1,3 @@
+3558 /home/runner/work/_temp/rc-out/full/simSoccerSeasonAvailability.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerSeasonAvailability.mjs/stderr.log
+3558 total

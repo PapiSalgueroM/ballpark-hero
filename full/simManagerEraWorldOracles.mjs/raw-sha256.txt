@@ -1,0 +1,2 @@
+2196b5169c932aea194fe4394d412f48a2e9f7f4c4a77d05430eaef4b6f20bb2  /home/runner/work/_temp/rc-out/full/simManagerEraWorldOracles.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simManagerEraWorldOracles.mjs/stderr.log

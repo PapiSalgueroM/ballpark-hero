@@ -1,0 +1,3 @@
+846 /home/runner/work/_temp/rc-out/full/simSoccerCurrency.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerCurrency.mjs/stderr.log
+846 total

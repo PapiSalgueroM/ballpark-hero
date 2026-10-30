@@ -1,0 +1,2 @@
+4548aa55f2cb55cba0d07a37ca74b7e1af153ba1616197c4875133907424f5b7  /home/runner/work/_temp/rc-out/full/simTycoonPitchRunner.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTycoonPitchRunner.mjs/stderr.log

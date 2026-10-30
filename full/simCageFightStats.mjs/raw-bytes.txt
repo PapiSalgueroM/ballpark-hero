@@ -1,0 +1,3 @@
+2239 /home/runner/work/_temp/rc-out/full/simCageFightStats.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCageFightStats.mjs/stderr.log
+2239 total

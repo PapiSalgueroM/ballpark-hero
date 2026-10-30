@@ -1,0 +1,3 @@
+506 /home/runner/work/_temp/rc-out/full/simTycoonPitchRunner.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simTycoonPitchRunner.mjs/stderr.log
+506 total

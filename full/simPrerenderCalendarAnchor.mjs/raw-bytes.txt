@@ -1,0 +1,3 @@
+423 /home/runner/work/_temp/rc-out/full/simPrerenderCalendarAnchor.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simPrerenderCalendarAnchor.mjs/stderr.log
+423 total

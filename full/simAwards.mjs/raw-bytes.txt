@@ -1,0 +1,3 @@
+5297 /home/runner/work/_temp/rc-out/full/simAwards.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simAwards.mjs/stderr.log
+5297 total

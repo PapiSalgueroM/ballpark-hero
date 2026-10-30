@@ -1,0 +1,2 @@
+8e1a92de0949ff39b00ba7e49b6cb624372cd0ee05c78a1b0aeccadcc21975c7  /home/runner/work/_temp/rc-out/full/simPrerenderCalendarAnchor.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPrerenderCalendarAnchor.mjs/stderr.log

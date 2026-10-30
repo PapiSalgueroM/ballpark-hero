@@ -1,0 +1,3 @@
+595 /home/runner/work/_temp/rc-out/full/simAccountPrivacy.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simAccountPrivacy.mjs/stderr.log
+595 total

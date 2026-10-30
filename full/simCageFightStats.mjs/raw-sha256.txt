@@ -1,0 +1,2 @@
+275e5eab271113614219e9a4c41246fb54da8c5cc1e16d1d48345a970316b05a  /home/runner/work/_temp/rc-out/full/simCageFightStats.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCageFightStats.mjs/stderr.log
