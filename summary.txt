@@ -1,0 +1,11 @@
+sim7 exit=2 31s | simCmEuroPlay: cannot run: section 7: no stream of CRAFT_STREAMS keeps Everton in work and out of the European leagues
+c-uelrank exit=2 26s | simCmEuroPlay: cannot run: section 7: no stream of CRAFT_STREAMS keeps Everton in work and out of the European leagues
+c-noplace exit=2 28s | simCmEuroPlay: cannot run: section 7: no stream of CRAFT_STREAMS keeps Everton in work and out of the European leagues
+c-nowinnerucl exit=2 27s | simCmEuroPlay: cannot run: section 7: no stream of CRAFT_STREAMS keeps Everton in work and out of the European leagues
+tsc exit=0 118s | 
+sim1 exit=0 131s | simCmEuroPlay: green, 873 checks, 0 failures
+c-notneutral exit=2 25s | simCmEuroPlay: cannot run: section 7: no stream of CRAFT_STREAMS keeps Everton in work and out of the European leagues
+c-noet exit=2 26s | simCmEuroPlay: cannot run: section 7: no stream of CRAFT_STREAMS keeps Everton in work and out of the European leagues
+c-inplace exit=2 25s | simCmEuroPlay: cannot run: section 7: no stream of CRAFT_STREAMS keeps Everton in work and out of the European leagues
+c-nouelucl-s5to8 exit=2 22s | simCmEuroPlay: cannot run: section 7: no stream of CRAFT_STREAMS keeps Everton in work and out of the European leagues
+c-friday exit=1 91s | simCmEuroPlay: control friday FIRED (204 failures, all its own)
