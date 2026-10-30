@@ -1,0 +1,64 @@
+1
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/ClubManagerSeasonSummary.expiring.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 474[2mms[22m[39m
+[31m   [31m×[31m Round 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut[39m[32m 164[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m Round 1597: no deal ends unseen[2m > [22manswering two keeps it shut, the third opens it, and a renewal is the desk's own[39m[32m 101[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22mLet the rest go answers every open deal at once and renews nobody[32m 53[2mms[22m[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22ma man the budget cannot renew can still be let go[32m 76[2mms[22m[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22ma manager leaving for a job he booked is not asked[32m 46[2mms[22m[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22mthe ? opens the rules with a worked example off the engine's numbers, and no dash anywhere[32m 33[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/ClubManagerSeasonSummary.expiring.test.tsx[2m > [22mRound 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/ClubManagerSeasonSummary.expiring.test.tsx:[2m49:27[22m[39m
+    [90m 47| [39m    expect(rows(view.container).every(r => r.getAttribute('data-cm-dea…
+    [90m 48| [39m    [35mconst[39m cont [33m=[39m [34mcontinueButton[39m(view[33m.[39mcontainer)[33m;[39m
+    [90m 49| [39m    [34mexpect[39m(cont[33m.[39mdisabled)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m 50| [39m    [34mexpect[39m(cont[33m.[39mtextContent)[33m.[39m[34mtoBe[39m([32m'Answer 3 deals first'[39m)[33m;[39m
+    [90m 51| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/ClubManagerSeasonSummary.expiring.test.tsx[2m > [22mRound 1597: no deal ends unseen[2m > [22manswering two keeps it shut, the third opens it, and a renewal is the desk's own
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/ClubManagerSeasonSummary.expiring.test.tsx:[2m62:53[22m[39m
+    [90m 60| [39m    expect(rowOf(view.container, c0, three[0]).getAttribute('data-cm-d…
+    [90m 61| [39m    expect(rowOf(view.container, c0, three[1]).getAttribute('data-cm-d…
+    [90m 62| [39m    [34mexpect[39m([34mcontinueButton[39m(view[33m.[39mcontainer)[33m.[39mdisabled)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                                    [31m^[39m
+    [90m 63| [39m    expect(continueButton(view.container).textContent).toBe('Answer 1 …
+    [90m 64| [39m    fireEvent.click(rowOf(view.container, c0, three[2]).querySelector(…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 06:18:36
+[2m   Duration [22m 3.33s[2m (transform 1.49s, setup 71ms, collect 2.03s, tests 474ms, environment 317ms, prepare 121ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/ClubManagerSeasonSummary.expiring.test.tsx,title=src/test/ClubManagerSeasonSummary.expiring.test.tsx > Round 1597%3A no deal ends unseen > lists the three final year men and keeps Continue shut,line=49,column=27::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/ClubManagerSeasonSummary.expiring.test.tsx:49:27%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/ClubManagerSeasonSummary.expiring.test.tsx,title=src/test/ClubManagerSeasonSummary.expiring.test.tsx > Round 1597%3A no deal ends unseen > answering two keeps it shut%2C the third opens it%2C and a renewal is the desk's own,line=62,column=53::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/test/ClubManagerSeasonSummary.expiring.test.tsx:62:53%0A%0A

@@ -1,0 +1,1 @@
+nogate exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/ClubManagerSeasonSummary.expiring.test.tsx,title=src/test/ClubManagerSeasonSummary.expiring.test.tsx >
