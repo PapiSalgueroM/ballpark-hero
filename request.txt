@@ -1,0 +1,4 @@
+subs: node scripts/simCmSubs.mjs
+subs-pressedge: SUBS_CONTROL=pressedge node scripts/simCmSubs.mjs
+subs-pressold: SUBS_CONTROL=pressold node scripts/simCmSubs.mjs
+probe: node .rc/x/pressProbe.mjs

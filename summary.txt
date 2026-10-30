@@ -1,0 +1,4 @@
+subs-pressedge exit=1 44s | control pressedge FIRED: 1 of 4 checks red
+subs-pressold exit=1 54s | control pressold FIRED: 3 of 4 checks red
+subs exit=0 73s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+probe exit=0 33s | free live state: week 14 next match:Gent:league:w; view state: week 14 next match:Gent:league:w

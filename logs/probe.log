@@ -1,0 +1,17 @@
+UNTRUE Brentford k=3 i=22 played=22 weekBefore=28 weekAfter=29 lastWeek=28 season=1
+  q: bigGame id=pq-1-28-171 "Arsenal on paper are a level above you. Realistically, what "; pending before the match: pq-1-28-171 (same id: true)
+  w27: entry={"type":"window","round":0}
+  report: opp=undefined comp=league home=Arsenal week=undefined
+  last(before)=match:Arsenal:league:w next(after,s.week)=match:Brighton:league:w edgeNext=6.598043636363627
+  w28: entry={"type":"league","round":19} nextFrom=match:Arsenal:league:w
+  w29: entry={"type":"league","round":20} nextFrom=match:Brighton:league:w
+  w30: entry={"type":"league","round":21} nextFrom=match:Everton:league:w
+  w31: entry={"type":"league","round":22} nextFrom=match:Manchester United:league:w
+  w32: entry={"type":"uclKo","round":0,"uclRound":"QF","uclLeg":1} nextFrom=match:Nottingham Forest:league:w
+  nextFixtureFrom(stateBefore, week+1)=match:Brighton:league:w edgeThere=10.218181818181819
+  live after=null matchRules=undefined
+edge fleet: 25 bigGame judged, 1 untrue
+daily Westerlo seed 3041765782: bigGame: Cercle Brugge on paper are a level above you. Realistically, what are you going there for?
+free live world: boardHeat: The bookmakers have you favourite for the sack. Are you worried about your job?
+free curve1 view: bigGame: Gent on paper are a level above you. Realistically, what are you going there for?
+free live state: week 14 next match:Gent:league:w; view state: week 14 next match:Gent:league:w
