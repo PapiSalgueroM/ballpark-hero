@@ -227,6 +227,17 @@
  * (its base 224,136, so the spike is the base's own), and this harness
  * measures season 15 only. The slope fence did not move. If a later head's
  * healthy top passes 215,000, measure again.
+ * Release BU joined Rounds 1597 and 1601 and measured again, the same way
+ * (the lead's L8; remote check rBUg-l8, head 4310e6714, the default stream
+ * and SIM_SEED 1 to 5): healthy 203,478 to 217,675 at season 15 (Real Madrid
+ * 203,478 to 210,926, Everton 212,852 to 216,176, Lincoln City 216,125 to
+ * 217,675), slope 479 to 1,911. Uncapped, default stream: Real Madrid
+ * 236,616, Everton 247,338, Lincoln City 252,464, slope 4,210 to 5,357 (the
+ * control fired, section 1 red, 33 failures). 227,000 sits 9,325 over the
+ * healthy top and 9,616 under the defect's bottom; 3,000 sits 1,089 over the
+ * healthy slope's top and 1,210 under the defect's. Both are back down from
+ * Round 1597's 231,000 and 3,600, which were measured before Round 1601's
+ * base and are no longer mid gap on the joined engine.
  * The first cut of this file set 5,000 and 240,000 by feel, and both passed
  * the uncapped engine, which is exactly the mistake the house rule names.
  *
@@ -251,8 +262,8 @@ const ENTRY = `${TMP}/cmSaveSize.entry.mjs`;
 const BUNDLE = `${TMP}/cmSaveSize.bundle.mjs`;
 
 /* Measured ranges beside each, see the header. */
-const SIZE_BUDGET = 231_000;   // Round 1597, nobody leaves the free agent list but by signing or retiring: healthy 206,589 to 223,145; uncapped 239,460 to 257,928 (was 214,000: Round 1344, every club's deals recorded: healthy 191,625 to 206,555; uncapped 227,507 to 239,176 (was 203,000: Round 1229, the league book, healthy 180,907 to 193,046, uncapped 215,793 to 226,422)
-const SLOPE_CAP = 3_600;       // Round 1597, the free agent list keeps its men: healthy 1,056 to 2,648 bytes a season; uncapped 4,611 to 5,585 (was 2,000: Round 1344, every club's deals recorded: healthy -181 to 1,517 bytes a season; uncapped 3,965 to 4,802 (was healthy 249 to 1,178, uncapped 3,052 to 4,408)
+const SIZE_BUDGET = 227_000;   // Release BU, Rounds 1597 and 1601 joined: healthy 203,478 to 217,675; uncapped 236,616 to 252,464 (was 231,000: Round 1597, nobody leaves the free agent list but by signing or retiring: healthy 206,589 to 223,145; uncapped 239,460 to 257,928 (was 214,000: Round 1344, every club's deals recorded: healthy 191,625 to 206,555; uncapped 227,507 to 239,176 (was 203,000: Round 1229, the league book, healthy 180,907 to 193,046, uncapped 215,793 to 226,422))
+const SLOPE_CAP = 3_000;       // Release BU, Rounds 1597 and 1601 joined: healthy 479 to 1,911 bytes a season; uncapped 4,210 to 5,357 (was 3,600: Round 1597, the free agent list keeps its men: healthy 1,056 to 2,648 bytes a season; uncapped 4,611 to 5,585 (was 2,000: Round 1344, every club's deals recorded: healthy -181 to 1,517 bytes a season; uncapped 3,965 to 4,802 (was healthy 249 to 1,178, uncapped 3,052 to 4,408))
 const CLUBS = ['Real Madrid', 'Everton', 'Lincoln City'];
 const SEASONS = 15;
 const SAVE_KEY = 'dukb-club-manager-save';
