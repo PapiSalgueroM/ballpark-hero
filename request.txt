@@ -1,0 +1,7 @@
+sec5: HOT_SEAT_SECTION=5 node scripts/simManagerHotSeat.mjs
+sec5-s1: SIM_SEED=1 HOT_SEAT_SECTION=5 node scripts/simManagerHotSeat.mjs
+sec5-s2: SIM_SEED=2 HOT_SEAT_SECTION=5 node scripts/simManagerHotSeat.mjs
+nochanged: HOT_SEAT_CONTROL=nochanged node scripts/simManagerHotSeat.mjs
+noswapback: HOT_SEAT_CONTROL=noswapback node scripts/simManagerHotSeat.mjs
+emptysaved: HOT_SEAT_CONTROL=emptysaved node scripts/simManagerHotSeat.mjs
+vitest: node_modules/.bin/vitest run src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx --testTimeout=300000 --hookTimeout=300000

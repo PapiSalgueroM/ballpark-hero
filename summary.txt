@@ -1,0 +1,7 @@
+sec5 exit=0 27s | simManagerHotSeat: green (section 5 only). A survivor carries on in Club Manager on the hot seat's own season.
+sec5-s1 exit=0 30s | simManagerHotSeat: green (section 5 only). A survivor carries on in Club Manager on the hot seat's own season.
+sec5-s2 exit=0 31s | simManagerHotSeat: green (section 5 only). A survivor carries on in Club Manager on the hot seat's own season.
+emptysaved exit=1 24s | simManagerHotSeat: 44 failure(s)
+nochanged exit=1 32s | simManagerHotSeat: 131 failure(s)
+noswapback exit=1 30s | simManagerHotSeat: 87 failure(s)
+vitest exit=0 5s |    Duration  5.08s (transform 2.29s, setup 186ms, collect 4.92s, tests 2.49s, environment 1.03s, prepare 243ms)

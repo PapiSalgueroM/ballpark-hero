@@ -1,0 +1,6 @@
+5) A manager who keeps the job carries on in Club Manager
+   54 setups in 27 leagues: 41 handed over (0 on a reprieve) from 26 leagues, 38 played to the end of the season, 3 sacked in Club Manager on the way, 26 sacked runs refused, 7 with a window before the next fixture, 163 of the previous manager's messages left behind
+   slot arms on 41 survivors: emptyDevice 41, keptSlotOne 41, intoSlotOne 41, fullAsked 41, damagedKept 41, pointsCleared 41, rolledBack 41, picked 41, changedRefused 41
+   ok  every survivor's career goes into an empty Club Manager slot and never over a career (a full house answers full, a picked career is kept aside first, a refused write moves nothing), opens on the hot seat's own table with the takeover stamp and the card's numbers, and plays to the end of the season; a sacked manager is never offered one
+
+simManagerHotSeat: green (section 5 only). A survivor carries on in Club Manager on the hot seat's own season.
