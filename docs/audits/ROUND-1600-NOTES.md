@@ -38,9 +38,11 @@ on purpose. Stature reads the level: `bakedXIAvg` (tier, budget, expected finish
 `eraXIAvgFrom` (past season title gaps and cup seeding), `projectClub`'s anchor, `valueScaleFor`, `worldRosterFor`'s
 anchor.
 
-DEVIATION 3. `customFounderValue` is unchanged. A created club's founder has no price; his rating is the number
-made up, and Round 640 prices that number off the market's line, with the money bands simCustomClubValues holds.
-Pricing him through the read run backwards would move every created club's money for nothing in the owner's ask.
+A CREATED CLUB'S FOUNDER is priced off the level his shown rating stands on at his age (`customFounderValue(rating,
+era, age)` through `levelForShown`, the read run backwards, total), because simCustomClubValues section 1 holds a
+founder to the real men of his era, rating and age band, and on the read a real man shown 84 at 21 is priced like
+level 88 and one shown 84 at 33 like level 81. A club's money ceiling (no age) still reads its rating as the level.
+A save already on CUSTOM_VALUES_VERSION 1 keeps its values.
 
 THE FUTURE OF A MAN reads the higher of the two (critic correction 5): the world exit (`ageOne`, `futureRead`) and
 the ceiling roll (`ceilingBase`, both call sites), so a boy shown under his price does not leave sooner or get a lower
