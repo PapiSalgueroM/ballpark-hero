@@ -140,6 +140,7 @@ Base 14a9af704 on the runner (r1600-base, r1600-s11b, r1600-s12) against the hea
    Gnabry to breaks where the base lost Endrick, Geovany Quenda, Jorrel Hato, Nico O'Reilly and Tom Bischof, and a
    rested veteran's deputy is a younger man the read now shows lower.
 3. simRoles section 10 (critic 7): a do nothing Everton season, 60 unseeded seasons, base 48.8 points (2se 2.4),
-   here 55.3 (2se 2.6), band 36 to 54. The written test (head within three points of base) fails by 6.5. Everton's
-   eleven carries veterans the read lifts; the band is a pin of one club's level. simPress (the same season) was
-   green at 3edef3897 (r1600-s6b).
+   here 55.3 (2se 2.6, runner r1600-s11h) and 52.6 (2se 2.4, r1600-s16b at e8eab9e5e, green), band 36 to 54: a coin
+   toss at the top. The written test (head within three points of base) fails by about 5. Everton's eleven carries
+   veterans the read lifts; the band is a pin of one club's level. simPress (the same season) is green on 53.05
+   (r1600-s6b, r1600-s16b).
