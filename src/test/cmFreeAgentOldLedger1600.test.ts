@@ -29,11 +29,11 @@ function oneYearOn(stamped: boolean) {
   const record = readWorldRoster(released)?.records.filter(r => r.player.id === pad!.id) ?? [];
   expect(record, 'CM_FA_OLD_LEDGER_SETUP_RECORD').toHaveLength(1);
   expect(record[0]).toMatchObject({ status: 'released', owner: null });
-  const ledger = released.worldRoster as Record<string, unknown>;
+  const ledger = released.worldRoster as unknown as Record<string, unknown>;
   expect(ledger.curve, 'CM_FA_OLD_LEDGER_SETUP_STAMP').toBeDefined();
   const unstamped = { ...ledger };
   delete unstamped.curve;
-  const career: CareerState = { ...released, worldRoster: (stamped ? ledger : unstamped) as CareerState['worldRoster'] };
+  const career: CareerState = { ...released, worldRoster: (stamped ? ledger : unstamped) as unknown as CareerState['worldRoster'] };
   expect(nearAges(readWorldRoster(career)!), 'CM_FA_OLD_LEDGER_SETUP_NEAR').toBe(!stamped);
   const thin: FreeAgent = { name: pad!.name, position: pad!.position, age: pad!.age + 1,
     rating: 40, value: .2, since: base.season - 1, reason: 'expired', fromMyClub: true };
