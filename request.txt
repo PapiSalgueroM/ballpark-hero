@@ -1,0 +1,1 @@
+wm7: node .rc/x/wm7patch.mjs && CM_WORLD_MOVES_SECTIONS=7 node scripts/simCmWorldMoves.mjs; s=$?; git checkout -- scripts; exit $s

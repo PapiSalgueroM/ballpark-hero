@@ -1,0 +1,20 @@
+wm7patch: patched
+7) my deals with the recording on: a release, a buy and a sale at the start and a season later, on BASE and on the head, seeds 1,2,3
+   REFUSED head now Real Madrid seed 1: Vinicius Junior want owned at Manchester City, 0 held; under the name: [["owned","Montpellier",26,"Real Madrid",2000]]
+   REFUSED head now Real Madrid seed 2: Vinicius Junior want owned at Manchester City, 0 held; under the name: [["owned","Kilmarnock",26,"Real Madrid",2000]]
+   REFUSED base now Everton seed 1: Hayden Hackney want owned at Barcelona, 0 held; under the name: [["owned","Seattle Sounders",24,"Everton",2003]]
+   REFUSED base now Everton seed 3: Brennan Johnson want owned at Barcelona, 0 held; under the name: [["owned","Juventus",25,"Everton",2002]]
+   REFUSED head now Everton seed 3: Hayden Hackney want owned at Barcelona, 0 held; under the name: [["owned","Sydney FC",25,"Everton",2002]]
+   REFUSED head now Aberdeen seed 1: Adrián Bernabé want owned at Barcelona, 0 held; under the name: [["owned","Marseille",26,"Parma",2001]]
+   REFUSED head now Aberdeen seed 2: Adrián Bernabé want owned at Barcelona, 0 held; under the name: [["owned","Rennes",26,"Parma",2001]]
+   REFUSED head era2015 Stoke City seed 2: Xherdan Shaqiri want owned at Barcelona, 0 held; under the name: [["owned","Atlético Madrid",24,"Stoke City",1992]]
+   REFUSED base era2015 Stoke City seed 3: Xherdan Shaqiri want owned at Real Madrid, 0 held; under the name: [["owned","Rennes",24,"Stoke City",1992]]
+   REFUSED base era2015 Carpi seed 2: Jonathan de Guzmán want owned at Real Madrid, 0 held; under the name: [["owned","Bordeaux",27,"Carpi",1988]]
+   REFUSED base era2015 Carpi seed 2: Adem Ljajic want owned at Barcelona, 0 held; under the name: [["owned","Juventus",24,"Inter Milan",1992]]
+   REFUSED head era2015 Carpi seed 2: Jonathan de Guzmán want owned at Real Madrid, 0 held; under the name: [["owned","Bordeaux",27,"Carpi",1988]]
+   REFUSED base era2005 Chelsea seed 2: Frank Lampard want owned at Barcelona, 0 held; under the name: [["owned","Borussia Dortmund",27,"Chelsea",1979]]
+   REFUSED head era2005 Treviso seed 2: Albert Luque want owned at Barcelona, 0 held; under the name: [["owned","Rennes",27,"Deportivo La Coruña",1979]]
+   BASE: 309 deals of mine, 6 without exactly one record; the head: 309 deals, 8 without exactly one record
+  FAIL section 7: the head left 8 deals of mine without exactly one ledger record, BASE 6
+   swaps: BASE 54, the head 54; exercised loan options: BASE 54, the head 54; deals not reached on the stream: BASE 0, the head 0
+simCmWorldMoves: RED, sections 7 (1)
