@@ -1,0 +1,6 @@
+ctl-dropreal: CM_FA_CONTROL=dropreal node scripts/simCmFreeAgencyFleet.mjs
+ctl-nodropout: CM_FA_CONTROL=nodropout node scripts/simCmFreeAgencyFleet.mjs
+ctl-leftunsaid: CM_FA_CONTROL=leftunsaid node scripts/simCmFreeAgencyFleet.mjs
+ctl-deletepool: CM_FA_CONTROL=deletepool node scripts/simCmFreeAgencyFleet.mjs
+ctl-norecover: CM_FA_CONTROL=norecover node scripts/simCmFreeAgencyFleet.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
