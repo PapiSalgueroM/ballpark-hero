@@ -1,0 +1,2 @@
+#!playwright
+jsprobe: node .rc/x/jsprobe.mjs
