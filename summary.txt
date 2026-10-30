@@ -1,0 +1,2 @@
+lr-old-tieoff exit=0 60s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+lr-old-head exit=1 60s | simCmLeagueRules: 31 failure(s)
