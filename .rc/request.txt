@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simCmEuroPlay.mjs
+vitest: node_modules/.bin/vitest run src/lib/worldNights.test.ts src/lib/worldCompetition.test.ts src/lib/euroAccess.test.ts src/lib/clubManagerWorldView.test.ts src/test/clubManagerOfferConfirm.test.tsx src/test/clubManagerShootoutCopy.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/cmSavePointsDoor.test.tsx --testTimeout=300000 --hookTimeout=120000
+walk: node scripts/playCmEuroPlay.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simWorldEuro-0: WORLD_EURO_ONLY=0 node scripts/simWorldEuro.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCmCopy: node scripts/simCmCopy.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
