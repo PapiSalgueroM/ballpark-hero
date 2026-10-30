@@ -1,0 +1,14 @@
+simClubManager exit=0 70s | ALL CLUB MANAGER SIMS PASSED
+simCmLeagueRules exit=1 96s | simCmLeagueRules: 47 failure(s)
+simCmLevelReads exit=0 2s | simCmLevelReads: 32 checks, 0 failures
+simCmDailyView exit=0 36s | simCmDailyView: 5 checks, 0 failures
+simClubManagerScore exit=0 162s | ALL SEASON SCORE CHECKS PASSED
+simCustomClubValues exit=0 145s | simCustomClubValues: 26 checks, 0 failures
+simDeadlineDay exit=0 6s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+simCmInternationals exit=0 68s | simCmInternationals: all green
+simClubManagerGathered exit=1 2s | simClubManagerGathered: 1 failure(s) (G 1)
+simBoardAsks exit=0 76s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+simCmDifficulty exit=0 426s | simCmDifficulty: all green (sections 1,2,3,6,7,8)
+simEras exit=0 2056s | ALL ERA AND AGEING CHECKS PASSED
+simRoles exit=0 2060s | ALL ROLE CHECKS PASSED
+simPress exit=0 2673s | ALL PRESS AND TEAM TALK CHECKS PASSED
