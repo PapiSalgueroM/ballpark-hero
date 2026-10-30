@@ -1,0 +1,147 @@
+name: Buzzer interrupted hold original focused baseline
+on:
+  push:
+    branches: [codex/buzzer-interruption-focused-red-20261030]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_MAIN: 14a9af7042793e487d12af0bffcaf030a0d0da9a
+      EXPECTED_PARENT: fdcd573d5b37dd76a095fe1f872d84fc5c7e5ff7
+      EXPECTED_TREE: 00a991a1e7861be1f16b72ad1c0cbab4c6338611
+      TEST_SHA256: a4dc200d089b9c30f54adc4f47d0c2f6e485bfeb68abb9a8c61a54007e6969d4
+      CONTROLLER_SHA256: e11e663acdc7e40f9219dbd907454a5be3ffe1eb54a073eb955f5a14ecfe1a30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind original application and new test source
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/buf"
+          test ! -e "$out"
+          mkdir -p "$out/helpers" "$out/runtime-tmp"
+          echo "BUZZER_OUT=$out" >> "$GITHUB_ENV"
+          echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV"
+          echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/buzzer-interruption-focused-red-20261030
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5455
+          git diff --name-status "$EXPECTED_MAIN" "$EXPECTED_PARENT" > "$out/test-base.paths"
+          printf 'A\tsrc/test/buzzerInterruption.test.tsx\n' > "$out/expected-test-base.paths"
+          cmp "$out/test-base.paths" "$out/expected-test-base.paths"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.paths"
+          printf 'A\t.github/workflows/buzzer-interruption-focused-red.yml\nA\tscripts/qa/buzzerInterruptionFocusedRed.cjs\n' > "$out/expected-proof.paths"
+          cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(sha256sum src/test/buzzerInterruption.test.tsx | cut -d' ' -f1)" = "$TEST_SHA256"
+          test "$(sha256sum scripts/qa/buzzerInterruptionFocusedRed.cjs | cut -d' ' -f1)" = "$CONTROLLER_SHA256"
+          test "$(sha256sum src/components/buzzer-beater/BuzzerBeaterBoard.tsx | cut -d' ' -f1)" = 705e7c481d88137334df6e8609b01c29974ac8a37cebfadc353c72cc89ac0388
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cp scripts/qa/buzzerInterruptionFocusedRed.cjs "$out/focused-red-controller.cjs"
+          cmp scripts/qa/buzzerInterruptionFocusedRed.cjs "$out/focused-red-controller.cjs"
+          sha256sum "$out/focused-red-controller.cjs" > "$out/controller-copy.sha256"
+          raw=0
+          node --check scripts/qa/buzzerInterruptionFocusedRed.cjs > "$out/syntax.stdout" 2> "$out/syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/syntax.stdout"
+          test ! -s "$out/syntax.stderr"
+          cat > "$out/helpers/run.sh" <<'RUN'
+          run() {
+            local id="$1" budget="$2"; shift 2
+            local raw=0
+            : > "$BUZZER_OUT/$id.transport"
+            { printf '%q ' "$@"; printf '\n'; } > "$BUZZER_OUT/$id.command"
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$BUZZER_OUT/$id.transport" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s "$budget" "$@" > "$BUZZER_OUT/$id.stdout" 2> "$BUZZER_OUT/$id.stderr" || raw=$?
+            printf '%s\n' "$raw" > "$BUZZER_OUT/$id.exit"
+            test ! -s "$BUZZER_OUT/$id.transport"
+          }
+          RUN
+          sha256sum "$out/helpers/run.sh" > "$out/helpers.sha256"
+      - name: Locked dependencies and actual application types
+        run: |
+          set -euo pipefail
+          out="$BUZZER_OUT"
+          raw=0
+          env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.exit"
+          test "$raw" -eq 0
+          source "$out/helpers/run.sh"
+          run types 3m node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          test "$(cat "$out/types.exit")" -eq 0
+          test ! -s "$out/types.stdout"
+          test ! -s "$out/types.stderr"
+      - name: Actual focused original eighteen cancellation failures
+        run: |
+          set -euo pipefail
+          out="$BUZZER_OUT"
+          source "$out/helpers/run.sh"
+          run focused 5m node "$out/focused-red-controller.cjs"
+          test "$(cat "$out/focused.exit")" -eq 0
+          test ! -s "$out/focused.stderr"
+          grep -Fqx 'BUZZER_INTERRUPTION_FOCUSED_RED: 18 owned cancellation failures, zero callback/suite errors;3 copied refusals and same-file restores passed.' "$out/focused.stdout"
+          test "$(cat "$out/focused-suite/raw.exit")" -eq 1
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-held.log"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.after-default.sha256"
+          cmp "$out/source.initial.sha256" "$out/source.after-default.sha256"
+          find node_modules -type f -print0 | sort -z > "$out/dependencies.members.post-qualification"
+          xargs -0 sha256sum < "$out/dependencies.members.post-qualification" > "$out/dependencies.post-qualification.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.post-qualification"
+      - name: Always preserve source and post-qualification evidence
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/buf"
+          mkdir -p "$out"
+          failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git diff --exit-code HEAD > "$out/working-source.diff" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"
+          cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/helpers.sha256" > "$out/helpers-held.log" 2>&1 || failed=1
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-final-held.log" 2>&1 || failed=1
+          if test -f "$out/dependencies.post-qualification.sha256"; then
+            find node_modules -type f -print0 | sort -z > "$out/dependencies.members.final"
+            cmp "$out/dependencies.members.post-qualification" "$out/dependencies.members.final" || failed=1
+            sha256sum -c "$out/dependencies.post-qualification.sha256" > "$out/dependencies-final-held.log" 2>&1 || failed=1
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.post-qualification" "$out/dependency-links.final" || failed=1
+          else
+            printf 'POST_QUALIFICATION_DEPENDENCY_SNAPSHOT_NOT_CREATED\n' > "$out/dependencies-not-created.txt"
+            failed=1
+          fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"ORIGINAL_APP_NEW18_FOCUSED_RED_BASELINE_ONLY","applicationFix":false,"nativeProof":"SEPARATE_41003714020","fullDefaultSuite":"UNRUN_IN_FOCUSED_JOB","focusedCases":"READ_ACTUAL_FOCUSED_RED_ADMISSION","expectedOwnedFailures":18,"optionalProfilesExecuted":false,"dependencyInventoryScope":"POST_QUALIFICATION_ONLY","build":"UNRUN","browser":"UNRUN","caps":"UNRUN","SEO":"UNRUN","globalSims":"UNRUN","featureReady":false}\n' > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/buzzer-focused-red-evidence.sha256"
+          cp "$RUNNER_TEMP/buzzer-focused-red-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: buzzer-interruption-focused-red-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/buf
+          if-no-files-found: error
+          retention-days: 14
