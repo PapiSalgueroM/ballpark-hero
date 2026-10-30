@@ -655,7 +655,8 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
   const uscView = useMemo(() => (uelOn ? superCupView(career, 'usc') : null), [career, uelOn]);
   const uscStatus = uscView ? superCupStatus(uscView) : null;
   /* The panel's old condition, word for word in effect: no group, and no knockout run still alive or won. */
-  const noEurope = career.uclGroup === null && (career.uclKoRound === null || career.uclKoRound === 'out');
+  /* Round 1593: and not a season my club plays the Europa League. */
+  const noEurope = career.uclGroup === null && (career.uclKoRound === null || career.uclKoRound === 'out') && uelStatus.mode !== 'in';
   const euro = careerLeagueOf(career).euro;
 
   let body: ReactNode;

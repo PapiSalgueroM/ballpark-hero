@@ -248,6 +248,8 @@ async function caseA(browser, size, tag) {
     const words = saves.a.label.replace('Europa League · ', '').toLowerCase();
     if (!hub.includes(words) || !hub.includes(saves.a.opp.toLowerCase())) finding(where, `the hub names no Europa League night: "${words}" against ${saves.a.opp} is not on it`);
     if (!(await toCups(page, where))) return;
+    /* Found on this walk's first pictures: the panel's old "no European football" card stood above a club in it. */
+    if (squash(await textOf(page, '[data-cm-cups-view="tiles"]')).includes('No European football')) finding(where, 'the Cups panel says there is no European football this season for a club in the Europa League');
     await measure(page, `${where} tiles`);
     const tile = squash(await textOf(page, '[data-cm-world-tile="uel"]'));
     if (!tile.includes("You're in it") || !tile.includes('matchday 1 of 8')) finding(where, `the Europa League tile reads "${tile.slice(0, 160)}", not that the club is in it with matchday 1 next`);
