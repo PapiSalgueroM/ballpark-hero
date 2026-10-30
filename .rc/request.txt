@@ -1,0 +1,13 @@
+simBoardAsks: node scripts/simBoardAsks.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simCmCopy: node scripts/simCmCopy.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simCmOwnClubMarket: node scripts/simCmOwnClubMarket.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+simCmWorldMoves: node scripts/simCmWorldMoves.mjs
+simEras: node scripts/simEras.mjs
+simManagerCustomPromotion: node scripts/simManagerCustomPromotion.mjs
+simPress: node scripts/simPress.mjs
+simUclField: node scripts/simUclField.mjs
