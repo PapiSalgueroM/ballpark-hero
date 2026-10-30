@@ -1,0 +1,1911 @@
+{
+ "about": "Round 1583. The two host proof behind the four NBA Connections file boards (nbaconn-001 to 004, src/data/nbaConnectionsPuzzles.ts, which are also live rows of nba_connections_puzzles and were current against the lead's 2026-10-29 export). No NBA board had ever been held to two hosts: the file's header said every fact was checked against the site's own tables on 2026-07-21, one source. The record (scripts/data/nbaConnectionsRecord-2026-10.json: ESPN's athlete service and nba.com's player page) is one host and basketball-reference.com (scripts/data/nbaConnectionsSecondHost-2026-10.json) the second; the checker reads both and returns unknown where they disagree. Wikis are never a source. The 16 table rows past the file (nbaconn-005 to 020) are Round 1586's.",
+ "read": "2026-10-29",
+ "rules": [
+  "Written before the first decision.",
+  "A fact names a man, a group label and whether he fits it (holds), and carries two sources on two different hosts, neither a wiki: the record first (site.web.api.espn.com for clubs, totals and birthplaces; nba.com for the draft), basketball-reference.com second. Facts are written by scripts/usConnections/verifyNbaFacts.mjs facts from the two committed host files, and a fact is written only where both hosts give the verdict it records.",
+  "Career means NBA regular season only: playoffs never count and ABA totals never count (the second host keeps a man's ABA rows apart).",
+  "A club group counts NBA regular season seasons with that club under the name the label gives, up to the season in its date by start year (\"as of 2025-26\" counts 2025-26 and earlier). ABA seasons never count: a man with ABA seasons for the club whose group is on his board is unknown beside it (critic-1583 item 5) and, a coin toss, leaves that board as a gray pair.",
+  "A man with a season under another name of the same franchise (the Minneapolis Lakers beside a Los Angeles Lakers group, the Seattle SuperSonics beside a Thunder group) is unknown beside it until this ledger decides him: a gray pair who leaves the board, or a club label that names both (critic-1583 item 4). A rostered man who played no game for a club (DeMarcus Cousins with the 2019-20 Lakers) is a gray pair beside that club too: a board never hinges on that argument (Round 219's rule).",
+  "A birth group reads where a man was born (ESPN's displayBirthPlace, basketball-reference's birthplace line), never a citizenship or nba.com's COUNTRY (Tony Parker: citizenship France, born in Bruges, Belgium).",
+  "A draft group reads the overall pick (nba.com's DRAFT_NUMBER and basketball-reference's Draft line); ESPN's draft line gives the pick within its round.",
+  "Where the two hosts disagree on a verdict the checker returns unknown and the ceilings (0) turn it red until a third host settles it in the overlay, or the man leaves the board."
+ ],
+ "watchRules": [
+  "Written before the first decision. The season in play is 2026-27; the last finished one is 2025-26 (LAST_FINISHED nba 2025 in scripts/simUsConnectionsFacts.mjs).",
+  "Still playing: ESPN's active flag, or nba.com's roster status Active, or any season from 2024-25 on (an unsigned veteran can still sign and add to a mark). No retirement is read: a season from 2024-25 on counts as still playing whatever either host says, which can only watch more men, never fewer.",
+  "A club group is dated in the trailing \"(as of 2025-26)\" shape on every board, whether or not a man still playing sits beside it today (one shape on every board; a date can only shrink what a group holds). Section 8 holds it.",
+  "A career mark (points, rebounds, assists, three-pointers, steals, blocks, games): a man still playing within one season's worth of it on either host is watched, a season's worth being the most anyone has added in one NBA regular season (basketball-reference's single season leaders pages, read 2026-10-29, the ABA rows set aside): 4,029 points (Wilt Chamberlain, 1961-62), 2,149 rebounds (Wilt Chamberlain, 1960-61), 1,164 assists (John Stockton, 1990-91), 402 three-pointers (Stephen Curry, 2015-16), 301 steals (Alvin Robertson, 1985-86), 456 blocks (Mark Eaton, 1984-85), 88 games (Walt Bellamy, 1968-69). These are bounds of the rule (NBA_REACH in scripts/lib/usConnectionsCheck.mjs), not claims any board makes.",
+  "Fixed: the draft (the overall pick) and the birthplace (a country, or a continent).",
+  "Only club groups are dated (Round 1574 R4): an award, Hall of Fame, running list or \"never\" group beside a watched man is fixed by moving the man or rebuilding the group into a finished claim. The four file boards carry none."
+ ],
+ "clubLabels": {
+  "Played for the Miami Heat": {
+   "espn": [
+    "Miami Heat"
+   ],
+   "bbref": [
+    "MIA"
+   ],
+   "franchiseNames": []
+  },
+  "Played for the Chicago Bulls": {
+   "espn": [
+    "Chicago Bulls"
+   ],
+   "bbref": [
+    "CHI"
+   ],
+   "franchiseNames": []
+  },
+  "Played for the Golden State Warriors": {
+   "espn": [
+    "Golden State Warriors"
+   ],
+   "bbref": [
+    "GSW"
+   ],
+   "franchiseNames": [
+    "SFW San Francisco Warriors (1963 to 1971)",
+    "PHW Philadelphia Warriors (1947 to 1962)"
+   ]
+  },
+  "Played for the New York Knicks": {
+   "espn": [
+    "New York Knicks"
+   ],
+   "bbref": [
+    "NYK"
+   ],
+   "franchiseNames": []
+  },
+  "Played for the Boston Celtics": {
+   "espn": [
+    "Boston Celtics"
+   ],
+   "bbref": [
+    "BOS"
+   ],
+   "franchiseNames": []
+  },
+  "Played for the Los Angeles Lakers": {
+   "espn": [
+    "Los Angeles Lakers"
+   ],
+   "bbref": [
+    "LAL"
+   ],
+   "franchiseNames": [
+    "MNL Minneapolis Lakers (1949 to 1960)"
+   ]
+  },
+  "Played for the Sacramento Kings": {
+   "espn": [
+    "Sacramento Kings"
+   ],
+   "bbref": [
+    "SAC"
+   ],
+   "franchiseNames": [
+    "KCK Kansas City Kings (1976 to 1985)",
+    "KCO Kansas City-Omaha Kings (1973 to 1975)",
+    "CIN Cincinnati Royals (1958 to 1972)",
+    "ROC Rochester Royals (1949 to 1957)"
+   ]
+  }
+ },
+ "overlay": {
+  "Larry Bird": {
+   "why": "ESPN keeps no season and no birthplace for him (its stats feed answers 404), so the record cannot place him beside any club or birth group",
+   "set": {
+    "seasons": {
+     "1979-80": [
+      "Boston Celtics"
+     ],
+     "1980-81": [
+      "Boston Celtics"
+     ],
+     "1981-82": [
+      "Boston Celtics"
+     ],
+     "1982-83": [
+      "Boston Celtics"
+     ],
+     "1983-84": [
+      "Boston Celtics"
+     ],
+     "1984-85": [
+      "Boston Celtics"
+     ],
+     "1985-86": [
+      "Boston Celtics"
+     ],
+     "1986-87": [
+      "Boston Celtics"
+     ],
+     "1987-88": [
+      "Boston Celtics"
+     ],
+     "1988-89": [
+      "Boston Celtics"
+     ],
+     "1989-90": [
+      "Boston Celtics"
+     ],
+     "1990-91": [
+      "Boston Celtics"
+     ],
+     "1991-92": [
+      "Boston Celtics"
+     ]
+    },
+    "born": "USA"
+   },
+   "sources": [
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/b/birdla01.html",
+     "says": "NBA Totals rows 1979-80 to 1991-92, every one BOS (13 seasons, no other club); Born ... in West Baden, Indiana"
+    },
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/news/history-nba-legend-larry-bird",
+     "says": "For 13 seasons with the Boston Celtics, from 1979-80 through 1991-92"
+    },
+    {
+     "host": "hoophall.com",
+     "url": "https://www.hoophall.com/hall-of-famers/larry-bird/",
+     "says": "Birthplace West Baden, IN"
+    }
+   ]
+  },
+  "Dikembe Mutombo": {
+   "why": "ESPN prints no birthplace for him, so the record cannot place him in \"Born in Africa\"",
+   "set": {
+    "born": "DR Congo"
+   },
+   "sources": [
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/mutomdi01.html",
+     "says": "Born ... in Kinshasa, Democratic Republic of the Congo"
+    },
+    {
+     "host": "hoophall.com",
+     "url": "https://www.hoophall.com/hall-of-famers/dikembe-mutombo/",
+     "says": "Birthplace Kinshasa, DR"
+    }
+   ]
+  },
+  "Kareem Abdul-Jabbar": {
+   "why": "ESPN keeps no Milwaukee seasons for him and counts only offensive plus defensive rebounds (12369); rebounds were not split before 1973-74",
+   "set": {
+    "career": {
+     "REB": 17440
+    }
+   },
+   "sources": [
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/a/abdulka01.html",
+     "says": "NBA regular season rebounds summed over the Totals rows, 1969-70 to 1988-89: 17440"
+    },
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/news/history-nba-legend-kareem-abdul-jabbar",
+     "says": "with 38,387 points (24.6 ppg), 17,440 rebounds (11.2 rpg)"
+    }
+   ]
+  },
+  "Elvin Hayes": {
+   "why": "ESPN counts only offensive plus defensive rebounds for him (9751), and shows none for his seasons before 1973-74, when rebounds were not split",
+   "set": {
+    "career": {
+     "REB": 16279
+    }
+   },
+   "sources": [
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/h/hayesel01.html",
+     "says": "NBA regular season rebounds summed over the Totals rows, 1968-69 to 1983-84: 16279"
+    },
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/news/history-nba-legend-elvin-hayes",
+     "says": "more than 27,000 career points and 16,000 career rebounds in his Hall of Fame career"
+    }
+   ]
+  }
+ },
+ "aliases": {},
+ "lists": {},
+ "flaggedGroups": [
+  [
+   "nbaconn-001",
+   "28,000+ career points"
+  ],
+  [
+   "nbaconn-001",
+   "Played for the Miami Heat"
+  ],
+  [
+   "nbaconn-001",
+   "10,000+ career assists"
+  ],
+  [
+   "nbaconn-001",
+   "Drafted #1 overall"
+  ],
+  [
+   "nbaconn-002",
+   "Played for the Chicago Bulls"
+  ],
+  [
+   "nbaconn-002",
+   "2,000+ career three-pointers"
+  ],
+  [
+   "nbaconn-002",
+   "Born in France"
+  ],
+  [
+   "nbaconn-002",
+   "14,000+ career rebounds"
+  ],
+  [
+   "nbaconn-003",
+   "Played for the Golden State Warriors"
+  ],
+  [
+   "nbaconn-003",
+   "Played for the New York Knicks"
+  ],
+  [
+   "nbaconn-003",
+   "Born in Canada"
+  ],
+  [
+   "nbaconn-003",
+   "Drafted #2 overall"
+  ],
+  [
+   "nbaconn-004",
+   "Played for the Boston Celtics"
+  ],
+  [
+   "nbaconn-004",
+   "Played for the Los Angeles Lakers"
+  ],
+  [
+   "nbaconn-004",
+   "Born in Africa"
+  ],
+  [
+   "nbaconn-004",
+   "Played for the Sacramento Kings"
+  ]
+ ],
+ "needs": [
+  {
+   "id": "nbaconn-002",
+   "label": "Born in France",
+   "name": "Tony Parker",
+   "holds": false,
+   "why": "not-a-member"
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "2,000+ career three-pointers",
+   "name": "Nicolas Batum",
+   "holds": false,
+   "why": "watched: still playing (a 2025-26 season on the record) with 1,842, within a season's worth of 2,000"
+  }
+ ],
+ "facts": [
+  {
+   "id": "nbaconn-001",
+   "label": "28,000+ career points",
+   "name": "Karl Malone",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/501/stats",
+     "says": "career regular season PTS 36928"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/malonka01.html",
+     "says": "NBA regular season PTS summed over the Totals rows: 36928"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "28,000+ career points",
+   "name": "Kobe Bryant",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/110/stats",
+     "says": "career regular season PTS 33643"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/b/bryanko01.html",
+     "says": "NBA regular season PTS summed over the Totals rows: 33643"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "28,000+ career points",
+   "name": "Michael Jordan",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/1035/stats",
+     "says": "career regular season PTS 32292"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/j/jordami01.html",
+     "says": "NBA regular season PTS summed over the Totals rows: 32292"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "28,000+ career points",
+   "name": "Dirk Nowitzki",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/609/stats",
+     "says": "career regular season PTS 31560"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/n/nowitdi01.html",
+     "says": "NBA regular season PTS summed over the Totals rows: 31560"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "28,000+ career points",
+   "name": "Carmelo Anthony",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/1975/stats",
+     "says": "career regular season PTS 28289"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/a/anthoca01.html",
+     "says": "NBA regular season PTS summed over the Totals rows: 28289"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "Played for the Miami Heat",
+   "name": "Dwyane Wade",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/1987/stats",
+     "says": "Miami Heat rows: 2003-04, 2004-05, 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13, 2013-14, 2014-15, 2015-16, 2017-18, 2018-19"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/w/wadedw01.html",
+     "says": "MIA rows in the Totals table: 2003-04, 2004-05, 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13, 2013-14, 2014-15, 2015-16, 2017-18, 2018-19"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "Played for the Miami Heat",
+   "name": "Alonzo Mourning",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/580/stats",
+     "says": "Miami Heat rows: 1995-96, 1996-97, 1997-98, 1998-99, 1999-00, 2000-01, 2001-02, 2004-05, 2005-06, 2006-07, 2007-08"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/mournal01.html",
+     "says": "MIA rows in the Totals table: 1995-96, 1996-97, 1997-98, 1998-99, 1999-00, 2000-01, 2001-02, 2004-05, 2005-06, 2006-07, 2007-08"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "Played for the Miami Heat",
+   "name": "Chris Bosh",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/1977/stats",
+     "says": "Miami Heat rows: 2010-11, 2011-12, 2012-13, 2013-14, 2014-15, 2015-16"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/b/boshch01.html",
+     "says": "MIA rows in the Totals table: 2010-11, 2011-12, 2012-13, 2013-14, 2014-15, 2015-16"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "Played for the Miami Heat",
+   "name": "Udonis Haslem",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/2184/stats",
+     "says": "Miami Heat rows: 2003-04, 2004-05, 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13, 2013-14, 2014-15, 2015-16, 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/h/hasleud01.html",
+     "says": "MIA rows in the Totals table: 2003-04, 2004-05, 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13, 2013-14, 2014-15, 2015-16, 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "Played for the Miami Heat",
+   "name": "Tim Hardaway",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/301/stats",
+     "says": "Miami Heat rows: 1995-96, 1996-97, 1997-98, 1998-99, 1999-00, 2000-01"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/h/hardati01.html",
+     "says": "MIA rows in the Totals table: 1995-96, 1996-97, 1997-98, 1998-99, 1999-00, 2000-01"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "10,000+ career assists",
+   "name": "John Stockton",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/812/stats",
+     "says": "career regular season AST 15806"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/s/stockjo01.html",
+     "says": "NBA regular season AST summed over the Totals rows: 15806"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "10,000+ career assists",
+   "name": "Jason Kidd",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/429/stats",
+     "says": "career regular season AST 12091"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/k/kiddja01.html",
+     "says": "NBA regular season AST summed over the Totals rows: 12091"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "10,000+ career assists",
+   "name": "Steve Nash",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/592/stats",
+     "says": "career regular season AST 10335"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/n/nashst01.html",
+     "says": "NBA regular season AST summed over the Totals rows: 10335"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "10,000+ career assists",
+   "name": "Mark Jackson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/370/stats",
+     "says": "career regular season AST 10334"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/j/jacksma01.html",
+     "says": "NBA regular season AST summed over the Totals rows: 10334"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "10,000+ career assists",
+   "name": "Chris Paul",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/2779/stats",
+     "says": "career regular season AST 12552"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/p/paulch01.html",
+     "says": "NBA regular season AST summed over the Totals rows: 12552"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "Drafted #1 overall",
+   "name": "Allen Iverson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/player/947",
+     "says": "DRAFT_YEAR 1996, DRAFT_ROUND 1, DRAFT_NUMBER 1"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/i/iversal01.html",
+     "says": "Draft: Philadelphia 76ers, round 1, 1 overall, 1996"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "Drafted #1 overall",
+   "name": "Yao Ming",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/player/2397",
+     "says": "DRAFT_YEAR 2002, DRAFT_ROUND 1, DRAFT_NUMBER 1"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/mingya01.html",
+     "says": "Draft: Houston Rockets, round 1, 1 overall, 2002"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "Drafted #1 overall",
+   "name": "Dwight Howard",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/player/2730",
+     "says": "DRAFT_YEAR 2004, DRAFT_ROUND 1, DRAFT_NUMBER 1"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/h/howardw01.html",
+     "says": "Draft: Orlando Magic, round 1, 1 overall, 2004"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "Drafted #1 overall",
+   "name": "John Wall",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/player/202322",
+     "says": "DRAFT_YEAR 2010, DRAFT_ROUND 1, DRAFT_NUMBER 1"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/w/walljo01.html",
+     "says": "Draft: Washington Wizards, round 1, 1 overall, 2010"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-001",
+   "label": "Drafted #1 overall",
+   "name": "Zion Williamson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/player/1629627",
+     "says": "DRAFT_YEAR 2019, DRAFT_ROUND 1, DRAFT_NUMBER 1"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/w/willizi01.html",
+     "says": "Draft: New Orleans Pelicans, round 1, 1 overall, 2019"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Played for the Chicago Bulls",
+   "name": "Derrick Rose",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3456/stats",
+     "says": "Chicago Bulls rows: 2008-09, 2009-10, 2010-11, 2011-12, 2013-14, 2014-15, 2015-16"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/r/rosede01.html",
+     "says": "CHI rows in the Totals table: 2008-09, 2009-10, 2010-11, 2011-12, 2013-14, 2014-15, 2015-16"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Played for the Chicago Bulls",
+   "name": "Joakim Noah",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3224/stats",
+     "says": "Chicago Bulls rows: 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13, 2013-14, 2014-15, 2015-16"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/n/noahjo01.html",
+     "says": "CHI rows in the Totals table: 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13, 2013-14, 2014-15, 2015-16"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Played for the Chicago Bulls",
+   "name": "Jimmy Butler",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/6430/stats",
+     "says": "Chicago Bulls rows: 2011-12, 2012-13, 2013-14, 2014-15, 2015-16, 2016-17"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/b/butleji01.html",
+     "says": "CHI rows in the Totals table: 2011-12, 2012-13, 2013-14, 2014-15, 2015-16, 2016-17"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Played for the Chicago Bulls",
+   "name": "Luol Deng",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/2429/stats",
+     "says": "Chicago Bulls rows: 2004-05, 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13, 2013-14"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/d/denglu01.html",
+     "says": "CHI rows in the Totals table: 2004-05, 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13, 2013-14"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Played for the Chicago Bulls",
+   "name": "Scottie Pippen",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/663/stats",
+     "says": "Chicago Bulls rows: 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93, 1993-94, 1994-95, 1995-96, 1996-97, 1997-98, 2003-04"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/p/pippesc01.html",
+     "says": "CHI rows in the Totals table: 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93, 1993-94, 1994-95, 1995-96, 1996-97, 1997-98, 2003-04"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "2,000+ career three-pointers",
+   "name": "Stephen Curry",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3975/stats",
+     "says": "career regular season FG3M 4262"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/c/curryst01.html",
+     "says": "NBA regular season FG3M summed over the Totals rows: 4262"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "2,000+ career three-pointers",
+   "name": "Ray Allen",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/9/stats",
+     "says": "career regular season FG3M 2973"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/a/allenra02.html",
+     "says": "NBA regular season FG3M summed over the Totals rows: 2973"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "2,000+ career three-pointers",
+   "name": "Reggie Miller",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/552/stats",
+     "says": "career regular season FG3M 2560"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/millere01.html",
+     "says": "NBA regular season FG3M summed over the Totals rows: 2560"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "2,000+ career three-pointers",
+   "name": "James Harden",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3992/stats",
+     "says": "career regular season FG3M 3399"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/h/hardeja01.html",
+     "says": "NBA regular season FG3M summed over the Totals rows: 3399"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "2,000+ career three-pointers",
+   "name": "Klay Thompson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/6475/stats",
+     "says": "career regular season FG3M 2911"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/t/thompkl01.html",
+     "says": "NBA regular season FG3M summed over the Totals rows: 2911"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Born in France",
+   "name": "Victor Wembanyama",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/5104157",
+     "says": "displayBirthPlace \"Paris, France\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/w/wembavi01.html",
+     "says": "Born ... in Le Chesnay, France"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Born in France",
+   "name": "Rudy Gobert",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3032976",
+     "says": "displayBirthPlace \"France\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/g/goberru01.html",
+     "says": "Born ... in Saint-Quentin, France"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Born in France",
+   "name": "Ian Mahinmi",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/2774",
+     "says": "displayBirthPlace \"France\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/mahinia01.html",
+     "says": "Born ... in Rouen, France"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Born in France",
+   "name": "Boris Diaw",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/2167",
+     "says": "displayBirthPlace \"France\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/d/diawbo01.html",
+     "says": "Born ... in Cormeilles-en-Parisis, France"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Born in France",
+   "name": "Evan Fournier",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/6588",
+     "says": "displayBirthPlace \"France\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/f/fournev01.html",
+     "says": "Born ... in Saint-Maurice, France"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "14,000+ career rebounds",
+   "name": "Kareem Abdul-Jabbar",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/a/abdulka01.html",
+     "says": "NBA regular season rebounds summed over the Totals rows, 1969-70 to 1988-89: 17440"
+    },
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/news/history-nba-legend-kareem-abdul-jabbar",
+     "says": "with 38,387 points (24.6 ppg), 17,440 rebounds (11.2 rpg)"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "14,000+ career rebounds",
+   "name": "Elvin Hayes",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/h/hayesel01.html",
+     "says": "NBA regular season rebounds summed over the Totals rows, 1968-69 to 1983-84: 16279"
+    },
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/news/history-nba-legend-elvin-hayes",
+     "says": "more than 27,000 career points and 16,000 career rebounds in his Hall of Fame career"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "14,000+ career rebounds",
+   "name": "Moses Malone",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3776/stats",
+     "says": "career regular season REB 16212"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/malonmo01.html",
+     "says": "NBA regular season REB summed over the Totals rows: 16212"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "14,000+ career rebounds",
+   "name": "Tim Duncan",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/215/stats",
+     "says": "career regular season REB 15091"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/d/duncati01.html",
+     "says": "NBA regular season REB summed over the Totals rows: 15091"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "14,000+ career rebounds",
+   "name": "Kevin Garnett",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/261/stats",
+     "says": "career regular season REB 14662"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/g/garneke01.html",
+     "says": "NBA regular season REB summed over the Totals rows: 14662"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Played for the Golden State Warriors",
+   "name": "Stephen Curry",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3975/stats",
+     "says": "Golden State Warriors rows: 2009-10, 2010-11, 2011-12, 2012-13, 2013-14, 2014-15, 2015-16, 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25, 2025-26"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/c/curryst01.html",
+     "says": "GSW rows in the Totals table: 2009-10, 2010-11, 2011-12, 2012-13, 2013-14, 2014-15, 2015-16, 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25, 2025-26"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Played for the Golden State Warriors",
+   "name": "Draymond Green",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/6589/stats",
+     "says": "Golden State Warriors rows: 2012-13, 2013-14, 2014-15, 2015-16, 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25, 2025-26"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/g/greendr01.html",
+     "says": "GSW rows in the Totals table: 2012-13, 2013-14, 2014-15, 2015-16, 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25, 2025-26"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Played for the Golden State Warriors",
+   "name": "Chris Mullin",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/582/stats",
+     "says": "Golden State Warriors rows: 1985-86, 1986-87, 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93, 1993-94, 1994-95, 1995-96, 1996-97, 2000-01"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/mullich01.html",
+     "says": "GSW rows in the Totals table: 1985-86, 1986-87, 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93, 1993-94, 1994-95, 1995-96, 1996-97, 2000-01"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Played for the Golden State Warriors",
+   "name": "Andre Iguodala",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/2386/stats",
+     "says": "Golden State Warriors rows: 2013-14, 2014-15, 2015-16, 2016-17, 2017-18, 2018-19, 2021-22, 2022-23"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/i/iguodan01.html",
+     "says": "GSW rows in the Totals table: 2013-14, 2014-15, 2015-16, 2016-17, 2017-18, 2018-19, 2021-22, 2022-23"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Played for the Golden State Warriors",
+   "name": "Monta Ellis",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/2751/stats",
+     "says": "Golden State Warriors rows: 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11, 2011-12"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/e/ellismo01.html",
+     "says": "GSW rows in the Totals table: 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11, 2011-12"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Played for the New York Knicks",
+   "name": "Patrick Ewing",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/237/stats",
+     "says": "New York Knicks rows: 1985-86, 1986-87, 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93, 1993-94, 1994-95, 1995-96, 1996-97, 1997-98, 1998-99, 1999-00"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/e/ewingpa01.html",
+     "says": "NYK rows in the Totals table: 1985-86, 1986-87, 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93, 1993-94, 1994-95, 1995-96, 1996-97, 1997-98, 1998-99, 1999-00"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Played for the New York Knicks",
+   "name": "Allan Houston",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/349/stats",
+     "says": "New York Knicks rows: 1996-97, 1997-98, 1998-99, 1999-00, 2000-01, 2001-02, 2002-03, 2003-04, 2004-05"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/h/houstal01.html",
+     "says": "NYK rows in the Totals table: 1996-97, 1997-98, 1998-99, 1999-00, 2000-01, 2001-02, 2002-03, 2003-04, 2004-05"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Played for the New York Knicks",
+   "name": "Amar'e Stoudemire",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/1727/stats",
+     "says": "New York Knicks rows: 2010-11, 2011-12, 2012-13, 2013-14, 2014-15"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/s/stoudam01.html",
+     "says": "NYK rows in the Totals table: 2010-11, 2011-12, 2012-13, 2013-14, 2014-15"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Played for the New York Knicks",
+   "name": "Julius Randle",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3064514/stats",
+     "says": "New York Knicks rows: 2019-20, 2020-21, 2021-22, 2022-23, 2023-24"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/r/randlju01.html",
+     "says": "NYK rows in the Totals table: 2019-20, 2020-21, 2021-22, 2022-23, 2023-24"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Played for the New York Knicks",
+   "name": "Derek Harper",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3609/stats",
+     "says": "New York Knicks rows: 1993-94, 1994-95, 1995-96"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/h/harpede01.html",
+     "says": "NYK rows in the Totals table: 1993-94, 1994-95, 1995-96"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Born in Canada",
+   "name": "Jamal Murray",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3936299",
+     "says": "displayBirthPlace \"Kitchener, ON\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/murraja01.html",
+     "says": "Born ... in Kitchener, Ontario"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Born in Canada",
+   "name": "Shai Gilgeous-Alexander",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/4278073",
+     "says": "displayBirthPlace \"Toronto, ON\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/g/gilgesh01.html",
+     "says": "Born ... in Toronto, Ontario"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Born in Canada",
+   "name": "Tristan Thompson",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/6474",
+     "says": "displayBirthPlace \"Brampton, ON\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/t/thomptr01.html",
+     "says": "Born ... in Toronto, Ontario"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Born in Canada",
+   "name": "Dillon Brooks",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3155526",
+     "says": "displayBirthPlace \"Mississauga, ON\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/b/brookdi01.html",
+     "says": "Born ... in Mississauga, Ontario"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Born in Canada",
+   "name": "Bennedict Mathurin",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/4683634",
+     "says": "displayBirthPlace \"Montreal, PQ\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/mathube01.html",
+     "says": "Born ... in Montreal, Quebec"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Drafted #2 overall",
+   "name": "Ja Morant",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/player/1629630",
+     "says": "DRAFT_YEAR 2019, DRAFT_ROUND 1, DRAFT_NUMBER 2"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/moranja01.html",
+     "says": "Draft: Memphis Grizzlies, round 1, 2 overall, 2019"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Drafted #2 overall",
+   "name": "Brandon Ingram",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/player/1627742",
+     "says": "DRAFT_YEAR 2016, DRAFT_ROUND 1, DRAFT_NUMBER 2"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/i/ingrabr01.html",
+     "says": "Draft: Los Angeles Lakers, round 1, 2 overall, 2016"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Drafted #2 overall",
+   "name": "Victor Oladipo",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/player/203506",
+     "says": "DRAFT_YEAR 2013, DRAFT_ROUND 1, DRAFT_NUMBER 2"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/o/oladivi01.html",
+     "says": "Draft: Orlando Magic, round 1, 2 overall, 2013"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Drafted #2 overall",
+   "name": "Jalen Green",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/player/1630224",
+     "says": "DRAFT_YEAR 2021, DRAFT_ROUND 1, DRAFT_NUMBER 2"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/g/greenja05.html",
+     "says": "Draft: Houston Rockets, round 1, 2 overall, 2021"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-003",
+   "label": "Drafted #2 overall",
+   "name": "Marvin Bagley III",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/player/1628963",
+     "says": "DRAFT_YEAR 2018, DRAFT_ROUND 1, DRAFT_NUMBER 2"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/b/baglema01.html",
+     "says": "Draft: Sacramento Kings, round 1, 2 overall, 2018"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Boston Celtics",
+   "name": "Larry Bird",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/b/birdla01.html",
+     "says": "NBA Totals rows 1979-80 to 1991-92, every one BOS (13 seasons, no other club); Born ... in West Baden, Indiana"
+    },
+    {
+     "host": "nba.com",
+     "url": "https://www.nba.com/news/history-nba-legend-larry-bird",
+     "says": "For 13 seasons with the Boston Celtics, from 1979-80 through 1991-92"
+    },
+    {
+     "host": "hoophall.com",
+     "url": "https://www.hoophall.com/hall-of-famers/larry-bird/",
+     "says": "Birthplace West Baden, IN"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Boston Celtics",
+   "name": "Kevin McHale",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/4144/stats",
+     "says": "Boston Celtics rows: 1980-81, 1981-82, 1982-83, 1983-84, 1984-85, 1985-86, 1986-87, 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/mchalke01.html",
+     "says": "BOS rows in the Totals table: 1980-81, 1981-82, 1982-83, 1983-84, 1984-85, 1985-86, 1986-87, 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Boston Celtics",
+   "name": "Paul Pierce",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/662/stats",
+     "says": "Boston Celtics rows: 1998-99, 1999-00, 2000-01, 2001-02, 2002-03, 2003-04, 2004-05, 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/p/piercpa01.html",
+     "says": "BOS rows in the Totals table: 1998-99, 1999-00, 2000-01, 2001-02, 2002-03, 2003-04, 2004-05, 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Boston Celtics",
+   "name": "Jayson Tatum",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/4065648/stats",
+     "says": "Boston Celtics rows: 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25, 2025-26"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/t/tatumja01.html",
+     "says": "BOS rows in the Totals table: 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25, 2025-26"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Boston Celtics",
+   "name": "Jaylen Brown",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3917376/stats",
+     "says": "Boston Celtics rows: 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25, 2025-26"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/b/brownja02.html",
+     "says": "BOS rows in the Totals table: 2016-17, 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25, 2025-26"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Los Angeles Lakers",
+   "name": "James Worthy",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3547/stats",
+     "says": "Los Angeles Lakers rows: 1982-83, 1983-84, 1984-85, 1985-86, 1986-87, 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93, 1993-94"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/w/worthja01.html",
+     "says": "LAL rows in the Totals table: 1982-83, 1983-84, 1984-85, 1985-86, 1986-87, 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93, 1993-94"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Los Angeles Lakers",
+   "name": "Pau Gasol",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/996/stats",
+     "says": "Los Angeles Lakers rows: 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13, 2013-14"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/g/gasolpa01.html",
+     "says": "LAL rows in the Totals table: 2007-08, 2008-09, 2009-10, 2010-11, 2011-12, 2012-13, 2013-14"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Los Angeles Lakers",
+   "name": "Anthony Davis",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/6583/stats",
+     "says": "Los Angeles Lakers rows: 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/d/davisan02.html",
+     "says": "LAL rows in the Totals table: 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Los Angeles Lakers",
+   "name": "Byron Scott",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3483/stats",
+     "says": "Los Angeles Lakers rows: 1983-84, 1984-85, 1985-86, 1986-87, 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93, 1996-97"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/s/scottby01.html",
+     "says": "LAL rows in the Totals table: 1983-84, 1984-85, 1985-86, 1986-87, 1987-88, 1988-89, 1989-90, 1990-91, 1991-92, 1992-93, 1996-97"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Los Angeles Lakers",
+   "name": "Lamar Odom",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/617/stats",
+     "says": "Los Angeles Lakers rows: 2004-05, 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/o/odomla01.html",
+     "says": "LAL rows in the Totals table: 2004-05, 2005-06, 2006-07, 2007-08, 2008-09, 2009-10, 2010-11"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Born in Africa",
+   "name": "Joel Embiid",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3059318",
+     "says": "displayBirthPlace \"Yaounde, Cameroon\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/e/embiijo01.html",
+     "says": "Born ... in Yaounde, Cameroon"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Born in Africa",
+   "name": "Hakeem Olajuwon",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/619",
+     "says": "displayBirthPlace \"Lagos, Nigeria\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/o/olajuha01.html",
+     "says": "Born ... in Lagos, Nigeria"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Born in Africa",
+   "name": "Dikembe Mutombo",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/m/mutomdi01.html",
+     "says": "Born ... in Kinshasa, Democratic Republic of the Congo"
+    },
+    {
+     "host": "hoophall.com",
+     "url": "https://www.hoophall.com/hall-of-famers/dikembe-mutombo/",
+     "says": "Birthplace Kinshasa, DR"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Born in Africa",
+   "name": "Serge Ibaka",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3439",
+     "says": "displayBirthPlace \"Brazzaville, Congo\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/i/ibakase01.html",
+     "says": "Born ... in Brazzaville, Republic of the Congo"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Born in Africa",
+   "name": "Pascal Siakam",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3149673",
+     "says": "displayBirthPlace \"Douala, Cameroon\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/s/siakapa01.html",
+     "says": "Born ... in Douala, Cameroon"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Sacramento Kings",
+   "name": "Chris Webber",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/897/stats",
+     "says": "Sacramento Kings rows: 1998-99, 1999-00, 2000-01, 2001-02, 2002-03, 2003-04, 2004-05"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/w/webbech01.html",
+     "says": "SAC rows in the Totals table: 1998-99, 1999-00, 2000-01, 2001-02, 2002-03, 2003-04, 2004-05"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Sacramento Kings",
+   "name": "Peja Stojaković",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/813/stats",
+     "says": "Sacramento Kings rows: 1998-99, 1999-00, 2000-01, 2001-02, 2002-03, 2003-04, 2004-05, 2005-06"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/s/stojape01.html",
+     "says": "SAC rows in the Totals table: 1998-99, 1999-00, 2000-01, 2001-02, 2002-03, 2003-04, 2004-05, 2005-06"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Sacramento Kings",
+   "name": "Mike Bibby",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/61/stats",
+     "says": "Sacramento Kings rows: 2001-02, 2002-03, 2003-04, 2004-05, 2005-06, 2006-07, 2007-08"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/b/bibbymi01.html",
+     "says": "SAC rows in the Totals table: 2001-02, 2002-03, 2003-04, 2004-05, 2005-06, 2006-07, 2007-08"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Sacramento Kings",
+   "name": "De'Aaron Fox",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/4066259/stats",
+     "says": "Sacramento Kings rows: 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/f/foxde01.html",
+     "says": "SAC rows in the Totals table: 2017-18, 2018-19, 2019-20, 2020-21, 2021-22, 2022-23, 2023-24, 2024-25"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-004",
+   "label": "Played for the Sacramento Kings",
+   "name": "Jason Williams",
+   "holds": true,
+   "why": "member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/933/stats",
+     "says": "Sacramento Kings rows: 1998-99, 1999-00, 2000-01"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/w/willija02.html",
+     "says": "SAC rows in the Totals table: 1998-99, 1999-00, 2000-01"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "Born in France",
+   "name": "Tony Parker",
+   "holds": false,
+   "why": "not-a-member",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/1015",
+     "says": "displayBirthPlace \"Belgium\""
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/p/parketo01.html",
+     "says": "Born ... in Bruges, Belgium"
+    }
+   ]
+  },
+  {
+   "id": "nbaconn-002",
+   "label": "2,000+ career three-pointers",
+   "name": "Nicolas Batum",
+   "holds": false,
+   "why": "watched: still playing (a 2025-26 season on the record) with 1,842, within a season's worth of 2,000",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/3416/stats",
+     "says": "career regular season FG3M 1842"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/b/batumni01.html",
+     "says": "NBA regular season FG3M summed over the Totals rows: 1842"
+    }
+   ]
+  }
+ ],
+ "grayPairs": [
+  {
+   "id": "nbaconn-004",
+   "name": "DeMarcus Cousins",
+   "label": "Played for the Los Angeles Lakers (as of 2025-26)",
+   "sources": [
+    {
+     "host": "site.web.api.espn.com",
+     "url": "https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/4258/stats",
+     "says": "regular season rows 2010-11 to 2021-22: Kings, Pelicans, Warriors, Rockets, Clippers, Bucks, Nuggets; no Lakers row"
+    },
+    {
+     "host": "basketball-reference.com",
+     "url": "https://www.basketball-reference.com/players/c/couside01.html",
+     "says": "2019: Signed as a free agent with the Los Angeles Lakers. February 24, 2020: Waived by the Los Angeles Lakers. No LAL row in the Totals table"
+    }
+   ],
+   "decision": "Rostered by the Lakers in 2019-20 without a game: by games he never played for them, by roster he did. A board never hinges on that argument (Round 219), so he left nbaconn-004 and De'Aaron Fox took his place in the Kings group."
+  }
+ ],
+ "fixed": [
+  "nbaconn-002 | not-a-member | Tony Parker | Born in France",
+  "nbaconn-002 | Nicolas Batum (Born in France) | 2,000+ career three-pointers | still playing with 1842, within a season's worth (402) of 2000 in 2026-27"
+ ],
+ "boardsChanged": [
+  "nbaconn-001",
+  "nbaconn-002",
+  "nbaconn-003",
+  "nbaconn-004"
+ ],
+ "uncheckedCeiling": 0,
+ "memberUnknownCeiling": 0,
+ "otherUnknownCeiling": 0,
+ "otherUnknownNote": "Other tiles the record cannot judge against a group beside them: none on the head. The count may only fall.",
+ "clubLabelsNote": "Each file label covers its club under the name it gives, nothing else (scripts/lib/usConnectionsCheck.mjs NBA_CLUBS). franchiseNames are the other names the franchise played under, from basketball-reference's franchise page (/teams/<code>/, read 2026-10-29): a man with a season under one of them is unknown beside the label, never a no. No man on the four file boards has a season under any of them, on either host. A lineage entry can only make a verdict unknown, never a yes or a no.",
+ "decisions": [
+  "nbaconn-001: the Heat group dated; no member moved.",
+  "nbaconn-002: the Bulls group dated. Tony Parker left \"Born in France\" (born in Belgium on both hosts: Bruges, Belgium on basketball-reference, Belgium on ESPN) for Victor Wembanyama (born in France on both hosts: Paris on ESPN, Le Chesnay on basketball-reference; a Spur only, 400 three-pointers, 2,054 rebounds). Nicolas Batum left it too: 1,842 three-pointers with a 2025-26 season (still playing on the record) puts him a season from \"2,000+ career three-pointers\". Ian Mahinmi (born in Rouen, France; Spurs, Mavericks, Pacers, Wizards; 8 three-pointers, 2,705 rebounds; last season 2019-20) took his place.",
+  "nbaconn-003: the Warriors and Knicks groups dated; no member moved.",
+  "nbaconn-004: the Celtics, Lakers and Kings groups dated. DeMarcus Cousins (a gray pair beside the Lakers) left the Kings group for De'Aaron Fox (Kings 2017-18 to 2024-25, then the Spurs; no Celtics or Lakers season on either host; born in the USA on both hosts)."
+ ]
+}

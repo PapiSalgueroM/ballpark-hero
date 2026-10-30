@@ -1,0 +1,183 @@
+{"about":"Round 1574. The nba_connections_puzzles rows past the shipped file (src/data/nbaConnectionsPuzzles.ts), as the lead's read only export held them (exported) and as the rounds that decided them leave them (board). Written by scripts/qa/usConnectionsTableImport.mjs init; a board changes only with a tableDecisions line in scripts/data/nbaConnectionsVerified-2026-10.json, and reaches the live table only through that round's guarded migration. Nothing under src reads this file.",
+"table":"nba_connections_puzzles",
+"exportedAt":"2026-10-29 16:58 EDT by the lead, read only: the public REST API with the anon key, h = md5 of the jsonb text computed with Round 1565's scripts/lib/pgJsonbText.mjs; the table fingerprint matched Postgres's own aggregate over md5(groups_json::text) through the Supabase MCP",
+"exportFile":"nba-2026-10-29.json",
+"fingerprint":"d1fd41b03ae8e61d4f349cfea5e6716f",
+"rows":[
+{"puzzle_id":"nbaconn-005","sort_order":5,"exportedH":"f453a62b558f6448f618250cbfaac95b",
+  "exported":[
+   {"theme":"Played for the Phoenix Suns","players":["Charles Barkley","Amar'e Stoudemire","Jason Kidd","Shaquille O'Neal","Jalen Green"],"difficulty":"yellow"},
+   {"theme":"Played for the Indiana Pacers","players":["Reggie Miller","Chris Mullin","Monta Ellis","Victor Oladipo","Tim Hardaway"],"difficulty":"green"},
+   {"theme":"Born outside the USA","players":["Dirk Nowitzki","Tony Parker","Joel Embiid","Rudy Gobert","Hakeem Olajuwon"],"difficulty":"blue"},
+   {"theme":"Played for the Wizards or Bullets","players":["Michael Jordan","Chris Webber","Dwight Howard","Moses Malone","John Wall"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Phoenix Suns","players":["Charles Barkley","Amar'e Stoudemire","Jason Kidd","Shaquille O'Neal","Jalen Green"],"difficulty":"yellow"},
+   {"theme":"Played for the Indiana Pacers","players":["Reggie Miller","Chris Mullin","Monta Ellis","Victor Oladipo","Tim Hardaway"],"difficulty":"green"},
+   {"theme":"Born outside the USA","players":["Dirk Nowitzki","Tony Parker","Joel Embiid","Rudy Gobert","Hakeem Olajuwon"],"difficulty":"blue"},
+   {"theme":"Played for the Wizards or Bullets","players":["Michael Jordan","Chris Webber","Dwight Howard","Moses Malone","John Wall"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-006","sort_order":6,"exportedH":"998c00c1dff26cbc5a7aa6166b87f661",
+  "exported":[
+   {"theme":"Played for the Dallas Mavericks","players":["Dirk Nowitzki","Michael Finley","Rolando Blackman","Derek Harper","Josh Howard"],"difficulty":"yellow"},
+   {"theme":"Played for the Portland Trail Blazers","players":["Clyde Drexler","Terry Porter","LaMarcus Aldridge","Rasheed Wallace","Bill Walton"],"difficulty":"green"},
+   {"theme":"2,000+ career three-pointers made","players":["Ray Allen","Reggie Miller","Kyle Korver","James Harden","Paul George"],"difficulty":"blue"},
+   {"theme":"Played for BOTH the Lakers and Celtics","players":["Shaquille O'Neal","Gary Payton","Rick Fox","Bob McAdoo","Charlie Scott"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Dallas Mavericks","players":["Dirk Nowitzki","Michael Finley","Rolando Blackman","Derek Harper","Josh Howard"],"difficulty":"yellow"},
+   {"theme":"Played for the Portland Trail Blazers","players":["Clyde Drexler","Terry Porter","LaMarcus Aldridge","Rasheed Wallace","Bill Walton"],"difficulty":"green"},
+   {"theme":"2,000+ career three-pointers made","players":["Ray Allen","Reggie Miller","Kyle Korver","James Harden","Paul George"],"difficulty":"blue"},
+   {"theme":"Played for BOTH the Lakers and Celtics","players":["Shaquille O'Neal","Gary Payton","Rick Fox","Bob McAdoo","Charlie Scott"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-007","sort_order":7,"exportedH":"2ccc98b2ba6297efcf7840e22165fb1e",
+  "exported":[
+   {"theme":"Played for the Miami Heat","players":["Dwyane Wade","Alonzo Mourning","Udonis Haslem","Tim Hardaway","Bam Adebayo"],"difficulty":"yellow"},
+   {"theme":"Played for the New York Knicks","players":["Patrick Ewing","Walt Frazier","Carmelo Anthony","Allan Houston","David Lee"],"difficulty":"green"},
+   {"theme":"Played for the Utah Jazz","players":["John Stockton","Deron Williams","Rudy Gobert","Donovan Mitchell","Jeff Hornacek"],"difficulty":"blue"},
+   {"theme":"12,000+ career rebounds","players":["Kareem Abdul-Jabbar","Moses Malone","Elvin Hayes","Tim Duncan","Hakeem Olajuwon"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Miami Heat","players":["Dwyane Wade","Alonzo Mourning","Udonis Haslem","Tim Hardaway","Bam Adebayo"],"difficulty":"yellow"},
+   {"theme":"Played for the New York Knicks","players":["Patrick Ewing","Walt Frazier","Carmelo Anthony","Allan Houston","David Lee"],"difficulty":"green"},
+   {"theme":"Played for the Utah Jazz","players":["John Stockton","Deron Williams","Rudy Gobert","Donovan Mitchell","Jeff Hornacek"],"difficulty":"blue"},
+   {"theme":"12,000+ career rebounds","players":["Kareem Abdul-Jabbar","Moses Malone","Elvin Hayes","Tim Duncan","Hakeem Olajuwon"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-008","sort_order":8,"exportedH":"31126f1cfcbd09ee139c3130a13f4195",
+  "exported":[
+   {"theme":"Played for the San Antonio Spurs","players":["Tim Duncan","David Robinson","Tony Parker","Manu Ginóbili","George Gervin"],"difficulty":"yellow"},
+   {"theme":"Played for the Phoenix Suns","players":["Devin Booker","Steve Nash","Shawn Marion","Tom Chambers","Jason Kidd"],"difficulty":"green"},
+   {"theme":"Played for the Houston Rockets","players":["Hakeem Olajuwon","James Harden","Tracy McGrady","Yao Ming","Elvin Hayes"],"difficulty":"blue"},
+   {"theme":"Played for the Portland Trail Blazers","players":["Damian Lillard","CJ McCollum","Rasheed Wallace","Zach Randolph","Buck Williams"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the San Antonio Spurs","players":["Tim Duncan","David Robinson","Tony Parker","Manu Ginóbili","George Gervin"],"difficulty":"yellow"},
+   {"theme":"Played for the Phoenix Suns","players":["Devin Booker","Steve Nash","Shawn Marion","Tom Chambers","Jason Kidd"],"difficulty":"green"},
+   {"theme":"Played for the Houston Rockets","players":["Hakeem Olajuwon","James Harden","Tracy McGrady","Yao Ming","Elvin Hayes"],"difficulty":"blue"},
+   {"theme":"Played for the Portland Trail Blazers","players":["Damian Lillard","CJ McCollum","Rasheed Wallace","Zach Randolph","Buck Williams"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-009","sort_order":9,"exportedH":"356089c2ee631d9bf5d6a83b8f44dfb5",
+  "exported":[
+   {"theme":"Played for the Detroit Pistons","players":["Isiah Thomas","Joe Dumars","Grant Hill","Mark Aguirre","Clifford Robinson"],"difficulty":"yellow"},
+   {"theme":"Played for the Denver Nuggets","players":["Nikola Jokić","Carmelo Anthony","Jamal Murray","Aaron Gordon","Kiki Vandeweghe"],"difficulty":"green"},
+   {"theme":"Played for the Milwaukee Bucks","players":["Giannis Antetokounmpo","Kareem Abdul-Jabbar","Ray Allen","Brook Lopez","Sidney Moncrief"],"difficulty":"blue"},
+   {"theme":"Played for the Philadelphia 76ers","players":["Julius Erving","Charles Barkley","James Harden","Paul George","Maurice Cheeks"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Detroit Pistons","players":["Isiah Thomas","Joe Dumars","Grant Hill","Mark Aguirre","Clifford Robinson"],"difficulty":"yellow"},
+   {"theme":"Played for the Denver Nuggets","players":["Nikola Jokić","Carmelo Anthony","Jamal Murray","Aaron Gordon","Kiki Vandeweghe"],"difficulty":"green"},
+   {"theme":"Played for the Milwaukee Bucks","players":["Giannis Antetokounmpo","Kareem Abdul-Jabbar","Ray Allen","Brook Lopez","Sidney Moncrief"],"difficulty":"blue"},
+   {"theme":"Played for the Philadelphia 76ers","players":["Julius Erving","Charles Barkley","James Harden","Paul George","Maurice Cheeks"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-010","sort_order":10,"exportedH":"ff9a87fab5bf23b4c7aeb90bb21f4110",
+  "exported":[
+   {"theme":"Won back-to-back MVPs","players":["Giannis Antetokounmpo","Stephen Curry","Nikola Jokic","Steve Nash","Tim Duncan"],"difficulty":"yellow"},
+   {"theme":"Drafted straight out of high school","players":["LeBron James","Kobe Bryant","Kevin Garnett","Tracy McGrady","Dwight Howard"],"difficulty":"green"},
+   {"theme":"Scored 70 or more in a game","players":["Wilt Chamberlain","Devin Booker","Donovan Mitchell","Luka Doncic","Damian Lillard"],"difficulty":"blue"},
+   {"theme":"Won Sixth Man of the Year","players":["Jamal Crawford","Lou Williams","Manu Ginobili","James Harden","J.R. Smith"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Won back-to-back MVPs","players":["Giannis Antetokounmpo","Stephen Curry","Nikola Jokic","Steve Nash","Tim Duncan"],"difficulty":"yellow"},
+   {"theme":"Drafted straight out of high school","players":["LeBron James","Kobe Bryant","Kevin Garnett","Tracy McGrady","Dwight Howard"],"difficulty":"green"},
+   {"theme":"Scored 70 or more in a game","players":["Wilt Chamberlain","Devin Booker","Donovan Mitchell","Luka Doncic","Damian Lillard"],"difficulty":"blue"},
+   {"theme":"Won Sixth Man of the Year","players":["Jamal Crawford","Lou Williams","Manu Ginobili","James Harden","J.R. Smith"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-011","sort_order":11,"exportedH":"69d6b2f11c53d394c3031a4722564041",
+  "exported":[
+   {"theme":"Whole career with one franchise","players":["Tim Duncan","Dirk Nowitzki","Kobe Bryant","Stephen Curry","Reggie Miller"],"difficulty":"yellow"},
+   {"theme":"Won Defensive Player of the Year","players":["Rudy Gobert","Giannis Antetokounmpo","Kawhi Leonard","Dwight Howard","Ben Wallace"],"difficulty":"green"},
+   {"theme":"Dad played in the NBA","players":["Klay Thompson","Austin Rivers","Gary Payton II","Jalen Brunson","Andrew Wiggins"],"difficulty":"blue"},
+   {"theme":"Won Rookie of the Year AND an MVP","players":["Derrick Rose","LeBron James","Kevin Durant","Wilt Chamberlain","Michael Jordan"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Whole career with one franchise","players":["Tim Duncan","Dirk Nowitzki","Kobe Bryant","Stephen Curry","Reggie Miller"],"difficulty":"yellow"},
+   {"theme":"Won Defensive Player of the Year","players":["Rudy Gobert","Giannis Antetokounmpo","Kawhi Leonard","Dwight Howard","Ben Wallace"],"difficulty":"green"},
+   {"theme":"Dad played in the NBA","players":["Klay Thompson","Austin Rivers","Gary Payton II","Jalen Brunson","Andrew Wiggins"],"difficulty":"blue"},
+   {"theme":"Won Rookie of the Year AND an MVP","players":["Derrick Rose","LeBron James","Kevin Durant","Wilt Chamberlain","Michael Jordan"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-012","sort_order":12,"exportedH":"9b06c3a539d115da847cd7e3a8a3f3fc",
+  "exported":[
+   {"theme":"Played for the Lakers","players":["Kobe Bryant","Shaquille O'Neal","Magic Johnson","Jerry West","Pau Gasol"],"difficulty":"yellow"},
+   {"theme":"Won Sixth Man of the Year","players":["Jamal Crawford","Manu Ginobili","Tyler Herro","Malcolm Brogdon","Detlef Schrempf"],"difficulty":"green"},
+   {"theme":"Scored 70 or more in a game","players":["Devin Booker","Damian Lillard","Donovan Mitchell","Joel Embiid","David Robinson"],"difficulty":"blue"},
+   {"theme":"Drafted straight out of high school","players":["Kevin Garnett","Tracy McGrady","Jermaine O'Neal","Amar'e Stoudemire","Al Jefferson"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Lakers","players":["Kobe Bryant","Shaquille O'Neal","Magic Johnson","Jerry West","Pau Gasol"],"difficulty":"yellow"},
+   {"theme":"Won Sixth Man of the Year","players":["Jamal Crawford","Manu Ginobili","Tyler Herro","Malcolm Brogdon","Detlef Schrempf"],"difficulty":"green"},
+   {"theme":"Scored 70 or more in a game","players":["Devin Booker","Damian Lillard","Donovan Mitchell","Joel Embiid","David Robinson"],"difficulty":"blue"},
+   {"theme":"Drafted straight out of high school","players":["Kevin Garnett","Tracy McGrady","Jermaine O'Neal","Amar'e Stoudemire","Al Jefferson"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-013","sort_order":13,"exportedH":"3dc3b1551175668b7861452bbd8831ee",
+  "exported":[
+   {"theme":"Point guards","players":["Chris Paul","Kyrie Irving","Ja Morant","Trae Young","Rajon Rondo"],"difficulty":"yellow"},
+   {"theme":"Won a Finals MVP","players":["Andre Iguodala","Kawhi Leonard","Dirk Nowitzki","Giannis Antetokounmpo","Jaylen Brown"],"difficulty":"green"},
+   {"theme":"Played 19 or more NBA seasons","players":["Vince Carter","Robert Parish","Kevin Willis","Udonis Haslem","Kevin Garnett"],"difficulty":"blue"},
+   {"theme":"Won back-to-back MVPs","players":["Stephen Curry","Steve Nash","Nikola Jokic","LeBron James","Tim Duncan"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Point guards","players":["Chris Paul","Kyrie Irving","Ja Morant","Trae Young","Rajon Rondo"],"difficulty":"yellow"},
+   {"theme":"Won a Finals MVP","players":["Andre Iguodala","Kawhi Leonard","Dirk Nowitzki","Giannis Antetokounmpo","Jaylen Brown"],"difficulty":"green"},
+   {"theme":"Played 19 or more NBA seasons","players":["Vince Carter","Robert Parish","Kevin Willis","Udonis Haslem","Kevin Garnett"],"difficulty":"blue"},
+   {"theme":"Won back-to-back MVPs","players":["Stephen Curry","Steve Nash","Nikola Jokic","LeBron James","Tim Duncan"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-014","sort_order":14,"exportedH":"c96bd1107c6140fad7626e3f05a0a728",
+  "exported":[
+   {"theme":"Centers","players":["Joel Embiid","Hakeem Olajuwon","Patrick Ewing","Victor Wembanyama","Kareem Abdul-Jabbar"],"difficulty":"yellow"},
+   {"theme":"Born outside the United States","players":["Luka Doncic","Yao Ming","Manu Ginobili","Steve Nash","Tony Parker"],"difficulty":"green"},
+   {"theme":"Won 6 or more championships","players":["Michael Jordan","Scottie Pippen","Robert Horry","Sam Jones","John Havlicek"],"difficulty":"blue"},
+   {"theme":"Averaged 30 points in a season","players":["Wilt Chamberlain","Allen Iverson","James Harden","Kevin Durant","Elgin Baylor"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Centers","players":["Joel Embiid","Hakeem Olajuwon","Patrick Ewing","Victor Wembanyama","Kareem Abdul-Jabbar"],"difficulty":"yellow"},
+   {"theme":"Born outside the United States","players":["Luka Doncic","Yao Ming","Manu Ginobili","Steve Nash","Tony Parker"],"difficulty":"green"},
+   {"theme":"Won 6 or more championships","players":["Michael Jordan","Scottie Pippen","Robert Horry","Sam Jones","John Havlicek"],"difficulty":"blue"},
+   {"theme":"Averaged 30 points in a season","players":["Wilt Chamberlain","Allen Iverson","James Harden","Kevin Durant","Elgin Baylor"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-015","sort_order":15,"exportedH":"6dd9ffbdef901b4dc236d453b7f29df0",
+  "exported":[
+   {"theme":"Played for the Celtics","players":["Larry Bird","Paul Pierce","Kevin McHale","Jayson Tatum","Bill Russell"],"difficulty":"yellow"},
+   {"theme":"Won Defensive Player of the Year","players":["Rudy Gobert","Dikembe Mutombo","Ben Wallace","Dennis Rodman","Alonzo Mourning"],"difficulty":"green"},
+   {"theme":"Scored 70 or more in a game","players":["Damian Lillard","Donovan Mitchell","Devin Booker","David Thompson","Wilt Chamberlain"],"difficulty":"blue"},
+   {"theme":"Drafted straight out of high school","players":["LeBron James","Tracy McGrady","Amar'e Stoudemire","Rashard Lewis","Monta Ellis"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Celtics","players":["Larry Bird","Paul Pierce","Kevin McHale","Jayson Tatum","Bill Russell"],"difficulty":"yellow"},
+   {"theme":"Won Defensive Player of the Year","players":["Rudy Gobert","Dikembe Mutombo","Ben Wallace","Dennis Rodman","Alonzo Mourning"],"difficulty":"green"},
+   {"theme":"Scored 70 or more in a game","players":["Damian Lillard","Donovan Mitchell","Devin Booker","David Thompson","Wilt Chamberlain"],"difficulty":"blue"},
+   {"theme":"Drafted straight out of high school","players":["LeBron James","Tracy McGrady","Amar'e Stoudemire","Rashard Lewis","Monta Ellis"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-016","sort_order":16,"exportedH":"f81b2dbca4d532ad8845325781995b26",
+  "exported":[
+   {"theme":"Won MVP since 2015","players":["Nikola Jokic","Joel Embiid","Giannis Antetokounmpo","Shai Gilgeous-Alexander","James Harden"],"difficulty":"yellow"},
+   {"theme":"Scored 70 or more in a game","players":["David Thompson","Elgin Baylor","David Robinson","Luka Doncic","Devin Booker"],"difficulty":"green"},
+   {"theme":"Won the scoring title and the title in the same season","players":["Michael Jordan","Shaquille O'Neal","Kareem Abdul-Jabbar","Wilt Chamberlain","George Mikan"],"difficulty":"blue"},
+   {"theme":"Played in both the ABA and NBA","players":["Julius Erving","Moses Malone","George Gervin","Artis Gilmore","Rick Barry"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Won MVP since 2015","players":["Nikola Jokic","Joel Embiid","Giannis Antetokounmpo","Shai Gilgeous-Alexander","James Harden"],"difficulty":"yellow"},
+   {"theme":"Scored 70 or more in a game","players":["David Thompson","Elgin Baylor","David Robinson","Luka Doncic","Devin Booker"],"difficulty":"green"},
+   {"theme":"Won the scoring title and the title in the same season","players":["Michael Jordan","Shaquille O'Neal","Kareem Abdul-Jabbar","Wilt Chamberlain","George Mikan"],"difficulty":"blue"},
+   {"theme":"Played in both the ABA and NBA","players":["Julius Erving","Moses Malone","George Gervin","Artis Gilmore","Rick Barry"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-017","sort_order":17,"exportedH":"ab2af73e84f6db15f24bc058424f7cd8",
+  "exported":[
+   {"theme":"Won the Slam Dunk Contest","players":["Michael Jordan","Vince Carter","Blake Griffin","Zach LaVine","Mac McClung"],"difficulty":"yellow"},
+   {"theme":"Had a 50-40-90 shooting season","players":["Larry Bird","Steve Nash","Dirk Nowitzki","Kevin Durant","Stephen Curry"],"difficulty":"green"},
+   {"theme":"Played for the Thunder","players":["Russell Westbrook","James Harden","Paul George","Shai Gilgeous-Alexander","Chris Paul"],"difficulty":"blue"},
+   {"theme":"Played for the Raptors","players":["Kawhi Leonard","DeMar DeRozan","Kyle Lowry","Chris Bosh","Pascal Siakam"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Won the Slam Dunk Contest","players":["Michael Jordan","Vince Carter","Blake Griffin","Zach LaVine","Mac McClung"],"difficulty":"yellow"},
+   {"theme":"Had a 50-40-90 shooting season","players":["Larry Bird","Steve Nash","Dirk Nowitzki","Kevin Durant","Stephen Curry"],"difficulty":"green"},
+   {"theme":"Played for the Thunder","players":["Russell Westbrook","James Harden","Paul George","Shai Gilgeous-Alexander","Chris Paul"],"difficulty":"blue"},
+   {"theme":"Played for the Raptors","players":["Kawhi Leonard","DeMar DeRozan","Kyle Lowry","Chris Bosh","Pascal Siakam"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-018","sort_order":18,"exportedH":"f430bdfe2e41d4bcfeb7c0d68a27eaed",
+  "exported":[
+   {"theme":"Played for the Grizzlies","players":["Marc Gasol","Shane Battier","Mike Conley","Jaren Jackson Jr.","Tony Allen"],"difficulty":"yellow"},
+   {"theme":"Foreign-born MVPs","players":["Giannis Antetokounmpo","Nikola Jokic","Joel Embiid","Hakeem Olajuwon","Dirk Nowitzki"],"difficulty":"green"},
+   {"theme":"Won Most Improved Player","players":["CJ McCollum","Jimmy Butler","Pascal Siakam","Julius Randle","Tyrese Maxey"],"difficulty":"blue"},
+   {"theme":"Played for the Cavaliers","players":["LeBron James","Kyrie Irving","Kevin Love","Mark Price","Donovan Mitchell"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Played for the Grizzlies","players":["Marc Gasol","Shane Battier","Mike Conley","Jaren Jackson Jr.","Tony Allen"],"difficulty":"yellow"},
+   {"theme":"Foreign-born MVPs","players":["Giannis Antetokounmpo","Nikola Jokic","Joel Embiid","Hakeem Olajuwon","Dirk Nowitzki"],"difficulty":"green"},
+   {"theme":"Won Most Improved Player","players":["CJ McCollum","Jimmy Butler","Pascal Siakam","Julius Randle","Tyrese Maxey"],"difficulty":"blue"},
+   {"theme":"Played for the Cavaliers","players":["LeBron James","Kyrie Irving","Kevin Love","Mark Price","Donovan Mitchell"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-019","sort_order":19,"exportedH":"0f81c10c9ee566dd10686267d236a4fa",
+  "exported":[
+   {"theme":"Won back-to-back Finals MVPs","players":["Michael Jordan","Shaquille O'Neal","Hakeem Olajuwon","LeBron James","Kobe Bryant"],"difficulty":"yellow"},
+   {"theme":"Played in the ABA","players":["Julius Erving","Rick Barry","Artis Gilmore","George Gervin","Dan Issel"],"difficulty":"green"},
+   {"theme":"Played for the Trail Blazers","players":["Clyde Drexler","Damian Lillard","LaMarcus Aldridge","Terry Porter","Brandon Roy"],"difficulty":"blue"},
+   {"theme":"Hall of Fame point guards","players":["Magic Johnson","John Stockton","Isiah Thomas","Jason Kidd","Gary Payton"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"Won back-to-back Finals MVPs","players":["Michael Jordan","Shaquille O'Neal","Hakeem Olajuwon","LeBron James","Kobe Bryant"],"difficulty":"yellow"},
+   {"theme":"Played in the ABA","players":["Julius Erving","Rick Barry","Artis Gilmore","George Gervin","Dan Issel"],"difficulty":"green"},
+   {"theme":"Played for the Trail Blazers","players":["Clyde Drexler","Damian Lillard","LaMarcus Aldridge","Terry Porter","Brandon Roy"],"difficulty":"blue"},
+   {"theme":"Hall of Fame point guards","players":["Magic Johnson","John Stockton","Isiah Thomas","Jason Kidd","Gary Payton"],"difficulty":"purple"}]},
+{"puzzle_id":"nbaconn-020","sort_order":20,"exportedH":"90c5d3d07904ca198b171c6fa047bb66",
+  "exported":[
+   {"theme":"2024 champion Celtics","players":["Jayson Tatum","Jaylen Brown","Kristaps Porzingis","Derrick White","Jrue Holiday"],"difficulty":"yellow"},
+   {"theme":"Won Rookie of the Year in the 2020s","players":["Ja Morant","LaMelo Ball","Scottie Barnes","Paolo Banchero","Victor Wembanyama"],"difficulty":"green"},
+   {"theme":"Warriors dynasty champions","players":["Draymond Green","Klay Thompson","Andre Iguodala","Kevon Looney","Shaun Livingston"],"difficulty":"blue"},
+   {"theme":"2020s scoring champions","players":["James Harden","Stephen Curry","Joel Embiid","Luka Doncic","Shai Gilgeous-Alexander"],"difficulty":"purple"}],
+  "board":[
+   {"theme":"2024 champion Celtics","players":["Jayson Tatum","Jaylen Brown","Kristaps Porzingis","Derrick White","Jrue Holiday"],"difficulty":"yellow"},
+   {"theme":"Won Rookie of the Year in the 2020s","players":["Ja Morant","LaMelo Ball","Scottie Barnes","Paolo Banchero","Victor Wembanyama"],"difficulty":"green"},
+   {"theme":"Warriors dynasty champions","players":["Draymond Green","Klay Thompson","Andre Iguodala","Kevon Looney","Shaun Livingston"],"difficulty":"blue"},
+   {"theme":"2020s scoring champions","players":["James Harden","Stephen Curry","Joel Embiid","Luka Doncic","Shai Gilgeous-Alexander"],"difficulty":"purple"}]}
+]}

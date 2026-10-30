@@ -12,6 +12,7 @@ import { HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NbaConnectionsHowToPlay } from '@/components/nba-connections/NbaConnectionsHowToPlay';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ConnectionsGroupLabel, ConnectionsReceiptText } from '@/components/game/ConnectionsGroupLabel';
 
 /**
  * NBA Connections, direct port of BaseballConnections.tsx (task #26) on the
@@ -186,7 +187,7 @@ const NbaConnections = () => {
           </div>
           <div>
           <div ref={actionRef} tabIndex={-1} className="space-y-2 rounded-lg focus:outline-none">
-            {notice.text && <p role="status" data-nba-receipt="" className="text-sm font-semibold">{notice.text}</p>}
+            {notice.text && <p role="status" data-nba-receipt="" className="text-sm font-semibold"><ConnectionsReceiptText text={notice.text} /></p>}
             <p className="text-xs text-muted-foreground">Draft {'ABCD'[drafts?.active ?? 0]}: {selected.length}/5. Planning costs nothing.</p>
           <div className="grid grid-cols-2 gap-2">
             <button
@@ -237,7 +238,7 @@ const NbaConnections = () => {
 
         {!isLoading && solvedGroups.length > 0 && <div className="mt-4 space-y-2" aria-label="Revealed groups">
           {solvedGroups.map(group => <details key={group.theme} className={cn('rounded-xl border px-3', DIFFICULTY_COLORS[group.difficulty])}>
-            <summary className="min-h-[44px] cursor-pointer py-3 text-sm font-bold">{group.theme}</summary>
+            <summary className="min-h-[44px] cursor-pointer py-3 text-sm font-bold"><ConnectionsGroupLabel theme={group.theme} /></summary>
             <p className="pb-3 text-sm">{group.players.join(', ')}</p>
           </details>)}
         </div>}
@@ -257,7 +258,7 @@ const NbaConnections = () => {
           examples={[
             '28,000+ career points: Karl Malone, Kobe Bryant, Dirk Nowitzki...',
             'Drafted #1 overall: Allen Iverson, Yao Ming, Zion Williamson...',
-            'Born in France: Tony Parker, Rudy Gobert, Boris Diaw...',
+            'Born in France: Victor Wembanyama, Rudy Gobert, Boris Diaw...',
             '10,000+ career assists: John Stockton, Jason Kidd, Chris Paul...',
           ]}
         />

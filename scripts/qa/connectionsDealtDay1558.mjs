@@ -50,7 +50,7 @@ const valid = g => { const all = g.flatMap(x => x.players ?? []); return g.lengt
 const MIGRATION_FILE = process.env.DEALT_MIGRATION ?? 'supabase/migrations/20261022180000_round_1558_us_connections_truth.sql';
 const ROUND = (MIGRATION_FILE.match(/round_(\d+)/) ?? [])[1] ?? '1558';
 const migration = fs.readFileSync(path.join(ROOT, MIGRATION_FILE), 'utf8');
-const touched = new Set([...migration.matchAll(/^\s*\('((?:bconn|nflconn|nhlconn)-[0-9]+)', /gm)].map(x => x[1]));
+const touched = new Set([...migration.matchAll(/^\s*\('((?:bconn|nflconn|nhlconn|nbaconn)-[0-9]+)', /gm)].map(x => x[1]));
 /* DEALT_LABELS_ONLY_SAFE=1 (Round 1567, set by its wrapper): a board whose every known old value holds the same five
    players in each group as the new board, and only a label changed ("Played for the Steelers" to "Played for the
    Steelers (as of 2025)"), cannot strand a tile: a guess saved earlier that day keeps the old label on its solved
@@ -64,7 +64,7 @@ const touched = new Set([...migration.matchAll(/^\s*\('((?:bconn|nflconn|nhlconn
 const LABELS_ONLY_SAFE = process.env.DEALT_LABELS_ONLY_SAFE === '1';
 const sets = g => g.map(x => [...(x.players ?? [])].sort().join('|')).join('/');
 const migRows = new Map();
-for (const x of migration.matchAll(/^\s*\('((?:bconn|nflconn|nhlconn)-[0-9]+)', '((?:[^']|'')*)', '((?:[^']|'')*)'\)/gm)) {
+for (const x of migration.matchAll(/^\s*\('((?:bconn|nflconn|nhlconn|nbaconn)-[0-9]+)', '((?:[^']|'')*)', '((?:[^']|'')*)'\)/gm)) {
   const [old, next] = [x[2], x[3]].map(j => JSON.parse(j.replace(/''/g, "'")));
   if (!migRows.has(x[1])) migRows.set(x[1], { next, olds: [] });
   migRows.get(x[1]).olds.push(old);

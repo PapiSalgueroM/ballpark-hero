@@ -828,6 +828,253 @@ export function makeNhlChecker({ record, ledger = {} }) {
   return { criterion, fits, watch, seasonBest, identity, active, watched: WATCHED.nhl, has: name => byName.has(fold(name)) };
 }
 
+/* ------------------------------------------------------------------ */
+/* NBA                                                                 */
+/* ------------------------------------------------------------------ */
+
+/*
+ * Round 1583: a birthplace as the hosts print it -> a country. ESPN's displayBirthPlace ends in a US state or a
+ * Canadian province code for a man born in North America ("Akron, OH", "Kitchener, ON") and in a country name
+ * otherwise ("Belgium", "Paris, France"); basketball-reference links the country as a two letter code
+ * (birthplaces.fcgi?country=BE). Both are mapped here by explicit lists; a suffix or a code no list holds is null
+ * (unknown), never a guess. A birth group reads the birthplace, never a citizenship or nba.com's COUNTRY (Tony
+ * Parker: citizenship France, born in Bruges, Belgium).
+ */
+const US_STATES = new Set(['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC']);
+/* PQ: the old code for Quebec, which ESPN still prints ("Montreal, PQ") */
+const CA_PROVINCES = new Set(['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'PQ', 'QC', 'SK', 'YT']);
+/* country names as ESPN prints them -> the country (each one seen on the 2026-10-29 read); exported for
+   simUsConnectionsFacts section 11, which holds every country either reader gives to one continent */
+export const NBA_COUNTRY_NAMES = {
+  France: 'France', Belgium: 'Belgium', 'West Germany': 'West Germany', Lithuania: 'Lithuania', Nigeria: 'Nigeria',
+  Cameroon: 'Cameroon', Sudan: 'Sudan', Jamaica: 'Jamaica', Spain: 'Spain', Yugoslavia: 'Yugoslavia',
+  /* ESPN prints "Congo" for Brazzaville (the Republic of the Congo); both Congos are in Africa */
+  Congo: 'Congo', 'South Africa': 'South Africa', 'Virgin Islands': 'US Virgin Islands', China: 'China',
+};
+/* basketball-reference's two letter country codes (birthplaces.fcgi?country=) -> the country */
+export const NBA_COUNTRY_CODES = {
+  US: 'USA', CA: 'Canada', FR: 'France', BE: 'Belgium', DE: 'Germany', LT: 'Lithuania', NG: 'Nigeria', CM: 'Cameroon',
+  SD: 'Sudan', SS: 'South Sudan', JM: 'Jamaica', ES: 'Spain', RS: 'Serbia', HR: 'Croatia', CG: 'Republic of the Congo',
+  CD: 'DR Congo', ZA: 'South Africa', VI: 'US Virgin Islands', CN: 'China',
+};
+/* "Born in Africa" and "Born in Europe": every country either host prints, old names and new, sorted into a
+   continent; a country in neither set is unknown for a continent group, never a no */
+const NBA_AFRICA = new Set(['Nigeria', 'Cameroon', 'Sudan', 'South Sudan', 'Congo', 'Republic of the Congo', 'DR Congo', 'South Africa']);
+const NBA_NOT_AFRICA = new Set(['USA', 'Canada', 'France', 'Belgium', 'Germany', 'West Germany', 'Lithuania', 'Jamaica', 'Spain', 'Serbia', 'Croatia', 'Yugoslavia', 'US Virgin Islands', 'China']);
+/** ESPN's displayBirthPlace -> a country, or null when its last part is in no list. */
+export function nbaBirthCountry(text) {
+  if (!text) return null;
+  const last = String(text).split(',').pop().trim();
+  if (US_STATES.has(last)) return 'USA';
+  if (CA_PROVINCES.has(last)) return 'Canada';
+  return NBA_COUNTRY_NAMES[last] ?? null;
+}
+
+/*
+ * Round 1583: every NBA franchise with every name it has played under, as each host writes it: basketball-reference's
+ * team codes (read from its 30 franchise pages, /teams/<code>/, on 2026-10-29) and the display names ESPN gives
+ * those seasons (the names ESPN printed on the 2026-10-29 read, plus the franchise pages' names). A club name or code
+ * no franchise here holds is unmapped. ESPN's names are not a closed list (it spells some of its own), so a man with
+ * a season under an unmapped ESPN name is unknown for every club group: it could be an old name of the club beside
+ * him, so it is never read as a no. basketball-reference's codes are closed: the 30 franchise pages list every code
+ * each franchise has played under, so a code none of them holds (an ABA club that folded, as the Utah Stars) belongs
+ * to no NBA club.
+ */
+const NBA_FRANCHISES = {
+  ATL: { codes: ['ATL', 'STL', 'MLH', 'TRI'], names: ['Atlanta Hawks', 'St. Louis Hawks', 'Milwaukee Hawks', 'Tri-Cities Blackhawks'] },
+  BOS: { codes: ['BOS'], names: ['Boston Celtics'] },
+  BRK: { codes: ['BRK', 'NJN', 'NYN', 'NYA', 'NJA'], names: ['Brooklyn Nets', 'New Jersey Nets', 'New York Nets', 'New Jersey Americans'] },
+  CHO: { codes: ['CHO', 'CHA', 'CHH'], names: ['Charlotte Hornets', 'Charlotte Bobcats'] },
+  CHI: { codes: ['CHI'], names: ['Chicago Bulls'] },
+  CLE: { codes: ['CLE'], names: ['Cleveland Cavaliers'] },
+  DAL: { codes: ['DAL'], names: ['Dallas Mavericks'] },
+  DEN: { codes: ['DEN', 'DNA', 'DNR'], names: ['Denver Nuggets', 'Denver Rockets'] },
+  DET: { codes: ['DET', 'FTW'], names: ['Detroit Pistons', 'Fort Wayne Pistons'] },
+  GSW: { codes: ['GSW', 'SFW', 'PHW'], names: ['Golden State Warriors', 'San Francisco Warriors', 'Philadelphia Warriors'] },
+  HOU: { codes: ['HOU', 'SDR'], names: ['Houston Rockets', 'San Diego Rockets'] },
+  IND: { codes: ['IND', 'INA'], names: ['Indiana Pacers'] },
+  LAC: { codes: ['LAC', 'SDC', 'BUF'], names: ['LA Clippers', 'Los Angeles Clippers', 'San Diego Clippers', 'Buffalo Braves'] },
+  LAL: { codes: ['LAL', 'MNL'], names: ['Los Angeles Lakers', 'Minneapolis Lakers'] },
+  MEM: { codes: ['MEM', 'VAN'], names: ['Memphis Grizzlies', 'Vancouver Grizzlies'] },
+  MIA: { codes: ['MIA'], names: ['Miami Heat'] },
+  MIL: { codes: ['MIL'], names: ['Milwaukee Bucks'] },
+  MIN: { codes: ['MIN'], names: ['Minnesota Timberwolves'] },
+  NOP: { codes: ['NOP', 'NOH', 'NOK'], names: ['New Orleans Pelicans', 'New Orleans Hornets', 'New Orleans/Oklahoma City Hornets', 'NO/Oklahoma City Hornets'] },
+  NYK: { codes: ['NYK'], names: ['New York Knicks'] },
+  OKC: { codes: ['OKC', 'SEA'], names: ['Oklahoma City Thunder', 'Seattle SuperSonics'] },
+  ORL: { codes: ['ORL'], names: ['Orlando Magic'] },
+  PHI: { codes: ['PHI', 'SYR'], names: ['Philadelphia 76ers', 'Syracuse Nationals'] },
+  PHO: { codes: ['PHO'], names: ['Phoenix Suns'] },
+  POR: { codes: ['POR'], names: ['Portland Trail Blazers'] },
+  SAC: { codes: ['SAC', 'KCK', 'KCO', 'CIN', 'ROC'], names: ['Sacramento Kings', 'Kansas City Kings', 'Kansas City-Omaha Kings', 'Cincinnati Royals', 'Rochester Royals'] },
+  SAS: { codes: ['SAS', 'SAA', 'DLC', 'TEX'], names: ['San Antonio Spurs', 'Dallas Chaparrals', 'Texas Chaparrals'] },
+  TOR: { codes: ['TOR'], names: ['Toronto Raptors'] },
+  UTA: { codes: ['UTA', 'NOJ'], names: ['Utah Jazz', 'New Orleans Jazz'] },
+  WAS: { codes: ['WAS', 'WSB', 'CAP', 'BAL', 'CHZ', 'CHP'], names: ['Washington Wizards', 'Washington Bullets', 'Capital Bullets', 'Baltimore Bullets', 'Chicago Zephyrs', 'Chicago Packers'] },
+};
+const NBA_CODE_FR = new Map(Object.entries(NBA_FRANCHISES).flatMap(([f, x]) => x.codes.map(c => [c, f])));
+const NBA_NAME_FR = new Map(Object.entries(NBA_FRANCHISES).flatMap(([f, x]) => x.names.map(n => [n, f])));
+/* a club label: the franchise and exactly the names and codes it covers (the club under today's name) */
+const club = (f, name, codes = [f], names = [name]) => ({ franchise: f, names, codes });
+/*
+ * Board wording (folded) -> the club the label names, on both hosts. A full name and a bare nickname are separate
+ * keys (critic-1583 item 4), each covering exactly the club under that name: "Played for the Los Angeles Lakers"
+ * does not count the Minneapolis Lakers, and neither does "Played for the Lakers" until a round decides that label.
+ * A man whose seasons with the franchise were under another of its names (or in the ABA) is unknown beside it, so
+ * the ledger decides him (a gray pair who leaves the board), never a silent no. A label this map does not hold is
+ * unjudged. The Clippers are one club under two ESPN names (LA Clippers, Los Angeles Clippers).
+ */
+export const NBA_CLUBS = {
+  atlantahawks: club('ATL', 'Atlanta Hawks'), bostonceltics: club('BOS', 'Boston Celtics'), brooklynnets: club('BRK', 'Brooklyn Nets'),
+  charlottehornets: club('CHO', 'Charlotte Hornets'), chicagobulls: club('CHI', 'Chicago Bulls'), clevelandcavaliers: club('CLE', 'Cleveland Cavaliers'),
+  dallasmavericks: club('DAL', 'Dallas Mavericks'), denvernuggets: club('DEN', 'Denver Nuggets'), detroitpistons: club('DET', 'Detroit Pistons'),
+  goldenstatewarriors: club('GSW', 'Golden State Warriors'), houstonrockets: club('HOU', 'Houston Rockets'), indianapacers: club('IND', 'Indiana Pacers'),
+  laclippers: club('LAC', 'LA Clippers', ['LAC'], ['LA Clippers', 'Los Angeles Clippers']),
+  losangelesclippers: club('LAC', 'Los Angeles Clippers', ['LAC'], ['LA Clippers', 'Los Angeles Clippers']),
+  losangeleslakers: club('LAL', 'Los Angeles Lakers'), memphisgrizzlies: club('MEM', 'Memphis Grizzlies'), miamiheat: club('MIA', 'Miami Heat'),
+  milwaukeebucks: club('MIL', 'Milwaukee Bucks'), minnesotatimberwolves: club('MIN', 'Minnesota Timberwolves'),
+  neworleanspelicans: club('NOP', 'New Orleans Pelicans'), newyorkknicks: club('NYK', 'New York Knicks'),
+  oklahomacitythunder: club('OKC', 'Oklahoma City Thunder'), orlandomagic: club('ORL', 'Orlando Magic'),
+  philadelphia76ers: club('PHI', 'Philadelphia 76ers'), phoenixsuns: club('PHO', 'Phoenix Suns'),
+  portlandtrailblazers: club('POR', 'Portland Trail Blazers'), sacramentokings: club('SAC', 'Sacramento Kings'),
+  sanantoniospurs: club('SAS', 'San Antonio Spurs'), torontoraptors: club('TOR', 'Toronto Raptors'), utahjazz: club('UTA', 'Utah Jazz'),
+  washingtonwizards: club('WAS', 'Washington Wizards'),
+  /* bare nicknames the live table uses (Round 1586 decides those rows); each the club under today's name only */
+  lakers: club('LAL', 'Los Angeles Lakers'), celtics: club('BOS', 'Boston Celtics'), thunder: club('OKC', 'Oklahoma City Thunder'),
+  raptors: club('TOR', 'Toronto Raptors'), grizzlies: club('MEM', 'Memphis Grizzlies'), cavaliers: club('CLE', 'Cleveland Cavaliers'),
+  trailblazers: club('POR', 'Portland Trail Blazers'),
+};
+/* a label's country words -> the countries either host may print for it */
+const NBA_BORN_LABELS = { france: ['France'], canada: ['Canada'], spain: ['Spain'], nigeria: ['Nigeria'], cameroon: ['Cameroon'] };
+const NBA_CAREER_STATS = { points: 'PTS', assists: 'AST', rebounds: 'REB', threepointers: 'FG3M', steals: 'STL', blocks: 'BLK', games: 'GP' };
+/*
+ * A season's worth of each career total, for the watch: the most anyone has added in one NBA regular season (the
+ * single season records, read on basketball-reference's single season leaders pages, cited in the ledger's
+ * watchRules), so no active man inside one season of a
+ * mark beside him is missed.
+ */
+export const NBA_REACH = { PTS: 4029, REB: 2149, AST: 1164, FG3M: 402, STL: 301, BLK: 456, GP: 88 };
+const NBA_IN_PLAY = '2026-27';
+
+/* one host's verdict on a club label: true when a season up to the date is with the club under a name the label
+   covers; null when none is but one is with the same franchise under another name, or under a name no franchise
+   holds; null too when the host keeps no season at all for him (ESPN for Larry Bird), which is no evidence of a
+   no; else false */
+function nbaClubVerdict(seasons, cover, frOf, c, closed = false) {
+  if (!Object.keys(seasons ?? {}).length) return null;
+  let hit = false;
+  let kin = false;
+  for (const [s, teams] of Object.entries(seasons ?? {})) {
+    if (c.asOf !== undefined && Number(s.slice(0, 4)) > c.asOf) continue;
+    for (const t of teams) {
+      if (cover.includes(t)) hit = true;
+      else if ((!frOf.has(t) && !closed) || frOf.get(t) === c.franchise) kin = true;
+    }
+  }
+  return hit ? true : kin ? null : false;
+}
+const agree = (a, b) => (a === null || a === undefined || b === null || b === undefined || a !== b ? null : a);
+
+/**
+ * NBA's checker (Round 1583). record: ESPN's athlete service and nba.com's player page; second: basketball-reference
+ * (scripts/data/nbaConnectionsSecondHost-2026-10.json); ledger: the round's two host ledger. Every verdict is read on
+ * both hosts and is unknown (null) where they disagree, so a record short for an early career (ESPN keeps no seasons
+ * for Larry Bird, and offensive plus defensive rebounds only before 1973-74) is never a silent no: the ledger's
+ * overlay settles it on two hosts. overlay.<name>.set changes the record's fields (career merged by stat),
+ * overlay.<name>.second the second host's.
+ */
+export function makeNbaChecker({ record, second, ledger = {} }) {
+  const lay = (men, key) => {
+    const out = { ...men };
+    for (const [name, o] of Object.entries(ledger.overlay ?? {})) {
+      if (!o[key]) continue;
+      const m = out[name] ?? {};
+      out[name] = { ...m, ...o[key], ...(o[key].career ? { career: { ...(m.career ?? {}), ...o[key].career } } : {}) };
+    }
+    return out;
+  };
+  const byName = indexByName(lay(record.men, 'set'), ledger.aliases);
+  const secBy = indexByName(lay(second?.men ?? {}, 'second'), ledger.aliases);
+  const lists = new Map(Object.entries(ledger.lists ?? {}).map(([k, v]) => [fold(v.label ?? k), v]));
+
+  function criterion(label) {
+    const f = fold(label);
+    if (lists.has(f)) return { kind: 'list', key: f };
+    let m;
+    /* "(as of 2025-26)": only seasons up to that one count (by start year), so a trade after it cannot add a man */
+    if ((m = label.match(/^Played for (?:the )?(.+?)(?: \(as of (\d{4})-\d{2}\))?$/))) {
+      const c = NBA_CLUBS[fold(m[1])];
+      return c ? { kind: 'club', ...c, ...(m[2] ? { asOf: Number(m[2]) } : {}) } : null;
+    }
+    if ((m = label.replace(/,/g, '').match(/^(\d+)\+ career (points|assists|rebounds|three-pointers|steals|blocks|games)( made)?$/))) {
+      return { kind: 'career', stat: NBA_CAREER_STATS[fold(m[2])], min: Number(m[1]) };
+    }
+    if ((m = label.match(/^Drafted #(\d+) overall$/))) return { kind: 'draft', overall: Number(m[1]) };
+    if (f === 'borninafrica') return { kind: 'continent', yes: NBA_AFRICA, no: NBA_NOT_AFRICA };
+    if ((m = label.match(/^Born in (.+)$/)) && NBA_BORN_LABELS[fold(m[1])]) return { kind: 'born', countries: NBA_BORN_LABELS[fold(m[1])] };
+    return null;
+  }
+
+  /* one verdict per host: [record's, second host's] */
+  function hosts(m, b, c) {
+    switch (c.kind) {
+      case 'club': {
+        const v2 = nbaClubVerdict(b.seasons, c.codes, NBA_CODE_FR, c, true);
+        /* a club group counts NBA seasons only: ABA seasons with the franchise make a man unknown beside it */
+        const aba = v2 !== true && Object.entries(b.aba ?? {}).some(([s, ts]) => (c.asOf === undefined || Number(s.slice(0, 4)) <= c.asOf) && ts.some(t => NBA_CODE_FR.get(t) === c.franchise));
+        return [nbaClubVerdict(m.seasons, c.names, NBA_NAME_FR, c), aba ? null : v2];
+      }
+      case 'career': {
+        const [a, x] = [m.career?.[c.stat], b.career?.[c.stat]];
+        return [typeof a === 'number' ? a >= c.min : null, typeof x === 'number' ? x >= c.min : null];
+      }
+      case 'draft': return [m.draft ? m.draft[2] === c.overall : m.draft === null ? false : null, b.draft ? b.draft[2] === c.overall : b.draft === null ? false : null];
+      case 'born': return [m.born ? c.countries.includes(m.born) : null, b.born ? c.countries.includes(b.born) : null];
+      case 'continent': {
+        const at = x => (!x ? null : c.yes.has(x) ? true : c.no.has(x) ? false : null);
+        return [at(m.born), at(b.born)];
+      }
+      default: return [null, null];
+    }
+  }
+
+  function fits(name, c) {
+    if (c.kind === 'list') {
+      const list = lists.get(c.key);
+      if (listSet(list).has(fold(name))) return true;
+      return list.closed ? false : null;
+    }
+    const m = byName.get(fold(name));
+    const b = secBy.get(fold(name));
+    if (!m || !b) return null;
+    return agree(...hosts(m, b, c));
+  }
+
+  /**
+   * A man who does not fit now but could join the group before the board is dealt again (the ledger's
+   * watchRules). The season in play is 2026-27. A career mark: still playing and within a season's worth of it
+   * (NBA_REACH) on either host. A club: section 8 holds it by a date. A draft or a birthplace never changes.
+   */
+  function watch(name, c) {
+    const m = byName.get(fold(name));
+    const b = secBy.get(fold(name));
+    if (!m || fits(name, c) !== false || !m.active) return null;
+    if (c.kind === 'career') {
+      const have = Math.max(m.career?.[c.stat] ?? 0, b?.career?.[c.stat] ?? 0);
+      return have + NBA_REACH[c.stat] >= c.min ? `still playing with ${have}, within a season's worth (${NBA_REACH[c.stat]}) of ${c.min} in ${NBA_IN_PLAY}` : null;
+    }
+    return null;
+  }
+
+  const identity = name => { const m = byName.get(fold(name)); return m?.nba ? `nba:${m.nba}` : m?.espn ? `espn:${m.espn}` : fold(name); };
+  /* a man who can still change clubs (Round 1567's trade check): ESPN's active flag, nba.com's roster status, or a
+     season from 2024-25 on */
+  const active = name => { const m = byName.get(fold(name)); return m ? !!m.active : null; };
+  /* both hosts' verdicts, for the ledger's facts (scripts/usConnections/verifyNbaFacts.mjs facts) */
+  const both = (name, c) => { const m = byName.get(fold(name)); const b = secBy.get(fold(name)); return m && b ? hosts(m, b, c) : [null, null]; };
+  return { criterion, fits, watch, identity, active, both, watched: WATCHED.nba, has: name => byName.has(fold(name)) && secBy.has(fold(name)) };
+}
+
 /*
  * Round 1574: how each criterion kind ages, for simUsConnectionsFacts section 10. 'fixed': nothing a season in play
  * can change (a birth country, a draft, a closed past range); 'running': a total, a count or an award the season
@@ -852,33 +1099,38 @@ export const AGES = {
     pos: 'fixed', award: 'running', smytheLost: 'running', cupClubs: 'running', cupWith: 'fixed', hofClub: 'running',
     draft: 'fixed', draftBy: 'fixed',
   },
+  /* Round 1583: the kinds the four NBA file boards use (the table rows' kinds are Round 1586's) */
+  nba: { club: 'move', career: 'running', draft: 'fixed', born: 'fixed', continent: 'fixed' },
 };
 /* the kinds each sport's watch() handles (a running kind outside its set fails section 10) */
 export const WATCHED = {
   baseball: new Set(['mvpBoth', 'mvpRun', 'award', 'awardAt', 'career', 'season']),
   nfl: new Set(['yards']),
   nhl: new Set(['career', 'season', 'clubGoals', 'wins', 'goalieGoal', 'award', 'smytheLost', 'cupClubs', 'hofClub']),
+  nba: new Set(['career']),
 };
 
 /* ------------------------------------------------------------------ */
 /* the record files                                                    */
 /* ------------------------------------------------------------------ */
 
-/** Read one sport's record and ledger: sport is 'baseball', 'nfl' or 'nhl'. */
+/** Read one sport's record and ledger: sport is 'baseball', 'nfl', 'nhl' or 'nba' (Round 1583: NBA's second host too). */
 export function loadUsConnectionsRecord(root, sport) {
   const read = f => JSON.parse(fs.readFileSync(path.join(root, 'scripts', 'data', f), 'utf8'));
   const ledgerFile = path.join(root, 'scripts', 'data', `${sport}ConnectionsVerified-2026-10.json`);
   const ledger = fs.existsSync(ledgerFile) ? JSON.parse(fs.readFileSync(ledgerFile, 'utf8')) : {};
   const record = read(`${sport}ConnectionsRecord-2026-10.json`);
   const grid = sport === 'nfl' ? read('nflGridPlayers.json') : null;
-  return { record, ledger, grid };
+  const second = sport === 'nba' ? read('nbaConnectionsSecondHost-2026-10.json') : null;
+  return { record, ledger, grid, second };
 }
 
 /** The checker for a sport, from its record files. */
 export function makeUsChecker(root, sport) {
-  const { record, ledger, grid } = loadUsConnectionsRecord(root, sport);
+  const { record, ledger, grid, second } = loadUsConnectionsRecord(root, sport);
   if (sport === 'baseball') return { ledger, checker: makeBaseballChecker({ record, ledger }) };
   if (sport === 'nfl') return { ledger, checker: makeNflChecker({ record, grid, ledger }) };
   if (sport === 'nhl') return { ledger, checker: makeNhlChecker({ record, ledger }) };
+  if (sport === 'nba') return { ledger, record, second, checker: makeNbaChecker({ record, second, ledger }) };
   throw new Error(`no checker for ${sport}`);
 }

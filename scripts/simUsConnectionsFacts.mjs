@@ -1,5 +1,11 @@
 /**
  * Round 1558 harness: Baseball, NFL and NHL Connections held to the record.
+ * Round 1583: NBA Connections too (its four file boards), judged on two hosts at
+ * once: scripts/data/nbaConnectionsRecord-2026-10.json (ESPN and nba.com) and
+ * nbaConnectionsSecondHost-2026-10.json (basketball-reference), unknown where
+ * they disagree, with the ledger nbaConnectionsVerified-2026-10.json. The NBA
+ * table rows (scripts/data/nbaConnectionsTable-2026-10.json) are held only in
+ * report mode (US_CONN_TABLES=nba) until Round 1586 decides them.
  *
  * A guess is right only when the five tiles equal one stored group (the
  * sport hooks' submitGuess), so a false tile costs a life from whoever knows
@@ -45,6 +51,11 @@
  *      "Played for the X" group on a board with a man still playing who does
  *      not fit it is dated ("Played for the Steelers (as of 2025)"), which the
  *      checkers hold to the seasons up to that one
+ *  (sections 9 and 10, Round 1574, are described where they run)
+ *  11) (fix-1583) the NBA birthplace readers: a suffix no list holds reads as
+ *      null, never as a country; every stored country on both hosts is what
+ *      its reader gives for the stored text or code; every country a reader
+ *      can give sits in exactly one of "Born in Africa"'s two sets
  *
  * Live rows: players are dealt from the tables baseball_connections_puzzles,
  * nfl_connections_puzzles and nhl_connections_puzzles. This harness never reads
@@ -131,6 +142,34 @@
  *   US_CONN_CONTROL=watchbest  fix2-1574: Evgeni Malkin's hockey-reference number in his watch line fact read as 53,
  *                             over 52.5 (watch-line, him)
  *   US_CONN_CONTROL=seasonage  fix2-1574: AGES.nhl.season back to 'running' in memory (season-age, season)
+ *   Round 1583, the NBA file boards:
+ *   US_CONN_CONTROL=nbaundate  nbaconn-004's Celtics group undated beside Joel Embiid, still playing (trade, him)
+ *   US_CONN_CONTROL=nbayear    Pascal Siakam given one Lakers season, 2025-26, on both hosts, beside nbaconn-004's
+ *                              Lakers group dated (as of 2025-26): the boundary a < for <= would hide (second-fit, him)
+ *   US_CONN_CONTROL=nbaafter   nbaconn-004's Celtics group dated back to (as of 2016-17): Jayson Tatum's Celtics
+ *                              seasons all come after it (not-a-member, him)
+ *   US_CONN_CONTROL=parker     Tony Parker back in nbaconn-002's "Born in France" (refuted, him)
+ *   US_CONN_CONTROL=kareem     Kareem Abdul-Jabbar's overlay removed: ESPN's short rebound total against the second
+ *                              host's must leave him unknown, never a silent no (member-unknown, him)
+ *   US_CONN_CONTROL=cousins    DeMarcus Cousins back in nbaconn-004's Kings group beside the Lakers (gray-back, him)
+ *   US_CONN_CONTROL=nbawatch   Nicolas Batum back in "Born in France" beside "2,000+ career three-pointers" (watch, him)
+ *   US_CONN_CONTROL=nbaclub    the Heat taken out of NBA_CLUBS (unjudged, the label)
+ *   US_CONN_CONTROL=nbaborn    Dillon Brooks (ESPN "Mississauga, ON") moved into nbaconn-003's Knicks group beside
+ *                              "Born in Canada" (second-fit, him)
+ *   US_CONN_CONTROL=nbalineage Pascal Siakam given a Minneapolis Lakers season beside the Los Angeles Lakers group
+ *                              (other-unknown, him)
+ *   US_CONN_CONTROL=nbaaba     the Bulls group read as the Pacers, Moses Malone given an ABA Pacers season
+ *                              (other-unknown, him)
+ *   fix-1583 (review-run-1583 minor 3: three "unknown, never a guess" branches had no control):
+ *   US_CONN_CONTROL=nbaespn    Pascal Siakam given a season under "Seattle Supersonics" on ESPN's side, a spelling
+ *                              no franchise lists, beside nbaconn-004's club groups (other-unknown, him)
+ *   US_CONN_CONTROL=nbacontinent Paul Pierce's second host birthplace read as Australia, in neither continent set,
+ *                              beside "Born in Africa" (other-unknown, him)
+ *   US_CONN_CONTROL=nbabornrecord Dillon Brooks' stored text read as "Mississauga, Ontario" with Canada still stored
+ *                              (born-record, him; section 11)
+ *   US_CONN_CONTROL=nbacontinentgap the ESPN reader taught Australia and no continent set (continent-gap, it;
+ *                              section 11). Section 11's fixed reader probes have no data control: their proof is
+ *                              the born-guess mutation (an unlisted suffix returned as the country), red on a runner
  * A control is red only when the rule it names fires for the man or group it
  * moved. Any other failure in a control run (a moved man has no two host fact
  * in section 3, say) is printed but never turns the run red on its own, so
@@ -146,7 +185,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { crossCheckBoards, findingKey } from './lib/connectionsCrossCheck.mjs';
-import { makeUsChecker, fold, AGES, SEASON_LINE } from './lib/usConnectionsCheck.mjs';
+import { makeUsChecker, fold, AGES, SEASON_LINE, loadUsConnectionsRecord, makeNbaChecker, NBA_CLUBS, nbaBirthCountry, NBA_COUNTRY_NAMES, NBA_COUNTRY_CODES } from './lib/usConnectionsCheck.mjs';
 import { TABLE_RANGE, tableBoards, tableRows, inRange } from './lib/usConnectionsTables.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -154,13 +193,20 @@ const R = ROOT.replaceAll('\\', '/');
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'usconnfacts-'));
 const CONTROL = process.env.US_CONN_CONTROL ?? '';
 const LIVE = process.env.US_CONN_LIVE ?? '';
-const SPORTS = ['baseball', 'nfl', 'nhl'];
+const SPORTS = ['baseball', 'nfl', 'nhl', 'nba'];
 /* Round 1574: report mode. US_CONN_TABLES=nfl,nhl adds those sports' table rows (scripts/data/<sport>ConnectionsTable
    -2026-10.json, all of them, whatever TABLE_RANGE says) for one run, prints every section and exits 0 whatever it
    finds, "REPORT ONLY" on its last line: the true count of a sport's table rows before and while a round decides
    them. Never a gate. */
 const REPORT = new Set((process.env.US_CONN_TABLES ?? '').split(',').filter(Boolean));
-for (const s of REPORT) if (!SPORTS.includes(s)) { console.error(`US_CONN_TABLES names ${s}, not a sport here`); process.exit(2); }
+/* Round 1583 (critic-1583 advice 10, the one rule this round changes in a 1574 file): report mode may also name a
+   sport the plain run does not hold yet, when a checker knows it, so a round can count a new sport's boards before it
+   decides them; a sport no checker knows still exits 2. A plain run is unchanged by this. */
+for (const s of REPORT) {
+  if (SPORTS.includes(s)) continue;
+  try { makeUsChecker(ROOT, s); } catch { console.error(`US_CONN_TABLES names ${s}, not a sport here`); process.exit(2); }
+  SPORTS.push(s);
+}
 if (REPORT.size && CONTROL) { console.error('US_CONN_TABLES is a report, never a control run'); process.exit(2); }
 const STRICT = new Set((process.env.US_CONN_LIVE_STRICT ?? '').split(',').filter(Boolean));
 const DUMP = process.env.US_CONN_DUMP ?? '';
@@ -171,6 +217,8 @@ if (TABLE_CONTROLS.includes(CONTROL) && !TABLE_RANGE.nhl) { console.error(`US_CO
 /* fix-1574 (review-run-1574 finding 3): US_CONN_CONTROL=rangedrop drops nhl from TABLE_RANGE in memory */
 const rangeDropped = CONTROL === 'rangedrop' && !!TABLE_RANGE.nhl;
 if (rangeDropped) { delete TABLE_RANGE.nhl; console.log('US_CONN_CONTROL=rangedrop: TABLE_RANGE loses nhl in memory for this run'); }
+/* Round 1583: the NBA controls, on the four NBA file boards */
+const NBA_CONTROLS = ['nbaundate', 'nbayear', 'nbaafter', 'parker', 'kareem', 'cousins', 'nbawatch', 'nbaclub', 'nbaborn', 'nbalineage', 'nbaaba', 'nbaespn', 'nbacontinent', 'nbabornrecord', 'nbacontinentgap'];
 /* Round 1567: a club group dated against trades ("Played for the Steelers (as of 2025)") is the same claim as the
    undated one for every man whose seasons there all came before the date, which section 4 checks against the
    record; the ledgers name such groups and facts by the undated label, and a refuted claim stays refuted dated */
@@ -188,6 +236,7 @@ fs.writeFileSync(path.join(TMP, 'entry.mjs'), `
 export const baseball = (await import('${R}/src/data/baseballConnectionsPuzzles.ts')).baseballConnectionsPuzzles;
 export const nfl = (await import('${R}/src/data/nflConnectionsPuzzles.ts')).nflConnectionsPuzzles;
 export const nhl = (await import('${R}/src/data/nhlConnectionsPuzzles.ts')).nhlConnectionsPuzzles;
+export const nba = (await import('${R}/src/data/nbaConnectionsPuzzles.ts')).nbaConnectionsPuzzles;
 `);
 await build({ entryPoints: [path.join(TMP, 'entry.mjs')], bundle: true, format: 'esm', platform: 'node', outfile: path.join(TMP, 'bundle.mjs'), logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const data = await import(pathToFileURL(path.join(TMP, 'bundle.mjs')).href);
@@ -389,6 +438,145 @@ if (CONTROL) {
       g.theme = 'Played in Japan before MLB';
       changed = true;
       own = { kinds: ['unjudged'], subject: 'Played in Japan before MLB' };
+    }
+  } else if (NBA_CONTROLS.includes(CONTROL)) {
+    /* Round 1583: a control that changes what a host says rebuilds the NBA checker in memory from changed copies of
+       the record files (never the files on disk); one that changes a board changes it here, as the others do */
+    const nba = id => boardOf('nba', id);
+    const group = (id, theme) => nba(id)?.groups.find(x => x.theme === theme);
+    const swapIn = (id, theme, out, inn) => { const g = group(id, theme); const i = g?.players.indexOf(out) ?? -1; if (i < 0 || nba(id).groups.some(x => x.players.includes(inn))) return false; g.players[i] = inn; return true; };
+    const rebuild = fn => {
+      const { record, second, ledger } = loadUsConnectionsRecord(ROOT, 'nba');
+      const [r, s2, l] = [structuredClone(record), structuredClone(second), structuredClone(ledger)];
+      if (!fn(r, s2, l)) return false;
+      sports.nba = { ledger: l, record: r, second: s2, checker: makeNbaChecker({ record: r, second: s2, ledger: l }) };
+      return true;
+    };
+    const CELTICS = 'Played for the Boston Celtics (as of 2025-26)';
+    const LAKERS = 'Played for the Los Angeles Lakers (as of 2025-26)';
+    if (CONTROL === 'nbaundate') {
+      /* nbaconn-004's Celtics group undated beside Joel Embiid (a 76er, still playing): one move from it (trade, him) */
+      const g = group('nbaconn-004', CELTICS);
+      if (g && nba('nbaconn-004').groups.some(x => x.players.includes('Joel Embiid')) && sports.nba.checker.active('Joel Embiid') === true) {
+        g.theme = 'Played for the Boston Celtics';
+        changed = true;
+        own = { kinds: ['trade'], subject: 'Joel Embiid' };
+      }
+    } else if (CONTROL === 'nbayear') {
+      /* the date's own boundary (review-run-1567 finding 3): Pascal Siakam given one Lakers season, 2025-26, on both
+         hosts, beside nbaconn-004's Lakers group dated (as of 2025-26): the date counts 2025-26, so he is a second right
+         answer, which a < for <= would hide (second-fit, him) */
+      changed = !!group('nbaconn-004', LAKERS) && rebuild((r, s2) => {
+        const [m, b] = [r.men['Pascal Siakam'], s2.men['Pascal Siakam']];
+        if (!m?.seasons?.['2025-26'] || !b?.seasons?.['2025-26']) return false;
+        m.seasons['2025-26'] = [...m.seasons['2025-26'], 'Los Angeles Lakers'];
+        b.seasons['2025-26'] = [...b.seasons['2025-26'], 'LAL'];
+        return true;
+      });
+      own = { kinds: ['second-fit'], subject: 'Pascal Siakam' };
+    } else if (CONTROL === 'nbaafter') {
+      /* the Celtics group dated back to (as of 2016-17): Jayson Tatum's Celtics seasons all come after it (not-a-member, him) */
+      const g = group('nbaconn-004', CELTICS);
+      if (g && g.players.includes('Jayson Tatum')) {
+        g.theme = 'Played for the Boston Celtics (as of 2016-17)';
+        changed = true;
+        own = { kinds: ['not-a-member'], subject: 'Jayson Tatum' };
+      }
+    } else if (CONTROL === 'parker') {
+      /* Tony Parker back in nbaconn-002's "Born in France" (born in Bruges, Belgium: refuted, him) */
+      changed = swapIn('nbaconn-002', 'Born in France', 'Victor Wembanyama', 'Tony Parker');
+      own = { kinds: ['refuted'], subject: 'Tony Parker' };
+    } else if (CONTROL === 'kareem') {
+      /* critic-1583 item 2 (nbagap): Kareem Abdul-Jabbar's overlay removed, so ESPN's 12,369 rebounds (no Milwaukee
+         seasons, offensive plus defensive only) stand against the second host's 17,440: he must come back unknown in
+         "14,000+ career rebounds", never a silent no (member-unknown, him) */
+      changed = rebuild((r, s2, l) => { if (!l.overlay?.['Kareem Abdul-Jabbar']) return false; delete l.overlay['Kareem Abdul-Jabbar']; return true; });
+      own = { kinds: ['member-unknown'], subject: 'Kareem Abdul-Jabbar' };
+    } else if (CONTROL === 'cousins') {
+      /* DeMarcus Cousins (rostered by the 2019-20 Lakers without a game) back in the Kings group beside the Lakers (gray-back, him) */
+      changed = swapIn('nbaconn-004', 'Played for the Sacramento Kings (as of 2025-26)', "De'Aaron Fox", 'DeMarcus Cousins');
+      own = { kinds: ['gray-back'], subject: 'DeMarcus Cousins' };
+    } else if (CONTROL === 'nbawatch') {
+      /* Nicolas Batum (1,842 three-pointers, a 2025-26 season) back in "Born in France" beside "2,000+ career three-pointers" (watch, him) */
+      changed = swapIn('nbaconn-002', 'Born in France', 'Ian Mahinmi', 'Nicolas Batum');
+      own = { kinds: ['watch'], subject: 'Nicolas Batum' };
+    } else if (CONTROL === 'nbaclub') {
+      /* the Heat taken out of NBA_CLUBS: the label is unjudged, never read as a no (unjudged, the label) */
+      if (NBA_CLUBS.miamiheat && group('nbaconn-001', 'Played for the Miami Heat (as of 2025-26)')) {
+        delete NBA_CLUBS.miamiheat;
+        changed = true;
+        own = { kinds: ['unjudged'], subject: 'Played for the Miami Heat (as of 2025-26)' };
+      }
+    } else if (CONTROL === 'nbaborn') {
+      /* critic-1583 item 3: Dillon Brooks (ESPN: "Mississauga, ON", a province code) and Derek Harper trade places on
+         nbaconn-003, so Brooks sits in the Knicks group beside "Born in Canada" (second-fit, him) */
+      const bornText = sports.nba.record.men['Dillon Brooks']?.bornText ?? '';
+      changed = /, ON$/.test(bornText) && swapIn('nbaconn-003', 'Played for the New York Knicks (as of 2025-26)', 'Derek Harper', 'Placeholder') && swapIn('nbaconn-003', 'Born in Canada', 'Dillon Brooks', 'Derek Harper') && swapIn('nbaconn-003', 'Played for the New York Knicks (as of 2025-26)', 'Placeholder', 'Dillon Brooks');
+      own = { kinds: ['second-fit'], subject: 'Dillon Brooks' };
+    } else if (CONTROL === 'nbalineage') {
+      /* critic-1583 item 4: Pascal Siakam given a Minneapolis Lakers season (MNL on the second host), beside nbaconn-004's
+         Los Angeles Lakers group: an old name of the same franchise, so he is unknown, never OUT (other-unknown, him) */
+      changed = !!group('nbaconn-004', LAKERS) && rebuild((r, s2) => {
+        const [m, b] = [r.men['Pascal Siakam'], s2.men['Pascal Siakam']];
+        if (!m?.seasons?.['2016-17'] || !b?.seasons?.['2016-17']) return false;
+        m.seasons['2016-17'] = [...m.seasons['2016-17'], 'Minneapolis Lakers'];
+        b.seasons['2016-17'] = [...b.seasons['2016-17'], 'MNL'];
+        return true;
+      });
+      own = { kinds: ['other-unknown'], subject: 'Pascal Siakam' };
+    } else if (CONTROL === 'nbaaba') {
+      /* critic-1583 item 5: nbaconn-002's Bulls group read as the Pacers and Moses Malone given an ABA Pacers season (INA)
+         on the second host: ABA seasons never count for a club group, and a man with them beside it is unknown, never
+         OUT (other-unknown, him) */
+      const g = group('nbaconn-002', 'Played for the Chicago Bulls (as of 2025-26)');
+      changed = !!g && nba('nbaconn-002').groups.some(x => x.players.includes('Moses Malone')) && rebuild((r, s2) => {
+        const b = s2.men['Moses Malone'];
+        if (!b?.aba?.['1975-76']) return false;
+        b.aba['1975-76'] = [...b.aba['1975-76'], 'INA'];
+        return true;
+      });
+      if (changed) g.theme = 'Played for the Indiana Pacers (as of 2025-26)';
+      own = { kinds: ['other-unknown'], subject: 'Moses Malone' };
+    } else if (CONTROL === 'nbaespn') {
+      /* fix-1583 (review-run-1583 minor 3, espn-closed): Pascal Siakam given a 2016-17 season on ESPN's side only under
+         "Seattle Supersonics", a spelling no franchise lists (ESPN's names are an open list): it could be an old name
+         of a club beside him, so he is unknown beside nbaconn-004's club groups, never OUT (other-unknown, him) */
+      changed = !!group('nbaconn-004', LAKERS) && rebuild(r => {
+        const m = r.men['Pascal Siakam'];
+        if (!m?.seasons?.['2016-17'] || m.seasons['2016-17'].includes('Seattle Supersonics')) return false;
+        m.seasons['2016-17'] = [...m.seasons['2016-17'], 'Seattle Supersonics'];
+        return true;
+      });
+      own = { kinds: ['other-unknown'], subject: 'Pascal Siakam' };
+    } else if (CONTROL === 'nbacontinent') {
+      /* fix-1583 (continent-no): Paul Pierce's birthplace on the second host read as Australia, a country in neither of
+         "Born in Africa"'s two sets: unknown beside nbaconn-004's "Born in Africa", never a no (other-unknown, him) */
+      changed = !!group('nbaconn-004', 'Born in Africa') && !!group('nbaconn-004', CELTICS)?.players.includes('Paul Pierce') && rebuild((r, s2) => {
+        const b = s2.men['Paul Pierce'];
+        if (b?.born !== 'USA') return false;
+        b.born = 'Australia';
+        return true;
+      });
+      own = { kinds: ['other-unknown'], subject: 'Paul Pierce' };
+    } else if (CONTROL === 'nbabornrecord') {
+      /* fix-1583 (born-guess, section 11): Dillon Brooks' stored birthplace text read as "Mississauga, Ontario" (a
+         spelled out province no list holds) while his stored country stays Canada: the reader gives null for that
+         text, so the stored country is no longer the reader's (born-record, him) */
+      changed = rebuild(r => {
+        const m = r.men['Dillon Brooks'];
+        if (m?.bornText !== 'Mississauga, ON' || m.born !== 'Canada') return false;
+        m.bornText = 'Mississauga, Ontario';
+        return true;
+      });
+      own = { kinds: ['born-record'], subject: 'Dillon Brooks' };
+    } else if (CONTROL === 'nbacontinentgap') {
+      /* fix-1583 (section 11): the ESPN reader taught Australia, as a round adding an Australian would, and neither
+         continent set: the country would fall through "Born in Africa" (continent-gap, Australia) */
+      if (!NBA_COUNTRY_NAMES.Australia) {
+        NBA_COUNTRY_NAMES.Australia = 'Australia';
+        changed = true;
+      }
+      own = { kinds: ['continent-gap'], subject: 'Australia' };
     }
   } else if (CONTROL === 'rangedrop') {
     if (rangeDropped) {
@@ -748,6 +936,16 @@ for (const s of SPORTS) {
 }
 
 console.log('7) what the record cannot judge may only get fewer');
+/* Round 1583: the men behind an unknown count (members, or other tiles beside a group), for a control to name */
+const unknownMen = (s, members) => {
+  const out = [];
+  for (const b of boards[s]) for (const g of b.groups) {
+    const c = sports[s].checker.criterion(g.theme);
+    if (!c) continue;
+    for (const o of b.groups) if ((o === g) === members) for (const p of o.players) if (sports[s].checker.fits(p, c) === null) out.push(p);
+  }
+  return out;
+};
 for (const s of SPORTS) {
   const L = ledgerOf(s);
   const n = unchecked[s].length;
@@ -768,8 +966,8 @@ for (const s of SPORTS) {
     if (o > (L.otherUnknownCeiling ?? 0)) fail(`${s}: ${o} live other tiles the record cannot judge, over the ceiling of ${L.otherUnknownCeiling} (US_CONN_LIVE_STRICT)`);
   } else if (CONTROL) {
     if (n > (L.uncheckedCeiling ?? 0)) { for (const x of unchecked[s]) fire('unjudged', x.label); fail(`${s}: ${n} groups nothing judges, over the ceiling of ${L.uncheckedCeiling}`); }
-    if (u > (L.memberUnknownCeiling ?? 0)) { fire('member-unknown', s); fail(`${s}: ${u} members the record cannot place, over the ceiling of ${L.memberUnknownCeiling}`); }
-    if (o > (L.otherUnknownCeiling ?? 0)) { fire('other-unknown', s); fail(`${s}: ${o} other tiles the record cannot judge, over the ceiling of ${L.otherUnknownCeiling}`); }
+    if (u > (L.memberUnknownCeiling ?? 0)) { fire('member-unknown', s); for (const p of unknownMen(s, true)) fire('member-unknown', p); fail(`${s}: ${u} members the record cannot place, over the ceiling of ${L.memberUnknownCeiling}`); }
+    if (o > (L.otherUnknownCeiling ?? 0)) { fire('other-unknown', s); for (const p of unknownMen(s, false)) fire('other-unknown', p); fail(`${s}: ${o} other tiles the record cannot judge, over the ceiling of ${L.otherUnknownCeiling}`); }
   }
   console.log(`   ${s}: ${n} groups nothing judges (ceiling ${L.uncheckedCeiling}), ${u} members the record cannot place (ceiling ${L.memberUnknownCeiling}), ${o} other tiles it cannot judge (ceiling ${L.otherUnknownCeiling})${n ? `: ${unchecked[s].map(x => `${x.id} "${x.label}"`).join(', ')}` : ''}`);
 }
@@ -782,9 +980,10 @@ console.log('8) no active man is one move from a second answer');
    the seasons up to that one; a legends group needs five seasons, so one move cannot do it.
    fix-1567 (review-read-1567 minor 7): a date only protects when no season after it is still being played, so it
    may not pass the sport's last finished season on the 2026-10 records: MLB 2026 (the regular season is over), the
-   NFL 2025 (2026 is under way) and the NHL 2025-26 (start year 2025; 2026-27 is under way). A group dated past it
+   NFL 2025 (2026 is under way) and the NHL 2025-26 (start year 2025; 2026-27 is under way); Round 1583: the NBA 2025-26 (start
+   year 2025; ESPN already carries 2026-27 rows). A group dated past it
    ("(as of 2030)") is as open as an undated one and is checked as one. Move these when the records are read again */
-const LAST_FINISHED = { baseball: 2026, nfl: 2025, nhl: 2025 };
+const LAST_FINISHED = { baseball: 2026, nfl: 2025, nhl: 2025, nba: 2025 };
 for (const s of SPORTS) {
   let n = 0, dated = 0, open = 0;
   for (const b of boards[s]) for (const g of b.groups) {
@@ -893,6 +1092,39 @@ for (const s of SPORTS) {
   console.log(`   ${s}: kinds ${[...kinds].map(([k, c]) => `${k} ${c}`).join(', ')}; ${n} problems${owed.size ? `; running and not watched, owed to the baseball table rounds: ${[...owed].join(', ')}` : ''}`);
 }
 
+console.log('11) the NBA birthplace readers: a place no list holds is unknown, and every stored country is the reader\'s');
+/* fix-1583 (review-run-1583 minor 3): the checker reads the stored country, and nbaBirthCountry runs only when the
+   record is fetched (fetchNbaRecord.mjs), so this asks the readers themselves. (a) fixed probes: a suffix no list
+   holds gives null, never the suffix; (b) on both hosts every man's stored country is what the reader gives for his
+   stored text or code; (c) every country either reader can give sits in exactly one of "Born in Africa"'s two sets,
+   so a country a round teaches the readers cannot fall through the continent group */
+{
+  let bad = 0;
+  const PROBES = [['Mississauga, ON', 'Canada'], ['Montreal, PQ', 'Canada'], ['Chicago, IL', 'USA'], ['Paris, France', 'France'], ['Kinshasa, Congo', 'Congo'], ['Melbourne, Australia', null], ['Mississauga, Ontario', null], ['', null], [null, null]];
+  for (const [text, want] of PROBES) {
+    const got = nbaBirthCountry(text);
+    if (got !== want) { bad += 1; fire('born-reader', String(text)); fail(`nba: nbaBirthCountry(${JSON.stringify(text)}) gives ${JSON.stringify(got)}, not ${JSON.stringify(want)}`); }
+  }
+  const { record, second, checker } = sports.nba;
+  const readBack = [[record?.men, m => nbaBirthCountry(m.bornText), 'the record', 'bornText'], [second?.men, m => (m.bornCode ? NBA_COUNTRY_CODES[m.bornCode] ?? null : null), 'the second host', 'bornCode']];
+  let men = 0;
+  for (const [all, reader, host, field] of readBack) {
+    for (const [name, m] of Object.entries(all ?? {})) {
+      men += 1;
+      const want = reader(m);
+      if ((m.born ?? null) !== want) { bad += 1; fire('born-record', name); fail(`nba: ${host} stores ${name} as born in ${JSON.stringify(m.born ?? null)}, but its reader gives ${JSON.stringify(want)} for ${field} ${JSON.stringify(m[field] ?? null)}`); }
+    }
+  }
+  const c = checker.criterion('Born in Africa');
+  const countries = new Set(['USA', 'Canada', ...Object.values(NBA_COUNTRY_NAMES), ...Object.values(NBA_COUNTRY_CODES)]);
+  if (c?.kind !== 'continent') { bad += 1; fail('nba: "Born in Africa" is no continent criterion, so section 11 (c) asks nothing'); }
+  for (const x of countries) {
+    const n = (c?.yes?.has(x) ? 1 : 0) + (c?.no?.has(x) ? 1 : 0);
+    if (n !== 1) { bad += 1; fire('continent-gap', x); fail(`nba: a reader can give ${x}, which sits in ${n} of "Born in Africa"'s two sets, not exactly one`); }
+  }
+  console.log(`   nba: ${PROBES.length} reader probes, ${men} stored birthplaces read back on two hosts, ${countries.size} countries each in one continent set; ${bad} problems`);
+}
+
 console.log('');
 if (REPORT.size) {
   const tally = {};
@@ -920,4 +1152,4 @@ if (failures > 0) {
   process.exit(1);
 }
 const gray = SPORTS.map(s => `${otherUnknown[s]} ${s}`).join(', ');
-console.log(`simUsConnectionsFacts: green. Every Baseball, NFL and NHL Connections group is held to the record, and no board has a second right answer the record can see (other tiles it cannot judge, each at its ceiling: ${gray}).`);
+console.log(`simUsConnectionsFacts: green. Every Baseball, NFL, NHL and NBA Connections group is held to the record, and no board has a second right answer the record can see (other tiles it cannot judge, each at its ceiling: ${gray}).`);

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useNhlConnections } from '@/hooks/useNhlConnections';
-import { ConnectionsGroupLabel } from '@/components/game/ConnectionsGroupLabel';
+import { ConnectionsGroupLabel, ConnectionsReceiptText } from '@/components/game/ConnectionsGroupLabel';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -185,7 +185,7 @@ const NhlConnections = () => {
           </div>
           <div>
           <div ref={actionRef} tabIndex={-1} className="space-y-2 rounded-lg focus:outline-none">
-            {notice.text && <p role="status" data-nhl-receipt="" className="text-sm font-semibold">{notice.text}</p>}
+            {notice.text && <p role="status" data-nhl-receipt="" className="text-sm font-semibold"><ConnectionsReceiptText text={notice.text} /></p>}
             <p className="text-xs text-muted-foreground">Draft {'ABCD'[drafts?.active ?? 0]}: {selected.length}/5. Planning costs nothing.</p>
           <div className="grid grid-cols-2 gap-2">
             <button

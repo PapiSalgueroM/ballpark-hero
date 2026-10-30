@@ -16,13 +16,14 @@
 
    TABLE_RANGE says which table rows the harness holds to every section, per sport: 'all', or [first id, last id].
    A sport not in it is held only in report mode (US_CONN_TABLES). Round 1574 holds NHL; Rounds 1580 to 1582 add
-   NFL and baseball. */
+   NFL and baseball. Round 1583 adds NBA's table file (nba_connections_puzzles) for report mode only; the round
+   that decides its rows (1586) puts nba in TABLE_RANGE. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { escapeDashes } from './connectionsMigration.mjs';
 
 export const TABLE_RANGE = { nhl: 'all' };
-export const TABLE_SPORTS = { baseball: 'baseball_connections_puzzles', nfl: 'nfl_connections_puzzles', nhl: 'nhl_connections_puzzles' };
+export const TABLE_SPORTS = { baseball: 'baseball_connections_puzzles', nfl: 'nfl_connections_puzzles', nhl: 'nhl_connections_puzzles', nba: 'nba_connections_puzzles' };
 
 export const tableFile = (root, sport) => path.join(root, 'scripts', 'data', `${sport}ConnectionsTable-2026-10.json`);
 

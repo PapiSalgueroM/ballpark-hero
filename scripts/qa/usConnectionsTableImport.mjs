@@ -29,7 +29,7 @@ import { classify, plainGroups, same } from '../lib/connectionsMigration.mjs';
 import { TABLE_SPORTS, tableDoc, tableFile, writeTableDoc } from '../lib/usConnectionsTables.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const FILE = { baseball: 'baseballConnectionsPuzzles', nfl: 'nflConnectionsPuzzles', nhl: 'nhlConnectionsPuzzles' };
+const FILE = { baseball: 'baseballConnectionsPuzzles', nfl: 'nflConnectionsPuzzles', nhl: 'nhlConnectionsPuzzles', nba: 'nbaConnectionsPuzzles' };
 
 /** The shipped file's puzzle ids for a sport. */
 export async function fileIds(sport) {

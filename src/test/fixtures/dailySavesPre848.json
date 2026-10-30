@@ -90,10 +90,10 @@
     {
       "game": "nba-connections",
       "key": "nba-connections-daily-2026-10-01",
-      "bytes": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":1,\"puzzleId\":\"nbaconn-002\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Chicago Bulls\",\"players\":[\"Derrick Rose\",\"Joakim Noah\",\"Jimmy Butler\",\"Luol Deng\",\"Scottie Pippen\"],\"diff\":\"yellow\"},{\"t\":\"x\"}],\"gameStatus\":\"playing\"}",
+      "bytes": "{\"v\":1,\"date\":\"2026-10-01\",\"puzzleIndex\":1,\"puzzleId\":\"nbaconn-002\",\"guesses\":[{\"t\":\"ok\",\"theme\":\"Played for the Chicago Bulls (as of 2025-26)\",\"players\":[\"Derrick Rose\",\"Joakim Noah\",\"Jimmy Butler\",\"Luol Deng\",\"Scottie Pippen\"],\"diff\":\"yellow\"},{\"t\":\"x\"}],\"gameStatus\":\"playing\"}",
       "restored": {
         "solved": [
-          "Played for the Chicago Bulls"
+          "Played for the Chicago Bulls (as of 2025-26)"
         ],
         "lives": 3,
         "status": "playing"

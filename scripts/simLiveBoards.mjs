@@ -166,7 +166,12 @@ if (!pools.nba_connections_puzzles) {
     const statOf = (p, kind) =>
       kind === "points" ? p.points : kind === "rebounds" ? p.rebounds : kind === "assists" ? p.assists : kind === "games" ? p.games : null;
     const parseTheme = theme => {
-      const t = theme.toLowerCase();
+      /* Round 1583: a club group dated against trades ("Played for the Miami Heat (as of 2025-26)") is read without its
+         date. That is the dated claim exactly while nba_player_stats stops at 2025-26 (it runs 1965-66 to 2025-26):
+         its franchise sets end where the date does (docs/DATA-VERIFICATION-MAP-2026-09-19.md). If the table is ever refreshed past 2025-26, a man who joins a
+         dated club later reads here as a second answer the board does not have (a false red): read the date before
+         acting on such a red. */
+      const t = theme.toLowerCase().replace(/ \(as of \d{4}-\d{2}\)$/, "");
       const mTeam = t.match(/played for the (.+)$/);
       if (mTeam) {
         const code = TEAM_CODES.get(fold(mTeam[1]));
