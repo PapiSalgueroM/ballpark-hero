@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+walk: node scripts/playCmEuroPlay.mjs
+walk-notile: PLAY_EURO_CONTROL=notile node scripts/playCmEuroPlay.mjs
+walk-nofixture: PLAY_EURO_CONTROL=nofixture node scripts/playCmEuroPlay.mjs
+playWorldUcl: node scripts/playWorldUcl.mjs
+playOneOffCups: node scripts/playOneOffCups.mjs
