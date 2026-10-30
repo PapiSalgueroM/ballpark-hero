@@ -17,7 +17,9 @@
  *               disk is B's every time.
  *   3 HOT SEAT  B carries a surviving Hot Seat manager on into Club Manager
  *               while A holds a career: A shows the notice and its leave write
- *               does not land over the handover.
+ *               does not land over the handover. Round 1592 (report
+ *               fe949903) review fix: and A's career is still on disk, parked
+ *               in slot 1 as A last held it, with the job active in slot 2.
  *   4 LANDING   after the carry on, /club-manager opens on the hub (no Resume
  *               Career press, no managers screen).
  *   5 DAMAGED   the hunt's ten damaged saves. Each ends on a playable hub with
@@ -203,7 +205,8 @@ async function plant(p, entries) {
   await p.goto(BASE + '/robots.txt', { waitUntil: 'domcontentloaded' });
   await p.evaluate(kv => { localStorage.clear(); for (const [k, v] of Object.entries(kv)) localStorage.setItem(k, v); }, entries);
 }
-const disk = p => p.evaluate(k => {
+/* The career at a key (the active one unless another key is named, such as a parked slot's). */
+const disk = (p, at = KEY) => p.evaluate(k => {
   const raw = localStorage.getItem(k);
   if (!raw) return null;
   try {
@@ -212,7 +215,7 @@ const disk = p => p.evaluate(k => {
     const last = log[log.length - 1];
     return { club: c.clubName, week: c.week, results: log.length, last: last ? `${last.opp} ${last.score}` : 'none', squad: (c.squad ?? []).length, xi: c.xiIds, budget: c.budget, live: c.live ? `minute ${c.live.minute ?? '?'}` : 'none' };
   } catch { return { unreadable: true }; }
-}, KEY);
+}, at);
 const say = d => (d ? `${d.club} week ${d.week}, ${d.results} results, last ${d.last}` : 'no save');
 const noticeUp = p => p.locator('[data-testid="save-moved-notice"]').isVisible().catch(() => false);
 const onHub = p => p.locator('[data-cm-way="quick"]').first().isVisible().catch(() => false);
@@ -408,10 +411,14 @@ async function caseHotSeat(ctx, tag) {
   await A.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
   await B.waitForTimeout(800);
   const afterLeave = await disk(B);
-  console.log(`   A held "${say(held)}"; B handed over "${say(handed)}" and landed on ${landedHub ? 'the hub' : landedSlots ? 'the managers screen' : 'something else'}; A saw it: ${up}; after A left "${say(afterLeave)}"`);
+  /* Round 1592 review fix: the career A held is not gone, it is parked in slot 1 and the job is in slot 2. */
+  const slotOne = await disk(B, 'dukb-cm-slot-1');
+  const index = await B.evaluate(() => localStorage.getItem('dukb-cm-slots'));
+  console.log(`   A held "${say(held)}"; B handed over "${say(handed)}" and landed on ${landedHub ? 'the hub' : landedSlots ? 'the managers screen' : 'something else'}; A saw it: ${up}; after A left "${say(afterLeave)}"; slot 1 holds "${say(slotOne)}", the index ${index}`);
   if (!handed || handed.club !== HOT.club) fail(3, `the handover did not land: the save holds "${say(handed)}", not ${HOT.club}`);
   if (!up) fail(3, 'tab A never showed the notice after the handover');
   if (say(afterLeave) !== say(handed)) fail(3, `tab A's leave write put "${say(afterLeave)}" over the handover "${say(handed)}"`);
+  if (!held || say(slotOne) !== say(held) || !/"active":2/.test(index ?? '')) fail(3, `tab A's career is not parked in slot 1 as A held it: slot 1 holds "${say(slotOne)}", A held "${say(held)}", the index reads ${index}`);
   if (!landedHub || landedSlots) fail(4, `the carry on landed on ${landedSlots ? 'the managers screen, one press short' : 'no hub'}`);
   else ok('the carry on opened Club Manager on the hub');
   await A.close();
