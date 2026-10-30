@@ -1,0 +1,17 @@
+simClubManagerDugouts exit=0 0s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+simManagers exit=0 33s | simManagers: all green
+ctl-twochairs exit=1 0s | control twochairs FIRED: section 0 red (1 failure(s) in all)
+ctl-onehost exit=1 0s | control onehost FIRED: section 1 red (1 failure(s) in all)
+ctl-orphan exit=1 0s | control orphan FIRED: section 2 red (2 failure(s) in all)
+ctl-gap exit=1 0s | control gap FIRED: section 3 red (2 failure(s) in all)
+ctl-monthclash exit=1 0s | control monthclash FIRED: section 4 red (2 failure(s) in all)
+quotes exit=0 25s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simManagers-fleet exit=0 81s | simManagers: all green
+quotes-dugout exit=1 18s | control run: dugout FIRED, pass 1 caught 1 planted quote(s) from a real manager
+tsc exit=0 85s | 
+managers-namedsack exit=0 25s | control run: namedsack FIRED, 7b went red 184 time(s), 184 naming the sentinel
+quotes-desk exit=1 28s | simNoInventedQuotes: 1 failure
+managers-recycle exit=0 25s | control run: recycle FIRED, 7b went red 205 time(s), 205 naming the sentinel
+vitest-dugout exit=0 6s |    Duration  5.89s (transform 2.00s, setup 332ms, collect 7.25s, tests 3.45s, environment 2.04s, prepare 523ms)
+simInventedNames exit=0 11s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.

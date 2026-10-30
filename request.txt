@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simClubManagerDugouts: node scripts/simClubManagerDugouts.mjs
+simManagers: node scripts/simManagers.mjs
+simManagers-fleet: SIM_MANAGERS_BASE=c0c66e087 node scripts/simManagers.mjs
+ctl-twochairs: DUGOUTS_CONTROL=twochairs node scripts/simClubManagerDugouts.mjs
+ctl-onehost: DUGOUTS_CONTROL=onehost node scripts/simClubManagerDugouts.mjs
+ctl-orphan: DUGOUTS_CONTROL=orphan node scripts/simClubManagerDugouts.mjs
+ctl-gap: DUGOUTS_CONTROL=gap node scripts/simClubManagerDugouts.mjs
+ctl-monthclash: DUGOUTS_CONTROL=monthclash node scripts/simClubManagerDugouts.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+quotes-dugout: QUOTES_CONTROL=dugout node scripts/simNoInventedQuotes.mjs
+quotes-desk: QUOTES_CONTROL=desk node scripts/simNoInventedQuotes.mjs
+managers-namedsack: SIM_MANAGERS_CONTROL=namedsack node scripts/simManagers.mjs
+managers-recycle: SIM_MANAGERS_CONTROL=recycle node scripts/simManagers.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+vitest-dugout: node_modules/.bin/vitest run src/test/clubDetailDugout.test.tsx src/test/clubDetailOwnClub.test.tsx src/test/clubDetailCurrentRoster.test.tsx src/test/clubDetailFixtures.test.tsx --testTimeout=300000 --hookTimeout=120000
