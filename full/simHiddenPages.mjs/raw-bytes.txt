@@ -1,0 +1,3 @@
+654 /home/runner/work/_temp/rc-out/full/simHiddenPages.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simHiddenPages.mjs/stderr.log
+654 total

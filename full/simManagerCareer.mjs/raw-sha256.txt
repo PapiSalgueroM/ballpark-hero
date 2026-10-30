@@ -1,0 +1,2 @@
+891b1ddfc059625b53fe11dc76ccdb04f2881549ed9b2c14c2f2818f8b86eda8  /home/runner/work/_temp/rc-out/full/simManagerCareer.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simManagerCareer.mjs/stderr.log

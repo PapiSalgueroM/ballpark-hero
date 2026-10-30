@@ -1,0 +1,2 @@
+9fb6d148901c77aff2197a9dfb52f1e93c72f73892bf60beb80a66c609a48a01  /home/runner/work/_temp/rc-out/full/simGauntletDraft.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGauntletDraft.mjs/stderr.log

@@ -1,0 +1,2 @@
+cd8f696a98bd206e928042e519e064bd42946d683ef934dfcd53776405ead56c  /home/runner/work/_temp/rc-out/full/simSoccerCompetitionNavigation.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerCompetitionNavigation.mjs/stderr.log

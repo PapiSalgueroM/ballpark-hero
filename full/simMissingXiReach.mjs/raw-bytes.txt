@@ -1,0 +1,3 @@
+74891 /home/runner/work/_temp/rc-out/full/simMissingXiReach.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simMissingXiReach.mjs/stderr.log
+74891 total

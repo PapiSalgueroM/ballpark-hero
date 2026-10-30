@@ -1,0 +1,2 @@
+244409d8df284ac81950d8b159922110be75bf51a987be7ac3c4afb9c9364065  /home/runner/work/_temp/rc-out/full/simWorldXiSeasonReport.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simWorldXiSeasonReport.mjs/stderr.log

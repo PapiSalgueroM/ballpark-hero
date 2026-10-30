@@ -1,0 +1,3 @@
+4347 /home/runner/work/_temp/rc-out/full/simBuzzerShotLab.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simBuzzerShotLab.mjs/stderr.log
+4347 total

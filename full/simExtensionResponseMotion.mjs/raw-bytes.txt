@@ -1,0 +1,3 @@
+1546 /home/runner/work/_temp/rc-out/full/simExtensionResponseMotion.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simExtensionResponseMotion.mjs/stderr.log
+1546 total

@@ -1,0 +1,3 @@
+2421 /home/runner/work/_temp/rc-out/full/simAcademy.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simAcademy.mjs/stderr.log
+2421 total

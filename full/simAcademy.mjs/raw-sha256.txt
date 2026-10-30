@@ -1,0 +1,2 @@
+4889f0903600ecd710ae1255829a72a1c3e9042ed76af28c98cfbe579e7b3e48  /home/runner/work/_temp/rc-out/full/simAcademy.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAcademy.mjs/stderr.log

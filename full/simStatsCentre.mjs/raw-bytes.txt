@@ -1,0 +1,3 @@
+725 /home/runner/work/_temp/rc-out/full/simStatsCentre.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simStatsCentre.mjs/stderr.log
+725 total

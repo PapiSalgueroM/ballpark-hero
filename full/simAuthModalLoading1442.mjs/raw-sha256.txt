@@ -1,0 +1,2 @@
+fb1792b78f1c91c6b599af02f03d478897d2fa57f2b0c7d066f711bbee61d200  /home/runner/work/_temp/rc-out/full/simAuthModalLoading1442.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAuthModalLoading1442.mjs/stderr.log

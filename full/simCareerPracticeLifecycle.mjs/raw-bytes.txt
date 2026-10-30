@@ -1,0 +1,3 @@
+546 /home/runner/work/_temp/rc-out/full/simCareerPracticeLifecycle.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simCareerPracticeLifecycle.mjs/stderr.log
+546 total

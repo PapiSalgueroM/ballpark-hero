@@ -1,0 +1,3 @@
+2978 /home/runner/work/_temp/rc-out/full/simCfbRecruitFilters.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCfbRecruitFilters.mjs/stderr.log
+2978 total

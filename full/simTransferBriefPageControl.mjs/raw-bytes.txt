@@ -1,0 +1,3 @@
+512 /home/runner/work/_temp/rc-out/full/simTransferBriefPageControl.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simTransferBriefPageControl.mjs/stderr.log
+512 total

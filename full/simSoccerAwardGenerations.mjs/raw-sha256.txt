@@ -1,0 +1,2 @@
+454f5aa43871e8365367b8445bbb1eee62a031875f5a7f1cb61b22498d9e7000  /home/runner/work/_temp/rc-out/full/simSoccerAwardGenerations.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerAwardGenerations.mjs/stderr.log

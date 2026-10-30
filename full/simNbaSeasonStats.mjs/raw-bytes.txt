@@ -1,0 +1,3 @@
+2819 /home/runner/work/_temp/rc-out/full/simNbaSeasonStats.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNbaSeasonStats.mjs/stderr.log
+2819 total

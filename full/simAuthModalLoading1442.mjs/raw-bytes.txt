@@ -1,0 +1,3 @@
+1043 /home/runner/work/_temp/rc-out/full/simAuthModalLoading1442.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simAuthModalLoading1442.mjs/stderr.log
+1043 total

@@ -1,0 +1,3 @@
+999 /home/runner/work/_temp/rc-out/full/simSoccerOwnGoals.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerOwnGoals.mjs/stderr.log
+999 total

@@ -1,0 +1,3 @@
+941 /home/runner/work/_temp/rc-out/full/simGauntletDraft.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simGauntletDraft.mjs/stderr.log
+941 total

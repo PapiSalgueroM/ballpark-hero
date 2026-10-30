@@ -1,0 +1,3 @@
+1533 /home/runner/work/_temp/rc-out/full/simTycoonPackPace.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simTycoonPackPace.mjs/stderr.log
+1533 total

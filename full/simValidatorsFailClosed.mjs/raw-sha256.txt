@@ -1,0 +1,2 @@
+846b3b6e9fc7b8ea1bcff731b026c0c747034926b96581c8e4ee67e469ed6dfc  /home/runner/work/_temp/rc-out/full/simValidatorsFailClosed.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simValidatorsFailClosed.mjs/stderr.log

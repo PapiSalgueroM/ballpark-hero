@@ -1,0 +1,3 @@
+1177 /home/runner/work/_temp/rc-out/full/simCareerEngaged.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerEngaged.mjs/stderr.log
+1177 total

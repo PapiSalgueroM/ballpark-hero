@@ -1,0 +1,2 @@
+e340045721da15ddb8ffb3b16a0641123fdff4db1633de9204c3ba8ab365ad4b  /home/runner/work/_temp/rc-out/full/simHiddenPages.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simHiddenPages.mjs/stderr.log

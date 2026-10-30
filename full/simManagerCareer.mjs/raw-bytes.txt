@@ -1,0 +1,3 @@
+4020 /home/runner/work/_temp/rc-out/full/simManagerCareer.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simManagerCareer.mjs/stderr.log
+4020 total

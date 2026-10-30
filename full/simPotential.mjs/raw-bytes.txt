@@ -1,0 +1,3 @@
+700 /home/runner/work/_temp/rc-out/full/simPotential.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simPotential.mjs/stderr.log
+700 total

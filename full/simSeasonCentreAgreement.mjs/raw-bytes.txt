@@ -1,0 +1,3 @@
+3612 /home/runner/work/_temp/rc-out/full/simSeasonCentreAgreement.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSeasonCentreAgreement.mjs/stderr.log
+3612 total
