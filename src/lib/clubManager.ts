@@ -7929,7 +7929,7 @@ export function summerFreeAgents(career: CareerState): { pool: FreeAgent[]; reti
   const retired: { name: string; age: number; rating: number }[] = [];
   const left: { name: string; age: number; rating: number }[] = [];
   if (!pool.length) return { pool, retired, left };
-  const nextSeason = career.season + 1, year = worldYear(career);
+  const nextSeason = career.season + 1;
   const ahead = livingWorldOf(career) ? worldRosterView(refreshWorldRoster({ ...career, season: nextSeason })) : null;
   const neutral = { ...career, training: DEFAULT_TRAINING, academy: undefined, facilities: undefined, staff: undefined };
   const kept: FreeAgent[] = [];
@@ -7940,10 +7940,12 @@ export function summerFreeAgents(career: CareerState): { pool: FreeAgent[]; reti
   };
   for (const f of pool) {
     if (isJourneyman(f)) { kept.push(f); continue; }
-    const held = (ahead?.records ?? []).filter(r => r.owner === null && (r.status === 'released' || r.status === 'retired')
-      && r.origin.name === f.name && r.origin.birthYear === year - f.age && r.player.position === f.position);
-    if (held.length === 1) {
-      const r = held[0];
+    /* Release BU (the lead's J2, Round 1597 x PR 429): his record is the one PR 429's freeAgentRecord resolves
+       today (his worldRosterKey when the list carries it, never a namesake), read one world year on by its key, so
+       the list's summer and the rollover's link below always mean the same man. */
+    const known = ahead ? freeAgentRecord(career, f) : null;
+    const r = known ? ahead?.records.find(x => x.key === known.key) : undefined;
+    if (r && r.owner === null && (r.status === 'released' || r.status === 'retired')) {
       if (r.status === 'retired') { retired.push({ name: f.name, age: r.player.age, rating: r.player.rating }); continue; }
       stay(f, { ...f, age: r.player.age, rating: r.player.rating, ...(f.value !== undefined && r.player.value !== undefined ? { value: r.player.value } : {}) });
       continue;
@@ -8009,12 +8011,17 @@ export function recoverPooledReleases(career: CareerState): CareerState {
     const p = r.player;
     if (r.status !== 'released' || r.owner !== null || here.has(p.name) || here.has(r.origin.name)) continue;
     here.add(p.name);
-    back.push({
+    const row: FreeAgent = {
       name: p.name, position: p.position, age: p.age, rating: p.rating,
       value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}),
       founderSaleRatio: p.founderSaleRatio, since: career.season,
       reason: mine.has(p.name) ? 'released' : 'expired', fromMyClub: true,
-    });
+    };
+    /* Release BU (the lead's J2, Round 1597 x PR 429): the row carries his record's key when PR 429's
+       freeAgentRecord resolves the row to exactly that record, so every later read means this man and never a
+       namesake. A row it cannot resolve goes back without a key, as before: a key that resolves to nobody would
+       make him unsignable (freeAgentBlock's notInPool), and nobody comes back only to be stuck. */
+    back.push(freeAgentRecord(career, row)?.key === r.key ? { worldRosterKey: r.key, ...row } : row);
   }
   return back.length ? { ...done, freeAgents: [...career.freeAgents, ...back] } : done;
 }
@@ -22617,10 +22624,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     for (const name of freeAgentsIn) {
       const man = squad.find(p => p.name === name);
       if (!man || emergencyFrom.has(name)) continue;
-      const released = worldRosterView(rosterCareer)?.records.filter(record => record.status === 'released' && record.owner === null
-        && record.player.name === name && record.origin.birthYear === worldYear(rosterCareer) - man.age);
-      if (released?.length !== 1) continue;
-      rosterCareer = recordWorldRosterTransfer(rosterCareer, { player: man, from: null, to: clubName, kind: 'permanent', key: released[0].key });
+      /* Release BU (the lead's J2, Round 1597 x PR 429): the record is the one PR 429's freeAgentRecord resolves for
+         his row on the list (its worldRosterKey, never a namesake), the lookup signFreeAgent makes for the same act. */
+      const row = (career.freeAgents ?? []).find(f => f.name === name);
+      const released = row ? freeAgentRecord(rosterCareer, { ...row, age: man.age }) : null;
+      if (!released || released.status !== 'released' || released.owner !== null) continue;
+      rosterCareer = recordWorldRosterTransfer(rosterCareer, { player: man, from: null, to: clubName, kind: 'permanent', key: released.key });
       poolSigned = true;
     }
     if (poolSigned) squad = rosterCareer.squad;

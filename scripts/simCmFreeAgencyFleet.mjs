@@ -134,14 +134,16 @@ const EDITS = {
   trimbar: [[CORE, '  return fa.fromMyClub === true && fa.reason === \'released\' && fa.trimmed !== true;\n',
     '  return fa.fromMyClub === true && fa.reason === \'released\';\n']],
   /* Closing check fix: the fill signs a man back off the list and the ledger is not told (the build as reviewed). */
-  nofilllink: [[CORE, '      rosterCareer = recordWorldRosterTransfer(rosterCareer, { player: man, from: null, to: clubName, kind: \'permanent\', key: released[0].key });\n', '']],
+  nofilllink: [[CORE, '      rosterCareer = recordWorldRosterTransfer(rosterCareer, { player: man, from: null, to: clubName, kind: \'permanent\', key: released.key });\n', '']],
   /* Closing check fix: a made up free agent leaves these leagues on the world's odds, and only he, and said. */
   dropreal: [[CORE, '  if (aged.generated !== true && !aged.name.endsWith(YOUTH_PAD_SUFFIX)) return false;\n', '']],
   nodropout: [[CORE, '  return random() < dropOutChance(aged.age, aged.rating, aged.position);\n', '  return random() < 0;\n']],
   leftunsaid: [[CORE, '  if (poolSummer.left.length) state.freeAgentsLeft = poolSummer.left;\n', '  if (poolSummer.left.length && false) state.freeAgentsLeft = poolSummer.left;\n']],
-  ledgeroff: [[CORE, '&& r.origin.birthYear === year - f.age && r.player.position === f.position);\n',
-    '&& r.origin.birthYear === year - f.age - 1 && r.player.position === f.position);\n']],
-  staleseason: [[CORE, '  const nextSeason = career.season + 1, year = worldYear(career);\n', '  const nextSeason = career.season, year = worldYear(career);\n']],
+  /* Release BU (J2): the summer finds his record through PR 429's freeAgentRecord, so the year off by one moves
+     there (his birth year one year out, the same miss the name, birth year and position filter had). */
+  ledgeroff: [[CORE, '    const known = ahead ? freeAgentRecord(career, f) : null;\n',
+    '    const known = ahead ? freeAgentRecord(career, { ...f, age: f.age + 1 }) : null;\n']],
+  staleseason: [[CORE, '  const nextSeason = career.season + 1;\n  const ahead = livingWorldOf(career)', '  const nextSeason = career.season;\n  const ahead = livingWorldOf(career)']],
   /* Review fix (r1597-run-loan): the deal of a man out on loan, unseen and unrenewable. */
   noloanrow: [[CORE, '    ...(career.loanedOut ?? []).filter(l => (l.player.contractYears ?? 9) <= 1).map(l => ({ player: l.player, loanClub: l.club })),\n', '']],
   norenewloan: [[CORE, '  return career.squad.find(x => x.id === playerId) ?? (career.loanedOut ?? []).find(l => l.player.id === playerId)?.player;\n',
