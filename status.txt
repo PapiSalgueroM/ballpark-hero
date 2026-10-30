@@ -1,14 +1,14 @@
-tick 2 at 17:00:15, node pid 2770 alive: yes
+tick 3 at 17:00:23, node pid 2770 alive: yes
                total        used        free      shared  buff/cache   available
-Mem:           15983        9632         733          45        6007        6350
-Swap:           3071           0        3071
+Mem:           15983       15773         201          17         362         209
+Swap:           3071         393        2678
 /dev/root         147814 62899     84899  43% /
     PID    PPID   RSS     ELAPSED COMMAND
-   2775    2770 8609564     00:08 node --max-old-space-size=3000 scripts/simManagerWorldContinuity.mjs
-   2808    2775 149704      00:08 /home/runner/work/ballpark-hero/ballpark-hero/node_modules/@esbuild/linux-x64/bin/esbuild --service=0.21.5 --ping
-   2486    2469 141608      01:27 /home/runner/actions-runner/cached/2.338.2/bin/Runner.Worker spawnclient 142 145
-   2428    2424 137700      01:44 /tmp/provjobd282535923
-   2469    2411 98096       01:29 /home/runner/actions-runner/cached/2.338.2/bin/Runner.Listener run
-   1455       1 84852       01:49 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
-   1107       1 56160       01:51 php-fpm: master process (/etc/php/8.5/fpm/php-fpm.conf)
+   2775    2770 15355692    00:16 node --max-old-space-size=3000 scripts/simManagerWorldContinuity.mjs
+   1455       1 80788       01:57 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+   2428    2424 71796       01:52 /tmp/provjobd282535923
+   1299       1 45368       01:59 /usr/bin/containerd
+   1107       1 41276       01:59 php-fpm: master process (/etc/php/8.5/fpm/php-fpm.conf)
+   1448    1156 36528       01:58 /usr/bin/python3 -u bin/WALinuxAgent-2.16.0.2-py3.12.egg -run-exthandlers
+   1156       1 28580       01:59 /usr/bin/python3 -u /usr/sbin/waagent -daemon
 log bytes 0
