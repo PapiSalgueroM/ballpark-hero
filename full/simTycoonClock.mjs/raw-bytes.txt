@@ -1,0 +1,3 @@
+801 /home/runner/work/_temp/rc-out/full/simTycoonClock.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simTycoonClock.mjs/stderr.log
+801 total

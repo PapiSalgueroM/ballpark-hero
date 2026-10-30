@@ -1,0 +1,2 @@
+d16e705d1bfada1a8315cc7cd1e377c6512d21fcf3e2fc4cfd919dbf6d48021c  /home/runner/work/_temp/rc-out/full/simCareerLifeCooldowns.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerLifeCooldowns.mjs/stderr.log

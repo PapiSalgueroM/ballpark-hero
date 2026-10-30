@@ -1,0 +1,2 @@
+394029c1f47244af52a2968804831004c9d036ea43c6c9f555b17295eb72006f  /home/runner/work/_temp/rc-out/full/simBrand.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simBrand.mjs/stderr.log

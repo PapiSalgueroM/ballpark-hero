@@ -1,0 +1,3 @@
+4083 /home/runner/work/_temp/rc-out/full/simConnect4FranchiseCodes.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simConnect4FranchiseCodes.mjs/stderr.log
+4083 total

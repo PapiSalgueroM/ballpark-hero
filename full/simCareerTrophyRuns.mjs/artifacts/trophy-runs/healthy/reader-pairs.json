@@ -1,0 +1,2020 @@
+[
+  {
+    "id": "held-quarter-final",
+    "row": {
+      "year": 2027,
+      "age": 23,
+      "club": "Arsenal",
+      "clubCountry": "England",
+      "clubTier": 1,
+      "apps": 42,
+      "leagueApps": 30,
+      "goals": 14,
+      "assists": 9,
+      "cleanSheets": 0,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 7.2,
+      "leagueTitle": false,
+      "domesticCup": true,
+      "championsLeague": true,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Chelsea",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Liverpool",
+            "won": true,
+            "for": 1,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Newcastle",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 1,
+          "against": 1,
+          "legs": 1,
+          "decidedBy": "penalties",
+          "pensFor": 5,
+          "pensAgainst": 4
+        }
+      },
+      "clubCupRun": {
+        "seasonYear": 2027,
+        "club": "Arsenal",
+        "qualified": true,
+        "competition": "Champions League",
+        "result": "Quarter-final",
+        "playerGoals": 2,
+        "isTopScorer": false,
+        "matches": [
+          {
+            "round": "QF",
+            "opponent": "Barcelona",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "won": true
+          },
+          {
+            "round": "QF",
+            "opponent": "Barcelona",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 0,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "won": false,
+            "aggFor": 2,
+            "aggAgainst": 3,
+            "decidedBy": "aggregate"
+          }
+        ]
+      }
+    },
+    "career": {
+      "lastUCLResult": null
+    },
+    "original": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "Champions League",
+        "result": "Quarter-final",
+        "matches": [
+          {
+            "round": "Quarter-final, leg 1",
+            "opponent": "Barcelona",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "home": true
+          },
+          {
+            "round": "Quarter-final, leg 2",
+            "opponent": "Barcelona",
+            "goalsFor": 0,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "home": false,
+            "result": "Out",
+            "note": "2-3 on aggregate"
+          }
+        ]
+      }
+    ],
+    "current": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "Champions League",
+        "result": "Quarter-final",
+        "matches": [
+          {
+            "round": "Quarter-final, leg 1",
+            "opponent": "Barcelona",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "home": true
+          },
+          {
+            "round": "Quarter-final, leg 2",
+            "opponent": "Barcelona",
+            "goalsFor": 0,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "home": false,
+            "result": "Out",
+            "note": "2-3 on aggregate"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "held-first-stage",
+    "row": {
+      "year": 2027,
+      "age": 23,
+      "club": "Arsenal",
+      "clubCountry": "England",
+      "clubTier": 1,
+      "apps": 42,
+      "leagueApps": 30,
+      "goals": 14,
+      "assists": 9,
+      "cleanSheets": 0,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 7.2,
+      "leagueTitle": false,
+      "domesticCup": true,
+      "championsLeague": true,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Chelsea",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Liverpool",
+            "won": true,
+            "for": 1,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Newcastle",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 1,
+          "against": 1,
+          "legs": 1,
+          "decidedBy": "penalties",
+          "pensFor": 5,
+          "pensAgainst": 4
+        }
+      },
+      "clubCupRun": {
+        "seasonYear": 2027,
+        "club": "Arsenal",
+        "qualified": true,
+        "competition": "Champions League",
+        "result": "League Phase",
+        "playerGoals": 2,
+        "isTopScorer": false,
+        "matches": [],
+        "firstStage": {
+          "kind": "leaguePhase",
+          "through": false,
+          "stages": [
+            {
+              "label": "League phase",
+              "position": 27,
+              "of": 36,
+              "footnote": "Saved test stage",
+              "myRow": {
+                "club": "Arsenal",
+                "w": 0,
+                "d": 1,
+                "l": 1,
+                "gf": 1,
+                "ga": 2,
+                "pts": 1
+              },
+              "games": [
+                {
+                  "matchday": 1,
+                  "opponent": "Juventus",
+                  "home": true,
+                  "goalsFor": 0,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 2,
+                  "opponent": "Dortmund",
+                  "home": false,
+                  "goalsFor": 1,
+                  "goalsAgainst": 1,
+                  "playerGoals": 1
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "career": {
+      "lastUCLResult": null
+    },
+    "original": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "Champions League",
+        "result": "League Phase",
+        "matches": [
+          {
+            "round": "League phase, game 1",
+            "opponent": "Juventus",
+            "goalsFor": 0,
+            "goalsAgainst": 1,
+            "home": true,
+            "playerGoals": 0
+          },
+          {
+            "round": "League phase, game 2",
+            "opponent": "Dortmund",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "home": false,
+            "playerGoals": 1
+          }
+        ]
+      }
+    ],
+    "current": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "Champions League",
+        "result": "League Phase",
+        "matches": [
+          {
+            "round": "League phase, game 1",
+            "opponent": "Juventus",
+            "goalsFor": 0,
+            "goalsAgainst": 1,
+            "home": true,
+            "playerGoals": 0
+          },
+          {
+            "round": "League phase, game 2",
+            "opponent": "Dortmund",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "home": false,
+            "playerGoals": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "held-caf-final",
+    "row": {
+      "year": 2027,
+      "age": 23,
+      "club": "Al Ahly",
+      "clubCountry": "Egypt",
+      "clubTier": 4,
+      "apps": 42,
+      "leagueApps": 30,
+      "goals": 14,
+      "assists": 9,
+      "cleanSheets": 0,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 7.2,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "clubCupTitle": "CAF Champions League",
+      "clubCupRun": {
+        "seasonYear": 2027,
+        "club": "Al Ahly",
+        "qualified": true,
+        "competition": "CAF Champions League",
+        "result": "Winners",
+        "playerGoals": 1,
+        "isTopScorer": false,
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Wydad",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "won": true
+          },
+          {
+            "round": "Final",
+            "opponent": "Wydad",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "won": true,
+            "aggFor": 3,
+            "aggAgainst": 2,
+            "decidedBy": "aggregate"
+          }
+        ]
+      }
+    },
+    "career": {
+      "lastUCLResult": null
+    },
+    "original": [
+      {
+        "id": "club",
+        "name": "CAF Champions League",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Final, leg 1",
+            "opponent": "Wydad",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "home": true
+          },
+          {
+            "round": "Final, leg 2",
+            "opponent": "Wydad",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "home": false,
+            "result": "Through",
+            "note": "3-2 on aggregate"
+          }
+        ]
+      }
+    ],
+    "current": [
+      {
+        "id": "club",
+        "name": "CAF Champions League",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Final, leg 1",
+            "opponent": "Wydad",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "home": true
+          },
+          {
+            "round": "Final, leg 2",
+            "opponent": "Wydad",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "home": false,
+            "result": "Through",
+            "note": "3-2 on aggregate"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "held-neutral-final",
+    "row": {
+      "year": 2027,
+      "age": 23,
+      "club": "Arsenal",
+      "clubCountry": "England",
+      "clubTier": 1,
+      "apps": 42,
+      "leagueApps": 30,
+      "goals": 14,
+      "assists": 9,
+      "cleanSheets": 0,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 7.2,
+      "leagueTitle": false,
+      "domesticCup": true,
+      "championsLeague": true,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Chelsea",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Liverpool",
+            "won": true,
+            "for": 1,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Newcastle",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 1,
+          "against": 1,
+          "legs": 1,
+          "decidedBy": "penalties",
+          "pensFor": 5,
+          "pensAgainst": 4
+        }
+      },
+      "clubCupRun": {
+        "seasonYear": 2027,
+        "club": "Arsenal",
+        "qualified": true,
+        "competition": "Champions League",
+        "result": "Winners",
+        "playerGoals": 1,
+        "isTopScorer": false,
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "leg": 1,
+            "home": false,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "playerGoals": 1,
+            "won": true,
+            "decidedBy": "aggregate"
+          }
+        ]
+      }
+    },
+    "career": {
+      "lastUCLResult": null
+    },
+    "original": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "Champions League",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "playerGoals": 1,
+            "result": "Through"
+          }
+        ]
+      }
+    ],
+    "current": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "Champions League",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "playerGoals": 1,
+            "result": "Through"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "held-penalties-extra-time",
+    "row": {
+      "year": 2027,
+      "age": 23,
+      "club": "Arsenal",
+      "clubCountry": "England",
+      "clubTier": 1,
+      "apps": 42,
+      "leagueApps": 30,
+      "goals": 14,
+      "assists": 9,
+      "cleanSheets": 0,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 7.2,
+      "leagueTitle": false,
+      "domesticCup": true,
+      "championsLeague": true,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Chelsea",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Liverpool",
+            "won": true,
+            "for": 1,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Newcastle",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 1,
+          "against": 1,
+          "legs": 1,
+          "decidedBy": "penalties",
+          "pensFor": 5,
+          "pensAgainst": 4
+        }
+      },
+      "clubCupRun": {
+        "seasonYear": 2027,
+        "club": "Arsenal",
+        "qualified": true,
+        "competition": "Champions League",
+        "result": "Winners",
+        "playerGoals": 1,
+        "isTopScorer": false,
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "leg": 1,
+            "home": false,
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "won": true,
+            "decidedBy": "penalties",
+            "pensFor": 5,
+            "pensAgainst": 4,
+            "afterExtraTime": true,
+            "etFor": 0,
+            "etAgainst": 0
+          }
+        ]
+      }
+    },
+    "career": {
+      "lastUCLResult": null
+    },
+    "original": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "Champions League",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "result": "Through",
+            "note": "5-4 on penalties"
+          }
+        ]
+      }
+    ],
+    "current": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "Champions League",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "result": "Through",
+            "note": "5-4 on penalties"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "held-away-goals",
+    "row": {
+      "year": 2027,
+      "age": 23,
+      "club": "Arsenal",
+      "clubCountry": "England",
+      "clubTier": 1,
+      "apps": 42,
+      "leagueApps": 30,
+      "goals": 14,
+      "assists": 9,
+      "cleanSheets": 0,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 7.2,
+      "leagueTitle": false,
+      "domesticCup": true,
+      "championsLeague": true,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Chelsea",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Liverpool",
+            "won": true,
+            "for": 1,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Newcastle",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 1,
+          "against": 1,
+          "legs": 1,
+          "decidedBy": "penalties",
+          "pensFor": 5,
+          "pensAgainst": 4
+        }
+      },
+      "clubCupRun": {
+        "seasonYear": 2027,
+        "club": "Arsenal",
+        "qualified": true,
+        "competition": "Champions League",
+        "result": "Quarter-final",
+        "playerGoals": 2,
+        "isTopScorer": false,
+        "matches": [
+          {
+            "round": "QF",
+            "opponent": "Barcelona",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "won": true
+          },
+          {
+            "round": "QF",
+            "opponent": "Barcelona",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 0,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "won": false,
+            "aggFor": 2,
+            "aggAgainst": 3,
+            "decidedBy": "awayGoals"
+          }
+        ]
+      }
+    },
+    "career": {
+      "lastUCLResult": null
+    },
+    "original": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "Champions League",
+        "result": "Quarter-final",
+        "matches": [
+          {
+            "round": "Quarter-final, leg 1",
+            "opponent": "Barcelona",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "home": true
+          },
+          {
+            "round": "Quarter-final, leg 2",
+            "opponent": "Barcelona",
+            "goalsFor": 0,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "home": false,
+            "result": "Out",
+            "note": "2-3 on aggregate · Settled on away goals"
+          }
+        ]
+      }
+    ],
+    "current": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "Champions League",
+        "result": "Quarter-final",
+        "matches": [
+          {
+            "round": "Quarter-final, leg 1",
+            "opponent": "Barcelona",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "home": true
+          },
+          {
+            "round": "Quarter-final, leg 2",
+            "opponent": "Barcelona",
+            "goalsFor": 0,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "home": false,
+            "result": "Out",
+            "note": "2-3 on aggregate · Settled on away goals"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "missing",
+    "row": {
+      "year": 2027,
+      "age": 23,
+      "club": "Arsenal",
+      "clubCountry": "England",
+      "clubTier": 1,
+      "apps": 42,
+      "leagueApps": 30,
+      "goals": 14,
+      "assists": 9,
+      "cleanSheets": 0,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 7.2,
+      "leagueTitle": false,
+      "domesticCup": true,
+      "championsLeague": true,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Chelsea",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Liverpool",
+            "won": true,
+            "for": 1,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Newcastle",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 1,
+          "against": 1,
+          "legs": 1,
+          "decidedBy": "penalties",
+          "pensFor": 5,
+          "pensAgainst": 4
+        }
+      }
+    },
+    "career": {
+      "lastUCLResult": null
+    },
+    "original": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "European club cup",
+        "result": "Winners",
+        "matches": [],
+        "note": "The match details for this season were not kept in this save."
+      }
+    ],
+    "current": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "European club cup",
+        "result": "Winners",
+        "matches": [],
+        "note": "The match details for this season were not kept in this save."
+      }
+    ]
+  },
+  {
+    "id": "wrong-year",
+    "row": {
+      "year": 2027,
+      "age": 23,
+      "club": "Arsenal",
+      "clubCountry": "England",
+      "clubTier": 1,
+      "apps": 42,
+      "leagueApps": 30,
+      "goals": 14,
+      "assists": 9,
+      "cleanSheets": 0,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 7.2,
+      "leagueTitle": false,
+      "domesticCup": true,
+      "championsLeague": true,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Chelsea",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Liverpool",
+            "won": true,
+            "for": 1,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Newcastle",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 1,
+          "against": 1,
+          "legs": 1,
+          "decidedBy": "penalties",
+          "pensFor": 5,
+          "pensAgainst": 4
+        }
+      },
+      "clubCupRun": {
+        "seasonYear": 2026,
+        "club": "Arsenal",
+        "qualified": true,
+        "competition": "Champions League",
+        "result": "Winners",
+        "playerGoals": 1,
+        "isTopScorer": false,
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "leg": 1,
+            "home": false,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "playerGoals": 1,
+            "won": true,
+            "decidedBy": "aggregate"
+          }
+        ]
+      }
+    },
+    "career": {
+      "lastUCLResult": {
+        "seasonYear": 2027,
+        "club": "Arsenal",
+        "qualified": true,
+        "competition": "Champions League",
+        "result": "Winners",
+        "playerGoals": 1,
+        "isTopScorer": false,
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "leg": 1,
+            "home": false,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "playerGoals": 1,
+            "won": true,
+            "decidedBy": "aggregate"
+          }
+        ]
+      }
+    },
+    "original": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "European club cup",
+        "result": "Winners",
+        "matches": [],
+        "note": "The match details for this season were not kept in this save."
+      }
+    ],
+    "current": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "European club cup",
+        "result": "Winners",
+        "matches": [],
+        "note": "The match details for this season were not kept in this save."
+      }
+    ]
+  },
+  {
+    "id": "wrong-club",
+    "row": {
+      "year": 2027,
+      "age": 23,
+      "club": "Arsenal",
+      "clubCountry": "England",
+      "clubTier": 1,
+      "apps": 42,
+      "leagueApps": 30,
+      "goals": 14,
+      "assists": 9,
+      "cleanSheets": 0,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 7.2,
+      "leagueTitle": false,
+      "domesticCup": true,
+      "championsLeague": true,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Chelsea",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Liverpool",
+            "won": true,
+            "for": 1,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Newcastle",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 1,
+          "against": 1,
+          "legs": 1,
+          "decidedBy": "penalties",
+          "pensFor": 5,
+          "pensAgainst": 4
+        }
+      },
+      "clubCupRun": {
+        "seasonYear": 2027,
+        "club": "A different recorded club",
+        "qualified": true,
+        "competition": "Champions League",
+        "result": "Winners",
+        "playerGoals": 1,
+        "isTopScorer": false,
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "leg": 1,
+            "home": false,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "playerGoals": 1,
+            "won": true,
+            "decidedBy": "aggregate"
+          }
+        ]
+      }
+    },
+    "career": {
+      "lastUCLResult": {
+        "seasonYear": 2027,
+        "club": "Arsenal",
+        "qualified": true,
+        "competition": "Champions League",
+        "result": "Winners",
+        "playerGoals": 1,
+        "isTopScorer": false,
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "leg": 1,
+            "home": false,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "playerGoals": 1,
+            "won": true,
+            "decidedBy": "aggregate"
+          }
+        ]
+      }
+    },
+    "original": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "European club cup",
+        "result": "Winners",
+        "matches": [],
+        "note": "The match details for this season were not kept in this save."
+      }
+    ],
+    "current": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "European club cup",
+        "result": "Winners",
+        "matches": [],
+        "note": "The match details for this season were not kept in this save."
+      }
+    ]
+  },
+  {
+    "id": "unanchored",
+    "row": {
+      "year": 2027,
+      "age": 23,
+      "club": "Arsenal",
+      "clubCountry": "England",
+      "clubTier": 1,
+      "apps": 42,
+      "leagueApps": 30,
+      "goals": 14,
+      "assists": 9,
+      "cleanSheets": 0,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 7.2,
+      "leagueTitle": false,
+      "domesticCup": true,
+      "championsLeague": true,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Chelsea",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Liverpool",
+            "won": true,
+            "for": 1,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Newcastle",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 1,
+          "against": 1,
+          "legs": 1,
+          "decidedBy": "penalties",
+          "pensFor": 5,
+          "pensAgainst": 4
+        }
+      },
+      "clubCupRun": {
+        "qualified": true,
+        "competition": "Champions League",
+        "result": "Winners",
+        "playerGoals": 1,
+        "isTopScorer": false,
+        "matches": [
+          {
+            "round": "Final",
+            "opponent": "Barcelona",
+            "leg": 1,
+            "home": false,
+            "goalsFor": 2,
+            "goalsAgainst": 0,
+            "playerGoals": 1,
+            "won": true,
+            "decidedBy": "aggregate"
+          }
+        ]
+      }
+    },
+    "career": {
+      "lastUCLResult": null
+    },
+    "original": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "European club cup",
+        "result": "Winners",
+        "matches": [],
+        "note": "The match details for this season were not kept in this save."
+      }
+    ],
+    "current": [
+      {
+        "id": "domestic",
+        "name": "FA Cup",
+        "result": "Winners",
+        "matches": [
+          {
+            "round": "Early rounds",
+            "opponent": null,
+            "goalsFor": null,
+            "goalsAgainst": null,
+            "result": "Through",
+            "note": "Opponents and scores were not kept for these rounds."
+          },
+          {
+            "round": "Quarter-final",
+            "opponent": "Chelsea",
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "result": "Through"
+          },
+          {
+            "round": "Semi-final",
+            "opponent": "Liverpool",
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "result": "Through"
+          },
+          {
+            "round": "Final",
+            "opponent": "Newcastle",
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "result": "Winners",
+            "note": "5-4 on penalties"
+          }
+        ],
+        "note": "Rounds before the final are shown as one match each."
+      },
+      {
+        "id": "club",
+        "name": "European club cup",
+        "result": "Winners",
+        "matches": [],
+        "note": "The match details for this season were not kept in this save."
+      }
+    ]
+  }
+]

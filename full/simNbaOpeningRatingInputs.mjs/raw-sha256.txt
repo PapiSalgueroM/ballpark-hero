@@ -1,0 +1,2 @@
+909590d156212c222eb257921cb3819d8684f021e4a60d6bafcf714f5f8d8410  /home/runner/work/_temp/rc-out/full/simNbaOpeningRatingInputs.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNbaOpeningRatingInputs.mjs/stderr.log

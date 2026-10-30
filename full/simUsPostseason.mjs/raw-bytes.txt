@@ -1,0 +1,3 @@
+7433 /home/runner/work/_temp/rc-out/full/simUsPostseason.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simUsPostseason.mjs/stderr.log
+7433 total

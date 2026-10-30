@@ -1,0 +1,3 @@
+888 /home/runner/work/_temp/rc-out/full/simNflPlayoffFormatHistory.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNflPlayoffFormatHistory.mjs/stderr.log
+888 total

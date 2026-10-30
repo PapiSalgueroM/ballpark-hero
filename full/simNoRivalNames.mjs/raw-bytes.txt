@@ -1,0 +1,3 @@
+860 /home/runner/work/_temp/rc-out/full/simNoRivalNames.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNoRivalNames.mjs/stderr.log
+860 total

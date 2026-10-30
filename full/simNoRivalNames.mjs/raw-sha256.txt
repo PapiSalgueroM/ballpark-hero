@@ -1,0 +1,2 @@
+9cff5f61605c1dd642dade9ff096d89a6258ac20c7e2262611dcce09bb40c54d  /home/runner/work/_temp/rc-out/full/simNoRivalNames.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNoRivalNames.mjs/stderr.log

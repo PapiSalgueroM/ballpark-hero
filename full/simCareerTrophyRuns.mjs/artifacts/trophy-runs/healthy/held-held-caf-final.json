@@ -1,0 +1,123 @@
+{
+  "id": "held-caf-final",
+  "row": {
+    "year": 2027,
+    "age": 23,
+    "club": "Al Ahly",
+    "clubCountry": "Egypt",
+    "clubTier": 4,
+    "apps": 42,
+    "leagueApps": 30,
+    "goals": 14,
+    "assists": 9,
+    "cleanSheets": 0,
+    "yellowCards": 2,
+    "redCards": 0,
+    "rating": 7.2,
+    "leagueTitle": false,
+    "domesticCup": false,
+    "championsLeague": false,
+    "worldCup": false,
+    "ballonDor": false,
+    "ballonDorRank": null,
+    "type": "playing",
+    "intApps": 0,
+    "intGoals": 0,
+    "intAssists": 0,
+    "intRating": 0,
+    "tournament": null,
+    "tournamentResult": null,
+    "clubCupTitle": "CAF Champions League",
+    "clubCupRun": {
+      "seasonYear": 2027,
+      "club": "Al Ahly",
+      "qualified": true,
+      "competition": "CAF Champions League",
+      "result": "Winners",
+      "playerGoals": 1,
+      "isTopScorer": false,
+      "matches": [
+        {
+          "round": "Final",
+          "opponent": "Wydad",
+          "leg": 1,
+          "home": true,
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "playerGoals": 1,
+          "won": true
+        },
+        {
+          "round": "Final",
+          "opponent": "Wydad",
+          "leg": 2,
+          "home": false,
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "playerGoals": 0,
+          "won": true,
+          "aggFor": 3,
+          "aggAgainst": 2,
+          "decidedBy": "aggregate"
+        }
+      ]
+    }
+  },
+  "career": {
+    "lastUCLResult": null
+  },
+  "expected": {
+    "missing": false,
+    "name": "CAF Champions League",
+    "result": "Winners",
+    "goals": "Your saved campaign goals: 1",
+    "format": null,
+    "matches": [
+      {
+        "round": "Final, leg 1",
+        "opponent": "Wydad",
+        "score": "2-1",
+        "home": "Home",
+        "playerGoals": "Your goals in this game: 1",
+        "note": null,
+        "extraTime": null
+      },
+      {
+        "round": "Final, leg 2",
+        "opponent": "Wydad",
+        "score": "1-1",
+        "home": "Away",
+        "playerGoals": "Your goals in this game: 0",
+        "note": "3-2 on aggregate",
+        "extraTime": null
+      }
+    ]
+  },
+  "actual": {
+    "missing": false,
+    "name": "CAF Champions League",
+    "result": "Winners",
+    "goals": "Your saved campaign goals: 1",
+    "format": null,
+    "matches": [
+      {
+        "round": "Final, leg 1",
+        "opponent": "Wydad",
+        "score": "2-1",
+        "home": "Home",
+        "playerGoals": "Your goals in this game: 1",
+        "note": null,
+        "extraTime": null
+      },
+      {
+        "round": "Final, leg 2",
+        "opponent": "Wydad",
+        "score": "1-1",
+        "home": "Away",
+        "playerGoals": "Your goals in this game: 0",
+        "note": "3-2 on aggregate",
+        "extraTime": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,3 @@
+1467 /home/runner/work/_temp/rc-out/full/simMostPlayed.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simMostPlayed.mjs/stderr.log
+1467 total

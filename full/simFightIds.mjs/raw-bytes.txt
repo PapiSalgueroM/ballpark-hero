@@ -1,0 +1,3 @@
+3113 /home/runner/work/_temp/rc-out/full/simFightIds.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFightIds.mjs/stderr.log
+3113 total

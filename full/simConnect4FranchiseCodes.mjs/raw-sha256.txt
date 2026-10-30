@@ -1,0 +1,2 @@
+da20cff219efc59221eb625c678ad0dd09931e23a3651ec0548b986561aae0ff  /home/runner/work/_temp/rc-out/full/simConnect4FranchiseCodes.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simConnect4FranchiseCodes.mjs/stderr.log

@@ -1,0 +1,159 @@
+{
+  "id": "held-away-goals",
+  "row": {
+    "year": 2027,
+    "age": 23,
+    "club": "Arsenal",
+    "clubCountry": "England",
+    "clubTier": 1,
+    "apps": 42,
+    "leagueApps": 30,
+    "goals": 14,
+    "assists": 9,
+    "cleanSheets": 0,
+    "yellowCards": 2,
+    "redCards": 0,
+    "rating": 7.2,
+    "leagueTitle": false,
+    "domesticCup": true,
+    "championsLeague": true,
+    "worldCup": false,
+    "ballonDor": false,
+    "ballonDorRank": null,
+    "type": "playing",
+    "intApps": 0,
+    "intGoals": 0,
+    "intAssists": 0,
+    "intRating": 0,
+    "tournament": null,
+    "tournamentResult": null,
+    "cupRun": {
+      "cup": "FA Cup",
+      "stages": [
+        {
+          "stage": "early",
+          "won": true
+        },
+        {
+          "stage": "QF",
+          "opp": "Chelsea",
+          "won": true,
+          "for": 2,
+          "against": 1,
+          "home": false
+        },
+        {
+          "stage": "SF",
+          "opp": "Liverpool",
+          "won": true,
+          "for": 1,
+          "against": 0
+        },
+        {
+          "stage": "F",
+          "opp": "Newcastle",
+          "won": true
+        }
+      ],
+      "final": {
+        "for": 1,
+        "against": 1,
+        "legs": 1,
+        "decidedBy": "penalties",
+        "pensFor": 5,
+        "pensAgainst": 4
+      }
+    },
+    "clubCupRun": {
+      "seasonYear": 2027,
+      "club": "Arsenal",
+      "qualified": true,
+      "competition": "Champions League",
+      "result": "Quarter-final",
+      "playerGoals": 2,
+      "isTopScorer": false,
+      "matches": [
+        {
+          "round": "QF",
+          "opponent": "Barcelona",
+          "leg": 1,
+          "home": true,
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "playerGoals": 1,
+          "won": true
+        },
+        {
+          "round": "QF",
+          "opponent": "Barcelona",
+          "leg": 2,
+          "home": false,
+          "goalsFor": 0,
+          "goalsAgainst": 2,
+          "playerGoals": 0,
+          "won": false,
+          "aggFor": 2,
+          "aggAgainst": 3,
+          "decidedBy": "awayGoals"
+        }
+      ]
+    }
+  },
+  "career": {
+    "lastUCLResult": null
+  },
+  "expected": {
+    "missing": false,
+    "name": "Champions League",
+    "result": "Quarter-final",
+    "goals": "Your saved campaign goals: 2",
+    "format": null,
+    "matches": [
+      {
+        "round": "Quarter-final, leg 1",
+        "opponent": "Barcelona",
+        "score": "2-1",
+        "home": "Home",
+        "playerGoals": "Your goals in this game: 1",
+        "note": null,
+        "extraTime": null
+      },
+      {
+        "round": "Quarter-final, leg 2",
+        "opponent": "Barcelona",
+        "score": "0-2",
+        "home": "Away",
+        "playerGoals": "Your goals in this game: 0",
+        "note": "2-3 on aggregate · Settled on away goals",
+        "extraTime": null
+      }
+    ]
+  },
+  "actual": {
+    "missing": false,
+    "name": "Champions League",
+    "result": "Quarter-final",
+    "goals": "Your saved campaign goals: 2",
+    "format": null,
+    "matches": [
+      {
+        "round": "Quarter-final, leg 1",
+        "opponent": "Barcelona",
+        "score": "2-1",
+        "home": "Home",
+        "playerGoals": "Your goals in this game: 1",
+        "note": null,
+        "extraTime": null
+      },
+      {
+        "round": "Quarter-final, leg 2",
+        "opponent": "Barcelona",
+        "score": "0-2",
+        "home": "Away",
+        "playerGoals": "Your goals in this game: 0",
+        "note": "2-3 on aggregate · Settled on away goals",
+        "extraTime": null
+      }
+    ]
+  }
+}

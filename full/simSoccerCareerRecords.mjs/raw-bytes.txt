@@ -1,0 +1,3 @@
+12047 /home/runner/work/_temp/rc-out/full/simSoccerCareerRecords.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simSoccerCareerRecords.mjs/stderr.log
+12047 total

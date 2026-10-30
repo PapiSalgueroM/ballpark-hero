@@ -1,0 +1,19 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 548,
+      "sha256": "a33bafc7a9b7af3be3c1ae4968deab569e52ed182c9e35f3d6fc5c0e6810c90e",
+      "tests": [
+        ":src/test/arcadePause.test.tsx",
+        ":src/test/freeKickLab.test.tsx",
+        ":src/test/liveScoresOwnership.test.tsx",
+        ":src/test/liveScoresTransport.test.ts",
+        ":src/test/soccerCareerRecords.test.tsx",
+        ":src/test/soccerHigherLowerReveal.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

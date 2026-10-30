@@ -1,0 +1,3 @@
+1934 /home/runner/work/_temp/rc-out/full/simDailyLegend.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simDailyLegend.mjs/stderr.log
+1934 total

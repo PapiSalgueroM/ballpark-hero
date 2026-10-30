@@ -1,0 +1,3 @@
+2909 /home/runner/work/_temp/rc-out/full/simSilverwareSort.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSilverwareSort.mjs/stderr.log
+2909 total

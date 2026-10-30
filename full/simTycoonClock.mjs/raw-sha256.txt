@@ -1,0 +1,2 @@
+a0df38ac14eaf5dfc9b2c882a72a4fba245e0b4f5873691635e4b808815f0820  /home/runner/work/_temp/rc-out/full/simTycoonClock.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTycoonClock.mjs/stderr.log

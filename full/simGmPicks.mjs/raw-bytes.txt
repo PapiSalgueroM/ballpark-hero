@@ -1,0 +1,3 @@
+1992 /home/runner/work/_temp/rc-out/full/simGmPicks.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGmPicks.mjs/stderr.log
+1992 total

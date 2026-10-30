@@ -1,0 +1,3 @@
+1080 /home/runner/work/_temp/rc-out/full/simHandleNames.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simHandleNames.mjs/stderr.log
+1080 total

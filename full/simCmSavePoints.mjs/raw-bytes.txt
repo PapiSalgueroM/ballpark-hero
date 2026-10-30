@@ -1,0 +1,3 @@
+2302 /home/runner/work/_temp/rc-out/full/simCmSavePoints.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmSavePoints.mjs/stderr.log
+2302 total
