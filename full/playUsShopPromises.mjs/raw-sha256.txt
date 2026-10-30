@@ -1,0 +1,2 @@
+920f4d6df9e75c194731dd50e7d0bfb3da9b1fe84a58efcb842de1636d34b454  /home/runner/work/_temp/rc-out/full/playUsShopPromises.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playUsShopPromises.mjs/stderr.log

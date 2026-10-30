@@ -1,0 +1,3 @@
+4298 /home/runner/work/_temp/rc-out/full/simFaqSchema.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFaqSchema.mjs/stderr.log
+4298 total

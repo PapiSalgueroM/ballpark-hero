@@ -1,0 +1,3 @@
+955 /home/runner/work/_temp/rc-out/full/playWorldXiReportFit.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playWorldXiReportFit.mjs/stderr.log
+955 total

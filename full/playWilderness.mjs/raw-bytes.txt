@@ -1,0 +1,3 @@
+1387 /home/runner/work/_temp/rc-out/full/playWilderness.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playWilderness.mjs/stderr.log
+1387 total

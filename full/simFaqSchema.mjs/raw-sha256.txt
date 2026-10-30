@@ -1,0 +1,2 @@
+12dcaf1700eb59293bea0d9f8ebb772b0b387158d999e1649136c17c44d62c7a  /home/runner/work/_temp/rc-out/full/simFaqSchema.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFaqSchema.mjs/stderr.log

@@ -1,0 +1,2 @@
+28d2909554a6c001ca20e18cdc42b87dfa21ddd03d711b972b1de6f10c4cc228  /home/runner/work/_temp/rc-out/full/playWilderness.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playWilderness.mjs/stderr.log

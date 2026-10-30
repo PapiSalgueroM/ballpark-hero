@@ -1,0 +1,3 @@
+1433 /home/runner/work/_temp/rc-out/full/playUsShopPromises.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playUsShopPromises.mjs/stderr.log
+1433 total
