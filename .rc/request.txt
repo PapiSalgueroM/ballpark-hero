@@ -1,0 +1,7 @@
+#!serial
+m-managedopen: node .rc/x/mutFix1606.mjs managedopen && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-partial: node .rc/x/mutFix1606.mjs partial && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-takeover: node .rc/x/mutFix1606.mjs takeover && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-namesrow: node .rc/x/mutFix1606.mjs namesrow && node scripts/simInventedNames.mjs; s=$?; git checkout -- src scripts; exit $s
+m-erasnojoin: node .rc/x/mutFix1606.mjs namesrow erasnojoin && node scripts/simInventedNames.mjs; s=$?; git checkout -- src scripts; exit $s
+probe-quotes-report: grep -c 'r.result?.events' scripts/simNoInventedQuotes.mjs && sed -i 's/r\.result?\.events/r.report?.events/' scripts/simNoInventedQuotes.mjs && grep -c 'r.report?.events' scripts/simNoInventedQuotes.mjs && node scripts/simNoInventedQuotes.mjs; s=$?; git checkout -- src scripts; exit $s
