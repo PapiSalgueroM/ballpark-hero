@@ -1,0 +1,14 @@
+c-emptykey exit=1 40s | simCmPlayerCard: control emptykey FIRED, 46 failures in section archive (46 in all) (40s)
+c-draw exit=1 41s | simCmPlayerCard: control draw FIRED, 6 failures in section stream (6 in all) (41s)
+c-offbyone exit=1 44s | simCmPlayerCard: control offbyone FIRED, 375 failures in section archive (375 in all) (44s)
+c-noarchive exit=1 42s | simCmPlayerCard: control noarchive FIRED, 393 failures in section archive (396 in all) (42s)
+c-loadwrite exit=1 41s | simCmPlayerCard: control loadwrite FIRED, 7 failures in section oldsave (7 in all) (41s)
+c-nocap exit=1 53s | simCmPlayerCard: control nocap FIRED, 47 failures in section cap (47 in all) (53s)
+c-allcomps exit=1 43s | simCmPlayerCard: control allcomps FIRED, 3079 failures in section cards (3079 in all) (43s)
+c-namekey exit=1 40s | simCmPlayerCard: control namekey FIRED, 1 failures in section cards (1 in all) (41s)
+c-bogus exit=2 0s | simCmPlayerCard: cannot run: CARDS_CONTROL=bogus is not a control of this harness (draw, emptykey, offbyone, noarchive, nocap, loadwrite, allcomps, namekey, linkalways, h
+c-linkalways exit=1 40s | simCmPlayerCard: control linkalways FIRED, 3 failures in section markup (3 in all) (40s)
+c-hotseat exit=1 40s | simCmPlayerCard: control hotseat FIRED, 4 failures in section dailies (4 in all) (40s)
+size-d exit=0 62s | simClubManagerSaveSize: all sections green
+cards-default exit=0 78s | simCmPlayerCard: all green, 10260 checks (78s)
+size-uncapped exit=1 57s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else

@@ -1,0 +1,46 @@
+simCmPlayerCard: 6 careers of 3 seasons, engines: candidate (control offbyone), off; PAST_KEPT 10
+  FAIL archive: Everton seed 0 season 1: p-jarrad-branthwaite's row [1,39,1,4,12,2574] is not his line [1,39,0,4,12,2574]
+  FAIL archive: Everton seed 0 season 1: p-james-garner's row [1,39,4,1,0,2567] is not his line [1,39,3,1,0,2567]
+  FAIL archive: Everton seed 0 season 1: p-brennan-johnson's row [1,38,11,8,0,2618] is not his line [1,38,10,8,0,2618]
+  FAIL archive: Everton seed 0 season 1: p-kiernan-dewsbury-hall's row [1,40,4,4,0,2640] is not his line [1,40,3,4,0,2640]
+  FAIL archive: Everton seed 0 season 1: p-hayden-hackney's row [1,39,1,5,0,2515] is not his line [1,39,0,5,0,2515]
+  FAIL archive: Everton seed 0 season 1: p-thierno-barry's row [1,36,21,3,0,2520] is not his line [1,36,20,3,0,2520]
+  FAIL archive: Everton seed 0 season 1: p-jack-grealish's row [1,39,11,3,0,2584] is not his line [1,39,10,3,0,2584]
+  FAIL archive: Everton seed 0 season 1: p-vitaliy-mykolenko's row [1,38,2,1,11,2554] is not his line [1,38,1,1,11,2554]
+  FAIL archive: Everton seed 0 season 1: p-tyler-dibling's row [1,19,2,0,0,1233] is not his line [1,19,1,0,0,1233]
+  FAIL archive: Everton seed 0 season 1: p-tyrique-george's row [1,21,4,0,0,1382] is not his line [1,21,3,0,0,1382]
+  FAIL archive: Everton seed 0 season 1: p-jake-o-brien's row [1,10,1,0,4,664] is not his line [1,10,0,0,4,664]
+  FAIL archive: Everton seed 0 season 1: p-merlin-rohl's row [1,13,4,3,0,920] is not his line [1,13,3,3,0,920]
+  FAIL archive: Everton seed 0 season 1: p-carlos-alcaraz's row [1,9,1,0,0,593] is not his line [1,9,0,0,0,593]
+  FAIL archive: Everton seed 0 season 1: p-jordan-pickford's row [1,39,1,0,12,2536] is not his line [1,39,0,0,12,2536]
+  FAIL archive: Everton seed 0 season 1: p-harrison-armstrong's row [1,2,1,0,0,142] is not his line [1,2,0,0,0,142]
+  FAIL archive: Everton seed 0 season 1: p-ainsley-maitland-niles's row [1,6,1,0,1,364] is not his line [1,6,0,0,1,364]
+  FAIL archive: Everton seed 0 season 1: p-james-tarkowski's row [1,38,2,2,12,2516] is not his line [1,38,1,2,12,2516]
+  FAIL archive: Everton seed 0 season 1: p-christian-norgaard's row [1,2,1,0,0,136] is not his line [1,2,0,0,0,136]
+  FAIL archive: Everton seed 0 season 1: p-michael-keane's row [1,38,2,5,12,2541] is not his line [1,38,1,5,12,2541]
+  FAIL archive: Everton seed 0 season 1: p-mark-travers's row [1,1,1,0,1,65] is not his line [1,1,0,0,1,65]
+cards   7859 checks: my men at 160 points, 3502 rival book rows at season ends, on the first seed of every club; notes seen {"leftclub":8,"thin":917}
+stream  860 of 860 faces equal to the off engine (every entry, season end and summer, with the draw count)
+stream  base arm NOT RUN: set CARDS_BASE to a worktree of the base commit
+archive 825 checks; 375 rows written and checked, the most rows one man held 3
+cards   the namesake case at Coventry City: each of two men of one name reads his own row
+cap     Everton renewing, 4 seasons: 4 seasons, the most rows one man held 4
+size    candidate bytes a season: 162608 176309 187143 187039
+size    archive bytes a season:   836 1219 1585 1942
+size    season 4: 187039 bytes, of which the archive 1942; slope over seasons 4 to 4 n/a bytes a season (printed for the lead, not gated here)
+cap     a constructed squad of 25 archived 12 times holds 10 rows a man, the newest
+oldsave the committed save of Round 1052 (Sevilla): six entries on, book 34 (late round index), 146 rival rows held, kept from no line
+oldsave the committed save of Round 1052 (Sevilla): loaded clean, season 1 played out, pastFrom 1, 20 men with a row
+oldsave the committed second tier save (Valencia): six entries on, book 34 (late round index), 136 rival rows held, kept from no line
+oldsave the committed second tier save (Valencia): loaded clean, season 1 played out, pastFrom 1, 17 men with a row
+oldsave a save parked on its season 1 review: nothing on load or at the summer, pastFrom 2 after season 2
+dailies 38 states of 4 Hot Seat days and 2 Deadline Day runs looked at
+markup  12 of 12 renders (Squad, Stats, a leaders board, a club page, on 3 saves) with no provider free of any card link (base arm NOT RUN: set CARDS_BASE)
+  cards    8187 checks, 0 failed
+  archive  825 checks, 375 failed
+  stream   6 checks, 0 failed
+  cap      85 checks, 0 failed
+  oldsave  12 checks, 0 failed
+  dailies  38 checks, 0 failed
+  markup   12 checks, 0 failed
+simCmPlayerCard: control offbyone FIRED, 375 failures in section archive (375 in all) (44s)
