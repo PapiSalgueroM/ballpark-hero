@@ -1,0 +1,3 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+measure-nhl exit=0 76s | playGmCareer: green. 1 board(s) (nhl), 3 sizes, four walks each and the slow kit walk at 390 and 1280.
+measure-nfl exit=0 88s | playGmCareer: green. 1 board(s) (nfl), 3 sizes, four walks each and the slow kit walk at 390 and 1280.
