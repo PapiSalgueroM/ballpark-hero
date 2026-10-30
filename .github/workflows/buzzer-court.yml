@@ -63,10 +63,34 @@ jobs:
           before="$RUNNER_TEMP/dukb-court-before"
           mkdir -p "$before"
           git archive "$baseline" | tar -x -C "$before"
-          cmp "$before/package-lock.json" package-lock.json
-          ln -s "$GITHUB_WORKSPACE/node_modules" "$before/node_modules"
           printf '%s\n' "$baseline" > buzzer-court-artifacts/baseline.txt
-          (cd "$before" && npm run build) 2>&1 | tee buzzer-court-artifacts/baseline-build.log
+          {
+            printf 'CURRENT_HEAD '; git rev-parse HEAD
+            git ls-tree HEAD -- package.json package-lock.json
+            printf 'HISTORICAL_BASELINE %s\n' "$baseline"
+            git ls-tree "$baseline" -- package.json package-lock.json
+          } > buzzer-court-artifacts/package-identities.git.txt
+          for file in package.json package-lock.json; do
+            test "$(git hash-object "$GITHUB_WORKSPACE/$file")" = "$(git rev-parse "HEAD:$file")"
+            test "$(git hash-object "$before/$file")" = "$(git rev-parse "$baseline:$file")"
+          done
+          sha256sum "$GITHUB_WORKSPACE/package.json" "$GITHUB_WORKSPACE/package-lock.json" > buzzer-court-artifacts/current-packages.before.sha256
+          sha256sum "$before/package.json" "$before/package-lock.json" > buzzer-court-artifacts/baseline-packages.before.sha256
+          stat -c '%s %n' "$GITHUB_WORKSPACE/package.json" "$GITHUB_WORKSPACE/package-lock.json" "$before/package.json" "$before/package-lock.json" > buzzer-court-artifacts/package-input-bytes.txt
+          raw=0
+          (cd "$before" && env -u NODE_OPTIONS npm ci) 2>&1 | tee buzzer-court-artifacts/baseline-npm-ci.log || raw=$?
+          printf '%s\n' "$raw" > buzzer-court-artifacts/baseline-npm-ci.exit
+          sha256sum -c buzzer-court-artifacts/current-packages.before.sha256 > buzzer-court-artifacts/current-packages.after-baseline-install.log
+          sha256sum -c buzzer-court-artifacts/baseline-packages.before.sha256 > buzzer-court-artifacts/baseline-packages.after-install.log
+          test "$raw" -eq 0
+          test -d "$before/node_modules"
+          test ! -L "$before/node_modules"
+          raw=0
+          (cd "$before" && npm run build) 2>&1 | tee buzzer-court-artifacts/baseline-build.log || raw=$?
+          printf '%s\n' "$raw" > buzzer-court-artifacts/baseline-build.exit
+          sha256sum -c buzzer-court-artifacts/current-packages.before.sha256 > buzzer-court-artifacts/current-packages.after-baseline-build.log
+          sha256sum -c buzzer-court-artifacts/baseline-packages.before.sha256 > buzzer-court-artifacts/baseline-packages.after-build.log
+          test "$raw" -eq 0
       - name: Same-scenario before and after with native geometry guards
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.before.outcome == 'success' }}
         env:
