@@ -1,0 +1,9672 @@
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
++ actual - expected
+... Skipped lines
+
+  {
+    loaded: {
+      academy: {
+        candidates: [
+          {
+...
+          playerWages: 0,
++         shirts: {
++           costPence: 0,
++           grossPence: 0,
++           openingPence: 0,
++           paidPence: 0,
++           v: 1,
++           weeks: 0
++         },
+          sponsor: 0,
+          staffWages: 0,
+          tickets: 0,
+          travel: 0,
+          weeks: 0
+...
+            playerWages: 0.533,
++           shirts: {
++             costPence: 672000,
++             grossPence: 1680000,
++             openingPence: 0,
++             paidPence: 1000000,
++             v: 1,
++             weeks: 1
++           },
+            sponsor: 0,
+            staffWages: 0.167,
+            tickets: 1.63,
+            travel: 0,
+            weeks: 1
+...
+        },
++       budget: 56.03,
+-       budget: 56.02,
+        calendar: [
+          {
+            round: 0,
+            type: 'league'
+          },
+...
+          {
++           deckId: 'injurySupport',
++           from: 'The medical team',
++           id: 'desk-1-0-injurySupport',
+-           deckId: 'finesKitty',
+-           from: 'The head coach',
+-           id: 'desk-1-0-finesKitty',
+            kind: 'situation',
+            options: [
+              {
+                effect: {
++                 delta: 6,
+-                 delta: 2,
+                  kind: 'move',
++                 meter: 'morale'
+-                 meter: 'press'
+                },
++               label: 'Check in with him (his morale +6)'
+-               label: "Give it to the club's community partner (press mood +2)"
+              },
+              {
+                effect: {
++                 delta: 2,
+-                 delta: 0.1,
+                  kind: 'move',
++                 meter: 'board'
+-                 meter: 'budget'
+                },
++               label: 'Update the board (board patience +2)'
+-               label: 'Put it in the transfer pot (£100k into the transfer budget)'
+              },
+              {
+                effect: {
+                  kind: 'none'
+                },
++               label: 'Leave it with medical staff (nothing changes)'
+-               label: 'Leave it in the kitty (nothing changes)'
+              }
+            ],
++           playerId: 'p-thierno-barry',
++           playerName: 'Thierno Barry',
+            season: 1,
++           text: 'Thierno Barry had 2 injury weeks left when this note was written. Staff suggest a check in or a board update. Neither changes the recovery time.',
+-           text: "The squad's fines kitty has £100k in it from late arrivals and phones in meetings. The head coach asks where it should go. The local paper always runs it when it goes to charity.",
+            week: 0
+          }
+        ],
+        eraId: 'now',
+        facilities: {
+
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 4,
+...
+        id: 'league',
++       label: 'Win La Liga',
+-       label: 'Win the La Liga',
+        target: 1
+      },
+      {
+        id: 'cup',
+        label: 'Win the Copa del Rey',
+
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+FAIL [healthy] seeded-world: Entire absent-seed projected world remains original
++ actual - expected
+... Skipped lines
+
+  {
+    'AC Ajaccio': [
+      {
+        a: 22,
+        anchor: 72,
++       lv: 72,
+        n: 'Lucas Pereira',
+        p: 'ST',
++       r: 71,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 30,
+        anchor: 68,
++       lv: 68,
+        n: 'André Luiz',
+        p: 'CAM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Antônio Carlos',
+        p: 'CB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Fabien Laurenti',
+        p: 'RB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Djamel Abdoun',
+        p: 'RW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Stéphane Porato',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 31,
+        anchor: 64,
++       lv: 64,
+        n: 'Stéphane Trévisan',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Xavier Collin',
+        p: 'LB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'AC Milan': [
+...
+        anchor: 88,
++       lv: 88,
+        n: 'Alberto Gilardino',
+        p: 'ST',
++       r: 87,
+-       r: 88,
+        since: 0,
+        v: 24
+      },
+      {
+        a: 22,
+        anchor: 88,
++       lv: 88,
+        n: 'Kaká',
+        p: 'CAM',
++       r: 87,
+-       r: 88,
+        since: 0,
+        v: 24
+      },
+      {
+        a: 25,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Dida',
+        p: 'GK',
++       r: 81,
+-       r: 79,
+        since: 0,
+        v: 12
+      },
+      {
+        a: 28,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Filippo Inzaghi',
+        p: 'ST',
++       r: 79,
+-       r: 77,
+        since: 0,
+        v: 8.3
+      },
+      {
+        a: 27,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Jaap Stam',
+        p: 'CB',
++       r: 79,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 27,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Rui Costa',
+        p: 'CAM',
++       r: 76,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 26,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Cafu',
+        p: 'RB',
++       r: 75,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 36,
+        anchor: 70,
++       lv: 70,
+        n: 'Paolo Maldini',
+        p: 'LB',
++       r: 77,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Dario Simic',
+        p: 'CB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 33,
+        anchor: 68,
++       lv: 68,
+        n: 'Serginho',
+        p: 'LB',
++       r: 72,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      }
+    ],
+    'Alavés': [
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Aleksandr Mostovoy',
+        p: 'CAM',
++       r: 71,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'David Coromina',
+        p: 'RB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Roberto Bonano',
+        p: 'GK',
++       r: 69,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Arminia Bielefeld': [
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Sibusiso Zuma',
+        p: 'ST',
++       r: 73,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Márcio Borges',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 32,
+        anchor: 68,
++       lv: 68,
+        n: 'Mathias Hain',
+        p: 'GK',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 31,
+        anchor: 68,
++       lv: 68,
+        n: 'Petr Gabriel',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Rüdiger Kauf',
+        p: 'CDM',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Dennis Eilhoff',
+        p: 'GK',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Diego León',
+        p: 'CAM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 33,
+        anchor: 64,
++       lv: 64,
+        n: 'Fatmir Vata',
+        p: 'CAM',
++       r: 68,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Julian Loose',
+        p: 'RW',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Juan Pablo Ángel',
+        p: 'ST',
++       r: 78,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 27,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Nolberto Solano',
+        p: 'RM',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 21,
+        anchor: 72,
++       lv: 72,
+        n: 'Carlton Cole',
+        p: 'ST',
++       r: 70,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 27,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Ulises de la Cruz',
+        p: 'RB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Peter Whittingham',
+        p: 'CM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Steven Davis',
+        p: 'CM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Andoni Iraola',
+        p: 'RB',
++       r: 75,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 25,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Ismael Urzaiz',
+        p: 'ST',
++       r: 74,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 31,
+        anchor: 68,
++       lv: 68,
+        n: 'Aitor Karanka',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Aritz Solabarrieta',
+        p: 'RM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Felipe Guréndez',
+        p: 'RB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Javi Casas',
+        p: 'LB',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Javi González',
+        p: 'RM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Jonan García',
+        p: 'CAM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Julen Guerrero',
+        p: 'CAM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 85,
++       lv: 85,
+        n: 'Fernando Torres',
+        p: 'ST',
++       r: 82,
+-       r: 85,
+        since: 0,
+        v: 20.3
+      },
+      {
+        a: 25,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Salva Ballesta',
+        p: 'ST',
++       r: 75,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 29,
+        anchor: 73,
++       lv: 73,
+        n: 'José García Calvo',
+        p: 'CB',
++       r: 74,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 28,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Nano',
+        p: 'LB',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 25,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Bernd Schneider',
+        p: 'RM',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 30,
+        anchor: 70,
++       lv: 70,
+        n: 'Carsten Ramelow',
+        p: 'CDM',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 70,
++       lv: 70,
+        n: 'Hans Jörg Butt',
+        p: 'GK',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 22,
+        anchor: 70,
++       lv: 70,
+        n: 'Landon Donovan',
+        p: 'ST',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Gonzalo Castro',
+        p: 'CM',
++       r: 62,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 68,
++       lv: 68,
+        n: 'Simon Rolfes',
+        p: 'CDM',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 19,
+        anchor: 68,
++       lv: 68,
+        n: 'Tranquillo Barnetta',
+        p: 'CAM',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Jeffrey Tumanan',
+        p: 'RM',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Sascha Dum',
+        p: 'LM',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Bayern Munich': [
+...
+        anchor: 85,
++       lv: 85,
+        n: 'Roy Makaay',
+        p: 'ST',
++       r: 86,
+-       r: 85,
+        since: 0,
+        v: 20.3
+      },
+      {
+        a: 26,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Bastian Schweinsteiger',
+        p: 'CM',
++       r: 76,
+-       r: 79,
+        since: 0,
+        v: 10.5
+      },
+      {
+        a: 27,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Zé Roberto',
+        p: 'LM',
++       r: 79,
+-       r: 77,
+        since: 0,
+        v: 8.3
+      },
+      {
+        a: 24,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Philipp Lahm',
+        p: 'RB',
++       r: 75,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 29,
+        anchor: 77,
++       lv: 77,
+        n: 'Valérien Ismaël',
+        p: 'CB',
++       r: 78,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 24,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Oliver Kahn',
+        p: 'GK',
++       r: 79,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 30,
+        anchor: 72,
++       lv: 72,
+        n: 'Jens Jeremies',
+        p: 'CDM',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Bixente Lizarazu',
+        p: 'LB',
++       r: 74,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 34,
+        anchor: 68,
++       lv: 68,
+        n: 'Mehmet Scholl',
+        p: 'CAM',
++       r: 73,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Paolo Guerrero',
+        p: 'ST',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Michael Rensing',
+        p: 'GK',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Birmingham City': [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Kenny Cunningham',
+        p: 'CB',
++       r: 77,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 28,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Robbie Savage',
+        p: 'CM',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 32,
+        anchor: 72,
++       lv: 72,
+        n: 'Darren Anderton',
+        p: 'RM',
++       r: 75,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 32,
+        anchor: 72,
++       lv: 72,
+        n: 'Stan Lazaridis',
+        p: 'LM',
++       r: 75,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 33,
+        anchor: 70,
++       lv: 70,
+        n: 'Dwight Yorke',
+        p: 'ST',
++       r: 74,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 70,
++       lv: 70,
+        n: 'Muzzy Izzet',
+        p: 'RM',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 28,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Darren Carter',
+        p: 'CM',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Jamie Clapham',
+        p: 'LB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 33,
+        anchor: 68,
++       lv: 68,
+        n: 'Maik Taylor',
+        p: 'GK',
++       r: 72,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Olivier Tébily',
+        p: 'CB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Nico Vaesen',
+        p: 'GK',
++       r: 70,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Blackburn Rovers': [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Dominic Matteo',
+        p: 'LB',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 32,
+        anchor: 73,
++       lv: 73,
+        n: 'Garry Flitcroft',
+        p: 'CM',
++       r: 76,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Jon Stead',
+        p: 'ST',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 26,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Andy Todd',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 33,
+        anchor: 68,
++       lv: 68,
+        n: 'Brad Friedel',
+        p: 'GK',
++       r: 72,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 30,
+        anchor: 68,
++       lv: 68,
+        n: 'Michael Gray',
+        p: 'LB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Tugay Kerimoğlu',
+        p: 'CDM',
++       r: 73,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Jay Bothroyd',
+        p: 'ST',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Jemal Johnson',
+        p: 'LW',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Paul Dickov',
+        p: 'ST',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Paul Gallagher',
+        p: 'CM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Bolton Wanderers': [
+...
+        anchor: 78,
++       lv: 78,
+        n: 'Jay-Jay Okocha',
+        p: 'CAM',
++       r: 80,
+-       r: 78,
+        since: 0,
+        v: 9.8
+      },
+      {
+        a: 23,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Jussi Jääskeläinen',
+        p: 'GK',
++       r: 75,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 27,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Kevin Nolan',
+        p: 'CAM',
++       r: 71,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 33,
+        anchor: 70,
++       lv: 70,
+        n: "Bruno N'Gotty",
+        p: 'CB',
++       r: 74,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 33,
+        anchor: 70,
++       lv: 70,
+        n: 'Ian Walker',
+        p: 'GK',
++       r: 74,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 70,
++       lv: 70,
+        n: 'Iván Campo',
+        p: 'CDM',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 31,
+        anchor: 70,
++       lv: 70,
+        n: 'Jared Borgetti',
+        p: 'ST',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 70,
++       lv: 70,
+        n: 'Khalilou Fadiga',
+        p: 'LW',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 70,
++       lv: 70,
+        n: 'Stelios Giannakopoulos',
+        p: 'RW',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Henrik Pedersen',
+        p: 'ST',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Radhi Jaïdi',
+        p: 'CB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Anthony Barness',
+        p: 'LB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 35,
+        anchor: 64,
++       lv: 64,
+        n: 'Gary Speed',
+        p: 'CM',
++       r: 70,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Nicky Hunt',
+        p: 'RB',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Ricardo Vaz Tê',
+        p: 'RW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Borussia Dortmund': [
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Jan Koller',
+        p: 'ST',
++       r: 78,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 24,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Florian Kringe',
+        p: 'CM',
++       r: 72,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 32,
+        anchor: 72,
++       lv: 72,
+        n: 'Christian Wörns',
+        p: 'CB',
++       r: 75,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Nuri Şahin',
+        p: 'CDM',
++       r: 64,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 20,
+        anchor: 68,
++       lv: 68,
+        n: 'David Odonkor',
+        p: 'RW',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Dennis Gentenaar',
+        p: 'GK',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Philipp Degen',
+        p: 'RB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'André Heitmeier',
+        p: 'RM',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Marc-André Kruska',
+        p: 'CM',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Salvatore Gambino',
+        p: 'CF',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Celta Vigo': [
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Gustavo López',
+        p: 'LW',
++       r: 78,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Facundo Sava',
+        p: 'ST',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Txomin Nagore',
+        p: 'CM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 31,
+        anchor: 68,
++       lv: 68,
+        n: 'Zisis Vryzas',
+        p: 'ST',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 34,
+        anchor: 64,
++       lv: 64,
+        n: 'Everton Giovanella',
+        p: 'CM',
++       r: 69,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Jonathan Aspas',
+        p: 'CM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 31,
+        anchor: 64,
++       lv: 64,
+        n: 'José Ignacio',
+        p: 'CDM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Roger Guerreiro',
+        p: 'CAM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Charlton Athletic': [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Chris Perry',
+        p: 'CB',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 25,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Darren Bent',
+        p: 'ST',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 26,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Jonatan Johansson',
+        p: 'ST',
++       r: 73,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 30,
+        anchor: 72,
++       lv: 72,
+        n: 'Matt Holland',
+        p: 'CM',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Hermann Hreidarsson',
+        p: 'LB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 26,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Radostin Kishishev',
+        p: 'CDM',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 28,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Dean Kiely',
+        p: 'GK',
++       r: 73,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 28,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Thomas Myhre',
+        p: 'GK',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 35,
+        anchor: 64,
++       lv: 64,
+        n: 'Chris Powell',
+        p: 'LB',
++       r: 70,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Jerome Thomas',
+        p: 'LW',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Lloyd Sam',
+        p: 'RW',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Andrea Zanchetta',
+        p: 'CM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Fabio Moro',
+        p: 'RB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Luciano',
+        p: 'RM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Paolo Sammarco',
+        p: 'CM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Victor Obinna',
+        p: 'CF',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Cádiz': [
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Fredi Lobeiras',
+        p: 'LM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Deportivo La Coruña': [
+...
+        anchor: 80,
++       lv: 80,
+        n: 'Juan Carlos Valerón',
+        p: 'CAM',
++       r: 81,
+-       r: 80,
+        since: 0,
+        v: 13.5
+      },
+      {
+        a: 26,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Fabricio Coloccini',
+        p: 'CB',
++       r: 75,
+-       r: 76,
+        since: 0,
+        v: 6.8
+      },
+      {
+        a: 28,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Héctor Berenguel',
+        p: 'RB',
++       r: 78,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 28,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Pedro Munitis',
+        p: 'CF',
++       r: 75,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 34,
+        anchor: 72,
++       lv: 72,
+        n: 'José Francisco Molina',
+        p: 'GK',
++       r: 77,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 33,
+        anchor: 70,
++       lv: 70,
+        n: 'Enrique Romero',
+        p: 'LB',
++       r: 74,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Roberto Acuña',
+        p: 'CM',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Eintracht Frankfurt': [
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Alexander Meier',
+        p: 'CF',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Francisco Copado',
+        p: 'CF',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Marko Rehmer',
+        p: 'RB',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Patrick Ochs',
+        p: 'RB',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Christopher Reinhard',
+        p: 'LB',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Markus Weissenberger',
+        p: 'CAM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Oka Nikolov',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Per Mertesacker',
+        p: 'CB',
++       r: 71,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 27,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Thomas Brdaric',
+        p: 'ST',
++       r: 73,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 29,
+        anchor: 70,
++       lv: 70,
+        n: 'Altin Lala',
+        p: 'CDM',
++       r: 71,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 20,
+        anchor: 68,
++       lv: 68,
+        n: 'Chavdar Yankov',
+        p: 'CM',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Daniel Stendel',
+        p: 'RW',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Michael Delura',
+        p: 'RW',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 35,
+        anchor: 64,
++       lv: 64,
+        n: 'Michael Tarnat',
+        p: 'LB',
++       r: 70,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Sezai Demircan',
+        p: 'LW',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Sören Halfar',
+        p: 'LB',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 83,
++       lv: 83,
+        n: 'Marcelinho Paraíba',
+        p: 'CAM',
++       r: 84,
+-       r: 83,
+        since: 0,
+        v: 15.8
+      },
+      {
+        a: 26,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Christian Fiedler',
+        p: 'GK',
++       r: 73,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 26,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Alexander Madlung',
+        p: 'CB',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Andreas Neuendorf',
+        p: 'CM',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 31,
+        anchor: 68,
++       lv: 68,
+        n: 'Dick van Burik',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Malik Fathi',
+        p: 'LB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 33,
+        anchor: 68,
++       lv: 68,
+        n: 'Niko Kovac',
+        p: 'CDM',
++       r: 72,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'André Thomas',
+        p: 'RM',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Ante Covic',
+        p: 'RM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Ashkan Dejagah',
+        p: 'RW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Chinedu Ede',
+        p: 'RW',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Christian Müller',
+        p: 'CAM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Kevin-Prince Boateng',
+        p: 'CAM',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Patrick Ebert',
+        p: 'RW',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Sebastian Stachnik',
+        p: 'RW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Volkan Altin',
+        p: 'RW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Inter Milan': [
+...
+        anchor: 91,
++       lv: 91,
+        n: 'Adriano',
+        p: 'ST',
++       r: 90,
+-       r: 91,
+        since: 0,
+        v: 28.5
+      },
+      {
+        a: 26,
+...
+        anchor: 83,
++       lv: 83,
+        n: 'Luís Figo',
+        p: 'RW',
++       r: 86,
+-       r: 83,
+        since: 0,
+        v: 16.5
+      },
+      {
+        a: 26,
+...
+        anchor: 80,
++       lv: 80,
+        n: 'Juan Sebastián Verón',
+        p: 'CM',
++       r: 81,
+-       r: 80,
+        since: 0,
+        v: 12.8
+      },
+      {
+        a: 28,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Obafemi Martins',
+        p: 'ST',
++       r: 76,
+-       r: 79,
+        since: 0,
+        v: 10.5
+      },
+      {
+        a: 25,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Javier Zanetti',
+        p: 'RB',
++       r: 79,
+-       r: 77,
+        since: 0,
+        v: 8.3
+      },
+      {
+        a: 28,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Julio Cruz',
+        p: 'ST',
++       r: 78,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 30,
+        anchor: 76,
++       lv: 76,
+        n: 'Kily González',
+        p: 'LM',
++       r: 78,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 27,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Marco Materazzi',
+        p: 'CB',
++       r: 76,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 28,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Zé Maria',
+        p: 'RB',
++       r: 76,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 33,
+        anchor: 73,
++       lv: 73,
+        n: 'Francesco Toldo',
+        p: 'GK',
++       r: 77,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Giuseppe Favalli',
+        p: 'LB',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      }
+    ],
+    'Köln': [
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Lukas Podolski',
+        p: 'ST',
++       r: 75,
+-       r: 79,
+        since: 0,
+        v: 11.3
+      },
+      {
+        a: 31,
+        anchor: 70,
++       lv: 70,
+        n: 'Alpay Özalan',
+        p: 'CB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Lukas Sinkiewicz',
+        p: 'CDM',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 68,
++       lv: 68,
+        n: 'Markus Feulner',
+        p: 'CM',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Adil Chihi',
+        p: 'RW',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Christian Lell',
+        p: 'RB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Christian Schlösser',
+        p: 'RM',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 33,
+        anchor: 64,
++       lv: 64,
+        n: 'Christian Springer',
+        p: 'LM',
++       r: 68,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Denis Epstein',
+        p: 'LW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Patrick Weiser',
+        p: 'LB',
++       r: 68,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Túlio de Melo',
+        p: 'ST',
++       r: 66,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Chiguy Lucau',
+        p: 'RW',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Davide Chiumiento',
+        p: 'CAM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Olivier Thomas',
+        p: 'LB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Romaric',
+        p: 'CDM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Yannick Fischer',
+        p: 'CB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Manchester City': [
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Ben Thatcher',
+        p: 'LB',
++       r: 75,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 27,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Steve McManaman',
+        p: 'RM',
++       r: 77,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 31,
+        anchor: 74,
++       lv: 74,
+        n: 'Trevor Sinclair',
+        p: 'LW',
++       r: 76,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 31,
+        anchor: 73,
++       lv: 73,
+        n: 'Claudio Reyna',
+        p: 'CM',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 34,
+        anchor: 73,
++       lv: 73,
+        n: 'David James',
+        p: 'GK',
++       r: 78,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 25,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Robbie Fowler',
+        p: 'ST',
++       r: 74,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 30,
+        anchor: 70,
++       lv: 70,
+        n: 'David Sommeil',
+        p: 'CB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Antoine Sibierski',
+        p: 'CAM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 68,
++       lv: 68,
+        n: 'Joey Barton',
+        p: 'CM',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Paul Bosvelt',
+        p: 'CDM',
++       r: 73,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Lee Croft',
+        p: 'RM',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 25,
+...
+        anchor: 91,
++       lv: 91,
+        n: 'Wayne Rooney',
+        p: 'ST',
++       r: 89,
+-       r: 91,
+        since: 0,
+        v: 29.3
+      },
+      {
+        a: 26,
+...
+        anchor: 88,
++       lv: 88,
+        n: 'Cristiano Ronaldo',
+        p: 'ST',
++       r: 84,
+-       r: 88,
+        since: 0,
+        v: 21.8
+      },
+      {
+        a: 30,
+        anchor: 83,
++       lv: 83,
+        n: 'Paul Scholes',
+        p: 'CM',
++       r: 85,
+-       r: 83,
+        since: 0,
+        v: 17.3
+      },
+      {
+        a: 31,
+        anchor: 83,
++       lv: 83,
+        n: 'Ryan Giggs',
+        p: 'LM',
++       r: 85,
+-       r: 83,
+        since: 0,
+        v: 15.8
+      },
+      {
+        a: 26,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Roy Keane',
+        p: 'CM',
++       r: 83,
+-       r: 79,
+        since: 0,
+        v: 11.3
+      },
+      {
+        a: 24,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Darren Fletcher',
+        p: 'CM',
++       r: 73,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 29,
+        anchor: 76,
++       lv: 76,
+        n: 'Gary Neville',
+        p: 'RB',
++       r: 77,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 27,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Edwin van der Sar',
+        p: 'GK',
++       r: 79,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Ole Gunnar Solskjaer',
+        p: 'ST',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'David Bellion',
+        p: 'ST',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 17,
+        anchor: 68,
++       lv: 68,
+        n: 'Gerard Piqué',
+        p: 'CB',
++       r: 62,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Jonathan Spector',
+        p: 'CB',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Lee Martin',
+        p: 'CAM',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Málaga': [
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Francesc Arnau',
+        p: 'GK',
++       r: 71,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 26,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Márcio Amoroso',
+        p: 'ST',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 24,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Litos',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Gerardo García',
+        p: 'RB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Vicente Valcarce',
+        p: 'LB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Nürnberg': [
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Róbert Vittek',
+        p: 'ST',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 20,
+        anchor: 70,
++       lv: 70,
+        n: 'Stefan Kießling',
+        p: 'ST',
++       r: 67,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 22,
+        anchor: 68,
++       lv: 68,
+        n: 'Andreas Wolf',
+        p: 'CB',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Javier Pinola',
+        p: 'LB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 30,
+        anchor: 68,
++       lv: 68,
+        n: 'Mario Cantaluppi',
+        p: 'CDM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Dominik Reinhardt',
+        p: 'RB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Ivan Saenko',
+        p: 'RW',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Samuel Slovak',
+        p: 'CAM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Sezer Öztürk',
+        p: 'CAM',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Argel Fuchs',
+        p: 'CB',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Fernando Marqués',
+        p: 'RW',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Javier Arizmendi',
+        p: 'ST',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Jonathan Valle',
+        p: 'CAM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Líbero Parri',
+        p: 'CAM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Raúl Martín',
+        p: 'RM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Wilfried Dalmat',
+        p: 'RW',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Real Betis': [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Melli',
+        p: 'CB',
++       r: 70,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 27,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Pedro Contreras',
+        p: 'GK',
++       r: 75,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Israel Bascón',
+        p: 'RM',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 32,
+        anchor: 64,
++       lv: 64,
+        n: 'Luis Fernández',
+        p: 'LB',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Toni Prats',
+        p: 'GK',
++       r: 68,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 32,
+        anchor: 64,
++       lv: 64,
+        n: 'Washington Tais',
+        p: 'RB',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Real Madrid': [
+...
+        anchor: 88,
++       lv: 88,
+        n: 'David Beckham',
+        p: 'RM',
++       r: 89,
+-       r: 88,
+        since: 0,
+        v: 22.5
+      },
+      {
+        a: 18,
+        anchor: 88,
++       lv: 88,
+        n: 'Sergio Ramos',
+        p: 'CB',
++       r: 84,
+-       r: 88,
+        since: 0,
+        v: 21.8
+      },
+      {
+        a: 23,
+...
+        anchor: 85,
++       lv: 85,
+        n: 'Robinho',
+        p: 'LW',
++       r: 82,
+-       r: 85,
+        since: 0,
+        v: 20.3
+      },
+      {
+        a: 32,
+        anchor: 83,
++       lv: 83,
+        n: 'Zinédine Zidane',
+        p: 'CAM',
++       r: 86,
+-       r: 83,
+        since: 0,
+        v: 16.5
+      },
+      {
+        a: 24,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Roberto Carlos',
+        p: 'LB',
++       r: 81,
+-       r: 79,
+        since: 0,
+        v: 11.3
+      },
+      {
+        a: 29,
+        anchor: 78,
++       lv: 78,
+        n: 'Iván Helguera',
+        p: 'CB',
++       r: 79,
+-       r: 78,
+        since: 0,
+        v: 9
+      },
+      {
+        a: 28,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Míchel Salgado',
+        p: 'RB',
++       r: 78,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 28,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Albert Celades',
+        p: 'CDM',
++       r: 73,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 21,
+        anchor: 70,
++       lv: 70,
+        n: 'Carlos Diogo',
+        p: 'RB',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 24,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Álvaro Mejía',
+        p: 'CB',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'César Sánchez',
+        p: 'GK',
++       r: 72,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Álex Pérez',
+        p: 'LW',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Álvaro Arbeloa',
+        p: 'RB',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Javier Balboa',
+        p: 'RW',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'José Manuel Jurado',
+        p: 'CAM',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Jotha Pérez',
+        p: 'CAM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Real Sociedad': [
+...
+        anchor: 75,
++       lv: 75,
+        n: 'Mikel Arteta',
+        p: 'CM',
++       r: 74,
+-       r: 75,
+        since: 0,
+        v: 5.3
+      },
+      {
+        a: 31,
+        anchor: 74,
++       lv: 74,
+        n: 'Darko Kovacevic',
+        p: 'ST',
++       r: 76,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 29,
+        anchor: 73,
++       lv: 73,
+        n: 'Aitor López Rekarte',
+        p: 'RB',
++       r: 74,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Asier Riesgo',
+        p: 'GK',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 28,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Xabi Prieto',
+        p: 'CAM',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Javier Garrido',
+        p: 'LB',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Hérita Ilunga',
+        p: 'LB',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 25,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Vincent Hognon',
+        p: 'CB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Siaka Tiéné',
+        p: 'LB',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Mouhamadou Dabo',
+        p: 'RB',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Schalke 04': [
+...
+        anchor: 75,
++       lv: 75,
+        n: 'Kevin Kuranyi',
+        p: 'ST',
++       r: 74,
+-       r: 75,
+        since: 0,
+        v: 5.3
+      },
+      {
+        a: 30,
+        anchor: 74,
++       lv: 74,
+        n: 'Mladen Krstajic',
+        p: 'CB',
++       r: 76,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 24,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Frank Rost',
+        p: 'GK',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 19,
+        anchor: 73,
++       lv: 73,
+        n: 'Rafinha',
+        p: 'RB',
++       r: 69,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Hamit Altıntop',
+        p: 'RM',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 68,
++       lv: 68,
+        n: 'Darío Rodríguez',
+        p: 'LB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 32,
+        anchor: 68,
++       lv: 68,
+        n: 'Ebbe Sand',
+        p: 'ST',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Christian Pander',
+        p: 'LB',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Johan Micoud',
+        p: 'CAM',
++       r: 81,
+-       r: 79,
+        since: 0,
+        v: 12
+      },
+      {
+        a: 26,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Frank Baumann',
+        p: 'CDM',
++       r: 74,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 21,
+        anchor: 73,
++       lv: 73,
+        n: 'Nelson Valdez',
+        p: 'ST',
++       r: 71,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 25,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Naldo',
+        p: 'CB',
++       r: 71,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Christian Schulz',
+        p: 'CB',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 24,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Leon Andreasen',
+        p: 'CM',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 35,
+        anchor: 68,
++       lv: 68,
+        n: 'Andreas Reinke',
+        p: 'GK',
++       r: 74,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Jelle Van Damme',
+        p: 'CB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 68,
++       lv: 68,
+        n: 'Pekka Lagerblom',
+        p: 'CDM',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 31,
+        anchor: 68,
++       lv: 68,
+        n: 'Ümit Davala',
+        p: 'RM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Aaron Hunt',
+        p: 'CAM',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Ali Avcioglu',
+        p: 'LW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Marco Stier',
+        p: 'LW',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'West Brom': [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Curtis Davies',
+        p: 'CB',
++       r: 69,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 23,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Kieran Richardson',
+        p: 'LB',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 28,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Richard Chaplow',
+        p: 'CM',
++       r: 66,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 68,
++       lv: 68,
+        n: 'Andy Johnson',
+        p: 'CAM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Riccardo Scimeca',
+        p: 'CB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Darren Moore',
+        p: 'CB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Russell Hoult',
+        p: 'GK',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'West Ham': [
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Christian Dailly',
+        p: 'CB',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 25,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Tomas Repka',
+        p: 'CB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Hogan Ephraim',
+        p: 'LM',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 31,
+        anchor: 64,
++       lv: 64,
+        n: 'Jimmy Walker',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Mark Noble',
+        p: 'CM',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Nigel Reo-Coker',
+        p: 'CM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Shaun Newton',
+        p: 'RM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    'Wigan Athletic': [
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Graham Kavanagh',
+        p: 'CM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Gareth Whalley',
+        p: 'CM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 34,
+        anchor: 64,
++       lv: 64,
+        n: 'John Filan',
+        p: 'GK',
++       r: 69,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 32,
+        anchor: 64,
++       lv: 64,
+        n: 'Mike Pollitt',
+        p: 'GK',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Ryan Taylor',
+        p: 'RB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 85,
++       lv: 85,
+        n: 'José Antonio Reyes',
+        p: 'RW',
++       r: 83,
+-       r: 85,
+        since: 0,
+        v: 19.5
+      },
+      {
+        a: 30,
+        anchor: 83,
++       lv: 83,
+        n: 'Sol Campbell',
+        p: 'CB',
++       r: 85,
+-       r: 83,
+        since: 0,
+        v: 16.5
+      },
+      {
+        a: 24,
+...
+        anchor: 83,
++       lv: 83,
+        n: 'Robert Pirès',
+        p: 'LM',
++       r: 85,
+-       r: 83,
+        since: 0,
+        v: 15
+      },
+      {
+        a: 27,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Cesc Fàbregas',
+        p: 'CM',
++       r: 70,
+-       r: 76,
+        since: 0,
+        v: 6.8
+      },
+      {
+        a: 28,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Robin van Persie',
+        p: 'ST',
++       r: 74,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 27,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Jens Lehmann',
+        p: 'GK',
++       r: 78,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 21,
+        anchor: 72,
++       lv: 72,
+        n: 'Jermaine Pennant',
+        p: 'RW',
++       r: 70,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 20,
+        anchor: 72,
++       lv: 72,
+        n: 'Mathieu Flamini',
+        p: 'CDM',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 19,
+        anchor: 72,
++       lv: 72,
+        n: 'Philippe Senderos',
+        p: 'CB',
++       r: 68,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 35,
+        anchor: 70,
++       lv: 70,
+        n: 'Dennis Bergkamp',
+        p: 'CF',
++       r: 76,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Emmanuel Eboué',
+        p: 'RB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 19,
+        anchor: 68,
++       lv: 68,
+        n: 'Gaël Clichy',
+        p: 'LB',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 30,
+        anchor: 68,
++       lv: 68,
+        n: 'Pascal Cygan',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Arturo Lupoli',
+        p: 'ST',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Justin Hoyte',
+        p: 'RB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Quincy Owusu-Abeyie',
+        p: 'LW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Ascoli: [
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Fabio Quagliarella',
+        p: 'ST',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Marco Capparella',
+        p: 'RW',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Pasquale Foggia',
+        p: 'CAM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Bacary Sagna',
+        p: 'RB',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Fabien Cool',
+        p: 'GK',
++       r: 73,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 24,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Yann Lachuer',
+        p: 'CAM',
++       r: 73,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Rene Bolf',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Thomas Kahlenberg',
+        p: 'CM',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Sébastien Hamel',
+        p: 'GK',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Barcelona: [
+...
+        anchor: 78,
++       lv: 78,
+        n: 'Andrés Iniesta',
+        p: 'CM',
++       r: 75,
+-       r: 78,
+        since: 0,
+        v: 9.8
+      },
+      {
+        a: 27,
+...
+        anchor: 78,
++       lv: 78,
+        n: 'Víctor Valdés',
+        p: 'GK',
++       r: 77,
+-       r: 78,
+        since: 0,
+        v: 9
+      },
+      {
+        a: 28,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Giovanni van Bronckhorst',
+        p: 'LB',
++       r: 78,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 22,
+        anchor: 76,
++       lv: 76,
+        n: 'Thiago Motta',
+        p: 'CDM',
++       r: 75,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 20,
+        anchor: 75,
++       lv: 75,
+        n: 'Maxi López',
+        p: 'ST',
++       r: 72,
+-       r: 75,
+        since: 0,
+        v: 5.3
+      },
+      {
+        a: 25,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Henrik Larsson',
+        p: 'ST',
++       r: 78,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 17,
+        anchor: 73,
++       lv: 73,
+        n: 'Lionel Messi',
+        p: 'RW',
++       r: 67,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 24,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Sylvinho',
+        p: 'LB',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 22,
+        anchor: 70,
++       lv: 70,
+        n: 'Fernando Navarro',
+        p: 'LB',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Damià Abella',
+        p: 'RB',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Cristian Hidalgo',
+        p: 'LW',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Joan Verdú',
+        p: 'CAM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 75,
++       lv: 75,
+        n: 'Rio Mavuba',
+        p: 'CDM',
++       r: 72,
+-       r: 75,
+        since: 0,
+        v: 5.3
+      },
+      {
+        a: 20,
+        anchor: 74,
++       lv: 74,
+        n: 'Marouane Chamakh',
+        p: 'ST',
++       r: 71,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 31,
+        anchor: 73,
++       lv: 73,
+        n: 'Vladimir Smicer',
+        p: 'CAM',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 26,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Edixon Perea',
+        p: 'ST',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 22,
+        anchor: 72,
++       lv: 72,
+        n: 'Marc Planus',
+        p: 'CB',
++       r: 71,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 29,
+        anchor: 70,
++       lv: 70,
+        n: 'Jean-Claude Darcheville',
+        p: 'ST',
++       r: 71,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 33,
+        anchor: 70,
++       lv: 70,
+        n: 'Lilian Laslandes',
+        p: 'ST',
++       r: 74,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 32,
+        anchor: 70,
++       lv: 70,
+        n: 'Ulrich Ramé',
+        p: 'GK',
++       r: 73,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 68,
++       lv: 68,
+        n: 'David Jemmali',
+        p: 'RB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Franck Jurietti',
+        p: 'LB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Henrique',
+        p: 'CB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 20,
+        anchor: 68,
++       lv: 68,
+        n: 'Juan Pablo Francia',
+        p: 'CAM',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Julien Faubert',
+        p: 'RB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Alejandro Alonso',
+        p: 'RM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Florian Marange',
+        p: 'LB',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 31,
+        anchor: 64,
++       lv: 64,
+        n: 'Frédéric Roux',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Mathieu Valverde',
+        p: 'GK',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Pierre Ducasse',
+        p: 'CDM',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Cagliari: [
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Nelson Abeijón',
+        p: 'CDM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Theofanis Katergiannakis',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Chelsea: [
+...
+        anchor: 93,
++       lv: 93,
+        n: 'Michael Essien',
+        p: 'CDM',
++       r: 92,
+-       r: 93,
+        since: 0,
+        v: 30.8
+      },
+      {
+        a: 26,
+...
+        anchor: 88,
++       lv: 88,
+        n: 'Arjen Robben',
+        p: 'RW',
++       r: 85,
+-       r: 88,
+        since: 0,
+        v: 22.5
+      },
+      {
+        a: 24,
+...
+        anchor: 85,
++       lv: 85,
+        n: 'Petr Cech',
+        p: 'GK',
++       r: 84,
+-       r: 85,
+        since: 0,
+        v: 18
+      },
+      {
+        a: 25,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Hernán Crespo',
+        p: 'ST',
++       r: 80,
+-       r: 79,
+        since: 0,
+        v: 12
+      },
+      {
+        a: 23,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Claude Makélélé',
+        p: 'CDM',
++       r: 81,
+-       r: 79,
+        since: 0,
+        v: 10.5
+      },
+      {
+        a: 23,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Glen Johnson',
+        p: 'RB',
++       r: 73,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 23,
+...
+        anchor: 75,
++       lv: 75,
+        n: 'Aleksey Smertin',
+        p: 'CDM',
++       r: 76,
+-       r: 75,
+        since: 0,
+        v: 5.3
+      },
+      {
+        a: 19,
+        anchor: 73,
++       lv: 73,
+        n: 'Lassana Diarra',
+        p: 'CDM',
++       r: 69,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 20,
+        anchor: 72,
++       lv: 72,
+        n: 'Robert Huth',
+        p: 'CB',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 31,
+        anchor: 70,
++       lv: 70,
+        n: 'Carlo Cudicini',
+        p: 'GK',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Filipe Oliveira',
+        p: 'RW',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Nuno Morais',
+        p: 'CDM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Duisburg: [
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Georg Koch',
+        p: 'GK',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Alexander Meyer',
+        p: 'LB',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Dirk Lottner',
+        p: 'CAM',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Ivica Grlic',
+        p: 'CDM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Markus Anfang',
+        p: 'CM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Nasir El Kasmi',
+        p: 'RM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Andrea Coda',
+        p: 'CB',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 18,
+        anchor: 68,
++       lv: 68,
+        n: 'Nicola Pozzi',
+        p: 'ST',
++       r: 63,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Antonio Buscè',
+        p: 'RM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Davide Moro',
+        p: 'CM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Francesco Lodi',
+        p: 'CDM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Paolo Zanetti',
+        p: 'CDM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 25,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Juanfran Torres',
+        p: 'RB',
++       r: 70,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 20,
+        anchor: 72,
++       lv: 72,
+        n: 'Carlos Kameni',
+        p: 'GK',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 26,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Eduardo Costa',
+        p: 'CDM',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 70,
++       lv: 70,
+        n: 'Hugo Ibarra',
+        p: 'RB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 24,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Dani García',
+        p: 'ST',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 32,
+        anchor: 68,
++       lv: 68,
+        n: 'Mauricio Pochettino',
+        p: 'CB',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Álex Fernández',
+        p: 'CDM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Borja Criado',
+        p: 'RM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Ito',
+        p: 'CM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 33,
+        anchor: 64,
++       lv: 64,
+        n: 'José Amavisca',
+        p: 'LM',
++       r: 68,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Martín Posse',
+        p: 'RW',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Alessandro Pistone',
+        p: 'LB',
++       r: 73,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 30,
+        anchor: 72,
++       lv: 72,
+        n: 'Lee Carsley',
+        p: 'CDM',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 30,
+        anchor: 72,
++       lv: 72,
+        n: 'Steve Watson',
+        p: 'RB',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 21,
+        anchor: 70,
++       lv: 70,
+        n: 'James McFadden',
+        p: 'LW',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Alan Stubbs',
+        p: 'CB',
++       r: 72,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 34,
+        anchor: 68,
++       lv: 68,
+        n: 'David Weir',
+        p: 'CB',
++       r: 73,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 33,
+        anchor: 68,
++       lv: 68,
+        n: 'Duncan Ferguson',
+        p: 'ST',
++       r: 72,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Nigel Martyn',
+        p: 'GK',
++       r: 72,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Fiorentina: [
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Valeri Bozhinov',
+        p: 'ST',
++       r: 74,
+-       r: 79,
+        since: 0,
+        v: 10.5
+      },
+      {
+        a: 29,
+        anchor: 77,
++       lv: 77,
+        n: 'Stefano Fiore',
+        p: 'CAM',
++       r: 78,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 26,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Giampaolo Pazzini',
+        p: 'ST',
++       r: 71,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 29,
+        anchor: 74,
++       lv: 74,
+        n: 'Martin Jørgensen',
+        p: 'LM',
++       r: 75,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 19,
+        anchor: 73,
++       lv: 73,
+        n: 'Riccardo Montolivo',
+        p: 'CDM',
++       r: 69,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 25,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Gianni Guigou',
+        p: 'CDM',
++       r: 73,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 21,
+        anchor: 72,
++       lv: 72,
+        n: 'Marco Donadel',
+        p: 'CDM',
++       r: 70,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 33,
+        anchor: 70,
++       lv: 70,
+        n: 'Giuseppe Pancaro',
+        p: 'RB',
++       r: 74,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 22,
+        anchor: 70,
++       lv: 70,
+        n: 'Manuel Pasqual',
+        p: 'LB',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 28,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Michele Pazienza',
+        p: 'CDM',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Christian Maggio',
+        p: 'RB',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Fulham: [
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Andy Cole',
+        p: 'ST',
++       r: 78,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 26,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Moritz Volz',
+        p: 'RB',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 31,
+        anchor: 70,
++       lv: 70,
+        n: 'Sylvain Legwinski',
+        p: 'CM',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 31,
+        anchor: 70,
++       lv: 70,
+        n: 'Tomasz Radzinski',
+        p: 'ST',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 32,
+        anchor: 68,
++       lv: 68,
+        n: 'Alain Goma',
+        p: 'CB',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 19,
+        anchor: 68,
++       lv: 68,
+        n: 'Collins John',
+        p: 'ST',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 30,
+        anchor: 68,
++       lv: 68,
+        n: 'Ian Pearce',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 32,
+        anchor: 68,
++       lv: 68,
+        n: 'Lee Clark',
+        p: 'CM',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 20,
+        anchor: 68,
++       lv: 68,
+        n: 'Liam Rosenior',
+        p: 'RB',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Mark Crossley',
+        p: 'GK',
++       r: 70,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 34,
+        anchor: 64,
++       lv: 64,
+        n: 'Mark Pembridge',
+        p: 'LM',
++       r: 69,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Niclas Jensen',
+        p: 'LB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Ricardo Batista',
+        p: 'GK',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Tony Warner',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Getafe: [
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Ángel Vivar Dorado',
+        p: 'CAM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Javier Sánchez Broto',
+        p: 'GK',
++       r: 68,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 32,
+        anchor: 64,
++       lv: 64,
+        n: 'José Manuel Yanguas',
+        p: 'RB',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Mario Cotelo',
+        p: 'RM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Marcell Jansen',
+        p: 'LB',
++       r: 68,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 26,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Giovane Élber',
+        p: 'ST',
++       r: 73,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 27,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Vaclav Sverkos',
+        p: 'ST',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Jörg Böhme',
+        p: 'LM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 35,
+        anchor: 68,
++       lv: 68,
+        n: 'Kasey Keller',
+        p: 'GK',
++       r: 74,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Oliver Neuville',
+        p: 'ST',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Christian Ziege',
+        p: 'LM',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Jan Hammes',
+        p: 'LW',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Jeff Strasser',
+        p: 'CB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Kahê',
+        p: 'ST',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Milan Fukal',
+        p: 'CB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Hamburg: [
+...
+        anchor: 78,
++       lv: 78,
+        n: 'Rafael van der Vaart',
+        p: 'CAM',
++       r: 76,
+-       r: 78,
+        since: 0,
+        v: 9.8
+      },
+      {
+        a: 23,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Thimothée Atouba',
+        p: 'LB',
++       r: 72,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Piotr Trochowski',
+        p: 'CAM',
++       r: 67,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 33,
+        anchor: 70,
++       lv: 70,
+        n: 'Sergej Barbarez',
+        p: 'CF',
++       r: 74,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 26,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Bastian Reinhardt',
+        p: 'CB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Stefan Beinlich',
+        p: 'CAM',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Alexander Laas',
+        p: 'LM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Muri Adewunmi',
+        p: 'RW',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 85,
++       lv: 85,
+        n: 'Pavel Nedved',
+        p: 'LM',
++       r: 88,
+-       r: 85,
+        since: 0,
+        v: 19.5
+      },
+      {
+        a: 30,
+        anchor: 80,
++       lv: 80,
+        n: 'Alessandro Del Piero',
+        p: 'CF',
++       r: 82,
+-       r: 80,
+        since: 0,
+        v: 14.3
+      },
+      {
+        a: 28,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Fabio Cannavaro',
+        p: 'CB',
++       r: 81,
+-       r: 79,
+        since: 0,
+        v: 11.3
+      },
+      {
+        a: 20,
+        anchor: 78,
++       lv: 78,
+        n: 'Giorgio Chiellini',
+        p: 'CB',
++       r: 75,
+-       r: 78,
+        since: 0,
+        v: 9.8
+      },
+      {
+        a: 25,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Giuliano Giannichedda',
+        p: 'CDM',
++       r: 78,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 26,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Lilian Thuram',
+        p: 'CB',
++       r: 78,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 30,
+        anchor: 73,
++       lv: 73,
+        n: 'Robert Kovac',
+        p: 'CB',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 21,
+        anchor: 73,
++       lv: 73,
+        n: 'Rubén Olivera',
+        p: 'CM',
++       r: 71,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Alessandro Birindelli',
+        p: 'RB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 34,
+        anchor: 68,
++       lv: 68,
+        n: 'Gianluca Pessotto',
+        p: 'LB',
++       r: 73,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      }
+    ],
+    Kaiserslautern: [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Halil Altıntop',
+        p: 'CAM',
++       r: 72,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 24,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Christian Nerlinger',
+        p: 'CDM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 28,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Hervé Lembi',
+        p: 'CB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Axel Bellinghausen',
+        p: 'LM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 34,
+        anchor: 64,
++       lv: 64,
+        n: 'Ciriaco Sforza',
+        p: 'CM',
++       r: 69,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Sebastiao',
+        p: 'LW',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'César',
+        p: 'LM',
++       r: 76,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 28,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Valon Behrami',
+        p: 'CM',
++       r: 70,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 21,
+        anchor: 72,
++       lv: 72,
+        n: 'Goran Pandev',
+        p: 'CF',
++       r: 70,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 29,
+        anchor: 72,
++       lv: 72,
+        n: 'Matteo Sereni',
+        p: 'GK',
++       r: 73,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 27,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Angelo Peruzzi',
+        p: 'GK',
++       r: 75,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Christian Manfredini',
+        p: 'LW',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Mirko Vučinić',
+        p: 'ST',
++       r: 77,
+-       r: 79,
+        since: 0,
+        v: 10.5
+      },
+      {
+        a: 22,
+        anchor: 77,
++       lv: 77,
+        n: 'Cristian Ledesma',
+        p: 'CDM',
++       r: 76,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 27,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Erminio Rullo',
+        p: 'LB',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Souleymane Diamoutene',
+        p: 'CB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Aleksey Eremenko Jr.',
+        p: 'CAM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Axel Konan',
+        p: 'LW',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Vincenzo Sicignano',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Lens: [
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Charles Itandje',
+        p: 'GK',
++       r: 71,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 27,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Jérôme Leroy',
+        p: 'CAM',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 21,
+        anchor: 72,
++       lv: 72,
+        n: 'Jussiê',
+        p: 'CAM',
++       r: 70,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 24,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Benoît Assou-Ekotto',
+        p: 'LB',
++       r: 67,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 31,
+        anchor: 70,
++       lv: 70,
+        n: 'Éric Carrière',
+        p: 'CAM',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 26,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Jean Makoun',
+        p: 'CDM',
++       r: 74,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 22,
+        anchor: 76,
++       lv: 76,
+        n: 'Mathieu Bodmer',
+        p: 'CDM',
++       r: 75,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 24,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Matt Moussilou',
+        p: 'ST',
++       r: 72,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 24,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Tony Sylva',
+        p: 'GK',
++       r: 73,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 19,
+        anchor: 70,
++       lv: 70,
+        n: 'Mathieu Debuchy',
+        p: 'RB',
++       r: 66,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Stephan Lichtsteiner',
+        p: 'RB',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 18,
+        anchor: 68,
++       lv: 68,
+        n: 'Yohan Cabaye',
+        p: 'CM',
++       r: 63,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Kévin Barralon',
+        p: 'LM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Kevin Mirallas',
+        p: 'RW',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Stéphane Dumont',
+        p: 'CDM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Liverpool: [
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Pepe Reina',
+        p: 'GK',
++       r: 76,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 19,
+        anchor: 76,
++       lv: 76,
+        n: 'Mohamed Sissoko',
+        p: 'CDM',
++       r: 72,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 31,
+        anchor: 75,
++       lv: 75,
+        n: 'Sami Hyypiä',
+        p: 'CB',
++       r: 77,
+-       r: 75,
+        since: 0,
+        v: 5.3
+      },
+      {
+        a: 31,
+        anchor: 74,
++       lv: 74,
+        n: 'Dietmar Hamann',
+        p: 'CDM',
++       r: 76,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 26,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Jerzy Dudek',
+        p: 'GK',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Florent Sinama-Pongolle',
+        p: 'CF',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 33,
+        anchor: 68,
++       lv: 68,
+        n: 'Mauricio Pellegrino',
+        p: 'CB',
++       r: 72,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 19,
+        anchor: 68,
++       lv: 68,
+        n: 'Scott Carson',
+        p: 'GK',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Cristiano Lucarelli',
+        p: 'ST',
++       r: 80,
+-       r: 79,
+        since: 0,
+        v: 10.5
+      },
+      {
+        a: 27,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Raffaele Palladino',
+        p: 'LW',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 29,
+        anchor: 70,
++       lv: 70,
+        n: 'César Prates',
+        p: 'RB',
++       r: 71,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 22,
+        anchor: 70,
++       lv: 70,
+        n: 'Marco Amelia',
+        p: 'GK',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'David Balleri',
+        p: 'RB',
++       r: 70,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Juninho Pernambucano',
+        p: 'CAM',
++       r: 80,
+-       r: 79,
+        since: 0,
+        v: 12
+      },
+      {
+        a: 25,
+...
+        anchor: 78,
++       lv: 78,
+        n: 'Fred',
+        p: 'ST',
++       r: 76,
+-       r: 78,
+        since: 0,
+        v: 9.8
+      },
+      {
+        a: 23,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Grégory Coupet',
+        p: 'GK',
++       r: 79,
+-       r: 76,
+        since: 0,
+        v: 6.8
+      },
+      {
+        a: 24,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Sylvain Wiltord',
+        p: 'CF',
++       r: 76,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Jérémy Berthod',
+        p: 'LB',
++       r: 67,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Lamine Diatta',
+        p: 'CB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: 'Hatem Ben Arfa',
+        p: 'CAM',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Jérémy Clément',
+        p: 'CDM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Benjamin Weigelt',
+        p: 'LB',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 31,
+        anchor: 68,
++       lv: 68,
+        n: 'Dimo Wache',
+        p: 'GK',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Christian Demirtas',
+        p: 'RB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Christof Babatz',
+        p: 'CDM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Dennis Weiland',
+        p: 'LM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Fatmir Pupalovic',
+        p: 'RM',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 32,
+        anchor: 64,
++       lv: 64,
+        n: 'Niclas Weiland',
+        p: 'RW',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Otto Addo',
+        p: 'CAM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Tom Geißler',
+        p: 'CM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Mallorca: [
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Alessandro Potenza',
+        p: 'RB',
++       r: 67,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 25,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Eduardo Tuzzio',
+        p: 'CB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 28,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Miguel Ángel Moyá',
+        p: 'GK',
++       r: 67,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 31,
+        anchor: 68,
++       lv: 68,
+        n: 'Cristiano Doni',
+        p: 'CAM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 20,
+        anchor: 68,
++       lv: 68,
+        n: 'Iván Ramis',
+        p: 'CB',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Mark Iuliano',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 30,
+        anchor: 68,
++       lv: 68,
+        n: 'Sander Westerveld',
+        p: 'GK',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Sergio Ballesteros',
+        p: 'CB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Tuni',
+        p: 'RW',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Yoshito Okubo',
+        p: 'ST',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Marseille: [
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Franck Ribéry',
+        p: 'LW',
++       r: 74,
+-       r: 76,
+        since: 0,
+        v: 6.8
+      },
+      {
+        a: 25,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Fabien Barthez',
+        p: 'GK',
++       r: 77,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 21,
+        anchor: 73,
++       lv: 73,
+        n: 'Lorik Cana',
+        p: 'CDM',
++       r: 71,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 19,
+        anchor: 73,
++       lv: 73,
+        n: 'Taye Taiwo',
+        p: 'LB',
++       r: 69,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 28,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Christian Giménez',
+        p: 'ST',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 21,
+        anchor: 70,
++       lv: 70,
+        n: 'Koke',
+        p: 'ST',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 33,
+        anchor: 70,
++       lv: 70,
+        n: 'Sabri Lamouchi',
+        p: 'CM',
++       r: 74,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 24,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Samir Nasri',
+        p: 'CAM',
++       r: 64,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 22,
+        anchor: 68,
++       lv: 68,
+        n: 'Bostjan Cesar',
+        p: 'CB',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Demetrius Ferreira',
+        p: 'RB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 32,
+        anchor: 68,
++       lv: 68,
+        n: 'Frédéric Déhu',
+        p: 'CB',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Rahmane Barry',
+        p: 'CF',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Messina: [
+...
+        anchor: 76,
++       lv: 76,
+        n: "Gaetano D'Agostino",
+        p: 'CM',
++       r: 75,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Marco Zoro',
+        p: 'CB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Rahman Rezaei',
+        p: 'CB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Arturo Di Napoli',
+        p: 'ST',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Riccardo Zampagna',
+        p: 'ST',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Metz: [
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Abdelnasser Ouadah',
+        p: 'LW',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Grégory Wimbée',
+        p: 'GK',
++       r: 72,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Dino Djiba',
+        p: 'CDM',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Franck Béria',
+        p: 'RB',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Ludovic Obraniak',
+        p: 'CAM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Roy Contout',
+        p: 'RW',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Sébastien Renouard',
+        p: 'RM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Szabolcs Huszti',
+        p: 'LM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Middlesbrough: [
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Mark Viduka',
+        p: 'ST',
++       r: 80,
+-       r: 79,
+        since: 0,
+        v: 10.5
+      },
+      {
+        a: 22,
+        anchor: 77,
++       lv: 77,
+        n: 'Yakubu',
+        p: 'ST',
++       r: 76,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 29,
+        anchor: 76,
++       lv: 76,
+        n: 'George Boateng',
+        p: 'CDM',
++       r: 77,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 30,
+        anchor: 75,
++       lv: 75,
+        n: 'Gaizka Mendieta',
+        p: 'RM',
++       r: 77,
+-       r: 75,
+        since: 0,
+        v: 5.3
+      },
+      {
+        a: 32,
+        anchor: 75,
++       lv: 75,
+        n: 'Jimmy Floyd Hasselbaink',
+        p: 'ST',
++       r: 78,
+-       r: 75,
+        since: 0,
+        v: 5.3
+      },
+      {
+        a: 25,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Michael Reiziger',
+        p: 'RB',
++       r: 76,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 31,
+        anchor: 74,
++       lv: 74,
+        n: 'Ray Parlour',
+        p: 'CM',
++       r: 76,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 27,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Ugo Ehiogu',
+        p: 'CB',
++       r: 77,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 26,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Gareth Southgate',
+        p: 'CB',
++       r: 78,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 32,
+        anchor: 73,
++       lv: 73,
+        n: 'Mark Schwarzer',
+        p: 'GK',
++       r: 76,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 25,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Stewart Downing',
+        p: 'LM',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Doriva',
+        p: 'CDM',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 32,
+        anchor: 64,
++       lv: 64,
+        n: 'Abel Xavier',
+        p: 'RB',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'James Morrison',
+        p: 'CM',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Monaco: [
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Emmanuel Adebayor',
+        p: 'ST',
++       r: 74,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Akis Zikos',
+        p: 'CDM',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 70,
++       lv: 70,
+        n: 'Flavio Roma',
+        p: 'GK',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 22,
+        anchor: 70,
++       lv: 70,
+        n: 'Jaroslav Plasil',
+        p: 'CM',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Guillaume Warmuz',
+        p: 'GK',
++       r: 69,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Nicolas Maurice-Belay',
+        p: 'LM',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Nancy: [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Habib Bamogo',
+        p: 'CF',
++       r: 72,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 21,
+        anchor: 73,
++       lv: 73,
+        n: 'Jérémy Toulalan',
+        p: 'CDM',
++       r: 71,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 20,
+        anchor: 70,
++       lv: 70,
+        n: 'Emerse Faé',
+        p: 'CM',
++       r: 67,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Gilles Yapi Yapo',
+        p: 'CDM',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Frédéric Da Rocha',
+        p: 'RW',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Mauro Cetto',
+        p: 'CB',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Nicolas Savinaud',
+        p: 'RB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Aurélien Capoue',
+        p: 'LW',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Claudiu Keșerü',
+        p: 'ST',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'David Leray',
+        p: 'RB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Loïc Guillon',
+        p: 'CB',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Luigi Glombard',
+        p: 'RW',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Mamadou Diallo',
+        p: 'ST',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Milos Dimitrijevic',
+        p: 'CM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Tony Heurtebis',
+        p: 'GK',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Newcastle: [
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Laurent Robert',
+        p: 'LW',
++       r: 77,
+-       r: 76,
+        since: 0,
+        v: 6.8
+      },
+      {
+        a: 28,
+...
+        anchor: 74,
++       lv: 74,
+        n: 'James Milner',
+        p: 'CM',
++       r: 69,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 29,
+        anchor: 74,
++       lv: 74,
+        n: 'Nicky Butt',
+        p: 'CDM',
++       r: 75,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Alan Shearer',
+        p: 'ST',
++       r: 75,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 20,
+        anchor: 68,
++       lv: 68,
+        n: 'Darren Ambrose',
+        p: 'RM',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 31,
+        anchor: 68,
++       lv: 68,
+        n: 'Robbie Elliott',
+        p: 'LB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Steve Harper',
+        p: 'GK',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: "Charles N'Zogbia",
+        p: 'RW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Martin Brittain',
+        p: 'RM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Nice: [
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Anthar Yahia',
+        p: 'CB',
++       r: 69,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 29,
+        anchor: 70,
++       lv: 70,
+        n: 'Bill Tchato',
+        p: 'LB',
++       r: 71,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Cyril Rool',
+        p: 'LB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Ederson',
+        p: 'CAM',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'François Grenet',
+        p: 'RB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 32,
+        anchor: 64,
++       lv: 64,
+        n: 'Olivier Echouafni',
+        p: 'CDM',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 31,
+        anchor: 64,
++       lv: 64,
+        n: 'Roberto Bisconti',
+        p: 'CDM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Souleymane Camara',
+        p: 'RW',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Savo Milosevic',
+        p: 'ST',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 28,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Patxi Puñal',
+        p: 'CDM',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Enrique Corrales',
+        p: 'LB',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Javier Flaño',
+        p: 'RB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Juan Ángel Seguro',
+        p: 'LW',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Juanma Ortiz',
+        p: 'RB',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Ricardo',
+        p: 'GK',
++       r: 68,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Pauleta',
+        p: 'ST',
++       r: 79,
+-       r: 77,
+        since: 0,
+        v: 8.3
+      },
+      {
+        a: 26,
+...
+        anchor: 73,
++       lv: 73,
+        n: "Modeste M'Bami",
+        p: 'CDM',
++       r: 72,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 24,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Vikash Dhorasoo',
+        p: 'CM',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 24,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Cristian Rodríguez',
+        p: 'LM',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 31,
+        anchor: 68,
++       lv: 68,
+        n: 'Lionel Létizi',
+        p: 'GK',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Franck Dja Djédjé',
+        p: 'RW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Jérôme Alonzo',
+        p: 'GK',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Rudy Haddad',
+        p: 'CAM',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Stephen Makinwa',
+        p: 'ST',
++       r: 71,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Eugenio Corini',
+        p: 'CDM',
++       r: 69,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Matteo Guardalben',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Parma: [
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Andrea Pisanu',
+        p: 'RM',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 68,
++       lv: 68,
+        n: 'Giovanni Pasquale',
+        p: 'LM',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Daniele Dessena',
+        p: 'CM',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Giuseppe Cardone',
+        p: 'RB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Ibrahima Camara',
+        p: 'LB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Portsmouth: [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Patrik Berger',
+        p: 'CAM',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 27,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Collins Mbesuma',
+        p: 'ST',
++       r: 67,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 31,
+        anchor: 70,
++       lv: 70,
+        n: 'David Unsworth',
+        p: 'LB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 30,
+        anchor: 70,
++       lv: 70,
+        n: 'Dejan Stefanovic',
+        p: 'CB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 24,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Shaka Hislop',
+        p: 'GK',
++       r: 74,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 33,
+        anchor: 68,
++       lv: 68,
+        n: 'Steve Stone',
+        p: 'RM',
++       r: 72,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Valéry Mézague',
+        p: 'CAM',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 34,
+        anchor: 64,
++       lv: 64,
+        n: 'Arjan de Zeeuw',
+        p: 'CB',
++       r: 69,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 17,
+        anchor: 64,
++       lv: 64,
+        n: "Franck Songo'o",
+        p: 'RW',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: "Gary O'Neil",
+        p: 'CM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Konstantinos Chalkias',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Giandomenico Mesto',
+        p: 'RM',
++       r: 72,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Nicola Amoruso',
+        p: 'ST',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Rolando Bianchi',
+        p: 'ST',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Francesco Cozza',
+        p: 'CAM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Francesco Modesto',
+        p: 'LB',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Ilyas Zeytullaev',
+        p: 'LW',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Jacopo Balestri',
+        p: 'LB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Nicola Pavarini',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Rennes: [
+...
+        anchor: 76,
++       lv: 76,
+        n: 'John Utaka',
+        p: 'LW',
++       r: 75,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 22,
+        anchor: 75,
++       lv: 75,
+        n: 'Kim Källström',
+        p: 'CM',
++       r: 74,
+-       r: 75,
+        since: 0,
+        v: 5.3
+      },
+      {
+        a: 28,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Dudu Cearense',
+        p: 'CM',
++       r: 70,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 21,
+        anchor: 72,
++       lv: 72,
+        n: 'Étienne Didot',
+        p: 'CM',
++       r: 70,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 20,
+        anchor: 72,
++       lv: 72,
+        n: 'Jacques Faty',
+        p: 'CB',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 26,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Adailton',
+        p: 'CB',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 26,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Yoann Gourcuff',
+        p: 'CAM',
++       r: 65,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Alain Rochat',
+        p: 'CB',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Cyril Jeunechamp',
+        p: 'CDM',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Arnold Mvuemba',
+        p: 'CDM',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Grégory Bourillon',
+        p: 'CB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: "Stéphane N'Guéma",
+        p: 'RW',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Roma: [
+...
+        anchor: 85,
++       lv: 85,
+        n: 'Antonio Cassano',
+        p: 'CF',
++       r: 84,
+-       r: 85,
+        since: 0,
+        v: 19.5
+      },
+      {
+        a: 24,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Daniele De Rossi',
+        p: 'CDM',
++       r: 77,
+-       r: 79,
+        since: 0,
+        v: 11.3
+      },
+      {
+        a: 24,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Vincenzo Montella',
+        p: 'ST',
++       r: 81,
+-       r: 79,
+        since: 0,
+        v: 11.3
+      },
+      {
+        a: 27,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Philippe Mexès',
+        p: 'CB',
++       r: 75,
+-       r: 76,
+        since: 0,
+        v: 6.8
+      },
+      {
+        a: 27,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Christian Panucci',
+        p: 'RB',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 30,
+        anchor: 73,
++       lv: 73,
+        n: 'Olivier Dacourt',
+        p: 'CDM',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 20,
+        anchor: 72,
++       lv: 72,
+        n: 'Alberto Aquilani',
+        p: 'CM',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 21,
+        anchor: 72,
++       lv: 72,
+        n: 'Cesare Bovo',
+        p: 'CB',
++       r: 70,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 19,
+        anchor: 72,
++       lv: 72,
+        n: 'Gianluca Curci',
+        p: 'GK',
++       r: 68,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Alessio Cerci',
+        p: 'RW',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Damiano Tommasi',
+        p: 'CM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Luigi Sartor',
+        p: 'RB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Sampdoria: [
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Francesco Flachi',
+        p: 'ST',
++       r: 77,
+-       r: 76,
+        since: 0,
+        v: 6.8
+      },
+      {
+        a: 26,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Giulio Falcone',
+        p: 'CB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Francesco Antonioli',
+        p: 'GK',
++       r: 70,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Max Tonetto',
+        p: 'LB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Sergio Volpi',
+        p: 'CM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Sevilla: [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Dani Alves',
+        p: 'RB',
++       r: 71,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 32,
+        anchor: 73,
++       lv: 73,
+        n: 'Darío Silva',
+        p: 'ST',
++       r: 76,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 25,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Esteban',
+        p: 'GK',
++       r: 71,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 27,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Jesús Navas',
+        p: 'RM',
++       r: 66,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 32,
+        anchor: 64,
++       lv: 64,
+        n: 'Antonio Notario',
+        p: 'GK',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'David Castedo',
+        p: 'LB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 16,
+        anchor: 64,
++       lv: 64,
+        n: 'Diego Capel',
+        p: 'LW',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Javi Navarro',
+        p: 'CB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Josep Lluís Martí',
+        p: 'CDM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 35,
+        anchor: 64,
++       lv: 64,
+        n: 'Pablo Alfaro',
+        p: 'CB',
++       r: 70,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Siena: [
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Enrico Chiesa',
+        p: 'ST',
++       r: 75,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Alberto Valentim',
+        p: 'RM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Antonio Mirante',
+        p: 'GK',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Gianluca Falsini',
+        p: 'LB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Paolo Foglio',
+        p: 'RB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 32,
+        anchor: 64,
++       lv: 64,
+        n: 'Paolo Negro',
+        p: 'RB',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: "Roberto D'Aversa",
+        p: 'CM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Sochaux: [
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Mourad Meghni',
+        p: 'CAM',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 24,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Miranda',
+        p: 'CB',
++       r: 67,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 24,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Arnaud Bühler',
+        p: 'CB',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 20,
+        anchor: 68,
++       lv: 68,
+        n: 'Cédric Rey',
+        p: 'LB',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 26,
+...
+        anchor: 68,
++       lv: 68,
+        n: "Guirane N'Daw",
+        p: 'CDM',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 68,
++       lv: 68,
+        n: 'Jaouad Zairi',
+        p: 'RM',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 17,
+        anchor: 68,
++       lv: 68,
+        n: 'Jérémy Ménez',
+        p: 'ST',
++       r: 62,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Philippe Brunel',
+        p: 'LM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Teddy Richert',
+        p: 'GK',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 31,
+        anchor: 64,
++       lv: 64,
+        n: 'Johann Lonfat',
+        p: 'CDM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Lionel Potillon',
+        p: 'LB',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Mickaël Isabey',
+        p: 'RM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Strasbourg: [
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Mickaël Pagis',
+        p: 'CF',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Alexander Farnerud',
+        p: 'CM',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Karim Haggui',
+        p: 'CB',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Salim Arrache',
+        p: 'LW',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 19,
+        anchor: 68,
++       lv: 68,
+        n: 'Sidi Keita',
+        p: 'CDM',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 32,
+        anchor: 68,
++       lv: 68,
+        n: 'Stéphane Cassard',
+        p: 'GK',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 30,
+        anchor: 68,
++       lv: 68,
+        n: 'Ulrich Le Pen',
+        p: 'LM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Amara Diané',
+        p: 'RW',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Arthur Boka',
+        p: 'LB',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Hosny Abd Rabo',
+        p: 'CM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Andreas Hinkel',
+        p: 'RB',
++       r: 75,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 25,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Markus Babbel',
+        p: 'CB',
++       r: 76,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 24,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Thomas Hitzlsperger',
+        p: 'CM',
++       r: 72,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 26,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Christian Gentner',
+        p: 'CM',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 22,
+        anchor: 68,
++       lv: 68,
+        n: 'Christian Tiffert',
+        p: 'CM',
++       r: 67,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 25,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Silvio Meißner',
+        p: 'CDM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Boris Zivkovic',
+        p: 'RB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Mario Carevic',
+        p: 'LM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 37,
+        anchor: 64,
++       lv: 64,
+        n: 'Zvonimir Soldo',
+        p: 'CDM',
++       r: 72,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Sunderland: [
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Gary Breen',
+        p: 'CB',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 23,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Marcus Stewart',
+        p: 'ST',
++       r: 73,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Andy Welsh',
+        p: 'LM',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Dean Whitehead',
+        p: 'CM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Jermain Defoe',
+        p: 'ST',
++       r: 78,
+-       r: 79,
+        since: 0,
+        v: 12
+      },
+      {
+        a: 21,
+        anchor: 79,
++       lv: 79,
+        n: 'Jermaine Jenas',
+        p: 'CM',
++       r: 77,
+-       r: 79,
+        since: 0,
+        v: 12
+      },
+      {
+        a: 24,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Edgar Davids',
+        p: 'CM',
++       r: 79,
+-       r: 77,
+        since: 0,
+        v: 8.3
+      },
+      {
+        a: 24,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Andy Reid',
+        p: 'LM',
++       r: 75,
+-       r: 76,
+        since: 0,
+        v: 6.8
+      },
+      {
+        a: 27,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Michael Dawson',
+        p: 'CB',
++       r: 74,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 21,
+        anchor: 76,
++       lv: 76,
+        n: 'Mido',
+        p: 'ST',
++       r: 74,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 25,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Goran Bunjevcevic',
+        p: 'CB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 31,
+        anchor: 70,
++       lv: 70,
+        n: 'Jamie Redknapp',
+        p: 'CM',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 27,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Noureddine Naybet',
+        p: 'CB',
++       r: 75,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 27,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Aaron Lennon',
+        p: 'RW',
++       r: 58,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Dean Marney',
+        p: 'CM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Mark Yeates',
+        p: 'LW',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'Radek Cerny',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Rohan Ricketts',
+        p: 'RM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Toulouse: [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Achille Emaná',
+        p: 'CAM',
++       r: 72,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 21,
+        anchor: 72,
++       lv: 72,
+        n: 'Jérémy Mathieu',
+        p: 'LB',
++       r: 70,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 29,
+        anchor: 72,
++       lv: 72,
+        n: 'Laurent Batlles',
+        p: 'CM',
++       r: 73,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 21,
+        anchor: 70,
++       lv: 70,
+        n: 'Bryan Bergougnoux',
+        p: 'CAM',
++       r: 68,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 20,
+        anchor: 70,
++       lv: 70,
+        n: 'Lucien Aubey',
+        p: 'CB',
++       r: 67,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 20,
+        anchor: 68,
++       lv: 68,
+        n: 'Albin Ebondo',
+        p: 'RB',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 32,
+        anchor: 68,
++       lv: 68,
+        n: 'Christophe Revault',
+        p: 'GK',
++       r: 71,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 19,
+        anchor: 68,
++       lv: 68,
+        n: 'Daniel Congré',
+        p: 'CB',
++       r: 64,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Nabil Taïder',
+        p: 'CM',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Alexandre Bonnet',
+        p: 'LM',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 19,
+        anchor: 64,
++       lv: 64,
+        n: 'Benjamin Psaume',
+        p: 'RW',
++       r: 60,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Henri Bedimo',
+        p: 'LB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Stéphane Lièvre',
+        p: 'LB',
++       r: 67,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Antonio Filippini',
+        p: 'RM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 31,
+        anchor: 68,
++       lv: 68,
+        n: 'Emanuele Filippini',
+        p: 'CM',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 33,
+        anchor: 64,
++       lv: 64,
+        n: 'Daniele Bellotto',
+        p: 'LM',
++       r: 68,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Francesco Parravicini',
+        p: 'CDM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 21,
+        anchor: 64,
++       lv: 64,
+        n: 'Reginaldo',
+        p: 'ST',
++       r: 62,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Troyes: [
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Sébastien Dallet',
+        p: 'RW',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 20,
+        anchor: 68,
++       lv: 68,
+        n: 'Sébastien Grax',
+        p: 'ST',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Stéphen Drouin',
+        p: 'LB',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Udinese: [
+...
+        anchor: 74,
++       lv: 74,
+        n: 'Felipe',
+        p: 'CB',
++       r: 71,
+-       r: 74,
+        since: 0,
+        v: 4.5
+      },
+      {
+        a: 19,
+        anchor: 73,
++       lv: 73,
+        n: 'Barreto',
+        p: 'CF',
++       r: 69,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 20,
+        anchor: 73,
++       lv: 73,
+        n: 'Sulley Muntari',
+        p: 'CM',
++       r: 70,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 20,
+        anchor: 72,
++       lv: 72,
+        n: 'Christian Obodo',
+        p: 'CM',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 18,
+        anchor: 72,
++       lv: 72,
+        n: 'Marco Motta',
+        p: 'RB',
++       r: 67,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 27,
+...
+        anchor: 70,
++       lv: 70,
+        n: 'Vincent Candela',
+        p: 'LB',
++       r: 72,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'José Luís Vidigal',
+        p: 'CDM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 79,
++       lv: 79,
+        n: 'Rubén Baraja',
+        p: 'CM',
++       r: 80,
+-       r: 79,
+        since: 0,
+        v: 10.5
+      },
+      {
+        a: 23,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Roberto Ayala',
+        p: 'CB',
++       r: 79,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 28,
+...
+        anchor: 76,
++       lv: 76,
+        n: 'Santiago Cañizares',
+        p: 'GK',
++       r: 82,
+-       r: 76,
+        since: 0,
+        v: 6
+      },
+      {
+        a: 28,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Andrés Palop',
+        p: 'GK',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 77,
++       lv: 77,
+        n: 'Alessio Tacchinardi',
+        p: 'CDM',
++       r: 78,
+-       r: 77,
+        since: 0,
+        v: 7.5
+      },
+      {
+        a: 25,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Gonzalo Rodríguez',
+        p: 'CB',
++       r: 69,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 26,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Juan Manuel Peña',
+        p: 'CB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 20,
+        anchor: 68,
++       lv: 68,
+        n: 'Mariano Barbosa',
+        p: 'GK',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 29,
+        anchor: 68,
++       lv: 68,
+        n: 'Rodolfo Arruabarrena',
+        p: 'LB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 21,
+        anchor: 68,
++       lv: 68,
+        n: 'Sebastián Viera',
+        p: 'GK',
++       r: 66,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Armando Sá',
+        p: 'RB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 20,
+        anchor: 64,
++       lv: 64,
+        n: 'Héctor Font',
+        p: 'CM',
++       r: 61,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 29,
+        anchor: 64,
++       lv: 64,
+        n: 'Javi Venta',
+        p: 'RB',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 26,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Josico',
+        p: 'CDM',
++       r: 65,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 18,
+        anchor: 64,
++       lv: 64,
+        n: 'Xisco Nadal',
+        p: 'RW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ],
+    Wolfsburg: [
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Diego Klimowicz',
+        p: 'ST',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 26,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Mike Hanke',
+        p: 'ST',
++       r: 70,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 28,
+...
+        anchor: 72,
++       lv: 72,
+        n: 'Pablo Thiam',
+        p: 'CDM',
++       r: 74,
+-       r: 72,
+        since: 0,
+        v: 3
+      },
+      {
+        a: 28,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Juan Carlos Menseguez',
+        p: 'RW',
++       r: 65,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Abuda',
+        p: 'RW',
++       r: 59,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 31,
+        anchor: 64,
++       lv: 64,
+        n: 'André Lenz',
+        p: 'GK',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Bojan Neziri',
+        p: 'LB',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 27,
+...
+        anchor: 73,
++       lv: 73,
+        n: 'Javi Moreno',
+        p: 'ST',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 30,
+        anchor: 73,
++       lv: 73,
+        n: 'Sávio',
+        p: 'LW',
++       r: 75,
+-       r: 73,
+        since: 0,
+        v: 3.8
+      },
+      {
+        a: 29,
+        anchor: 70,
++       lv: 70,
+        n: 'José María Movilla',
+        p: 'CDM',
++       r: 71,
+-       r: 70,
+        since: 0,
+        v: 2.3
+      },
+      {
+        a: 23,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Agustín Aranzabal',
+        p: 'LB',
++       r: 70,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 27,
+...
+        anchor: 68,
++       lv: 68,
+        n: 'Carlos Cuartero',
+        p: 'RB',
++       r: 69,
+-       r: 68,
+        since: 0,
+        v: 1.5
+      },
+      {
+        a: 24,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'David Generelo',
+        p: 'CM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 30,
+        anchor: 64,
++       lv: 64,
+        n: 'David Pirri',
+        p: 'LM',
++       r: 66,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 28,
+...
+        anchor: 64,
++       lv: 64,
+        n: 'Leonardo Ponzio',
+        p: 'CDM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      },
+      {
+        a: 22,
+        anchor: 64,
++       lv: 64,
+        n: 'Óscar González',
+        p: 'CAM',
++       r: 63,
+-       r: 64,
+        since: 0,
+        v: 0.8
+      }
+    ]
+  }
+
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+3 !== 0
+
+    at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:531:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:539:24

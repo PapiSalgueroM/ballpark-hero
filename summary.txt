@@ -1,0 +1,3 @@
+wcprobe exit=0 20s | probe done
+worldcont-head exit=1 22s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:539:24
+worldcont-main exit=1 37s |     at async file:///tmp/m-wc/scripts/simManagerWorldContinuity.mjs:527:24

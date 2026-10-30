@@ -1,0 +1,3 @@
+wcprobe: bash .rc/x/wcProbe.sh
+worldcont-head: bash .rc/x/wd.sh node scripts/simManagerWorldContinuity.mjs
+worldcont-main: R=$PWD; git worktree add /tmp/m-wc c18c4b7a8 >/dev/null 2>&1 && cd /tmp/m-wc && ln -s $R/node_modules node_modules && bash $R/.rc/x/wd.sh node scripts/simManagerWorldContinuity.mjs

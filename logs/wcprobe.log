@@ -1,0 +1,30 @@
+engines loaded; curve 1 files served: 4 ; main files: 87
+Everton now seed 17: state json 809676 chars; vs original: head false, curve1 false, main false; curve1 vs main: true draws true; head vs main false
+   head vs main first diff $.reads.market.0.age: 26 vs 25
+   main vs original first diff $.match.state.budget: 56.03 vs 56.02
+Everton now seed 311: state json 807593 chars; vs original: head false, curve1 false, main false; curve1 vs main: true draws true; head vs main false
+   head vs main first diff $.reads.market.0.age: 26 vs 25
+   main vs original first diff $.match.state.budget: 55.5 vs 55.49
+Barcelona now seed 17: state json 817768 chars; vs original: head false, curve1 false, main false; curve1 vs main: true draws true; head vs main false
+   head vs main first diff $.reads.market.1.name: "Michael Olise" vs "Jude Bellingham"
+   main vs original first diff $.match.state.budget: 158.06 vs 158
+Barcelona now seed 311: state json 823270 chars; vs original: head false, curve1 false, main false; curve1 vs main: true draws true; head vs main false
+   head vs main first diff $.reads.market.0.age: 26 vs 25
+   main vs original first diff $.match.state.budget: 161.22 vs 161.16
+Everton era2010 seed 17: state json 323106 chars; vs original: head false, curve1 false, main false; curve1 vs main: false draws true; head vs main false
+   curve1 vs main first diff $.reads.market.2.rating: 95 vs 94
+   head vs main first diff $.reads.market.2.rating: 95 vs 94
+   main vs original first diff $.match.state.budget: 27.26 vs 27.25
+Everton era2010 seed 311: state json 322287 chars; vs original: head false, curve1 false, main false; curve1 vs main: false draws true; head vs main false
+   curve1 vs main first diff $.reads.market.2.rating: 95 vs 94
+   head vs main first diff $.reads.market.2.rating: 95 vs 94
+   main vs original first diff $.match.state.budget: 27.15 vs 27.14
+PSG era2015 seed 17: state json 307753 chars; vs original: head false, curve1 false, main false; curve1 vs main: false draws false; head vs main false
+   curve1 vs main first diff $.reads.market.2.rating: 95 vs 96
+   head vs main first diff $.reads.market.2.rating: 95 vs 96
+   main vs original first diff $.match.state.budget: 62.71 vs 62.67
+PSG era2015 seed 311: state json 313192 chars; vs original: head false, curve1 false, main false; curve1 vs main: false draws false; head vs main false
+   curve1 vs main first diff $.reads.market.3.rating: 95 vs 96
+   head vs main first diff $.reads.market.3.rating: 95 vs 96
+   main vs original first diff $.match.state.budget: 62.15 vs 62.11
+probe done
