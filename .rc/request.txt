@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+walk1592: node .rc/x/walk1592.mjs
+playTwoTabs: ENGINES=chromium SIZES=390x844,1280x900 CASES=3,4,9 node scripts/playTwoTabs.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
+playClubManagerSlots: ENGINES=chromium node scripts/playClubManagerSlots.mjs
+playSaveKeeper: KEEPER_DIST=dist KEEPER_NO_BASE=1 node scripts/playSaveKeeper.mjs
