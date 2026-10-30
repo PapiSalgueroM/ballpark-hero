@@ -1,0 +1,6 @@
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+quotes-dugout: QUOTES_CONTROL=dugout node scripts/simNoInventedQuotes.mjs
+quotes-desk: QUOTES_CONTROL=desk node scripts/simNoInventedQuotes.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
