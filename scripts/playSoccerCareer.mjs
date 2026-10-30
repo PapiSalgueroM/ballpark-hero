@@ -36,7 +36,12 @@
  *      the other half of the same invariant.
  *   4. The Round 544 error boundary never appears and the root never goes
  *      near empty, which is what a render throw looks like from outside.
- *   5. No console error and no page error across the whole walk.
+ *   5. No console error and no page error across the whole walk. The walk
+ *      aborts every request to the database host itself (the standing rule
+ *      since 2026-10-02: no walk reaches production), and the one resource
+ *      line Chrome prints for each request it aborted is set aside by its
+ *      exact URL and counted. Every other error still counts, a resource
+ *      error from any other address included (see the strayload control).
  *
  * IT IS DETERMINISTIC ON PURPOSE, AND IT TRIES MORE THAN ONE CAREER.
  * Math.random is replaced before any page code runs with a seeded generator,
@@ -73,6 +78,13 @@
  *                           reach a campaign. Check 1 must go red. This is the
  *                           control that proves check 1 is a real gate rather
  *                           than a line that can never fire.
+ *   SC_WALK_CONTROL=strayload has every page fetch one address the walk
+ *                           aborts WITHOUT adding it to its own list, so
+ *                           Chrome prints the very same "Failed to load
+ *                           resource" line the database aborts print. Check
+ *                           6 must go red and nothing else may, which proves
+ *                           the set aside is keyed on the walk's own aborts
+ *                           and not on the wording of the line.
  *
  * Run: ENGINES=chromium node scripts/playSoccerCareer.mjs
  * (dist must be built. PORT moves the server, SEED changes the career, ERA
@@ -98,7 +110,7 @@ const ERA = process.env.ERA || 'Current era';
    that, so a run that does not get there is not short of budget. */
 const MAX_STEPS = Number(process.env.MAX_STEPS || (CONTROL === 'noreach' ? 2 : 240));
 
-const KNOWN_CONTROLS = ['noagg', 'noreach'];
+const KNOWN_CONTROLS = ['noagg', 'noreach', 'strayload'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`SC_WALK_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN_CONTROLS.join(', ')})`);
   process.exit(1);
@@ -107,6 +119,7 @@ if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
 const CONTROL_TARGETS = {
   noagg: ['2. every two legged tie shows its aggregate on screen'],
   noreach: ['1. the walk reached a qualified Champions League campaign'],
+  strayload: ['6. no console or page errors across the walk'],
 };
 
 const failed = [];
@@ -167,6 +180,15 @@ await new Promise(r => setTimeout(r, 1200));
 const browser = await chromium.launch({ args: ['--no-sandbox', '--no-proxy-server'] });
 const consoleErrors = [];
 const pageErrors = [];
+/* Every database request the walk aborted itself, by exact URL, and how many
+   resource lines were set aside because of them (check 6). */
+const dbAborted = new Set();
+let dbAbortCount = 0;
+let ownAbortLines = 0;
+/* The strayload control's address: aborted, never added to dbAborted. */
+const STRAY_RE = /sc-walk-control\.invalid/;
+const STRAY_URL = 'https://sc-walk-control.invalid/stray.json';
+let strayAborts = 0;
 
 /* MORE THAN ONE SEED, and this is not the check going soft.
    Measured on 2026-09-14 across four seeds: three reached a qualified
@@ -195,8 +217,24 @@ async function newSeededContext(seed) {
     try { localStorage.removeItem('soccerCareerSave'); } catch { /* private mode */ }
   }, [seed]);
 
+  /* No walk reaches production (standing rule since 2026-10-02). */
+  await ctx.route(/supabase\.co/, r => { dbAborted.add(r.request().url()); dbAbortCount += 1; return r.abort(); });
+  if (CONTROL === 'strayload') {
+    await ctx.route(STRAY_RE, r => { strayAborts += 1; return r.abort(); });
+    await ctx.addInitScript(([u]) => {
+      if (window.top !== window) return;
+      addEventListener('load', () => { fetch(u).catch(() => {}); });
+    }, [STRAY_URL]);
+  }
+
   const page = await ctx.newPage();
-  page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });
+  page.on('console', m => {
+    if (m.type() !== 'error') return;
+    const url = m.location().url || '';
+    const text = m.text();
+    if (/Failed to load resource.*(?:ERR_FAILED|ERR_BLOCKED_BY_CLIENT)/.test(text) && dbAborted.has(url)) { ownAbortLines += 1; return; }
+    consoleErrors.push(`${text.slice(0, 160)}${url ? ` (${url.slice(0, 100)})` : ''}`);
+  });
   page.on('pageerror', e => pageErrors.push(String(e).slice(0, 200)));
 
   if (CONTROL === 'noagg') {
@@ -468,9 +506,14 @@ console.log('\nThe page survived');
 check('5. the error boundary never appeared and the root is not empty',
   !health.boundary && health.rootLen > 200,
   health.boundary ? 'the Round 544 boundary is on screen' : `root holds ${health.rootLen} characters`);
+console.log(`      database requests the walk aborted itself: ${dbAbortCount}; their resource lines set aside: ${ownAbortLines}`);
+const allErrors = [...consoleErrors, ...pageErrors];
+const distinctErrors = [...allErrors.reduce((m, e) => m.set(e, (m.get(e) || 0) + 1), new Map())];
 check('6. no console or page errors across the walk',
-  consoleErrors.length === 0 && pageErrors.length === 0,
-  consoleErrors.length || pageErrors.length ? [...consoleErrors, ...pageErrors].slice(0, 3).join(' | ') : 'none');
+  allErrors.length === 0,
+  allErrors.length
+    ? `${allErrors.length} error(s), ${distinctErrors.length} distinct: ${distinctErrors.slice(0, 8).map(([e, n]) => `${n}x ${e}`).join(' | ')}${distinctErrors.length > 8 ? ` | and ${distinctErrors.length - 8} more` : ''}`
+    : 'none');
 
 if (stuckPhases.size) {
   console.log(`\n      phases the walk could not drive, named rather than hidden: ${[...stuckPhases].join(', ')}`);
@@ -490,6 +533,11 @@ function report() {
       stop(1);
     }
     if (CONTROL === 'noagg') console.log(`control "noagg": ${controlSwaps} served response(s) rewritten`);
+    if (CONTROL === 'strayload' && strayAborts === 0) {
+      console.error('control "strayload": no page fetched the stray address, so the control changed nothing and this run proves nothing.');
+      stop(1);
+    }
+    if (CONTROL === 'strayload') console.log(`control "strayload": ${strayAborts} stray request(s) aborted outside the walk's own list`);
     if (targeted.length === 0) {
       console.error(`control "${CONTROL}": the targeted check stayed green, so it is not measuring what it claims to.`);
       stop(1);
