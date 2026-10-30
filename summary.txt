@@ -1,0 +1,5 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playUsCareerSaveSeam exit=0 34s | playUsCareerSaveSeam: 15 journeys, 71 checks, 0 failed
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simCareerProgramme-forwalk exit=0 77s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,163 unchanged chance outcomes an
+simCareerTransferBrief-forwalk exit=0 7s | Transfer Brief:9 healthy outcome groups,60 full original state/RNG pairs,8 effective copied source controls,9 prepared native branches.
