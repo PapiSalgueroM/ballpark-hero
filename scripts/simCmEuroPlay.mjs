@@ -25,7 +25,8 @@
  *   2 one competition: a winner crowned, my club an entrant, 8 league phase games a club, no club in both
  *     competitions, each night's log score is its record in orientation; the season review's line (summary.uelRun)
  *     is how far my club went, worked out here from the evaluation, a season with no Europa League has no line, and a
- *     winner's review says next season's Champions League. Control `mineflip`.
+ *     winner's review says next season's Champions League. Controls `mineflip`, `nouelucl` (the review's line back on the
+ *     league place alone).
  *  2b a job move in the middle of a participant season (three nights played; the first MOVE_SAVES such seasons), to
  *     one of its entrants and to a club outside its field: the save stops playing it, and the season still crowns a
  *     winner with all 36 clubs on eight league phase games (the critic's correction 3). Control `nocarry` (the carry
@@ -55,7 +56,7 @@ const CONTROL = process.env.CM_EURO_PLAY_CONTROL || '';
 const ONLY = (process.env.CM_EURO_PLAY_ONLY || '').split(',').filter(Boolean).map(Number);
 const SEEDS = (process.env.CM_EURO_PLAY_SEEDS || '1,2').split(',').map(Number);
 const cannot = why => { console.log(`simCmEuroPlay: cannot run: ${why}`); process.exit(2); };
-const CONTROLS = { rawlength: [5, /^5.1 /], nothursday: [1, /^1 /], mineflip: [2, /^2 /], noplaygate: [4, /^4 /], noplayrevert: [6, /^6 /], legfromucl: [3, /^3 /], nocarry: [2, /^2b /] };
+const CONTROLS = { rawlength: [5, /^5.1 /], nothursday: [1, /^1 /], mineflip: [2, /^2 /], noplaygate: [4, /^4 /], noplayrevert: [6, /^6 /], legfromucl: [3, /^3 /], nocarry: [2, /^2b /], nouelucl: [2, /^2 .*review does not say next season's Champions League/] };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`no control named ${CONTROL}`);
 const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || ONLY.includes(n));
 
@@ -225,6 +226,8 @@ const CONTROL_EDITS = {
   nothursday: [{ file: CAL_FILE, from: 'addDays(last, wasSaturday ? 5 : 1)', to: 'addDays(last, wasSaturday ? 4 : 1)' }],
   mineflip: [{ file: CM_FILE, from: '{ h: my.atHome ? mine : theirs, a: my.atHome ? theirs : mine }', to: '{ h: my.atHome ? theirs : mine, a: my.atHome ? mine : theirs }' }],
   noplaygate: [{ file: CM_FILE, from: "  if (play && tables && mine.clubs.length === UCL_LEAGUE.clubs && (earned === 'L'", to: "  if (mine.clubs.length === UCL_LEAGUE.clubs && (earned === 'L'" }],
+  /* Section 2: the review's Champions League line back on the league place alone (the critic's correction 13). */
+  nouelucl: [{ file: CM_FILE, from: '    qualifiedUcl: position <= uclPlacesIn(careerLeagueOf(state)) || wonUelThisSeason(state),', to: '    qualifiedUcl: position <= uclPlacesIn(careerLeagueOf(state)),' }],
   /* Section 2b: carryWorldComp back on the watcher's rule, so a move to an entrant drops the competition. */
   nocarry: [{ file: CM_FILE, from: '(!!slice.me || !names.some(c => slice.clubs.includes(c)))', to: '!names.some(c => slice.clubs.includes(c))' }],
 };
