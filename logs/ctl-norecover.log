@@ -1,0 +1,25 @@
+  Everton now none: 15 men left, lost 0, twice 0, 5 retired off the list; at season 3 16 on the list besides the journeymen, median age 28
+  Everton now eleven: 7 men left, lost 0, twice 0, 5 retired off the list; at season 3 9 on the list besides the journeymen, median age 32
+  Villarreal now none: 16 men left, lost 0, twice 0, 5 retired off the list; at season 3 17 on the list besides the journeymen, median age 26
+  Villarreal now eleven: 9 men left, lost 0, twice 0, 5 retired off the list; at season 3 10 on the list besides the journeymen, median age 27
+  Freiburg now none: 11 men left, lost 0, twice 0, 5 retired off the list; at season 3 12 on the list besides the journeymen, median age 27
+  Freiburg now eleven: 6 men left, lost 0, twice 0, 4 retired off the list; at season 3 8 on the list besides the journeymen, median age 32
+  Ajax now none: 15 men left, lost 0, twice 0, 6 retired off the list; at season 3 16 on the list besides the journeymen, median age 31
+  Ajax now eleven: 5 men left, lost 0, twice 0, 6 retired off the list; at season 3 6 on the list besides the journeymen, median age 34
+  Braga now none: 16 men left, lost 0, twice 0, 5 retired off the list; at season 3 17 on the list besides the journeymen, median age 26
+  Braga now eleven: 9 men left, lost 0, twice 0, 4 retired off the list; at season 3 12 on the list besides the journeymen, median age 26
+  Southampton era2015 none: 10 men left, lost 0, twice 0, 0 retired off the list; at season 3 10 on the list besides the journeymen, median age 28
+  Southampton era2015 eleven: 6 men left, lost 0, twice 0, 0 retired off the list; at season 3 6 on the list besides the journeymen, median age 21
+  FAIL section 4: Everton: Jarrad Branthwaite, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Everton: Brennan Johnson, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Everton: Thierno Barry, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Everton: Merlin Röhl, held by the ledger as released and listed nowhere, did not come back at the next summer
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 0
+  FAIL section 4: Ajax: Simon Adingra, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Ajax: Caio Henrique, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Ajax: Maher Carrizo, held by the ledger as released and listed nowhere, did not come back at the next summer
+  FAIL section 4: Ajax: Anton Gaaei, held by the ledger as released and listed nowhere, did not come back at the next summer
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 0
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 0
+simCmFreeAgencyFleet: 12 careers to season 3; 125 men left a squad, 184 summer checks; lost 0, twice 0; 50 retired off the list (0 summers unseen); list size at the end median 12, its median age median 28; old saves recoverable 13, recovered 0
+simCmFreeAgencyFleet: CONTROL norecover FIRED: section 4 red

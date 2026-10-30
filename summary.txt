@@ -1,0 +1,6 @@
+tsc exit=0 104s | 
+ctl-norecover exit=1 40s | simCmFreeAgencyFleet: CONTROL norecover FIRED: section 4 red
+simFreeAgents exit=0 150s | simFreeAgents: all sections passed
+fleet exit=0 252s | simCmFreeAgencyFleet: green, all four sections held
+fa-rollseed exit=1 129s | simFreeAgents: 1 failure(s)
+ctl-noretire exit=1 203s | simCmFreeAgencyFleet: CONTROL noretire FIRED: section 2 red
