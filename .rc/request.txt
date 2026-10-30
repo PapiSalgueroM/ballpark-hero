@@ -1,0 +1,18 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx src/lib/brokenSaveRecovery.test.ts src/test/cmSavePointsScreen.test.tsx src/test/routeErrorRecovery.test.tsx src/test/saveKeeper.test.ts src/test/saveFence.test.ts --testTimeout=300000 --hookTimeout=300000
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+hs5-seed1: SIM_SEED=1 HOT_SEAT_SECTION=5 node scripts/simManagerHotSeat.mjs
+hs5-clobber: HOT_SEAT_CONTROL=clobber node scripts/simManagerHotSeat.mjs
+hs5-damagedfree: HOT_SEAT_CONTROL=damagedfree node scripts/simManagerHotSeat.mjs
+hs5-nopoints: HOT_SEAT_CONTROL=nopoints node scripts/simManagerHotSeat.mjs
+hs5-norollback: HOT_SEAT_CONTROL=norollback node scripts/simManagerHotSeat.mjs
+hs5-nobackup: HOT_SEAT_CONTROL=nobackup node scripts/simManagerHotSeat.mjs
+hs5-nocal: HOT_SEAT_CONTROL=nocal node scripts/simManagerHotSeat.mjs
+hs5-sackoffer: HOT_SEAT_CONTROL=sackoffer node scripts/simManagerHotSeat.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
