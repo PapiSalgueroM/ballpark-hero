@@ -1,0 +1,10 @@
+sim: node scripts/simCmEuroPlay.mjs
+nothursday: CM_EURO_PLAY_CONTROL=nothursday node scripts/simCmEuroPlay.mjs
+mineflip: CM_EURO_PLAY_CONTROL=mineflip node scripts/simCmEuroPlay.mjs
+legfromucl: CM_EURO_PLAY_CONTROL=legfromucl node scripts/simCmEuroPlay.mjs
+noplaygate: CM_EURO_PLAY_CONTROL=noplaygate node scripts/simCmEuroPlay.mjs
+noplayrevert: CM_EURO_PLAY_CONTROL=noplayrevert node scripts/simCmEuroPlay.mjs
+rawlength: CM_EURO_PLAY_CONTROL=rawlength node scripts/simCmEuroPlay.mjs
+nocarry: CM_EURO_PLAY_CONTROL=nocarry node scripts/simCmEuroPlay.mjs
+nouelucl: CM_EURO_PLAY_CONTROL=nouelucl node scripts/simCmEuroPlay.mjs
+sim-seeds34: CM_EURO_PLAY_SEEDS=3,4 CM_EURO_PLAY_PLAY_SEEDS=5,6,7,8 node scripts/simCmEuroPlay.mjs
