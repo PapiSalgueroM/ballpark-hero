@@ -394,7 +394,10 @@ function uelHeaderLines(career: CareerState, view: WorldCompView): string[] {
   const how = routeWords(view.earned);
   return [
     uelLeadLine(career, how),
-    'This is the real format: 36 clubs in one table, then knockouts, each night but the final the day after the Champions League\'s.',
+    /* Round 1593: a season my club plays it, its nights are its own Thursdays, not the day after the Champions League's. */
+    career.worldComps?.uel?.me === career.clubName && career.worldComps.uel.s === career.season
+      ? 'This is the real format: 36 clubs in one table, then knockouts, every night on the day your calendar shows.'
+      : 'This is the real format: 36 clubs in one table, then knockouts, each night but the final the day after the Champions League\'s.',
     career.season === 1
       ? 'This season\'s field is the real 2025-26 tables and cup winners, put through the game\'s rule.'
       : 'This season\'s field is last season\'s tables in your save, put through the game\'s rule.',
