@@ -273,18 +273,30 @@ async function caseB(browser, size, tag) {
   try {
     if (!(await toCups(page, where))) return;
     await roundTrip(page, where, async () => {
-      if (!(await press(page, page.locator('[data-cm-world-club="Everton"]')))) { finding(where, 'Everton cannot be pressed on the Europa League screen'); return; }
+      /* The screen opens on its tiles: the table first, then my club's row in it, then back twice to the screen. */
+      if (!(await press(page, page.locator('[data-cm-world-tile="table"]')))) { finding(where, 'the Europa League screen has no table tile'); return; }
+      if (!(await press(page, page.locator('[data-cm-world-table] [data-club="Everton"]')))) { finding(where, 'Everton cannot be pressed in the Europa League table'); await press(page, page.locator('[data-cm-world-back]')); return; }
       await page.waitForTimeout(400);
-      const rec = await count(page, '[data-cm-world-run-row="recorded"]');
-      const up = await count(page, '[data-cm-world-run-row="upcoming"]');
-      if (rec !== 1 || up !== 7) finding(where, `Everton's run shows ${rec} played and ${up} to come, not 1 and 7`);
-      const row = squash(await textOf(page, '[data-cm-world-run-row="recorded"]'));
-      if (!row.includes(saves.b.line)) finding(where, `the played night reads "${row.slice(0, 120)}", the engine played ${saves.b.line}`);
-      await shot(page, `uel-b-run-${tag}`);
+      await readRun(page, where, tag);
+      await measure(page, `${where} run`);
+      await press(page, page.locator('[data-cm-world-back]'));
+      await press(page, page.locator('[data-cm-world-back]'));
     });
     if (errors.length) finding(where, `page errors: ${errors.slice(0, 2).join(' | ')}`);
   } finally { await ctx.close(); }
-  /* The stats centre, on a page of its own (the Cups screen has no way back to the hub's tiles but its own). */
+  await statsView(browser, size, where, tag);
+}
+/** My club's run on the Europa League screen: the night played, with the evaluation's score, and seven to come. */
+async function readRun(page, where, tag) {
+  const rec = await count(page, '[data-cm-world-run-row="recorded"]');
+  const up = await count(page, '[data-cm-world-run-row="upcoming"]');
+  if (rec !== 1 || up !== 7) finding(where, `Everton's run shows ${rec} played and ${up} to come, not 1 and 7`);
+  const row = squash(await textOf(page, '[data-cm-world-run-row="recorded"]'));
+  if (!row.includes(saves.b.line)) finding(where, `the played night reads "${row.slice(0, 120)}", the engine played ${saves.b.line}`);
+  await shot(page, `uel-b-run-${tag}`);
+}
+/** The stats centre, on a page of its own (the Cups screen has no way back to the hub's tiles but its own). */
+async function statsView(browser, size, where, tag) {
   const second = await open(browser, saves.b.items, size);
   try {
     const ok = await press(second.page, second.page.getByRole('button').filter({ has: second.page.getByText('Stats', { exact: true }) }), 15000);
