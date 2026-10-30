@@ -1,0 +1,14 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+nolift exit=1 79s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift FIRED. 15 of 15 lines with the lift stripped read red, the Soccer Career hub among them
+states exit=0 95s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+always exit=1 95s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=always FIRED. 15 of 15 lines with the lift pinned read red for the answered half, the Soccer Career hub among them
+badname exit=2 1s | CONSENT_BAR_CONTROL=bogus is not a control this walk knows (nolift, always, inflow, offtop)
+inflow exit=1 94s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=inflow FIRED. 2 of 2 lines it moved read red for inflow, the Soccer Career hub among them
+offtop exit=1 94s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=offtop FIRED. 15 of 15 lines it moved read red for offscreen, the Soccer Career hub among them
+shard1 exit=0 278s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+shard2 exit=0 264s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+simAccessibility exit=0 0s | simAccessibility: all green
+playHomeFold exit=0 30s | playHomeFold: green. The first thing on the page is something to play.
+sweepWeight exit=0 31s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+shard3 exit=0 328s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+simMobileChrome exit=0 210s | GREEN: 34 top bar measurements and 136 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
