@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: WALK_CASES=K,M,R node .rc/x/walk1593.mjs
