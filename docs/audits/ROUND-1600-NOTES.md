@@ -95,3 +95,51 @@ The refit is the old table one year later, so today's world on curve 2 hands the
 (`dropShift` in projectClub); the past seasons and the curve 1 view hand it the age as it is; retireChance and
 ageDriftBand read the age as it is everywhere. Before this, runner r1600-s7 had simEras section 6 at 43.7 percent of
 first teams real five years on (floor 45) and 11.3 ten years on (floor 12).
+
+## The balance harnesses after the flip (draft 3.6), each with its route
+
+Base 14a9af704 on the runner (r1600-base, r1600-s11b, r1600-s12) against the head named.
+
+- simCreateClub: red on the BASE as well (season two league has 24 clubs, r1600-s11b), not this round's.
+- simCustomClubValues section 2 (a founder above the ceiling sold on p10 0.48 of the same man at the ceiling):
+  the same man at the ceiling is the same age, so his price there reads his age (buildCustomSquad). Back to 1.00.
+- simBoardAsks section 7 (a word kept or broken moves nothing): the fixture walk skipped only seasons on 35 or 82,
+  and Round 1335's grade band is a clamp too (an A or a B opens at least on BOARD_FRESH 69, a D or an F under 60).
+  On the age read all five clubs land on a clamp (Everton 69 A, Napoli 35 F, Brentford nothing both hit and
+  missed, Sevilla 69 B, Wolfsburg 69 A), so the walk skips the band as it skips the clamp and goes on through ten
+  more clubs in a fixed order. New control BOARD_ASKS_CONTROL=nopromise.
+- simCmDifficulty section 3 (B2 and M1 floors, only 5 season ends): sample floors. Section 0 over 20 seeds a club,
+  the steady driver for one season (r1600-s12): mid and small clubs sacked 45 of 120 on the base and 57 of 120
+  here (1.6 standard errors), points a game mid 1.34 to 1.21, small 0.71 to 0.61, big 2.01 to 2.02. The money
+  dials are read on three times the seasons; no floor moved.
+- simCmLeagueRules: the modern digest moves by design at the flip (27 of 27), the eras digest at the era flip;
+  pure (drop zones, European places, board demands) is unchanged. Re-taken with --write on the runner, with the
+  inert steps shown unchanged first.
+
+### STOPS for the lead (each measured, none edited to pass)
+
+1. simCustomClubValues section 1 (draft 3.6 item 3; the critic: read the whole harness). The founder is priced off
+   the level his shown rating stands on at his age. Against real men of his era, rating and AGE BAND: p10 0.87,
+   p50 0.98, p90 1.33 (band p90 1.15). By band (now): 21 or under p90 1.67, 22 to 24 1.26, 25 to 28 1.05, 29 to 31
+   1.20; past seasons 21 or under 1.50. Against real men of his EXACT AGE (8 or more, 6,554 men): p10 0.87, p50 0.96,
+   p90 1.03, inside all three bands. The bands were cut to the raw curve's own age bands; the age read prices by
+   the year, so a band four years wide holds men priced up to six levels apart. Recommended ruling: the assertion
+   reads the year grain (the band numbers unchanged). Not done here.
+2. simCmInternationals section 3 (draft 3.6 item 7, critic 13). Resting wins back 0.42 of a break's cost (floor
+   0.50; base 0.56). LEGS_LATER_WEIGHT refit, set A the six the fit was made on, set B six it never saw
+   (Barcelona, PSG, Inter Milan, Juventus, Atletico Madrid, Borussia Dortmund), share (rest now, next):
+
+       weight   set A here          set B here          base A 0.56 (0.37, 1.21)   base B 0.51 (0.17, 1.00)
+       0.25     0.42 (0.27, 0.87)   0.56 (0.37, 0.98)
+       0.50     0.42 (0.11, 1.04)   0.56 (0.20, 1.15)
+       0.75     0.38 (-0.15, 1.18)  0.53 (0.04, 1.23)
+       1        0.35 (-0.37, 1.32)  0.49 (-0.12, 1.29)
+
+   No weight clears set A, so the weight stays 0.5. The cause is who is called up (nationBars reads the shown
+   rating): set A now loses Alisson, Virgil van Dijk, Thibaut Courtois, Emiliano Martinez, Phil Foden and Serge
+   Gnabry to breaks where the base lost Endrick, Geovany Quenda, Jorrel Hato, Nico O'Reilly and Tom Bischof, and a
+   rested veteran's deputy is a younger man the read now shows lower.
+3. simRoles section 10 (critic 7): a do nothing Everton season, 60 unseeded seasons, base 48.8 points (2se 2.4),
+   here 55.3 (2se 2.6), band 36 to 54. The written test (head within three points of base) fails by 6.5. Everton's
+   eleven carries veterans the read lifts; the band is a pin of one club's level. simPress (the same season) was
+   green at 3edef3897 (r1600-s6b).
