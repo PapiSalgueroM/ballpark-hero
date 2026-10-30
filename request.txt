@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerTrajectory.test.ts src/lib/cmMatchDisplay.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmLevelReads: node scripts/simCmLevelReads.mjs
+ctl-pointsfirst: CM_LEVEL_READS_CONTROL=pointsfirst node scripts/simCmLevelReads.mjs
+ctl-noeraread: CM_LEVEL_READS_CONTROL=noeraread node scripts/simCmLevelReads.mjs
+simEra2005: node scripts/simEra2005.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2015: node scripts/simEra2015.mjs
+simEra2020: node scripts/simEra2020.mjs
+simCareerEras: node scripts/simCareerEras.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simClubManagerEraMidSeason: node scripts/simClubManagerEraMidSeason.mjs
+simEraWorldTables: node scripts/simEraWorldTables.mjs
+simEras: node scripts/simEras.mjs

@@ -1,0 +1,14 @@
+simCmLevelReads exit=0 4s | simCmLevelReads: 27 checks, 0 failures
+ctl-pointsfirst exit=1 3s | simCmLevelReads: 27 checks, 8 failures (control pointsfirst)
+ctl-noeraread exit=1 4s | simCmLevelReads: 27 checks, 9 failures (control noeraread)
+vitest-cm exit=1 34s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerTrajectory.test.ts,title=src/lib/clubManagerTrajectory.test.ts > save-scoped actual world pr
+simEra2005 exit=0 27s | simEra2005: green. 2005 is real, sealed, and plays like 2005.
+simEra2010 exit=0 22s | simEra2010: green. 2010 is real, sealed, and plays like 2010.
+simEra2015 exit=0 21s | simEra2015: green. 2015 is real, sealed, and plays like 2015.
+simCareerEras exit=0 0s | simCareerEras: all green
+simClubManagerEraUcl exit=0 43s | simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night
+simEra2020 exit=0 51s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+simEraWorldTables exit=0 3s | simEraWorldTables: green. Era worlds play, the picker lists the truth, and the knockout takes the top twos.
+simClubManagerEraMidSeason exit=0 12s | simClubManagerEraMidSeason: PASS. His 2005 save plays every league, the picker lists one La Liga, and the Cups tab shows the cup it names.
+tsc exit=0 123s | 
+simEras exit=1 1549s | 353 FAILURES

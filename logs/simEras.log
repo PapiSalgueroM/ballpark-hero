@@ -1,0 +1,410 @@
+1) Year zero is the identity
+   454 clubs, 5113 players compared field by field against the real data
+  FAIL: AC Milan in the world is not the bake's AC Milan less the men who moved
+  FAIL: AEK Athens in the world is not the bake's AEK Athens less the men who moved
+  FAIL: AGF in the world is not the bake's AGF less the men who moved
+  FAIL: AZ Alkmaar in the world is not the bake's AZ Alkmaar less the men who moved
+  FAIL: Aberdeen in the world is not the bake's Aberdeen less the men who moved
+  FAIL: Abha in the world is not the bake's Abha less the men who moved
+  FAIL: Ajax in the world is not the bake's Ajax less the men who moved
+  FAIL: Al-Ahli in the world is not the bake's Al-Ahli less the men who moved
+  FAIL: Al-Diriyah in the world is not the bake's Al-Diriyah less the men who moved
+  FAIL: Al-Ettifaq in the world is not the bake's Al-Ettifaq less the men who moved
+  FAIL: Al-Fayha in the world is not the bake's Al-Fayha less the men who moved
+  FAIL: Al-Hazem in the world is not the bake's Al-Hazem less the men who moved
+  FAIL: Al-Hilal in the world is not the bake's Al-Hilal less the men who moved
+  FAIL: Al-Ittihad in the world is not the bake's Al-Ittihad less the men who moved
+  FAIL: Al-Khaleej in the world is not the bake's Al-Khaleej less the men who moved
+  FAIL: Al-Nassr in the world is not the bake's Al-Nassr less the men who moved
+  FAIL: Al-Qadsiah in the world is not the bake's Al-Qadsiah less the men who moved
+  FAIL: Al-Riyadh in the world is not the bake's Al-Riyadh less the men who moved
+  FAIL: Al-Shabab in the world is not the bake's Al-Shabab less the men who moved
+  FAIL: Al-Taawoun in the world is not the bake's Al-Taawoun less the men who moved
+  FAIL: Alanyaspor in the world is not the bake's Alanyaspor less the men who moved
+  FAIL: Alavés in the world is not the bake's Alavés less the men who moved
+  FAIL: Albacete in the world is not the bake's Albacete less the men who moved
+  FAIL: Almería in the world is not the bake's Almería less the men who moved
+  FAIL: Alverca in the world is not the bake's Alverca less the men who moved
+  FAIL: América in the world is not the bake's América less the men who moved
+  FAIL: Anderlecht in the world is not the bake's Anderlecht less the men who moved
+  FAIL: Angers in the world is not the bake's Angers less the men who moved
+  FAIL: Antwerp in the world is not the bake's Antwerp less the men who moved
+  FAIL: Aris in the world is not the bake's Aris less the men who moved
+  FAIL: Arsenal in the world is not the bake's Arsenal less the men who moved
+  FAIL: Ascoli in the world is not the bake's Ascoli less the men who moved
+  FAIL: Aston Villa in the world is not the bake's Aston Villa less the men who moved
+  FAIL: Atalanta in the world is not the bake's Atalanta less the men who moved
+  FAIL: Athletic Club in the world is not the bake's Athletic Club less the men who moved
+  FAIL: Athletico Paranaense in the world is not the bake's Athletico Paranaense less the men who moved
+  FAIL: Atlanta United in the world is not the bake's Atlanta United less the men who moved
+  FAIL: Atlas in the world is not the bake's Atlas less the men who moved
+  FAIL: Atlético Madrid in the world is not the bake's Atlético Madrid less the men who moved
+  FAIL: Atlético Mineiro in the world is not the bake's Atlético Mineiro less the men who moved
+  FAIL: Atlético San Luis in the world is not the bake's Atlético San Luis less the men who moved
+  FAIL: Augsburg in the world is not the bake's Augsburg less the men who moved
+  FAIL: Austin FC in the world is not the bake's Austin FC less the men who moved
+  FAIL: Austria Wien in the world is not the bake's Austria Wien less the men who moved
+  FAIL: Auxerre in the world is not the bake's Auxerre less the men who moved
+  FAIL: Avellino in the world is not the bake's Avellino less the men who moved
+  FAIL: Bahia in the world is not the bake's Bahia less the men who moved
+  FAIL: Barcelona in the world is not the bake's Barcelona less the men who moved
+  FAIL: Basel in the world is not the bake's Basel less the men who moved
+  FAIL: Bayer Leverkusen in the world is not the bake's Bayer Leverkusen less the men who moved
+  FAIL: Bayern Munich in the world is not the bake's Bayern Munich less the men who moved
+  FAIL: Başakşehir in the world is not the bake's Başakşehir less the men who moved
+  FAIL: Benevento in the world is not the bake's Benevento less the men who moved
+  FAIL: Benfica in the world is not the bake's Benfica less the men who moved
+  FAIL: Beşiktaş in the world is not the bake's Beşiktaş less the men who moved
+  FAIL: Birmingham City in the world is not the bake's Birmingham City less the men who moved
+  FAIL: Bochum in the world is not the bake's Bochum less the men who moved
+  FAIL: Bologna in the world is not the bake's Bologna less the men who moved
+  FAIL: Bolton Wanderers in the world is not the bake's Bolton Wanderers less the men who moved
+  FAIL: Borussia Dortmund in the world is not the bake's Borussia Dortmund less the men who moved
+  FAIL: Botafogo in the world is not the bake's Botafogo less the men who moved
+  FAIL: Boulogne in the world is not the bake's Boulogne less the men who moved
+  FAIL: Bournemouth in the world is not the bake's Bournemouth less the men who moved
+  FAIL: Braga in the world is not the bake's Braga less the men who moved
+  FAIL: Braunschweig in the world is not the bake's Braunschweig less the men who moved
+  FAIL: Brentford in the world is not the bake's Brentford less the men who moved
+  FAIL: Brest in the world is not the bake's Brest less the men who moved
+  FAIL: Brighton in the world is not the bake's Brighton less the men who moved
+  FAIL: Bristol City in the world is not the bake's Bristol City less the men who moved
+  FAIL: Brøndby IF in the world is not the bake's Brøndby IF less the men who moved
+  FAIL: Burgos in the world is not the bake's Burgos less the men who moved
+  FAIL: Burnley in the world is not the bake's Burnley less the men who moved
+  FAIL: CF Montréal in the world is not the bake's CF Montréal less the men who moved
+  FAIL: Cagliari in the world is not the bake's Cagliari less the men who moved
+  FAIL: Cardiff City in the world is not the bake's Cardiff City less the men who moved
+  FAIL: Carrarese in the world is not the bake's Carrarese less the men who moved
+  FAIL: Casa Pia in the world is not the bake's Casa Pia less the men who moved
+  FAIL: Castellón in the world is not the bake's Castellón less the men who moved
+  FAIL: Catanzaro in the world is not the bake's Catanzaro less the men who moved
+  FAIL: Celta Vigo in the world is not the bake's Celta Vigo less the men who moved
+  FAIL: Celtic in the world is not the bake's Celtic less the men who moved
+  FAIL: Cercle Brugge in the world is not the bake's Cercle Brugge less the men who moved
+  FAIL: Cesena in the world is not the bake's Cesena less the men who moved
+  FAIL: Charleroi in the world is not the bake's Charleroi less the men who moved
+  FAIL: Charlotte FC in the world is not the bake's Charlotte FC less the men who moved
+  FAIL: Charlton Athletic in the world is not the bake's Charlton Athletic less the men who moved
+  FAIL: Chelsea in the world is not the bake's Chelsea less the men who moved
+  FAIL: Chicago Fire in the world is not the bake's Chicago Fire less the men who moved
+  FAIL: Club Brugge in the world is not the bake's Club Brugge less the men who moved
+  FAIL: Colorado Rapids in the world is not the bake's Colorado Rapids less the men who moved
+  FAIL: Columbus Crew in the world is not the bake's Columbus Crew less the men who moved
+  FAIL: Como in the world is not the bake's Como less the men who moved
+  FAIL: Corinthians in the world is not the bake's Corinthians less the men who moved
+  FAIL: Coritiba in the world is not the bake's Coritiba less the men who moved
+  FAIL: Coventry City in the world is not the bake's Coventry City less the men who moved
+  FAIL: Cremonese in the world is not the bake's Cremonese less the men who moved
+  FAIL: Cruz Azul in the world is not the bake's Cruz Azul less the men who moved
+  FAIL: Cruzeiro in the world is not the bake's Cruzeiro less the men who moved
+  FAIL: Crystal Palace in the world is not the bake's Crystal Palace less the men who moved
+  FAIL: Cádiz in the world is not the bake's Cádiz less the men who moved
+  FAIL: D.C. United in the world is not the bake's D.C. United less the men who moved
+  FAIL: Darmstadt in the world is not the bake's Darmstadt less the men who moved
+  FAIL: Deportivo La Coruña in the world is not the bake's Deportivo La Coruña less the men who moved
+  FAIL: Derby County in the world is not the bake's Derby County less the men who moved
+  FAIL: Dinamo Zagreb in the world is not the bake's Dinamo Zagreb less the men who moved
+  FAIL: Dundee in the world is not the bake's Dundee less the men who moved
+  FAIL: Dunkerque in the world is not the bake's Dunkerque less the men who moved
+  FAIL: Dynamo Dresden in the world is not the bake's Dynamo Dresden less the men who moved
+  FAIL: Eibar in the world is not the bake's Eibar less the men who moved
+  FAIL: Eintracht Frankfurt in the world is not the bake's Eintracht Frankfurt less the men who moved
+  FAIL: Elche in the world is not the bake's Elche less the men who moved
+  FAIL: Elversberg in the world is not the bake's Elversberg less the men who moved
+  FAIL: Empoli in the world is not the bake's Empoli less the men who moved
+  FAIL: Entella in the world is not the bake's Entella less the men who moved
+  FAIL: Espanyol in the world is not the bake's Espanyol less the men who moved
+  FAIL: Estoril in the world is not the bake's Estoril less the men who moved
+  FAIL: Estrela Amadora in the world is not the bake's Estrela Amadora less the men who moved
+  FAIL: Everton in the world is not the bake's Everton less the men who moved
+  FAIL: Eyüpspor in the world is not the bake's Eyüpspor less the men who moved
+  FAIL: FC Copenhagen in the world is not the bake's FC Copenhagen less the men who moved
+  FAIL: FC Dallas in the world is not the bake's FC Dallas less the men who moved
+  FAIL: FC Juárez in the world is not the bake's FC Juárez less the men who moved
+  FAIL: FC Midtjylland in the world is not the bake's FC Midtjylland less the men who moved
+  FAIL: FC Nordsjælland in the world is not the bake's FC Nordsjælland less the men who moved
+  FAIL: FC Zürich in the world is not the bake's FC Zürich less the men who moved
+  FAIL: Falkirk in the world is not the bake's Falkirk less the men who moved
+  FAIL: Famalicão in the world is not the bake's Famalicão less the men who moved
+  FAIL: Fenerbahçe in the world is not the bake's Fenerbahçe less the men who moved
+  FAIL: Feyenoord in the world is not the bake's Feyenoord less the men who moved
+  FAIL: Fiorentina in the world is not the bake's Fiorentina less the men who moved
+  FAIL: Flamengo in the world is not the bake's Flamengo less the men who moved
+  FAIL: Fluminense in the world is not the bake's Fluminense less the men who moved
+  FAIL: Fortuna Sittard in the world is not the bake's Fortuna Sittard less the men who moved
+  FAIL: Freiburg in the world is not the bake's Freiburg less the men who moved
+  FAIL: Frosinone in the world is not the bake's Frosinone less the men who moved
+  FAIL: Fulham in the world is not the bake's Fulham less the men who moved
+  FAIL: Galatasaray in the world is not the bake's Galatasaray less the men who moved
+  FAIL: Gaziantep FK in the world is not the bake's Gaziantep FK less the men who moved
+  FAIL: Genk in the world is not the bake's Genk less the men who moved
+  FAIL: Genoa in the world is not the bake's Genoa less the men who moved
+  FAIL: Gent in the world is not the bake's Gent less the men who moved
+  FAIL: Gençlerbirliği in the world is not the bake's Gençlerbirliği less the men who moved
+  FAIL: Getafe in the world is not the bake's Getafe less the men who moved
+  FAIL: Gil Vicente in the world is not the bake's Gil Vicente less the men who moved
+  FAIL: Girona in the world is not the bake's Girona less the men who moved
+  FAIL: Gladbach in the world is not the bake's Gladbach less the men who moved
+  FAIL: Go Ahead Eagles in the world is not the bake's Go Ahead Eagles less the men who moved
+  FAIL: Grasshopper in the world is not the bake's Grasshopper less the men who moved
+  FAIL: Grazer AK in the world is not the bake's Grazer AK less the men who moved
+  FAIL: Greuther Fürth in the world is not the bake's Greuther Fürth less the men who moved
+  FAIL: Groningen in the world is not the bake's Groningen less the men who moved
+  FAIL: Grêmio in the world is not the bake's Grêmio less the men who moved
+  FAIL: Guadalajara in the world is not the bake's Guadalajara less the men who moved
+  FAIL: Göztepe in the world is not the bake's Göztepe less the men who moved
+  FAIL: Hajduk Split in the world is not the bake's Hajduk Split less the men who moved
+  FAIL: Hamburg in the world is not the bake's Hamburg less the men who moved
+  FAIL: Hannover 96 in the world is not the bake's Hannover 96 less the men who moved
+  FAIL: Hartberg in the world is not the bake's Hartberg less the men who moved
+  FAIL: Heerenveen in the world is not the bake's Heerenveen less the men who moved
+  FAIL: Heidenheim in the world is not the bake's Heidenheim less the men who moved
+  FAIL: Hertha BSC in the world is not the bake's Hertha BSC less the men who moved
+  FAIL: Hibernian in the world is not the bake's Hibernian less the men who moved
+  FAIL: Hoffenheim in the world is not the bake's Hoffenheim less the men who moved
+  FAIL: Holstein Kiel in the world is not the bake's Holstein Kiel less the men who moved
+  FAIL: Houston Dynamo in the world is not the bake's Houston Dynamo less the men who moved
+  FAIL: Hull City in the world is not the bake's Hull City less the men who moved
+  FAIL: Inter Miami in the world is not the bake's Inter Miami less the men who moved
+  FAIL: Inter Milan in the world is not the bake's Inter Milan less the men who moved
+  FAIL: Internacional in the world is not the bake's Internacional less the men who moved
+  FAIL: Ipswich Town in the world is not the bake's Ipswich Town less the men who moved
+  FAIL: Juventus in the world is not the bake's Juventus less the men who moved
+  FAIL: Kaiserslautern in the world is not the bake's Kaiserslautern less the men who moved
+  FAIL: Karlsruhe in the world is not the bake's Karlsruhe less the men who moved
+  FAIL: Kasımpaşa in the world is not the bake's Kasımpaşa less the men who moved
+  FAIL: Kilmarnock in the world is not the bake's Kilmarnock less the men who moved
+  FAIL: Kocaelispor in the world is not the bake's Kocaelispor less the men who moved
+  FAIL: Konyaspor in the world is not the bake's Konyaspor less the men who moved
+  FAIL: Kortrijk in the world is not the bake's Kortrijk less the men who moved
+  FAIL: Köln in the world is not the bake's Köln less the men who moved
+  FAIL: LA Galaxy in the world is not the bake's LA Galaxy less the men who moved
+  FAIL: LAFC in the world is not the bake's LAFC less the men who moved
+  FAIL: LASK in the world is not the bake's LASK less the men who moved
+  FAIL: La Louvière in the world is not the bake's La Louvière less the men who moved
+  FAIL: Las Palmas in the world is not the bake's Las Palmas less the men who moved
+  FAIL: Lausanne-Sport in the world is not the bake's Lausanne-Sport less the men who moved
+  FAIL: Lazio in the world is not the bake's Lazio less the men who moved
+  FAIL: Le Havre in the world is not the bake's Le Havre less the men who moved
+  FAIL: Lecce in the world is not the bake's Lecce less the men who moved
+  FAIL: Leeds United in the world is not the bake's Leeds United less the men who moved
+  FAIL: Leganés in the world is not the bake's Leganés less the men who moved
+  FAIL: Lens in the world is not the bake's Lens less the men who moved
+  FAIL: Levante in the world is not the bake's Levante less the men who moved
+  FAIL: León in the world is not the bake's León less the men who moved
+  FAIL: Lille in the world is not the bake's Lille less the men who moved
+  FAIL: Lincoln City in the world is not the bake's Lincoln City less the men who moved
+  FAIL: Liverpool in the world is not the bake's Liverpool less the men who moved
+  FAIL: Lorient in the world is not the bake's Lorient less the men who moved
+  FAIL: Lugano in the world is not the bake's Lugano less the men who moved
+  FAIL: Luzern in the world is not the bake's Luzern less the men who moved
+  FAIL: Lyngby in the world is not the bake's Lyngby less the men who moved
+  FAIL: Lyon in the world is not the bake's Lyon less the men who moved
+  FAIL: Mainz in the world is not the bake's Mainz less the men who moved
+  FAIL: Mallorca in the world is not the bake's Mallorca less the men who moved
+  FAIL: Manchester City in the world is not the bake's Manchester City less the men who moved
+  FAIL: Manchester United in the world is not the bake's Manchester United less the men who moved
+  FAIL: Mantova in the world is not the bake's Mantova less the men who moved
+  FAIL: Marseille in the world is not the bake's Marseille less the men who moved
+  FAIL: Mechelen in the world is not the bake's Mechelen less the men who moved
+  FAIL: Metz in the world is not the bake's Metz less the men who moved
+  FAIL: Middlesbrough in the world is not the bake's Middlesbrough less the men who moved
+  FAIL: Millwall in the world is not the bake's Millwall less the men who moved
+  FAIL: Minnesota United in the world is not the bake's Minnesota United less the men who moved
+  FAIL: Modena in the world is not the bake's Modena less the men who moved
+  FAIL: Monaco in the world is not the bake's Monaco less the men who moved
+  FAIL: Monterrey in the world is not the bake's Monterrey less the men who moved
+  FAIL: Montpellier in the world is not the bake's Montpellier less the men who moved
+  FAIL: Monza in the world is not the bake's Monza less the men who moved
+  FAIL: Moreirense in the world is not the bake's Moreirense less the men who moved
+  FAIL: Motherwell in the world is not the bake's Motherwell less the men who moved
+  FAIL: Málaga in the world is not the bake's Málaga less the men who moved
+  FAIL: NEC Nijmegen in the world is not the bake's NEC Nijmegen less the men who moved
+  FAIL: NEOM SC in the world is not the bake's NEOM SC less the men who moved
+  FAIL: Nacional in the world is not the bake's Nacional less the men who moved
+  FAIL: Nantes in the world is not the bake's Nantes less the men who moved
+  FAIL: Napoli in the world is not the bake's Napoli less the men who moved
+  FAIL: Nashville SC in the world is not the bake's Nashville SC less the men who moved
+  FAIL: Necaxa in the world is not the bake's Necaxa less the men who moved
+  FAIL: New England Revolution in the world is not the bake's New England Revolution less the men who moved
+  FAIL: New York City FC in the world is not the bake's New York City FC less the men who moved
+  FAIL: New York Red Bulls in the world is not the bake's New York Red Bulls less the men who moved
+  FAIL: Newcastle in the world is not the bake's Newcastle less the men who moved
+  FAIL: Nice in the world is not the bake's Nice less the men who moved
+  FAIL: Norwich City in the world is not the bake's Norwich City less the men who moved
+  FAIL: Nottingham Forest in the world is not the bake's Nottingham Forest less the men who moved
+  FAIL: Nürnberg in the world is not the bake's Nürnberg less the men who moved
+  FAIL: OB in the world is not the bake's OB less the men who moved
+  FAIL: OFI in the world is not the bake's OFI less the men who moved
+  FAIL: Olympiacos in the world is not the bake's Olympiacos less the men who moved
+  FAIL: Orlando City in the world is not the bake's Orlando City less the men who moved
+  FAIL: Osasuna in the world is not the bake's Osasuna less the men who moved
+  FAIL: Osijek in the world is not the bake's Osijek less the men who moved
+  FAIL: PAOK in the world is not the bake's PAOK less the men who moved
+  FAIL: PEC Zwolle in the world is not the bake's PEC Zwolle less the men who moved
+  FAIL: PSG in the world is not the bake's PSG less the men who moved
+  FAIL: PSV in the world is not the bake's PSV less the men who moved
+  FAIL: Pachuca in the world is not the bake's Pachuca less the men who moved
+  FAIL: Paderborn in the world is not the bake's Paderborn less the men who moved
+  FAIL: Padova in the world is not the bake's Padova less the men who moved
+  FAIL: Palermo in the world is not the bake's Palermo less the men who moved
+  FAIL: Palmeiras in the world is not the bake's Palmeiras less the men who moved
+  FAIL: Panathinaikos in the world is not the bake's Panathinaikos less the men who moved
+  FAIL: Paris FC in the world is not the bake's Paris FC less the men who moved
+  FAIL: Parma in the world is not the bake's Parma less the men who moved
+  FAIL: Philadelphia Union in the world is not the bake's Philadelphia Union less the men who moved
+  FAIL: Pisa in the world is not the bake's Pisa less the men who moved
+  FAIL: Portland Timbers in the world is not the bake's Portland Timbers less the men who moved
+  FAIL: Porto in the world is not the bake's Porto less the men who moved
+  FAIL: Portsmouth in the world is not the bake's Portsmouth less the men who moved
+  FAIL: Preston North End in the world is not the bake's Preston North End less the men who moved
+  FAIL: QPR in the world is not the bake's QPR less the men who moved
+  FAIL: Querétaro in the world is not the bake's Querétaro less the men who moved
+  FAIL: RB Leipzig in the world is not the bake's RB Leipzig less the men who moved
+  FAIL: RB Salzburg in the world is not the bake's RB Salzburg less the men who moved
+  FAIL: Racing Santander in the world is not the bake's Racing Santander less the men who moved
+  FAIL: Rangers in the world is not the bake's Rangers less the men who moved
+  FAIL: Rapid Wien in the world is not the bake's Rapid Wien less the men who moved
+  FAIL: Rayo Vallecano in the world is not the bake's Rayo Vallecano less the men who moved
+  FAIL: Real Betis in the world is not the bake's Real Betis less the men who moved
+  FAIL: Real Madrid in the world is not the bake's Real Madrid less the men who moved
+  FAIL: Real Oviedo in the world is not the bake's Real Oviedo less the men who moved
+  FAIL: Real Salt Lake in the world is not the bake's Real Salt Lake less the men who moved
+  FAIL: Real Sociedad in the world is not the bake's Real Sociedad less the men who moved
+  FAIL: Red Bull Bragantino in the world is not the bake's Red Bull Bragantino less the men who moved
+  FAIL: Red Star FC in the world is not the bake's Red Star FC less the men who moved
+  FAIL: Reims in the world is not the bake's Reims less the men who moved
+  FAIL: Rennes in the world is not the bake's Rennes less the men who moved
+  FAIL: Ried in the world is not the bake's Ried less the men who moved
+  FAIL: Rijeka in the world is not the bake's Rijeka less the men who moved
+  FAIL: Rio Ave in the world is not the bake's Rio Ave less the men who moved
+  FAIL: Rizespor in the world is not the bake's Rizespor less the men who moved
+  FAIL: Roma in the world is not the bake's Roma less the men who moved
+  FAIL: Saint-Étienne in the world is not the bake's Saint-Étienne less the men who moved
+  FAIL: Sampdoria in the world is not the bake's Sampdoria less the men who moved
+  FAIL: Samsunspor in the world is not the bake's Samsunspor less the men who moved
+  FAIL: San Diego FC in the world is not the bake's San Diego FC less the men who moved
+  FAIL: San Jose Earthquakes in the world is not the bake's San Jose Earthquakes less the men who moved
+  FAIL: Santos in the world is not the bake's Santos less the men who moved
+  FAIL: Santos Laguna in the world is not the bake's Santos Laguna less the men who moved
+  FAIL: Sassuolo in the world is not the bake's Sassuolo less the men who moved
+  FAIL: Schalke 04 in the world is not the bake's Schalke 04 less the men who moved
+  FAIL: Seattle Sounders in the world is not the bake's Seattle Sounders less the men who moved
+  FAIL: Servette in the world is not the bake's Servette less the men who moved
+  FAIL: Sevilla in the world is not the bake's Sevilla less the men who moved
+  FAIL: Sheffield United in the world is not the bake's Sheffield United less the men who moved
+  FAIL: Sint-Truiden in the world is not the bake's Sint-Truiden less the men who moved
+  FAIL: Sion in the world is not the bake's Sion less the men who moved
+  FAIL: Slaven Belupo in the world is not the bake's Slaven Belupo less the men who moved
+  FAIL: Southampton in the world is not the bake's Southampton less the men who moved
+  FAIL: Sparta Rotterdam in the world is not the bake's Sparta Rotterdam less the men who moved
+  FAIL: Sporting CP in the world is not the bake's Sporting CP less the men who moved
+  FAIL: Sporting Gijón in the world is not the bake's Sporting Gijón less the men who moved
+  FAIL: St Johnstone in the world is not the bake's St Johnstone less the men who moved
+  FAIL: St. Gallen in the world is not the bake's St. Gallen less the men who moved
+  FAIL: St. Louis City in the world is not the bake's St. Louis City less the men who moved
+  FAIL: St. Pauli in the world is not the bake's St. Pauli less the men who moved
+  FAIL: Standard Liège in the world is not the bake's Standard Liège less the men who moved
+  FAIL: Stoke City in the world is not the bake's Stoke City less the men who moved
+  FAIL: Strasbourg in the world is not the bake's Strasbourg less the men who moved
+  FAIL: Sturm Graz in the world is not the bake's Sturm Graz less the men who moved
+  FAIL: Stuttgart in the world is not the bake's Stuttgart less the men who moved
+  FAIL: Sunderland in the world is not the bake's Sunderland less the men who moved
+  FAIL: Swansea City in the world is not the bake's Swansea City less the men who moved
+  FAIL: São Paulo in the world is not the bake's São Paulo less the men who moved
+  FAIL: Südtirol in the world is not the bake's Südtirol less the men who moved
+  FAIL: Telstar in the world is not the bake's Telstar less the men who moved
+  FAIL: Thun in the world is not the bake's Thun less the men who moved
+  FAIL: Tigres UANL in the world is not the bake's Tigres UANL less the men who moved
+  FAIL: Tijuana in the world is not the bake's Tijuana less the men who moved
+  FAIL: Toluca in the world is not the bake's Toluca less the men who moved
+  FAIL: Torino in the world is not the bake's Torino less the men who moved
+  FAIL: Toronto FC in the world is not the bake's Toronto FC less the men who moved
+  FAIL: Tottenham in the world is not the bake's Tottenham less the men who moved
+  FAIL: Toulouse in the world is not the bake's Toulouse less the men who moved
+  FAIL: Trabzonspor in the world is not the bake's Trabzonspor less the men who moved
+  FAIL: Twente in the world is not the bake's Twente less the men who moved
+  FAIL: Udinese in the world is not the bake's Udinese less the men who moved
+  FAIL: Union Berlin in the world is not the bake's Union Berlin less the men who moved
+  FAIL: Union Saint-Gilloise in the world is not the bake's Union Saint-Gilloise less the men who moved
+  FAIL: Utrecht in the world is not the bake's Utrecht less the men who moved
+  FAIL: Valencia in the world is not the bake's Valencia less the men who moved
+  FAIL: Vancouver Whitecaps in the world is not the bake's Vancouver Whitecaps less the men who moved
+  FAIL: Vasco da Gama in the world is not the bake's Vasco da Gama less the men who moved
+  FAIL: Venezia in the world is not the bake's Venezia less the men who moved
+  FAIL: Verona in the world is not the bake's Verona less the men who moved
+  FAIL: Viborg FF in the world is not the bake's Viborg FF less the men who moved
+  FAIL: Vicenza in the world is not the bake's Vicenza less the men who moved
+  FAIL: Villarreal in the world is not the bake's Villarreal less the men who moved
+  FAIL: Vitória in the world is not the bake's Vitória less the men who moved
+  FAIL: Vitória Guimarães in the world is not the bake's Vitória Guimarães less the men who moved
+  FAIL: Volos in the world is not the bake's Volos less the men who moved
+  FAIL: Watford in the world is not the bake's Watford less the men who moved
+  FAIL: Werder Bremen in the world is not the bake's Werder Bremen less the men who moved
+  FAIL: West Brom in the world is not the bake's West Brom less the men who moved
+  FAIL: West Ham in the world is not the bake's West Ham less the men who moved
+  FAIL: Westerlo in the world is not the bake's Westerlo less the men who moved
+  FAIL: Willem II in the world is not the bake's Willem II less the men who moved
+  FAIL: Wolfsburg in the world is not the bake's Wolfsburg less the men who moved
+  FAIL: Wolves in the world is not the bake's Wolves less the men who moved
+  FAIL: Wrexham in the world is not the bake's Wrexham less the men who moved
+  FAIL: Young Boys in the world is not the bake's Young Boys less the men who moved
+  FAIL: Zulte Waregem in the world is not the bake's Zulte Waregem less the men who moved
+   the real data: the bake's 4401, less 1 moved by a newer squad list (Ryan Fraser from Southampton), plus 713 in 2 generated leagues (A-League Men 310, Russian Premier League 403) = 5113
+2) A thirty three year old declines, a twenty two year old does not
+   10 clubs x 24 seasons, mean rating change per season by the age he turned
+   outfield  18:2.61 19:2.43 20:1.94 21:1.60 22:1.23 23:0.93 24:0.60 25:0.59 26:0.42 27:0.19 28:0.17 29:0.13 30:-0.47 31:-1.05 32:-1.47 33:-1.78 34:-2.36 35:-2.84 36:-3.31 37:-4.32 38:-5.21
+   keepers   20:1.31 21:1.39 22:0.73 23:0.56 24:0.37 25:0.31 26:0.25 27:0.20 28:0.04 29:0.08 30:0.00 31:-0.23 32:-0.50 33:-0.72 34:-1.09 35:-1.23 36:-1.35 37:-1.78
+   369 retirements: youngest 32, median 37, oldest 42
+3) A retired player never comes back
+   18 retired names, 107 market checks, none reappeared
+   2026:gone 2027:gone 2028:gone 2029:gone 2030:gone 2031:gone 2032:gone 2033:gone 2034:gone 2035:gone 2036:gone 2037:gone 2038:gone
+4) Twenty seasons out, the league is still a league
+   10 careers x 20 seasons, champions: Manchester City 24, Everton 19, Arsenal 14, Manchester United 13, Coventry City 12, Liverpool 12
+   established clubs took 41% of the titles
+   my squad: size 23.6 (min 21), average age 28.3, oldest 36.4 (max 40), XI 76.3
+   world + 0y: 5113 players, mean age 25.8, club XI mean 69.9 (min 56.5, max 88.9), oldest club man median 32
+   world + 5y: 5113 players, mean age 25.3, club XI mean 70.3 (min 57.1, max 90.5), oldest club man median 31
+   world +10y: 5113 players, mean age 25.3, club XI mean 70.5 (min 57.1, max 89.5), oldest club man median 32
+   world +20y: 5113 players, mean age 25.3, club XI mean 70.7 (min 56.9, max 90.6), oldest club man median 31
+   world +30y: 5113 players, mean age 25.4, club XI mean 70.8 (min 58.1, max 92.2), oldest club man median 31
+5) Balance did not move: ticking clock against a frozen one
+   40 careers x 12 seasons per arm (480 league seasons each)
+   frozen clock : 2.62 goals a game, champion on 82.5 pts, me on 56.7 pts finishing 10.8
+   ticking clock: 2.62 goals a game, champion on 84.8 pts, me on 57.7 pts finishing 11.2
+   gap: 0.01 goals a game, 2.3 champion points, 1.0 of my points
+6) Real names become made up ones gracefully, and it is labelled
+   share of players who are real footballers:
+     + 0y  first teams 100.0%  whole squads 100.0%
+     + 1y  first teams 88.3%  whole squads 83.4%
+     + 3y  first teams 63.7%  whole squads 56.7%
+     + 5y  first teams 43.7%  whole squads 38.0%
+     +10y  first teams 11.3%  whole squads 11.5%
+     +15y  first teams 0.7%  whole squads 1.8%
+     +20y  first teams 0.0%  whole squads 0.1%
+  FAIL: five years on, most of a first team is already invented
+  FAIL: ten years on there is nothing recognisable left at all
+   Real Madrid five years on: 20/30 of the squad are still real players
+   12802 made up players checked across three projections, none wearing a real name
+   4142 distinct made up names in the 2036 world
+   season 11 of a Liverpool save (2036-37 world): 20/26 made up in the projected squad, 4097/4667 on the market
+   4 screens carry the labelling
+7) The era menu is exactly what the owner asked for and the data supports
+   5 era(s): 2026-27, 2020-21, 2015-16, 2010-11, 2005-06
+   2020-21: historical bake, 1774 real players across 98 clubs
+   2015-16: historical bake, 1659 real players across 98 clubs
+   2010-11: historical bake, 1751 real players across 98 clubs
+   2005-06: historical bake, 1727 real players across 98 clubs
+   2026-27  Real players, made up youth fill gaps  |  Real data: every real player has his real name, age and value as of August 2026. Thin squa...
+   2020-21  Real players, made up youth fill gaps  |  Real data. 1774 real players with their real 2020 ages and values, all 98 clubs of the 202...
+   2015-16  Real players, made up youth fill gaps  |  Real data. 1659 real players with their real 2015 ages and values, all 98 clubs of the 201...
+   2010-11  Real players, made up youth fill gaps  |  Real data. 1751 real players with their real 2010 ages and values, all 98 clubs of the 201...
+   2005-06  Real players, made up youth fill gaps  |  Real data. 1727 real players with their real 2005 ages and values, all 98 clubs of the 200...
+   2026-27: XI 88, 0 made up players in the squad
+8) A save from before the clock existed still opens and still works
+   repaired to 2029-30, played 39 entries, rolled on to 2030-31
+9) Copy check
+   12/12 files clean
+
+353 FAILURES
