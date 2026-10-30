@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+shard1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+shard2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+shard3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+sweepWeight: node scripts/sweepWeight.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

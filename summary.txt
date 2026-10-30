@@ -1,0 +1,10 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+tsc exit=0 66s | 
+shard2 exit=0 250s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+simAccessibility exit=0 0s | simAccessibility: all green
+shard1 exit=0 269s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+sweepWeight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+playHomeFold exit=0 29s | playHomeFold: green. The first thing on the page is something to play.
+shard3 exit=0 281s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
