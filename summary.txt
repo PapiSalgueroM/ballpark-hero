@@ -1,0 +1,2 @@
+tsc exit=0 72s | 
+m1always exit=1 84s | playFirstVisitDialogs: RED. 3 bar lines: /club-manager#club-picked 320x640, /club-manager#club-picked 390x844, /club-manager#club-picked 1280x900
