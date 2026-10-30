@@ -265,6 +265,8 @@ async function spendAPoint(page, row, tag, w) {
   await wait(400);
   const panel = await page.locator('[data-gm-desk="panel"]').first().boundingBox();
   console.log(`  MEASURED ${tag}: the GM level panel is ${panel ? Math.round(panel.height) : 'no'} px tall at ${w}`);
+  const xpH = await page.evaluate(() => { const el = document.querySelector('[data-gm-xp-desk]'); return el ? Math.round(el.getBoundingClientRect().height) : null; });
+  console.log(`  MEASURED ${tag}: the GM level screen is ${xpH ?? 'no'} px tall at ${w}`);
   if (w === 390) say(!!panel && panel.height <= 1.5 * 844, `${tag}: the GM level panel fits one and a half screens at 390 (${panel ? Math.round(panel.height) : 0}px)`);
   await shot(page, `${row.sport}-${w}-gm-level`);
   await screenChecks(page, `${tag} GM level`);
@@ -349,6 +351,9 @@ async function walkA(row, w, h) {
   await careerBox(page, 'Career').click();
   await page.locator('[data-gm-desk="panel"]').first().waitFor({ timeout: 20000 });
   await wait(500);
+  /* Round 1561 (finding 9): the landed screen's own height, the number its holding box's floor is set from */
+  const careerH = await page.evaluate(() => { const el = document.querySelector('[data-gm-career]'); return el ? Math.round(el.getBoundingClientRect().height) : null; });
+  console.log(`  MEASURED ${tag}: the Career screen is ${careerH ?? 'no'} px tall at ${w}`);
   await shot(page, `${row.sport}-${w}-career`);
   await screenChecks(page, `${tag} career`);
   await back(page);
