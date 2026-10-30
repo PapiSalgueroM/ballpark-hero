@@ -1,0 +1,9 @@
+# Release BT kit: 1 of the 5 request lines of Release BS's rc-BJb.txt (rBSg/.tmp-fx/bs), the lines of the BT areas (the US My Careers, the Front Offices, Soccer Connections and the daily save shape, Build Your XI and the player search box, What's New, the guides and search index, the weight rows) and the setup lines before them; 4 line(s) outside those areas left out: matchcentre stoppage motion plans.
+# Release BS kit: 5 of the 6 request lines of Release BR's rc-BJb.txt (rBRg/.tmp-fx/br), the lines of the BS areas (Soccer Career, Club Manager and the manager games on its engine, Player Bingo, Conquest, Stat and Draft Detective, the US My Career save notice, What's New, the polls, the guide intro) and the setup lines before them; 1 line(s) outside those areas left out: matchscreen.
+# Release BJ, Round 1340 (Club Manager match day screens: home side first, whole names, the Stats tile), merged in
+# Round BJG as m2 20fa77a6 (first parent c06f27b5). simCmMatchDay section 7 compares the round's five files at
+# MATCHDAY_BASE: on the final tree that is the tree WITHOUT Round 1340 (treeWithoutMerge 20fa77a6 c06f27b5; it forms,
+# keeping the head's What's New). Proven per merge on runner bjg-m2 (MATCHDAY_BASE=c06f27b5): matchday 0 (918
+# matches), all eight controls 1, simMatchScreen, simCmMatchCentre, simCmStoppageTime, simLiveSimMotion,
+# simManagerMatchPlans 0. The walks are rc-BJb2.
+vitest-1340: node_modules/.bin/vitest run src/lib/cmMatchDisplay.test.ts src/test/clubManagerVarScreen.test.tsx src/test/cmReportBoardWord.test.tsx src/test/liveSimMotion.test.tsx src/test/managerHalftimeLineups.test.tsx src/test/managerScorerMarks.test.tsx src/test/pitchOwnGoal.test.tsx --testTimeout=300000 --hookTimeout=120000
