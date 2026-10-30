@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
+roster-head: export CI=1 SIM_NETWORK=offline CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CORE_REF=HEAD ENGINES=chromium CM_OWN_ROSTER_OUT="$RC_OUT/roster-head" FREE_KICK_FONT_CACHE=/tmp/fk-head && node .rc/x/rosterInstalled.mjs && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubDetailCurrentRoster.mjs
+weight-main: git worktree add -f /tmp/wm 158969218 -q && ln -s "$PWD/node_modules" /tmp/wm/node_modules && cd /tmp/wm && npm run build > /tmp/wm-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4176 > /tmp/wm-serve.log 2>&1 &) && sleep 5 && BASE=http://localhost:4176 SWEEP_BASE=http://localhost:4176 ENGINES=chromium node scripts/sweepWeight.mjs; s=$?; tail -2 /tmp/wm-build.log; exit $s
