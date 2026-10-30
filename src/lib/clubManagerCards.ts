@@ -24,6 +24,7 @@ import { mineSheets, rowKey } from '@/lib/clubManagerLeagueBook';
 import { BOOK_FULL_SHARE } from '@/lib/clubManagerLeagueBoards';
 import { averageOf, pastOf } from '@/lib/clubManagerCareerLines';
 import { worldYearOf } from '@/lib/clubManagerCalendar';
+import { seasonLabel } from '@/lib/clubManagerEras';
 import type { SeasonHistoryMetric } from '@/lib/soccerCareerSeasonHistory';
 
 /** What a link opens: one of my men by squad id, or a man of another club by name, position and club. */
@@ -83,8 +84,7 @@ export const isBack = (pos: Position): boolean => pos === 'GK' || groupOf(pos) =
 
 /** "2026-27" for a season number of this save. */
 export function seasonLabelOf(state: Pick<CareerState, 'startYear'>, season: number): string {
-  const y = worldYearOf({ startYear: state.startYear, season });
-  return `${y}-${String((y + 1) % 100).padStart(2, '0')}`;
+  return seasonLabel(worldYearOf({ startYear: state.startYear, season }));
 }
 
 /** A past row's numbers in the shared metric shape. */
