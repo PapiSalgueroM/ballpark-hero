@@ -1,0 +1,3 @@
+simManagers: node scripts/simManagers.mjs
+ctl-takeover: SIM_MANAGERS_CONTROL=takeover node scripts/simManagers.mjs
+ctl-namedsack: SIM_MANAGERS_CONTROL=namedsack node scripts/simManagers.mjs
