@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-ca: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-nlz: node_modules/.bin/vitest run src/components/nhl-front-office/NhlLazyDesk.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNhlRosterLimit-all: NHL_ROSTER_CONTROL=all node scripts/simNhlRosterLimit.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simGmCareer-nhl: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+simGmCareer-nhl-extradraw: SIM_GM_CAREER_SPORT=nhl SIM_GM_CAREER_CONTROL=extradraw node scripts/simGmCareer.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+fobcheck: node scripts/controlFrontOfficeBoard.mjs check
