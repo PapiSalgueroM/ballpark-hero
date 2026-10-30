@@ -1,0 +1,3 @@
+m2-noretnames exit=0 263s | simFreeAgents: 1 failure(s)
+m3-notrimpool exit=0 266s | simFreeAgents: all sections passed
+m5-mathrandom exit=0 388s | simCmFreeAgencyFleet: green, all three sections held

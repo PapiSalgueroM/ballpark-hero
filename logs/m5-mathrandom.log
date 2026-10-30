@@ -1,0 +1,10 @@
+hotseat clean exit 0
+MUT mathrandom applied (1 edit)
+hotseat mut exit 0
+HOTSEAT_SAME
+m5 fa exit 1
+   ok   signing a real free agent to sell him on does not pay: 4 percent of sales at a profit (ceiling 25), -0.08m a sale
+simFreeAgents: 1 failure(s)
+m5 fleet exit 0
+simCmFreeAgencyFleet: 12 careers to season 9; 628 men left a squad, 2490 summer checks; lost 0, twice 0; 127 retired off the list (0 summers unseen); list size at the end median 50, its median age median 24; old saves skipped
+simCmFreeAgencyFleet: green, all three sections held
