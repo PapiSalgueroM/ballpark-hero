@@ -1,0 +1,25 @@
+#!serial
+ledger-make-base: git worktree add -f /tmp/base 14a9af704 >/dev/null 2>&1; node .rc/x/ledgerProbe.mjs make /tmp/base /tmp/base-saves.json
+ledger-base-on-base: node .rc/x/ledgerProbe.mjs load /tmp/base /tmp/base-saves.json
+ledger-base-on-head: node .rc/x/ledgerProbe.mjs load . /tmp/base-saves.json
+ledger-make-head: node .rc/x/ledgerProbe.mjs make . /tmp/head-saves.json
+ledger-head-on-head: node .rc/x/ledgerProbe.mjs load . /tmp/head-saves.json
+m-youth-lr: node .rc/x/mut1600.mjs youth && node scripts/simCmLevelReads.mjs; s=$?; git checkout -- src scripts; exit $s
+m-youth-vitest: node .rc/x/mut1600.mjs youth && node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/lib/clubManagerTrajectory.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+m-youth-yp: node .rc/x/mut1600.mjs youth && node scripts/simYouthPadding.mjs; s=$?; git checkout -- src scripts; exit $s
+m-youth-ca: node .rc/x/mut1600.mjs youth && node scripts/simCareerAcademy.mjs; s=$?; git checkout -- src scripts; exit $s
+m-nolv-lr: node .rc/x/mut1600.mjs nolv && node scripts/simCmLevelReads.mjs; s=$?; git checkout -- src scripts; exit $s
+m-faview-dv: node .rc/x/mut1600.mjs faview && node scripts/simCmDailyView.mjs; s=$?; git checkout -- src scripts; exit $s
+m-faview-dd: node .rc/x/mut1600.mjs faview && node scripts/simDailyDeals.mjs; s=$?; git checkout -- src scripts; exit $s
+m-faview-hs: node .rc/x/mut1600.mjs faview && node scripts/simManagerHotSeat.mjs; s=$?; git checkout -- src scripts; exit $s
+m-endday-dl: node .rc/x/mut1600.mjs endday && node scripts/simDeadlineDay.mjs; s=$?; git checkout -- src scripts; exit $s
+m-endday-dv: node .rc/x/mut1600.mjs endday && node scripts/simCmDailyView.mjs; s=$?; git checkout -- src scripts; exit $s
+m-endday-dd: node .rc/x/mut1600.mjs endday && node scripts/simDailyDeals.mjs; s=$?; git checkout -- src scripts; exit $s
+m-bid-dl: node .rc/x/mut1600.mjs bid && node scripts/simDeadlineDay.mjs; s=$?; git checkout -- src scripts; exit $s
+m-bid-dv: node .rc/x/mut1600.mjs bid && node scripts/simCmDailyView.mjs; s=$?; git checkout -- src scripts; exit $s
+m-bid-dd: node .rc/x/mut1600.mjs bid && node scripts/simDailyDeals.mjs; s=$?; git checkout -- src scripts; exit $s
+m-pointsfirst-e2010: node .rc/x/mut1600.mjs pointsfirst && node scripts/simEra2010.mjs; s=$?; git checkout -- src scripts; exit $s
+m-noeraread-e2015: node .rc/x/mut1600.mjs noeraread && node scripts/simEra2015.mjs; s=$?; git checkout -- src scripts; exit $s
+m-noshift-e2010: node .rc/x/mut1600.mjs noshift && node scripts/simEra2010.mjs; s=$?; git checkout -- src scripts; exit $s
+m-noshift-lr: node .rc/x/mut1600.mjs noshift && node scripts/simCmLevelReads.mjs; s=$?; git checkout -- src scripts; exit $s
+clean-after: git status --short src scripts | head -5; node scripts/simCmLevelReads.mjs
