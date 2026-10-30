@@ -568,3 +568,49 @@ describe('Round 1570: the plaque says the jersey and its counts in the card\'s o
     }
   });
 });
+
+/* Release BU (the lead's L3, the 1570 x 1557 seam): a loaded NBA save whose international block the repair
+   changes. The sport's intl face is held behind a gate the test opens, and its repair is planted to change a
+   field the plaque reads, so the unrepaired plaque and the repaired one differ. Without the board's hold the
+   keep effect writes the unrepaired plaque while the repair is pending and replaces it after (two writes). */
+describe('Release BU: a loaded NBA save waits for its international repair before its plaque goes up', () => {
+  it('writes the wall once, after the repair, and never the unrepaired plaque', async () => {
+    const real = NBA_CAREER_SPORT.intl!;
+    let open!: () => void;
+    const gate = new Promise<void>(resolve => { open = resolve; });
+    const REPAIRED = 'Repaired Plaque Name';
+    const sport: typeof NBA_CAREER_SPORT = {
+      ...NBA_CAREER_SPORT,
+      intl: {
+        ...real,
+        load: async () => {
+          await gate;
+          const face = await real.load();
+          return { ...face, repairOnLoad: c => { face.repairOnLoad(c); c.name = REPAIRED; return true; } };
+        },
+      },
+    };
+    const c = retiredCareer(NBA_CAREER_SPORT, 1571);
+    c.intl = { v: 1, summers: [] };
+    const unrepaired = c.name;
+    expect(unrepaired).not.toBe(REPAIRED);
+    localStorage.setItem(sport.saveKey, JSON.stringify({ c, phase: 'retired', teamQuality: 80, coach: null }));
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    const wallWrites = () => writes.mock.calls.filter(([key]) => key === wallKey(sport))
+      .map(([, value]) => JSON.parse(String(value)) as { entries: HallWallEntry[] });
+    mountBoard(sport);
+    await settle();
+    /* The wall module loads in a tick: a board without the hold has written the unrepaired plaque by now. */
+    await act(async () => { await import('@/lib/usCareerHallWall'); });
+    await settle(); await settle();
+    expect(wallWrites(), 'nothing goes up while the repair is pending').toEqual([]);
+    await act(async () => { open(); await gate; await new Promise(resolve => setTimeout(resolve, 50)); });
+    await waitFor(() => expect(wallWrites().length).toBeGreaterThan(0));
+    await settle();
+    const got = wallWrites();
+    expect(got.length, 'the wall is written once').toBe(1);
+    expect(got[0].entries.map(e => e.name)).toEqual([REPAIRED]);
+    expect(JSON.stringify(got), 'the unrepaired plaque never went up').not.toContain(unrepaired);
+    writes.mockRestore();
+  }, 30000);
+});

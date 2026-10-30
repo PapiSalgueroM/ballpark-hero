@@ -414,8 +414,13 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      version this build does not know is never written over. A refused write throws past setWall, so the
      prompt never says the card stays when the browser did not keep it; until the rules have loaded and the
      plaque is up it says the card goes, which is then true. */
+  /* Release BU (the lead's L3, the 1570 x 1557 seam): a loaded save that carries an international block waits
+     for its repair (the load hunk loads the sport's intl face, repairs a copy and swaps it in). Writing before
+     that put the unrepaired plaque up first, and a restart confirmed inside that window left it there. The hold
+     lifts in the render that holds the face, with the repaired copy when the repair changed anything. */
+  const intlRepairPending = !!sport.intl && (career as { intl?: unknown } | null)?.intl !== undefined && !intl;
   useEffect(() => {
-    if (!sport.hall || !career?.retired || saveFailure) return;
+    if (!sport.hall || !career?.retired || saveFailure || intlRepairPending) return;
     const retired = career, mine = wallKeyOf(career, sport.hall);
     let live = true;
     import('@/lib/usCareerHallWall').then(m => {
@@ -434,7 +439,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       } catch { setWallRefused(mine); /* the career is still on its save, and the prompt keeps saying the card goes */ }
     }).catch(() => { /* a chunk that fails to load: the site's preloadError listener reloads once */ });
     return () => { live = false; };
-  }, [career, sport, saveFailure]);
+  }, [career, sport, saveFailure, intlRepairPending]);
 
   useEffect(() => {
     pendingSave.current = null;
