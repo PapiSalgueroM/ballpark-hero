@@ -53,7 +53,9 @@
         src/data/bingoClubAdditions.json is the generator's output byte for
         byte, the generator refuses nothing (no club he already has under
         another spelling or slash part), and every added club uses the
-        table's own spelling where the table spells it at all.
+        table's own spelling where the table spells it at all, and one the
+        table never spells reads like no table spelling and no club tile
+        (Man City for Manchester City: red).
      7. the fleet: 200 seeds of a seeded Math.random through generateBoard
         and buildDeck on BASE and on the tree. Every criterion's eligibility
         is equal, so the board's tile sequence must be byte identical on all
@@ -152,6 +154,11 @@
                                    keyed entry's) keeps one source in memory:
                                    section 5 red (onesource lands on a Round
                                    1571 club and never reached this check).
+     BINGO_CLUBS_CONTROL=shortname the added "Manchester City" written "Man
+                                   City" in the derived copy section 6's
+                                   spelling checks read: section 6 red (a new
+                                   key that reads like a table spelling or a
+                                   club tile).
      BINGO_CLUBS_CONTROL=touchprev one PREV entry's notes edited in memory:
                                    section 9 red. (Named for PREV, not for a
                                    round, so it moves with PREV.)
@@ -824,16 +831,55 @@ if (CONTROL === 'handedit') {
 }
 if (shipped !== built.text) fail(`${DERIVED} is not the generator's output (run node scripts/genBingoClubAdditions.mjs, never edit it by hand)`);
 const derived = JSON.parse(built.text);
+if (CONTROL === 'shortname') {
+  const a = derived.add.find(x => x.clubs.includes('Manchester City'));
+  if (!a) console.log('   =shortname: no added Manchester City in the derived file (exit 3 by design)');
+  else {
+    a.clubs = a.clubs.map(c => (c === 'Manchester City' ? 'Man City' : c));
+    changed(`${a.n}'s added "Manchester City" written "Man City" (Transfermarkt's short form) in the copy the spelling checks read`);
+  }
+}
 const spellings = new Map();
 for (const r of rows) if (r.club) spellings.set(norm(r.club), r.club);
+/* A new key that reads like a club the table already spells (review 2026-10-30, mutation mancity:
+   Reijnders's "Manchester City" written "Man City" stayed green while his Played for Manchester City
+   move vanished from section 9(c)). The fold: punctuation to spaces, affix words (fc, cf, ac, de and
+   the like) and numbers of two or more digits dropped (a single digit stays: SC Dnipro-1 is not FC
+   Dnipro). Two names are near when the folds hold the same number of words, each equal or a short
+   form of three letters or fewer (same first letter, letters in order: man for manchester, utd for
+   united), or when one is a single word made of the other's initials (PSG). An added club the table
+   never spells must be near no table spelling and no club tile's label; a truly different club that
+   folds near one goes in NOT_NEAR as [added club, the spelling it is not], with its reason. */
+const NOT_NEAR = [];
+const AFFIX_WORDS = new Set(['fc', 'cf', 'afc', 'sc', 'ac', 'as', 'cd', 'sd', 'ud', 'ss', 'ssc', 'sv', 'fk', 'nk', 'sk', 'bk', 'if', 'club', 'de', 'del', 'la', 'the', 'calcio', 'and']);
+const clubWords = s => norm(s).replace(/[^a-z0-9 ]+/g, ' ').split(/ +/).filter(t => t && !/^[0-9]{2,}$/.test(t));
+const looseWords = s => clubWords(s).filter(t => !AFFIX_WORDS.has(t));
+const inOrder = (short, long) => { let i = 0; for (const ch of long) if (ch === short[i]) i += 1; return i === short.length; };
+const shortFor = (a, b) => a.length <= 3 && b.length > a.length && a[0] === b[0] && inOrder(a, b);
+const initials = s => clubWords(s).map(w => w[0]).join('');
+const nearClub = (x, y) => {
+  const a = looseWords(x);
+  const b = looseWords(y);
+  if (!a.length || !b.length) return false;
+  if (a.length === b.length && a.every((w, i) => w === b[i] || shortFor(w, b[i]) || shortFor(b[i], w))) return true;
+  return (a.length === 1 && a[0].length >= 2 && a[0] === initials(y)) || (b.length === 1 && b[0].length >= 2 && b[0] === initials(x));
+};
+const tileLabels = headCriteria.filter(c => c.id.startsWith('club-')).map(c => c.label.replace(/^Played for /, ''));
+const nearTargets = [...new Set([...spellings.values(), ...tileLabels])];
 const unseen = [];
 for (const a of derived.add) {
   for (const club of a.clubs) {
     const table = spellings.get(norm(club));
     if (table && table !== club) fail(`${a.n}: "${club}" is spelled "${table}" in the table`);
-    if (!table) unseen.push(`${a.n}: ${club}`);
+    if (table) continue;
+    unseen.push(`${a.n}: ${club}`);
+    for (const t of nearTargets) {
+      if (!nearClub(club, t) || NOT_NEAR.some(([x, y]) => x === club && y === t)) continue;
+      fail(`${a.n}: "${club}" is spelled nowhere in the table but reads like "${t}" (${tileLabels.includes(t) ? 'a club tile' : 'a table spelling'}): use the table's spelling, or name the pair in NOT_NEAR if they are different clubs`);
+    }
   }
 }
+console.log(`   near spellings: ${unseen.length} new keys held against ${nearTargets.length} table spellings and club tile labels (${tileLabels.length} tiles), ${NOT_NEAR.length} pairs in NOT_NEAR`);
 console.log(`   ${derived.add.length} men, ${derived.add.reduce((n, a) => n + a.clubs.length, 0)} added clubs; clubs the fixture never spells (new keys, printed): ${unseen.length}${unseen.length ? ': ' + unseen.join('; ') : ''}`);
 
 /* ---------------------------------------------------------------- 7 */
