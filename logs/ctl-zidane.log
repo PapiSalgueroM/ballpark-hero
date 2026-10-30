@@ -1,0 +1,21 @@
+CONN_CONTROL=zidane: the boards were changed; this run must end red
+1) no group claims the present
+   0 present tense, unstamped season or unheld recent year labels; 5 recent year groups owed to part B
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   2 watches over 31 men about to join a list
+  FAIL: puzzle-1: Zinedine Zidane in "Over 100 Premier League assists" is contradicted by the record
+   26 squads, 1 lists, 47 ledgered groups, 167 stamped groups, 1192 members confirmed, 74 rebuilt boards
+4) one right answer: the cross check over every board
+  FAIL: puzzle-1 | second-fit | Zinedine Zidane | Won the Ballon d'Or | listed under Over 100 Premier League assists, so the board has two right answers
+  FAIL: puzzle-1 | not-a-member | Zinedine Zidane | Over 100 Premier League assists
+   1028 of 1304 groups judged; members 3521 judged (591 unknown), other tiles 10636 judged (1700 unknown)
+   23 findings: 21 adjudicated, 0 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   262 groups nothing checks yet (ceiling 262); part B ledgers them
+   539 members of judged groups the record cannot place (ceiling 539); a ledger fact or a swap brings it down
+6) the shipped file is the copy of the live table (scripts/data/connectionsLiveSnapshot.json)
+   326 file boards, 326 live rows (read only, 2026-10-30 08:26 EDT, after Round 1565...), 0 boards differ
+
+simConnectionsFacts: 3 failures

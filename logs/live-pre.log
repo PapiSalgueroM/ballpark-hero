@@ -1,0 +1,403 @@
+CONN_LIVE: checking 326 rows of the live table export, not the shipped file
+1) no group claims the present
+  FAIL: puzzle-89: "Played for AC Milan (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-91: "Played in the 2022 World Cup Final" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-95: "Played for Napoli (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-97: "Played for Borussia Dortmund (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-99: "Played for Juventus (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-108: "Won the Carabao Cup (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-113: "Won the Scudetto with AC Milan (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-119: "Played for PSG (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-127: "Premier League Golden Boot (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-141: "Won 2024 Euros with Spain" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-149: "Won the 2022 World Cup with Argentina" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+   11 present tense, unstamped season or unheld recent year labels; 0 recent year groups owed to part B
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   2 watches over 31 men about to join a list
+  FAIL: puzzle-2: "From Brazil" on the board is not the group the ledger checked
+  FAIL: puzzle-8: "Played for both Manchester clubs" on the board is not the group the ledger checked
+  FAIL: puzzle-13: the ledger holds "From Belgium" and the board has no such group
+  FAIL: puzzle-16: "Played their entire career at one club" on the board is not the group the ledger checked
+  FAIL: puzzle-18: "From Uruguay" on the board is not the group the ledger checked
+  FAIL: puzzle-26: the ledger holds "Played for both Barcelona and Real Madrid" and the board has no such group
+  FAIL: puzzle-28: "Played for Sevilla" on the board is not the group the ledger checked
+  FAIL: puzzle-28: the ledger holds "Won the 2002 World Cup with Brazil" and the board has no such group
+  FAIL: puzzle-38: "Played for Villarreal" on the board is not the group the ledger checked
+  FAIL: puzzle-43: the ledger holds "Won the 2002 World Cup with Brazil" and the board has no such group
+  FAIL: puzzle-55: the ledger holds "Played for both Manchester clubs" and the board has no such group
+  FAIL: puzzle-59: "Won the MLS Cup" on the board is not the group the ledger checked
+  FAIL: puzzle-64: "Won the Ballon d'Or in the 2000s" on the board is not the group the ledger checked
+  FAIL: puzzle-65: "From Côte d'Ivoire" on the board is not the group the ledger checked
+  FAIL: puzzle-68: "From Mali" on the board is not the group the ledger checked
+  FAIL: puzzle-70: "From Georgia" on the board is not the group the ledger checked
+  FAIL: puzzle-81: "From Nigeria" on the board is not the group the ledger checked
+  FAIL: puzzle-81: the ledger holds "Played for both Real Madrid and Atlético Madrid" and the board has no such group
+  FAIL: puzzle-90: "Won the Ballon d'Or as a midfielder" on the board is not the group the ledger checked
+  FAIL: puzzle-92: the ledger holds "From Egypt" and the board has no such group
+  FAIL: puzzle-92: "Played for both Barcelona and Atlético Madrid" on the board is not the group the ledger checked
+  FAIL: puzzle-97: "From Georgia" on the board is not the group the ledger checked
+  FAIL: puzzle-103: "Played for both Lyon and PSG" on the board is not the group the ledger checked
+  FAIL: puzzle-109: the ledger holds "Played for both Real Madrid and Atlético Madrid" and the board has no such group
+  FAIL: puzzle-113: "Played for both Tottenham and Real Madrid" on the board is not the group the ledger checked
+  FAIL: puzzle-123: "Played for PSG and Chelsea" on the board is not the group the ledger checked
+  FAIL: puzzle-131: "Played for PSG and Manchester City" on the board is not the group the ledger checked
+  FAIL: puzzle-138: "From Guinea" on the board is not the group the ledger checked
+  FAIL: puzzle-138: "Played for Manchester City and Barcelona" on the board is not the group the ledger checked
+  FAIL: puzzle-149: the ledger holds "Played for both Barcelona and Real Madrid" and the board has no such group
+  FAIL: crafted-1005: the ledger holds "Played for Liverpool" and the board has no such group
+  FAIL: crafted-1005: "Won Olympic gold in football" on the board is not the group the ledger checked
+  FAIL: crafted-1007: "Played for Juventus" on the board is not the group the ledger checked
+  FAIL: crafted-1007: "Won the Copa America with Chile" on the board is not the group the ledger checked
+  FAIL: crafted-1008: "Played for Sevilla" on the board is not the group the ledger checked
+  FAIL: crafted-1009: "African Player of the Year winners" on the board is not the group the ledger checked
+  FAIL: crafted-1011: "Played for LA Galaxy" on the board is not the group the ledger checked
+  FAIL: crafted-1012: "Egyptian internationals" on the board is not the group the ledger checked
+  FAIL: crafted-1020: "From Portugal" on the board is not the group the ledger checked
+  FAIL: cx-20260710-05: the ledger holds "Played for both Lyon and PSG" and the board has no such group
+  FAIL: cx-20260710-09: "Played for Boca Juniors" on the board is not the group the ledger checked
+  FAIL: cx-20260710-11: the ledger holds "Played for both Barcelona and Real Madrid" and the board has no such group
+  FAIL: cx-20260710-12: "Played in the 2010 World Cup final for the Netherlands" on the board is not the group the ledger checked
+  FAIL: puzzle-2: "Scored 50+ goals in a calendar year" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-2: "Captained their country at a World Cup" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-8: "Won the Golden Boot at a World Cup" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-13: Eusébio in "From Portugal" is not confirmed by the record
+  FAIL: puzzle-13: "Won the PFA Player of the Year" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-13: "Scored 170+ Premier League goals" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-16: Edin Džeko in "Played for AS Roma" is not confirmed by the record
+  FAIL: puzzle-16: Daniele De Rossi in "Played for AS Roma" is not confirmed by the record
+  FAIL: puzzle-16: "Won the Golden Ball at a World Cup" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-18: Rafael van der Vaart in "Played for Ajax" is not confirmed by the record
+  FAIL: puzzle-18: "Scored in 2+ European Cup or Champions League finals" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-18: "Won the Premier League with Leicester City" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-20: Davor Šuker in "From Croatia" is not confirmed by the record
+  FAIL: puzzle-20: Robert Prosinečki in "From Croatia" is not confirmed by the record
+  FAIL: puzzle-20: Pablo Aimar in "Played for Valencia" is not confirmed by the record
+  FAIL: puzzle-20: "All-time top scorer for their country" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-20: "Won the Champions League with Porto" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-22: Alan Smith in "Played for Leeds United" is not confirmed by the record
+  FAIL: puzzle-22: Mark Viduka in "Played for Leeds United" is not confirmed by the record
+  FAIL: puzzle-22: Harry Kewell in "Played for Leeds United" is not confirmed by the record
+  FAIL: puzzle-22: "Won the UEFA Cup / Europa League" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-22: "Scored directly from a corner kick" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-26: Dwight Yorke in "Played for Aston Villa" is not confirmed by the record
+  FAIL: puzzle-26: Paul McGrath in "Played for Aston Villa" is not confirmed by the record
+  FAIL: puzzle-26: "Won the FA Cup 3+ times" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-26: "Became their country's all-time top scorer" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-28: Abedi Pelé in "From Ghana" is not confirmed by the record
+  FAIL: puzzle-28: "Scored 180+ Premier League goals" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-28: "Played in both Serie A and Bundesliga" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-38: Gheorghe Hagi in "From Romania" is not confirmed by the record
+  FAIL: puzzle-38: Nicolae Dobrin in "From Romania" is not confirmed by the record
+  FAIL: puzzle-38: "Famous for their rabona" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-43: Peter Odemwingie in "Played for West Brom" is not confirmed by the record
+  FAIL: puzzle-43: Saido Berahino in "Played for West Brom" is not confirmed by the record
+  FAIL: puzzle-43: Jay Rodriguez in "Played for West Brom" is not confirmed by the record
+  FAIL: puzzle-43: James Morrison in "Played for West Brom" is not confirmed by the record
+  FAIL: puzzle-43: Kenny Dalglish in "From Scotland" is not confirmed by the record
+  FAIL: puzzle-43: Denis Law in "From Scotland" is not confirmed by the record
+  FAIL: puzzle-43: Ally McCoist in "From Scotland" is not confirmed by the record
+  FAIL: puzzle-43: Graeme Souness in "From Scotland" is not confirmed by the record
+  FAIL: puzzle-43: "Won the Copa del Rey 5+ times" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-43: "Had a famous moment at the World Cup" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-46: Kai Havertz in "Played for Bayer Leverkusen" is not confirmed by the record
+  FAIL: puzzle-46: Dimitar Berbatov in "Played for Bayer Leverkusen" is not confirmed by the record
+  FAIL: puzzle-46: Raheem Sterling in "From Jamaica" is contradicted by the record
+  FAIL: puzzle-46: Luton Shelton in "From Jamaica" is not confirmed by the record
+  FAIL: puzzle-46: "Won the Ligue 1 title 3+ times" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-46: "Had an iconic kit number" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-55: Troy Deeney in "Played for Watford" is not confirmed by the record
+  FAIL: puzzle-55: Ismaïla Sarr in "Played for Watford" is not confirmed by the record
+  FAIL: puzzle-55: Elton John in "Played for Watford" is not confirmed by the record
+  FAIL: puzzle-55: John Barnes in "Played for Watford" is not confirmed by the record
+  FAIL: puzzle-55: Papiss Cissé in "From Senegal" is not confirmed by the record
+  FAIL: puzzle-55: "Won the Asian Cup" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-55: "Famous for their long throw-ins" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-59: Rúben Neves in "Played for Wolverhampton Wanderers" is not confirmed by the record
+  FAIL: puzzle-59: Matt Doherty in "Played for Wolverhampton Wanderers" is not confirmed by the record
+  FAIL: puzzle-59: Pedro Neto in "Played for Wolverhampton Wanderers" is not confirmed by the record
+  FAIL: puzzle-59: Angelos Charisteas in "From Greece" is not confirmed by the record
+  FAIL: puzzle-59: Giorgos Karagounis in "From Greece" is not confirmed by the record
+  FAIL: puzzle-59: Sotirios Kyrgiakos in "From Greece" is not confirmed by the record
+  FAIL: puzzle-59: Kostas Manolas in "From Greece" is not confirmed by the record
+  FAIL: puzzle-59: "Played a match in a mask" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-63: Peter Crouch in "Played for Stoke City" is not confirmed by the record
+  FAIL: puzzle-63: Bojan Krkić in "Played for Stoke City" is not confirmed by the record
+  FAIL: puzzle-63: Marko Arnautović in "Played for Stoke City" is not confirmed by the record
+  FAIL: puzzle-63: Xherdan Shaqiri in "Played for Stoke City" is not confirmed by the record
+  FAIL: puzzle-63: "Won the Club World Cup as captain" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-63: "Had a famous touchline celebration" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-64: Atiba Hutchinson in "From Canada" is not confirmed by the record
+  FAIL: puzzle-64: Dwayne De Rosario in "From Canada" is not confirmed by the record
+  FAIL: puzzle-64: "Played in the 2006 World Cup Final" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-65: Gianfranco Zola in "Played for Chelsea" is not confirmed by the record
+  FAIL: puzzle-65: Michael Essien in "Played for Chelsea" is not confirmed by the record
+  FAIL: puzzle-65: "Scored a World Cup-winning goal" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-65: "Had their shirt number retired" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-68: Fernando Llorente in "Played for Athletic Bilbao" is not confirmed by the record
+  FAIL: puzzle-68: Iker Muniain in "Played for Athletic Bilbao" is not confirmed by the record
+  FAIL: puzzle-68: Aritz Aduriz in "Played for Athletic Bilbao" is not confirmed by the record
+  FAIL: puzzle-68: Andoni Zubizarreta in "Played for Athletic Bilbao" is not confirmed by the record
+  FAIL: puzzle-68: "Scored 30+ goals in a single Premier League season" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-68: "Played in 4+ different top-5 European leagues" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-70: Gian Piero Gasperini in "Played for Atalanta" is not confirmed by the record
+  FAIL: puzzle-70: Ademola Lookman in "Played for Atalanta" is not confirmed by the record
+  FAIL: puzzle-70: Luis Muriel in "Played for Atalanta" is not confirmed by the record
+  FAIL: puzzle-70: Duván Zapata in "Played for Atalanta" is not confirmed by the record
+  FAIL: puzzle-70: "Won the Premier League with Manchester United in the Fergie era" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-70: "Had a famous goal against Brazil" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-74: Giovanni van Bronckhorst in "Played for Feyenoord" is not confirmed by the record
+  FAIL: puzzle-74: Robin van Persie in "Played for Feyenoord" is contradicted by the record
+  FAIL: puzzle-74: Pierre van Hooijdonk in "Played for Feyenoord" is not confirmed by the record
+  FAIL: puzzle-74: Arne Slot in "Played for Feyenoord" is not confirmed by the record
+  FAIL: puzzle-74: "Won the Premier League and La Liga in their career" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-74: "Scored an injury-time equaliser in a final" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-81: Simão Sabrosa in "Played for Porto and Benfica" is not confirmed by the record
+  FAIL: puzzle-81: Lisandro López in "Played for Porto and Benfica" is not confirmed by the record
+  FAIL: puzzle-81: Ángel Di María in "Played for Porto and Benfica" is contradicted by the record
+  FAIL: puzzle-81: Enzo Pérez in "Played for Porto and Benfica" is not confirmed by the record
+  FAIL: puzzle-81: "Won consecutive league titles in different countries" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-89: "Played for AC Milan (2020s)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-89: "Won the DFB-Pokal and Bundesliga double" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-89: "Captained their club at age 21 or younger" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-90: Leonardo Bonucci in "Played for both AC Milan and Juventus" is not confirmed by the record
+  FAIL: puzzle-92: "Galatasaray stars (past & present)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-92: "Won the World Cup with France (2018)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-97: "Played for Borussia Dortmund (2020s)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-97: "Won the Coppa Italia with Inter Milan" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-97: "Famous for their trivela technique" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-99: "Played for Juventus (2020s)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-99: "Won the FA Cup with Arsenal" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-99: "Scored at a major international tournament as a teenager" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-103: "Premier League Young Player of Year winners" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-103: Jackson Irvine in "From Australia" is not confirmed by the record
+  FAIL: puzzle-103: "Won the Champions League with Barcelona" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-109: James Rodríguez in "Played for both Benfica and Porto" is contradicted by the record
+  FAIL: puzzle-109: Lisandro López in "Played for both Benfica and Porto" is not confirmed by the record
+  FAIL: puzzle-109: Ricardo Quaresma in "Played for both Benfica and Porto" is not confirmed by the record
+  FAIL: puzzle-109: Deco in "Played for both Benfica and Porto" is contradicted by the record
+  FAIL: puzzle-109: "Scored a bicycle kick in the Champions League" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-113: Juan Román Riquelme in "Played for Boca Juniors" is not confirmed by the record
+  FAIL: puzzle-113: Edinson Cavani in "Played for Boca Juniors" is contradicted by the record
+  FAIL: puzzle-113: Aron Gunnarsson in "From Iceland" is not confirmed by the record
+  FAIL: puzzle-113: Birkir Bjarnason in "From Iceland" is not confirmed by the record
+  FAIL: puzzle-113: "Won the Scudetto with AC Milan (2020s)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-119: "Played for PSG (2020s)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-119: "Premier League Golden Boot (2010s)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-119: "Won the World Cup with Spain" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-119: "One club legends (never transferred)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-120: "Brazilian legends of the 1990s-2000s" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-120: "Played in MLS after European career" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-120: "Won the CAF Champions League" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-120: "Players who wore number 10 at Barcelona" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-123: "Premier League Golden Boot (pre-2010)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-123: "Brazilian legends of the 1950s-70s" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-123: "One club legends of Serie A" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-131: "Premier League Golden Boot shared winners" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-131: "Brazilian legends at Inter Milan" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-131: "Champions League winners as a substitute in the final" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-132: "Won the World Cup with France (2018)" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-132: "African midfield legends" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-132: "Played in MLS and Bundesliga" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-132: "One club legends of Bundesliga" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-134: Lucas Moura in "Played for PSG and Tottenham" is not confirmed by the record
+  FAIL: puzzle-134: Serge Aurier in "Played for PSG and Tottenham" is not confirmed by the record
+  FAIL: puzzle-134: Giovani Lo Celso in "Played for PSG and Tottenham" is not confirmed by the record
+  FAIL: puzzle-134: Erik Lamela in "Played for PSG and Tottenham" is not confirmed by the record
+  FAIL: puzzle-134: "Won the World Cup twice" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-134: "African players at Liverpool" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-134: "One club legends" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-138: "Won the Ballon d'Or with a La Liga club" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-138: "Lifted the Champions League trophy as club captain" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-149: "Won the 2022 World Cup with Argentina" is on a rebuilt board and nothing checks it
+  FAIL: puzzle-149: Cédric Bakambu in "From DR Congo" is not confirmed by the record
+  FAIL: puzzle-149: Chancel Mbemba in "From DR Congo" is not confirmed by the record
+  FAIL: puzzle-149: Dieumerci Mbokani in "From DR Congo" is not confirmed by the record
+  FAIL: puzzle-149: Ronaldinho Gaúcho in "Played for PSG, Barcelona AND Real Madrid" is contradicted by the record
+  FAIL: puzzle-149: Neymar Jr in "Played for PSG, Barcelona AND Real Madrid" is contradicted by the record
+  FAIL: puzzle-149: Luis Figo in "Played for PSG, Barcelona AND Real Madrid" is contradicted by the record
+  FAIL: puzzle-149: Javier Saviola in "Played for PSG, Barcelona AND Real Madrid" is not confirmed by the record
+  FAIL: puzzle-149: "Won league titles in four different countries" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1002: "Premier League Golden Boot winners" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1002: "Goalkeepers" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1002: Frank Rijkaard in "Played for Ajax" is not confirmed by the record
+  FAIL: crafted-1002: Matthijs de Ligt in "Played for Ajax" is not confirmed by the record
+  FAIL: crafted-1002: "Played in MLS" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1003: "Won the Premier League with Leicester City" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1003: "Won Euro 2016 with Portugal" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1003: Michael Laudrup in "Played for both Real Madrid and Barcelona" is not confirmed by the record
+  FAIL: crafted-1003: Javier Saviola in "Played for both Real Madrid and Barcelona" is not confirmed by the record
+  FAIL: crafted-1003: "Later managed a club they played for" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1005: "World Cup Golden Boot winners" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1005: "Played in the Bundesliga" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1006: "Lifted the World Cup as captain" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1006: "Scored 100+ Premier League goals" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1006: Samir Nasri in "Played for Marseille" is not confirmed by the record
+  FAIL: crafted-1006: Dimitri Payet in "Played for Marseille" is not confirmed by the record
+  FAIL: crafted-1007: "Scored at four different World Cups" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1007: "Moved to the Saudi Pro League" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1008: "English strikers" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1008: "Won La Liga with Atletico Madrid" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1009: Ilkay Gundogan in "Played for Borussia Dortmund" is not confirmed by the record
+  FAIL: crafted-1009: "Sons of professional footballers" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1011: "Won the 2010 World Cup with Spain" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1011: "Won the Golden Boy award" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1012: "Won the Premier League with Manchester City" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1012: Daniele De Rossi in "Played for Roma" is not confirmed by the record
+  FAIL: crafted-1012: Edin Dzeko in "Played for Roma" is not confirmed by the record
+  FAIL: crafted-1012: Radja Nainggolan in "Played for Roma" is not confirmed by the record
+  FAIL: crafted-1012: "Won the Scudetto with Napoli" is on a rebuilt board and nothing checks it
+  FAIL: crafted-1020: "World Cup-winning goalkeepers" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260709-02: "Italy internationals" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260709-02: Shinji Kagawa in "Played for Borussia Dortmund" is not confirmed by the record
+  FAIL: cx-20260709-02: "France internationals" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260709-02: "Scored in a Champions League Final" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-01: "Wore the No. 7 shirt at Manchester United" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-01: "Ballon d'Or winners" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-01: "Scored in a World Cup final" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-01: Michael Laudrup in "Played for both Real Madrid and Barcelona" is not confirmed by the record
+  FAIL: cx-20260710-01: Javier Saviola in "Played for both Real Madrid and Barcelona" is not confirmed by the record
+  FAIL: cx-20260710-01: Luis Enrique in "Played for both Real Madrid and Barcelona" is not confirmed by the record
+  FAIL: cx-20260710-02: "Goalkeepers who won the World Cup" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-02: "One-club players" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-02: "Goalkeepers famous for scoring goals" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-02: "Captained their country to a World Cup title" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-03: "Won the 2002 World Cup with Brazil" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-03: Didier Drogba in "Played for Galatasaray" is contradicted by the record
+  FAIL: cx-20260710-03: Fernando Muslera in "Played for Galatasaray" is not confirmed by the record
+  FAIL: cx-20260710-03: "Won the Copa Libertadores" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-03: "Played in Major League Soccer" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-04: "Scored 100+ Premier League goals" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-04: "World Cup Golden Boot winners" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-04: "Scored in a Champions League final" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-04: "African Footballer of the Year winners" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-05: "Won the 2018 World Cup with France" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-05: "Scored 50+ goals in a calendar year" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-05: Andrea Pirlo in "Played for both AC Milan and Inter Milan" is contradicted by the record
+  FAIL: cx-20260710-05: Hakan Çalhanoğlu in "Played for both AC Milan and Inter Milan" is not confirmed by the record
+  FAIL: cx-20260710-05: "Played under José Mourinho at two different clubs" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-07: "Won the 2014 World Cup with Germany" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-07: "Goalkeepers with 100+ international caps" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-07: "Won the Ballon d'Or while at a German club" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-08: "Played under Pep Guardiola at Manchester City" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-08: "Won the Premier League with two different clubs" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-08: "English players who played in Serie A" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-08: Paul Gascoigne in "Played for Rangers" is not confirmed by the record
+  FAIL: cx-20260710-08: Terry Butcher in "Played for Rangers" is not confirmed by the record
+  FAIL: cx-20260710-08: Trevor Steven in "Played for Rangers" is not confirmed by the record
+  FAIL: cx-20260710-08: Mark Hateley in "Played for Rangers" is not confirmed by the record
+  FAIL: cx-20260710-09: Alfredo Di Stéfano in "Played for River Plate" is not confirmed by the record
+  FAIL: cx-20260710-09: Radamel Falcao in "Played for River Plate" is contradicted by the record
+  FAIL: cx-20260710-09: "Won both the Copa Libertadores and the Champions League" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-09: Mauricio Pochettino in "Played for Newell's Old Boys" is not confirmed by the record
+  FAIL: cx-20260710-09: Gerardo Martino in "Played for Newell's Old Boys" is not confirmed by the record
+  FAIL: cx-20260710-09: Maxi Rodríguez in "Played for Newell's Old Boys" is not confirmed by the record
+  FAIL: cx-20260710-09: Gabriel Heinze in "Played for Newell's Old Boys" is not confirmed by the record
+  FAIL: cx-20260710-10: "Their country's all-time leading goalscorer" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-10: "European Golden Shoe winners" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-10: "Scored at three or more European Championships" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-10: "World Cup Golden Ball winners" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-11: "Won the 1998 World Cup with France" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-11: "Won both the Premier League and La Liga" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-11: Zinedine Zidane in "Played for and later managed Real Madrid" is contradicted by the record
+  FAIL: cx-20260710-11: Santiago Solari in "Played for and later managed Real Madrid" is not confirmed by the record
+  FAIL: cx-20260710-11: Bernd Schuster in "Played for and later managed Real Madrid" is not confirmed by the record
+  FAIL: cx-20260710-11: Miguel Muñoz in "Played for and later managed Real Madrid" is not confirmed by the record
+  FAIL: cx-20260710-12: Mario Gómez in "Played for Bayern Munich" is not confirmed by the record
+  FAIL: cx-20260710-12: "Won a treble (league, cup & Champions League) in one season" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260710-12: "One-club players" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-1: "Brazilians who played for Barcelona" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-1: "Won the 2002 World Cup" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-1: "Scored in two different World Cup finals" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-1: "Won the Ballon d'Or while playing in Serie A" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-2: "Scored 100+ Premier League goals" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-2: "Scored in a Champions League final their team won" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-2: Steve McManaman in "Played for both Real Madrid and Liverpool" is not confirmed by the record
+  FAIL: cx-20260805-2: Fernando Morientes in "Played for both Real Madrid and Liverpool" is not confirmed by the record
+  FAIL: cx-20260805-2: "Top scorer at a European Championship" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-4: "Cost more than 100 million euros" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-4: "Joined a new club on a free transfer" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-4: "Re-signed for a club they had left" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-4: "Their transfer broke the world record at the time" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-5: "African players who played for Chelsea" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-5: "Won the Africa Cup of Nations" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-5: "African players who won the Premier League" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-5: "Played in a World Cup semi-final for Morocco" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-6: "Managed a Premier League club after playing" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-6: "Won the World Cup as a player, later managed their country" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-6: "Were player-managers at an English club" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-6: "Won a league title with the same club as player and manager" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-7: "Won the World Cup Golden Boot" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-7: "Sent off in a World Cup knockout game" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-7: "Missed a penalty at a World Cup" is on a rebuilt board and nothing checks it
+  FAIL: cx-20260805-7: "Went to five World Cups" is on a rebuilt board and nothing checks it
+   26 squads, 1 lists, 47 ledgered groups, 69 stamped groups, 624 members confirmed, 74 rebuilt boards
+4) one right answer: the cross check over every board
+  FAIL: puzzle-2 | second-fit | Ronaldinho Gaúcho | Played for AC Milan | listed under From Brazil, so the board has two right answers
+  FAIL: puzzle-2 | second-fit | Rivaldo Vítor | Played for AC Milan | listed under From Brazil, so the board has two right answers
+  FAIL: puzzle-2 | second-fit | Ricardo Kaká | Played for AC Milan | listed under From Brazil, so the board has two right answers
+  FAIL: puzzle-8 | second-fit | Carlos Tévez | Played for Juventus | listed under Played for both Manchester clubs, so the board has two right answers
+  FAIL: puzzle-13 | second-fit | Luis Suárez | Played for Atlético Madrid | listed under Won the PFA Player of the Year, so the board has two right answers
+  FAIL: puzzle-16 | second-fit | Francesco Totti | Played for AS Roma | listed under Played their entire career at one club, so the board has two right answers
+  FAIL: puzzle-18 | second-fit | Luis Suárez | Played for Ajax | listed under From Uruguay, so the board has two right answers
+  FAIL: puzzle-26 | second-fit | Robbie Keane | Played for Aston Villa | listed under Became their country's all-time top scorer, so the board has two right answers
+  FAIL: puzzle-28 | not-a-member | Diego Forlán | Played for Sevilla
+  FAIL: puzzle-28 | second-fit | Kevin-Prince Boateng | From Ghana | listed under Played in both Serie A and Bundesliga, so the board has two right answers
+  FAIL: puzzle-38 | second-fit | Diego Forlán | Won the European Golden Shoe | listed under Played for Villarreal, so the board has two right answers
+  FAIL: puzzle-43 | second-fit | James Morrison | From Scotland | listed under Played for West Brom, so the board has two right answers
+  FAIL: puzzle-46 | not-a-member | Raheem Sterling | From Jamaica
+  FAIL: puzzle-55 | second-fit | Ismaïla Sarr | From Senegal | listed under Played for Watford, so the board has two right answers
+  FAIL: puzzle-59 | second-fit | Robbie Keane | Played for Wolverhampton Wanderers | listed under Won the MLS Cup, so the board has two right answers
+  FAIL: puzzle-64 | second-fit | Ronaldinho Gaúcho | Played for AC Milan | listed under Won the Ballon d'Or in the 2000s, so the board has two right answers
+  FAIL: puzzle-64 | second-fit | Kaká | Played for AC Milan | listed under Won the Ballon d'Or in the 2000s, so the board has two right answers
+  FAIL: puzzle-65 | second-fit | Didier Drogba | Played for Chelsea | listed under From Côte d'Ivoire, so the board has two right answers
+  FAIL: puzzle-68 | not-a-member | Moussa Sissoko | From Mali
+  FAIL: puzzle-70 | not-a-member | Willy Sagnol | From Georgia
+  FAIL: puzzle-74 | not-a-member | Robin van Persie | Played for Feyenoord
+  FAIL: puzzle-81 | not-a-member | Ángel Di María | Played for Porto and Benfica
+  FAIL: puzzle-90 | second-fit | Luis Figo | From Portugal | listed under Won the Ballon d'Or as a midfielder, so the board has two right answers
+  FAIL: puzzle-92 | second-fit | Mauro Icardi | From Argentina | listed under Galatasaray stars (past & present), so the board has two right answers
+  FAIL: puzzle-92 | not-a-member | Fernando Torres | Played for both Barcelona and Atlético Madrid
+  FAIL: puzzle-97 | not-a-member | Willy Sagnol | From Georgia
+  FAIL: puzzle-103 | not-a-member | Nabil Fekir | Played for both Lyon and PSG
+  FAIL: puzzle-103 | not-a-member | Memphis Depay | Played for both Lyon and PSG
+  FAIL: puzzle-109 | not-a-member | James Rodríguez | Played for both Benfica and Porto
+  FAIL: puzzle-109 | not-a-member | Deco | Played for both Benfica and Porto
+  FAIL: puzzle-113 | not-a-member | Edinson Cavani | Played for Boca Juniors
+  FAIL: puzzle-113 | not-a-member | Robbie Keane | Played for both Tottenham and Real Madrid
+  FAIL: puzzle-123 | not-a-member | Edinson Cavani | Played for PSG and Chelsea
+  FAIL: puzzle-123 | not-a-member | Mauro Icardi | Played for PSG and Chelsea
+  FAIL: puzzle-131 | not-a-member | Carlos Tévez | Played for PSG and Manchester City
+  FAIL: puzzle-138 | not-a-member | Mamadou Diallo | From Guinea
+  FAIL: puzzle-149 | not-a-member | Ronaldinho Gaúcho | Played for PSG, Barcelona AND Real Madrid
+  FAIL: puzzle-149 | not-a-member | Neymar Jr | Played for PSG, Barcelona AND Real Madrid
+  FAIL: puzzle-149 | not-a-member | Luis Figo | Played for PSG, Barcelona AND Real Madrid
+  FAIL: crafted-1005 | second-fit | Ousmane Dembele | Played for PSG | listed under Played in the Bundesliga, so the board has two right answers
+  FAIL: crafted-1005 | second-fit | Lionel Messi | Played for PSG | listed under Won Olympic gold in football, so the board has two right answers
+  FAIL: crafted-1005 | second-fit | Neymar Jr | Played for PSG | listed under Won Olympic gold in football, so the board has two right answers
+  FAIL: crafted-1007 | second-fit | Arturo Vidal | Played for Juventus | listed under Won the Copa America with Chile, so the board has two right answers
+  FAIL: crafted-1008 | second-fit | Ivan Rakitic | From Croatia | listed under Played for Sevilla, so the board has two right answers
+  FAIL: crafted-1009 | second-fit | Erling Haaland | Played for Borussia Dortmund | listed under Sons of professional footballers, so the board has two right answers
+  FAIL: crafted-1009 | second-fit | Yaya Toure | Played for Monaco | listed under African Player of the Year winners, so the board has two right answers
+  FAIL: crafted-1011 | second-fit | Robbie Keane | Played for Tottenham | listed under Played for LA Galaxy, so the board has two right answers
+  FAIL: crafted-1012 | second-fit | Mohamed Salah | Played for Roma | listed under Egyptian internationals, so the board has two right answers
+  FAIL: crafted-1020 | second-fit | Cristiano Ronaldo | Won the Ballon d'Or | listed under From Portugal, so the board has two right answers
+  FAIL: cx-20260710-03 | not-a-member | Didier Drogba | Played for Galatasaray
+  FAIL: cx-20260710-05 | not-a-member | Andrea Pirlo | Played for both AC Milan and Inter Milan
+  FAIL: cx-20260710-05 | second-fit | Zlatan Ibrahimović | Played for both AC Milan and Inter Milan | listed under Played under José Mourinho at two different clubs, so the board has two right answers
+  FAIL: cx-20260710-09 | not-a-member | Radamel Falcao | Played for River Plate
+  FAIL: cx-20260710-09 | second-fit | Gabriel Batistuta | Played for River Plate | listed under Played for Boca Juniors, so the board has two right answers
+  FAIL: cx-20260710-09 | second-fit | Diego Maradona | Played for Newell's Old Boys | listed under Played for Boca Juniors, so the board has two right answers
+  FAIL: cx-20260710-09 | second-fit | Gabriel Batistuta | Played for Newell's Old Boys | listed under Played for Boca Juniors, so the board has two right answers
+  FAIL: cx-20260710-11 | not-a-member | Zinedine Zidane | Played for and later managed Real Madrid
+  FAIL: cx-20260710-12 | second-fit | Arjen Robben | Played for Bayern Munich | listed under Played in the 2010 World Cup final for the Netherlands, so the board has two right answers
+   876 of 1304 groups judged; members 2839 judged (665 unknown), other tiles 8710 judged (1802 unknown)
+   78 findings: 20 adjudicated, 0 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   416 groups nothing checks yet (ceiling 262); part B ledgers them
+   645 members of judged groups the record cannot place (ceiling 539); a ledger fact or a swap brings it down
+6) the shipped file is the copy of the live table (scripts/data/connectionsLiveSnapshot.json)
+   326 file boards, 326 live rows (read only, 2026-10-30 08:26 EDT, after Round 1565...), 0 boards differ; the export under test differs from the snapshot on 65
+
+simConnectionsFacts: 385 failures

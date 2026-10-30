@@ -1,0 +1,6 @@
+export: 326 rows; migration rewrites 65; control tamper
+1) md5(groups_json::text) equals boardMd5 on 326 exported and 326 file boards: yes
+2) migration: 326 of 326 rows at the file's board, 0 moved, valid pool 326 unchanged, second run a no-op
+FAIL: the production form raised and applied nothing: Round 1565: payload checksum mismatch, nothing applied
+3) production form: raised; table unchanged
+rehearseConnections1565: 1 failure (control tamper fired)

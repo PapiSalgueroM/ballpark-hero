@@ -1,0 +1,23 @@
+CONN_LIVE: checking 326 rows of the live table export, not the shipped file
+1) no group claims the present
+  FAIL: puzzle-91: "Played in the 2022 World Cup Final" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-95: "Played for Napoli (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-108: "Won the Carabao Cup (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-127: "Premier League Golden Boot (2020s)" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+  FAIL: puzzle-141: "Won 2024 Euros with Spain" names a year from 2020 on and nothing holds the group to it: stamp a season the checker holds, write the group out in the ledger on two hosts, or retire it
+   5 present tense, unstamped season or unheld recent year labels; 0 recent year groups owed to part B
+2) no refuted claim is on a board
+   5 refuted claims held off every board, 0 found
+3) every group this round wrote stands on two hosts
+   2 watches over 31 men about to join a list
+   26 squads, 1 lists, 47 ledgered groups, 167 stamped groups, 1192 members confirmed, 74 rebuilt boards
+4) one right answer: the cross check over every board
+   1028 of 1304 groups judged; members 3521 judged (591 unknown), other tiles 10636 judged (1700 unknown)
+   21 findings: 21 adjudicated, 0 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+   262 groups nothing checks yet (ceiling 262); part B ledgers them
+   539 members of judged groups the record cannot place (ceiling 539); a ledger fact or a swap brings it down
+6) the shipped file is the copy of the live table (scripts/data/connectionsLiveSnapshot.json)
+   326 file boards, 326 live rows (read only, 2026-10-30 08:26 EDT, after Round 1565...), 0 boards differ; the export under test differs from the snapshot on 0
+
+simConnectionsFacts: 5 failures

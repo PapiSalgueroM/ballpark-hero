@@ -1,0 +1,4 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+R848 metalate control: 21 rows red, exactly the first row of each of the 21 seo meta parts in play (the four recorded reds among them), 15 green, every failure a page difference; the shapes part named all 35 game rows on "skipped"
+simDailySaveHardening: control metalate fired as designed

@@ -1,0 +1,16 @@
+1) The real hooks with fake timers: one timer per miss, none after the shake, none after an unmount
+   vitest exit 0, 8 passed (8)
+   ✓ src/hooks/useConnectionsShake.test.ts > NHL Connections: the shake timer > a second miss replaces the first timer, and the shake ends 600ms after the last miss 28ms
+   ✓ src/hooks/useConnectionsShake.test.ts > NHL Connections: the shake timer > an unmount mid shake leaves no live timer behind 4ms
+   ✓ src/hooks/useConnectionsShake.test.ts > NBA Connections: the shake timer > a second miss replaces the first timer, and the shake ends 600ms after the last miss 6ms
+   ✓ src/hooks/useConnectionsShake.test.ts > NBA Connections: the shake timer > an unmount mid shake leaves no live timer behind 4ms
+   ✓ src/hooks/useConnectionsShake.test.ts > NFL Connections: the shake timer > a second miss replaces the first timer, and the shake ends 600ms after the last miss 5ms
+   ✓ src/hooks/useConnectionsShake.test.ts > NFL Connections: the shake timer > an unmount mid shake leaves no live timer behind 3ms
+   ✓ src/hooks/useConnectionsShake.test.ts > Baseball Connections: the shake timer > a second miss replaces the first timer, and the shake ends 600ms after the last miss 7ms
+   ✓ src/hooks/useConnectionsShake.test.ts > Baseball Connections: the shake timer > an unmount mid shake leaves no live timer behind 3ms
+     live timers before any miss: 0
+     after 600ms: shake off, 0 live timer(s)
+     after unmount mid shake: 0 live timer(s)
+     live timers before any miss: 0
+
+simConnectionsShake: all green

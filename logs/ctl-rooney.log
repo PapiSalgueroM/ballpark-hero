@@ -1,0 +1,21 @@
+CONN_CONTROL=rooney: the boards were changed; this run must end red
+1) no group claims the present
+   0 present tense, unstamped season or unheld recent year labels; 5 recent year groups owed to part B
+2) no refuted claim is on a board
+  FAIL: puzzle-10: Wayne Rooney in "Won the Treble" is refuted (Manchester United's only treble is 1998-99, years before he joined them from Everton in 2004)
+   5 refuted claims held off every board, 1 found
+3) every group this round wrote stands on two hosts
+   2 watches over 31 men about to join a list
+  FAIL: puzzle-10: "Won the Treble" is on a rebuilt board and nothing checks it
+   26 squads, 1 lists, 47 ledgered groups, 167 stamped groups, 1188 members confirmed, 74 rebuilt boards
+4) one right answer: the cross check over every board
+   1027 of 1304 groups judged; members 3517 judged (591 unknown), other tiles 10624 judged (1700 unknown)
+   21 findings: 21 adjudicated, 0 owed to part B on boards not yet rebuilt
+5) the groups nothing checks yet may only get fewer
+  FAIL: 263 groups nothing checks, over the ceiling of 262
+   263 groups nothing checks yet (ceiling 262); part B ledgers them
+   539 members of judged groups the record cannot place (ceiling 539); a ledger fact or a swap brings it down
+6) the shipped file is the copy of the live table (scripts/data/connectionsLiveSnapshot.json)
+   326 file boards, 326 live rows (read only, 2026-10-30 08:26 EDT, after Round 1565...), 0 boards differ
+
+simConnectionsFacts: 3 failures

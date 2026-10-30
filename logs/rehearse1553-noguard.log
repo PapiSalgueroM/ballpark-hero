@@ -1,0 +1,17 @@
+   puzzle-81: rebuilt again by Round 1565, held to that migration
+   puzzle-90: rebuilt again by Round 1565, held to that migration
+   puzzle-109: rebuilt again by Round 1565, held to that migration
+   file: 54 of 57 new boards in the migration equal the shipped file's boards
+  FAIL: the dealt pool went from 129 valid boards to 136, so every daily would reshuffle
+  FAIL: puzzle-4 differed from the file and was overwritten anyway
+  FAIL: puzzle-10 differed from the file and was overwritten anyway
+  FAIL: puzzle-12 differed from the file and was overwritten anyway
+  FAIL: puzzle-75 differed from the file and was overwritten anyway
+  FAIL: puzzle-104 differed from the file and was overwritten anyway
+  FAIL: puzzle-112 differed from the file and was overwritten anyway
+  FAIL: puzzle-151 had drifted from the file and was overwritten anyway
+   seed: 155 rows, 129 valid before and 136 after; 50 rewritten in place; puzzle-151 drifted on purpose and left alone; 6 seeded rows already differ from the pre-round file and were left alone: puzzle-4 puzzle-10 puzzle-12 puzzle-75 puzzle-104 puzzle-112
+  FAIL: the dealt pool went from 135 valid boards to 136, so every daily would reshuffle
+  FAIL: puzzle-151 had drifted from the file and was overwritten anyway
+   file: 155 rows, 135 valid before and 136 after; 56 rewritten in place; puzzle-151 drifted on purpose and left alone; 0 seeded rows already differ from the pre-round file and were left alone
+rehearseConnections1553: 10 failures

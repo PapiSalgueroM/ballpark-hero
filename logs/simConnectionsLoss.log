@@ -1,0 +1,12 @@
+1) The real hooks, rendered: a loss counts the groups the player found, in both modes
+   vitest exit 0, 8 passed (8)
+   ✓ src/hooks/useConnectionsLoss.test.ts > NHL Connections: a loss counts what the player found > daily: one group found, four wrong guesses, then a reload 42ms
+   ✓ src/hooks/useConnectionsLoss.test.ts > NHL Connections: a loss counts what the player found > unlimited: one group found, four wrong guesses, then the next puzzle 13ms
+   ✓ src/hooks/useConnectionsLoss.test.ts > NBA Connections: a loss counts what the player found > daily: one group found, four wrong guesses, then a reload 14ms
+   ✓ src/hooks/useConnectionsLoss.test.ts > NBA Connections: a loss counts what the player found > unlimited: one group found, four wrong guesses, then the next puzzle 12ms
+   ✓ src/hooks/useConnectionsLoss.test.ts > NFL Connections: a loss counts what the player found > daily: one group found, four wrong guesses, then a reload 8ms
+   ✓ src/hooks/useConnectionsLoss.test.ts > NFL Connections: a loss counts what the player found > unlimited: one group found, four wrong guesses, then the next puzzle 4ms
+   ✓ src/hooks/useConnectionsLoss.test.ts > Baseball Connections: a loss counts what the player found > daily: one group found, four wrong guesses, then a reload 7ms
+   ✓ src/hooks/useConnectionsLoss.test.ts > Baseball Connections: a loss counts what the player found > unlimited: one group found, four wrong guesses, then the next puzzle 10ms
+
+simConnectionsLoss: all green

@@ -1,0 +1,4 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+R848 guideheld control: 35 rows red, exactly the 35 rows whose route has a guide, each on the named assertion; 1 rows with no guide green
+simDailySaveHardening: control guideheld fired as designed
