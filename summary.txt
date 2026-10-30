@@ -1,0 +1,3 @@
+vitest exit=0 13s |    Duration  11.61s (transform 3.88s, setup 609ms, collect 12.51s, tests 9.95s, environment 3.20s, prepare 1.24s)
+simSaveFence exit=1 64s | simSaveFence: RED, 2 findings
+tsc exit=2 89s |   Property 'why' does not exist on type '{ ok: true; slot: number; backupKey: string; }'.

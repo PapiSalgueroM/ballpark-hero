@@ -1,0 +1,2 @@
+src/lib/managerHotSeat.ts(896,33): error TS2339: Property 'why' does not exist on type 'HandOverResult'.
+  Property 'why' does not exist on type '{ ok: true; slot: number; backupKey: string; }'.
