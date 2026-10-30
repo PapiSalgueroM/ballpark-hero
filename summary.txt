@@ -1,0 +1,3 @@
+vitest exit=0 8s |    Duration  6.56s (transform 2.52s, setup 191ms, collect 5.97s, tests 3.53s, environment 1.30s, prepare 441ms)
+tsc exit=0 82s | 
+simCmEuroPlay exit=0 97s | simCmEuroPlay: green, 90 checks, 0 failures
