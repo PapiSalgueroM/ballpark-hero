@@ -1,0 +1,3 @@
+REFUSED: --market and --stints only check (the SQL files are written from the committed exports)
+changed files: 0
+refuse-exit=2
