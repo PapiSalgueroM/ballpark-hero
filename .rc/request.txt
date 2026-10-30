@@ -1,0 +1,15 @@
+simClubManagerDecisionDeadline: node scripts/simClubManagerDecisionDeadline.mjs
+simCmHandoverDesk: node scripts/simCmHandoverDesk.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+simCmOwnClubMarket: node scripts/simCmOwnClubMarket.mjs
+simCmShootoutResults: node scripts/simCmShootoutResults.mjs
+simManagerLiveLineups: node scripts/simManagerLiveLineups.mjs
+simPitchRestartContinuity: node scripts/simPitchRestartContinuity.mjs
+simSoccerDeck: node scripts/simSoccerDeck.mjs
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+simCmSubs: node scripts/simCmSubs.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
