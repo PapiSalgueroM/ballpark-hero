@@ -1,0 +1,10 @@
+MUT probe applied (4 edits)
+probe fleet exit 0
+PROBE_LEDGER 623
+PROBE_AGE 1265
+PROBE_TRIM 0
+PROBE_RECOVER 13
+    614 PROBE_LEDGER released
+      9 PROBE_LEDGER retired
+simCmFreeAgencyFleet: 12 careers to season 9; 629 men left a squad, 2488 summer checks; lost 0, twice 0; 133 retired off the list (0 summers unseen); list size at the end median 43, its median age median 25; old saves recoverable 13, recovered 13
+simCmFreeAgencyFleet: green, all four sections held

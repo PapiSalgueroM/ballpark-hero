@@ -1,0 +1,14 @@
+  Everton now none: 66 men left, lost 0, twice 0, 14 retired off the list; at season 9 48 on the list besides the journeymen, median age 24
+  Everton now eleven: 31 men left, lost 0, twice 0, 12 retired off the list; at season 9 25 on the list besides the journeymen, median age 23
+  Villarreal now none: 69 men left, lost 0, twice 0, 9 retired off the list; at season 9 58 on the list besides the journeymen, median age 25
+  Villarreal now eleven: 35 men left, lost 0, twice 0, 8 retired off the list; at season 9 29 on the list besides the journeymen, median age 24
+  Freiburg now none: 67 men left, lost 0, twice 0, 11 retired off the list; at season 9 52 on the list besides the journeymen, median age 25
+  Freiburg now eleven: 37 men left, lost 0, twice 0, 13 retired off the list; at season 9 28 on the list besides the journeymen, median age 23
+  Ajax now none: 71 men left, lost 0, twice 0, 16 retired off the list; at season 9 53 on the list besides the journeymen, median age 24
+  Ajax now eleven: 39 men left, lost 0, twice 0, 16 retired off the list; at season 9 27 on the list besides the journeymen, median age 23
+  Braga now none: 72 men left, lost 0, twice 0, 9 retired off the list; at season 9 60 on the list besides the journeymen, median age 25
+  Braga now eleven: 37 men left, lost 0, twice 0, 9 retired off the list; at season 9 35 on the list besides the journeymen, median age 24
+  Southampton era2015 none: 67 men left, lost 0, twice 0, 4 retired off the list; at season 9 53 on the list besides the journeymen, median age 25
+  Southampton era2015 eleven: 36 men left, lost 0, twice 0, 4 retired off the list; at season 9 31 on the list besides the journeymen, median age 23
+simCmFreeAgencyFleet: 12 careers to season 9; 627 men left a squad, 2502 summer checks; lost 0, twice 0; 125 retired off the list (0 summers unseen); list size at the end median 48, its median age median 24; old saves skipped
+simCmFreeAgencyFleet: green, all three sections held
