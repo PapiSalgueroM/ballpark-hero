@@ -415,7 +415,9 @@ section = 'E';
   for (const L of leagues) {
     const pristine = cm[`__g_${L.row.id}`][`CM_${L.row.prefix}_ROSTERS`];
     for (const [club, list] of Object.entries(pristine)) {
-      if (JSON.stringify(world[club] ?? null) !== JSON.stringify(list)) fail(`${club}: the joined world holds ${world[club] ? world[club].length + ' men who are not' : 'no squad, not'} the ${list.length} of ${L.row.out}`);
+      /* Round 1600: a file on curve 2 reaches the world read with age; its men, order and LEVELS must be the file's. */
+      const levels = world[club] ? world[club].map(({ lv, ...p }) => (lv === undefined ? p : { ...p, r: lv })) : null;
+      if (JSON.stringify(levels) !== JSON.stringify(list)) fail(`${club}: the joined world holds ${world[club] ? world[club].length + ' men who are not' : 'no squad, not'} the ${list.length} of ${L.row.out}`);
       else joined += 1;
     }
     for (const c of cm[`__g_${L.row.id}`][`CM_${L.row.prefix}_PARTIAL`]) if (!cm.CM_WORLD_PARTIAL.includes(c)) fail(`${c} is partial in ${L.row.out} and the joined world does not say so`);

@@ -33,7 +33,7 @@ import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
-import { stampedSquads, agedSquads, unflippedSquads, unstampedLeague, isStamped } from './lib/cmSquadAges.mjs';
+import { stampedSquads, agedSquads, unflippedSquads, unstampedLeague, unstampedFreeAgents, isStamped } from './lib/cmSquadAges.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CM_DAILY_VIEW_CONTROL || '';
@@ -64,8 +64,8 @@ if (!CUTOVER) { console.log('simCmDailyView: ABORTED, no CM_DAILY_NEW_NUMBERS_FR
 /* Since the flip ships, the shipped files ARE arm F's, and arm A is the curve 1 world rebuilt from them (no stamp on
    the three modern files, the main file's men at the curve 1 view's ages). Before it, the other way round. */
 const SHIPPED = read('src/data/clubManagerRosters.ts');
-const LEAGUES = { aleague: read('src/data/clubManagerALeague2026.ts'), russia: read('src/data/clubManagerRussia2026.ts') };
-const CURVE1_LEAGUES = { aleague: unstampedLeague(LEAGUES.aleague), russia: unstampedLeague(LEAGUES.russia) };
+const LEAGUES = { aleague: read('src/data/clubManagerALeague2026.ts'), russia: read('src/data/clubManagerRussia2026.ts'), fa: read('src/data/clubManagerFreeAgents2026.ts') };
+const CURVE1_LEAGUES = { aleague: unstampedLeague(LEAGUES.aleague), russia: unstampedLeague(LEAGUES.russia), fa: unstampedFreeAgents(LEAGUES.fa) };
 const SQUADS = isStamped(SHIPPED) ? unflippedSquads(SHIPPED, read('src/data/clubManagerCurve1View.ts')).text : SHIPPED;
 const FLIPPED = isStamped(SHIPPED) ? SHIPPED : agedSquads(stampedSquads(SHIPPED), JSON.parse(read('scripts/data/cmAgesBasis2026.json'))).text;
 const FLIPPED_LEAGUES = isStamped(SHIPPED) ? LEAGUES : CURVE1_LEAGUES;
@@ -86,6 +86,7 @@ async function bundle(name, src, squads, leagues) {
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerRosters\.ts$/ }, () => ({ contents: squads, loader: 'ts' }));
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerALeague2026\.ts$/ }, () => ({ contents: leagues.aleague, loader: 'ts' }));
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerRussia2026\.ts$/ }, () => ({ contents: leagues.russia, loader: 'ts' }));
+      b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerFreeAgents2026\.ts$/ }, () => ({ contents: leagues.fa, loader: 'ts' }));
     } }],
   });
   return createRequire(import.meta.url)(outfile);

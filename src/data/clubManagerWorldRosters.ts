@@ -115,6 +115,12 @@ export function cmWorld(): Record<string, BakedPlayer[]> {
   return ACTIVE_WORLD ?? CM_WORLD_ROSTERS;
 }
 
+/** True while the engine reads the live world and its main squads file is read with age (curve 2): never inside
+ *  the curve 1 view. For the few reads of a daily tuned on curve 1 that must know which numbers it deals on. */
+export function cmWorldReadsAge(): boolean {
+  return !ACTIVE_WORLD && fileCurve(CM_ROSTER_META) === CM_AGE_CURVE;
+}
+
 /** What every engine cache keyed on the modern world puts in front of its key: '' for the live world. */
 export function cmWorldTag(): string {
   return ACTIVE_WORLD ? 'curve1|' : '';

@@ -79,6 +79,7 @@ import {
 } from '@/lib/clubManager';
 import { MIN_TERMS_YEARS, askingTerms, dealCloseness, offerVerdict, termsCloseness, valuationBand, type PersonalTerms, type ValuationRead } from '@/lib/clubManagerDeals';
 import { hotSeatPool, mixSeed, onStaticWorld, withSeed } from '@/lib/managerHotSeat';
+import { cmWorldReadsAge } from '@/data/clubManagerWorldRosters';
 /* Round 1600: every engine stretch of a run is run on the world its date was dealt on (onStaticWorld's daily). */
 const onStaticWorldOn = <T>(daily: string | undefined, fn: () => T): T => onStaticWorld(fn, daily);
 import { mulberry32 } from '@/lib/leagueCore';
@@ -309,6 +310,16 @@ function readNeeds(state: CareerState): DeadlineNeed[] {
 }
 
 /** Real players who can play the slot and clear its line: a cheap one, a middling one and a dear one. */
+/* Round 1600 (the critic's rule (b) for this daily): on the world that reads age the desk deals men of 29 or under.
+   A man of 30 or more asks 0.9 of his value (askingPrice), so paying his ask costs nothing the desk could save, and
+   the age read puts more veterans over each need's line: the desk's whole edge went (scripts/simDeadlineDay.mjs
+   section 2 on runner r1600-s6a: 1.77 points over the ask against a floor of 2.5). One number inside this game,
+   nothing outside it. A day dealt on the curve 1 view (before CM_DAILY_NEW_NUMBERS_FROM) keeps 33, so it deals
+   what it dealt. */
+function dealtAgeMax(): number {
+  return cmWorldReadsAge() ? 29 : 33;
+}
+
 function readCandidates(state: CareerState, need: DeadlineNeed, market: MarketPlayer[], taken: Set<string>, rng: () => number, clubs: Set<string> | null): MarketPlayer[] {
   let fits: MarketPlayer[] = [];
   /* The market is the top divisions, so a small club's weakest starter can sit
@@ -317,7 +328,7 @@ function readCandidates(state: CareerState, need: DeadlineNeed, market: MarketPl
   for (let span = CANDIDATE_SPAN; span <= CANDIDATE_SPAN + 20; span += 3) {
     fits = market.filter(m => need.allowed.includes(m.position)
       && m.rating >= need.min && m.rating <= need.min + span
-      && m.age <= 33 && !taken.has(m.name) && m.club !== state.clubName
+      && m.age <= dealtAgeMax() && !taken.has(m.name) && m.club !== state.clubName
       && !isPartialClub(m.club) && (!clubs || clubs.has(m.club)) && (m.value ?? m.price) > 0);
     if (fits.length >= CANDIDATES_PER_NEED * 3) break;
   }

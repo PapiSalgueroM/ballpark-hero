@@ -116,6 +116,7 @@ import { execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { buildFreeAgents, renderFile } from './genClubManagerFreeAgents.mjs';
+import { ageRead } from './lib/cmValueCurve.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
@@ -1629,7 +1630,9 @@ console.log("18) a modern day one opens with today's real free agents, and only 
     if (JSON.stringify(got) !== JSON.stringify(want)) wrongSet.push(`${DAY_CLUBS[i]} lists [${got.join(', ')}]`);
     for (const f of realIn) {
       const row = CM_REAL_FREE_AGENTS.find(r => r.name === f.name);
-      if (!row || f.since !== st.season || f.rating !== row.rating || f.age !== row.age || f.value !== row.value || f.wage !== undefined || f.fromMyClub) wrongRow.push(`${f.name} at ${DAY_CLUBS[i]}`);
+      /* Round 1600: a file on curve 2 is seeded with the age read of its rating (seedRealFreeAgents). */
+      const shown = row && /CM_REAL_FREE_AGENTS_CURVE = 2;/.test(sources.faData) ? ageRead(row.rating, row.age) : row?.rating;
+      if (!row || f.since !== st.season || f.rating !== shown || f.age !== row.age || f.value !== row.value || f.wage !== undefined || f.fromMyClub) wrongRow.push(`${f.name} at ${DAY_CLUBS[i]}`);
     }
     const jm = (st.freeAgents ?? []).filter(f => f.reason === 'unattached' && f.generated).length;
     if (jm !== cm.FREE_AGENT_POOL_TARGET) shortJm.push(`${DAY_CLUBS[i]} ${jm}`);

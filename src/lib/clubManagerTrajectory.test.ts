@@ -34,7 +34,8 @@ describe('Club Manager save-bound player trajectories', () => {
     const pool = fullPool();
     expect(pool.length).toBeGreaterThan(4000);
     for (const [club, players] of Object.entries(projectedWorldFor('now', 0))) {
-      expect(players.map(({ n, p, a, r, v }) => ({ n, p, a, r, v }))).toEqual(CM_WORLD_ROSTERS[club]);
+      /* Round 1600: a row of a world that reads age carries its level (lv), and year zero carries it too */
+      expect(players.map(({ n, p, a, r, v, lv }) => ({ n, p, a, r, v, ...(lv === undefined ? {} : { lv }) }))).toEqual(CM_WORLD_ROSTERS[club]);
     }
     for (const { player } of pool) {
       const before = JSON.stringify(player);
@@ -270,7 +271,8 @@ describe('save-scoped actual world projections', () => {
     const original = projectedWorldFor('now', 0);
     const actual = projectedWorldFor('now', 1, 31);
     for (const [club, players] of Object.entries(original)) {
-      const ratios = players.map(player => player.v / Math.max(0.5, rawCurveValue(player.r, player.a))).sort((a, b) => a - b);
+      /* Round 1600: the scale reads each man's level (valueScaleFor) */
+      const ratios = players.map(player => player.v / Math.max(0.5, rawCurveValue(player.lv ?? player.r, player.a))).sort((a, b) => a - b);
       const scale = ratios[Math.floor(ratios.length / 2)] || 1;
       expect(actual[club]).toHaveLength(players.length);
       for (const player of actual[club]) {

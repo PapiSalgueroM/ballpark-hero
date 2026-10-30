@@ -51,7 +51,7 @@ import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
-import { stampedSquads, agedSquads, unflippedSquads, unstampedLeague, isStamped } from './lib/cmSquadAges.mjs';
+import { stampedSquads, agedSquads, unflippedSquads, unstampedLeague, unstampedFreeAgents, isStamped } from './lib/cmSquadAges.mjs';
 import { eraShown } from './lib/cmEraRead.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -93,7 +93,7 @@ if (CONTROL) {
    three modern files, every man of the main file at the age the curve 1 view holds), and arm B2 is the files as
    shipped. On a tree from before the flip the files are curve 1 and it runs the other way round. */
 const SHIPPED = read('src/data/clubManagerRosters.ts');
-const LEAGUES = { aleague: read('src/data/clubManagerALeague2026.ts'), russia: read('src/data/clubManagerRussia2026.ts') };
+const LEAGUES = { aleague: read('src/data/clubManagerALeague2026.ts'), russia: read('src/data/clubManagerRussia2026.ts'), fa: read('src/data/clubManagerFreeAgents2026.ts') };
 const BASIS = JSON.parse(read('scripts/data/cmAgesBasis2026.json'));
 const FLIPPED = isStamped(SHIPPED);
 const BACK = FLIPPED ? unflippedSquads(SHIPPED, read('src/data/clubManagerCurve1View.ts')) : null;
@@ -101,7 +101,7 @@ const CURVE1 = FLIPPED ? BACK.text : SHIPPED;
 const AGED = FLIPPED ? { text: SHIPPED, moved: BACK.moved, rows: BACK.rows } : agedSquads(stampedSquads(SHIPPED), BASIS);
 const ROSTERS = CURVE1;
 const ROSTERS_STAMPED = stampedSquads(CURVE1);
-const CURVE1_LEAGUES = { aleague: unstampedLeague(LEAGUES.aleague), russia: unstampedLeague(LEAGUES.russia) };
+const CURVE1_LEAGUES = { aleague: unstampedLeague(LEAGUES.aleague), russia: unstampedLeague(LEAGUES.russia), fa: unstampedFreeAgents(LEAGUES.fa) };
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cmlevelreads-'));
 async function bundle(name, rosterText, leagues = CURVE1_LEAGUES) {
@@ -120,6 +120,7 @@ async function bundle(name, rosterText, leagues = CURVE1_LEAGUES) {
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerRosters\.ts$/ }, () => ({ contents: rosterText, loader: 'ts' }));
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerALeague2026\.ts$/ }, () => ({ contents: leagues.aleague, loader: 'ts' }));
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerRussia2026\.ts$/ }, () => ({ contents: leagues.russia, loader: 'ts' }));
+      b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerFreeAgents2026\.ts$/ }, () => ({ contents: leagues.fa, loader: 'ts' }));
     } }],
   });
   return createRequire(import.meta.url)(outfile);

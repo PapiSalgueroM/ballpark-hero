@@ -88,3 +88,10 @@ export function unflippedSquads(text, viewText) {
 export function unstampedLeague(text) {
   return text.replaceAll('\r\n', '\n').replace(/^  curve: 2,\n/m, '');
 }
+
+/** The real free agents file on curve 1 (its ratings shown as the value curve's, as before Round 1600). */
+export function unstampedFreeAgents(text) {
+  const lf = text.replaceAll('\r\n', '\n');
+  const from = 'export const CM_REAL_FREE_AGENTS_CURVE = 2;';
+  return lf.includes(from) ? lf.replace(from, 'export const CM_REAL_FREE_AGENTS_CURVE = 1;') : lf;
+}
