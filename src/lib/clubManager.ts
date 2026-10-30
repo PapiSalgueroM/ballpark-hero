@@ -74,7 +74,7 @@ import { CM_REAL_FREE_AGENTS } from '@/data/clubManagerFreeAgents2026';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 // Round 1035: the modern squads are the baked file joined with the A-League
 // Men's generated one, in one place both engine files read.
-import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL } from '@/data/clubManagerWorldRosters';
+import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL, cmWorldTag } from '@/data/clubManagerWorldRosters';
 // Round 612: how the real 2025-26 season finished, read by season one's
 // Champions League field. The data file imports nothing, so there is no cycle.
 import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubManagerFinalTables2025_26';
@@ -9683,7 +9683,8 @@ const MARKET_BASE_CACHE = new Map<string, MarketPlayer[]>();
    cache does. */
 function marketBase(yearsOnNow: number, eraId: string = 'now', worldSeed?: number): MarketPlayer[] {
   const y = Math.max(0, Math.round(yearsOnNow));
-  const key = `${isHistoricEra(eraId) ? eraId : 'now'}|${y}${worldSeed === undefined ? '' : `|${worldSeed}`}`;
+  /* Round 1600: today's world carries its tag, so the curve 1 view keeps its own market (cmWorldTag). */
+  const key = `${isHistoricEra(eraId) ? eraId : `${cmWorldTag()}now`}|${y}${worldSeed === undefined ? '' : `|${worldSeed}`}`;
   const hit = MARKET_BASE_CACHE.get(key);
   if (hit) return hit;
   const out: MarketPlayer[] = [];

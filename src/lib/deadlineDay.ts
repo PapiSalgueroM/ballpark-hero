@@ -79,6 +79,8 @@ import {
 } from '@/lib/clubManager';
 import { MIN_TERMS_YEARS, askingTerms, dealCloseness, offerVerdict, termsCloseness, valuationBand, type PersonalTerms, type ValuationRead } from '@/lib/clubManagerDeals';
 import { hotSeatPool, mixSeed, onStaticWorld, withSeed } from '@/lib/managerHotSeat';
+/* Round 1600: every engine stretch of a run is run on the world its date was dealt on (onStaticWorld's daily). */
+const onStaticWorldOn = <T>(daily: string | undefined, fn: () => T): T => onStaticWorld(fn, daily);
 import { mulberry32 } from '@/lib/leagueCore';
 import { dailyIndex, dailyPrngSeed } from '@/lib/dateUtils';
 import type { Position } from '@/types/game';
@@ -342,7 +344,7 @@ function stickerOf(mp: MarketPlayer): number {
  * run on every replay.
  */
 export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
-  return onStaticWorld(() => {
+  return onStaticWorldOn(setup.daily, () => {
     const state0 = withSeed(mixSeed(setup.seed, SEED_START), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START));
     /* Release AT: a daily never carries the real fixture list (see startOnStaticWorld in
        managerHotSeat.ts). Deadline Day plays no match, so the key was inert here; it comes off so the
@@ -470,7 +472,7 @@ export function termsMeter(run: DeadlineRun, i: number, offer: { wage: number; y
 export function openRefusal(run: DeadlineRun, i: number): string | null {
   const t = run.targets[i];
   if (!t || t.status !== 'idle') return null;
-  return onStaticWorld(() => doorRefusal({ ...run.state, negotiation: null }, t.mp, 'talk'));
+  return onStaticWorldOn(run.setup.daily, () => doorRefusal({ ...run.state, negotiation: null }, t.mp, 'talk'));
 }
 
 /** The hours left on the clock. */
@@ -582,7 +584,7 @@ function atTable(run: DeadlineRun, t: DeadlineTarget, seed: number, fn: (s: Care
 export function openTalks(prev: DeadlineRun, i: number): DeadlineRun {
   const t0 = prev.targets[i];
   if (prev.grade || !t0 || t0.status !== 'idle') return prev;
-  return onStaticWorld(() => {
+  return onStaticWorldOn(prev.setup.daily, () => {
     const run = cloneRun(prev);
     const t = run.targets[i];
     const neg = atTable(run, t, mixSeed(run.setup.seed, SEED_OPEN + i), s => startNegotiation(s, t.mp));
@@ -606,7 +608,7 @@ export function placeBid(prev: DeadlineRun, i: number, amount: number): Deadline
   const amt = Math.round(amount * 10) / 10;
   /* A bid the budget cannot cover is refused before the hour is spent. */
   if (!(amt > 0) || amt > prev.state.budget) return prev;
-  return onStaticWorld(() => {
+  return onStaticWorldOn(prev.setup.daily, () => {
     const run = cloneRun(prev);
     const t = run.targets[i];
     const askBefore = t.neg!.theirAsk;
@@ -655,7 +657,7 @@ export function offerPersonalTerms(prev: DeadlineRun, i: number, offer: { wage: 
   /* The fee and the bonus come out of one budget; refused before the hour. */
   if (fee + bonus > prev.state.budget) return prev;
   if (prev.state.squad.length >= 30) return prev;
-  return onStaticWorld(() => {
+  return onStaticWorldOn(prev.setup.daily, () => {
     const run = cloneRun(prev);
     const t = run.targets[i];
     const want = t.neg!.terms!.want;
@@ -695,7 +697,7 @@ export function offerPersonalTerms(prev: DeadlineRun, i: number, offer: { wage: 
 export function walkFrom(prev: DeadlineRun, i: number): DeadlineRun {
   const t0 = prev.targets[i];
   if (prev.grade || !t0 || (t0.status !== 'talks' && t0.status !== 'terms')) return prev;
-  return onStaticWorld(() => {
+  return onStaticWorldOn(prev.setup.daily, () => {
     const run = cloneRun(prev);
     const t = run.targets[i];
     const goneBefore = run.state.goneNames.length;
@@ -722,7 +724,7 @@ export function sellPlayer(prev: DeadlineRun, k: number): DeadlineRun {
   if (prev.grade || !sale || sale.done) return prev;
   const p = prev.state.squad.find(x => x.id === sale.playerId);
   if (!p || !canLeaveSquad(prev.state, p)) return prev;
-  return onStaticWorld(() => {
+  return onStaticWorldOn(prev.setup.daily, () => {
     const run = cloneRun(prev);
     const s = run.sales[k];
     const withBid: CareerState = {
@@ -743,7 +745,7 @@ export function sellPlayer(prev: DeadlineRun, k: number): DeadlineRun {
 /** Close the laptop: the rest of the day passes and the window shuts. */
 export function endDay(prev: DeadlineRun): DeadlineRun {
   if (prev.grade) return prev;
-  return onStaticWorld(() => {
+  return onStaticWorldOn(prev.setup.daily, () => {
     const run = cloneRun(prev);
     run.actions.push({ t: 'end' });
     shutWindow(run);

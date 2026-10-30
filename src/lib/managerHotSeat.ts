@@ -90,6 +90,8 @@ import { LEGACY_BOARD_START } from '@/lib/clubManagerBoardVerdict';
 import type { SeasonHandover } from '@/lib/clubManagerScore';
 import { dailyIndex, dailyPrngSeed } from '@/lib/dateUtils';
 import DAILY_CLUB_POOL from '@/data/dailyClubPool.json';
+import { onCurve1View } from '@/data/clubManagerWorldRosters';
+import { CM_CURVE1_VIEW } from '@/data/clubManagerCurve1View';
 
 /* ---------------- the numbers ---------------- */
 
@@ -172,8 +174,12 @@ export function withSeed<T>(seed: number, fn: () => T): T {
  * had registered, whatever happens. A tab with nothing registered, which is
  * every tab without a Club Manager save open, pays nothing: the swap is
  * skipped rather than busting the engine's def cache twice per call.
+ *
+ * Round 1600: a daily passes its date, and a date before CM_DAILY_NEW_NUMBERS_FROM runs the stretch on the
+ * curve 1 view of the world as well (onCurve1View), so a day once dealt stays dealt.
  */
-export function onStaticWorld<T>(fn: () => T): T {
+export function onStaticWorld<T>(fn: () => T, daily?: string): T {
+  if (daily !== undefined && daily < CM_DAILY_NEW_NUMBERS_FROM) return onCurve1View(CM_CURVE1_VIEW, () => onStaticWorld(fn));
   const had = engineRegistrations();
   const swap = had.custom !== null || had.overrides !== null;
   if (!swap) return fn();
@@ -313,6 +319,16 @@ export interface HotSeatSetup {
  * proves every earlier date replays and holds this to a date after the round's base commit.
  */
 export const HOT_SEAT_RULES_FROM = '2026-10-24';
+
+/**
+ * Round 1600: the first daily dealt on Club Manager's age read (a man's rating is his price's level plus points
+ * for his age, src/lib/cmAgeRead.ts). Both dailies deal from Club Manager's world, so a release that re-rates it
+ * would deal every day already played again. A daily dated before this is dealt, played and replayed on the curve 1
+ * view (onCurve1View, src/data/clubManagerCurve1View.ts): no age read, the ages the squads file held before it.
+ * Neither board keeps an archive, so the day at risk is the release day: the lead sets this, at the release, to the
+ * second Eastern day after the release is live, never earlier. Free play has no date and plays the live world.
+ * scripts/simCmDailyView.mjs proves every earlier date deals what the base dealt. */
+export const CM_DAILY_NEW_NUMBERS_FROM = '2026-11-16';
 
 /** Round 1331: the match rules a run plays: 'base' for a daily dated before HOT_SEAT_RULES_FROM or a free
  *  run without the 1331 stamp, undefined (the current rules) otherwise. */
@@ -493,7 +509,7 @@ function midSeasonEntryOf(s: CareerState): NonNullable<CareerState['midSeasonSta
  * twenty engine calls), so the page runs it once per run and never in render.
  */
 export function startHotSeat(setup: HotSeatSetup): HotSeatRun {
-  return onStaticWorld(() => startOnStaticWorld(setup));
+  return onStaticWorld(() => startOnStaticWorld(setup), setup.daily);
 }
 
 function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
@@ -683,7 +699,7 @@ function cloneRun(run: HotSeatRun): HotSeatRun {
  */
 export function playHotSeatMatch(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null): HotSeatRun {
   if (prev.verdict) return prev;
-  return onStaticWorld(() => playOnStaticWorld(prev, mentality, talk));
+  return onStaticWorld(() => playOnStaticWorld(prev, mentality, talk), prev.setup.daily);
 }
 
 function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null): HotSeatRun {
@@ -740,7 +756,7 @@ export function answerHotSeatPress(prev: HotSeatRun, optionIdx: number): HotSeat
   if (!q || !q.options[optionIdx]) return prev;
   const run = cloneRun(prev);
   run.actions.push({ t: 'press', i: optionIdx });
-  run.state = onStaticWorld(() => withSeed(mixSeed(run.setup.seed, 3000 + run.actions.length), () => answerPress(run.state, optionIdx)));
+  run.state = onStaticWorld(() => withSeed(mixSeed(run.setup.seed, 3000 + run.actions.length), () => answerPress(run.state, optionIdx)), run.setup.daily);
   run.step += 1;
   return run;
 }
@@ -898,14 +914,14 @@ export function carryOnSummary(run: HotSeatRun): CarryOnSummary {
   const s = run.state;
   const board = boardMeter(s);
   return {
-    position: onStaticWorld(() => leaguePosition(s)),
+    position: onStaticWorld(() => leaguePosition(s), run.setup.daily),
     clubs: s.table.length,
     points: myRow(s)?.pts ?? 0,
     leaguePlayed: leagueGamesPlayed(s),
     board: board.shown,
     boardBand: board.band,
     boardTone: board.tone,
-    windowFirst: onStaticWorld(() => nextFixture(s)).kind === 'window',
+    windowFirst: onStaticWorld(() => nextFixture(s), run.setup.daily).kind === 'window',
   };
 }
 

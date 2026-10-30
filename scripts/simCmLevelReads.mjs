@@ -44,7 +44,7 @@ import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
-import { ageOn, tableAugustAge, AGES_AS_OF } from './lib/cmAges.mjs';
+import { stampedSquads, agedSquads } from './lib/cmFlipProbe.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CM_LEVEL_READS_CONTROL || '';
@@ -79,35 +79,9 @@ if (CONTROL) {
 /* ---------- the 2026 squads file, stamped and (arm B2) aged to 1 August ---------- */
 const ROSTERS_REL = 'src/data/clubManagerRosters.ts';
 const ROSTERS = read(ROSTERS_REL);
-const META_OPEN = 'export const CM_ROSTER_META = {\n';
-if (ROSTERS.split(META_OPEN).length !== 2) { console.log('simCmLevelReads: ABORTED, the squads file has no single META'); process.exit(2); }
-const stamped = text => text.replace(META_OPEN, `${META_OPEN}  curve: 2,\n`);
+const ROSTERS_STAMPED = stampedSquads(ROSTERS);
 const BASIS = JSON.parse(read('scripts/data/cmAgesBasis2026.json'));
-function augustOf(line) {
-  const [age, year, id, how, born] = line;
-  if (how === 'born') return ageOn(born, AGES_AS_OF);
-  if (how === 'written') return age;
-  return tableAugustAge({ name: '', age, year, id }).age;
-}
-const CLUB_LINE = /^  '(.*)': \[$/;
-const ROW_LINE = /^(    \{ n: '.*', p: '\w+', a: )(\d+)(, v: [\d.]+, r: \d+ \},)$/;
-function aged(text) {
-  let club = null, i = 0, moved = 0, rows = 0;
-  const out = text.split('\n').map(l => {
-    const c = CLUB_LINE.exec(l);
-    if (c) { club = c[1].replace(/\\'/g, "'").replace(/\\\\/g, '\\'); i = 0; return l; }
-    const m = ROW_LINE.exec(l);
-    if (!m) return l;
-    const line = BASIS.clubs[club]?.[i++];
-    if (!line) throw new Error(`simCmLevelReads: no basis line for man ${i} of ${club}`);
-    const a = augustOf(line);
-    rows += 1;
-    if (a !== Number(m[2])) moved += 1;
-    return `${m[1]}${a}${m[3]}`;
-  });
-  return { text: out.join('\n'), moved, rows };
-}
-const AGED = aged(stamped(ROSTERS));
+const AGED = agedSquads(ROSTERS_STAMPED, BASIS);
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cmlevelreads-'));
 async function bundle(name, rosterText) {
@@ -131,7 +105,7 @@ async function bundle(name, rosterText) {
 const store = new Map();
 globalThis.localStorage = { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); }, removeItem: k => { store.delete(k); } };
 const A = await bundle('A', ROSTERS);
-const B1 = await bundle('B1', stamped(ROSTERS));
+const B1 = await bundle('B1', ROSTERS_STAMPED);
 const B2 = await bundle('B2', AGED.text);
 for (const arm of [A, B1, B2]) await arm.cm.ensureAllEraRosters();
 

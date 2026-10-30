@@ -89,6 +89,7 @@ import { nationalityOf } from '@/data/playerNationalities';
 import { NATION_CONFED } from '@/lib/soccerInternational';
 import type { Confederation } from '@/lib/soccerInternational';
 import { eraRosters } from '@/lib/clubManagerEras';
+import { cmWorldTag } from '@/data/clubManagerWorldRosters';
 import { addDays, dateKey, dayOfWeek, entryDatesOf, shortDate, worldYearOf } from '@/lib/clubManagerCalendar';
 import type { CalDate } from '@/lib/clubManagerCalendar';
 
@@ -192,7 +193,8 @@ const BAR_CACHE = new Map<string, Map<string, number>>();
  * than anybody being called against the wrong world.
  */
 export function nationBars(eraId: string | undefined): Map<string, number> {
-  const key = eraId ?? 'now';
+  /* Round 1600: today's world carries its tag, so the curve 1 view keeps its own bars (cmWorldTag). */
+  const key = eraId && eraId !== 'now' ? eraId : `${cmWorldTag()}now`;
   const hit = BAR_CACHE.get(key);
   if (hit) return hit;
   const byNation = new Map<string, number[]>();

@@ -47,7 +47,7 @@ import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 import { advanceClubManagerTrajectory } from '@/lib/clubManagerTrajectory';
 // Round 1035: the modern squads, baked plus the A-League Men, joined once.
-import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_READS_AGE } from '@/data/clubManagerWorldRosters';
+import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_READS_AGE, cmWorld, cmWorldTag } from '@/data/clubManagerWorldRosters';
 import { levelFrom, RATING_CEIL, ERA_RATING_AGE_SHIFT } from '@/lib/cmAgeRead';
 import { loadNationalityWorld, registerNationalityWorld } from '@/data/playerNationalities';
 /* Round 832: the three era bakes are no longer imported here. Each one is its
@@ -760,7 +760,8 @@ export function eraRostersRaw(eraId: string | undefined): Record<string, BakedPl
     if (!world) throw new Error(`Club Manager: the ${eraId} squads are not loaded yet (await ensureEraRosters first)`);
     return world;
   }
-  return CM_ROSTERS;
+  /* Round 1600: the live world, or the curve 1 view while a daily dated before the age read deals. */
+  return cmWorld();
 }
 
 const UPLIFTED_CACHE = new Map<string, Record<string, BakedPlayer[]>>();
@@ -817,7 +818,8 @@ function worldKeyOf(eraId: string, yearsOn: number, worldSeed?: number): { y: nu
   const seed = Number.isSafeInteger(worldSeed) && worldSeed! >= 0 && worldSeed! <= 4294967295
     && Number.isSafeInteger(y) && y > 0 ? worldSeed : undefined;
   const key = `${trajectoryEra}|${y}${seed === undefined ? '' : `|seed:${seed}`}`;
-  return { y, trajectoryEra, seed, key };
+  /* Round 1600: today's world puts its tag first, so the curve 1 view keeps its own projections (cmWorldTag). */
+  return { y, trajectoryEra, seed, key: trajectoryEra === 'now' ? `${cmWorldTag()}${key}` : key };
 }
 
 /* One club's projection. Every draw in it is keyed on the club (ageOne, generateFor) and nothing is shared
