@@ -1,0 +1,20 @@
+vitest exit=0 24s |    Duration  23.88s (transform 3.13s, setup 738ms, collect 12.67s, tests 44.10s, environment 4.37s, prepare 1.06s)
+simContracts exit=0 20s | ALL CONTRACT CHECKS PASSED
+simFreeAgents exit=0 107s | simFreeAgents: all sections passed
+fleet exit=0 179s | simCmFreeAgencyFleet: green, all eight sections held
+ctl-notrimpool exit=1 153s | simCmFreeAgencyFleet: CONTROL notrimpool FIRED: section 5 red (red: 1 (12), 5 (12))
+ctl-ledgeroff exit=1 159s | simCmFreeAgencyFleet: CONTROL ledgeroff FIRED: section 6 red
+ctl-staleseason exit=1 147s | simCmFreeAgencyFleet: CONTROL staleseason FIRED: section 6 red
+ctl-noloanrow exit=1 166s | simCmFreeAgencyFleet: CONTROL noloanrow FIRED: section 7 red
+ctl-norenewloan exit=1 165s | simCmFreeAgencyFleet: CONTROL norenewloan FIRED: section 7 red
+ctl-deletepool exit=1 159s | simCmFreeAgencyFleet: CONTROL deletepool FIRED: section 1 red (red: 1 (343), 4 (15), 8 (374))
+ctl-noretire exit=1 153s | simCmFreeAgencyFleet: CONTROL noretire FIRED: section 2 red (red: 2 (1), 6 (16))
+size-d exit=0 60s | simClubManagerSaveSize: all sections green
+ctl-nodedupe exit=1 155s | simCmFreeAgencyFleet: CONTROL nodedupe FIRED: section 3 red (red: 2 (2), 3 (81))
+size-1 exit=0 63s | simClubManagerSaveSize: all sections green
+ctl-norecover exit=1 156s | simCmFreeAgencyFleet: CONTROL norecover FIRED: section 4 red
+size-2 exit=0 62s | simClubManagerSaveSize: all sections green
+size-3 exit=0 59s | simClubManagerSaveSize: all sections green
+size-4 exit=0 64s | simClubManagerSaveSize: all sections green
+size-5 exit=0 61s | simClubManagerSaveSize: all sections green
+size-uncapped exit=1 48s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
