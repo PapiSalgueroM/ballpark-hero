@@ -1,0 +1,14 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+playCmSavePoints: bash .rc/default-support.sh run playCmSavePoints.mjs
+playCmShootoutAlignment: bash .rc/default-support.sh run playCmShootoutAlignment.mjs
+playCmSubsRule: bash .rc/default-support.sh run playCmSubsRule.mjs
+playCmTablesFit: bash .rc/default-support.sh run playCmTablesFit.mjs
+playCmTactics: bash .rc/default-support.sh run playCmTactics.mjs
+playCmVar: bash .rc/default-support.sh run playCmVar.mjs
+playCmWorldMoves: bash .rc/default-support.sh run playCmWorldMoves.mjs
+playCollegeGridFirstTap: bash .rc/default-support.sh run playCollegeGridFirstTap.mjs
+playCollegeSeat: bash .rc/default-support.sh run playCollegeSeat.mjs
+playConquestScenes: bash .rc/default-support.sh run playConquestScenes.mjs
+finish: bash .rc/default-support.sh finish
