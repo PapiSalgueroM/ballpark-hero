@@ -1,0 +1,4 @@
+simCmEuroPlay-nothursday exit=1 126s | simCmEuroPlay: control nothursday FIRED (114 failures, all its own)
+simCmEuroPlay-noplaygate exit=1 129s | simCmEuroPlay: control noplaygate FIRED (32 failures, all its own)
+simCmEuroPlay-nouelucl exit=1 134s | simCmEuroPlay: control nouelucl FIRED (1 failures, all its own)
+simCmEuroPlay-legfromucl exit=1 82s | simCmEuroPlay: control legfromucl FIRED (9 failures, all its own)
