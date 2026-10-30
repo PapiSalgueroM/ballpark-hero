@@ -1,0 +1,5 @@
+ctl-trimstranger: CM_FA_CONTROL=trimstranger node scripts/simCmFreeAgencyFleet.mjs
+ctl-trimbar: CM_FA_CONTROL=trimbar node scripts/simCmFreeAgencyFleet.mjs
+ctl-nodropout: CM_FA_CONTROL=nodropout node scripts/simCmFreeAgencyFleet.mjs
+ctl-dropreal: CM_FA_CONTROL=dropreal node scripts/simCmFreeAgencyFleet.mjs
+ctl-leftunsaid: CM_FA_CONTROL=leftunsaid node scripts/simCmFreeAgencyFleet.mjs
