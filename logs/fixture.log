@@ -1,0 +1,5 @@
+skip) one skip target on every page
+   174 of 174 addresses (172 sitemap pages, reset-password, an unknown address) draw exactly one #dukb-main
+simDailySaveHardening: part all green
+ src/test/fixtures/dailySavesPre848.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)

@@ -1,0 +1,1 @@
+fixture: R848_WRITE_FIXTURE=1 node scripts/simDailySaveHardening.mjs 2>&1 | tail -3; cp src/test/fixtures/dailySavesPre848.json "$RC_OUT/dailySavesPre848.json"; git diff --stat -- src/test/fixtures/dailySavesPre848.json
