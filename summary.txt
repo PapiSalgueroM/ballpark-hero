@@ -1,0 +1,6 @@
+vitest exit=0 9s |    Duration  8.52s (transform 2.90s, setup 353ms, collect 9.04s, tests 7.74s, environment 2.15s, prepare 624ms)
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simManagerHotSeat exit=0 66s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simSaveFence exit=0 55s | simSaveFence: all green (tabs, source, fleet)
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+tsc exit=0 81s | 

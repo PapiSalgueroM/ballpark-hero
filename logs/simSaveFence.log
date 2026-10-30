@@ -1,0 +1,21 @@
+tabs: two tabs on one career, and a Hot Seat handover beside one
+  B1 start: Brighton week 1, 1 meetings, last Aston Villa 2-3
+     after B played three: Brighton week 5, 4 meetings, last Coventry City 0-0
+     after A left: Brighton week 5, 4 meetings, last Coventry City 0-0 (A saw the move: true, its leave write landed: false)
+  REPLAY 0: B wrote "Brighton week 6, 5 meetings, last Arsenal 1-1", stale A played "Brighton week 6, 5 meetings, last Arsenal 1-1", on disk after A: "Brighton week 6, 5 meetings, last Arsenal 1-1" (A refused 2 times)
+  REPLAY 1: B wrote "Brighton week 7, 6 meetings, last Sunderland 2-2", stale A played "Brighton week 7, 6 meetings, last Sunderland 0-1", on disk after A: "Brighton week 7, 6 meetings, last Sunderland 2-2" (A refused 2 times)
+  REPLAY 2: B wrote "Brighton week 9, 7 meetings, last Crystal Palace 2-1", stale A played "Brighton week 9, 7 meetings, last Crystal Palace 3-0", on disk after A: "Brighton week 9, 7 meetings, last Crystal Palace 2-1" (A refused 2 times)
+  HOT SEAT: Arsenal handed over (saved): "Arsenal week 26, 26 meetings, last Hull City 2-0"; tab A saw it: true; after A left: "Arsenal week 26, 26 meetings, last Hull City 2-0"
+source: every call in src that writes the Club Manager save or the Soccer Career save is fenced or allowed
+  Soccer Career: the restoredSave initialiser starts with saveFence.adopt(SAVE_KEY);; 1 read(s) after it; 1 adopt call(s) in the page
+  98 files write storage; 6 writes of the save inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+  Soccer Career: 3 writes of soccerCareerSave inside saveFence.write, 4 on the allowed list (3 entries, each still there)
+fleet: 4 careers x seeds 0,1,2,3,4 x 2 seasons, a save, a load and a save after every entry (no FENCE_BASE: the repairs alone)
+  1919 saves on head, 0 of them in a state a load repair fires on
+  squeezed career: 455 saves the engine wrote with fewer than 14 men (seed:saves 0:92 1:92 2:87 3:92 4:92)
+  negative budget: saved at -2.5, opened on head at -2.5 with 0 draws
+  (set FENCE_BASE to a worktree of the base commit for the byte and draw comparison and the old saves)
+  section tabs: 15 checks, 0 red
+  section source: 18 checks, 0 red
+  section fleet: 3 checks, 0 red
+simSaveFence: all green (tabs, source, fleet)
