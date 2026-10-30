@@ -1,0 +1,81 @@
+mutation M5 applied to src/lib/nbaCareerIntl.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/nbaCareerIntl.test.ts[2m > [22m[2mhis line and his medals[2m > [22m[2mscales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1
+[22m[39mnbaIntlLine means over 4000 keyed games: pts 15.011, reb 3.754, ast 3.103
+
+ [31m❯[39m src/test/nbaCareerIntl.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 126[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mmaps the season labelled Y to the summer Y + 1[32m 1[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mhas no edition in the summers between[32m 0[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mlabels an edition from the ledger, Tokyo with the year it was held, a projected one with no host[32m 1[2mms[22m[39m
+   [32m✓[39m the summer after a season[2m > [22mnames the two group rounds only for a World Cup really played that way (review of Round 1544: no source for 2027 on)[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mcomes at 87 and not at 86 (the lead's ruling L1 of Round 1544)[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mnever comes when retired, suspended, too old or too hurt, or in a summer with no edition[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mnever comes to a career that ends after this season, by the hard stop or by his own choice[32m 0[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mrest writes the year, the edition and went false, and nothing else[32m 1[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mgo writes the row and never the tournament, which the save plays again; only health moves outside the block[32m 5[2mms[22m[39m
+   [32m✓[39m the call[2m > [22mplays the same tournament for the same career twice[32m 1[2mms[22m[39m
+   [32m✓[39m the game[2m > [22mis never level, and goes to overtime only from level[32m 98[2mms[22m[39m
+   [32m✓[39m the game[2m > [22mgives each nation its real rung in a played summer, drawing nothing, and a rung it really reached before one to come[32m 2[2mms[22m[39m
+[31m   [31m×[31m the game[2m > [22mcan draw every finish a nation really had before a summer to come, its latest one too (review of Round 1544, M5)[39m[32m 7[2mms[22m[39m
+[31m     → expected 85 to be 76 // Object.is equality[39m
+[31m   [31m×[31m the game[2m > [22mreads every played summer of a nation's history, written out here rather than taken from the helper (review of Round 1544, N1)[39m[32m 1[2mms[22m[39m
+[31m     → expected 92 to be 82 // Object.is equality[39m
+   [32m✓[39m his line and his medals[2m > [22mscales his season to a 40 minute game and a team of stars: 24, 6 and 5 come out near 15, 3.75 and 3.1[32m 5[2mms[22m[39m
+   [32m✓[39m his line and his medals[2m > [22mlabels a medal of an edition the ledger lacks by the name its competition went by that summer[32m 0[2mms[22m[39m
+   [32m✓[39m the help and the bindings[2m > [22mquotes the module numbers and never the marks[32m 1[2mms[22m[39m
+   [32m✓[39m the help and the bindings[2m > [22mbinds the NBA alone, the gate now and the whole face on demand (Round 1544)[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mthe game[2m > [22mcan draw every finish a nation really had before a summer to come, its latest one too (review of Round 1544, M5)
+[31m[1mAssertionError[22m: expected 85 to be 76 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 76[39m
+[31m+ 85[39m
+
+[36m [2m❯[22m forEach src/test/nbaCareerIntl.test.ts:[2m172:79[22m[39m
+    [90m170| [39m      /* a stream that lands in the middle of slot i must give the i-t…
+    [90m171| [39m      past[33m.[39m[34mforEach[39m((rung[33m,[39m i) [33m=>[39m {
+    [90m172| [39m        expect(nbaIntlStrength(qatar, nation, () => (i + 0.5) / past.l…
+    [90m   | [39m                                                                              [31m^[39m
+    [90m173| [39m        checked [33m+=[39m [34m1[39m[33m;[39m
+    [90m174| [39m      })[33m;[39m
+[90m [2m❯[22m src/test/nbaCareerIntl.test.ts:[2m171:12[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/nbaCareerIntl.test.ts[2m > [22mthe game[2m > [22mreads every played summer of a nation's history, written out here rather than taken from the helper (review of Round 1544, N1)
+[31m[1mAssertionError[22m: expected 92 to be 82 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 82[39m
+[31m+ 92[39m
+
+[36m [2m❯[22m forEach src/test/nbaCareerIntl.test.ts:[2m190:75[22m[39m
+    [90m188| [39m    [35mif[39m ([33m![39mqatar) [35mthrow[39m [35mnew[39m [33mError[39m([32m'no 2027'[39m)[33m;[39m
+    [90m189| [39m    usa[33m.[39m[34mforEach[39m((rung[33m,[39m i) [33m=>[39m {
+    [90m190| [39m      expect(nbaIntlStrength(qatar, 'USA', () => (i + 0.5) / usa.lengt…
+    [90m   | [39m                                                                          [31m^[39m
+    [90m191| [39m    })[33m;[39m
+    [90m192| [39m  })[33m;[39m
+[90m [2m❯[22m src/test/nbaCareerIntl.test.ts:[2m189:9[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (18)[39m
+[2m   Start at [22m 17:12:14
+[2m   Duration [22m 2.15s[2m (transform 1.03s, setup 60ms, collect 1.29s, tests 126ms, environment 259ms, prepare 115ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > the game > can draw every finish a nation really had before a summer to come%2C its latest one too (review of Round 1544%2C M5),line=172,column=79::AssertionError: expected 85 to be 76 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 76%0A+ 85%0A%0A ❯ forEach src/test/nbaCareerIntl.test.ts:172:79%0A ❯ src/test/nbaCareerIntl.test.ts:171:12%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > the game > reads every played summer of a nation's history%2C written out here rather than taken from the helper (review of Round 1544%2C N1),line=190,column=75::AssertionError: expected 92 to be 82 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 82%0A+ 92%0A%0A ❯ forEach src/test/nbaCareerIntl.test.ts:190:75%0A ❯ src/test/nbaCareerIntl.test.ts:189:9%0A%0A

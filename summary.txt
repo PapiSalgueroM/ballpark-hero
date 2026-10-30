@@ -1,0 +1,1 @@
+ctl-m5 exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/nbaCareerIntl.test.ts,title=src/test/nbaCareerIntl.test.ts > the game > reads every played summer of a
