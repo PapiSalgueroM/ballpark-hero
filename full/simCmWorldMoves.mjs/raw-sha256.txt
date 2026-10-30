@@ -1,0 +1,2 @@
+d95204d0c21aaecb8343a1bf6c89f159d9d54aba09c7c0743001cbe26e4869e8  /home/runner/work/_temp/rc-out/full/simCmWorldMoves.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmWorldMoves.mjs/stderr.log

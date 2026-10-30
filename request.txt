@@ -1,0 +1,5 @@
+#!serial
+# Supplemental immutable-main residual comparison A only. No final-source1022 qualification credit.
+prepare: bash .rc/default-support.sh prepare
+simCmWorldMoves: bash .rc/default-support.sh run simCmWorldMoves.mjs
+finish: bash .rc/default-support.sh finish
