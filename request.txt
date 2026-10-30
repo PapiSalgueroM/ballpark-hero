@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+playCmPlayerCard: ENGINES=chromium node scripts/playCmPlayerCard.mjs
+walk-thin: PLAY_CARDS_CONTROL=thin ENGINES=chromium node scripts/playCmPlayerCard.mjs
+walk-stack: PLAY_CARDS_CONTROL=stack ENGINES=chromium node scripts/playCmPlayerCard.mjs
+walk-swap: PLAY_CARDS_CONTROL=swap ENGINES=chromium node scripts/playCmPlayerCard.mjs
+walk-wide: PLAY_CARDS_CONTROL=wide ENGINES=chromium node scripts/playCmPlayerCard.mjs
+walk-nohold: PLAY_CARDS_CONTROL=nohold ENGINES=chromium node scripts/playCmPlayerCard.mjs
+walk-write: PLAY_CARDS_CONTROL=write ENGINES=chromium node scripts/playCmPlayerCard.mjs
+playCmLeagueLeaders: ENGINES=chromium node scripts/playCmLeagueLeaders.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs

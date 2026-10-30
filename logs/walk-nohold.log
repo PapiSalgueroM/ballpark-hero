@@ -1,0 +1,22 @@
+playCmPlayerCard: saves built: S1 season 3 week 26, 22 men with kept seasons, share 100; S4 share 100; S2 week 27, share 53; S3 kept from 3
+playCmPlayerCard: page seed 1397084510
+  FAIL 3: S1-320-top: after Back his row is not open as it was
+  FAIL 3: S1-320-keeper: after Back his row is not open as it was
+  FAIL 3: S1-320-idle: after Back his row is not open as it was
+  FAIL 3: S1-320-goals: after Back the goals board is not open as it was
+  FAIL 3: S1-320-sheets: after Back the sheets board is not open as it was
+  FAIL 3: S1-320-assists: Back left the page at 621, it stood at 1078
+  FAIL 3: S1-320-assists: after Back the assists board is not open as it was
+  FAIL 3: S2-320-goals: after Back the goals board is not open as it was
+  FAIL 3: S2-320-sheets: after Back the sheets board is not open as it was
+  FAIL 3: S2-320-assists: Back left the page at 711, it stood at 1168
+  FAIL 3: S2-320-assists: after Back the assists board is not open as it was
+  FAIL 3: S4-320-goals: after Back the goals board is not open as it was
+4       lines read on 9 S1 rival cards (share 100), 9 S4 rival cards (share 100), 9 S1 cards of mine, 9 S2 rival cards (share 53), 9 S3 cards of mine (kept from 2028-29)
+  FAIL 5: the looking arm could not go on: locator.click: Timeout 20000ms exceeded.
+green 1 the page is the reader: 45 checks
+green 2 the fit: 468 checks
+RED   3 nothing stacks or jumps: 135 checks, 54 failed
+green 4 the lines: 45 checks
+RED   5 a match with cards opened: 2 checks, 1 failed
+playCmPlayerCard: CONTROL nohold DID NOT FIRE as it must: section 3 has 54 failures, other red sections [5]
