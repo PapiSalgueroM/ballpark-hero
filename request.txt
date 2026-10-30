@@ -1,0 +1,13 @@
+#!build
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/hooks/useConnectionsRelabel.test.ts src/hooks/useConnectionsLoss.test.ts src/hooks/useConnectionsShake.test.ts src/test/nbaPlanningBench.test.tsx src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx --testTimeout=300000 --hookTimeout=120000
+plain: node scripts/simUsConnectionsFacts.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simConnectionsFacts: node scripts/simConnectionsFacts.mjs
+simFairPuzzles: node scripts/simFairPuzzles.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+mig1583: node scripts/qa/nbaConnections1583Migration.mjs check

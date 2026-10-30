@@ -1,0 +1,12 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+plain exit=0 0s | simUsConnectionsFacts: green. Every Baseball, NFL, NHL and NBA Connections group is held to the record, and no board has a second right answer the record can see (other t
+vitest exit=0 28s |    Duration  27.30s (transform 4.86s, setup 513ms, collect 7.76s, tests 31.11s, environment 2.97s, prepare 655ms)
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures
+simConnectionsFacts exit=0 1s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+simFairPuzzles exit=0 1s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simDailySaveHardening exit=0 71s | simDailySaveHardening: part all green
+simDailyPuzzleContract exit=0 0s | simDailyPuzzleContract: green. Every caller honours the contract the selection memo depends on.
+mig1583 exit=0 0s | supabase/migrations/20261031120000_round_1583_nba_connections_dated.sql matches the file at b4a331a9cb1db7411b91538eaeaf29385d2ce3a9 and 4708a3d5965729156892f3e538633b2c3
+tsc exit=0 74s | 
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
