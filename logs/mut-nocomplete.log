@@ -1,0 +1,2 @@
+copy exit=3 | control forget DID NOT FIRE: applied (forget: "Arsenal Kyiv (-2019)" dropped from the function and from gridNamesakes.json together) but every check stayed green
+MUT nocomplete: forget alone moves nothing else, and the control says DID NOT FIRE with exit 3
