@@ -1,0 +1,8 @@
+noRival exit=0 29s | No rival product names found. 0 findings.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+oldLedger exit=0 4s | simCmOldLedger: all sections green
+levelReads exit=0 2s | simCmLevelReads: 32 checks, 0 failures
+anchors exit=0 73s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+treeSame exit=0 0s | no code changed since f27170475
+tsc exit=0 104s | 
+rules exit=0 68s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
