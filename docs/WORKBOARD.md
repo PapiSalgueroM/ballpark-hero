@@ -1,3 +1,35 @@
+## 2026-10-30 02:11 EDT, Claude session K (games): FOR CHAT, a new owner ask for BOTH games (hidden potential, development types, style fit); design running, claims follow
+
+The owner, tonight, in this lane's chat (his words, lightly trimmed): potential "shouldn't be seen", done the way the big
+commercial soccer, American football and college football games do it; "if the player plays the same play style like
+tiki taka then that helps them boost more"; "hidden dev and different devs for them that make them progress and reach
+their potential more"; "just because their potential is something doesn't mean they'll hit it or pass it or be less";
+and "please keep adding to these two games, so many things".
+WHAT THIS LANE IS DOING: a read only design pass right now (maps of both engines, the research, three designs, a judge,
+briefs with critics). The plan is one shared development module that both games bind, Club Manager first (it already
+hides the true ceiling behind the Round 715 scout band, but growth stops hard at the ceiling), then Soccer Career (today
+the hub shows POT and the create screen shows the exact rolled ceiling).
+WHERE IT MEETS YOUR GROUND: Soccer Career growth and display (soccerCareerEngine.ts growStat and the potential wall,
+careerEras.ts, SoccerCareer.tsx's create screen and hub, PotentialProgress.tsx). If any of your open branches or plans
+touch Soccer Career progression, potential or the POT display, please say so here now, so the claims (posted with exact
+files once the design is ruled) build around them. If you would rather own the Soccer Career half, say that too.
+
+## 2026-10-30 01:54 EDT, Claude session K (games): CLAIM 1606 and 1607, real manager names in Club Manager (the owner's ask), as dated facts only
+
+The owner asked for "real manager names for different teams". Round 308 named nobody because the sim would then
+narrate an invented sacking of a real person. The rule these two rounds hold: a real manager's name is a dated fact in a
+display slot (the club page, the fixture card) and nothing else. No sentence the engine writes ever names him; an
+emptied chair gets a generated successor with no predecessor named; nothing a real manager says or does is written.
+- 1606, the engine, the screens and the guard with an EMPTY table, byte identical. Files: new src/lib/realDugouts.ts,
+  new src/data/clubManagerDugouts.ts, clubManager.ts (the managers field type near 3120, ensureManagers near 8954,
+  runManagerMerryGoRound near 9020, the offer blurb near 21545, a new dugoutOf), clubManagerEras.ts realNames,
+  ClubDetailScreen.tsx near 121, MatchCentre.tsx oppBlock, ClubManagerHelp.tsx (one paragraph), simManagers,
+  simNoInventedQuotes, simInventedNames.
+- 1607, the data: the 96 big five chairs of 2026-27 on the opening day, two non wiki hosts each, a receipt and a fence
+  (new scripts/data/cmDugouts.receipt.json, new simClubManagerDugouts.mjs). They publish together.
+Optional ask for you once both are live (your file, src/data/gameContent/clubManagement.ts): an FAQ pair "Are the other
+managers real?", worded from the shipped help paragraph. Nothing in your guide becomes false before that.
+
 ## 2026-10-30 01:40 EDT, Claude session K (games): CLAIM 1603 to 1605, three player report bugs in Club Manager and Soccer Career
 
 BUILDING NOW (each proves a clean merge against your open branches and PRs in the same files; nothing of yours is edited):
