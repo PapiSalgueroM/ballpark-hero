@@ -439,6 +439,12 @@ describe('nhl board: the saves the base wrote', () => {
       if (name.startsWith('fired')) {
         await waitFor(() => expect(outScreen(), `${name} opens out of work`).not.toBeNull(), { timeout: 30_000 });
         expect(document.querySelectorAll('[data-gm-out-of-work] [data-gm-desk="tiles"] button')).toHaveLength(3);
+        /* Round 1561 (fix, the review's bindlegacy): a save older than the seat block stands on the record the kit
+           reads off the league (careerBinding.ts), and only that record knows his old club's tier, which decides
+           next year. The save alone would print "Open it to see each ask" and lose the sentence below. */
+        const card = outScreen()?.textContent ?? '';
+        expect(card, `${name}: the card's next year line`).toContain('Pass, and next year the phone rings only if the Detroit Red Wings have climbed into the second tier of the league by then.');
+        expect(card, `${name}: the Job market box's line`).toContain('Next year hangs on your old club');
       } else {
         expect(outScreen(), 'the hub save is not out of work').toBeNull();
         for (const title of ['Career', 'GM level']) {
@@ -578,6 +584,54 @@ for (const row of BOARDS.filter(b => b.career)) {
       const won = readSave(row);
       expect(won.postseason.champion, 'a club of 99s wins it').toBe(target);
       expect(completion.calls).toEqual([{ path: row.career!.path, score: won.titles * 100 + won.seasonsPlayed * 5 }]);
+    });
+
+    /* Round 1561 (fix, critic 21d of brief 1559): a phone call left open when the season closes is the old club's, and
+       taking a seat drops it. Kept, the new club's Trades box never builds a deal: the old call's piece is on no roster
+       there, so no card draws to end it (controlFrontOfficeBoard talkskept and nhl-talkskept keep it). The desk is off,
+       so no deadline refuses the call on the last period. */
+    it("a call left open when he is fired stays with the old club: the new club's Trades box builds a deal", async () => {
+      const { Board } = await freshBoard(row, 18);
+      let view = render(<Board />);
+      clickText(row.clubLabel);
+      await waitFor(() => expect(readSave(row)?.phase).toBe('hub'), { timeout: 120_000 });
+      answerPresser();
+      view.unmount();
+      const s = readSave(row);
+      const spec = row.career!;
+      delete s.gm;
+      s.trust = 5;
+      s.mandate = spec.titleAsk(s.league.season);
+      for (const p of s.league.teams[s.myTeam].players) p.ovr = 60;
+      spec.toLastPeriod(s);
+      localStorage.setItem(row.saveKey, JSON.stringify(s));
+      view = render(<Board />);
+      row.drive.toLimit();
+      openCall(row);
+      expect(document.querySelector('[data-trade-talks]'), 'a call is open at the old club').not.toBeNull();
+      openTile(spec.tile);
+      await waitFor(() => expect(buttonNamed(spec.finalButton)?.disabled).toBe(false), { timeout: 30_000 });
+      fireEvent.click(buttonNamed(spec.finalButton)!);
+      await waitFor(() => expect(readSave(row)?.phase).toBe('fired'), { timeout: 60_000 });
+      fireEvent.click(buttonNamed('See who is calling')!);
+      await openCareerBox('Job market');
+      const target = offerIds()[0];
+      expect(target, 'somebody calls after a firing').toBeTruthy();
+      fireEvent.click(document.querySelector(`[data-gm-offer="${target}"]`)!);
+      const take = () => document.querySelector('[data-gm-take]') as HTMLButtonElement;
+      fireEvent.click(take());
+      fireEvent.click(take());
+      expect(readSave(row).myTeam, 'he took the job').toBe(target);
+      answerPresser();
+      fireEvent.click(buttonNamed(/Go to the draft/)!);
+      row.drive.runDraft(row);
+      expect(readSave(row).phase).toBe('hub');
+      openTile('Trades');
+      expect(document.querySelector('[data-trade-talks]'), "the old club's call is not on the new club's desk").toBeNull();
+      const partner = Object.keys(readSave(row).league.teams).find(x => x !== target)!;
+      fireEvent.click(screen.getAllByText(partner).find(el => el.tagName === 'BUTTON')!);
+      expect(document.querySelectorAll('[data-trade-row]').length, "the new club's Trades box builds a deal with a partner").toBeGreaterThan(0);
+      view.unmount();
     });
 
     it('a year out: two taps, the league a season on with one more champion, his counters as they were', async () => {
@@ -846,8 +900,34 @@ async function lookAt(title: string, landed: string) {
   if (!box) throw new Error(`no career box titled ${title}`);
   fireEvent.click(box);
   await waitFor(() => expect(document.querySelector(landed)).not.toBeNull(), { timeout: 30_000 });
+  /* Round 1561 (fix): a career box takes the hub, the tile rule's one screen at a time: none of the board's own boxes
+     is drawn under it (controlFrontOfficeBoard hubstack and nhl-hubstack read the desk's own panels alone again) */
+  expect(boardBoxes(), `${title} is drawn under the board's own boxes`).toEqual([]);
   backToHub();
   await waitFor(() => expect(document.querySelector('[data-gm-desk="panel"]')).toBeNull(), { timeout: 30_000 });
+}
+
+/** The board's own hub boxes on screen (both boards title them the same, foHub.ts), by their upper case title line. */
+const BOARD_BOX_TITLES = ['Roster', 'Free agency', 'Trades', 'Standings'];
+const boardBoxes = (): string[] => buttons().flatMap(b => Array.from(b.querySelectorAll('div'))
+  .filter(dv => dv.className.includes('uppercase') && BOARD_BOX_TITLES.includes((dv.textContent ?? '').trim()))
+  .map(dv => (dv.textContent ?? '').trim()));
+
+/** Critic 21d's setup: a phone call opened in the Trades box (a partner, his first man, the first of theirs open for
+    talks), the way NhlTradeLists.test and FrontOfficeCuts.test open one. */
+function openCall(row: BoardRow) {
+  openTile('Trades');
+  const s = readSave(row);
+  const partner = Object.keys(s.league.teams).find(x => x !== s.myTeam)!;
+  fireEvent.click(screen.getAllByText(partner).find(el => el.tagName === 'BUTTON')!);
+  const piece = s.league.teams[s.myTeam].players[0];
+  const sends = screen.getAllByText(`${piece.name} (${piece.pos})`);
+  fireEvent.click(sends[sends.length - 1]);
+  const open = Array.from(document.querySelectorAll('[data-trade-row]'))
+    .map(r => within(r as HTMLElement).queryByText('Open talks') as HTMLButtonElement | null)
+    .find(b => b && !b.disabled);
+  if (!open) throw new Error(`nobody on ${partner}'s list is open for talks`);
+  fireEvent.click(open);
 }
 
 /** The safe answer (the first, which never gambles) at a presser on screen, if there is one. */

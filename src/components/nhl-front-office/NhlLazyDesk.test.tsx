@@ -91,6 +91,16 @@ describe('NHL front office: the GM career kit loads when it is needed', () => {
     fireEvent.click(screen.getByText('Play'));
     await tick();
     expect(G.loader.state(), 'a season being played fetched the kit').toBe('idle');
+    /* Round 1561 (fix): the round is played, not only looked at. The press waits for the kit on the last round alone
+       (useGmCareerKit's waits), so a reloaded save in the middle of a season plays its round with the kit away
+       (controlFrontOfficeBoard nhl-waitsalways makes it wait on every round). */
+    const roundPress = Array.from(document.querySelectorAll('button')).find(b => (b.textContent ?? '').trim() === 'Play Round 5');
+    expect(roundPress, 'the Play box draws Play Round 5').toBeTruthy();
+    expect(roundPress!.disabled, 'a round in the middle of the season waits for the kit').toBe(false);
+    fireEvent.click(roundPress!);
+    await tick();
+    expect(JSON.parse(localStorage.getItem(SAVE_KEY)!).league.round, 'Play Round 5 did not play the round').toBe(6);
+    expect(G.loader.state(), 'playing a round fetched the kit').toBe('idle');
     first.unmount();
     /* the same save, the kit on the page: the box is read off the kit's own record (the league through the adapter) */
     await G.loader.load();

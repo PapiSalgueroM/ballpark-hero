@@ -1317,6 +1317,9 @@ export default function FrontOfficeBoard() {
     setHeld(null); setHeldRoom(null); setHeldBracket(null); setGmOpen(null);
     setTab(null); setWeekResults([]); setFeedSlam(null); setCutArmed(null); setShopOffers([]); setShopTried(false);
     setDraftNight(null); setPlayoffs(null); ask.current = 'week';
+    /* Round 1561 (fix, the NHL's critic 21d on its twin): a phone call left open at the old club is the old club's.
+       Kept, it hid the new club's deal builder (its piece is on no roster here, so no card drew to end it). */
+    setTalks(null); setTradePartner(''); setMyTradePiece('');
     /* The introduction presser, the call start makes: first day, full room. */
     setPresser(buildGmPresser(NFL_WORDS, {
       justHired: true, teamLabel: label(teamId), fired: false, wonTitle: false,

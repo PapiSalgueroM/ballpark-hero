@@ -83,6 +83,11 @@
  * (dist/.fo-board-control/<name>), so two controls run side by side no
  * longer take each other's copy away. A relative import in a board
  * ('./NhlWaiverReceipt') is written as its '@/' path in the copy.
+ * Round 1561's fix pass added three on each board for the review's mutants
+ * that every board test survived: waitsalways and nhl-waitsalways (the press
+ * waits for the kit on every period), hubstack and nhl-hubstack (a career
+ * box drawn under the board's own boxes) and talkskept and nhl-talkskept
+ * (the old club's phone call kept through a seat taken).
  * `blank` and `nhl-blank` are this file's own controls and are not part of `all`: it rewrites a
  * comment and nothing else, so no test may go red, and the run must say DID
  * NOT FIRE and exit 1. If `blank` ever exits 0 this file is lying.
@@ -192,6 +197,9 @@ const T = {
   nlzRecap: [NLZ, 'a save that loads on the recap waits in a holding box'],
   nlzFired: [NLZ, 'a save that loads on the fired screen waits in a holding box'],
   nlzOffline: [NLZ, 'a desk off save on the last round whose fetch fails'],
+  /* Round 1561's fix pass: critic 21d's call left open, on each board */
+  caTalks: [CA, 'nfl board: the career a call left open when he is fired stays with the old club'],
+  nhCaTalks: [CA, 'nhl board: the career a call left open when he is fired stays with the old club'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -282,6 +290,17 @@ const CONTROLS = {
   'nhl-askalways': ['the NHL board asks for the career kit while a season is played', [['    presser: presser !== null,\n    boxOpen: careerBoxOpen,', '    presser: true,\n    boxOpen: careerBoxOpen,']], [T.nlzSeason], [T.nlzRecap, T.nhDefault], 'nhl'],
   'nhl-nowait': ["the NHL last round's press does not wait for the career kit", [['  const closeWaits = careerKit.waits;', '  const closeWaits = false;']], [T.nlzRound, T.nlzOffline], [T.nlzRecap, T.nhDefault], 'nhl'],
   'nhl-recapnever': ['an NHL save that loads on the recap never asks for the career kit', [['  const careerKit = useGmCareerKit(nhlCareerKitLoader, {\n    phase,\n', "  const careerKit = useGmCareerKit(nhlCareerKitLoader, {\n    phase: phase === 'recap' ? 'draft' : phase,\n"]], [T.nlzRecap], [T.nlzFired, T.nlzRound], 'nhl'],
+  /* Round 1561's fix pass (the review's surviving mutants, each green on the board tests before these): the press
+     waiting for the kit on every period, which the shared hook keeps to the last one (hookwaits, written here as the
+     board's own wait); a career box opened on the hub drawn under the board's own boxes (hubpanels); and the old
+     club's phone call kept through a seat taken (talkskept, critic 21d; the NFL board gained the clearing in the
+     same pass) */
+  waitsalways: ['the press waits for the career kit on every week, not the last one alone', [['  const closeWaits = careerKit.waits;', "  const closeWaits = !careerKit.kit && phase === 'hub';"]], [T.lzSeason], [T.lzRecap]],
+  'nhl-waitsalways': ['the NHL press waits for the career kit on every round, not the last one alone', [['  const closeWaits = careerKit.waits;', "  const closeWaits = !careerKit.kit && phase === 'hub';"]], [T.nlzSeason], [T.nlzRecap], 'nhl'],
+  hubstack: ["a career box opened on the hub is drawn under the board's own boxes", [['  const deskPanelOpen = gmPanelFor(NFL_HUB_PANELS, gmOpen) !== null;', '  const deskPanelOpen = gmPanelFor(NFL_DESK_PANELS, gmOpen) !== null;']], [T.caLookHub], [T.caFired]],
+  'nhl-hubstack': ["an NHL career box opened on the hub is drawn under the board's own boxes", [['  const deskPanelOpen = gmPanelFor(NHL_HUB_PANELS, gmOpen) !== null;', '  const deskPanelOpen = gmPanelFor(NHL_DESK_PANELS, gmOpen) !== null;']], [T.nhCaLookHub], [T.nhCaFired], 'nhl'],
+  talkskept: ["the old club's phone call follows him through a seat taken", [["    setTalks(null); setTradePartner(''); setMyTradePiece('');\n", "    setTradePartner(''); setMyTradePiece('');\n"]], [T.caTalks], [T.caTake]],
+  'nhl-talkskept': ["the NHL old club's phone call follows him through a seat taken", [['setDraftNight(null); setTalks(null);', 'setDraftNight(null);']], [T.nhCaTalks], [T.nhCaTake], 'nhl'],
   'nhl-blank': ["THIS FILE'S OWN CONTROL on the NHL board: a comment is reworded and nothing else, so nothing may fire", [['/* Round 180: rank my roster against the league and let ownership set the ask. */', '/* Round 180: rank my roster against the league, and let ownership set the ask. */']], [T.nhDefault], [], 'nhl'],
 };
 const isBlank = n => n === 'blank' || n === 'nhl-blank';
