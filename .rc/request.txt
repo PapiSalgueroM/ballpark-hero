@@ -1,0 +1,34 @@
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simClubNamesakes.mjs
+c-blind: SIM_NAMESAKE_CONTROL=blind node scripts/simClubNamesakes.mjs
+c-unmerge: SIM_NAMESAKE_CONTROL=unmerge node scripts/simClubNamesakes.mjs
+c-noexclude: SIM_NAMESAKE_CONTROL=noexclude node scripts/simClubNamesakes.mjs
+c-wide: SIM_NAMESAKE_CONTROL=wide node scripts/simClubNamesakes.mjs
+c-mirrordrift: SIM_NAMESAKE_CONTROL=mirrordrift node scripts/simClubNamesakes.mjs
+c-onehost: SIM_NAMESAKE_CONTROL=onehost node scripts/simClubNamesakes.mjs
+c-forget: SIM_NAMESAKE_CONTROL=forget node scripts/simClubNamesakes.mjs
+c-manhost: SIM_NAMESAKE_CONTROL=manhost node scripts/simClubNamesakes.mjs
+c-wiki: SIM_NAMESAKE_CONTROL=wiki node scripts/simClubNamesakes.mjs
+c-twotm: SIM_NAMESAKE_CONTROL=twotm node scripts/simClubNamesakes.mjs
+c-unjudged: SIM_NAMESAKE_CONTROL=unjudged node scripts/simClubNamesakes.mjs
+c-payload: SIM_NAMESAKE_CONTROL=payload node scripts/simClubNamesakes.mjs
+c-londonspan: SIM_NAMESAKE_CONTROL=londonspan node scripts/simClubNamesakes.mjs
+c-leak: SIM_NAMESAKE_CONTROL=leak node scripts/simClubNamesakes.mjs
+c-freshmoved: SIM_NAMESAKE_CONTROL=freshmoved node scripts/simClubNamesakes.mjs
+c-freshstill: SIM_NAMESAKE_CONTROL=freshstill node scripts/simClubNamesakes.mjs
+c-namesakedrift: SIM_NAMESAKE_CONTROL=namesakedrift node scripts/simClubNamesakes.mjs
+c-nonet: SIM_NAMESAKE_CONTROL=nonet node scripts/simClubNamesakes.mjs
+c-widepool: SIM_NAMESAKE_CONTROL=widepool node scripts/simClubNamesakes.mjs
+c-purgeblind: SIM_NAMESAKE_CONTROL=purgeblind node scripts/simClubNamesakes.mjs
+gen-ledger: node scripts/qa/genArsenalLedger1587.mjs --check
+gen-payload: node scripts/qa/genClubNamesakes1587.mjs --check
+gen-owed: node scripts/qa/genArsenalOwed1587.mjs --check
+dealt-list: node scripts/qa/namesakeDealtDay1587.mjs 2026-10-30 +32
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simEdgeSync: node scripts/simEdgeSync.mjs
+rulefences: bad=0; for f in simLiveScores simInventedNames simNoInventedQuotes simNoInventedConduct simLegalPages simSingleFooter simCompletionOnce simNoDoubleRecord simDailyPuzzleContract simDailySaveHardening simFetchRetry simGoogleOnlyReturn simNavbarStatsReads simScoringCoverage simSiteSearch simResultMoment simGuideHeadings; do timeout 900 node scripts/$f.mjs > /tmp/rf-$f.log 2>&1; e=$?; echo "$f exit=$e | $(tail -1 /tmp/rf-$f.log | cut -c1-160)"; if [ $e -ne 0 ]; then bad=1; fi; done; exit $bad
