@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/lib/clubManagerSlots.test.ts src/test/clubManagerSlots.test.tsx --testTimeout=300000 --hookTimeout=300000
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
