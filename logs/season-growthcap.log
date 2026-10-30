@@ -1,0 +1,32 @@
+main runs: 3 careers x 8 seasons, 24 seasons complete, 2020 actions, 4.7 s
+
+2. Calendar: 23 rounds, everyone once a round, 17 opponents, 6 doubled with venues reversed
+  5 seeds x 40 seasons checked, 0 faults; double ups changed in 3510 of 3510 club season pairs (100.0%); home games 11 to 13 (printed, not asserted)
+  ok: every season: each round has every club once, 23 games, 17 opponents, 6 met twice with venues reversed
+  ok: the double up opponents change between seasons in at least 90 percent of club season pairs
+
+7. Summer and lists: ageing, growth inside potential, retirements, the draft refill
+  ok: no career crashed or got stuck (0)
+  36 summers (6 extra careers x 2 seasons plus the main runs), 36 season starts
+  faults: list size 0, floors 0, above potential 3108, gain at ceiling 1692, ages 0, retirements 0, draftee ages 0, names 0, draft order 0, picks vs vacancies 0
+  young players with headroom: 6307, mean gain 3.50; name bank load 648 of 3600 (18.0%)
+  ok: 36 players on every list at every season start
+  ok: every list keeps 7 defenders, 6 midfielders, 2 rucks and 7 forwards after every draft
+  FAIL [7]: nobody grows above potential, and players at their ceiling never gain
+  ok: young players with headroom gain on average
+  ok: everyone ages a year, retirees leave, draftees are 18
+  own retirement rule: 81 players reached 35 after a summer birthday, 0 faults
+  ok: nobody under 31 retires and nobody plays on past 35 (the guide's rule, checked without the engine)
+  ok: names are unique and non-empty across every list
+  ok: the draft order follows the declared rule and each club's picks equal its vacancies
+  constructed: 4 drafts where three clubs lost every ruck, 0 lists left short
+  ok: clubs pick role need first, so a club that lost its rucks drafts back to the floor
+  constructed: one pick left and one ruck short; refusal reads "Your list still needs 1 more ruck, and this pick would leave too few picks to get there."
+  ok: a pick that leaves your list short of a floor is refused with the reason
+  ok: the pick that fills the floor is taken
+  seed 61: league mean skill 63.68 to 67.43 (range 63.44 to 69.13, slope 0.105 a season), player spread 7.90 to 15.24
+  seed 61: five season means, first and last: skill 64.04 and 66.29, spread 14.89 and 9.74
+  ok: seed 61: league mean skill and spread, averaged over the first and the last five seasons, stay inside their bands
+  ok: seed 61: no drift in league skill across 24 seasons
+
+simAussieRulesSeason control growthcap: RED as intended (section 7 failed 1 checks, independent section 2 passed) in 15.4 s

@@ -1,0 +1,24 @@
+main runs: 3 careers x 8 seasons, 24 seasons complete, 2014 actions, 5.1 s
+
+2. Calendar: 23 rounds, everyone once a round, 17 opponents, 6 doubled with venues reversed
+  5 seeds x 40 seasons checked, 0 faults; double ups changed in 3510 of 3510 club season pairs (100.0%); home games 11 to 13 (printed, not asserted)
+  ok: every season: each round has every club once, 23 games, 17 opponents, 6 met twice with venues reversed
+  ok: the double up opponents change between seasons in at least 90 percent of club season pairs
+
+4. Finals: the 2026 wildcard week then the final eight, against a bracket hard coded from the receipts
+  ok: no career crashed or got stuck (0)
+  24 finals series; pair faults 0, qualifier faults 0, exit faults 74, eliminated clubs reappearing 0, path faults 0, count faults 0
+  level finals 0, finals that went to extra time 0; premiers by ladder place [[1,7],[2,5],[3,6],[4,5],[5,1]]
+  ok: every tie pairs exactly the clubs the 2026 bracket names, in the right week
+  FAIL [4]: the top ten and nobody else play the finals, and only the rest missed them
+  ok: an eliminated club never plays again
+  ok: premier paths: top four lose at most a qualifying final, QF winners play QF, PF, GF, 5th and 6th play EF, SF, PF, GF, 7th to 10th add the wildcard
+  ok: eleven finals a season
+  ok: no final ends level
+  300 constructed level finals: extra time blocks mean 1.09, most 4 (printed, not asserted), bound 20, still level 0
+  ok: a final level after four quarters goes to extra time and ends with a winner
+  FAIL [4]: extra time happened in the run (0 in 24 finals series)
+  resolver alone: 2000 random outcome sets, 169 faults
+  FAIL [4]: the bracket resolver names every pairing the receipts name, and leaves exactly one club standing
+
+simAussieRulesSeason control seven: RED as intended (section 4 failed 3 checks, independent section 2 passed) in 5.3 s

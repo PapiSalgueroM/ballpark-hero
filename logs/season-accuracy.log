@@ -1,0 +1,22 @@
+main runs: 3 careers x 8 seasons, 24 seasons complete, 2016 actions, 6.5 s
+
+2. Calendar: 23 rounds, everyone once a round, 17 opponents, 6 doubled with venues reversed
+  5 seeds x 40 seasons checked, 0 faults; double ups changed in 3510 of 3510 club season pairs (100.0%); home games 11 to 13 (printed, not asserted)
+  ok: every season: each round has every club once, 23 games, 17 opponents, 6 met twice with venues reversed
+  ok: the double up opponents change between seasons in at least 90 percent of club season pairs
+
+5. Score realism and the long season
+  ok: no career crashed or got stuck (0)
+  4968 games: team score 90.95, goals 13.86, behinds 7.77, accuracy 0.6409, draws 0.52%, margin 42.67, late over early 0.9629
+  ok: 4968 games measured
+  league mean fatigue after each round: rounds 1 to 6 46.75, rounds 18 to 23 56.34
+  ok: late season league fatigue 56.34 inside [50, 63]
+  FAIL [5]: teamScore 90.9496 inside [76, 84]
+  FAIL [5]: goals 13.8638 inside [11, 12.4]
+  FAIL [5]: behinds 7.7666 inside [9.3, 10.6]
+  FAIL [5]: accuracy 0.6409 inside [0.52, 0.56]
+  ok: drawRate 0.0052 inside [0.0025, 0.0135]
+  FAIL [5]: margin 42.6681 inside [36, 42]
+  ok: lateOverEarly 0.9629 inside [0.94, 0.99]
+
+simAussieRulesSeason control accuracy: RED as intended (section 5 failed 5 checks, independent section 2 passed) in 6.6 s

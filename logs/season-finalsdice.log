@@ -1,0 +1,22 @@
+main runs: 0 careers x 8 seasons, 0 seasons complete, 0 actions, 0.0 s
+
+2. Calendar: 23 rounds, everyone once a round, 17 opponents, 6 doubled with venues reversed
+  5 seeds x 40 seasons checked, 0 faults; double ups changed in 3510 of 3510 club season pairs (100.0%); home games 11 to 13 (printed, not asserted)
+  ok: every season: each round has every club once, 23 games, 17 opponents, 6 met twice with venues reversed
+  ok: the double up opponents change between seasons in at least 90 percent of club season pairs
+
+9. Determinism and dice
+  ok: no career crashed or got stuck (0)
+  ok: the same seed and actions give the same state (87 actions)
+  ok: playing the whole match equals four quarters with the same tactic
+  ok: the same pairing in seasons 1 and 2 rolls different dice
+  finals dice labels 22, 23, 24, 25, 26 (home and away rounds 0 to 22); 11 of your finals checked, 0 off their week's label
+  FAIL [9]: every finals week rolls its own dice label, above every home and away round
+  40 paired matches, each quarter countering what the opponent actually plays against playing into it: 89.3 points (sd 23.2); won 36 countering, 2 played into it; floor 40
+  ok: your tactic is applied to your side: countering what they play wins the same match by more
+  120 paired matches, the whole match countering the read against playing into it: 27.1 points (sd 39.5); floor 12
+  ok: countering the read still pays on average
+  28 of your matches, 1197 scoring events, 0 by a player outside his club's matchday 23
+  ok: every score in your matches comes from that club's own matchday 23
+
+simAussieRulesSeason control finalsdice: RED as intended (section 9 failed 1 checks, independent section 2 passed) in 2.7 s

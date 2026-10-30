@@ -1,0 +1,20 @@
+main runs: 3 careers x 8 seasons, 24 seasons complete, 2014 actions, 7.0 s
+
+2. Calendar: 23 rounds, everyone once a round, 17 opponents, 6 doubled with venues reversed
+  5 seeds x 40 seasons checked, 0 faults; double ups changed in 3510 of 3510 club season pairs (100.0%); home games 11 to 13 (printed, not asserted)
+  ok: every season: each round has every club once, 23 games, 17 opponents, 6 met twice with venues reversed
+  ok: the double up opponents change between seasons in at least 90 percent of club season pairs
+
+3. Ladder maths: the engine's ladder against the harness's own, after every round
+  ok: no career crashed or got stuck (0)
+  552 round ladders compared over 24 seasons; 552 mismatched; 0 with broken totals; 32 drawn games
+  FAIL [3]: played, W/D/L, points (4 and 2), PF, PA and percentage match the own ladder, in the same order, after every round
+  ok: sum of PF equals sum of PA, wins equal losses, draws come in pairs
+  ok: drawn games occur (32)
+  goal tally: 24 seasons (21 after the first), 0 whose tally is not that season's home and away goals, 0 leading goalkicker rows off the tally
+  ok: every season's goal tally is exactly that season's home and away goals, so it resets each summer
+  ok: the history row names the top of the tally: his club, his name and his goals
+  constructed tie: club-02 4 pts 50.0% at 1, club-10 4 pts 50.0% at 2
+  ok: an exact tie orders by club index: club 2 above club 10
+
+simAussieRulesSeason control percentage: RED as intended (section 3 failed 1 checks, independent section 2 passed) in 7.2 s
