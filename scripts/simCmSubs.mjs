@@ -33,6 +33,16 @@
                daily at Westerlo still asks about Cercle Brugge (it is dated before the rules), and a stamped
                free run on its seed asks about Gent. Prints the count of each question kind, and the base's
                beside it when SUBS_BASE is set.
+               Round 1600 (2026-10-30): a question counts as asked at a whistle only when its id is new
+               there. The engine hands back a fresh copy of the state on every call, so the old test (not
+               the same object as the one pending before) let a question asked when the January window
+               opened, still pending at the next whistle, through as a whistle question: on the age world
+               Brentford's window question at seed 9211 was "Arsenal on paper are a level above you", true
+               of Arsenal when it was asked (the next match then) and judged against Brighton, the match
+               after (probe r1600-pp). And the free run plays on the curve 1 view, the world the 2026-10-12
+               daily is dealt on (dated before CM_DAILY_NEW_NUMBERS_FROM), so the two runs differ in their
+               rules alone, as they did before the flip; the free run on today's world is printed, not
+               asserted (it asks the sack question there, which comes before a big game).
    With SUBS_BASE=<a checkout of the commit this branch started from> three more run (the default then):
      legacy    Everton 2005-06, Barcelona 2015-16 and Liverpool 2026-27 (quick sims with the coach and with
                noCoach) and two Hot Seat style careers, seeds 0 to SUBS_LEGACY_SEEDS-1, SUBS_LEGACY_SEASONS
@@ -66,6 +76,7 @@
    Exit 0 green, 1 red or a control fired, 2 could not run, 3 a control did not fire. */
 import './lib/offlineTransport.cjs';
 import { mkdtemp, readFile, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { createHash } from 'node:crypto';
 import { build } from 'esbuild';
@@ -137,6 +148,10 @@ function check(part, name, ok, detail = '') {
 const require = createRequire(import.meta.url);
 /** Manager Hot Seat, bundled with each engine (the engine module is the key). */
 const HS = new WeakMap();
+/** Round 1600: runs a stretch of calls on the curve 1 view of each engine's bundle (src/data/clubManagerWorldRosters.ts
+ *  onCurve1View), or as they are on a src tree from before the view. */
+const VIEW = new WeakMap();
+const setView = mod => VIEW.set(mod.cm, mod.onCurve1View ? fn => mod.onCurve1View(mod.CM_CURVE1_VIEW, fn) : fn => fn());
 /** Where each engine bundle was written, so a fresh copy of it can be loaded. */
 const OUT = new WeakMap();
 /** The engine (src/lib/clubManager.ts as `text`) bundled with Manager Hot Seat beside it. `srcRoot` is the
@@ -152,10 +167,13 @@ async function bundleEngine(text, name, folder, { srcRoot = path.join(root, 'src
     await writeFile(hsFile, hsText);
     alias['@/lib/managerHotSeat'] = hsFile;
   }
-  await writeFile(entry, "export * as cm from '@/lib/clubManager';\nexport * as hs from '@/lib/managerHotSeat';\n");
+  const view = existsSync(path.join(srcRoot, 'data', 'clubManagerCurve1View.ts'))
+    ? "export { onCurve1View } from '@/data/clubManagerWorldRosters';\nexport { CM_CURVE1_VIEW } from '@/data/clubManagerCurve1View';\n" : '';
+  await writeFile(entry, "export * as cm from '@/lib/clubManager';\nexport * as hs from '@/lib/managerHotSeat';\n" + view);
   await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias, nodePaths: [path.join(root, 'node_modules')] });
   const mod = require(output);
   HS.set(mod.cm, mod.hs);
+  setView(mod);
   OUT.set(mod.cm, output);
   return mod.cm;
 }
@@ -520,6 +538,7 @@ async function freshEngine(cm) {
   delete require.cache[require.resolve(output)];
   const mod = require(output);
   HS.set(mod.cm, mod.hs);
+  setView(mod);
   OUT.set(mod.cm, output);
   await mod.cm.ensureAllEraRosters();
   return mod.cm;
@@ -579,7 +598,8 @@ function pressFleet(cm, onAsk, fleet = PRESS_FLEET) {
         if (r.kind !== 'match') continue;
         played += 1;
         const q = s.press?.pending ?? null;
-        if (!q || q === before || s.press.lastWeek !== week) continue;
+        /* Round 1600: new at this whistle means a new id (the state is a fresh copy every call; see the header) */
+        if (!q || q.id === before?.id || s.press.lastWeek !== week) continue;
         kinds[q.kind] = (kinds[q.kind] ?? 0) + 1;
         if (onAsk && (q.kind === 'bigGame' || q.kind === 'derby')) onAsk(q, cm.nextFixtureFrom ? cm.nextFixtureFrom(s, s.week) : null, last, s, JSON.stringify(s.intl ?? null) !== intlBefore);
       }
@@ -625,9 +645,12 @@ function pressSection(cm, { base }) {
   const daily = withSeed(1, () => hs.dailyHotSeat('2026-10-12'));
   const acts = [{ t: 'match', m: 'balanced', talk: null }, { t: 'match', m: 'balanced', talk: null }];
   const dayRun = withSeed(2, () => hs.replayHotSeat({ club: daily.club, seed: daily.seed, daily: daily.daily }, acts));
-  const freeRun = withSeed(3, () => hs.replayHotSeat({ club: daily.club, seed: daily.seed, rules: 1331 }, acts));
+  /* Round 1600: on the curve 1 view, the daily's own world, so the two runs differ in their rules alone */
+  const freeRun = VIEW.get(cm)(() => withSeed(3, () => hs.replayHotSeat({ club: daily.club, seed: daily.seed, rules: 1331 }, acts)));
+  const freeLive = withSeed(3, () => hs.replayHotSeat({ club: daily.club, seed: daily.seed, rules: 1331 }, acts));
   const dayQ = dayRun.state.press?.pending?.text ?? '(none)', freeQ = freeRun.state.press?.pending?.text ?? '(none)';
-  console.log(`   2026-10-12 daily at ${daily.club}: "${dayQ}"; the stamped free run on its seed: "${freeQ}"`);
+  console.log(`   2026-10-12 daily at ${daily.club}: "${dayQ}"; the stamped free run on its seed, on the daily's world: "${freeQ}"`);
+  console.log(`   the same free run on today's world (printed, not asserted): "${freeLive.state.press?.pending?.text ?? '(none)'}"`);
   check(P, 'the 2026-10-12 daily still asks about Cercle Brugge (it is dated before the rules)', daily.club === 'Westerlo' && dayQ.includes('Cercle Brugge'));
   check(P, 'a stamped free run on the same seed asks about Gent after Cercle Brugge', freeQ.includes('Gent') && !freeQ.includes('Cercle Brugge'));
 }
