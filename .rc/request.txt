@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simEdgeSync: node scripts/simEdgeSync.mjs
+edge-drift: EDGE_SYNC_CONTROL=drift node scripts/simEdgeSync.mjs
+edge-attr: git worktree add -q /tmp/attr 8006e832ea09fc7f79c68381a612282b2bc4ba81 && ( cd /tmp/attr && git checkout 390ca9956^ -- supabase/functions/soccer-grid-validate/index.ts && git checkout dc145b8e2^ -- supabase/functions/validate-player/index.ts && git status --short && node scripts/simEdgeSync.mjs )
+edge-main: git worktree add -q /tmp/mainwt 28e7392f38f04a3af6da33e71ec5625ca1e2cd9f && ( cd /tmp/mainwt && node scripts/simEdgeSync.mjs )
+sim: node scripts/simClubNamesakes.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
