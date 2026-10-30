@@ -1,0 +1,6 @@
+sim exit=0 1s | simClubNamesakes: green. The detection flags Arsenal FC where it is two clubs, and the grid stops reading Arsenal inside another club's name, nowhere else.
+ctl-onehost exit=1 1s | simClubNamesakes: 1 finding(s).
+ctl-forget exit=1 2s | simClubNamesakes: 1 finding(s).
+simNoRivalNames exit=0 29s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 63s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 93s | 

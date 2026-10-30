@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simClubNamesakes.mjs
+ctl-onehost: SIM_NAMESAKE_CONTROL=onehost node scripts/simClubNamesakes.mjs
+ctl-forget: SIM_NAMESAKE_CONTROL=forget node scripts/simClubNamesakes.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
