@@ -1,0 +1,6 @@
+#!serial
+m-inplace: node .rc/x/mut1593.mjs m-inplace sim1234 vitest
+m-friday: node .rc/x/mut1593.mjs m-friday sim1234 vitestview
+m-neutral: node .rc/x/mut1593.mjs m-neutral sim1234
+m-noobj: node .rc/x/mut1593.mjs m-noobj sim1234 rules board
+nouelucl-s5to8: CM_EURO_PLAY_CONTROL=nouelucl CM_EURO_PLAY_PLAY_SEEDS=5,6,7,8 node scripts/simCmEuroPlay.mjs
