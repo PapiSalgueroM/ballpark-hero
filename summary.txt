@@ -1,0 +1,9 @@
+size-6 exit=0 102s | simClubManagerSaveSize: all sections green
+size-7 exit=0 106s | simClubManagerSaveSize: all sections green
+size-8 exit=0 107s | simClubManagerSaveSize: all sections green
+unseeded-head exit=1 240s | simCmUnseededWorld: 113 FAILURE(S)
+budget-base exit=1 285s | simClubManagerBudget: 1 FAILURE(S)
+budget-head exit=0 310s | simClubManagerBudget: PASS
+unseeded-base exit=1 229s | simCmUnseededWorld: 113 FAILURE(S)
+worldmoves-base exit=1 1300s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
+worldmoves-head exit=1 1326s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
