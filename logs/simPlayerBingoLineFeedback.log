@@ -1,0 +1,6 @@
+simPlayerBingoLineFeedback: seven actual page placement and completion cases pass, none skipped.
+simPlayerBingoLineFeedback: real line counting earns 100 for one added line and 200 for an intersection, matching displayed totals.
+simPlayerBingoLineFeedback: first-line bank is 100, blackout is 1700, shares and once-only result booking stay exact.
+simPlayerBingoLineFeedback: status feedback keeps its 1800ms lifetime and uses motion-safe animation classes.
+simPlayerBingoLineFeedback: wrong placement, skip, exhaustion, replay and unmount preserve accounting.
+simPlayerBingoLineFeedback: CRLF bindings proved, original bytes held and owned copies cleaned; fictional fixtures, no browser or backend calls.
