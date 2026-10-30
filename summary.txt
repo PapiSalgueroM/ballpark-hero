@@ -1,0 +1,4 @@
+m2-nflpress exit=0 6s | PROBE nfl press done
+m2-hook-fld exit=0 25s | simFoLazyDesk: all checks passed
+m2-hook-reload exit=0 6s | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+m2-hook-fob exit=1 15s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office/FrontOfficeGameDay.test.tsx,title=src/components/front-office/FrontOfficeGameDay.te
