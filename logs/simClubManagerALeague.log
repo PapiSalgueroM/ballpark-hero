@@ -1,0 +1,20 @@
+A) every ledger row with a group ships once, under its own club, and nobody else does
+   310 ledger rows with a group, 310 shipped, 2 without a group held back
+   joined world: 1 stale baked row(s) dropped, 0 A-League names in two squads
+B) every value cites its club page and every rating sits on the shared curve
+   310 players checked against 12 club pages, 61 with no value at the floor (rating 48)
+   partial by the ledger rule: Central Coast Mariners (13 of 25)
+C) every shipped nationality and age stands on two hosts
+   299 nationalities shipped on two hosts, 11 left unknown, every age on two hosts
+D) 10 seeded seasons at A-League clubs, plus one at each club outside the cup
+   boards: {"Win the A-League Men":2,"Make the finals":5,"Finish mid-table or better":5}
+   11 home players asks read at Australian clubs, every one for Australia
+   10 seasons ended, 1 sacked, 10 Australia Cup finals with a winner (Melbourne City 1, Sydney FC 2, Brisbane Roar 4, Perth Glory 1, Central Coast Mariners 1, Melbourne Victory 1)
+   Auckland FC: 0 cup weeks, cup null, sits out the Australia Cup, home players ask for New Zealand, season ended
+   Wellington Phoenix: 0 cup weeks, cup null, sits out the Australia Cup, home players ask for New Zealand, season ended
+   every short cup crowned a winner: scottish 12, austria 12, greece 14, denmark 12, switzerland 12, croatia 10, aleague 10; full fields of sixteen: 19
+   17 played brackets read for shape (round sizes, nobody twice, no self ties, each round fed by the last plus the byes): 0 faults
+E) the club, league, country and player counts in the copy agree with the engine
+   engine: 27 leagues, 454 clubs, 21 countries, 5113 real players in the joined world
+   10 count lines read across 6 files
+simClubManagerALeague: all checks passed
