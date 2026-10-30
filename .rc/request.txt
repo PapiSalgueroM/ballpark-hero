@@ -1,0 +1,5 @@
+simCmEuroPlay: node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-nocarry: CM_EURO_PLAY_CONTROL=nocarry node scripts/simCmEuroPlay.mjs
+simCmEuroPlay-mineflip: CM_EURO_PLAY_CONTROL=mineflip node scripts/simCmEuroPlay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+oldsaves: node scripts/proofWorldUclFleet.mjs --base 14a9af704 --fleet all --coach nocoach --seeds 1,2 --old-saves --uel-play-off
