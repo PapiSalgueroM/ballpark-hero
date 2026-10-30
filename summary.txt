@@ -1,0 +1,6 @@
+ctl-nodedupe exit=1 48s | simCmFreeAgencyFleet: CONTROL nodedupe FIRED: section 3 red (red: 2 (10), 3 (46))
+ctl-deletepool exit=1 93s | simCmFreeAgencyFleet: CONTROL deletepool FIRED: section 1 red (red: 1 (171), 2 (13))
+fa-olddelete exit=1 111s | simFreeAgents: 4 failure(s)
+ctl-noretire exit=1 185s | simCmFreeAgencyFleet: CONTROL noretire FIRED: section 2 red
+fa-nosummer exit=1 115s | simFreeAgents: 2 failure(s)
+fa-nodecay exit=1 95s | simFreeAgents: 2 failure(s)

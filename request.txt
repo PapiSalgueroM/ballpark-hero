@@ -1,0 +1,6 @@
+ctl-deletepool: CM_FA_SKIP_OLD=1 CM_FA_SEASONS=5 CM_FA_CONTROL=deletepool node scripts/simCmFreeAgencyFleet.mjs
+ctl-noretire: CM_FA_SKIP_OLD=1 CM_FA_CONTROL=noretire node scripts/simCmFreeAgencyFleet.mjs
+ctl-nodedupe: CM_FA_SKIP_OLD=1 CM_FA_SEASONS=3 CM_FA_CONTROL=nodedupe node scripts/simCmFreeAgencyFleet.mjs
+fa-olddelete: FA_CONTROL=olddelete node scripts/simFreeAgents.mjs
+fa-nosummer: FA_CONTROL=nosummer node scripts/simFreeAgents.mjs
+fa-nodecay: FA_CONTROL=nodecay node scripts/simFreeAgents.mjs

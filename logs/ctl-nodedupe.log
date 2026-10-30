@@ -1,0 +1,30 @@
+  FAIL section 2: Everton none summer 2: 1 retired off the list and no news line says so
+  Everton now none: 20 men left, lost 0, twice 0, 6 retired off the list; at season 4 19 on the list besides the journeymen, median age 26
+  Everton now eleven: 10 men left, lost 0, twice 0, 5 retired off the list; at season 4 12 on the list besides the journeymen, median age 31
+  FAIL section 2: Villarreal none summer 1: 5 retired off the list and no news line says so
+  FAIL section 3: Villarreal none, season 2: Aleks Moretti (Youth) is in {"squad":0,"pool":2,"retired":0,"ai":0,"total":2}
+  FAIL section 3: Villarreal none, season 2: on the list twice: Aleks Moretti (Youth)
+  FAIL section 3: Villarreal none, season 3: Aleks Moretti (Youth) is in {"squad":0,"pool":2,"retired":0,"ai":0,"total":2}
+  FAIL section 3: Villarreal none, season 3: on the list twice: Aleks Moretti (Youth)
+  FAIL section 3: Villarreal none, season 4: Aleks Moretti (Youth) is in {"squad":0,"pool":2,"retired":0,"ai":0,"total":2}
+  FAIL section 3: Villarreal none, season 4: on the list twice: Aleks Moretti (Youth)
+  Villarreal now none: 26 men left, lost 0, twice 6, 5 retired off the list; at season 4 26 on the list besides the journeymen, median age 27
+  FAIL section 2: Villarreal eleven summer 1: 4 retired off the list and no news line says so
+  FAIL section 3: Villarreal eleven, season 2: Enzo Achebe (Youth) is in {"squad":0,"pool":2,"retired":0,"ai":0,"total":2}
+  FAIL section 3: Villarreal eleven, season 2: on the list twice: Enzo Achebe (Youth)
+  FAIL section 2: Villarreal eleven summer 2: 1 retired off the list and no news line says so
+  Villarreal now eleven: 13 men left, lost 0, twice 6, 5 retired off the list; at season 4 14 on the list besides the journeymen, median age 27
+  FAIL section 2: Freiburg none summer 3: 1 retired off the list and no news line says so
+  Freiburg now none: 20 men left, lost 0, twice 6, 6 retired off the list; at season 4 19 on the list besides the journeymen, median age 26
+  FAIL section 2: Freiburg eleven summer 1: 4 retired off the list and no news line says so
+  Freiburg now eleven: 13 men left, lost 0, twice 6, 6 retired off the list; at season 4 14 on the list besides the journeymen, median age 27
+  FAIL section 2: Ajax none summer 1: 6 retired off the list and no news line says so
+  FAIL section 2: Ajax none summer 3: 3 retired off the list and no news line says so
+  Ajax now none: 23 men left, lost 0, twice 4, 9 retired off the list; at season 4 20 on the list besides the journeymen, median age 29
+  Ajax now eleven: 10 men left, lost 0, twice 6, 8 retired off the list; at season 4 10 on the list besides the journeymen, median age 32
+  Braga now none: 28 men left, lost 0, twice 6, 6 retired off the list; at season 4 28 on the list besides the journeymen, median age 25
+  Braga now eleven: 13 men left, lost 0, twice 6, 5 retired off the list; at season 4 16 on the list besides the journeymen, median age 27
+  Southampton era2015 none: 19 men left, lost 0, twice 0, 1 retired off the list; at season 4 17 on the list besides the journeymen, median age 28
+  Southampton era2015 eleven: 10 men left, lost 0, twice 0, 0 retired off the list; at season 4 10 on the list besides the journeymen, median age 28
+simCmFreeAgencyFleet: 12 careers to season 4; 205 men left a squad, 383 summer checks; lost 0, twice 46; 62 retired off the list (10 summers unseen); list size at the end median 17, its median age median 27; old saves skipped
+simCmFreeAgencyFleet: CONTROL nodedupe FIRED: section 3 red (red: 2 (10), 3 (46))
