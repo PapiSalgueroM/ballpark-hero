@@ -1,0 +1,9 @@
+tsc exit=0 70s | 
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+vitest exit=0 39s |    Duration  38.04s (transform 3.89s, setup 648ms, collect 12.31s, tests 53.10s, environment 3.86s, prepare 895ms)
+m1always exit=0 81s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+m3nosm exit=1 73s | playFirstVisitDialogs: RED. 2 bar lines: /soccer-career#hub 320x640, /soccer-career#hub 390x844
+m6card exit=1 72s | playFirstVisitDialogs: RED. 3 bar lines: /soccer-career#kept-aside 320x640, /soccer-career#kept-aside 390x844, /soccer-career#kept-aside 1280x900
+m7foot exit=1 74s | playFirstVisitDialogs: RED. 1 bar lines: /soccer-career#hub 320x640
