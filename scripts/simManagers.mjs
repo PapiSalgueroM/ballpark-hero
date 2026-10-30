@@ -45,6 +45,10 @@
    7g. in every league, the summer you take the sentinel's own job (a move
        into his chair, the call an accepted offer makes) reads "You take
        over at {club}." and nothing names him, then or after.
+   7h. the offer from his emptied chair, built in every league with a club
+       a tier below his (a title season there, his club bottom), says only
+       that the club is making a change, and accepting it names nobody.
+       Floor 10 offers (7b alone meets one in 200 summers).
    8.  with SIM_MANAGERS_BASE=<commit>, a fleet (12 seeds by 5 eras by 3
        seasons, mid season starts, Hot Seat runs) saves the same bytes as
        that commit's engine (after the 7c strip once the table has rows).
@@ -60,6 +64,8 @@
                 name the sentinel.
      liveevent  every match writes the other manager into a live event, 7f
                 must name the sentinel.
+     offer      the offer blurb names the real man on his way out, 7h must
+                name the sentinel.
 
    Run: node scripts/simManagers.mjs
 */
@@ -76,7 +82,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL_NAME = process.env.SIM_MANAGERS_CONTROL || '';
 /* Round 1606: the sentinel controls, each judged on its own section's failures. */
-const SENTINEL_CONTROLS = { namedsack: '7b', recycle: '7b', takeover: '7g', liveevent: '7f' };
+const SENTINEL_CONTROLS = { namedsack: '7b', recycle: '7b', takeover: '7g', liveevent: '7f', offer: '7h' };
 if (CONTROL_NAME && CONTROL_NAME !== 'sever' && !SENTINEL_CONTROLS[CONTROL_NAME]) {
   console.error(`SIM_MANAGERS_CONTROL=${CONTROL_NAME} is not a control this harness knows (sever, ${Object.keys(SENTINEL_CONTROLS).join(', ')})`);
   process.exit(2);
@@ -298,6 +304,7 @@ async function realDugoutsSection() {
   const failB = failer('7b');
   const failG = failer('7g');
   const failF = failer('7f');
+  const failH = failer('7h');
   /* Everything a state says outside the record and the vacancy list, in one pass (spoken() copies the state first). */
   const said = state => JSON.stringify({ ...state, managers: undefined, pendingVacancies: undefined });
   /* The sentinel must be nobody: no shipped file under src (every roster, bake, pool and generator bank) carries
@@ -317,6 +324,7 @@ async function realDugoutsSection() {
   const edit = MODE === 'namedsack' ? { from: 'const holderReal = realOut.has(s.name);', to: 'const holderReal = false;' }
     : MODE === 'recycle' ? { from: 'if (recycled && !realOut.has(recycled)) {', to: 'if (recycled) {' }
     : MODE === 'takeover' ? { from: 'const displacedReal = isRealChair(record[state.clubName]);', to: 'const displacedReal = false;' }
+    : MODE === 'offer' ? { from: 'const outReal = !!out && (', to: 'const outReal = false && (' }
     /* A round that writes the other manager into a live event: one line per match naming whoever is in their chair. */
     : MODE === 'liveevent' ? { from: '  let trophyWon: string | null = null;', to: '  let trophyWon: string | null = null; { const oppMgr = state.managers?.[fx.opponent]?.name; if (oppMgr) events.push(`The other bench, ${oppMgr}, never sat down.`); }' }
     : null;
@@ -464,6 +472,42 @@ async function realDugoutsSection() {
     console.log(`   7g: ${moves} summers took the sentinel's own job, ${lines} takeover lines read (all "You take over at {club}."), ${bySection['7g'].fails} failures`);
     if (moves !== leagues.length) fail(`7g: only ${moves} of ${leagues.length} leagues moved you into his chair`);
     if (lines < Math.ceil(leagues.length / 2)) fail(`7g: only ${lines} of ${moves} takeover lines survived the feed's cut, too few to read (floor half the leagues)`);
+  }
+  /* 7h. The offer from an emptied real chair, built rather than waited for (7b meets one in 200 summers). In every
+     league with a club one tier below the sentinel's, a career there finishes a title season (90 points) with his
+     club bottom (0, the rest 40), so the axe picks his chair often and his club calls; the first seed of up to 16
+     whose offers carry his club is read, then accepted the way the hook accepts it. The offer may only say the
+     club is making a change, and nothing then or after may name him. Floor 10 offers. */
+  if (!MODE || MODE === 'offer') {
+    let tried = 0, unseated = 0, offers = 0, accepted = 0;
+    for (const L of leagues) {
+      const tierOf = club => S.cm.eraClubDefFor(club, L.era)?.tier;
+      const probe = seeded(hashSeed(`7h|${L.era}|${L.id}`), () => S.cm.startCareer(L.career, L.era)).value;
+      const playable = new Set((L.era === 'now' ? S.cm.playableClubs(L.id) : S.cm.eraPlayableClubs(L.era, L.id)).map(c => c.name));
+      const below = tierOf(L.sentinel) + 1;
+      const club = [...probe.leagueClubs].sort().find(n => n !== L.sentinel && n !== L.partial && playable.has(n) && tierOf(n) === below);
+      if (!club) continue;
+      tried += 1;
+      for (let k = 0; k < 16; k++) {
+        const seed = hashSeed(`7h|${L.era}|${L.id}|${k}`);
+        const c = seeded(seed, () => S.cm.startCareer(club, L.era)).value;
+        if (c.managers?.[L.sentinel]?.name !== SENTINEL) { unseated += 1; break; }
+        for (const row of c.table) row.pts = row.club === club ? 90 : row.club === L.sentinel ? 0 : 40;
+        const fin = seeded(seed + 1, () => S.cm.finishSeason(c).state).value;
+        const o = (fin.pendingSummary?.offers ?? []).find(x => x.club === L.sentinel);
+        if (!o || !(fin.pendingVacancies ?? []).some(v => v.club === L.sentinel)) continue;
+        offers += 1;
+        if (JSON.stringify(o).includes(SENTINEL)) failH(`${L.era} ${L.id}: the offer from ${L.sentinel} names ${SENTINEL}: "${o.blurb}"`);
+        else if (!o.blurb.includes('making a change in the dugout')) failH(`${L.era} ${L.id}: the offer from ${L.sentinel} does not say only that the club is making a change: "${o.blurb}"`);
+        const next = seeded(seed + 2, () => S.cm.startNextSeason(fin, L.sentinel)).value;
+        if (next.clubName === L.sentinel) accepted += 1;
+        const text = said(next);
+        if (text.includes(SENTINEL)) failH(`${L.era} ${L.id}: accepting the offer from ${L.sentinel} says ${SENTINEL}: "${text.slice(Math.max(0, text.indexOf(SENTINEL) - 80), text.indexOf(SENTINEL) + 40)}"`);
+        break;
+      }
+    }
+    console.log(`   7h: ${tried} leagues with a club a tier below his, ${offers} offers from his emptied chair read and ${accepted} accepted (all saying only that the club is making a change), ${unseated} skipped unseated, ${bySection['7h'].fails} failures`);
+    if (offers < 10) fail(`7h: only ${offers} offers from the emptied real chair were read (floor 10)`);
   }
   await ownAndManaged(S, byEra('now').find(l => l.id === 'premier') ?? byEra('now')[0]);
   return { bySection };
