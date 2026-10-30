@@ -1,0 +1,1 @@
+simCmPlayerCard: cannot run: CARDS_CONTROL=bogus is not a control of this harness (draw, emptykey, offbyone, noarchive, nocap, loadwrite, allcomps, namekey, latefrom, thisclub, keepoldest, noloans, linkalways, hotseat)

@@ -1,0 +1,28 @@
+simCmPlayerCard: 30 careers of 3 seasons, engines: candidate, off, base; PAST_KEPT 10
+cards   7861 checks: my men at 160 points, 3508 rival book rows at season ends, on the first seed of every club; notes seen {"thisclub":3499,"leftclub":9,"thin":917}
+stream  4300 of 4300 faces equal to the off engine (every entry, season end and summer, with the draw count)
+stream  4300 of 4300 faces equal to the base engine (every entry, season end and summer, with the draw count)
+archive 4182 checks; 1914 rows written and checked, 15 of them for a man out on loan at the season end, the most rows one man held 3
+cards   the namesake case at Coventry City: each of two men of one name reads his own row
+cap     Everton renewing, 15 seasons: 15 seasons, the most rows one man held 10
+size    candidate bytes a season: 162608 176309 187142 187038 191845 226705 202439 203597 206347 206335 206827 206754 211292 209608 211806
+size    archive bytes a season:   836 1219 1584 1941 2193 2543 2871 2999 3141 3308 3310 3534 3458 3178 3463
+size    season 15: 211806 bytes, of which the archive 3463; slope over seasons 4 to 15 1244 bytes a season (printed for the lead, not gated here)
+size    base bytes a season:      161746 175064 185532 185071 189626 224136 199542 200572 203180 203001 203491 203194 207808 206404 208317
+size    base season 15: 208317 bytes, slope 1116; candidate minus base: 862 1245 1610 1967 2219 2569 2897 3025 3167 3334 3336 3560 3484 3204 3489
+cap     a constructed squad of 25 archived 12 times holds 10 rows a man, the newest (seasons 3 to 12)
+oldsave the committed save of Round 1052 (Sevilla): six entries on, book 34 (late round index), 146 rival rows held, kept from no line
+oldsave the committed save of Round 1052 (Sevilla): loaded clean, season 1 played out, pastFrom 1, 20 men with a row
+oldsave the committed second tier save (Valencia): six entries on, book 34 (late round index), 136 rival rows held, kept from no line
+oldsave the committed second tier save (Valencia): loaded clean, season 1 played out, pastFrom 1, 17 men with a row
+oldsave a save parked on its season 1 review: nothing on load or at the summer, pastFrom 2 after season 2
+dailies 38 states of 4 Hot Seat days and 2 Deadline Day runs looked at
+markup  12 of 12 renders (Squad, Stats, a leaders board, a club page, on 3 saves) with no provider byte equal to the base commit's
+  cards    8189 checks, 0 failed
+  archive  4182 checks, 0 failed
+  stream   60 checks, 0 failed
+  cap      332 checks, 0 failed
+  oldsave  12 checks, 0 failed
+  dailies  38 checks, 0 failed
+  markup   12 checks, 0 failed
+simCmPlayerCard: all green, 12825 checks (259s)
