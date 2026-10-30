@@ -1,0 +1,19 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 15 node harnesses
+  PASS  simCareerDecisionOutcome.mjs   24.0s
+  PASS  simCareerEntryGuide.mjs        21.4s
+  PASS  simCareerHub.mjs                1.3s
+  PASS  simCareerInboxBeats.mjs       100.5s
+  PASS  simCareerPreDraft.mjs          58.9s
+  PASS  simCareerRivalryEvents.mjs     19.4s
+  PASS  simCareerSeasonReview.mjs      28.4s
+  PASS  simCareerTraining.mjs          31.8s
+  PASS  simExtension.mjs                1.3s
+  PASS  simHomeFront.mjs                2.2s
+  PASS  simRevealMoments.mjs           27.9s
+  PASS  simSessionMarks.mjs             1.0s
+  PASS  simTycoonGear.mjs               7.1s
+  PASS  simUsCareerProspect.mjs        29.8s
+  PASS  simUsCoachCareer.mjs            7.5s
+
+All 15 harnesses green.
