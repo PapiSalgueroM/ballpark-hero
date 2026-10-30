@@ -152,6 +152,12 @@
    Under nocal no career is handed over; under clobber arm (b) fails on
    every survivor; under sackoffer every sacked run fails;
    under nostamp and card every handover fails (39 of 39 on the own seed).
+   After the review fixes (the second career, the wider arms (g) and (i)),
+   on a runner (r1592-fx-a, 2026-10-30, head d817a288f): 43, 41 and 43
+   survivors on the own seed and SIM_SEED=1 and 2, every arm on every one;
+   nochanged turns (i) and (h) red on 43 of 43 (131 failures), noswapback
+   turns (g) red on 43 of 43 (86 failures, both parked rows), emptysaved
+   turns (g) red on 43 of 43 (the empty device row).
    A review probe on a sixth seed saw 6 careers sacked in Club Manager, so
    the reported 2 to 4 is not a ceiling; the offer card warns when the board
    is not yet safe.
