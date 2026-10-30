@@ -1,0 +1,3 @@
+1888 /home/runner/work/_temp/rc-out/full/simCareerContinental.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerContinental.mjs/stderr.log
+1888 total

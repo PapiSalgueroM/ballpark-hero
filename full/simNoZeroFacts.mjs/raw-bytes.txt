@@ -1,0 +1,3 @@
+1061 /home/runner/work/_temp/rc-out/full/simNoZeroFacts.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNoZeroFacts.mjs/stderr.log
+1061 total

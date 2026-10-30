@@ -1,0 +1,3 @@
+888 /home/runner/work/_temp/rc-out/full/simCmShirtSales.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simCmShirtSales.mjs/stderr.log
+888 total

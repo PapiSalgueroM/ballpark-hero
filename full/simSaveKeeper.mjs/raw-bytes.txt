@@ -1,0 +1,3 @@
+12970 /home/runner/work/_temp/rc-out/full/simSaveKeeper.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simSaveKeeper.mjs/stderr.log
+12970 total

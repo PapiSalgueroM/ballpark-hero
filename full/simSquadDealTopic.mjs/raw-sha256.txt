@@ -1,0 +1,2 @@
+fede04b94c7ac2b303c5d6abd6ddd476bb81f19e88a8f37ffe38960d2fa9e941  /home/runner/work/_temp/rc-out/full/simSquadDealTopic.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSquadDealTopic.mjs/stderr.log

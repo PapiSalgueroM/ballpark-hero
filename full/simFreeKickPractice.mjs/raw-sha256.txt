@@ -1,0 +1,2 @@
+69210db6e3f8b717dea26c42ba47d5b44a16467dac280a63022f8995e1f3c960  /home/runner/work/_temp/rc-out/full/simFreeKickPractice.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFreeKickPractice.mjs/stderr.log

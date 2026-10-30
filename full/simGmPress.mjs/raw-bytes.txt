@@ -1,0 +1,3 @@
+782 /home/runner/work/_temp/rc-out/full/simGmPress.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simGmPress.mjs/stderr.log
+782 total

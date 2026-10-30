@@ -1,0 +1,3 @@
+859 /home/runner/work/_temp/rc-out/full/simWorldCupSquads.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simWorldCupSquads.mjs/stderr.log
+859 total

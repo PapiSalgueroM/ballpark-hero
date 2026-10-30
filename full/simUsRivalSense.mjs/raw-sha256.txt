@@ -1,0 +1,2 @@
+d7fe7b9974e50c4236092a01107f83ce9d076a04123d2f7f400991c9d2bf363d  /home/runner/work/_temp/rc-out/full/simUsRivalSense.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simUsRivalSense.mjs/stderr.log

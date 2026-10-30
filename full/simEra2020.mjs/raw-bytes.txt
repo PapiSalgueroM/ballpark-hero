@@ -1,0 +1,3 @@
+4575 /home/runner/work/_temp/rc-out/full/simEra2020.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simEra2020.mjs/stderr.log
+4575 total

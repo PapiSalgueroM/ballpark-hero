@@ -1,0 +1,2 @@
+939abc9e1c20a5b47d1b4343137e404d99dcf1d114ec0088c3cffc2c75782625  /home/runner/work/_temp/rc-out/full/simInjuryArc.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simInjuryArc.mjs/stderr.log

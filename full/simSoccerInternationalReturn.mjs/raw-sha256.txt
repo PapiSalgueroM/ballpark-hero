@@ -1,0 +1,2 @@
+2defbf58e74724de27a912fb338df7ad51b74024202927557cf5ed3d7c70a3c0  /home/runner/work/_temp/rc-out/full/simSoccerInternationalReturn.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerInternationalReturn.mjs/stderr.log

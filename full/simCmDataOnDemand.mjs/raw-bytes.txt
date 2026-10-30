@@ -1,0 +1,3 @@
+1404 /home/runner/work/_temp/rc-out/full/simCmDataOnDemand.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmDataOnDemand.mjs/stderr.log
+1404 total

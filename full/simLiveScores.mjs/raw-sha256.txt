@@ -1,0 +1,2 @@
+a0a7bf5b1a0a6a4565762019c6c3b67da84206130f0131e9ad3dcd37f85e3c27  /home/runner/work/_temp/rc-out/full/simLiveScores.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simLiveScores.mjs/stderr.log

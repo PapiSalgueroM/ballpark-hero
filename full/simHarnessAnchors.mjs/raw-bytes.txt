@@ -1,0 +1,3 @@
+618 /home/runner/work/_temp/rc-out/full/simHarnessAnchors.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simHarnessAnchors.mjs/stderr.log
+618 total

@@ -1,0 +1,3 @@
+478 /home/runner/work/_temp/rc-out/full/simSingleFooter.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSingleFooter.mjs/stderr.log
+478 total

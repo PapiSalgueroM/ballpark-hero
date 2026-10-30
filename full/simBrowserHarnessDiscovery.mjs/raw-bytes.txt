@@ -1,0 +1,3 @@
+803 /home/runner/work/_temp/rc-out/full/simBrowserHarnessDiscovery.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simBrowserHarnessDiscovery.mjs/stderr.log
+803 total

@@ -1,0 +1,2 @@
+458a48aba7dc6dda063fc648a2955aa70693c4c11b0daa72dbb09070dfc3c2bb  /home/runner/work/_temp/rc-out/full/simFightPromoter.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simFightPromoter.mjs/stderr.log

@@ -1,0 +1,3 @@
+86572 /home/runner/work/_temp/rc-out/full/simSoccerInternationalReturn.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simSoccerInternationalReturn.mjs/stderr.log
+86572 total

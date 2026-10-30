@@ -1,0 +1,3 @@
+869 /home/runner/work/_temp/rc-out/full/simMidSeasonStart.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simMidSeasonStart.mjs/stderr.log
+869 total

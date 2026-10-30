@@ -1,0 +1,2 @@
+59b4985f94a2a796aae2b55ef56e25ae465b85a9188f38cce849e9241d506769  /home/runner/work/_temp/rc-out/full/simUfcFacts.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simUfcFacts.mjs/stderr.log

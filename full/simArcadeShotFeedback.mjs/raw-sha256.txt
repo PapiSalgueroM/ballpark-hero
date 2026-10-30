@@ -1,0 +1,2 @@
+0645de994b72e5372d00570d7b6d79e36e41be1730ac5c45ff102a3e132488d4  /home/runner/work/_temp/rc-out/full/simArcadeShotFeedback.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simArcadeShotFeedback.mjs/stderr.log

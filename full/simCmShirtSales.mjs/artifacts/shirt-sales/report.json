@@ -1,0 +1,213 @@
+{
+  "schema": 1,
+  "status": "passed",
+  "control": null,
+  "source": {
+    "commit": "f62e99c24c125309cd63857fd56d313d607a2324",
+    "before": {
+      "src/lib/clubManager.ts": "ea2bf9c72ad4097af2df77fa5c19e04cfbca0bcc9c39bf71dc7fc42f249b3cc2",
+      "src/lib/clubManagerFinances.ts": "8b4a59515252187b129feb41f69770c36e4c7175a3eada55bb700ef7042cd76b",
+      "src/lib/clubManagerCalendar.ts": "ee7a0ad2086ea52d10ef30f3fc02a4479132899eb30cbab815753cad3b4d6f6b",
+      "src/lib/clubManagerMeters.ts": "0f2d08797d3eeedf9d755a516f7a97760c2550cc8c1ceb9d7d28a864b3212424",
+      "src/lib/clubManagerHubLines.ts": "f49baac6242f3cb04a36cc5bbe23ca40df20f34c85c5eacdd9d0fc1ae1c826c8",
+      "src/hooks/useClubManager.ts": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "src/lib/worldOneOffs.ts": "9ebddd5c33519138ba3b8f3a861d575b9870914dc4cb1de5cd9294e1a67e84b0",
+      "src/lib/worldNights.ts": "95ca78f3f61426c97e390f3f59ae2c4234be2a3a47f45555ecf53e2de690d5fe",
+      "src/data/clubManagerRosters.ts": "f1a2ef3b68df755765e624d359831cf2627378e6987b3387d26f2943a087bbed",
+      "src/data/clubManagerWorldRosters.ts": "32f4d470368576706016afb77508a15b4be5335f700eb223af6aec783a64e65d",
+      "src/data/playerNationalities.ts": "db21b93b9a7202e88f7e66bb5d0774261e4b05ab5cda8ed8d0e4f411288c8779",
+      "src/data/clubManagerEra2005.ts": "bdd5c1f5eaeeae5a0a2b9394010f1aac3d407f48e0b8c6b2669e75b89668ee6a",
+      "src/data/clubManagerEra2020.ts": "2e8d121349d0d056dc3834f60f8e470459f1518d60f896c6181511a97cbfc5b3",
+      "package.json": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "package-lock.json": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76"
+    },
+    "bundleSha256": "a5930a4f1fc9aa6579d7ebd3805d820dd2214f24ef8c70fa31906474b6c757ee",
+    "after": {
+      "src/lib/clubManager.ts": "ea2bf9c72ad4097af2df77fa5c19e04cfbca0bcc9c39bf71dc7fc42f249b3cc2",
+      "src/lib/clubManagerFinances.ts": "8b4a59515252187b129feb41f69770c36e4c7175a3eada55bb700ef7042cd76b",
+      "src/lib/clubManagerCalendar.ts": "ee7a0ad2086ea52d10ef30f3fc02a4479132899eb30cbab815753cad3b4d6f6b",
+      "src/lib/clubManagerMeters.ts": "0f2d08797d3eeedf9d755a516f7a97760c2550cc8c1ceb9d7d28a864b3212424",
+      "src/lib/clubManagerHubLines.ts": "f49baac6242f3cb04a36cc5bbe23ca40df20f34c85c5eacdd9d0fc1ae1c826c8",
+      "src/hooks/useClubManager.ts": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "src/lib/worldOneOffs.ts": "9ebddd5c33519138ba3b8f3a861d575b9870914dc4cb1de5cd9294e1a67e84b0",
+      "src/lib/worldNights.ts": "95ca78f3f61426c97e390f3f59ae2c4234be2a3a47f45555ecf53e2de690d5fe",
+      "src/data/clubManagerRosters.ts": "f1a2ef3b68df755765e624d359831cf2627378e6987b3387d26f2943a087bbed",
+      "src/data/clubManagerWorldRosters.ts": "32f4d470368576706016afb77508a15b4be5335f700eb223af6aec783a64e65d",
+      "src/data/playerNationalities.ts": "db21b93b9a7202e88f7e66bb5d0774261e4b05ab5cda8ed8d0e4f411288c8779",
+      "src/data/clubManagerEra2005.ts": "bdd5c1f5eaeeae5a0a2b9394010f1aac3d407f48e0b8c6b2669e75b89668ee6a",
+      "src/data/clubManagerEra2020.ts": "2e8d121349d0d056dc3834f60f8e470459f1518d60f896c6181511a97cbfc5b3",
+      "package.json": "acfe14626dea53cf5f9c5e0286b766a22237656b52aac4c888b080873ac90e31",
+      "package-lock.json": "c7e3867eabf0bfa03a8aa6a5e601b0050b937ed210d48c6bbd241019e3c9ea76"
+    },
+    "unchanged": true
+  },
+  "plannedCases": 15,
+  "cases": [
+    {
+      "id": "penny-identity",
+      "status": "passed"
+    },
+    {
+      "id": "one-counter-per-charge",
+      "status": "passed"
+    },
+    {
+      "id": "malformed-and-overflow",
+      "status": "passed"
+    },
+    {
+      "id": "legacy-zero-no-backpay",
+      "status": "passed"
+    },
+    {
+      "id": "displayed-demand-and-era-scale",
+      "status": "passed"
+    },
+    {
+      "id": "small-club-pennies",
+      "status": "passed"
+    },
+    {
+      "id": "one-net-income-no-board-cost",
+      "status": "passed"
+    },
+    {
+      "id": "charged-weeks-projection",
+      "status": "passed"
+    },
+    {
+      "id": "unsafe-future-keeps-known-paid",
+      "status": "passed"
+    },
+    {
+      "id": "actual-engine-window-cash",
+      "status": "passed"
+    },
+    {
+      "id": "actual-skipped-night",
+      "status": "passed"
+    },
+    {
+      "id": "save-load-and-pure-reads",
+      "status": "passed"
+    },
+    {
+      "id": "same-club-carry-and-moves",
+      "status": "passed"
+    },
+    {
+      "id": "no-passive-time-or-random-income",
+      "status": "passed"
+    },
+    {
+      "id": "real-charged-prefixes",
+      "status": "passed"
+    }
+  ],
+  "prefixes": [
+    {
+      "kind": "modern",
+      "seed": 0,
+      "plannedChargedWeeks": 12,
+      "chargedWeeks": 12,
+      "entries": 12,
+      "immutabilityChecks": 12,
+      "ledger": {
+        "v": 1,
+        "weeks": 12,
+        "openingPence": 0,
+        "grossPence": 102790000,
+        "costPence": 41116000,
+        "paidPence": 61000000
+      }
+    },
+    {
+      "kind": "modern",
+      "seed": 8,
+      "plannedChargedWeeks": 12,
+      "chargedWeeks": 12,
+      "entries": 12,
+      "immutabilityChecks": 12,
+      "ledger": {
+        "v": 1,
+        "weeks": 12,
+        "openingPence": 0,
+        "grossPence": 90795000,
+        "costPence": 36318000,
+        "paidPence": 54000000
+      }
+    },
+    {
+      "kind": "historical",
+      "seed": 0,
+      "plannedChargedWeeks": 12,
+      "chargedWeeks": 12,
+      "entries": 12,
+      "immutabilityChecks": 12,
+      "ledger": {
+        "v": 1,
+        "weeks": 12,
+        "openingPence": 0,
+        "grossPence": 78900000,
+        "costPence": 31560000,
+        "paidPence": 47000000
+      }
+    },
+    {
+      "kind": "historical",
+      "seed": 8,
+      "plannedChargedWeeks": 12,
+      "chargedWeeks": 12,
+      "entries": 12,
+      "immutabilityChecks": 12,
+      "ledger": {
+        "v": 1,
+        "weeks": 12,
+        "openingPence": 0,
+        "grossPence": 83872500,
+        "costPence": 33549000,
+        "paidPence": 50000000
+      }
+    },
+    {
+      "kind": "custom",
+      "seed": 0,
+      "plannedChargedWeeks": 12,
+      "chargedWeeks": 12,
+      "entries": 12,
+      "immutabilityChecks": 12,
+      "ledger": {
+        "v": 1,
+        "weeks": 12,
+        "openingPence": 0,
+        "grossPence": 4695000,
+        "costPence": 1878000,
+        "paidPence": 2000000
+      }
+    },
+    {
+      "kind": "custom",
+      "seed": 8,
+      "plannedChargedWeeks": 12,
+      "chargedWeeks": 12,
+      "entries": 12,
+      "immutabilityChecks": 12,
+      "ledger": {
+        "v": 1,
+        "weeks": 12,
+        "openingPence": 0,
+        "grossPence": 3530000,
+        "costPence": 1412000,
+        "paidPence": 2000000
+      }
+    }
+  ],
+  "networkAttempts": 0,
+  "errors": [],
+  "observedCases": 15,
+  "passedCases": 15,
+  "failedCases": 0,
+  "randomRestored": true,
+  "clockRestored": true,
+  "elapsedSeconds": 1.091073347
+}

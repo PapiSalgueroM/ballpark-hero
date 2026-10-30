@@ -1,0 +1,3 @@
+4610 /home/runner/work/_temp/rc-out/full/simUfcFacts.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simUfcFacts.mjs/stderr.log
+4610 total

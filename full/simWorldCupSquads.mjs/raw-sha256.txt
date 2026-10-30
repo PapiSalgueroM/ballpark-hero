@@ -1,0 +1,2 @@
+bbcd5aa9533909745245773c975443831956c3197e2785c2d42c7c01aa25729e  /home/runner/work/_temp/rc-out/full/simWorldCupSquads.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simWorldCupSquads.mjs/stderr.log

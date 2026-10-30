@@ -1,0 +1,3 @@
+1379 /home/runner/work/_temp/rc-out/full/simConnectionsFacts.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simConnectionsFacts.mjs/stderr.log
+1379 total

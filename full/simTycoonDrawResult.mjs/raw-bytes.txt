@@ -1,0 +1,3 @@
+572 /home/runner/work/_temp/rc-out/full/simTycoonDrawResult.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simTycoonDrawResult.mjs/stderr.log
+572 total

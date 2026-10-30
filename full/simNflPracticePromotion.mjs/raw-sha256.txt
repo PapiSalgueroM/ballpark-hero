@@ -1,0 +1,2 @@
+6333345ced0c10bf92b3e6e90a2f1fe2bfc16739a27872ac5bbd678fd2aa122a  /home/runner/work/_temp/rc-out/full/simNflPracticePromotion.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNflPracticePromotion.mjs/stderr.log

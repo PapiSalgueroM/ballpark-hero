@@ -1,0 +1,3 @@
+2507 /home/runner/work/_temp/rc-out/full/simMysteryBoxMotion.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simMysteryBoxMotion.mjs/stderr.log
+2507 total

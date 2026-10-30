@@ -1,0 +1,3 @@
+786 /home/runner/work/_temp/rc-out/full/simNflPracticePromotion.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNflPracticePromotion.mjs/stderr.log
+786 total
