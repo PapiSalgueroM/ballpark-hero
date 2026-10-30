@@ -1,0 +1,10 @@
+3) Self test: the detector still catches what Round 137 removed
+   10 of 10 known bad lines flagged
+   7 of 7 defensible lines left alone
+1) Runtime: every line real seasons can put on screen
+   harvested 1454 distinct lines across 8 clubs
+   1 of them put words in a real player's mouth
+     real name (Testa Realmann) shares a line with quoted speech "I want my side pressing higher than anyone, and I know we c
+       Testa Realmann on the new season: "I want my side pressing higher than anyone, and I know we can."
+  FAIL: 1 rendered lines attribute invented speech or conduct to a real player
+control run: dugout FIRED, pass 1 caught 1 planted quote(s) from a real manager

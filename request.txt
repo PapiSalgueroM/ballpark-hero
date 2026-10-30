@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/clubDetailDugout.test.tsx src/test/clubDetailOwnClub.test.tsx src/test/clubManagerJobHunt.test.ts src/test/clubDetailFixtures.test.tsx --testTimeout=300000 --hookTimeout=120000
+simManagers: node scripts/simManagers.mjs
+simManagers-fleet: SIM_MANAGERS_BASE=c0c66e087 node scripts/simManagers.mjs
+ctl-namedsack: SIM_MANAGERS_CONTROL=namedsack node scripts/simManagers.mjs
+ctl-recycle: SIM_MANAGERS_CONTROL=recycle node scripts/simManagers.mjs
+ctl-takeover: SIM_MANAGERS_CONTROL=takeover node scripts/simManagers.mjs
+ctl-liveevent: SIM_MANAGERS_CONTROL=liveevent node scripts/simManagers.mjs
+ctl-offer: SIM_MANAGERS_CONTROL=offer node scripts/simManagers.mjs
+ctl-sever: SIM_MANAGERS_CONTROL=sever node scripts/simManagers.mjs
+ctl-bogus: SIM_MANAGERS_CONTROL=bogus node scripts/simManagers.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+quotes-dugout: QUOTES_CONTROL=dugout node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+roster-head: CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs
+roster-ctl-original: CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_CONTROL=original node scripts/simClubDetailCurrentRoster.mjs

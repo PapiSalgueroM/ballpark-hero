@@ -1,0 +1,218 @@
+7) real dugouts: a sentinel registered as real is a display fact and nothing else
+   sentinel "Testa Realmann" is in no src file; 47 leagues across 5 eras hold it
+  FAIL: 7b: now premier seed 0: the new season says Testa Realmann outside the record: "🪑 Bournemouth sack Zoran Idrissi after finishing 19th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: now laliga seed 2: the new season says Testa Realmann outside the record: "🪑 Atlético Madrid sack Oliwier Idrissi after finishing 19th. Testa Realmann, out at Alavés the same week, takes the chair."
+  FAIL: 7b: now bundesliga seed 4: the new season says Testa Realmann outside the record: "🪑 Köln sack Kelvin Akande after finishing 11th. Testa Realmann, out at Augsburg the same week, takes the chair."
+  FAIL: 7b: now eredivisie seed 6: the new season says Testa Realmann outside the record: "🪑 Feyenoord sack Zaid Kessler after finishing 6th. Testa Realmann, out at ADO Den Haag the same week, takes the chair."
+  FAIL: 7b: now eredivisie seed 6: after his chair was emptied Testa Realmann still sits at Feyenoord
+  FAIL: 7b: now saudi seed 7: the new season says Testa Realmann outside the record: "🪑 Al-Shabab sack Ethan Marchetti after finishing 16th. Testa Realmann, out at Abha the same week, takes the chair."
+  FAIL: 7b: now saudi seed 7: after his chair was emptied Testa Realmann still sits at Al-Shabab
+  FAIL: 7b: now mlsEast seed 8: the new season says Testa Realmann outside the record: "🪑 Charlotte FC sack Vito Pereira after finishing 14th. Testa Realmann, out at Atlanta United the same week, takes the chair."
+  FAIL: 7b: now mlsEast seed 8: after his chair was emptied Testa Realmann still sits at Charlotte FC
+  FAIL: 7b: now mlsWest seed 9: the new season says Testa Realmann outside the record: "🪑 St. Louis City sack Musa Mendes after finishing 14th. Testa Realmann, out at Austin FC the same week, takes the chair."
+  FAIL: 7b: now mlsWest seed 9: after his chair was emptied Testa Realmann still sits at St. Louis City
+  FAIL: 7b: now primeira seed 10: the new season says Testa Realmann outside the record: "🪑 Arouca sack Reece Nakamura after finishing 17th. Testa Realmann, out at Académico de Viseu the same week, takes the chair."
+  FAIL: 7b: now primeira seed 10: after his chair was emptied Testa Realmann still sits at Arouca
+  FAIL: 7b: now bundesliga2 seed 13: the new season says Testa Realmann outside the record: "🪑 Braunschweig sack Cheick Kalu after finishing 17th. Testa Realmann, out at Arminia Bielefeld the same week, takes the chair."
+  FAIL: 7b: now bundesliga2 seed 13: after his chair was emptied Testa Realmann still sits at Braunschweig
+  FAIL: 7b: now austria seed 15: the new season says Testa Realmann outside the record: "🪑 WSG Tirol sack Tadeo Haas after finishing 12th. Testa Realmann, out at Altach the same week, takes the chair."
+  FAIL: 7b: now austria seed 15: after his chair was emptied Testa Realmann still sits at WSG Tirol
+  FAIL: 7b: now denmark seed 17: the new season says Testa Realmann outside the record: "🪑 Brøndby IF sack Anders Bakker after finishing 11th. Testa Realmann, out at AC Horsens the same week, takes the chair."
+  FAIL: 7b: now denmark seed 17: after his chair was emptied Testa Realmann still sits at Brøndby IF
+  FAIL: 7b: now croatia seed 19: after his chair was emptied Testa Realmann still sits at Hajduk Split
+  FAIL: 7b: now ligamx seed 21: the new season says Testa Realmann outside the record: "🪑 Tigres UANL sack Zeke Antunes after finishing 16th. Testa Realmann, out at América the same week, takes the chair."
+  FAIL: 7b: now ligamx seed 21: after his chair was emptied Testa Realmann still sits at Tigres UANL
+  FAIL: 7b: now ligue2 seed 24: the new season says Testa Realmann outside the record: "🪑 Red Star FC sack Ludo Lindgren after finishing 14th. Testa Realmann, out at Annecy the same week, takes the chair."
+  FAIL: 7b: now ligue2 seed 24: after his chair was emptied Testa Realmann still sits at Red Star FC
+  FAIL: 7b: now russia seed 26: the new season says Testa Realmann outside the record: "🪑 Baltika sack Manu Hansen after finishing 3rd. Testa Realmann, out at Akhmat Grozny the same week, takes the chair."
+  FAIL: 7b: now russia seed 26: after his chair was emptied Testa Realmann still sits at Baltika
+  FAIL: 7b: now premier seed 27: the new season says Testa Realmann outside the record: "🪑 Nottingham Forest sack Jaden Machado after finishing 18th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: now premier seed 27: after his chair was emptied Testa Realmann still sits at Nottingham Forest
+  FAIL: 7b: now laliga seed 29: the new season says Testa Realmann outside the record: "🪑 Atlético Madrid sack Oliwier Idrissi after finishing 19th. Testa Realmann, out at Alavés the same week, takes the chair."
+  FAIL: 7b: now bundesliga seed 31: the new season says Testa Realmann outside the record: "🪑 Bayern Munich sack Alfie Mucci after finishing 3rd. Testa Realmann, out at Augsburg the same week, takes the chair."
+  FAIL: 7b: now saudi seed 34: the new season says Testa Realmann outside the record: "🪑 Al-Taawoun sack Rodri Jansen after finishing 17th. Testa Realmann, out at Abha the same week, takes the chair."
+  FAIL: 7b: now saudi seed 34: after his chair was emptied Testa Realmann still sits at Al-Taawoun
+  FAIL: 7b: now scottish seed 38: the new season says Testa Realmann outside the record: "🪑 Celtic sack Jaden Rossi after finishing 2nd. Testa Realmann, out at Aberdeen the same week, takes the chair."
+  FAIL: 7b: now scottish seed 38: after his chair was emptied Testa Realmann still sits at Celtic
+  FAIL: 7b: now superlig seed 39: the new season says Testa Realmann outside the record: "🪑 Başakşehir sack Ismael Sinclair after finishing 17th. Testa Realmann, out at Alanyaspor the same week, takes the chair."
+  FAIL: 7b: now superlig seed 39: after his chair was emptied Testa Realmann still sits at Başakşehir
+  FAIL: 7b: era2020 premier2020 seed 0: the new season says Testa Realmann outside the record: "🪑 Aston Villa sack Caio Gilbert after finishing 2nd. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2020 premier2020 seed 0: after his chair was emptied Testa Realmann still sits at Aston Villa
+  FAIL: 7b: era2020 laliga2020 seed 1: the new season says Testa Realmann outside the record: "🪑 Atlético Madrid sack Colm Martel after finishing 3rd. Testa Realmann, out at Alavés the same week, takes the chair."
+  FAIL: 7b: era2020 laliga2020 seed 1: after his chair was emptied Testa Realmann still sits at Atlético Madrid
+  FAIL: 7b: era2020 bundesliga2020 seed 3: the new season says Testa Realmann outside the record: "🪑 Bayer Leverkusen sack Axel Obi after finishing 17th. Testa Realmann, out at Arminia Bielefeld the same week, takes the chair."
+  FAIL: 7b: era2020 bundesliga2020 seed 3: after his chair was emptied Testa Realmann still sits at Bayer Leverkusen
+  FAIL: 7b: era2020 premier2020 seed 5: the new season says Testa Realmann outside the record: "🪑 Brighton sack Dominik Tavares after finishing 3rd. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2020 premier2020 seed 5: after his chair was emptied Testa Realmann still sits at Brighton
+  FAIL: 7b: era2020 bundesliga2020 seed 8: the new season says Testa Realmann outside the record: "🪑 Bayer Leverkusen sack Axel Obi after finishing 17th. Testa Realmann, out at Arminia Bielefeld the same week, takes the chair."
+  FAIL: 7b: era2020 bundesliga2020 seed 8: after his chair was emptied Testa Realmann still sits at Bayer Leverkusen
+  FAIL: 7b: era2020 ligue12020 seed 9: the new season says Testa Realmann outside the record: "🪑 Brest sack Zeke Maes after finishing 3rd. Testa Realmann, out at Angers the same week, takes the chair."
+  FAIL: 7b: era2020 ligue12020 seed 9: after his chair was emptied Testa Realmann still sits at Brest
+  FAIL: 7b: era2020 laliga2020 seed 11: the new season says Testa Realmann outside the record: "🪑 Valencia sack Alan Ilic after finishing 18th. Testa Realmann, out at Alavés the same week, takes the chair."
+  FAIL: 7b: era2020 laliga2020 seed 11: after his chair was emptied Testa Realmann still sits at Valencia
+  FAIL: 7b: era2020 seriea2020 seed 12: the new season says Testa Realmann outside the record: "🪑 Benevento sack Jorge Balogun after finishing 19th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2020 seriea2020 seed 12: after his chair was emptied Testa Realmann still sits at Benevento
+  FAIL: 7b: era2020 bundesliga2020 seed 13: the new season says Testa Realmann outside the record: "🪑 Freiburg sack Amadou Eriksen after finishing 7th. Testa Realmann, out at Arminia Bielefeld the same week, takes the chair."
+  FAIL: 7b: era2020 bundesliga2020 seed 13: after his chair was emptied Testa Realmann still sits at Freiburg
+  FAIL: 7b: era2020 ligue12020 seed 14: the new season says Testa Realmann outside the record: "🪑 Saint-Étienne sack Bo Gilbert after finishing 19th. Testa Realmann, out at Angers the same week, takes the chair."
+  FAIL: 7b: era2020 ligue12020 seed 14: after his chair was emptied Testa Realmann still sits at Saint-Étienne
+  FAIL: 7b: era2020 seriea2020 seed 17: the new season says Testa Realmann outside the record: "🪑 Udinese sack Dario Thiam after finishing 19th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2020 seriea2020 seed 17: after his chair was emptied Testa Realmann still sits at Udinese
+  FAIL: 7b: era2020 ligue12020 seed 19: the new season says Testa Realmann outside the record: "🪑 Brest sack Zeke Maes after finishing 19th. Testa Realmann, out at Angers the same week, takes the chair."
+  FAIL: 7b: era2020 ligue12020 seed 19: after his chair was emptied Testa Realmann still sits at Brest
+  FAIL: 7b: era2020 laliga2020 seed 21: the new season says Testa Realmann outside the record: "🪑 Atlético Madrid sack Colm Martel after finishing 19th. Testa Realmann, out at Alavés the same week, takes the chair."
+  FAIL: 7b: era2020 laliga2020 seed 21: after his chair was emptied Testa Realmann still sits at Atlético Madrid
+  FAIL: 7b: era2020 bundesliga2020 seed 23: the new season says Testa Realmann outside the record: "🪑 Bayer Leverkusen sack Axel Obi after finishing 17th. Testa Realmann, out at Arminia Bielefeld the same week, takes the chair."
+  FAIL: 7b: era2020 bundesliga2020 seed 23: after his chair was emptied Testa Realmann still sits at Bayer Leverkusen
+  FAIL: 7b: era2020 seriea2020 seed 27: the new season says Testa Realmann outside the record: "🪑 Udinese sack Dario Thiam after finishing 19th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2020 seriea2020 seed 27: after his chair was emptied Testa Realmann still sits at Udinese
+  FAIL: 7b: era2020 bundesliga2020 seed 28: the new season says Testa Realmann outside the record: "🪑 Gladbach sack Silas Gomes after finishing 8th. Testa Realmann, out at Arminia Bielefeld the same week, takes the chair."
+  FAIL: 7b: era2020 bundesliga2020 seed 28: after his chair was emptied Testa Realmann still sits at Gladbach
+  FAIL: 7b: era2020 ligue12020 seed 29: the new season says Testa Realmann outside the record: "🪑 Brest sack Zeke Maes after finishing 19th. Testa Realmann, out at Angers the same week, takes the chair."
+  FAIL: 7b: era2020 ligue12020 seed 29: after his chair was emptied Testa Realmann still sits at Brest
+  FAIL: 7b: era2020 seriea2020 seed 32: the new season says Testa Realmann outside the record: "🪑 Juventus sack Miro Valdes after finishing 10th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2020 seriea2020 seed 32: after his chair was emptied Testa Realmann still sits at Juventus
+  FAIL: 7b: era2020 bundesliga2020 seed 33: the new season says Testa Realmann outside the record: "🪑 Mainz sack Viktor Johansen after finishing 12th. Testa Realmann, out at Arminia Bielefeld the same week, takes the chair."
+  FAIL: 7b: era2020 bundesliga2020 seed 33: after his chair was emptied Testa Realmann still sits at Mainz
+  FAIL: 7b: era2020 premier2020 seed 35: the new season says Testa Realmann outside the record: "🪑 Brighton sack Dominik Tavares after finishing 19th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2020 premier2020 seed 35: after his chair was emptied Testa Realmann still sits at Brighton
+  FAIL: 7b: era2020 ligue12020 seed 39: the new season says Testa Realmann outside the record: "🪑 Brest sack Zeke Maes after finishing 19th. Testa Realmann, out at Angers the same week, takes the chair."
+  FAIL: 7b: era2020 ligue12020 seed 39: after his chair was emptied Testa Realmann still sits at Brest
+  FAIL: 7b: era2015 laliga2015 seed 1: the new season says Testa Realmann outside the record: "🪑 Sevilla sack Pau Ugarte after finishing 17th. Testa Realmann, out at Athletic Club the same week, takes the chair."
+  FAIL: 7b: era2015 laliga2015 seed 1: after his chair was emptied Testa Realmann still sits at Sevilla
+  FAIL: 7b: era2015 seriea2015 seed 2: the new season says Testa Realmann outside the record: "🪑 Napoli sack Kwame Sarr after finishing 14th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2015 seriea2015 seed 2: after his chair was emptied Testa Realmann still sits at Napoli
+  FAIL: 7b: era2015 bundesliga2015 seed 3: the new season says Testa Realmann outside the record: "🪑 Bayern Munich sack Miro Grimaldo after finishing 17th. Testa Realmann, out at Augsburg the same week, takes the chair."
+  FAIL: 7b: era2015 bundesliga2015 seed 3: after his chair was emptied Testa Realmann still sits at Bayern Munich
+  FAIL: 7b: era2015 ligue12015 seed 4: the new season says Testa Realmann outside the record: "🪑 Saint-Étienne sack Remi Toure after finishing 18th. Testa Realmann, out at Angers the same week, takes the chair."
+  FAIL: 7b: era2015 ligue12015 seed 4: after his chair was emptied Testa Realmann still sits at Saint-Étienne
+  FAIL: 7b: era2015 premier2015 seed 5: the new season says Testa Realmann outside the record: "🪑 Bournemouth sack Hakan Roman after finishing 19th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2015 premier2015 seed 5: after his chair was emptied Testa Realmann still sits at Bournemouth
+  FAIL: 7b: era2015 laliga2015 seed 6: the new season says Testa Realmann outside the record: "🪑 Barcelona sack Nikola Jimenez after finishing 19th. Testa Realmann, out at Athletic Club the same week, takes the chair."
+  FAIL: 7b: era2015 laliga2015 seed 6: after his chair was emptied Testa Realmann still sits at Barcelona
+  FAIL: 7b: era2015 seriea2015 seed 7: the new season says Testa Realmann outside the record: "🪑 Bologna sack Lorenzo Abara after finishing 19th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2015 seriea2015 seed 7: after his chair was emptied Testa Realmann still sits at Bologna
+  FAIL: 7b: era2015 bundesliga2015 seed 8: the new season says Testa Realmann outside the record: "🪑 Stuttgart sack Salim Brandt after finishing 16th. Testa Realmann, out at Augsburg the same week, takes the chair."
+  FAIL: 7b: era2015 bundesliga2015 seed 8: after his chair was emptied Testa Realmann still sits at Stuttgart
+  FAIL: 7b: era2015 laliga2015 seed 11: the new season says Testa Realmann outside the record: "🪑 Barcelona sack Nikola Jimenez after finishing 19th. Testa Realmann, out at Athletic Club the same week, takes the chair."
+  FAIL: 7b: era2015 laliga2015 seed 11: after his chair was emptied Testa Realmann still sits at Barcelona
+  FAIL: 7b: era2015 bundesliga2015 seed 13: the new season says Testa Realmann outside the record: "🪑 Stuttgart sack Salim Brandt after finishing 16th. Testa Realmann, out at Augsburg the same week, takes the chair."
+  FAIL: 7b: era2015 bundesliga2015 seed 13: after his chair was emptied Testa Realmann still sits at Stuttgart
+  FAIL: 7b: era2015 ligue12015 seed 14: the new season says Testa Realmann outside the record: "🪑 Saint-Étienne sack Remi Toure after finishing 18th. Testa Realmann, out at Angers the same week, takes the chair."
+  FAIL: 7b: era2015 ligue12015 seed 14: after his chair was emptied Testa Realmann still sits at Saint-Étienne
+  FAIL: 7b: era2015 seriea2015 seed 17: the new season says Testa Realmann outside the record: "🪑 Torino sack Nabil Dieng after finishing 19th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2015 seriea2015 seed 17: after his chair was emptied Testa Realmann still sits at Torino
+  FAIL: 7b: era2015 bundesliga2015 seed 18: the new season says Testa Realmann outside the record: "🪑 Stuttgart sack Salim Brandt after finishing 16th. Testa Realmann, out at Augsburg the same week, takes the chair."
+  FAIL: 7b: era2015 bundesliga2015 seed 18: after his chair was emptied Testa Realmann still sits at Stuttgart
+  FAIL: 7b: era2015 ligue12015 seed 19: the new season says Testa Realmann outside the record: "🪑 Saint-Étienne sack Remi Toure after finishing 18th. Testa Realmann, out at Angers the same week, takes the chair."
+  FAIL: 7b: era2015 ligue12015 seed 19: after his chair was emptied Testa Realmann still sits at Saint-Étienne
+  FAIL: 7b: era2015 seriea2015 seed 27: the new season says Testa Realmann outside the record: "🪑 Roma sack Tunde Weber after finishing 16th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2015 seriea2015 seed 27: after his chair was emptied Testa Realmann still sits at Roma
+  FAIL: 7b: era2015 bundesliga2015 seed 28: the new season says Testa Realmann outside the record: "🪑 Bayern Munich sack Miro Grimaldo after finishing 17th. Testa Realmann, out at Augsburg the same week, takes the chair."
+  FAIL: 7b: era2015 bundesliga2015 seed 28: after his chair was emptied Testa Realmann still sits at Bayern Munich
+  FAIL: 7b: era2015 ligue12015 seed 29: the new season says Testa Realmann outside the record: "🪑 Toulouse sack Adem Esposito after finishing 19th. Testa Realmann, out at Angers the same week, takes the chair."
+  FAIL: 7b: era2015 ligue12015 seed 29: after his chair was emptied Testa Realmann still sits at Toulouse
+  FAIL: 7b: era2015 premier2015 seed 30: the new season says Testa Realmann outside the record: "🪑 Manchester United sack Colm Seydou after finishing 10th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2015 premier2015 seed 30: after his chair was emptied Testa Realmann still sits at Manchester United
+  FAIL: 7b: era2015 seriea2015 seed 32: the new season says Testa Realmann outside the record: "🪑 Juventus sack Ethan Olsen after finishing 12th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2015 seriea2015 seed 32: after his chair was emptied Testa Realmann still sits at Juventus
+  FAIL: 7b: era2015 bundesliga2015 seed 33: the new season says Testa Realmann outside the record: "🪑 Darmstadt sack Ari Ricci after finishing 5th. Testa Realmann, out at Augsburg the same week, takes the chair."
+  FAIL: 7b: era2015 bundesliga2015 seed 33: after his chair was emptied Testa Realmann still sits at Darmstadt
+  FAIL: 7b: era2015 laliga2015 seed 36: the new season says Testa Realmann outside the record: "🪑 Málaga sack Rafa Dieng after finishing 12th. Testa Realmann, out at Athletic Club the same week, takes the chair."
+  FAIL: 7b: era2015 laliga2015 seed 36: after his chair was emptied Testa Realmann still sits at Málaga
+  FAIL: 7b: era2015 seriea2015 seed 37: the new season says Testa Realmann outside the record: "🪑 Sassuolo sack Liam Colombo after finishing 18th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2015 seriea2015 seed 37: after his chair was emptied Testa Realmann still sits at Sassuolo
+  FAIL: 7b: era2015 bundesliga2015 seed 38: the new season says Testa Realmann outside the record: "🪑 Hertha BSC sack Thiago Amaral after finishing 10th. Testa Realmann, out at Augsburg the same week, takes the chair."
+  FAIL: 7b: era2015 bundesliga2015 seed 38: after his chair was emptied Testa Realmann still sits at Hertha BSC
+  FAIL: 7b: era2015 ligue12015 seed 39: the new season says Testa Realmann outside the record: "🪑 Bordeaux sack Jorge Jankovic after finishing 19th. Testa Realmann, out at Angers the same week, takes the chair."
+  FAIL: 7b: era2015 ligue12015 seed 39: after his chair was emptied Testa Realmann still sits at Bordeaux
+  FAIL: 7b: era2010 laliga2010 seed 1: after his chair was emptied Testa Realmann still sits at Atlético Madrid
+  FAIL: 7b: era2010 bundesliga2010 seed 3: the new season says Testa Realmann outside the record: "🪑 Stuttgart sack Sven Maes after finishing 16th. Testa Realmann, out at Bayer Leverkusen the same week, takes the chair."
+  FAIL: 7b: era2010 bundesliga2010 seed 3: after his chair was emptied Testa Realmann still sits at Stuttgart
+  FAIL: 7b: era2010 ligue12010 seed 4: after his chair was emptied Testa Realmann still sits at Bordeaux
+  FAIL: 7b: era2010 seriea2010 seed 7: the new season says Testa Realmann outside the record: "🪑 Roma sack Onur Escobar after finishing 18th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2010 seriea2010 seed 7: after his chair was emptied Testa Realmann still sits at Roma
+  FAIL: 7b: era2010 bundesliga2010 seed 8: the new season says Testa Realmann outside the record: "🪑 Eintracht Frankfurt sack Jorge Leite after finishing 4th. Testa Realmann, out at Bayer Leverkusen the same week, takes the chair."
+  FAIL: 7b: era2010 bundesliga2010 seed 8: after his chair was emptied Testa Realmann still sits at Eintracht Frankfurt
+  FAIL: 7b: era2010 ligue12010 seed 9: the new season says Testa Realmann outside the record: "🪑 Bordeaux sack Vito Olsen after finishing 19th. Testa Realmann, out at Arles-Avignon the same week, takes the chair."
+  FAIL: 7b: era2010 ligue12010 seed 9: after his chair was emptied Testa Realmann still sits at Bordeaux
+  FAIL: 7b: era2010 seriea2010 seed 12: the new season says Testa Realmann outside the record: "🪑 Fiorentina sack Maxim Gallardo after finishing 9th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2010 seriea2010 seed 12: after his chair was emptied Testa Realmann still sits at Fiorentina
+  FAIL: 7b: era2010 bundesliga2010 seed 13: the new season says Testa Realmann outside the record: "🪑 Eintracht Frankfurt sack Jorge Leite after finishing 4th. Testa Realmann, out at Bayer Leverkusen the same week, takes the chair."
+  FAIL: 7b: era2010 bundesliga2010 seed 13: after his chair was emptied Testa Realmann still sits at Eintracht Frankfurt
+  FAIL: 7b: era2010 ligue12010 seed 14: the new season says Testa Realmann outside the record: "🪑 Lille sack Aurel Dembo after finishing 7th. Testa Realmann, out at Arles-Avignon the same week, takes the chair."
+  FAIL: 7b: era2010 ligue12010 seed 14: after his chair was emptied Testa Realmann still sits at Lille
+  FAIL: 7b: era2010 premier2010 seed 15: the new season says Testa Realmann outside the record: "🪑 Wigan Athletic sack Kalle Kaya after finishing 19th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2010 premier2010 seed 15: after his chair was emptied Testa Realmann still sits at Wigan Athletic
+  FAIL: 7b: era2010 ligue12010 seed 19: the new season says Testa Realmann outside the record: "🪑 Bordeaux sack Vito Olsen after finishing 3rd. Testa Realmann, out at Arles-Avignon the same week, takes the chair."
+  FAIL: 7b: era2010 ligue12010 seed 19: after his chair was emptied Testa Realmann still sits at Bordeaux
+  FAIL: 7b: era2010 laliga2010 seed 21: the new season says Testa Realmann outside the record: "🪑 Valencia sack Felipe Pinto after finishing 18th. Testa Realmann, out at Almería the same week, takes the chair."
+  FAIL: 7b: era2010 laliga2010 seed 21: after his chair was emptied Testa Realmann still sits at Valencia
+  FAIL: 7b: era2010 ligue12010 seed 24: the new season says Testa Realmann outside the record: "🪑 Marseille sack Tadeo Barros after finishing 10th. Testa Realmann, out at Arles-Avignon the same week, takes the chair."
+  FAIL: 7b: era2010 ligue12010 seed 24: after his chair was emptied Testa Realmann still sits at Marseille
+  FAIL: 7b: era2010 laliga2010 seed 26: the new season says Testa Realmann outside the record: "🪑 Valencia sack Felipe Pinto after finishing 18th. Testa Realmann, out at Almería the same week, takes the chair."
+  FAIL: 7b: era2010 laliga2010 seed 26: after his chair was emptied Testa Realmann still sits at Valencia
+  FAIL: 7b: era2010 seriea2010 seed 27: the new season says Testa Realmann outside the record: "🪑 Napoli sack Kwame Ahlberg after finishing 15th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2010 seriea2010 seed 27: after his chair was emptied Testa Realmann still sits at Napoli
+  FAIL: 7b: era2010 bundesliga2010 seed 28: the new season says Testa Realmann outside the record: "🪑 Eintracht Frankfurt sack Jorge Leite after finishing 4th. Testa Realmann, out at Bayer Leverkusen the same week, takes the chair."
+  FAIL: 7b: era2010 bundesliga2010 seed 28: after his chair was emptied Testa Realmann still sits at Eintracht Frankfurt
+  FAIL: 7b: era2010 premier2010 seed 30: the new season says Testa Realmann outside the record: "🪑 Birmingham City sack Marek Walsh after finishing 19th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2010 premier2010 seed 30: after his chair was emptied Testa Realmann still sits at Birmingham City
+  FAIL: 7b: era2010 bundesliga2010 seed 33: the new season says Testa Realmann outside the record: "🪑 Werder Bremen sack Rico Lindgren after finishing 17th. Testa Realmann, out at Bayer Leverkusen the same week, takes the chair."
+  FAIL: 7b: era2010 bundesliga2010 seed 33: after his chair was emptied Testa Realmann still sits at Werder Bremen
+  FAIL: 7b: era2010 seriea2010 seed 37: the new season says Testa Realmann outside the record: "🪑 Bologna sack Dennis Fernandes after finishing 19th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2010 seriea2010 seed 37: after his chair was emptied Testa Realmann still sits at Bologna
+  FAIL: 7b: era2010 bundesliga2010 seed 38: the new season says Testa Realmann outside the record: "🪑 Gladbach sack Gabriel Rosales after finishing 6th. Testa Realmann, out at Bayer Leverkusen the same week, takes the chair."
+  FAIL: 7b: era2010 bundesliga2010 seed 38: after his chair was emptied Testa Realmann still sits at Gladbach
+  FAIL: 7b: era2005 premier2005 seed 0: the new season says Testa Realmann outside the record: "🪑 Birmingham City sack Erik Steiner after finishing 19th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2005 premier2005 seed 0: after his chair was emptied Testa Realmann still sits at Birmingham City
+  FAIL: 7b: era2005 premier2005 seed 5: the new season says Testa Realmann outside the record: "🪑 Birmingham City sack Erik Steiner after finishing 19th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2005 premier2005 seed 5: after his chair was emptied Testa Realmann still sits at Birmingham City
+  FAIL: 7b: era2005 laliga2005 seed 6: the new season says Testa Realmann outside the record: "🪑 Villarreal sack Oliwier Kimura after finishing 19th. Testa Realmann, out at Alavés the same week, takes the chair."
+  FAIL: 7b: era2005 laliga2005 seed 6: after his chair was emptied Testa Realmann still sits at Villarreal
+  FAIL: 7b: era2005 seriea2005 seed 7: the new season says Testa Realmann outside the record: "🪑 Cagliari sack Reece Obi after finishing 3rd. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2005 seriea2005 seed 7: after his chair was emptied Testa Realmann still sits at Cagliari
+  FAIL: 7b: era2005 bundesliga2005 seed 8: the new season says Testa Realmann outside the record: "🪑 Duisburg sack Joaquin Haas after finishing 5th. Testa Realmann, out at Arminia Bielefeld the same week, takes the chair."
+  FAIL: 7b: era2005 bundesliga2005 seed 8: after his chair was emptied Testa Realmann still sits at Duisburg
+  FAIL: 7b: era2005 bundesliga2005 seed 13: the new season says Testa Realmann outside the record: "🪑 Bayern Munich sack Kian Kolar after finishing 17th. Testa Realmann, out at Arminia Bielefeld the same week, takes the chair."
+  FAIL: 7b: era2005 bundesliga2005 seed 13: after his chair was emptied Testa Realmann still sits at Bayern Munich
+  FAIL: 7b: era2005 ligue12005 seed 14: the new season says Testa Realmann outside the record: "🪑 Le Mans sack Jesper Ubeda after finishing 4th. Testa Realmann, out at AC Ajaccio the same week, takes the chair."
+  FAIL: 7b: era2005 ligue12005 seed 14: after his chair was emptied Testa Realmann still sits at Le Mans
+  FAIL: 7b: era2005 seriea2005 seed 17: the new season says Testa Realmann outside the record: "🪑 Cagliari sack Reece Obi after finishing 19th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2005 seriea2005 seed 17: after his chair was emptied Testa Realmann still sits at Cagliari
+  FAIL: 7b: era2005 bundesliga2005 seed 18: the new season says Testa Realmann outside the record: "🪑 Bayern Munich sack Kian Kolar after finishing 17th. Testa Realmann, out at Arminia Bielefeld the same week, takes the chair."
+  FAIL: 7b: era2005 bundesliga2005 seed 18: after his chair was emptied Testa Realmann still sits at Bayern Munich
+  FAIL: 7b: era2005 ligue12005 seed 19: the new season says Testa Realmann outside the record: "🪑 Toulouse sack Axel Nakamura after finishing 19th. Testa Realmann, out at AC Ajaccio the same week, takes the chair."
+  FAIL: 7b: era2005 ligue12005 seed 19: after his chair was emptied Testa Realmann still sits at Toulouse
+  FAIL: 7b: era2005 laliga2005 seed 21: the new season says Testa Realmann outside the record: "🪑 Villarreal sack Oliwier Kimura after finishing 19th. Testa Realmann, out at Alavés the same week, takes the chair."
+  FAIL: 7b: era2005 laliga2005 seed 21: after his chair was emptied Testa Realmann still sits at Villarreal
+  FAIL: 7b: era2005 ligue12005 seed 24: the new season says Testa Realmann outside the record: "🪑 Le Mans sack Jesper Ubeda after finishing 4th. Testa Realmann, out at AC Ajaccio the same week, takes the chair."
+  FAIL: 7b: era2005 ligue12005 seed 24: after his chair was emptied Testa Realmann still sits at Le Mans
+  FAIL: 7b: era2005 premier2005 seed 25: the new season says Testa Realmann outside the record: "🪑 West Brom sack Levi Solberg after finishing 18th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2005 premier2005 seed 25: after his chair was emptied Testa Realmann still sits at West Brom
+  FAIL: 7b: era2005 laliga2005 seed 26: the new season says Testa Realmann outside the record: "🪑 Valencia sack Jonas Diallo after finishing 18th. Testa Realmann, out at Alavés the same week, takes the chair."
+  FAIL: 7b: era2005 laliga2005 seed 26: after his chair was emptied Testa Realmann still sits at Valencia
+  FAIL: 7b: era2005 seriea2005 seed 27: after his chair was emptied Testa Realmann still sits at Cagliari
+  FAIL: 7b: era2005 ligue12005 seed 29: the new season says Testa Realmann outside the record: "🪑 Bordeaux sack Ciro Medina after finishing 19th. Testa Realmann, out at AC Ajaccio the same week, takes the chair."
+  FAIL: 7b: era2005 ligue12005 seed 29: after his chair was emptied Testa Realmann still sits at Bordeaux
+  FAIL: 7b: era2005 laliga2005 seed 31: the new season says Testa Realmann outside the record: "🪑 Villarreal sack Oliwier Kimura after finishing 19th. Testa Realmann, out at Alavés the same week, takes the chair."
+  FAIL: 7b: era2005 laliga2005 seed 31: after his chair was emptied Testa Realmann still sits at Villarreal
+  FAIL: 7b: era2005 seriea2005 seed 32: the new season says Testa Realmann outside the record: "🪑 Cagliari sack Reece Obi after finishing 19th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2005 seriea2005 seed 32: after his chair was emptied Testa Realmann still sits at Cagliari
+  FAIL: 7b: era2005 ligue12005 seed 34: the new season says Testa Realmann outside the record: "🪑 Bordeaux sack Ciro Medina after finishing 19th. Testa Realmann, out at AC Ajaccio the same week, takes the chair."
+  FAIL: 7b: era2005 ligue12005 seed 34: after his chair was emptied Testa Realmann still sits at Bordeaux
+  FAIL: 7b: era2005 premier2005 seed 35: the new season says Testa Realmann outside the record: "🪑 Birmingham City sack Erik Steiner after finishing 19th. Testa Realmann, out at Arsenal the same week, takes the chair."
+  FAIL: 7b: era2005 premier2005 seed 35: after his chair was emptied Testa Realmann still sits at Birmingham City
+  FAIL: 7b: era2005 seriea2005 seed 37: the new season says Testa Realmann outside the record: "🪑 Treviso sack Nabil Pavlik after finishing 19th. Testa Realmann, out at AC Milan the same week, takes the chair."
+  FAIL: 7b: era2005 seriea2005 seed 37: after his chair was emptied Testa Realmann still sits at Treviso
+   7b: 200 summers, 200 with the sentinel's chair emptied (17 by the sim's own draw), 200 with a second chair to recycle into, 149 offers read (2 for the emptied real chair, all saying only that the club is making a change), 205 failures (30 s)
+   7c: 200 of 200 sentinel careers equal their empty table twin after the strip, draw for draw
+   7a: 47 of 47 sentinel chairs held on day one, 47 partial chairs made up and marked
+  FAIL: 7a: only 1 of 3 partial mark reads ran, the check tests too little
+   7a: a later world and a season two repair seat nobody real; an outside club shows him in season one only
+   7g: 47 summers took the sentinel's own job, 39 takeover lines read (all "You take over at {club}."), 0 failures
+   7d: Arsenal left the league over that summer under this control, so the chair you left is not read
+   7d: nothing at Arsenal as your club, the club you left, a club you managed, Hot Seat or a mid season start
+   7e: the old save loads with its 19 chairs byte identical (Arsenal: Youri Sagna)
+
+control run: recycle FIRED, 7b went red 205 time(s), 205 naming the sentinel

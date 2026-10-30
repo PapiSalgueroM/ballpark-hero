@@ -1,0 +1,21 @@
+vitest exit=0 9s |    Duration  8.27s (transform 3.59s, setup 799ms, collect 12.17s, tests 3.52s, environment 3.09s, prepare 1.22s)
+simManagers exit=0 79s | simManagers: all green
+ctl-namedsack exit=0 37s | control run: namedsack FIRED, 7b went red 184 time(s), 184 naming the sentinel
+tsc exit=0 120s | 
+simManagers-fleet exit=0 132s | simManagers: all green
+ctl-recycle exit=0 38s | control run: recycle FIRED, 7b went red 205 time(s), 205 naming the sentinel
+ctl-takeover exit=0 38s | control run: takeover FIRED, 7g went red 78 time(s), 78 naming the sentinel
+ctl-sever exit=0 8s | control run: 3 failure(s) FIRED as expected
+ctl-bogus exit=2 0s | SIM_MANAGERS_CONTROL=bogus is not a control this harness knows (sever, namedsack, recycle, takeover, liveevent, offer)
+ctl-offer exit=0 37s | control run: offer FIRED, 7h went red 13 time(s), 13 naming the sentinel
+ctl-liveevent exit=0 64s | control run: liveevent FIRED, 7f went red 44 time(s), 44 naming the sentinel
+simNoInventedQuotes exit=0 37s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+quotes-dugout exit=1 24s | control run: dugout FIRED, pass 1 caught 1 planted quote(s) from a real manager
+simInventedNames exit=0 14s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 28s | No rival product names found. 0 findings.
+roster-head exit=0 6s | simClubDetailCurrentRoster normal: green.
+roster-ctl-original exit=0 5s | simClubDetailCurrentRoster original: green.
+simHarnessAnchors exit=0 64s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simManagerHotSeat exit=0 67s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
