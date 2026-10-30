@@ -1,0 +1,2 @@
+worldcont-head: R=$PWD; git worktree add /tmp/h-wc 4202099a7 >/dev/null 2>&1 && cd /tmp/h-wc && ln -s $R/node_modules node_modules && timeout 2400 node scripts/simManagerWorldContinuity.mjs
+worldcont-main: R=$PWD; git worktree add /tmp/m-wc c18c4b7a8 >/dev/null 2>&1 && cd /tmp/m-wc && ln -s $R/node_modules node_modules && timeout 1200 node scripts/simManagerWorldContinuity.mjs
