@@ -1,0 +1,3 @@
+1158 /home/runner/work/_temp/rc-out/full/simUclFormatHistory.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simUclFormatHistory.mjs/stderr.log
+1158 total

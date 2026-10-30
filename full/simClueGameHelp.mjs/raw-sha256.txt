@@ -1,0 +1,2 @@
+84c6fcb5259dafd1f5238e37ac15eb99acda4d49aba63eebc066a387ab91b9a0  /home/runner/work/_temp/rc-out/full/simClueGameHelp.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simClueGameHelp.mjs/stderr.log

@@ -1,0 +1,2 @@
+26715a371fc6a7471bbdd314ebd32fce31f52b24d69c26b42edf822829c5d8c4  /home/runner/work/_temp/rc-out/full/simSessionMarks.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSessionMarks.mjs/stderr.log

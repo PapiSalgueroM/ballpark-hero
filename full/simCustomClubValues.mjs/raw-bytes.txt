@@ -1,0 +1,3 @@
+9548 /home/runner/work/_temp/rc-out/full/simCustomClubValues.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCustomClubValues.mjs/stderr.log
+9548 total

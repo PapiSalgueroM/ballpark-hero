@@ -1,0 +1,3 @@
+474 /home/runner/work/_temp/rc-out/full/simRugbyLeagueReview.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simRugbyLeagueReview.mjs/stderr.log
+474 total

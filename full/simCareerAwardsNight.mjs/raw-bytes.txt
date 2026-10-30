@@ -1,0 +1,3 @@
+4609 /home/runner/work/_temp/rc-out/full/simCareerAwardsNight.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerAwardsNight.mjs/stderr.log
+4609 total

@@ -1,0 +1,3 @@
+7160 /home/runner/work/_temp/rc-out/full/simGuideHeadings.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGuideHeadings.mjs/stderr.log
+7160 total

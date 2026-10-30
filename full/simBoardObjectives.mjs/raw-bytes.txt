@@ -1,0 +1,3 @@
+6268 /home/runner/work/_temp/rc-out/full/simBoardObjectives.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simBoardObjectives.mjs/stderr.log
+6268 total

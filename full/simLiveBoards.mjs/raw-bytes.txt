@@ -1,0 +1,3 @@
+2393 /home/runner/work/_temp/rc-out/full/simLiveBoards.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simLiveBoards.mjs/stderr.log
+2393 total

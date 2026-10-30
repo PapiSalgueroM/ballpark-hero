@@ -1,0 +1,3 @@
+1932 /home/runner/work/_temp/rc-out/full/simSoccerGridLabels.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerGridLabels.mjs/stderr.log
+1932 total

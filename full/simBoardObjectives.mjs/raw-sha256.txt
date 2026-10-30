@@ -1,0 +1,2 @@
+2ced2e32d93b6b03c62caa5b051a777ee740215922112a4cd54172874e7d43f9  /home/runner/work/_temp/rc-out/full/simBoardObjectives.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simBoardObjectives.mjs/stderr.log

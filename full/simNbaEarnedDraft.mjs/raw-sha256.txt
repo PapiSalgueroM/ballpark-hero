@@ -1,0 +1,2 @@
+e81cc8010bdb30e6bfe1b8510d118904bb7a4c799beadf2b72f7214378d2c24a  /home/runner/work/_temp/rc-out/full/simNbaEarnedDraft.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNbaEarnedDraft.mjs/stderr.log

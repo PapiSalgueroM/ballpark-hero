@@ -1,0 +1,3 @@
+13056 /home/runner/work/_temp/rc-out/full/simSound.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simSound.mjs/stderr.log
+13056 total

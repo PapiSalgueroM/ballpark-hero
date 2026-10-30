@@ -1,0 +1,3 @@
+889 /home/runner/work/_temp/rc-out/full/simTennisSlams.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simTennisSlams.mjs/stderr.log
+889 total

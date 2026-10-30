@@ -1,0 +1,2 @@
+cee5878fc96f4689b392fe804dcbd10149c11ad0c274151b79b76fd2a09494ff  /home/runner/work/_temp/rc-out/full/simCareerAwardsNight.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerAwardsNight.mjs/stderr.log

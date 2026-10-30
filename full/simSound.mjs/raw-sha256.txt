@@ -1,0 +1,2 @@
+7a0fdc4c8deaf478b732e57ec11b0f4df0c6e08027fc4d34c33b43aa023ff524  /home/runner/work/_temp/rc-out/full/simSound.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSound.mjs/stderr.log

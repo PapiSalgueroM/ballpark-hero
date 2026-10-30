@@ -1,0 +1,21 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 705,
+      "sha256": "d721e3bdd290a9d40908f33dc7aca8cc54bf6d7c878b8b4a4c9cad97f53b22c2",
+      "tests": [
+        ":src/test/clueGameHelp.test.tsx",
+        ":src/test/emojiGuessFeedback.test.tsx",
+        ":src/test/mmaBoutRecap.test.tsx",
+        ":src/test/noDoubleRecord.test.tsx",
+        ":src/test/rankEmOrder.test.tsx",
+        ":src/test/rugbyLeagueReview.test.tsx",
+        ":src/test/soccerSeasonOpponents.test.ts",
+        ":src/test/trophyCabinet.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

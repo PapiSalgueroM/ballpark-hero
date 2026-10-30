@@ -1,0 +1,2 @@
+35c4a66434b6e090bf638b1299994e5101706bc14c4c1fdf459521c9cd94e763  /home/runner/work/_temp/rc-out/full/simGuideHeadings.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGuideHeadings.mjs/stderr.log

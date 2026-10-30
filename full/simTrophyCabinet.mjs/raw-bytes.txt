@@ -1,0 +1,3 @@
+13205 /home/runner/work/_temp/rc-out/full/simTrophyCabinet.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simTrophyCabinet.mjs/stderr.log
+13205 total

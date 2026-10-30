@@ -1,0 +1,2 @@
+4a82181030ec028b49a53d9efdf187ab1be0cd8964677426edd8900806b6d943  /home/runner/work/_temp/rc-out/full/simColleges.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simColleges.mjs/stderr.log

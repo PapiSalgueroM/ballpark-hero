@@ -1,0 +1,3 @@
+2506 /home/runner/work/_temp/rc-out/full/simManagerXp.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simManagerXp.mjs/stderr.log
+2506 total

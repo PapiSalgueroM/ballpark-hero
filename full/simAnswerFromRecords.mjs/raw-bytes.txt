@@ -1,0 +1,3 @@
+5385 /home/runner/work/_temp/rc-out/full/simAnswerFromRecords.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simAnswerFromRecords.mjs/stderr.log
+5385 total

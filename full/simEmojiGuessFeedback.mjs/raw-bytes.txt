@@ -1,0 +1,3 @@
+3388 /home/runner/work/_temp/rc-out/full/simEmojiGuessFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simEmojiGuessFeedback.mjs/stderr.log
+3388 total

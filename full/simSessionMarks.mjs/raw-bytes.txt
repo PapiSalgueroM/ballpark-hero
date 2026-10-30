@@ -1,0 +1,3 @@
+696 /home/runner/work/_temp/rc-out/full/simSessionMarks.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSessionMarks.mjs/stderr.log
+696 total

@@ -1,0 +1,3 @@
+4371 /home/runner/work/_temp/rc-out/full/simNbaEarnedDraft.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNbaEarnedDraft.mjs/stderr.log
+4371 total

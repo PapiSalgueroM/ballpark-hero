@@ -1,0 +1,2 @@
+739c94274a75081024b36774164b0a4fdd73f6fdfce1d57d857972e877ab3803  /home/runner/work/_temp/rc-out/full/simAnswerFromRecords.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAnswerFromRecords.mjs/stderr.log

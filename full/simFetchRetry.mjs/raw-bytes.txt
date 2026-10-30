@@ -1,0 +1,3 @@
+1143 /home/runner/work/_temp/rc-out/full/simFetchRetry.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFetchRetry.mjs/stderr.log
+1143 total

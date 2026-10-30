@@ -1,0 +1,3 @@
+6887 /home/runner/work/_temp/rc-out/full/simNoDoubleRecord.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNoDoubleRecord.mjs/stderr.log
+6887 total

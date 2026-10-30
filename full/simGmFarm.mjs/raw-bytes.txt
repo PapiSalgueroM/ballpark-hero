@@ -1,0 +1,3 @@
+4870 /home/runner/work/_temp/rc-out/full/simGmFarm.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGmFarm.mjs/stderr.log
+4870 total
