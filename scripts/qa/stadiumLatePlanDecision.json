@@ -1,0 +1,122 @@
+{
+  "schema": 1,
+  "status": "FROZEN_AFTER_CALIBRATION_BEFORE_HOLDOUT",
+  "frozenAtUTC": "2026-10-30T01:18:27Z",
+  "selectedPoints": 4,
+  "zeroEngineSHA256": "1b00a96307914df097dc1375973e72328aad01b0b5ff8e5074177151960c17c9",
+  "calibrationSource": "cfe998485216194fe4cceb72efad5ac0fa089ea6",
+  "calibrationSummarySHA256": "5f83ca4c95fd2175617e9d28e7cf9e7b5a3493ec0cdf2daf42e502409153eaf2",
+  "scenarioManifestSHA256": "6dd8c78decd2bcb8364ca7ef11d82fe0859f04b7218d47b9f7eda8258e71fec2",
+  "floors": {
+    "protectLeadRetention": 0.009,
+    "protectScoringCost": 0.035,
+    "chaseDeficitRescue": 0.01,
+    "chaseConcedingCost": 0.028,
+    "chaseLeadLossCost": 0.003
+  },
+  "selectionReason": "The smallest predeclared candidate has repeatable lead-retention and deficit-rescue benefits, each near2 percentagepoints, with clear scoring/conceding/lead-loss costs. Both calibration halves retain useful headroom. Larger candidates are unnecessary for this bounded optional decision.",
+  "floorReason": "Each positive floor is below half the smaller observed calibration-half mean, rounded downward. No maximum or non-significance assertion is used.",
+  "measuredCalibration": {
+    "points": 4,
+    "metrics": {
+      "protectLeadRetention": {
+        "delta": 1080,
+        "denominator": 54000,
+        "mean": 0.02
+      },
+      "protectScoringCost": {
+        "delta": 11932,
+        "denominator": 162000,
+        "mean": 0.07365432098765431
+      },
+      "chaseDeficitRescue": {
+        "delta": 1187,
+        "denominator": 54000,
+        "mean": 0.02198148148148148
+      },
+      "chaseConcedingCost": {
+        "delta": 9480,
+        "denominator": 162000,
+        "mean": 0.05851851851851852
+      },
+      "chaseLeadLossCost": {
+        "delta": 375,
+        "denominator": 54000,
+        "mean": 0.006944444444444444
+      }
+    },
+    "halfBlocks": [
+      {
+        "protectLeadRetention": {
+          "delta": 511,
+          "denominator": 27000,
+          "mean": 0.018925925925925926
+        },
+        "protectScoringCost": {
+          "delta": 6049,
+          "denominator": 81000,
+          "mean": 0.07467901234567902
+        },
+        "chaseDeficitRescue": {
+          "delta": 597,
+          "denominator": 27000,
+          "mean": 0.022111111111111113
+        },
+        "chaseConcedingCost": {
+          "delta": 4660,
+          "denominator": 81000,
+          "mean": 0.05753086419753087
+        },
+        "chaseLeadLossCost": {
+          "delta": 172,
+          "denominator": 27000,
+          "mean": 0.00637037037037037
+        }
+      },
+      {
+        "protectLeadRetention": {
+          "delta": 569,
+          "denominator": 27000,
+          "mean": 0.021074074074074075
+        },
+        "protectScoringCost": {
+          "delta": 5883,
+          "denominator": 81000,
+          "mean": 0.07262962962962963
+        },
+        "chaseDeficitRescue": {
+          "delta": 590,
+          "denominator": 27000,
+          "mean": 0.02185185185185185
+        },
+        "chaseConcedingCost": {
+          "delta": 4820,
+          "denominator": 81000,
+          "mean": 0.059506172839506176
+        },
+        "chaseLeadLossCost": {
+          "delta": 203,
+          "denominator": 27000,
+          "mean": 0.007518518518518518
+        }
+      }
+    ],
+    "summarySHA256": "03bb385dae9b1144a0c2c0b7a65a5cd30785e72045469e927b911db1874685dd"
+  },
+  "floorUnits": {
+    "protectLeadRetention": "win-probability difference among minute60 leading cohorts",
+    "protectScoringCost": "late goals for given up per paired remainder",
+    "chaseDeficitRescue": "nonloss-probability improvement among minute60 trailing cohorts",
+    "chaseConcedingCost": "extra late goals against per paired remainder",
+    "chaseLeadLossCost": "extra outright-loss probability among minute60 leading cohorts"
+  },
+  "holdoutSeeds": [
+    100001,
+    108000
+  ],
+  "holdout": "UNRUN_UNOPENED",
+  "sourceControls": "UNRUN",
+  "launchRequiresIndependentAllRowDataAdmission": true,
+  "shippingEngineSHA256MustMatchActualSelectedVariant": "bd510c2277e61eef5e7cbcf4f283c07124735c8f25b6503297fc61e477a0c428",
+  "productReady": false
+}

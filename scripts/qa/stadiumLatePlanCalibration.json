@@ -1,0 +1,359 @@
+{
+  "status": "MEASURED_ALL_FOUR_PREDECLARED_CANDIDATES_NO_SELECTION",
+  "source": "cfe998485216194fe4cceb72efad5ac0fa089ea6",
+  "zeroEngineSHA256": "1b00a96307914df097dc1375973e72328aad01b0b5ff8e5074177151960c17c9",
+  "scenarioManifestSHA256": "6dd8c78decd2bcb8364ca7ef11d82fe0859f04b7218d47b9f7eda8258e71fec2",
+  "summaries": [
+    {
+      "points": 4,
+      "metrics": {
+        "protectLeadRetention": {
+          "delta": 1080,
+          "denominator": 54000,
+          "mean": 0.02
+        },
+        "protectScoringCost": {
+          "delta": 11932,
+          "denominator": 162000,
+          "mean": 0.07365432098765431
+        },
+        "chaseDeficitRescue": {
+          "delta": 1187,
+          "denominator": 54000,
+          "mean": 0.02198148148148148
+        },
+        "chaseConcedingCost": {
+          "delta": 9480,
+          "denominator": 162000,
+          "mean": 0.05851851851851852
+        },
+        "chaseLeadLossCost": {
+          "delta": 375,
+          "denominator": 54000,
+          "mean": 0.006944444444444444
+        }
+      },
+      "halfBlocks": [
+        {
+          "protectLeadRetention": {
+            "delta": 511,
+            "denominator": 27000,
+            "mean": 0.018925925925925926
+          },
+          "protectScoringCost": {
+            "delta": 6049,
+            "denominator": 81000,
+            "mean": 0.07467901234567902
+          },
+          "chaseDeficitRescue": {
+            "delta": 597,
+            "denominator": 27000,
+            "mean": 0.022111111111111113
+          },
+          "chaseConcedingCost": {
+            "delta": 4660,
+            "denominator": 81000,
+            "mean": 0.05753086419753087
+          },
+          "chaseLeadLossCost": {
+            "delta": 172,
+            "denominator": 27000,
+            "mean": 0.00637037037037037
+          }
+        },
+        {
+          "protectLeadRetention": {
+            "delta": 569,
+            "denominator": 27000,
+            "mean": 0.021074074074074075
+          },
+          "protectScoringCost": {
+            "delta": 5883,
+            "denominator": 81000,
+            "mean": 0.07262962962962963
+          },
+          "chaseDeficitRescue": {
+            "delta": 590,
+            "denominator": 27000,
+            "mean": 0.02185185185185185
+          },
+          "chaseConcedingCost": {
+            "delta": 4820,
+            "denominator": 81000,
+            "mean": 0.059506172839506176
+          },
+          "chaseLeadLossCost": {
+            "delta": 203,
+            "denominator": 27000,
+            "mean": 0.007518518518518518
+          }
+        }
+      ],
+      "summarySHA256": "03bb385dae9b1144a0c2c0b7a65a5cd30785e72045469e927b911db1874685dd"
+    },
+    {
+      "points": 6,
+      "metrics": {
+        "protectLeadRetention": {
+          "delta": 1777,
+          "denominator": 54000,
+          "mean": 0.032907407407407406
+        },
+        "protectScoringCost": {
+          "delta": 17815,
+          "denominator": 162000,
+          "mean": 0.10996913580246914
+        },
+        "chaseDeficitRescue": {
+          "delta": 1695,
+          "denominator": 54000,
+          "mean": 0.03138888888888889
+        },
+        "chaseConcedingCost": {
+          "delta": 14198,
+          "denominator": 162000,
+          "mean": 0.08764197530864197
+        },
+        "chaseLeadLossCost": {
+          "delta": 539,
+          "denominator": 54000,
+          "mean": 0.009981481481481482
+        }
+      },
+      "halfBlocks": [
+        {
+          "protectLeadRetention": {
+            "delta": 874,
+            "denominator": 27000,
+            "mean": 0.03237037037037037
+          },
+          "protectScoringCost": {
+            "delta": 8953,
+            "denominator": 81000,
+            "mean": 0.11053086419753086
+          },
+          "chaseDeficitRescue": {
+            "delta": 837,
+            "denominator": 27000,
+            "mean": 0.031
+          },
+          "chaseConcedingCost": {
+            "delta": 6997,
+            "denominator": 81000,
+            "mean": 0.08638271604938272
+          },
+          "chaseLeadLossCost": {
+            "delta": 268,
+            "denominator": 27000,
+            "mean": 0.009925925925925927
+          }
+        },
+        {
+          "protectLeadRetention": {
+            "delta": 903,
+            "denominator": 27000,
+            "mean": 0.03344444444444444
+          },
+          "protectScoringCost": {
+            "delta": 8862,
+            "denominator": 81000,
+            "mean": 0.10940740740740741
+          },
+          "chaseDeficitRescue": {
+            "delta": 858,
+            "denominator": 27000,
+            "mean": 0.03177777777777778
+          },
+          "chaseConcedingCost": {
+            "delta": 7201,
+            "denominator": 81000,
+            "mean": 0.08890123456790124
+          },
+          "chaseLeadLossCost": {
+            "delta": 271,
+            "denominator": 27000,
+            "mean": 0.010037037037037037
+          }
+        }
+      ],
+      "summarySHA256": "6a6cd650ccdc0547ba5d2932505c14a2a8bea69f047360dca9e1608aab89a7fb"
+    },
+    {
+      "points": 8,
+      "metrics": {
+        "protectLeadRetention": {
+          "delta": 2349,
+          "denominator": 54000,
+          "mean": 0.0435
+        },
+        "protectScoringCost": {
+          "delta": 23757,
+          "denominator": 162000,
+          "mean": 0.14664814814814814
+        },
+        "chaseDeficitRescue": {
+          "delta": 2156,
+          "denominator": 54000,
+          "mean": 0.03992592592592593
+        },
+        "chaseConcedingCost": {
+          "delta": 18895,
+          "denominator": 162000,
+          "mean": 0.1166358024691358
+        },
+        "chaseLeadLossCost": {
+          "delta": 743,
+          "denominator": 54000,
+          "mean": 0.01375925925925926
+        }
+      },
+      "halfBlocks": [
+        {
+          "protectLeadRetention": {
+            "delta": 1175,
+            "denominator": 27000,
+            "mean": 0.04351851851851852
+          },
+          "protectScoringCost": {
+            "delta": 11895,
+            "denominator": 81000,
+            "mean": 0.14685185185185184
+          },
+          "chaseDeficitRescue": {
+            "delta": 1084,
+            "denominator": 27000,
+            "mean": 0.04014814814814815
+          },
+          "chaseConcedingCost": {
+            "delta": 9385,
+            "denominator": 81000,
+            "mean": 0.1158641975308642
+          },
+          "chaseLeadLossCost": {
+            "delta": 362,
+            "denominator": 27000,
+            "mean": 0.013407407407407408
+          }
+        },
+        {
+          "protectLeadRetention": {
+            "delta": 1174,
+            "denominator": 27000,
+            "mean": 0.04348148148148148
+          },
+          "protectScoringCost": {
+            "delta": 11862,
+            "denominator": 81000,
+            "mean": 0.14644444444444443
+          },
+          "chaseDeficitRescue": {
+            "delta": 1072,
+            "denominator": 27000,
+            "mean": 0.039703703703703706
+          },
+          "chaseConcedingCost": {
+            "delta": 9510,
+            "denominator": 81000,
+            "mean": 0.1174074074074074
+          },
+          "chaseLeadLossCost": {
+            "delta": 381,
+            "denominator": 27000,
+            "mean": 0.01411111111111111
+          }
+        }
+      ],
+      "summarySHA256": "530e29191f89bd2e405d60e07829750a03580071d5280e73893e89b8d5d9e263"
+    },
+    {
+      "points": 10,
+      "metrics": {
+        "protectLeadRetention": {
+          "delta": 2816,
+          "denominator": 54000,
+          "mean": 0.052148148148148145
+        },
+        "protectScoringCost": {
+          "delta": 29779,
+          "denominator": 162000,
+          "mean": 0.18382098765432098
+        },
+        "chaseDeficitRescue": {
+          "delta": 2623,
+          "denominator": 54000,
+          "mean": 0.048574074074074075
+        },
+        "chaseConcedingCost": {
+          "delta": 23699,
+          "denominator": 162000,
+          "mean": 0.14629012345679013
+        },
+        "chaseLeadLossCost": {
+          "delta": 935,
+          "denominator": 54000,
+          "mean": 0.017314814814814814
+        }
+      },
+      "halfBlocks": [
+        {
+          "protectLeadRetention": {
+            "delta": 1401,
+            "denominator": 27000,
+            "mean": 0.05188888888888889
+          },
+          "protectScoringCost": {
+            "delta": 14953,
+            "denominator": 81000,
+            "mean": 0.18460493827160493
+          },
+          "chaseDeficitRescue": {
+            "delta": 1341,
+            "denominator": 27000,
+            "mean": 0.049666666666666665
+          },
+          "chaseConcedingCost": {
+            "delta": 11775,
+            "denominator": 81000,
+            "mean": 0.14537037037037037
+          },
+          "chaseLeadLossCost": {
+            "delta": 455,
+            "denominator": 27000,
+            "mean": 0.01685185185185185
+          }
+        },
+        {
+          "protectLeadRetention": {
+            "delta": 1415,
+            "denominator": 27000,
+            "mean": 0.05240740740740741
+          },
+          "protectScoringCost": {
+            "delta": 14826,
+            "denominator": 81000,
+            "mean": 0.18303703703703703
+          },
+          "chaseDeficitRescue": {
+            "delta": 1282,
+            "denominator": 27000,
+            "mean": 0.04748148148148148
+          },
+          "chaseConcedingCost": {
+            "delta": 11924,
+            "denominator": 81000,
+            "mean": 0.14720987654320988
+          },
+          "chaseLeadLossCost": {
+            "delta": 480,
+            "denominator": 27000,
+            "mean": 0.017777777777777778
+          }
+        }
+      ],
+      "summarySHA256": "35d2664f90d34d3667489db5e6a8d53441ea0e4e406ffdbc302d6c8aebe7f9fd"
+    }
+  ],
+  "holdout": "UNRUN",
+  "controls": "UNRUN_REQUIRES_FROZEN_SELECTION",
+  "parameterSelected": false
+}
