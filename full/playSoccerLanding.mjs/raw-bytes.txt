@@ -1,0 +1,3 @@
+53453 /home/runner/work/_temp/rc-out/full/playSoccerLanding.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playSoccerLanding.mjs/stderr.log
+53453 total

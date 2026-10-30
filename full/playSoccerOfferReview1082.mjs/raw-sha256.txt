@@ -1,0 +1,2 @@
+85ca38ca4003bc263f046118cc8f072b4071c127930a7f86fc15f08832c06305  /home/runner/work/_temp/rc-out/full/playSoccerOfferReview1082.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerOfferReview1082.mjs/stderr.log

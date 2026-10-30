@@ -1,0 +1,2 @@
+c32eefcc375391d2fa998285a0094f9751a9c0e4f3c28b227aed48d26f46c2f8  /home/runner/work/_temp/rc-out/full/playSoccerDeck.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerDeck.mjs/stderr.log

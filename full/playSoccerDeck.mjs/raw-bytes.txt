@@ -1,0 +1,3 @@
+14492 /home/runner/work/_temp/rc-out/full/playSoccerDeck.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playSoccerDeck.mjs/stderr.log
+14492 total

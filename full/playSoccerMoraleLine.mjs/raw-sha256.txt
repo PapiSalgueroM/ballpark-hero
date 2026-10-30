@@ -1,0 +1,2 @@
+cd84933d2c8ed7ce139c05635988fef48f9db46ce29669146199b169e4a050b9  /home/runner/work/_temp/rc-out/full/playSoccerMoraleLine.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerMoraleLine.mjs/stderr.log

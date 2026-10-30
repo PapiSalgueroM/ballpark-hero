@@ -1,0 +1,3 @@
+1025 /home/runner/work/_temp/rc-out/full/playSoccerInternationalReturn.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playSoccerInternationalReturn.mjs/stderr.log
+1025 total

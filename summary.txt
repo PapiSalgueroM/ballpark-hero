@@ -1,0 +1,12 @@
+prepare exit=0 50s | ordinary-build raw=0
+playSoccerDeck exit=0 127s | playSoccerDeck.mjs raw=0
+playSoccerEventCards exit=0 27s | playSoccerEventCards.mjs raw=0
+playSoccerFarewell exit=1 1s | playSoccerFarewell.mjs raw=1
+playSoccerHubGrid1089 exit=1 1s | playSoccerHubGrid1089.mjs raw=1
+playSoccerInternationalReturn exit=1 1s | playSoccerInternationalReturn.mjs raw=1
+playSoccerLanding exit=1 275s | playSoccerLanding.mjs raw=1
+playSoccerMoraleLine exit=0 34s | playSoccerMoraleLine.mjs raw=0
+playSoccerOfferReview1082 exit=1 1s | playSoccerOfferReview1082.mjs raw=1
+playSoccerResultsLayout exit=1 1s | playSoccerResultsLayout.mjs raw=1
+playSoccerScreenTruths exit=0 44s | playSoccerScreenTruths.mjs raw=0
+finish exit=0 5s | 

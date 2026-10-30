@@ -1,0 +1,2 @@
+ff3a28f0716ffa90fc183388aed58724733a41fef120880827d60e9c2a9b85da  /home/runner/work/_temp/rc-out/full/playSoccerInternationalReturn.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerInternationalReturn.mjs/stderr.log

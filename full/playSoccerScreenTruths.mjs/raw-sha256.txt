@@ -1,0 +1,2 @@
+4905adb1995568ae25c09d78ec018c3d4f1a32dcd4f73adc84e0e0296908d086  /home/runner/work/_temp/rc-out/full/playSoccerScreenTruths.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerScreenTruths.mjs/stderr.log

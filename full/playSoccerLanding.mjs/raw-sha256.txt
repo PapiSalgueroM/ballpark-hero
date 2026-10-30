@@ -1,0 +1,2 @@
+d3b05f75bbd9f95d67f3b82bb837a7825953a17e3482c023f7c3fee811325346  /home/runner/work/_temp/rc-out/full/playSoccerLanding.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerLanding.mjs/stderr.log

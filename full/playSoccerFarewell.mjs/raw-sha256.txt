@@ -1,0 +1,2 @@
+8d7dcb3e1af3953e871294baada57da2e1e0aa5e3bed5df1a23758d233120316  /home/runner/work/_temp/rc-out/full/playSoccerFarewell.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerFarewell.mjs/stderr.log
