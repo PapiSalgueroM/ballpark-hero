@@ -7890,14 +7890,15 @@ export function summerFreeAgents(career: CareerState): { pool: FreeAgent[]; reti
   const pool = career.freeAgents ?? [];
   const retired: { name: string; age: number; rating: number }[] = [];
   if (!pool.length) return { pool, retired };
-  const nextSeason = career.season + 1, year = worldYear(career);
+  const nextSeason = career.season + 1;
   const ahead = livingWorldOf(career) ? worldRosterView(refreshWorldRoster({ ...career, season: nextSeason })) : null;
   const neutral = { ...career, training: DEFAULT_TRAINING, academy: undefined, facilities: undefined, staff: undefined };
   const kept: FreeAgent[] = [];
   for (const f of pool) {
     if (isJourneyman(f)) { kept.push(f); continue; }
-    const held = (ahead?.records ?? []).filter(r => r.owner === null && (r.status === 'released' || r.status === 'retired')
-      && r.origin.name === f.name && r.origin.birthYear === year - f.age && r.player.position === f.position);
+    const current = freeAgentRecord(career, f);
+    const held = current ? (ahead?.records ?? []).filter(r => r.key === current.key
+      && r.owner === null && (r.status === 'released' || r.status === 'retired')) : [];
     if (held.length === 1) {
       const r = held[0];
       if (r.status === 'retired') { retired.push({ name: f.name, age: r.player.age, rating: r.player.rating }); continue; }
@@ -7951,7 +7952,7 @@ export function recoverPooledReleases(career: CareerState): CareerState {
       name: p.name, position: p.position, age: p.age, rating: p.rating,
       value: p.value, generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}),
       founderSaleRatio: p.founderSaleRatio, since: career.season,
-      reason: mine.has(p.name) ? 'released' : 'expired', fromMyClub: true,
+      reason: mine.has(p.name) ? 'released' : 'expired', fromMyClub: true, worldRosterKey: r.key,
     });
   }
   return back.length ? { ...done, freeAgents: [...career.freeAgents, ...back] } : done;
