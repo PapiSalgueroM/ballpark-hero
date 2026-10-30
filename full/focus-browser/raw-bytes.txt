@@ -1,0 +1,3 @@
+0 /home/runner/work/_temp/rc-out/full/focus-browser/stdout.log
+0 /home/runner/work/_temp/rc-out/full/focus-browser/stderr.log
+0 total

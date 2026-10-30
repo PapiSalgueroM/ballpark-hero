@@ -1,0 +1,1 @@
+function n(e){const r=String(e),t=/^([+-]?)(\d+)(\.\d+)?$/.exec(r);return t?t[1]+t[2].replace(/\B(?=(\d{3})+(?!\d))/g,",")+(t[3]??""):r}export{n as f};

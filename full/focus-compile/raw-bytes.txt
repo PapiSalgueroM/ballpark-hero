@@ -1,0 +1,3 @@
+94266 /home/runner/work/_temp/rc-out/full/focus-compile/stdout.log
+  767 /home/runner/work/_temp/rc-out/full/focus-compile/stderr.log
+95033 total

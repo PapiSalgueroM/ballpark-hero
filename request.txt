@@ -1,0 +1,7 @@
+#!serial
+# Unpredicted original-Page pending-centre focus baseline, exactly four fresh contexts.
+prepare: bash .rc/default-support.sh prepare
+fixture: bash .rc/default-support.sh focus fixture
+compiled: bash .rc/default-support.sh focus compile
+browser: bash .rc/default-support.sh focus browser
+finish: bash .rc/default-support.sh finish
