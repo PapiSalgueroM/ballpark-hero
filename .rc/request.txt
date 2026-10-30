@@ -1,0 +1,4 @@
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
