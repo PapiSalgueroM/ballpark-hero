@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+walkfix-head: RC_OUT=$RC_OUT/head node .rc/x/walkfix.mjs
+walkfix-basefix: git worktree add -f rcbase 14a9af704 > /dev/null 2>&1; RC_OUT=$RC_OUT/basefix FIX_ROOT=$PWD/rcbase node .rc/x/walkfix.mjs
+walkfix-prefix-control: R=$PWD; git worktree add /tmp/pre 438443b1e > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/pre/node_modules && (cd /tmp/pre && node_modules/.bin/vite build > /tmp/pre-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/pre/dist 4183 > /dev/null 2>&1 &) && sleep 4 && RC_OUT=$RC_OUT/pre SWEEP_BASE=http://localhost:4183 BASE=http://localhost:4183 node .rc/x/walkfix.mjs > /tmp/pre.out 2>&1; s=$?; tail -30 /tmp/pre.out; echo "CONTROL on 438443b1e: NOTE OFF SCREEN fired $(grep -c 'NOTE OFF SCREEN' /tmp/pre.out) times, note on screen $(grep -c 'changed note is on screen' /tmp/pre.out) times"; exit $s
+playTwoTabs-390: SIZES=390x844 CASES=3,4,9 node scripts/playTwoTabs.mjs
+playTwoTabs-1280: SIZES=1280x900 CASES=3,4,9 node scripts/playTwoTabs.mjs
+playTwoTabs-clobber-control: R=$PWD; git worktree add /tmp/clob HEAD > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/clob/node_modules && (cd /tmp/clob && node "$R/.rc/x/mutclobber.mjs" && node_modules/.bin/vite build > /tmp/clob-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/clob/dist 4184 > /dev/null 2>&1 &) && sleep 4 && SWEEP_BASE=http://localhost:4184 BASE=http://localhost:4184 SIZES=390x844 CASES=3 node scripts/playTwoTabs.mjs > /tmp/clob.out 2>&1; s=$?; tail -25 /tmp/clob.out; echo "CONTROL clobber: the slot 1 check fired $(grep -c 'not parked in slot 1' /tmp/clob.out) times"; exit $s

@@ -1,0 +1,7 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walkfix-head exit=0 46s | walkfix: green, every case at both sizes with reduced motion on and off
+walkfix-basefix exit=0 48s | walkfix: green, every case at both sizes with reduced motion on and off
+playTwoTabs-390 exit=0 35s | playTwoTabs: green at 390x844
+playTwoTabs-1280 exit=0 35s | playTwoTabs: green at 1280x900
+walkfix-prefix-control exit=1 94s | CONTROL on 438443b1e: NOTE OFF SCREEN fired 4 times, note on screen 0 times
+playTwoTabs-clobber-control exit=1 50s | CONTROL clobber: the slot 1 check fired 1 times

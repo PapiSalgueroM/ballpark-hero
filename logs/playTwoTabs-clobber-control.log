@@ -1,0 +1,10 @@
+MUTATION clobber: applied
+fixtures: Brighton 60638 chars, Everton 59456 chars, Hot Seat survivor Arsenal (survived, 9 actions)
+== 390x844
+3) HOT SEAT carry on beside a Club Manager tab, and 4) LANDING (390x844)
+   A held "Brighton week 1, 1 results, last Aston Villa 1-0"; B handed over "Arsenal week 26, 26 results, last Hull City 2-0" and landed on the hub; A saw it: true; after A left "Arsenal week 26, 26 results, last Hull City 2-0"; slot 1 holds "no save", the index null
+  FAIL [case 3]: tab A's career is not parked in slot 1 as A held it: slot 1 holds "no save", A held "Brighton week 1, 1 results, last Aston Villa 1-0", the index reads null
+  ok    the carry on opened Club Manager on the hub
+cases red: 3; pictures in /home/runner/work/_temp/rc-out/files
+playTwoTabs: RED, 1 findings
+CONTROL clobber: the slot 1 check fired 1 times
