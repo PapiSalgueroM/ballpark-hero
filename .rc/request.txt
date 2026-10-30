@@ -1,0 +1,13 @@
+#!serial
+m-month1host: node .rc/x/rv-mut.mjs month1host && node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-wiki: node .rc/x/rv-mut.mjs wiki && node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-wikimirror: node .rc/x/rv-mut.mjs wikimirror && node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-lateopen: node .rc/x/rv-mut.mjs lateopen && node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-latereads: node .rc/x/rv-mut.mjs latereads && node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-samedomain: node .rc/x/rv-mut.mjs samedomain && node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-fenceids-samedomain: node .rc/x/rv-mut.mjs fenceids samedomain && node scripts/simClubManagerDugouts.mjs; s=$?; git checkout -- src scripts; exit $s
+m-fenceids-controls: node .rc/x/rv-mut.mjs fenceids && (node scripts/simClubManagerDugouts.mjs 2>&1 | tail -1; for c in twochairs onehost orphan gap monthclash; do DUGOUTS_CONTROL=$c node scripts/simClubManagerDugouts.mjs 2>&1 | tail -1; done); s=$?; git checkout -- src scripts; exit $s
+m-fencemonthids-controls: node .rc/x/rv-mut.mjs fencemonthids && (node scripts/simClubManagerDugouts.mjs 2>&1 | tail -1; for c in twochairs onehost orphan gap monthclash; do DUGOUTS_CONTROL=$c node scripts/simClubManagerDugouts.mjs 2>&1 | tail -1; done); s=$?; git checkout -- src scripts; exit $s
+m-era-managers: node .rc/x/rv-mut.mjs era && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-season-managers: node .rc/x/rv-mut.mjs season && node scripts/simManagers.mjs; s=$?; git checkout -- src scripts; exit $s
+m-season-vitest: node .rc/x/rv-mut.mjs season && node_modules/.bin/vitest run src/test/clubDetailDugout.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
