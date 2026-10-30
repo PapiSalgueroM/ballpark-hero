@@ -1,0 +1,5 @@
+roster-head exit=0 3s | simClubDetailCurrentRoster normal: green.
+roster-ctl-original exit=0 3s | simClubDetailCurrentRoster original: green.
+roster-mut-dugout exit=1 1s | Node.js v24.22.1
+budget-head exit=1 149s | simClubManagerBudget: 1 FAILURE(S)
+budget-base exit=1 148s | simClubManagerBudget: 1 FAILURE(S)

@@ -1,0 +1,6 @@
+#!serial
+roster-head: CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs
+roster-ctl-original: CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_CONTROL=original node scripts/simClubDetailCurrentRoster.mjs
+roster-mut-dugout: grep -c 'gap-y-0.5 min-w-0" data-cm-dugout' src/components/club-manager/ClubDetailScreen.tsx && sed -i 's/gap-y-0.5 min-w-0" data-cm-dugout/gap-y-0.5 min-w-0 x" data-cm-dugout/' src/components/club-manager/ClubDetailScreen.tsx && grep -c 'min-w-0 x" data-cm-dugout' src/components/club-manager/ClubDetailScreen.tsx && CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs; s=$?; git checkout -- src scripts; rm -rf tmp; exit $s
+budget-head: node scripts/simClubManagerBudget.mjs
+budget-base: git worktree add /tmp/base c0c66e087 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simClubManagerBudget.mjs
