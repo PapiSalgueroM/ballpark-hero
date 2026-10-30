@@ -40,8 +40,9 @@
        simNoInventedQuotes pass 1 reads them (every match result, the feed,
        the inbox and the desk after each entry, then the season end and the
        summer): nothing outside the record says him, and each season is its
-       empty table twin's draw for draw. Floors: 20 matches against his club
-       and 300 distinct lines.
+       empty table twin's draw for draw. Measured: 823 entries, 44 matches
+       against his club, 1849 distinct lines; floors a third below (29 and
+       1200).
    7g. in every league, the summer you take the sentinel's own job (a move
        into his chair, the call an accepted offer makes) reads "You take
        over at {club}." and nothing names him, then or after.
@@ -494,7 +495,7 @@ async function realDugoutsSection() {
     if (lines < Math.ceil(leagues.length / 2)) fail(`7g: only ${lines} of ${moves} takeover lines survived the feed's cut, too few to read (floor half the leagues)`);
   }
   /* 7h. The offer from an emptied real chair, built rather than waited for (7b meets one in 200 summers). In every
-     league with a club one tier below the sentinel's, a career there finishes a title season (90 points) with his
+     league with a club one (else two) tiers below the sentinel's, a career there finishes a title season (90 points) with his
      club bottom (0, the rest 40), so the axe picks his chair often and his club calls; the first seed of up to 16
      whose offers carry his club is read, then accepted the way the hook accepts it. The offer may only say the
      club is making a change, and nothing then or after may name him. Floor 10 offers. */
@@ -504,8 +505,11 @@ async function realDugoutsSection() {
       const tierOf = club => S.cm.eraClubDefFor(club, L.era)?.tier;
       const probe = seeded(hashSeed(`7h|${L.era}|${L.id}`), () => S.cm.startCareer(L.career, L.era)).value;
       const playable = new Set((L.era === 'now' ? S.cm.playableClubs(L.id) : S.cm.eraPlayableClubs(L.era, L.id)).map(c => c.name));
-      const below = tierOf(L.sentinel) + 1;
-      const club = [...probe.leagueClubs].sort().find(n => n !== L.sentinel && n !== L.partial && playable.has(n) && tierOf(n) === below);
+      /* One tier below his club calls after any title; two below only after a top flight one (offerStepOk), tried
+         when the league has no club one tier below. */
+      const st = tierOf(L.sentinel);
+      const pickAt = t => [...probe.leagueClubs].sort().find(n => n !== L.sentinel && n !== L.partial && playable.has(n) && tierOf(n) === t);
+      const club = pickAt(st + 1) ?? pickAt(st + 2);
       if (!club) continue;
       tried += 1;
       for (let k = 0; k < 16; k++) {
@@ -526,7 +530,7 @@ async function realDugoutsSection() {
         break;
       }
     }
-    console.log(`   7h: ${tried} leagues with a club a tier below his, ${offers} offers from his emptied chair read and ${accepted} accepted (all saying only that the club is making a change), ${unseated} skipped unseated, ${bySection['7h'].fails} failures`);
+    console.log(`   7h: ${tried} leagues with a club below his, ${offers} offers from his emptied chair read and ${accepted} accepted (all saying only that the club is making a change), ${unseated} skipped unseated, ${bySection['7h'].fails} failures`);
     if (offers < 10) fail(`7h: only ${offers} offers from the emptied real chair were read (floor 10)`);
   }
   await ownAndManaged(S, byEra('now').find(l => l.id === 'premier') ?? byEra('now')[0], leagues);
@@ -608,8 +612,10 @@ async function realDugoutsSection() {
     }
     console.log(`   7f: ${seasons} whole seasons with the sentinel seated, ${entries} entries, ${vsHim} matches against his club, ${seen.size} distinct lines read, ${twins} of ${seasons} equal to their empty table twin, ${bySection['7f'].fails} failures${hidden ? ` (${hidden} not shown)` : ''} (${((Date.now() - t1) / 1000).toFixed(0)} s)`);
     if (seasons !== ERAS.length * PER_ERA_F) fail(`7f: only ${seasons} seasons played`);
-    if (vsHim < 20) fail(`7f: only ${vsHim} matches against the sentinel's club (floor 20)`);
-    if (seen.size < 300) fail(`7f: only ${seen.size} distinct lines read, the harvest did not exercise the narrative (floor 300)`);
+    /* Measured (r1606-fx-c, head e3aa0fd09): 823 entries, 44 matches against his club, 1849 distinct lines. The run
+       is seeded, so it repeats those numbers until the engine changes; the floors sit a third below, pass 1's rule. */
+    if (vsHim < 29) fail(`7f: only ${vsHim} matches against the sentinel's club (floor 29, measured 44)`);
+    if (seen.size < 1200) fail(`7f: only ${seen.size} distinct lines read, the harvest did not exercise the narrative (floor 1200, measured 1849)`);
   }
 }
 
