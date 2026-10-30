@@ -1,0 +1,4 @@
+simWritesAreSent exit=1 1s | simWritesAreSent: 1 failure
+simResultMoment exit=0 7s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+hardening-head exit=0 58s | simDailySaveHardening: 1 failure(s)
+hardening-base exit=0 57s | simDailySaveHardening: part all green
