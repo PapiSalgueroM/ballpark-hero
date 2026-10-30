@@ -1,0 +1,27 @@
+  NONE     /club-manager 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /club-manager 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /club-manager 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /world-cup-bracket 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /world-cup-bracket 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /world-cup-bracket 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /soccer-career 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /soccer-career 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /soccer-career 1280x900: no first visit dialog, banner 735 to 900 (pending)
+
+9 route widths walked over 3 routes: 0 dialogs tapped and closed, 0 expected site reds, 9 without a first visit dialog, 0 red
+
+THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner
+  BARS FAIL     /world-cup-bracket 320x640: answered, "⚡Auto Fill Everything" moved 0 px when the 305 px banner was answered, not down by its height
+  BARS FAIL     /world-cup-bracket 390x844: answered, "⚡Auto Fill Everything" moved 0 px when the 233 px banner was answered, not down by its height
+  BARS FAIL     /world-cup-bracket 1280x900: answered, "⚡Auto Fill Everything" moved 0 px when the 165 px banner was answered, not down by its height
+  BARS FAIL     /club-manager#club-picked 320x640: answered, "Take the job" moved 0 px when the 305 px banner was answered, not down by its height
+  BARS FAIL     /club-manager#club-picked 390x844: answered, "Take the job" moved 0 px when the 233 px banner was answered, not down by its height
+  BARS FAIL     /club-manager#club-picked 1280x900: answered, "Take the job" moved 0 px when the 165 px banner was answered, not down by its height
+  BARS FAIL     /club-manager#custom-club 320x640: answered, "Found the club" moved 0 px when the 305 px banner was answered, not down by its height
+  BARS FAIL     /club-manager#custom-club 390x844: answered, "Found the club" moved 0 px when the 233 px banner was answered, not down by its height
+  BARS FAIL     /club-manager#custom-club 1280x900: answered, "Found the club" moved 0 px when the 165 px banner was answered, not down by its height
+  BARS FAIL     /soccer-career#hub 320x640: answered, "Next Year" moved 0 px when the 305 px banner was answered, not down by its height
+  BARS FAIL     /soccer-career#hub 390x844: answered, "Next Year" moved 0 px when the 233 px banner was answered, not down by its height
+  BARS FAIL     /soccer-career#hub 1280x900: answered, "Open the training ground" moved 0 px when the 165 px banner was answered, not down by its height; "Open your phone" moved 0 px when the 165 px banner was answered, not down by its height; "Next Year" moved 0 px when the 165 px banner was answered, not down by its height
+18 bar lines (9 of them scripted states): 6 green over 0 fixed controls, 12 red, 0 with no pending banner; answered, 0 lifted controls dropped back by the banner's height
+playFirstVisitDialogs: CONSENT_BAR_CONTROL=always FIRED. 12 of 12 lines with the lift pinned read red for the answered half, the Soccer Career hub among them

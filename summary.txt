@@ -1,0 +1,4 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+nolift exit=1 57s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift FIRED. 12 of 12 lines with the lift stripped read red, the Soccer Career hub among them
+states exit=0 67s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+always exit=1 67s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=always FIRED. 12 of 12 lines with the lift pinned read red for the answered half, the Soccer Career hub among them
