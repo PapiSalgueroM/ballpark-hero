@@ -1,0 +1,16 @@
+#!build
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+playBingoClubRules: CI=1 SIM_NETWORK=offline RC_OUT=$RC_OUT node scripts/playBingoClubRules.mjs
+ctl-wrongtile: CI=1 SIM_NETWORK=offline PLAY_BINGO_CLUBS_CONTROL=wrongtile RC_OUT=$RC_OUT/wrongtile node scripts/playBingoClubRules.mjs
+ctl-base: git worktree add -q /tmp/base692 692590145 && ln -s "$PWD/node_modules" /tmp/base692/node_modules && (cd /tmp/base692 && node_modules/.bin/vite build --outDir /tmp/base692-dist > /tmp/base692-build.log 2>&1; tail -2 /tmp/base692-build.log) && CI=1 SIM_NETWORK=offline PLAY_BINGO_CLUBS_CONTROL=base PLAY_BINGO_BUILD=/tmp/base692-dist PLAY_BINGO_PORT=4199 RC_OUT=$RC_OUT/base node scripts/playBingoClubRules.mjs
+ctl-base1571: git worktree add -q /tmp/base1571 32baab916 && ln -s "$PWD/node_modules" /tmp/base1571/node_modules && (cd /tmp/base1571 && node_modules/.bin/vite build --outDir /tmp/base1571-dist > /tmp/base1571-build.log 2>&1; tail -2 /tmp/base1571-build.log) && CI=1 SIM_NETWORK=offline PLAY_BINGO_CLUBS_CONTROL=base1571 PLAY_BINGO_BUILD=/tmp/base1571-dist PLAY_BINGO_PORT=4197 RC_OUT=$RC_OUT/base1571 node scripts/playBingoClubRules.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simPrerender: node scripts/simPrerender.mjs 2>&1 | grep -v "^   ok" | tail -25; exit ${PIPESTATUS[0]}
+simPrerender-oldnews: git show 692590145:src/pages/WhatsNew.tsx > src/pages/WhatsNew.tsx && node scripts/simPrerender.mjs 2>&1 | grep -v "^   ok" | tail -12; s=${PIPESTATUS[0]}; git checkout -- src; exit $s
+dashes: node .rc/x/dashcheck.mjs src/pages/WhatsNew.tsx scripts/playBingoClubRules.mjs scripts/simBingoClubCounts.mjs scripts/data/bingoClubAdditions-2026-10.json src/data/bingoClubAdditions.json
