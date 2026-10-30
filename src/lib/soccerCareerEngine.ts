@@ -4901,8 +4901,16 @@ export function initCareer(
      harnesses, keeps working untouched. */
   physique?: PlayerPhysique | null,
   attrShape?: AttrShape | null,
+  /* Round 1604 (report 3f014b97): the academy the creation screen showed.
+     The screen draws its own placement, and a second draw here put most new
+     players at a different club from the one they were promised. It counts
+     only when that club is in the start year's list; without it the draw
+     below runs exactly as it always has. */
+  academyName?: string | null,
 ): CareerState {
-  const academyClub = getYouthAcademyClub(adjustClubsForYear(clubs, startYear), nationality, overall);
+  const yearClubs = adjustClubsForYear(clubs, startYear);
+  const academyClub = (academyName ? yearClubs.find(c => c.name === academyName) : undefined)
+    ?? getYouthAcademyClub(yearClubs, nationality, overall);
   // Round 80: one text waiting on day one so the phone is alive immediately
   const seedTexts = pickPhoneTexts(16, "youth", [], 1);
   const created: CareerState = {

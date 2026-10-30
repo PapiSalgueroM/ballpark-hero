@@ -992,6 +992,8 @@ export default function SoccerCareer() {
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   // Round 78: the potential rolled alongside the overall, threaded into the career.
   const [rolledPot, setRolledPot] = useState<number | null>(null);
+  // Round 1604: the academy the creation screen is showing, handed to initCareer.
+  const [academyPreview, setAcademyPreview] = useState<string | null>(null);
   // Round 80: the phone overlay
   const [phoneOpen, setPhoneOpen] = useState(false);
   // Round 81: the training ground overlay
@@ -1122,6 +1124,7 @@ export default function SoccerCareer() {
     setPreviewOvr(0);
     setRolledOvr(null);
     setRolledPot(null);
+    setAcademyPreview(null);
     /* Round 131: the specifics under each family are different for a keeper
        than for anybody else, and a normal frame for a keeper is not a normal
        frame for a winger, so switching position resets both rather than
@@ -1143,7 +1146,7 @@ export default function SoccerCareer() {
     // Guests can play; careers live in local state. Sign-in is only a nice-to-have.
     if (!previewStats || !isFormValid || clubs.length === 0 || rolledOvr === null) return;
     const startYear = ERAS.find(e => e.value === era)?.startYear ?? 2020;
-    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance, rolledPot ?? undefined, physique, attrShape);
+    const newCareer = initCareer(playerName.trim(), nationality, position, era, previewStats, rolledOvr, startYear, clubs, appearance, rolledPot ?? undefined, physique, attrShape, academyPreview);
     setSaveError(false);
     setArrivalCount(n => n + 1);
     setCareer(newCareer);
@@ -1575,6 +1578,7 @@ export default function SoccerCareer() {
     setPreviewStats(null);
     setRolledOvr(null);
     setRolledPot(null);
+    setAcademyPreview(null);
     setPhoneOpen(false);
     setTrainingOpen(false);
     setPlayerName(""); setNationality(""); setPosition(""); setEra("");
@@ -1668,6 +1672,7 @@ export default function SoccerCareer() {
               user={user} onBegin={handleBeginCareer} onShowAuth={() => setShowAuth(true)}
               clubs={clubs} clubsLoading={clubsLoading} clubsError={clubsError}
               onRolledOvr={(ovr: number, pot: number) => { setRolledOvr(ovr); setRolledPot(pot); }}
+              onAcademyPreview={setAcademyPreview}
               onStatsGenerated={(stats: Stats, ovr: number) => { setPreviewStats(stats); setPreviewOvr(ovr); }}
               appearance={appearance} setAppearance={setAppearance}
               physique={physique} setPhysique={setPhysique}
@@ -1896,7 +1901,7 @@ function AttributesScreen({ career, onBack }: { career: CareerState; onBack: () 
 }
 
 /* ─── Creation Screen ─── */
-function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, clubsLoading, clubsError, onRolledOvr, onStatsGenerated, appearance, setAppearance, physique, setPhysique, attrShape, setAttrShape }: any) {
+function CreationScreen({ playerName, setPlayerName, nationality, setNationality, position, handlePositionChange, era, setEra, previewStats, previewOvr, isFormValid, saving, user, onBegin, onShowAuth, clubs, clubsLoading, clubsError, onRolledOvr, onAcademyPreview, onStatsGenerated, appearance, setAppearance, physique, setPhysique, attrShape, setAttrShape }: any) {
   const [rolledOvr, setRolledOvr] = useState<number | null>(null);
   const [rolledPot, setRolledPot] = useState<number | null>(null);
   const [rollCount, setRollCount] = useState(0);
@@ -1904,6 +1909,19 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
   const [isRolling, setIsRolling] = useState(false);
   const [displayOvr, setDisplayOvr] = useState(0);
   const [academyClub, setAcademyClub] = useState<ClubData | null>(null);
+  /* Round 1604 (report 3f014b97): the club shown here is the club the career
+     starts at. Every placement is drawn in one place, handed up to the page
+     for initCareer, and remembers the nationality and era it was drawn for. */
+  const academyFor = useRef("");
+  const showAcademy = (club: ClubData | null, drawnFor = "") => {
+    academyFor.current = drawnFor;
+    setAcademyClub(club);
+    onAcademyPreview?.(club ? club.name : null);
+  };
+  const placeAcademy = (ovr: number, nat: string, eraValue: string) => {
+    const startYr = ERAS.find(er => er.value === eraValue)?.startYear ?? 2020;
+    showAcademy(getYouthAcademyClub(adjustClubsForYear(clubs, startYr), nat, ovr), `${nat}|${eraValue}`);
+  };
   const rollTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   // A roll belongs to the position it was made for. Keep the form itself mounted.
   useEffect(() => {
@@ -1937,7 +1955,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
        exactly as rare per roll as it has always been. */
     if (!canGenerate || clubs.length === 0 || isRolling) return;
     setIsRolling(true);
-    setAcademyClub(null);
+    showAcademy(null);
     // Slot machine animation: cycle through random numbers
     let ticks = 0;
     const totalTicks = 18;
@@ -1961,10 +1979,8 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         const stats = generateStatsFromOverall(finalOvr, position);
         onStatsGenerated?.(stats, finalOvr);
         setIsRolling(false);
-        // Preview academy (era-adjusted so it matches initCareer)
-        const startYr = ERAS.find(er => er.value === era)?.startYear ?? 2020;
-        const club = getYouthAcademyClub(adjustClubsForYear(clubs, startYr), nationality, finalOvr);
-        setAcademyClub(club);
+        // Preview academy (era-adjusted, and the one initCareer is handed)
+        placeAcademy(finalOvr, nationality, era);
       }
     }, 60);
     rollTimer.current = interval;
@@ -1988,9 +2004,29 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
     /* Round 131: the academy that takes you depends on how good you are, and
        the build screen can now move that by fifty points, so the placement
        preview underneath has to be recalculated or it is quietly lying. */
-    const startYr = ERAS.find(er => er.value === era)?.startYear ?? 2020;
-    setAcademyClub(getYouthAcademyClub(adjustClubsForYear(clubs, startYr), nationality, calcOvr));
+    placeAcademy(calcOvr, nationality, era);
   };
+
+  /* Round 1604: a placement belongs to the nationality and era it was drawn
+     for. Change either after a roll (or during one) and it is drawn once more
+     for the new choice, the roll itself kept, so the club shown is still the
+     club Begin Career starts you at. */
+  useEffect(() => {
+    if (rolledOvr === null || isRolling || clubs.length === 0 || !nationality || !era) return;
+    if (academyFor.current === `${nationality}|${era}`) return;
+    placeAcademy(rolledOvr, nationality, era);
+  }, [nationality, era, rolledOvr, isRolling, clubs]);
+
+  /* Round 1604: what still stands between the player and a roll, in plain words. */
+  const missingPicks = [!nationality && "a nationality", !position && "a position", !era && "an era"].filter(Boolean) as string[];
+  const pickList = missingPicks.length > 1 ? `${missingPicks.slice(0, -1).join(", ")} and ${missingPicks[missingPicks.length - 1]}` : (missingPicks[0] ?? "");
+  const needName = !playerName.trim();
+  /* Once a roll is on screen the name unlocks a reroll and Begin Career, not a
+     first roll, so the two lines say that instead. */
+  const missingFor = (goal: string) => !needName && !missingPicks.length ? ""
+    : `${needName ? (missingPicks.length ? "Add your name, then pick " : "Add your name") : "Pick "}${pickList} to ${goal}.`;
+  const missingLine = missingFor(rolledOvr !== null ? "roll again" : "roll your potential");
+  const missingBeginLine = missingFor(rolledOvr !== null ? "start your career" : "roll your potential");
 
   // Tile rule: the build editor takes over the whole screen with a back button
   if (buildOpen && previewStats && rolledOvr !== null) {
@@ -2073,82 +2109,84 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         clubColor={academyClub?.color || "#10B981"}
       />
 
-      {/* Generate Starting Potential */}
-      {canGenerate && (
-        <div className="bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4">
-          <h2 className="text-base font-bold text-center">Starting Potential</h2>
+      {/* Generate Starting Potential. Round 1604: on the page before the form
+          is complete too, its button off and one line saying what is missing. */}
+      <div className="bg-card border border-border rounded-xl p-4 sm:p-5 space-y-4">
+        <h2 className="text-base font-bold text-center">Starting Potential</h2>
 
-          {clubsLoading && (
-            <div className="rounded-xl border border-border bg-muted/10 p-4 text-center text-sm text-muted-foreground animate-pulse">
-              Loading clubs...
-            </div>
-          )}
-          {!clubsLoading && clubsError && (
-            <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-center text-xs text-amber-400">
-              Couldn't reach the live club database, so we loaded a backup roster. Everything still works.
-            </div>
-          )}
-
-          {(rolledOvr !== null || isRolling) && (
-            <div className={`rounded-xl border p-5 text-center space-y-2 transition-all ${tier ? tier.bgColor : "bg-muted/20 border-border"}`}>
-              <div className={`text-6xl font-black tabular-nums transition-all ${isRolling ? "animate-pulse" : "animate-scale-in"} ${tier ? tier.color : "text-foreground"}`}>
-                {isRolling ? displayOvr : rolledOvr}
-              </div>
-              <div className={`text-sm font-bold ${tier ? tier.color : "text-muted-foreground"}`}>
-                {isRolling ? "Rolling..." : tier?.label}
-              </div>
-              {/* Round 78: scout projection. Potential is rolled once and the
-                  engine walls growth at it, so this number actually matters. */}
-              {!isRolling && rolledPot !== null && (
-                <div className="pt-1 border-t border-border/50 space-y-0.5 animate-fade-in">
-                  <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Scout Projection</div>
-                  <div className={`text-sm font-bold ${potentialTier(rolledPot).color}`}>
-                    {potentialTier(rolledPot).label} · {rolledPot} ceiling
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="flex gap-2">
-            <Button
-              onClick={doRoll}
-              disabled={isRolling || clubsLoading}
-              className={`flex-1 h-11 text-sm font-bold text-black ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
-              variant={rolledOvr !== null ? "outline" : "default"}
-            >
-              {clubsLoading ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Roll again" : "🎲 Generate Starting Potential"}
-            </Button>
+        {/* Only a complete form waits on the clubs, so an empty one never
+            flashes a loading box on its first frame. */}
+        {clubsLoading && canGenerate && (
+          <div className="rounded-xl border border-border bg-muted/10 p-4 text-center text-sm text-muted-foreground animate-pulse">
+            Loading clubs...
           </div>
-          {rolledOvr !== null && !isRolling && (
-            <p className="text-[11px] text-muted-foreground text-center">
-              Roll {rollCount}. Reroll as many times as you like, it costs nothing.
-              {bestPotSeen > (rolledPot ?? 0) ? ` Best ceiling you have turned up so far: ${potentialTier(bestPotSeen).label.toLowerCase()}.` : ""}
-            </p>
-          )}
+        )}
+        {!clubsLoading && clubsError && (
+          <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-center text-xs text-amber-400">
+            Couldn't reach the live club database, so we loaded a backup roster. Everything still works.
+          </div>
+        )}
 
-          {/* Academy preview */}
-          {academyClub && !isRolling && (
-            <div className="rounded-xl border border-border bg-muted/10 p-4 space-y-2 animate-fade-in">
-              <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground text-center">Academy Placement</div>
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-black shrink-0"
-                  style={{ backgroundColor: academyClub.color + "22", color: academyClub.color, border: `2px solid ${academyClub.color}44` }}>
-                  {academyClub.name.slice(0, 2).toUpperCase()}
-                </div>
-                <div>
-                  <div className="font-bold text-sm flex items-center gap-1"><FlagImg name={academyClub.country} size={16} />{academyClub.name} Youth</div>
-                  <div className="text-[11px] text-muted-foreground">{(() => {
-                    /* Round 1037: the league the club is in the year he joins, or none */
-                    const line = leagueSeasonLine(academyClub, ERAS.find(er => er.value === era)?.startYear ?? 2020);
-                    return line ? `${line} · ` : "";
-                  })()}Tier {academyClub.tier}</div>
+        {(rolledOvr !== null || isRolling) && (
+          <div className={`rounded-xl border p-5 text-center space-y-2 transition-all ${tier ? tier.bgColor : "bg-muted/20 border-border"}`}>
+            <div className={`text-6xl font-black tabular-nums transition-all ${isRolling ? "animate-pulse" : "animate-scale-in"} ${tier ? tier.color : "text-foreground"}`}>
+              {isRolling ? displayOvr : rolledOvr}
+            </div>
+            <div className={`text-sm font-bold ${tier ? tier.color : "text-muted-foreground"}`}>
+              {isRolling ? "Rolling..." : tier?.label}
+            </div>
+            {/* Round 78: scout projection. Potential is rolled once and the
+                engine walls growth at it, so this number actually matters. */}
+            {!isRolling && rolledPot !== null && (
+              <div className="pt-1 border-t border-border/50 space-y-0.5 animate-fade-in">
+                <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Scout Projection</div>
+                <div className={`text-sm font-bold ${potentialTier(rolledPot).color}`}>
+                  {potentialTier(rolledPot).label} · {rolledPot} ceiling
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          <Button
+            onClick={doRoll}
+            disabled={!canGenerate || isRolling || clubsLoading}
+            className={`flex-1 h-11 text-sm font-bold text-black ${rolledOvr !== null ? "bg-muted/40 hover:bg-muted/60 text-foreground" : "bg-emerald-600 hover:bg-emerald-500"}`}
+            variant={rolledOvr !== null ? "outline" : "default"}
+          >
+            {clubsLoading && canGenerate ? "Loading..." : isRolling ? "🎰 Rolling..." : rolledOvr !== null ? "🎲 Roll again" : "🎲 Generate Starting Potential"}
+          </Button>
         </div>
-      )}
+        {!canGenerate && <p className="text-[11px] text-muted-foreground text-center">{missingLine}</p>}
+        {rolledOvr !== null && !isRolling && (
+          <p className="text-[11px] text-muted-foreground text-center">
+            Roll {rollCount}. Reroll as many times as you like, it costs nothing.
+            {bestPotSeen > (rolledPot ?? 0) ? ` Best ceiling you have turned up so far: ${potentialTier(bestPotSeen).label.toLowerCase()}.` : ""}
+          </p>
+        )}
+
+        {/* Academy preview */}
+        {academyClub && !isRolling && (
+          <div className="rounded-xl border border-border bg-muted/10 p-4 space-y-2 animate-fade-in">
+            <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground text-center">Academy Placement</div>
+            <div className="flex items-center justify-center gap-3">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-black shrink-0"
+                style={{ backgroundColor: academyClub.color + "22", color: academyClub.color, border: `2px solid ${academyClub.color}44` }}>
+                {academyClub.name.slice(0, 2).toUpperCase()}
+              </div>
+              <div>
+                <div className="font-bold text-sm flex items-center gap-1"><FlagImg name={academyClub.country} size={16} />{academyClub.name} Youth</div>
+                <div className="text-[11px] text-muted-foreground">{(() => {
+                  /* Round 1037: the league the club is in the year he joins, or none */
+                  const line = leagueSeasonLine(academyClub, ERAS.find(er => er.value === era)?.startYear ?? 2020);
+                  return line ? `${line} · ` : "";
+                })()}Tier {academyClub.tier}</div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Stats preview */}
       {previewStats && (
@@ -2176,11 +2214,12 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         </div>
       )}
 
-      <Button onClick={onBegin} disabled={!isFormValid || saving || rolledOvr === null || !previewStats}
+      <Button onClick={onBegin} disabled={!isFormValid || saving || rolledOvr === null || !previewStats || isRolling}
         className="w-full h-12 text-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-black disabled:opacity-40">
         {saving ? "Creating..." : "⚽ Begin Career"}
       </Button>
       {rolledOvr === null && canGenerate && <p className="text-xs text-muted-foreground text-center">Generate your starting potential to begin</p>}
+      {!canGenerate && <p className="text-xs text-muted-foreground text-center">{missingBeginLine}</p>}
       {!user && <p className="text-xs text-muted-foreground text-center">Your career saves in this browser. No account needed.</p>}
     </div>
   );

@@ -20,7 +20,9 @@
  *
  * WHAT IT MEASURES, and none of it is "the page did not crash".
  *   1. It reaches a career with a QUALIFIED Champions League campaign that
- *      contains at least one two legged tie. If it never does, that is a
+ *      contains at least one two legged tie settled on aggregate (since Round
+ *      1604; an extra time tie alone left the noagg control nothing to fire
+ *      on). If it never does, that is a
  *      COVERAGE FAILURE and it says so loudly rather than passing quietly
  *      having checked nothing, which is the failure mode that let Round 563
  *      ship unseen in the first place.
@@ -34,7 +36,12 @@
  *      the other half of the same invariant.
  *   4. The Round 544 error boundary never appears and the root never goes
  *      near empty, which is what a render throw looks like from outside.
- *   5. No console error and no page error across the whole walk.
+ *   5. No console error and no page error across the whole walk. The walk
+ *      aborts every request to the database host itself (the standing rule
+ *      since 2026-10-02: no walk reaches production), and the one resource
+ *      line Chrome prints for each request it aborted is set aside by its
+ *      exact URL and counted. Every other error still counts, a resource
+ *      error from any other address included (see the strayload control).
  *
  * IT IS DETERMINISTIC ON PURPOSE, AND IT TRIES MORE THAN ONE CAREER.
  * Math.random is replaced before any page code runs with a seeded generator,
@@ -71,6 +78,13 @@
  *                           reach a campaign. Check 1 must go red. This is the
  *                           control that proves check 1 is a real gate rather
  *                           than a line that can never fire.
+ *   SC_WALK_CONTROL=strayload has every page fetch one address the walk
+ *                           aborts WITHOUT adding it to its own list, so
+ *                           Chrome prints the very same "Failed to load
+ *                           resource" line the database aborts print. Check
+ *                           6 must go red and nothing else may, which proves
+ *                           the set aside is keyed on the walk's own aborts
+ *                           and not on the wording of the line.
  *
  * Run: ENGINES=chromium node scripts/playSoccerCareer.mjs
  * (dist must be built. PORT moves the server, SEED changes the career, ERA
@@ -96,7 +110,7 @@ const ERA = process.env.ERA || 'Current era';
    that, so a run that does not get there is not short of budget. */
 const MAX_STEPS = Number(process.env.MAX_STEPS || (CONTROL === 'noreach' ? 2 : 240));
 
-const KNOWN_CONTROLS = ['noagg', 'noreach'];
+const KNOWN_CONTROLS = ['noagg', 'noreach', 'strayload'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`SC_WALK_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN_CONTROLS.join(', ')})`);
   process.exit(1);
@@ -105,6 +119,7 @@ if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
 const CONTROL_TARGETS = {
   noagg: ['2. every two legged tie shows its aggregate on screen'],
   noreach: ['1. the walk reached a qualified Champions League campaign'],
+  strayload: ['6. no console or page errors across the walk'],
 };
 
 const failed = [];
@@ -165,6 +180,15 @@ await new Promise(r => setTimeout(r, 1200));
 const browser = await chromium.launch({ args: ['--no-sandbox', '--no-proxy-server'] });
 const consoleErrors = [];
 const pageErrors = [];
+/* Every database request the walk aborted itself, by exact URL, and how many
+   resource lines were set aside because of them (check 6). */
+const dbAborted = new Set();
+let dbAbortCount = 0;
+let ownAbortLines = 0;
+/* The strayload control's address: aborted, never added to dbAborted. */
+const STRAY_RE = /sc-walk-control\.invalid/;
+const STRAY_URL = 'https://sc-walk-control.invalid/stray.json';
+let strayAborts = 0;
 
 /* MORE THAN ONE SEED, and this is not the check going soft.
    Measured on 2026-09-14 across four seeds: three reached a qualified
@@ -193,8 +217,24 @@ async function newSeededContext(seed) {
     try { localStorage.removeItem('soccerCareerSave'); } catch { /* private mode */ }
   }, [seed]);
 
+  /* No walk reaches production (standing rule since 2026-10-02). */
+  await ctx.route(/supabase\.co/, r => { dbAborted.add(r.request().url()); dbAbortCount += 1; return r.abort(); });
+  if (CONTROL === 'strayload') {
+    await ctx.route(STRAY_RE, r => { strayAborts += 1; return r.abort(); });
+    await ctx.addInitScript(([u]) => {
+      if (window.top !== window) return;
+      addEventListener('load', () => { fetch(u).catch(() => {}); });
+    }, [STRAY_URL]);
+  }
+
   const page = await ctx.newPage();
-  page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 200)); });
+  page.on('console', m => {
+    if (m.type() !== 'error') return;
+    const url = m.location().url || '';
+    const text = m.text();
+    if (/Failed to load resource.*(?:ERR_FAILED|ERR_BLOCKED_BY_CLIENT)/.test(text) && dbAborted.has(url)) { ownAbortLines += 1; return; }
+    consoleErrors.push(`${text.slice(0, 160)}${url ? ` (${url.slice(0, 100)})` : ''}`);
+  });
   page.on('pageerror', e => pageErrors.push(String(e).slice(0, 200)));
 
   if (CONTROL === 'noagg') {
@@ -281,10 +321,26 @@ const ACTIONS = [
      header or nav button), not the card. This speech has no gate, and the
      button is gone once it is given, so Continue is next. */
   '😭 Cry through',
+  /* Round 1604: the season's social media card offers only its own actions
+     (an emoji, then the label) and no Continue until one is taken, so with no
+     entry here the fallback pressed the site's Menu button, then its Close,
+     for the rest of the walk: 228 of 240 steps of seed 20260914 went round
+     that loop (rc r1604-fx-diag), and no seeded career reached a campaign.
+     The plainest post, and the cover offer it can lead to. */
+  String.fromCodePoint(0x1F3CB, 0xFE0F) + 'Post training video',
+  '✅ Accept: Become the Cover Star',
   'Next Year', 'Next Season', 'Continue', 'Sign Contract',
   'Accept', 'Confirm', 'Proceed', 'Next', 'Done', 'Close',
 ];
-const SKIP = /Retire|New Career|Report a problem|Light mode|Sound: |Cookie|Sign up|^Back$|Full attributes|Reject all|Essential only|^Accept all$|^Accept$|^Save choices$|^⏸$|^🏋️$|^📱/;
+/* Round 1604: ^Menu$ is the site's own menu, and on a phone sized page the
+   training ground button reads "🏋️Training..." and sits before the card, as
+   do Derby history and the trophy count tiles. None of them is a step of the
+   game, and as the fallback they trapped the walk: the Menu and Close loop
+   above, then 226 of 240 steps opening and closing the training ground in
+   front of a random event card whose choices (an emoji, then the label)
+   match no entry (rc r1604-fx-walk, diag-a). With them skipped the fallback
+   takes the card's first choice. */
+const SKIP = /Retire|New Career|Report a problem|Light mode|Sound: |Cookie|Sign up|^Back$|^Menu$|Full attributes|Reject all|Essential only|^Accept all$|^Accept$|^Save choices$|^⏸$|^🏋️$|^🏋️Training|Derby history|^(🏆|⭐|🌍|🌐)\d|^📱/;
 
 async function stepOnce(page) {
   return page.evaluate(async ([actions, skipSrc]) => {
@@ -296,7 +352,10 @@ async function stepOnce(page) {
     let pick = null;
     for (const a of actions) { pick = usable.find(b => b.textContent.trim().startsWith(a)); if (pick) break; }
     if (!pick) pick = usable[0];
-    if (!pick) return { phase: before.phase, age: before.age, action: 'STUCK' };
+    /* Round 1604: a card still revealing (the Ballon d'Or's Continue comes in
+       after a moment) can leave nothing to press, so a STUCK step waits as long
+       as a press would rather than spending the step budget in a blink. */
+    if (!pick) { await new Promise(r => setTimeout(r, 620)); return { phase: before.phase, age: before.age, action: 'STUCK' }; }
     const label = pick.textContent.trim().slice(0, 34);
     pick.click();
     await new Promise(r => setTimeout(r, 620));
@@ -306,6 +365,11 @@ async function stepOnce(page) {
       phase: before.phase, age: before.age, action: label,
       options: usable.map(b => b.textContent.trim().slice(0, 30)),
       qualified: !!(u && u.qualified && (u.matches || []).length),
+      /* Round 1604: a tie settled on aggregate, the one case Round 563 fixed
+         and the only one the noagg control can turn red. A campaign whose only
+         tie went to extra time (seed 20260914 after the 1604 re-record) checks
+         the card but leaves that control with nothing to fire on. */
+      aggTie: !!(u && (u.matches || []).some(m => m.leg === 2 && m.aggFor !== undefined && m.decidedBy === 'aggregate')),
       retired: !!after.retired,
       cardMounted: !![...document.querySelectorAll('span,div')].find(e => e.textContent.trim() === '⭐ Champions League'),
     };
@@ -328,7 +392,7 @@ async function playOneCareer(seed) {
     if (r.phase === 'transfer_window') say(`window @${r.age}: chose "${r.action}" from [${(r.options || []).join(' / ')}]`);
     if (r.action === 'STUCK') { stuckPhases.add(r.phase || 'unknown'); if (stuckPhases.size > 3) break; }
     if (r.retired) { say('the career retired before a campaign'); break; }
-    if (r.qualified && r.cardMounted) { reached = true; break; }
+    if (r.qualified && r.aggTie && r.cardMounted) { reached = true; break; }
   }
   /* The campaign can exist while the card is not mounted, because some
      phases do not render it. Advance a little to bring it on screen. */
@@ -336,7 +400,7 @@ async function playOneCareer(seed) {
     for (let extra = 0; extra < 12 && steps < MAX_STEPS; extra++, steps++) {
       const r = await stepOnce(page);
       trail.push(r);
-      if (r.qualified && r.cardMounted) { reached = true; break; }
+      if (r.qualified && r.aggTie && r.cardMounted) { reached = true; break; }
       if (r.retired || r.action === 'STUCK') break;
     }
   }
@@ -442,9 +506,14 @@ console.log('\nThe page survived');
 check('5. the error boundary never appeared and the root is not empty',
   !health.boundary && health.rootLen > 200,
   health.boundary ? 'the Round 544 boundary is on screen' : `root holds ${health.rootLen} characters`);
+console.log(`      database requests the walk aborted itself: ${dbAbortCount}; their resource lines set aside: ${ownAbortLines}`);
+const allErrors = [...consoleErrors, ...pageErrors];
+const distinctErrors = [...allErrors.reduce((m, e) => m.set(e, (m.get(e) || 0) + 1), new Map())];
 check('6. no console or page errors across the walk',
-  consoleErrors.length === 0 && pageErrors.length === 0,
-  consoleErrors.length || pageErrors.length ? [...consoleErrors, ...pageErrors].slice(0, 3).join(' | ') : 'none');
+  allErrors.length === 0,
+  allErrors.length
+    ? `${allErrors.length} error(s), ${distinctErrors.length} distinct: ${distinctErrors.slice(0, 8).map(([e, n]) => `${n}x ${e}`).join(' | ')}${distinctErrors.length > 8 ? ` | and ${distinctErrors.length - 8} more` : ''}`
+    : 'none');
 
 if (stuckPhases.size) {
   console.log(`\n      phases the walk could not drive, named rather than hidden: ${[...stuckPhases].join(', ')}`);
@@ -464,6 +533,11 @@ function report() {
       stop(1);
     }
     if (CONTROL === 'noagg') console.log(`control "noagg": ${controlSwaps} served response(s) rewritten`);
+    if (CONTROL === 'strayload' && strayAborts === 0) {
+      console.error('control "strayload": no page fetched the stray address, so the control changed nothing and this run proves nothing.');
+      stop(1);
+    }
+    if (CONTROL === 'strayload') console.log(`control "strayload": ${strayAborts} stray request(s) aborted outside the walk's own list`);
     if (targeted.length === 0) {
       console.error(`control "${CONTROL}": the targeted check stayed green, so it is not measuring what it claims to.`);
       stop(1);
