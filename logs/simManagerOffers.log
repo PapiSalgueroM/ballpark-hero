@@ -1,0 +1,25 @@
+1) The offer feed has to be earned
+   legend  standing 100, ceiling tier 1, 2.94 offers avg, 0 percent empty, best tier 1
+   grinder standing 11, ceiling tier 4, 0.33 offers avg, 67 percent empty, best tier 4
+2) You can end up with nothing
+   burned out: standing 0, ceiling null, 100 percent of windows had zero offers
+3) Time out of the game costs you
+   0 seasons out: standing 72, 2.03 offers, 0 percent empty
+   1 seasons out: standing 64, 1.75 offers, 0 percent empty
+   2 seasons out: standing 51, 0.53 offers, 54 percent empty
+   3 seasons out: standing 35, 0.36 offers, 64 percent empty
+4) How you went out matters
+   poached    standing 86, 2.50 offers
+   resigned   standing 78, 2.10 offers
+   mutual     standing 74, 2.03 offers
+   sacked     standing 69, 1.92 offers
+   relegated  standing 62, 1.70 offers
+5) You cannot leap up from where you fell
+   sacked at a tier 4 club: 0 elite offers across 500 windows (ceiling tier 4)
+6) You can work your way back up
+   T4 -> can reach T4  |  T4 -> can reach T3  |  T3 -> can reach T2  |  T2 -> can reach T1
+   after three good spells the ceiling is tier 1, standing 100
+7) Offers explain themselves
+   514 offers checked, all carried a reason and a brief
+
+ALL MANAGER OFFER CHECKS PASSED
