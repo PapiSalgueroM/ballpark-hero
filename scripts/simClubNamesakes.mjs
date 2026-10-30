@@ -61,6 +61,11 @@
  *    two generators as child processes with --check) on the committed exports copied byte for byte under DATED names:
  *    both exit 0 with "same:" twice; the same pair with one payload row's value moved (h recomputed) stops step 3
  *    (exit 1, DIFFERS); and the payload generator refuses to write from a fresh export (exit 2).
+ * C, THE OTHER TWO CACHES (review 1587 major 2). scripts/qa/genArsenalCachePurge1587.mjs over a made up Q6
+ *    (scripts/lib/arsenalCacheFixture1587.mjs, keys built the way validate-player and football-connect4-validate
+ *    write them): exactly the sarandi man's Build Your XI yes, Connect 4 pair yes and Connect 4 fact are deleted, a
+ *    last name only key is held, refusals, the london man, another club and a Soccer Grid row are kept; the form
+ *    carries its md5 and K; the generator run as the lead runs it exits 0 with that K.
  * P, THE STATE AFTER (Round 1587). Q2 with the payload applied: no sarandi row reads Arsenal FC, each reads its old
  *    club with Arsenal FC replaced by 'Arsenal de Sarandí', every other row byte equal; once the lead commits
  *    arsenalMarketPost-<date>.json it must equal that state row for row.
@@ -77,6 +82,7 @@
  *    'Arsenal Sarandí' in memory): M's tie to the grid's exclusion is red. nonet (the first man who came in by the
  *    roster net only, Joel Soñora or Nicolás Giménez, taken out of the ledger in memory): T's roster net check is red.
  *    widepool (fetchClubPool's bare string condition widened to club.like."Arsenal*" in the source text): R is red.
+ *    purgeblind (the fixture's sarandi man taken out of the ledger the cache purge reads): C is red.
  *
  * Run: node scripts/simClubNamesakes.mjs            (green: the closing line and exit 0) */
 import fs from 'node:fs';
@@ -90,12 +96,14 @@ import { createHash } from 'node:crypto';
 import os from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { marketHash } from './lib/arsenalGuard1587.mjs';
+import * as PURGE from './qa/genArsenalCachePurge1587.mjs';
+import { cacheFixture } from './lib/arsenalCacheFixture1587.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'scripts', 'data', 'clubNamesakes1584');
 const MIGRATION_PATH = 'supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql';
 const CONTROLS = ['blind', 'unmerge', 'noexclude', 'wide', 'mirrordrift', 'onehost', 'forget',
-  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak', 'freshmoved', 'freshstill', 'namesakedrift', 'nonet', 'widepool'];
+  'manhost', 'wiki', 'twotm', 'unjudged', 'payload', 'londonspan', 'leak', 'freshmoved', 'freshstill', 'namesakedrift', 'nonet', 'widepool', 'purgeblind'];
 const WIKI_HOST = /(^|\.)(wikipedia|wikidata|wikimedia|fandom|wikiwand)\./i;
 const regDomain = h => h.toLowerCase().replace(/^www\./, '').split('.').slice(-2).join('.');
 /* two registrable hosts (soccerway's and ESPN's regional mirrors are one host each), no wiki, at most one Transfermarkt,
@@ -505,6 +513,41 @@ console.log('F) the apply\'s steps 2 and 3 on fresh exports under dated names de
   const wr = run('genClubNamesakes1587.mjs', ['--market', sm, '--stints', ss]);
   if (wr.status === 2 && /^REFUSED/.test((wr.stdout || '').trim())) ok('the payload generator refuses to write from a fresh export (--market without --check exits 2)');
   else fail(`the payload generator given --market without --check exited ${wr.status}, not 2 with REFUSED`);
+}
+
+/* ---------------------------------------------------------------- C (Round 1587, review major 2) */
+console.log('C) the Build Your XI and Soccer Connect 4 cache purge removes exactly the sarandi men\'s Arsenal yeses');
+{
+  const fx = cacheFixture(AL, MARKET);
+  if (!fx) fail('C: the ledger has no two word sarandi and london man to build the made up cache from');
+  else {
+    const md5 = s => createHash('md5').update(s, 'utf8').digest('hex');
+    const q6 = fx.rows.map(r => { const verdict = JSON.stringify(r.verdict); return { game: r.game, cache_key: r.cache_key, verdict, h: md5(`${r.game}|${r.cache_key}|${verdict}`), want: r.want }; });
+    let ledger = AL;
+    if (CONTROL === 'purgeblind') {
+      const sMan = AL.men.find(m => m.verdict === 'sarandi' && MARKET.find(r => r.id === m.rows[0])?.player_name === fx.S);
+      if (!sMan) abort(`the fixture's sarandi man ${fx.S} is not in the ledger`);
+      ledger = { ...AL, men: AL.men.filter(m => m !== sMan) };
+      fired.push(`purgeblind: ${fx.S} taken out of the ledger the purge generator reads`);
+    }
+    const res = PURGE.computeCachePurge(ledger, MARKET, q6);
+    const got = r => (res.del.includes(r) ? 'delete' : res.held.includes(r) ? 'held' : 'keep');
+    const wrong = q6.filter(r => got(r) !== r.want);
+    const n = w => q6.filter(r => r.want === w).length;
+    if (!wrong.length) ok(`on a made up cache of ${q6.length} rows (${fx.S} sarandi, ${fx.L} london): ${n('delete')} deleted (a Build Your XI yes, a Connect 4 pair yes and fact), ${n('held')} held (a last name only key), ${n('keep')} kept (refusals, the london man, another club, a Soccer Grid row)`);
+    else fail(`the purge decides ${wrong.length} rows wrongly: ${wrong.slice(0, 4).map(r => `${r.game} ${r.cache_key} wants ${r.want}, got ${got(r)}`).join('; ')}`);
+    const out = PURGE.writeCachePurgeSql(res.del, { cacheName: 'fixture', read: q6.length, men: res.men, spellings: res.spellings });
+    const line = (/payload text := '(.*)';/.exec(out.sql) || [])[1] || '';
+    const ids = JSON.parse(line.replace(/''/g, "'") || '[]').map(p => p.game + ' ' + p.cache_key);
+    if (out.sql.includes(`if md5(payload) <> '${md5(line)}'`) && out.sql.includes(`want int := ${res.del.length};`) && ids.length === res.del.length)
+      ok(`the purge form carries the ${res.del.length} rows, its payload md5 and K`);
+    else fail('the purge form does not carry its own payload md5, K or the rows it deletes');
+    const T = fs.mkdtempSync(path.join(os.tmpdir(), 'r1587-purge-'));
+    fs.writeFileSync(path.join(T, 'q6.json'), JSON.stringify(q6.map(({ want, ...r }) => r)));
+    const cli = spawnSync(process.execPath, [path.join(ROOT, 'scripts', 'qa', 'genArsenalCachePurge1587.mjs'), '--cache', path.join(T, 'q6.json'), '--out', path.join(T, 'purge.sql')], { encoding: 'utf8' });
+    if (cli.status === 0 && new RegExp(`^K ${res.del.length}; payload md5 `, 'm').test(cli.stdout || '')) ok(`the generator run as the lead runs it exits 0 with K ${res.del.length}`);
+    else fail(`the generator run as the lead runs it exited ${cli.status}: ${(cli.stderr || cli.stdout || '').trim().split('\n').pop()}`);
+  }
 }
 
 /* ---------------------------------------------------------------- P and R (Round 1587) */

@@ -7,6 +7,10 @@
  *      other row, including the decoys a name keyed or club keyed bug would hit, is byte for byte unchanged (critic
  *      advice 19); a second run changes nothing and counts every row already current.
  *   C  THE APPLIED FORM on a fresh load: the same, and its second run raises nothing and changes nothing.
+ *   D  THE CACHE PURGE (review 1587 major 2): a made up ai_validation_cache (scripts/lib/arsenalCacheFixture1587.mjs) is
+ *      read with the lead's own Q6 text (scripts/qa/clubNamesakes1584CacheRead.sql), genArsenalCachePurge1587.mjs is
+ *      run on it as the lead runs it, and its form removes exactly the Build Your XI and Connect 4 yeses of the sarandi
+ *      man and nothing else; a second run raises and removes nothing.
  * Outside rows loaded beside Q2 and Q3: every Q3c stint not in Q3 (the Sarandí men's other clubs, Arsenal Tula, Kyiv),
  * and per sarandi man two decoy market rows: one at CA Lanús and one at "Arsenal FC" in 1999 with an id outside Q2.
  * Controls, REHEARSE_CONTROL=<name>; FIRED only when applied and a check went red (exit 1), else DID NOT FIRE (exit 3):
@@ -15,15 +19,19 @@
  *   drift    one payload row's position edited in the table first: the applied form raises and writes nothing, the
  *            record rewrites the rest and leaves that row, and both say 1 drifted: B and C are red.
  *   noguard  the drift edit, and the guard stripped from the record's market update: the edited row is overwritten, B red.
+ *   cachedrift  one cached yes the purge targets edited after the Q6 read: the purge raises and removes nothing, D red.
  * PGlite is not a dependency of this repo: npm install --prefix /tmp/pgl @electric-sql/pglite, then
  *   PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { SQL_MARKET_HASH, SQL_STINT_HASH } from '../lib/arsenalGuard1587.mjs';
+import os from 'node:os';
+import { spawnSync } from 'node:child_process';
+import { cacheFixture } from '../lib/arsenalCacheFixture1587.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
-const CONTROLS = ['parity', 'tamper', 'drift', 'noguard'];
+const CONTROLS = ['parity', 'tamper', 'drift', 'noguard', 'cachedrift'];
 const CONTROL = process.env.REHEARSE_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`REHEARSE_CONTROL=${CONTROL} is not a control this script knows, ABORTED`); process.exit(2); }
 const dir = process.env.PGLITE_DIR;
@@ -181,6 +189,57 @@ console.log('C) the applied form rewrites exactly the payload or nothing, and a 
     unchanged(after, again, `the applied form's second run${r2.notice ? ` ("${r2.notice}")` : ''}`);
   }
   await db.close();
+}
+
+/* ---------------------------------------------------------------- D (review 1587 major 2) */
+console.log('D) the Build Your XI and Soccer Connect 4 cache purge, from Q6 as the lead reads it, removes exactly its rows or nothing');
+{
+  const fx = cacheFixture(LEDGER, Q2);
+  if (!fx) fail('D: the ledger has no two word sarandi and london man to build the made up cache from');
+  else {
+    const db = new PGlite();
+    await db.exec(`create table public.ai_validation_cache (game text not null, cache_key text not null, verdict jsonb not null,
+      created_at timestamptz not null default now(), primary key (game, cache_key))`);
+    for (const r of fx.rows) await db.query('insert into public.ai_validation_cache (game, cache_key, verdict) values ($1, $2, $3::jsonb)', [r.game, r.cache_key, JSON.stringify(r.verdict)]);
+    const q6 = (await db.query(read('scripts/qa/clubNamesakes1584CacheRead.sql').trim().replace(/;$/, ''))).rows;
+    const T = fs.mkdtempSync(path.join(os.tmpdir(), 'r1587-purge-'));
+    fs.writeFileSync(path.join(T, 'q6.json'), JSON.stringify(q6));
+    const gen = spawnSync(process.execPath, [path.join(ROOT, 'scripts/qa/genArsenalCachePurge1587.mjs'), '--cache', path.join(T, 'q6.json'), '--out', path.join(T, 'purge.sql')], { encoding: 'utf8' });
+    const toDelete = fx.rows.filter(r => r.want === 'delete').map(r => `${r.game}|${r.cache_key}`).sort();
+    if (gen.status !== 0) fail(`D: the generator exited ${gen.status}: ${(gen.stderr || '').trim().slice(0, 200)}`);
+    else {
+      const said = gen.stdout.split('\n').filter(l => l.startsWith('  delete: ')).map(l => l.slice(10).replace(' ', '|')).sort();
+      const heldSaid = gen.stdout.split('\n').filter(l => l.includes('HELD')).length;
+      if (JSON.stringify(said) === JSON.stringify(toDelete) && heldSaid === fx.rows.filter(r => r.want === 'held').length) ok(`D: from the ${q6.length} rows Q6 reads, the generator lists the ${toDelete.length} yeses of ${fx.S} and holds the last name only key`);
+      else fail(`D: the generator lists ${said.length} to delete (${said.join('; ')}) and ${heldSaid} held`);
+      const form = fs.readFileSync(path.join(T, 'purge.sql'), 'utf8');
+      if (CONTROL === 'cachedrift') {
+        const [g, ...k] = toDelete[0].split('|');
+        const r = await db.query("update public.ai_validation_cache set verdict = verdict || '{\"note\":\"edited after the read\"}'::jsonb where game = $1 and cache_key = $2", [g, k.join('|')]);
+        if (r.affectedRows !== 1) abort('the first target row is not in the table');
+        fired.push(`cachedrift: ${toDelete[0]} edited after the Q6 read`);
+      }
+      const snap = async () => new Map((await db.query("select game || '|' || cache_key as k, md5(concat_ws('|', game, cache_key, verdict::text)) as h from public.ai_validation_cache")).rows.map(r => [r.k, r.h]));
+      const before = await snap();
+      let raised = '';
+      try { await db.exec(form); } catch (e) { raised = String(e.message || e); }
+      const after = await snap();
+      const removed = [...before.keys()].filter(k => !after.has(k)).sort();
+      const changed = [...after.keys()].filter(k => before.get(k) !== after.get(k));
+      if (!raised && JSON.stringify(removed) === JSON.stringify(toDelete)) ok(`D: the form ran and removed exactly the ${removed.length} yeses (Build Your XI, the Connect 4 pair and its fact)`);
+      else fail(`D: the form ${raised ? 'raised (' + raised.slice(0, 90) + ')' : 'ran'} and removed ${removed.length} rows: ${removed.join('; ') || 'none'}`);
+      if (!changed.length && (removed.length === 0 || removed.length === toDelete.length)) ok(`D: all or nothing (${removed.length} of ${toDelete.length}), and every row left is byte for byte as it was`);
+      else fail(`D: ${changed.length} rows left changed, ${removed.length} of ${toDelete.length} removed`);
+      if (!raised && removed.length) {
+        let again = '';
+        try { await db.exec(form); } catch (e) { again = String(e.message || e); }
+        const third = await snap();
+        if (new RegExp(`0 of ${toDelete.length} rows still match`).test(again) && third.size === after.size) ok(`D: a second run raises (0 of ${toDelete.length} still match) and removes nothing`);
+        else fail(`D: a second run ${again ? 'raised: ' + again.slice(0, 90) : 'did not raise'}, or changed the table`);
+      }
+    }
+    await db.close();
+  }
 }
 
 console.log('');
