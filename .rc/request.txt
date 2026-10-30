@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+weight-base: R=$PWD && git worktree add -f /tmp/wbase 14a9af704 >/dev/null 2>&1 && cd /tmp/wbase && ln -s "$R/node_modules" node_modules && node_modules/.bin/vite build --outDir /tmp/wbasedist >/dev/null 2>&1 && cd "$R" && { node scripts/lib/hostLikeServer.mjs /tmp/wbasedist 4180 >/dev/null 2>&1 & } && sleep 4 && SWEEP_OFFLINE=1 BASE=http://localhost:4180 node scripts/sweepWeight.mjs
+savesize-base: R=$PWD && git worktree add -f /tmp/sbase 14a9af704 >/dev/null 2>&1 && cd /tmp/sbase && ln -s "$R/node_modules" node_modules && node scripts/simClubManagerSaveSize.mjs
