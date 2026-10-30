@@ -200,7 +200,8 @@ const CAP_FLOOR_LINE = '  if (custom) state.wageCap = Math.max(state.wageCap, re
 const ROOM_AT_FOUNDING = '  if (custom) state.founderWageRoom = foundersWageRoom(state) || undefined;\n';
 const ROOM_AT_SUMMER = '  state.founderWageRoom = roomNow || undefined;\n';
 const CAP_LOAD_LINE = '      if (repriced) ensureCustomClubWageCap(parsed);\n';
-const PRICE_LINE = '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, rating)) * 10) / 10);\n';
+/* Round 1600: the founder is priced off the level his shown rating stands on at his age (customFounderValue). */
+const PRICE_LINE = '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, level)) * 10) / 10);\n';
 const LINE_K = 'export const REAL_CAP_PER_BUDGET_K = 37.13;\n';
 const ROLLOVER_CAP = '    : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - (career.founderWageRoom ?? 0)), club.expectation, prevPos, seasonTrophyCount) + roomNow;\n';
 const OLD_ROLLOVER_CAP = '    : nextWageCap(career.wageCap ?? wageCapFrom(wageBill(career)), club.expectation, prevPos, seasonTrophyCount);\n';
@@ -244,11 +245,11 @@ if (CONTROL === 'stingycap') {
 }
 /* Founders priced 25 percent over the market. */
 if (CONTROL === 'overprice') {
-  live = rewrite(live, PRICE_LINE, '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, rating)) * 1.25 * 10) / 10);\n', 'control overprice');
+  live = rewrite(live, PRICE_LINE, '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, level)) * 1.25 * 10) / 10);\n', 'control overprice');
 }
 /* A historic founder priced by his engine rating, the era's uplift not taken back. */
 if (CONTROL === 'noerabake') {
-  live = rewrite(live, PRICE_LINE, '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(rating) * 10) / 10);\n', 'control noerabake');
+  live = rewrite(live, PRICE_LINE, '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(level) * 10) / 10);\n', 'control noerabake');
 }
 /* The summer moves the whole cap on, founders' room and all, as before the review. */
 if (CONTROL === 'stickycap') live = rewrite(live, ROLLOVER_CAP, OLD_ROLLOVER_CAP, 'control stickycap');
