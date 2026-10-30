@@ -205,8 +205,8 @@ import {
 export type Mentality = 'defensive' | 'balanced' | 'attacking';
 export type FormResult = 'W' | 'D' | 'L';
 /** Round 1510: 'oneOff' is a one match cup a participant plays on a night of its own (the domestic super cup,
- *  CareerState.worldComps.dsc). */
-export type Competition = 'league' | 'cup' | 'uclGroup' | 'uclKo' | 'oneOff';
+ *  CareerState.worldComps.dsc). Round 1593: 'uel' is a Europa League night of a participant (worldComps.uel.me).*/
+export type Competition = 'league' | 'cup' | 'uclGroup' | 'uclKo' | 'oneOff' | 'uel';
 
 /** Round 164: how the stats centre buckets football. The two UCL phases are
  *  one competition to a fan, so they share a bucket. Round 1510: 'other' holds

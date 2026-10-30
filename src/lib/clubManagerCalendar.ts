@@ -113,7 +113,20 @@ function drawEntries(kickoff: CalDate, worldYear: number, calendar: { type: stri
   const out: CalDate[] = [];
   let last = addDays(kickoff, -7);
   const newYear: CalDate = { y: worldYear + 1, m: 1, d: 1 };
+  /* Round 1593: the date of the last Europa League night drawn, for a night that follows another at the end. */
+  let lastUel: CalDate | null = null;
   for (const [i, entry] of calendar.entries()) {
+    if (entry.type === 'uel') {
+      /* Round 1593: a Europa League night is a Thursday. After a Saturday it is that week's Thursday; right after a
+         midweek (a Champions League week the club does not play) the next day; after another Europa League night
+         (the end of a short season) a week on. It never moves `last`, so every entry after it keeps its date. A
+         calendar with no 'uel' entry never reaches this branch. */
+      const wasSaturday = dayOfWeek(last.y, last.m, last.d) === 6;
+      const next = i > 0 && calendar[i - 1].type === 'uel' && lastUel ? addDays(lastUel, 7) : addDays(last, wasSaturday ? 5 : 1);
+      out.push(next);
+      lastUel = next;
+      continue;
+    }
     if ((entry.type === 'league' && !midweek.has(i)) || entry.type === 'window') {
       let next = saturdayAfter(last);
       if (entry.type === 'window' && dateKey(next) < dateKey(newYear)) {
@@ -185,6 +198,9 @@ export function worldCompNightDates(state: CareerState, comp: WorldCompKey): Cal
   if (!league.length) return null;
   const thursday = comp === 'uel' ? 1 : 0;
   return places.map(p => {
+    /* Round 1593 (the critic's correction 6a): a participant's own Europa League night is an entry already drawn
+       on its Thursday, so it is that entry's date, never the day after. */
+    if (p.entry && state.calendar[p.at]?.type === 'uel') return dates[p.at];
     if (p.entry) return thursday ? addDays(dates[p.at], thursday) : dates[p.at];
     const last = league.length - 1;
     return p.round <= last ? addDays(league[p.round], 4 + thursday) : addDays(league[last], 4 + thursday + 7 * (p.round - last));
