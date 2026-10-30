@@ -1,0 +1,17 @@
+simNhlRosterLimit exit=1 0s | Node.js v24.22.1
+simNhlWaiverReceipt exit=0 3s | NHL waiver: exact copied targets, CRLF-safe controls, owned cleanup and offline transport verified.
+simNhlDraftCapital exit=0 6s | NHL draft: CRLF-safe executable controls, bounded owned-copy cleanup and zero outside transport verified.
+simNhlContributorsBoard exit=0 9s | simNhlContributorsBoard: stable nodes, finite cue binding and focus are unit checked; native pixel/reduced-motion and full-season engine acceptance are separate.
+simNhlRatingEvidence exit=0 8s | NHL rating evidence: CRLF-safe executable bindings, raw-byte holds and owned-copy cleanup verified. No native or live claims.
+simNhlGmDesk exit=0 5s | simNhlGmDesk: all seven checks passed (10 seeds x 10 seasons)
+simGmDesk exit=0 0s | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and 
+simDraftNight exit=0 0s | simDraftNight: green. Every pick the engine made is shown, none is invented, and the run cannot become a wait.
+simFrontOfficeCuts exit=0 11s | simFrontOfficeCuts: 1187 checks passed over 4 sims and 4 seeded leagues each. A cut costs dead money, the man waits a season by any door, the hub and the boards say so, a
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simFrontOfficeSchedule exit=0 14s | simFrontOfficeSchedule: GREEN, NBA, MLB and NHL seasons booked and played exactly over 20 seeds
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simLeagueCaps exit=0 1s | simLeagueCaps: green. Four caps, two sources each, read on one day, and every screen says which day.
+simOwnerMandate exit=0 0s | ALL OWNER MANDATE CHECKS PASSED
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simGmDeskHost exit=0 45s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+simGmGameDay exit=1 69s | simGmGameDay: 462 checks, 1 failed
