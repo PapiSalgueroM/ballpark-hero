@@ -88,11 +88,11 @@ export function mineCard(squad: readonly { id: string; name: string; position: P
   return found === null ? null : { k: 'mine', id: found };
 }
 
-/** The link. With no provider (or no card) the children come back untouched. */
-export function CmCardLink({ card, className, children }: { card: CmCard | null; className?: string; children: ReactNode }) {
+/** The link. With no provider (or no card) the children come back untouched; with `only`, nothing is drawn. */
+export function CmCardLink({ card, className, children, only = false }: { card: CmCard | null; className?: string; children: ReactNode; only?: boolean }) {
   const cards = useContext(Cards);
   const hold = useContext(Hold);
-  if (!cards || !card) return <>{children}</>;
+  if (!cards || !card) return only ? null : <>{children}</>;
   return (
     <button type="button" data-cm-card-link={keyOf(card)} className={className} onClick={() => { hold?.(); cards.open(card); }}>
       {children}

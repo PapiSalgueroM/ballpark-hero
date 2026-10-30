@@ -18,6 +18,10 @@ import { leaders } from '@/lib/clubManagerLeagueBoards';
 import { playerCardOf, type CardRef } from '@/lib/clubManagerCards';
 import { PlayerCardScreen } from '@/components/club-manager/PlayerCardScreen';
 import { CmCardLink, CmCardsProvider, CmHost, mineCard, useCmCards } from '@/components/club-manager/CmCards';
+import { StatsScreen } from '@/components/club-manager/StatsScreen';
+import { SquadScreen } from '@/components/club-manager/SquadScreen';
+import { MemoryRouter } from 'react-router-dom';
+import type { ReactNode } from 'react';
 
 function seeded<T>(seed: number, run: () => T): T {
   const original = Math.random;
@@ -105,6 +109,41 @@ describe('the stack and the link', () => {
   it('with no provider draws exactly its children', () => {
     const bare = renderToStaticMarkup(<span className="x">Name</span>);
     expect(renderToStaticMarkup(<CmCardLink card={{ k: 'mine', id: 'a' }}><span className="x">Name</span></CmCardLink>)).toBe(bare);
+  });
+  /* The page draws a card in place of the hub, which unmounts the hosts: this stand in does the same. */
+  function Page({ host }: { host: ReactNode }) {
+    const cards = useCmCards();
+    return cards?.top
+      ? <div data-top={JSON.stringify(cards.top)}><button type="button" onClick={() => cards.back()}>Close card</button></div>
+      : <>{host}</>;
+  }
+  it('a board row opens that man\'s card, and Back finds the Stats screen on that board again', () => {
+    const { container } = render(<MemoryRouter><CmCardsProvider><Page host={<StatsScreen career={s2} />} /></CmCardsProvider></MemoryRouter>);
+    fireEvent.click(container.querySelector('[data-cm-leaders-tile="goals"]') as Element);
+    const row = container.querySelector('[data-cm-board-row]:not([data-mine]) [data-cm-card-link]');
+    if (!row) throw new Error('no rival row link on the goals board');
+    const name = row.querySelector('[data-cm-board-name]')?.textContent;
+    fireEvent.click(row);
+    expect(container.querySelector('[data-top]')?.getAttribute('data-top')).toContain(`"name":"${name}"`);
+    fireEvent.click(screen.getByText('Close card'));
+    expect(container.querySelector('[data-cm-board="goals"]')).toBeTruthy();
+  });
+  it('the Seasons button opens my man\'s card, and Back finds his row open again', () => {
+    const { container } = render(<MemoryRouter><CmCardsProvider><Page host={<SquadScreen squad={s2.squad} xiIds={s2.xiIds} eraId={s2.eraId} career={s2} />} /></CmCardsProvider></MemoryRouter>);
+    fireEvent.click(container.querySelector('[data-cm-squad-row] > button') as Element);
+    const open = container.querySelector('[data-cm-squad-detail]');
+    if (!open) throw new Error('no row opened');
+    const opened = open.getAttribute('data-cm-squad-detail');
+    fireEvent.click(open.querySelector('[data-cm-card-link]') as Element);
+    expect(container.querySelector('[data-top]')?.getAttribute('data-top')).toBe(JSON.stringify({ k: 'mine', id: opened }));
+    fireEvent.click(screen.getByText('Close card'));
+    expect(container.querySelector(`[data-cm-squad-detail="${opened}"]`)).toBeTruthy();
+  });
+  it('draws no link anywhere with no provider above the hosts', () => {
+    const { container } = render(<MemoryRouter><StatsScreen career={s2} /><SquadScreen squad={s2.squad} xiIds={s2.xiIds} eraId={s2.eraId} career={s2} /></MemoryRouter>);
+    fireEvent.click(container.querySelector('[data-cm-leaders-tile="goals"]') as Element);
+    expect(container.querySelector('[data-cm-board-row]')).toBeTruthy();
+    expect(container.querySelector('[data-cm-card-link]')).toBeNull();
   });
   it('resolves one of mine from a board row only when exactly one man has that name and position', () => {
     const squad = [{ id: 'a', name: 'Sam Doe', position: 'CB' as const }, { id: 'b', name: 'Sam Doe', position: 'CB' as const }, { id: 'c', name: 'Al Roe', position: 'ST' as const }];
