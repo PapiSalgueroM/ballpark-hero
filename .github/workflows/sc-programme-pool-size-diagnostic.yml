@@ -1,0 +1,65 @@
+name: Soccer Programme pool and playing-size diagnostic only
+on:
+  push:
+    branches: [codex/sc-programme-pool-size-diagnostic-20261030]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sc-programme-pool-size-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  diagnostic:
+    if: github.ref == 'refs/heads/codex/sc-programme-pool-size-diagnostic-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: External evidence and frozen source pins
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/sc-programme-pool-size-${GITHUB_RUN_ID}-a${GITHUB_RUN_ATTEMPT}"
+          echo "SC_POOL_SIZE_OUT=$RUNNER_TEMP/sc-programme-pool-size-${GITHUB_RUN_ID}-a${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_ENV"
+          printf '%s  %s\n' 4977c3177c1f9bd273b38f6ab5cb0a47f3709dc6527b5997e901e38cde2f0b08 scripts/qa/diagnoseProgrammePoolSizes.mjs | sha256sum --check
+          printf '%s  %s\n' 1611516baa917512ea95266ed86e1ee45f1c6c6713459a58621edf30a89b7c58 qa/sc-programme-pool-size-v1/CONTRACT.json | sha256sum --check
+      - name: Ordinary locked dependencies
+        shell: bash
+        run: |
+          set -uo pipefail
+          npm ci > "$SC_POOL_SIZE_OUT/npm-ci.stdout.log" 2> "$SC_POOL_SIZE_OUT/npm-ci.stderr.log"
+          raw=$?
+          printf '%s\n' "$raw" > "$SC_POOL_SIZE_OUT/npm-ci.exit"
+          exit "$raw"
+      - name: Syntax and actual diagnostic with original assertions
+        shell: bash
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: |
+          set -euo pipefail
+          node --check scripts/qa/diagnoseProgrammePoolSizes.mjs > "$SC_POOL_SIZE_OUT/syntax.stdout.log" 2> "$SC_POOL_SIZE_OUT/syntax.stderr.log"
+          raw=0
+          node scripts/qa/diagnoseProgrammePoolSizes.mjs > "$SC_POOL_SIZE_OUT/controller.stdout.log" 2> "$SC_POOL_SIZE_OUT/controller.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$SC_POOL_SIZE_OUT/controller.exit"
+          exit "$raw"
+      - name: Retain original actuals on every outcome
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-programme-pool-size-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/sc-programme-pool-size-${{ github.run_id }}-a${{ github.run_attempt }}/
+            !${{ runner.temp }}/sc-programme-pool-size-${{ github.run_id }}-a${{ github.run_attempt }}/matched-source/**
+          if-no-files-found: error
+          retention-days: 14

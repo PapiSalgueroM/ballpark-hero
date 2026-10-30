@@ -1,0 +1,162 @@
+{
+  "schema": 1,
+  "status": "BOUND",
+  "branch": "codex/sc-programme-pool-size-diagnostic-20261030",
+  "product": "0b545ff00497ed849224ab74deaba546ab5d93ca",
+  "productTree": "02cde32c88fd64e0417ef36ea098a899a758645c",
+  "base": "78e7b2ec9ea0865da3029275c060104d2668117b",
+  "baseTree": "96fb865e8e38462d96f51a858150ba1be5178d92",
+  "productFiles": 5457,
+  "proofFiles": 5460,
+  "historicalBase": "2f1919478db9e3a0f13b8f8b34373756944459c1",
+  "historicalBaseTree": "877ae7877f37ddeb6e57385bed8ee4da7f95f108",
+  "proofAdds": [
+    ".github/workflows/sc-programme-pool-size-diagnostic.yml",
+    "qa/sc-programme-pool-size-v1/CONTRACT.json",
+    "scripts/qa/diagnoseProgrammePoolSizes.mjs"
+  ],
+  "programme": {
+    "mode": "100644",
+    "path": "scripts/simCareerProgramme.mjs",
+    "bytes": 32227,
+    "gitBlob": "d6cdd02fb39e3d423737b4957ba66c46a54421f6",
+    "sha256": "ef4dad717fe38919c529f801c7d6fa7e5155d1f4f3c463bacd65112c96402d22"
+  },
+  "poolHelper": {
+    "mode": "100644",
+    "path": "scripts/lib/careerProgrammePoolAttribution.mjs",
+    "bytes": 10995,
+    "gitBlob": "794d328d470533d826667cd4378c70e8853cdf88",
+    "sha256": "fcf9dfede4a066358569bb2ec49b79a2db18bf149e8785ca6bd912367e083f94"
+  },
+  "fixture": {
+    "ids": [
+      "ere",
+      "cha",
+      "sco",
+      "her",
+      "nan"
+    ],
+    "sha256": "1c2ac7441402ad6db4916c844181b869a3550726c7e0afed4cce194f5e6ca8ef",
+    "gitBlob": "81425f731297f0ff72fc4e163dfe1a4cb86814ab",
+    "path": "scripts/data/careerLeagueWorldSaves1100.json",
+    "bytes": 102331,
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ]
+  },
+  "sizePath": "src/lib/soccerCareerLeague.ts",
+  "sizeBefore": {
+    "bytes": 47020,
+    "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+    "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844"
+  },
+  "sizeAfter": {
+    "bytes": 46938,
+    "sha256": "3e253f8c244a487bb9c6281d95503ec7030782d415ed26a36aab1f9292f5177d",
+    "gitBlob": "d18723f8a1acef9f5502cafac1d12633df76de9b"
+  },
+  "sizeWindows": [
+    {
+      "id": "Ligue2-live-playing-size",
+      "before": "  \"Brasileirao\": [{ from: 2026, size: 20 }],\n",
+      "after": "  \"Brasileirao\": [{ from: 2026, size: 20 }],\n  \"Ligue 2\": [{ from: 2026, size: 18 }],\n"
+    },
+    {
+      "id": "SerieB-live-playing-size",
+      "before": "};\n/* The dugout's alone:",
+      "after": "  \"Serie B\": [{ from: 2026, size: 20 }],\n};\n/* The dugout's alone:"
+    }
+  ],
+  "observer": {
+    "bytes": 33652,
+    "sha256": "ccbbbd07b4ecf50595f8f3ef137adfc9b2b2b3cd96eaca4d2ad4346338b6f565",
+    "gitBlob": "0137477851174adb70081b1814f54af3177b2763"
+  },
+  "observerOps": [
+    {
+      "before": "if(normalizePool)contents=inverseProgrammePool(rel,contents,pool);",
+      "after": "if(normalizePool)contents=inverseProgrammePool(rel,contents,pool);if(historicalPool&&rel==='src/lib/soccerCareerLeague.ts'){const windows=[{\"id\":\"Ligue2-live-playing-size\",\"before\":\"  \\\"Brasileirao\\\": [{ from: 2026, size: 20 }],\\n\",\"after\":\"  \\\"Brasileirao\\\": [{ from: 2026, size: 20 }],\\n  \\\"Ligue 2\\\": [{ from: 2026, size: 18 }],\\n\"},{\"id\":\"SerieB-live-playing-size\",\"before\":\"};\\n/* The dugout's alone:\",\"after\":\"  \\\"Serie B\\\": [{ from: 2026, size: 20 }],\\n};\\n/* The dugout's alone:\"}],sizeSourceBefore=contents;for(const window of windows){assert.equal(contents.split(window.after).length,2,'SC_POOL_SIZE_UNIQUE_INVERSE:'+window.id);contents=contents.replace(window.after,window.before);}let sizeForward=contents;for(const window of [...windows].reverse()){assert.equal(sizeForward.split(window.before).length,2,'SC_POOL_SIZE_UNIQUE_FORWARD:'+window.id);sizeForward=sizeForward.replace(window.before,window.after);}assert.equal(sizeForward,sizeSourceBefore,'SC_POOL_SIZE_WHOLE_FORWARD');assert.notEqual(sha(contents),sha(sizeSourceBefore),'SC_POOL_SIZE_EFFECTIVE');fs.writeFileSync(path.join(out,arm+'-playing-size.before.ts'),sizeSourceBefore,{flag:'wx'});fs.writeFileSync(path.join(out,arm+'-playing-size.after.ts'),contents,{flag:'wx'});fs.writeFileSync(path.join(out,arm+'-playing-size-inverse.json'),JSON.stringify({arm,rows:windows.length,beforeSHA256:sha(sizeSourceBefore),afterSHA256:sha(contents),forwardSHA256:sha(sizeForward),wholeForwardRestored:true},null,2),{flag:'wx'});}"
+    }
+  ],
+  "arms": [
+    "original",
+    "current",
+    "compatibility",
+    "historical-opening-on",
+    "historical-opening-off",
+    "pristine-opening-on",
+    "pristine-opening-off"
+  ],
+  "priorCompiled": {
+    "original": "5fcf6ed82c128e7fe20d6f908b20ffea3458aef60e7586f5e8af825a724af1cb",
+    "current": "9428d1e38510a095c8ade9ec61516c08c0332442d3bc91be1b686febd894972b",
+    "compatibility": "3d33be1b98e99d4055ec081110898809e3c6e8a6cd13a886fc7fe4e1703a2106",
+    "historical-opening-on": "07c685fb0f15ddbc033a1e64868f1ae531100c360876acd99bf21df4a0589d4a",
+    "historical-opening-off": "abbeee86e2d9f2cbc31f3d0a75e1f1b4d2ca1a91762891086e0408cf6fe98105",
+    "pristine-opening-on": "bd106e983cd704a2448ce95e47ed6ccbc74f32baffba9e8b150f425e48db90f0",
+    "pristine-opening-off": "cb81169a8f7f98de2f08cc9edd3c5323298042dad14eba4e319cd076f0715bc0"
+  },
+  "failedWitness": {
+    "run": 41039222461,
+    "artifact": 12968774027,
+    "path": "normal/actual/neutral-nan-2.json",
+    "sequence": 42,
+    "bytes": 330154,
+    "sha256": "1c248529a6d892cf885ebf4eab1e087fa49b6e5afd7d37c838b7e4914000c530",
+    "twoOnlyDifferences": [
+      "value.seasons[4].leagueFinish",
+      "value.pendingSummary.leagueFinish"
+    ],
+    "actual": 13,
+    "expected": 16,
+    "draws": 174
+  },
+  "controlIds": [
+    "tactics",
+    "position",
+    "set_pieces",
+    "promise",
+    "negotiation",
+    "bonuses",
+    "adaptation",
+    "fitness",
+    "captain",
+    "loan",
+    "us-workload",
+    "us-tactics",
+    "us-expectation",
+    "us-partnership",
+    "us-bonus",
+    "us-reinvention",
+    "ui-scroll",
+    "ui-focus",
+    "wheel-roll",
+    "wheel-ack",
+    "wheel-ui"
+  ],
+  "cacheTests": [
+    "src/lib/soccerCareerProgramme.test.ts",
+    "src/lib/usCareerProgramme.test.ts",
+    "src/test/soccerCareerProgrammeUi.test.tsx",
+    "src/lib/careerChanceWheel.test.ts",
+    "src/test/careerChanceWheelUi.test.tsx",
+    "src/test/soccerCareerLeagueWorld.test.ts",
+    "src/test/soccerCareerWorldSettle.test.ts"
+  ],
+  "limits": [
+    "Diagnostic only. Candidate may pass or fail later, neither is product qualification.",
+    "Exactly two live LEAGUE_SIZES rows in H only. DUGOUT, test table, pool-only baseline and A/B/C/pristine source unchanged.",
+    "No original assertion, fixture, seed, digest, control, threshold or downstream count changed.",
+    "No app, data, Cup, permanent guard, types, full default suite, build, caps, readers, browser or release credit."
+  ]
+}
