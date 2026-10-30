@@ -1034,7 +1034,7 @@ export function setTicketPolicy(s: TycoonState, policy: TicketPolicy): TycoonSta
 }
 
 /* Late-match plans use the shared law without changing its limits. */
-const MATCH_PLAN_POINTS = 0;
+const MATCH_PLAN_POINTS = 4;
 
 function validMatchPlanState(s: TycoonState): boolean {
   const match = s.totalMatches === undefined ? 0 : s.totalMatches;
