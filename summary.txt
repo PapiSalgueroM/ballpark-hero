@@ -1,0 +1,3 @@
+simBuildYourXiFit exit=0 4s | simBuildYourXiFit: all checks green
+simPlayerAutocompleteInteraction exit=0 8s | simPlayerAutocompleteInteraction: eight actual-component pointer, keyboard, disabled, free-text, identity and filter checks passed; fifteen stale list checks passed (a bo
+vitest-pr exit=0 23s |    Duration  22.55s (transform 1.28s, setup 473ms, collect 3.45s, tests 21.27s, environment 2.66s, prepare 917ms)
