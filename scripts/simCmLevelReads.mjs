@@ -71,7 +71,7 @@ const CONTROLS = {
     '     world still on curve 1 the level is the rating. */\n  const rs = roster.map(p => p.r)'],
   anchor: ['src/lib/clubManagerEras.ts', 'r: b.r, anchor: levelOf(b), since: 0,', 'r: b.r, anchor: b.r, since: 0,'],
   scale: ['src/lib/clubManagerEras.ts', 'rawCurveValue(levelOf(b), b.a)', 'rawCurveValue(b.r, b.a)'],
-  exit: ['src/lib/clubManagerEras.ts', 'worldExitChance(age, futureRead(pl), pl.p)', 'worldExitChance(age, pl.r, pl.p)'],
+  exit: ['src/lib/clubManagerEras.ts', 'worldExitChance(age, futureRead(pl), pl.p, ', 'worldExitChance(age, pl.r, pl.p, '],
   ceiling: ['src/lib/clubManager.ts', 'p.potential = rollPotential(ceilingBase(p), p.age);', 'p.potential = rollPotential(p.rating, p.age);'],
   nostamp: ['src/data/clubManagerWorldRosters.ts', '  if (curve !== CM_AGE_CURVE) return rosters;\n', ''],
   /* Round 1214's mutation: the points under the stretch, as Round 1102 had them (2010 Messi 95, not 97). */
@@ -104,7 +104,7 @@ const ROSTERS_STAMPED = stampedSquads(CURVE1);
 const CURVE1_LEAGUES = { aleague: unstampedLeague(LEAGUES.aleague), russia: unstampedLeague(LEAGUES.russia), fa: unstampedFreeAgents(LEAGUES.fa) };
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cmlevelreads-'));
-async function bundle(name, rosterText, leagues = CURVE1_LEAGUES) {
+async function bundle(name, rosterText, leagues = CURVE1_LEAGUES, src = SRC) {
   const outfile = path.join(TMP, `${name}.cjs`);
   await build({
     stdin: { contents: "export * as cm from '@/lib/clubManager'; export * as eras from '@/lib/clubManagerEras';", resolveDir: ROOT, loader: 'ts' },
@@ -116,7 +116,7 @@ async function bundle(name, rosterText, leagues = CURVE1_LEAGUES) {
         'src/lib/clubManagerEras.ts': /[\\/]src[\\/]lib[\\/]clubManagerEras\.ts$/,
         'src/data/clubManagerWorldRosters.ts': /[\\/]src[\\/]data[\\/]clubManagerWorldRosters\.ts$/,
       };
-      for (const [rel, filter] of Object.entries(FILTERS)) b.onLoad({ filter }, () => ({ contents: SRC[rel], loader: 'ts' }));
+      for (const [rel, filter] of Object.entries(FILTERS)) b.onLoad({ filter }, () => ({ contents: src[rel], loader: 'ts' }));
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerRosters\.ts$/ }, () => ({ contents: rosterText, loader: 'ts' }));
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerALeague2026\.ts$/ }, () => ({ contents: leagues.aleague, loader: 'ts' }));
       b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerRussia2026\.ts$/ }, () => ({ contents: leagues.russia, loader: 'ts' }));
@@ -128,7 +128,11 @@ async function bundle(name, rosterText, leagues = CURVE1_LEAGUES) {
 const store = new Map();
 globalThis.localStorage = { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => { store.set(k, String(v)); }, removeItem: k => { store.delete(k); } };
 const A = await bundle('A', ROSTERS);
-const B1 = await bundle('B1', ROSTERS_STAMPED);
+/* Arm B1 stamps the file with its ages untouched, so the drop out table must read the age as it is there (the
+   shift by one is for the August column, arm B2): the seam test holds the level reads alone. */
+const DROP_SHIFT = "  const dropShift = trajectoryEra === 'now' && cmWorldReadsAge() ? 1 : 0;\n";
+if (SRC['src/lib/clubManagerEras.ts'].split(DROP_SHIFT).length !== 2) { console.log('simCmLevelReads: ABORTED, the drop out shift line is not in clubManagerEras.ts once'); process.exit(2); }
+const B1 = await bundle('B1', ROSTERS_STAMPED, CURVE1_LEAGUES, { ...SRC, 'src/lib/clubManagerEras.ts': SRC['src/lib/clubManagerEras.ts'].replace(DROP_SHIFT, '  const dropShift = 0;\n') });
 const B2 = await bundle('B2', AGED.text, FLIPPED ? LEAGUES : CURVE1_LEAGUES);
 for (const arm of [A, B1, B2]) await arm.cm.ensureAllEraRosters();
 

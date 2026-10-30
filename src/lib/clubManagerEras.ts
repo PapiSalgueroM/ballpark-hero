@@ -47,7 +47,7 @@ import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 import { advanceClubManagerTrajectory } from '@/lib/clubManagerTrajectory';
 // Round 1035: the modern squads, baked plus the A-League Men, joined once.
-import { CM_WORLD_ROSTERS as CM_ROSTERS, cmWorld, cmWorldTag } from '@/data/clubManagerWorldRosters';
+import { CM_WORLD_ROSTERS as CM_ROSTERS, cmWorld, cmWorldTag, cmWorldReadsAge } from '@/data/clubManagerWorldRosters';
 import { readInWorld, RATING_CEIL, ERA_RATING_AGE_SHIFT } from '@/lib/cmAgeRead';
 import { loadNationalityWorld, registerNationalityWorld } from '@/data/playerNationalities';
 /* Round 832: the three era bakes are no longer imported here. Each one is its
@@ -215,9 +215,10 @@ export function dropOutChance(age: number, rating: number, position: Position): 
   return clamp(base * quality * keeper, 0, 0.9);
 }
 
-/** Retirement and dropping out, combined: the chance he is gone from the game. */
-export function worldExitChance(age: number, rating: number, position: Position): number {
-  return 1 - (1 - retireChance(age, rating, position)) * (1 - dropOutChance(age, rating, position));
+/** Retirement and dropping out, combined: the chance he is gone from the game.
+ *  Round 1600: `dropAge` is the age the drop out table reads, his age unless his world says otherwise (ageOne). */
+export function worldExitChance(age: number, rating: number, position: Position, dropAge = age): number {
+  return 1 - (1 - retireChance(age, rating, position)) * (1 - dropOutChance(dropAge, rating, position));
 }
 
 /**
@@ -502,12 +503,12 @@ export function rawCurveValue(rating: number, age: number): number {
 }
 
 /** One year on for one projected player. Null means he is gone from the game. */
-function ageOne(club: string, pl: ProjectedPlayer, year: number, scale: number, worldSeed?: number): ProjectedPlayer | null {
+function ageOne(club: string, pl: ProjectedPlayer, year: number, scale: number, worldSeed?: number, dropShift = 0): ProjectedPlayer | null {
   const age = pl.a + 1;
   const key = `${club}|${pl.n}|${year}`;
   /* Round 1600 (critic correction 5 of the ratings design): the exit reads the higher of his rating and his level,
      so a boy shown under his level by the age read does not leave the game more often for it. */
-  if (rnd(`${key}|ret`) < worldExitChance(age, futureRead(pl), pl.p)) return null;
+  if (rnd(`${key}|ret`) < worldExitChance(age, futureRead(pl), pl.p, age - dropShift)) return null;
   if (worldSeed !== undefined && pl.worldRosterKey) {
     const next = advanceClubManagerTrajectory(pl, { seed: worldSeed, identity: pl.worldRosterKey, year,
       ageBand: ageDriftBand(age), declineScale: declineScale(pl.p) });
@@ -832,6 +833,13 @@ function worldKeyOf(eraId: string, yearsOn: number, worldSeed?: number): { y: nu
    alone and get the same list. */
 function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number | undefined, trajectoryEra: string): ProjectedPlayer[] {
   const scale = valueScaleFor(club, baked);
+  /* Round 1600: dropOutChance's table was FITTED to the age column the bake shipped, each man's age on 1 January (its
+     comment: "the ratio of one age band to the next IS the survival rate"). Today's world on curve 2 holds his age on
+     1 August, a year more for 4,225 of 4,401 men, and the column refitted on it is the old table one year later
+     (docs/audits/ROUND-1600-NOTES.md prints both), so it hands the table its age less one. The past seasons, whose
+     files still hold the 1 January age, and the curve 1 view hand it the age as it is. retireChance and ageDriftBand
+     are anchored on real ages and read the age as it is everywhere. */
+  const dropShift = trajectoryEra === 'now' && cmWorldReadsAge() ? 1 : 0;
   /* Round 1600: the slot's anchor is the man's level, and a row that carries one keeps it. */
   let roster: ProjectedPlayer[] = baked.map(b => ({
     n: b.n, p: b.p, a: b.a, v: b.v, r: b.r, anchor: levelOf(b), since: 0,
@@ -845,7 +853,7 @@ function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number
     const kept: ProjectedPlayer[] = [];
     const emptied: ProjectedPlayer[] = [];
     for (const pl of roster) {
-      const next = ageOne(club, pl, year, scale, seed);
+      const next = ageOne(club, pl, year, scale, seed, dropShift);
       if (next) kept.push(next); else emptied.push(pl);
     }
     // Every slot that emptied gets filled the same summer. A real club does
