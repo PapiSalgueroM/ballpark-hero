@@ -1,0 +1,4 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk exit=2 1s | playCmDecidingLeg could not run: the career met no deciding second leg
+sweepWeight exit=1 30s | sweepWeight: 2 failures
+simClubManagerSaveSize exit=0 49s | simClubManagerSaveSize: all sections green
