@@ -123,8 +123,10 @@ describe('Round 1597: no deal ends unseen', () => {
   it('a final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal', () => {
     const { state, summary } = finishSeason(startCareer('OB'));
     const squad = state.squad.map(p => ({ ...p, contractYears: 3 }));
-    /* Under 29 and no youth pad, so the summer cannot retire him and the trim cannot cut him. */
-    const lentMan = { ...squad.filter(p => !p.onLoan && !p.isYouth && p.position !== 'GK' && p.age <= 28).sort((a, b) => b.rating - a.rating)[0], contractYears: 1 };
+    /* The best outfield man, made 25 and no youth pad, so the summer cannot retire him and the trim cannot cut him. */
+    const best = squad.filter(p => !p.onLoan && p.position !== 'GK').sort((a, b) => b.rating - a.rating)[0];
+    expect(best?.id).toBeTruthy();
+    const lentMan = { ...best, age: 25, isYouth: false, contractYears: 1 };
     const c0: CareerState = { ...state, budget: 999, squad: squad.filter(p => p.id !== lentMan.id),
       loanedOut: [{ player: lentMan, club: 'Loan Club Test', fee: 1, season: state.season }], pendingSummary: summary, jobHunt: undefined };
     expect(expiringPlayers(c0).map(p => p.id)).not.toContain(lentMan.id);
