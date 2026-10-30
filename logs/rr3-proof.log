@@ -1,0 +1,14 @@
+1
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/r3[39m
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22m[2mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating
+[22m[39m2026 at the flip: 2078 of 4401 ratings change; by points {"0":2323,"1":230,"2":324,"3":110,"4":76,"5":44,"6":20,"7":11,"8":13,"-1":379,"-2":306,"-3":245,"-4":182,"-6":50,"-5":88}
+
+ [32m✓[39m src/test/cmValueCurve.test.ts [2m([22m[2m57 tests[22m[2m | [22m[33m56 skipped[39m[2m)[22m[32m 19[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[2m | [22m[33m56 skipped[39m[90m (57)[39m
+[2m   Start at [22m 13:24:04
+[2m   Duration [22m 3.23s[2m (transform 1.67s, setup 139ms, collect 1.90s, tests 19ms, environment 430ms, prepare 342ms)[22m
+

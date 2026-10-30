@@ -1,0 +1,11 @@
+rr1-modern-proof exit=1 2s | Node.js v24.22.1
+rr2-proof exit=0 6s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+rr1-eras-proof exit=0 16s | simCmLeagueRules: all checks passed (eras)
+rr2-retake exit=0 11s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+rr3-proof exit=0 5s |    Duration  3.23s (transform 1.67s, setup 139ms, collect 1.90s, tests 19ms, environment 430ms, prepare 342ms)
+rr34-head exit=0 24s |    Duration  22.97s (transform 1.80s, setup 246ms, collect 3.03s, tests 21.10s, environment 974ms, prepare 307ms)
+rr4-proof exit=0 26s |    Duration  24.45s (transform 987ms, setup 102ms, collect 1.08s, tests 21.84s, environment 574ms, prepare 465ms)
+rr1-retake exit=0 148s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+oldCareers-base exit=1 88s | simCmOldCareersWorld: RED, 20 failure(s) (section 1 2, section 2 18) (86s)
+unseeded-base exit=1 229s | simCmUnseededWorld: 113 FAILURE(S)
+worldMoves-base exit=1 1222s | simCmWorldMoves: RED, sections 5 (96), 6 (270), 8 (57)
