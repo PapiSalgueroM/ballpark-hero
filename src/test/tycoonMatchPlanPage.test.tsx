@@ -40,11 +40,11 @@ describe('late-match plans on the real Stadium page and hook', () => {
     mountPage(<StadiumTycoon />, '/stadium-tycoon');
     const group = within(planGroup());
     for (const name of ['Protect the lead', 'Balanced', 'Chase a goal']) {
-      const button = group.getByRole('button', { name, exact: true });
+      const button = group.getByRole('button', { name });
       expect(button).toBeDisabled();
       fireEvent.click(button);
     }
-    expect(group.getByRole('button', { name: 'Balanced', exact: true })).toHaveAttribute('aria-pressed', 'true');
+    expect(group.getByRole('button', { name: 'Balanced' })).toHaveAttribute('aria-pressed', 'true');
     expect(localStorage.getItem(TYCOON_SAVE_KEY)).toBe(raw);
     expect(recordCompletion).not.toHaveBeenCalled();
   });
@@ -53,16 +53,16 @@ describe('late-match plans on the real Stadium page and hook', () => {
     const before = fixture(60);
     const page = mountPage(<StadiumTycoon />, '/stadium-tycoon');
     const group = within(planGroup());
-    for (const name of ['Protect the lead', 'Balanced', 'Chase a goal']) expect(group.getByRole('button', { name, exact: true })).toBeEnabled();
-    fireEvent.click(group.getByRole('button', { name: 'Balanced', exact: true }));
+    for (const name of ['Protect the lead', 'Balanced', 'Chase a goal']) expect(group.getByRole('button', { name })).toBeEnabled();
+    fireEvent.click(group.getByRole('button', { name: 'Balanced' }));
     const committed = saved();
     expect(committed.matchPlan).toEqual({ rep: before.rep, match: before.totalMatches, choice: 'balanced' });
     const { matchPlan, ...rest } = committed;
     expect(rest).toEqual(JSON.parse(serializeTycoon(before, EPOCH)));
     expect(matchPlan.choice).toBe('balanced');
     for (const name of ['Protect the lead', 'Balanced', 'Chase a goal']) {
-      expect(group.getByRole('button', { name, exact: true })).toBeDisabled();
-      fireEvent.click(group.getByRole('button', { name, exact: true }));
+      expect(group.getByRole('button', { name })).toBeDisabled();
+      fireEvent.click(group.getByRole('button', { name }));
     }
     expect(saved()).toEqual(committed);
     expect(group.getByRole('status')).toHaveTextContent('Balanced locked until full time.');
@@ -71,7 +71,7 @@ describe('late-match plans on the real Stadium page and hook', () => {
     page.unmount();
     mountPage(<StadiumTycoon />, '/stadium-tycoon');
     expect(saved()).toEqual(committed);
-    expect(within(planGroup()).getByRole('button', { name: 'Balanced', exact: true })).toBeDisabled();
+    expect(within(planGroup()).getByRole('button', { name: 'Balanced' })).toBeDisabled();
     expect(within(planGroup()).getByRole('status')).toHaveTextContent('Balanced locked until full time.');
     expect(recordCompletion).toHaveBeenCalledTimes(1);
   });
@@ -114,13 +114,13 @@ describe('late-match plans on the real Stadium page and hook', () => {
       if (key === TYCOON_SAVE_KEY && blocked) throw new DOMException('Full', 'QuotaExceededError');
       return writer.call(this, key, value);
     });
-    fireEvent.click(within(planGroup()).getByRole('button', { name: 'Chase a goal', exact: true }));
+    fireEvent.click(within(planGroup()).getByRole('button', { name: 'Chase a goal' }));
     expect(within(planGroup()).getByRole('alert')).toHaveTextContent('Could not save that plan. Try again.');
-    expect(within(planGroup()).getByRole('button', { name: 'Chase a goal', exact: true })).toBeEnabled();
+    expect(within(planGroup()).getByRole('button', { name: 'Chase a goal' })).toBeEnabled();
     expect(saved().matchPlan).toBeUndefined();
     expect(recordCompletion).not.toHaveBeenCalled();
     blocked = false;
-    fireEvent.click(within(planGroup()).getByRole('button', { name: 'Chase a goal', exact: true }));
+    fireEvent.click(within(planGroup()).getByRole('button', { name: 'Chase a goal' }));
     expect(saved().matchPlan.choice).toBe('chase');
     expect(saved().money).toBe(before.money);
     expect(saved().totalTaps).toBe(before.totalTaps);
@@ -145,8 +145,8 @@ describe('late-match plans on the real Stadium page and hook', () => {
   it('reopenable help explains both costs, reload locking, the default and a worked lead', () => {
     fixture(60);
     mountPage(<StadiumTycoon />, '/stadium-tycoon');
-    fireEvent.click(screen.getByRole('button', { name: 'How it works', exact: true }));
-    const dialog = screen.getByRole('dialog', { name: 'How Stadium Tycoon works', exact: true });
+    fireEvent.click(screen.getByRole('button', { name: 'How it works' }));
+    const dialog = screen.getByRole('dialog', { name: 'How Stadium Tycoon works' });
     expect(dialog).toHaveTextContent('Protect the lead lowers chances for both sides.');
     expect(dialog).toHaveTextContent('Chase a goal raises both, so your rival gets more chances too.');
     expect(dialog).toHaveTextContent('including after a reload');
