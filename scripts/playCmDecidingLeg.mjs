@@ -47,17 +47,22 @@ globalThis.localStorage = { getItem: k => memory.get(k) ?? null, setItem: (k, v)
 const { cm } = createRequire(import.meta.url)(path.join(work, 'engine.cjs'));
 await cm.ensureAllEraRosters();
 let pre = null;
-{
-  let s = withSeed(16030, () => cm.startCareer('Real Madrid', 'era2010'));
+const trail = [];
+for (const [club, era, seed] of [['Real Madrid', 'era2010', 16030], ['Barcelona', 'era2015', 16040], ['Real Madrid', 'now', 16050], ['Bayern Munich', 'now', 16060], ['Barcelona', 'era2005', 16070]]) {
+  let s = withSeed(seed, () => cm.startCareer(club, era));
+  let why = 'the guard';
   for (let i = 0; i < 160 && !pre; i++) {
     const e = s.calendar[s.week];
-    if (e && e.type === 'uclKo' && e.uclLeg === 2 && s.uclKoRound === e.uclRound) { pre = s; break; }
-    const r = withSeed(16031 + i, () => cm.playNextEntry(s, { skipHalftime: true }));
+    if (e && e.type === 'uclKo' && e.uclLeg === 2 && s.uclKoRound === e.uclRound) { pre = s; why = 'found'; break; }
+    const r = withSeed(seed + 1 + i, () => cm.playNextEntry(s, { skipHalftime: true }));
     s = r.state;
-    if (r.kind === 'seasonOver' || s.sacked || s.uclKoRound === 'out') break;
+    if (r.kind === 'seasonOver' || s.sacked || s.uclKoRound === 'out') { why = `${r.kind}, week ${s.week}, Champions League ${s.uclKoRound ?? 'group'}, legs on the calendar ${s.calendar.filter(x => x.uclLeg === 2).length}`; break; }
   }
+  trail.push(`${club} ${era}: ${why}`);
+  if (pre) break;
 }
-if (!pre) cannot('the career met no deciding second leg');
+console.log(`looking for a deciding second leg: ${trail.join('; ')}`);
+if (!pre) cannot('no career met a deciding second leg');
 const round = pre.calendar[pre.week].uclRound;
 function plant(mine, theirs) {
   const s = structuredClone(pre);
