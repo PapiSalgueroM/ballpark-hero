@@ -1,0 +1,12 @@
+#!serial
+rh: npm install --prefix /tmp/pgl @electric-sql/pglite > /dev/null 2>&1 && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs
+rh-cachedrift: REHEARSE_CONTROL=cachedrift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs
+rh-parity: REHEARSE_CONTROL=parity PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs
+rh-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs
+rh-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs
+rh-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs
+rh1584: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1584.mjs
+mut-oldgen: git show 253ff4257:scripts/qa/genClubNamesakes1587.mjs > scripts/qa/genClubNamesakes1587.mjs && git diff --stat && node scripts/simClubNamesakes.mjs; s=$?; git checkout -- scripts supabase; exit $s
+mut-A-regen: node .rc/x/mut1587.mjs A && node scripts/qa/genArsenalLedger1587.mjs && node scripts/qa/genClubNamesakes1587.mjs && node scripts/simClubNamesakes.mjs; s=$?; git checkout -- scripts supabase; exit $s
+mut-B-regen: node .rc/x/mut1587.mjs B && node scripts/qa/genArsenalLedger1587.mjs && node scripts/qa/genClubNamesakes1587.mjs && node scripts/simClubNamesakes.mjs; s=$?; git checkout -- scripts supabase; exit $s
+clean: git status --short | wc -l

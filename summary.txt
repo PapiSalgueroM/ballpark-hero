@@ -1,0 +1,11 @@
+rh exit=0 8s | rehearseClubNamesakes1587: green. Both forms move exactly the 110 market rows and 56 stints to Arsenal de Sarandí and nothing else, and a second run changes nothing.
+rh-cachedrift exit=1 7s | rehearseClubNamesakes1587: 1 finding(s).
+rh-parity exit=1 7s | rehearseClubNamesakes1587: 1 finding(s).
+rh-tamper exit=1 7s | rehearseClubNamesakes1587: 1 finding(s).
+rh-drift exit=1 7s | rehearseClubNamesakes1587: 2 finding(s).
+rh-noguard exit=1 7s | rehearseClubNamesakes1587: 3 finding(s).
+rh1584 exit=0 6s | rehearseClubNamesakes1584: green. Q1 and its JS twin agree in Postgres, and the purge form removes exactly the stale Arsenal yeses or nothing.
+mut-oldgen exit=1 4s | simClubNamesakes: 2 finding(s).
+mut-A-regen exit=1 4s | simClubNamesakes: 2 finding(s).
+mut-B-regen exit=1 2s | simClubNamesakes: 1 finding(s).
+clean exit=0 1s | 0
