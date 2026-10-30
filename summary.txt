@@ -1,0 +1,19 @@
+m-agree-silent exit=0 4s | MUT agree-silent: plain exit=0; controls that stopped firing: nbaaba -> DETECTED
+m-agree-record-first exit=0 4s | MUT agree-record-first: plain exit=0; controls that stopped firing: kareem,nbaaba -> DETECTED
+m-asof-offbyone exit=0 4s | MUT asof-offbyone: plain exit=0; controls that stopped firing: nbayear -> DETECTED
+m-lineage-kin-drop exit=0 4s | MUT lineage-kin-drop: plain exit=0; controls that stopped firing: nbalineage -> DETECTED
+m-aba-drop exit=0 4s | MUT aba-drop: plain exit=0; controls that stopped firing: nbaaba -> DETECTED
+m-watch-espn-flag exit=0 4s | MUT watch-espn-flag: plain exit=0; controls that stopped firing: nbawatch -> DETECTED
+m-espn-closed exit=0 4s | MUT espn-closed: plain exit=0; controls that stopped firing: none -> UNDETECTED (everything green)
+m-born-guess exit=0 4s | MUT born-guess: plain exit=0; controls that stopped firing: none -> UNDETECTED (everything green)
+m-continent-no exit=0 4s | MUT continent-no: plain exit=0; controls that stopped firing: none -> UNDETECTED (everything green)
+m-page exit=0 168s | MUTPAGE page: vitest7=0 tsc=0 simNbaPlanningBench=0 simConnectionsFacts=0 simUsConnectionsFacts=0 simDailySaveHardening=0 -> UNDETECTED (everything green)
+m-dialog exit=0 165s | MUTPAGE dialog: vitest7=0 tsc=0 simNbaPlanningBench=0 simConnectionsFacts=0 simUsConnectionsFacts=0 simDailySaveHardening=0 -> UNDETECTED (everything green)
+pgl exit=0 1s | /tmp/pgl/node_modules/@electric-sql/pglite/dist/index.js
+rehearse exit=0 18s | rehearseNbaConnections1583: green. Both forms land the 4 NBA file boards in place, a drifted row is left alone or stops the step, a tampered payload is refused, the rows 
+reh-noguard exit=1 9s | rehearseNbaConnections1583 control noguard: FIRED, caught by check B (2 failures; checks A, B)
+reh-drift exit=1 9s | rehearseNbaConnections1583 control drift: FIRED, caught by check 0 (3 failures; checks 0, A, G)
+reh-tamper exit=1 9s | rehearseNbaConnections1583 control tamper: FIRED, caught by check D (2 failures; checks D)
+reh-nohash exit=1 9s | rehearseNbaConnections1583 control nohash: FIRED, caught by check E (2 failures; checks E)
+reh-dupname exit=1 9s | rehearseNbaConnections1583 control dupname: FIRED, caught by check H (1 failure; checks H)
+oldsave exit=0 2s |    Duration  1.59s (transform 116ms, setup 68ms, collect 203ms, tests 584ms, environment 298ms, prepare 69ms)

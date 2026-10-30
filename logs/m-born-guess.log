@@ -1,0 +1,15 @@
+probe original: Larry Bird overlay removed: fits=null hosts=[null,true]; Dikembe Mutombo overlay removed: fits=null hosts=[null,true]; Kareem Abdul-Jabbar overlay removed: fits=null hosts=[false,true]
+probe mutated:  Larry Bird overlay removed: fits=null hosts=[null,true]; Dikembe Mutombo overlay removed: fits=null hosts=[null,true]; Kareem Abdul-Jabbar overlay removed: fits=null hosts=[false,true]
+plain exit=0 | simUsConnectionsFacts: green. Every Baseball, NFL, NHL and NBA Connections group is held to the record, and no board has a second right answer the record can see (other tiles it cannot judge, each at its ceiling: 0 baseb
+  c-nbaundate exit=1 FIRED | US_CONN_CONTROL=nbaundate fired its own rule 1 time(s): trade x1 for Joel Embiid (all findings: trade 4; 4 failures in all)
+  c-nbayear exit=1 FIRED | US_CONN_CONTROL=nbayear fired its own rule 1 time(s): second-fit x1 for Pascal Siakam (all findings: second-fit 1; 1 failures in all)
+  c-nbaafter exit=1 FIRED | US_CONN_CONTROL=nbaafter fired its own rule 1 time(s): not-a-member x1 for Jayson Tatum (all findings: not-a-member 1; 1 failures in all)
+  c-parker exit=1 FIRED | US_CONN_CONTROL=parker fired its own rule 1 time(s): refuted x1 for Tony Parker (all findings: refuted 1, no-fact 1, not-a-member 1; 3 failures in all)
+  c-kareem exit=1 FIRED | US_CONN_CONTROL=kareem fired its own rule 1 time(s): member-unknown x1 for Kareem Abdul-Jabbar (all findings: member-unknown 2; 1 failures in all)
+  c-cousins exit=1 FIRED | US_CONN_CONTROL=cousins fired its own rule 1 time(s): gray-back x1 for DeMarcus Cousins (all findings: gray-back 1, no-fact 1; 2 failures in all)
+  c-nbawatch exit=1 FIRED | US_CONN_CONTROL=nbawatch fired its own rule 1 time(s): watch x1 for Nicolas Batum (all findings: no-fact 1, watch 1; 2 failures in all)
+  c-nbaclub exit=1 FIRED | US_CONN_CONTROL=nbaclub fired its own rule 1 time(s): unjudged x1 for Played for the Miami Heat (as of 2025-26) (all findings: unjudged 1; 2 failures in all)
+  c-nbaborn exit=1 FIRED | US_CONN_CONTROL=nbaborn fired its own rule 1 time(s): second-fit x1 for Dillon Brooks (all findings: no-fact 2, not-a-member 2, second-fit 2; 6 failures in all)
+  c-nbalineage exit=1 FIRED | US_CONN_CONTROL=nbalineage fired its own rule 1 time(s): other-unknown x1 for Pascal Siakam (all findings: other-unknown 2; 1 failures in all)
+  c-nbaaba exit=1 FIRED | US_CONN_CONTROL=nbaaba fired its own rule 1 time(s): other-unknown x1 for Moses Malone (all findings: not-a-member 5, second-fit 2, other-unknown 2; 9 failures in all)
+MUT born-guess: plain exit=0; controls that stopped firing: none -> UNDETECTED (everything green)

@@ -1,0 +1,20 @@
+#!serial
+m-agree-silent: node .rc/x/rmut.mjs agree-silent
+m-agree-record-first: node .rc/x/rmut.mjs agree-record-first
+m-asof-offbyone: node .rc/x/rmut.mjs asof-offbyone
+m-lineage-kin-drop: node .rc/x/rmut.mjs lineage-kin-drop
+m-aba-drop: node .rc/x/rmut.mjs aba-drop
+m-watch-espn-flag: node .rc/x/rmut.mjs watch-espn-flag
+m-espn-closed: node .rc/x/rmut.mjs espn-closed
+m-born-guess: node .rc/x/rmut.mjs born-guess
+m-continent-no: node .rc/x/rmut.mjs continent-no
+m-page: node .rc/x/rmutpage.mjs page; s=$?; git checkout -- src scripts; exit $s
+m-dialog: node .rc/x/rmutpage.mjs dialog; s=$?; git checkout -- src scripts; exit $s
+pgl: npm install --silent --prefix /tmp/pgl @electric-sql/pglite > /tmp/pgl.log 2>&1; s=$?; ls /tmp/pgl/node_modules/@electric-sql/pglite/dist/index.js; exit $s
+rehearse: PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-noguard: REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-drift: REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-tamper: REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-nohash: REHEARSE_CONTROL=nohash PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+reh-dupname: REHEARSE_CONTROL=dupname PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseNbaConnections1583.mjs
+oldsave: git show b4a331a9c:src/data/nbaConnectionsPuzzles.ts > src/data/zzBaseNbaPuzzles.ts && cp .rc/x/zzOldSave1583.test.tsx src/test/zzOldSave1583.test.tsx && node_modules/.bin/vitest run src/test/zzOldSave1583.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; rm -f src/data/zzBaseNbaPuzzles.ts src/test/zzOldSave1583.test.tsx; exit $s
