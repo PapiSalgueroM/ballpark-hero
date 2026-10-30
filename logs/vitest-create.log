@@ -1,0 +1,59 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/soccerCareerCreationRoll.test.tsx[2m > [22m[2mSoccer Career creation roll belongs to its selected position[2m > [22m[2mcreation roll preservation: a fresh settled roll starts and saves the displayed player
+[22m[39mWarning: validateDOMNesting(...): <span> cannot appear as a child of <option>.
+    at span
+    at option
+    at SelectItem (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:99:24)
+    at SelectGroup (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:107:25)
+    at SelectContent (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:96:27)
+    at select
+    at Select (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerCreationRoll.test.tsx:87:20)
+    at div
+    at div
+    at div
+    at CreationScreen (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:3969:57)
+    at main
+    at div
+    at SoccerCareer (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/SoccerCareer.tsx:2441:59)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+ [32m✓[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 8489[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores current progress synchronously and advances the same career once [33m 371[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores a decided moral dilemma and keeps its consequence after Continue [33m 427[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrehydrates a serialized random event and applies its catalog outcome [33m 384[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores an older World Cup result without requiring a new tournament field [33m 320[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrecords a newly finished ceremony once and does not replay it on the next mount [33m 340[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects null seasons before render, retains raw bytes and deletes only its own key on request [33m 465[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects missing seasons before render, retains raw bytes and deletes only its own key on request [33m 469[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects empty seasons before render, retains raw bytes and deletes only its own key on request [33m 429[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects object seasons before render, retains raw bytes and deletes only its own key on request [33m 301[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mallows an explicit new career to replace damaged bytes without touching another save [33m 324[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerCreationRoll.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 12417[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career creation roll belongs to its selected position[2m > [22mcreation roll preservation: a fresh settled roll starts and saves the displayed player [33m 1308[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career creation roll belongs to its selected position[2m > [22mcreation roll stale settled: changing position requires a new roll before Begin Career [33m 798[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career creation roll belongs to its selected position[2m > [22mcreation roll stale in-flight: a previous position roll cannot publish after the switch [33m 517[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career creation roll belongs to its selected position[2m > [22mcreation roll preservation: a new position reroll starts with its displayed stats [33m 1017[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career creation: the academy shown is the academy joined[2m > [22macademy kept: a settled roll starts the career at the club under Academy Placement [33m 2915[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career creation: the academy shown is the academy joined[2m > [22macademy kept: a nationality change after the roll re-reads the placement and starts there [33m 2531[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career creation: the academy shown is the academy joined[2m > [22macademy kept: an era change after the roll re-reads the placement for the new year and starts there [33m 1951[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career creation: the academy shown is the academy joined[2m > [22macademy kept: Begin Career waits while Roll again is rolling, then starts at the new placement [33m 1378[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 13580[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps the restored career and old bytes while showing a persistent save warning and one toast [33m 703[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps repeated refused retries visible without replaying progress or repeating the toast [33m 481[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount [33m 4728[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine [33m 3801[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal [33m 3134[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears the old failure after explicit reset and saves the replacement career without old progress [33m 477[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m55 passed[39m[22m[90m (55)[39m
+[2m   Start at [22m 14:57:10
+[2m   Duration [22m 19.97s[2m (transform 6.19s, setup 345ms, collect 14.39s, tests 34.49s, environment 1.91s, prepare 778ms)[22m
+
