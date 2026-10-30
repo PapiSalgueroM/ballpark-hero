@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+states: ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
+nolift: CONSENT_BAR_CONTROL=nolift ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
+always: CONSENT_BAR_CONTROL=always ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
+inflow: CONSENT_BAR_CONTROL=inflow ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
+offtop: CONSENT_BAR_CONTROL=offtop ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
+badname: CONSENT_BAR_CONTROL=bogus ONLY=/soccer-career node scripts/playFirstVisitDialogs.mjs
+shard1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+shard2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+shard3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
