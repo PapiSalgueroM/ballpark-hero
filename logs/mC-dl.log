@@ -1,0 +1,2 @@
+MUTATED C
+simCmDecidingLeg: ABORT, old: the line to rewrite is in clubManager.ts 0 times, it must be exactly once: return state.matchRules !== 'base' && state.tieRules !== 'night' && tie?.leg === 2 && typeof tie.through === 'boolean';

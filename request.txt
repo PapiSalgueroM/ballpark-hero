@@ -1,0 +1,8 @@
+#!serial
+mA-dl: node .rc/x/mut1603.mjs A && node scripts/simCmDecidingLeg.mjs; s=$?; git checkout -- src scripts; exit $s
+mA-lr: node .rc/x/mut1603.mjs A && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
+mB-dl: node .rc/x/mut1603.mjs B && node scripts/simCmDecidingLeg.mjs; s=$?; git checkout -- src scripts; exit $s
+mC-dl: node .rc/x/mut1603.mjs C && node scripts/simCmDecidingLeg.mjs; s=$?; git checkout -- src scripts; exit $s
+mK-dl: node .rc/x/mut1603.mjs K && DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs; s=$?; git checkout -- src scripts; exit $s
+mK-et: node .rc/x/mut1603.mjs K && node scripts/simExtraTime.mjs; s=$?; git checkout -- src scripts; exit $s
+mL-dl: node .rc/x/mut1603.mjs L && DECIDING_LEG_SECTION=legs node scripts/simCmDecidingLeg.mjs; s=$?; git checkout -- src scripts; exit $s

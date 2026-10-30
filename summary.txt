@@ -1,0 +1,7 @@
+mA-dl exit=0 62s | simCmDecidingLeg: PASS, 19 of 19 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+mA-lr exit=1 60s | simCmLeagueRules: 29 failure(s)
+mB-dl exit=1 61s | simCmDecidingLeg: FAIL, 4 of 19 checks red (legs, legs, legs, legs)
+mC-dl exit=2 1s | simCmDecidingLeg: ABORT, old: the line to rewrite is in clubManager.ts 0 times, it must be exactly once: return state.matchRules !== 'base' && state.tieRules !== 'night' 
+mK-dl exit=1 30s | simCmDecidingLeg: FAIL, 1 of 8 checks red (legs)
+mK-et exit=0 89s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
+mL-dl exit=1 30s | simCmDecidingLeg: FAIL, 1 of 8 checks red (legs)
