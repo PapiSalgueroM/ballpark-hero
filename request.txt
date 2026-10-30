@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+# Release BT lane a2: Round 1569's walks on the served build (supabase.co aborted in every context): walkStart2.mjs per sport (R3, every swap puts the new screen's top in view, the Hall sentence only on a retired prompt), walkStart.mjs (R1), and walkInbox.mjs with its bar control (the Inbox tap proof, 12 of 12 taps; inbox-bar must exit 1 with its control line). Extras: walkStart.mjs, walkStart2.mjs, walkInbox.mjs from r1569/.tmp-fx.
+# Left out: walk-old in both source files (each builds an old head, 1387282d8 or 2ee79c595, to show the fault there: an attribution, red there by design), and their tsc, simNoRivalNames, simHarnessAnchors, simStorageWrites (lane g). start1 was red on its own head only for the R3 sentence then missing (rc-1569.txt R1); R3 is on 493926a4f, so start1 must be green here.
+walk-nba: WALK_SPORTS=nba node .rc/x/walkStart2.mjs
+walk-nfl: WALK_SPORTS=nfl node .rc/x/walkStart2.mjs
+walk-mlb: WALK_SPORTS=mlb node .rc/x/walkStart2.mjs
+walk-nhl: WALK_SPORTS=nhl node .rc/x/walkStart2.mjs
+start1: node .rc/x/walkStart.mjs
+inbox: node .rc/x/walkInbox.mjs
+inbox-bar: WALK_CONTROL=bar RC_OUT=$RC_OUT/bar node .rc/x/walkInbox.mjs

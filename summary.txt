@@ -1,0 +1,8 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk-nba exit=0 566s | walkStart DONE: 0 problems, 30 of 30 swaps (nba) put the new screen's top in view, base http://localhost:4173
+walk-mlb exit=0 566s | walkStart DONE: 0 problems, 30 of 30 swaps (mlb) put the new screen's top in view, base http://localhost:4173
+walk-nfl exit=0 576s | walkStart DONE: 0 problems, 30 of 30 swaps (nfl) put the new screen's top in view, base http://localhost:4173
+inbox exit=0 86s | walkInbox DONE: 0 problems, 12 of 12 taps opened the Inbox, base http://localhost:4173
+inbox-bar exit=1 80s | walkInbox FAIL: 24 problems, 0 of 12 taps opened the Inbox, CONTROL bar (tap at y 34), base http://localhost:4173
+walk-nhl exit=0 571s | walkStart DONE: 0 problems, 30 of 30 swaps (nhl) put the new screen's top in view, base http://localhost:4173
+start1 exit=0 2279s | walkStart DONE: 0 problems, 120 of 120 swaps put the new screen's top in view, base http://localhost:4173

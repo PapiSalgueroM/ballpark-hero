@@ -1,0 +1,25 @@
+{"tag":"nba-1280x900","tap":{"x":856,"y":70.25},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":2,"empty":false,"inboxOpen":true}}
+{"tag":"nba-1280x900","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"nba-1318x647","tap":{"x":875,"y":70.25},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":2,"empty":false,"inboxOpen":true}}
+{"tag":"nba-1318x647","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"nba-390x844","tap":{"x":287,"y":69.75},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":2,"empty":false,"inboxOpen":true}}
+{"tag":"nba-390x844","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"nfl-1280x900","tap":{"x":856,"y":70.25},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":1,"empty":false,"inboxOpen":true}}
+{"tag":"nfl-1280x900","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"nfl-1318x647","tap":{"x":875,"y":70.25},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":1,"empty":false,"inboxOpen":true}}
+{"tag":"nfl-1318x647","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"nfl-390x844","tap":{"x":287,"y":69.75},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":1,"empty":false,"inboxOpen":true}}
+{"tag":"nfl-390x844","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"mlb-1280x900","tap":{"x":856,"y":70.25},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":1,"empty":false,"inboxOpen":true}}
+{"tag":"mlb-1280x900","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"mlb-1318x647","tap":{"x":875,"y":70.25},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":1,"empty":false,"inboxOpen":true}}
+{"tag":"mlb-1318x647","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"mlb-390x844","tap":{"x":287,"y":69.75},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":1,"empty":false,"inboxOpen":true}}
+{"tag":"mlb-390x844","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"nhl-1280x900","tap":{"x":856,"y":70.25},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":1,"empty":false,"inboxOpen":true}}
+{"tag":"nhl-1280x900","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"nhl-1318x647","tap":{"x":875,"y":70.25},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":1,"empty":false,"inboxOpen":true}}
+{"tag":"nhl-1318x647","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+{"tag":"nhl-390x844","tap":{"x":287,"y":69.75},"hit":{"el":"DIV","inTile":true,"inPill":false,"inBar":false},"restartDialog":false,"before":false,"after":{"tiles":false,"back":true,"title":"📱 Inbox","rows":1,"empty":false,"inboxOpen":true}}
+{"tag":"nhl-390x844","pass":"tile hit, Inbox opened, no restart dialog, Hub back to the tiles"}
+walkInbox DONE: 0 problems, 12 of 12 taps opened the Inbox, base http://localhost:4173
