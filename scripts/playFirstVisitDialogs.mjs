@@ -77,6 +77,74 @@
  * mutation leg) the seeded lines go red at 320 (the button 407 to 451 under the banner, the box 141 px under it) and
  * 390 (18 of the button's 44 px and 43 px of the box under it), and stay green at 1280.
  *
+ * THE BOTTOM BAR NET (Round 1605): a fixed bar is not a dialog, so none of the above ever looked at one. Soccer
+ * Career's floating action bar sat under the unanswered banner on every first visit ("NO NEXT SEASON BUTTON", fixed by
+ * class in Release BS), and the same shape stayed live in its siblings: Club Manager's Take the job, the custom club
+ * bar, and Soccer Career's desktop Training and Phone. So this net is a SHAPE CHECK, not a list: on every line, with
+ * the banner up and unanswered (fixed, and body[data-consent-pending] set), it reads EVERY button or link that sits
+ * inside a position fixed element (or is one), clips its box to its scroll boxes and the screen, and fails the line
+ * when what is left meets the banner's box by more than 1 px either way, whether it is under the banner or drawn over
+ * it. It reads at load and again after the first visit dialog is tapped closed (a bar that a rules card hides at load
+ * still counts). A line where the banner was never pending measured nothing and is ABORTED, never green. Three
+ * scripted states reach the bars no load shows (the STATES table): Club Manager with a club picked (Take the job), the
+ * custom club form open (Found the club), and a Soccer Career hub from a planted career (Next Year, Training, Phone).
+ * Since the Round 1605 review a fourth: a kept aside Soccer Career save and no live save, which shows the card every
+ * route mounts (BrokenSaveRestore, Put that save back); its card sat wholly under the banner until then.
+ * Each FAILS when its script cannot reach the state or the controls it names are not on screen, so a renamed button
+ * turns it red rather than green. A control whose host is the site's own chrome (data-site-chrome) is marked SITE in
+ * its line: that cause belongs to the other lane and the lead hands it over.
+ * NEGATIVE CONTROL: CONSENT_BAR_CONTROL=nolift first asserts that src/pages/SoccerCareer.tsx still holds the action
+ * bar's lift class (refuses to run otherwise), then strips every [body[data-consent-pending]_&]: class from the page
+ * before the read. Every line it stripped something on must go red, and the Soccer Career hub must be one of them:
+ * FIRED (exit 1), did NOT fire (exit 3), or ABORTED when nothing was stripped or the hub is not in the run (exit 2).
+ * Measured 2026-10-30 on runners (Round 1605). On main's game code (r1605-red2, the three game files checked out from
+ * 4bd20c993) 7 bar lines were red: Take the job 44 px under the banner at 320, 390 and 1280, Found the club 44 px under
+ * at all three, and at 1280 Training and Phone 56 px under; the hub's Next Year was already 18 px above at 320 and 390
+ * (Release BS). The first walk of all 133 routes with the net (r1605-g1) found one more: World Cup 2026 Bracket's Auto
+ * Fill Everything (fixed bottom-6, z 50) 52 px under at all three widths, game side and one class, so it was lifted
+ * too. After (r1605-g2): 411 bar lines (402 route widths plus 9 state lines), 76 fixed controls read, 0 red, 0 with no
+ * pending banner; the closest green control is Take the job, 12 px above the banner, then Found the club 12 to 15, Next
+ * Year 18 and Auto Fill 24. No site control met the banner anywhere. The first nolift run (r1605-ctl) caught 9 of 12
+ * stripped lines and passed the bracket's 3: its button has transition-all, so it was read mid move. The strip turns
+ * transitions off now, and the rerun (r1605-nolift) fired on 12 of 12, each control back where main had it (Take the
+ * job and Found the club 44 px under, the hub's Next Year 48, Training and Phone 56, Auto Fill 52); with /soccer-career
+ * left out of the run it refuses (ABORTED, exit 2).
+ * THE ANSWERED HALF (Round 1605 review): the rule is also "once it is answered they drop back", and nothing read that
+ * half, so a lift made unconditional (the class kept, its pending variant lost) left the net green while Take the job
+ * floated 242 px up the screen after the answer. Now the net reads the lift by shape: a LIFT is a class whose variant
+ * chain holds [body[data-consent-pending]_&] and whose utility moves an edge (bottom, top, inset), ACTIVE when every
+ * other variant in its chain is a screen variant this window matches. Every control inside a fixed element with an
+ * active lift is a lifted control, and so is a scripted state's wanted control inside a fixed element, whatever its
+ * class says (the first cut read the class only, and the source form of that slip, Take the job's class without its
+ * variant, stayed green on r1605-fx-m). On every scripted state line, and on every route line that read a lifted control,
+ * the walk goes back to the top of the page, reads the lifted controls with the banner pending, answers the banner
+ * with its own Reject all button and reads them again: each must have moved down by the banner's height, plus or
+ * minus 2 px, or the line FAILS (and it FAILS when the banner has no Reject all or stays pending). NEGATIVE CONTROL:
+ * CONSENT_BAR_CONTROL=always pins every lift element's bottom where the pending lift put it just before the answer,
+ * the in page form of that slip; every line it pinned something on must read red for the answered half, the Soccer
+ * Career hub among them: FIRED (exit 1), did NOT fire (exit 3), ABORTED (exit 2, nothing pinned, or no hub).
+ * TWO MORE SHAPES (Round 1605 review), read on every pending read: INFLOW, an active lift on an element that is
+ * neither fixed nor sticky (a lift that lost its sm: shoves an in flow button off the top while the net, which reads
+ * fixed controls only, stayed green); and OFFSCREEN, a lifted control, or a scripted state's wanted control inside a
+ * fixed element, that is not wholly on screen below the site's own bar across the top (an over lift used to pass,
+ * because a control clipped to nothing was skipped). The answered half's lines also read the page's end, still
+ * pending, so a lift that another lift adds to (the Soccer Career hub's footer lift) is read where it is worst.
+ * Controls: CONSENT_BAR_CONTROL=inflow takes the screen variant off every lift that only its screen variant keeps off
+ * the window (Training's and Phone's below 640, refusing to run when SoccerCareer.tsx holds no sm: lift), and every
+ * line it moved must read red for INFLOW; CONSENT_BAR_CONTROL=offtop pushes every fixed lift element off the top of
+ * the screen, and every line it moved must read red for OFFSCREEN; each with the Soccer Career hub among them.
+ * The net measures a control's own box, not its bar's, so a bar's padding (12 px on Take the job's) may sit inside the
+ * banner on a green line; that is by design, the button is what a player taps.
+ * Measured 2026-10-30 on runners (the Round 1605 review fix). Whole walk (r1605-fx-s2, head 390157ecf): 414 bar lines
+ * (402 route widths plus 12 state lines), 85 fixed controls, 0 red; 23 lifted controls dropped by exactly the banner's
+ * height (305 px at 320x640, 233 at 390x844, 165 at 1280x900); the kept aside card's buttons 33 px above the banner.
+ * Controls on the three state routes: nolift, always and offtop FIRED 15 of 15, inflow 2 of 2 (the hub at 320 and 390).
+ * Source mutations, each built and served (r1605-fx-m2): Take the job's class without its variant RED on 3 lines (it
+ * moved 75, 3 and -65 px against banners of 305, 233 and 165); Training's lift without sm: RED for INFLOW at 320 and 390
+ * (Training -200 to -156 and -128 to -84); the card's lift taken out RED at all three widths (its buttons 36 to 38 px
+ * under the banner); the hub's footer fix taken out RED at 320 at the page end (Next Year -133 to -49, the site bar
+ * ends at 44), the same line that was red before that fix (r1605-fx-b).
+ *
  * Run: BASE=http://localhost:4173 node scripts/playFirstVisitDialogs.mjs   (a served build, see scripts/lib/hostLikeServer.mjs)
  *      ONLY=/stadium-tycoon,/idle-arena scopes it; PLAYFIRST_SHARD=1/3 runs a third of the routes;
  *      PLAYFIRST_JSON=<file> writes every measurement as JSON.
@@ -93,6 +161,20 @@ const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:417
 const CONTROL = process.env.PLAYFIRST_CONTROL || '';
 const CONTROLS = ['cover', 'ratchet', 'expected', 'edge', 'lift', 'nobanner', 'stale', 'jump'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`PLAYFIRST_CONTROL=${CONTROL} is not a control this walk knows (${CONTROLS.join(', ')})`); process.exit(2); }
+/* Round 1605: the bottom bar net's own control (see the header). The needle is the class Release BS put on Soccer
+   Career's floating action bar; the control refuses to run when the source no longer holds it. */
+const BAR_CONTROL = process.env.CONSENT_BAR_CONTROL || '';
+const BAR_CONTROLS = ['nolift', 'always', 'inflow', 'offtop'];
+if (BAR_CONTROL && !BAR_CONTROLS.includes(BAR_CONTROL)) { console.error(`CONSENT_BAR_CONTROL=${BAR_CONTROL} is not a control this walk knows (${BAR_CONTROLS.join(', ')})`); process.exit(2); }
+if (BAR_CONTROL && CONTROL) { console.error('playFirstVisitDialogs: run CONSENT_BAR_CONTROL and PLAYFIRST_CONTROL one at a time'); process.exit(2); }
+const LIFT_NEEDLE = '[body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]';
+/* inflow acts on a lift that only a screen variant keeps off narrow windows: Training's and Phone's */
+const SM_NEEDLE = 'sm:[body[data-consent-pending]_&]:bottom-';
+const NEEDLE = BAR_CONTROL === 'inflow' ? SM_NEEDLE : LIFT_NEEDLE;
+if (BAR_CONTROL && !fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').includes(NEEDLE)) {
+  console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=${BAR_CONTROL} acts on ${NEEDLE}, and src/pages/SoccerCareer.tsx no longer holds it, so it would act on nothing. Refusing to run.`);
+  process.exit(2);
+}
 const WIDTHS = [[320, 640], [390, 844], [1280, 900]];
 const BANNER = '[role="region"][aria-label="Cookie choices"], [role="dialog"][aria-label="Cookie choices"]';
 
@@ -201,6 +283,278 @@ for (const sc of sceneRuns) {
 }
 if (['stale', 'jump'].includes(CONTROL) && !sceneRuns.length) { console.log(`playFirstVisitDialogs control ABORTED: PLAYFIRST_CONTROL=${CONTROL} acts on seeded scenes and none is in this run`); process.exit(2); }
 const SHOTS = process.env.RC_OUT || '';
+
+/* Round 1605: THE BOTTOM BAR NET's scripted states (see the header). Steps press buttons with a DOM click, never a
+   tap, so reaching a state never depends on the very thing the net measures. A step names a pattern its button's
+   text must match (the first visible, enabled one wins); `sibling` presses the first other button beside it instead
+   (the first club in the grid that also holds "Create your own club"). `want` is what must be on screen once the
+   state is reached. The Soccer Career hub is a career made in node by the engine's own initCareer and checked by the
+   game's own save reader before any page opens. The states do not run under PLAYFIRST_CONTROL (its controls judge
+   dialogs only). */
+const CM_TO_TEAMS = [{ text: 'Today\\.' }, { text: '^\\s*England' }, { text: 'Strongest sides' }];
+const STATES = [
+  { key: '/club-manager#club-picked', route: '/club-manager', steps: [...CM_TO_TEAMS, { text: 'Create your own club', sibling: true }], want: [{ sel: 'button', text: 'Take the job' }] },
+  { key: '/club-manager#custom-club', route: '/club-manager', steps: [...CM_TO_TEAMS, { text: 'Create your own club' }], want: [{ sel: 'button', text: 'Found the club' }] },
+  {
+    key: '/soccer-career#hub', route: '/soccer-career', plant: plantCareer, steps: [],
+    want: [{ sel: '[data-career-action-bar="floating"]' }, { sel: '[data-career-utility="training"]' }, { sel: '[data-career-utility="phone"]' }],
+  },
+  /* Round 1605 review: the kept aside save card (BrokenSaveRestore, mounted on every route), from a planted backup of
+     an engine made Soccer Career save with no live save beside it */
+  { key: '/soccer-career#kept-aside', route: '/soccer-career', plant: plantKeptAside, steps: [], want: [{ sel: 'button', text: 'Put that save back' }] },
+];
+const stateRuns = CONTROL ? [] : STATES.filter(st => routes.includes(st.route));
+if (BAR_CONTROL && !stateRuns.some(st => st.key === '/soccer-career#hub')) {
+  console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=${BAR_CONTROL} acts on the Soccer Career hub, and /soccer-career is not in this run`);
+  process.exit(2);
+}
+
+/* A youth career on day one, made by the engine and round tripped through the game's own save writer and reader. */
+async function plantCareer() {
+  const { build } = await import('esbuild');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'playfirst-career-'));
+  const out = path.join(tmp, 'career.mjs');
+  const lib = f => JSON.stringify(path.join(ROOT, 'src/lib', f).split(path.sep).join('/'));
+  await build({
+    stdin: { contents: `export * as E from ${lib('soccerCareerEngine.ts')}; export * as S from ${lib('soccerCareerSave.ts')};`, resolveDir: ROOT, loader: 'ts' },
+    bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },
+  });
+  if (!globalThis.localStorage) globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+  const { E, S } = await import(pathToFileURL(out).href);
+  fs.rmSync(tmp, { recursive: true, force: true });
+  const real = Math.random;
+  Math.random = mulberry(1605);
+  const stat = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
+  let s;
+  try { s = E.initCareer('Probe', 'England', 'ST', '2020s', stat(62), 62, 2020, E.FALLBACK_CLUBS, null); } finally { Math.random = real; }
+  if (!s || s.phase !== 'youth' || s.retired) throw new Error(`the Soccer Career plant: initCareer left the career in ${s?.phase}, not youth`);
+  const save = S.serializeSoccerCareerSave(s);
+  if (!S.isSoccerCareerSave(S.parseSoccerCareerSave(save))) throw new Error('the Soccer Career plant: the game\'s own reader refuses the save');
+  return { key: 'soccerCareerSave', save };
+}
+/* The same save kept aside under a dated backup key, the shape RouteErrorBoundary writes, and no live save. */
+async function plantKeptAside() {
+  const { save } = await plantCareer();
+  return { key: 'soccerCareerSave.broken-2026-10-29T12-00-00', save };
+}
+for (const st of stateRuns) {
+  if (!st.plant) continue;
+  try { st.seed = await st.plant(); } catch (e) { console.log(`playFirstVisitDialogs ABORTED: ${String(e.message || e)}`); process.exit(2); }
+}
+
+/* Runs in the page: every button or link inside a position fixed element (or one itself) whose box, clipped to its
+   scroll boxes and the screen, meets a pending banner's box. Under CONSENT_BAR_CONTROL=nolift it first strips every
+   [body[data-consent-pending]_&]: class in the page. */
+function barsInPage({ BANNER, control, want }) {
+  const W = innerWidth, H = innerHeight;
+  const strip = control === 'nolift';
+  const banner = [...document.querySelectorAll(BANNER)].find(b => {
+    const r = b.getBoundingClientRect(); const s = getComputedStyle(b);
+    return r.width >= 2 && r.height >= 2 && s.display !== 'none' && s.visibility !== 'hidden';
+  }) || null;
+  if (!banner || getComputedStyle(banner).position !== 'fixed' || document.body.dataset.consentPending == null) return { pending: false };
+  let stripped = 0;
+  /* transitions off first: a lifted control with transition-all (the bracket's Auto Fill) would otherwise still be
+     read where it was, and the first nolift run passed it for exactly that reason */
+  if (strip) for (const el of document.querySelectorAll('[class*="data-consent-pending"]')) {
+    for (const c of [...el.classList]) if (c.includes('[body[data-consent-pending]_&]:')) { el.style.transition = 'none'; el.classList.remove(c); stripped += 1; }
+  }
+  const bb = banner.getBoundingClientRect();
+  const cut = (a, b) => ({ left: Math.max(a.left, b.left), top: Math.max(a.top, b.top), right: Math.min(a.right, b.right), bottom: Math.min(a.bottom, b.bottom) });
+  const label = el => (el.getAttribute('aria-label') || (el.textContent || '').trim() || el.getAttribute('title') || '').replace(/\s+/g, ' ').slice(0, 30);
+  /* Round 1605 review: the lift itself, read by shape. A LIFT is a class whose variant chain holds the pending variant
+     and whose utility moves an edge (bottom, top, inset). It is ACTIVE when every other variant in its chain is a
+     screen variant this window matches (an unknown variant, hover: say, is never read as active). Every fixed element
+     with an active lift is marked, and so is every control inside one, so the drop check finds them once the banner is
+     answered. */
+  const PENDING = '[body[data-consent-pending]_&]';
+  const SCREENS = { sm: 640, md: 768, lg: 1024, xl: 1280, '2xl': 1536 };
+  const parts = cls => {
+    const out = []; let depth = 0, cur = '';
+    for (const ch of cls) {
+      if (ch === '[' || ch === '(') depth += 1; else if (ch === ']' || ch === ')') depth -= 1;
+      if (ch === ':' && depth === 0) { out.push(cur); cur = ''; } else cur += ch;
+    }
+    out.push(cur);
+    return out;
+  };
+  const screenQuery = v => {
+    if (SCREENS[v]) return `(min-width: ${SCREENS[v]}px)`;
+    let m = v.match(/^max-(sm|md|lg|xl|2xl)$/);
+    if (m) return `not all and (min-width: ${SCREENS[m[1]]}px)`;
+    m = v.match(/^(min|max)-\[(\d+(?:\.\d+)?px)\]$/);
+    return m ? `(${m[1]}-width: ${m[2]})` : null;
+  };
+  const liftOf = cls => {
+    if (!cls.includes(PENDING)) return null;
+    const p = parts(cls);
+    const utility = p.pop();
+    const at = p.indexOf(PENDING);
+    if (at < 0 || !/^-?(bottom|top|inset|inset-y)-/.test(utility)) return null;
+    const others = p.filter((_, i) => i !== at);
+    const queries = others.map(screenQuery);
+    return { utility, others, known: queries.every(Boolean), active: queries.every(q => q && matchMedia(q).matches) };
+  };
+  /* CONSENT_BAR_CONTROL=inflow: a lift that only its screen variants keep off this window, on an element that is not
+     fixed here, loses those variants (Training's and Phone's below 640): the class shape of a dropped sm: */
+  let acted = 0;
+  if (control === 'inflow') for (const el of document.querySelectorAll('[class*="data-consent-pending"]')) {
+    if (banner.contains(el) || getComputedStyle(el).position === 'fixed') continue;
+    for (const c of [...el.classList]) {
+      const l = liftOf(c);
+      if (l && !l.active && l.known && l.others.length) { el.classList.replace(c, `${PENDING}:${l.utility}`); acted += 1; }
+    }
+  }
+  /* INFLOW (Round 1605 review): an active lift on an element that is neither fixed nor sticky shoves it through the
+     page instead of standing it on the banner, so it is red wherever it lands */
+  const liftEls = new Set(), inflow = [];
+  for (const el of document.querySelectorAll('[class*="data-consent-pending"]')) {
+    if (banner.contains(el)) continue;
+    const l = [...el.classList].map(liftOf).find(x => x?.active);
+    if (!l) continue;
+    const s = getComputedStyle(el), r = el.getBoundingClientRect();
+    if (s.position === 'fixed') { liftEls.add(el); el.setAttribute('data-playfirst-liftel', ''); }
+    else if (s.position !== 'sticky' && s.display !== 'none' && r.width >= 2 && r.height >= 2) {
+      inflow.push({ label: label(el), position: s.position, utility: l.utility, top: Math.round(r.top), bottom: Math.round(r.bottom) });
+    }
+  }
+  /* CONSENT_BAR_CONTROL=offtop: every fixed lift element pushed off the top of the screen, an over lift */
+  if (control === 'offtop') for (const el of liftEls) { el.style.transition = 'none'; el.style.bottom = `${H + 200}px`; acted += 1; }
+  /* OFFSCREEN (Round 1605 review): a lifted control, and a scripted state's wanted control in a fixed element, must
+     stand wholly on screen below the site's own bar across the top (data-site-chrome, sticky or fixed, in the top
+     half of the window). Read before any clipping, so a control pushed off the screen cannot pass by being skipped. */
+  let chrome = 0;
+  for (const el of document.querySelectorAll('[data-site-chrome]')) {
+    if (el.contains(banner) || banner.contains(el)) continue;
+    const s = getComputedStyle(el);
+    if (s.position !== 'sticky' && s.position !== 'fixed') continue;
+    const r = el.getBoundingClientRect();
+    if (r.height >= 2 && r.top >= -1 && r.bottom <= H / 2) chrome = Math.max(chrome, r.bottom);
+  }
+  const offscreen = [], checked = new Set();
+  const onScreen = (el, why) => {
+    if (checked.has(el)) return;
+    checked.add(el);
+    const r = el.getBoundingClientRect(), s = getComputedStyle(el);
+    if (r.width < 2 || r.height < 2 || s.display === 'none' || s.visibility === 'hidden') return;
+    if (r.top >= chrome - 1 && r.bottom <= H + 1) return;
+    offscreen.push({ label: label(el), why, top: Math.round(r.top), bottom: Math.round(r.bottom), chrome: Math.round(chrome) });
+  };
+  const inFixed = el => { for (let n = el; n && n !== document.documentElement; n = n.parentElement) if (getComputedStyle(n).position === 'fixed') return true; return false; };
+  const wantedEls = [];
+  for (const w of want || []) for (const el of document.querySelectorAll(w.sel)) {
+    if (banner.contains(el) || (w.text && !(el.textContent || '').includes(w.text))) continue;
+    wantedEls.push(el);
+    if (inFixed(el)) onScreen(el, 'wanted');
+  }
+  const offenders = [], lift = [];
+  let fixedControls = 0, closest = null;
+  for (const c of document.querySelectorAll('button, a[href], [role="button"], [role="link"]')) {
+    if (banner.contains(c)) continue;
+    const r = c.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2) continue;
+    const cs = getComputedStyle(c);
+    if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+    let host = null, lifted = false, opacity = 1, box = cut(r, { left: 0, top: 0, right: W, bottom: H });
+    for (let n = c; n && n !== document.documentElement; n = n.parentElement) {
+      const s = getComputedStyle(n);
+      opacity *= Number(s.opacity);
+      if (host) continue;
+      if (liftEls.has(n)) lifted = true;
+      if (n !== c && (s.overflowX !== 'visible' || s.overflowY !== 'visible')) box = cut(box, n.getBoundingClientRect());
+      if (s.position === 'fixed') host = n;
+    }
+    /* a scripted state's wanted control in a fixed element counts as lifted whatever its class says: the state names
+       a bar that must stand on the banner, so a lift that lost its variant (review mutation m1) is still read */
+    if (host && (lifted || wantedEls.some(w => w.contains(c))) && opacity >= 0.05) {
+      if (!c.dataset.playfirstLift) c.dataset.playfirstLift = String((window.__playfirstLift = (window.__playfirstLift || 0) + 1));
+      lift.push({ id: c.dataset.playfirstLift, label: label(c), top: Math.round(r.top), bottom: Math.round(r.bottom) });
+      onScreen(c, 'lifted');
+    }
+    if (!host || opacity < 0.05 || box.right - box.left < 1 || box.bottom - box.top < 1) continue;
+    fixedControls += 1;
+    const ox = Math.min(box.right, bb.right) - Math.max(box.left, bb.left);
+    const oy = Math.min(box.bottom, bb.bottom) - Math.max(box.top, bb.top);
+    if (ox > 1 && oy > 1) {
+      const x = Math.max(box.left, bb.left) + ox / 2, y = Math.max(box.top, bb.top) + oy / 2;
+      const atPoint = document.elementFromPoint(x, y);
+      offenders.push({
+        label: label(c), host: `${host.tagName.toLowerCase()}.${String(host.className).trim().split(/\s+/).slice(0, 8).join('.')}`.slice(0, 90),
+        z: getComputedStyle(host).zIndex, site: !!(host.closest('[data-site-chrome]') || c.closest('[data-site-chrome]')),
+        top: Math.round(box.top), bottom: Math.round(box.bottom), meets: Math.round(oy),
+        side: atPoint && banner.contains(atPoint) ? 'under the banner' : 'over the banner',
+      });
+    } else if (ox > 1 && box.bottom <= bb.top + 1) {
+      const gap = Math.round(bb.top - box.bottom);
+      if (closest === null || gap < closest.gap) closest = { gap, label: label(c) };
+    }
+  }
+  return { pending: true, banner: { top: Math.round(bb.top), bottom: Math.round(bb.bottom) }, fixedControls, offenders, closest, stripped, lift, inflow, offscreen, acted };
+}
+
+/* Runs in the page (Round 1605 review, the answered half): answers the banner with its own Reject all button.
+   CONSENT_BAR_CONTROL=always first pins every marked lift element's bottom where the pending lift put it, so the lift
+   no longer depends on the banner (the slip that keeps the class and loses its variant), and every lifted control
+   must then fail to drop. */
+function answerInPage({ BANNER, freeze }) {
+  let frozen = 0;
+  if (freeze) for (const el of document.querySelectorAll('[data-playfirst-liftel]')) {
+    const bottom = getComputedStyle(el).bottom;
+    el.style.transition = 'none';
+    el.style.bottom = bottom;
+    frozen += 1;
+  }
+  const banner = [...document.querySelectorAll(BANNER)].find(b => { const r = b.getBoundingClientRect(); return r.width >= 2 && r.height >= 2; });
+  const pick = banner ? [...banner.querySelectorAll('button')].find(b => /^\s*reject all\s*$/i.test(b.textContent || '')) : null;
+  if (!pick) return { frozen, clicked: false };
+  pick.click();
+  return { frozen, clicked: true };
+}
+
+/* Runs in the page: where each marked lifted control is now. */
+function dropInPage() {
+  return [...document.querySelectorAll('[data-playfirst-lift]')].map(c => {
+    const r = c.getBoundingClientRect();
+    return { id: c.dataset.playfirstLift, top: Math.round(r.top), shown: r.width >= 2 && r.height >= 2 };
+  });
+}
+
+/* Runs in the page (a scripted state): closes an open first visit dialog with a DOM click on its own go button. */
+function dismissInPage({ BANNER }) {
+  const banner = document.querySelector(BANNER);
+  const vis = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width >= 2 && r.height >= 2 && s.display !== 'none' && s.visibility !== 'hidden'; };
+  const d = [...document.querySelectorAll('[role="dialog"],[role="alertdialog"],[aria-modal="true"]')].filter(x => vis(x) && !(banner && banner.contains(x))).pop();
+  if (!d) return '';
+  const label = b => ((b.textContent || '').trim() || b.getAttribute('aria-label') || '').replace(/\s+/g, ' ').slice(0, 30);
+  const btns = [...d.querySelectorAll('button,[role="button"]')].filter(b => vis(b) && !b.disabled && !(banner && banner.contains(b)));
+  const GO = /^(let'?s (go|play|start|do (it|this))|play|start|got it|continue|begin|ok|okay|i'?m ready|ready|kick ?off|go|done|enter)\b/i;
+  const pick = btns.find(b => GO.test(label(b))) || btns.find(b => /\bbg-primary\b/.test(String(b.className))) || btns.find(b => /close|dismiss/i.test(label(b)));
+  if (!pick) return `a dialog with no go button (${btns.map(label).join(', ').slice(0, 60)})`;
+  pick.click();
+  return label(pick) || 'its button';
+}
+
+/* Runs in the page (a scripted state): presses one step's button, or says why it could not. */
+function stepInPage({ BANNER, text, sibling }) {
+  const banner = document.querySelector(BANNER);
+  const vis = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width >= 2 && r.height >= 2 && s.display !== 'none' && s.visibility !== 'hidden'; };
+  const norm = el => (el.textContent || '').replace(/\s+/g, ' ').trim();
+  const re = new RegExp(text);
+  const ok = b => vis(b) && !b.disabled && !(banner && banner.contains(b));
+  const btn = [...document.querySelectorAll('button')].find(b => ok(b) && re.test(norm(b)));
+  if (!btn) return `no button reads /${text}/`;
+  const target = sibling ? [...(btn.parentElement?.children ?? [])].find(b => b !== btn && b.matches('button') && ok(b)) : btn;
+  if (!target) return `no other button sits beside "${norm(btn).slice(0, 30)}"`;
+  target.click();
+  return '';
+}
+
+/* Runs in the page (a scripted state): which of the state's wanted controls are not on screen. */
+function wantInPage({ want }) {
+  const vis = el => { const r = el.getBoundingClientRect(); const s = getComputedStyle(el); return r.width >= 2 && r.height >= 2 && s.display !== 'none' && s.visibility !== 'hidden'; };
+  return want.filter(w => ![...document.querySelectorAll(w.sel)].some(el => vis(el) && (!w.text || (el.textContent || '').includes(w.text))))
+    .map(w => (w.text ? `"${w.text}"` : w.sel));
+}
 
 /* Runs in the page. Finds the open first visit dialog, picks its own primary button, scrolls that into the middle of
    its own scroll box and reports what sits at its centre. Marks both so the tap and the close check find them again. */
@@ -330,6 +684,46 @@ function cardFactsInPage({ label, full }) {
 }
 
 const span = b => (b ? `${b.top} to ${b.bottom}` : 'none');
+/* Round 1605 review: THE ANSWERED HALF of the rule ("once it is answered they drop back"). Back at the top of the page
+   it reads the lifted controls with the banner still pending, answers the banner (Reject all) and reads them again:
+   dropBarsOf then wants each one moved down by the banner's height. Its own errors stay on the line as dropError, so
+   they never read as a page that did not load. Before that, still pending, it reads the page's end: a lift that
+   another lift adds to (the Soccer Career hub's footer lift) must not throw a control off the screen there. */
+async function answerAndDrop(page, res, want) {
+  try {
+    await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+    await page.waitForTimeout(800);
+    res.barsBottom = await page.evaluate(barsInPage, { BANNER, control: BAR_CONTROL, want });
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    await page.waitForTimeout(800);
+    res.barsPre = await page.evaluate(barsInPage, { BANNER, control: BAR_CONTROL, want });
+    if (!res.barsPre.pending || !res.barsPre.lift.length) return;
+    const ans = await page.evaluate(answerInPage, { BANNER, freeze: BAR_CONTROL === 'always' });
+    const answered = ans.clicked && await page.waitForFunction(() => document.body.dataset.consentPending == null, null, { timeout: 4000 }).then(() => true, () => false);
+    await page.waitForTimeout(700);
+    res.drop = { ...ans, answered, after: await page.evaluate(dropInPage) };
+  } catch (e) {
+    res.dropError = String(e.message || e).split('\n')[0].slice(0, 120);
+  }
+}
+/* What the answered half found wrong on one line: every lifted control read just before the answer must have moved
+   down by the banner's height (plus or minus 2 px) once it was answered. */
+function dropBarsOf(r) {
+  if (r.dropError) return [`the answered half could not be read: ${r.dropError}`];
+  const pre = r.barsPre;
+  if (!pre?.pending || !pre.lift?.length || !r.drop) return [];
+  if (!r.drop.clicked) return ['the banner has no Reject all button, so the answered half could not be read'];
+  if (!r.drop.answered) return ['the banner stayed pending after Reject all, so the answered half could not be read'];
+  const height = pre.banner.bottom - pre.banner.top;
+  const out = [];
+  for (const l of pre.lift) {
+    const a = r.drop.after.find(x => x.id === l.id);
+    if (!a || !a.shown) { out.push(`"${l.label}" left the screen when the banner was answered`); continue; }
+    const moved = a.top - l.top;
+    if (Math.abs(moved - height) > 2) out.push(`"${l.label}" moved ${moved} px when the ${height} px banner was answered, not down by its height`);
+  }
+  return out;
+}
 const results = [];
 const lines = [];
 for (const route of routes) for (const [w, h] of WIDTHS) lines.push({ route, w, h, key: `${route}@${w}`, scene: null });
@@ -349,6 +743,8 @@ for (const { route, w, h, key, scene } of lines) {
     await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 80, null, { timeout: 15000 }).catch(() => {});
     await page.waitForSelector(BANNER, { timeout: 5000 }).catch(() => {});
     await page.waitForTimeout(1500);
+    /* Round 1605: the bottom bar net reads at load, before the dialog checks touch anything */
+    res.barsLoad = await page.evaluate(barsInPage, { BANNER, control: BAR_CONTROL });
     if (scene) {
       res.card = await page.evaluate(cardFactsInPage, { label: scene.label, full: scene.full });
       if (res.card.open && (res.card.count !== scene.seed.count || res.card.missing.length)) {
@@ -381,12 +777,66 @@ for (const { route, w, h, key, scene } of lines) {
       }
       Object.assign(res, after);
       if (scene) res.after = await where();
+      /* Round 1605: and again once the first visit dialog is closed, for a bar the dialog hid at load */
+      res.barsAfter = await page.evaluate(barsInPage, { BANNER, control: BAR_CONTROL });
     }
+    /* Round 1605 review: a line that read a lifted control also reads the answered half, last, so it touches no
+       dialog verdict */
+    if (res.barsLoad?.lift?.length || res.barsAfter?.lift?.length) await answerAndDrop(page, res);
   } catch (e) {
     res.error = String(e.message || e).split('\n')[0].slice(0, 120);
   }
   await ctx.close();
   results.push(res);
+}
+/* Round 1605: the scripted states, each in a fresh context with the banner left unanswered */
+const stateResults = [];
+for (const st of stateRuns) for (const [w, h] of WIDTHS) {
+  const res = { scripted: st.key, route: st.route, width: w, height: h, key: `${st.key}@${w}`, dismissed: [], missed: '', missing: [] };
+  const ctx = await browser.newContext({ viewport: { width: w, height: h } });
+  const page = await ctx.newPage();
+  await page.route(/supabase\.co/, r => r.abort());
+  const dismiss = async () => {
+    for (let i = 0; i < 4; i += 1) {
+      const d = await page.evaluate(dismissInPage, { BANNER });
+      if (!d) return;
+      res.dismissed.push(d);
+      await page.waitForTimeout(500);
+    }
+  };
+  try {
+    if (st.seed) await page.addInitScript(([k, v]) => { try { localStorage.setItem(k, v); } catch { /* the line then misses its state and fails */ } }, [st.seed.key, st.seed.save]);
+    await page.goto(`${BASE}${st.route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 80, null, { timeout: 15000 }).catch(() => {});
+    await page.waitForSelector(BANNER, { timeout: 5000 }).catch(() => {});
+    await page.waitForTimeout(1500);
+    await dismiss();
+    for (const step of st.steps) {
+      let why = '';
+      for (let t = 0; t < 10; t += 1) {
+        why = await page.evaluate(stepInPage, { BANNER, ...step });
+        if (!why) break;
+        await page.waitForTimeout(500);
+      }
+      if (why) { res.missed = why; break; }
+      await page.waitForTimeout(400);
+    }
+    if (!res.missed) {
+      for (let t = 0; t < 10; t += 1) {
+        await page.waitForTimeout(500);
+        await dismiss();
+        res.missing = await page.evaluate(wantInPage, { want: st.want });
+        if (!res.missing.length) break;
+      }
+    }
+    res.barsLoad = await page.evaluate(barsInPage, { BANNER, control: BAR_CONTROL, want: st.want });
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `bars-${st.key.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '')}-${w}${BAR_CONTROL ? `-${BAR_CONTROL}` : ''}.png`) });
+    if (!res.missed) await answerAndDrop(page, res, st.want);
+  } catch (e) {
+    res.error = String(e.message || e).split('\n')[0].slice(0, 120);
+  }
+  await ctx.close();
+  stateResults.push(res);
 }
 await browser.close();
 
@@ -459,6 +909,101 @@ if (process.env.PLAYFIRST_JSON) fs.writeFileSync(process.env.PLAYFIRST_JSON, JSO
 console.log('');
 const seeded = results.filter(r => r.scene);
 console.log(`${results.length} route widths walked over ${routes.length} routes${seeded.length ? ` and ${sceneRuns.length} seeded scene${sceneRuns.length === 1 ? '' : 's'} (${seeded.length} of the lines)` : ''}: ${passed} dialogs tapped and closed, ${expected} expected site reds, ${none} without a first visit dialog, ${failures.length} red`);
+/* Round 1605: THE BOTTOM BAR NET's verdicts. A route line that did not load already failed above; a state line that
+   did not load fails here. Green route lines are summed, every other line is printed. */
+console.log('');
+console.log('THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner');
+const barFailures = [], barNoBanner = [], barLines = [];
+let barPassed = 0, barControls = 0, barClosest = null, barDropped = 0;
+for (const r of [...results, ...stateResults]) {
+  const where = `${r.scripted ?? r.scene ?? r.route} ${r.width}x${r.height}`;
+  const reads = [r.barsLoad, r.barsAfter, r.barsBottom, r.barsPre].filter(Boolean);
+  const pending = reads.filter(b => b.pending);
+  const seen = new Set();
+  const offenders = pending.flatMap(b => b.offenders).filter(o => { const k = `${o.label}|${o.host}`; if (seen.has(k)) return false; seen.add(k); return true; });
+  const once = (list, key) => { const s = new Set(); return list.filter(x => { const k = key(x); if (s.has(k)) return false; s.add(k); return true; }); };
+  const inflow = once(pending.flatMap(b => b.inflow || []), x => `${x.label}|${x.utility}`);
+  const offscreen = once([r.barsLoad, r.barsAfter, r.barsPre].filter(b => b?.pending).flatMap(b => b.offscreen || []), x => x.label)
+    .map(x => ({ ...x, at: 'the top' }))
+    .concat((r.barsBottom?.pending ? r.barsBottom.offscreen || [] : []).map(x => ({ ...x, at: 'the page end' })));
+  const drops = dropBarsOf(r);
+  const dropped = r.drop?.answered && !drops.length ? r.barsPre.lift.length : 0;
+  const line = { r, where, offenders, inflow, offscreen, drops, frozen: r.drop?.frozen || 0, acted: reads.reduce((s, b) => s + (b.acted || 0), 0), stripped: reads.reduce((s, b) => s + (b.stripped || 0), 0) };
+  barLines.push(line);
+  const banner = pending[0]?.banner;
+  const closest = pending.map(b => b.closest).filter(Boolean).sort((a, b) => a.gap - b.gap)[0] ?? null;
+  let state, why;
+  if (r.error) { if (!r.scripted) continue; state = 'FAIL'; why = `the page did not load: ${r.error}`; }
+  else if (r.scripted && r.missed) { state = 'FAIL'; why = `the script did not reach its state: ${r.missed}`; }
+  else if (r.scripted && r.missing.length) { state = 'FAIL'; why = `the state is reached but ${r.missing.join(', ')} is not on screen`; }
+  else if (!pending.length) { state = 'NOBANNER'; why = 'the banner was never pending on this line, so it measured nothing'; barNoBanner.push(where); }
+  else if (offenders.length || inflow.length || offscreen.length || drops.length) {
+    state = 'FAIL';
+    const said = [];
+    if (offenders.length) {
+      said.push(`${offenders.length} fixed control${offenders.length === 1 ? '' : 's'} meet${offenders.length === 1 ? 's' : ''} the banner ${banner.top} to ${banner.bottom}: `
+        + offenders.map(o => `${o.site ? 'SITE ' : ''}"${o.label}" ${o.top} to ${o.bottom}, ${o.meets} px ${o.side}, in ${o.host} (z ${o.z})`).join('; '));
+    }
+    if (inflow.length) said.push(`a lift on an element that is not fixed shoves it through the page: ${inflow.map(x => `"${x.label}" (${x.position}, ${x.utility}) ${x.top} to ${x.bottom}`).join('; ')}`);
+    if (offscreen.length) said.push(`not wholly on screen below the site bar: ${offscreen.map(x => `${x.why} "${x.label}" ${x.top} to ${x.bottom} at ${x.at} (bar ends ${x.chrome}, window ${r.height})`).join('; ')}`);
+    if (drops.length) said.push(`answered, ${drops.join('; ')}`);
+    why = said.join('. ');
+  } else {
+    state = 'PASS';
+    const n = Math.max(...pending.map(b => b.fixedControls));
+    barControls += n;
+    barDropped += dropped;
+    if (closest && (barClosest === null || closest.gap < barClosest.gap)) barClosest = { ...closest, where };
+    why = `${n} fixed control${n === 1 ? '' : 's'}, none meets the banner ${banner.top} to ${banner.bottom}${closest ? `; the closest, "${closest.label}", ${closest.gap} px above it` : ''}`
+      + (dropped ? `; answered, ${dropped} lifted control${dropped === 1 ? '' : 's'} dropped by the banner's ${r.barsPre.banner.bottom - r.barsPre.banner.top} px` : '');
+  }
+  if (r.scripted && r.dismissed.length) why +=` (closed first: ${r.dismissed.join(', ')})`;
+  line.state = state;
+  if (state === 'FAIL') barFailures.push(`${where}: ${why}`);
+  if (state === 'PASS') barPassed += 1;
+  if (state !== 'PASS' || r.scripted || dropped) console.log(`  BARS ${state.padEnd(8)} ${where}: ${why}`);
+}
+console.log(`${barLines.length} bar lines (${stateResults.length} of them scripted states): ${barPassed} green over ${barControls} fixed controls, ${barFailures.length} red, ${barNoBanner.length} with no pending banner${barClosest ? `; the closest green control sat ${barClosest.gap} px above the banner ("${barClosest.label}", ${barClosest.where})` : ''}; answered, ${barDropped} lifted controls dropped back by the banner's height`);
+/* Round 1605 review: CONSENT_BAR_CONTROL=always pins every lift where the pending banner put it, so every line it
+   pinned something on must read red for the answered half, the Soccer Career hub among them */
+if (BAR_CONTROL === 'always') {
+  const acted = barLines.filter(l => l.frozen > 0);
+  if (!acted.length || !acted.some(l => l.r.scripted === '/soccer-career#hub')) {
+    console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=always pinned ${acted.length ? 'nothing on the Soccer Career hub' : 'nothing on any line'}, so the answered half was not tried`);
+    process.exit(2);
+  }
+  const escaped = acted.filter(l => l.state !== 'FAIL' || !l.drops.length);
+  if (!escaped.length) { console.log(`playFirstVisitDialogs: CONSENT_BAR_CONTROL=always FIRED. ${acted.length} of ${acted.length} lines with the lift pinned read red for the answered half, the Soccer Career hub among them`); process.exit(1); }
+  console.log(`playFirstVisitDialogs: CONSENT_BAR_CONTROL=always did NOT fire on ${escaped.length} of ${acted.length} pinned lines: ${escaped.map(l => l.where).join(', ')}`);
+  process.exit(3);
+}
+/* Round 1605 review: inflow must turn every line it moved red for INFLOW, offtop every line it moved red for
+   OFFSCREEN, each with the Soccer Career hub among them */
+const BAR_HITS = { inflow: ['inflow', l => l.inflow.length > 0], offtop: ['offscreen', l => l.offscreen.length > 0] };
+if (BAR_HITS[BAR_CONTROL]) {
+  const [what, hit] = BAR_HITS[BAR_CONTROL];
+  const acted = barLines.filter(l => l.acted > 0);
+  if (!acted.length || !acted.some(l => l.r.scripted === '/soccer-career#hub')) {
+    console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=${BAR_CONTROL} moved ${acted.length ? 'nothing on the Soccer Career hub' : 'nothing on any line'}, so the ${what} check was not tried`);
+    process.exit(2);
+  }
+  const escaped = acted.filter(l => l.state !== 'FAIL' || !hit(l));
+  if (!escaped.length) { console.log(`playFirstVisitDialogs: CONSENT_BAR_CONTROL=${BAR_CONTROL} FIRED. ${acted.length} of ${acted.length} lines it moved read red for ${what}, the Soccer Career hub among them`); process.exit(1); }
+  console.log(`playFirstVisitDialogs: CONSENT_BAR_CONTROL=${BAR_CONTROL} did NOT fire on ${escaped.length} of ${acted.length} moved lines: ${escaped.map(l => l.where).join(', ')}`);
+  process.exit(3);
+}
+if (BAR_CONTROL === 'nolift') {
+  const acted = barLines.filter(l => l.stripped > 0);
+  const hub = acted.filter(l => l.r.scripted === '/soccer-career#hub');
+  if (!acted.length || !hub.length) {
+    console.log(`playFirstVisitDialogs control ABORTED: CONSENT_BAR_CONTROL=nolift stripped ${acted.length ? 'nothing on the Soccer Career hub' : 'nothing on any line'}, so the lift class was not in the page`);
+    process.exit(2);
+  }
+  const escaped = acted.filter(l => l.state !== 'FAIL' || !l.offenders.length);
+  if (!escaped.length) { console.log(`playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift FIRED. ${acted.length} of ${acted.length} lines with the lift stripped read red, the Soccer Career hub among them`); process.exit(1); }
+  console.log(`playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift did NOT fire on ${escaped.length} of ${acted.length} stripped lines: ${escaped.map(l => l.where).join(', ')}`);
+  process.exit(3);
+}
 /* Exit 2 as the brief's design asked (a smaller card is never measured), but this abort is NOT the environment: the
    plant already drew the full card in node on 200 of 200 seeded streams, so a short count or a missing line is the
    page's until shown otherwise (a mutation that drops the "final matchday" line lands here). The line says so. */
@@ -518,12 +1063,16 @@ if (CONTROL === 'nobanner') {
   console.log(`playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner did NOT fire: ${judged - noBanner.length} of ${judged} route widths still saw the banner on screen`);
   process.exit(3);
 }
-if (failures.length) {
-  console.log(`playFirstVisitDialogs: RED. ${failures.length} route widths: ${failures.map(f => f.split(':')[0]).join(', ')}`);
+if (failures.length || barFailures.length) {
+  const red = [];
+  if (failures.length) red.push(`${failures.length} route widths: ${failures.map(f => f.split(':')[0]).join(', ')}`);
+  if (barFailures.length) red.push(`${barFailures.length} bar lines: ${barFailures.map(f => f.split(':')[0]).join(', ')}`);
+  console.log(`playFirstVisitDialogs: RED. ${red.join('. ')}`);
   process.exit(1);
 }
-if (noBanner.length) {
-  console.log(`playFirstVisitDialogs ABORTED: the cookie banner never came on screen on ${noBanner.length} route widths, so they measured nothing: ${noBanner.join(', ')}`);
+if (noBanner.length || barNoBanner.length) {
+  const none = [...new Set([...noBanner, ...barNoBanner])];
+  console.log(`playFirstVisitDialogs ABORTED: the cookie banner never came on screen (or was never pending) on ${none.length} lines, so they measured nothing: ${none.join(', ')}`);
   process.exit(2);
 }
-console.log('playFirstVisitDialogs: green. Every first visit dialog can be started with the cookie banner unanswered.');
+console.log('playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.');

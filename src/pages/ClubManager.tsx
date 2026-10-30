@@ -811,7 +811,7 @@ const ClubManager = () => {
             {/* Round 70: no scrolling to confirm. The confirm bar pins to the
                 bottom of the screen the moment a club is picked. */}
             {g.pendingClub && (
-              <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur-sm">
+              <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur-sm [body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]">
                 <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Your club</div>

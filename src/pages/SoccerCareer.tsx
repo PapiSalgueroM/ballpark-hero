@@ -893,18 +893,30 @@ function useFooterLift(enabled: boolean): number {
          half until Round 286: the footer grew a row of sport hubs, and at 320
          wide on an 844 tall screen it stands about 440px, so the half clamp
          left the bar parked 17px into the footer at the very bottom of the
-         page. simMobileChrome measures exactly that. */
-      const next = Math.max(0, Math.min(Math.round(vh - foot.getBoundingClientRect().top), Math.round(vh * 0.6)));
+         page. simMobileChrome measures exactly that. Round 1605 review:
+         while the cookie choices are unanswered the controls already stand
+         on the banner (its height is on the body), and the banner covers the
+         footer, so only footer above the banner counts and the clamp counts
+         the banner too. The two lifts used to add up and throw the bar off
+         the top of a 320 by 640 screen at the page end. */
+      const pending = document.body.dataset.consentPending != null;
+      const height = document.body.style.getPropertyValue('--dukb-consent-height');
+      const banner = pending ? (height ? parseFloat(height) || 0 : 230) : 0;
+      const next = Math.max(0, Math.min(Math.round(vh - foot.getBoundingClientRect().top - banner), Math.round(vh * 0.6 - banner)));
       setLift((prev) => (prev === next ? prev : next));
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(measure); };
     measure();
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+    /* the answer (or a new banner height) changes the lift without a scroll */
+    const consent = typeof MutationObserver !== 'undefined' ? new MutationObserver(onScroll) : null;
+    consent?.observe(document.body, { attributes: true, attributeFilter: ['data-consent-pending', 'style'] });
     return () => {
       if (raf) cancelAnimationFrame(raf);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
+      consent?.disconnect();
     };
   }, [enabled]);
 
@@ -1643,7 +1655,7 @@ export default function SoccerCareer() {
               {!career.retired && (
                 <button type="button" ref={trainingTriggerRef} data-career-utility="training"
                   onClick={() => setTrainingOpen(true)} aria-label="Open the training ground"
-                  className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700">
+                  className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:[body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_5.5rem)] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700">
                   <span aria-hidden="true">🏋️</span><span className="sm:hidden">Training</span>
                   {trainingAvailable(career) && (
                     <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"><span className="sr-only">Drill ready</span></span>
@@ -1651,7 +1663,7 @@ export default function SoccerCareer() {
                 </button>
               )}
               <button type="button" data-career-utility="phone" onClick={() => setPhoneOpen(true)} aria-label="Open your phone"
-                className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700">
+                className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:[body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_1.25rem)] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700">
                 <span aria-hidden="true">📱</span><span className="sm:hidden">Phone</span>
                 {unreadPhoneCount(career) > 0 && (
                   <span className="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5">
