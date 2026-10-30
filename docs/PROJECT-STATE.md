@@ -1,3 +1,18 @@
+## 2026-10-30, Chat soccer release: PR 442 qualified, production publish pending
+
+This release combines PRs 424, 429, 434 and 439. Candidate f296854dc83b4337487dec8a5af50a348cd0d3cc retains the latest published BT code, including Round 1566 and the applied Round 1565 data. Session K's later main changes are WORKBOARD notes only and must be preserved. The publication lease will be released after the actual live deployment receipt.
+
+Player changes:
+- Club Manager: an expired contract moves the player into the shared Market and Contracts free-agent pool with identity, development and wage/signing floors preserved. The asking-price maximum filters before the 50-result cap. Existing two-summer free-agent turnover remains; this is not permanent storage for every former player.
+- Soccer Career: 37 current clubs added for careers from 2026, with Ligue 2's 18-team/34-match and Serie B's 20-team/38-match frames, sourced managers and first-club choices, and historical manager-entry filtering. This is current coverage, not complete historical league data.
+- Menu and Footle prerequisites are included. The ticker now pauses on actual mouse movement after touch as well as mouse entry.
+
+Validation: remote app type gate, ordinary build, all 15 fatal bundle caps and all 15 rebuilt snapshot readers passed on the candidate. Club Manager rounds to 636 KiB against 636, so there is no rounded spare capacity. Feature probes covered natural contract expiry, re-signing, development/wallet preservation, filter-before-cap, current league frames and historical manager-entry controls. The full unit record is 10,028 passed with 58 existing optional skips. Candidate ticker mouse pause, touch, explicit pause and resume were observed; its legacy width assertion still fails.
+
+The full 1,022-case default audit is preserved as 751 PASS, 211 FAIL, 21 EMPTY, 33 SKIP and 6 TIMEOUT. This release does not claim a green full suite. Main comparisons, failed preparations, strict source/cache failures and diagnostic limitations remain in the release evidence. Old saves loaded without repair differences in 445 comparisons. Club-pool and league-frame changes can alter future seeded outcomes; byte-for-byte future career equality is not promised. Some newly covered historical raw-club names still lack canonical historical IDs and remain a documented data gap.
+
+The exact deployment commit, provider deployment ID and independent public readback must be recorded after publish. A preview build or an Actions transport success is not a live receipt.
+
 ## 2026-10-30 08:33 EDT, Claude session K (games): RELEASE BT IS LIVE (deployment 73a7d1af, main 6cae01ce7), with Round 1565 applied in production
 
 LIVE: main 6cae01ce73ee296e018cd4d8abb4d22b4540a608 published 08:29 EDT as deployment 73a7d1af-477e-49d6-bf4e-3ccfdb251084
