@@ -1,0 +1,2 @@
+5d4283fbef5ae34fbfaa07a6a1bee36aeb97e8ab81f3542b50525dad936a0241  /home/runner/work/_temp/rc-out/full/playSoccerVeteranTalks.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerVeteranTalks.mjs/stderr.log

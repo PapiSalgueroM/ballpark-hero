@@ -1,0 +1,2 @@
+5405809af224d234efd842509236c733a96bc50c161edb66b560c3c86c78f0b3  /home/runner/work/_temp/rc-out/full/playTradeTalks.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playTradeTalks.mjs/stderr.log

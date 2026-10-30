@@ -1,0 +1,2 @@
+1205471fba88ef9977b88f4a55522004c26f3bc6d0649f8df0c1d98b2b65320d  /home/runner/work/_temp/rc-out/full/playSoccerWorldTruth.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerWorldTruth.mjs/stderr.log

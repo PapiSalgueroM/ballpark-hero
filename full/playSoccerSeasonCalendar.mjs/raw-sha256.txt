@@ -1,0 +1,2 @@
+f5a7b111bfa9b9376e89f4ba4a6f0d3c6c14ddec0de133e776ee7ce314cfd6b2  /home/runner/work/_temp/rc-out/full/playSoccerSeasonCalendar.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerSeasonCalendar.mjs/stderr.log

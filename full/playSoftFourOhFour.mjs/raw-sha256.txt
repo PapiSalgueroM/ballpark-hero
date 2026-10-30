@@ -1,0 +1,2 @@
+32047cda10aaa98c3bc2e86d5131efa0309a84f3b5f1d2dda11da7de2ed1b143  /home/runner/work/_temp/rc-out/full/playSoftFourOhFour.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoftFourOhFour.mjs/stderr.log

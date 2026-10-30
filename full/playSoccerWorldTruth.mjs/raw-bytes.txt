@@ -1,0 +1,3 @@
+1582 /home/runner/work/_temp/rc-out/full/playSoccerWorldTruth.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playSoccerWorldTruth.mjs/stderr.log
+1582 total

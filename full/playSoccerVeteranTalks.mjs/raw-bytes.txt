@@ -1,0 +1,3 @@
+982 /home/runner/work/_temp/rc-out/full/playSoccerVeteranTalks.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playSoccerVeteranTalks.mjs/stderr.log
+982 total

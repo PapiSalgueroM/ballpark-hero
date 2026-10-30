@@ -1,0 +1,14 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+playSoccerSeasonCalendar: bash .rc/default-support.sh run playSoccerSeasonCalendar.mjs
+playSoccerVeteranTalks: bash .rc/default-support.sh run playSoccerVeteranTalks.mjs
+playSoccerWorldTruth: bash .rc/default-support.sh run playSoccerWorldTruth.mjs
+playSoftFourOhFour: bash .rc/default-support.sh run playSoftFourOhFour.mjs
+playSoundGate: bash .rc/default-support.sh run playSoundGate.mjs
+playSponsors: bash .rc/default-support.sh run playSponsors.mjs
+playStartingXi: bash .rc/default-support.sh run playStartingXi.mjs
+playStorageBlocked: bash .rc/default-support.sh run playStorageBlocked.mjs
+playTradeTalks: bash .rc/default-support.sh run playTradeTalks.mjs
+playTranslatedPage: bash .rc/default-support.sh run playTranslatedPage.mjs
+finish: bash .rc/default-support.sh finish

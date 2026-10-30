@@ -1,0 +1,2 @@
+60cfd2097f787fd97cfd4f3dc2b6d4636ef6b8da1b111a27b63715e5bedd96fa  /home/runner/work/_temp/rc-out/full/playSoundGate.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoundGate.mjs/stderr.log

@@ -1,0 +1,3 @@
+150 /home/runner/work/_temp/rc-out/full/playStartingXi.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playStartingXi.mjs/stderr.log
+150 total

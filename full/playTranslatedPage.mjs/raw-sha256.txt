@@ -1,0 +1,2 @@
+07ffaff1bcb16e3fcd355886345f29e786781bd97a620a516d938c083b3678e2  /home/runner/work/_temp/rc-out/full/playTranslatedPage.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playTranslatedPage.mjs/stderr.log

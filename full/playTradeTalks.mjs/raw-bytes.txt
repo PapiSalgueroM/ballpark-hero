@@ -1,0 +1,3 @@
+2174 /home/runner/work/_temp/rc-out/full/playTradeTalks.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playTradeTalks.mjs/stderr.log
+2174 total

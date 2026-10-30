@@ -1,0 +1,3 @@
+2243 /home/runner/work/_temp/rc-out/full/playSponsors.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playSponsors.mjs/stderr.log
+2243 total
