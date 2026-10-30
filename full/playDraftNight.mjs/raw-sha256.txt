@@ -1,0 +1,2 @@
+9a82aba7877a778afe6978968130a3b01e707a4bec03b41cc5446394b6456125  /home/runner/work/_temp/rc-out/full/playDraftNight.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playDraftNight.mjs/stderr.log

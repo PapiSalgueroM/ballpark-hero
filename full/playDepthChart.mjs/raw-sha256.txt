@@ -1,0 +1,2 @@
+1fdee585dc134fd312ea0d4f8d53e9a8594d460f6d3dc0e16a089f596fe6b196  /home/runner/work/_temp/rc-out/full/playDepthChart.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playDepthChart.mjs/stderr.log

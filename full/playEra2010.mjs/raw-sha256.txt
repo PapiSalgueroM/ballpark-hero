@@ -1,0 +1,2 @@
+81c58e0d5af8eb26ebb45219d0154f5d3fbe92083a987dab5cf81a6a61da8b67  /home/runner/work/_temp/rc-out/full/playEra2010.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playEra2010.mjs/stderr.log

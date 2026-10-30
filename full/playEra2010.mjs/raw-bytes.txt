@@ -1,0 +1,3 @@
+1842 /home/runner/work/_temp/rc-out/full/playEra2010.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playEra2010.mjs/stderr.log
+1842 total

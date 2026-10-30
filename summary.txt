@@ -1,0 +1,12 @@
+prepare exit=0 85s | ordinary-build raw=0
+playConsentPrivacy1442 exit=0 7s | playConsentPrivacy1442.mjs raw=0
+playCookiePolicy1446 exit=1 20s | playCookiePolicy1446.mjs raw=1
+playCorruptSaves exit=0 134s | playCorruptSaves.mjs raw=0
+playDealDesk exit=1 16s | playDealDesk.mjs raw=1
+playDepthChart exit=1 24s | playDepthChart.mjs raw=1
+playDerbyHistory1195 exit=1 1s | playDerbyHistory1195.mjs raw=1
+playDraftDetectiveReports exit=0 10s | playDraftDetectiveReports.mjs raw=0
+playDraftNight exit=1 216s | playDraftNight.mjs raw=1
+playEra2005 exit=1 13s | playEra2005.mjs raw=1
+playEra2010 exit=1 8s | playEra2010.mjs raw=1
+finish exit=0 7s | 

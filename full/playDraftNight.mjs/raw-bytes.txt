@@ -1,0 +1,3 @@
+13156 /home/runner/work/_temp/rc-out/full/playDraftNight.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playDraftNight.mjs/stderr.log
+13156 total

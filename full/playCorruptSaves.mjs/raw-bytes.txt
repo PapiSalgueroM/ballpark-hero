@@ -1,0 +1,3 @@
+6864 /home/runner/work/_temp/rc-out/full/playCorruptSaves.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playCorruptSaves.mjs/stderr.log
+6864 total

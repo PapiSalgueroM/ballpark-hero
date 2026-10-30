@@ -1,0 +1,1065 @@
+{
+  "fixture": "Fictional response rows, no live database calls",
+  "target": {
+    "x": 504.3,
+    "y": 156.7
+  },
+  "viewports": [
+    {
+      "viewport": "390x844",
+      "dart": [
+        [
+          "Fixture Draft 0000",
+          "Fixture Draft 0001",
+          "Fixture Draft 0002",
+          "Fixture Draft 0003",
+          "Fixture Draft 0004",
+          "Fixture Draft 0005",
+          "Fixture Draft 0006",
+          "Fixture Draft 0007"
+        ],
+        [
+          "Fixture Draft 0001",
+          "Fixture Draft 0002",
+          "Fixture Draft 0003",
+          "Fixture Draft 0004",
+          "Fixture Draft 1304",
+          "Fixture Draft 1303",
+          "Fixture Draft 1302",
+          "Fixture Draft 1301"
+        ]
+      ],
+      "requests": [
+        {
+          "table": "player_market_values",
+          "offset": 0,
+          "limit": 1000,
+          "year": "eq.2026",
+          "nationality": null,
+          "position": null,
+          "order": "market_value_usd.desc,player_name.asc,id.asc",
+          "minutes": null
+        },
+        {
+          "table": "player_market_values",
+          "offset": 1000,
+          "limit": 1000,
+          "year": "eq.2026",
+          "nationality": null,
+          "position": null,
+          "order": "market_value_usd.desc,player_name.asc,id.asc",
+          "minutes": null
+        },
+        {
+          "table": "player_market_values",
+          "offset": 0,
+          "limit": 1000,
+          "year": "eq.2026",
+          "nationality": "in.(France)",
+          "position": null,
+          "order": "market_value_usd.desc,player_name.asc,id.asc",
+          "minutes": null
+        },
+        {
+          "table": "player_market_values",
+          "offset": 1000,
+          "limit": 1000,
+          "year": "eq.2026",
+          "nationality": "in.(France)",
+          "position": null,
+          "order": "market_value_usd.desc,player_name.asc,id.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 0,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 1000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 2000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 3000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 4000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 5000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 6000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 7000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 8000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 9000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 10000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 11000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 12000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 13000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 14000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 15000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 16000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 17000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 18000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 19000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 20000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 21000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 22000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 23000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 24000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 0,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 1000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 2000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 3000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 4000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 5000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        }
+      ],
+      "reports": [
+        {
+          "game_type": "stat-detective",
+          "game_context": {
+            "path": "/stat-detective",
+            "date": "2026-10-30",
+            "submittedAt": "2026-10-30T18:11:21.942Z",
+            "source": "game-report-button",
+            "contextTruncated": false,
+            "puzzleId": "Fixture Case Anchor|1995-96|BOS",
+            "player": "Fixture Case Anchor",
+            "season": "1995-96",
+            "team": "BOS",
+            "difficulty": "stars",
+            "phase": "playing",
+            "guesses": [
+              "Fixture Guess One",
+              "Fixture Guess Two",
+              "Fixture Guess Three"
+            ],
+            "profileScope": "career-span-every-season-on-file",
+            "recordedSeasons": "1990-2001",
+            "diagnostics": {
+              "build": "index-DuRMmzqf.js",
+              "viewport": {
+                "width": 390,
+                "height": 844,
+                "pixelRatio": 1
+              },
+              "timezone": "UTC",
+              "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+              "language": "en-US"
+            }
+          },
+          "description": "Other: Fictional offline fixture report"
+        }
+      ],
+      "errors": [],
+      "help": {
+        "phase": "restored",
+        "openingAnimations": [],
+        "preEscape": {
+          "state": "open",
+          "focused": true,
+          "bodyPointerEvents": "none",
+          "panelPointerEvents": "auto",
+          "active": "<button class=\"w-full py-3 min-h-[44px] bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-opacity\">Let's Play!</button>",
+          "animations": []
+        },
+        "escapeEvents": [
+          {
+            "key": "Escape",
+            "isTrusted": true,
+            "eventPhase": 1,
+            "timeStamp": 601.5,
+            "target": "<button class=\"w-full py-3 min-h-[44px] bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-opacity\">Let's Play!</button>",
+            "defaultPreventedAtCapture": false,
+            "defaultPreventedAfter": false
+          }
+        ]
+      }
+    },
+    {
+      "viewport": "1280x900",
+      "dart": [
+        [
+          "Fixture Draft 0000",
+          "Fixture Draft 0001",
+          "Fixture Draft 0002",
+          "Fixture Draft 0003",
+          "Fixture Draft 0004",
+          "Fixture Draft 0005",
+          "Fixture Draft 0006",
+          "Fixture Draft 0007"
+        ],
+        [
+          "Fixture Draft 0001",
+          "Fixture Draft 0002",
+          "Fixture Draft 0003",
+          "Fixture Draft 0004",
+          "Fixture Draft 1304",
+          "Fixture Draft 1303",
+          "Fixture Draft 1302",
+          "Fixture Draft 1301"
+        ]
+      ],
+      "requests": [
+        {
+          "table": "player_market_values",
+          "offset": 0,
+          "limit": 1000,
+          "year": "eq.2026",
+          "nationality": null,
+          "position": null,
+          "order": "market_value_usd.desc,player_name.asc,id.asc",
+          "minutes": null
+        },
+        {
+          "table": "player_market_values",
+          "offset": 1000,
+          "limit": 1000,
+          "year": "eq.2026",
+          "nationality": null,
+          "position": null,
+          "order": "market_value_usd.desc,player_name.asc,id.asc",
+          "minutes": null
+        },
+        {
+          "table": "player_market_values",
+          "offset": 0,
+          "limit": 1000,
+          "year": "eq.2026",
+          "nationality": "in.(France)",
+          "position": null,
+          "order": "market_value_usd.desc,player_name.asc,id.asc",
+          "minutes": null
+        },
+        {
+          "table": "player_market_values",
+          "offset": 1000,
+          "limit": 1000,
+          "year": "eq.2026",
+          "nationality": "in.(France)",
+          "position": null,
+          "order": "market_value_usd.desc,player_name.asc,id.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 0,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 1000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 2000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 3000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 4000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 5000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 6000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 7000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 8000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 9000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 10000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 11000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 12000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 13000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 14000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 15000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 16000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 17000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 18000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 19000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 20000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 21000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 22000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 23000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_player_seasons",
+          "offset": 24000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "id.desc",
+          "minutes": "gte.500"
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 0,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 1000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 2000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 3000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 4000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        },
+        {
+          "table": "bref_nba_career_spans",
+          "offset": 5000,
+          "limit": 1000,
+          "year": null,
+          "nationality": null,
+          "position": null,
+          "order": "player_name.asc,cohort.asc",
+          "minutes": null
+        }
+      ],
+      "reports": [
+        {
+          "game_type": "stat-detective",
+          "game_context": {
+            "path": "/stat-detective",
+            "date": "2026-10-30",
+            "submittedAt": "2026-10-30T18:11:26.342Z",
+            "source": "game-report-button",
+            "contextTruncated": false,
+            "puzzleId": "Fixture Case Anchor|1995-96|BOS",
+            "player": "Fixture Case Anchor",
+            "season": "1995-96",
+            "team": "BOS",
+            "difficulty": "stars",
+            "phase": "playing",
+            "guesses": [
+              "Fixture Guess One",
+              "Fixture Guess Two",
+              "Fixture Guess Three"
+            ],
+            "profileScope": "career-span-every-season-on-file",
+            "recordedSeasons": "1990-2001",
+            "diagnostics": {
+              "build": "index-DuRMmzqf.js",
+              "viewport": {
+                "width": 1280,
+                "height": 900,
+                "pixelRatio": 1
+              },
+              "timezone": "UTC",
+              "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+              "language": "en-US"
+            }
+          },
+          "description": "Other: Fictional offline fixture report"
+        }
+      ],
+      "errors": [],
+      "help": {
+        "phase": "restored",
+        "openingAnimations": [],
+        "preEscape": {
+          "state": "open",
+          "focused": true,
+          "bodyPointerEvents": "none",
+          "panelPointerEvents": "auto",
+          "active": "<button class=\"w-full py-3 min-h-[44px] bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-opacity\">Let's Play!</button>",
+          "animations": []
+        },
+        "escapeEvents": [
+          {
+            "key": "Escape",
+            "isTrusted": true,
+            "eventPhase": 1,
+            "timeStamp": 605.7999999999884,
+            "target": "<button class=\"w-full py-3 min-h-[44px] bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-opacity\">Let's Play!</button>",
+            "defaultPreventedAtCapture": false,
+            "defaultPreventedAfter": false
+          }
+        ]
+      }
+    }
+  ],
+  "checks": [
+    {
+      "ok": true,
+      "label": "390x844: turn 1 has eight distinct choices"
+    },
+    {
+      "ok": true,
+      "label": "390x844: strongest three remain after used-player exclusion"
+    },
+    {
+      "ok": true,
+      "label": "390x844: every country choice belongs to its recorded nation and CM pool"
+    },
+    {
+      "ok": true,
+      "label": "390x844: turn 2 has eight distinct choices"
+    },
+    {
+      "ok": true,
+      "label": "390x844: strongest three remain after used-player exclusion"
+    },
+    {
+      "ok": true,
+      "label": "390x844: every country choice belongs to its recorded nation and CM pool"
+    },
+    {
+      "ok": true,
+      "label": "390x844: second throw reaches deeper names with no already drafted player"
+    },
+    {
+      "ok": true,
+      "label": "390x844: actual global request is the first 2,000 rows as two pages and nothing past them"
+    },
+    {
+      "ok": true,
+      "label": "390x844: country pages beyond 120 and 1000 with stable id order and 2026 scope"
+    },
+    {
+      "ok": true,
+      "label": "390x844: Dart Draft has no horizontal overflow"
+    },
+    {
+      "ok": true,
+      "label": "390x844: the career span scope appears before play"
+    },
+    {
+      "ok": true,
+      "label": "390x844: both difficulty buttons are on the first screen (Deep Cuts ends at 791 of 844)"
+    },
+    {
+      "ok": true,
+      "label": "390x844: the clue is the complete span in season end years, the 80 minute stint of 2000-01 included"
+    },
+    {
+      "ok": true,
+      "label": "390x844: the franchise count sits beside its stated scope"
+    },
+    {
+      "ok": true,
+      "label": "390x844: no 500 minute label and no visible answer spoiler"
+    },
+    {
+      "ok": true,
+      "label": "390x844: reopened help repeats the career span scope"
+    },
+    {
+      "ok": true,
+      "label": "390x844: Escape returns native help focus"
+    },
+    {
+      "ok": true,
+      "label": "390x844: intercepted report identifies exact random puzzle and mode"
+    },
+    {
+      "ok": true,
+      "label": "390x844: report includes visible scope and actual guesses"
+    },
+    {
+      "ok": true,
+      "label": "390x844: existing mystery eligibility remains 500 minutes"
+    },
+    {
+      "ok": true,
+      "label": "390x844: the spans view is read in whole pages from the first row, in its key order (6 requests)"
+    },
+    {
+      "ok": true,
+      "label": "390x844: no page errors or sideways Stat Detective scroll"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: turn 1 has eight distinct choices"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: strongest three remain after used-player exclusion"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: every country choice belongs to its recorded nation and CM pool"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: turn 2 has eight distinct choices"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: strongest three remain after used-player exclusion"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: every country choice belongs to its recorded nation and CM pool"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: second throw reaches deeper names with no already drafted player"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: actual global request is the first 2,000 rows as two pages and nothing past them"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: country pages beyond 120 and 1000 with stable id order and 2026 scope"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: Dart Draft has no horizontal overflow"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: the career span scope appears before play"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: both difficulty buttons are on the first screen (Deep Cuts ends at 557 of 900)"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: the clue is the complete span in season end years, the 80 minute stint of 2000-01 included"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: the franchise count sits beside its stated scope"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: no 500 minute label and no visible answer spoiler"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: reopened help repeats the career span scope"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: Escape returns native help focus"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: intercepted report identifies exact random puzzle and mode"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: report includes visible scope and actual guesses"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: existing mystery eligibility remains 500 minutes"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: the spans view is read in whole pages from the first row, in its key order (6 requests)"
+    },
+    {
+      "ok": true,
+      "label": "1280x900: no page errors or sideways Stat Detective scroll"
+    }
+  ],
+  "checksRun": 44,
+  "failed": 0
+}

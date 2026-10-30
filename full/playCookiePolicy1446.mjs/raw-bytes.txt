@@ -1,0 +1,3 @@
+683 /home/runner/work/_temp/rc-out/full/playCookiePolicy1446.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playCookiePolicy1446.mjs/stderr.log
+683 total

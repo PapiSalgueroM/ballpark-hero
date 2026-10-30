@@ -1,0 +1,2 @@
+8bfe6e5a4af930b8a2af2557c727f68330b3eab68ac715b91b2af74214040e6a  /home/runner/work/_temp/rc-out/full/playDraftDetectiveReports.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playDraftDetectiveReports.mjs/stderr.log

@@ -1,0 +1,2 @@
+3c137733730d0b8473b9ee1b7534fff7908feaa54e371f37b3e07f84d4250121  /home/runner/work/_temp/rc-out/full/playDerbyHistory1195.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playDerbyHistory1195.mjs/stderr.log

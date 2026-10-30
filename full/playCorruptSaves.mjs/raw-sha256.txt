@@ -1,0 +1,2 @@
+d73b87c1c64d8514e93e8dd84b15489fc9d4fb37c26084c2aded6411f1667437  /home/runner/work/_temp/rc-out/full/playCorruptSaves.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playCorruptSaves.mjs/stderr.log

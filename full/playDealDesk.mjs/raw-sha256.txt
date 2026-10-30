@@ -1,0 +1,2 @@
+0757693c36f30782eebea7d85b077cff8eb817d08c64d4a1592565479363fbe8  /home/runner/work/_temp/rc-out/full/playDealDesk.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playDealDesk.mjs/stderr.log
