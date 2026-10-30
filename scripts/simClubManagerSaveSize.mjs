@@ -202,8 +202,11 @@
  * the archive 3,463 bytes, slope 1,244 against 1,116. Uncapped, default
  * stream, with the rows: Real Madrid 232,779, Everton 242,759, Lincoln City
  * 245,401, slope 3,158 to 4,664 (the control fired, section 1 red, 33
- * failures). 222,000 sits about 9,900 over the healthy top and 10,800 under
- * the defect's bottom. The slope fence did not move. If a later head's
+ * failures). 222,000 sits about 9,900 over the healthy top AT SEASON 15 and
+ * 10,800 under the defect's bottom. It is a season 15 line, not a ceiling no
+ * healthy save crosses: the renewing career spikes to 226,705 at season 6
+ * (its base 224,136, so the spike is the base's own), and this harness
+ * measures season 15 only. The slope fence did not move. If a later head's
  * healthy top passes 215,000, measure again.
  * The first cut of this file set 5,000 and 240,000 by feel, and both passed
  * the uncapped engine, which is exactly the mistake the house rule names.
