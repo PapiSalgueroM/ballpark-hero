@@ -1,0 +1,7 @@
+#!serial
+# Supplemental immutable-main residual comparison B only. No final-source1022 qualification credit.
+prepare: bash .rc/default-support.sh prepare
+simCmLedgerBound: bash .rc/default-support.sh run simCmLedgerBound.mjs
+simClubManagerBudget: bash .rc/default-support.sh run simClubManagerBudget.mjs
+simMoney: bash .rc/default-support.sh run simMoney.mjs
+finish: bash .rc/default-support.sh finish

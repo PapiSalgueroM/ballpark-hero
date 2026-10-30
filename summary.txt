@@ -1,0 +1,5 @@
+prepare exit=0 88s | ordinary-build raw=0
+simCmLedgerBound exit=1 348s | simCmLedgerBound.mjs raw=1
+simClubManagerBudget exit=1 186s | simClubManagerBudget.mjs raw=1
+simMoney exit=1 200s | simMoney.mjs raw=1
+finish exit=0 7s | 

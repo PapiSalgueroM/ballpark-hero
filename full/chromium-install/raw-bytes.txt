@@ -1,0 +1,3 @@
+16065 /home/runner/work/_temp/rc-out/full/chromium-install/stdout.log
+  308 /home/runner/work/_temp/rc-out/full/chromium-install/stderr.log
+16373 total
