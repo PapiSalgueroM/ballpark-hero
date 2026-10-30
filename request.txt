@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+playTranslatedPage: ENGINES=chromium node scripts/playTranslatedPage.mjs
+playFlagshipLazy: ENGINES=chromium node scripts/playFlagshipLazy.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
