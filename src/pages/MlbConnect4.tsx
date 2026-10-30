@@ -119,20 +119,20 @@ const MlbConnect4 = () => {
         </p>
 
         {/* The Grid */}
-        <div className="overflow-x-auto pb-4">
-          <div className="inline-block min-w-[700px] mx-auto">
+        <div className="overflow-x-auto pb-4 max-[389px]:-mx-4">
+          <div className="inline-block min-w-[700px] mx-auto max-md:block max-md:w-full max-md:min-w-0">
             {/* Column headers */}
-            <div className="grid gap-1" style={{ gridTemplateColumns: `100px repeat(${COLS}, 1fr)` }}>
-              <div /> {/* Empty corner */}
+            <div className="grid grid-cols-[100px_repeat(7,minmax(0,1fr))] gap-1 max-md:min-w-0 max-md:grid-cols-[repeat(7,minmax(0,1fr))] max-[389px]:gap-0.5">
+              <div className="max-md:hidden" /> {/* Empty corner */}
               {board.columnAttributes.map((attr, c) => (
                 <button
                   key={c}
                   disabled={isValidating || phase !== 'playing' || getTargetRow(c) === null}
                   onClick={() => selectColumn(c)}
                   className={cn(
-                    'text-[10px] md:text-xs font-bold text-center px-1 py-2.5 rounded-lg transition-all leading-tight',
+                    'text-[10px] md:text-xs font-bold text-center px-1 py-2.5 rounded-lg transition-all leading-tight max-md:grid max-md:h-[96px] max-md:min-w-0 max-md:grid-rows-[72px_16px] max-md:gap-y-1 max-md:px-0.5 max-md:py-0.5 max-md:text-[11px] max-md:leading-[12px] max-md:[overflow-wrap:anywhere] max-md:focus-visible:outline-offset-[-2px]',
                     selectedCol === c
-                      ? 'bg-primary text-primary-foreground scale-105'
+                      ? 'bg-primary text-primary-foreground scale-105 max-md:scale-100'
                       : getTargetRow(c) !== null && phase === 'playing'
                         ? 'bg-secondary text-foreground hover:bg-secondary/80 cursor-pointer'
                         : 'bg-secondary/50 text-muted-foreground cursor-default'
@@ -144,7 +144,7 @@ const MlbConnect4 = () => {
                      board does not jump when the last disc ends the game */}
                   <ArrowDown
                     aria-hidden="true"
-                    className={cn('w-3 h-3 mx-auto mt-0.5', selectedCol === c ? 'animate-bounce' : 'invisible')}
+                    className={cn('w-3 h-3 mx-auto mt-0.5 max-md:mt-0 max-md:self-end', selectedCol === c ? 'animate-bounce' : 'invisible')}
                   />
                 </button>
               ))}
@@ -156,7 +156,7 @@ const MlbConnect4 = () => {
                   <div
                     key={`label-${r}`}
                     className={cn(
-                      'text-[10px] md:text-xs font-bold flex items-center px-2 rounded-lg',
+                      'text-[10px] md:text-xs font-bold flex items-center px-2 rounded-lg max-md:col-span-7 max-md:h-8 max-md:min-w-0 max-md:py-0.5 max-md:text-[12px] max-md:leading-[14px] max-md:[overflow-wrap:anywhere]',
                       selectedCol !== null && targetRow === r
                         ? 'bg-primary/20 text-primary'
                         : 'bg-secondary/50 text-muted-foreground'
@@ -190,7 +190,7 @@ const MlbConnect4 = () => {
                             : `Empty square, ${board.rowAttributes[r]} and ${board.columnAttributes[c]}`
                         }
                         className={cn(
-                          'aspect-square rounded-lg border flex items-center justify-center transition-all relative',
+                          'aspect-square rounded-lg border flex items-center justify-center transition-all relative max-md:aspect-auto max-md:h-[72px] max-[389px]:h-[84px] max-md:min-w-0 max-md:px-0.5 max-md:py-[5px] max-md:[overflow-wrap:anywhere] max-md:focus-visible:outline-offset-[-2px]',
                           cell
                             ? cell.team === 'red'
                               ? isWinCell
@@ -207,7 +207,7 @@ const MlbConnect4 = () => {
                         )}
                       >
                         {cell && (
-                          <span className="text-[7px] md:text-[9px] font-semibold text-white text-center leading-tight px-0.5 break-words line-clamp-2">
+                          <span className="text-[7px] md:text-[9px] font-semibold text-white text-center leading-tight px-0.5 break-words min-w-0 max-w-full [overflow-wrap:anywhere] max-md:px-0 max-md:text-[11px] max-md:leading-[12px]">
                             {cell.playerName}
                           </span>
                         )}
