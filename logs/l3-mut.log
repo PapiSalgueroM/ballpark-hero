@@ -1,0 +1,134 @@
+mutl3hold: the hold is out of the keep effect
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/usCareerHallWall.test.tsx [2m([22m[2m57 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m56 skipped[39m[2m)[22m[32m 257[2mms[22m[39m
+   [2m[90m↓[39m[22m 'NFL': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there
+   [2m[90m↓[39m[22m 'NFL': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes
+   [2m[90m↓[39m[22m 'NFL': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1
+   [2m[90m↓[39m[22m 'NFL': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn
+   [2m[90m↓[39m[22m 'NBA': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there
+   [2m[90m↓[39m[22m 'NBA': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes
+   [2m[90m↓[39m[22m 'NBA': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1
+   [2m[90m↓[39m[22m 'NBA': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn
+   [2m[90m↓[39m[22m 'MLB': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there
+   [2m[90m↓[39m[22m 'MLB': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes
+   [2m[90m↓[39m[22m 'MLB': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1
+   [2m[90m↓[39m[22m 'MLB': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn
+   [2m[90m↓[39m[22m 'NHL': the Hall wall on the board[2m > [22mC1 and C2: a career retired through the board goes up on the wall, and a restart keeps it there
+   [2m[90m↓[39m[22m 'NHL': the Hall wall on the board[2m > [22mC4: a refused wall write breaks nothing, and the prompt keeps saying the card goes
+   [2m[90m↓[39m[22m 'NHL': the Hall wall on the board[2m > [22mC4b: a refused wall write with another plaque already up: the prompt says the card goes, the opener reads 1
+   [2m[90m↓[39m[22m 'NHL': the Hall wall on the board[2m > [22mC7: with no Hall bound (the parity replay) the wall is never read, written or drawn
+   [2m[90m↓[39m[22m 'NFL': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written
+   [2m[90m↓[39m[22m 'NFL': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone
+   [2m[90m↓[39m[22m 'NFL': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+   [2m[90m↓[39m[22m 'NBA': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written
+   [2m[90m↓[39m[22m 'NBA': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone
+   [2m[90m↓[39m[22m 'NBA': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+   [2m[90m↓[39m[22m 'MLB': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written
+   [2m[90m↓[39m[22m 'MLB': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone
+   [2m[90m↓[39m[22m 'MLB': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+   [2m[90m↓[39m[22m 'NHL': old saves and broken walls[2m > [22mC3: an old retired save of every class goes up as its card told him, and its save is never written
+   [2m[90m↓[39m[22m 'NHL': old saves and broken walls[2m > [22mC6: junk is replaced, a newer version is never written over, a bad plaque is dropped alone
+   [2m[90m↓[39m[22m 'NHL': old saves and broken walls[2m > [22mC9: a refused retirement save holds the plaque back until the save's own Retry lands
+   [2m[90m↓[39m[22m C8: the wall draws nothing and moves no save byte[2m > [22m'NFL': five seeds, the wall written, refused and absent, press for press
+   [2m[90m↓[39m[22m C8: the wall draws nothing and moves no save byte[2m > [22m'NBA': five seeds, the wall written, refused and absent, press for press
+   [2m[90m↓[39m[22m C8: the wall draws nothing and moves no save byte[2m > [22m'MLB': five seeds, the wall written, refused and absent, press for press
+   [2m[90m↓[39m[22m C8: the wall draws nothing and moves no save byte[2m > [22m'NHL': five seeds, the wall written, refused and absent, press for press
+   [2m[90m↓[39m[22m C8b: the wall's read draws nothing and moves no save byte[2m > [22m'NFL': five seeds, no Hall bound, a bound Hall with no wall and with a full wall
+   [2m[90m↓[39m[22m C8b: the wall's read draws nothing and moves no save byte[2m > [22m'NBA': five seeds, no Hall bound, a bound Hall with no wall and with a full wall
+   [2m[90m↓[39m[22m C8b: the wall's read draws nothing and moves no save byte[2m > [22m'MLB': five seeds, no Hall bound, a bound Hall with no wall and with a full wall
+   [2m[90m↓[39m[22m C8b: the wall's read draws nothing and moves no save byte[2m > [22m'NHL': five seeds, no Hall bound, a bound Hall with no wall and with a full wall
+   [2m[90m↓[39m[22m 'NFL': the wall screen[2m > [22mC5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them)
+   [2m[90m↓[39m[22m 'NFL': the wall screen[2m > [22mC10: focus, the "?" and the tap targets, from the create screen
+   [2m[90m↓[39m[22m 'NFL': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create
+   [2m[90m↓[39m[22m 'NFL': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it
+   [2m[90m↓[39m[22m 'NBA': the wall screen[2m > [22mC5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them)
+   [2m[90m↓[39m[22m 'NBA': the wall screen[2m > [22mC10: focus, the "?" and the tap targets, from the create screen
+   [2m[90m↓[39m[22m 'NBA': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create
+   [2m[90m↓[39m[22m 'NBA': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it
+   [2m[90m↓[39m[22m 'MLB': the wall screen[2m > [22mC5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them)
+   [2m[90m↓[39m[22m 'MLB': the wall screen[2m > [22mC10: focus, the "?" and the tap targets, from the create screen
+   [2m[90m↓[39m[22m 'MLB': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create
+   [2m[90m↓[39m[22m 'MLB': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it
+   [2m[90m↓[39m[22m 'NHL': the wall screen[2m > [22mC5: a full wall keeps 12, the new plaque goes up first and the oldest miss comes down (the oldest Hall of Famer only on a wall of them)
+   [2m[90m↓[39m[22m 'NHL': the wall screen[2m > [22mC10: focus, the "?" and the tap targets, from the create screen
+   [2m[90m↓[39m[22m 'NHL': the wall screen[2m > [22mC10: from the retirement screen the opener waits for the card, Back focuses it, and Start over on the wall lands on create
+   [2m[90m↓[39m[22m 'NHL': the wall screen[2m > [22mC10: the wall says when this player is not on it, and when a newer version saved it
+   [2m[90m↓[39m[22m Round 1570: the plaque says the jersey and its counts in the card's own words[2m > [22m'NFL'
+   [2m[90m↓[39m[22m Round 1570: the plaque says the jersey and its counts in the card's own words[2m > [22m'NBA'
+   [2m[90m↓[39m[22m Round 1570: the plaque says the jersey and its counts in the card's own words[2m > [22m'MLB'
+   [2m[90m↓[39m[22m Round 1570: the plaque says the jersey and its counts in the card's own words[2m > [22m'NHL'
+[31m   [31m×[31m Release BU: a loaded NBA save waits for its international repair before its plaque goes up[2m > [22mC11: the wall is written once, after the repair, and never with the unrepaired plaque[39m[32m 256[2mms[22m[39m
+[31m     → nothing goes up while the repair is pending: expected [ { v: 1, entries: [ { …(13) } ] } ] to deeply equal [][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerHallWall.test.tsx[2m > [22mRelease BU: a loaded NBA save waits for its international repair before its plaque goes up[2m > [22mC11: the wall is written once, after the repair, and never with the unrepaired plaque
+[31m[1mAssertionError[22m: nothing goes up while the repair is pending: expected [ { v: 1, entries: [ { …(13) } ] } ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   {[39m
+[31m+     "entries": [[39m
+[31m+       {[39m
+[31m+         "from": 2026,[39m
+[31m+         "hall": {[39m
+[31m+           "ballots": [],[39m
+[31m+           "firstBallot": false,[39m
+[31m+           "firstClass": 2035,[39m
+[31m+           "hallName": "Naismith Memorial Basketball Hall of Fame",[39m
+[31m+           "inductedClass": null,[39m
+[31m+           "jersey": null,[39m
+[31m+           "outcome": "notOnBallot",[39m
+[31m+           "score": 60,[39m
+[31m+           "sport": "nba",[39m
+[31m+         },[39m
+[31m+         "hof": false,[39m
+[31m+         "honours": [[39m
+[31m+           {[39m
+[31m+             "label": "in other awards",[39m
+[31m+             "n": 1,[39m
+[31m+           },[39m
+[31m+         ],[39m
+[31m+         "key": "Wall NBA 1571|PG|39|2026|wall1571|6|486",[39m
+[31m+         "legacy": 60,[39m
+[31m+         "name": "Wall NBA 1571",[39m
+[31m+         "pos": "PG",[39m
+[31m+         "rings": 0,[39m
+[31m+         "seasons": 6,[39m
+[31m+         "teams": [[39m
+[31m+           "BOS",[39m
+[31m+         ],[39m
+[31m+         "to": 2031,[39m
+[31m+         "verdict": "Ten-day contracts and what-ifs",[39m
+[31m+       },[39m
+[31m+     ],[39m
+[31m+     "v": 1,[39m
+[31m+   },[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/usCareerHallWall.test.tsx:[2m606:73[22m[39m
+    [90m604| [39m    [35mawait[39m [34mact[39m([35masync[39m () [33m=>[39m { [35mawait[39m [35mimport[39m([32m'@/lib/usCareerHallWall'[39m)[33m;[39m })[33m;[39m
+    [90m605| [39m    [35mawait[39m [34msettle[39m()[33m;[39m [35mawait[39m [34msettle[39m()[33m;[39m
+    [90m606| [39m    expect(wallWrites(), 'nothing goes up while the repair is pending'…
+    [90m   | [39m                                                                        [31m^[39m
+    [90m607| [39m    await act(async () => { open(); await gate; await new Promise(reso…
+    [90m608| [39m    await waitFor(() => expect(wallWrites().length).toBeGreaterThan(0)…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m56 skipped[39m[90m (57)[39m
+[2m   Start at [22m 14:53:58
+[2m   Duration [22m 2.71s[2m (transform 1.32s, setup 54ms, collect 1.84s, tests 257ms, environment 243ms, prepare 95ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallWall.test.tsx,title=src/test/usCareerHallWall.test.tsx > Release BU%3A a loaded NBA save waits for its international repair before its plaque goes up > C11%3A the wall is written once%2C after the repair%2C and never with the unrepaired plaque,line=606,column=73::AssertionError: nothing goes up while the repair is pending: expected [ { v: 1, entries: [ { …(13) } ] } ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   {%0A+     "entries": [%0A+       {%0A+         "from": 2026,%0A+         "hall": {%0A+           "ballots": [],%0A+           "firstBallot": false,%0A+           "firstClass": 2035,%0A+           "hallName": "Naismith Memorial Basketball Hall of Fame",%0A+           "inductedClass": null,%0A+           "jersey": null,%0A+           "outcome": "notOnBallot",%0A+           "score": 60,%0A+           "sport": "nba",%0A+         },%0A+         "hof": false,%0A+         "honours": [%0A+           {%0A+             "label": "in other awards",%0A+             "n": 1,%0A+           },%0A+         ],%0A+         "key": "Wall NBA 1571|PG|39|2026|wall1571|6|486",%0A+         "legacy": 60,%0A+         "name": "Wall NBA 1571",%0A+         "pos": "PG",%0A+         "rings": 0,%0A+         "seasons": 6,%0A+         "teams": [%0A+           "BOS",%0A+         ],%0A+         "to": 2031,%0A+         "verdict": "Ten-day contracts and what-ifs",%0A+       },%0A+     ],%0A+     "v": 1,%0A+   },%0A+ ]%0A%0A ❯ src/test/usCareerHallWall.test.tsx:606:73%0A%0A
