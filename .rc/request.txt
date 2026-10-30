@@ -1,0 +1,10 @@
+shootout: node scripts/simCmShootoutOrder.mjs
+shootoutResults: node scripts/simCmShootoutResults.mjs
+so-keepcurve: CM_SHOOTOUT_CONTROL=keepcurve node scripts/simCmShootoutOrder.mjs
+sr-keepcurve: CM_SHOOTOUT_RESULTS_CONTROL=keepcurve node scripts/simCmShootoutResults.mjs
+so-unsetpath: CM_SHOOTOUT_CONTROL=unsetpath node scripts/simCmShootoutOrder.mjs
+so-keepleague: CM_SHOOTOUT_CONTROL=keepleague node scripts/simCmShootoutOrder.mjs
+so-tie-record: CM_SHOOTOUT_CONTROL=tie-record node scripts/simCmShootoutOrder.mjs
+so-seed1: SIM_SEED=1 node scripts/simCmShootoutOrder.mjs
+so-seed2: SIM_SEED=2 node scripts/simCmShootoutOrder.mjs
+so-seed3: SIM_SEED=3 node scripts/simCmShootoutOrder.mjs
