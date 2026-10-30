@@ -148,7 +148,7 @@ try {
       const play = page.getByRole('button', { name: "Let's Play!", exact: true });
       await play.waitFor({ timeout: 30000 });
       if (seed === 1 && c.key === 'morton' && CONTROL !== 'base') {
-        const section = page.locator('section', { has: page.locator('h3', { hasText: 'Club squares' }) });
+        const section = page.locator('section', { has: page.locator('h3', { hasText: /^Club squares$/ }) }) /* Release BU: exact, since PR 437's FAQ heading says club squares too */;
         const texts = (await section.locator('h3, p').allTextContents()).map(t => t.replace(/\s+/g, ' ').trim());
         if (JSON.stringify(texts) !== JSON.stringify(SECTION)) fail(`the Club squares section reads ${JSON.stringify(texts)}`);
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
