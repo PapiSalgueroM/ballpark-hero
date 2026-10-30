@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+states: ONLY=/club-manager,/soccer-career node scripts/playFirstVisitDialogs.mjs
+shard1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+shard2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+shard3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
