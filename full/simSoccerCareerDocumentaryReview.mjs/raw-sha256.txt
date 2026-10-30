@@ -1,0 +1,2 @@
+d1f455c98395956cf0e9c9363fedfcbab2e29d34e08ccef327bdf7a8b88b9ebc  /home/runner/work/_temp/rc-out/full/simSoccerCareerDocumentaryReview.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerCareerDocumentaryReview.mjs/stderr.log

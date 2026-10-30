@@ -1,0 +1,25 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 1021,
+      "sha256": "b097a4caf5584b6743a8f0f39706b2e1f92bcd4a4cf7d5357cce6fdf69b4562c",
+      "tests": [
+        ":src/test/cageReadiness.test.tsx",
+        ":src/test/champOrNotReveal.test.tsx",
+        ":src/test/contractPreview.test.tsx",
+        ":src/test/draftRosterMotion.test.tsx",
+        ":src/test/homeSearchRecovery.test.tsx",
+        ":src/test/managerMatchPlans.test.tsx",
+        ":src/test/mlbHlReveal.test.tsx",
+        ":src/test/nhlPlanningBench.test.tsx",
+        ":src/test/phonePanelLifeStories.test.tsx",
+        ":src/test/soccerDiscipline.test.ts",
+        ":src/hooks/useTransferPath.test.ts",
+        ":src/test/whodTheyBeatReveal.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

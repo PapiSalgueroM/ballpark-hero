@@ -1,0 +1,2 @@
+d68e0475713e0c52db548a926f45174c44ea4fe20bf97745165855e382cc90e2  /home/runner/work/_temp/rc-out/full/simCmMatchDay.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmMatchDay.mjs/stderr.log

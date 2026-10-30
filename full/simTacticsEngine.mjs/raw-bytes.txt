@@ -1,0 +1,3 @@
+5187 /home/runner/work/_temp/rc-out/full/simTacticsEngine.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simTacticsEngine.mjs/stderr.log
+5187 total

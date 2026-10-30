@@ -1,0 +1,2 @@
+87d59b37a076630d0c62f34ba657c4e3a0304ccca868d3b865b8faf1cd2e96df  /home/runner/work/_temp/rc-out/full/simDraftRosterMotion.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simDraftRosterMotion.mjs/stderr.log

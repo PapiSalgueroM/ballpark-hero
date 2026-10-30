@@ -1,0 +1,3 @@
+639 /home/runner/work/_temp/rc-out/full/simHomeSearchRecovery.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simHomeSearchRecovery.mjs/stderr.log
+639 total

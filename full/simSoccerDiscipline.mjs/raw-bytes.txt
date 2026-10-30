@@ -1,0 +1,3 @@
+50697 /home/runner/work/_temp/rc-out/full/simSoccerDiscipline.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simSoccerDiscipline.mjs/stderr.log
+50697 total

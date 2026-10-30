@@ -1,0 +1,3 @@
+926 /home/runner/work/_temp/rc-out/full/simChampOrNotReveal.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simChampOrNotReveal.mjs/stderr.log
+926 total

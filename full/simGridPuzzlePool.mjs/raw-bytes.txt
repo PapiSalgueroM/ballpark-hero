@@ -1,0 +1,3 @@
+686 /home/runner/work/_temp/rc-out/full/simGridPuzzlePool.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simGridPuzzlePool.mjs/stderr.log
+686 total

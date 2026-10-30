@@ -1,0 +1,3 @@
+1966 /home/runner/work/_temp/rc-out/full/simTycoonSeasonReview.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simTycoonSeasonReview.mjs/stderr.log
+1966 total

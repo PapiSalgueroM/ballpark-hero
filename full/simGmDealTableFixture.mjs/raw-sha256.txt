@@ -1,0 +1,2 @@
+75278649d673609e1c5253d807315a63ad002987d94def55e4d7ed9fc3c2f871  /home/runner/work/_temp/rc-out/full/simGmDealTableFixture.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGmDealTableFixture.mjs/stderr.log

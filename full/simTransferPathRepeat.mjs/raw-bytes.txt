@@ -1,0 +1,3 @@
+722 /home/runner/work/_temp/rc-out/full/simTransferPathRepeat.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simTransferPathRepeat.mjs/stderr.log
+722 total

@@ -1,0 +1,2 @@
+7c7c511870ab3a3ec1ea0095dd93fb855cec168fe6f7dae3001ab57d6aa34538  /home/runner/work/_temp/rc-out/full/simSoccerStintNameFold.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerStintNameFold.mjs/stderr.log

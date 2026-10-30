@@ -1,0 +1,3 @@
+1912 /home/runner/work/_temp/rc-out/full/simNflCareerPathFacts.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNflCareerPathFacts.mjs/stderr.log
+1912 total

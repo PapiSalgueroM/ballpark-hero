@@ -1,0 +1,3 @@
+1014 /home/runner/work/_temp/rc-out/full/simFaceOff.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFaceOff.mjs/stderr.log
+1014 total

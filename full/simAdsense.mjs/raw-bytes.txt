@@ -1,0 +1,3 @@
+1679 /home/runner/work/_temp/rc-out/full/simAdsense.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simAdsense.mjs/stderr.log
+1679 total

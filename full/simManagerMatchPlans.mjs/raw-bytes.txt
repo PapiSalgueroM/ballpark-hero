@@ -1,0 +1,3 @@
+3854 /home/runner/work/_temp/rc-out/full/simManagerMatchPlans.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simManagerMatchPlans.mjs/stderr.log
+3854 total

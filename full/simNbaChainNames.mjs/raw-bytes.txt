@@ -1,0 +1,3 @@
+1402 /home/runner/work/_temp/rc-out/full/simNbaChainNames.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNbaChainNames.mjs/stderr.log
+1402 total

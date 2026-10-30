@@ -1,0 +1,2 @@
+d317c897fa1f1320c11f79643a25d548cdbee7c12101f4c58b215473b6da6a06  /home/runner/work/_temp/rc-out/full/simPublicWrites.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPublicWrites.mjs/stderr.log

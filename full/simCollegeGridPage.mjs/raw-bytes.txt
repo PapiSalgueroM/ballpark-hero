@@ -1,0 +1,3 @@
+3907 /home/runner/work/_temp/rc-out/full/simCollegeGridPage.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCollegeGridPage.mjs/stderr.log
+3907 total
