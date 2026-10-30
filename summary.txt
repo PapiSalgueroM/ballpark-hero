@@ -1,0 +1,3 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+natflags-base exit=1 2s | simNationalityFlags: 1 failure
+walk exit=0 234s | walkRev1604: 128 checks, 0 failed, red paths: none

@@ -1,0 +1,2 @@
+  FAIL: src/components/soccer-career/CoachingStartChooser.tsx:61 prints {quote.country} with no flag beside it
+simNationalityFlags: 1 failure
