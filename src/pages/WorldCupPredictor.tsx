@@ -1613,7 +1613,7 @@ const WorldCupPredictor = () => {
           <button
             onClick={handleAutoFillEverything}
             disabled={autoFillEverythingLoading}
-            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm
+            className="fixed bottom-6 [body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_1.5rem)] right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm
               bg-gradient-to-r from-[hsl(45,90%,45%)] to-[hsl(35,90%,50%)] hover:from-[hsl(45,90%,50%)] hover:to-[hsl(35,90%,55%)]
               text-[hsl(220,20%,8%)] shadow-xl shadow-[hsl(45,90%,45%)]/30
               disabled:opacity-60 transition-all transform hover:scale-105"

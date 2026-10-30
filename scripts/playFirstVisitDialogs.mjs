@@ -297,7 +297,7 @@ function barsInPage({ BANNER, strip }) {
   }
   const bb = banner.getBoundingClientRect();
   const cut = (a, b) => ({ left: Math.max(a.left, b.left), top: Math.max(a.top, b.top), right: Math.min(a.right, b.right), bottom: Math.min(a.bottom, b.bottom) });
-  const label = el => ((el.textContent || '').trim() || el.getAttribute('aria-label') || el.getAttribute('title') || '').replace(/\s+/g, ' ').slice(0, 30);
+  const label = el => (el.getAttribute('aria-label') || (el.textContent || '').trim() || el.getAttribute('title') || '').replace(/\s+/g, ' ').slice(0, 30);
   const offenders = [];
   let fixedControls = 0, closest = null;
   for (const c of document.querySelectorAll('button, a[href], [role="button"], [role="link"]')) {
