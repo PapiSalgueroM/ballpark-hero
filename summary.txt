@@ -1,0 +1,11 @@
+roles10-head-a exit=0 88s | RUNMEANS 51.80 53.67
+roles10-head-b exit=0 89s | RUNMEANS 52.70 53.83
+roles10-base-a exit=0 94s | RUNMEANS 47.20 49.63
+roles10-base-b exit=0 94s | RUNMEANS 46.57 48.53
+cv-seed1 exit=0 141s | simCustomClubValues: 25 checks, 0 failures
+cv-default exit=0 151s | simCustomClubValues: 25 checks, 0 failures
+cv-seed2 exit=0 149s | simCustomClubValues: 25 checks, 0 failures
+cv-overprice exit=1 0s | simCustomClubValues: stopped, 1 failure
+cv-seed3 exit=0 148s | simCustomClubValues: 25 checks, 0 failures
+cv-capall exit=1 145s | simCustomClubValues: 25 checks, 4 failures (sections 1, 2) (control capall)
+cv-rawcurve exit=1 116s | simCustomClubValues: 25 checks, 8 failures (sections 1, 2) (control rawcurve)

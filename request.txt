@@ -1,0 +1,11 @@
+roles10-head-a: REPS=2 node .rc/x/rolesTen.mjs
+roles10-base-a: R=$PWD; git worktree add /tmp/rb1 14a9af704 >/dev/null 2>&1 && cd /tmp/rb1 && ln -s $R/node_modules node_modules && REPS=2 node $R/.rc/x/rolesTen.mjs
+roles10-head-b: REPS=2 node .rc/x/rolesTen.mjs
+roles10-base-b: R=$PWD; git worktree add /tmp/rb2 14a9af704 >/dev/null 2>&1 && cd /tmp/rb2 && ln -s $R/node_modules node_modules && REPS=2 node $R/.rc/x/rolesTen.mjs
+cv-default: node scripts/simCustomClubValues.mjs
+cv-seed1: SIM_SEED=1 node scripts/simCustomClubValues.mjs
+cv-seed2: SIM_SEED=2 node scripts/simCustomClubValues.mjs
+cv-seed3: SIM_SEED=3 node scripts/simCustomClubValues.mjs
+cv-capall: CUSTOM_VALUE_CONTROL=capall node scripts/simCustomClubValues.mjs
+cv-overprice: CUSTOM_VALUE_CONTROL=overprice node scripts/simCustomClubValues.mjs
+cv-rawcurve: CUSTOM_VALUE_CONTROL=rawcurve node scripts/simCustomClubValues.mjs
