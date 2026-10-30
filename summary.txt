@@ -1,0 +1,4 @@
+build exit=0 36s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+vitest exit=0 7s |    Duration  6.23s (transform 2.52s, setup 230ms, collect 6.18s, tests 1.81s, environment 1.22s, prepare 437ms)
+sweepWeight exit=0 31s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+walk exit=0 58s | playCmDecidingLeg GREEN: 42 of 42 checks green
