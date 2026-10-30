@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+# Release BU lane h2: Round 1592's split playSaveKeeper line.
+keeper-crossK: R=$PWD; git worktree add /tmp/kk 14a9af704 > /dev/null 2>&1 && ln -s "$R/node_modules" /tmp/kk/node_modules && (cd /tmp/kk && node_modules/.bin/vite build > /tmp/kk-build.log 2>&1) && KEEPER_DIST=$R/dist KEEPER_BASE_DIST=/tmp/kk/dist PARTS=cross,K node scripts/playSaveKeeper.mjs
