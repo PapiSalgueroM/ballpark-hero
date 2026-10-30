@@ -100,6 +100,9 @@ describe('a man of another club', () => {
     expect(card?.league?.yellows).toBeNull();
     expect(card?.now).toBeNull();
     expect(card?.age).not.toBeNull();
+    /* The count is for this club only: a man who joined it this season brings no goals from his old club. */
+    expect(card?.notes).toContainEqual({ k: 'thisclub' });
+    expect(card?.notes.some(n => n.k === 'leftclub')).toBe(false);
   });
   it('says there is no book when the save holds none, and draws no league line', () => {
     const boards = leagueBoardsOf(s2);

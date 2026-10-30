@@ -28,6 +28,7 @@ function noteText(n: CardNote, card: PlayerCard, state: CareerState): string {
     case 'thin': return `The data covers only part of this league: ${n.share} in 100 of the other clubs' goals have a name.`;
     case 'outside': return 'The game keeps goals for the clubs of your league only.';
     case 'leftclub': return `He is no longer on ${card.club}'s books. The count is what he scored for them this season.`;
+    case 'thisclub': return `The count is for ${card.club} only. If he joined them this season, what he did at his old club is not in it.`;
     case 'keptfrom': return `Seasons before ${seasonLabelOf(state, n.from)} were played before the game kept them.`;
   }
 }

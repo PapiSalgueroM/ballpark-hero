@@ -56,6 +56,7 @@ export type CardNote =
   | { k: 'thin'; share: number } // only part of the league's goals have a name
   | { k: 'outside' }           // a club outside my league: the game keeps goals for my league only
   | { k: 'leftclub' }          // a book row whose man the club's roster no longer holds
+  | { k: 'thisclub' }          // a rival's count is for the club named only (a man who joined it this season)
   | { k: 'keptfrom'; from: number }; // seasons before season `from` were played before the game kept them
 
 export interface PlayerCard {
@@ -173,6 +174,6 @@ export function playerCardOf(state: CareerState, ref: CardRef): PlayerCard | nul
     league: boards
       ? { apps: null, goals: row?.[0] ?? 0, assists: row?.[1] ?? 0, cleanSheets: back ? row?.[2] ?? 0 : null, yellows: null, reds: null, average: null }
       : null,
-    notes: [...bookNotes(boards), ...(r ? [] : [{ k: 'leftclub' } as const])],
+    notes: [...bookNotes(boards), ...(r ? (boards ? [{ k: 'thisclub' } as const] : []) : [{ k: 'leftclub' } as const])],
   };
 }
