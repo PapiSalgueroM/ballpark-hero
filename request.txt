@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+fit: node .rc/x/fitRun1606.mjs

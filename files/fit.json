@@ -1,0 +1,27 @@
+{
+ "390": {
+  "mcWidth": 104,
+  "mcCut": 8,
+  "mcCutNames": [
+   "Domenico Tedesco",
+   "Eusebio Di Francesco",
+   "Gian Piero Gasperini",
+   "Jens Berthel Askou",
+   "José Alberto López",
+   "Massimiliano Allegri",
+   "Pellegrino Matarazzo",
+   "Quique Sánchez Flores"
+  ],
+  "clubWidth": 203,
+  "clubCut": 0,
+  "clubCutNames": []
+ },
+ "1280": {
+  "mcWidth": 104,
+  "mcCut": 0,
+  "mcCutNames": [],
+  "clubWidth": 203,
+  "clubCut": 0,
+  "clubCutNames": []
+ }
+}
