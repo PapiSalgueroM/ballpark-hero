@@ -19742,3 +19742,8 @@ The separate default unit qualification 40949430401/a1 at f7d0cf32 passed 9863 c
 PR398 remains separately qualified at 19d86992. Joined Home proof 40952943484/a1 at 62c668ea passed 12 dark guest profiles, 30 normal images and 20 effective controls on the combined Menu plus Home source, with no concrete pixel blocker. That scope does not claim a combined default unit run.
 
 Clean delivery uses freshly verified main plus the 18 qualified product bodies and the exact current PROJECT-STATE prefix followed by this append. PR424's 036c6813 history is preserved by a normal forward commit. Claude owns integration and publication; this qualification makes no merge, release or live-site claim.
+
+
+## 2026-10-30, report email status copy (Codex)
+
+The admin report badge now explains provider acceptance separately from actual inbox receipt. A missing email status can also come from a fresh backup submission, so it no longer claims every unknown status is an old report. No report, email, auth, delivery, triage or database behavior changes. This copy-only branch depends on ready Menu PR424. Existing report checks, genuine app types and ordinary build are pending on a remote proof branch. No new test mirrors the wording. No report marked fixed, reporter contacted, or production mutation. Claude K retains integration and publication.

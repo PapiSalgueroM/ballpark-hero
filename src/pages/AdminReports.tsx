@@ -37,9 +37,8 @@ interface Report {
   resolved: boolean;
   resolved_at: string | null;
   created_at: string;
-  /* Round 446: did the relay get a confirmed email delivery for this one?
-     null on every row written before that round, which is honest: unknown,
-     not false. */
+  /* Provider acceptance is separate from inbox delivery. A null value means
+     no email status was recorded, including backup submissions. */
   emailed: boolean | null;
   /* Round 713: the triage columns. Absent until the migration is applied,
      which is why every read goes through statusOf and priorityOf. */
@@ -281,9 +280,7 @@ const AdminReports = () => {
                   <span className="text-xs text-muted-foreground">
                     {new Date(report.created_at).toLocaleDateString()} {new Date(report.created_at).toLocaleTimeString()}
                   </span>
-                  {/* Round 446: whether this one reached the inbox, which
-                      is the half of "where do these go" that nothing used
-                      to record. */}
+                  {/* Email status is separate from the saved report. */}
                   <span
                     className={cn(
                       "text-xs px-2 py-0.5 rounded",
@@ -292,9 +289,9 @@ const AdminReports = () => {
                       report.emailed === null && "bg-muted text-muted-foreground",
                     )}
                     title={
-                      report.emailed === true ? "The relay confirmed delivery to douknowball1@gmail.com"
-                        : report.emailed === false ? "The relay tried and the mail provider did not confirm delivery. The inbox may still need its one time activation."
-                        : "Filed before Round 446 started recording delivery, so this is genuinely unknown"
+                      report.emailed === true ? "The mail provider accepted the email for douknowball1@gmail.com. Check the inbox to confirm it arrived."
+                        : report.emailed === false ? "The report is saved, but the mail provider did not confirm the email."
+                        : "The report is saved, but its email status was not recorded. This can happen with an older report or the backup submission route."
                     }
                   >
                     {report.emailed === true ? "emailed" : report.emailed === false ? "not emailed" : "delivery unknown"}
