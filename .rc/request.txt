@@ -1,0 +1,5 @@
+base-createClub: git worktree add -q /tmp/base 14a9af704 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simCreateClub.mjs
+base-intl: sleep 20 && cd /tmp/base && node scripts/simCmInternationals.mjs
+base-difficulty: sleep 20 && cd /tmp/base && node scripts/simCmDifficulty.mjs
+base-boardAsks: sleep 20 && cd /tmp/base && node scripts/simBoardAsks.mjs
+base-roles: sleep 20 && cd /tmp/base && node scripts/simRoles.mjs
