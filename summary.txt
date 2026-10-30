@@ -1,0 +1,4 @@
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+fobcheck exit=0 0s | controlFrontOfficeBoard: check passed. Every string of all 58 controls is in the board exactly once.
+simHarnessAnchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 56s | 
