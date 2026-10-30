@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simCmEuroPlay.mjs
+ctl-friday: CM_EURO_PLAY_CONTROL=friday node scripts/simCmEuroPlay.mjs
+ctl-uelrank: CM_EURO_PLAY_CONTROL=uelrank node scripts/simCmEuroPlay.mjs
+ctl-inplace: CM_EURO_PLAY_CONTROL=inplace node scripts/simCmEuroPlay.mjs
+ctl-noet: CM_EURO_PLAY_CONTROL=noet node scripts/simCmEuroPlay.mjs
+ctl-nowinnerucl: CM_EURO_PLAY_CONTROL=nowinnerucl node scripts/simCmEuroPlay.mjs

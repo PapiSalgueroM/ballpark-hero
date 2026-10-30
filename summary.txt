@@ -1,0 +1,7 @@
+tsc exit=0 109s | 
+ctl-friday exit=1 111s | simCmEuroPlay: control friday FIRED (204 failures, all its own)
+ctl-uelrank exit=1 38s | simCmEuroPlay: control uelrank FIRED (2 failures, all its own)
+ctl-inplace exit=1 38s | simCmEuroPlay: control inplace FIRED (1 failures, all its own)
+ctl-nowinnerucl exit=1 35s | simCmEuroPlay: control nowinnerucl FIRED (2 failures, all its own)
+ctl-noet exit=1 38s | simCmEuroPlay: control noet FIRED (4 failures, all its own)
+sim exit=0 376s | simCmEuroPlay: green, 1728 checks, 0 failures
