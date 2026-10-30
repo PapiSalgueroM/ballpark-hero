@@ -1,0 +1,6 @@
+sim7 exit=0 26s | simCmEuroPlay: green, 84 checks, 0 failures
+sim2-s5to8 exit=0 75s | simCmEuroPlay: green, 312 checks, 0 failures
+c-carryall-s5to8 exit=1 79s | simCmEuroPlay: control carryall FIRED (2 failures, all its own)
+c-nouelucl-s5to8 exit=1 101s | simCmEuroPlay: control nouelucl FIRED (1 failures, all its own)
+c-nocarry exit=1 69s | simCmEuroPlay: control nocarry FIRED (3 failures, all its own)
+c-nouelucl exit=1 88s | simCmEuroPlay: control nouelucl FIRED (2 failures, all its own)
