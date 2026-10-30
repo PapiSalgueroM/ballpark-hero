@@ -1,0 +1,109 @@
+[
+ {
+  "tag": "390-rm",
+  "found": true,
+  "rect": {
+   "x": 36,
+   "w": 338,
+   "h": 273
+  },
+  "firstInList": true,
+  "monthHeading": "October 2026",
+  "links": [
+   {
+    "text": "Rarity Round",
+    "href": "/rarity-round"
+   }
+  ],
+  "overflowChildren": 0,
+  "pageScrollX": 0,
+  "fontPx": "14px",
+  "text": "Arsenal means the London Arsenal again. 56 players from Arsenal de Sarandí, a club in Argentina, were filed under plain Arsenal in our player data. That put them in Rarity Round's Arsenal category, and our records in Soccer Grid, Soccer Connect 4 and Build Your XI would back them as Arsenal answers. We checked all 74 players who could have been mixed up, each against two sources: the 56 now sit under Arsenal de Sarandí, and the 18 who really played in London stay at Arsenal. Club Manager and Soccer Career squads still have a few of them at Arsenal for now.",
+  "dashes": false,
+  "blocked": 1,
+  "errors": [
+   "console Failed to load resource: net::ERR_FAILED"
+  ],
+  "rarityLink": 1,
+  "afterClickUrl": "/rarity-round",
+  "afterClickH1": "RARITY ROUND"
+ },
+ {
+  "tag": "390-motion",
+  "found": true,
+  "rect": {
+   "x": 36,
+   "w": 338,
+   "h": 273
+  },
+  "firstInList": true,
+  "monthHeading": "October 2026",
+  "links": [
+   {
+    "text": "Rarity Round",
+    "href": "/rarity-round"
+   }
+  ],
+  "overflowChildren": 0,
+  "pageScrollX": 0,
+  "fontPx": "14px",
+  "text": "Arsenal means the London Arsenal again. 56 players from Arsenal de Sarandí, a club in Argentina, were filed under plain Arsenal in our player data. That put them in Rarity Round's Arsenal category, and our records in Soccer Grid, Soccer Connect 4 and Build Your XI would back them as Arsenal answers. We checked all 74 players who could have been mixed up, each against two sources: the 56 now sit under Arsenal de Sarandí, and the 18 who really played in London stay at Arsenal. Club Manager and Soccer Career squads still have a few of them at Arsenal for now.",
+  "dashes": false,
+  "blocked": 1,
+  "errors": [
+   "console Failed to load resource: net::ERR_FAILED"
+  ]
+ },
+ {
+  "tag": "1280-rm",
+  "found": true,
+  "rect": {
+   "x": 292,
+   "w": 716,
+   "h": 137
+  },
+  "firstInList": true,
+  "monthHeading": "October 2026",
+  "links": [
+   {
+    "text": "Rarity Round",
+    "href": "/rarity-round"
+   }
+  ],
+  "overflowChildren": 0,
+  "pageScrollX": 0,
+  "fontPx": "14px",
+  "text": "Arsenal means the London Arsenal again. 56 players from Arsenal de Sarandí, a club in Argentina, were filed under plain Arsenal in our player data. That put them in Rarity Round's Arsenal category, and our records in Soccer Grid, Soccer Connect 4 and Build Your XI would back them as Arsenal answers. We checked all 74 players who could have been mixed up, each against two sources: the 56 now sit under Arsenal de Sarandí, and the 18 who really played in London stay at Arsenal. Club Manager and Soccer Career squads still have a few of them at Arsenal for now.",
+  "dashes": false,
+  "blocked": 1,
+  "errors": [
+   "console Failed to load resource: net::ERR_FAILED"
+  ]
+ },
+ {
+  "tag": "1280-motion",
+  "found": true,
+  "rect": {
+   "x": 292,
+   "w": 716,
+   "h": 137
+  },
+  "firstInList": true,
+  "monthHeading": "October 2026",
+  "links": [
+   {
+    "text": "Rarity Round",
+    "href": "/rarity-round"
+   }
+  ],
+  "overflowChildren": 0,
+  "pageScrollX": 0,
+  "fontPx": "14px",
+  "text": "Arsenal means the London Arsenal again. 56 players from Arsenal de Sarandí, a club in Argentina, were filed under plain Arsenal in our player data. That put them in Rarity Round's Arsenal category, and our records in Soccer Grid, Soccer Connect 4 and Build Your XI would back them as Arsenal answers. We checked all 74 players who could have been mixed up, each against two sources: the 56 now sit under Arsenal de Sarandí, and the 18 who really played in London stay at Arsenal. Club Manager and Soccer Career squads still have a few of them at Arsenal for now.",
+  "dashes": false,
+  "blocked": 1,
+  "errors": [
+   "console Failed to load resource: net::ERR_FAILED"
+  ]
+ }
+]
