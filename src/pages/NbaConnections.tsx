@@ -258,7 +258,7 @@ const NbaConnections = () => {
           examples={[
             '28,000+ career points: Karl Malone, Kobe Bryant, Dirk Nowitzki...',
             'Drafted #1 overall: Allen Iverson, Yao Ming, Zion Williamson...',
-            'Born in France: Tony Parker, Rudy Gobert, Boris Diaw...',
+            'Born in France: Victor Wembanyama, Rudy Gobert, Boris Diaw...',
             '10,000+ career assists: John Stockton, Jason Kidd, Chris Paul...',
           ]}
         />
