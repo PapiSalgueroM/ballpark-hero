@@ -1,0 +1,6 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk-notile exit=2 4s | playCmEuroPlay: could not run. the save never reached its first Europa League night (week 40, {"type":"uel","round":0,"night":{"k":"uel","n":6}})
+walk-nofixture exit=2 4s | playCmEuroPlay: could not run. the save never reached its first Europa League night (week 40, {"type":"uel","round":0,"night":{"k":"uel","n":6}})
+walk exit=2 4s | playCmEuroPlay: could not run. the save never reached its first Europa League night (week 40, {"type":"uel","round":0,"night":{"k":"uel","n":6}})
+playOneOffCups exit=0 103s | playOneOffCups: green, five cases at three sizes and two more at two, pictures in /home/runner/work/_temp/rc-out/files/shots
+playWorldUcl exit=0 263s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
