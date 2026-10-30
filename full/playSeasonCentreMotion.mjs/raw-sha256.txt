@@ -1,0 +1,2 @@
+f8e4c92bf5afe2d97f8b9643977dfcbc2b745bfa71731b6169cd203fd8901c92  /home/runner/work/_temp/rc-out/full/playSeasonCentreMotion.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSeasonCentreMotion.mjs/stderr.log

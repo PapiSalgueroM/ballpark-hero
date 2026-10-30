@@ -1,0 +1,3 @@
+3107 /home/runner/work/_temp/rc-out/full/playSeasonReveal.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playSeasonReveal.mjs/stderr.log
+3107 total

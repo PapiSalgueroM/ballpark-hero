@@ -1,0 +1,2 @@
+b6026356e9f6bf4d0f4ebab92e30ce11d5a7f9a26813fa592519eed7d39478ba  /home/runner/work/_temp/rc-out/full/playSnapshotDrift.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSnapshotDrift.mjs/stderr.log

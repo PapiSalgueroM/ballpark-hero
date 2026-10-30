@@ -1,0 +1,3 @@
+10315 /home/runner/work/_temp/rc-out/full/playSeasonCentreMotion.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playSeasonCentreMotion.mjs/stderr.log
+10315 total

@@ -1,0 +1,3 @@
+3848 /home/runner/work/_temp/rc-out/full/playSeasonCentre.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playSeasonCentre.mjs/stderr.log
+3848 total

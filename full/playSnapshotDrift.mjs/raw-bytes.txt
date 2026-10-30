@@ -1,0 +1,3 @@
+1192 /home/runner/work/_temp/rc-out/full/playSnapshotDrift.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playSnapshotDrift.mjs/stderr.log
+1192 total

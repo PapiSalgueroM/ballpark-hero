@@ -1,0 +1,2 @@
+0f8608c18d9d0cf04fc687e1d11a96c51c49a19b8ee89e1f5535338d71ecc4b7  /home/runner/work/_temp/rc-out/full/playSeasonMoments.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSeasonMoments.mjs/stderr.log

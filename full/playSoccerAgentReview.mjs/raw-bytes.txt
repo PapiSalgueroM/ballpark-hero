@@ -1,0 +1,3 @@
+980 /home/runner/work/_temp/rc-out/full/playSoccerAgentReview.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playSoccerAgentReview.mjs/stderr.log
+980 total

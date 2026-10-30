@@ -1,0 +1,2 @@
+d303ce1a33db7be5d02d45532bf37a676b9c5998af061fcf0e061b2776b09bab  /home/runner/work/_temp/rc-out/full/playSoccerAgentReview.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerAgentReview.mjs/stderr.log
