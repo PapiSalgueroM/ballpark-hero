@@ -63,7 +63,7 @@ import {
 } from '@/lib/clubManagerLeagueBook';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
 import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
-import { compactWorldRoster, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
+import { bornNear, compactWorldRoster, nearAges, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
 import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
@@ -77,7 +77,7 @@ import { CM_AGE_CURVE, ageRead } from '@/lib/cmAgeRead';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 // Round 1035: the modern squads are the baked file joined with the A-League
 // Men's generated one, in one place both engine files read.
-import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL, cmWorldTag } from '@/data/clubManagerWorldRosters';
+import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL, cmWorldReadsAge, cmWorldTag } from '@/data/clubManagerWorldRosters';
 // Round 612: how the real 2025-26 season finished, read by season one's
 // Champions League field. The data file imports nothing, so there is no cycle.
 import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubManagerFinalTables2025_26';
@@ -364,9 +364,14 @@ export function adoptLivingWorld(career: CareerState): CareerState {
   for (const [club, roster] of Object.entries(projectedWorldFor(career.eraId ?? 'now', yearsOn(career)))) {
     for (const p of roster) { const key = `${p.n}|${p.a}`; const clubs = listedAt.get(key); if (clubs) clubs.push(club); else listedAt.set(key, [club]); }
   }
+  /* Round 1600 fix: every career adopted here was started before the age read moved today's ages a year on, so its
+     men are found a year either side (nearAges: the ledger made above carries no stamp). */
+  const near = nearAges(adopted.worldRoster!);
+  const clubsOf = (name: string, age: number): string[] => [age, age - 1, age + 1]
+    .filter(a => bornNear(age, a, near)).flatMap(a => listedAt.get(`${name}|${a}`) ?? []);
   for (const p of [...career.squad.filter(x => !x.onLoan), ...(career.loanedOut ?? []).map(l => l.player)]) {
     if (p.academyGrad || p.isYouth) continue;
-    const clubs = listedAt.get(`${p.name}|${p.age}`) ?? [];
+    const clubs = clubsOf(p.name, p.age);
     if (clubs.length !== 1 || clubs[0] === career.clubName) continue;
     adopted = recordActualRosterTransfer(adopted, p, clubs[0], career.clubName, 'permanent', false);
   }
@@ -436,8 +441,10 @@ function pruneWorldRoster(career: CareerState): CareerState {
   const held = worldRosterView(career);
   if (!held || !eraRostersLoaded(career.eraId)) return career;
   const year = worldYear(career), years = yearsOn(career), seed = worldSeedOf(career), era = career.eraId ?? 'now';
+  /* Round 1600 fix: a ledger from before the age read matches a year either side, as worldRosterClub does (nearAges). */
+  const near = nearAges(held);
   const listed = (record: WorldRosterState['records'][number]): boolean => projectedRoster(record.origin.club, years, era, seed)
-    .some(p => p.worldRosterKey === record.key || p.p === record.origin.position && p.n === record.origin.name && year - p.a === record.origin.birthYear);
+    .some(p => p.worldRosterKey === record.key || p.p === record.origin.position && p.n === record.origin.name && bornNear(year - p.a, record.origin.birthYear, near));
   const kept = held.records.filter(record => record.status === 'owned' || record.status === 'retired' && record.year >= year || listed(record));
   if (kept.length === held.records.length) return career;
   const ledger = compactWorldRoster({ ...held, records: kept });
@@ -559,8 +566,14 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
   }
   const held = worldRosterView(state);
   const carried = player.worldRosterKey && held?.records.find(record => record.key === player.worldRosterKey);
-  const sources = projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state))
-    .filter(p => player.worldRosterKey ? p.worldRosterKey === player.worldRosterKey : p.n === player.name && p.a === player.age);
+  const projected = projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state));
+  let sources = projected.filter(p => player.worldRosterKey ? p.worldRosterKey === player.worldRosterKey : p.n === player.name && p.a === player.age);
+  /* Round 1600 fix: in a ledger from before the age read (nearAges), a man of mine from my own club's squad carries
+     the key his old age gave, which today's projection no longer gives anyone, so selling him recorded nothing and
+     he left the world. His row is found the way worldRosterClub finds it: his name, a year either side. */
+  if (!sources.length && !carried && held && nearAges(held)) {
+    sources = projected.filter(p => p.n === player.name && bornNear(player.age, p.a, true));
+  }
   const source = sources.length === 1 ? sources[0] : undefined;
   if (!carried && (sources.length > 1 || player.worldRosterKey && !source)) return state;
   return recordWorldRosterTransfer(state, { player, from, to, kind,
@@ -8202,8 +8215,10 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
      career with no seed never gets), now said where it is done. Round 1508: until its first summer here, when it is
      adopted with a readable ledger (adoptLivingWorld). */
   if (!livingWorldOf(career)) return state;
-  const released = worldRosterView(career)?.records.filter(record => record.status === 'released'
-    && record.player.name === player.name && record.origin.birthYear === worldYear(career) - player.age);
+  const held = worldRosterView(career);
+  /* Round 1600 fix: a ledger from before the age read matches a year either side (nearAges). */
+  const released = held?.records.filter(record => record.status === 'released'
+    && record.player.name === player.name && bornNear(worldYear(career) - player.age, record.origin.birthYear, nearAges(held)));
   return released?.length === 1 ? recordWorldRosterTransfer(state, { player, from: null, to: state.clubName,
     kind: 'permanent', key: released[0].key }) : state;
 }
@@ -19989,7 +20004,14 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   openWorldUclOnStart(state, world);
   /* Round 1510: the country's super cup, season one's edition, followed, opened after the seed it is keyed on. */
   openOneOffsOnStart(state, world);
-  return recordAiDeals(state, unrecorded);
+  const opened = recordAiDeals(state, unrecorded);
+  /* Round 1600 fix: a brand new career on today's world as it reads now (the age read, never the dailies' curve 1
+     view) stamps the ledger its opening window wrote, so its identity stays exact (nearAges). A job move carries
+     the ledger it was handed, stamp or none. */
+  if (!world && cmWorldReadsAge() && (opened.eraId ?? 'now') === 'now' && opened.worldRoster) {
+    opened.worldRoster = { ...opened.worldRoster, curve: CM_AGE_CURVE };
+  }
+  return opened;
 }
 
 /**

@@ -1,5 +1,6 @@
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import type { CareerState, CMPlayer } from '@/lib/clubManager';
+import { CM_AGE_CURVE } from '@/lib/cmAgeRead';
 
 export type WorldRosterPlayer = CMPlayer & { worldRosterKey?: string };
 export interface WorldRosterOrigin {
@@ -26,6 +27,10 @@ export interface WorldRosterState {
   /** Complete records, encoded without dropping player fields. */
   packedRecords?: string;
   packedFormat?: 'rows-v1';
+  /** Round 1600 fix: the age curve of today's world the career that owns this ledger was started on (2, the age
+   *  read on 1 August ages). Absent on every ledger written before Round 1600 and on one the engine starts later
+   *  (adoption, a rewrite of an unreadable one): see nearAges. */
+  curve?: number;
 }
 export type WorldRosterCareer = CareerState & { squad: WorldRosterPlayer[]; worldRoster?: WorldRosterState };
 export interface WorldRosterTransfer {
@@ -88,8 +93,26 @@ function validPlayer(value: unknown): value is WorldRosterPlayer {
 function keyOf(eraId: string, origin: WorldRosterOrigin): string {
   return JSON.stringify([eraId, origin.club, origin.name, origin.position, origin.birthYear, origin.since]);
 }
-function samePlayer(player: CMPlayer, origin: WorldRosterOrigin, year: number): boolean {
-  return player.name === origin.name && year - player.age === origin.birthYear;
+function samePlayer(player: CMPlayer, origin: WorldRosterOrigin, year: number, near = false): boolean {
+  return player.name === origin.name && bornNear(year - player.age, origin.birthYear, near);
+}
+/* Round 1600 fix (both reviews, MAJOR 1): the ledger names a man by the birth year his age gave, and Round 1600
+   moved most ages of today's main squads file a year on (1 January to 1 August, scripts/data/cmAgesBasis2026.json).
+   A record written before that holds the old birth year, so the club he left projected him again under the new
+   one and he stood at two clubs. The rule for those ledgers: a ledger of today's world without the stamp a career
+   started on the age world gets (curve, written by startCareer) reads a man of the PROJECTED world a year either
+   side of the birth year it recorded, wherever it matches a projected row against a record (worldRosterClub here;
+   pruneWorldRoster, recordActualRosterTransfer, adoptLivingWorld and the released free agent in clubManager.ts).
+   Nothing in the save is rewritten, so the save stays byte for byte what it was. A stamped ledger and every past
+   season's ledger (their files' ages never moved) keep the exact year. The worst a near match costs is a namesake
+   of the same club and position born a year apart going unlisted there (scripts/simCmOldLedger.mjs section 1
+   holds that today's files list no such pair). That harness loads saves the engine before Round 1600 writes and
+   holds the rule on them (CM_OLD_LEDGER_CONTROL=exact takes it out). */
+export function nearAges(held: Pick<WorldRosterState, 'eraId' | 'curve'>): boolean {
+  return held.eraId === 'now' && held.curve !== CM_AGE_CURVE;
+}
+export function bornNear(birthYear: number, recorded: number, near: boolean): boolean {
+  return near ? Math.abs(birthYear - recorded) <= 1 : birthYear === recorded;
 }
 function samePayload(a: unknown, b: unknown): boolean {
   return JSON.stringify(a) === JSON.stringify(b);
@@ -283,7 +306,9 @@ export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRo
     ? career.squad.map(player => player.id === transfer.player.id && samePlayer(player, origin, year)
       ? { ...plainCopy(player), worldRosterKey: key } : player)
     : career.squad;
-  const ledger: WorldRosterState = { version: 1, eraId: career.eraId ?? 'now', records };
+  /* Round 1600 fix: the stamp rides with the ledger (nearAges). */
+  const ledger: WorldRosterState = { version: 1, eraId: career.eraId ?? 'now', records,
+    ...(held?.curve === undefined ? {} : { curve: held.curve }) };
   return { ...career, squad, worldRoster: pack ? compactWorldRoster(ledger) : ledger };
 }
 
@@ -320,13 +345,14 @@ export function worldRosterClub(career: CareerState, club: string, fallback: rea
   const touch = touchOf(held);
   if (!touch.clubs.has(club) && !fallback.some(player => player.worldRosterKey !== undefined && touch.keys.has(player.worldRosterKey))) return fallback;
   let changed = false;
+  const near = nearAges(held);
   const out = fallback.filter(player => {
-    const record = records.find(item => player.worldRosterKey === item.key || (item.origin.club === club && player.position === item.origin.position && samePlayer(player, item.origin, year)));
+    const record = records.find(item => player.worldRosterKey === item.key || (item.origin.club === club && player.position === item.origin.position && samePlayer(player, item.origin, year, near)));
     if (record && (record.owner !== club || record.status !== 'owned')) { changed = true; return false; }
     return true;
   }).map(player => {
     const record = records.find(item => item.year === year && item.status === 'owned' && item.owner === club
-      && (player.worldRosterKey === item.key || (item.origin.club === club && player.position === item.origin.position && samePlayer(player, item.origin, year))));
+      && (player.worldRosterKey === item.key || (item.origin.club === club && player.position === item.origin.position && samePlayer(player, item.origin, year, near))));
     if (!record) return player;
     changed = true;
     return plainCopy(record.player);
