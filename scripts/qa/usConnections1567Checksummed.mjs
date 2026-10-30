@@ -7,7 +7,7 @@
 
      node scripts/qa/usConnections1567Checksummed.mjs baseball=<b.json>,nfl=<f.json>,nhl=<h.json> <out.sql>
 
-   For every row the migration (supabase/migrations/20261029120000_round_1567_us_connections_gray.sql) rewrites:
+   For every row the migration (supabase/migrations/20261029130000_round_1567_us_connections_gray.sql) rewrites:
    a row already holding the new board is left out; a row holding a known old board goes in with its exported hash;
    a row holding anything else (drifted) STOPS the script (exit 1, named) unless the lead, having looked at it,
    lists it in ACCEPT_DRIFTED=<id,id>, in which case it goes in with its exported hash like the rest. A row missing

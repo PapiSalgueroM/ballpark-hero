@@ -25,7 +25,7 @@ export const BASE = '1229c0190';
    have not changed since this commit on the round's branch; merge the branch, never squash it, or the commit is
    lost. A later edit of the files is that round's own migration. */
 export const ROUND_FILES = 'e61011096f352f2ba5e6c2853794a038c74e3a15';
-export const MIGRATION = 'supabase/migrations/20261029120000_round_1567_us_connections_gray.sql';
+export const MIGRATION = 'supabase/migrations/20261029130000_round_1567_us_connections_gray.sql';
 const SEED = 'supabase/migrations/20260526000007_baseball_connections_puzzles.sql';
 export const SPORTS = { baseball: ['baseballConnectionsPuzzles', 'baseball_connections_puzzles'], nfl: ['nflConnectionsPuzzles', 'nfl_connections_puzzles'], nhl: ['nhlConnectionsPuzzles', 'nhl_connections_puzzles'] };
 

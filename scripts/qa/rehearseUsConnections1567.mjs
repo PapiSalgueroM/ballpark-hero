@@ -1,7 +1,7 @@
 /* Round 1567: the Baseball, NFL and NHL Connections migration, and its checksummed all or nothing form, run for
    real in an embedded Postgres (PGlite), never against the live project.
 
-   supabase/migrations/20261029120000_round_1567_us_connections_gray.sql (the guarded form) and the SQL that
+   supabase/migrations/20261029130000_round_1567_us_connections_gray.sql (the guarded form) and the SQL that
    scripts/qa/usConnections1567Checksummed.mjs writes from the lead's exports (the form production gets, as 1553
    and 1558 did) both run here word for word.
 
