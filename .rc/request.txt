@@ -1,0 +1,4 @@
+bv-dailies: git worktree add -q .rcbase1 4bd20c993 && CM_BOARD_BASE=$PWD/.rcbase1 node scripts/simCmBoardVerdict.mjs --part=dailies
+bv-dailies-hscard: git worktree add -q .rcbase2 4bd20c993 && CM_BOARD_BASE=$PWD/.rcbase2 SIM_CM_BOARD_CONTROL=hscard node scripts/simCmBoardVerdict.mjs --part=dailies
+bv-pure-onbase: git worktree add -q .rcbase3 4bd20c993 && cd .rcbase3 && CM_BOARD_BASE=$PWD node scripts/simCmBoardVerdict.mjs --part=pure
+bv-dailies-onbase: git worktree add -q .rcbase4 4bd20c993 && cd .rcbase4 && CM_BOARD_BASE=$PWD node scripts/simCmBoardVerdict.mjs --part=dailies
