@@ -1,0 +1,2 @@
+12ceda31fabd47a6aa9f0d1154d1ae37c3be9bca1596b81a4c73ed32425484f9  /home/runner/work/_temp/rc-out/full/inventory/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/inventory/stderr.log

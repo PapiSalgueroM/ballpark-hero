@@ -1,0 +1,2 @@
+6893a2054b999829a43cb3dacba05887ae11c1d67e42394b8f242e39f3896e23  /home/runner/work/_temp/rc-out/full/simSoccerDeck.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerDeck.mjs/stderr.log
