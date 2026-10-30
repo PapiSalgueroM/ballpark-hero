@@ -1,0 +1,9 @@
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+simManagerHotSeat-seed1 exit=0 28s | simManagerHotSeat: green (section 5 only). A survivor carries on in Club Manager on the hot seat's own season.
+simDailyDeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+simManagerHotSeat-seed2 exit=0 30s | simManagerHotSeat: green (section 5 only). A survivor carries on in Club Manager on the hot seat's own season.
+simManagerHotSeat exit=0 82s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simSaveKeeper exit=0 7s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simClubManagerSaveSize exit=0 94s | simClubManagerSaveSize: all sections green
+simClubManagerSlots exit=0 103s | simClubManagerSlots: all sections green
+simCmSavePoints exit=0 56s | simCmSavePoints: OK, all eight sections green
