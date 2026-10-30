@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dl: node scripts/simCmDecidingLeg.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
