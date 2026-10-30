@@ -1,0 +1,38 @@
+{
+  "scope": "PASSIVE_CAPTURE_ADMITTED_NO_PRODUCT_QUALIFICATION",
+  "originalRaw": 1,
+  "diagnosticRaw": 1,
+  "originalFailureLines": [
+    "   FAIL 34 careers part from the base: career 7 (LW, 2025) from step 14; career 14 (CDM, 2020-24) from step 54; career 15 (CM, 2025) from step 40",
+    "   FAIL 1 careers draw Math.random a different number of times",
+    "   FAIL 34 careers part from the base at a season end",
+    "   FAIL 0 base saves load differently here and 13 play their season differently (the deck not loaded)"
+  ],
+  "diagnosticFailureLines": [
+    "   FAIL 34 careers part from the base: career 7 (LW, 2025) from step 14; career 14 (CDM, 2020-24) from step 54; career 15 (CM, 2025) from step 40",
+    "   FAIL 1 careers draw Math.random a different number of times",
+    "   FAIL 34 careers part from the base at a season end",
+    "   FAIL 0 base saves load differently here and 13 play their season differently (the deck not loaded)"
+  ],
+  "c2": {
+    "careers": 200,
+    "steps": 20846,
+    "differ": 34,
+    "callsDiffer": 1,
+    "calls": 1155960
+  },
+  "c4": {
+    "careers": 200,
+    "seasons": 2200,
+    "apart": 34,
+    "deckAnswers": 1811,
+    "empties": 0
+  },
+  "c9": {
+    "loaded": 445,
+    "apartLoad": 0,
+    "apartPlay": 13,
+    "threw": 0
+  },
+  "noReplay": true
+}

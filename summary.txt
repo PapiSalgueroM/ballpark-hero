@@ -1,0 +1,4 @@
+prepare exit=0 59s | ordinary-build raw=0
+simSoccerDeck exit=1 135s | simSoccerDeck.mjs raw=1
+deckCapture exit=0 161s | 
+finish exit=0 7s | 

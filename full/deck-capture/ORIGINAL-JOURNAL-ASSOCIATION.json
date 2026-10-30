@@ -1,0 +1,50 @@
+{
+  "active": {
+    "utc": "2026-10-30T20:37:19.471Z",
+    "parentPid": 3118,
+    "event": "journal-active",
+    "root": "/home/runner/work/ballpark-hero/ballpark-hero",
+    "argv": [
+      "/opt/hostedtoolcache/node/24.22.1/x64/bin/node",
+      "/home/runner/work/ballpark-hero/ballpark-hero/scripts/runAllSims.mjs",
+      "--browser"
+    ],
+    "cwd": "/home/runner/work/ballpark-hero/ballpark-hero"
+  },
+  "start": {
+    "utc": "2026-10-30T20:37:19.736Z",
+    "parentPid": 3118,
+    "event": "start",
+    "id": "3118-0001",
+    "pid": 3126,
+    "command": "/opt/hostedtoolcache/node/24.22.1/x64/bin/node",
+    "args": [
+      "/home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerDeck.mjs"
+    ],
+    "cwd": "/home/runner/work/ballpark-hero/ballpark-hero",
+    "stdout": "3118-0001.simSoccerDeck.mjs.stdout.log",
+    "stderr": "3118-0001.simSoccerDeck.mjs.stderr.log"
+  },
+  "close": {
+    "utc": "2026-10-30T20:39:34.465Z",
+    "parentPid": 3118,
+    "event": "close",
+    "id": "3118-0001",
+    "pid": 3126,
+    "code": 1,
+    "signal": null,
+    "durationMs": 134736.746521,
+    "journalElapsedMs": 134994.114917
+  },
+  "wrapper": {
+    "start": "2026-10-30T20:37:19Z",
+    "end": "2026-10-30T20:39:34Z",
+    "status": 1,
+    "timeout": false,
+    "credit": "REQUIRES_ACTUAL_OUTPUT_ADMISSION"
+  },
+  "childStdoutSHA256": "d3843008510551ec1c86af43a2dd4dbf441ce1eff08054aea493c322bbc55642",
+  "childStderrSHA256": "c97feace36e3933db15cdc7f71253b66de92e0e8a4064a6987b20b14900c28cc",
+  "nestedStartsRetained": 0,
+  "comparisonScope": "Diagnostic child raw and stderr compare to the exact completed ordinary declared child. Wrapper raw is retained separately."
+}

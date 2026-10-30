@@ -1,0 +1,10 @@
+A	.github/workflows/lane-remote-check.yml
+A	.rc/admitResultCache.mjs
+A	.rc/admitted-plan.json
+A	.rc/captureSoccerDeck.mjs
+A	.rc/child-journal.cjs
+A	.rc/deck-observer.mjs
+A	.rc/default-support.sh
+A	.rc/fonts.cjs
+A	.rc/request.txt
+A	.rc/run.sh
