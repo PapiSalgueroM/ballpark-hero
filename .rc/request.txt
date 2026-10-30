@@ -1,0 +1,2 @@
+fob-all: node scripts/controlFrontOfficeBoard.mjs all
+fob-blank: node scripts/controlFrontOfficeBoard.mjs blank
