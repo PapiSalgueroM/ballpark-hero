@@ -1,0 +1,5 @@
+#!serial
+mP1-vt: node .rc/x/mut1603.mjs P1 && node_modules/.bin/vitest run src/test/cmDecidingLegCard.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mP2-vt: node .rc/x/mut1603.mjs P2 && node_modules/.bin/vitest run src/test/cmDecidingLegCard.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mQ-vt: node .rc/x/mut1603.mjs Q && node_modules/.bin/vitest run src/test/cmDecidingLegCard.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mN1-vt: node .rc/x/mut1603.mjs N1 && node_modules/.bin/vitest run src/test/cmDecidingLegCard.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
