@@ -1,0 +1,5 @@
+lr-1592 exit=0 53s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+lr-1597 exit=1 55s | simCmLeagueRules: 47 failure(s)
+tsc exit=0 63s | 
+lr-1606 exit=0 41s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+lr-1607 exit=1 41s | simCmLeagueRules: 5 failure(s)

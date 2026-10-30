@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+lr-1592: git worktree add -f /tmp/w92 0ff7e1e9cbb611a5350d2aa886d83df197eb6073 -q && ln -s "$PWD/node_modules" /tmp/w92/node_modules && cd /tmp/w92 && node scripts/simCmLeagueRules.mjs
+lr-1597: git worktree add -f /tmp/w97 a93b71f0fb2a21c14c1b755ca419c9beff042d96 -q && ln -s "$PWD/node_modules" /tmp/w97/node_modules && cd /tmp/w97 && node scripts/simCmLeagueRules.mjs
+lr-1606: git worktree add -f /tmp/w06 8dfbc56224823756168fc661d31a9cdb6629de4a -q && ln -s "$PWD/node_modules" /tmp/w06/node_modules && cd /tmp/w06 && node scripts/simCmLeagueRules.mjs
+lr-1607: git worktree add -f /tmp/w07 049092c312e34e706d7bf4dfeb29438dff5c98bc -q && ln -s "$PWD/node_modules" /tmp/w07/node_modules && cd /tmp/w07 && node scripts/simCmLeagueRules.mjs
