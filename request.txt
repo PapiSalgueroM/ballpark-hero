@@ -1,0 +1,16 @@
+# Release BU lane a: US Connections (Rounds 1567, 1574, 1583): the facts fence with its controls, the three migration checks, the fairness and planning sims, the daily save files.
+facts: node scripts/simUsConnectionsFacts.mjs
+migcheck: node scripts/qa/usConnections1567Migration.mjs check
+ctl-undate: US_CONN_CONTROL=undate node scripts/simUsConnectionsFacts.mjs
+ctl-ohtani: US_CONN_CONTROL=ohtani node scripts/simUsConnectionsFacts.mjs
+ctl-frobinson: US_CONN_CONTROL=frobinson node scripts/simUsConnectionsFacts.mjs
+fair: node scripts/simFairPuzzles.mjs
+report: US_CONN_TABLES=nfl,nhl node scripts/simUsConnectionsFacts.mjs
+vitest: node_modules/.bin/vitest run src/test/dailySaveParity.test.tsx src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx src/test/nhlPlanningBench.test.tsx --testTimeout=300000 --hookTimeout=120000
+simConnectionsFacts: node scripts/simConnectionsFacts.mjs
+simNhlPlanningBench: node scripts/simNhlPlanningBench.mjs
+copyfence: node scripts/simConnectionsDatedCopy.mjs
+recordgrows: node scripts/qa/nbaRecordGrows1583.mjs
+migcheck1574: node scripts/qa/usConnections1574Migration.mjs check
+migcheck1583: node scripts/qa/nbaConnections1583Migration.mjs check
+vitest-relabel: node_modules/.bin/vitest run src/hooks/useConnectionsRelabel.test.ts --testTimeout=300000 --hookTimeout=120000

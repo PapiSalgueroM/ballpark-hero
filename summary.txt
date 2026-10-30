@@ -1,0 +1,15 @@
+migcheck exit=0 0s | supabase/migrations/20261029130000_round_1567_us_connections_gray.sql matches the files
+facts exit=0 1s | simUsConnectionsFacts: green. Every Baseball, NFL, NHL and NBA Connections group is held to the record, and no board has a second right answer the record can see (other t
+ctl-undate exit=1 1s | US_CONN_CONTROL=undate fired its own rule 1 time(s): trade x1 for Lamar Jackson (all findings: trade 7; 7 failures in all)
+fair exit=0 0s | simFairPuzzles: green. No board has a new second right answer; only the soccer findings the ledger owes to part B remain.
+ctl-ohtani exit=1 1s | US_CONN_CONTROL=ohtani fired its own rule 1 time(s): watch x1 for Shohei Ohtani (all findings: watch 1; 1 failures in all)
+ctl-frobinson exit=1 1s | US_CONN_CONTROL=frobinson fired its own rule 1 time(s): gray-back x1 for Frank Robinson (all findings: gray-back 1, other-unknown 2; 2 failures in all)
+report exit=0 1s | REPORT ONLY
+simConnectionsFacts exit=0 1s | simConnectionsFacts: green. Every claim this round checked stands on two hosts and no rebuilt board has a second answer.
+copyfence exit=0 0s | simConnectionsDatedCopy: green. The four US Connections pages render every group label through ConnectionsGroupLabel and every receipt through ConnectionsReceiptText, and
+recordgrows exit=0 0s | nbaRecordGrows1583: 1909 fields of 166 men held at 5620589b4 compared, 0 changed. The NBA record only grew.
+migcheck1574 exit=0 0s | supabase/migrations/20261030150000_round_1574_nhl_connections_tables.sql matches the table file at 6084fb666151e74a23edf3ac54d96656a6615c87 (16 boards)
+migcheck1583 exit=0 1s | supabase/migrations/20261031120000_round_1583_nba_connections_dated.sql matches the file at b4a331a9cb1db7411b91538eaeaf29385d2ce3a9 and 4708a3d5965729156892f3e538633b2c3
+simNhlPlanningBench exit=0 8s | simNhlPlanningBench normal: exact expected assertions and independent Daily restore passed.
+vitest-relabel exit=0 4s |    Duration  2.46s (transform 376ms, setup 143ms, collect 574ms, tests 234ms, environment 554ms, prepare 291ms)
+vitest exit=0 26s |    Duration  25.62s (transform 5.36s, setup 552ms, collect 6.97s, tests 28.98s, environment 2.54s, prepare 609ms)
