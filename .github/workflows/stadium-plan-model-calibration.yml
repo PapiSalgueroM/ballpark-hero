@@ -1,0 +1,200 @@
+name: Stadium plan model-only calibration
+on:
+  push:
+    branches: [codex/stadium-plan-model-calibration-v2-20261029]
+permissions:
+  contents: read
+jobs:
+  model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      TZ: UTC
+      EXPECTED_PARENT: 0207ae74e56897082ef2cf43d586c704388cb237
+      EXPECTED_MAIN: bd0c07bf72dc0214842202fe2f931b14c65d82dc
+      EXPECTED_TREE: feb6a07782358af6dbd067356a700e411d1743f3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind immutable zero product and separate model-only scope
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/stadium-plan-model-calibration"; test ! -e "$out"; mkdir -p "$out"
+          echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/stadium-plan-model-calibration-v2-20261029
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5456
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof-diff.txt"
+          printf 'A\t.github/workflows/stadium-plan-model-calibration.yml\nA\tscripts/qa/calibrateStadiumLatePlan.mjs\n' > "$out/expected-proof-diff.txt"
+          cmp "$out/proof-diff.txt" "$out/expected-proof-diff.txt"
+          test "$(git rev-parse HEAD:src/lib/stadiumTycoon.ts)" = 1d3b864e7f22b9c2c712923416b13a5403aeb36f
+          test "$(sha256sum src/lib/stadiumTycoon.ts | cut -d' ' -f1)" = 1b00a96307914df097dc1375973e72328aad01b0b5ff8e5074177151960c17c9
+          test "$(sha256sum scripts/qa/calibrateStadiumLatePlan.mjs | cut -d' ' -f1)" = f637f32fb46dbd4f917cfc26d7b402b3417ee822b245c1145244f25ab6877d3b
+          echo "STADIUM_PLAN_ZERO_ENGINE_SHA256=1b00a96307914df097dc1375973e72328aad01b0b5ff8e5074177151960c17c9" >> "$GITHUB_ENV"
+          echo "STADIUM_PLAN_ORIGINAL_ENGINE=$out/original-stadium-engine.ts" >> "$GITHUB_ENV"
+          echo "STADIUM_PLAN_PHASE=calibration" >> "$GITHUB_ENV"; echo "STADIUM_PLAN_MEASUREMENT_OUT=$out/measurement" >> "$GITHUB_ENV"
+          git show "$EXPECTED_MAIN:src/lib/stadiumTycoon.ts" > "$out/original-stadium-engine.ts"
+          test "$(sha256sum "$out/original-stadium-engine.ts" | cut -d' ' -f1)" = 7ae67d9000bd6e371a7745b458060a0d3bdd6c8dc893c743cfdde46231b6280e
+          printf '%s\n' "$EXPECTED_MAIN" > "$out/main-at-plan.txt"
+          private_index="$out/main-bridge.private.index";test ! -e "$private_index"
+          default_index=$(git rev-parse --git-path index)
+          sha256sum "$default_index" > "$out/default-index.before.sha256"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before.txt"
+          git fetch --no-tags --refmap='' origin refs/heads/main > "$out/main-fetch.stdout.log" 2> "$out/main-fetch.stderr.log"
+          actual_main=$(git rev-parse --verify 'FETCH_HEAD^{commit}')
+          [[ "$actual_main" =~ ^[a-f0-9]{40}$ ]]
+          printf '%s\n' "$actual_main" > "$out/main-at-start.txt"
+          echo "ACTUAL_MAIN_AT_START=$actual_main" >> "$GITHUB_ENV"
+          GIT_INDEX_FILE="$private_index" git read-tree "$EXPECTED_MAIN^{tree}"
+          base_tree=$(GIT_INDEX_FILE="$private_index" git write-tree)
+          cp "$private_index" "$out/main-bridge.private.index.before"
+          before_index_sha=$(sha256sum "$private_index" | cut -d ' ' -f1)
+          inspect_main_trees() {
+            local base="$1" candidate="$2" prefix="$3" full_raw outside_raw paths_raw base_board candidate_board
+            if GIT_INDEX_FILE="$private_index" git diff --name-status "$base" "$candidate" -- > "$prefix.paths.tsv" 2> "$prefix.paths.stderr.log";then paths_raw=0;else paths_raw=$?;fi
+            if GIT_INDEX_FILE="$private_index" git diff --exit-code "$base" "$candidate" -- > "$prefix.full.diff" 2> "$prefix.full.stderr.log";then full_raw=0;else full_raw=$?;fi
+            if GIT_INDEX_FILE="$private_index" git diff --exit-code "$base" "$candidate" -- . ':!docs/WORKBOARD.md' > "$prefix.nonboard.diff" 2> "$prefix.nonboard.stderr.log";then outside_raw=0;else outside_raw=$?;fi
+            printf '%s\n' "$paths_raw" > "$prefix.paths.raw.exit";printf '%s\n' "$full_raw" > "$prefix.full.raw.exit";printf '%s\n' "$outside_raw" > "$prefix.nonboard.raw.exit"
+            test "$paths_raw" -eq 0 || return 2
+            [[ "$full_raw" =~ ^[01]$ && "$outside_raw" =~ ^[01]$ ]] || return 2
+            GIT_INDEX_FILE="$private_index" git ls-tree "$base" -- docs/WORKBOARD.md > "$prefix.base-board.tsv" || return 2
+            GIT_INDEX_FILE="$private_index" git ls-tree "$candidate" -- docs/WORKBOARD.md > "$prefix.candidate-board.tsv" || return 2
+            base_board=$(cat "$prefix.base-board.tsv");candidate_board=$(cat "$prefix.candidate-board.tsv")
+            [[ "$base_board" =~ ^100644\ blob\ [a-f0-9]{40}$'\t'docs/WORKBOARD.md$ && "$candidate_board" =~ ^100644\ blob\ [a-f0-9]{40}$'\t'docs/WORKBOARD.md$ ]] || { printf 'MENU_MAIN_BOARD_REGULAR_MODE\n' > "$prefix.refusal.txt";return 1; }
+            if test "$outside_raw" -ne 0;then printf 'MENU_MAIN_NONBOARD_PATH\n' > "$prefix.refusal.txt";return 1;fi
+            if test "$full_raw" -eq 0;then
+              test ! -s "$prefix.paths.tsv" || return 2
+              printf 'SAME\n' > "$prefix.outcome.txt";return 0
+            fi
+            if ! printf 'M\tdocs/WORKBOARD.md\n' | cmp - "$prefix.paths.tsv";then printf 'MENU_MAIN_OWNED_BOARD_PATH_ONLY\n' > "$prefix.refusal.txt";return 1;fi
+            printf 'BOARD_ONLY\n' > "$prefix.outcome.txt"
+          }
+          inspect_main_trees "$EXPECTED_MAIN" "$actual_main" "$out/main-actual"
+          actual_kind=$(cat "$out/main-actual.outcome.txt")
+          for control in board app;do
+            if test "$control" = board;then target=docs/WORKBOARD.md;else target=src/App.tsx;fi
+            cmp "$private_index" "$out/main-bridge.private.index.before"
+            test "$(GIT_INDEX_FILE="$private_index" git write-tree)" = "$base_tree"
+            cmp "$private_index" "$out/main-bridge.private.index.before"
+            GIT_INDEX_FILE="$private_index" git cat-file blob "$EXPECTED_MAIN:$target" > "$out/control-$control.original.body"
+            cp "$out/control-$control.original.body" "$out/control-$control.changed.body"
+            printf '\n// QA-only private Git-tree %s control.\n' "$control" >> "$out/control-$control.changed.body"
+            original_body_sha=$(sha256sum "$out/control-$control.original.body" | cut -d ' ' -f1)
+            changed_body_sha=$(sha256sum "$out/control-$control.changed.body" | cut -d ' ' -f1)
+            test "$original_body_sha" != "$changed_body_sha"
+            original_blob=$(GIT_INDEX_FILE="$private_index" git rev-parse "$EXPECTED_MAIN:$target")
+            changed_blob=$(GIT_INDEX_FILE="$private_index" git hash-object -w "$out/control-$control.changed.body")
+            test "$changed_blob" != "$original_blob"
+            GIT_INDEX_FILE="$private_index" git update-index --cacheinfo 100644 "$changed_blob" "$target"
+            changed_tree=$(GIT_INDEX_FILE="$private_index" git write-tree);test "$changed_tree" != "$base_tree"
+            changed_index_sha=$(sha256sum "$private_index" | cut -d ' ' -f1);test "$changed_index_sha" != "$before_index_sha"
+            cp "$private_index" "$out/control-$control.changed.index"
+            if inspect_main_trees "$base_tree" "$changed_tree" "$out/control-$control";then control_raw=0;else control_raw=$?;fi
+            printf '%s\n' "$control_raw" > "$out/control-$control.classifier.raw.exit"
+            test "$(cat "$out/control-$control.full.raw.exit")" = 1
+            printf 'M\t%s\n' "$target" | cmp - "$out/control-$control.paths.tsv"
+            if test "$control" = board;then
+              test "$control_raw" = 0;test "$(cat "$out/control-board.nonboard.raw.exit")" = 0;test "$(cat "$out/control-board.outcome.txt")" = BOARD_ONLY
+            else
+              test "$control_raw" = 1;test "$(cat "$out/control-app.nonboard.raw.exit")" = 1;test "$(cat "$out/control-app.refusal.txt")" = MENU_MAIN_NONBOARD_PATH
+            fi
+            cp "$out/main-bridge.private.index.before" "$private_index"
+            cmp "$private_index" "$out/main-bridge.private.index.before"
+            restored_tree=$(GIT_INDEX_FILE="$private_index" git write-tree);test "$restored_tree" = "$base_tree"
+            cmp "$private_index" "$out/main-bridge.private.index.before"
+            restored_index_sha=$(sha256sum "$private_index" | cut -d ' ' -f1);test "$restored_index_sha" = "$before_index_sha"
+            cp "$private_index" "$out/control-$control.restored.index"
+            inspect_main_trees "$base_tree" "$restored_tree" "$out/control-$control-restored"
+            test "$(cat "$out/control-$control-restored.full.raw.exit")" = 0;test "$(cat "$out/control-$control-restored.nonboard.raw.exit")" = 0;test "$(cat "$out/control-$control-restored.outcome.txt")" = SAME
+            printf '{"id":"%s","scope":"REMOTE_PRIVATE_GIT_INDEX_TREE_ONLY","target":"%s","classifierRaw":%s,"fullDiffRaw":1,"outsideBoardDiffRaw":%s,"originalBodySHA256":"%s","changedBodySHA256":"%s","originalBlob":"%s","changedBlob":"%s","beforeTree":"%s","changedTree":"%s","restoredTree":"%s","beforeIndexSHA256":"%s","changedIndexSHA256":"%s","restoredIndexSHA256":"%s","samePrivateIndexBytesAndTreeRestored":true,"workingSourceChanged":false,"refWritten":false}\n' "$control" "$target" "$control_raw" "$(cat "$out/control-$control.nonboard.raw.exit")" "$original_body_sha" "$changed_body_sha" "$original_blob" "$changed_blob" "$base_tree" "$changed_tree" "$restored_tree" "$before_index_sha" "$changed_index_sha" "$restored_index_sha" >> "$out/main-bridge-controls.jsonl"
+          done
+          GIT_OPTIONAL_LOCKS=0 git diff --exit-code HEAD;test -z "$(GIT_OPTIONAL_LOCKS=0 git status --porcelain --untracked-files=no)"
+          sha256sum -c "$out/default-index.before.sha256" > "$out/default-index-held.log"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after.txt";cmp "$out/refs.before.txt" "$out/refs.after.txt"
+          printf '{"schema":1,"status":"ACTUAL_MAIN_SAME_OR_REGULAR_WORKBOARD_ONLY_WITH_PHYSICAL_PRIVATE_TREE_CONTROLS","source":"%s","productParent":"%s","mainAtPlan":"%s","mainAtStart":"%s","compatibility":"%s","nonBoardDiffRaw":0,"positiveBoardControl":true,"negativeAppControl":true,"samePrivateIndexBytesAndTreeRestored":true,"defaultIndexAndRefsHeld":true,"sourceOrRefMutation":false}\n' "$GITHUB_SHA" "$EXPECTED_PARENT" "$EXPECTED_MAIN" "$actual_main" "$actual_kind" > "$out/MAIN-BOARD-COMPATIBILITY-ADMISSION.json"
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          git archive --format=tar HEAD > "$out/source.tar"
+          printf '{"scope":"MODEL_ONLY_FOUR_CANDIDATE_CALIBRATION","plannedMain":"%s","observedMain":"%s","productRegularFiles":5454,"proofRegularFiles":5456,"qaAdditions":2,"shippingEnginePoints":0,"parameterSelected":false,"types":"UNRUN_HERE","units":"UNRUN_HERE","build":"UNRUN","caps":"UNRUN_HERE","browser":"UNRUN","fonts":"UNRUN","fullSEO":"UNRUN","globalChecks":"UNRUN","knownShippingBlocker":"ACTUAL_V2_STADIUM_305.9K_ROUNDED306_OVER305","capWaiver":false,"productReady":false}\n' "$EXPECTED_MAIN" "$actual_main" > "$out/SCOPE.json"
+      - name: Remote runner syntax before dependency installation
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT"; status=0
+          FORCE_COLOR=0 env -u NO_COLOR node --check scripts/qa/calibrateStadiumLatePlan.mjs > "$out/runner-syntax.stdout.log" 2> "$out/runner-syntax.stderr.log" || status=$?
+          printf '%s\n' "$status" > "$out/runner-syntax.exit"
+          test "$status" -eq 0
+      - name: Locked model dependencies and immutable inventories
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT"
+          npm ci > "$out/npm-ci.stdout.log" 2> "$out/npm-ci.stderr.log"
+          find node_modules -type f -print0 | sort -z > "$out/deps.members"
+          xargs -0 sha256sum < "$out/deps.members" > "$out/deps.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.before"
+          cat > "$out/run.sh" <<'GATE'
+          run() {
+            local id="$1"; shift
+            local dir="$PLACEMENT_OUT/gates/$id"; test ! -e "$dir"; mkdir -p "$dir"
+            printf '%q ' "$@" > "$dir/command.txt"; printf '\n' >> "$dir/command.txt"; : > "$dir/transport.jsonl"
+            local raw=0
+            SIM_OFFLINE_RECEIPT="$dir/transport.jsonl" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s 3600s "$@" > "$dir/stdout.log" 2> "$dir/stderr.log" || raw=$?
+            printf '%s\n' "$raw" > "$dir/raw.exit"; printf 'gate=%s raw=%s expected=0\n' "$id" "$raw"
+            test "$raw" -eq 0; test ! -s "$dir/transport.jsonl"
+          }
+          GATE
+          mkdir -p "$out/gates"
+          sha256sum "$out/run.sh" "$out/original-stadium-engine.ts" > "$out/helpers.initial.sha256"
+      - name: Measure all four candidates without opening controls or holdout
+        run: |
+          set -euo pipefail
+          out="$PLACEMENT_OUT"; source "$out/run.sh"
+          run calibration node scripts/qa/calibrateStadiumLatePlan.mjs
+          test "$(tail -n1 "$out/gates/calibration/stdout.log")" = 'STADIUM_PLAN_MEASUREMENT_COMPLETE: calibration completed with shipping source held; no product-ready claim.'
+          node <<'MEASURED'
+          const fs=require('node:fs'),a=require('node:assert/strict'),out=process.env.STADIUM_PLAN_MEASUREMENT_OUT,r=JSON.parse(fs.readFileSync(out+'/CALIBRATION-COMPLETE.json'));
+          a.equal(r.status,'MEASURED_ALL_FOUR_PREDECLARED_CANDIDATES_NO_SELECTION');a.equal(r.source,process.env.GITHUB_SHA);a.equal(r.zeroEngineSHA256,process.env.STADIUM_PLAN_ZERO_ENGINE_SHA256);a.equal(r.parameterSelected,false);a.equal(r.holdout,'UNRUN');a.equal(r.controls,'UNRUN_REQUIRES_FROZEN_SELECTION');a.deepEqual(r.summaries.map(row=>row.points),[4,6,8,10]);
+          fs.writeFileSync(process.env.PLACEMENT_OUT+'/MODEL-CALIBRATION-SCOPE.json',JSON.stringify({status:'ACTUAL_FOUR_CANDIDATE_MODEL_CALIBRATION_COMPLETED',source:process.env.GITHUB_SHA,parent:process.env.EXPECTED_PARENT,zeroEngineSHA256:process.env.STADIUM_PLAN_ZERO_ENGINE_SHA256,modelOnly:true,calibrationRaw:0,parameterSelected:false,controls:'UNRUN',holdout:'UNRUN',appBuildCapsUnitsBrowser:'UNRUN_HERE',knownShippingBlocker:'ACTUAL_V2_STADIUM_305.9K_ROUNDED306_OVER305',capWaiver:false,productReady:false},null,2)+'\n',{flag:'wx'});
+          console.log('STADIUM_MODEL_CALIBRATION_COMPLETED: four candidates measured only; known Stadium cap failure still blocks shipping, no cap waiver or product-ready claim.');
+          MEASURED
+      - name: Always retain immutable source, model dependencies and evidence
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="${PLACEMENT_OUT:-$RUNNER_TEMP/stadium-plan-model-calibration}"; mkdir -p "$out"; failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          xargs -0 sha256sum < "$out/source-members.final" > "$out/source.final.sha256"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          cmp "$out/source.initial.sha256" "$out/source.final.sha256" || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          if test -f "$out/deps.sha256"; then
+            find node_modules -type f -print0 | sort -z > "$out/deps.members.final"
+            cmp "$out/deps.members" "$out/deps.members.final" || failed=1
+            sha256sum -c "$out/deps.sha256" > "$out/deps-held.log" 2>&1 || failed=1
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.before" "$out/dependency-links.final" || failed=1
+          else printf 'UNRUN: model dependency inventory unavailable\n' > "$out/DEPS-UNRUN.txt"; fi
+          if test -f "$out/helpers.initial.sha256"; then sha256sum -c "$out/helpers.initial.sha256" > "$out/helpers-held.log" 2>&1 || failed=1; else failed=1; fi
+          printf 'Model-only calibration. No build, dist, fonts, browsers, caps, units or global checks ran here. Known Stadium cap failure still blocks shipping; no cap waiver.\n' > "$out/MODEL-ONLY-SCOPE.txt"
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/stadium-model-calibration-evidence.sha256"
+          cp "$RUNNER_TEMP/stadium-model-calibration-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: stadium-plan-model-calibration-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-plan-model-calibration
+          if-no-files-found: error
+          retention-days: 14
