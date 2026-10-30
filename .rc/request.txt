@@ -1,0 +1,10 @@
+#!serial
+roll-head: node_modules/.bin/vitest run src/test/soccerCareerCreationRoll.test.tsx --testTimeout=300000 --hookTimeout=120000
+revM2: node .rc/x/mutRun1604.mjs M2; s=$?; git checkout -- src scripts; exit $s
+revM3: node .rc/x/mutRun1604.mjs M3; s=$?; git checkout -- src scripts; exit $s
+revM5: node .rc/x/mutRun1604.mjs M5; s=$?; git checkout -- src scripts; exit $s
+revM7: node .rc/x/mutRun1604.mjs M7; s=$?; git checkout -- src scripts; exit $s
+fixM3n: node .rc/x/mutFix1604.mjs M3n; s=$?; git checkout -- src scripts; exit $s
+fixM3e: node .rc/x/mutFix1604.mjs M3e; s=$?; git checkout -- src scripts; exit $s
+fixM9: node .rc/x/mutFix1604.mjs M9; s=$?; git checkout -- src scripts; exit $s
+fixM8: node .rc/x/mutFix1604.mjs M8; s=$?; git checkout -- src scripts; exit $s
