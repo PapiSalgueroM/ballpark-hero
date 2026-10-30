@@ -1,0 +1,3 @@
+899 /home/runner/work/_temp/rc-out/full/playTycoonGearFit.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playTycoonGearFit.mjs/stderr.log
+899 total

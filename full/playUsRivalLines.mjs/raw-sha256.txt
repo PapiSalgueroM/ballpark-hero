@@ -1,0 +1,2 @@
+dea0d2dafc3c051745ffd5fca4cd1c450042eece2bfa40a388b75314ab95d383  /home/runner/work/_temp/rc-out/full/playUsRivalLines.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playUsRivalLines.mjs/stderr.log

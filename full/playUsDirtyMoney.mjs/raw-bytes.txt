@@ -1,0 +1,3 @@
+638 /home/runner/work/_temp/rc-out/full/playUsDirtyMoney.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playUsDirtyMoney.mjs/stderr.log
+638 total

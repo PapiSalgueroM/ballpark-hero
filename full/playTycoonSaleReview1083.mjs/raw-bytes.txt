@@ -1,0 +1,3 @@
+1199 /home/runner/work/_temp/rc-out/full/playTycoonSaleReview1083.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playTycoonSaleReview1083.mjs/stderr.log
+1199 total

@@ -1,0 +1,2 @@
+7c0f118b39a1538b785ce4ba60d0d6b09a9b0c2144934bfdff710a59c55afe70  /home/runner/work/_temp/rc-out/full/playUsSeasonCentre.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playUsSeasonCentre.mjs/stderr.log

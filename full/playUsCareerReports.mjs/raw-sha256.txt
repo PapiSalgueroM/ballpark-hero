@@ -1,0 +1,2 @@
+104f611d9ee8bd721c3adbf1ab82b790e45bef5a488e69bdf9426bfc90ea6051  /home/runner/work/_temp/rc-out/full/playUsCareerReports.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playUsCareerReports.mjs/stderr.log

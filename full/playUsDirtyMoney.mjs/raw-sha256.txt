@@ -1,0 +1,2 @@
+4659e9b410308708beed952cd58166d463b41e3ff7342f99409c479e170d829d  /home/runner/work/_temp/rc-out/full/playUsDirtyMoney.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playUsDirtyMoney.mjs/stderr.log

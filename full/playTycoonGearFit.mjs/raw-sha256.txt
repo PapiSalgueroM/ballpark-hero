@@ -1,0 +1,2 @@
+4f5148f7204ff71001384e5f137852d94508f024da141a1e4a2282d8889db3c7  /home/runner/work/_temp/rc-out/full/playTycoonGearFit.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playTycoonGearFit.mjs/stderr.log
