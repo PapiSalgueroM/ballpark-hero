@@ -1,0 +1,69 @@
+1) The window rule against the verified dates, and a played season firing each window once, in order
+   2 verified windows held to the rule
+   Arsenal 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Inter Miami 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   LA Galaxy 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Toronto FC 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Seattle Sounders 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Atlanta United 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Columbus Crew 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Liverpool 2020: fired 2020-sep, 2020-oct, 2020-nov, 2021-mar
+   Juventus 2020: fired 2020-sep, 2020-oct, 2020-nov, 2021-mar
+   Lille 2020: fired 2020-sep, 2020-oct, 2020-nov, 2021-mar
+   10 seasons on the live path: 33 breaks between the right two matches of mine, 32 notes naming everyone, 0 where the match they come back for kicked off in the same play as the note
+   2 late 2020-21 season(s) whose first window starts before the opener
+2) Harder: the match they come back for, against the same save with call ups off (6 squads x 18 seeds)
+   Arsenal          53 breaks, 17.83 called a break, gap 2.57
+   Manchester City  54 breaks, 16.89 called a break, gap 3.17
+   Real Madrid      54 breaks, 18.74 called a break, gap 2.01
+   Liverpool        53 breaks, 18.83 called a break, gap 1.80
+   Chelsea          54 breaks, 12.83 called a break, gap 1.19
+   Bayern Munich    54 breaks, 16.74 called a break, gap 2.60
+   322 breaks: the match after is 2.22 strength weaker on average (floor 1.5)
+   sepoct  108 breaks, gap 3.05 (floor 2)
+   nov     108 breaks, gap 2.27 (floor 1.4)
+   mar     106 breaks, gap 1.33 (floor 0.6)
+   0 breaks reached the match after in the same play as the note
+3) Resting the spent ones wins back the cost over the two matches the trip touches
+   Arsenal          cost 3.26, rest wins back 2.34 (0.72); now 0.78, next 1.56
+   Manchester City  cost 4.23, rest wins back 1.13 (0.27); now 0.18, next 0.95
+   Real Madrid      cost 2.57, rest wins back 1.63 (0.63); now 0.07, next 1.56
+   Liverpool        cost 2.19, rest wins back 0.90 (0.41); now 0.19, next 0.71
+   Chelsea          cost 1.52, rest wins back 0.44 (0.29); now -0.07, next 0.52
+   Bayern Munich    cost 3.19, rest wins back 1.13 (0.35); now 0.00, next 1.13
+   Barcelona        cost 2.27, rest wins back 0.83 (0.37); now 0.06, next 0.77
+   PSG              cost 2.84, rest wins back 1.32 (0.46); now -0.05, next 1.37
+   Inter Milan      cost 1.90, rest wins back 1.96 (1.03); now 0.81, next 1.15
+   Juventus         cost 2.59, rest wins back 1.07 (0.41); now 0.04, next 1.03
+   Atlético Madrid  cost 3.46, rest wins back 1.85 (0.53); now 0.46, next 1.38
+   Borussia Dortmund cost 2.03, rest wins back 1.25 (0.61); now 0.37, next 0.88
+   Arsenal loses: Bruno Guimarães 53, Christos Tzolis 53, Eberechi Eze 53, Ezri Konsa 53, Jurriën Timber 53, Kai Havertz 53, Mikel Merino 53, Noni Madueke 53, Piero Hincapié 53, William Saliba 53, Bukayo Saka 52, David Raya 52, Declan Rice 52, Martin Ødegaard 52, Martín Zubimendi 52, Riccardo Calafiori 52, Viktor Gyökeres 52, Gabriel 51
+   Manchester City loses: Ayyoub Bouaddi 54, Elliot Anderson 54, Enzo Fernández 54, Erling Haaland 54, Iliman Ndiaye 54, Jérémy Doku 54, Josko Gvardiol 54, Mateo Kovacic 54, Matheus Nunes 54, Phil Foden 54, Rayan Cherki 54, Rúben Dias 54, Abdukodir Khusanov 53, Antoine Semenyo 53, Gianluigi Donnarumma 53, Marc Guéhi 53, Rayan Aït-Nouri 52
+   Real Madrid loses: Álvaro Carreras 54, Andriy Lunin 54, Arda Güler 54, Bernardo Silva 54, Brahim Díaz 54, Denzel Dumfries 54, Eduardo Camavinga 54, Ibrahima Konaté 54, Jude Bellingham 54, Rodrygo 54, Vinicius Junior 54, Yan Diomande 54, Dean Huijsen 53, Marc Cucurella 53, Trent Alexander-Arnold 53, Aurélien Tchouaméni 52, Kylian Mbappé 52, Thibaut Courtois 51, Federico Valverde 50
+   Liverpool loses: Alisson 53, Conor Bradley 53, Dominik Szoboszlai 53, Giorgi Mamardashvili 53, Hugo Ekitiké 53, Jérémy Jacquet 53, Konstantinos Tsimikas 53, Lewis Koumas 53, Ronald Araujo 53, Ryan Gravenberch 53, Virgil van Dijk 53, Wataru Endo 53, Alexander Isak 52, Bradley Barcola 52, Florian Wirtz 52, Jeremie Frimpong 52, Milos Kerkez 52, Alexis Mac Allister 51, Cody Gakpo 51
+   Chelsea loses: Emiliano Martínez 54, Emmanuel Emegha 54, Pedro Neto 54, Reece James 54, Roméo Lavia 54, Valentín Barco 54, Cole Palmer 53, Estêvão 53, Levi Colwill 53, Maxence Lacroix 53, Morgan Rogers 53, João Pedro 52, Moisés Caicedo 52
+   Bayern Munich loses: Aleksandar Pavlovic 54, Hiroki Ito 54, Ismael Saibari 54, Josip Stanisic 54, Konrad Laimer 54, Lennart Karl 54, Michael Olise 54, Serge Gnabry 54, Dayot Upamecano 53, Harry Kane 53, Jamal Musiala 53, Min-jae Kim 53, Nathaniel Brown 53, Alphonso Davies 52, Jonathan Tah 52, Joshua Kimmich 52, Luis Díaz 51
+   Barcelona loses: Andreas Christensen 54, Anthony Gordon 54, Dani Olmo 54, Eric García 54, Frenkie de Jong 54, Jules Koundé 54, Karim Adeyemi 54, Pau Cubarsí 54, Pedri 54, Rodri 54, Roony Bardghji 54, Alejandro Balde 53, Joan García 53, Fermín López 52, Raphinha 52, Lamine Yamal 50
+   PSG loses: Désiré Doué 54, Ferran Torres 54, Marquinhos 54, Matvey Safonov 54, Nuno Mendes 54, Warren Zaïre-Emery 54, Fabián Ruiz 53, Ilya Zabarnyi 53, João Neves 53, Khvicha Kvaratskhelia 53, Maghnes Akliouche 53, Vitinha 53, Willian Pacho 53, Ousmane Dembélé 52, Achraf Hakimi 50
+   Inter Milan loses: Aleksandar Stanković 52, Ange-Yoan Bonny 52, Federico Dimarco 52, Hakan Çalhanoğlu 52, Henrikh Mkhitaryan 52, Lautaro Martínez 52, Pio Esposito 52, Piotr Zielinski 52, Yann Bisseck 52, Yann Sommer 52, Marcus Thuram 51, Nicolò Barella 51, Alessandro Bastoni 50, Manuel Akanji 50, Petar Sučić 50
+   Juventus loses: Edon Zhegrova 54, Filip Kostić 54, Jérémie Boga 54, Jhon Lucumí 54, Juan Cabal 54, Kamil Grabara 54, Kerim Alajbegovic 54, Khéphren Thuram 54, Manuel Locatelli 54, Nico González 54, Weston McKennie 54, Andrea Cambiaso 53, Bremer 53, Francisco Conceição 53, Kenan Yıldız 53, Nick Woltemade 53, Pierre Kalulu 53, Guglielmo Vicario 52, Pape Matar Sarr 52
+   Atlético Madrid loses: Ademola Lookman 54, Cristian Romero 54, Dávid Hancko 54, Johnny Cardoso 54, Jonathan David 54, Julián Alvarez 54, Marcos Llorente 54, Morten Hjulmand 54, Alexander Sørloth 53, Kang-in Lee 53, Álex Baena 52, Pablo Barrios 52, Alejandro Grimaldo 50, Giuliano Simeone 50, Jan Oblak 49
+   Borussia Dortmund loses: Carney Chukwuemeka 52, Felix Nmecha 52, Giannis Konstantelias 52, Konstantinos Karetsas 52, Marcel Sabitzer 52, Nico Schlotterbeck 52, Serhou Guirassy 52, Fábio Silva 51, Joey Veerman 51, Maximilian Beier 51, Daniel Svensson 50, Gregor Kobel 50, Julian Ryerson 50, Ramy Bensebaini 50
+   pooled rest: now 0.23, next 1.08
+   share seed by seed: 1 0.54, 2 0.44, 3 0.48, 4 0.51, 5 0.41, 6 0.49, 7 0.44, 8 0.61, 9 0.54, 10 0.53, 11 0.58, 12 0.42, 13 0.43, 14 0.52, 15 0.40, 16 0.48, 17 0.56, 18 0.48; mean 0.49, sd 0.06, se 0.015 (18 seeds)
+   pooled over 12 squads: the break costs 2.68 over two matches and the rest wins back 1.32, a share of 0.49 (band 0.4 to 0.6)
+6) A rest is what plays: the rested men are out of your picked eleven, nobody fills a gap with them, picking one back plays him, and they return after the match
+   2957 men rested: 0 still played with cover on the bench, 0 still in the picked eleven; 2859 of 2859 picked back by hand played; 2859 of 2859 back in their slot after the match, 0 rests still standing after it
+4) Every man called up is known to the nationality map with that country, and no made up player goes
+   Barcelona era2015: 4 breaks (4 in the season's structure)
+   Chelsea era2005: 4 breaks (4 in the season's structure)
+   10859 call ups checked: 0 with a country the map does not give him, 0 made up men
+5) A save from before this round plays its season with no break, then gets windows from the next one
+   old save, season one: 0 plays carried a block, 0 notes, week 54 of 54
+   season two: first break 2027-sepoct fired
+   damaged block: dropped, the save played on to week 1
+7) A man who started for a country on another continent from his club comes back more tired than one who stayed on his own
+   four game window: far starters 562 cost 38.55, near starters 1506 cost 28.28
+   two game windows: far starters 1131 cost 27.80, near starters 3278 cost 18.13
+   the long trip costs 9.97 more fitness on average (floor 5)
+simCmInternationals: all green
