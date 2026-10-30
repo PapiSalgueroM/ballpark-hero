@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+ledger-make-base: git worktree add -f /tmp/base 14a9af704 >/dev/null 2>&1; node .rc/x/ledgerProbe.mjs make /tmp/base /tmp/base-saves.json
+walk: node .rc/x/walkRun1600.mjs
