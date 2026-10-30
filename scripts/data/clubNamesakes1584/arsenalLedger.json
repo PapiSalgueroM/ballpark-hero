@@ -1,0 +1,4894 @@
+{
+ "round": 1587,
+ "storedName": "Arsenal FC",
+ "namesake": "Arsenal de Sarandí",
+ "nameSources": [
+  {
+   "host": "statscrew.com",
+   "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+   "read": "2026-10-29",
+   "says": "Roster pages headed \"2010-11 Arsenal de Sarandí Roster\", club in Argentina's Primera División."
+  },
+  {
+   "host": "sofascore.com",
+   "url": "https://www.sofascore.com/team/football/arsenal-de-sarandi/3221",
+   "read": "2026-10-29",
+   "says": "Team page titled Arsenal de Sarandí, listed in Argentina (read by Round 1584, gridNamesakes.json)."
+  }
+ ],
+ "export": "arsenalMarket-2026-10-29.json",
+ "pages": "arsenalRosterPages-2026-10-29.txt",
+ "conmebol": [
+  "Argentina",
+  "Bolivia",
+  "Brazil",
+  "Chile",
+  "Colombia",
+  "Ecuador",
+  "Paraguay",
+  "Peru",
+  "Uruguay",
+  "Venezuela"
+ ],
+ "rule": "Judged: every Q2 row with a CONMEBOL nationality token, an empty nationality or Arsenal FC as a middle part (tripwire), plus every row whose man is on a fetched Arsenal de Sarandí roster (roster net). A man is name_folded plus birth year; a jump of 3 or more is another man. sarandi: two hosts on Arsenal de Sarandí and no London page. london: the reverse. held: both. pending: under two hosts. A noisy page proves the club only and never moves a span.",
+ "counts": {
+  "judgedRows": 162,
+  "men": 74,
+  "sarandi": 56,
+  "london": 18,
+  "held": 0,
+  "pending": 0,
+  "sarandiRows": 110
+ },
+ "men": [
+  {
+   "name": "Edú Gaspar",
+   "nameFolded": "edu gaspar",
+   "birthYears": [
+    1979
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    133150,
+    132619
+   ],
+   "rowYears": [
+    2004,
+    2005
+   ],
+   "span": [
+    2004,
+    2005
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "statscrew.com",
+     "espn.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2004",
+     "read": "2026-10-29",
+     "says": "2004-05 Arsenal (London) squad lists Edu Gaspar (born 1978-05-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/story/_/id/42246160/how-arsenal-handle-sporting-director-edu-shock-exit",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN article of 2024-11-07 on Arsenal's sporting director Edu: he made 127 appearances for Arsenal as a midfielder in the Invincibles squad (2003-04)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Gilberto Silva",
+   "nameFolded": "gilberto silva",
+   "birthYears": [
+    1977
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    127086,
+    126590,
+    140596,
+    140090,
+    144883
+   ],
+   "rowYears": [
+    2004,
+    2005,
+    2006,
+    2007,
+    2008
+   ],
+   "span": [
+    2004,
+    2007
+   ],
+   "yearsOutsideSpan": [
+    2008
+   ],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2006/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal (London) squad lists Gilberto Silva"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2005/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2005-06 Arsenal (London) squad lists Gilberto Silva"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2004",
+     "read": "2026-10-29",
+     "says": "2004-05 Arsenal (London) squad lists Gilberto Silva (born 1976-10-07)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal (London) squad lists Gilberto Silva (born 1976-10-07)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Cristian Llama",
+   "nameFolded": "cristian llama",
+   "birthYears": [
+    1987
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    60080
+   ],
+   "rowYears": [
+    2006
+   ],
+   "span": [
+    2004,
+    2007
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Cristian Llama (born 1986-06-26)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2006/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Cristian Ezequiel Llama"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2005",
+     "read": "2026-10-29",
+     "says": "2005-06 Arsenal de Sarandí squad lists Cristian Llama (born 1986-06-26)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2004",
+     "read": "2026-10-29",
+     "says": "2004-05 Arsenal de Sarandí squad lists Cristian Llama (born 1986-06-26)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Denílson",
+   "nameFolded": "denilson",
+   "birthYears": [
+    1989
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    140620,
+    140110,
+    144907,
+    144368,
+    145864,
+    145367
+   ],
+   "rowYears": [
+    2006,
+    2007,
+    2008,
+    2009,
+    2010,
+    2011
+   ],
+   "span": [
+    2006,
+    2007
+   ],
+   "yearsOutsideSpan": [
+    2008,
+    2009,
+    2010,
+    2011
+   ],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2006/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal (London) squad lists Denílson"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal (London) squad lists Denilson (born 1988-02-16)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Andrés San Martín",
+   "nameFolded": "andres san martin",
+   "birthYears": [
+    1979
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    140346,
+    145133
+   ],
+   "rowYears": [
+    2007,
+    2008
+   ],
+   "span": [
+    2006,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Andrés San Martín (born 1978-04-12)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Andrés San Martín"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Andrés San Martín (born 1978-04-12)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Andrés San Martín"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Andrés San Martín (born 1978-04-12)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Andrés San Martín"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Carlos Casteglione",
+   "nameFolded": "carlos casteglione",
+   "birthYears": [
+    1981
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    21772,
+    21250
+   ],
+   "rowYears": [
+    2007,
+    2008
+   ],
+   "span": [
+    2003,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Carlos Casteglione (born 1980-05-09)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Carlos Casteglione"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Carlos Casteglione (born 1980-05-09)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Carlos Casteglione"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Carlos Casteglione (born 1980-05-09)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2006/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Carlos Casteglione"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Carlos Casteglione"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2005",
+     "read": "2026-10-29",
+     "says": "2005-06 Arsenal de Sarandí squad lists Carlos Casteglione (born 1980-05-09)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2004",
+     "read": "2026-10-29",
+     "says": "2004-05 Arsenal de Sarandí squad lists Carlos Casteglione (born 1980-05-09)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2003",
+     "read": "2026-10-29",
+     "says": "2003-04 Arsenal de Sarandí squad lists Carlos Casteglione (born 1980-05-09)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Cristian Díaz",
+   "nameFolded": "cristian diaz",
+   "birthYears": [
+    1977
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    42292,
+    41335,
+    40424
+   ],
+   "rowYears": [
+    2007,
+    2008,
+    2009
+   ],
+   "span": [
+    2007,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Cristian Díaz (born 1976-05-12)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Christian Díaz"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Cristian Díaz (born 1976-05-12)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Christian Díaz"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Christian Díaz"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Darío Espínola",
+   "nameFolded": "dario espinola",
+   "birthYears": [
+    1974
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    57933,
+    57513
+   ],
+   "rowYears": [
+    2007,
+    2008
+   ],
+   "span": [
+    2003,
+    2010
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Darío Espínola (born 1973-09-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Darío Espínola"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Darío Espínola (born 1973-09-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Darío Espínola"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Darío Espínola (born 1973-09-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Darío Espínola"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Darío Espínola"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2005",
+     "read": "2026-10-29",
+     "says": "2005-06 Arsenal de Sarandí squad lists Darío Espínola (born 1973-09-15)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2004",
+     "read": "2026-10-29",
+     "says": "2004-05 Arsenal de Sarandí squad lists Darío Espínola (born 1973-09-15)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2003",
+     "read": "2026-10-29",
+     "says": "2003-04 Arsenal de Sarandí squad lists Darío Espínola (born 1973-09-15)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Diego Villar",
+   "nameFolded": "diego villar",
+   "birthYears": [
+    1982
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    93759,
+    93221
+   ],
+   "rowYears": [
+    2007,
+    2008
+   ],
+   "span": [
+    2007,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Diego Villar (born 1981-04-25)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Diego Villar (born 1981-04-25)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Diego Villar"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Gastón Filgueira",
+   "nameFolded": "gaston filgueira",
+   "birthYears": [
+    1987
+   ],
+   "nat": "Uruguay",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    42291
+   ],
+   "rowYears": [
+    2007
+   ],
+   "span": [
+    2006,
+    2008
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Gastón Filgueira (born 1986-01-08)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Gastón Filgueira (born 1986-01-08)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Gastón Filgueira"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Israel Damonte",
+   "nameFolded": "israel damonte",
+   "birthYears": [
+    1983
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    140446
+   ],
+   "rowYears": [
+    2007
+   ],
+   "span": [
+    2007,
+    2008
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Israel Damonte (born 1982-01-06)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Israel Damonte"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Javier Yacuzzi",
+   "nameFolded": "javier yacuzzi",
+   "birthYears": [
+    1980
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    42304,
+    41261,
+    40296,
+    39346
+   ],
+   "rowYears": [
+    2007,
+    2008,
+    2009,
+    2010
+   ],
+   "span": [
+    2005,
+    2010
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Javier Yacuzzi (born 1979-08-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Javier Yacuzzi"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Javier Yacuzzi (born 1979-08-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Javier Yacuzzi"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Javier Yacuzzi (born 1979-08-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Javier Yacuzzi"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Javier Yacuzzi (born 1979-08-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2006/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Javier Yacuzzi"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Javier Yacuzzi"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2005",
+     "read": "2026-10-29",
+     "says": "2005-06 Arsenal de Sarandí squad lists Javier Yacuzzi (born 1979-08-15)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Josimar Mosquera",
+   "nameFolded": "josimar mosquera",
+   "birthYears": [
+    1983
+   ],
+   "nat": "Colombia",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    21747,
+    21258
+   ],
+   "rowYears": [
+    2007,
+    2008
+   ],
+   "span": [
+    2007,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Josimar Mosquera (born 1982-10-12)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Jossimar Mosquera"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Josimar Mosquera (born 1982-10-12)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Jossimar Mosquera"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Jossimar Mosquera"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Júlio Baptista",
+   "nameFolded": "julio baptista",
+   "birthYears": [
+    1982
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    62173
+   ],
+   "rowYears": [
+    2007
+   ],
+   "span": [
+    2006,
+    2007
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "statscrew.com",
+     "espn.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal (London) squad lists Júlio Baptista (born 1981-10-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/player/bio/_/id/38643/julio-baptista",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN bio: Júlio Baptista, born 1981-10-01, Brazil; career history lists Arsenal (1 season, linked to ESPN club 359, the London club's squad pages) with Sevilla, Real Madrid, AS Roma, Málaga, Cruzeiro"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Mario Cuenca",
+   "nameFolded": "mario cuenca",
+   "birthYears": [
+    1976
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    10679,
+    10154
+   ],
+   "rowYears": [
+    2007,
+    2008
+   ],
+   "span": [
+    2006,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Mario Cuenca (born 1975-06-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Mario Cuenca"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Mario Cuenca (born 1975-06-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Mario Cuenca"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Mario Cuenca (born 1975-06-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2006/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Mario Cuenca"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Mario Cuenca"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Martín Andrizzi",
+   "nameFolded": "martin andrizzi",
+   "birthYears": [
+    1977
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    94719,
+    94238
+   ],
+   "rowYears": [
+    2007,
+    2008
+   ],
+   "span": [
+    2007,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Martín Andrizzi (born 1976-07-05)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Martín Andrizzi (born 1976-07-05)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Martín Andrizzi"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Martín Andrizzi"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Pablo Garnier",
+   "nameFolded": "pablo garnier",
+   "birthYears": [
+    1982
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    93736,
+    93239
+   ],
+   "rowYears": [
+    2007,
+    2008
+   ],
+   "span": [
+    2006,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Pablo Garnier (born 1981-02-26)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Pablo Garnier (born 1981-02-26)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Pablo Garnier"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Pablo Garnier (born 1981-02-26)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2006/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Pablo Garnier"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Pablo Garnier"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Pablo Mouche",
+   "nameFolded": "pablo mouche",
+   "birthYears": [
+    1988
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    92424
+   ],
+   "rowYears": [
+    2007
+   ],
+   "span": [
+    2006,
+    2007
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Pablo Mouche (born 1987-10-11)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://africa.espn.com/football/player/bio/_/id/90835/pablo-mouche",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN bio: Pablo Mouche, born 1987-10-11, Argentina; career history lists Arsenal Sarandi (1 season) with Boca Juniors, Kayserispor, Palmeiras, Lanús and others; no Arsenal of England"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Papu Gómez",
+   "nameFolded": "papu gomez",
+   "birthYears": [
+    1989
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    92218,
+    91711
+   ],
+   "rowYears": [
+    2007,
+    2008
+   ],
+   "span": [
+    2005,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Papu Gómez (born 1988-02-15)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Papu Gómez (born 1988-02-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Alejandro Gómez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Papu Gómez (born 1988-02-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2006/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Alejandro Gómez"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Alejandro Gómez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2005",
+     "read": "2026-10-29",
+     "says": "2005-06 Arsenal de Sarandí squad lists Papu Gómez (born 1988-02-15)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Santiago Raymonda",
+   "nameFolded": "santiago raymonda",
+   "birthYears": [
+    1980
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    62379
+   ],
+   "rowYears": [
+    2007
+   ],
+   "span": [
+    2005,
+    2008
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Santiago Raymonda (born 1979-04-03)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Santiago Raymonda (born 1979-04-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2006/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Santiago Raymonda"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Santiago Raymonda"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2005",
+     "read": "2026-10-29",
+     "says": "2005-06 Arsenal de Sarandí squad lists Santiago Raymonda (born 1979-04-03)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Sebastián Carrera",
+   "nameFolded": "sebastian carrera",
+   "birthYears": [
+    1979
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    93803,
+    93237,
+    116501
+   ],
+   "rowYears": [
+    2007,
+    2008,
+    2009
+   ],
+   "span": [
+    2007,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Sebastián Carrera (born 1978-05-25)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Sebastián Carrera"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Sebastián Carrera (born 1978-05-25)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Sebastián Carrera"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Sebastián Carrera"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Cristian Campestrini",
+   "nameFolded": "cristian campestrini",
+   "birthYears": [
+    1981
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    10380,
+    9696,
+    9130,
+    8679,
+    8196,
+    7850,
+    7355
+   ],
+   "rowYears": [
+    2008,
+    2009,
+    2010,
+    2011,
+    2012,
+    2013,
+    2014
+   ],
+   "span": [
+    2008,
+    2015
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Cristian Campestrini (born 1980-06-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Cristian Campestrini"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Cristian Campestrini (born 1980-06-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Cristian Campestrini"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Cristian Campestrini (born 1980-06-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Cristian Campestrini"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Cristian Campestrini (born 1980-06-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Cristian Campestrini"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Cristian Campestrini (born 1980-06-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Cristian Campestrini"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Cristian Campestrini (born 1980-06-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2013/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Cristian Campestrini"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2014",
+     "read": "2026-10-29",
+     "says": "2014-15 Arsenal de Sarandí squad lists Cristian Campestrini (born 1980-06-16)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Cristian Pellerano",
+   "nameFolded": "cristian pellerano",
+   "birthYears": [
+    1983
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    145125,
+    144626
+   ],
+   "rowYears": [
+    2008,
+    2009
+   ],
+   "span": [
+    2007,
+    2009
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Cristian Pellerano (born 1982-02-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Cristian Pellerano"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Cristian Pellerano (born 1982-02-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Cristian Pellerano"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Cristian Pellerano"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Federico Poggi",
+   "nameFolded": "federico poggi",
+   "birthYears": [
+    1982
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    118117,
+    117729
+   ],
+   "rowYears": [
+    2009,
+    2010
+   ],
+   "span": [
+    2008,
+    2010
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Federico Poggi (born 1981-01-10)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Federico Poggi"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Federico Poggi (born 1981-01-10)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Federico Poggi"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Luciano Leguizamón",
+   "nameFolded": "luciano leguizamon",
+   "birthYears": [
+    1983
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    126024,
+    130008,
+    129558
+   ],
+   "rowYears": [
+    2009,
+    2010,
+    2011
+   ],
+   "span": [
+    2007,
+    2013
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Luciano Leguizamón (born 1982-07-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Luciano Leguizamón"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Luciano Leguizamón (born 1982-07-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Luciano Leguizamón"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Luciano Leguizamón (born 1982-07-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Luciano Leguizamón"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Luciano Leguizamón (born 1982-07-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Luciano Leguizamón"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Luciano Leguizamón (born 1982-07-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Luciano Leguizamón"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Luciano Leguizamón (born 1982-07-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Luciano Leguizamón"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Sergio Sena",
+   "nameFolded": "sergio sena",
+   "birthYears": [
+    1983
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    116502,
+    116002,
+    114599
+   ],
+   "rowYears": [
+    2009,
+    2010,
+    2011
+   ],
+   "span": [
+    2008,
+    2012
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Sergio Sena (born 1982-08-25)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Sergio Sena"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Sergio Sena (born 1982-08-25)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Sergio Sena"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Sergio Sena (born 1982-08-25)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Sergio Sena"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Sergio Sena (born 1982-08-25)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Sergio Sena"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Cristian Álvarez",
+   "nameFolded": "cristian alvarez",
+   "birthYears": [
+    1979
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    56553,
+    56153
+   ],
+   "rowYears": [
+    2010,
+    2011
+   ],
+   "span": [
+    2009,
+    2011
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Cristian Álvarez (born 1978-01-09)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Cristian Álvarez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Cristian Álvarez (born 1978-01-09)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Cristian Álvarez"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Diego Galván",
+   "nameFolded": "diego galvan",
+   "birthYears": [
+    1983
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    116026
+   ],
+   "rowYears": [
+    2010
+   ],
+   "span": [
+    2009,
+    2010
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Diego Galván (born 1982-03-19)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Diego Galván"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Franco Jara",
+   "nameFolded": "franco jara",
+   "birthYears": [
+    1989
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    129803
+   ],
+   "rowYears": [
+    2010
+   ],
+   "span": [
+    2007,
+    2010
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Franco Jara (born 1988-07-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Franco Jara"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Franco Jara (born 1988-07-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Franco Jara"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Franco Jara (born 1988-07-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2007/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Franco Jara"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Iván Marcone",
+   "nameFolded": "ivan marcone",
+   "birthYears": [
+    1991
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    146278,
+    145658,
+    152148,
+    151649,
+    151159,
+    150610
+   ],
+   "rowYears": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015
+   ],
+   "span": [
+    2008,
+    2016
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Iván Marcone (born 1990-06-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Iván Marcone"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Iván Marcone (born 1990-06-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Iván Marcone"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Iván Marcone (born 1990-06-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Iván Marcone"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Iván Marcone (born 1990-06-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Iván Marcone"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Iván Marcone (born 1990-06-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Iván Marcone"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Iván Marcone (born 1990-06-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2013/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Iván Marcone"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2015",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Iván Marcone (born 1990-06-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2015/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Iván Marcone"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2014",
+     "read": "2026-10-29",
+     "says": "2014-15 Arsenal de Sarandí squad lists Iván Marcone (born 1990-06-03)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Mauro Óbolo",
+   "nameFolded": "mauro obolo",
+   "birthYears": [
+    1982
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    130044,
+    129543
+   ],
+   "rowYears": [
+    2010,
+    2011
+   ],
+   "span": [
+    2006,
+    2012
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Mauro Óbolo (born 1981-09-28)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Mauro Iván Obolo"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Mauro Óbolo (born 1981-09-28)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Mauro Iván Obolo"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Mauro Óbolo (born 1981-09-28)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2006/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Mauro Iván Obolo"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Mauro Óbolo (born 1981-09-28)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Guillermo Burdisso",
+   "nameFolded": "guillermo burdisso",
+   "birthYears": [
+    1989
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    19777,
+    19042
+   ],
+   "rowYears": [
+    2011,
+    2012
+   ],
+   "span": [
+    2011,
+    2013
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Guillermo Burdisso (born 1988-09-26)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Guillermo Burdisso"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Guillermo Burdisso (born 1988-09-26)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Hugo Nervo",
+   "nameFolded": "hugo nervo",
+   "birthYears": [
+    1992
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    19774,
+    19237,
+    18720,
+    18340
+   ],
+   "rowYears": [
+    2011,
+    2012,
+    2013,
+    2014
+   ],
+   "span": [
+    2008,
+    2015
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Hugo Nervo (born 1991-01-06)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Hugo Nervo"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Hugo Nervo (born 1991-01-06)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Hugo Nervo"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Hugo Nervo (born 1991-01-06)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Hugo Nervo"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Hugo Nervo (born 1991-01-06)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Hugo Nervo"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Hugo Nervo (born 1991-01-06)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Hugo Nervo"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Hugo Nervo (born 1991-01-06)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2013/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Hugo Nervo"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2014",
+     "read": "2026-10-29",
+     "says": "2014-15 Arsenal de Sarandí squad lists Hugo Nervo (born 1991-01-06)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Jorge Ortiz",
+   "nameFolded": "jorge ortiz",
+   "birthYears": [
+    1985
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    136978,
+    136539,
+    140029
+   ],
+   "rowYears": [
+    2011,
+    2012,
+    2013
+   ],
+   "span": [
+    2006,
+    2023
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Jorge Ortiz (born 1984-06-20)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Jorge Ortíz"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Jorge Ortiz (born 1984-06-20)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2006/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Jorge Ortíz"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Jorge Ortiz (born 1984-06-20)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Jorge Ortíz"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Jorge Ortiz (born 1984-06-20)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Jorge Ortíz"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Jorge Ortiz (born 1984-06-20)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2020/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal de Sarandí squad lists Jorge Ortiz"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2021",
+     "read": "2026-10-29",
+     "says": "2021-22 Arsenal de Sarandí squad lists Jorge Ortiz (born 1984-06-20)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2022",
+     "read": "2026-10-29",
+     "says": "2022-23 Arsenal de Sarandí squad lists Jorge Ortiz (born 1984-06-20)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Juan Pablo Caffa",
+   "nameFolded": "juan pablo caffa",
+   "birthYears": [
+    1985
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    115534,
+    115061
+   ],
+   "rowYears": [
+    2011,
+    2012
+   ],
+   "span": [
+    2005,
+    2013
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Juan Caffa (born 1984-09-30)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Juan Caffa"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2006",
+     "read": "2026-10-29",
+     "says": "2006-07 Arsenal de Sarandí squad lists Juan Caffa (born 1984-09-30)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Juan Caffa (born 1984-09-30)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Juan Caffa"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Juan Caffa (born 1984-09-30)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2005",
+     "read": "2026-10-29",
+     "says": "2005-06 Arsenal de Sarandí squad lists Juan Caffa (born 1984-09-30)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Lisandro López",
+   "nameFolded": "lisandro lopez",
+   "birthYears": [
+    1990
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    19508,
+    18920,
+    18526
+   ],
+   "rowYears": [
+    2011,
+    2012,
+    2013
+   ],
+   "span": [
+    2010,
+    2014
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Lisandro López (born 1989-09-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Lisandro López"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Lisandro López (born 1989-09-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Lisandro López"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Lisandro López (born 1989-09-01)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Lisandro López"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Lisandro López (born 1989-09-01)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Marcos Aguirre",
+   "nameFolded": "marcos aguirre",
+   "birthYears": [
+    1985
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    114581
+   ],
+   "rowYears": [
+    2011
+   ],
+   "span": [
+    2010,
+    2011
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Marcos Aguirre (born 1984-03-30)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Marcos Sebastian Aguirre"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "André Santos",
+   "nameFolded": "andre santos",
+   "birthYears": [
+    1984
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    37599,
+    37137
+   ],
+   "rowYears": [
+    2012,
+    2013
+   ],
+   "span": [
+    2011,
+    2012
+   ],
+   "yearsOutsideSpan": [
+    2013
+   ],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2011/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal (London) squad lists André Santos"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal (London) squad lists André Santos (born 1983-03-08)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Carlos Carbonero",
+   "nameFolded": "carlos carbonero",
+   "birthYears": [
+    1991
+   ],
+   "nat": "Colombia",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    63964,
+    64944
+   ],
+   "rowYears": [
+    2012,
+    2013
+   ],
+   "span": [
+    2011,
+    2014
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Carlos Carbonero (born 1990-07-25)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Carlos Carbonero"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Carlos Carbonero (born 1990-07-25)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Carlos Carbonero"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Carlos Carbonero (born 1990-07-25)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Nicolás Aguirre",
+   "nameFolded": "nicolas aguirre",
+   "birthYears": [
+    1991
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    64143,
+    65119
+   ],
+   "rowYears": [
+    2012,
+    2013
+   ],
+   "span": [
+    2008,
+    2015
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Nicolás Aguirre (born 1990-06-27)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Nicolás Aguirre"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Nicolás Aguirre (born 1990-06-27)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Nicolás Aguirre"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Nicolás Aguirre (born 1990-06-27)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Nicolás Aguirre"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Nicolás Aguirre (born 1990-06-27)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Nicolás Aguirre"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Nicolás Aguirre (born 1990-06-27)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2013/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Nicolás Aguirre"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2014",
+     "read": "2026-10-29",
+     "says": "2014-15 Arsenal de Sarandí squad lists Nicolás Aguirre (born 1990-06-27)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Damián Pérez",
+   "nameFolded": "damian perez",
+   "birthYears": [
+    1989
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    37543,
+    36563,
+    36012
+   ],
+   "rowYears": [
+    2013,
+    2014,
+    2015
+   ],
+   "span": [
+    2007,
+    2023
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2010",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Damián Pérez (born 1988-12-22)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2010/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2010-11 Arsenal de Sarandí squad lists Damián Pérez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2009",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Damián Pérez (born 1988-12-22)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2009/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2009-10 Arsenal de Sarandí squad lists Damián Pérez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2008",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Damián Pérez (born 1988-12-22)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2008/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2008-09 Arsenal de Sarandí squad lists Damián Pérez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2007",
+     "read": "2026-10-29",
+     "says": "2007-08 Arsenal de Sarandí squad lists Damián Pérez (born 1988-12-22)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2011",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Damián Pérez (born 1988-12-22)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2011/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal de Sarandí squad lists Damián Pérez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Damián Pérez (born 1988-12-22)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Damián Pérez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Damián Pérez (born 1988-12-22)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2013/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Damián Pérez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2015",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Damián Pérez (born 1988-12-22)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2022",
+     "read": "2026-10-29",
+     "says": "2022-23 Arsenal de Sarandí squad lists Damián Pérez (born 1988-12-22)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2014",
+     "read": "2026-10-29",
+     "says": "2014-15 Arsenal de Sarandí squad lists Damián Pérez (born 1988-12-22)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Martín Rolle",
+   "nameFolded": "martin rolle",
+   "birthYears": [
+    1986
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    65076
+   ],
+   "rowYears": [
+    2013
+   ],
+   "span": [
+    2012,
+    2015
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Martín Rolle (born 1985-02-02)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2012/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: 2012-13 Arsenal de Sarandí squad lists Martín Rolle"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Martín Rolle (born 1985-02-02)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2013/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Martín Rolle"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2014",
+     "read": "2026-10-29",
+     "says": "2014-15 Arsenal de Sarandí squad lists Martín Rolle (born 1985-02-02)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Mauricio Sperduti",
+   "nameFolded": "mauricio sperduti",
+   "birthYears": [
+    1987
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    86895,
+    86048
+   ],
+   "rowYears": [
+    2013,
+    2014
+   ],
+   "span": [
+    2012,
+    2015
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Mauricio Sperduti (born 1986-02-16)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Mauricio Sperduti (born 1986-02-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2013/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Mauricio Sperduti"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2014",
+     "read": "2026-10-29",
+     "says": "2014-15 Arsenal de Sarandí squad lists Mauricio Sperduti (born 1986-02-16)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Franco Zuculini",
+   "nameFolded": "franco zuculini",
+   "birthYears": [
+    1991
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    139499
+   ],
+   "rowYears": [
+    2014
+   ],
+   "span": [
+    2013,
+    2015
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Franco Zuculini (born 1990-09-05)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2013/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Franco Zuculini"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2014",
+     "read": "2026-10-29",
+     "says": "2014-15 Arsenal de Sarandí squad lists Franco Zuculini (born 1990-09-05)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Ramiro Carrera",
+   "nameFolded": "ramiro carrera",
+   "birthYears": [
+    1994
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    112155,
+    110670,
+    110173
+   ],
+   "rowYears": [
+    2014,
+    2015,
+    2016
+   ],
+   "span": [
+    2012,
+    2018
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2012",
+     "read": "2026-10-29",
+     "says": "2012-13 Arsenal de Sarandí squad lists Ramiro Carrera (born 1993-10-24)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2013",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Ramiro Carrera (born 1993-10-24)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2013/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2013-14 Arsenal de Sarandí squad lists Ramiro Carrera"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2015",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Ramiro Carrera (born 1993-10-24)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2015/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Ramiro Carrera"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Ramiro Carrera (born 1993-10-24)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2016/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Ramiro Carrera"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2017",
+     "read": "2026-10-29",
+     "says": "2017-18 Arsenal de Sarandí squad lists Ramiro Carrera (born 1993-10-24)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2014",
+     "read": "2026-10-29",
+     "says": "2014-15 Arsenal de Sarandí squad lists Ramiro Carrera (born 1993-10-24)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Alexis Sánchez",
+   "nameFolded": "alexis sanchez",
+   "birthYears": [
+    1989
+   ],
+   "nat": "Chile",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    142071,
+    147819,
+    147319,
+    154294
+   ],
+   "rowYears": [
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "span": [
+    2016,
+    2017
+   ],
+   "yearsOutsideSpan": [
+    2015,
+    2018
+   ],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2016/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal (London) squad lists Alexis Sánchez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal (London) squad lists Alexis Sánchez (born 1988-12-19)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Claudio Corvalán",
+   "nameFolded": "claudio corvalan",
+   "birthYears": [
+    1990
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    36051
+   ],
+   "rowYears": [
+    2015
+   ],
+   "span": [
+    2015,
+    2019
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2015",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Claudio Corvalán (born 1989-03-23)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2015/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Claudio Corvalán"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Claudio Corvalán (born 1989-03-23)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2016/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Claudio Corvalán"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2017",
+     "read": "2026-10-29",
+     "says": "2017-18 Arsenal de Sarandí squad lists Claudio Corvalán (born 1989-03-23)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2017/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2017-18 Arsenal de Sarandí squad lists Claudio Corvalán"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2018",
+     "read": "2026-10-29",
+     "says": "2018-19 Arsenal de Sarandí squad lists Claudio Corvalán (born 1989-03-23)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "David Ospina",
+   "nameFolded": "david ospina",
+   "birthYears": [
+    1989
+   ],
+   "nat": "Colombia",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    6436,
+    17441,
+    16957,
+    16502
+   ],
+   "rowYears": [
+    2015,
+    2016,
+    2017,
+    2018
+   ],
+   "span": [
+    2016,
+    2017
+   ],
+   "yearsOutsideSpan": [
+    2015,
+    2018
+   ],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2016/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal (London) squad lists David Ospina"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal (London) squad lists David Ospina (born 1988-08-31)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Esteban Andrada",
+   "nameFolded": "esteban andrada",
+   "birthYears": [
+    1992
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    6876
+   ],
+   "rowYears": [
+    2015
+   ],
+   "span": [
+    2014,
+    2016
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2015",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Esteban Andrada (born 1991-01-26)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2015/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Esteban Andrada"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2014",
+     "read": "2026-10-29",
+     "says": "2014-15 Arsenal de Sarandí squad lists Esteban Andrada (born 1991-01-26)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Ezequiel Ruiz",
+   "nameFolded": "ezequiel ruiz",
+   "birthYears": [
+    1996
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    142270,
+    147983
+   ],
+   "rowYears": [
+    2015,
+    2016
+   ],
+   "span": [
+    2015,
+    2017
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2015",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Ezequiel Ruíz (born 1995-09-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2015/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Ezequiel Ruíz"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Ezequiel Ruíz (born 1995-09-16)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Fabián Muñoz",
+   "nameFolded": "fabian munoz",
+   "birthYears": [
+    1992
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    83974
+   ],
+   "rowYears": [
+    2015
+   ],
+   "span": [
+    2015,
+    2016
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2015",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Fabián Muñoz (born 1991-11-03)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2015/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Fabian Muñoz"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Matías Campos Toro",
+   "nameFolded": "matias campos toro",
+   "birthYears": [
+    1990
+   ],
+   "nat": "Chile",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    36009
+   ],
+   "rowYears": [
+    2015
+   ],
+   "span": [
+    2015,
+    2016
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2015",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Matías Daniel Campos Toro (born 1989-06-22)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2015/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2015-16 Arsenal de Sarandí squad lists Matías Campos"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Emiliano Martínez",
+   "nameFolded": "emiliano martinez",
+   "birthYears": [
+    1993
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    17648,
+    17253,
+    15424
+   ],
+   "rowYears": [
+    2016,
+    2017,
+    2020
+   ],
+   "span": [
+    2011,
+    2021
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2019/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal (London) squad lists Emiliano Martínez"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2016/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal (London) squad lists Emiliano Martínez"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2011/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2011-12 Arsenal (London) squad lists Emiliano Martínez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal (London) squad lists Emiliano Martínez (born 1992-09-02)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2019",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal (London) squad lists Emiliano Martínez (born 1992-09-02)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2020",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal (London) squad lists Emiliano Martínez (born 1992-09-02)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Gabriel Paulista",
+   "nameFolded": "gabriel paulista",
+   "birthYears": [
+    1991
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    28244,
+    27760
+   ],
+   "rowYears": [
+    2016,
+    2017
+   ],
+   "span": [
+    2016,
+    2017
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2016/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal (London) squad lists Gabriel Paulista"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal (London) squad lists Gabriel Paulista (born 1990-11-26)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Gonzalo Bazán",
+   "nameFolded": "gonzalo bazan",
+   "birthYears": [
+    1990
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    111263,
+    109938
+   ],
+   "rowYears": [
+    2016,
+    2017
+   ],
+   "span": [
+    2016,
+    2018
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Gonzalo Bazán (born 1989-05-05)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2017",
+     "read": "2026-10-29",
+     "says": "2017-18 Arsenal de Sarandí squad lists Gonzalo Bazán (born 1989-05-05)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://africa.espn.com/football/player/bio/_/id/200340/gonzalo-bazan",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN bio: Gonzalo Bazán, born 1989-05-05, Argentina; career history lists Arsenal Sarandi (2 seasons) among Chacarita Juniors, Guillermo Brown, Platense, Gimnasia (Mendoza), Sarmiento (Junín), Ferro Carril Oeste, Atlético Tucumán; no Arsenal of England"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Mariano Barbieri",
+   "nameFolded": "mariano barbieri",
+   "birthYears": [
+    1991
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    82560
+   ],
+   "rowYears": [
+    2016
+   ],
+   "span": [
+    2016,
+    2017
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Mariano Barbieri (born 1990-11-29)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://africa.espn.com/football/player/bio/_/id/142135/mariano-barbieri",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN bio: Mariano Barbieri, born 1990-11-29, Argentina; career history lists Arsenal Sarandi (1 season) with Flandria, Deportivo Morón, Defensa y Justicia, Belgrano and others; no Arsenal of England"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Juan Brunetta",
+   "nameFolded": "juan brunetta",
+   "birthYears": [
+    1998
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    67010
+   ],
+   "rowYears": [
+    2017
+   ],
+   "span": [
+    2016,
+    2018
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Juan Brunetta (born 1997-05-12)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2016/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Juan Brunetta"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2017",
+     "read": "2026-10-29",
+     "says": "2017-18 Arsenal de Sarandí squad lists Juan Brunetta (born 1997-05-12)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Leandro Marín",
+   "nameFolded": "leandro marin",
+   "birthYears": [
+    1993
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    54515
+   ],
+   "rowYears": [
+    2017
+   ],
+   "span": [
+    2016,
+    2018
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2016",
+     "read": "2026-10-29",
+     "says": "2016-17 Arsenal de Sarandí squad lists Leandro Marín (born 1992-01-22)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2017",
+     "read": "2026-10-29",
+     "says": "2017-18 Arsenal de Sarandí squad lists Leandro Marín (born 1992-01-22)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://africa.espn.com/football/player/bio/_/id/195650/leandro-marin",
+     "read": "2026-10-29",
+     "says": "club only, season not trusted: ESPN bio: Leandro Marín, born 1992-01-22, Argentina; career history lists Arsenal Sarandi (2 seasons) with Patronato, Lausanne Sports, Tigre and Boca Juniors; no Arsenal of England"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Gabriel Alanís",
+   "nameFolded": "gabriel alanis",
+   "birthYears": [
+    1995
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    109567
+   ],
+   "rowYears": [
+    2018
+   ],
+   "span": [
+    2017,
+    2018
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2017",
+     "read": "2026-10-29",
+     "says": "2017-18 Arsenal de Sarandí squad lists Gabriel Alanís (born 1994-03-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2017/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2017-18 Arsenal de Sarandí squad lists Gabriel Alanís"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Gabriel Martinelli",
+   "nameFolded": "gabriel martinelli",
+   "birthYears": [
+    2002
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    78286,
+    77805,
+    103068,
+    102609,
+    100600,
+    100103,
+    99611
+   ],
+   "rowYears": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ],
+   "span": [
+    2019,
+    2026
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2025/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2025-26 Arsenal (London) squad lists Gabriel Martinelli"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2024/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2024-25 Arsenal (London) squad lists Gabriel Martinelli"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2020/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal (London) squad lists Gabriel Martinelli"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2019/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal (London) squad lists Gabriel Martinelli"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2019",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal (London) squad lists Gabriel Martinelli (born 2001-06-18)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2020",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal (London) squad lists Gabriel Martinelli (born 2001-06-18)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2022",
+     "read": "2026-10-29",
+     "says": "2022-23 Arsenal (London) squad lists Gabriel Martinelli (born 2001-06-18)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Lucas Torreira",
+   "nameFolded": "lucas torreira",
+   "birthYears": [
+    1997
+   ],
+   "nat": "Uruguay",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    161050,
+    168510
+   ],
+   "rowYears": [
+    2019,
+    2020
+   ],
+   "span": [
+    2019,
+    2020
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2019/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal (London) squad lists Lucas Torreira"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2019",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal (London) squad lists Lucas Torreira (born 1996-02-11)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Joel Soñora",
+   "nameFolded": "joel sonora",
+   "birthYears": [
+    1997
+   ],
+   "nat": "United States",
+   "nets": [
+    "roster"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    67755
+   ],
+   "rowYears": [
+    2020
+   ],
+   "span": [
+    2019,
+    2021
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2019",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal de Sarandí squad lists Joel Soñora (born 1996-09-15)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2019/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal de Sarandí squad lists Joel Soñora"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2020",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal de Sarandí squad lists Joel Soñora (born 1996-09-15)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Nicolás Giménez",
+   "nameFolded": "nicolas gimenez",
+   "birthYears": [
+    1997
+   ],
+   "nat": "United Arab Emirates",
+   "nets": [
+    "roster"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    67673
+   ],
+   "rowYears": [
+    2020
+   ],
+   "span": [
+    2019,
+    2021
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2019",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal de Sarandí squad lists Nicolás Giménez (born 1996-01-16)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2019/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal de Sarandí squad lists Nicolás Gimenez"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2020",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal de Sarandí squad lists Nicolás Giménez (born 1996-01-16)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "David Luiz",
+   "nameFolded": "david luiz",
+   "birthYears": [
+    1988
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    26183
+   ],
+   "rowYears": [
+    2021
+   ],
+   "span": [
+    2019,
+    2021
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2020/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal (London) squad lists David Luiz"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2019/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal (London) squad lists David Luiz"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2019",
+     "read": "2026-10-29",
+     "says": "2019-20 Arsenal (London) squad lists David Luiz (born 1987-04-22)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2020",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal (London) squad lists David Luiz (born 1987-04-22)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Gabriel",
+   "nameFolded": "gabriel",
+   "birthYears": [
+    1998
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    25857,
+    25323,
+    24810,
+    24304,
+    23805,
+    17903
+   ],
+   "rowYears": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+   ],
+   "span": [
+    2020,
+    2027
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com",
+     "fotmob.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2025/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2025-26 Arsenal (London) squad lists Gabriel Magalhães"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2026/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2026-27 Arsenal (London) squad lists Gabriel Magalhães"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2024/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2024-25 Arsenal (London) squad lists Gabriel Magalhães"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2020/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal (London) squad lists Gabriel Magalhães"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2020",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal (London) squad lists Gabriel (born 1997-12-19)"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2022",
+     "read": "2026-10-29",
+     "says": "2022-23 Arsenal (London) squad lists Gabriel (born 1997-12-19)"
+    },
+    {
+     "host": "fotmob.com",
+     "url": "https://www.fotmob.com/teams/9825/squad/arsenal-fc",
+     "read": "2026-10-29",
+     "says": "2026-2027 Arsenal (London) squad lists Gabriel"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Ramiro Luna",
+   "nameFolded": "ramiro luna",
+   "birthYears": [
+    1996
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    121343
+   ],
+   "rowYears": [
+    2021
+   ],
+   "span": [
+    2020,
+    2022
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2020",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal de Sarandí squad lists Ramiro Luna (born 1995-07-21)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2020/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal de Sarandí squad lists Ramiro Luna"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2021",
+     "read": "2026-10-29",
+     "says": "2021-22 Arsenal de Sarandí squad lists Ramiro Luna (born 1995-07-21)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Willian",
+   "nameFolded": "willian",
+   "birthYears": [
+    1989
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    103117
+   ],
+   "rowYears": [
+    2021
+   ],
+   "span": [
+    2020,
+    2021
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2020/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal (London) squad lists Willian"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2020",
+     "read": "2026-10-29",
+     "says": "2020-21 Arsenal (London) squad lists Willian (born 1988-08-09)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Gabriel Jesus",
+   "nameFolded": "gabriel jesus",
+   "birthYears": [
+    1998
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    157925,
+    166780,
+    166330
+   ],
+   "rowYears": [
+    2023,
+    2024,
+    2025
+   ],
+   "span": [
+    2022,
+    2026
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "statscrew.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2025/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2025-26 Arsenal (London) squad lists Gabriel Jesus"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2024/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2024-25 Arsenal (London) squad lists Gabriel Jesus"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSFC764/y-2022",
+     "read": "2026-10-29",
+     "says": "2022-23 Arsenal (London) squad lists Gabriel Jesus (born 1997-04-03)"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Lautaro Guzmán",
+   "nameFolded": "lautaro guzman",
+   "birthYears": [
+    2001
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    102537
+   ],
+   "rowYears": [
+    2023
+   ],
+   "span": [
+    2023,
+    2025
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2023",
+     "read": "2026-10-29",
+     "says": "2023-24 Arsenal de Sarandí squad lists Lautaro Guzmán (born 2000-01-18)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2023/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2023-24 Arsenal de Sarandí squad lists Lautaro Guzmán"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2024/league/ARG.2",
+     "read": "2026-10-29",
+     "says": "2024-25 Arsenal de Sarandí squad lists Lautaro Guzmán"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Lucas Souto",
+   "nameFolded": "lucas souto",
+   "birthYears": [
+    1999
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    47674
+   ],
+   "rowYears": [
+    2023
+   ],
+   "span": [
+    2023,
+    2024
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "statscrew.com",
+     "espn.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/roster/t-ARSSA760/y-2023",
+     "read": "2026-10-29",
+     "says": "2023-24 Arsenal de Sarandí squad lists Lucas Souto (born 1998-10-11)"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2023/league/ARG.1",
+     "read": "2026-10-29",
+     "says": "2023-24 Arsenal de Sarandí squad lists Lucas Souto"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Neto",
+   "nameFolded": "neto",
+   "birthYears": [
+    1990
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    3198
+   ],
+   "rowYears": [
+    2025
+   ],
+   "span": [
+    2024,
+    2025
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "fotmob.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2024/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2024-25 Arsenal (London) squad lists Neto"
+    },
+    {
+     "host": "fotmob.com",
+     "url": "https://www.fotmob.com/players/176186/neto",
+     "read": "2026-10-29",
+     "says": "fotmob: Neto, Brazilian goalkeeper born 1989-07-19; senior career shows Arsenal on loan from Bournemouth, Aug 2024 to Jun 2025"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Valentín Serrano",
+   "nameFolded": "valentin serrano",
+   "birthYears": [
+    2005,
+    2007
+   ],
+   "nat": "Argentina",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "sarandi",
+   "rows": [
+    125364,
+    121827
+   ],
+   "rowYears": [
+    2025,
+    2026
+   ],
+   "span": [
+    2024,
+    2026
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [
+     "espn.com",
+     "soccerway.com"
+    ],
+    "london": []
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2635/season/2024/league/ARG.2",
+     "read": "2026-10-29",
+     "says": "2024-25 Arsenal de Sarandí squad lists Valentín Serrano"
+    },
+    {
+     "host": "soccerway.com",
+     "url": "https://es.soccerway.com/jugador/serrano-valentin/bFKowHbJ",
+     "read": "2026-10-29",
+     "says": "born 2004-02-23, Argentina: league seasons 2024 and 2025 at Arsenal Sarandí (Primera Nacional), 2026 at Arsenal Sarandí (Primera B) and then Acassuso; no Arsenal of England"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Bruno Guimarães",
+   "nameFolded": "bruno guimaraes",
+   "birthYears": [
+    1998
+   ],
+   "nat": "Brazil",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    162548
+   ],
+   "rowYears": [
+    2026
+   ],
+   "span": [
+    2026,
+    2027
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "fotmob.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2026/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2026-27 Arsenal (London) squad lists Bruno Guimarães"
+    },
+    {
+     "host": "fotmob.com",
+     "url": "https://www.fotmob.com/teams/9825/squad/arsenal-fc",
+     "read": "2026-10-29",
+     "says": "2026-2027 Arsenal (London) squad lists Bruno Guimarães"
+    }
+   ],
+   "dobMismatch": []
+  },
+  {
+   "name": "Piero Hincapié",
+   "nameFolded": "piero hincapie",
+   "birthYears": [
+    2003
+   ],
+   "nat": "Ecuador",
+   "nets": [
+    "conmebol"
+   ],
+   "verdict": "london",
+   "rows": [
+    17917
+   ],
+   "rowYears": [
+    2026
+   ],
+   "span": [
+    2025,
+    2027
+   ],
+   "yearsOutsideSpan": [],
+   "hosts": {
+    "sarandi": [],
+    "london": [
+     "espn.com",
+     "fotmob.com"
+    ]
+   },
+   "sources": [
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2025/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2025-26 Arsenal (London) squad lists Piero Hincapié"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/359/season/2026/league/ENG.1",
+     "read": "2026-10-29",
+     "says": "2026-27 Arsenal (London) squad lists Piero Hincapié"
+    },
+    {
+     "host": "fotmob.com",
+     "url": "https://www.fotmob.com/teams/9825/squad/arsenal-fc",
+     "read": "2026-10-29",
+     "says": "2026-2027 Arsenal (London) squad lists Piero Hincapié"
+    }
+   ],
+   "dobMismatch": []
+  }
+ ]
+}
