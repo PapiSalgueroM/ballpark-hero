@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+oldLedger: node scripts/simCmOldLedger.mjs
+oldLedger-exact: CM_OLD_LEDGER_CONTROL=exact node scripts/simCmOldLedger.mjs
+vitest-ledger: node_modules/.bin/vitest run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerWorldMoves.test.ts src/lib/clubManagerWorldMovesNamesakes.test.ts src/lib/clubManagerAdoption.test.ts src/test/clubManagerLoanPlanIntegration.test.ts --testTimeout=300000 --hookTimeout=120000
+unseeded: node scripts/simCmUnseededWorld.mjs
+oldCareers: node scripts/simCmOldCareersWorld.mjs
+worldMoves: node scripts/simCmWorldMoves.mjs
+ledgerJourney: node scripts/simCmLedgerJourney.mjs
+clubDetail: node scripts/simClubDetailCurrentRoster.mjs
+ledgerBound: node scripts/simCmLedgerBound.mjs

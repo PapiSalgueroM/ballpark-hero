@@ -1,0 +1,21 @@
+simCmOldLedger: base 14a9af704
+section 1: 454 clubs, 0 namesake pairs of one position born within a year
+made on base: Everton bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: Everton, 5 records, 5 moves, 0 problems
+  FAIL 2: Everton: the loaded career saves back to a different string (60559 to 61728)
+  FAIL 4: Everton: no man of the day one squad whose age moved could be sold (0 candidates)
+  section 3 season two: Everton, 13 records, 13 moves, 0 problems
+made on base: AC Milan bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: AC Milan, 6 records, 6 moves, 0 problems
+  FAIL 2: AC Milan: the loaded career saves back to a different string (61313 to 62476)
+  FAIL 4: AC Milan: no man of the day one squad whose age moved could be sold (0 candidates)
+  section 3 season two: AC Milan, 17 records, 17 moves, 0 problems
+made on base: Bayern Munich bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: Bayern Munich, 6 records, 6 moves, 0 problems
+  FAIL 2: Bayern Munich: the loaded career saves back to a different string (62553 to 63718)
+  FAIL 4: Bayern Munich: no man of the day one squad whose age moved could be sold (0 candidates)
+  section 3 season two: Bayern Munich, 14 records, 14 moves, 0 problems
+section 5: a new Everton career, ledger curve 2, near false
+  section 5 new: Everton, 5 records, 5 moves, 0 problems
+simCmOldLedger: 17 ledger moves loaded, 0 sales, 6 failures
+simCmOldLedger: FAIL

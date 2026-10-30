@@ -1,0 +1,49 @@
+simCmOldLedger: base 14a9af704, control exact
+section 1: 454 clubs, 0 namesake pairs of one position born within a year
+made on base: Everton bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: Everton, 5 records, 5 moves, 3 problems
+     Amadou Onana still at Aston Villa (owned to Sunderland, born 2001)
+     Pedro Neto still at Chelsea (owned to Tottenham, born 2001)
+     Federico Valverde still at Real Madrid (owned to Chelsea, born 1999)
+  FAIL 2: Everton: 3 problems on load
+  FAIL 2: Everton: the loaded career saves back to a different string (60559 to 61728)
+  FAIL 4: Everton: no man of the day one squad whose age moved could be sold (0 candidates)
+  section 3 season two: Everton, 10 records, 10 moves, 3 problems
+     Amadou Onana still at Aston Villa (owned to Sunderland, born 2001)
+     Pedro Neto still at Chelsea (owned to Tottenham, born 2001)
+     Federico Valverde still at Real Madrid (owned to Chelsea, born 1999)
+  FAIL 3: Everton: 3 problems in season two
+made on base: AC Milan bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: AC Milan, 6 records, 6 moves, 4 problems
+     Eberechi Eze still at Arsenal (owned to Inter Milan, born 1999)
+     Aleksandar Pavlovic still at Bayern Munich (owned to Inter Milan, born 2005)
+     Gianluigi Donnarumma still at Manchester City (owned to Liverpool, born 2000)
+     Phil Foden still at Manchester City (owned to Bayern Munich, born 2001)
+  FAIL 2: AC Milan: 4 problems on load
+  FAIL 2: AC Milan: the loaded career saves back to a different string (61313 to 62476)
+  FAIL 4: AC Milan: no man of the day one squad whose age moved could be sold (0 candidates)
+  section 3 season two: AC Milan, 10 records, 10 moves, 4 problems
+     Eberechi Eze still at Arsenal (owned to Inter Milan, born 1999)
+     Aleksandar Pavlovic still at Bayern Munich (owned to Inter Milan, born 2005)
+     Gianluigi Donnarumma still at Manchester City (owned to Liverpool, born 2000)
+     Phil Foden still at Manchester City (owned to Bayern Munich, born 2001)
+  FAIL 3: AC Milan: 4 problems in season two
+made on base: Bayern Munich bought Aleksey Gritsaenko from Rubin Kazan
+  section 2 loaded: Bayern Munich, 6 records, 6 moves, 4 problems
+     Adam Wharton still at Crystal Palace (owned to Arsenal, born 2005)
+     Kobbie Mainoo still at Manchester United (owned to Stuttgart, born 2006)
+     Elliot Anderson still at Manchester City (owned to Bayer Leverkusen, born 2003)
+     Can Uzun still at Eintracht Frankfurt (owned to Borussia Dortmund, born 2006)
+  FAIL 2: Bayern Munich: 4 problems on load
+  FAIL 2: Bayern Munich: the loaded career saves back to a different string (62553 to 63718)
+  FAIL 4: Bayern Munich: no man of the day one squad whose age moved could be sold (0 candidates)
+  section 3 season two: Bayern Munich, 11 records, 11 moves, 4 problems
+     Adam Wharton still at Crystal Palace (owned to Arsenal, born 2005)
+     Kobbie Mainoo still at Manchester United (owned to Stuttgart, born 2006)
+     Elliot Anderson still at Manchester City (owned to Bayer Leverkusen, born 2003)
+     Can Uzun still at Eintracht Frankfurt (owned to Borussia Dortmund, born 2006)
+  FAIL 3: Bayern Munich: 4 problems in season two
+section 5: a new Everton career, ledger curve 2, near false
+  section 5 new: Everton, 5 records, 5 moves, 0 problems
+simCmOldLedger: 17 ledger moves loaded, 0 sales, 12 failures
+simCmOldLedger: control exact FIRED (sections 2 and 4 red)

@@ -1,0 +1,10 @@
+oldLedger-exact exit=1 4s | simCmOldLedger: control exact FIRED (sections 2 and 4 red)
+oldLedger exit=1 4s | simCmOldLedger: FAIL
+unseeded exit=1 2s | Node.js v24.22.1
+vitest-ledger exit=1 10s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerWorldRoster.test.ts,title=src/lib/clubManagerWorldRoster.test.ts > save-scoped world roster 
+oldCareers exit=1 66s | simCmOldCareersWorld: RED, 20 failure(s) (section 1 2, section 2 18) (66s)
+tsc exit=0 96s | 
+clubDetail exit=1 0s | Node.js v24.22.1
+ledgerJourney exit=0 152s | simCmLedgerJourney: green. 45 seeded journeys, 9752 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+ledgerBound exit=0 326s | simCmLedgerBound: green, all four sections held
+worldMoves exit=1 933s | simCmWorldMoves: RED, sections 0 (1), 5 (96), 6 (404), 7 (1), 8 (81), 11 (8)
