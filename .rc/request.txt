@@ -1,0 +1,4 @@
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+quotes-dugout: QUOTES_CONTROL=dugout node scripts/simNoInventedQuotes.mjs
+quotes-desk: QUOTES_CONTROL=desk node scripts/simNoInventedQuotes.mjs
+simClubManagerDugouts: node scripts/simClubManagerDugouts.mjs
