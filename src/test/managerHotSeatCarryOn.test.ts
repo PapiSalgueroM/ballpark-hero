@@ -11,7 +11,8 @@
  */
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { clearCareer, ensureHandover, loadCareer, saveCareer, startCareer } from '@/lib/clubManager';
-import { SLOTS_INDEX_KEY, activeSlot, parkedKey, readSlots, summarize, switchSlot } from '@/lib/clubManagerSlots';
+import { SLOTS_INDEX_KEY, activeSlot, parkedKey, readSlots, summarize, switchSlot, type SlotView } from '@/lib/clubManagerSlots';
+import { handOverCareer } from '@/lib/clubManagerHandOver';
 import { pointKeyPrefix, pointsIndexKey } from '@/lib/cmSavePointsStore';
 import { backupKeysOf, offeredBackup } from '@/lib/brokenSaveRecovery';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
@@ -33,6 +34,9 @@ let base: HotSeatRun;
 function withVerdict(kind: VerdictKind): HotSeatRun {
   return { ...base, verdict: { kind, points: base.points, target: base.target, leaguePlayed: base.leaguePlayed, matches: base.log.length } };
 }
+
+/** The carry the way the card makes it: Club Manager's hand over, with the slot picked when all three are full. */
+const carry = (run: HotSeatRun, replace?: SlotView) => carryOnInClubManager(run, career => handOverCareer(career, replace));
 
 /** Every key and value in the store, in key order. */
 function snap(): string {
@@ -72,14 +76,14 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
   });
 
   it('a sacked manager writes nothing, even to an empty device', () => {
-    expect(carryOnInClubManager(withVerdict('sacked'))).toBe('refused');
-    expect(carryOnInClubManager(withVerdict('boardSacked'))).toBe('refused');
+    expect(carry(withVerdict('sacked'))).toBe('refused');
+    expect(carry(withVerdict('boardSacked'))).toBe('refused');
     expect(snap()).toBe('[]');
   });
 
   it('the save Club Manager opens is the run as it stands', () => {
     const run = withVerdict('survived');
-    expect(carryOnInClubManager(run)).toBe('saved');
+    expect(carry(run)).toBe('saved');
     expect(activeSlot()).toBe(1);
     const loaded = loadCareer();
     expect(loaded).not.toBeNull();
@@ -95,7 +99,7 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
     expect(saveCareer(mine)).toBe(true);
     const was = summarize(localStorage.getItem(KEY));
     const run = withVerdict('reprieve');
-    expect(carryOnInClubManager(run)).toBe('saved');
+    expect(carry(run)).toBe('saved');
     expect(activeSlot()).toBe(2);
     expect(summarize(localStorage.getItem(parkedKey(1)))).toEqual(was);
     expect(loadCareer()!.clubName).toBe(run.state.clubName);
@@ -109,14 +113,14 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
     localStorage.setItem(SLOTS_INDEX_KEY, JSON.stringify({ v: 1, active: 2 }));
     expect(saveCareer(startCareer(hotSeatPool()[2].club))).toBe(true);
     expect(readSlots().map(v => !!v.summary)).toEqual([false, true, false]);
-    expect(carryOnInClubManager(withVerdict('survived'))).toBe('saved');
+    expect(carry(withVerdict('survived'))).toBe('saved');
     expect(activeSlot()).toBe(1);
     expect(summarize(localStorage.getItem(parkedKey(2)))?.clubName).toBe(hotSeatPool()[2].club);
   }, 60000);
 
   it('a save that cannot be read still counts as a career, and its bytes are kept', () => {
     localStorage.setItem(KEY, '{not json');
-    expect(carryOnInClubManager(withVerdict('survived'))).toBe('saved');
+    expect(carry(withVerdict('survived'))).toBe('saved');
     expect(activeSlot()).toBe(2);
     expect(localStorage.getItem(parkedKey(1))).toBe('{not json');
   });
@@ -124,7 +128,7 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
   it('a new career in a slot never finds old save points there', () => {
     localStorage.setItem(pointsIndexKey(1), JSON.stringify({ v: 1, points: [], credited: [1], blocked: [] }));
     localStorage.setItem(`${pointKeyPrefix(1)}abc`, 'x');
-    expect(carryOnInClubManager(withVerdict('survived'))).toBe('saved');
+    expect(carry(withVerdict('survived'))).toBe('saved');
     expect(localStorage.getItem(pointsIndexKey(1))).toBeNull();
     expect(localStorage.getItem(`${pointKeyPrefix(1)}abc`)).toBeNull();
   });
@@ -132,7 +136,7 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
   it('with all three slots full nothing is written until a career is picked', () => {
     fillThree();
     const before = snap();
-    expect(carryOnInClubManager(withVerdict('survived'))).toBe('full');
+    expect(carry(withVerdict('survived'))).toBe('full');
     expect(snap()).toBe(before);
   }, 90000);
 
@@ -141,7 +145,7 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
     localStorage.setItem(pointsIndexKey(2), JSON.stringify({ v: 1, points: [], credited: [1], blocked: [] }));
     const one = localStorage.getItem(KEY), three = localStorage.getItem(parkedKey(3)), two = localStorage.getItem(parkedKey(2));
     const run = withVerdict('survived');
-    expect(carryOnInClubManager(run, readSlots()[1])).toBe('saved');
+    expect(carry(run, readSlots()[1])).toBe('saved');
     expect(activeSlot()).toBe(2);
     expect(loadCareer()!.clubName).toBe(run.state.clubName);
     expect(localStorage.getItem(parkedKey(3))).toBe(three);
@@ -162,7 +166,7 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
     const other = startCareer(hotSeatPool()[4].club);
     expect(saveCareer(other)).toBe(true);
     const before = snap();
-    expect(carryOnInClubManager(withVerdict('survived'), shown)).toBe('changed');
+    expect(carry(withVerdict('survived'), shown)).toBe('changed');
     expect(snap()).toBe(before);
   }, 90000);
 
@@ -174,7 +178,7 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
       if (k === KEY) throw new Error('quota');
       return real.call(this, k, v);
     });
-    expect(carryOnInClubManager(withVerdict('survived'))).toBe('failed');
+    expect(carry(withVerdict('survived'))).toBe('failed');
     expect(snap()).toBe(before);
     vi.restoreAllMocks();
     fillThree();
@@ -183,7 +187,7 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
       if (k === KEY) throw new Error('quota');
       return real.call(this, k, v);
     });
-    expect(carryOnInClubManager(withVerdict('survived'), readSlots()[0])).toBe('failed');
+    expect(carry(withVerdict('survived'), readSlots()[0])).toBe('failed');
     expect(snap()).toBe(full);
   }, 90000);
 
@@ -191,7 +195,7 @@ describe('Manager Hot Seat: carry on in Club Manager', () => {
     const run = withVerdict('survived');
     expect(run.state.handover).toMatchObject({ pts: run.takeover.points, played: run.takeover.played });
     expect(run.state.midSeasonStart).toBeTruthy();
-    expect(carryOnInClubManager(run)).toBe('saved');
+    expect(carry(run)).toBe('saved');
     const loaded = loadCareer()!;
     expect(ensureHandover(loaded)).toMatchObject({ pts: run.takeover.points, played: run.takeover.played });
     expect(loaded.midSeasonStart).toBe(run.state.midSeasonStart);

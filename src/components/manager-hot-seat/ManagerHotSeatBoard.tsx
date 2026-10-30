@@ -121,7 +121,8 @@ function openPage(path: string) {
   window.location.assign(path);
 }
 import { markLandOnHub } from '@/lib/clubManagerLanding';
-import { freeSlot, readSlots, type SlotView } from '@/lib/clubManagerSlots';
+import { readSlots, type SlotView } from '@/lib/clubManagerSlots';
+import { freeSlot, handOverCareer } from '@/lib/clubManagerHandOver';
 
 /** Round 1592: a manager slot's career in words, the way the chooser names it. */
 function slotWords(v: SlotView): string {
@@ -152,7 +153,7 @@ export function CarryOnCard({ run, openPath = openPage }: { run: HotSeatRun; ope
 
   const go = (replace?: SlotView) => {
     if (going) return;
-    const res = carryOnInClubManager(run, replace);
+    const res = carryOnInClubManager(run, career => handOverCareer(career, replace));
     if (res === 'saved') {
       setGoing(true);
       /* Round 1323: and Club Manager opens it on the hub, not the managers screen. */

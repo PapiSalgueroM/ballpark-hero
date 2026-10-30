@@ -83,7 +83,7 @@
      HOT_SEAT_CONTROL=nocal      the handover drops the calendar. Club
        Manager's loadCareer refuses every save, section 5 must go red.
      HOT_SEAT_CONTROL=clobber    the carry writes over the career being
-       played, the report fe949903 shape (a copy of clubManagerSlots.ts
+       played, the report fe949903 shape (a copy of clubManagerHandOver.ts
        whose free slot is always the active one). Must go red.
      HOT_SEAT_CONTROL=damagedfree an unreadable save counts as an empty
        slot, so it is written over. Arm (e) must go red.
@@ -224,18 +224,17 @@ function rewrite(file, edits, outName, what) {
   }
   const out = `${TMP}/${process.pid}.${outName}`;
   fs.writeFileSync(out, src);
-  if (controlCopy) slotsCopy = controlCopy;
   controlCopy = out;
   return out;
 }
-/* Round 1592: the carry's slot rule lives in src/lib/clubManagerSlots.ts, so
-   its controls rewrite a copy of that file and point the lib's import at it.
-   The copy's two relative imports go through the alias from the temp folder. */
-const SLOTS = path.join(ROOT, 'src', 'lib', 'clubManagerSlots.ts');
-let slotsCopy = null;
-function rewriteSlots(edits, name, what) {
-  const copy = rewrite(SLOTS, [...edits, ["from './clubManager';", "from '@/lib/clubManager';"], ["from './clubManagerEras';", "from '@/lib/clubManagerEras';"]], `clubManagerSlots.${name}.ts`, what);
-  return rewrite(LIB, [["from '@/lib/clubManagerSlots';", `from '${copy}';`]], `managerHotSeat.${name}.ts`, 'the slots import');
+/* Round 1592: the carry's slot rule is Club Manager's hand over,
+   src/lib/clubManagerHandOver.ts, which the page passes to
+   carryOnInClubManager. Its controls rewrite a copy of that file, and the
+   bundle's `ho` is the copy. */
+const HANDOVER = path.join(ROOT, 'src', 'lib', 'clubManagerHandOver.ts');
+let hoPath = `${ROOT_URL}/src/lib/clubManagerHandOver.ts`;
+function rewriteHandOver(edits, name, what) {
+  hoPath = rewrite(HANDOVER, edits, `clubManagerHandOver.${name}.ts`, what);
 }
 if (CONTROL === 'flat') {
   libPath = rewrite(LIB, [['export const TARGET_PER_POINT = 0.07;\n', 'export const TARGET_PER_POINT = 0;\n']], 'managerHotSeat.flat.ts', 'the per point term');
@@ -266,23 +265,23 @@ if (CONTROL === 'card') {
   console.log('NEGATIVE CONTROL ON: the offer card counts only the games played in the job; section 5 must go red');
 }
 if (CONTROL === 'clobber') {
-  libPath = rewriteSlots([['  const free = freeSlot(views);\n', '  const free = from;\n']], 'clobber', 'the free slot pick');
+  rewriteHandOver([['  const free = freeSlot(views);\n', '  const free = from;\n']], 'clobber', 'the free slot pick');
   console.log('NEGATIVE CONTROL ON: the handover writes over the career being played, the report fe949903 shape; section 5 must go red');
 }
 if (CONTROL === 'damagedfree') {
-  libPath = rewriteSlots([['  return views.find(v => !v.summary && !v.damaged)?.slot ?? null;\n', '  return views.find(v => !v.summary)?.slot ?? null;\n']], 'damagedfree', 'the free slot rule');
+  rewriteHandOver([['  return views.find(v => !v.summary && !v.damaged)?.slot ?? null;\n', '  return views.find(v => !v.summary)?.slot ?? null;\n']], 'damagedfree', 'the free slot rule');
   console.log('NEGATIVE CONTROL ON: an unreadable save counts as an empty slot; section 5 must go red');
 }
 if (CONTROL === 'nopoints') {
-  libPath = rewriteSlots([['    clearSlotPoints(free, listable());\n', '']], 'nopoints', 'the free slot\'s points clear');
+  rewriteHandOver([['    clearSlotPoints(free, listable());\n', '']], 'nopoints', 'the free slot\'s points clear');
   console.log('NEGATIVE CONTROL ON: the new career inherits the slot\'s old save points; section 5 must go red');
 }
 if (CONTROL === 'norollback') {
-  libPath = rewriteSlots([['        putBack(parkedKey(free), null);\n', '']], 'norollback', 'the refused swap\'s clean up');
+  rewriteHandOver([['        putBack(parkedKey(free), null);\n', '']], 'norollback', 'the refused swap\'s clean up');
   console.log('NEGATIVE CONTROL ON: a refused swap leaves the new career parked in the free slot; section 5 must go red');
 }
 if (CONTROL === 'nobackup') {
-  libPath = rewriteSlots([['  const copy = copyAside(entry, store);\n', '  const copy = { ok: true, backupKey: \'dukb-none\' };\n']], 'nobackup', 'the replaced career\'s kept aside copy');
+  rewriteHandOver([['  const copy = copyAside(entry, store);\n', '  const copy = { ok: true, backupKey: \'dukb-none\' };\n']], 'nobackup', 'the replaced career\'s kept aside copy');
   console.log('NEGATIVE CONTROL ON: a picked career is replaced without a kept aside copy; section 5 must go red');
 }
 if (CONTROL === 'sackoffer') {
@@ -300,6 +299,7 @@ fs.writeFileSync(ENTRY, `
 export * as hs from '${libPath}';
 export * as cm from '${ROOT_URL}/src/lib/clubManager.ts';
 export * as sl from '${ROOT_URL}/src/lib/clubManagerSlots.ts';
+export * as ho from '${hoPath}';
 export * as pts from '${ROOT_URL}/src/lib/cmSavePointsStore.ts';
 `);
 execSync(`"${ESBUILD}" "${ENTRY}" --bundle --format=cjs --platform=node --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, {
@@ -319,7 +319,7 @@ globalThis.localStorage = {
   get length() { return store.size; },
   key: i => [...store.keys()][i] ?? null,
 };
-const { hs, cm, sl, pts } = createRequire(import.meta.url)(BUNDLE);
+const { hs, cm, sl, ho, pts } = createRequire(import.meta.url)(BUNDLE);
 const {
   startHotSeat, playHotSeatMatch, answerHotSeatPress, replayHotSeat, pendingPress, hotSeatPool, dailyHotSeat,
   HOT_SEAT_LEASH, HOT_SEAT_BOARD_START, HOT_SEAT_TAKEOVER_MIN, HOT_SEAT_TAKEOVER_MAX,
@@ -502,7 +502,9 @@ ok('a custom club and a league override registered before the run are the same o
 /* ---------- 5. carrying on in Club Manager (Round 956) ---------- */
 console.log('5) A manager who keeps the job carries on in Club Manager');
 const failsBeforeFive = failures;
-const { canCarryOn, carryOnInClubManager, carryOnSummary, hotSeatLeagues, hotSeatMeters } = hs;
+const { canCarryOn, carryOnSummary, hotSeatLeagues, hotSeatMeters } = hs;
+/* The carry the way the card makes it: Club Manager's hand over, with the slot picked when all three are full. */
+const carryOnInClubManager = (run, replace) => hs.carryOnInClubManager(run, career => ho.handOverCareer(career, replace));
 const { readSlots, activeSlot, switchSlot, parkedKey, summarize, SLOTS_INDEX_KEY } = sl;
 const { pointsIndexKey, pointKey } = pts;
 const { loadCareer, saveCareer, startCareer, playNextEntry, leaguePosition, nextFixture, ensureHandover } = cm;
@@ -714,7 +716,7 @@ if (failures === failsBeforeFive) ok('every survivor\'s career goes into an empt
 
 /* ---------- verdict ---------- */
 
-for (const f of [ENTRY, BUNDLE, controlCopy, slotsCopy]) { if (f) { try { fs.unlinkSync(f); } catch { /* fine */ } } }
+for (const f of [ENTRY, BUNDLE, controlCopy]) { if (f) { try { fs.unlinkSync(f); } catch { /* fine */ } } }
 if (failures) {
   console.error(`\nsimManagerHotSeat: ${failures} failure(s)`);
   process.exit(1);

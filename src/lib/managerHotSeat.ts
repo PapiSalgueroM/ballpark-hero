@@ -85,7 +85,7 @@ import {
   type TalkTone,
 } from '@/lib/clubManager';
 import { FAN_SINGING, boardMeter, fanMeter, type Meter, type MeterTone } from '@/lib/clubManagerMeters';
-import { handOverCareer, type SlotView } from '@/lib/clubManagerSlots';
+import type { HandOverResult } from '@/lib/clubManagerHandOver';
 import { LEGACY_BOARD_START } from '@/lib/clubManagerBoardVerdict';
 import type { SeasonHandover } from '@/lib/clubManagerScore';
 import { dailyIndex, dailyPrngSeed } from '@/lib/dateUtils';
@@ -822,7 +822,7 @@ export function shareText(run: HotSeatRun): string {
  *
  * Round 1592 (report fe949903): Club Manager keeps three careers, one per
  * manager slot, and the carry goes in by Club Manager's own rule through
- * handOverCareer in src/lib/clubManagerSlots.ts: the first empty slot, never
+ * handOverCareer in src/lib/clubManagerHandOver.ts: the first empty slot, never
  * a slot that holds a career. Only when all three are full does the card ask
  * which one to replace, naming each, and the replaced career is kept aside
  * first so Club Manager can put it back. Until this round the carry wrote
@@ -882,16 +882,16 @@ export function carryOnSummary(run: HotSeatRun): CarryOnSummary {
 export type CarryOnResult = 'saved' | 'full' | 'changed' | 'refused' | 'failed';
 
 /**
- * Hands the run to Club Manager. 'refused' when the manager was sacked;
- * 'saved' when Club Manager will open this career next, in an empty slot, or
- * in `replace` (a slot the player picked on the card, as the card read it)
- * when all three were full; 'full' when every slot holds a career and none
- * was picked; 'changed' when the picked slot no longer holds the career the
- * card showed; 'failed' when the browser refused a step. Nothing is written
- * for any answer but 'saved'.
+ * Hands the run to Club Manager through `handOver`, which the page passes in
+ * as handOverCareer from src/lib/clubManagerHandOver.ts (with the slot the
+ * player picked, when all three were full). Passed in rather than imported so
+ * this lib, which Deadline Day loads for its club pool, carries none of the
+ * slot code. 'refused' when the manager was sacked (nothing is handed over);
+ * 'saved' when Club Manager will open this career next; otherwise the hand
+ * over's own answer: 'full', 'changed' or 'failed', with nothing written.
  */
-export function carryOnInClubManager(run: HotSeatRun, replace?: SlotView): CarryOnResult {
+export function carryOnInClubManager(run: HotSeatRun, handOver: (career: CareerState) => HandOverResult): CarryOnResult {
   if (!canCarryOn(run)) return 'refused';
-  const res = handOverCareer(handoverState(run), replace);
+  const res = handOver(handoverState(run));
   return 'why' in res ? res.why : 'saved';
 }
