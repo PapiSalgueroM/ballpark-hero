@@ -1,0 +1,4 @@
+#!serial
+lr-retake: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write; s=$?; git diff --stat scripts/data/cmLeagueRulesDigest.json; git diff --quiet scripts/data/cmLeagueRulesDigest.json; d=$?; git checkout -- src scripts; echo "write exit $s, diff exit $d"; [ $s -eq 0 ] && [ $d -eq 0 ]
+lr-old-tieoff: git show 4bd20c993:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && sed -i 's/^  const tieJudged = judgedByTie(state, tieLine);$/  const tieJudged = false;/' src/lib/clubManager.ts && echo "tieoff=$(grep -c '^  const tieJudged = false;$' src/lib/clubManager.ts)" && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
+lr-old-head: git show 4bd20c993:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- src scripts; exit $s
