@@ -17,7 +17,8 @@ import {
 import { leaders } from '@/lib/clubManagerLeagueBoards';
 import { playerCardOf, type CardRef } from '@/lib/clubManagerCards';
 import { PlayerCardScreen } from '@/components/club-manager/PlayerCardScreen';
-import { CmCardLink, CmCardsProvider, CmHost, mineCard, useCmCards } from '@/components/club-manager/CmCards';
+import { CmCardsProvider, useCmCards } from '@/components/club-manager/CmCards';
+import { CmCardLink, CmHost, mineCard } from '@/components/club-manager/CmCardLink';
 import { StatsScreen } from '@/components/club-manager/StatsScreen';
 import { SquadScreen } from '@/components/club-manager/SquadScreen';
 import { MemoryRouter } from 'react-router-dom';

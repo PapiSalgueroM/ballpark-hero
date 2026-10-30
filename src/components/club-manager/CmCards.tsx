@@ -1,6 +1,7 @@
 /**
- * Round 1601: the page's stack of cards (a club page, one of my men, a man of another club), its name link, and
- * the host hold. Statically imported by the page, so it is kept small: the card screen and its reader are lazy.
+ * Round 1601: the page's stack of cards (a club page, one of my men, a man of another club). Statically imported by
+ * the page, so it is kept small: the links and the host hold live in CmCardLink.tsx (imported only by the lazy
+ * hosts), and the card screen and its reader are lazy.
  *
  * Opening pushes, Back pops one, a card already in the stack is popped back to rather than pushed twice, and the
  * stack holds at most six. Every push records the scroll of the view it was opened from and Back puts it back, so
@@ -8,15 +9,9 @@
  * a card opens and never fights the restore on the way back (the club page's Back used to reveal the panel; it now
  * returns to where you were).
  *
- * A host whose own state would be lost while the hub is unmounted (the Stats screen, the Squad screen) wraps what
- * it renders in CmHost; every link inside calls the hold before it opens, so the host files its state for the trip
- * the way WorldCompScreen's resume already does.
- *
- * With no provider above it, a link renders its children untouched, so every existing render is the markup it was.
  */
 import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { CardRef } from '@/lib/clubManagerCards';
-import type { Position } from '@/types/game';
 
 export type CmCard = CardRef | { k: 'club'; club: string };
 
@@ -30,10 +25,8 @@ export interface CmCardsApi {
 
 const DEEP = 6;
 const same = (a: CmCard, b: CmCard): boolean => JSON.stringify(a) === JSON.stringify(b);
-const keyOf = (c: CmCard): string => (c.k === 'club' ? `club:${c.club}` : c.k === 'mine' ? `mine:${c.id}` : `man:${c.club}|${c.name}|${c.pos}`);
 
 const Cards = createContext<CmCardsApi | null>(null);
-const Hold = createContext<(() => void) | null>(null);
 
 export function CmCardsProvider({ children }: { children: ReactNode }) {
   const [stack, setStack] = useState<{ card: CmCard; y: number }[]>([]);
@@ -70,32 +63,4 @@ export function CmCardsProvider({ children }: { children: ReactNode }) {
 
 export function useCmCards(): CmCardsApi | null {
   return useContext(Cards);
-}
-
-/** A host's hold: called before any link inside opens a card. No DOM node. */
-export function CmHost({ hold, children }: { hold: () => void; children: ReactNode }) {
-  return <Hold.Provider value={hold}>{children}</Hold.Provider>;
-}
-
-/** One of my men from a board row: by name and position in the squad, exactly one match, else no link. */
-export function mineCard(squad: readonly { id: string; name: string; position: Position }[], name: string, pos: Position): CmCard | null {
-  let found: string | null = null;
-  for (const p of squad) {
-    if (p.name !== name || p.position !== pos) continue;
-    if (found !== null) return null;
-    found = p.id;
-  }
-  return found === null ? null : { k: 'mine', id: found };
-}
-
-/** The link. With no provider (or no card) the children come back untouched; with `only`, nothing is drawn. */
-export function CmCardLink({ card, className, children, only = false }: { card: CmCard | null; className?: string; children: ReactNode; only?: boolean }) {
-  const cards = useContext(Cards);
-  const hold = useContext(Hold);
-  if (!cards || !card) return only ? null : <>{children}</>;
-  return (
-    <button type="button" data-cm-card-link={keyOf(card)} className={className} onClick={() => { hold?.(); cards.open(card); }}>
-      {children}
-    </button>
-  );
 }

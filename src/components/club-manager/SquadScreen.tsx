@@ -10,7 +10,7 @@ import {
 } from '@/lib/clubManager';
 import type { CMPlayer, CareerState, IncomingBid } from '@/lib/clubManager';
 import { staffLevel } from '@/lib/clubManagerStaff';
-import { CmCardLink, CmHost } from '@/components/club-manager/CmCards';
+import { CmCardLink, CmHost } from '@/components/club-manager/CmCardLink';
 /* Round 978: who is just back from international duty, and who you rested. */
 import { backFromDuty, restingIds } from '@/lib/clubManagerInternationals';
 import type { IntlCallUp } from '@/lib/clubManagerInternationals';

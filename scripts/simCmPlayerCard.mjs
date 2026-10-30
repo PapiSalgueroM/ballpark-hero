@@ -96,7 +96,7 @@ const CONTROLS = {
   loadwrite: { section: 'oldsave', patches: [{ file: ENGINE, from: '    ensureMadeUpNations(parsed);\n', to: '    ensureMadeUpNations(parsed);\n    parsed.pastFrom = 1;\n' }] },
   allcomps: { section: 'cards', patches: [{ file: CARDS, from: '    const lg = p.comp?.league;', to: '    const lg = { apps: p.apps, goals: p.seasonGoals, assists: p.seasonAssists, yellows: p.seasonYellows, reds: p.seasonReds, ratingSum: p.ratingSum };' }] },
   namekey: { section: 'cards', patches: [{ file: CARDS, from: 'boards.input.book.c[ref.club]?.m[rowKey({ n: ref.name, p: ref.pos, r: 0 })]', to: "Object.entries(boards.input.book.c[ref.club]?.m ?? {}).find(([key]) => key.slice(0, key.lastIndexOf('|')) === ref.name)?.[1]" }] },
-  linkalways: { section: 'markup', patches: [{ file: 'src/components/club-manager/CmCards.tsx', from: '  if (!cards || !card) return only ? null : <>{children}</>;', to: '  if (!card) return only ? null : <>{children}</>;' }] },
+  linkalways: { section: 'markup', patches: [{ file: 'src/components/club-manager/CmCardLink.tsx', from: '  if (!cards || !card) return only ? null : <>{children}</>;', to: '  if (!card) return only ? null : <>{children}</>;' }] },
   hotseat: { section: 'dailies', patches: [
     { file: HOT, from: '  playNextEntry,\n', to: '  playNextEntry,\n  finishSeason,\n' },
     { file: HOT, from: '    run.leash = run.leaguePlayed;\n  }\n  settle(run);', to: '    run.leash = run.leaguePlayed;\n  }\n  run.state = finishSeason(run.state).state;\n  settle(run);' },

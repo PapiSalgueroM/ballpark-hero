@@ -4,7 +4,7 @@ import { teamCompRecord, careerLeagueOf, goldenBootTable, playerOfSeasonRace, ba
 import type { CareerState, CMPlayer, CompBucket, CompStatLine } from '@/lib/clubManager';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { LeagueLeadersCard, type LeadersBoard } from '@/components/club-manager/LeagueLeadersCard';
-import { CmHost } from '@/components/club-manager/CmCards';
+import { CmHost } from '@/components/club-manager/CmCardLink';
 
 /* Round 1601: the state a player card's trip leaves behind (see StatsScreen). */
 let resume: { key: string; view: View; sortKey: SortKey; board: LeadersBoard | null; backTo: number | null } | null = null;

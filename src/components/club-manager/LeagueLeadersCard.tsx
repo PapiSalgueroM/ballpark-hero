@@ -18,7 +18,7 @@ import type { CareerState } from '@/lib/clubManager';
 import { AWARD_FLOOR, BOOK_FULL_SHARE, TEAMS_KEPT, bestOfMine, leaders, type BoardKind, type BoardMan } from '@/lib/clubManagerLeagueBoards';
 import { dealShares, type BookMan } from '@/lib/clubManagerLeagueBook';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
-import { CmCardLink, mineCard } from '@/components/club-manager/CmCards';
+import { CmCardLink, mineCard } from '@/components/club-manager/CmCardLink';
 import { SeasonHonoursCard } from '@/components/club-manager/SeasonHonoursCard';
 
 /** A board of the card: one of the three, or the past winners. */
