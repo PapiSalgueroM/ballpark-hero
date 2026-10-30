@@ -1,0 +1,12 @@
+vitest exit=0 12s |    Duration  11.36s (transform 4.13s, setup 758ms, collect 12.41s, tests 11.56s, environment 4.65s, prepare 1.13s)
+tsc exit=0 81s | 
+simCmEuroPlay exit=0 318s | simCmEuroPlay: green, 1305 checks, 0 failures
+euro-a exit=0 351s | simWorldEuro: green, 37053 checks, 0 failures
+euro-6 exit=0 18s | simWorldEuro: green, 30 checks, 0 failures
+proofFleet-off exit=0 178s | proofWorldUclFleet: GREEN, 38 journeys and 4888 steps byte equal to 14a9af704, draws equal
+simHarnessAnchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simCmCopy exit=0 33s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simBoard exit=0 4s | ALL BOARD CHECKS PASSED
+euro-3 exit=0 379s | simWorldEuro: green, 521 checks, 0 failures
+euro-2 exit=0 648s | simWorldEuro: green, 14795 checks, 0 failures
