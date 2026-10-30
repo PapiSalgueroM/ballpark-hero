@@ -442,8 +442,11 @@ function stringifiedLiterals(rel) {
         if (!fits) bad.push(keys.join(' '));
       }
       if (bad.length) { fail(`${e.path}: a fixture's top level keys (${bad[0]}) are not the keys of any literal ${row.file} stringifies (${lits.map(l => l.direct.join(' ')).join(' | ') || 'none found'})`); continue; }
-      /* A wrapper that grew its own version number would be invisible to section 1's table. */
-      const versioned = lits.flatMap(l => [...l.direct, ...l.spread]).filter(k => ['v', 'version', 'saveVersion'].includes(k));
+      /* A wrapper that grew its own version number would be invisible to section 1's table. Only the literals shaped
+         like this save count: Release BU's Hall wall writes its own { v: 1, entries } under another key from the same
+         file, and that number is the wall's, not the save's. */
+      const saveLits = lits.filter(l => (shapeFleet[e.path] ?? []).some(raw => { const keys = topKeys(raw) ?? []; return keys.every(k => l.direct.includes(k) || l.spread.includes(k)) && l.direct.every(k => keys.includes(k) || unset.includes(k)); }));
+      const versioned = saveLits.flatMap(l => [...l.direct, ...l.spread]).filter(k => ['v', 'version', 'saveVersion'].includes(k));
       if (versioned.length) { fail(`${e.path}: the literal ${row.file} stringifies has a top level ${versioned[0]}, which SAVE_VERSIONS does not know`); continue; }
     }
     held += 1;
