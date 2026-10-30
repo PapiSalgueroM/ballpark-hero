@@ -1,0 +1,17 @@
+#!serve
+#!playwright
+#!serial
+walk2: git worktree add -q /tmp/b1571 32baab916 && ln -s "$PWD/node_modules" /tmp/b1571/node_modules && (cd /tmp/b1571 && node_modules/.bin/vite build --outDir /tmp/b1571-dist > /tmp/b1571.log 2>&1; tail -1 /tmp/b1571.log) && (nohup node scripts/lib/hostLikeServer.mjs /tmp/b1571-dist 4199 > /tmp/hls.log 2>&1 &) && sleep 4 && URLS=$BASE,http://127.0.0.1:4199 CI=1 SIM_NETWORK=offline node .rc/x/rv-walk2.mjs
+vitest: node_modules/.bin/vitest run clubCareerAdditions playerBingo --testTimeout=300000 --hookTimeout=120000
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simCfbSlate: node scripts/simCfbSlate.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+simInternalLinks: node scripts/simInternalLinks.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simPrerender: node scripts/simPrerender.mjs 2>&1 | grep -E "FAIL|simPrerender:"; exit ${PIPESTATUS[0]}
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs

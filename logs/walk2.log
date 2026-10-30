@@ -1,0 +1,12 @@
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+http://localhost:4173 seed 6 (tile index 3): Erling Haaland locks Played for Manchester City after 3 skips; tile height 76->84; document height 5651->5660
+http://localhost:4173 seed 8 (tile index 13): Ayyoub Bouaddi locks Played for Manchester City after 7 skips; tile height 76->84; document height 5651->5660
+http://localhost:4173 seed 10 (tile index 6): Kevin De Bruyne locks Played for Manchester City after 8 skips; tile height 76->84; document height 5648->5680
+http://localhost:4173 seed 13 (tile index 6): Liam Delap locks Played for Manchester City after 9 skips; tile height 76->84; document height 5679->5687
+http://localhost:4173: 4 Manchester City locks measured
+http://127.0.0.1:4199 seed 6 (tile index 3): Erling Haaland locks Played for Manchester City after 11 skips; tile height 76->84; document height 5675->5684
+http://127.0.0.1:4199 seed 10 (tile index 6): Kevin De Bruyne locks Played for Manchester City after 4 skips; tile height 76->84; document height 5648->5656
+http://127.0.0.1:4199 seed 13 (tile index 6): Kevin De Bruyne locks Played for Manchester City after 28 skips; tile height 76->84; document height 5679->5687
+http://127.0.0.1:4199 seed 15 (tile index 18): Enzo Fernández locks Played for Manchester City after 14 skips; tile height 76->84; document height 5675->5684
+http://127.0.0.1:4199: 4 Manchester City locks measured
+rv-walk2: DONE
