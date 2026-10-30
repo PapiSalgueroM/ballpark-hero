@@ -1,0 +1,26 @@
+  info  fixture NEAR: Everton season 1 week 48, league weeks left 4, expiring 3, managers 19 real
+  info  fixture END: review pending true, expiring 3
+  info  fixture HOT: Chelsea (survived); slot 1 holds Aston Villa
+-- 390rm section D
+  ok    390rm D: Generate Starting Potential 332x44 at 400 to 444, banner top 611, hit itself
+  ok    390rm D: Begin Career 366x48 at 398 to 446, banner top 611, hit itself
+  ok    390rm D: England, Goalkeeper (GK), Early 2000s (2000 start): shown and joined "Watford Youth"
+  ok    390rm D: the Training button 179x44 at 193 to 237, banner top 611, hit itself
+-- 1280rm section D
+  ok    1280rm D: Generate Starting Potential 534x44 at 428 to 472, banner top 735, hit itself
+  ok    1280rm D: Begin Career 576x48 at 426 to 474, banner top 735, hit itself
+  ok    1280rm D: Brazil🇧🇷, Goalkeeper (GK), Early 2000s (2000 start): shown and joined "Mirassol Youth"
+  ok    1280rm D: the phone button 56x56 at 659 to 715, banner top 735, hit itself
+  ok    1280rm D: the Training button 56x56 at 591 to 647, banner top 735, hit itself
+-- 390mo section D
+  ok    390mo D: Generate Starting Potential 332x44 at 400 to 444, banner top 611, hit itself
+  ok    390mo D: Begin Career 366x48 at 398 to 446, banner top 611, hit itself
+  ok    390mo D: Spain🇪🇸, Goalkeeper (GK), Early 2000s (2000 start): shown and joined "Villarreal Youth"
+  ok    390mo D: the Training button 179x44 at 193 to 237, banner top 611, hit itself
+-- 1280mo section D
+  ok    1280mo D: Generate Starting Potential 534x44 at 428 to 472, banner top 735, hit itself
+  ok    1280mo D: Begin Career 576x48 at 426 to 474, banner top 735, hit itself
+  ok    1280mo D: Nigeria🇳🇬, Goalkeeper (GK), Early 2000s (2000 start): shown and joined "Enyimba Youth"
+  ok    1280mo D: the phone button 56x56 at 659 to 715, banner top 735, hit itself
+  ok    1280mo D: the Training button 56x56 at 591 to 647, banner top 735, hit itself
+walkcmsc: green

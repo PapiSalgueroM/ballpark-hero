@@ -1,0 +1,24 @@
+  info  fixture NEAR: Everton season 1 week 48, league weeks left 4, expiring 3, managers 19 real
+  info  fixture END: review pending true, expiring 3
+  info  fixture HOT: Chelsea (survived); slot 1 holds Aston Villa
+-- 390rm section C
+  ok    390rm C: See the Club Manager offer 324x44 at 400 to 444, banner top 611, hit itself
+  ok    390rm C: the card says "This job goes into Club Manager slot 2. Your career in slot 1 (Aston Villa, 2026-27, season 1) stays exactly as it is."
+  ok    390rm C: Carry on in Club Manager 290x48 at 398 to 446, banner top 611, hit itself
+  ok    390rm C: the job is in slot 2 (Chelsea), slot 1 kept Aston Villa
+-- 1280rm section C
+  ok    1280rm C: See the Club Manager offer 280x58 at 350 to 408, banner top 735, hit itself
+  ok    1280rm C: the card says "This job goes into Club Manager slot 2. Your career in slot 1 (Aston Villa, 2026-27, season 1) stays exactly as it is."
+  ok    1280rm C: Carry on in Club Manager 572x48 at 426 to 474, banner top 735, hit itself
+  ok    1280rm C: the job is in slot 2 (Chelsea), slot 1 kept Aston Villa
+-- 390mo section C
+  ok    390mo C: See the Club Manager offer 324x44 at 400 to 444, banner top 611, hit itself
+  ok    390mo C: the card says "This job goes into Club Manager slot 2. Your career in slot 1 (Aston Villa, 2026-27, season 1) stays exactly as it is."
+  ok    390mo C: Carry on in Club Manager 290x48 at 398 to 446, banner top 611, hit itself
+  ok    390mo C: the job is in slot 2 (Chelsea), slot 1 kept Aston Villa
+-- 1280mo section C
+  ok    1280mo C: See the Club Manager offer 280x58 at 350 to 408, banner top 735, hit itself
+  ok    1280mo C: the card says "This job goes into Club Manager slot 2. Your career in slot 1 (Aston Villa, 2026-27, season 1) stays exactly as it is."
+  ok    1280mo C: Carry on in Club Manager 572x48 at 426 to 474, banner top 735, hit itself
+  ok    1280mo C: the job is in slot 2 (Chelsea), slot 1 kept Aston Villa
+walkcmsc: green
