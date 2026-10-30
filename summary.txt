@@ -1,0 +1,4 @@
+build exit=0 38s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playBingoClubRules exit=0 55s | playBingoClubRules: GREEN, both viewports held
+ctl-wrongtile exit=1 54s | playBingoClubRules: CONTROL=wrongtile FIRED (tapped From Portugal for Marcus Rashford; 8 failures)
+ctl-base1571 exit=1 61s | playBingoClubRules: CONTROL=base1571 FIRED (the walk ran on a dist built from Round 1571's closed head; 4 failures)
