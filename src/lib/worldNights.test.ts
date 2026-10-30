@@ -10,7 +10,7 @@ import type { CalDate } from './calDate';
 import { ERA_LEAGUES, LEAGUE_RULES, REAL_LEAGUES, buildCalendar } from './clubManager';
 import { dateOfEntries } from './clubManagerCalendar';
 import type { SeasonPlan } from './clubManagerCalendar';
-import { nightDateAt, nightsDoneAt, placeNights } from './worldNights';
+import { nightDateAt, nightsDoneAt, placeNights, tickingWeeksDone, tickingWeeksIn, tickingWeeksLeft } from './worldNights';
 import type { NightWant } from './worldNights';
 import { oneOffNightsOf } from './worldOneOffs';
 
@@ -171,5 +171,29 @@ describe('Round 1514: a dated night', () => {
   });
   it('never shares a gap with a night placed before it', () => {
     expect(placeNights(A, draw(A), [{ place: 'early' }, { place: 'dated', on: { y: 2026, m: 8, d: 13 } }])).toEqual([1, 4]);
+  });
+});
+
+/* Round 1593 (decision 6): the weeks a season charges. With no night they are the raw length's numbers at every
+   week; a night is counted by none of them; on the engine's calendars of every league size the same holds. */
+describe('tickingWeeks', () => {
+  it('equals the raw length on a calendar with no night, at every week', () => {
+    for (const size of [10, 12, 18, 20, 24]) {
+      const c = buildCalendar(size, false, true, true);
+      expect(tickingWeeksIn(c)).toBe(c.length);
+      for (let w = 0; w <= c.length; w += 1) {
+        expect(tickingWeeksDone(c, w)).toBe(w);
+        expect(tickingWeeksLeft(c, w)).toBe(c.length - w);
+      }
+    }
+  });
+  it('never counts a night', () => {
+    const c: { type: string; night?: { k: string; n: number } }[] = [
+      { type: 'league' }, { type: 'oneOff', night: { k: 'dsc', n: 0 } }, { type: 'league' }, { type: 'uel', night: { k: 'uel', n: 0 } }, { type: 'league' },
+    ];
+    expect(tickingWeeksIn(c)).toBe(3);
+    expect([0, 1, 2, 3, 4, 5].map(w => tickingWeeksDone(c, w))).toEqual([0, 1, 1, 2, 2, 3]);
+    expect([0, 1, 2, 3, 4, 5].map(w => tickingWeeksLeft(c, w))).toEqual([3, 2, 2, 1, 1, 0]);
+    expect(tickingWeeksLeft(c, 9)).toBe(0);
   });
 });

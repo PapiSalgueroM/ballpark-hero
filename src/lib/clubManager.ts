@@ -48,7 +48,7 @@ import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
 /* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
-import { nightsDoneAt, placeNights } from '@/lib/worldNights';
+import { nightsDoneAt, placeNights, tickingWeeksDone, tickingWeeksIn } from '@/lib/worldNights';
 import type { CalDate } from '@/lib/calDate';
 import type { NightRef, NightResult } from '@/lib/worldNights';
 import { entrantsFrom, evaluateOneOff, myOneOffFixture, oneOffNightsOf, oneOffPartial, oneOffPlayedIn, oneOffRowAt, oneOffRowFor } from '@/lib/worldOneOffs';
@@ -7869,8 +7869,9 @@ export const SEVERANCE_CAP_SEASONS = 2;
 /** What letting this man go would cost, so a screen can say so before you do it. */
 export function severanceFor(state: CareerState, p: CMPlayer): { weekly: number; weeksLeft: number } {
   const wage = p.wage ?? wageFor(p);
-  const seasonWeeks = Math.max(1, state.calendar.length);
-  const leftThisSeason = Math.max(0, seasonWeeks - state.week);
+  /* Round 1593: the weeks the season still charges, so a night (a super cup, a Europa League night) owes nothing. */
+  const seasonWeeks = Math.max(1, tickingWeeksIn(state.calendar));
+  const leftThisSeason = Math.max(0, seasonWeeks - tickingWeeksDone(state.calendar, state.week));
   const yearsBeyond = Math.max(0, (p.contractYears ?? 1) - 1);
   const owed = Math.min(leftThisSeason + yearsBeyond * seasonWeeks, SEVERANCE_CAP_SEASONS * seasonWeeks);
   return { weekly: Math.max(1, Math.ceil(wage * SEVERANCE_RATE)), weeksLeft: Math.max(1, Math.round(owed)) };
@@ -10355,7 +10356,7 @@ function generateClubMessage(state: CareerState): void {
   const asks = objectiveStatuses(state).filter(s => isBoardAsk(s.objective.id));
   const chasing = asks.find(s => s.status !== 'done');
   const alreadyChased = (state.inbox ?? []).some(m => m.kind === 'boardChase');
-  if (chasing && !alreadyChased && state.week >= state.calendar.length * 0.25 && Math.random() < 0.45) {
+  if (chasing && !alreadyChased && tickingWeeksDone(state.calendar, state.week) >= tickingWeeksIn(state.calendar) * 0.25 && Math.random() < 0.45) {
     const fund = Math.max(1, Math.round(state.budget * 0.25 * 10) / 10);
     pushMessage(state, {
       playerName: 'The board',

@@ -11,6 +11,8 @@ import type { CalendarDay, FastForward as FastForwardTarget } from '@/lib/clubMa
 import { bannerClearance } from './deskCue';
 /* Round 978: the international breaks on the grid. */
 import { intlMarks, intlMarkLine } from '@/lib/clubManagerInternationals';
+/* Round 1593: the weeks the season still charges (a night is never one). */
+import { tickingWeeksLeft } from '@/lib/worldNights';
 
 /**
  * Round 158: the season as a real month calendar, off the phone calendar
@@ -194,7 +196,7 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
   );
   const selectedIntl = selected ? intlByKey.get(selected.key) ?? null : null;
 
-  const weeksLeft = c.calendar.length - c.week;
+  const weeksLeft = tickingWeeksLeft(c.calendar, c.week);
 
   const ffButton = (label: string, target: FastForwardTarget | null, gold = false) => {
     if (!target) return null;

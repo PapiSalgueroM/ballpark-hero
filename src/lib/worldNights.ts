@@ -111,6 +111,29 @@ export function nightDateAt(dates: readonly CalDate[], slot: number): CalDate | 
   return before ? addDays(before, 4) : null;
 }
 
+/**
+ * Round 1593 (decision 6, critic-1348 correction 4): the weeks a season charges. Every calendar entry ticks a week
+ * (the wages, the recovery, the books) except a night, which is a match and nothing else (playNextEntry skips the
+ * tick for it). So every reader that means "weeks of the season" counts these, never the raw length: a super cup
+ * night, and from this round a Europa League night, would otherwise be charged as a week. A calendar with no night
+ * entry gives exactly the numbers the raw length gave, for any week from 0 to the calendar's length.
+ */
+export function tickingWeeksIn(calendar: readonly { night?: unknown }[]): number {
+  let n = 0;
+  for (const e of calendar) if (!e.night) n += 1;
+  return n;
+}
+/** The ticking weeks before entry `week` (the ones already charged). */
+export function tickingWeeksDone(calendar: readonly { night?: unknown }[], week: number): number {
+  let n = 0;
+  for (let i = 0; i < week && i < calendar.length; i += 1) if (!calendar[i].night) n += 1;
+  return n;
+}
+/** The ticking weeks from entry `week` on (the ones still to charge). */
+export function tickingWeeksLeft(calendar: readonly { night?: unknown }[], week: number): number {
+  return tickingWeeksIn(calendar) - tickingWeeksDone(calendar, week);
+}
+
 /** How many of a watched season's nights the save has passed: a night sits before calendar entry `slot`, so it is
  *  played once every entry before it has been (`week >= slot`), and a whole season counts every night. A prefix,
  *  and never fewer than `seen`, the nights shown before a mid season move. A participant's own night entry at index

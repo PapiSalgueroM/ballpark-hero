@@ -58,6 +58,7 @@ import { plainCopy, snapshotWorldRosterClub, worldRosterView } from '@/lib/clubM
    proves the calendar built on them did not move a day. */
 import { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, shortDate } from '@/lib/calDate';
 import type { CalDate } from '@/lib/calDate';
+import { tickingWeeksDone, tickingWeeksIn } from '@/lib/worldNights';
 export { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, MONTH_NAMES, shortDate } from '@/lib/calDate';
 export type { CalDate } from '@/lib/calDate';
 
@@ -985,7 +986,10 @@ export function joinClubNow(career: CareerState): CareerState | null {
   /* The same point of the season, by share of the calendar: the two leagues
      need not be the same length. Never the very end, the Round 549 rule. */
   const total = fresh.calendar.length;
-  const frac = career.calendar.length ? career.week / career.calendar.length : 0;
+  /* Round 1593: the share of the weeks the old season has charged (a night is never one); fresh is a season one
+     save, whose calendar holds no night (a super cup's first season is a stub, and so is the Europa League's). */
+  const ticks = tickingWeeksIn(career.calendar);
+  const frac = ticks ? tickingWeeksDone(career.calendar, career.week) / ticks : 0;
   const target = Math.max(1, Math.min(total - 3, Math.round(total * frac)));
   const s = playRunIn(fresh, target);
   const interim = interimManagerName(from, career.season, career.week);

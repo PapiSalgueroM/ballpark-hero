@@ -80,6 +80,8 @@ import { staffOf, staffPayrollWeekly } from '@/lib/clubManagerStaff';
    from the engine, so there is no cycle. */
 import { gateEdge } from '@/lib/clubManagerXp';
 import { fanMeter } from '@/lib/clubManagerMeters';
+/* Round 1593: the weeks a season charges (a night is never one); worldNights.ts imports nothing from the engine. */
+import { tickingWeeksLeft } from '@/lib/worldNights';
 
 export type ConcessionTier = 0 | 1 | 2;
 
@@ -503,7 +505,7 @@ export function expectedHomeCrowd(state: CareerState): number {
 export function projectFinances(state: CareerState): FinanceProjection {
   const books = booksOf(state);
   const s = books.season;
-  const weeksLeft = Math.max(0, state.calendar.length - state.week);
+  const weeksLeft = tickingWeeksLeft(state.calendar, state.week);
   const retail = readShirtSales(s.shirts);
   const retailWeeksLeft = state.calendar.slice(state.week).filter(entry => !entry.night).length;
   const quote = shirtSalesForWeek(state);

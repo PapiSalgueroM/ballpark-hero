@@ -46,6 +46,8 @@ import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
+/* Round 1593: the hub's Week X of Y counts the weeks a season charges, never a night. */
+import { tickingWeeksDone, tickingWeeksIn } from '@/lib/worldNights';
 
 const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
 const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubManagerBoardPanel'));
@@ -412,7 +414,7 @@ const ClubManager = () => {
       <ScreenLoading>
         <ManagerSlotsScreen
           slots={g.slots}
-          activeDetail={c && !c.retired ? `Week ${Math.min(c.week + 1, c.calendar.length)} of ${c.calendar.length} · Board ${Math.round(c.boardConfidence)}/100` : null}
+          activeDetail={c && !c.retired ? `Week ${Math.min(tickingWeeksDone(c.calendar, c.week) + 1, tickingWeeksIn(c.calendar))} of ${tickingWeeksIn(c.calendar)} · Board ${Math.round(c.boardConfidence)}/100` : null}
           note={g.slotNote}
           onContinue={g.openSlot}
           onNew={g.newInSlot}
