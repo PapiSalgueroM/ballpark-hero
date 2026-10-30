@@ -1,0 +1,8 @@
+build exit=0 40s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simCmLeagueRules exit=0 94s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+dl exit=0 95s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+tsc exit=0 129s | 
+simCmMatchDay exit=0 44s | simCmMatchDay: all sections green (918 matches: 462 home, 448 away, 8 neutral)
+simManagerAppealIsolation exit=0 66s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+sweepWeight exit=0 31s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simManagerHotSeat exit=0 67s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
