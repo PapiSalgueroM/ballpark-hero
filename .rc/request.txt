@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-round: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office-shared/gmCareerKitPieces.test.tsx src/components/nhl-front-office/NhlLazyDesk.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/front-office-shared/GmCareerDesk.test.tsx src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/test/frontOfficeSaveRecovery.test.tsx src/lib/gmCareerRules.test.ts --testTimeout=600000 --hookTimeout=120000
+vitest-boards: node_modules/.bin/vitest run src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office/FrontOfficeTile.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx src/components/nhl-front-office/NhlTradeLists.test.tsx src/components/nhl-front-office/NhlWaiverReceipt.test.tsx --testTimeout=600000 --hookTimeout=120000
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simGmGameDay: node scripts/simGmGameDay.mjs
+simGmCareer-nfl: node scripts/simGmCareer.mjs
+simGmCareer-nhl: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+fob-check: node scripts/controlFrontOfficeBoard.mjs check
