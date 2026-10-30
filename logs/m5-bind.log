@@ -1,0 +1,6 @@
+MUTATION APPLIED: bindlegacy in src/components/front-office-shared/careerBinding.ts
+M5 bindlegacy playGmCareer nhl 390 exit=0 | playGmCareer: green. 1 board(s) (nhl), 1 sizes, four walks each and the slow kit walk at 390 and 1280.
+M5 bindlegacy simGmReload exit=0 | simGmReload: all green. Four front offices keep a finished season through a reload, and none of them can play a closed one again.
+M5 bindlegacy simFoHub exit=0 | simFoHub: green. Four hubs, five boxes each, every one of them saying something true.
+M5 bindlegacy simGmSeat exit=0 | simGmSeat: all checks passed
+M5 bind done
