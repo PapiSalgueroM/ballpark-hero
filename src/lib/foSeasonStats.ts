@@ -35,15 +35,20 @@ export interface FoStatLine {
 /** A club's games, the ones its box score won, and its points for and against. */
 export interface FoTeamTotals { g: number; w: number; pts: number; opp: number }
 
-/** A season's lines, keyed `${team}|${id}`, and its club totals. */
+/** A season's lines, keyed `${team}|${id}`, and its club totals. Round 1566: what readers read, never what a save
+ *  keeps; every sport saves the shared short shape (src/lib/foStatsCodec.ts) and spells it out with foExpand. */
 export interface FoSeasonStats {
   season: number;
   lines: Record<string, FoStatLine>;
   teams: Record<string, FoTeamTotals>;
 }
 
-export function foNewSeasonStats(season: number): FoSeasonStats {
-  return { season, lines: {}, teams: {} };
+/** No board calls this since Round 1566. It is kept for the pinned copy of an older NBA engine that
+ *  src/lib/nbaOpeningRatings.test.ts bundles against this folder: that engine opens each season with it and records
+ *  through today's nbaSeasonStats.ts, so it hands back today's empty saved block (the shared short shape,
+ *  src/lib/foStatsCodec.ts), not named rows. */
+export function foNewSeasonStats(season: number): { season: number; lines: Record<string, never>; clubs: Record<string, never> } {
+  return { season, lines: {}, clubs: {} };
 }
 
 /** Totals over games, to one decimal. Zero for a man with no games. */

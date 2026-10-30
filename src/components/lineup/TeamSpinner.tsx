@@ -6,6 +6,7 @@ interface TeamSpinnerProps {
   targetIndex: number;
   isSpinning: boolean;
   onFinish: () => void;
+  recordedYear?: number;
 }
 
 // Country code map for flag emojis (ISO 3166-1 alpha-2)
@@ -36,7 +37,8 @@ const allDisplayTeams = [
   'Morocco', 'Uruguay', 'Croatia', 'Colombia', 'Senegal',
 ];
 
-const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish }: TeamSpinnerProps) => {
+const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish, recordedYear }: TeamSpinnerProps) => {
+  const displayTeams = recordedYear === undefined ? allDisplayTeams : teams.map(team => team.name);
   const [displayIndex, setDisplayIndex] = useState(0);
   const [speed, setSpeed] = useState(60);
   const [settled, setSettled] = useState(!isSpinning);
@@ -65,7 +67,7 @@ const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish }: TeamSpinnerPr
         return;
       }
 
-      setDisplayIndex((prev) => (prev + 1) % allDisplayTeams.length);
+      setDisplayIndex((prev) => (prev + 1) % displayTeams.length);
 
       const progress = elapsed / totalDuration;
       const newSpeed = 45 + progress * 230;
@@ -77,10 +79,10 @@ const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish }: TeamSpinnerPr
     frame = window.setTimeout(tick, 45);
 
     return () => clearTimeout(frame);
-  }, [isSpinning]);
+  }, [isSpinning, displayTeams.length]);
 
   const target = teams[targetIndex];
-  const displayName = settled ? target?.name : allDisplayTeams[displayIndex];
+  const displayName = settled ? target?.name : displayTeams[displayIndex % displayTeams.length];
   const displayIsNation = settled ? target?.isNation : displayIndex > 9;
 
   // Get the visual (flag only; club crests are not used to avoid trademarked logos)
@@ -123,7 +125,7 @@ const TeamSpinner = ({ teams, targetIndex, isSpinning, onFinish }: TeamSpinnerPr
           </div>
           {settled && target && (
             <p className="text-xs text-muted-foreground mt-0.5 animate-fade-in">
-              Name a player who has played for {target.name}
+              {recordedYear === undefined ? `Name a player who has played for ${target.name}` : `Matching ${target.name} records from ${recordedYear}`}
             </p>
           )}
         </div>

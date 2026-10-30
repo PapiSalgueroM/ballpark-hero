@@ -15,8 +15,15 @@
  * and no name is cut: a leader's name wraps beside its value (the row stays
  * one line wherever the name fits, so the card grows least), and below the sm
  * width a club line puts the name on its own line with the numbers under it,
- * because the numbers' columns leave a name about 32 px at 320 wide.
+ * because the numbers' columns leave a name about 28 px at 320 wide (the NFL's
+ * five; 71 px for the NBA's four).
  * scripts/playFoSeasonCard.mjs measures both boards at three sizes.
+ *
+ * Round 1566, the phone leftovers of 1562's reviews: below sm a hairline rule
+ * sits over every man's two lines, so his numbers read as his and not the next
+ * man's, and Your lines is taller there (27rem against sm's 14rem), so a phone
+ * shows at least the eleven men of a twelve man club the box showed before the
+ * lines stacked, and the page's own scroll stays the main one.
  */
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -112,14 +119,14 @@ export function FoSeasonStatsCard(props: FoSeasonStatsCardProps) {
       )}
 
       {tab === 'team' && (
-        <div data-stats-team className="mt-2 max-h-56 overflow-y-auto rounded-lg border border-border/60 bg-background px-2 py-1.5">
+        <div data-stats-team className="mt-2 max-h-[27rem] overflow-y-auto rounded-lg border border-border/60 bg-background px-2 py-1.5 sm:max-h-56">
           <div className="grid grid-cols-1 gap-x-2 text-xs font-bold uppercase text-muted-foreground sm:grid-cols-[1fr_auto]">
             <span className="min-w-0 break-words">{props.teamName}</span>
             <span className="grid justify-self-end gap-2 text-right" style={cols}><span>G</span>{props.columns.map(c => <span key={c}>{c}</span>)}</span>
           </div>
           {props.teamLines.length === 0 && <p className="text-xs text-muted-foreground">Nobody played.</p>}
           {props.teamLines.map(l => (
-            <div key={l.id} className="grid grid-cols-1 gap-x-2 text-xs text-foreground sm:grid-cols-[1fr_auto]">
+            <div key={l.id} data-stats-team-row className="grid grid-cols-1 gap-x-2 border-t border-border/60 text-xs text-foreground sm:grid-cols-[1fr_auto] sm:border-t-0">
               <span className="min-w-0 break-words">{l.name}{l.tag ? <span className="text-muted-foreground"> {l.tag}</span> : null}</span>
               <span className="grid justify-self-end gap-2 text-right" style={cols}><span>{l.g}</span>{l.values.map((v, i) => <span key={i}>{v}</span>)}</span>
             </div>

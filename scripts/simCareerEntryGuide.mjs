@@ -49,7 +49,9 @@ if (control === 'all') {
     const passed = run.status === 0 && !run.error && !run.signal;
     outcomes.push({ control: mode || 'normal', passed, exit: run.status, error: String(run.error || '') });
     console.log(`${passed ? 'PASS' : 'FAIL'} career entry guide ${mode || 'normal'}`);
-    process.stdout.write(passed ? output.split('\n').filter(line => line.startsWith('simCareerEntryGuide')).join('\n') + '\n' : output.slice(-16000));
+    /* Round 1557 (critic-1541 correction 9): the normal run also passes on the test's own note of whether its NBA saves
+       meet the national team's call (src/test/helpers/intlCallNote.ts prints it; a run of one mode prints it whole). */
+    process.stdout.write(passed ? output.split('\n').filter(line => line.startsWith('simCareerEntryGuide') || (!mode && line.startsWith('note careerEntryGuide'))).join('\n') + '\n' : output.slice(-16000));
   }
   await writeFile(path.join(evidence, 'summary.json'), JSON.stringify(outcomes, null, 2));
   assert(outcomes.every(row => row.passed), 'Every normal and control mode passed; all modes were attempted');

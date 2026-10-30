@@ -48,16 +48,17 @@ export interface NflTeamLine { id: string; name: string; pos: string; g: number;
 export function nflTeamLines(lg: Pick<LeagueState, 'stats' | 'season'>, abbr: string): NflTeamLine[] {
   const stats = nflLiveStats(lg);
   if (!stats) return [];
-  return Object.entries(stats.lines[abbr] ?? {})
-    .filter(([, l]) => l[2] > 0)
-    .map(([id, l]) => ({ id, name: l[0], pos: l[1], g: l[2], values: NFL_STAT_COLS.map((_, i) => l[3 + i] as number), rookie: l[7] === 1 }))
+  return Object.values(nflFoStats(stats).lines)
+    .filter(l => l.team === abbr && l.g > 0)
+    .map(l => ({ id: l.id, name: l.name, pos: l.pos, g: l.g, values: NFL_STAT_COLS.map(c => l.tot[c] ?? 0), rookie: !!l.rookie }))
     .sort((a, b) => b.values.reduce((x, y) => x + y, 0) - a.values.reduce((x, y) => x + y, 0) || b.g - a.g || a.id.localeCompare(b.id));
 }
 
 /** A club's field goals and safeties this regular season, or null with no lines. */
 export function nflClubKicks(lg: Pick<LeagueState, 'stats' | 'season'>, abbr: string): { td: number; fg: number; sf: number } | null {
-  const c = nflLiveStats(lg)?.clubs[abbr];
-  return c ? { td: c[4], fg: c[5], sf: c[6] } : null;
+  const live = nflLiveStats(lg);
+  const c = live ? nflFoStats(live).club[abbr] : undefined;
+  return c ? { td: c[0], fg: c[1], sf: c[2] } : null;
 }
 
 /** An award winner's line in words: "31 TD thrown, 3 run in", "14 sacks". */

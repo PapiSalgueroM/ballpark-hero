@@ -19,6 +19,10 @@ import { ARCHETYPES, startCareer, nflAssignRole, simSeason, progress, legacyOf }
 import { NBA_ARCHETYPES, startNbaCareer, nbaAssignRole, simNbaSeason, nbaProgress, nbaLegacyOf } from '@/lib/nbaMyCareer';
 import { MLB_ARCHETYPES, startMlbCareer, mlbAssignRole, simMlbSeason, mlbProgress, mlbLegacyOf } from '@/lib/mlbMyCareer';
 import { NHL_ARCHETYPES, startNhlCareer, nhlAssignRole, simNhlSeason, nhlProgress, nhlLegacyOf } from '@/lib/nhlMyCareer';
+import { noteIntlCalls } from '@/test/helpers/intlCallNote';
+
+/* Round 1557 (critic-1541 correction 9): the file prints whether its NBA saves meet the national team's call. */
+noteIntlCalls('usCareerActionConfirm');
 
 const SENTINEL_KEY = 'confirmation-fixture-unrelated';
 const SENTINEL = 'preserved simulated unrelated save';

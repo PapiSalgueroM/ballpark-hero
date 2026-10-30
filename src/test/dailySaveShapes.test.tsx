@@ -52,6 +52,22 @@
  *         off): the first row of each guide file draws the recorded red.
  *   held  the gate never opens: every row with a guide fails by name within a
  *         short bound, never on a diff and never by hanging.
+ *
+ * Round 1565 (closing check): the guide was not the only late piece. The
+ * guide block's heading is the game's search title (useSeoMetaTitle), read
+ * from one of the 32 seo meta parts Round 700 split out, and until that part
+ * lands the heading is the page's own title prop. Nothing fetched the part
+ * before the baseline, so the first row of each part could take "fresh"
+ * without the search title, and the row went red on that heading. Measured on
+ * GitHub runners: dailySaveShapes alone red 1 of 13 runs, and 6 of 10 when it
+ * shares a runner with the four other daily save files (results r1565-vf-a,
+ * r1565-vf-c and r1565-vf-e, on origin/main 1229c0190 as on the round's head),
+ * every red the heading of /baseball-connections, /nba-career,
+ * /afl-higher-lower or /college-grid, each the first row of its part. So a
+ * row of a game page now fetches its part through loadSeoMeta itself, beside
+ * the guide, and says by name when it has not landed. R848_META switches that
+ * race on, with the same three modes as R848_GUIDE (slow, late, held), and the
+ * harness's meta controls read them.
  */
 import './dailyReload/mocks';
 import { act, cleanup, render } from '@testing-library/react';
@@ -62,6 +78,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { loadGameContent, peekGameContent, PATH_BUNDLE } from '@/data/gameContent/loader';
+import { loadSeoMeta } from '@/components/seo/PageSeo';
+import { ALL_GAMES } from '@/data/gameRegistry';
 import { resetMocks } from './dailyReload/mocks';
 
 /* These DOM checks use an unavailable optional answer key.
@@ -101,6 +119,33 @@ if (GUIDE && !['slow', 'late', 'held'].includes(GUIDE)) throw new Error(`unknown
 /* How long a row waits for its guide before it fails by name. */
 const GUIDE_BOUND_MS = GUIDE === 'held' ? 500 : 30000;
 const GUIDE_NOT_LANDED = 'the guide for this route had not landed when the baseline was taken';
+
+/* The seo meta parts, passed through untouched unless R848_META is set. With
+   it set, every part load waits first: a real 300 ms under slow, a gate under
+   late and held. PageSeo keeps each part once it lands and asks for a part only
+   while it is not held, so only the first row of each part is exposed. */
+const meta = vi.hoisted(() => {
+  const state = { mode: process.env.R848_META || '', open: () => {}, gate: Promise.resolve(), waited: 0 };
+  state.gate = new Promise<void>((r) => { state.open = r; });
+  return state;
+});
+vi.mock('@/data/seoMetaParts', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/data/seoMetaParts')>();
+  if (!meta.mode) return { ...real };
+  return {
+    ...real,
+    SEO_META_PARTS: real.SEO_META_PARTS.map((load) => async () => {
+      meta.waited += 1;
+      if (meta.mode === 'slow') await new Promise((r) => setTimeout(r, 300));
+      else await meta.gate;
+      return load();
+    }),
+  };
+});
+const META = meta.mode;
+if (META && !['slow', 'late', 'held'].includes(META)) throw new Error(`unknown R848_META ${META}`);
+const META_BOUND_MS = META === 'held' ? 500 : 30000;
+const META_NOT_LANDED = 'the seo meta part for this route had not landed when the baseline was taken';
 
 /* What each useDailyPuzzle call reads, captured through a pass-through
    wrapper: the storage key prefix, and once it has loaded, the index and id
@@ -259,10 +304,14 @@ beforeEach(() => {
   /* A gate of its own for every row: the one a row opened must not let the
      next guide file through early. */
   guide.gate = new Promise<void>((r) => { guide.open = r; });
+  meta.gate = new Promise<void>((r) => { meta.open = r; });
 });
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.useRealTimers(); });
 /* Output, not runtime, proves the switch was on: how many loads were made to wait. */
-afterAll(() => { if (GUIDE) console.log(`R848_GUIDE ${JSON.stringify({ mode: GUIDE, waited: guide.waited })}`); });
+afterAll(() => {
+  if (GUIDE) console.log(`R848_GUIDE ${JSON.stringify({ mode: GUIDE, waited: guide.waited })}`);
+  if (META) console.log(`R848_META ${JSON.stringify({ mode: META, waited: meta.waited })}`);
+});
 
 /** True when the promise settled inside the bound. The timer is real (only Date is faked here). */
 function landedWithin(work: Promise<unknown>, ms: number): Promise<boolean> {
@@ -285,6 +334,10 @@ describe('a damaged daily save resets itself', () => {
       const failures: string[] = [];
       const hasGuide = PATH_BUNDLE[row.route] !== undefined;
       let guideState: 'ready' | 'none' | 'skipped' | 'missing' = hasGuide ? 'missing' : 'none';
+      /* PageSeo asks for a part only on a game page (its isGame), so a route
+         the registry does not list never waits on one. */
+      const hasMeta = ALL_GAMES.some((g) => g.path === row.route);
+      let metaState: 'ready' | 'none' | 'skipped' | 'missing' = hasMeta ? 'missing' : 'none';
       let slugs: [string, { index: number; id?: string; loaded: boolean }][] = [];
       run: {
         /* The route's guide, through the loader itself, before anything is
@@ -298,6 +351,18 @@ describe('a damaged daily save resets itself', () => {
             break run;
           }
           guideState = 'ready';
+        }
+        /* Round 1565: the part holding the heading's search title, the same
+           way and for the same reason, through PageSeo's own loader. */
+        if (hasMeta && META === 'late') metaState = 'skipped';
+        else if (hasMeta) {
+          const answer = loadSeoMeta(row.route);
+          const landed = await landedWithin(answer, META_BOUND_MS);
+          if (!landed || (await answer) == null) {
+            failures.push(`${META_NOT_LANDED} (${landed ? 'the loader answered with nothing' : `the loader had not answered after ${META_BOUND_MS} ms`})`);
+            break run;
+          }
+          metaState = 'ready';
         }
         /* A first mount still warms the page's own lazy pieces, so the
            baseline is the second. */
@@ -314,6 +379,10 @@ describe('a damaged daily save resets itself', () => {
         if (hasGuide && GUIDE === 'late') {
           guide.open();
           await loadGameContent(row.route);
+        }
+        if (hasMeta && META === 'late') {
+          meta.open();
+          await loadSeoMeta(row.route);
         }
         for (const form of damaged(slugs[0][1], row)) {
           localStorage.clear();
@@ -336,7 +405,7 @@ describe('a damaged daily save resets itself', () => {
         const again = await mount(row);
         if (again !== fresh) failures.push(`the fresh page moved while the row ran, ${firstDifference(again, fresh)}`);
       }
-      console.log(`R848_SHAPES ${JSON.stringify({ route: row.route, slugs: slugs.map(([s, v]) => ({ s, i: v.index, id: v.id ?? null })), guide: guideState, failures })}`);
+      console.log(`R848_SHAPES ${JSON.stringify({ route: row.route, slugs: slugs.map(([s, v]) => ({ s, i: v.index, id: v.id ?? null })), guide: guideState, meta: metaState, failures })}`);
       expect(failures).toEqual([]);
     }, 60000);
   }

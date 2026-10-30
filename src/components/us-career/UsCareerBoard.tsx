@@ -12,7 +12,8 @@ import ShareButtons from '@/components/game/ShareButtons';
    usCareerToCoach.ts) still pulls in the NFL engine and the NBA, MLB and NHL
    conquest data on all four routes, as it did before this round.
    Wire a new screen here, once. */
-import type { UsCareerCore, UsCareerEvent, UsCareerSeason, UsCareerSport, UsShopItem } from '@/lib/usCareerSport';
+import type { IntlSummerNotes, UsCareerCore, UsCareerEvent, UsCareerSeason, UsCareerSport, UsIntlSport, UsShopItem } from '@/lib/usCareerSport';
+import type { IntlSummerEntry, IntlTournament } from '@/lib/careerIntl';
 import UsCareerProgramme from '@/components/us-career/UsCareerProgramme';
 import { expireUsCareerProgramme, prepareUsCareerProgramme, restoreUsCareerProgramme, settleUsCareerProgramme, type ProgrammeCareer } from '@/lib/usCareerProgramme';
 // Round 179: real free agency, shared engine and shared screen.
@@ -32,6 +33,8 @@ import { holdPendingSave } from '@/lib/safeStorage';
    celebration kit the season curtain uses. */
 import DraftDayCard, { type DraftDayFacts } from '@/components/us-career/DraftDayCard';
 import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm';
+import UsCareerStartOver from '@/components/us-career/UsCareerStartOver';
+import { noOfferWhy, seasonAheadIsLast } from '@/lib/usCareerNoOffer';
 import UsCareerSaveNotice from '@/components/us-career/UsCareerSaveNotice';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { type PlayerAppearance, defaultAppearance } from '@/lib/soccerCareerAppearance';
@@ -91,6 +94,24 @@ const FarewellSeasonBanner = lazy(() => import('@/components/career/FarewellCard
 const HallOfFameCard = lazy(() => import('@/components/career/HallOfFameCard').then(m => ({ default: m.HallOfFameCard })));
 /* Round 1500: the dirty money desk loads when "Deal with it" is pressed. */
 const DirtyMoneyDesk = lazy(() => import('@/components/us-career/DirtyMoneyDesk'));
+/* Round 1544: the national team's call and what the summer came to load with
+   the moment they belong to, as the sport's whole intl face does. */
+const IntlCallUpCard = lazy(() => import('@/components/us-career/IntlCallUpCard'));
+const IntlSummerResult = lazy(() => import('@/components/us-career/IntlSummerResult'));
+/* Round 1557: the International view behind the Trophy Case's tile, a named export of the result's own module,
+   so the two share one lazy chunk. */
+const IntlSummersView = lazy(() => import('@/components/us-career/IntlSummerResult').then(m => ({ default: m.IntlSummersView })));
+
+/** Round 1544: holds the place of the national team's screens while their chunk
+ *  or the sport's face is on its way, at about the call card's height, so the
+ *  page does not jump when they land. */
+function IntlHolding() {
+  return (
+    <div role="status" data-intl-holding style={{ minHeight: 300 }} className="rounded-xl border border-border bg-card p-4 text-xs text-muted-foreground">
+      One moment
+    </div>
+  );
+}
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
    game. Now it hands you to a job board and the save keeps going.
@@ -198,6 +219,16 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [feed, setFeed] = useState<string[]>([]);
   const [pendingEvent, setPendingEvent] = useState<CareerEvent | null>(null);
   const [decisionOutcome, setDecisionOutcome] = useState<CareerDecisionOutcomeData | null>(null);
+  /* Round 1544: the international summers, with the board's other state and above every early return (critic
+     advice 21, the React error #310 rule). intlFace is the sport's whole face once it has loaded (the binding's
+     static gate decides when: a call waiting, or a save that carries a summer), held with the sport it came from.
+     intlResult is the screen of a call he just answered, transient like decisionOutcome: a reload does not show
+     it again, and the summer row keeps the medal. */
+  const [intlFace, setIntlFace] = useState<{ of: UsCareerSport; face: UsIntlSport<CareerState> } | null>(null);
+  const [intlResult, setIntlResult] = useState<{ row: Extract<IntlSummerEntry, { went: true }>; tournament: IntlTournament | null; notes: IntlSummerNotes } | null>(null);
+  const intlAnswered = useRef<string | null>(null);
+  /* Round 1557: the Trophy Case's International view is open (a state of the trophies panel, with its own Back). */
+  const [intlOpen, setIntlOpen] = useState(false);
   const consumedEvent = useRef<CareerEvent | null>(null);
   /* Round 1038: the summer slot ('year:at') the last answer spent, so a
      double tap can never apply two cards of one summer. */
@@ -275,8 +306,25 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      scroll from here would fight that one. The hook does nothing when the wheel's top is already readable. */
   const pushesMade = !marketTalk ? 0 : marketTalk.kind === 'extension' ? (marketTalk.talk.pushed ? 1 : 0)
     : marketTalk.window.offers.filter(o => o.pushed).length;
+  /* Round 1544: the summer whose call waits on an answer, from the binding's static gate (no ledger, no
+     module): derived from the save, so a reload asks again until he answers. The whole face loads the first
+     time a call waits (the load hunk loads it too for a save that carries a summer). */
+  const intlCallYear = career && sport.intl && (phase === 'season' || phase === 'event') ? sport.intl.pendingYear(career) : null;
+  const intl = intlFace?.of === sport ? intlFace.face : null;
+  useEffect(() => {
+    if (intl || !sport.intl || intlCallYear === null) return;
+    let live = true;
+    sport.intl.load().then(face => { if (live) setIntlFace({ of: sport, face }); })
+      .catch(() => { /* a chunk that fails to load: the site's preloadError listener reloads once */ });
+    return () => { live = false; };
+  }, [sport, intl, intlCallYear]);
+  /* A new call (or none) frees the double tap guard of answerIntlCall. */
+  useEffect(() => { intlAnswered.current = null; }, [intlCallYear]);
+  /* Round 1557 (1544's review, minor 6): the curtain closing is a screen change of its own, so whatever comes after
+     it (the national team's call, the summer's card) arrives in view the way every other step does. Before this
+     term the press changed the key once, for the curtain, and its Continue changed nothing. */
   const revealRef = useRevealScroll<HTMLDivElement>(
-    `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}:${pushesMade}`,
+    `${phase}:${pendingEvent?.id ?? ''}:${career?.seasons.length ?? 0}:${pushesMade}:${intlCallYear ?? ''}:${intlResult ? 'intl' : ''}:${reveal ? 'curtain' : ''}`,
   );
 
   /* Round 470: opening a hub box is a new screen, so it obeys the owner's no
@@ -285,7 +333,22 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      at scrollY 443 with the panel's own back button 246px above the fold, so
      the player landed underneath the screen he had just opened. The hook does
      nothing when the top of the panel is already readable. */
-  const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}`);
+  const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}:${intlOpen ? 'intl' : ''}`);
+  /* Round 1557: leaving the trophies panel any way at all closes the International view, so the case opens on itself. */
+  useEffect(() => { if (panel !== 'trophies') setIntlOpen(false); }, [panel]);
+
+  /* Round 1569 (the lead's ruling R1, report A's own screen). A start or a
+     restart swaps the whole board: Enter the draft swaps the tall create
+     screen for the shorter hub, the road to the draft and its draft day do the
+     same, and a confirmed Start over or New career swaps a hub or the retired
+     card for the create screen. The page kept the old screen's scroll, so at
+     1318 x 647 the hub's top sat above the viewport and the window was left on
+     the guide below the board: the player saw no game. The count rises on
+     those presses and at no other time (never on a load, a reload or a hub
+     tile), and the board's own wrapper pulls its top in under the menu bar.
+     Like every reveal it does nothing when that top is already readable. */
+  const [careerStart, setCareerStart] = useState(0);
+  const boardTop = useRevealScroll<HTMLDivElement>(careerStart);
 
   /* Round 643: the coaching career comes after retirement, so it is still a
      finished playing career. With done on the retired screen alone, every
@@ -340,6 +403,17 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       /* Round 1039: the retirement answers, the speech and the recorded jersey,
          each checked alone. Old saves have none. */
       repairHallOnLoad(loaded);
+      /* Round 1544: the international summers, each row checked alone (careerIntl.ts repairIntlOnLoad). The
+         module loads only for a save that carries a block; the repair runs on a copy and the copy is taken only
+         while the career on screen is still the one loaded. A save with no block loads nothing. */
+      const intlGate = sport.intl;
+      if (intlGate && (loaded as { intl?: unknown }).intl !== undefined) {
+        intlGate.load().then(face => {
+          setIntlFace({ of: sport, face });
+          const copy: CareerState = JSON.parse(JSON.stringify(loaded));
+          if (face.repairOnLoad(copy)) setCareer(prev => (prev === loaded ? copy : prev));
+        }).catch(() => { /* a chunk that fails to load: the site's preloadError listener reloads once */ });
+      }
       setCareer(loaded);
       setTeamQuality(s.teamQuality);
       /* Round 126, house pattern from ensureContracts and ensureAcademy in
@@ -448,6 +522,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   };
   const beginProspect = () => {
     if (prospectRef.current) return;
+    setCareerStart(n => n + 1);
     saveProspect(createUsCareerProspect(sport, {
       name: nameInput.trim() || sport.create.defaultName, pos, archetypeId, eraId, appearance,
       seed: `${sport.slug}:${Math.floor(Math.random() * 0x100000000).toString(36)}`,
@@ -483,6 +558,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setTeamQuality(tq);
     setDraftDay(null);
     focusCareerEntry.current = true;
+    setCareerStart(n => n + 1);
     setPhase('season');
     persist(c, 'season', tq);
   };
@@ -509,6 +585,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     ]);
     /* Round 530: the same facts, given a moment. */
     setDraftDay({ pick: c.draftPick, teamLabel: sport.teamLabelOf(c.team), playerName: c.name, lines: [pressureLine, roleNote], firstRoundEnd: sport.firstRoundEnd });
+    setCareerStart(n => n + 1);
     setPhase('season');
     persist(c, 'season', tq);
   };
@@ -608,12 +685,16 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setLastLine(line);
     /* Round 186: the curtain. Every string in it is one the engine already
        wrote; the true stat line is on screen from frame one. */
+    /* Round 1544: the national team's call, from the binding's static gate, closes the curtain (critic advice
+       22: it is shown after the season, so it says what comes next). The feed below is unchanged. */
+    const intlCurtain = sport.intl?.curtainLine(c) ?? null;
     setReveal(buildSeasonReveal({
       year: line.year,
       subHeader: `${sport.teamLabelOf(line.team, c.eraId)} · age ${line.age} · ${c.pos}`,
       teamResult: line.teamResult, statLine: statLine(line, c.pos),
       /* Round 1039: the last season of an announced farewell says so. */
-      campNote, notes: isFarewellSeason(c.retirement, line.year) ? ['Farewell season', ...notes] : notes, progressNotes,
+      campNote, notes: isFarewellSeason(c.retirement, line.year) ? ['Farewell season', ...notes] : notes,
+      progressNotes: intlCurtain ? [...progressNotes, intlCurtain] : progressNotes,
     }));
     const newFeed = [...(campNote ? [campNote] : []), ...notes, ...progressNotes];
     /* Round 1039: a farewell he announced (on the talk or on a deck card) ends
@@ -650,6 +731,23 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setFeed(newFeed);
     setPhase('event');
     persist(c, 'event', teamQuality);
+  };
+
+  /* Round 1544: his answer to the national team. The face plays the tournament on the career's own keyed
+     stream (never Math.random) on a copy, and the save keeps the phase it had, so the summer's card (dealt at
+     the press, never touched here) or the hub comes next, after the result. One answer a summer: a double tap
+     is held by the summer it answered. */
+  const answerIntlCall = (choice: 'go' | 'rest') => {
+    if (!career || !intl || intlCallYear === null) return;
+    const slot = `${career.seasons.length}:${intlCallYear}`;
+    if (intlAnswered.current === slot) return;
+    intlAnswered.current = slot;
+    const c: CareerState = JSON.parse(JSON.stringify(career));
+    const res = intl.answer(c, choice);
+    if (!res) return;
+    setCareer(c);
+    persist(c, phase, teamQuality);
+    if (res.row.went) setIntlResult({ row: res.row, tournament: res.tournament, notes: intl.summerNotes(res.row.edition, res.row.age) });
   };
 
   /* Round 1038: an answer inside a summer. The card applies (card 1 on the
@@ -918,6 +1016,19 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     persist(c, 'retired', teamQuality);
   };
 
+  /* Round 1569: the market and the extension talk with no offer are never a
+     dead end. A veteran (the six seasons Hang them up now waits for) can
+     retire from either, through the same confirmation, and the retirement
+     is the full one: the card, the Hall ballot and the coaching start. The
+     talk is dropped first so the save carries no market for a retired man. */
+  const retireFromMarket = (label: string): ReactNode => (!career || career.seasons.length < 6) ? null : (
+    <div data-career-market-retire="" className="mt-2 flex justify-center">
+      <USCareerActionConfirm action="retire" sport={sport.label} onConfirm={() => { setMarketTalk(null); extDeclinedRef.current = false; retireNow(); }}>
+        <button type="button" className="min-h-11 min-w-11 rounded-full px-4 text-xs font-semibold text-muted-foreground hover:text-destructive">{label}</button>
+      </USCareerActionConfirm>
+    </div>
+  );
+
   const reset = () => {
     setMarketTalk(null);
     extDeclinedRef.current = false;
@@ -926,6 +1037,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     prospectRef.current = null;
     setProspect(null);
     setProspectNotice('');
+    setCareerStart(n => n + 1);
     setPhase('create');
     setFeed([]);
     setLastLine(null);
@@ -939,6 +1051,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setRivalryOutcome(null);
     setPanel('none');
     setRetiredReview(false);
+    /* Since Round 1569 Start over is drawn on every screen, so two transient
+       screens that render after the create check can be on screen here: the
+       season curtain and the national team result. Leaving either set opened
+       the NEXT career on the old career's screen (Release BT review). */
+    setReveal(null);
+    setIntlResult(null);
     reviewReturn.current = null;
     coachRef.current = null;
     setCoach(null);
@@ -984,10 +1102,21 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      TD" in all four places this prints. The line lives in usCareerStatLine.ts
      now, one branch per position the career deals. */
   const statLine: (s: SeasonLine, p: string) => string = sport.statLine;
-  const withSaveStatus = (content: ReactNode) => <>
+  /* Round 1569: every screen after the create screen opens with Start over
+     (src/components/us-career/UsCareerStartOver.tsx says why), the prospect's
+     road to the draft and the coaching career included. The board is one
+     element so that a sticky control inside it is held to the board and never
+     floats over the guide below it (it was a fragment, and the page's main was
+     the sticky parent). */
+  const startOver = phase !== 'create' && (!!career || (phase === 'prospect' && !!prospect));
+  /* Round 1569 (the lead's ruling R3): a retired career's Hall card is drawn from this one save, so both
+     restart prompts say it goes too (the coaching career after retirement included). */
+  const hallOnRestart = !!career?.retired && !!sport.hall;
+  const withSaveStatus = (content: ReactNode) => <div ref={boardTop}>
     {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
+    {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} />}
     {content}
-  </>;
+  </div>;
 
   if (phase === 'prospect' && prospect) {
     return withSaveStatus(<ProspectJourney sport={sport} prospect={prospect} onChange={advanceProspect} onJoin={joinCareer} onBack={() => {
@@ -1171,6 +1300,41 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     );
   }
 
+  /* ------------------- Round 1544: the national team's call -------------------
+     After the talk, before the summer's card or the hub. The static gate says a call waits; the card draws
+     once the face has loaded, in a holding box until then. Go shows what the summer came to (transient), and
+     its Continue goes on to the summer's card or the hub, whichever the save is on. */
+  if (intlResult) {
+    const n = intlResult.notes;
+    return withSaveStatus(
+      <div ref={revealRef}>
+        <Suspense fallback={<IntlHolding />}>
+          <IntlSummerResult
+            editionLabel={n.label} row={intlResult.row} tournament={intlResult.tournament} nation={n.nation}
+            happened={n.happened} fieldNote={n.fieldNote} playedAsNote={n.playedAsNote} statWords={n.statWords}
+            hurtCost={n.hurtCost} continueLabel="Continue" onContinue={() => setIntlResult(null)}
+          />
+        </Suspense>
+      </div>
+    );
+  }
+  const intlCall = intlCallYear !== null && intl ? intl.pending(career) : null;
+  if (intlCallYear !== null && (!intl || intlCall)) {
+    const n = intlCall && intl ? intl.summerNotes(intlCall.edition.id, career.age) : null;
+    return withSaveStatus(
+      <div ref={revealRef}>
+        {!n ? <IntlHolding /> : (
+          <Suspense fallback={<IntlHolding />}>
+            <IntlCallUpCard
+              editionLabel={n.label} age={career.age} knockPct={n.knockPct} hurtCost={n.hurtCost}
+              fieldNote={n.fieldNote} playedAsNote={n.playedAsNote} onAnswer={answerIntlCall}
+            />
+          </Suspense>
+        )}
+      </div>
+    );
+  }
+
   if ((phase === 'retired' && retiredReview) || (phase !== 'retired' && phase !== 'coach' && phase !== 'freeagency' && panel === 'log')) {
     return withSaveStatus(<Suspense fallback={<p role="status">Loading season review...</p>}>
       <CareerSeasonReview career={career} sport={sport} backLabel={phase === 'retired' ? 'Back to retirement' : 'Back to career'} onBack={() => {
@@ -1235,7 +1399,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             )}
           </div>
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset}>
+            <USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset} hallCard={hallOnRestart}>
               <button className="inline-flex min-h-11 min-w-11 items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground">
                 <RotateCcw className="h-4 w-4" /> New career
               </button>
@@ -1342,9 +1506,26 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             </div>
           </div>
         )}
-        {panel === 'trophies' && (
+        {/* Round 1557: the medals of the summers with the national team sit on the shelf as rows of their own
+            (the sport's face, loaded with the save that carries a summer), and the International tile opens every
+            summer he was called, one tile each, in its own view with Back: never a list above the badges. */}
+        {panel === 'trophies' && intlOpen && intl ? (
+          <Suspense fallback={<IntlHolding />}>
+            <IntlSummersView
+              summers={intl.summersOf(career)} editionLabel={intl.editionLabel}
+              resultOf={row => ({ tournament: intl.tournamentOf(career, row.year), notes: intl.summerNotes(row.edition, row.age) })}
+              onBack={() => setIntlOpen(false)}
+            />
+          </Suspense>
+        ) : panel === 'trophies' && (
           <div className="space-y-3">
-            <TrophyCase seasons={career.seasons} rings={sport.ringsOf(career)} ringWord={sport.ringWord} />
+            <TrophyCase
+              seasons={career.seasons} rings={sport.ringsOf(career)} ringWord={sport.ringWord}
+              extra={intl?.trophyRows(career)}
+              intlTile={intl && intl.summersOf(career).length > 0
+                ? { sub: `Called up by the national team ${intl.summersOf(career).length === 1 ? 'once' : `${intl.summersOf(career).length} times`}`, onOpen: () => setIntlOpen(true) }
+                : undefined}
+            />
             {/* Round 469: the peaks between the trophies. Evaluated on every
                 render off the save, so a badge can never be stale. */}
             <BadgeGrid defs={sport.badges} earned={sport.earnedBadges(career)} />
@@ -1530,11 +1711,15 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
 
       {phase === 'extension' && extTalk ? (
         <div ref={revealRef}>
-          <ExtensionCard talk={extTalk} seasonWord={sport.seasonWord} onPush={pushExt} onSign={signExt} onDecline={declineExt} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} odds={extensionMarketProbabilities(sport.extPushArgs(career, Math.random))} />
+          <ExtensionCard talk={extTalk} seasonWord={sport.seasonWord} onPush={pushExt} onSign={signExt} onDecline={declineExt} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} odds={extensionMarketProbabilities(sport.extPushArgs(career, Math.random))}
+            why={extTalk.offer || extTalk.pulled ? null : noOfferWhy({ age: career.age, ovr: career.ovr, cliffAge: sport.extPushArgs(career, Math.random).cliffAge, market: extTalk.market })}
+            lastSeason={seasonAheadIsLast(career, sport.shouldRetire)}
+            retire={retireFromMarket('Retire now')} />
         </div>
       ) : phase === 'freeagency' && faWindow ? (
         <div ref={revealRef}>
           <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} compare odds={faWindow.offers.map((_, index) => freeAgencyMarketProbabilities(faWindow, index, sport.faPushArgs(career, Math.random)))} />
+          {!(marketTalk?.wheel && !marketTalk.wheel.seen) && retireFromMarket('Retire instead')}
         </div>
       ) : phase === 'event' && pendingEvent ? (
         <div ref={revealRef} data-career-event={pendingEvent.id} data-career-decision-event={pendingEvent.id} className={career.summer ? 'cm-rise rounded-2xl border border-gold/40 bg-card p-4' : 'rounded-2xl border border-gold/40 bg-card p-4'}>

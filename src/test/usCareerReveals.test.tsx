@@ -39,6 +39,10 @@ import { ARCHETYPES, startCareer } from '@/lib/nflMyCareer';
 import { draftPressureLine } from '@/lib/usCareerReveal';
 import { acceptCoachOffer, formatCoachRecord, playCoachSeason, startCoachCareer } from '@/lib/usCoachCareer';
 import type { CoachCareerState } from '@/lib/usCoachCareer';
+import { noteIntlCalls } from '@/test/helpers/intlCallNote';
+
+/* Round 1557 (critic-1541 correction 9): the file prints whether its NBA saves meet the national team's call. */
+noteIntlCalls('usCareerReveals');
 
 /* The draw the coach season runs on. Pinned so the season resolves the same
    way every run; the test asserts the coach kept the job on it, so a change

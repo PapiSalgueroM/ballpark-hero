@@ -38,6 +38,10 @@ import { US_BANK_HELP_RULE } from '@/lib/usCareerBank';
 import { rookieDeal } from '@/lib/usCareerRookieDeal';
 import { US_COACH_RETIRE_HELP_RULE } from '@/lib/usCoachRetirement';
 import { US_DIRTY_MONEY_HELP_RULE } from '@/lib/careerDirtyMoney';
+import { noteIntlCalls } from '@/test/helpers/intlCallNote';
+
+/* Round 1557 (critic-1541 correction 9): the file prints whether its NBA saves meet the national team's call. */
+noteIntlCalls('usCareerHelpRules1104');
 
 const pages: Record<string, ComponentType> = { nba: NbaMyCareer, nfl: NflMyCareer, mlb: MlbMyCareer, nhl: NhlMyCareer };
 const tick = (ms: number) => act(async () => { await new Promise(resolve => setTimeout(resolve, ms)); });

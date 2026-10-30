@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { createServer } from 'node:net';
 import { spawn } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { noteNoIntlCareer } from '../lib/intlCallNote.mjs';
 
 assert(process.env.CI, 'Number formatting native verification runs only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -298,6 +299,8 @@ try {
   }
   assert.equal(report.cases.length, 6); assert(report.cases.every(row => row.complete)); assert.equal(report.controls.length, 9);
   assert(report.controls.every(control => control.rejected?.name === 'AssertionError' && control.restored)); report.complete = true;
+  /* Round 1557 (critic-1541 correction 9): every walk naming the NBA save says whether it meets the national team's call. */
+  noteNoIntlCareer('numberFormatting1085', 'its NBA save is a protected string kept byte for byte, never a career, so no bar reaches it');
   console.log('Number formatting native: 6 actual route cases and 9 effective restored DOM controls passed.');
 } catch (error) {
   report.error = { name: error.name, message: error.message, stack: error.stack };

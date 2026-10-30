@@ -78,8 +78,11 @@ const mods = await import(pathToFileURL(BUNDLE).href);
  * These are a RATCHET, not a target. A number here may only ever go up,
  * and it goes up in the same round that earns it, so a game that gets more
  * puzzles cannot silently lose them again later.
+ *
+ * Round 1565: soccer 250 to 326, the file now holds every board of the live
+ * table it is the fallback for (the 76 boards only the table had).
  */
-const FLOOR = { soccer: 250, baseball: 60, nba: 4, nfl: 4, nhl: 4 };
+const FLOOR = { soccer: 326, baseball: 60, nba: 4, nfl: 4, nhl: 4 };
 /* Below this a daily game repeats inside a week, which players notice. */
 const COMFORTABLE = 14;
 
