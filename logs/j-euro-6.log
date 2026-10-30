@@ -1,0 +1,19 @@
+Auto-merging scripts/data/cmLeagueRulesDigest.json
+Auto-merging scripts/fixtures/managerAppealIsolation1081/manifest.json
+Auto-merging scripts/simCmLeagueRules.mjs
+Auto-merging src/lib/clubManager.ts
+Auto-merging src/pages/WhatsNew.tsx
+joined93=c7383da5bb
+  6 dailies: 20 days, 10 of the Hot Seat clubs follow a Europa League before the strip
+  6 a Hot Seat start 2026-10-17 Trabzonspor: head 193.9 ms, base 243.5 ms, -49.7 ms more
+  6 a Hot Seat start 2026-10-18 Al-Ahli: head 172.5 ms, base 230.7 ms, -58.3 ms more
+  6 a Hot Seat start 2026-10-19 Hamburg: head 199.3 ms, base 220.5 ms, -21.2 ms more
+  6 a Hot Seat start 2026-10-20 Toulouse: head 202.3 ms, base 169.0 ms, 33.3 ms more
+  6 a Hot Seat start 2026-10-21 Anderlecht: head 154.7 ms, base 168.0 ms, -13.4 ms more
+  6 a Hot Seat start 2026-10-22 León: head 141.1 ms, base 148.7 ms, -7.6 ms more
+  6 a Hot Seat start 2026-10-23 Elche: head 181.7 ms, base 176.2 ms, 5.5 ms more
+  6 a Hot Seat start 2026-10-24 Athletico Paranaense: head 159.9 ms, base 211.0 ms, -51.0 ms more
+  6 a Hot Seat start 2026-10-25 Samsunspor: head 180.0 ms, base 151.9 ms, 28.1 ms more
+  6 a Hot Seat start 2026-10-26 Le Havre: head 199.4 ms, base 274.7 ms, -75.4 ms more
+  6 a Hot Seat start, the median a date costs more on this tree: -13.4 ms (ruling 1l: measured 54.9 ms on startCareer alone before the options object)
+simWorldEuro: green, 30 checks, 0 failures

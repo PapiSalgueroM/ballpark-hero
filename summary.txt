@@ -1,0 +1,6 @@
+j-euro-6 exit=0 19s | simWorldEuro: green, 30 checks, 0 failures
+j-simCmCopy exit=0 34s | simCmCopy: green on this tree. Sections 1, 2, 3, 4, 5: Club Manager says what it means.
+simBoard exit=0 5s | ALL BOARD CHECKS PASSED
+j-simBoard exit=0 7s | ALL BOARD CHECKS PASSED
+j-euro-57 exit=0 277s | simWorldEuro: green, 36350 checks, 0 failures
+j-euro-3 exit=0 315s | simWorldEuro: green, 521 checks, 0 failures
