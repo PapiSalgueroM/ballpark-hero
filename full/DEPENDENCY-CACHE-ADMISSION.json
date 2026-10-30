@@ -1,0 +1,28 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 1353,
+      "sha256": "9e96a291878139477a12a1a82d391d4482602ef8d5856b1862ca91de23b8366a",
+      "tests": [
+        ":src/test/draftWinnerFeedback.test.tsx",
+        ":src/test/facilitiesPreview.test.tsx",
+        ":src/lib/footlePracticeRun.test.ts",
+        ":src/test/footlePractice.test.tsx",
+        ":src/lib/fetchFootlePlayerPool.test.ts",
+        ":src/test/guessFinishMoment.test.tsx",
+        ":src/test/guessFinishClueBoards.test.tsx",
+        ":src/test/guessFinishChainBoards.test.tsx",
+        ":src/test/nbaCourtSelection.test.tsx",
+        ":src/components/front-office/FrontOfficeDraftCapital.test.tsx",
+        ":src/components/nhl-front-office/NhlFrontOfficeRatingEvidence.test.tsx",
+        ":src/test/quizBoardAccess.test.tsx",
+        ":src/test/soccerCareerLeagueWorld.test.ts",
+        ":src/test/soccerCareerWorldSettle.test.ts",
+        ":src/test/tycoonSetPiecePage.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

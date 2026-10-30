@@ -1,0 +1,3 @@
+652 /home/runner/work/_temp/rc-out/full/simSeedRandom.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSeedRandom.mjs/stderr.log
+652 total

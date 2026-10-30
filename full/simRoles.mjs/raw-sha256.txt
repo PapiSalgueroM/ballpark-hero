@@ -1,0 +1,2 @@
+e0563d62fbd23d3c8bf9832865a17d62263b63db20f2244ab3bec6a6fd01723c  /home/runner/work/_temp/rc-out/full/simRoles.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simRoles.mjs/stderr.log

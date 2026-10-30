@@ -1,0 +1,3 @@
+384 /home/runner/work/_temp/rc-out/full/simCalendar.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simCalendar.mjs/stderr.log
+384 total

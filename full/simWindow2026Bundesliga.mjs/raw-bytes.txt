@@ -1,0 +1,3 @@
+3159 /home/runner/work/_temp/rc-out/full/simWindow2026Bundesliga.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simWindow2026Bundesliga.mjs/stderr.log
+3159 total

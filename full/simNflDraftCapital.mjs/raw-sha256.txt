@@ -1,0 +1,2 @@
+199028c607d22253b628d079a4dcfdde4cc838a559d07d72cdc2ed1ed450464c  /home/runner/work/_temp/rc-out/full/simNflDraftCapital.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNflDraftCapital.mjs/stderr.log

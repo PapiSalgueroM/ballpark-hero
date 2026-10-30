@@ -1,0 +1,2 @@
+0d5e842f98f90834b9321599879eb874a8f1045636b56710dfda898fa83818d5  /home/runner/work/_temp/rc-out/full/simCareerSeasonTruth.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerSeasonTruth.mjs/stderr.log

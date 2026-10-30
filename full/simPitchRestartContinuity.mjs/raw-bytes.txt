@@ -1,0 +1,3 @@
+939 /home/runner/work/_temp/rc-out/full/simPitchRestartContinuity.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simPitchRestartContinuity.mjs/stderr.log
+939 total

@@ -1,0 +1,2 @@
+e80e49aaea1536f7c8244bf7a2374f5be0564bf4fc30c53aa8d1b17fdfc2002b  /home/runner/work/_temp/rc-out/full/simMlbOpeningRatingModel.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simMlbOpeningRatingModel.mjs/stderr.log

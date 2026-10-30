@@ -1,0 +1,3 @@
+787 /home/runner/work/_temp/rc-out/full/simHubExperience.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simHubExperience.mjs/stderr.log
+787 total

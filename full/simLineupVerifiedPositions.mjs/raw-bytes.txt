@@ -1,0 +1,3 @@
+1476 /home/runner/work/_temp/rc-out/full/simLineupVerifiedPositions.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simLineupVerifiedPositions.mjs/stderr.log
+1476 total

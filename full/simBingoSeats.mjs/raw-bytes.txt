@@ -1,0 +1,3 @@
+2616 /home/runner/work/_temp/rc-out/full/simBingoSeats.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simBingoSeats.mjs/stderr.log
+2616 total

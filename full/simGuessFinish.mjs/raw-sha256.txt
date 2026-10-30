@@ -1,0 +1,2 @@
+b87bf9faf8e73cd9d258b918053cb5242d05bda67748b1f4936d7d85a0f1ff09  /home/runner/work/_temp/rc-out/full/simGuessFinish.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGuessFinish.mjs/stderr.log

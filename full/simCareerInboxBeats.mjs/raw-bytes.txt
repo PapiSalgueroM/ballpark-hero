@@ -1,0 +1,3 @@
+8580 /home/runner/work/_temp/rc-out/full/simCareerInboxBeats.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerInboxBeats.mjs/stderr.log
+8580 total

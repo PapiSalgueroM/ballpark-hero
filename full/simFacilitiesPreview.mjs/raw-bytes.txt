@@ -1,0 +1,3 @@
+707 /home/runner/work/_temp/rc-out/full/simFacilitiesPreview.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simFacilitiesPreview.mjs/stderr.log
+707 total

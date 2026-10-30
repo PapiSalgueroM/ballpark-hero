@@ -1,0 +1,2 @@
+0d82aab62d1de7d41d08c4bba400687cd35ff84be3b2552469417d8c25841de7  /home/runner/work/_temp/rc-out/full/simCmOldCareersWorld.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmOldCareersWorld.mjs/stderr.log

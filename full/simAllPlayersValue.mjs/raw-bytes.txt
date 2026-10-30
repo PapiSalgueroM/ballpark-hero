@@ -1,0 +1,3 @@
+3606 /home/runner/work/_temp/rc-out/full/simAllPlayersValue.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simAllPlayersValue.mjs/stderr.log
+3606 total

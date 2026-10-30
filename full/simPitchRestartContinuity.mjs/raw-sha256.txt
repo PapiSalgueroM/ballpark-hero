@@ -1,0 +1,2 @@
+377790fda0e89c13c232ce6c581146113593242241454df707ea75178949ddac  /home/runner/work/_temp/rc-out/full/simPitchRestartContinuity.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPitchRestartContinuity.mjs/stderr.log

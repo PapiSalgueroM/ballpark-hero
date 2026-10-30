@@ -1,0 +1,2 @@
+8258d575b43be8337c49db6eadcbbe8311de68e39463c7a9a34ce2e41f7f1c83  /home/runner/work/_temp/rc-out/full/simBingoSeats.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simBingoSeats.mjs/stderr.log

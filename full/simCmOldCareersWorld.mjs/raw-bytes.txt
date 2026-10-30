@@ -1,0 +1,3 @@
+3292 /home/runner/work/_temp/rc-out/full/simCmOldCareersWorld.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmOldCareersWorld.mjs/stderr.log
+3292 total

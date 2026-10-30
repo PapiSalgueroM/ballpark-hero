@@ -1,0 +1,3 @@
+687 /home/runner/work/_temp/rc-out/full/simNhlRatingEvidence.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNhlRatingEvidence.mjs/stderr.log
+687 total

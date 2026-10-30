@@ -1,0 +1,3 @@
+5834 /home/runner/work/_temp/rc-out/full/simGmDeskHost.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGmDeskHost.mjs/stderr.log
+5834 total
