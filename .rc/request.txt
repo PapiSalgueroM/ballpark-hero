@@ -1,0 +1,29 @@
+# Release BU lane e: the GM career for the NHL and the NHL Front Office board (Rounds 1559 and 1561): Round 1561's closing gate g1 and g2 (results-g/rc-1561.txt), the type gate left to lane g.
+vitest-a: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeGmCareer.test.tsx src/components/front-office/FrontOfficeLazyDesk.test.tsx src/components/nhl-front-office/NhlLazyDesk.test.tsx src/components/front-office-shared/GmCareerDesk.test.tsx src/lib/gmCareerRules.test.ts src/lib/gmDeskHost.test.ts src/lib/gmXp.test.ts src/lib/gmSeat.test.ts --testTimeout=600000 --hookTimeout=120000
+vitest-b: node_modules/.bin/vitest run src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx src/test/frontOfficeSaveRecovery.test.tsx src/components/front-office/FrontOfficeCuts.test.tsx src/components/front-office/FrontOfficeOnePress.test.tsx src/components/front-office/FrontOfficePostseason.test.tsx src/components/front-office/FrontOfficeDraftCapital.test.tsx src/components/front-office/FrontOfficeTile.test.tsx src/components/front-office/FrontOfficeGameDay.test.tsx src/components/front-office/FrontOfficeSeasonStats.test.tsx --testTimeout=600000 --hookTimeout=120000
+vitest-c: node_modules/.bin/vitest run src/test/nhlContributors.test.ts src/lib/nhlOpeningRatings.test.ts src/components/nhl-front-office/NhlTradeLists.test.tsx src/components/nhl-front-office/NhlWaiverReceipt.test.tsx src/components/nhl-front-office/NhlFrontOfficeRatingEvidence.test.tsx src/components/mlb-front-office/MlbGmDesk.test.tsx src/components/mlb-front-office/MlbDraftCapital.test.tsx --testTimeout=600000 --hookTimeout=120000
+simGmCareer-nfl: node scripts/simGmCareer.mjs
+simGmCareer-nhl: SIM_GM_CAREER_SPORT=nhl node scripts/simGmCareer.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simFoLazyDesk: node scripts/simFoLazyDesk.mjs
+simFoLazyDesk-hostimport: SIM_FO_LAZY_DESK_CONTROL=hostimport node scripts/simFoLazyDesk.mjs
+simFoLazyDesk-eager: SIM_FO_LAZY_DESK_CONTROL=eager node scripts/simFoLazyDesk.mjs
+simNhlGmDesk: node scripts/simNhlGmDesk.mjs
+simGmReload: node scripts/simGmReload.mjs
+simFoHub: node scripts/simFoHub.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simGmBooks: node scripts/simGmBooks.mjs
+simGmInbox: node scripts/simGmInbox.mjs
+simGmCalendar: node scripts/simGmCalendar.mjs
+simGmPress: node scripts/simGmPress.mjs
+simOwnerMandate: node scripts/simOwnerMandate.mjs
+simDraftNight: node scripts/simDraftNight.mjs
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simGmXp: node scripts/simGmXp.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simMlbGmDesk: node scripts/simMlbGmDesk.mjs
+simMlbFullRosters: node scripts/simMlbFullRosters.mjs
+simGmTradePackage: node scripts/simGmTradePackage.mjs
+simCollegeSeat: node scripts/simCollegeSeat.mjs
