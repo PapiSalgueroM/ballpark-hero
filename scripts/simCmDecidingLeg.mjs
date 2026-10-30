@@ -74,6 +74,13 @@
    (a run is five league games from week 6 to 14, and the deciding legs sit later in the season), so the gate is
    held at the engine (section 3) as well as by the replays; the 2026-10-28 daily (PSG) has a four goal haul in its feed, which now
    reads "scored four" and nothing else about the day moves. Each control fired (exit 1, FIRED) on r1603-s2/s3.
+   THE SIZES, measured on r1603-fx-a (head 7b9a693b9, 2026-10-30): on the fleet's own dice the board's swing held to
+   the tenth on all 234 legs and 5715 men's shifts held exactly, 1933 of them on the 80 differing legs and 391 of
+   those men who played under the captain on the losing side of night or tie (where his relief decides the number);
+   salts a, b, c: 4311, 5022 and 5895 men, 559, 610 and 585 under the relief. The report's swing, before the clamp:
+   through 5.02 above OLD on average (4.80 to 5.18 on the salts), out -8.39 (-7.10 to -8.20); the old clamped reading
+   had shown +1.24 through, because a leg at 100 passed on the clamp. Controls boardsize, moralesize and relief each
+   FIRED with only their own size check red (every sign check stayed green), board and morale FIRED on both.
 
    Run: node scripts/simCmDecidingLeg.mjs   (DECIDING_LEG_CAREERS, DECIDING_LEG_REPLAYS, DECIDING_LEG_SECTION) */
 import { build } from 'esbuild';
