@@ -1,0 +1,10 @@
+shootoutResults exit=2 0s |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+sr-keepcurve exit=2 0s |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+so-keepcurve exit=1 32s | simCmShootoutOrder: 4 FAILURE(S)
+shootout exit=0 36s | simCmShootoutOrder: all sections passed
+so-unsetpath exit=1 37s | simCmShootoutOrder: 4 FAILURE(S)
+so-keepleague exit=1 32s | simCmShootoutOrder: 4 FAILURE(S)
+so-tie-record exit=1 39s | simCmShootoutOrder: 78 FAILURE(S)
+so-seed1 exit=0 40s | simCmShootoutOrder: all sections passed
+so-seed2 exit=0 35s | simCmShootoutOrder: all sections passed
+so-seed3 exit=0 32s | simCmShootoutOrder: all sections passed

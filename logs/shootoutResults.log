@@ -1,0 +1,11 @@
+Shootout results infrastructure error: AssertionError [ERR_ASSERTION]: Unknown CM_SHOOTOUT_RESULTS_CONTROL function control(label, input, mutate, judge) {
+    const fault = copy(input);
+    mutate(fault);
+    assert.notDeepEqual(fault, input, `${label} control changed nothing`);
+    assert.throws(() => judge(fault), assert.AssertionError, `${label} control was not rejected`);
+    receipt.controls.push({ label, changed: true, rejected: true, original: hash(JSON.stringify(input)), fault: hash(JSON.stringify(fault)) });
+  }
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmShootoutResults.mjs:166:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
