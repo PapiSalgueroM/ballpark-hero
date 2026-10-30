@@ -15,7 +15,10 @@
  * THE RULE, said on the card: seasons are kept for the men at the club when a season ends, while
  * they stay. Each season end keeps an entry only for a man of the squad or out on loan from it,
  * so a man who left (sold, released, retired, walked) loses his rows at the next season end. A
- * man re-signed before that season end keeps them, if he comes back under the same id.
+ * man re-signed before that season end keeps them, if he comes back under the same id. When the
+ * manager moves jobs, the rows of seasons finished at the old club go at the next season end, and
+ * the card shows only this club's seasons before that (rowIsHere), so a namesake at the new club
+ * never wears another man's seasons.
  *
  * A man out on loan keeps his line too: the save plays no loan games, so every app on his line
  * is a game for MY club.
@@ -49,6 +52,9 @@ export interface ArchiveIn {
   loanedOut?: readonly { player: LineIn }[];
   pastLines?: PastEntry[];
   pastFrom?: number;
+  /** The club of this save, and the club of every season it finished (history, this season's included). */
+  clubName?: string;
+  history?: readonly { season: number; club: string }[];
 }
 
 const whole = (v: unknown): v is number => typeof v === 'number' && Number.isSafeInteger(v) && v >= 0;
@@ -108,12 +114,24 @@ export function withSeasonRow(rows: readonly PastRow[], row: PastRow | null): Pa
 }
 
 /**
+ * True when a row's season was finished at the club the save is at now, or the save does not say.
+ * A row of a season finished at another club (the manager moved jobs) is not "here": squad ids are
+ * built from names, so a namesake at the new club would otherwise inherit the old man's seasons.
+ */
+export function rowIsHere(state: Pick<ArchiveIn, 'clubName' | 'history'>, row: PastRow): boolean {
+  if (state.clubName === undefined) return true;
+  const club = (state.history ?? []).find(h => h.season === row[0])?.club;
+  return club === undefined || club === state.clubName;
+}
+
+/**
  * The season end write, on finishSeason's own clone. Every man of the squad and every man out
- * on loan gets this season's row when he played; every entry of a man in neither is dropped; the
- * key is left off when nobody holds a row; pastFrom is set once, the first time this runs.
+ * on loan gets this season's row when he played; every entry of a man in neither is dropped, and
+ * so is every row of a season finished at another club; the key is left off when nobody holds a
+ * row; pastFrom is set once, the first time this runs.
  */
 export function archiveCareerSeason(state: ArchiveIn): void {
-  const old = new Map(readPastLines(state.pastLines));
+  const old = new Map(readPastLines(state.pastLines).map(([id, rows]): PastEntry => [id, rows.filter(r => rowIsHere(state, r))]));
   const men: LineIn[] = [...state.squad, ...(state.loanedOut ?? []).map(l => l?.player).filter((p): p is LineIn => !!p)];
   const seen = new Set<string>();
   const next: PastEntry[] = [];

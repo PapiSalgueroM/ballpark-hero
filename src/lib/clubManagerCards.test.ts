@@ -61,6 +61,15 @@ describe('one of my men', () => {
     expect(card?.keptFrom).toBe(1);
     expect(card?.notes.some(n => n.k === 'keptfrom')).toBe(false);
   });
+  it('shows only seasons finished at this club: after a job move a namesake wears none of the old club\'s', () => {
+    const p = s2.squad.find(x => pastOf(s2.pastLines, x.id).length > 0);
+    if (!p) throw new Error('no man of mine with a kept season');
+    /* The seasons the rows were kept in, finished at another club: the shape a job move leaves. */
+    const moved = copy(s2);
+    moved.history = moved.history.map(h => ({ ...h, club: 'Somewhere Else' }));
+    expect(playerCardOf(moved, { k: 'mine', id: p.id })?.past).toEqual([]);
+    expect(playerCardOf(s2, { k: 'mine', id: p.id })?.past.length).toBe(pastOf(s2.pastLines, p.id).length);
+  });
   it('is null for a man who is not at the club', () => {
     expect(playerCardOf(s2, { k: 'mine', id: 'nobody-here' })).toBeNull();
   });

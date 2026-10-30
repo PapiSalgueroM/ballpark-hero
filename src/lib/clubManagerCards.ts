@@ -22,7 +22,7 @@ import {
 import type { Position } from '@/types/game';
 import { mineSheets, rowKey } from '@/lib/clubManagerLeagueBook';
 import { BOOK_FULL_SHARE } from '@/lib/clubManagerLeagueBoards';
-import { averageOf, pastOf } from '@/lib/clubManagerCareerLines';
+import { averageOf, pastOf, rowIsHere } from '@/lib/clubManagerCareerLines';
 import { worldYearOf } from '@/lib/clubManagerCalendar';
 import { seasonLabel } from '@/lib/clubManagerEras';
 import type { SeasonHistoryMetric } from '@/lib/soccerCareerSeasonHistory';
@@ -144,7 +144,8 @@ export function playerCardOf(state: CareerState, ref: CardRef): PlayerCard | nul
         cleanSheets: back && boards && boards.from === null ? mineSheets(boards.input.book, p.id) : null,
         yellows: lg?.yellows ?? 0, reds: lg?.reds ?? 0, average: averageOf(lg?.apps ?? 0, Math.round((lg?.ratingSum ?? 0) * 10)),
       },
-      past: pastOf(state.pastLines, p.id).slice().reverse().map(row => ({
+      /* Seasons HERE only: a row of a season finished at a club the manager has left is another man's. */
+      past: pastOf(state.pastLines, p.id).filter(row => rowIsHere(state, row)).reverse().map(row => ({
         season: row[0], label: seasonLabelOf(state, row[0]),
         club: state.history.find(h => h.season === row[0])?.club ?? null,
         metrics: pastMetrics(row, back),

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 /* Round 1601: the season archive's pure rules, each held by a case that fails if its line goes. */
 import {
-  PAST_KEPT, archiveCareerSeason, averageOf, pastOf, pastRowOf, readPast, readPastLines, withSeasonRow,
+  PAST_KEPT, archiveCareerSeason, averageOf, pastOf, pastRowOf, readPast, readPastLines, rowIsHere, withSeasonRow,
   type ArchiveIn, type LineIn, type PastRow,
 } from '@/lib/clubManagerCareerLines';
 
@@ -100,6 +100,22 @@ describe('archiveCareerSeason', () => {
     away.squad = [man('r', { apps: 2, ratingSum: 12 })];
     archiveCareerSeason(away);
     expect(pastOf(away.pastLines, 'r')).toEqual([[4, 2, 0, 0, 0, 120]]);
+  });
+  it('after a job move, a namesake at the new club does not inherit the seasons the old club\'s man played', () => {
+    const s = save({
+      season: 3, clubName: 'B',
+      history: [{ season: 1, club: 'A' }, { season: 2, club: 'A' }, { season: 3, club: 'B' }],
+      squad: [man('p-silva', { apps: 6, ratingSum: 40 })],
+      pastLines: [['p-silva', [[1, 30, 9, 2, 0, 2100], [2, 28, 7, 1, 0, 1900]]]],
+      pastFrom: 1,
+    });
+    archiveCareerSeason(s);
+    expect(pastOf(s.pastLines, 'p-silva')).toEqual([[3, 6, 0, 0, 0, 400]]);
+    expect(rowIsHere(s, [1, 30, 9, 2, 0, 2100])).toBe(false);
+    expect(rowIsHere(s, [3, 6, 0, 0, 0, 400])).toBe(true);
+    /* No history for a season, or no club on the save: the row is kept, never guessed away. */
+    expect(rowIsHere({ clubName: 'B', history: [] }, [1, 1, 0, 0, 0, 6])).toBe(true);
+    expect(rowIsHere({}, [1, 1, 0, 0, 0, 6])).toBe(true);
   });
   it('is idempotent for a second call in the same season', () => {
     const s = save();

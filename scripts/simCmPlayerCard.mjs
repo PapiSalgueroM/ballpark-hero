@@ -348,7 +348,9 @@ function checkMine(mod, s, where) {
       }
       if (back && late && !c.notes.some(n => n.k === 'late')) fail('cards', `${who}: a keeper or defender on a late book with no late note`);
     }
-    const rows = mod.lines.pastOf(s.pastLines, p.id).slice().reverse();
+    /* Seasons finished at this club only (a job move leaves rows of another club until the next season end). */
+    const here = r => { const club = s.history.find(h => h.season === r[0])?.club; return club === undefined || club === s.clubName; };
+    const rows = mod.lines.pastOf(s.pastLines, p.id).filter(here).reverse();
     const want = rows.map(r => [r[0], s.history.find(h => h.season === r[0])?.club ?? null, r[1], r[2], r[3], back ? r[4] : null, r[5] / 10 / r[1]]);
     const got = c.past.map(l => { const m = k => l.metrics.find(x => x.key === k)?.value ?? null; return [l.season, l.club, m('apps'), m('goals'), m('assists'), m('cleanSheets'), m('rating')]; });
     if (JSON.stringify(got) !== JSON.stringify(want)) fail('cards', `${who}: seasons ${JSON.stringify(got).slice(0, 120)} are not the archive's ${JSON.stringify(want).slice(0, 120)}`);
