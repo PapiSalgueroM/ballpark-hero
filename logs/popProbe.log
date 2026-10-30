@@ -1,0 +1,17 @@
+main file men in the engine's world: 4400 (proposal 4,401)
+  14 to 20: 327 men (want 327), level mean 74.63 (want 74.63), shown 70.09 (want 70.09) ok
+  21 to 23: 924 men (want 924), level mean 74.55 (want 74.55), shown 72.70 (want 72.7) ok
+  24 to 29: 2322 men (want 2322), level mean 74.62 (want 74.62), shown 74.62 (want 74.62) ok
+  30 to 32: 553 men (want 554), level mean 72.94 (want 72.93), shown 74.52 (want 74.52) OFF
+  33 to 35: 230 men (want 230), level mean 70.94 (want 70.94), shown 74.66 (want 74.66) ok
+  36 to 99: 44 men (want 44), level mean 68.64 (want 68.64), shown 75.48 (want 75.48) ok
+  veterans (30 plus): 827 (proposal 828) OFF
+  veteran mean level: 72.16 (proposal 72.15) OFF
+  veteran mean shown: 74.61 (proposal 74.61) ok
+  veterans shown 75 plus: 394 (proposal 394) ok
+  veterans shown 80 plus: 118 (proposal 118) ok
+  veterans shown 85 plus: 17 (proposal 17) ok
+  veterans in the top 100 (ties by name): 7 (proposal 7) ok
+  nobody past 94: 0 (proposal 0) ok
+  rows the read changes: 2077 of 4400 (Round 1214's notes: 2,078 on its ages)
+popProbe: 3 lines off the proposal

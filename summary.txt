@@ -1,0 +1,5 @@
+ledger-make-base exit=0 1s | saved 3
+ledger-base-on-base exit=0 0s | ledgerProbe load: 0 problems
+ledger-base-on-head exit=1 0s | ledgerProbe load: 8 problems
+popProbe exit=1 0s | popProbe: 3 lines off the proposal
+deepDaily exit=0 25s | deepDaily: 77 early dates played to the end; A vs F differ: Deadline Day 0, Hot Seat 0; F vs M differ: Deadline Day 0, Hot Seat 75

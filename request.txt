@@ -1,0 +1,6 @@
+#!serial
+ledger-make-base: git worktree add -f /tmp/base 14a9af704 >/dev/null 2>&1; node .rc/x/ledgerProbe.mjs make /tmp/base /tmp/base-saves.json
+ledger-base-on-base: node .rc/x/ledgerProbe.mjs load /tmp/base /tmp/base-saves.json
+ledger-base-on-head: node .rc/x/ledgerProbe.mjs load . /tmp/base-saves.json
+popProbe: node .rc/x/popProbe.mjs
+deepDaily: node .rc/x/deepDaily.mjs
