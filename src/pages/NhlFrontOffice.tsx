@@ -5,8 +5,12 @@ import NhlFrontOfficeBoard from '@/components/nhl-front-office/NhlFrontOfficeBoa
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { hostCareerRules } from '@/lib/gmCareerFace'; /* Round 1561: the help's part of the career, not the whole host */
 
 const NhlFrontOffice = () => {
+  /* Round 1561: the career rules (fired is a chapter, not the end) in the ? panel, the NFL page's five sentences with
+     the NHL's word for the books. Built inside the component, never at module scope. */
+  const rules = hostCareerRules('nhl');
   return (
     <>
       <PageSeo
@@ -16,7 +20,7 @@ const NhlFrontOffice = () => {
       />
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={rules} /></div>
         <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">NHL Front Office</h1>

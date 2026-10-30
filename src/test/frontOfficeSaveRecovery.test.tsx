@@ -3,9 +3,12 @@ import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/re
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import NflBoard from '@/components/front-office/FrontOfficeBoard';
 import { loadNflCareerKit } from '@/components/front-office/nflCareerKitLoad';
+import { nhlCareerKitLoader } from '@/components/nhl-front-office/nhlCareerKitLoad';
 /* Round 1550: the board fetches its career kit when a screen needs it (FrontOfficeLazyDesk.test.tsx drives that);
    these cases drive the rules, so the kit is on the page before the board mounts. */
 beforeAll(async () => { await loadNflCareerKit(); });
+/* Round 1561: and the NHL board's, since its career bind (critic 1 of brief 1559) */
+beforeAll(async () => { await nhlCareerKitLoader.load(); });
 import NhlBoard from '@/components/nhl-front-office/NhlFrontOfficeBoard';
 import { initLeague, generateDraftClass, runPlayoffs, REGULAR_WEEKS } from '@/lib/frontOffice';
 import { initNhlLeague, nhlDraftClass, runNhlFoPlayoffs, nhlContributors, NHL_FO_ROUNDS } from '@/lib/nhlFrontOffice';

@@ -20,6 +20,8 @@ import {
   type DeskCase, type GmTerms, type Made, type PushResult,
 } from '@/lib/gmContracts';
 import { nhlContractHost } from '@/lib/gmContractsHostNhl';
+import type { GmCareerFacts } from '@/lib/gmDeskHost';
+import { GM_CAREER_PANELS } from '@/components/front-office-shared/gmCareerDesk';
 import { pickKey, pickRefusal, picksHeldBy } from '@/lib/gmPicks';
 import { assetKey, evaluatePackage, type TradeAsset, type TradePackage } from '@/lib/gmTradePackage';
 import { NHL_STAFF_PACK } from '@/data/gmStaff/packs';
@@ -30,8 +32,8 @@ import {
   nhlTradeWindow, NHL_SPECIAL_TEAMS_WEIGHT,
 } from '@/lib/nhlGmDesk';
 
-/** The board's state, flattened for the desk, plus the actions a panel may take. */
-export interface NhlDeskFacts extends GmFacts {
+/** The board's state, flattened for the desk, plus the actions a panel may take. Round 1561: and his career (GmCareerFacts). */
+export interface NhlDeskFacts extends GmCareerFacts {
   league: NhlLeague;
   /** The regular season is over (the recap). Deals are shut, the re-sign desk is the business of the day. */
   seasonOver: boolean;
@@ -267,3 +269,5 @@ const DEALS: GmPanelDef<NhlDeskFacts> = {
 export const NHL_DESK_PANELS: readonly GmPanelDef<NhlDeskFacts>[] = [STAFF, CONTRACTS, PICKS, DEALS];
 /** The recap, once the season is over: the re-sign desk before the draft. */
 export const NHL_RECAP_PANELS: readonly GmPanelDef<NhlDeskFacts>[] = [CONTRACTS];
+/** Round 1561: the hub, the desk's four boxes and then his career's three (gmCareerDesk.tsx; the Job market box only while he is out of work). */
+export const NHL_HUB_PANELS: readonly GmPanelDef<NhlDeskFacts>[] = [...NHL_DESK_PANELS, ...GM_CAREER_PANELS];
