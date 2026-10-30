@@ -1,0 +1,4 @@
+vitest exit=0 6s |    Duration  4.68s (transform 1.87s, setup 122ms, collect 4.45s, tests 2.33s, environment 767ms, prepare 538ms)
+simClubManagerCalendar exit=0 41s | simClubManagerCalendar: all green
+tsc exit=0 65s | 
+simOneOffCups exit=0 1624s | simOneOffCups: green, 270840 checks (1624 s)
