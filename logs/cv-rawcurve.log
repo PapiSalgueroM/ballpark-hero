@@ -1,0 +1,80 @@
+   [control rawcurve applied to an in memory copy of the engine]
+simCustomClubValues: seed base 0, control rawcurve
+1) a created squad is worth what the real squads of its level in its league are worth
+   882 created squads (21168 founders), 404 with a real squad of the same league within two rating points
+   value a head over the real squads': big p50 14.80 (111), q77 p50 11.01 (78), q88 p50 6.63 (1), small p50 23.04 (21), mid p50 18.42 (111), q66 p50 21.46 (79), q55 p50 31.59 (3)
+   no real squad that close in the league: small 105, mid 15, q55 123, q66 47, q88 125, q77 48, big 15
+   pooled p10 10.45, p50 17.42, p90 24.63
+   FAIL a created squad's value a head runs p10 10.45, p50 17.42, p90 24.63 of the real squads of its level, outside p10 0.6, p50 0.8 to 1.15, p90 1.65
+   man by man, 12748 founders against the median real player of the same era, rating and age band (8 or more of them, printed only): p10 8.51, p50 16.96, p90 30.53
+   by age band (0 is 21 or under, 1 is 22 to 24, 2 is 25 to 28, 3 is 29 to 31): now band 0 p10 9.69 p50 21.20 p90 38.33 (2976); now band 1 p10 6.87 p50 17.16 p90 44.38 (1263); now band 2 p10 6.92 p50 15.66 p90 30.53 (4414); now band 3 p10 7.45 p50 13.00 p90 19.13 (780); past band 0 p10 13.78 p50 19.00 p90 28.37 (1040); past band 1 p10 10.97 p50 18.30 p90 28.13 (475); past band 2 p10 9.55 p50 14.76 p90 22.80 (1490); past band 3 p10 9.49 p50 13.87 p90 19.93 (310)
+   the same founders against real players of their exact age (8 or more, 6554 men): p10 8.93, p50 15.66, p90 25.25
+   FAIL a founder is worth p10 8.93, p50 15.66, p90 25.25 of the real players of his era, rating and exact age, outside p10 0.8, p50 0.88 to 1.08, p90 1.15
+   the top at the year grain, 2056 founders rated over 80 against the real men of their era and exact age the engine rates within a point (3 or more): p10 5.00, p50 6.80, p90 9.96
+   FAIL a founder over 80 is worth 6.80 of the real men of his era and exact age within a point of him at the median, outside 0.7 to 1.4
+   the top of the past eras, 1140 founders rated over 80 against the era's real players the engine rates within a point of him (3 or more): p10 9.17, p50 10.68, p90 14.24
+   FAIL a historic founder over 80 is worth 10.68 of the era's real players of his engine rating at the median, outside 0.7 to 1.4: the era's uplift is not being taken back before he is priced
+   FAIL 21168 of 21168 founders were not created carrying customFounderValue for their rating and era
+   31 foundings above their tier's ceiling, 18 founders worth more than the same man at the ceiling; 18 of them moved in rating, value or wage, first: Aurel Jansen (now, small, 88): rating 91 was 91, value 421.1 honest 94.6, wage 279 honest 95
+   FAIL only 18 founders above their tier's ceiling, too few to say the ratio leaves them alone
+2) selling the founders never pays more than their tier's money allows
+   real baseline: 101 real clubs inside the budget clamp, 743 sold; gain / own budget p50 2.17, p90 3.08; bound 1.2 x that = 3.70
+   small budget 15m: gain over selling nobody p50 158.9m, p90 200.0m (13.33 x the smallest tier, 13.33 of its own)
+   mid   budget 40m: gain over selling nobody p50 297.8m, p90 382.9m (25.53 x the smallest tier, 9.57 of its own)
+   big   budget 90m: gain over selling nobody p50 626.1m, p90 765.5m (51.04 x the smallest tier, 8.51 of its own)
+   q66   budget 40m: gain over selling nobody p50 247.4m, p90 320.7m (21.38 x the smallest tier, 8.02 of its own)
+   104 paired careers, 1040 founders sold; gain as a share of the tier's budget p50 7.45, p90 10.98
+   FAIL selling every founder beats selling nobody by 10.98 of the tier's budget at the p90 of 104 careers, above 1
+   now small     ceiling 72: gain / budget p50 5.06, p90 21.73
+   now mid       ceiling 78: gain / budget p50 3.77, p90 15.09
+   now big       ceiling 82: gain / budget p50 2.93, p90 12.42
+   era2015 small ceiling 72: gain / budget p50 4.59, p90 22.58
+   era2015 mid   ceiling 78: gain / budget p50 3.51, p90 16.62
+   era2015 big   ceiling 85: gain / budget p50 4.70, p90 14.58
+   era2010 small ceiling 72: gain / budget p50 4.47, p90 23.28
+   era2010 mid   ceiling 78: gain / budget p50 3.94, p90 15.87
+   era2010 big   ceiling 85: gain / budget p50 4.12, p90 17.12
+   era2005 small ceiling 72: gain / budget p50 5.10, p90 23.76
+   era2005 mid   ceiling 79: gain / budget p50 4.65, p90 19.39
+   era2005 big   ceiling 88: gain / budget p50 6.14, p90 24.64
+   408 settings (115 above their tier's ceiling), 4080 founders sold; gain / tier budget over all p50 3.95, p90 18.48; above the ceiling p50 2.39, p90 3.00; 88 on 15m 2.71, 2.65, 3.33, 2.72
+   above the ceiling, the squad's sale ceiling / (tier budget / 0.16): p50 0.99, p90 1.08 (115); 2760 founders with a ratio, 0 priced above it by sellValue
+   above the ceiling, a founder's sale basis over the same man founded at the ceiling (2760 men): p10 0.05, p50 0.08, p90 0.12
+   FAIL selling the founders pays p90 18.48 of the tier's budget over every setting and 3.00 above the ceiling, above 3.70 (1.2 x the 3.08 real clubs bank)
+   ok   sellValue prices all 2760 founders with a ratio at or under their value times that ratio
+   ok   above the ceiling a founding squad can be sold for at most p90 1.08 of what a real club with its budget holds (budget / 0.16), inside 1.15
+   FAIL a founder above the ceiling sells on a basis of p10 0.05 to p90 0.12 of the same man founded at the ceiling, outside 0.95 to 1.05: the ratio withholds more (or less) than the slider handed out
+3) a real player is priced exactly as he was before the round
+   30 real club careers played on both engines, 0 differ; 30 old real club saves loaded by both, 0 differ
+   16 created club markets compared, 0 differ; 48 real signings, 0 priced differently
+   16 old created club saves carrying 48 real players; 0 moved on load
+   ok   all 30 real club careers played day one, the window and three weeks exactly as before, and all 30 of their saves loaded exactly as before
+   ok   all 16 created club markets are the market as it was, and all 48 real signings carry their market value and the wage they always did
+   ok   all 48 real players bought by a created club before the round load with their value and wage exactly as saved
+4) a created club save written before the round loads repriced and plays the same season
+   20 old saves two weeks in, 460 founders in the squad; 460 carry today's creation value, 20 of 20 out on loan; 0 wages moved, 0 other changes, 0 moved again on a second load
+   20 of 20 played the rest of season one identically (1070 calendar weeks); a season on, 76 of 76 founders moved by the ratio and 4 of 4 played on identically
+   (with the value sorted bid targeting live and the old values kept: 20 of 20 and 4 of 4 still identical, not asserted)
+   ok   every one of 460 founders in 20 old saves, and all 20 out on loan, loaded carrying today's creation value and sale cap
+   ok   the load moved no wage and nothing but the founders' value, and a second load moved nothing
+   ok   all 20 repriced saves played the rest of season one (1070 calendar weeks in all) exactly as the old engine played them, bar the founders' value
+   ok   a season on, all 76 founders moved by the ratio of the new creation value to the old, and all 4 saves played the next weeks exactly as the old engine did
+   old money in the saves: now mid: bids 15.9/33.8m, clause 80.4m, option 29.6m; now q88: bids 134.4/245.2/380.7m, clause 705.8m, option 265.4m; era2015 mid: bids 37.8/15.1m, clause 80.4m, option 29.6m; era2015 q88: bids 287.8/137/324.6/326.9m, clause 705.8m, option 265.4m; era2010 mid: bids 36.3/42.3m, clause 80.4m, option 29.6m; era2010 q88: bids 138.9/325m, clause 705.8m, option 265.4m; era2005 mid: bids 14.1/26.9m, clause 80.4m, option 29.6m; era2005 q88: bids 296.2/160.8/245.2m, clause 705.8m, option 265.4m
+   after the load: 36 figures checked, 0 still on the old money; 16 of 16 founders in the free agent list or signed back under a free agent id repriced
+   ok   all 36 bids, clauses and loan options the old engine priced off a founder's old value load moved onto his new sale price
+   ok   all 16 founders waiting in the free agent list or signed back under a free agent id load with today's value and sale ratio
+5) a created club can spend its budget the way a real club with that budget can
+   the line against 302 real clubs inside the budget clamp: day one cap / realCapForBudget p10 0.94, p50 0.99, p90 1.05
+   ok   real clubs run p10 0.94, p50 0.99, p90 1.05 of realCapForBudget: the line is the cap a real club with that budget has
+   small 15m: created bill / cap after spending p50 0.92 (20); real clubs of a similar budget p50 1.01 (24)
+   mid   40m: created bill / cap after spending p50 0.93 (20); real clubs of a similar budget p50 1.01 (24)
+   big   90m: created bill / cap after spending p50 0.93 (20); real clubs of a similar budget p50 1.00 (13)
+   60 created clubs founded, 0 not on max(bill based cap, realCapForBudget + foundersWageRoom); budget spent p50 0.97, p10 0.89
+   ok   all 60 created clubs opened on the larger of their bill based cap and the cap a real club with their budget has plus their founders' room
+   ok   on every tier a created club that spends its budget sits no further over its cap than real clubs of that budget do (median against their median plus 0.1)
+   founded at 88 above the ceiling (11 tier and era pairs): kept a summer on, cap / bill p50 1.16; with every founder carrying a ratio gone, the cap went 6174k to 247k (line 255k), 6170k to 529k (line 511k), 6172k to 883k (line 910k); after / line p50 0.97, p90 1.03
+   ok   a squad above the money keeps room for its bill while it is there (cap 1.16 of the bill a summer on) and, with its founders gone, falls back to 0.97 of the budget's line a summer on (bound 1.2)
+   old save with its cap at 100k loads at 910k (line 910k); old save with its own cap (2094k) loads at 2094k; a new save brought down to 100k loads at 100k
+   ok   an old created save with its cap under the line loads at the 910k line with every contract as signed
+   ok   the floor leaves an old save's higher cap and a new save's own cap exactly as saved
+simCustomClubValues: 26 checks, 9 failures (sections 1, 2) (control rawcurve)

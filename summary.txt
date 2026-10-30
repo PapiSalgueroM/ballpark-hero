@@ -1,0 +1,8 @@
+cv-capall exit=1 136s | simCustomClubValues: 26 checks, 5 failures (sections 1, 2) (control capall)
+cv-overprice exit=1 140s | simCustomClubValues: 26 checks, 2 failures (sections 1) (control overprice)
+cv exit=0 141s | simCustomClubValues: 26 checks, 0 failures
+intl exit=0 64s | simCmInternationals: all green
+intl-norest exit=1 66s | simCmInternationals: 4 FAILURES (control norest)
+cv-rawcurve exit=1 135s | simCustomClubValues: 26 checks, 9 failures (sections 1, 2) (control rawcurve)
+cv-noerabake exit=1 139s | simCustomClubValues: 26 checks, 1 failure (sections 1) (control noerabake)
+intl-freelegs exit=1 47s | simCmInternationals: 1 FAILURES (control freelegs)

@@ -1,0 +1,8 @@
+cv: node scripts/simCustomClubValues.mjs
+cv-capall: CUSTOM_VALUE_CONTROL=capall node scripts/simCustomClubValues.mjs
+cv-overprice: CUSTOM_VALUE_CONTROL=overprice node scripts/simCustomClubValues.mjs
+cv-noerabake: CUSTOM_VALUE_CONTROL=noerabake node scripts/simCustomClubValues.mjs
+cv-rawcurve: CUSTOM_VALUE_CONTROL=rawcurve node scripts/simCustomClubValues.mjs
+intl: node scripts/simCmInternationals.mjs
+intl-norest: SIM_CMINTL_CONTROL=norest node scripts/simCmInternationals.mjs
+intl-freelegs: SIM_CMINTL_CONTROL=freelegs node scripts/simCmInternationals.mjs
