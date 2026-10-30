@@ -1,0 +1,49 @@
+O1 Aston Villa seed 4: season two watches (null)
+O2 Aston Villa seed 4: stays a watcher, season three watches (null)
+O1 Aston Villa seed 5: season two watches (null)
+O2 Aston Villa seed 5: stays a watcher, season three watches (null)
+O1 Aston Villa seed 6: season two watches (null)
+O2 Aston Villa seed 6: stays a watcher, season three watches (null)
+O1 Lazio seed 4: season two watches (null)
+O2 Lazio seed 4: stays a watcher, season three watches (null)
+O1 Lazio seed 5: season two watches (null)
+O2 Lazio seed 5: stays a watcher, season three watches (null)
+O1 Lazio seed 6: season two watches (null)
+O2 Lazio seed 6: stays a watcher, season three watches (null)
+O1 Eintracht Frankfurt seed 4: season two watches (null)
+O2 Eintracht Frankfurt seed 4: stays a watcher, season three PLAYS (L), 8 nights, 28th of 36 in the league phase, winner Villarreal
+O1 Eintracht Frankfurt seed 5: season two PLAYS (P), 15 nights, lost the final, winner Athletic Club | O3 base loads and plays on: week 67/67, next season 3 with 0 uel entries
+O2 Eintracht Frankfurt seed 5: stays a watcher, season three watches (null)
+O1 Eintracht Frankfurt seed 6: season two watches (null)
+O2 Eintracht Frankfurt seed 6: stays a watcher, season three PLAYS (L), 10 nights, out in the knockout play-off, winner Atlético Madrid
+O1 Lyon seed 4: season two PLAYS (L), 8 nights, 33rd of 36 in the league phase, winner Everton | O3 base loads and plays on: week 67/67, next season 3 with 0 uel entries
+O2 Lyon seed 4: stays a watcher, season three watches (null)
+O1 Lyon seed 5: season two PLAYS (C), 10 nights, out in the knockout play-off, winner Como | O3 base loads and plays on: week 68/68, next season 3 with 0 uel entries
+O2 Lyon seed 5: stays a watcher, season three watches (null)
+O1 Lyon seed 6: season two PLAYS (L), 10 nights, out in the knockout play-off, winner Bournemouth | O3 base loads and plays on: week 67/67, next season 3 with 0 uel entries
+O2 Lyon seed 6: stays a watcher, season three PLAYS (L), 12 nights, out in the round of 16, winner Manchester United
+O1 Braga seed 4: season two watches (null)
+O2 Braga seed 4: stays a watcher, season three watches (null)
+O1 Braga seed 5: season two PLAYS (P), 8 nights, 29th of 36 in the league phase, winner Aston Villa | O3 base loads and plays on: week 67/67, next season 3 with 0 uel entries
+O2 Braga seed 5: stays a watcher, season three PLAYS (P), 8 nights, 27th of 36 in the league phase, winner Liverpool
+O1 Braga seed 6: season two PLAYS (L), 8 nights, 27th of 36 in the league phase, winner Real Sociedad | O3 base loads and plays on: week 67/67, next season 3 with 0 uel entries
+O2 Braga seed 6: stays a watcher, season three watches (null)
+O1 Rangers seed 4: season two watches (null)
+O2 Rangers seed 4: stays a watcher, season three watches (null)
+O1 Rangers seed 5: season two watches (null)
+O2 Rangers seed 5: stays a watcher, season three watches (null)
+O1 Rangers seed 6: season two watches (null)
+O2 Rangers seed 6: stays a watcher, season three PLAYS (L), 12 nights, out in the round of 16, winner Manchester City
+O1 Real Sociedad seed 4: season two watches (null)
+O2 Real Sociedad seed 4: stays a watcher, season three PLAYS (L), 8 nights, 34th of 36 in the league phase, winner Fiorentina
+O1 Real Sociedad seed 5: season two watches (null)
+O2 Real Sociedad seed 5: stays a watcher, season three watches (null)
+O1 Real Sociedad seed 6: season two watches (null)
+O2 Real Sociedad seed 6: stays a watcher, season three watches (null)
+O1 AZ Alkmaar seed 4: season two PLAYS (P), 12 nights, out in the round of 16, winner Bournemouth | O3 base loads and plays on: week 67/67, next season 3 with 0 uel entries
+O2 AZ Alkmaar seed 4: stays a watcher, season three watches (null)
+O1 AZ Alkmaar seed 5: season two PLAYS (L), 12 nights, out in the quarter-finals, winner Everton | O3 base loads and plays on: week 67/67, next season 3 with 0 uel entries
+O2 AZ Alkmaar seed 5: stays a watcher, season three PLAYS (P), 10 nights, out in the knockout play-off, winner Liverpool
+O1 AZ Alkmaar seed 6: season two watches (null)
+O2 AZ Alkmaar seed 6: stays a watcher, season three watches (null)
+oldsave1593: {"o1":24,"o1play":8,"o2":24,"o2play":7,"o3":8,"o3threw":0,"uelNightsBase":0}; green

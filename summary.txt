@@ -1,0 +1,3 @@
+old-b exit=0 115s | oldsave1593: {"o1":24,"o1play":8,"o2":24,"o2play":7,"o3":8,"o3threw":0,"uelNightsBase":0}; green
+old-a exit=0 118s | oldsave1593: {"o1":24,"o1play":7,"o2":24,"o2play":9,"o3":7,"o3threw":0,"uelNightsBase":0}; green
+oldfleet exit=0 186s | proofWorldUclFleet: GREEN, 38 journeys and 4888 steps byte equal to 14a9af704, draws equal
