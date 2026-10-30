@@ -1,0 +1,3 @@
+levelReads exit=0 2s | simCmLevelReads: 32 checks, 0 failures
+lr-noeraread exit=1 2s | simCmLevelReads: 32 checks, 9 failures (control noeraread)
+lr-youth exit=1 2s | simCmLevelReads: 32 checks, 5 failures (control youth)
