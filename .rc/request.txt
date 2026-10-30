@@ -1,0 +1,14 @@
+simCmDifficulty: node scripts/simCmDifficulty.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-cm: node_modules/.bin/vitest run src/test/cmFreeAgentContinuity.test.ts src/test/cmFreeAgentDiscovery.test.tsx src/test/cmFreeAgentLegacyIdentity.test.ts src/test/cmMarketMaxPrice.test.tsx src/test/cmValueCurve.test.ts src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts src/test/cmFreeAgentOldLedger1600.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simCmOldLedger: node scripts/simCmOldLedger.mjs
+simCmOldLedger-exact: CM_OLD_LEDGER_CONTROL=exact node scripts/simCmOldLedger.mjs
+simClubManager: node scripts/simClubManager.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs
