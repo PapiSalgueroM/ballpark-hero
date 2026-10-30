@@ -43,15 +43,18 @@ if (CONTROL) {
   // bare newlines never matched it, so the control refused to run on every
   // desktop build. Normalise first, as the harness rules say.
   const src = fs.readFileSync(cmPath, 'utf8').replace(/\r\n/g, '\n');
-  const needle = 'ensurePress(state);\n  ensureManagers(state);\n  state.wageCap';
-  if (!src.includes(needle)) { console.error('control run: the startCareer ensure call to sever is not in the source, refusing a dead control'); process.exit(1); }
+  /* Round 1606: the startCareer call passes the world's own offset now, so the needle is that call. */
+  const needle = '  ensureManagers(state, startYearsOn);\n  state.wageCap';
+  if (src.split(needle).length !== 2) { console.error('control run: the startCareer ensure call to sever is not in the source exactly once, refusing a dead control'); process.exit(1); }
   cmPath = path.join(os.tmpdir(), 'clubManager.severed.ts').replaceAll('\\', '/');
-  fs.writeFileSync(cmPath, src.replace(needle, 'ensurePress(state);\n  state.wageCap'));
+  fs.writeFileSync(cmPath, src.replace(needle, '  state.wageCap'));
 }
 fs.writeFileSync(ENTRY, `
 export * as cm from '${cmPath}';
 export { CM_ROSTERS } from '${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts';
 export { players as POOL } from '${ROOT.replaceAll('\\', '/')}/src/data/players.ts';
+export { CM_DUGOUTS } from '${ROOT.replaceAll('\\', '/')}/src/data/clubManagerDugouts.ts';
+export * as rd from '${ROOT.replaceAll('\\', '/')}/src/lib/realDugouts.ts';
 `);
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error --alias:@=${ROOT}/src`, { stdio: 'inherit' });
 const store = new Map();
@@ -61,12 +64,14 @@ globalThis.localStorage = {
   removeItem: k => { store.delete(k); },
   clear: () => { store.clear(); },
 };
-const { cm, CM_ROSTERS, POOL } = await import(pathToFileURL(BUNDLE).href);
+const { cm, CM_ROSTERS, POOL, CM_DUGOUTS, rd } = await import(pathToFileURL(BUNDLE).href);
 
 const fold = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' ').trim();
 const realNames = new Set();
 for (const roster of Object.values(CM_ROSTERS)) for (const p of roster) realNames.add(fold(p.n));
 for (const p of POOL) realNames.add(fold(p.name));
+/* Round 1606: and every real manager in the dugout table, so no generated name can be one of them either. */
+for (const n of rd.realDugoutNames(CM_DUGOUTS)) realNames.add(fold(n));
 
 console.log('1) a fresh career names every dugout but yours, no real person among them');
 {
@@ -78,10 +83,18 @@ console.log('1) a fresh career names every dugout but yours, no real person amon
   if (m['Arsenal']) fail('your own club has an AI manager, the chair is supposed to be yours');
   const names = entries.map(([, v]) => v.name);
   if (new Set(names).size !== names.length) fail('two clubs share a manager name');
-  for (const n of names) {
-    if (realNames.has(fold(n))) fail(`generated manager "${n}" is a real person's name`);
+  /* Round 1606: a chair marked real holds the table's sourced man on purpose; every OTHER name is generated
+     and must still never be a real person's. */
+  let realChairs = 0;
+  for (const [club, v] of entries) {
+    if (v.real === 1) {
+      realChairs += 1;
+      if (rd.realDugoutFor(CM_DUGOUTS, c.eraId ?? 'now', club)?.name !== v.name) fail(`${club}'s chair is marked real but "${v.name}" is not the table's man for it`);
+      continue;
+    }
+    if (realNames.has(fold(v.name))) fail(`generated manager "${v.name}" is a real person's name`);
   }
-  console.log(`   ${entries.length} dugouts named, all distinct, none real, yours empty`);
+  console.log(`   ${entries.length} dugouts named, all distinct, ${realChairs} from the real table, no generated one real, yours empty`);
 }
 
 console.log('2) deterministic and idempotent');
@@ -173,7 +186,10 @@ console.log('6) offers and the merry-go-round agree on one vacancy list');
       offersSeen += 1;
       if (byClub.has(o.club)) {
         vacancyOffers += 1;
-        if (!o.blurb.includes(byClub.get(o.club))) { blurbLies += 1; fail(`vacancy offer for ${o.club} does not name ${byClub.get(o.club)}: "${o.blurb}"`); }
+        /* Round 1606: a real outgoing man is never named; the blurb says the club is making a change. */
+        if (fin.managers?.[o.club]?.real === 1) {
+          if (o.blurb.includes(byClub.get(o.club)) || !o.blurb.includes('making a change in the dugout')) { blurbLies += 1; fail(`vacancy offer for ${o.club} narrates a real manager's exit: "${o.blurb}"`); }
+        } else if (!o.blurb.includes(byClub.get(o.club))) { blurbLies += 1; fail(`vacancy offer for ${o.club} does not name ${byClub.get(o.club)}: "${o.blurb}"`); }
       }
     }
     const next = cm.startNextSeason(fin);

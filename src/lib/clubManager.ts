@@ -81,6 +81,10 @@ import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubMan
 /* Round 1012: the real rivals table moved to a shared leaf module so Soccer
    Career reads the same data. Imported back under its old name, unchanged. */
 import { PRIMARY_RIVAL as RIVALS } from '@/data/clubRivalries';
+/* Round 1606: the real opening day dugouts. The data file imports only a type and the module imports nothing,
+   so there is no cycle; both are read at the call, never at module scope. */
+import { CM_DUGOUTS, CM_DUGOUTS_PARTIAL } from '@/data/clubManagerDugouts';
+import { realDugoutFor, realDugoutNames, realDugoutPartial } from '@/lib/realDugouts';
 // Round 132: the world clock. Everything about ageing, retirement, eras and
 // the projected future world lives in clubManagerEras, which imports nothing
 // from this file, so there is no cycle.
@@ -3116,8 +3120,12 @@ export interface CareerState {
    *  collisions away), never an entry for your own club. The world model is
    *  rebuilt every summer; this record is deliberately carried across the
    *  rollover so a manager's tenure means something, and the merry-go-round
-   *  turns it over at roughly the real world's rate. */
-  managers?: Record<string, { name: string; since: number }>;
+   *  turns it over at roughly the real world's rate. Round 1606: a chair can
+   *  hold the club's REAL opening day manager (src/data/clubManagerDugouts.ts),
+   *  marked `real: 1` with the month he was appointed, only on a season one
+   *  start in the world the table describes. A real name is a display fact and
+   *  never goes into a sentence; old saves carry neither field. */
+  managers?: Record<string, { name: string; since: number; real?: 1; appointed?: string }>;
   /** Round 309: the chairs this summer will empty, decided at season end so
    *  the job offers and the merry-go-round agree on one list. Written by
    *  finishSeason, consumed and cleared by the rollover. */
@@ -8951,12 +8959,44 @@ function mintManagerName(state: CareerState, club: string, taken: Set<string>): 
   return name;
 }
 
-export function ensureManagers(state: CareerState): void {
+/* Round 1606: every real manager's name in the dugout table, built at the first call (never at module scope). */
+let REAL_MANAGER_NAMES: Set<string> | null = null;
+function realManagerNames(): Set<string> {
+  if (!REAL_MANAGER_NAMES) REAL_MANAGER_NAMES = new Set(realDugoutNames(CM_DUGOUTS));
+  return REAL_MANAGER_NAMES;
+}
+
+/** Round 1606: true when a chair's holder is a real person, by the record's mark or by the table's names. A
+ *  real man is a display fact only: no sentence the engine writes may carry his name. */
+function isRealChair(entry: { name: string; real?: 1 } | undefined | null): boolean {
+  return !!entry && (entry.real === 1 || realManagerNames().has(entry.name));
+}
+
+/* Round 1606: the real man in a club's chair on the opening day of the season the table describes, or null. Only
+   a season one start at yearsOn 0 (the world the table is a record of; a later projected world, or a job taken
+   in a later season, gets made up names), never your club and never a club this career has managed. */
+function openingDayDugout(state: CareerState, club: string, years: number): { name: string; appointed?: string } | null {
+  if (state.season !== 1 || years !== 0 || club === state.clubName) return null;
+  if ((state.careerStats?.clubsManaged ?? []).includes(club)) return null;
+  return realDugoutFor(CM_DUGOUTS, state.eraId ?? 'now', club);
+}
+
+/** Round 1606: `years` is how far the world has moved from the table's year. startCareer passes the job move's
+ *  own world offset, because a fresh save built for a move made in a later season still counts from season one. */
+export function ensureManagers(state: CareerState, years: number = yearsOn(state)): void {
   if (!state.managers || typeof state.managers !== 'object') state.managers = {};
   const m = state.managers;
   /* Your own chair is yours: a stale entry for the club you now manage is
      what a save carries the summer you change jobs. */
   delete m[state.clubName];
+  /* Round 1606: and a real man never sits in a chair this career has held: in this world he was never there. */
+  const managedHere = new Set(state.careerStats?.clubsManaged ?? []);
+  for (const club of Object.keys(m)) {
+    if (m[club] && m[club].real === 1 && managedHere.has(club)) {
+      const taken0 = new Set(Object.values(m).map(v => v.name));
+      m[club] = { name: mintManagerName(state, club, taken0), since: m[club].since };
+    }
+  }
   /* Round 310: the record only ever describes the dugouts of the CURRENT
      league, so clubs that left it (relegation, promotion, you moving
      abroad) are dropped. Without this a yo-yo career keeps a manager for
@@ -8974,6 +9014,12 @@ export function ensureManagers(state: CareerState): void {
   for (const club of [...state.leagueClubs].sort()) {
     if (club === state.clubName) continue;
     if (m[club] && typeof m[club].name === 'string') continue;
+    const real = openingDayDugout(state, club, years);
+    if (real && !taken.has(real.name)) {
+      taken.add(real.name);
+      m[club] = { name: real.name, since: state.season, real: 1, ...(real.appointed ? { appointed: real.appointed } : {}) };
+      continue;
+    }
     const name = mintManagerName(state, club, taken);
     taken.add(name);
     m[club] = { name, since: state.season };
@@ -8981,8 +9027,30 @@ export function ensureManagers(state: CareerState): void {
 }
 
 /** Who is in a club's dugout, or null for your own club and unknown clubs. */
-export function managerOf(career: CareerState, club: string): { name: string; since: number } | null {
+export function managerOf(career: CareerState, club: string): { name: string; since: number; real?: 1; appointed?: string } | null {
   return career.managers?.[club] ?? null;
+}
+
+/** Round 1606: what a display slot (the club page, the fixture card) shows for a club's dugout. The record's
+ *  entry for a club of your league; else, for a club outside it (a cup or European opponent), the table's
+ *  opening day man in a season one start only; else null, as before. `real` marks a sourced man (show
+ *  `appointed`); `partial` marks a made up man in a chair the table could not two source. A real man's name
+ *  is only ever drawn in such a slot, never written into a sentence. */
+export interface DugoutView { name: string; since?: number; real?: 1; appointed?: string; partial?: boolean }
+export function dugoutOf(career: CareerState, club: string): DugoutView | null {
+  if (club === career.clubName) return null;
+  const era = career.eraId ?? 'now';
+  const entry = career.managers?.[club];
+  if (entry && typeof entry.name === 'string') {
+    if (entry.real === 1) {
+      if ((career.careerStats?.clubsManaged ?? []).includes(club)) return null;
+      return { name: entry.name, since: entry.since, real: 1, ...(entry.appointed ? { appointed: entry.appointed } : {}) };
+    }
+    return { name: entry.name, since: entry.since, ...(realDugoutPartial(CM_DUGOUTS_PARTIAL, era, club) ? { partial: true } : {}) };
+  }
+  if (career.leagueClubs.includes(club)) return null;
+  const real = openingDayDugout(career, club, yearsOn(career));
+  return real ? { name: real.name, real: 1, ...(real.appointed ? { appointed: real.appointed } : {}) } : null;
 }
 
 /**
@@ -9018,7 +9086,7 @@ function pickSummerSackings(prev: CareerState): { club: string; name: string; po
 }
 
 function runManagerMerryGoRound(prev: CareerState, state: CareerState): string[] {
-  const record: Record<string, { name: string; since: number }> = { ...(prev.managers ?? {}) };
+  const record: Record<string, { name: string; since: number; real?: 1; appointed?: string }> = { ...(prev.managers ?? {}) };
   const lines: string[] = [];
   /* One list per summer: finishSeason already decided who goes so the
      offers it printed stay true; a rollover reached without a season end
@@ -9031,17 +9099,27 @@ function runManagerMerryGoRound(prev: CareerState, state: CareerState): string[]
      by a fresh appointment. */
   const pool = shuffle(sacked.map(s => s.name));
   const taken = new Set(Object.values(record).map(v => v.name));
+  /* Round 1606 (decision A): a real man is never named in a line and never recycled. His chair's line names
+     only the man appointed, and when the draw below picks him for another chair he is spliced out exactly as
+     before and a fresh made up name takes the chair, so every draw, sacking and result stays the same. */
+  const realOut = new Set(sacked.filter(s => isRealChair(record[s.club])).map(s => s.name));
   for (const s of sacked) {
     const recycled = pool.find(n => n !== s.name && Math.random() < 0.4);
+    const holderReal = realOut.has(s.name);
     let name: string;
-    if (recycled) {
+    if (recycled && !realOut.has(recycled)) {
       pool.splice(pool.indexOf(recycled), 1);
       name = recycled;
       const from = sacked.find(x => x.name === recycled);
-      lines.push(`\u{1FA91} ${s.club} sack ${s.name} after finishing ${ordinal(s.pos)}. ${name}, out at ${from?.club ?? 'his last club'} the same week, takes the chair.`);
+      lines.push(holderReal
+        ? `\u{1FA91} ${s.club} appoint ${name} after finishing ${ordinal(s.pos)}. He was out at ${from?.club ?? 'his last club'} the same week.`
+        : `\u{1FA91} ${s.club} sack ${s.name} after finishing ${ordinal(s.pos)}. ${name}, out at ${from?.club ?? 'his last club'} the same week, takes the chair.`);
     } else {
+      if (recycled) pool.splice(pool.indexOf(recycled), 1);
       name = mintManagerName(state, s.club, taken);
-      lines.push(`\u{1FA91} ${s.club} sack ${s.name} after finishing ${ordinal(s.pos)}. ${name} takes over.`);
+      lines.push(holderReal
+        ? `\u{1FA91} ${s.club} appoint ${name} after finishing ${ordinal(s.pos)}.`
+        : `\u{1FA91} ${s.club} sack ${s.name} after finishing ${ordinal(s.pos)}. ${name} takes over.`);
     }
     taken.add(name);
     record[s.club] = { name, since: state.season };
@@ -9051,8 +9129,9 @@ function runManagerMerryGoRound(prev: CareerState, state: CareerState): string[]
      chair you take stops being anyone else's. */
   if (state.clubName !== prev.clubName) {
     const displaced = record[state.clubName]?.name;
+    const displacedReal = isRealChair(record[state.clubName]);
     delete record[state.clubName];
-    if (displaced) lines.push(`\u{1F91D} You take over at ${state.clubName} from ${displaced}.`);
+    if (displaced) lines.push(displacedReal ? `\u{1F91D} You take over at ${state.clubName}.` : `\u{1F91D} You take over at ${state.clubName} from ${displaced}.`);
     if (!record[prev.clubName]) {
       const name = mintManagerName(state, prev.clubName, taken);
       record[prev.clubName] = { name, since: state.season };
@@ -19862,7 +19941,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensureAcademy(state);
   ensureRoles(state);
   ensurePress(state);
-  ensureManagers(state);
+  /* Round 1606: the world's own offset, so a move made in a later season (a season one save under the hood)
+     never seats the table's opening day men. */
+  ensureManagers(state, startYearsOn);
   state.wageCap = wageCapFrom(wageBill(state));
   /* Round 640: and a created club gets the cap a real club with its budget
      has, plus the room its founders above that money bring, recorded so the
@@ -21543,9 +21624,11 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
       const sLeague = (eraHist && eraLeagueOf(s.name, state.eraId)) || leagueOf(s.name);
       const ask = leagueDemand(s.expectation, s.tier, sLeague.clubs.length, sLeague, titleGapFor(s.name, sLeague, state.eraId), state.eraId, s.name);
       const out = (state.pendingVacancies ?? []).find(v => v.club === s.name);
+      /* Round 1606: a real man's exit is never narrated; the line names the change, not the man. */
+      const outReal = !!out && (realManagerNames().has(out.name) || (state.managers?.[out.club]?.name === out.name && isRealChair(state.managers?.[out.club])));
       offers.push({
         club: s.name,
-        blurb: `${out ? `\u{1FA91} They are moving on from ${out.name} \u{B7} ` : ''}${TIER_INFO[s.tier].emoji} ${TIER_INFO[s.tier].label} club \u{B7} ${sLeague.name}${abroad ? ' (abroad)' : ''} \u{B7} ${money(s.budget)} budget \u{B7} the board wants: ${ask.label}`,
+        blurb: `${out ? (outReal ? `\u{1FA91} They are making a change in the dugout \u{B7} ` : `\u{1FA91} They are moving on from ${out.name} \u{B7} `) : ''}${TIER_INFO[s.tier].emoji} ${TIER_INFO[s.tier].label} club \u{B7} ${sLeague.name}${abroad ? ' (abroad)' : ''} \u{B7} ${money(s.budget)} budget \u{B7} the board wants: ${ask.label}`,
       });
     }
   }
