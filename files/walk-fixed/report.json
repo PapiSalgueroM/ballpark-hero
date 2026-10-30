@@ -1,0 +1,107 @@
+{
+  "phase": "fixed",
+  "base": "http://localhost:4173",
+  "checks": 35,
+  "failed": 5,
+  "rows": [
+    {
+      "path": "A",
+      "width": 320,
+      "issues": [
+        "A@320: threw at step \"open combobox 0\": locator.click: Timeout 20000ms exceeded. - <div data-site-chrome=\"\" class=\"sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background\">…</div> intercepts pointer events / - waiting for element to be visible, enabled and stable / - <div data-site-chrome=\"\" class=\"sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background\">…</div> intercepts pointer events"
+      ],
+      "seen": {}
+    },
+    {
+      "path": "B",
+      "width": 320,
+      "issues": [
+        "B@320: threw at step \"open combobox 0\": locator.click: Timeout 20000ms exceeded. - <div data-site-chrome=\"\" class=\"sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background\">…</div> intercepts pointer events / - waiting for element to be visible, enabled and stable / - <div data-site-chrome=\"\" class=\"sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background\">…</div> intercepts pointer events"
+      ],
+      "seen": {}
+    },
+    {
+      "path": "C",
+      "width": 320,
+      "issues": [
+        "C@320: threw at step \"open combobox 0\": locator.click: Timeout 20000ms exceeded. - <div data-site-chrome=\"\" class=\"sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background\">…</div> intercepts pointer events / - waiting for element to be visible, enabled and stable / - <div data-site-chrome=\"\" class=\"sticky top-0 z-50 flex h-11 items-center border-b border-border/40 bg-background\">…</div> intercepts pointer events"
+      ],
+      "seen": {}
+    },
+    {
+      "path": "A",
+      "width": 390,
+      "issues": [
+        "A@390: threw at step \"pick /2020s/ in combobox 2\": locator.click: Timeout 20000ms exceeded. - <p>…</p> from <div role=\"region\" tabindex=\"-1\" data-site-chrome=\"\" data-dukb-focused=\"1\" data-aria-hidden=\"true\" aria-label=\"Cookie choices\" class=\"fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg\">…</div> subtree intercepts pointer events / - waiting for element to be visible, enabled and stable / - <p>…</p> from <div role=\"region\" tabindex=\"-1\" data-site-chrome=\"\" data-dukb-focused=\"1\" data-aria-hidden=\"true\" aria-label=\"Cookie choices\" class=\"fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg\">…</div> subtree intercepts pointer events"
+      ],
+      "seen": {}
+    },
+    {
+      "path": "B",
+      "width": 390,
+      "issues": [
+        "B@390: threw at step \"pick /2020s/ in combobox 2\": locator.click: Timeout 20000ms exceeded. - <p>…</p> from <div role=\"region\" tabindex=\"-1\" data-site-chrome=\"\" data-dukb-focused=\"1\" data-aria-hidden=\"true\" aria-label=\"Cookie choices\" class=\"fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg\">…</div> subtree intercepts pointer events / - waiting for element to be visible, enabled and stable / - <p>…</p> from <div role=\"region\" tabindex=\"-1\" data-site-chrome=\"\" data-dukb-focused=\"1\" data-aria-hidden=\"true\" aria-label=\"Cookie choices\" class=\"fixed bottom-0 left-0 right-0 z-[60] pointer-events-auto max-h-[60dvh] overflow-y-auto p-4 bg-card border-t border-border shadow-lg\">…</div> subtree intercepts pointer events"
+      ],
+      "seen": {}
+    },
+    {
+      "path": "C",
+      "width": 390,
+      "issues": [],
+      "seen": {
+        "lines": 2,
+        "bothLines": 2
+      }
+    },
+    {
+      "path": "A",
+      "width": 1280,
+      "issues": [],
+      "seen": {
+        "first": {
+          "text": "Leeds United Youth",
+          "raw": "Leeds United Youth",
+          "flag": null
+        },
+        "started": {
+          "currentClub": "Leeds United Youth",
+          "academyClubName": "Leeds United",
+          "country": "England",
+          "nationality": "England"
+        }
+      }
+    },
+    {
+      "path": "B",
+      "width": 1280,
+      "issues": [],
+      "seen": {
+        "first": {
+          "text": "Lincoln City Youth",
+          "raw": "Lincoln City Youth",
+          "flag": null
+        },
+        "after": {
+          "text": "Internacional Youth",
+          "raw": "🇧🇷\nInternacional Youth",
+          "flag": "Brazil"
+        },
+        "started": {
+          "currentClub": "Internacional Youth",
+          "academyClubName": "Internacional",
+          "country": "Brazil",
+          "nationality": "Brazil"
+        }
+      }
+    },
+    {
+      "path": "C",
+      "width": 1280,
+      "issues": [],
+      "seen": {
+        "lines": 2,
+        "bothLines": 2
+      }
+    }
+  ]
+}

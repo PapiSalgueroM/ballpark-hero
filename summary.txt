@@ -1,0 +1,4 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk-fixed exit=1 115s | walk1604 fixed: 35 checks, 5 failed, red paths: A, B, C
+walk-main exit=1 178s | walk1604 main: 34 checks, 17 failed, red paths: A, B, C
+buildlazy exit=0 25s | Soccer Career build fixed: passed; 3 healthy flows, 0 eager fetches, 12 originals, 0 failures, 0 setup failures.
