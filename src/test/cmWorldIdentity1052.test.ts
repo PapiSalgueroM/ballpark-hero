@@ -63,6 +63,55 @@ const sha = (v: unknown): string => createHash('sha256').update(typeof v === 'st
 const seeded = (s: number) => { let x = (s >>> 0) || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 4294967296; }; };
 const fixture: any = fs.existsSync(FIXTURE) ? JSON.parse(fs.readFileSync(FIXTURE, 'utf8')) : null;
 const got: any = {};
+/* The approved display-only delta is checked before its old colour is projected for the photograph. */
+const APPROVED_DISPLAY_COLOURS: Record<string, string> = {
+  'Red Star FC': '#0a7040', Annecy: '#d02128', Pau: '#f7d417',
+  Dunkerque: '#1b458f', Grenoble: '#1b458f', Rodez: '#d02128',
+  Clermont: '#d02128', Boulogne: '#d02128', Laval: '#ff6600',
+  Avellino: '#0a7040', Carrarese: '#f7d417', Catanzaro: '#d02128',
+  Entella: '#87d8f7', 'Juve Stabia': '#f7d417', Mantova: '#d02128',
+  Modena: '#f7d417', Padova: '#d02128', 'Südtirol': '#d02128',
+  Vicenza: '#d02128', Arezzo: '#7d1c2a',
+};
+const actualDisplayColours: Record<string, unknown> = {};
+const clubObservations: Record<string, any> = {};
+const approvedColour = (club: string) => Object.prototype.hasOwnProperty.call(APPROVED_DISPLAY_COLOURS, club);
+const legacyClubDigest = (club: string, value: any): string => {
+  const def = approvedColour(club) && value.def ? { ...value.def, color: '#8899aa' } : value.def;
+  return sha({ rows: value.rows, def, xi: value.xi, preview: value.preview, partial: value.partial, nats: value.nats });
+};
+const assertClubSnapshot = (clubs: Record<string, string>, colours: Record<string, unknown>): void => {
+  expect(colours, 'approved Ligue 2 and Serie B display colours').toEqual(APPROVED_DISPLAY_COLOURS);
+  const names = Object.keys(fixture.clubs);
+  const moved = names.filter(n => clubs[n] !== fixture.clubs[n]);
+  expect(moved, `clubs whose digest moved: ${moved.join(', ')}`).toEqual([]);
+  expect(Object.keys(clubs).length).toBe(names.length);
+};
+const copiedControl = (club: string, field: 'color' | 'budget', value: string | number, message: string): void => {
+  assertClubSnapshot(got.clubs, actualDisplayColours);
+  const observation = structuredClone(clubObservations[club]);
+  expect(observation?.def, 'copied control needs an actual club definition').toBeTruthy();
+  const before = JSON.stringify(observation), old = observation.def[field];
+  expect(old, 'copied control must change the observed field').not.toEqual(value);
+  observation.def[field] = value;
+  expect(JSON.stringify(observation)).not.toBe(before);
+  const clubs = { ...got.clubs }, colours = { ...actualDisplayColours };
+  clubs[club] = legacyClubDigest(club, observation);
+  if (approvedColour(club)) colours[club] = observation.def.color;
+  if (field === 'color' && approvedColour(club)) expect(clubs[club]).toBe(got.clubs[club]);
+  else expect(clubs[club]).not.toBe(got.clubs[club]);
+  let failure: unknown;
+  try { assertClubSnapshot(clubs, colours); } catch (error) { failure = error; }
+  expect(failure).toMatchObject({ name: 'AssertionError' });
+  expect((failure as Error).message).toContain(message);
+  observation.def[field] = old;
+  clubs[club] = legacyClubDigest(club, observation);
+  if (approvedColour(club)) colours[club] = observation.def.color;
+  expect(JSON.stringify(observation)).toBe(before);
+  expect(clubs).toEqual(got.clubs); expect(colours).toEqual(actualDisplayColours);
+  assertClubSnapshot(clubs, colours);
+  expect(clubObservations[club].def[field]).toEqual(old);
+};
 let cm: any; let rosters: Record<string, any[]>; let nationalityOf: (era: string | undefined, name: string) => string | null;
 
 beforeAll(async () => {
@@ -92,10 +141,13 @@ beforeAll(async () => {
     const defs = new Map<string, any>(cm.playableClubs(lg.id).map((d: any) => [d.name, d]));
     for (const club of lg.clubs) {
       const rows = rosters[club] ?? null;
-      got.clubs[club] = sha({
+      const observation = {
         rows, def: defs.get(club) ?? null, xi: cm.bakedXIAvg(club), preview: cm.clubPreviewRating(club), partial: cm.isPartialClub(club),
         nats: (rows ?? []).map((p: any) => nationalityOf(undefined, p.n)),
-      });
+      };
+      clubObservations[club] = observation;
+      if (approvedColour(club)) actualDisplayColours[club] = observation.def?.color;
+      got.clubs[club] = legacyClubDigest(club, observation);
     }
   }
   const fa = (await import('@/data/clubManagerFreeAgents2026')).CM_REAL_FREE_AGENTS;
@@ -135,10 +187,18 @@ describe('Round 1052: the world before the round is still there, untouched', () 
   });
   it('keeps every one of the 438 clubs: squad, club row, ratings, partial mark and flags', () => {
     if (RECORD) return;
-    const names = Object.keys(fixture.clubs);
-    const moved = names.filter(n => got.clubs[n] !== fixture.clubs[n]);
-    expect(moved, `clubs whose digest moved: ${moved.join(', ')}`).toEqual([]);
-    expect(Object.keys(got.clubs).length).toBe(names.length);
+    assertClubSnapshot(got.clubs, actualDisplayColours);
+  });
+  it.skipIf(RECORD || !!CONTROL)('rejects an outside-twenty copied colour change and readmits its restoration', () => {
+    copiedControl('Sevilla', 'color', '#8899aa', 'clubs whose digest moved: Sevilla');
+  });
+  it.skipIf(RECORD || !!CONTROL)('rejects an inside-twenty copied colour change and readmits its restoration', () => {
+    copiedControl('Carrarese', 'color', '#8899aa', 'approved Ligue 2 and Serie B display colours');
+  });
+  it.skipIf(RECORD || !!CONTROL)('rejects an inside-twenty copied budget change and readmits its restoration', () => {
+    const budget = clubObservations.Carrarese?.def?.budget;
+    expect(typeof budget).toBe('number'); expect(Number.isFinite(budget)).toBe(true);
+    copiedControl('Carrarese', 'budget', budget + 1, 'clubs whose digest moved: Carrarese');
   });
   it('keeps the free agent pool', () => {
     if (RECORD) return;

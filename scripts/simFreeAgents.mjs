@@ -60,7 +60,7 @@
  *   weekkey        the week keyed countdown guard is back            -> section 7
  *   tickwild       a week is counted off twice                       -> section 7
  *   countfirst     the countdown runs before the week is charged     -> section 7
- *   resignnow      a man whose deal ran out comes straight back      -> section 9
+ *   resignnow      a verified natural expiry is refused this season -> section 9
  *   resignreleased the signing rule forgets everyone you released    -> sections 9 and 17
  *   livefree       a release works with a match paused               -> section 11
  *   gkfree         a release skips the shared squad rules            -> section 11
@@ -154,6 +154,7 @@ const sources = {
   engine: lf('src/lib/clubManager.ts'),
   fin: lf('src/lib/clubManagerFinances.ts'),
   card: lf('src/components/club-manager/ContractsCard.tsx'),
+  pool: lf('src/components/club-manager/FreeAgentPool.tsx'),
   faData: lf('src/data/clubManagerFreeAgents2026.ts'),
 };
 /* Round 1033: the ledger the real free agents come from, and the roster
@@ -296,8 +297,8 @@ if (CONTROL === 'nosev') {
     `${COUNTDOWN}  tickFacilities(state);\n  tickBooks(state);`);
 } else if (CONTROL === 'resignnow') {
   rewrite('resignnow', 'engine',
-    "  if (fa.fromMyClub && fa.since === career.season) return 'justLeft';",
-    "  if (false) return 'justLeft';");
+    "  if (fa.fromMyClub && fa.since === career.season && !(fa.reason === 'expired' && canonical)) return 'justLeft';",
+    "  if (fa.fromMyClub && fa.since === career.season) return 'justLeft';");
 } else if (CONTROL === 'resignreleased') {
   rewrite('resignreleased', 'engine',
     "  if (releasedByYou(fa) || releasedByYouNames(career).has(fa.name)) return 'releasedByYou';",
@@ -324,8 +325,8 @@ if (CONTROL === 'nosev') {
     '');
 } else if (CONTROL === 'fillkeeps') {
   rewrite('fillkeeps', 'engine',
-    '      return out.filter(f => !inSquad.has(f.name));',
-    '      return out;');
+    "    return out.filter(f => !inSquad.has(f.name)).flatMap(f => {\n      const departed = f.reason === 'expired' && f.since === season\n        ? rosterExits.find(exit => exit.kind === 'release' && exit.player.name === f.name)?.player : undefined;\n      const linked = freeAgentRecord(rosterCareer, { ...f, ...(departed?.worldRosterKey ? { worldRosterKey: departed.worldRosterKey } : {}) }, departed?.id);\n      if (linked && (linked.status !== 'released' || linked.owner !== null)) return [];\n      return [linked ? { ...f, worldRosterKey: linked.key } : f];\n    });",
+    "    return out.flatMap(f => {\n      const departed = f.reason === 'expired' && f.since === season\n        ? rosterExits.find(exit => exit.kind === 'release' && exit.player.name === f.name)?.player : undefined;\n      const linked = freeAgentRecord(rosterCareer, { ...f, ...(departed?.worldRosterKey ? { worldRosterKey: departed.worldRosterKey } : {}) }, departed?.id);\n      if (linked?.status === 'retired') return [];\n      return [linked ? { ...f, worldRosterKey: linked.key } : f];\n    });");
 } else if (CONTROL === 'fillreleased') {
   rewrite('fillreleased', 'engine',
     '  const letGo = new Set(released);',
@@ -342,16 +343,16 @@ if (CONTROL === 'nosev') {
     '    player.wage = wageFor(player);');
 } else if (CONTROL === 'faid') {
   rewrite('faid', 'engine',
-    '    id: freeSquadId(career.squad, `fa-${slug(fa.name)}-s${career.season}`),',
-    '    id: `fa-${slug(fa.name)}-s${career.season}`,');
+    "    id: freeSquadId(career.squad, restored?.id ?? `fa-${slug(fa.name)}-s${career.season}`),",
+    "    id: restored?.id ?? `fa-${slug(fa.name)}-s${career.season}`,");
 } else if (CONTROL === 'nojourneymen') {
   rewrite('nojourneymen', 'engine',
     '  if (have >= FREE_AGENT_POOL_TARGET) return;',
     '  return;');
 } else if (CONTROL === 'movekeeps') {
   rewrite('movekeeps', 'engine',
-    "      let out = moving ? carried.filter(f => f.reason !== 'unattached') : carried;",
-    '      let out = carried;');
+    "    let out = moving ? carried.filter(f => f.reason !== 'unattached') : carried;",
+    "    let out = carried;");
 } else if (CONTROL === 'goodjourneymen') {
   rewrite('goodjourneymen', 'engine',
     '    const rating = clamp(Math.round(level) - cInt(`${seed}|r`, 20, 26), 40, 99);',
@@ -370,8 +371,8 @@ if (CONTROL === 'nosev') {
     '      value: worth,\n');
 } else if (CONTROL === 'feefloor') {
   rewrite('feefloor', 'engine',
-    '  const fee = Math.max(floor, Math.round(wage * years * 0.045 * 10) / 10);',
-    '  const fee = Math.max(0.1, Math.round(wage * years * 0.045 * 10) / 10);');
+    "  const fee = Math.max(floor, Math.round(wage * years * 0.045 * 10) / 10, renewal?.fee ?? 0);",
+    "  const fee = Math.max(0.1, Math.round(wage * years * 0.045 * 10) / 10, renewal?.fee ?? 0);");
 } else if (CONTROL === 'nofee') {
   rewrite('nofee', 'engine',
     '    budget: Math.round((career.budget - fee) * 10) / 10,\n    squad: [...career.squad, player],\n    freeAgents: pool.filter(x => x.name !== fa.name),',
@@ -409,13 +410,13 @@ if (CONTROL === 'nosev') {
     '              const block = releaseBlock(career, p);',
     '              const block = null as ReleaseBlock | null;');
 } else if (CONTROL === 'cardsign') {
-  rewrite('cardsign', 'card',
-    '              const block = freeAgentBlock(career, f);',
-    '              const block = null as FreeAgentBlock | null;');
+  rewrite('cardsign', 'pool',
+    "          const block = freeAgentBlock(career, f);",
+    "          const block = null as FreeAgentBlock | null;");
 } else if (CONTROL === 'termsdrift') {
   rewrite('termsdrift', 'engine',
-    '  const { wage, years, fee } = freeAgentTerms(fa);',
-    '  const { wage, years, fee } = { ...freeAgentTerms(fa), wage: freeAgentTerms(fa).wage + 1 };');
+    "  const { wage, years, fee } = freeAgentTerms(fa, career);",
+    "  const { wage, years, fee } = { ...freeAgentTerms(fa, career), wage: freeAgentTerms(fa, career).wage + 1 };");
 } else if (CONTROL === 'onetap') {
   rewrite('onetap', 'card',
     '                      onClick={() => setConfirmId(confirming ? null : p.id)}',
@@ -433,6 +434,7 @@ if (CONTROL === 'nosev') {
 const SRC = `${TMP_URL}/clubManager.ts`;
 const FIN = `${TMP_URL}/clubManagerFinances.ts`;
 const CARD = `${TMP_URL}/ContractsCard.tsx`;
+const FA_POOL = TMP_URL + '/FreeAgentPool.tsx';
 
 /* The finance module and the card import the engine through the alias, which
    would be the untouched file on disk. Pointing both at the rewritten copy
@@ -451,11 +453,15 @@ function bundle(outfile) {
   fs.writeFileSync(FA_DATA, sources.faData);
   fs.writeFileSync(SRC, sources.engine.replace(FA_IMPORT, `import { CM_REAL_FREE_AGENTS } from '${FA_DATA}';`));
   fs.writeFileSync(FIN, toEngine(sources.fin));
-  fs.writeFileSync(CARD, toEngine(sources.card));
+  const poolImport = "from '@/components/club-manager/FreeAgentPool'";
+  if (sources.card.split(poolImport).length !== 2) { console.log('   FAIL the card no longer imports exactly one shared free-agent pool'); process.exit(1); }
+  fs.writeFileSync(FA_POOL, toEngine(sources.pool));
+  fs.writeFileSync(CARD, toEngine(sources.card).replace(poolImport, 'from ' + JSON.stringify(FA_POOL)));
   fs.writeFileSync(path.join(TMP, 'entry.mjs'), `
 export * as cm from '${SRC}';
 export * as fin from '${FIN}';
 export { ContractsCard } from '${CARD}';
+export { readWorldRoster } from '${ROOT_URL}/src/lib/clubManagerWorldRoster.ts';
 export { HISTORIC_ROSTERS } from '${ROOT_URL}/src/lib/clubManagerEras.ts';
 export { CM_REAL_FREE_AGENTS } from '${FA_DATA}';
 import React from '${NM}/react/index.js';
@@ -490,7 +496,7 @@ if (CONTROL === 'realname') {
 }
 
 bundle(BUNDLE);
-const { cm, fin, ContractsCard, HISTORIC_ROSTERS, render, CM_REAL_FREE_AGENTS } = createRequire(import.meta.url)(BUNDLE);
+const { cm, fin, ContractsCard, readWorldRoster, HISTORIC_ROSTERS, render, CM_REAL_FREE_AGENTS } = createRequire(import.meta.url)(BUNDLE);
 /* Round 832: HISTORIC_ROSTERS fills as each era loads, so load all three first. */
 await cm.ensureAllEraRosters();
 
@@ -982,53 +988,62 @@ console.log('9) letting deals expire does not beat renewing them');
   } else {
     ok(`no club's best player would sign for nothing, at any of the ${CLUBS.length} clubs`);
   }
-  /* And a man whose deal ran out at your club cannot be taken straight back,
-     while a man you RELEASED can never be taken back at all.
-
-     Its own career, because the two blocks above build theirs inside a loop
-     and none of their names reach this far. The first draft read `seniors`
-     from one of them, threw a ReferenceError, and took section 10 down with it
-     on the full suite, after the controls had been proven on the draft before.
-
-     The refusal also has to come from the re-sign rules and not from something
-     else. The first draft offered a man rated one point above the interest
-     bar, so interest refused him whatever the guard did and the check could
-     not fail. So the same man is offered three ways: his deal ran out LAST
-     season, which must be accepted (proving interest, the cap and the squad
-     size all allow him); his deal ran out THIS season, which must be refused;
-     and released by you last season, which must be refused too. The review
-     found the last one: a release was blocked only for its own season, so
-     releasing an expiring man before the final match got him back in August
-     with no renewal fee (12.8m dodged for 37k at Manchester City).
-
-     His value goes with him, exactly as releasePlayer writes it. Without it
-     wageFor falls back to a rating formula about ten times his real wage (a 72
-     rated backup on 8k asked 82k), the cap refused both offers, and the
-     twin failed on healthy code. The cap is lifted for the same reason: this
-     check is about the re-sign rules, and section 1 already owns the cap. */
+  /* Thin legacy records keep their old fallback without invented contract
+     history. A real new expiry below must instead recover its verified profile
+     immediately and pay at least the existing renewal quote. */
   seeded(6400, () => {
     const st = cm.startCareer(CLUBS[0]);
     cm.ensureFreeAgents(st);
     const mine = st.clubStrengths?.[st.clubName] ?? 66;
     const weakest = st.squad.filter(p => !p.isYouth && p.age >= 20).sort((a2, b2) => a2.rating - b2.rating)[0];
-    if (!weakest) { fail('no senior at the club to test the re-sign guard with'); return; }
+    if (!weakest) { fail('no senior at the club to test the legacy re-sign rules with'); return; }
     const rating = Math.min(weakest.rating, Math.floor(mine) - 8);
     const without = { ...st, squad: st.squad.filter(x => x.id !== weakest.id), transferWindow: null, wageCap: Number.MAX_SAFE_INTEGER };
     const offered = (since, reason) => ({ ...without, freeAgents: [{ name: weakest.name, position: weakest.position, age: weakest.age, rating, value: weakest.value, generated: weakest.generated, since, reason, fromMyClub: true }] });
     if (!cm.signFreeAgent(offered(st.season - 1, 'expired'), weakest.name)) {
-      fail('the same man whose deal ran out LAST season is refused too, so a refusal cannot be pinned on the re-sign rules');
-      return;
-    }
-    if (cm.signFreeAgent(offered(st.season, 'expired'), weakest.name)) {
-      fail('a man whose deal ran out this season can be re-signed at once, so letting a deal run down costs nothing');
+      fail('a valid older thin free-agent record can no longer sign');
+    } else if (cm.signFreeAgent(offered(st.season, 'expired'), weakest.name)) {
+      fail('a thin legacy record with no verified contract bypassed its same-season guard');
     } else {
-      ok('a man whose deal ran out this season cannot be taken back, and the same man a season later can');
+      ok('thin legacy records keep their existing later signing without guessed history');
     }
     if (cm.signFreeAgent(offered(st.season - 1, 'released'), weakest.name)) {
       fail('a man you released last season can be signed back, so releasing an expiring player dodges the renewal fee');
     } else {
       ok('a man you released cannot be taken back, even a season later');
     }
+  });
+  seeded(6401, () => {
+    const base = cm.startCareer('Everton');
+    const squad = [...base.squad.filter(p => p.position === 'GK').slice(0, 2), ...base.squad.filter(p => p.position !== 'GK').slice(0, 16)];
+    const target = squad.filter(p => !p.isYouth && !p.onLoan && p.position !== 'GK' && p.age >= 20 && p.age <= 28).sort((a, b) => a.rating - b.rating)[0];
+    if (squad.length !== 18 || !target) { fail('FA_EXPIRY_SETUP: no legal current squad and young natural-expiry subject'); return; }
+    const before = { ...base, squad: squad.map(p => p.id === target.id
+      ? { ...p, contractYears: 1, rating: 40, potential: 86, value: 0.2, wage: 80 }
+      : { ...p, contractYears: 4 }), budget: 9999, wageCap: 9999 };
+    const arrived = cm.startNextSeason(before);
+    const fa = (arrived.freeAgents ?? []).find(f => f.name === target.name);
+    const canonical = fa?.worldRosterKey && readWorldRoster(arrived)?.records.find(r => r.key === fa.worldRosterKey);
+    if (!fa || !canonical || canonical.status !== 'released' || canonical.owner !== null
+      || arrived.squad.some(p => p.id === target.id) || (arrived.retiredNames ?? []).includes(target.name)) {
+      fail('FA_EXPIRY_SETUP: the actual summer did not produce one live canonical expired player'); return;
+    }
+    const quote = cm.renewalTerms(canonical.player);
+    const open = { ...arrived, transferWindow: null };
+    const signed = cm.signFreeAgent(open, fa.name);
+    if (!signed) {
+      fail('FA_NATURAL_EXPIRY_RECOVERY: a verified natural expiry is refused this season: ' + cm.freeAgentBlock(open, fa));
+      return;
+    }
+    const man = signed.squad.find(p => p.name === fa.name);
+    const charged = Math.round((open.budget - signed.budget) * 10) / 10;
+    if (!man || man.id !== target.id || man.worldRosterKey !== canonical.key) fail('FA_NATURAL_EXPIRY_IDENTITY: signing replaced the actual expired identity');
+    else if (man.wage < quote.wage || charged < quote.fee || charged < cm.FREE_AGENT_MIN_FEE) fail('FA_NATURAL_EXPIRY_FINANCE: letting the deal expire undercut paid renewal terms');
+    else ok('a verified natural expiry returns immediately with its identity and paid-renewal wage and fee floors');
+    const released = cm.releasePlayer(before, target.id);
+    if (!released || !released.freeAgents?.some(f => f.name === target.name)) fail('FA_RELEASE_SETUP: the same man could not be manually released');
+    else if (cm.signFreeAgent({ ...released, transferWindow: null }, target.name)) fail('manual release bypassed its embargo while natural expiry was enabled');
+    else ok('the same player manually released still refuses an immediate return');
   });
 }
 
@@ -1406,7 +1421,7 @@ console.log('15) the contracts card agrees with the engine on every button');
       if (isDisabled) disabled += 1; else enabled += 1;
       if ((after !== null) === isDisabled) wrong.push(`Sign ${f.name} ${label}: card ${isDisabled ? 'off' : 'on'}, engine ${after ? 'allows' : 'refuses'}`);
       if (!isDisabled) {
-        const t = cm.freeAgentTerms(f);
+        const t = cm.freeAgentTerms(f, st);
         const feeText = cm.money(t.fee, st);
         if (!m[4].includes(`${t.wage}k/w`) || !m[4].includes(`${t.years}y`) || !m[4].includes(feeText)) badFaces.push(`${f.name}: "${m[4]}" for ${t.wage}k, ${t.years} years and ${feeText}`);
         const man = after?.squad.find(p => p.name === f.name);
