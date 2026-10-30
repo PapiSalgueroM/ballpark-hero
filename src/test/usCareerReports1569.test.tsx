@@ -22,6 +22,7 @@ import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { hallWallKey } from '@/lib/usCareerHallWall';
 
 const SENTINEL_KEY = 'reports-1569-unrelated';
 const SENTINEL = 'an unrelated save that must survive';
@@ -127,12 +128,14 @@ describe('Round 1569 report A: Start over from every screen', () => {
   });
 });
 
-/* The lead's ruling R3 (fix pass of 2026-10-29): the Hall card is drawn from the one career save, so clearing a
-   retired career takes it too, and every restart prompt of a retired career says so in plain words: the retired
-   card's New career, Start over beside it, and Start over in the coaching career after it. A live career has no
-   Hall card, and its prompt reads exactly as before. */
-const restartWords = (row: Row, hall: boolean) =>
-  `This deletes your saved ${row.label} player and coaching career on this device.${hall ? ' The Hall of Fame card goes too.' : ''} You cannot undo this.`;
+/* The lead's ruling R3 (fix pass of 2026-10-29), moved by Round 1570: the Hall card is drawn from the one career
+   save, so every restart prompt of a retired career says what happens to it: the retired card's New career, Start
+   over beside it, and Start over in the coaching career after it. Since Round 1570 a retired career is up on its
+   sport's Hall wall by the time any of them opens, so they say the card stays there; when this browser refused
+   the wall's write they keep 1569's words, which are then true. A live career has no Hall card, and its prompt
+   reads exactly as before. */
+const restartWords = (row: Row, hall: 'none' | 'kept' | 'gone') =>
+  `This deletes your saved ${row.label} player and coaching career on this device.${hall === 'kept' ? ' The Hall of Fame card stays on your Hall wall.' : hall === 'gone' ? ' The Hall of Fame card goes too.' : ''} You cannot undo this.`;
 async function restartPromptSays(view: RenderResult, opener: string, words: string) {
   await click(view.getByRole('button', { name: opener }));
   const dialog = within(document.body).getByRole('alertdialog', { name: 'Start a new career?' });
@@ -140,17 +143,30 @@ async function restartPromptSays(view: RenderResult, opener: string, words: stri
   await click(within(dialog).getByRole('button', { name: 'Keep this career' }));
   await waitFor(() => expect(within(document.body).queryByRole('alertdialog')).toBeNull());
 }
-describe('Round 1569 ruling R3: a restart says the Hall card goes too', () => {
+describe('Round 1569 ruling R3, moved by Round 1570: a restart says where the Hall card goes', () => {
   it.each(ROWS)('$label names the Hall card on every restart prompt of a retired career and not on a live one', async row => {
     seed(row, 6, (c, save) => { c.retired = true; save.phase = 'retired'; }); const view = render(<row.Board />); await flush();
-    await restartPromptSays(view, 'New career', restartWords(row, true));
-    await restartPromptSays(view, 'Start over', restartWords(row, true));
+    await waitFor(() => expect(localStorage.getItem(hallWallKey(row.sport.slug))).not.toBeNull());
+    await restartPromptSays(view, 'New career', restartWords(row, 'kept'));
+    await restartPromptSays(view, 'Start over', restartWords(row, 'kept'));
     await click(view.getByRole('button', { name: /Go after a coaching job/ }));
-    await restartPromptSays(view, 'Start over', restartWords(row, true));
+    await restartPromptSays(view, 'Start over', restartWords(row, 'kept'));
     view.unmount(); localStorage.clear();
     seed(row, 2); const live = render(<row.Board />); await flush();
-    await restartPromptSays(live, 'Start over', restartWords(row, false));
+    await restartPromptSays(live, 'Start over', restartWords(row, 'none'));
     expect(localStorage.getItem(row.sport.saveKey)).not.toBeNull();
+  });
+  it.each(ROWS)('$label keeps the words that the card goes when the browser refused the Hall wall', async row => {
+    seed(row, 6, (c, save) => { c.retired = true; save.phase = 'retired'; });
+    const real = Storage.prototype.setItem;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key: string, value: string) {
+      if (key.endsWith('-my-career-hall-v1')) throw new DOMException('Controlled quota refusal', 'QuotaExceededError');
+      real.call(this, key, value);
+    });
+    const view = render(<row.Board />); await flush();
+    await restartPromptSays(view, 'New career', restartWords(row, 'gone'));
+    await restartPromptSays(view, 'Start over', restartWords(row, 'gone'));
+    expect(localStorage.getItem(hallWallKey(row.sport.slug))).toBeNull();
   });
 });
 

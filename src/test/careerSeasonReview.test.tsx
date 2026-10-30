@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import type { ComponentType } from 'react';
 
@@ -19,6 +19,7 @@ import { answerSummerCard, summerCardAt } from '@/lib/usCareerSummer';
 import { makeReviewCareer, reviewFixtures, reviewSave, reviewSports } from '@/test/fixtures/careerSeasonReview1008';
 import type { ReviewFixture } from '@/test/fixtures/careerSeasonReview1008';
 import type { UsCareerCore } from '@/lib/usCareerSport';
+import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWall';
 
 const boards: Record<string, ComponentType> = { nba: NbaMyCareerBoard, nfl: NflMyCareerBoard, mlb: MlbMyCareerBoard, nhl: NhlMyCareerBoard };
 const field = (name: string) => document.querySelector(`[data-season-${name}]`)?.textContent;
@@ -504,18 +505,28 @@ describe('saved career season review', () => {
       const career: UsCareerCore = makeReviewCareer(fixture, true), bytes = reviewSave(career), legacy = sport.legacyOf(career);
       localStorage.setItem(sport.saveKey, bytes);
       const writes = vi.spyOn(Storage.prototype, 'setItem');
+      /* The keep effect is the one reader of the wall after mount, so a wall read after render returns says it
+         ran (on the second open the cumulative write list already holds the first open's write). */
+      const reads = vi.spyOn(Storage.prototype, 'getItem');
+      const wallReads = () => reads.mock.calls.filter(([key]) => key === hallWallKey(sport.slug)).length;
       for (let open = 0; open < 2; open++) {
         const { unmount } = render(<MemoryRouter><Board /></MemoryRouter>);
+        const mounted = wallReads();
         await screen.findByText(`${career.name} retires`, undefined, { timeout: 20000 });
+        await waitFor(() => expect(wallReads(), `open ${open + 1}: the keep effect read the wall`).toBeGreaterThan(mounted), { timeout: 20000 });
         expect(screen.queryByText(legacy.verdict)).not.toBeNull();
         for (const bullet of legacy.bullets) expect(document.body.textContent).toContain(bullet);
         expect(document.body.textContent).toContain(`Legacy ${legacy.score}`);
         expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
-        expect(writes).not.toHaveBeenCalled();
+        /* Round 1570: the first open puts this career up on its Hall wall, one write on the wall's own key and
+           none on the save's; the second open finds the plaque there and writes nothing at all. */
+        await waitFor(() => expect(writes.mock.calls.map(([key]) => key)).toEqual([hallWallKey(sport.slug)]));
+        expect((JSON.parse(String(writes.mock.calls[0][1])) as { entries: { key: string }[] }).entries.map(e => e.key))
+          .toEqual([wallKeyOf(career, sport.hall!)]);
         expect(recordCompletion).not.toHaveBeenCalled();
         unmount();
       }
-      writes.mockRestore();
+      writes.mockRestore(); reads.mockRestore();
     }
   }, 60000);
 });

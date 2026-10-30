@@ -82,6 +82,12 @@ import { answerTalk, endsAfterSeason, manualRetire, pendingTalk, repairHallOnLoa
 import { stampOnRetirement } from '@/lib/usCareerRetirementFlow';
 import { isFarewellSeason, type RetirementChoiceId } from '@/lib/careerRetirement';
 import { hallRecordFor, type HallSpeechId } from '@/lib/careerHallOfFame';
+/* Round 1570: the Hall wall. Only its two keys load with the board; the rules (src/lib/usCareerHallWall.ts) load
+   when there is a wall to read or a retired career to put up, and the wall screen when it is opened. Loaded with
+   the board the rules cost every US career route 2.02K (r1570-s5a, one runner), over the lead's 2K line. Neither
+   file imports a sport (simUsCareerHallWall section 3). */
+import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWallKey';
+import type { HallWall } from '@/lib/usCareerHallWall';
 import { DIRTY_SENTENCE_NO_WASHERS, canDealWithDirtyMoney, washersLeft } from '@/lib/careerDirtyMoney';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
@@ -92,6 +98,8 @@ const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeaso
 const FarewellCard = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellCard })));
 const FarewellSeasonBanner = lazy(() => import('@/components/career/FarewellCard').then(m => ({ default: m.FarewellSeasonBanner })));
 const HallOfFameCard = lazy(() => import('@/components/career/HallOfFameCard').then(m => ({ default: m.HallOfFameCard })));
+/* Round 1570: the Hall wall's screen loads when it is opened. */
+const UsCareerHallWall = lazy(() => import('@/components/us-career/UsCareerHallWall'));
 /* Round 1500: the dirty money desk loads when "Deal with it" is pressed. */
 const DirtyMoneyDesk = lazy(() => import('@/components/us-career/DirtyMoneyDesk'));
 /* Round 1544: the national team's call and what the summer came to load with
@@ -177,13 +185,27 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
   const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news' | 'inbox' | 'dirty'>('none');
   const [retiredReview, setRetiredReview] = useState(false);
-  const reviewReturn = useRef<'log' | 'retired' | null>(null);
+  const reviewReturn = useRef<'log' | 'retired' | 'wallCreate' | 'wallRetired' | null>(null);
   const reviewHubIndex = useRef(0);
   const hubButtons = useRef<HTMLDivElement>(null);
   const retiredReviewButton = useRef<HTMLButtonElement>(null);
+  /* Round 1570: the Hall wall as this browser holds it (null until read, and always with no Hall bound), the
+     wall screen when it is open (where it opened from, and the plaque on its own screen), its two openers, and
+     its reveal: keyed on the view, so opening the wall from the bottom of the tall create screen brings the
+     wall's top in under the menu bar. All above the focus effect and every early return. */
+  const [wall, setWall] = useState<HallWall | null>(null);
+  const [wallView, setWallView] = useState<{ from: 'create' | 'retired'; plaque: string | null } | null>(null);
+  /* The career whose plaque this browser refused (by its wall key), so the wall's honest line shows only after a
+     real refusal, never while the rules are still on their way. */
+  const [wallRefused, setWallRefused] = useState<string | null>(null);
+  const createWallButton = useRef<HTMLButtonElement>(null);
+  const retiredWallButton = useRef<HTMLButtonElement>(null);
+  const wallTop = useRevealScroll<HTMLDivElement>(wallView ? (wallView.plaque === null ? 'grid' : `plaque:${wallView.plaque}`) : 'closed');
   useEffect(() => {
     if (!reviewReturn.current) return;
     const target = reviewReturn.current === 'retired' ? retiredReviewButton.current
+      : reviewReturn.current === 'wallCreate' ? createWallButton.current
+      : reviewReturn.current === 'wallRetired' ? retiredWallButton.current
       : hubButtons.current?.querySelectorAll<HTMLButtonElement>('button')[reviewHubIndex.current];
     target?.focus({ preventScroll: true });
     reviewReturn.current = null;
@@ -195,7 +217,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       });
     });
     return () => cancelAnimationFrame(frame);
-  }, [panel, retiredReview]);
+  }, [panel, retiredReview, wallView]);
   /* Round 469: the News box opens on three screens, the paper, the gram and
      the rival, so the hub keeps its five boxes (simCareerHub holds that). */
   const [newsTab, setNewsTab] = useState<'headlines' | 'fans' | 'rival'>('headlines');
@@ -367,6 +389,52 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [hallLanded, setHallLanded] = useState(false);
   const [hallFolded, setHallFolded] = useState(false);
   useEffect(() => { setHallLanded(false); setHallFolded(false); }, [sport, career?.name, career?.retired]);
+
+  /* Round 1570: the Hall wall, read after mount and never during render, so the saved page (drawn with empty
+     storage) and the first paint agree. A bound Hall gates every piece of the wall: the parity replay binds
+     none, and sees no read, no write and no element. Junk reads as an empty wall the next plaque replaces. */
+  useEffect(() => {
+    if (!sport.hall) return;
+    try {
+      const raw = localStorage.getItem(hallWallKey(sport.slug));
+      if (!raw) { setWall({ entries: [], writable: true }); return; }
+      const stored: unknown = JSON.parse(raw);
+      let live = true;
+      /* The keep effect's wall is newer than this read, so a read that lands after it changes nothing. */
+      import('@/lib/usCareerHallWall').then(m => { if (live) setWall(w => w ?? m.sanitizeHallWall(stored, sport.slug)); })
+        .catch(() => { /* a chunk that fails to load: the site's preloadError listener reloads once */ });
+      return () => { live = false; };
+    } catch { setWall({ entries: [], writable: true }); }
+  }, [sport]);
+  /* Round 1570: a retired career goes up on the wall, keyed by career: when it retires in this visit (after
+     persist has stamped its calibration) and on the first load of a retired save from before this round,
+     whose save is never written. It waits while a save write is refused: a refused retirement means the
+     disk still holds the live career, and a plaque for it would be a ghost. The same plaque again writes
+     nothing, and a changed record replaces its own plaque where it hangs (never a second one). A wall of a
+     version this build does not know is never written over. A refused write throws past setWall, so the
+     prompt never says the card stays when the browser did not keep it; until the rules have loaded and the
+     plaque is up it says the card goes, which is then true. */
+  useEffect(() => {
+    if (!sport.hall || !career?.retired || saveFailure) return;
+    const retired = career, mine = wallKeyOf(career, sport.hall);
+    let live = true;
+    import('@/lib/usCareerHallWall').then(m => {
+      if (!live) return;
+      try {
+        const entry = m.hallWallEntry(sport, retired);
+        if (!entry) return;
+        const key = hallWallKey(sport.slug);
+        const raw = localStorage.getItem(key);
+        let was: HallWall;
+        try { was = m.sanitizeHallWall(raw ? JSON.parse(raw) : null, sport.slug); } catch { was = { entries: [], writable: true }; }
+        if (!was.writable) { setWall(was); return; }
+        const next = m.addToWall(was.entries, entry);
+        if (next !== was.entries) localStorage.setItem(key, JSON.stringify({ v: 1, entries: next }));
+        setWall({ entries: next, writable: true });
+      } catch { setWallRefused(mine); /* the career is still on its save, and the prompt keeps saying the card goes */ }
+    }).catch(() => { /* a chunk that fails to load: the site's preloadError listener reloads once */ });
+    return () => { live = false; };
+  }, [career, sport, saveFailure]);
 
   useEffect(() => {
     pendingSave.current = null;
@@ -1057,6 +1125,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
        the NEXT career on the old career's screen (Release BT review). */
     setReveal(null);
     setIntlResult(null);
+    setWallView(null);
     reviewReturn.current = null;
     coachRef.current = null;
     setCoach(null);
@@ -1110,11 +1179,17 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      the sticky parent). */
   const startOver = phase !== 'create' && (!!career || (phase === 'prospect' && !!prospect));
   /* Round 1569 (the lead's ruling R3): a retired career's Hall card is drawn from this one save, so both
-     restart prompts say it goes too (the coaching career after retirement included). */
+     restart prompts say what happens to it (the coaching career after retirement included). Round 1570: it
+     stays when its plaque is up on the Hall wall, and goes when this browser did not keep the plaque. */
   const hallOnRestart = !!career?.retired && !!sport.hall;
+  const hallWallKeyNow = career?.retired && sport.hall ? wallKeyOf(career, sport.hall) : null;
+  const hallKept = hallWallKeyNow !== null && !!wall?.entries.some(e => e.key === hallWallKeyNow);
+  /* The wall's "did not keep" line: this career's write was refused (or its save was, which holds the plaque
+     back). Not while the rules load, and not for a plaque never built (a key past the bound refuses nothing). */
+  const hallRefused = hallWallKeyNow !== null && !hallKept && (wallRefused === hallWallKeyNow || !!saveFailure);
   const withSaveStatus = (content: ReactNode) => <div ref={boardTop}>
     {saveFailure && <UsCareerSaveNotice operation={saveFailure} onRetry={retrySave} />}
-    {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} />}
+    {startOver && <UsCareerStartOver sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} hallKept={hallKept} />}
     {content}
   </div>;
 
@@ -1126,6 +1201,24 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       prospectRef.current = null; setProspect(null); setPhase('create');
       saveValue(null);
     }} />);
+  }
+
+  /* ---------------------- Round 1570: the Hall wall ---------------------
+     A screen swap like Review seasons, opened from the create screen (career null) or the retirement screen.
+     The board owns the wrapper the reveal measures, and the fallback has a real height, so the first, cold
+     open (the chunk still loading) is brought into view too. */
+  if (wallView && sport.hall && wall) {
+    const view = wallView;
+    return withSaveStatus(
+      <div ref={wallTop}>
+        <Suspense fallback={<div role="status" style={{ minHeight: 300 }} className="text-center text-xs text-muted-foreground">Loading the Hall wall...</div>}>
+          <UsCareerHallWall sport={sport} wall={wall} from={view.from} plaque={view.plaque} missing={view.from === 'retired' && hallRefused}
+            onOpen={key => setWallView({ from: view.from, plaque: key })}
+            onClosePlaque={() => setWallView({ from: view.from, plaque: null })}
+            onBack={() => { reviewReturn.current = view.from === 'create' ? 'wallCreate' : 'wallRetired'; setWallView(null); }} />
+        </Suspense>
+      </div>,
+    );
   }
 
   /* ------------------------------ create ------------------------------ */
@@ -1208,6 +1301,14 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           >
             Enter the draft
           </button>
+          {/* Round 1570: below the last control on purpose. The wall is read after mount, so this row arrives
+              one paint late, and below everything it moves nothing a player is reading. */}
+          {sport.hall && wall && wall.entries.length > 0 && (
+            <button ref={createWallButton} type="button" data-career-hall-wall-opener="create" onClick={() => setWallView({ from: 'create', plaque: null })}
+              className="min-h-11 w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground">
+              🏛️ Hall wall ({wall.entries.length})
+            </button>
+          )}
         </div>
       </div>
     );
@@ -1399,7 +1500,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             )}
           </div>
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-            <USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset} hallCard={hallOnRestart}>
+            <USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} hallKept={hallKept}>
               <button className="inline-flex min-h-11 min-w-11 items-center gap-2 rounded-full border border-border px-6 py-2.5 text-sm font-semibold text-foreground">
                 <RotateCcw className="h-4 w-4" /> New career
               </button>
@@ -1429,6 +1530,13 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         {/* Round 126: the save does not end here any more. */}
         <CoachStartCard sport={sport.slug} existing={coach} onStart={startCoaching} onResume={openCoaching} />
         <button ref={retiredReviewButton} data-career-review-opener="" onClick={() => setRetiredReview(true)} className="min-h-[44px] w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground">Review seasons</button>
+        {/* Round 1570: drawn whenever a Hall is bound, so it never arrives late and moves the block under it; held
+            shut until the Hall card has landed or been folded, so a tile cannot spoil the ballot. */}
+        {sport.hall && (
+          <button ref={retiredWallButton} type="button" data-career-hall-wall-opener="retired" disabled={!(hallLanded || hallFolded || !hallRecord)}
+            onClick={() => setWallView({ from: 'retired', plaque: null })}
+            className="min-h-[44px] w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground disabled:opacity-50">🏛️ Hall wall</button>
+        )}
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Season by season</p>
           <div className="max-h-72 space-y-0.5 overflow-y-auto">

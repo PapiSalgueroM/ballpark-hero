@@ -45,12 +45,14 @@ interface Props {
   onConfirm: () => void;
   /** Round 1569 (R3): the career being cleared is retired with a Hall of Fame card. */
   hallCard?: boolean;
+  /** Round 1570: that card is up on the Hall wall, so it stays after the restart. */
+  hallKept?: boolean;
 }
 
-export default function UsCareerStartOver({ sport, onConfirm, hallCard }: Props) {
+export default function UsCareerStartOver({ sport, onConfirm, hallCard, hallKept }: Props) {
   return (
     <div data-career-start-over="" className="mb-2 flex justify-end lg:pointer-events-none lg:sticky lg:top-12 lg:z-20 lg:mb-0 lg:h-0">
-      <USCareerActionConfirm action="restart" sport={sport} onConfirm={onConfirm} hallCard={hallCard}>
+      <USCareerActionConfirm action="restart" sport={sport} onConfirm={onConfirm} hallCard={hallCard} hallKept={hallKept}>
         <button type="button" className="inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-4 text-xs font-semibold text-muted-foreground shadow-sm hover:text-foreground lg:pointer-events-auto lg:translate-x-[calc(100%+2rem)]">
           <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" /> Start over
         </button>
