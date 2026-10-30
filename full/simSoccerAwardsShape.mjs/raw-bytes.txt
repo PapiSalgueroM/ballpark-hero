@@ -1,0 +1,3 @@
+3520 /home/runner/work/_temp/rc-out/full/simSoccerAwardsShape.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerAwardsShape.mjs/stderr.log
+3520 total

@@ -1,0 +1,21 @@
+{
+  "originalFilesAndBodiesHeld": true,
+  "entries": [
+    {
+      "file": "node_modules/.vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 724,
+      "sha256": "bf0f5e09cbd2360ed82ea1a0fe884fac1b87fd13408a13633e1534044eaccfd0",
+      "tests": [
+        ":src/test/cageClash.test.tsx",
+        ":src/components/cfb-dynasty/CfbDynastyDepth.test.tsx",
+        ":src/test/conquestRegionDetails.test.tsx",
+        ":src/hooks/useGameNavbarStats.test.tsx",
+        ":src/test/reportDraftLifecycle.test.tsx",
+        ":src/test/soccerPracticeLifecycle.test.tsx",
+        ":src/test/tycoonPitch.test.tsx",
+        ":src/test/usCareerProspect.test.tsx"
+      ],
+      "kind": "NEW_GENERATED_RESULTS_CACHE_ONLY_NO_TEST_CREDIT"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+2052 /home/runner/work/_temp/rc-out/full/simSeasonCentreNeutral.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSeasonCentreNeutral.mjs/stderr.log
+2052 total

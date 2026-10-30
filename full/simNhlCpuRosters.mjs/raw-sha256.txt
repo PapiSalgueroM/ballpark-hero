@@ -1,0 +1,2 @@
+f04983560d616b6c8edb2c48b9f2691a1affb143c35b46f52ef2159a154c0e6f  /home/runner/work/_temp/rc-out/full/simNhlCpuRosters.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simNhlCpuRosters.mjs/stderr.log

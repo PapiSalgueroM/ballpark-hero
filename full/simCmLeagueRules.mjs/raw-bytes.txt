@@ -1,0 +1,3 @@
+5895 /home/runner/work/_temp/rc-out/full/simCmLeagueRules.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCmLeagueRules.mjs/stderr.log
+5895 total

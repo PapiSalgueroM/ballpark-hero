@@ -1,0 +1,2 @@
+5824e9882e83767f1b2448ad4b6ef516bbff6daeedb0ad8ad58bcc637ac68976  /home/runner/work/_temp/rc-out/full/simTransferPathActiveIdentity.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTransferPathActiveIdentity.mjs/stderr.log

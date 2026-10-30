@@ -1,0 +1,3 @@
+3852 /home/runner/work/_temp/rc-out/full/simCfbStaff.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCfbStaff.mjs/stderr.log
+3852 total

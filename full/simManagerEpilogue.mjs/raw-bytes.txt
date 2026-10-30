@@ -1,0 +1,3 @@
+499 /home/runner/work/_temp/rc-out/full/simManagerEpilogue.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simManagerEpilogue.mjs/stderr.log
+499 total

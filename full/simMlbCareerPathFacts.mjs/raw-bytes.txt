@@ -1,0 +1,3 @@
+784 /home/runner/work/_temp/rc-out/full/simMlbCareerPathFacts.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simMlbCareerPathFacts.mjs/stderr.log
+784 total

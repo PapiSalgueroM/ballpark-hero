@@ -1,0 +1,3 @@
+1028 /home/runner/work/_temp/rc-out/full/simGauntletGuideLadder.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simGauntletGuideLadder.mjs/stderr.log
+1028 total

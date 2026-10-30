@@ -1,0 +1,2 @@
+5bf5ac95cf0c9e6386ced820ff1b656469c2b8ef423ffd9fbd295800da80cd56  /home/runner/work/_temp/rc-out/full/simGauntletGuideLadder.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGauntletGuideLadder.mjs/stderr.log

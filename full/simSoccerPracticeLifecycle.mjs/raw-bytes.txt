@@ -1,0 +1,3 @@
+4118 /home/runner/work/_temp/rc-out/full/simSoccerPracticeLifecycle.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerPracticeLifecycle.mjs/stderr.log
+4118 total

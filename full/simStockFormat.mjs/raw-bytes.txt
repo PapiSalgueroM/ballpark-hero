@@ -1,0 +1,3 @@
+3496 /home/runner/work/_temp/rc-out/full/simStockFormat.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simStockFormat.mjs/stderr.log
+3496 total

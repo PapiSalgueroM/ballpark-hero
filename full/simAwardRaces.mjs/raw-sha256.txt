@@ -1,0 +1,2 @@
+5a4740d07246c1ea2ea8f96c466faaff3b55910d1590c6a36393810d73e6c748  /home/runner/work/_temp/rc-out/full/simAwardRaces.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simAwardRaces.mjs/stderr.log

@@ -1,0 +1,3 @@
+2291 /home/runner/work/_temp/rc-out/full/simPrerender.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simPrerender.mjs/stderr.log
+2291 total

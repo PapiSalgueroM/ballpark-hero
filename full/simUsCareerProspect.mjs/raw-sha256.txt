@@ -1,0 +1,2 @@
+321923efa15baed6aab85f2d66721dafbad2003909bbb1aae5486d585413641e  /home/runner/work/_temp/rc-out/full/simUsCareerProspect.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simUsCareerProspect.mjs/stderr.log

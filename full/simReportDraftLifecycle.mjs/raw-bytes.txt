@@ -1,0 +1,3 @@
+563 /home/runner/work/_temp/rc-out/full/simReportDraftLifecycle.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simReportDraftLifecycle.mjs/stderr.log
+563 total

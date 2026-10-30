@@ -1,0 +1,2 @@
+b60d8ff84203baf38a11001c9652e25e2c5229b969c5365161ddfeea3ec3ae1a  /home/runner/work/_temp/rc-out/full/simSoccerAwardsShape.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerAwardsShape.mjs/stderr.log

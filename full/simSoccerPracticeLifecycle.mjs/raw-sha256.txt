@@ -1,0 +1,2 @@
+26d514b6b146456838893f9e24b2dad8d2ef4fd0899b38f193312bdfece32f6f  /home/runner/work/_temp/rc-out/full/simSoccerPracticeLifecycle.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerPracticeLifecycle.mjs/stderr.log

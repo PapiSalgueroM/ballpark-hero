@@ -1,0 +1,3 @@
+12365 /home/runner/work/_temp/rc-out/full/simHigherLowerFacts.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simHigherLowerFacts.mjs/stderr.log
+12365 total

@@ -1,0 +1,3 @@
+3750 /home/runner/work/_temp/rc-out/full/simDeadlineDay.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simDeadlineDay.mjs/stderr.log
+3750 total

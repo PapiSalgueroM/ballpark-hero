@@ -1,0 +1,2 @@
+bed030892f1425a6d766bfd720c6fac07d826d9c2cc23f7d346ac04b740dcbe5  /home/runner/work/_temp/rc-out/full/simClubManagerNewLeagues.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simClubManagerNewLeagues.mjs/stderr.log

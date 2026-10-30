@@ -1,0 +1,3 @@
+4244 /home/runner/work/_temp/rc-out/full/simPerfectSeasonOdds.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simPerfectSeasonOdds.mjs/stderr.log
+4244 total

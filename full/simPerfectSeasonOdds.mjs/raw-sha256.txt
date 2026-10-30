@@ -1,0 +1,2 @@
+fb13e76afdfbbda192f4dd9c86abe2e989eb4cbc1eaf27e05b26d556ec3de00c  /home/runner/work/_temp/rc-out/full/simPerfectSeasonOdds.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPerfectSeasonOdds.mjs/stderr.log

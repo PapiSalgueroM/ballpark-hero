@@ -1,0 +1,2 @@
+d848493733455798b6251fb24100bb2fbeb4bb67ef60284ed7589cedda27ca5c  /home/runner/work/_temp/rc-out/full/simCareerEras.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCareerEras.mjs/stderr.log

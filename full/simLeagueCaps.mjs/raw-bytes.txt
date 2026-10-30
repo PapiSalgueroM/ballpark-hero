@@ -1,0 +1,3 @@
+594 /home/runner/work/_temp/rc-out/full/simLeagueCaps.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simLeagueCaps.mjs/stderr.log
+594 total

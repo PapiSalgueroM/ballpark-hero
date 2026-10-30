@@ -1,0 +1,2 @@
+b51a36cb82a5269a164c18c29d2759df1ccf2bba70feb7df398daf19c7c9af54  /home/runner/work/_temp/rc-out/full/simMlbCareerPathFacts.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simMlbCareerPathFacts.mjs/stderr.log

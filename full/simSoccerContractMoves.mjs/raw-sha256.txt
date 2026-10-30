@@ -1,0 +1,2 @@
+d861309b00d3fe7079f5192c44023b3cc4189e87758d67b5497f9c61f04e2efa  /home/runner/work/_temp/rc-out/full/simSoccerContractMoves.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerContractMoves.mjs/stderr.log

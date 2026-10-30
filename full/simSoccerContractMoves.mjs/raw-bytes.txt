@@ -1,0 +1,3 @@
+634 /home/runner/work/_temp/rc-out/full/simSoccerContractMoves.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simSoccerContractMoves.mjs/stderr.log
+634 total

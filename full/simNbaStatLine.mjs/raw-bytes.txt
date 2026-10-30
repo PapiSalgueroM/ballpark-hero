@@ -1,0 +1,3 @@
+1310 /home/runner/work/_temp/rc-out/full/simNbaStatLine.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNbaStatLine.mjs/stderr.log
+1310 total

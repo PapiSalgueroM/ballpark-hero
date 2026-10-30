@@ -1,0 +1,3 @@
+2317 /home/runner/work/_temp/rc-out/full/simNavbarStatsReads.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNavbarStatsReads.mjs/stderr.log
+2317 total
