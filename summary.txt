@@ -1,0 +1,4 @@
+digest-head exit=1 59s | simCmLeagueRules: 47 failure(s)
+digest-revert exit=0 60s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+digest-write exit=0 89s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+deadline exit=0 6s | simClubManagerDecisionDeadline normal: green.
