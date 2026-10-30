@@ -1,0 +1,16 @@
+  Real Madrid now: 5 checkpoints (week 6 w6, before a first leg w32, before a deciding leg w34, before a first leg w42, before a deciding leg w44)
+  Liverpool now: 1 checkpoints (week 6 w7)
+  Barcelona era2015: 7 checkpoints (week 6 w6, before a first leg w29, before a deciding leg w31, before a first leg w34, before a deciding leg w36, before a first leg w44, before a deciding leg w46)
+  Bayern Munich era2010: 5 checkpoints (week 6 w6, before a first leg w27, before a deciding leg w29, before a first leg w32, before a deciding leg w34)
+  Chelsea era2020: 7 checkpoints (week 6 w6, before a first leg w29, before a deciding leg w31, before a first leg w34, before a deciding leg w36, before a first leg w44, before a deciding leg w46)
+  Inter Milan now: 3 checkpoints (week 6 w6, before a first leg w32, before a deciding leg w34)
+  Arsenal now: 5 checkpoints (week 6 w6, before a first leg w32, before a deciding leg w34, before a first leg w42, before a deciding leg w44)
+  Juventus era2015: 7 checkpoints (week 6 w6, before a first leg w29, before a deciding leg w31, before a first leg w34, before a deciding leg w36, before a first leg w44, before a deciding leg w46)
+checkpoints 40, weeks carried equal 73, parted at a differing leg 7, tie logged 7, rollbacks 7
+ok   load: HEAD loads every base save exactly as the base does
+ok   fans: fan terms of a loaded base save are the base's
+FAIL carry: HEAD and base carry on equal except at a differing deciding leg (33: Real Madrid now week 6 (week 6) +0 (league); Real Madrid now before a first leg (week 32) +0 (uclKo); Real Madrid now before a first leg (week 42) +6 (cup))
+ok   tie: at a differing leg HEAD logs tie, the base does not, the record is the same
+ok   rollback: a HEAD save with tie loads on the base engine
+FAIL coverage too thin (40 checkpoints, 73 weeks)
+oldsave1603 RED: 3 of 5 green
