@@ -1,0 +1,152 @@
+name: Stadium plan search generation only
+on:
+  push:
+    branches: [codex/stadium-plan-search-generate-20261029]
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      TZ: UTC
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_PARENT: a90801e0a7439a9ce8a4bafa126c4aa84f3fab94
+      EXPECTED_TREE: 75bf0cb5f73aa11dc3bbd14b556fcc09c9573b3d
+      MAIN_AT_PLAN: bd0c07bf72dc0214842202fe2f931b14c65d82dc
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind immutable product and retain original HEAD before generation
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/stadium-plan-search-generate"; test ! -e "$out"; mkdir -p "$out/generator-tmp"
+          echo "GEN_OUT=$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/stadium-plan-search-generate-20261029
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT 988dc9d6b880d6c8a15fb4a00e09e6bf7a18eeab 0207ae74e56897082ef2cf43d586c704388cb237"
+          test "$(git ls-files | wc -l)" -eq 5459
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof-diff.txt"
+          printf 'A\t.github/workflows/stadium-plan-search-generate.yml\n' > "$out/expected-proof-diff.txt"
+          cmp "$out/proof-diff.txt" "$out/expected-proof-diff.txt"
+          test "$(sha256sum scripts/genSearchKeywords.mjs | cut -d' ' -f1)" = f76ff265e08218b2a80589710b434e382c7c63e45abcf3d94087e5c3fd04091c
+          test "$(sha256sum scripts/lib/atomicWrite.mjs | cut -d' ' -f1)" = c2f21d05e485543d8e96a157ef47ecddfd1645578bf88e71842a103dea82015c
+          test "$(git rev-parse HEAD:src/data/searchKeywords.json)" = e3e8df33531e9dfd65f602acee2bca1b81a098f4
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files -z | grep -z -v -x -F 'src/data/searchKeywords.json' | sort -z > "$out/source-other-members.initial"
+          test "$(tr -cd '\0' < "$out/source-other-members.initial" | wc -c)" -eq 5458
+          xargs -0 sha256sum < "$out/source-other-members.initial" > "$out/source-other.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          git archive --format=tar HEAD > "$out/source.tar"
+          git show HEAD:src/data/searchKeywords.json > "$out/original-searchKeywords.json"
+          cmp src/data/searchKeywords.json "$out/original-searchKeywords.json"
+          printf 'M\tsrc/data/searchKeywords.json\n' > "$out/only-allowed-app-diff.txt"
+          cat > "$out/run-node.sh" <<'GATE'
+          run_node() {
+            local id="$1"; shift
+            local dir="$GEN_OUT/$id" raw=0
+            test ! -e "$dir"; mkdir -p "$dir"
+            { printf 'node '; printf '%q ' "$@"; printf '\n'; } > "$dir/command.txt"
+            : > "$dir/transport.jsonl"
+            SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$dir/transport.jsonl" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" TMPDIR="$GEN_OUT/generator-tmp" timeout --signal=TERM --kill-after=10s 2m node "$@" > "$dir/stdout.log" 2> "$dir/stderr.log" || raw=$?
+            printf '%s\n' "$raw" > "$dir/raw.exit"
+            test "$raw" -eq 0; test ! -s "$dir/transport.jsonl"
+          }
+          GATE
+          sha256sum "$out/run-node.sh" > "$out/run-node.initial.sha256"
+          printf '{"scope":"GENERATION_ONLY_NOT_A_SHIPPING_ROUND","source":"%s","actualSourceParent":"%s","actualParentTree":"%s","mainAtPlan":"%s","mainAndBSAndBTAndBranchFence":"ROOT_OWNED_OUTSIDE_THIS_JOB","productRegularFiles":5458,"proofRegularFiles":5459,"qaAdditions":1,"allowedGeneratedPath":"src/data/searchKeywords.json","otherProductBodiesHeldRequired":5457,"otherProofBodiesHeldRequired":5458,"generator":"scripts/genSearchKeywords.mjs","parameterSelected":false,"types":"UNRUN","units":"UNRUN","build":"UNRUN","caps":"UNRUN","browser":"UNRUN","globalSims":"UNRUN","fullSEO":"UNRUN","featureReady":false}\n' "$GITHUB_SHA" "$EXPECTED_PARENT" "$EXPECTED_TREE" "$MAIN_AT_PLAN" > "$out/SCOPE.json"
+      - name: Early remote generator syntax before dependencies
+        run: |
+          set -euo pipefail
+          source "$GEN_OUT/run-node.sh"
+          run_node syntax --check scripts/genSearchKeywords.mjs
+      - name: Locked generator dependency and original dependency inventory
+        run: |
+          set -euo pipefail
+          out="$GEN_OUT"
+          npm ci > "$out/npm-ci.stdout.log" 2> "$out/npm-ci.stderr.log"
+          find node_modules -type f -print0 | sort -z > "$out/deps.members"
+          xargs -0 sha256sum < "$out/deps.members" > "$out/deps.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.initial"
+      - name: Execute actual generator and retain the only generated app body
+        run: |
+          set -euo pipefail
+          out="$GEN_OUT"; source "$out/run-node.sh"
+          run_node first scripts/genSearchKeywords.mjs
+          cp src/data/searchKeywords.json "$out/generated-searchKeywords.json"
+          if cmp -s "$out/original-searchKeywords.json" "$out/generated-searchKeywords.json"; then printf 'GENERATOR_DID_NOT_CHANGE_EXPECTED_STALE_OUTPUT\n' >&2; exit 1; fi
+          git diff --name-status HEAD -- > "$out/after-first.paths.tsv"
+          cmp "$out/after-first.paths.tsv" "$out/only-allowed-app-diff.txt"
+          git diff --summary HEAD -- > "$out/after-first.mode-summary.txt"; test ! -s "$out/after-first.mode-summary.txt"
+          test "$(stat -c '%a' src/data/searchKeywords.json)" = 644
+          git ls-files -z | sort -z > "$out/source-members.first"
+          cmp "$out/source-members.initial" "$out/source-members.first"
+          sha256sum -c "$out/source-other.initial.sha256" > "$out/source-other.first-held.log"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.first"
+          cmp "$out/untracked.initial" "$out/untracked.first"
+          xargs -0 sha256sum < "$out/source-members.first" > "$out/source.first.sha256"
+          git diff HEAD -- src/data/searchKeywords.json > "$out/generated-searchKeywords.diff"
+          sha256sum "$out/original-searchKeywords.json" "$out/generated-searchKeywords.json" > "$out/original-generated.sha256"
+          cp -a "$out/generator-tmp" "$out/first-generator-tmp"
+      - name: Execute actual generator again and require byte idempotency
+        run: |
+          set -euo pipefail
+          out="$GEN_OUT"; source "$out/run-node.sh"
+          run_node second scripts/genSearchKeywords.mjs
+          cp src/data/searchKeywords.json "$out/second-searchKeywords.json"
+          cmp "$out/generated-searchKeywords.json" "$out/second-searchKeywords.json"
+          git ls-files -z | sort -z > "$out/source-members.second"
+          cmp "$out/source-members.first" "$out/source-members.second"
+          xargs -0 sha256sum < "$out/source-members.second" > "$out/source.second.sha256"
+          cmp "$out/source.first.sha256" "$out/source.second.sha256"
+          git diff --name-status HEAD -- > "$out/after-second.paths.tsv"
+          cmp "$out/after-second.paths.tsv" "$out/only-allowed-app-diff.txt"
+          git diff --summary HEAD -- > "$out/after-second.mode-summary.txt"; test ! -s "$out/after-second.mode-summary.txt"
+          printf '{"status":"ACTUAL_SEARCH_GENERATION_COMPLETE_ONE_OUTPUT_AND_SECOND_RUN_BYTE_IDEMPOTENT","source":"%s","actualSourceParent":"%s","actualParentTree":"%s","generatedPath":"src/data/searchKeywords.json","originalRaw":"original-searchKeywords.json","firstGeneratedRaw":"generated-searchKeywords.json","secondGeneratedRaw":"second-searchKeywords.json","firstRaw":0,"secondRaw":0,"syntaxRaw":0,"otherProductBodiesHeld":5457,"otherProofBodiesHeld":5458,"allSourceMembershipHeld":true,"secondAllSourceHashesIdentical":true,"strictOfflineReceiptsEmpty":true,"shippingOrFeatureCredit":false}\n' "$GITHUB_SHA" "$EXPECTED_PARENT" "$EXPECTED_TREE" > "$out/GENERATION-COMPLETE.json"
+          printf 'STADIUM_SEARCH_GENERATION: actual generator raw0 twice, only searchKeywords changed, second output byte-identical. No feature qualification.\n'
+      - name: Always retain original-source and generated-output final holds
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="${GEN_OUT:-$RUNNER_TEMP/stadium-plan-search-generate}"; mkdir -p "$out"; failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          xargs -0 sha256sum < "$out/source-members.final" > "$out/source.final.sha256"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          sha256sum -c "$out/source-other.initial.sha256" > "$out/source-other.final-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          if test -f "$out/generated-searchKeywords.json"; then cmp src/data/searchKeywords.json "$out/generated-searchKeywords.json" || failed=1; fi
+          if test -f "$out/source.second.sha256"; then cmp "$out/source.second.sha256" "$out/source.final.sha256" || failed=1; fi
+          git diff --name-status HEAD -- > "$out/final.paths.tsv"
+          if test -f "$out/generated-searchKeywords.json"; then cmp "$out/final.paths.tsv" "$out/only-allowed-app-diff.txt" || failed=1; fi
+          git diff --summary HEAD -- > "$out/final.mode-summary.txt"; test ! -s "$out/final.mode-summary.txt" || failed=1
+          if test -f "$out/deps.sha256"; then
+            find node_modules -type f -print0 | sort -z > "$out/deps.members.final"
+            cmp "$out/deps.members" "$out/deps.members.final" || failed=1
+            sha256sum -c "$out/deps.sha256" > "$out/deps.final-held.log" 2>&1 || failed=1
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.initial" "$out/dependency-links.final" || failed=1
+          fi
+          if test -f "$out/run-node.initial.sha256"; then sha256sum -c "$out/run-node.initial.sha256" > "$out/run-node.final-held.log" 2>&1 || failed=1; else failed=1; fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/stadium-search-generation-evidence.sha256"
+          cp "$RUNNER_TEMP/stadium-search-generation-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: stadium-plan-search-generate-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/stadium-plan-search-generate
+          if-no-files-found: error
+          retention-days: 14
