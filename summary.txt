@@ -1,0 +1,8 @@
+academy exit=0 8s | simSoccerAcademyPlacement: all sections green
+vitest-create exit=0 12s |    Duration  11.43s (transform 4.03s, setup 291ms, collect 10.36s, tests 18.68s, environment 1.24s, prepare 369ms)
+academy-base exit=0 9s | simSoccerAcademyPlacement: all sections green
+academy-redraw exit=1 6s | control redraw FIRED: section 1 went red as it must
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 60s | 

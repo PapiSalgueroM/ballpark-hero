@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-create: node_modules/.bin/vitest run src/test/soccerCareerCreationRoll.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000
+academy: node scripts/simSoccerAcademyPlacement.mjs
+academy-base: SC_ACADEMY_BASE=4bd20c993 node scripts/simSoccerAcademyPlacement.mjs
+academy-redraw: SC_ACADEMY_CONTROL=redraw node scripts/simSoccerAcademyPlacement.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
