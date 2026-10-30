@@ -789,8 +789,11 @@ console.log('9) A manager who never says a word is where he always was');
   console.log(`   ${RUNS} do nothing Everton seasons: ${mean(p).toFixed(1)} pts (2se ${se2(p).toFixed(1)}), ${mean(reqs).toFixed(2)} transfer requests, sacked ${sacked.reduce((a, b) => a + b, 0)}/${RUNS}`);
   /* The same band simRoles guards. Before this round the identical run came out
      at 44.4 points over forty runs in Round 127 and 42.7 over sixty when it was
-     re-measured for this one, and twelve rounds of calibration sit on it. */
-  if (mean(p) < 36 || mean(p) > 54) fail(`a do nothing Everton season now finishes on ${mean(p).toFixed(1)} points, and before this round it was 42.7`);
+     re-measured for this one, and twelve rounds of calibration sit on it.
+     Round 1600: moved with simRoles section 10 (the lead's ruling there, the identical season), 36 to 54 to 41
+     to 59: veterans rated by their level lift Everton about five points. Four unseeded runs of 60 a side on
+     GitHub runners (r1600-f3b): base 14a9af704 mean 47.98, head 4950135f6 mean 53.00 (runs 51.80 to 53.83). */
+  if (mean(p) < 41 || mean(p) > 59) fail(`a do nothing Everton season now finishes on ${mean(p).toFixed(1)} points, band 41 to 59 (Round 1600 measured 53.0)`);
   if (mean(reqs) > 6) fail(`a manager who touched nothing collected ${mean(reqs).toFixed(2)} transfer requests`);
 }
 
