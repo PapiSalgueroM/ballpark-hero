@@ -1,0 +1,5 @@
+nonatnew: a row with an empty nationality
+pages 64, judged rows 163, men 75: sarandi 56 (110 rows), london 18, held 0, pending 1
+  pending Nadie Sinpais 2024 sar: lon:
+FAIL: arsenalLedger.json is not what the generator writes from the committed pages and the export given: stop the apply
+nonatnew: ledger exit 1 (want 1), payload exit null (want null): EXPECTED

@@ -1,0 +1,39 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: node scripts/simClubNamesakes.mjs
+c-blind: SIM_NAMESAKE_CONTROL=blind node scripts/simClubNamesakes.mjs
+c-unmerge: SIM_NAMESAKE_CONTROL=unmerge node scripts/simClubNamesakes.mjs
+c-noexclude: SIM_NAMESAKE_CONTROL=noexclude node scripts/simClubNamesakes.mjs
+c-wide: SIM_NAMESAKE_CONTROL=wide node scripts/simClubNamesakes.mjs
+c-mirrordrift: SIM_NAMESAKE_CONTROL=mirrordrift node scripts/simClubNamesakes.mjs
+c-onehost: SIM_NAMESAKE_CONTROL=onehost node scripts/simClubNamesakes.mjs
+c-forget: SIM_NAMESAKE_CONTROL=forget node scripts/simClubNamesakes.mjs
+c-manhost: SIM_NAMESAKE_CONTROL=manhost node scripts/simClubNamesakes.mjs
+c-wiki: SIM_NAMESAKE_CONTROL=wiki node scripts/simClubNamesakes.mjs
+c-twotm: SIM_NAMESAKE_CONTROL=twotm node scripts/simClubNamesakes.mjs
+c-unjudged: SIM_NAMESAKE_CONTROL=unjudged node scripts/simClubNamesakes.mjs
+c-payload: SIM_NAMESAKE_CONTROL=payload node scripts/simClubNamesakes.mjs
+c-londonspan: SIM_NAMESAKE_CONTROL=londonspan node scripts/simClubNamesakes.mjs
+c-leak: SIM_NAMESAKE_CONTROL=leak node scripts/simClubNamesakes.mjs
+rh: npm install --prefix /tmp/pglA @electric-sql/pglite > /dev/null 2>&1 && PGLITE_DIR=/tmp/pglA node scripts/qa/rehearseClubNamesakes1587.mjs
+rh-parity: npm install --prefix /tmp/pglB @electric-sql/pglite > /dev/null 2>&1 && REHEARSE_CONTROL=parity PGLITE_DIR=/tmp/pglB node scripts/qa/rehearseClubNamesakes1587.mjs
+rh-tamper: npm install --prefix /tmp/pglC @electric-sql/pglite > /dev/null 2>&1 && REHEARSE_CONTROL=tamper PGLITE_DIR=/tmp/pglC node scripts/qa/rehearseClubNamesakes1587.mjs
+rh-drift: npm install --prefix /tmp/pglD @electric-sql/pglite > /dev/null 2>&1 && REHEARSE_CONTROL=drift PGLITE_DIR=/tmp/pglD node scripts/qa/rehearseClubNamesakes1587.mjs
+rh-noguard: npm install --prefix /tmp/pglE @electric-sql/pglite > /dev/null 2>&1 && REHEARSE_CONTROL=noguard PGLITE_DIR=/tmp/pglE node scripts/qa/rehearseClubNamesakes1587.mjs
+rh1584: npm install --prefix /tmp/pglF @electric-sql/pglite > /dev/null 2>&1 && PGLITE_DIR=/tmp/pglF node scripts/qa/rehearseClubNamesakes1584.mjs
+gen-ledger: node scripts/qa/genArsenalLedger1587.mjs --check
+gen-payload: node scripts/qa/genClubNamesakes1587.mjs --check
+gen-owed: node scripts/qa/genArsenalOwed1587.mjs --check
+dealt-list: node scripts/qa/namesakeDealtDay1587.mjs 2026-10-30 +32
+dealt-nov07: node scripts/qa/namesakeDealtDay1587.mjs 2026-11-07
+dealt-always: DEALT_CONTROL=always node scripts/qa/namesakeDealtDay1587.mjs 2026-11-02
+fresh-renamed: mkdir -p /tmp/frn && cp scripts/data/clubNamesakes1584/arsenalMarket-2026-10-29.json /tmp/frn/arsenalMarket-2026-11-03.json && cp scripts/data/clubNamesakes1584/arsenalStints-2026-10-29.json /tmp/frn/arsenalStints-2026-11-03.json && cmp scripts/data/clubNamesakes1584/arsenalMarket-2026-10-29.json /tmp/frn/arsenalMarket-2026-11-03.json && node scripts/qa/genArsenalLedger1587.mjs --market /tmp/frn/arsenalMarket-2026-11-03.json --check && node scripts/qa/genClubNamesakes1587.mjs --market /tmp/frn/arsenalMarket-2026-11-03.json --stints /tmp/frn/arsenalStints-2026-11-03.json --check
+fresh-same: node .rc/x/freshctl.mjs same
+fresh-valuechg: node .rc/x/freshctl.mjs valuechg
+fresh-sarnew: node .rc/x/freshctl.mjs sarnew
+fresh-nonatnew: node .rc/x/freshctl.mjs nonatnew
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simEdgeSync: node scripts/simEdgeSync.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+rulefences: bad=0; for f in simLiveScores simNoRivalNames simInventedNames simHarnessAnchors simNoInventedQuotes simNoInventedConduct simLegalPages simSingleFooter simCompletionOnce simNoDoubleRecord simDailyPuzzleContract simDailySaveHardening simWritesAreSent simFetchRetry simGoogleOnlyReturn simNavbarStatsReads simScoringCoverage simSiteSearch simResultMoment simGuideHeadings; do timeout 900 node scripts/$f.mjs > /tmp/rf-$f.log 2>&1; e=$?; echo "$f exit=$e | $(tail -1 /tmp/rf-$f.log | cut -c1-160)"; if [ $e -ne 0 ]; then bad=1; fi; done; exit $bad

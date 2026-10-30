@@ -1,0 +1,3 @@
+market 110 rows, stints 56 rows, held 0; payload md5 3ffefa34360b317d34796f515b42ce9a
+same: supabase/migrations/20261101120000_round_1587_arsenal_de_sarandi.sql
+same: scripts/qa/clubNamesakes1587Applied.sql

@@ -1,0 +1,4 @@
+sarnew: a 2007 row for Cristian Llama
+pages 64, judged rows 163, men 74: sarandi 56 (111 rows), london 18, held 0, pending 0
+FAIL: arsenalLedger.json is not what the generator writes from the committed pages and the export given: stop the apply
+sarnew: ledger exit 1 (want 1), payload exit null (want null): EXPECTED
