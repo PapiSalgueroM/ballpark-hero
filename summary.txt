@@ -1,0 +1,6 @@
+tsc exit=0 112s | 
+ctl-nofilllink exit=1 261s | simCmFreeAgencyFleet: CONTROL nofilllink FIRED: section 6 red
+fleet exit=1 277s | simCmFreeAgencyFleet: RED, sections 6 (2)
+ctl-leftunsaid exit=1 289s | simCmFreeAgencyFleet: CONTROL leftunsaid FIRED: section 8 red (red: 1 (128), 4 (5), 6 (2), 8 (131))
+simFreeAgents exit=0 135s | simFreeAgents: all sections passed
+simCmLedgerBound exit=0 384s | simCmLedgerBound: green, all four sections held
