@@ -1,0 +1,6 @@
+quotes-dugout exit=1 13s | control run: dugout FIRED, pass 1 caught 1 planted quote(s) from a real manager
+quotes-desk exit=1 23s | simNoInventedQuotes: 1 failure
+simNoInventedQuotes exit=0 24s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
