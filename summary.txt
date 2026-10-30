@@ -1,0 +1,4 @@
+bv-pure-onbase exit=2 2s |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+bv-dailies-onbase exit=0 80s | simCmBoardVerdict GREEN: 3 of 3 checks green (parts dailies, 78 s)
+bv-dailies-hscard exit=1 84s | control hscard FIRED: 2 of 3 checks red
+bv-dailies exit=0 84s | simCmBoardVerdict GREEN: 3 of 3 checks green (parts dailies, 83 s)
