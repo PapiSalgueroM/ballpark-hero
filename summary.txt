@@ -1,0 +1,8 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk-wide exit=1 130s | playCmPlayerCard: CONTROL wide FIRED: section 2 went red (30 failures) and no other did
+playCmPlayerCard exit=0 131s | playCmPlayerCard: green, 5 sections at 320, 390 and 1280
+walk-swap exit=1 131s | playCmPlayerCard: CONTROL swap FIRED: section 1 went red (45 failures) and no other did
+walk-stack exit=3 90s | playCmPlayerCard: CONTROL stack DID NOT FIRE as it must: section 3 has 33 failures, other red sections [1, 4, 5]
+walk-nohold exit=1 127s | playCmPlayerCard: CONTROL nohold FIRED: section 3 went red (54 failures) and no other did
+walk-thin exit=1 128s | playCmPlayerCard: CONTROL thin FIRED: section 4 went red (18 failures) and no other did
+walk-write exit=1 124s | playCmPlayerCard: CONTROL write FIRED: section 5 went red (1 failures) and no other did

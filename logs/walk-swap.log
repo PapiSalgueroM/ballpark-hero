@@ -1,0 +1,22 @@
+playCmPlayerCard: saves built: S1 season 3 week 26, 22 men with kept seasons, share 100; S4 share 100; S2 week 27, share 53; S3 kept from 3
+playCmPlayerCard: page seed 1397084510
+  FAIL 1: S1-320-top: the card on the page {"kind":"mine","name":"Viktor Gyökeres","lines":["21 apps, 12 goals, 6 assists","18 apps, 12 goals, 5 assists"],"seasons":[["2027-28Arsenal","48","21","6","6.9"],["2026-27Arsenal","51","18","13","7.1"]]} is not the reader's {"kind":"mine","name":"Viktor Gyökeres","lines":["20 apps, 12 goals, 6 assists","18 apps, 12 goals, 5 assists"],"seasons":[["2027-28Arsenal","48","21","6","6.9"],["2026-27Arsenal","51","18","13","7.1"]]}
+  FAIL 1: S1-320-keeper: the card on the page {"kind":"mine","name":"David Raya","lines":["21 apps, 0 goals, 0 assists, 3 clean sheets","18 apps, 0 goals, 0 assists, 2 clean sheets"],"seasons":[["2027-28Arsenal","44","0","0","12","6.4"],["2026-27Arsenal","49","0","0 is not the reader's {"kind":"mine","name":"David Raya","lines":["20 apps, 0 goals, 0 assists, 3 clean sheets","18 apps, 0 goals, 0 assists, 2 clean sheets"],"seasons":[["2027-28Arsenal","44","0","0","12","6.4"],["2026-27Arsenal","49","0","0
+  FAIL 1: S1-320-idle: the card on the page {"kind":"mine","name":"Illan Meslier","lines":["1 apps, 0 goals, 0 assists, 0 clean sheets","0 apps, 0 goals, 0 assists, 0 clean sheets"],"seasons":[["2027-28Arsenal","3","0","0","1","7.1"],["2026-27Arsenal","3","0","0", is not the reader's {"kind":"mine","name":"Illan Meslier","lines":["0 apps, 0 goals, 0 assists, 0 clean sheets","0 apps, 0 goals, 0 assists, 0 clean sheets"],"seasons":[["2027-28Arsenal","3","0","0","1","7.1"],["2026-27Arsenal","3","0","0",
+  FAIL 1: S1-320-goals: the card on the page {"kind":"man","name":"Omar Marmoush","lines":["13 goals, 3 assists"],"seasons":[]} is not the reader's {"kind":"man","name":"Omar Marmoush","lines":["12 goals, 3 assists"],"seasons":[]}
+  FAIL 1: S1-320-sheets: the card on the page {"kind":"man","name":"Gianluigi Donnarumma","lines":["1 goals, 0 assists, 9 clean sheets"],"seasons":[]} is not the reader's {"kind":"man","name":"Gianluigi Donnarumma","lines":["0 goals, 0 assists, 9 clean sheets"],"seasons":[]}
+  FAIL 1: S1-320-assists: the card on the page {"kind":"man","name":"Matheus Cunha","lines":["9 goals, 4 assists"],"seasons":[]} is not the reader's {"kind":"man","name":"Matheus Cunha","lines":["8 goals, 4 assists"],"seasons":[]}
+  FAIL 1: S2-320-goals: the card on the page {"kind":"man","name":"Kento Shiogai","lines":["14 goals, 7 assists"],"seasons":[]} is not the reader's {"kind":"man","name":"Kento Shiogai","lines":["13 goals, 7 assists"],"seasons":[]}
+  FAIL 1: S2-320-sheets: the card on the page {"kind":"man","name":"Timon Wellenreuther","lines":["1 goals, 0 assists, 12 clean sheets"],"seasons":[]} is not the reader's {"kind":"man","name":"Timon Wellenreuther","lines":["0 goals, 0 assists, 12 clean sheets"],"seasons":[]}
+  FAIL 1: S2-320-assists: the card on the page {"kind":"man","name":"Joakim Maehle","lines":["5 goals, 3 assists, 12 clean sheets"],"seasons":[]} is not the reader's {"kind":"man","name":"Joakim Maehle","lines":["4 goals, 3 assists, 12 clean sheets"],"seasons":[]}
+  FAIL 1: S4-320-goals: the card on the page {"kind":"man","name":"Victor Osimhen","lines":["15 goals, 4 assists"],"seasons":[]} is not the reader's {"kind":"man","name":"Victor Osimhen","lines":["14 goals, 4 assists"],"seasons":[]}
+  FAIL 1: S4-320-sheets: the card on the page {"kind":"man","name":"Robin Roefs","lines":["1 goals, 0 assists, 10 clean sheets"],"seasons":[]} is not the reader's {"kind":"man","name":"Robin Roefs","lines":["0 goals, 0 assists, 10 clean sheets"],"seasons":[]}
+  FAIL 1: S4-320-assists: the card on the page {"kind":"man","name":"Nicolas Jackson","lines":["9 goals, 4 assists"],"seasons":[]} is not the reader's {"kind":"man","name":"Nicolas Jackson","lines":["8 goals, 4 assists"],"seasons":[]}
+4       lines read on 9 S1 rival cards (share 100), 9 S4 rival cards (share 100), 9 S1 cards of mine, 9 S2 rival cards (share 53), 9 S3 cards of mine (kept from 2028-29)
+5       the page drew 7 and 7 times before the match; the two saves are equal (146242 characters)
+RED   1 the page is the reader: 45 checks, 45 failed
+green 2 the fit: 468 checks
+green 3 nothing stacks or jumps: 135 checks
+green 4 the lines: 45 checks
+green 5 a match with cards opened: 2 checks
+playCmPlayerCard: CONTROL swap FIRED: section 1 went red (45 failures) and no other did

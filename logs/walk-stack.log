@@ -1,0 +1,29 @@
+playCmPlayerCard: saves built: S1 season 3 week 26, 22 men with kept seasons, share 100; S4 share 100; S2 week 27, share 53; S3 kept from 3
+playCmPlayerCard: page seed 1397084510
+  FAIL 3: S1-320-top: with the card open the document still holds [data-cm-squad-list]
+  FAIL 1: S1-320: the squad walk could not go on: locator.waitFor: Error: strict mode violation: locator('[data-cm-squad-list]') resolved to 2 elements:
+  FAIL 3: S1-320-goals: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S1-320-sheets: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S1-320-assists: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S2-320-goals: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S2-320-sheets: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S2-320-assists: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S4-320-goals: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S4-320-sheets: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S4-320-assists: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S3-320-top: with the card open the document still holds [data-cm-squad-list]
+  FAIL 1: S3-320: the squad walk could not go on: locator.waitFor: Error: strict mode violation: locator('[data-cm-squad-list]') resolved to 2 elements:
+  FAIL 3: S1-390-top: with the card open the document still holds [data-cm-squad-list]
+  FAIL 1: S1-390: the squad walk could not go on: locator.waitFor: Error: strict mode violation: locator('[data-cm-squad-list]') resolved to 2 elements:
+  FAIL 1: S3-390: the squad walk could not go on: locator.waitFor: Error: strict mode violation: locator('[data-cm-squad-list]') resolved to 2 elements:
+  FAIL 1: S1-1280: the squad walk could not go on: locator.waitFor: Error: strict mode violation: locator('[data-cm-squad-list]') resolved to 2 elements:
+  FAIL 1: S3-1280: the squad walk could not go on: locator.waitFor: Error: strict mode violation: locator('[data-cm-squad-list]') resolved to 2 elements:
+  FAIL 4: a save drew no card to read: S1 9 rivals and 0 of mine, S2 9 rivals, S3 0 of mine
+4       lines read on 9 S1 rival cards (share 100), 9 S4 rival cards (share 100), 0 S1 cards of mine, 9 S2 rival cards (share 53), 0 S3 cards of mine (kept from 2028-29)
+  FAIL 5: the looking arm could not go on: locator.waitFor: Error: strict mode violation: locator('[data-cm-squad-list]') resolved to 2 elements:
+RED   1 the page is the reader: 33 checks, 6 failed
+green 2 the fit: 408 checks
+RED   3 nothing stacks or jumps: 87 checks, 33 failed
+RED   4 the lines: 27 checks, 1 failed
+RED   5 a match with cards opened: 2 checks, 1 failed
+playCmPlayerCard: CONTROL stack DID NOT FIRE as it must: section 3 has 33 failures, other red sections [1, 4, 5]
