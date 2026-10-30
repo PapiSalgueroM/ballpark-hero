@@ -1,0 +1,12 @@
+vitest exit=0 13s |    Duration  12.55s (transform 4.37s, setup 915ms, collect 11.78s, tests 14.29s, environment 3.76s, prepare 1.41s)
+continuity-base exit=1 44s |     at async file:///tmp/wb/scripts/simManagerWorldContinuity.mjs:527:24
+simCmTablesTruth exit=0 27s | simCmTablesTruth: every case green
+tsc exit=0 120s | 
+cards-full3 exit=0 392s | simCmPlayerCard: all green, 12812 checks (390s)
+simSquadRows exit=0 4s | simSquadRows: all green
+simTransfers exit=0 105s | ALL TRANSFER CHECKS PASSED
+simStatsCentre exit=0 5s | ALL STATS CENTRE CHECKS PASSED
+simCmLeagueBook exit=0 108s | simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (108s)
+simHarnessAnchors exit=1 65s | simHarnessAnchors: 1 failure(s)
+simEras exit=0 1632s | ALL ERA AND AGEING CHECKS PASSED
+simRoles exit=0 1648s | ALL ROLE CHECKS PASSED

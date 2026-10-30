@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerCareerLines.test.ts src/lib/clubManagerCards.test.ts src/test/cmPlayerCard.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerWorldEditorPage.test.tsx --testTimeout=300000 --hookTimeout=300000
+cards-full3: git worktree add -f /tmp/cbase 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/cbase/node_modules && CARDS_SEEDS=5 CARDS_BASE=/tmp/cbase node scripts/simCmPlayerCard.mjs
+continuity-base: git worktree add -f /tmp/wb 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/wb/node_modules && cd /tmp/wb && node scripts/simManagerWorldContinuity.mjs
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simEras: node scripts/simEras.mjs
+simRoles: node scripts/simRoles.mjs
+simSquadRows: node scripts/simSquadRows.mjs
+simTransfers: node scripts/simTransfers.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
