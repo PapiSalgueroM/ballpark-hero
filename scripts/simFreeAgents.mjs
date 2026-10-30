@@ -381,8 +381,8 @@ if (CONTROL === 'nosev') {
      the loan filter after this one, 1606068d made the deal check return a reason), so these two controls
      aborted on every head before this train. Each now cuts the same rule from today's line. */
   rewrite('marketreleased', 'engine',
-    ' && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));',
-    ' && !onLoanOut.has(sameManKey(p)));');
+    ' && !released.has(p.name) && !onLoanOut.some(mine => sameManNearAge(mine, p)));',
+    ' && !onLoanOut.some(mine => sameManNearAge(mine, p)));');
 } else if (CONTROL === 'buyreleased') {
   rewrite('buyreleased', 'engine',
     '  if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;\n  /* Round 634: nor a man you have out on loan',

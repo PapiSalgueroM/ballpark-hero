@@ -440,6 +440,9 @@ export interface BakedPlayer {
   v: number;
   /** Game rating 48-94 derived from market value. */
   r: number;
+  /** Round 1600: never written by a bake. The engine sets it where a world reads age (levelOf in
+   *  src/lib/clubManagerEras.ts): the level the price gives, when it is not the rating. */
+  lv?: number;
 }
 
 export const CM_ROSTER_META = {

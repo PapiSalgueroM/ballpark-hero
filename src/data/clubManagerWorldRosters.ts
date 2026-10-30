@@ -21,18 +21,49 @@
  * CM_GENERATED_LEAGUES is what each generated file says about itself, in
  * join order: the picker's date line and the count under it print from it,
  * so the next gathered league needs no page edit. */
-import { CM_ROSTERS as CM_ROSTERS_BAKED, CM_PARTIAL as CM_PARTIAL_BAKED } from '@/data/clubManagerRosters';
+import { CM_ROSTERS as CM_ROSTERS_BAKED, CM_PARTIAL as CM_PARTIAL_BAKED, CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 import { CM_ALEAGUE_ROSTERS, CM_ALEAGUE_PARTIAL, CM_ALEAGUE_SUPERSEDES, CM_ALEAGUE_META } from '@/data/clubManagerALeague2026';
 import { CM_RUSSIA_ROSTERS, CM_RUSSIA_PARTIAL, CM_RUSSIA_META } from '@/data/clubManagerRussia2026';
+import { CM_AGE_CURVE, ageRead } from '@/lib/cmAgeRead';
+
+/* Round 1600: the age read (Round 1214, src/lib/cmAgeRead.ts) is applied HERE, at load, once, for every modern
+   file that says it wants it: a META with `curve: 2`. Such a file holds what every bake writes in `r`, the man's
+   value rating, which is his LEVEL, and in `a` his age on 1 August. The engine shows the read of the two (the
+   level plus points for his age, held to 48 and 94) and keeps the level beside it as `lv`, where the two differ,
+   for every read of what a CLUB is (levelOf in src/lib/clubManagerEras.ts). The past seasons are read the same
+   way at load in eraRosters, so every world has one order: the file holds the price, the load adds the age.
+   A file with no stamp (every file shipped before this round) is curve 1: handed back as it is, the same
+   objects, so nothing that reads it can move. */
+export function fileCurve(meta: object): number {
+  const curve = (meta as { curve?: unknown }).curve;
+  return curve === undefined ? 1 : Number(curve);
+}
+
+/** True when today's main squads file (the bake) is read with the age. A created club's founders are priced
+ *  through the same read in that case (customFounderValue). */
+export const CM_WORLD_READS_AGE: boolean = fileCurve(CM_ROSTER_META) === CM_AGE_CURVE;
+
+export function readWithAge(rosters: Record<string, BakedPlayer[]>, curve: number): Record<string, BakedPlayer[]> {
+  if (curve !== CM_AGE_CURVE) return rosters;
+  const out: Record<string, BakedPlayer[]> = {};
+  for (const [club, list] of Object.entries(rosters)) {
+    out[club] = list.map(b => {
+      const r = ageRead(b.r, b.a);
+      return r === b.r ? b : { ...b, r, lv: b.r };
+    });
+  }
+  return out;
+}
 
 function joinWorld(): Record<string, BakedPlayer[]> {
-  const out: Record<string, BakedPlayer[]> = { ...CM_ROSTERS_BAKED };
+  const out: Record<string, BakedPlayer[]> = { ...readWithAge(CM_ROSTERS_BAKED, fileCurve(CM_ROSTER_META)) };
   for (const [name, club] of Object.entries(CM_ALEAGUE_SUPERSEDES)) {
     const list = out[club];
     if (list) out[club] = list.filter(p => p.n !== name);
   }
-  return { ...out, ...CM_ALEAGUE_ROSTERS, ...CM_RUSSIA_ROSTERS };
+  return { ...out, ...readWithAge(CM_ALEAGUE_ROSTERS, fileCurve(CM_ALEAGUE_META)),
+    ...readWithAge(CM_RUSSIA_ROSTERS, fileCurve(CM_RUSSIA_META)) };
 }
 
 export const CM_WORLD_ROSTERS: Record<string, BakedPlayer[]> = joinWorld();

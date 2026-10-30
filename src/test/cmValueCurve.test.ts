@@ -1145,14 +1145,10 @@ describe('the folded final tables: two table publishers a league, neither a wiki
   });
 });
 
-/* THE TYPED DOOR, src/lib/cmAgeRead.ts: what the engine will import. It must be the script's own
-   functions (one implementation for the bake and the engine), typed, and imported by nothing yet. */
-const IMPORTS_THE_AGE_READ = /(?:\bfrom\s*|\bimport\s*\(\s*|\brequire\s*\(\s*|^\s*import\s+)['"][^'"\n]*(?:cmAgeRead|scripts\/lib\/cmValueCurve|scripts\/lib\/cmAges)(?:\.[a-z]+)?['"]/m;
-const sourceFilesUnder = (dir: string): string[] => fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
-  const full = path.join(dir, entry.name);
-  if (entry.isDirectory()) return sourceFilesUnder(full);
-  return /\.(ts|tsx|mts|js|jsx|mjs)$/.test(entry.name) ? [full] : [];
-});
+/* THE TYPED DOOR, src/lib/cmAgeRead.ts: what the engine imports (since Round 1600, through
+   src/data/clubManagerWorldRosters.ts and src/lib/clubManagerEras.ts). It must be the script's own
+   functions (one implementation for the bake and the engine), typed. Round 1214's last test here, that
+   nothing imported it yet, was deleted with the first import, as its own name ordered. */
 
 describe('the typed door the engine will import (src/lib/cmAgeRead.ts)', () => {
   it('is the script library itself, not a second implementation', () => {
@@ -1178,24 +1174,8 @@ describe('the typed door the engine will import (src/lib/cmAgeRead.ts)', () => {
     expect(door.levelFrom(nedved.rating, nedved.age, 96)).toBe(nedved.level);
   });
 
-  it('nothing shipped imports it, or either script library, yet (part two deletes this test with its first import)', () => {
-    /* the shape fires on an import and stays quiet on prose about the file */
-    expect(IMPORTS_THE_AGE_READ.test("import { ageRead } from '@/lib/cmAgeRead';")).toBe(true);
-    expect(IMPORTS_THE_AGE_READ.test("import { ageRead } from './cmAgeRead';")).toBe(true);
-    expect(IMPORTS_THE_AGE_READ.test("const m = await import('../../scripts/lib/cmValueCurve.mjs');")).toBe(true);
-    expect(IMPORTS_THE_AGE_READ.test("import '../../scripts/lib/cmAges.mjs';")).toBe(true);
-    expect(IMPORTS_THE_AGE_READ.test('// rated on the curve (scripts/lib/cmValueCurve.mjs). 310 players')).toBe(false);
-    expect(IMPORTS_THE_AGE_READ.test(' * the typed door is src/lib/cmAgeRead.ts')).toBe(false);
+  it('imports the two script libraries and nothing else', () => {
     const root = path.resolve(process.cwd(), 'src');
-    const files = sourceFilesUnder(root);
-    expect(files.length).toBeGreaterThan(1500);
-    const allowed = new Set(['lib/cmAgeRead.ts', 'test/cmValueCurve.test.ts']);
-    const importers = files
-      .map(file => path.relative(root, file).split(path.sep).join('/'))
-      .filter(rel => !allowed.has(rel))
-      .filter(rel => IMPORTS_THE_AGE_READ.test(fs.readFileSync(path.join(root, rel), 'utf8')));
-    expect(importers).toEqual([]);
-    /* and the door itself imports the two script libraries and nothing else */
     const doorSource = fs.readFileSync(path.join(root, 'lib/cmAgeRead.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
     const doorImports = [...doorSource.matchAll(/from\s+'([^']+)'/g)].map(m => m[1]);
     expect(doorImports).toEqual(['../../scripts/lib/cmValueCurve.mjs', '../../scripts/lib/cmAges.mjs']);

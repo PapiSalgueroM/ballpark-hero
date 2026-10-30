@@ -91,6 +91,8 @@ import {
   isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,
   makeGeneratedName, eraBakeRating, bakedValueForRating,
   eraRostersLoaded,
+  // Round 1600: a man's level beside his shown rating (one holder, in the file that imports nothing of this one).
+  levelOf,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
 /* Round 1520: after the eras module, which brings the nationality maps in first, so the chunk keeps its order. */
@@ -460,6 +462,9 @@ export function worldRosterFor(career: CareerState, club: string, onYears = year
        either flag. scripts/simCmLedgerBound.mjs holds it. */
     return { n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating,
       ...(p.generated || p.academyGrad || p.isYouth ? { g: true } : {}), anchor: original?.anchor ?? p.rating,
+      /* Round 1600: a man who carries a level keeps it, and with no row of his own to inherit a slot from, his
+         slot's anchor is that level, not his age points (a later key of a literal keeps the first one's place). */
+      ...(p.lv === undefined ? {} : { lv: p.lv, anchor: original?.anchor ?? p.lv }),
       since: p.worldRosterSince ?? original?.since ?? 0,
       /* Round 1520: only a made up man carries one, and the ledger keeps it. */
       ...(p.nation ? { nation: p.nation } : {}),
@@ -1185,6 +1190,10 @@ export interface LoanOut {
 export interface CMPlayer {
   worldRosterKey?: string;
   worldRosterSince?: number;
+  /** Round 1600: the level his price gave him where his world reads age and it is not his rating
+   *  (levelOf in src/lib/clubManagerEras.ts). Absent on every man of a world on curve 1, on every made up man
+   *  and on every man of a save written before. Read for his ceiling only (ceilingBase). */
+  lv?: number;
   id: string;
   name: string;
   position: Position;
@@ -1607,6 +1616,8 @@ export interface MentalityDef { id: Mentality; label: string; emoji: string; des
 export interface MarketPlayer {
   worldRosterKey?: string;
   worldRosterSince?: number;
+  /** Round 1600: as CMPlayer.lv, carried onto the man a signing makes. */
+  lv?: number;
   potential?: number;
   name: string;
   club: string;
@@ -4867,7 +4878,8 @@ export function shownNation(eraId: string | undefined, p: { name: string; nation
 function eraXIAvgFrom(rosters: Record<string, BakedPlayer[]>, clubName: string): number | null {
   const roster = rosters[clubName];
   if (!roster || !roster.length) return null;
-  const rs = roster.map(p => p.r).sort((a, b) => b - a).slice(0, 11);
+  /* Round 1600: a past season's title gaps and cup seeding read the level too (bakedXIAvg's rule). */
+  const rs = roster.map(p => levelOf(p)).sort((a, b) => b - a).slice(0, 11);
   while (rs.length < 11) rs.push(60);
   return Math.round((rs.reduce((s, r) => s + r, 0) / 11) * 10) / 10;
 }
@@ -5227,7 +5239,10 @@ export function isPartialClub(clubName: string, eraId?: string): boolean {
 export function bakedXIAvg(clubName: string): number | null {
   const roster = CM_ROSTERS[clubName];
   if (!roster || !roster.length) return null;
-  const rs = roster.map(p => p.r).sort((a, b) => b - a).slice(0, 11);
+  /* Round 1600: stature reads each man's LEVEL (levelOf), never his age points, so a club with three veterans
+     in its eleven is not filed a tier up, and its board does not demand the title, for their birthdays. On a
+     world still on curve 1 the level is the rating. */
+  const rs = roster.map(p => levelOf(p)).sort((a, b) => b - a).slice(0, 11);
   while (rs.length < 11) rs.push(60);
   return Math.round((rs.reduce((s, r) => s + r, 0) / 11) * 10) / 10;
 }
@@ -5489,6 +5504,30 @@ export function sameManKey(p: { name: string; position: Position; age: number })
 }
 
 /**
+ * Round 1600, ported by hand from Round 1102's fix (origin/r1102-fix-loan-identity 2e8715bf): a man of mine and
+ * the world's row for him, when the two were written by different bakes.
+ *
+ * sameManKey stands on one sentence above: a squad row and the projected row it was priced off always agree on the
+ * age. That holds while the baked ages never move. Round 1600 moves them to 1 August 2026 (most men a year up), and
+ * a career keeps the squad it was saved with, so in every career started before that a man of mine sits a year off
+ * the world's row for him, and stays a year off, because the summer ages both sides together. Read on the exact
+ * age, the loan guard missed all of them: a man sent out on loan was listed at my own club, the buy went through,
+ * and the summer brought the loan copy home beside the bought one.
+ *
+ * So the loan guard, and only the guard, reads the age with a year either side: buildMarket, marketForScreen,
+ * signingRefusal and doorRefusal. Those hide a card or refuse a press and delete nothing, so the worst a wrong
+ * match costs is a namesake of the same position and nearly the same age staying off the market while that loan
+ * runs (sameManKey's own measurement above found one such pair in the whole world). ensureOneOfEach DROPS a man,
+ * so it keeps the exact key.
+ */
+export function sameManNearAge(
+  a: { name: string; position: Position; age: number },
+  b: { name: string; position: Position; age: number },
+): boolean {
+  return a.name === b.name && a.position === b.position && Math.abs(a.age - b.age) <= 1;
+}
+
+/**
  * Money in millions: money(180) -> '£180m', money(0.6) -> '£600k'.
  *
  * Round 514: the symbol follows the start option when a career is handed in,
@@ -5713,6 +5752,8 @@ function bakedToCMPlayer(b: BakedPlayer | ProjectedPlayer): CMPlayer {
     seasonAssists: 0,
     value: b.v,
     generated: gen || undefined,
+    /* Round 1600: the level rides with him (CMPlayer.lv); a world on curve 1 has none. */
+    ...(b.lv === undefined ? {} : { lv: b.lv }),
     ...((b as ProjectedPlayer).nation ? { nation: (b as ProjectedPlayer).nation } : {}),
     ...((b as ProjectedPlayer).worldRosterKey ? { worldRosterKey: (b as ProjectedPlayer).worldRosterKey,
       worldRosterSince: (b as ProjectedPlayer).since, potential: (b as ProjectedPlayer).potential } : {}),
@@ -9660,6 +9701,8 @@ function marketBase(yearsOnNow: number, eraId: string = 'now', worldSeed?: numbe
         price: askingPrice(b.v, b.a),
         value: b.v,
         generated: b.g || undefined,
+        /* Round 1600: the level rides onto the market row, and from it onto the man a signing makes. */
+        ...(b.lv === undefined ? {} : { lv: b.lv }),
         ...listedNation(b, club, eraId),
         ...(b.worldRosterKey ? { worldRosterKey: b.worldRosterKey, worldRosterSince: b.since, potential: b.potential } : {}),
       });
@@ -9691,9 +9734,9 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
      price and the summer return made two of him. See ensureOneOfEach. */
   /* Keyed on sameManKey, so a different man who happens to share his name is
      still on the market. */
-  const onLoanOut = new Set((career.loanedOut ?? []).map(l => sameManKey(l.player)));
+  const onLoanOut = (career.loanedOut ?? []).map(l => l.player);
   return worldMarket(career)
-    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));
+    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.some(mine => sameManNearAge(mine, p)));
 }
 
 /* Round 1344 (the player report: a man another club bought was "deleted from the database"). The market the transfer
@@ -9711,7 +9754,7 @@ export function marketForScreen(career: CareerState): MarketPlayer[] {
   const squadNames = new Set(career.squad.map(p => p.name));
   const retired = new Set(career.retiredNames ?? []);
   const released = releasedByYouNames(career);
-  const onLoanOut = new Set((career.loanedOut ?? []).map(l => sameManKey(l.player)));
+  const onLoanOut = (career.loanedOut ?? []).map(l => l.player);
   /* Round 1344 review: rows are matched by name and club, not by object, so the answer never rests on worldMarket's
      memo handing the same objects back to three calls; and a man is marked joined by the one test the refusal reads
      (joinedHisClubThisSeason), so nothing is listed as joined that a door then sells. A gone name with no deal line
@@ -9719,7 +9762,7 @@ export function marketForScreen(career: CareerState): MarketPlayer[] {
   const at = (p: MarketPlayer) => `${p.name}|${p.club}`;
   const world = worldMarket(career);
   const joined = new Set(world.filter(p => gone.has(p.name)
-    && !squadNames.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p))
+    && !squadNames.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.some(mine => sameManNearAge(mine, p))
     && joinedHisClubThisSeason(career, p)).map(at));
   if (!joined.size) return market;
   const listed = new Set(market.map(at));
@@ -9785,7 +9828,7 @@ export function signingRefusal(career: CareerState, mp: MarketPlayer, fee: numbe
   /* Round 634: nor a man you have out on loan, by any door. buildMarket no
      longer offers him, but a card drawn from an older career object can still
      be pressed, and the summer return would make two of him. */
-  const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
+  const away = (career.loanedOut ?? []).find(l => sameManNearAge(l.player, mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
   return joinedThisSeasonRefusal(career, mp);
 }
@@ -9821,7 +9864,7 @@ export function doorRefusal(career: CareerState, mp: MarketPlayer, door: MarketD
      a man you released, or a man of yours out on loan, opened a fee table
      that only failed at the terms stage with a generic line. */
   if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;
-  const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
+  const away = (career.loanedOut ?? []).find(l => sameManNearAge(l.player, mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
   return joinedThisSeasonRefusal(career, mp);
 }
@@ -9856,6 +9899,8 @@ function completeSigning(
     /* Round 1520: a made up man keeps his mark and his country whatever world he was bought in (before the round
        a career with no world seed bought him unmarked). */
     ...(mp.generated ? { generated: true, ...(mp.nation ? { nation: mp.nation } : {}) } : {}),
+    /* Round 1600: a man I buy keeps the level his row carried (critic correction 7: his ceiling reads it). */
+    ...(mp.lv === undefined ? {} : { lv: mp.lv }),
     onLoan: loan || undefined,
     // Round 105: a signing arrives on a real deal.
     contractYears: loan ? 1 : (terms ? terms.years : (mp.age >= 31 ? 2 : 4)),
@@ -19214,6 +19259,13 @@ export function rollPotential(rating: number, age: number, random?: () => number
   return clamp(rating + head, rating, 95);
 }
 
+/** Round 1600: the rating a real man's ceiling is rolled from, the higher of his shown rating and his level
+ *  (CMPlayer.lv). A boy the age read shows six under his price is not handed a ceiling six lower for it; he
+ *  grows back into his level, as the price says he will. A man with no level reads his rating, as before. */
+export function ceilingBase(p: { rating: number; lv?: number }): number {
+  return Math.max(p.rating, p.lv ?? p.rating);
+}
+
 /** What the club is handed on day one. Big clubs have better everything. */
 function defaultAcademy(clubName: string): Academy {
   const tier = clubDefFor(clubName).tier;
@@ -19268,7 +19320,7 @@ export function ensureAcademy(state: CareerState): void {
   if (typeof a.lastIntakeSeason !== 'number') a.lastIntakeSeason = 0;
   if (state.academyGraduates === undefined) state.academyGraduates = 0;
   for (const p of state.squad) {
-    if (p.potential === undefined) p.potential = rollPotential(p.rating, p.age);
+    if (p.potential === undefined) p.potential = rollPotential(ceilingBase(p), p.age);
   }
 }
 
@@ -21671,7 +21723,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
   const [lo, hi] = ageDriftBand(age);
   let drift = random ? lo + Math.floor(random() * (hi - lo + 1)) : ri(lo, hi);
   if (drift < 0) drift = Math.round(drift * declineScale(p.position));
-  const potential = p.potential ?? rollPotential(p.rating, p.age, random);
+  const potential = p.potential ?? rollPotential(ceilingBase(p), p.age, random);
   if (drift > 0) {
     drift = Math.round(drift * developmentRate(p, career));
     drift = Math.min(drift, Math.max(0, potential - p.rating));
@@ -21836,6 +21888,8 @@ function fillSquadGaps(
       value: mp.value,
       generated: mp.generated,
       ...(mp.nation ? { nation: mp.nation } : {}),
+      /* Round 1600: the summer top up keeps the level too (critic correction 7). */
+      ...(mp.lv === undefined ? {} : { lv: mp.lv }),
       contractYears: mp.age >= 31 ? 2 : 3,
       wage: 0,
     };
