@@ -1,0 +1,12 @@
+playSoccerCareer: base seed 16040, era "Current era", up to 4 career(s) of 240 steps
+
+The walk
+  FAIL  1. the walk reached a qualified Champions League campaign: no campaign on screen in 4 career(s): 16040:240 steps, no campaign; 23959:240 steps, no campaign; 31878:240 steps, no campaign; 39797:240 steps, no campaign. This is a coverage failure, not a pass: the card below was never checked.
+
+The page survived
+  PASS  5. the error boundary never appeared and the root is not empty: root holds 19887 characters
+  FAIL  6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+3 checks, 2 failed
+  - 1. the walk reached a qualified Champions League campaign: no campaign on screen in 4 career(s): 16040:240 steps, no campaign; 23959:240 steps, no campaign; 31878:240 steps, no campaign; 39797:240 steps, no campaign. This is a coverage failure, not a pass: the card below was never checked.
+  - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED

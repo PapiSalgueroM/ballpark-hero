@@ -1,0 +1,253 @@
+scripts/pscDiag.mjs written
+playSoccerCareer: base seed 20260914, era "Current era", up to 1 career(s) of 240 steps
+  step 0 youth age 16 -> Next Year | 🏋️TrainingDrill ready / Pace / Shooting / Passing / Dribbling / Defending / Physical / 🏆0Leagues
+  step 1 contract_offer age 17 -> Review contract | 🏋️TrainingDrill ready / Review contract / Review contract / Review contract / Review contract / Your next seasonRoles, contrac / 🏆0Leagues / 🏆0Cups
+  step 2 contract_offer age 17 -> Sign contract | 🏋️TrainingDrill ready / Review contract / Review contract / Review contract / Review contract / Your next seasonRoles, contrac / 🏆0Leagues / 🏆0Cups
+  step 3 playing age 17 -> Next Season | 🏋️TrainingDrill ready / 👥 SquadYour teammatesThe plan / 🎯 Season targetChoose a perso / 🏃 Preseason planBalanced, or  / Your next seasonRoles, contrac / Open your phoneBank, market, e / 🏆0Leagues / 🏆0Cups
+  step 4 newspaper age 18 -> Continue to Season Summary → | 🏋️TrainingDrill ready / Continue to Season Summary → / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup / 🌐0Continental
+  step 5 season_summary age 18 -> Continue → | 🏋️TrainingDrill ready / Continue → / 📺 Watch it week by week / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 6 ballon_dor age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup / 🌐0Continental / 🏅0Ballon d'Or
+  step 7 ballon_dor age 18 -> Close | 🏋️TrainingDrill ready / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup / 🌐0Continental / 🏅0Ballon d'Or
+  step 8 ballon_dor age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup / 🌐0Continental / 🏅0Ballon d'Or
+  step 9 ballon_dor age 18 -> Close | 🏋️TrainingDrill ready / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup / 🌐0Continental / 🏅0Ballon d'Or
+  step 10 ballon_dor age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup / 🌐0Continental / 🏅0Ballon d'Or
+  step 11 ballon_dor age 18 -> Continue → | 🏋️TrainingDrill ready / Continue → / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup / 🌐0Continental
+  step 12 social_media_action age 18 -> 🏋️Post training videoShow off you | 🏋️TrainingDrill ready / 🏋️Post training videoShow off / 🎬Go viral with celebration cl / 🔥Post controversial opinionSh / ❤️Announce charity workHighlig / 📸Post about personal lifeShar / 😈Troll your rival on social m / 🧘Stay off social mediaFocus o
+  step 13 social_media_action age 18 -> Continue → | 🏋️TrainingDrill ready / Continue → / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup / 🌐0Continental
+  step 14 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 15 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 16 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 17 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 18 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 19 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 20 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 21 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 22 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 23 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 24 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 25 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 26 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 27 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 28 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 29 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 30 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 31 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 32 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 33 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 34 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 35 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 36 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 37 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 38 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 39 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 40 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 41 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 42 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 43 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 44 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 45 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 46 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 47 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 48 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 49 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 50 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 51 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 52 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 53 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 54 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 55 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 56 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 57 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 58 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 59 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 60 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 61 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 62 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 63 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 64 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 65 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 66 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 67 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 68 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 69 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 70 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 71 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 72 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 73 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 74 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 75 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 76 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 77 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 78 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 79 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 80 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 81 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 82 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 83 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 84 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 85 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 86 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 87 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 88 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 89 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 90 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 91 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 92 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 93 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 94 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 95 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 96 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 97 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 98 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 99 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 100 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 101 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 102 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 103 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 104 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 105 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 106 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 107 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 108 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 109 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 110 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 111 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 112 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 113 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 114 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 115 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 116 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 117 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 118 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 119 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 120 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 121 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 122 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 123 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 124 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 125 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 126 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 127 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 128 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 129 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 130 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 131 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 132 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 133 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 134 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 135 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 136 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 137 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 138 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 139 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 140 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 141 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 142 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 143 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 144 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 145 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 146 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 147 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 148 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 149 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 150 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 151 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 152 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 153 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 154 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 155 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 156 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 157 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 158 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 159 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 160 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 161 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 162 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 163 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 164 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 165 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 166 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 167 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 168 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 169 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 170 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 171 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 172 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 173 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 174 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 175 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 176 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 177 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 178 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 179 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 180 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 181 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 182 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 183 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 184 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 185 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 186 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 187 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 188 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 189 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 190 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 191 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 192 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 193 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 194 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 195 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 196 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 197 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 198 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 199 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 200 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 201 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 202 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 203 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 204 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 205 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 206 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 207 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 208 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 209 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 210 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 211 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 212 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 213 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 214 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 215 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 216 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 217 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 218 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 219 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 220 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 221 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 222 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 223 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 224 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 225 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 226 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 227 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 228 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 229 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 230 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 231 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 232 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 233 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 234 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 235 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 236 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 237 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 238 random_events age 18 -> Close | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+  step 239 random_events age 18 -> 🏋️TrainingDrill ready | 🏋️TrainingDrill ready / 📋Do the sprint workMorale -1, / ✋Keep your usual routineNothin / 🔥 Derby history / 🏆0Leagues / 🏆0Cups / ⭐0UCL / 🌍0World Cup
+
+The walk
+  FAIL  1. the walk reached a qualified Champions League campaign: no campaign on screen in 1 career(s): 20260914:240 steps, no campaign. This is a coverage failure, not a pass: the card below was never checked.
+
+The page survived
+  PASS  5. the error boundary never appeared and the root is not empty: root holds 19849 characters
+  FAIL  6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
+
+3 checks, 2 failed
+  - 1. the walk reached a qualified Champions League campaign: no campaign on screen in 1 career(s): 20260914:240 steps, no campaign. This is a coverage failure, not a pass: the card below was never checked.
+  - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED
