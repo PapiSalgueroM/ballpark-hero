@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/ClubManagerSeasonSummary.expiring.test.tsx src/test/cmTablesTruth.test.tsx src/test/clubManagerOfferConfirm.test.tsx src/test/contractPreview.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerHubLines.test.ts src/test/clubManagerLoanPlanIntegration.test.ts src/test/clubManagerLoanPlanMounted.test.tsx src/test/clubManagerSaveSize.test.tsx src/lib/clubManagerReportAge.test.ts --testTimeout=300000 --hookTimeout=120000
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simContracts: node scripts/simContracts.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
