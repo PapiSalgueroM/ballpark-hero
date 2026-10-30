@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+# Release BU lane l: game buttons above an unanswered cookie banner (Round 1605): the three shards of playFirstVisitDialogs, the nolift control (exit 1, FIRED) and its other controls.
+shard1: PLAYFIRST_SHARD=1/3 node scripts/playFirstVisitDialogs.mjs
+shard2: PLAYFIRST_SHARD=2/3 node scripts/playFirstVisitDialogs.mjs
+shard3: PLAYFIRST_SHARD=3/3 node scripts/playFirstVisitDialogs.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+nolift: CONSENT_BAR_CONTROL=nolift ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
+cover: PLAYFIRST_CONTROL=cover ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/hall-of-champions,/club-manager,/soccer-career node scripts/playFirstVisitDialogs.mjs
+ratchet: PLAYFIRST_CONTROL=ratchet ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/hall-of-champions,/club-manager,/soccer-career node scripts/playFirstVisitDialogs.mjs
+expected: PLAYFIRST_CONTROL=expected ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/hall-of-champions,/club-manager,/soccer-career node scripts/playFirstVisitDialogs.mjs
+edge: PLAYFIRST_CONTROL=edge ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/hall-of-champions,/club-manager,/soccer-career node scripts/playFirstVisitDialogs.mjs
+lift: PLAYFIRST_CONTROL=lift ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/hall-of-champions,/club-manager,/soccer-career node scripts/playFirstVisitDialogs.mjs
+nobanner: PLAYFIRST_CONTROL=nobanner ONLY=/stadium-tycoon,/idle-arena,/wonderkid-factory,/hall-of-champions,/club-manager,/soccer-career node scripts/playFirstVisitDialogs.mjs
+stale: PLAYFIRST_CONTROL=stale ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs
+jump: PLAYFIRST_CONTROL=jump ONLY=/stadium-tycoon node scripts/playFirstVisitDialogs.mjs
+states: ONLY=/club-manager,/soccer-career,/world-cup-bracket node scripts/playFirstVisitDialogs.mjs
