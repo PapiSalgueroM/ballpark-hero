@@ -1,0 +1,4 @@
+unseeded-head: node scripts/simCmUnseededWorld.mjs
+unseeded-base: git worktree add -f /tmp/ub 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/ub/node_modules && cd /tmp/ub && node scripts/simCmUnseededWorld.mjs
+oldcareers-head: node scripts/simCmOldCareersWorld.mjs
+oldcareers-base: git worktree add -f /tmp/ob 14a9af704 -q && ln -s "$PWD/node_modules" /tmp/ob/node_modules && cd /tmp/ob && node scripts/simCmOldCareersWorld.mjs
