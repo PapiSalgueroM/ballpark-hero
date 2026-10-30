@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+noRival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+oldLedger: node scripts/simCmOldLedger.mjs
+levelReads: node scripts/simCmLevelReads.mjs
+rules: node scripts/simCmLeagueRules.mjs
+treeSame: git diff --stat f27170475 HEAD -- src scripts index.html public supabase | tail -1; test -z "$(git diff --name-only f27170475 HEAD -- src scripts index.html public supabase)" && echo "no code changed since f27170475"
