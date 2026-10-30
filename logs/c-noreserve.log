@@ -1,0 +1,214 @@
+0) The fixture
+   BASE 692590145: pool 474 from 483 names and 3692 rows, 21 requests, largest response 1000 rows, largest history page 781 rows
+1) The diagnosis receipt and the candidate rule
+   BASE Tyler Morton (Olympique Lyon, 2026, Defensive Midfield): clubs [liverpool fc, olympique lyon], count 2, 4+ false, one club false
+   hole class: 69 candidates (24 on Round 669's lists, 45 more whose counted rows begin at or after 2023 with a hole year missing)
+   window class: 99 candidates (98 on the hand overlay; 1 from generated rows whose from club he has no counted row at: James Ward-Prowse (Burnley FC))
+   printed, not asserted: generated rows with from null (wrote over no club): Nicolás Valentini, Giorgi Tsitaishvili, Serge Gnabry (a fixture name), Connor Metcalfe, Kai Trewin
+   printed, not asserted: generated rows with from equal to db (changed nothing): 16, fixture names among them: Morten Hjulmand, João Cancelo
+   printed, not asserted: hand overlay names in the fixture but outside BASE's pool (the lead's live pass): Romelu Lukaku
+   owed, C1 outside the hole (a 2023 to 2025 year missing after his first counted row, not a candidate): 5: Álvaro Carreras, Amad Diallo, Jamie Leweling, Ian Maatsen, Emile Smith Rowe
+   owed, academy filtered rows at a club he has no counted row at (critic advice 10): 18
+     Eberechi Eze (wycombe wanderers); Nicolò Barella (como 1907); Federico Dimarco (fc empoli); Gianluigi Donnarumma (ac milan primavera); Ademola Lookman (charlton athletic); Serhou Guirassy (aj auxerre)
+     Conor Gallagher (charlton athletic); Dominic Solanke (vitesse arnhem); Dan Ndoye (fc lausanne-sport); Rico Lewis (manchester city u21); Antonio Nusa (stabaek fotball); Ferdi Kadıoğlu (nec nijmegen)
+     James Maddison (coventry city); Kingsley Coman (paris saint-germain); Jan Oblak (ud leiria); Pervis Estupiñán (ud almeria); André Onana (ajax amsterdam u21); Oleksandr Zinchenko (fc ufa)
+   owed, C3 late starters outside the hole (first counted row at a listed age of 22 or more): 18
+     Viktor Gyökeres (2022, 23); Yann Bisseck (2023, 22); Mateo Retegui (2022, 22); David Raya (2019, 23); Kiernan Dewsbury-Hall (2022, 23); Yoane Wissa (2020, 23); Mohamed Amoura (2023, 22); Min-jae Kim (2021, 24)
+     Kaoru Mitoma (2021, 23); Robin Le Normand (2019, 22); Mats Wieffer (2023, 23); Isak Hien (2023, 23); Ivan Toney (2020, 23); Nayef Aguerd (2019, 22); Hiroki Ito (2022, 22); Samuel Lino (2022, 22)
+     Maximilian Kilman (2020, 22); John McGinn (2018, 23)
+2) Identity, BASE against the tree
+   control changed: the reserve sides emptied in the derived file
+  FAIL: Moisés Caicedo: club history [beerschot va, brighton & hove albion, brighton & hove albion u21, chelsea fc, independiente del valle] is not BASE's plus his record additions under the count rule [beerschot va, brighton & hove albion, chelsea fc, independiente del valle]
+  FAIL: Ryan Gravenberch: club history [ajax amsterdam, ajax amsterdam u21, ajax amsterdam uefa u19, bayern munich, liverpool fc] is not BASE's plus his record additions under the count rule [ajax amsterdam, bayern munich, liverpool fc]
+  FAIL: Jurriën Timber: club history [ajax amsterdam, ajax amsterdam u21, arsenal fc] is not BASE's plus his record additions under the count rule [ajax amsterdam, arsenal fc]
+  FAIL: Martin Ødegaard: club history [arsenal fc, real madrid, real madrid castilla, real sociedad, sc heerenveen, vitesse arnhem] is not BASE's plus his record additions under the count rule [arsenal fc, real madrid, real sociedad, sc heerenveen, vitesse arnhem]
+  FAIL: Nico Paz: club history [como 1907, real madrid, real madrid castilla] is not BASE's plus his record additions under the count rule [como 1907, real madrid]
+  FAIL: Rúben Dias: club history [manchester city, sl benfica, sl benfica b] is not BASE's plus his record additions under the count rule [manchester city, sl benfica]
+  FAIL: Alejandro Balde: club history [fc barcelona, fc barcelona atletic] is not BASE's plus his record additions under the count rule [fc barcelona]
+  FAIL: Nico Williams: club history [athletic bilbao, bilbao athletic] is not BASE's plus his record additions under the count rule [athletic bilbao]
+  FAIL: Marc Cucurella: club history [brighton & hove albion, chelsea fc, fc barcelona atletic, getafe cf, real madrid, sd eibar] is not BASE's plus his record additions under the count rule [brighton & hove albion, chelsea fc, getafe cf, real madrid, sd eibar]
+  FAIL: Samu Aghehowa: club history [deportivo alaves, fc porto, recreativo granada] is not BASE's plus his record additions under the count rule [deportivo alaves, fc porto]
+  FAIL: Angelo Stiller: club history [bayern munich, fc bayern munich ii, tsg 1899 hoffenheim, vfb stuttgart] is not BASE's plus his record additions under the count rule [bayern munich, tsg 1899 hoffenheim, vfb stuttgart]
+  FAIL: James Garner: club history [everton fc, manchester united, manchester united u21, nottingham forest, watford fc] is not BASE's plus his record additions under the count rule [everton fc, manchester united, nottingham forest, watford fc]
+  FAIL: Diogo Costa: club history [fc porto, fc porto b] is not BASE's plus his record additions under the count rule [fc porto]
+  FAIL: Gregor Kobel: club history [borussia dortmund, fc augsburg, tsg 1899 hoffenheim, tsg 1899 hoffenheim ii, vfb stuttgart] is not BASE's plus his record additions under the count rule [borussia dortmund, fc augsburg, tsg 1899 hoffenheim, vfb stuttgart]
+  FAIL: Tino Livramento: club history [chelsea fc u21, newcastle united, southampton fc] is not BASE's plus his record additions under the count rule [newcastle united, southampton fc]
+  FAIL: Gonçalo Ramos: club history [ac milan, paris saint-germain, sl benfica, sl benfica b] is not BASE's plus his record additions under the count rule [ac milan, paris saint-germain, sl benfica]
+  FAIL: Mile Svilar: club history [as roma, sl benfica, sl benfica b] is not BASE's plus his record additions under the count rule [as roma, sl benfica]
+  FAIL: Evanilson: club history [afc bournemouth, fc porto, fc porto b, fc stk 1914 samorin, fluminense football club] is not BASE's plus his record additions under the count rule [afc bournemouth, fc porto, fc stk 1914 samorin, fluminense football club]
+  FAIL: Michael Kayode: club history [acf fiorentina, brentford fc, fiorentina primavera] is not BASE's plus his record additions under the count rule [acf fiorentina, brentford fc]
+  FAIL: Konstantinos Karetsas: club history [borussia dortmund, jong genk, krc genk] is not BASE's plus his record additions under the count rule [borussia dortmund, krc genk]
+  FAIL: Matías Soulé: club history [as roma, frosinone calcio, juventus fc, juventus next gen] is not BASE's plus his record additions under the count rule [as roma, frosinone calcio, juventus fc]
+  FAIL: Kevin Schade: club history [brentford fc, sc freiburg, sc freiburg ii] is not BASE's plus his record additions under the count rule [brentford fc, sc freiburg]
+  FAIL: Ethan Ampadu: club history [chelsea fc, chelsea fc u21, exeter city, leeds united, rb leipzig, sheffield united, spezia calcio, venezia fc] is not BASE's plus his record additions under the count rule [chelsea fc, exeter city, leeds united, rb leipzig, sheffield united, spezia calcio, venezia fc]
+  FAIL: Gavi: club history [fc barcelona, fc barcelona atletic] is not BASE's plus his record additions under the count rule [fc barcelona]
+  FAIL: Senne Lammens: club history [club brugge kv, manchester united, royal antwerp fc, young reds] is not BASE's plus his record additions under the count rule [club brugge kv, manchester united, royal antwerp fc]
+  FAIL: Marco Palestra: club history [atalanta bc, atalanta u23, cagliari calcio, chelsea fc] is not BASE's plus his record additions under the count rule [atalanta bc, cagliari calcio, chelsea fc]
+  FAIL: Raúl Asencio: club history [real madrid, real madrid castilla] is not BASE's plus his record additions under the count rule [real madrid]
+  FAIL: Gianluca Scamacca: club history [ascoli calcio, atalanta bc, genoa cfc, sassuolo primavera, us sassuolo, west ham united] is not BASE's plus his record additions under the count rule [ascoli calcio, atalanta bc, genoa cfc, us sassuolo, west ham united]
+  FAIL: Unai Simón: club history [athletic bilbao, bilbao athletic] is not BASE's plus his record additions under the count rule [athletic bilbao]
+  FAIL: Marcos Llorente: club history [atletico de madrid, deportivo alaves, real madrid, real madrid castilla] is not BASE's plus his record additions under the count rule [atletico de madrid, deportivo alaves, real madrid]
+  FAIL: Noussair Mazraoui: club history [ajax amsterdam, ajax amsterdam u21, bayern munich, manchester united] is not BASE's plus his record additions under the count rule [ajax amsterdam, bayern munich, manchester united]
+  FAIL: Serge Gnabry: club history [arsenal fc, arsenal fc u21, bayern munich, sv werder bremen, tsg 1899 hoffenheim] is not BASE's plus his record additions under the count rule [arsenal fc, bayern munich, sv werder bremen, tsg 1899 hoffenheim]
+   pool, seasonStats and clubYears equal to BASE; 48 club histories changed; 33 club square verdicts moved
+     Nico Paz now fits Played for Real Madrid (support 27 -> 30)
+     Franco Mastantuono now fits Played for Real Madrid (support 27 -> 30)
+     Mario Gila now fits Played for Real Madrid (support 27 -> 30)
+     Máximo Perrone now fits Played for Manchester City (support 42 -> 43)
+     Ryan Gravenberch now fits Played for Bayern Munich (support 28 -> 31)
+     Angelo Stiller now fits Played for Bayern Munich (support 28 -> 31)
+     João Cancelo now fits Played for Bayern Munich (support 28 -> 31)
+     Dean Huijsen now fits Played for Juventus (support 21 -> 23)
+     João Cancelo now fits Played for Juventus (support 21 -> 23)
+     Adam Wharton no longer fits One-club man (support 31 -> 23)
+     Carlos Baleba no longer fits One-club man (support 31 -> 23)
+     Kaishu Sano no longer fits One-club man (support 31 -> 23)
+     Joel Ordóñez no longer fits One-club man (support 31 -> 23)
+     Aleksandar Stanković no longer fits One-club man (support 31 -> 23)
+     Hayden Hackney no longer fits One-club man (support 31 -> 23)
+     Leon Avdullahu no longer fits One-club man (support 31 -> 23)
+     Conor Bradley no longer fits One-club man (support 31 -> 23)
+     Sandro Tonali now fits Played for 4+ clubs (support 149 -> 163)
+     Dean Huijsen now fits Played for 4+ clubs (support 149 -> 163)
+     Nick Woltemade now fits Played for 4+ clubs (support 149 -> 163)
+     Amadou Onana now fits Played for 4+ clubs (support 149 -> 163)
+     Angelo Stiller now fits Played for 4+ clubs (support 149 -> 163)
+     Morten Hjulmand now fits Played for 4+ clubs (support 149 -> 163)
+     Bazoumana Touré now fits Played for 4+ clubs (support 149 -> 163)
+     Mateus Fernandes now fits Played for 4+ clubs (support 149 -> 163)
+     Máximo Perrone now fits Played for 4+ clubs (support 149 -> 163)
+     Tyler Morton now fits Played for 4+ clubs (support 149 -> 163)
+     Senne Lammens now fits Played for 4+ clubs (support 149 -> 163)
+     Marco Palestra now fits Played for 4+ clubs (support 149 -> 163)
+     Mamadou Sangaré now fits Played for 4+ clubs (support 149 -> 163)
+     Thierno Barry now fits Played for 4+ clubs (support 149 -> 163)
+     Dilane Bakwa now fits Played for 4+ clubs (support 149 -> 163)
+     Jules Koundé no longer fits Played for 4+ clubs (support 149 -> 163)
+   the count rule alone (split, aliases, reserve sides) moves 18 men's club square verdicts: João Cancelo: Played for Juventus; Nico Paz: One-club man; Alejandro Balde: One-club man; Nico Williams: One-club man; Diogo Costa: One-club man; Gavi: One-club man; Raúl Asencio: One-club man; Unai Simón: One-club man; Moisés Caicedo: Played for 4+ clubs; Ryan Gravenberch: Played for 4+ clubs; Jules Koundé: Played for 4+ clubs; James Garner: Played for 4+ clubs; Gregor Kobel: Played for 4+ clubs; Gonçalo Ramos: Played for 4+ clubs; Evanilson: Played for 4+ clubs; Matías Soulé: Played for 4+ clubs; Marcos Llorente: Played for 4+ clubs; Noussair Mazraoui: Played for 4+ clubs
+   support on the fixture: One-club man 31 -> 23, Played for 4+ clubs 149 -> 163
+3) Verdicts
+   tree Tyler Morton: [liverpool fc, olympique lyon, blackburn rovers, hull city], count 4, 4+ true, one club false
+  FAIL: Angelo Stiller: the tree gives {"count":4,"fourPlus":true,"oneClub":false}, the record's after says {"count":3,"fourPlus":false,"oneClub":false}
+  FAIL: Angelo Stiller: the tree counts [bayern munich, fc bayern munich ii, tsg 1899 hoffenheim, vfb stuttgart], his sourced senior career is [bayern munich, tsg 1899 hoffenheim, vfb stuttgart]
+  FAIL: Ethan Ampadu: the tree gives {"count":8,"fourPlus":true,"oneClub":false}, the record's after says {"count":7,"fourPlus":true,"oneClub":false}
+  FAIL: Ethan Ampadu: the tree counts [chelsea fc, chelsea fc u21, exeter city, leeds united, rb leipzig, sheffield united, spezia calcio, venezia fc], his sourced senior career is [chelsea fc, exeter city, leeds united, rb leipzig, sheffield united, spezia calcio, venezia fc]
+  FAIL: Evanilson: the tree gives {"count":5,"fourPlus":true,"oneClub":false}, the record's after says {"count":4,"fourPlus":true,"oneClub":false}
+  FAIL: Evanilson: the tree counts [afc bournemouth, fc porto, fc porto b, fc stk 1914 samorin, fluminense football club], his sourced senior career is [afc bournemouth, fc porto, fc stk 1914 samorin, fluminense football club]
+  FAIL: Gregor Kobel: the tree gives {"count":5,"fourPlus":true,"oneClub":false}, the record's after says {"count":4,"fourPlus":true,"oneClub":false}
+  FAIL: Gregor Kobel: the tree counts [borussia dortmund, fc augsburg, tsg 1899 hoffenheim, tsg 1899 hoffenheim ii, vfb stuttgart], his sourced senior career is [borussia dortmund, fc augsburg, tsg 1899 hoffenheim, vfb stuttgart]
+  FAIL: James Garner: the tree gives {"count":5,"fourPlus":true,"oneClub":false}, the record's after says {"count":4,"fourPlus":true,"oneClub":false}
+  FAIL: James Garner: the tree counts [everton fc, manchester united, manchester united u21, nottingham forest, watford fc], his sourced senior career is [everton fc, manchester united, nottingham forest, watford fc]
+  FAIL: Marco Palestra: the tree gives {"count":4,"fourPlus":true,"oneClub":false}, the record's after says {"count":3,"fourPlus":false,"oneClub":false}
+  FAIL: Marco Palestra: the tree counts [atalanta bc, atalanta u23, cagliari calcio, chelsea fc], his sourced senior career is [atalanta bc, cagliari calcio, chelsea fc]
+  FAIL: Moisés Caicedo: the tree gives {"count":5,"fourPlus":true,"oneClub":false}, the record's after says {"count":4,"fourPlus":true,"oneClub":false}
+  FAIL: Moisés Caicedo: the tree counts [beerschot va, brighton & hove albion, brighton & hove albion u21, chelsea fc, independiente del valle], his sourced senior career is [beerschot va, brighton & hove albion, chelsea fc, independiente del valle]
+  FAIL: Nico Paz: the tree gives {"count":3,"fourPlus":false,"oneClub":false}, the record's after says {"count":2,"fourPlus":false,"oneClub":false}
+  FAIL: Nico Paz: the tree counts [como 1907, real madrid, real madrid castilla], his sourced senior career is [como 1907, real madrid]
+  FAIL: Ryan Gravenberch: the tree gives {"count":5,"fourPlus":true,"oneClub":false}, the record's after says {"count":3,"fourPlus":false,"oneClub":false}
+  FAIL: Ryan Gravenberch: the tree counts [ajax amsterdam, ajax amsterdam u21, ajax amsterdam uefa u19, bayern munich, liverpool fc], his sourced senior career is [ajax amsterdam, bayern munich, liverpool fc]
+  FAIL: Senne Lammens: the tree gives {"count":4,"fourPlus":true,"oneClub":false}, the record's after says {"count":3,"fourPlus":false,"oneClub":false}
+  FAIL: Senne Lammens: the tree counts [club brugge kv, manchester united, royal antwerp fc, young reds], his sourced senior career is [club brugge kv, manchester united, royal antwerp fc]
+  FAIL: Alejandro Balde: the tree gives {"count":2,"fourPlus":false,"oneClub":false}, the record's after says {"count":1,"fourPlus":false,"oneClub":true}
+  FAIL: Alejandro Balde: the tree counts [fc barcelona, fc barcelona atletic], his sourced senior career is [fc barcelona]
+  FAIL: Diogo Costa: the tree gives {"count":2,"fourPlus":false,"oneClub":false}, the record's after says {"count":1,"fourPlus":false,"oneClub":true}
+  FAIL: Diogo Costa: the tree counts [fc porto, fc porto b], his sourced senior career is [fc porto]
+  FAIL: Gavi: the tree gives {"count":2,"fourPlus":false,"oneClub":false}, the record's after says {"count":1,"fourPlus":false,"oneClub":true}
+  FAIL: Gavi: the tree counts [fc barcelona, fc barcelona atletic], his sourced senior career is [fc barcelona]
+  FAIL: Gonçalo Ramos: the tree gives {"count":4,"fourPlus":true,"oneClub":false}, the record's after says {"count":3,"fourPlus":false,"oneClub":false}
+  FAIL: Gonçalo Ramos: the tree counts [ac milan, paris saint-germain, sl benfica, sl benfica b], his sourced senior career is [ac milan, paris saint-germain, sl benfica]
+  FAIL: Konstantinos Karetsas: the tree gives {"count":3,"fourPlus":false,"oneClub":false}, the record's after says {"count":2,"fourPlus":false,"oneClub":false}
+  FAIL: Konstantinos Karetsas: the tree counts [borussia dortmund, jong genk, krc genk], his sourced senior career is [borussia dortmund, krc genk]
+  FAIL: Marcos Llorente: the tree gives {"count":4,"fourPlus":true,"oneClub":false}, the record's after says {"count":3,"fourPlus":false,"oneClub":false}
+  FAIL: Marcos Llorente: the tree counts [atletico de madrid, deportivo alaves, real madrid, real madrid castilla], his sourced senior career is [atletico de madrid, deportivo alaves, real madrid]
+  FAIL: Matías Soulé: the tree gives {"count":4,"fourPlus":true,"oneClub":false}, the record's after says {"count":3,"fourPlus":false,"oneClub":false}
+  FAIL: Matías Soulé: the tree counts [as roma, frosinone calcio, juventus fc, juventus next gen], his sourced senior career is [as roma, frosinone calcio, juventus fc]
+  FAIL: Nico Williams: the tree gives {"count":2,"fourPlus":false,"oneClub":false}, the record's after says {"count":1,"fourPlus":false,"oneClub":true}
+  FAIL: Nico Williams: the tree counts [athletic bilbao, bilbao athletic], his sourced senior career is [athletic bilbao]
+  FAIL: Noussair Mazraoui: the tree gives {"count":4,"fourPlus":true,"oneClub":false}, the record's after says {"count":3,"fourPlus":false,"oneClub":false}
+  FAIL: Noussair Mazraoui: the tree counts [ajax amsterdam, ajax amsterdam u21, bayern munich, manchester united], his sourced senior career is [ajax amsterdam, bayern munich, manchester united]
+  FAIL: Raúl Asencio: the tree gives {"count":2,"fourPlus":false,"oneClub":false}, the record's after says {"count":1,"fourPlus":false,"oneClub":true}
+  FAIL: Raúl Asencio: the tree counts [real madrid, real madrid castilla], his sourced senior career is [real madrid]
+  FAIL: Unai Simón: the tree gives {"count":2,"fourPlus":false,"oneClub":false}, the record's after says {"count":1,"fourPlus":false,"oneClub":true}
+  FAIL: Unai Simón: the tree counts [athletic bilbao, bilbao athletic], his sourced senior career is [athletic bilbao]
+   82 recorded verdicts checked against BASE and the tree; 61 whole senior careers equal to what the tree counts
+4) Completeness, a ratchet
+   168 candidates (69 hole, 99 window): 40 additions, 42 agrees, 1 partial, 98 pending (ratchet 98); round 1576 entries 0
+   unjudged (pending plus owed, distinct): 139 (ratchet 139); owed rows: unnumbered 5, 1577 18, 1577 18
+   pending: Alejandro Garnacho, Alejandro Grimaldo, Andrew Robertson, Andrey Santos, Anthony Gordon, Antoine Semenyo, António Silva, Artem Dovbyk, Axel Disasi, Ayyoub Bouaddi, Benjamin Pavard, Benoît Badiashile, Bernardo Silva, Bradley Barcola, Brais Méndez, Brennan Johnson, Bruno Guimarães, Christopher Nkunku, Christos Tzolis, Cristian Romero, Crysencio Summerville, Curtis Jones, Davide Frattesi, Denzel Dumfries, Djed Spence, Douglas Luiz, Dušan Vlahović, Elliot Anderson, Endrick, Enzo Fernández, Ethan Nwaneri, Evan Ferguson, Evann Guessand, Exequiel Palacios, Ezri Konsa, Ferran Torres, Francisco Trincão, Gabriel Jesus, Gabriel Martinelli, Guglielmo Vicario, Harvey Elliott, Hugo Larsson, Ibrahima Konaté, Iliman Ndiaye, Ismael Saibari, James Trafford, James Ward-Prowse, Jan Paul van Hecke, Joey Veerman, John Stones, Jonathan David, Julian Brandt, Kang-in Lee, Karim Adeyemi, Leon Bailey, Leon Goretzka, Liam Delap, Loïs Openda, Luka Vuskovic, Lutsharel Geertruida, Maghnes Akliouche, Malick Fofana, Marc Cucurella, Marc Guéhi, Marc-André ter Stegen, Marcus Rashford, Mason Greenwood, Maxence Lacroix, Mohamed Salah, Moise Kean, Morgan Rogers, Moussa Diaby, Nahuel Molina, Nathan Aké, Nathaniel Brown, Nico González, Nicolas Jackson, Ollie Watkins, Omar Marmoush, Omari Hutchinson, Ousmane Diomande, Pape Matar Sarr, Pedro Gonçalves, Quinten Timber, Rafael Leão, Randal Kolo Muani, Rodrigo Mora, Ronald Araujo, Santiago Castro, Santiago Gimenez, Savinho, Simon Adingra, Takehiro Tomiyasu, Tijjani Reijnders, Trevoh Chalobah, Valentín Barco, Victor Boniface, Youri Tielemans
+5) Sources
+   227 sourced facts checked
+   55 of 55 added clubs carry one fromSeason and one toSeason
+6) The derived file
+   tableClubs equal to BASE's club history for 82 of 82 judged men
+   40 men, 55 added clubs; clubs the fixture never spells (new keys, printed): 15: Abdukodir Khusanov: Energetik-BGU; Aleksandar Stanković: FC Luzern; Bazoumana Touré: ASEC Mimosas; Ethan Ampadu: Exeter City; Evanilson: FC STK 1914 Šamorín; Fisnik Asllani: FK Austria Vienna; Hayden Hackney: Scunthorpe United; Jérémy Jacquet: Clermont Foot 63; Kaishu Sano: FC Machida Zelvia; Mamadou Sangaré: Grazer AK; Mamadou Sangaré: SV Zulte Waregem; Moisés Caicedo: Beerschot VA; Morten Hjulmand: FC Admira Wacker; Petar Sučić: HŠK Zrinjski Mostar; Thierno Barry: SK Beveren
+7) The fleet: 200 seeded boards and decks, BASE against the tree
+   eligibility equal; 200 of 200 boards byte identical; 0 boards kept every tile's support, 0 of their decks identical; guarantee regressions 0
+8) The window answer (round 1576 entries)
+   Gonçalo Ramos: judged by an earlier round (class counting); the overlay's AC Milan is in his tree history
+   0 round 1576 entries (0 partial), 0 window clubs; 0 men had a 2025-26 club the table lacked
+9) Against the previous closed head on this record, PREV 32baab916
+   (a) 83 of 83 PREV entries byte equal by name (0 amended by name); round, checkedOn, report, fixture, counting, hole candidates, 5 rule keys and 0 earlier classes equal
+  FAIL: Moisés Caicedo has no round 1576 entry and his club history moved against PREV ([beerschot va, brighton & hove albion, chelsea fc, independiente del valle] -> [beerschot va, brighton & hove albion, brighton & hove albion u21, chelsea fc, independiente del valle])
+  FAIL: Ryan Gravenberch has no round 1576 entry and his club history moved against PREV ([ajax amsterdam, bayern munich, liverpool fc] -> [ajax amsterdam, ajax amsterdam u21, ajax amsterdam uefa u19, bayern munich, liverpool fc])
+  FAIL: Jurriën Timber has no round 1576 entry and his club history moved against PREV ([ajax amsterdam, arsenal fc] -> [ajax amsterdam, ajax amsterdam u21, arsenal fc])
+  FAIL: Martin Ødegaard has no round 1576 entry and his club history moved against PREV ([arsenal fc, real madrid, real sociedad, sc heerenveen, vitesse arnhem] -> [arsenal fc, real madrid, real madrid castilla, real sociedad, sc heerenveen, vitesse arnhem])
+  FAIL: Nico Paz has no round 1576 entry and his club history moved against PREV ([como 1907, real madrid] -> [como 1907, real madrid, real madrid castilla])
+  FAIL: Rúben Dias has no round 1576 entry and his club history moved against PREV ([manchester city, sl benfica] -> [manchester city, sl benfica, sl benfica b])
+  FAIL: Alejandro Balde has no round 1576 entry and his club history moved against PREV ([fc barcelona] -> [fc barcelona, fc barcelona atletic])
+  FAIL: Nico Williams has no round 1576 entry and his club history moved against PREV ([athletic bilbao] -> [athletic bilbao, bilbao athletic])
+  FAIL: Marc Cucurella has no round 1576 entry and his club history moved against PREV ([brighton & hove albion, chelsea fc, getafe cf, real madrid, sd eibar] -> [brighton & hove albion, chelsea fc, fc barcelona atletic, getafe cf, real madrid, sd eibar])
+  FAIL: Samu Aghehowa has no round 1576 entry and his club history moved against PREV ([deportivo alaves, fc porto] -> [deportivo alaves, fc porto, recreativo granada])
+  FAIL: Angelo Stiller has no round 1576 entry and his club history moved against PREV ([bayern munich, tsg 1899 hoffenheim, vfb stuttgart] -> [bayern munich, fc bayern munich ii, tsg 1899 hoffenheim, vfb stuttgart])
+  FAIL: James Garner has no round 1576 entry and his club history moved against PREV ([everton fc, manchester united, nottingham forest, watford fc] -> [everton fc, manchester united, manchester united u21, nottingham forest, watford fc])
+  FAIL: Diogo Costa has no round 1576 entry and his club history moved against PREV ([fc porto] -> [fc porto, fc porto b])
+  FAIL: Gregor Kobel has no round 1576 entry and his club history moved against PREV ([borussia dortmund, fc augsburg, tsg 1899 hoffenheim, vfb stuttgart] -> [borussia dortmund, fc augsburg, tsg 1899 hoffenheim, tsg 1899 hoffenheim ii, vfb stuttgart])
+  FAIL: Tino Livramento has no round 1576 entry and his club history moved against PREV ([newcastle united, southampton fc] -> [chelsea fc u21, newcastle united, southampton fc])
+  FAIL: Gonçalo Ramos has no round 1576 entry and his club history moved against PREV ([ac milan, paris saint-germain, sl benfica] -> [ac milan, paris saint-germain, sl benfica, sl benfica b])
+  FAIL: Mile Svilar has no round 1576 entry and his club history moved against PREV ([as roma, sl benfica] -> [as roma, sl benfica, sl benfica b])
+  FAIL: Evanilson has no round 1576 entry and his club history moved against PREV ([afc bournemouth, fc porto, fc stk 1914 samorin, fluminense football club] -> [afc bournemouth, fc porto, fc porto b, fc stk 1914 samorin, fluminense football club])
+  FAIL: Michael Kayode has no round 1576 entry and his club history moved against PREV ([acf fiorentina, brentford fc] -> [acf fiorentina, brentford fc, fiorentina primavera])
+  FAIL: Konstantinos Karetsas has no round 1576 entry and his club history moved against PREV ([borussia dortmund, krc genk] -> [borussia dortmund, jong genk, krc genk])
+  FAIL: Matías Soulé has no round 1576 entry and his club history moved against PREV ([as roma, frosinone calcio, juventus fc] -> [as roma, frosinone calcio, juventus fc, juventus next gen])
+  FAIL: Kevin Schade has no round 1576 entry and his club history moved against PREV ([brentford fc, sc freiburg] -> [brentford fc, sc freiburg, sc freiburg ii])
+  FAIL: Ethan Ampadu has no round 1576 entry and his club history moved against PREV ([chelsea fc, exeter city, leeds united, rb leipzig, sheffield united, spezia calcio, venezia fc] -> [chelsea fc, chelsea fc u21, exeter city, leeds united, rb leipzig, sheffield united, spezia calcio, venezia fc])
+  FAIL: Gavi has no round 1576 entry and his club history moved against PREV ([fc barcelona] -> [fc barcelona, fc barcelona atletic])
+  FAIL: Senne Lammens has no round 1576 entry and his club history moved against PREV ([club brugge kv, manchester united, royal antwerp fc] -> [club brugge kv, manchester united, royal antwerp fc, young reds])
+  FAIL: Marco Palestra has no round 1576 entry and his club history moved against PREV ([atalanta bc, cagliari calcio, chelsea fc] -> [atalanta bc, atalanta u23, cagliari calcio, chelsea fc])
+  FAIL: Raúl Asencio has no round 1576 entry and his club history moved against PREV ([real madrid] -> [real madrid, real madrid castilla])
+  FAIL: Gianluca Scamacca has no round 1576 entry and his club history moved against PREV ([ascoli calcio, atalanta bc, genoa cfc, us sassuolo, west ham united] -> [ascoli calcio, atalanta bc, genoa cfc, sassuolo primavera, us sassuolo, west ham united])
+  FAIL: Unai Simón has no round 1576 entry and his club history moved against PREV ([athletic bilbao] -> [athletic bilbao, bilbao athletic])
+  FAIL: Marcos Llorente has no round 1576 entry and his club history moved against PREV ([atletico de madrid, deportivo alaves, real madrid] -> [atletico de madrid, deportivo alaves, real madrid, real madrid castilla])
+  FAIL: Noussair Mazraoui has no round 1576 entry and his club history moved against PREV ([ajax amsterdam, bayern munich, manchester united] -> [ajax amsterdam, ajax amsterdam u21, bayern munich, manchester united])
+  FAIL: Serge Gnabry has no round 1576 entry and his club history moved against PREV ([arsenal fc, bayern munich, sv werder bremen, tsg 1899 hoffenheim] -> [arsenal fc, arsenal fc u21, bayern munich, sv werder bremen, tsg 1899 hoffenheim])
+   (b) 442 pool men without a round 1576 entry keep PREV's club history exactly
+  FAIL: one-club-man: Alejandro Balde moved against PREV but has no round 1576 entry
+  FAIL: one-club-man: Nico Williams moved against PREV but has no round 1576 entry
+  FAIL: one-club-man: Diogo Costa moved against PREV but has no round 1576 entry
+  FAIL: one-club-man: Gavi moved against PREV but has no round 1576 entry
+  FAIL: one-club-man: Raúl Asencio moved against PREV but has no round 1576 entry
+  FAIL: one-club-man: Unai Simón moved against PREV but has no round 1576 entry
+  FAIL: journeyman-4-clubs: Ryan Gravenberch moved against PREV but has no round 1576 entry
+  FAIL: journeyman-4-clubs: Angelo Stiller moved against PREV but has no round 1576 entry
+  FAIL: journeyman-4-clubs: Gonçalo Ramos moved against PREV but has no round 1576 entry
+  FAIL: journeyman-4-clubs: Matías Soulé moved against PREV but has no round 1576 entry
+  FAIL: journeyman-4-clubs: Senne Lammens moved against PREV but has no round 1576 entry
+  FAIL: journeyman-4-clubs: Marco Palestra moved against PREV but has no round 1576 entry
+  FAIL: journeyman-4-clubs: Marcos Llorente moved against PREV but has no round 1576 entry
+  FAIL: journeyman-4-clubs: Noussair Mazraoui moved against PREV but has no round 1576 entry
+   (c) 14 club square verdicts moved against PREV (the list a What's New line may draw on):
+     Alejandro Balde no longer fits One-club man (support 29 -> 23)
+     Nico Williams no longer fits One-club man (support 29 -> 23)
+     Diogo Costa no longer fits One-club man (support 29 -> 23)
+     Gavi no longer fits One-club man (support 29 -> 23)
+     Raúl Asencio no longer fits One-club man (support 29 -> 23)
+     Unai Simón no longer fits One-club man (support 29 -> 23)
+     Ryan Gravenberch now fits Played for 4+ clubs (support 155 -> 163)
+     Angelo Stiller now fits Played for 4+ clubs (support 155 -> 163)
+     Gonçalo Ramos now fits Played for 4+ clubs (support 155 -> 163)
+     Matías Soulé now fits Played for 4+ clubs (support 155 -> 163)
+     Senne Lammens now fits Played for 4+ clubs (support 155 -> 163)
+     Marco Palestra now fits Played for 4+ clubs (support 155 -> 163)
+     Marcos Llorente now fits Played for 4+ clubs (support 155 -> 163)
+     Noussair Mazraoui now fits Played for 4+ clubs (support 155 -> 163)
+   (d) eligibility equal to PREV; 200 of 200 boards byte identical; 0 boards kept every tile's support, 0 of their decks identical; guarantee regressions 0
+simBingoClubCounts: CONTROL=noreserve FIRED (120 failures; section 2: 32, section 3: 42, section 9: 46)
