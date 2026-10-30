@@ -1,0 +1,9 @@
+vitest exit=0 32s |    Duration  31.40s (transform 3.66s, setup 1.12s, collect 15.32s, tests 62.53s, environment 6.97s, prepare 1.75s)
+tsc exit=0 84s | 
+simContracts exit=0 22s | ALL CONTRACT CHECKS PASSED
+simFreeAgents exit=0 102s | simFreeAgents: all sections passed
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+fleet exit=0 173s | simCmFreeAgencyFleet: green, all eight sections held
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simClubManagerSaveSize exit=0 73s | simClubManagerSaveSize: all sections green
+simHarnessAnchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
