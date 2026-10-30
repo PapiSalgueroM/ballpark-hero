@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/clubDetailDugout.test.tsx src/test/clubDetailOwnClub.test.tsx src/test/clubDetailCurrentRoster.test.tsx src/test/clubDetailFixtures.test.tsx src/test/managerScorerMarks.test.tsx src/test/cmMinuteLabel.test.ts --testTimeout=300000 --hookTimeout=120000
+simManagers: node scripts/simManagers.mjs
+simManagers-fleet: SIM_MANAGERS_BASE=c0c66e087 node scripts/simManagers.mjs
+simManagers-namedsack: SIM_MANAGERS_CONTROL=namedsack node scripts/simManagers.mjs
+simManagers-recycle: SIM_MANAGERS_CONTROL=recycle node scripts/simManagers.mjs
+simManagers-sever: SIM_MANAGERS_CONTROL=sever node scripts/simManagers.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+quotes-dugout: QUOTES_CONTROL=dugout node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simClubDetailFixtures: node scripts/simClubDetailFixtures.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
