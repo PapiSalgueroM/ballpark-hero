@@ -1,0 +1,18 @@
+#!serial
+# Release BU lane f: the club namesakes and Arsenal de Sarandi (Rounds 1584 and 1587): the sim and its controls, the reproductions and the generators' checks. simEdgeSync is red on soccer-grid-validate until the lead's deploy (L7). Serial, since rh installs PGlite for rh-cachedrift. simSoccerGridLabels reads the live tables: it is a live pass line, not a gate line.
+n1584-sim: node scripts/simClubNamesakes.mjs
+n1584-ctl-onehost: SIM_NAMESAKE_CONTROL=onehost node scripts/simClubNamesakes.mjs
+n1584-ctl-forget: SIM_NAMESAKE_CONTROL=forget node scripts/simClubNamesakes.mjs
+n1587-repro-dated: D=/tmp/fresh && mkdir -p $D && cp scripts/data/clubNamesakes1584/arsenalMarket-2026-10-29.json $D/arsenalMarket-2026-11-03.json && cp scripts/data/clubNamesakes1584/arsenalStints-2026-10-29.json $D/arsenalStints-2026-11-03.json && cmp scripts/data/clubNamesakes1584/arsenalMarket-2026-10-29.json $D/arsenalMarket-2026-11-03.json && cmp scripts/data/clubNamesakes1584/arsenalStints-2026-10-29.json $D/arsenalStints-2026-11-03.json && echo "cmp: both dated copies byte identical" && node scripts/qa/genArsenalLedger1587.mjs --market $D/arsenalMarket-2026-11-03.json --check && echo "STEP2 exit 0" && node scripts/qa/genClubNamesakes1587.mjs --market $D/arsenalMarket-2026-11-03.json --stints $D/arsenalStints-2026-11-03.json --check
+n1587-repro-oldgen: D=/tmp/fresh2 && mkdir -p $D && cp scripts/data/clubNamesakes1584/arsenalMarket-2026-10-29.json $D/arsenalMarket-2026-11-03.json && cp scripts/data/clubNamesakes1584/arsenalStints-2026-10-29.json $D/arsenalStints-2026-11-03.json && git worktree add -q /tmp/base 253ff4257 && node /tmp/base/scripts/qa/genClubNamesakes1587.mjs --market $D/arsenalMarket-2026-11-03.json --stints $D/arsenalStints-2026-11-03.json --check
+n1587-repro-refuse: node scripts/qa/genClubNamesakes1587.mjs --market scripts/data/clubNamesakes1584/arsenalMarket-2026-10-29.json; s=$?; echo "changed files: $(git status --short | wc -l)"; echo "refuse-exit=$s"; [ $s -eq 2 ]
+n1587-sim: node scripts/simClubNamesakes.mjs
+n1587-c-freshmoved: SIM_NAMESAKE_CONTROL=freshmoved node scripts/simClubNamesakes.mjs
+n1587-c-freshstill: SIM_NAMESAKE_CONTROL=freshstill node scripts/simClubNamesakes.mjs
+n1587-c-purgeblind: SIM_NAMESAKE_CONTROL=purgeblind node scripts/simClubNamesakes.mjs
+n1587-rh: npm install --prefix /tmp/pgl @electric-sql/pglite > /dev/null 2>&1 && PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs
+n1587-rh-cachedrift: REHEARSE_CONTROL=cachedrift PGLITE_DIR=/tmp/pgl node scripts/qa/rehearseClubNamesakes1587.mjs
+n1587-gen-ledger: node scripts/qa/genArsenalLedger1587.mjs --check
+n1587-gen-payload: node scripts/qa/genClubNamesakes1587.mjs --check
+n1587-gen-owed: node scripts/qa/genArsenalOwed1587.mjs --check
+n1587-simEdgeSync: node scripts/simEdgeSync.mjs
