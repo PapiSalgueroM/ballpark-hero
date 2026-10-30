@@ -110,8 +110,9 @@ if (QUOTES_CONTROL === 'dugout') {
     srcDir: path.join(ROOT, 'src'), tmp, name: 'quotes-dugout', nodeModules: path.join(ROOT, 'node_modules'), refuse,
     table: { now: { Arsenal: { name: SENTINEL, appointed: SENTINEL_MONTH } } }, partial: {},
     edit: {
-      from: 'ensureManagers(state, startYearsOn);',
-      to: 'ensureManagers(state, startYearsOn); { const realOne = Object.values(state.managers ?? {}).find(v => v.real === 1); if (realOne) state.aiHeadlines = [`${realOne.name} ' + DUGOUT_PLANT + '`, ...(state.aiHeadlines ?? [])]; }',
+      /* After the start's headlines are built, which rebuild the feed from scratch and would eat an earlier plant. */
+      from: 'const unrecorded = generateHeadlines(state);',
+      to: 'const unrecorded = generateHeadlines(state); { const realOne = Object.values(state.managers ?? {}).find(v => v.real === 1); if (realOne) state.aiHeadlines = [`${realOne.name} ' + DUGOUT_PLANT + '`, ...(state.aiHeadlines ?? [])]; }',
     },
   });
   cm = S.cm;
