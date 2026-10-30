@@ -1,0 +1,27 @@
+{
+  "CI": "true",
+  "TZ": null,
+  "NODE_OPTIONS": null,
+  "configAliasControlNames": [
+    "TYCOON_AWAY_CONTROL",
+    "COMPLETION_HOOK",
+    "OWNED_TIMEOUTS_HOOK",
+    "CONQUEST_NBA_HOOK",
+    "CONQUEST_NBA_BOARD",
+    "POLL_FIXTURES",
+    "US_BOARD_CONTROL_ALIAS",
+    "US_BOARD_CONTROL_FILE",
+    "DAILY_RECORD_CONTROL",
+    "TYCOON_ROOMS_PAGE",
+    "TYCOON_LOADS_STADIUM_HOOK",
+    "TYCOON_LOADS_ACADEMY_HOOK",
+    "TYCOON_LOADS_STADIUM_LIB",
+    "TYCOON_LOADS_ACADEMY_LIB",
+    "TYCOON_PITCH_COMPONENT",
+    "TYCOON_PACKS_REWARDS",
+    "TYCOON_PACKS_PANEL",
+    "NO_DOUBLE_SWAP"
+  ],
+  "allConfigAliasesOff": true,
+  "noWorkerOrTestTimeoutFlags": true
+}

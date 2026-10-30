@@ -1,0 +1,1 @@
+DEFAULT_VITEST: full ordinary npm test JSON, runtime errors, assertions and explicit skip identities retained; review required.

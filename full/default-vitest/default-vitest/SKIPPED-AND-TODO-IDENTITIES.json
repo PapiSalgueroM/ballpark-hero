@@ -1,0 +1,620 @@
+[
+  {
+    "file": "src/test/clubManagerVarLive.test.tsx",
+    "fileIndex": 125,
+    "caseIndex": 2,
+    "ancestorTitles": [
+      "Club Manager: VAR with the switch off (the dark rule)"
+    ],
+    "title": "a live kick off through the hook asks for no review",
+    "fullName": "Club Manager: VAR with the switch off (the dark rule) a live kick off through the hook asks for no review",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/clubManagerVarLive.test.tsx",
+    "fileIndex": 125,
+    "caseIndex": 3,
+    "ancestorTitles": [
+      "Club Manager: VAR with the switch off (the dark rule)"
+    ],
+    "title": "a Quick Sim through the hook is the match the engine plays without reviews",
+    "fullName": "Club Manager: VAR with the switch off (the dark rule) a Quick Sim through the hook is the match the engine plays without reviews",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/clubManagerVarLive.test.tsx",
+    "fileIndex": 125,
+    "caseIndex": 4,
+    "ancestorTitles": [
+      "Club Manager: VAR with the switch off (the dark rule)"
+    ],
+    "title": "the fast forward is the engine run without reviews",
+    "fullName": "Club Manager: VAR with the switch off (the dark rule) the fast forward is the engine run without reviews",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveHardening.test.tsx",
+    "fileIndex": 164,
+    "caseIndex": 50,
+    "ancestorTitles": [
+      "5) saves written before this round load unchanged"
+    ],
+    "title": "captures saves from the hook under test (the harness points it at the pre 848 code)",
+    "fullName": "5) saves written before this round load unchanged captures saves from the hook under test (the harness points it at the pre 848 code)",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 1,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "afl-higher-lower",
+    "fullName": "one tab plays and restores exactly as before Round 848 afl-higher-lower",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 2,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "cfb-higher-lower",
+    "fullName": "one tab plays and restores exactly as before Round 848 cfb-higher-lower",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 3,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "f1-higher-lower",
+    "fullName": "one tab plays and restores exactly as before Round 848 f1-higher-lower",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 4,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "golf-higher-lower",
+    "fullName": "one tab plays and restores exactly as before Round 848 golf-higher-lower",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 5,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "hockey-higher-lower",
+    "fullName": "one tab plays and restores exactly as before Round 848 hockey-higher-lower",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 6,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "mlb-higher-lower",
+    "fullName": "one tab plays and restores exactly as before Round 848 mlb-higher-lower",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 7,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "nba-higher-lower",
+    "fullName": "one tab plays and restores exactly as before Round 848 nba-higher-lower",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 8,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "nfl-higher-lower",
+    "fullName": "one tab plays and restores exactly as before Round 848 nfl-higher-lower",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 9,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "tennis-higher-lower",
+    "fullName": "one tab plays and restores exactly as before Round 848 tennis-higher-lower",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 10,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "baseball-career",
+    "fullName": "one tab plays and restores exactly as before Round 848 baseball-career",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 11,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "hockey-career",
+    "fullName": "one tab plays and restores exactly as before Round 848 hockey-career",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 12,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "nba-career",
+    "fullName": "one tab plays and restores exactly as before Round 848 nba-career",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 13,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "olympics",
+    "fullName": "one tab plays and restores exactly as before Round 848 olympics",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 14,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "world-cup",
+    "fullName": "one tab plays and restores exactly as before Round 848 world-cup",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 15,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "guess-the-college",
+    "fullName": "one tab plays and restores exactly as before Round 848 guess-the-college",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 16,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "career",
+    "fullName": "one tab plays and restores exactly as before Round 848 career",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 17,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "connections",
+    "fullName": "one tab plays and restores exactly as before Round 848 connections",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 18,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "baseball-connections",
+    "fullName": "one tab plays and restores exactly as before Round 848 baseball-connections",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 19,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "nba-connections",
+    "fullName": "one tab plays and restores exactly as before Round 848 nba-connections",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 20,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "nfl-connections",
+    "fullName": "one tab plays and restores exactly as before Round 848 nfl-connections",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 21,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "nhl-connections",
+    "fullName": "one tab plays and restores exactly as before Round 848 nhl-connections",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 22,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "football-grid",
+    "fullName": "one tab plays and restores exactly as before Round 848 football-grid",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 23,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "college-grid",
+    "fullName": "one tab plays and restores exactly as before Round 848 college-grid",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 24,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "soccer-grid",
+    "fullName": "one tab plays and restores exactly as before Round 848 soccer-grid",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 25,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "football-connect-4",
+    "fullName": "one tab plays and restores exactly as before Round 848 football-connect-4",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 26,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "footle",
+    "fullName": "one tab plays and restores exactly as before Round 848 footle",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 27,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "ufc",
+    "fullName": "one tab plays and restores exactly as before Round 848 ufc",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 28,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "shirt-number",
+    "fullName": "one tab plays and restores exactly as before Round 848 shirt-number",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 29,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "transfer-path",
+    "fullName": "one tab plays and restores exactly as before Round 848 transfer-path",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 30,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "football-draft",
+    "fullName": "one tab plays and restores exactly as before Round 848 football-draft",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 31,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "guess-transfer-value",
+    "fullName": "one tab plays and restores exactly as before Round 848 guess-transfer-value",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 32,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "missing-five",
+    "fullName": "one tab plays and restores exactly as before Round 848 missing-five",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 33,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "missing-nine",
+    "fullName": "one tab plays and restores exactly as before Round 848 missing-nine",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 34,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "missing-eleven",
+    "fullName": "one tab plays and restores exactly as before Round 848 missing-eleven",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 35,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "missing-xi",
+    "fullName": "one tab plays and restores exactly as before Round 848 missing-xi",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 36,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "rank-em",
+    "fullName": "one tab plays and restores exactly as before Round 848 rank-em",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 37,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "guess-the-golfer",
+    "fullName": "one tab plays and restores exactly as before Round 848 guess-the-golfer",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 38,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "puck-detective",
+    "fullName": "one tab plays and restores exactly as before Round 848 puck-detective",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/dailySaveParity.test.tsx",
+    "fileIndex": 165,
+    "caseIndex": 39,
+    "ancestorTitles": [
+      "one tab plays and restores exactly as before Round 848"
+    ],
+    "title": "career-ladder",
+    "fullName": "one tab plays and restores exactly as before Round 848 career-ladder",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/homeSearchRecovery.test.tsx",
+    "fileIndex": 225,
+    "caseIndex": 0,
+    "ancestorTitles": [],
+    "title": "unchanged search engine retains complete catalog and exact ranked results",
+    "fullName": "unchanged search engine retains complete catalog and exact ranked results",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/homeSearchRecovery.test.tsx",
+    "fileIndex": 225,
+    "caseIndex": 1,
+    "ancestorTitles": [],
+    "title": "pending import keeps honest busy state without false empty results or writes",
+    "fullName": "pending import keeps honest busy state without false empty results or writes",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/homeSearchRecovery.test.tsx",
+    "fileIndex": 225,
+    "caseIndex": 2,
+    "ancestorTitles": [],
+    "title": "resolved import renders the latest query in unchanged engine rank order",
+    "fullName": "resolved import renders the latest query in unchanged engine rank order",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/homeSearchRecovery.test.tsx",
+    "fileIndex": 225,
+    "caseIndex": 3,
+    "ancestorTitles": [],
+    "title": "rejected import clears busy and offers recovery without pretending no games exist",
+    "fullName": "rejected import clears busy and offers recovery without pretending no games exist",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/homeSearchRecovery.test.tsx",
+    "fileIndex": 225,
+    "caseIndex": 4,
+    "ancestorTitles": [],
+    "title": "Back clears the query and restores browse and input focus without scrolling",
+    "fullName": "Back clears the query and restores browse and input focus without scrolling",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/homeSearchRecovery.test.tsx",
+    "fileIndex": 225,
+    "caseIndex": 5,
+    "ancestorTitles": [],
+    "title": "failed search remains terminal through Back reentry focus and hover",
+    "fullName": "failed search remains terminal through Back reentry focus and hover",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/homeSearchRecovery.test.tsx",
+    "fileIndex": 225,
+    "caseIndex": 6,
+    "ancestorTitles": [],
+    "title": "only explicit Reload invokes the existing reload boundary once",
+    "fullName": "only explicit Reload invokes the existing reload boundary once",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/homeSearchRecovery.test.tsx",
+    "fileIndex": 225,
+    "caseIndex": 7,
+    "ancestorTitles": [],
+    "title": "clearing a pending query keeps browse after late resolution and reuses the engine",
+    "fullName": "clearing a pending query keeps browse after late resolution and reuses the engine",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/homeSearchRecovery.test.tsx",
+    "fileIndex": 225,
+    "caseIndex": 8,
+    "ancestorTitles": [],
+    "title": "a real zero-result query shows existing fallback games only after resolution",
+    "fullName": "a real zero-result query shows existing fallback games only after resolution",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/homeSearchRecovery.test.tsx",
+    "fileIndex": 225,
+    "caseIndex": 9,
+    "ancestorTitles": [],
+    "title": "a failed focus prewarm keeps browsing until a query asks for recovery",
+    "fullName": "a failed focus prewarm keeps browsing until a query asks for recovery",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/nhlContributors.test.ts",
+    "fileIndex": 283,
+    "caseIndex": 1,
+    "ancestorTitles": [
+      "NHL simulation contributor outcomes"
+    ],
+    "title": "matches physical original rounds, AI, roster moves, playoffs and offseason",
+    "fullName": "NHL simulation contributor outcomes matches physical original rounds, AI, roster moves, playoffs and offseason",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/usBoardFixture.test.tsx",
+    "fileIndex": 489,
+    "caseIndex": 0,
+    "ancestorTitles": [
+      "the four US career boards against the recorded fixture"
+    ],
+    "title": "nfl",
+    "fullName": "the four US career boards against the recorded fixture nfl",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/usBoardFixture.test.tsx",
+    "fileIndex": 489,
+    "caseIndex": 1,
+    "ancestorTitles": [
+      "the four US career boards against the recorded fixture"
+    ],
+    "title": "nba",
+    "fullName": "the four US career boards against the recorded fixture nba",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/usBoardFixture.test.tsx",
+    "fileIndex": 489,
+    "caseIndex": 2,
+    "ancestorTitles": [
+      "the four US career boards against the recorded fixture"
+    ],
+    "title": "mlb",
+    "fullName": "the four US career boards against the recorded fixture mlb",
+    "status": "skipped"
+  },
+  {
+    "file": "src/test/usBoardFixture.test.tsx",
+    "fileIndex": 489,
+    "caseIndex": 3,
+    "ancestorTitles": [
+      "the four US career boards against the recorded fixture"
+    ],
+    "title": "nhl",
+    "fullName": "the four US career boards against the recorded fixture nhl",
+    "status": "skipped"
+  }
+]

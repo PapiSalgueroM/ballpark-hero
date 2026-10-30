@@ -1,0 +1,16 @@
+70d7403008e4aec7be435ea93c138028f9582087925dd33b7956a9b9cdc66e01  /home/runner/work/_temp/rc-out/full/default-vitest/controller.stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/default-vitest/controller.stderr.log
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa  /home/runner/work/_temp/rc-out/full/default-vitest/controller.exit
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/default-vitest/helper-syntax.stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/default-vitest/helper-syntax.stderr.log
+9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa  /home/runner/work/_temp/rc-out/full/default-vitest/helper-syntax.exit
+19303a81bac3b088cc8b6665950c745038b8208ed5a10c8f2cb73dc75dd23e09  /home/runner/work/_temp/rc-out/full/default-vitest/request-identity.txt
+398d8f4f01e83ae379286e458db584c670f333bcae844cb27316b6b6cb4778f2  /home/runner/work/_temp/rc-out/full/default-vitest/request-input-sha256.txt
+2ede121f89eb41a84356d543602617f15db7759f49ca684ad1db8fcc16ef15fd  /home/runner/work/_temp/rc-out/full/default-vitest/controller.stdout.log.gz
+1e0f34b4238175e6f7ef684f09bd4b3de34fc88e515c4ddd06b3eb3e494b032c  /home/runner/work/_temp/rc-out/full/default-vitest/controller.stderr.log.gz
+e6cc7b9797956ed79ec09efdfa4f505a10d1ee9e71d5c03fe1e810b6a3bed7b2  /home/runner/work/_temp/rc-out/full/default-vitest/controller.exit.gz
+5f19bfd7cde300f6b787ea6f6bfe60d6524cd708b6ae1f8090982d6810134c25  /home/runner/work/_temp/rc-out/full/default-vitest/helper-syntax.stdout.log.gz
+27f5fac86f18180a41b15c6e4f39f9a3b672a579875ea948b8d093fb00c7c9aa  /home/runner/work/_temp/rc-out/full/default-vitest/helper-syntax.stderr.log.gz
+eecd1493aac616f1ed0be5cad6b63eb19282c97a9b7c5071e6c7f3c1a8927b41  /home/runner/work/_temp/rc-out/full/default-vitest/helper-syntax.exit.gz
+82c602a2044357df567876a732aab186b72de3a26262f2298a7864a1a71c0537  /home/runner/work/_temp/rc-out/full/default-vitest/request-identity.txt.gz
+0595ce6932294d7990bc7d12cb9b39f800992c0838be8532cc533f1771b5d46a  /home/runner/work/_temp/rc-out/full/default-vitest/request-input-sha256.txt.gz

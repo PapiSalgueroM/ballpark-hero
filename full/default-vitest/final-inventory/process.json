@@ -1,0 +1,23 @@
+{
+  "command": "/opt/hostedtoolcache/node/24.22.1/x64/bin/node",
+  "args": [
+    "scripts/runAllSims.mjs",
+    "--plan-json"
+  ],
+  "cwd": "/home/runner/work/ballpark-hero/ballpark-hero",
+  "start": "2026-10-30T16:35:40.955Z",
+  "end": "2026-10-30T16:35:45.138Z",
+  "durationMs": 4182.712488,
+  "timeoutMs": 120000,
+  "status": 0,
+  "signal": null,
+  "error": null,
+  "offlineTransport": {
+    "source": "scripts/lib/offlineTransport.cjs",
+    "physicalPath": "/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs",
+    "sha256": "e60ff1534307e449ccef598e3b7470dcba58681b82cea4005cec7319f14f9221",
+    "nodeOptions": "--require \"/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/offlineTransport.cjs\"",
+    "receipt": "/home/runner/work/_temp/rc-out/full/default-vitest/final-inventory/transport.jsonl",
+    "mode": "offline"
+  }
+}

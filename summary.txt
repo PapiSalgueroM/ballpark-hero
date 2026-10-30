@@ -1,0 +1,1 @@
+default-vitest exit=0 551s | DEFAULT_VITEST: full ordinary npm test JSON, runtime errors, assertions and explicit skip identities retained; review required.

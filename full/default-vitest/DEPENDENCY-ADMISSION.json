@@ -1,0 +1,4879 @@
+{
+  "originalBodiesAndMembershipHeld": true,
+  "original": 24500,
+  "generatedCaches": [
+    {
+      "file": ".vite/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 60676,
+      "sha256": "dbf1c9773aa729c7dd40b117885980c8d72a9ce81969417b24b98a262934f37e",
+      "scope": "Exact generated Vitest results cache only, never package code or healthy-test credit",
+      "actualResults": [
+        [
+          ":src/test/liveSimMotion.test.tsx",
+          {
+            "duration": 45385.540178999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerVarScreen.test.tsx",
+          {
+            "duration": 84063.420479,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmValueCurve.test.ts",
+          {
+            "duration": 352.46003999999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/pitchOwnGoal.test.tsx",
+          {
+            "duration": 16134.398888,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerWorldRoster.test.ts",
+          {
+            "duration": 1738.433224,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/noDoubleRecord.test.tsx",
+          {
+            "duration": 20372.876345999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmDeskHost.test.ts",
+          {
+            "duration": 498.5901010000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmInbox.test.ts",
+          {
+            "duration": 102.66297900000006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/translateGuard.test.tsx",
+          {
+            "duration": 2132.755953,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usSeasonCentreEntry.test.tsx",
+          {
+            "duration": 8220.005116999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficePostseason.test.tsx",
+          {
+            "duration": 8144.597078000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usSeasonNfl.test.ts",
+          {
+            "duration": 1040.200545,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/dailySaveParity.test.tsx",
+          {
+            "duration": 4.06456500000013,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/dailySaveHardening.test.tsx",
+          {
+            "duration": 981.694434,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerHallBoard.test.tsx",
+          {
+            "duration": 12585.748185999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/frontOfficeRatings.test.ts",
+          {
+            "duration": 5093.81868,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usBoardFixture.test.tsx",
+          {
+            "duration": 0,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/scoreShown.test.tsx",
+          {
+            "duration": 9676.730479999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerClubSquad.test.ts",
+          {
+            "duration": 502.595997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/routeErrorRecovery.test.tsx",
+          {
+            "duration": 571.920924,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerAutocompleteStale.test.tsx",
+          {
+            "duration": 957.8996799999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerSeasonReview.test.tsx",
+          {
+            "duration": 2951.77224,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usSeasonMlb.test.ts",
+          {
+            "duration": 4208.616884,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerDraftNight.test.tsx",
+          {
+            "duration": 1198.930662,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/FrontOfficeGmCareer.test.tsx",
+          {
+            "duration": 16314.895906000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerPreDraft.test.tsx",
+          {
+            "duration": 1376.8723800000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCareerProgramme.test.ts",
+          {
+            "duration": 56.64525099999992,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerDebutLegacy.test.tsx",
+          {
+            "duration": 921.363364,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerDeck.test.ts",
+          {
+            "duration": 107.18378299999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/saveKeeper.test.ts",
+          {
+            "duration": 42.133644000000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCareerLeague.test.ts",
+          {
+            "duration": 55.95070799999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerHall.test.tsx",
+          {
+            "duration": 436.6207139999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerLeagueBook.test.ts",
+          {
+            "duration": 924.0840900000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerSearchIdentity.test.ts",
+          {
+            "duration": 585.6003719999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/nhlOpeningRatings.test.ts",
+          {
+            "duration": 926.152949,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tournamentCardMoment.test.tsx",
+          {
+            "duration": 1441.4343920000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmBracket.test.ts",
+          {
+            "duration": 116.2819199999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/buildXiClubYear.test.tsx",
+          {
+            "duration": 14031.616761,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/liveSimCelebration.test.tsx",
+          {
+            "duration": 305.52100700000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/lineupValidatorClient.test.tsx",
+          {
+            "duration": 90.91312000000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmGameDay.test.ts",
+          {
+            "duration": 423.22855400000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/worldCompetition.test.ts",
+          {
+            "duration": 555.1529479999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/collegeGridFailClosed.test.tsx",
+          {
+            "duration": 1760.990178,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/nbaOpeningRatings.test.ts",
+          {
+            "duration": 1464.4056389999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/aussieRulesManager.test.ts",
+          {
+            "duration": 2471.094157,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerStory.test.tsx",
+          {
+            "duration": 3259.8269689999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficeGameDay.test.tsx",
+          {
+            "duration": 887.433819,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerLeagueWorld.test.ts",
+          {
+            "duration": 825.1566559999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/safeStorage.test.ts",
+          {
+            "duration": 61.19978400000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usSeason.test.ts",
+          {
+            "duration": 329.76857700000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/nbaEarnedDraft.test.ts",
+          {
+            "duration": 458.0249030000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerSaveRetry.test.tsx",
+          {
+            "duration": 7018.137077,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmFarm.test.ts",
+          {
+            "duration": 75.94972000000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonPacks.test.tsx",
+          {
+            "duration": 1424.615554,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficeSeasonStats.test.tsx",
+          {
+            "duration": 2292.4647539999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/careerIntl.test.ts",
+          {
+            "duration": 1196.894477,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonTicketPolicy.test.tsx",
+          {
+            "duration": 2650.2361889999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/buzzerShotLab.test.tsx",
+          {
+            "duration": 4919.386781,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/statDetectiveSpans.test.tsx",
+          {
+            "duration": 6322.455274,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/mmaPromotion.test.tsx",
+          {
+            "duration": 554.882504,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/college-dynasty/CollegeSeat.test.tsx",
+          {
+            "duration": 4747.614253,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerMomentKit.test.tsx",
+          {
+            "duration": 225.093386,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/dailySaveShapes.test.tsx",
+          {
+            "duration": 19255.503840999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmContracts.test.ts",
+          {
+            "duration": 45.889746,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerReports1346.test.tsx",
+          {
+            "duration": 4875.109065000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmDraftOrder.test.ts",
+          {
+            "duration": 73.291653,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerDecisionOutcome.test.tsx",
+          {
+            "duration": 2527.95785,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerAwardsNightCard.test.tsx",
+          {
+            "duration": 3813.911601,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usSeasonCentre.test.tsx",
+          {
+            "duration": 760.004597,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerDeskCues.test.tsx",
+          {
+            "duration": 954.121209,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerPressRoomReadAsAbsent.test.tsx",
+          {
+            "duration": 5682.33929,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerAwardGenerations.test.tsx",
+          {
+            "duration": 1733.6785060000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficeDraftCapital.test.tsx",
+          {
+            "duration": 1447.0120989999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerStatLines.test.tsx",
+          {
+            "duration": 1335.88521,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerFarewell.test.ts",
+          {
+            "duration": 329.6230989999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerProspect.test.tsx",
+          {
+            "duration": 6955.28455,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerFarewellPage.test.tsx",
+          {
+            "duration": 1710.5884250000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerDerbyHistoryUi.test.tsx",
+          {
+            "duration": 2514.787366,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/nbaRotation.test.ts",
+          {
+            "duration": 1712.6163850000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/footleUnlimitedSession.test.tsx",
+          {
+            "duration": 989.298085,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCareerPress.test.ts",
+          {
+            "duration": 245.13263700000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerTactics.test.ts",
+          {
+            "duration": 394.543991,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/rugbyLeagueChallenge.test.tsx",
+          {
+            "duration": 2713.098536,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cageClash.test.tsx",
+          {
+            "duration": 279.88073199999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmEarnedDraft.test.ts",
+          {
+            "duration": 1146.5836980000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerMatchPlans.test.tsx",
+          {
+            "duration": 1445.406829,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/gridEngineSource.test.ts",
+          {
+            "duration": 153.91733499999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmLeagueLeadersCard.test.tsx",
+          {
+            "duration": 2010.167407,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerRoutineEvents.test.ts",
+          {
+            "duration": 294.683618,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usPlayoffs.test.ts",
+          {
+            "duration": 1192.707695,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerRetire.test.tsx",
+          {
+            "duration": 1130.899668,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cagePractice.test.tsx",
+          {
+            "duration": 461.109561,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/GmCareerDesk.test.tsx",
+          {
+            "duration": 172.76538900000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerKeepPlaying.test.tsx",
+          {
+            "duration": 6077.181339,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerTrainingGround.test.tsx",
+          {
+            "duration": 4725.021102000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/buzzerContestRecap.test.tsx",
+          {
+            "duration": 5928.635923999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cageCircuit.test.tsx",
+          {
+            "duration": 4866.425529,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nba-front-office/NbaEarnedDraft.test.tsx",
+          {
+            "duration": 1890.5394890000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/nflSeasonStats.test.ts",
+          {
+            "duration": 93.10659600000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nhlContributors.test.ts",
+          {
+            "duration": 412.04123300000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmDraftNight.test.ts",
+          {
+            "duration": 18.30727300000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerLoanPlanMounted.test.tsx",
+          {
+            "duration": 8246.30429,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/xiQueryOwnership.test.tsx",
+          {
+            "duration": 4745.7560189999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/mlb-front-office/MlbDraftCapital.test.tsx",
+          {
+            "duration": 1538.9671479999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerWorldView.test.ts",
+          {
+            "duration": 1569.37653,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/seasonCore.test.ts",
+          {
+            "duration": 58.00614799999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerInternationalReturn.test.ts",
+          {
+            "duration": 307.800881,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/footlePractice.test.tsx",
+          {
+            "duration": 1364.0161440000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerIntlBoard.test.tsx",
+          {
+            "duration": 1429.9026600000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerDifficulty.test.ts",
+          {
+            "duration": 987.5672790000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/freeKickPractice.test.tsx",
+          {
+            "duration": 2169.2364740000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficeOnePress.test.tsx",
+          {
+            "duration": 3211.2618350000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmFreeAgentContinuity.test.ts",
+          {
+            "duration": 924.888377,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerShirtSales.test.ts",
+          {
+            "duration": 529.2808480000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/resultScorePillComparison.test.tsx",
+          {
+            "duration": 850.3541879999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficeTile.test.tsx",
+          {
+            "duration": 967.937868,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerSavePartsReadAsAbsent.test.ts",
+          {
+            "duration": 219.63863200000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerStatRewards.test.ts",
+          {
+            "duration": 1378.5441650000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaStatLinePicker.test.tsx",
+          {
+            "duration": 12225.814985,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/moneyAppFeedback.test.tsx",
+          {
+            "duration": 951.9032470000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/college-dynasty/collegeDynastyFixture.test.tsx",
+          {
+            "duration": 2407.960469,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerDilemmaReach.test.tsx",
+          {
+            "duration": 32314.748706,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/rugbyLeagueReview.test.tsx",
+          {
+            "duration": 3317.1558689999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerAgentReview.test.ts",
+          {
+            "duration": 290.07400500000006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerScreenTruths.test.tsx",
+          {
+            "duration": 685.1726069999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerDocumentaryReview.test.ts",
+          {
+            "duration": 432.68166599999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerTransferBrief.test.ts",
+          {
+            "duration": 78.2722920000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/worldOneOffs.test.ts",
+          {
+            "duration": 283.63769700000006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerProgrammeUi.test.tsx",
+          {
+            "duration": 1710.9821200000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/boxingShowForecast.test.tsx",
+          {
+            "duration": 2082.2106160000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerSaveRecovery.test.tsx",
+          {
+            "duration": 2693.4140370000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/lottery/LotteryReveal.test.tsx",
+          {
+            "duration": 175.104372,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonRooms.test.tsx",
+          {
+            "duration": 14472.922907,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/seasonCentreSlots.test.tsx",
+          {
+            "duration": 62.85568000000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/staffScreen.test.tsx",
+          {
+            "duration": 631.178643,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/firstTouchBoard.test.tsx",
+          {
+            "duration": 1546.861566,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cagePracticeFeedback.test.tsx",
+          {
+            "duration": 253.508424,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/buzzerPractice.test.tsx",
+          {
+            "duration": 2108.1869970000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerInternationalReturnPage.test.tsx",
+          {
+            "duration": 1281.722636,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerSeasonRatings.test.tsx",
+          {
+            "duration": 1089.730697,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerGridInitialTimer.test.tsx",
+          {
+            "duration": 89.15479799999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonSaleReview.test.tsx",
+          {
+            "duration": 2450.232857,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerTrajectory.test.ts",
+          {
+            "duration": 10746.909467,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/rankEmCircuit.test.tsx",
+          {
+            "duration": 1606.0375870000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/puckDetectiveFeedback.test.tsx",
+          {
+            "duration": 2133.05582,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmLineup.test.ts",
+          {
+            "duration": 30.280947999999967,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCareerDerbyHistory.test.ts",
+          {
+            "duration": 23.009190999999987,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nhl-front-office/NhlFrontOfficeRatingEvidence.test.tsx",
+          {
+            "duration": 1696.2068259999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerReports1569.test.tsx",
+          {
+            "duration": 10899.220033,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerAgentReviewPage.test.tsx",
+          {
+            "duration": 973.854396,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerPendingLife.test.ts",
+          {
+            "duration": 251.61010299999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonPitch.test.tsx",
+          {
+            "duration": 87624.477888,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/collegeRecruiting.test.ts",
+          {
+            "duration": 116.89274399999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/freeKickLab.test.tsx",
+          {
+            "duration": 2449.064628,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usRivalLine.test.ts",
+          {
+            "duration": 245.71613100000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/GmGameDayCard.test.tsx",
+          {
+            "duration": 1772.719192,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/rankEmOrder.test.tsx",
+          {
+            "duration": 1274.771397,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerSeasonCompetitions.test.tsx",
+          {
+            "duration": 913.113959,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerGridDeadline.test.tsx",
+          {
+            "duration": 147.43187799999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerActionConfirm.test.tsx",
+          {
+            "duration": 2435.713143,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerGridSettingsRace.test.tsx",
+          {
+            "duration": 7522.2694010000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmTablesTruth.test.tsx",
+          {
+            "duration": 11596.656126,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerVarLive.test.tsx",
+          {
+            "duration": 8165.541829000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/usCareerShopPromises.test.ts",
+          {
+            "duration": 89.92212500000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/threePointContest.test.tsx",
+          {
+            "duration": 2081.164156,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/footleClueDesk.test.tsx",
+          {
+            "duration": 1850.914646,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/seasonCentreOwnGoals.test.tsx",
+          {
+            "duration": 1151.067176,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/emojiGuessFeedback.test.tsx",
+          {
+            "duration": 2209.2874970000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerJobHunt.test.ts",
+          {
+            "duration": 16.51226700000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerLiveLineups.test.ts",
+          {
+            "duration": 374.6479059999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerAgentReviewUi.test.tsx",
+          {
+            "duration": 702.63036,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/numberFormatting.test.tsx",
+          {
+            "duration": 234.19521700000007,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/throughBallBoard.test.tsx",
+          {
+            "duration": 1429.3694809999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/arcadePause.test.tsx",
+          {
+            "duration": 2048.8376279999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaPlanningBench.test.tsx",
+          {
+            "duration": 2021.6464529999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/SiteMenu.finder.test.tsx",
+          {
+            "duration": 4313.969912,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerPracticeLifecycle.test.tsx",
+          {
+            "duration": 3140.035605,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerLifeReviews.test.ts",
+          {
+            "duration": 433.1462999999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/conquestExplore.test.tsx",
+          {
+            "duration": 1088.208681,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nhlPlanningBench.test.tsx",
+          {
+            "duration": 1942.205849,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerSaveRetry.test.tsx",
+          {
+            "duration": 4943.736415,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonAway.test.tsx",
+          {
+            "duration": 209.35699899999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmFreeAgentDiscovery.test.tsx",
+          {
+            "duration": 1280.918587,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerPackedFence.test.tsx",
+          {
+            "duration": 873.7578209999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/gamePicks.test.tsx",
+          {
+            "duration": 6876.736935,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerScorerMarks.test.tsx",
+          {
+            "duration": 89.61258600000008,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/gameLawNfl.test.ts",
+          {
+            "duration": 733.798519,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerPendingPopularity.test.ts",
+          {
+            "duration": 113.95614699999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/pressRoomLoadingKeyboard.test.tsx",
+          {
+            "duration": 617.01457,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/GmBracketCard.test.tsx",
+          {
+            "duration": 229.22373699999991,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cageReadiness.test.tsx",
+          {
+            "duration": 817.070706,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerDilemmaSaves.test.tsx",
+          {
+            "duration": 2966.948293,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerManagerJobReview.test.ts",
+          {
+            "duration": 978.548278,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx",
+          {
+            "duration": 2000.63025,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/throughBallDrill.test.ts",
+          {
+            "duration": 4548.264235,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerSavedDealsPaging.test.tsx",
+          {
+            "duration": 1869.462868,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerPracticeLifecycle.test.tsx",
+          {
+            "duration": 1200.499324,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/hallOfChampionsLongPlay.test.tsx",
+          {
+            "duration": 169.45209599999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/usCareerProgramme.test.ts",
+          {
+            "duration": 140.206994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/ballIqFeedback.test.tsx",
+          {
+            "duration": 901.2660549999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerPressRoomFailure.test.tsx",
+          {
+            "duration": 651.195697,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nba-front-office/NbaRotationPanel.test.tsx",
+          {
+            "duration": 2033.2764540000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/fightCareerRingPlayback.test.tsx",
+          {
+            "duration": 1008.213006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/listQuizFeedback.test.tsx",
+          {
+            "duration": 3271.880736,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/trophyCabinetCampaign.test.tsx",
+          {
+            "duration": 389.46003499999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/coachCalls.test.ts",
+          {
+            "duration": 373.18704,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerDugoutTable.test.tsx",
+          {
+            "duration": 871.8611669999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerPractice.test.tsx",
+          {
+            "duration": 13718.073879000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerGridSearchDiscovery.test.tsx",
+          {
+            "duration": 620.021462,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficeCuts.test.tsx",
+          {
+            "duration": 948.5729369999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaCareerIntl.test.ts",
+          {
+            "duration": 142.52154399999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerSummer.test.tsx",
+          {
+            "duration": 1196.749845,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/statDetectiveMotion.test.tsx",
+          {
+            "duration": 1125.910191,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerBingoCategories.test.ts",
+          {
+            "duration": 144.96680100000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/xiSelectionHistoryRace.test.tsx",
+          {
+            "duration": 29.644792999999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/champOrNotReveal.test.tsx",
+          {
+            "duration": 808.864141,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/budgetSigning.test.tsx",
+          {
+            "duration": 1790.6070129999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/searchAndDiscardFeedback.test.tsx",
+          {
+            "duration": 2894.788408,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerDraftNightBoard.test.tsx",
+          {
+            "duration": 1178.85944,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerContracts.test.ts",
+          {
+            "duration": 130.871396,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerDecisionDeadline.test.ts",
+          {
+            "duration": 1616.641041,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cbbProgramFeedback.test.tsx",
+          {
+            "duration": 2585.6673769999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerLeagueBoards.test.ts",
+          {
+            "duration": 10.513259000000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clueAuctionFeedback.test.tsx",
+          {
+            "duration": 1904.2723420000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nascarDriverFeedback.test.tsx",
+          {
+            "duration": 1921.9006800000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerDevelopment.test.ts",
+          {
+            "duration": 85.18563799999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerStoryRole.test.ts",
+          {
+            "duration": 111.96020199999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/collegeGridOffline.test.tsx",
+          {
+            "duration": 2071.47878,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/inboxCard.test.tsx",
+          {
+            "duration": 587.672618,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/collegeSeat.test.ts",
+          {
+            "duration": 91.76710100000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tennisPlayerFeedback.test.tsx",
+          {
+            "duration": 1933.047573,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerRecruitmentHook.test.tsx",
+          {
+            "duration": 1001.9875799999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/academyAway.test.tsx",
+          {
+            "duration": 213.2328799999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmPicks.test.ts",
+          {
+            "duration": 56.46734799999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerBingoHonours.test.ts",
+          {
+            "duration": 64.14452099999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerSlots.test.tsx",
+          {
+            "duration": 2095.551829,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cageFightStats.test.tsx",
+          {
+            "duration": 1942.2600040000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmLotteryNight.test.ts",
+          {
+            "duration": 93.96133800000007,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerLoanDevelopment.test.ts",
+          {
+            "duration": 12.212278000000083,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/higherLowerReveal.test.tsx",
+          {
+            "duration": 295.98934599999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/mlbTradeRoster.test.tsx",
+          {
+            "duration": 3477.8363949999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerLineupPicker.test.tsx",
+          {
+            "duration": 3826.873261,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerCustomPromotion.test.ts",
+          {
+            "duration": 3981.292394,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmSavePoints.test.ts",
+          {
+            "duration": 713.844846,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/mysteryBoxMotion.test.tsx",
+          {
+            "duration": 947.4900040000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmStaff.test.ts",
+          {
+            "duration": 428.21727899999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/mlbCareerLifeC.test.ts",
+          {
+            "duration": 32.75233300000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/whodTheyBeatReveal.test.tsx",
+          {
+            "duration": 619.786689,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerSave.test.tsx",
+          {
+            "duration": 1099.27415,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/aussieRulesManagerBoard.test.tsx",
+          {
+            "duration": 2922.556203,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmWorldIdentity1052.test.ts",
+          {
+            "duration": 381.80784500000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerPendingMorale.test.ts",
+          {
+            "duration": 124.44954800000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerSeasonHistoryUi.test.tsx",
+          {
+            "duration": 1402.29441,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/usCareerAnnualBenefits.test.ts",
+          {
+            "duration": 87.74293999999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/drillKeyboardRouting.test.tsx",
+          {
+            "duration": 2191.514949,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerColdContext.test.ts",
+          {
+            "duration": 94.56639900000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cfbRecruitFilters.test.tsx",
+          {
+            "duration": 2229.47026,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/uclLeaguePhase.test.ts",
+          {
+            "duration": 484.70238300000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerBingoTransport.test.ts",
+          {
+            "duration": 174.74392899999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/profileSecondDevice.test.tsx",
+          {
+            "duration": 715.9859980000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerDifficultyPick.test.tsx",
+          {
+            "duration": 1310.394205,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/quizBoardAccess.test.tsx",
+          {
+            "duration": 1294.833134,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerRetirement1519.test.tsx",
+          {
+            "duration": 1772.8977559999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nba-front-office/NbaGmDeskBoard.test.tsx",
+          {
+            "duration": 264.1057609999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/miniPitchScene.test.ts",
+          {
+            "duration": 74.60774400000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerTransferBriefPage.test.tsx",
+          {
+            "duration": 413.9911750000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/hooks/useTransferPathGuidance.test.ts",
+          {
+            "duration": 499.8585549999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerLoyalty.engine.test.ts",
+          {
+            "duration": 110.35946999999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/trophyCabinet.test.tsx",
+          {
+            "duration": 357.84574499999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nhlContributorsBoard.test.tsx",
+          {
+            "duration": 2362.3329299999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaOldSaveLines.test.ts",
+          {
+            "duration": 54.796718999999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/frontOfficeSaveRecovery.test.tsx",
+          {
+            "duration": 2804.736183,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/mlbHlReveal.test.tsx",
+          {
+            "duration": 84.38360499999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerBracketMoment.test.tsx",
+          {
+            "duration": 277.02506399999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/homeSearchRecovery.test.tsx",
+          {
+            "duration": 0,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerRecordBoundary.test.ts",
+          {
+            "duration": 2523.854314,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/collegeGridSearchMemory.test.ts",
+          {
+            "duration": 670.64403,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/chainRequestOwnership.test.tsx",
+          {
+            "duration": 94.6603399999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/missingNineFeedback.test.tsx",
+          {
+            "duration": 1935.236753,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerWorldBrowser.test.tsx",
+          {
+            "duration": 1363.938243,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/sportsBingoTable.test.tsx",
+          {
+            "duration": 870.307053,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/usCareerMarket.test.ts",
+          {
+            "duration": 20.894803000000024,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/perfectSeasonNbaRetry.test.tsx",
+          {
+            "duration": 4920.22241,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/leaderboardFailure.test.tsx",
+          {
+            "duration": 823.098753,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tennisChainScoreOwnership.test.tsx",
+          {
+            "duration": 1808.012228,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/freeAgencyFeedback.test.tsx",
+          {
+            "duration": 820.9845509999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerPhoneStateIsolation.test.ts",
+          {
+            "duration": 27.13875500000006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerHandoverDesk.test.ts",
+          {
+            "duration": 2028.7446499999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficeTagDepth.test.tsx",
+          {
+            "duration": 455.89600500000006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/mmaBoutRecap.test.tsx",
+          {
+            "duration": 535.464705,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerEntryGuide.test.tsx",
+          {
+            "duration": 1584.847079,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerPendingPopularityGates.test.ts",
+          {
+            "duration": 192.33882700000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/lineupPickerFilters.test.tsx",
+          {
+            "duration": 4222.605965,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerInternationalReturnUi.test.tsx",
+          {
+            "duration": 541.47306,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/drillBoardMatch.test.tsx",
+          {
+            "duration": 402.10840199999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerDiscipline.test.ts",
+          {
+            "duration": 114.14366400000006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clueGameHintPoints.test.tsx",
+          {
+            "duration": 1469.5028,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaCourtRecap1517.test.tsx",
+          {
+            "duration": 474.43450900000016,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerShirtSalesScreen.test.tsx",
+          {
+            "duration": 457.319891,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/contractPreview.test.tsx",
+          {
+            "duration": 739.522163,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCareerSeasonHistory.test.ts",
+          {
+            "duration": 13.952539999999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonGear.test.tsx",
+          {
+            "duration": 416.423269,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCareerContinental.test.ts",
+          {
+            "duration": 124.47742699999992,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/sharedResultChallenge.test.tsx",
+          {
+            "duration": 520.298046,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/auth/googlePaused.test.tsx",
+          {
+            "duration": 621.036925,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerMarketUi.test.tsx",
+          {
+            "duration": 421.46782099999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/f1DriverFeedback.test.tsx",
+          {
+            "duration": 1318.995701,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerMilestones.test.ts",
+          {
+            "duration": 3425.005839,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmSeat.test.ts",
+          {
+            "duration": 112.57691900000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerRecruitmentBoard.test.tsx",
+          {
+            "duration": 1375.6822579999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/dailyRecord.test.tsx",
+          {
+            "duration": 165.01943100000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerDecisionDepth.test.ts",
+          {
+            "duration": 102.31381699999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerDerbies.test.tsx",
+          {
+            "duration": 2437.2001210000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nflCoachStaffRecovery.test.tsx",
+          {
+            "duration": 620.181477,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/guessFinishMoment.test.tsx",
+          {
+            "duration": 685.964285,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/Search.navigation.test.tsx",
+          {
+            "duration": 842.8211370000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/freshBuildBlockedStorage.test.ts",
+          {
+            "duration": 90.23317500000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/dartDraftPools.test.ts",
+          {
+            "duration": 3633.027765,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerDealMoment.test.tsx",
+          {
+            "duration": 1002.7760959999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerHallSaves1301.test.ts",
+          {
+            "duration": 68.86085500000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmGameDayView.test.ts",
+          {
+            "duration": 438.249732,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerReportedScorers.test.ts",
+          {
+            "duration": 4211.169196999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/GmDeskMount.test.tsx",
+          {
+            "duration": 95.48428299999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/worldNights.test.ts",
+          {
+            "duration": 466.949476,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmMarketMaxPrice.test.tsx",
+          {
+            "duration": 2898.646231,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/homePersonalReads.test.tsx",
+          {
+            "duration": 7549.202117999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/nbaCareerLifeC.test.ts",
+          {
+            "duration": 19.636432000000013,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/f1DriverSearchNavigation.test.tsx",
+          {
+            "duration": 201.997708,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/phonePanelFocus.test.tsx",
+          {
+            "duration": 877.7198020000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerLoanPlanIntegration.test.ts",
+          {
+            "duration": 946.4393420000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/usCareerRecovery.test.ts",
+          {
+            "duration": 905.632094,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerAutocompleteTouchScroll.test.tsx",
+          {
+            "duration": 528.411845,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficeLazyDesk.test.tsx",
+          {
+            "duration": 977.424509,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerTransferBriefPromise.test.tsx",
+          {
+            "duration": 250.22439199999985,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/storageBlockedBoot.test.tsx",
+          {
+            "duration": 395.490509,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerHallV1Replay.test.ts",
+          {
+            "duration": 2026.952873,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmCalendar.test.ts",
+          {
+            "duration": 52.342340000000036,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerDecisions.test.tsx",
+          {
+            "duration": 135.25462000000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerDirtyMoney.test.tsx",
+          {
+            "duration": 1499.0660110000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/trainingFeedbackMotion.test.tsx",
+          {
+            "duration": 1572.2928900000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerAutocompleteEmptyText.test.tsx",
+          {
+            "duration": 3345.325831,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/euroAccess.test.ts",
+          {
+            "duration": 96.29399699999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerPhoneSeasonBudget.test.ts",
+          {
+            "duration": 69.99087199999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerSaveFence.test.tsx",
+          {
+            "duration": 585.7409740000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/nhlCareerLifeC.test.ts",
+          {
+            "duration": 23.702057999999965,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nba-front-office/NbaFrontOfficeRatingEvidence.test.tsx",
+          {
+            "duration": 857.7377949999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/phonePanelLifeStories.test.tsx",
+          {
+            "duration": 894.780724,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficePromotion.test.tsx",
+          {
+            "duration": 694.4595560000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerCoachingStart.consumer.lifecycle.test.tsx",
+          {
+            "duration": 3686.723475,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nba-front-office/NbaDraftNightRivals.test.tsx",
+          {
+            "duration": 368.38041,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerPendingMoneyGates.test.ts",
+          {
+            "duration": 209.75877400000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/draftPoolFilters.test.tsx",
+          {
+            "duration": 1478.1260619999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerPendingOverallGates.test.ts",
+          {
+            "duration": 103.37397799999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerSearchFailure.test.tsx",
+          {
+            "duration": 466.12218099999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerFarewellOneBanner.test.tsx",
+          {
+            "duration": 382.813852,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/reportDraftLifecycle.test.tsx",
+          {
+            "duration": 2087.176808,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/careerDirtyMoney.test.ts",
+          {
+            "duration": 2840.8338599999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usSeasonCentreScreens.test.tsx",
+          {
+            "duration": 1558.0004350000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerCreationRoll.test.tsx",
+          {
+            "duration": 1117.780656,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerPotentialProgress.test.tsx",
+          {
+            "duration": 206.9449189999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/pitchRestartContinuity.test.tsx",
+          {
+            "duration": 79.07639299999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/guessTheNationFeedback.test.tsx",
+          {
+            "duration": 1303.6936609999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerAppearanceSelection.test.tsx",
+          {
+            "duration": 6864.327657,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerBank.test.ts",
+          {
+            "duration": 1968.9979589999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/seasonCentreWords.test.tsx",
+          {
+            "duration": 437.14389099999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cageGrappleMotion.test.tsx",
+          {
+            "duration": 139.28716100000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaChainFeedback.test.tsx",
+          {
+            "duration": 1317.748086,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonHelp.test.tsx",
+          {
+            "duration": 433.1869110000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerAmbitions.test.ts",
+          {
+            "duration": 98.10194899999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaCourtSelection.test.tsx",
+          {
+            "duration": 635.4338959999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmBracketView.test.ts",
+          {
+            "duration": 22.594502999999918,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficeFullRoster.test.tsx",
+          {
+            "duration": 1129.701455,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerLoyaltyUncut.test.ts",
+          {
+            "duration": 2247.5326649999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerFarewellUi.test.tsx",
+          {
+            "duration": 415.97985300000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerTransferBriefUi.test.tsx",
+          {
+            "duration": 918.3573369999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/dailyReload.test.tsx",
+          {
+            "duration": 6772.466521999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/firstTeam.test.tsx",
+          {
+            "duration": 803.2368240000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/buzzerCourtPresentation.test.tsx",
+          {
+            "duration": 853.9490149999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/arcadeHoldRelease.test.tsx",
+          {
+            "duration": 1374.0868480000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerLoyalty.test.ts",
+          {
+            "duration": 32.73832100000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerEventDeckIntegrity.test.ts",
+          {
+            "duration": 32.09643600000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/hooks/useGameNavbarStats.test.tsx",
+          {
+            "duration": 40.04415000000006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/rebuildPowerUps.test.ts",
+          {
+            "duration": 100.79828299999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cbbRecruitFilters.test.tsx",
+          {
+            "duration": 1035.865475,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubDetailFixtures.test.tsx",
+          {
+            "duration": 636.1885910000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerHigherLowerReveal.test.tsx",
+          {
+            "duration": 33.09051899999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/facilitiesPreview.test.tsx",
+          {
+            "duration": 614.8697060000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/silverwareReveal.test.tsx",
+          {
+            "duration": 1316.900717,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerEraLifeMoney.test.ts",
+          {
+            "duration": 6250.94878,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerReveals.test.tsx",
+          {
+            "duration": 345.79474300000015,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonSetPiecePage.test.tsx",
+          {
+            "duration": 1239.245865,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerGridSearchAccessibility.test.tsx",
+          {
+            "duration": 98.17580900000007,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/connect4ReasonShape.test.tsx",
+          {
+            "duration": 133.19571099999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCoachRetirement.test.tsx",
+          {
+            "duration": 452.54851199999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerSlots.test.ts",
+          {
+            "duration": 431.64326700000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerSavedLoan.test.ts",
+          {
+            "duration": 62.788324999999986,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/perfectSeasonResult.test.tsx",
+          {
+            "duration": 1970.5695500000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerFirstClubs.test.ts",
+          {
+            "duration": 21.349035999999955,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerRetire.test.ts",
+          {
+            "duration": 43.00595700000008,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerOwnClubLevel.test.ts",
+          {
+            "duration": 772.724824,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/dartDraftPool.test.ts",
+          {
+            "duration": 2893.48571,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerProgrammeUi.test.tsx",
+          {
+            "duration": 614.845882,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerBingoLineFeedback.test.tsx",
+          {
+            "duration": 1948.1576309999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerWorldEditor.test.tsx",
+          {
+            "duration": 340.1418749999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/guessFinishClueBoards.test.tsx",
+          {
+            "duration": 757.2010910000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerManagerJobReview.consumer.test.tsx",
+          {
+            "duration": 1334.739558,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/mlbFullRosters.test.tsx",
+          {
+            "duration": 469.0302550000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cageStrikeMotion.test.tsx",
+          {
+            "duration": 99.49967499999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/aussieRulesLeagueBoard.test.tsx",
+          {
+            "duration": 1432.2338840000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerPressSettlementOrder.test.ts",
+          {
+            "duration": 2010.357642,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerMomentKitLift.test.tsx",
+          {
+            "duration": 60.83960300000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/guessFinishChainBoards.test.tsx",
+          {
+            "duration": 775.8879369999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/f1DriverHintPoints.test.tsx",
+          {
+            "duration": 1811.77104,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/arcadeShotFeedback.test.tsx",
+          {
+            "duration": 1364.048035,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/conquestRegionDetails.test.tsx",
+          {
+            "duration": 390.230412,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerMarketSecondTab.test.tsx",
+          {
+            "duration": 652.002704,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/connect4FinishPages.test.tsx",
+          {
+            "duration": 336.28443400000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/worldXiSummary.test.tsx",
+          {
+            "duration": 2062.274379,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerRecruitment.test.ts",
+          {
+            "duration": 662.14735,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/mlb-front-office/MlbGmDesk.test.tsx",
+          {
+            "duration": 645.9390259999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerLifeFollowups.test.ts",
+          {
+            "duration": 87.28483700000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaTrophyTile.test.ts",
+          {
+            "duration": 15.275531,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmBooks.test.ts",
+          {
+            "duration": 20.90783399999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/GmLotteryCard.test.tsx",
+          {
+            "duration": 107.82030899999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerRookieDeal.test.ts",
+          {
+            "duration": 34.272896,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerWorldMoves.test.ts",
+          {
+            "duration": 287.63482999999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/awardsNightSound.test.tsx",
+          {
+            "duration": 135.19617400000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usTrophyTile.test.ts",
+          {
+            "duration": 302.652561,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/cbb-dynasty/CbbDynastyDepth.test.tsx",
+          {
+            "duration": 336.384769,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tennisPlayerReplay.test.tsx",
+          {
+            "duration": 984.018529,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerRecruitmentBaseline.test.tsx",
+          {
+            "duration": 710.584398,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerGridBlurOwnership.test.tsx",
+          {
+            "duration": 605.136926,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerHalftimeLineups.test.tsx",
+          {
+            "duration": 1230.1633629999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/fightGym.test.ts",
+          {
+            "duration": 12.075684000000024,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/defenderCleanSheets.test.tsx",
+          {
+            "duration": 848.116864,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerCoachingStart.test.ts",
+          {
+            "duration": 26.653839000000062,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/usCoachPoaching.test.ts",
+          {
+            "duration": 25.76803099999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerAppearanceOptions.test.tsx",
+          {
+            "duration": 7944.906131000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usProgrammeCardTruth.test.ts",
+          {
+            "duration": 265.71169199999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/SiteMenu.page-chrome.test.tsx",
+          {
+            "duration": 1193.180439,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmGameScore.test.ts",
+          {
+            "duration": 91.27039099999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/reportDetails.test.tsx",
+          {
+            "duration": 1268.0694480000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/academyFilters.test.tsx",
+          {
+            "duration": 585.7091569999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/chainTimelineMotion.test.tsx",
+          {
+            "duration": 251.403588,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/auth/AuthModal.google.test.tsx",
+          {
+            "duration": 355.5770309999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmMadeUpNations.test.ts",
+          {
+            "duration": 273.098345,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerStartOverClears.test.tsx",
+          {
+            "duration": 455.66870700000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCareerAcademy.test.ts",
+          {
+            "duration": 16.033014000000037,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonLoads.test.tsx",
+          {
+            "duration": 43.36559999999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerEraCards.test.ts",
+          {
+            "duration": 422.8701410000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cookieConsentStorage.test.tsx",
+          {
+            "duration": 291.75019499999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerEraLoad.test.tsx",
+          {
+            "duration": 1193.814832,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerRecordedStats.test.tsx",
+          {
+            "duration": 67.08477300000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubDetailCurrentRoster.test.tsx",
+          {
+            "duration": 497.48336299999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerOwnTransferLog.test.tsx",
+          {
+            "duration": 891.684505,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/leagueSlate.test.ts",
+          {
+            "duration": 333.7998130000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerClubStartingElevenUi.test.tsx",
+          {
+            "duration": 325.10389,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerShootoutTile.test.tsx",
+          {
+            "duration": 314.687904,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/helpConsentFocus.test.tsx",
+          {
+            "duration": 469.54100399999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/supabaseClientBlockedStorage.test.ts",
+          {
+            "duration": 53.04081600000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerShootoutOrder.test.ts",
+          {
+            "duration": 26.464553000000024,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/seasonResume.test.ts",
+          {
+            "duration": 8.747602000000029,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerBingoWorldCupAlias.test.ts",
+          {
+            "duration": 32.788531999999975,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/frontOfficePostseason.test.ts",
+          {
+            "duration": 87.05152300000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/saveFence.test.ts",
+          {
+            "duration": 6.071277000000009,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerSeasonOpponents.test.ts",
+          {
+            "duration": 86.84688399999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerPressRoomUi.test.tsx",
+          {
+            "duration": 288.133821,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tradeTalksMotion.test.tsx",
+          {
+            "duration": 246.62206400000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerSearchKeyboard.test.tsx",
+          {
+            "duration": 167.46908900000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerWorldSettle.test.ts",
+          {
+            "duration": 8202.064730999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/hooks/useDailyPuzzleIdentity.test.ts",
+          {
+            "duration": 34.459288000000015,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmGameLog.test.ts",
+          {
+            "duration": 10.371286999999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerInternationals.test.ts",
+          {
+            "duration": 10.194500000000062,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/safeStorageQuota.test.ts",
+          {
+            "duration": 13.353946000000008,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerSaveSize.test.tsx",
+          {
+            "duration": 539.333783,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/constructorFeedback.test.tsx",
+          {
+            "duration": 447.554135,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerSearchLocal.test.ts",
+          {
+            "duration": 8.721362,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/appearanceSportCopy.test.tsx",
+          {
+            "duration": 2643.554683,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/GmEarnedDraftScreen.test.tsx",
+          {
+            "duration": 26.844577000000072,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerAwardReveal.test.tsx",
+          {
+            "duration": 70.51995399999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nflTruthRules1104.test.ts",
+          {
+            "duration": 266.022314,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerStartWait.test.tsx",
+          {
+            "duration": 637.1118590000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/storageNoticeFollows.test.tsx",
+          {
+            "duration": 55.50951599999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerCoachingChooser.test.tsx",
+          {
+            "duration": 285.676513,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/SiteMenu.test.tsx",
+          {
+            "duration": 1136.154136,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/consentPurposeGates.test.ts",
+          {
+            "duration": 43.20038999999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerShootoutResults.test.ts",
+          {
+            "duration": 593.2790399999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/brokenSaveRecovery.test.ts",
+          {
+            "duration": 5.170435999999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmXp.test.ts",
+          {
+            "duration": 167.498692,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/footlePracticeRun.test.ts",
+          {
+            "duration": 17.992666999999983,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonBadgeTurns.test.tsx",
+          {
+            "duration": 27.965733,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gmPostseason.test.ts",
+          {
+            "duration": 6.012168000000031,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/profileInitials1446.test.tsx",
+          {
+            "duration": 645.0049099999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerCoachingTransaction.test.tsx",
+          {
+            "duration": 44.01216699999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/extensionResponseMotion.test.tsx",
+          {
+            "duration": 305.28310899999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerBingoLoad.test.tsx",
+          {
+            "duration": 521.060137,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/frontOfficeGameDay.test.ts",
+          {
+            "duration": 50.773807999999974,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/rulesGateConsentFocus.test.tsx",
+          {
+            "duration": 446.63915600000007,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerTruthDigest.test.ts",
+          {
+            "duration": 28485.436059,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usPostseasonFormat.test.ts",
+          {
+            "duration": 10.247638999999936,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerSmallItems1104.test.ts",
+          {
+            "duration": 166.387607,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/rivalryChoiceBoard.test.tsx",
+          {
+            "duration": 316.756984,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nhl-front-office/NhlWaiverReceipt.test.tsx",
+          {
+            "duration": 193.41951699999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerManagerFace.test.tsx",
+          {
+            "duration": 1435.3063499999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerSeasonCalendarUi.test.tsx",
+          {
+            "duration": 519.270743,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerRecords.test.ts",
+          {
+            "duration": 6.247353000000089,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/cmMatchDisplay.test.ts",
+          {
+            "duration": 4432.134156,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaAwardDecisionLift.test.ts",
+          {
+            "duration": 244.43332499999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/skipTarget.test.tsx",
+          {
+            "duration": 9727.594938,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerWorldMovesNamesakes.test.ts",
+          {
+            "duration": 200.41699099999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nhl-front-office/NhlTradeLists.test.tsx",
+          {
+            "duration": 237.47395999999992,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/GmInboxPanel.test.tsx",
+          {
+            "duration": 84.49554799999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCareerSave.test.ts",
+          {
+            "duration": 152.656478,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/gridNamesakes.test.ts",
+          {
+            "duration": 83.61296599999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/idleArenaPerks.test.ts",
+          {
+            "duration": 11.552671000000032,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nba-front-office/NbaTradeLists.test.tsx",
+          {
+            "duration": 267.88376000000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/calendarCurrentDate.test.tsx",
+          {
+            "duration": 2031.4415099999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerBadgeMotion.test.tsx",
+          {
+            "duration": 95.35575899999992,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerHelpRules1104.test.tsx",
+          {
+            "duration": 1026.040009,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/leaderboardEligibility.test.tsx",
+          {
+            "duration": 353.1867679999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/belgianOpponentLabelsLeague.test.ts",
+          {
+            "duration": 10.397686000000022,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/liveScoresOwnership.test.tsx",
+          {
+            "duration": 34.10765900000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/keeperTraining.test.ts",
+          {
+            "duration": 5.028761000000031,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/consentSynchronization1442.test.tsx",
+          {
+            "duration": 187.21436800000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerLifeChoicePreviews.test.ts",
+          {
+            "duration": 26.25376300000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerManagerJobReview.transaction.test.tsx",
+          {
+            "duration": 57.79852499999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmSavePointsScreen.test.tsx",
+          {
+            "duration": 435.26919499999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/internationalPanelTruth.test.tsx",
+          {
+            "duration": 79.99196199999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nba-front-office/NbaSeasonStats.test.tsx",
+          {
+            "duration": 432.020038,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/gridCellMotion.test.tsx",
+          {
+            "duration": 542.5495249999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerNoSack.test.tsx",
+          {
+            "duration": 846.790018,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerHotSeatCarryOnCard.test.tsx",
+          {
+            "duration": 839.7992780000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/statDetectiveScope.test.tsx",
+          {
+            "duration": 395.15739799999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/GmLineupPanel.test.tsx",
+          {
+            "duration": 111.59410000000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/profile/AccountPrivacy.test.tsx",
+          {
+            "duration": 309.7033,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/freshBuildReloadWait.test.ts",
+          {
+            "duration": 24.939956999999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/fightCareerLifeBoard.test.tsx",
+          {
+            "duration": 136.15342199999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerHubLines.test.ts",
+          {
+            "duration": 7.168925999999942,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/authModalLoading1442.test.tsx",
+          {
+            "duration": 357.338407,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerAutocompleteInteraction.test.tsx",
+          {
+            "duration": 169.16959699999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerBoardVerdict.test.ts",
+          {
+            "duration": 3.9977329999999824,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/worldXiRespins.test.tsx",
+          {
+            "duration": 213.48669000000007,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/gameReportPlacement.test.tsx",
+          {
+            "duration": 132.474082,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/aussieRulesLeague.test.ts",
+          {
+            "duration": 1629.658286,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerEraNationalities.test.ts",
+          {
+            "duration": 358.240647,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/dailyMenuResume.test.tsx",
+          {
+            "duration": 545.5726579999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerMarketBoard.test.tsx",
+          {
+            "duration": 837.072819,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/firstTouchDrill.test.ts",
+          {
+            "duration": 166.62654299999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/headerAccountLoading1442.test.tsx",
+          {
+            "duration": 501.89061600000014,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usRivalOldSavesB.test.ts",
+          {
+            "duration": 13.397681000000034,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usCareerShopCap.test.ts",
+          {
+            "duration": 850.510845,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/historicalOpponentLabels.test.ts",
+          {
+            "duration": 76.10465499999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerAdoption.test.ts",
+          {
+            "duration": 329.16545899999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/fightCareerRetireBoard.test.tsx",
+          {
+            "duration": 929.699638,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerWorldTruth.test.ts",
+          {
+            "duration": 119.05351100000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerWorldCompsReload.test.ts",
+          {
+            "duration": 1241.308587,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/idleArenaTrophyRoom.test.tsx",
+          {
+            "duration": 955.6603930000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/hooks/useConnectionsLoss.test.ts",
+          {
+            "duration": 88.14802799999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usSeasonSlate.test.ts",
+          {
+            "duration": 19.260302000000024,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/momentHost.test.tsx",
+          {
+            "duration": 41.37706099999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerRecords.test.tsx",
+          {
+            "duration": 288.053521,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/faceOffDeadline.test.tsx",
+          {
+            "duration": 76.56574999999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/gameSeoIntroLinks.test.tsx",
+          {
+            "duration": 140.605687,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/xiWingbackFit.test.ts",
+          {
+            "duration": 4.304266000000041,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/useSaveFenceWatch.test.tsx",
+          {
+            "duration": 26.762901999999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/perfectSeasonVerdict.test.tsx",
+          {
+            "duration": 131.189035,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soundToggle.test.tsx",
+          {
+            "duration": 302.01554,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerSeasonCalendar.test.ts",
+          {
+            "duration": 5.295544000000007,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/footleResultCurrency.test.tsx",
+          {
+            "duration": 313.212714,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usRivalOldSaves.test.ts",
+          {
+            "duration": 27.824506999999983,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/seasonFamilySummary.test.ts",
+          {
+            "duration": 6.474016000000006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/consentWithdrawal1442.test.ts",
+          {
+            "duration": 7.407787000000042,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerHotSeatCarryOn.test.ts",
+          {
+            "duration": 252.63290700000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/hooks/useConnectionsShake.test.ts",
+          {
+            "duration": 68.73767899999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office/FrontOfficeRatingEvidence.test.tsx",
+          {
+            "duration": 466.4044550000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/keeperTrainingPanel.test.tsx",
+          {
+            "duration": 893.310927,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/draftWinnerFeedback.test.tsx",
+          {
+            "duration": 224.15153700000008,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerReportAge.test.ts",
+          {
+            "duration": 896.9415379999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/fightCareerLife.test.ts",
+          {
+            "duration": 33.076205000000016,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/freshBuildOptionalChunk.test.ts",
+          {
+            "duration": 15.215799000000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nba-front-office/NbaRotationReset.test.tsx",
+          {
+            "duration": 731.286243,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/trailingSlashRoutes.test.tsx",
+          {
+            "duration": 129.11800200000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerCoachingStart.consumer.test.tsx",
+          {
+            "duration": 946.115513,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/consentPrivacy1442.test.ts",
+          {
+            "duration": 54.373553000000015,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerLifeChainPackedSave.test.ts",
+          {
+            "duration": 65.73652800000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerBingoRodriHonour.test.ts",
+          {
+            "duration": 10.62997699999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/lineupPickerFocus.test.tsx",
+          {
+            "duration": 1094.660001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerBingoReport.test.tsx",
+          {
+            "duration": 255.2638129999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/guestHandleVisit.test.tsx",
+          {
+            "duration": 175.40677899999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/lineupBuilderHistoryRead.test.tsx",
+          {
+            "duration": 18.887947999999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/cfb-dynasty/CfbDynastyDepth.test.tsx",
+          {
+            "duration": 221.069567,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/rolesBrokenPromises.test.tsx",
+          {
+            "duration": 96.47826200000009,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/hofOrBustVoteOnce.test.tsx",
+          {
+            "duration": 73.24412499999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/drillBoardMarkup.test.tsx",
+          {
+            "duration": 520.5929570000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerAutocompleteHighlightScroll.test.tsx",
+          {
+            "duration": 188.76011599999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/analyticsPausedStatus1445.test.tsx",
+          {
+            "duration": 128.16575599999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerWorldEditorPage.test.tsx",
+          {
+            "duration": 1274.600582,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerLoyalty.review.test.tsx",
+          {
+            "duration": 250.12062100000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCareerLeagueBand.test.ts",
+          {
+            "duration": 86.30443599999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/appearanceCategoryScroll.test.tsx",
+          {
+            "duration": 1402.240273,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerSeasonAwards1525.test.ts",
+          {
+            "duration": 41.84796600000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/cfb-dynasty/CfbDynastyBoard.test.tsx",
+          {
+            "duration": 201.893823,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCupOpening.test.ts",
+          {
+            "duration": 43.42258100000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonLatestSeason.test.tsx",
+          {
+            "duration": 221.23867900000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clueGameHelp.test.tsx",
+          {
+            "duration": 320.126491,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/saveMovedNotice.test.tsx",
+          {
+            "duration": 129.845097,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/authModalFocus.test.tsx",
+          {
+            "duration": 733.046098,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerRowButtons.test.tsx",
+          {
+            "duration": 63.053288000000066,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/usFranchiseYears.test.ts",
+          {
+            "duration": 3.099094999999977,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/gmBracketLedger.test.ts",
+          {
+            "duration": 16.34573899999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerOfferReviewAgeRule.test.tsx",
+          {
+            "duration": 81.16788400000007,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerQuickSimLegs.test.tsx",
+          {
+            "duration": 332.21657099999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/useArrivalTop.test.tsx",
+          {
+            "duration": 31.025476999999967,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/baseballCareerGuess.test.tsx",
+          {
+            "duration": 40.63099699999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/myCareerRestore.test.tsx",
+          {
+            "duration": 249.14897400000007,
+            "failed": false
+          }
+        ],
+        [
+          ":src/hooks/useTransferPath.test.ts",
+          {
+            "duration": 142.55505299999993,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/nba-front-office/NbaRosterBoxTipOff.test.tsx",
+          {
+            "duration": 137.34545400000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/soccerCareerLeagueSeasons.test.ts",
+          {
+            "duration": 13.221514999999954,
+            "failed": false
+          }
+        ],
+        [
+          ":src/hooks/useClubManager.test.ts",
+          {
+            "duration": 1755.038638,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerManagerPendingRetire.test.tsx",
+          {
+            "duration": 337.30337499999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/idleFloaterTimers.test.tsx",
+          {
+            "duration": 15.336071999999945,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/dailyRecord.test.ts",
+          {
+            "duration": 4.4511380000000145,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/toastClearsCookieBanner.test.tsx",
+          {
+            "duration": 93.85394499999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/f1ConstructorGuideScore.test.tsx",
+          {
+            "duration": 134.13562100000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerSeasonAvailability.test.ts",
+          {
+            "duration": 63.92909199999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmReportBoardWord.test.tsx",
+          {
+            "duration": 715.8623150000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerMoneyLineGrouped.test.ts",
+          {
+            "duration": 6.031526999999983,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerOfferConfirm.test.tsx",
+          {
+            "duration": 453.0810569999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/playerBingoBirthYear.test.ts",
+          {
+            "duration": 9.233507000000031,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/GmSeatCard.test.tsx",
+          {
+            "duration": 41.839102000000025,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/draftRosterMotion.test.tsx",
+          {
+            "duration": 103.35379999999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/reportContext.test.ts",
+          {
+            "duration": 31.54740300000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaStatLineColumns.test.ts",
+          {
+            "duration": 40.271600000000035,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/SiteMenu.escape-loading.test.tsx",
+          {
+            "duration": 195.464514,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmMinuteLabel.test.ts",
+          {
+            "duration": 3.2037220000000275,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerHalftimeLineupsSubsRule.test.ts",
+          {
+            "duration": 73.76431600000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/intlFormatHistory.test.ts",
+          {
+            "duration": 5.200359999999989,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/routeErrorHeldSave.test.tsx",
+          {
+            "duration": 43.32758999999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/gridCellLayout.test.tsx",
+          {
+            "duration": 376.63493099999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/hooks/useGame.test.ts",
+          {
+            "duration": 192.50037500000008,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/eventChoiceAfterReload.test.ts",
+          {
+            "duration": 18.483518000000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerChanceWheelUi.test.tsx",
+          {
+            "duration": 259.569606,
+            "failed": false
+          }
+        ],
+        [
+          ":src/hooks/useGameCompletion.test.ts",
+          {
+            "duration": 19.707768999999928,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubDetailOwnClub.test.tsx",
+          {
+            "duration": 183.47642699999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/listedAges.test.ts",
+          {
+            "duration": 4.916881999999987,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/useGmEarnedDraft.test.tsx",
+          {
+            "duration": 13.71995800000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/buildXiClubYearSetup.test.tsx",
+          {
+            "duration": 572.26763,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerManagerJobReviewMarket.test.ts",
+          {
+            "duration": 480.7479169999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerEraPicker.test.tsx",
+          {
+            "duration": 473.290265,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/tycoonSetPieceBoard.test.tsx",
+          {
+            "duration": 299.268636,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerCoachingStartEra.test.ts",
+          {
+            "duration": 393.5396410000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerManagerJobReview.card.test.tsx",
+          {
+            "duration": 99.81596200000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/helpDialogFocus.test.tsx",
+          {
+            "duration": 360.461996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/fetchFootlePlayerPool.test.ts",
+          {
+            "duration": 11.916852000000006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/SiteMenu.lazy-loading.test.tsx",
+          {
+            "duration": 212.92378499999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/us-career/InboxPanel.test.tsx",
+          {
+            "duration": 56.000850000000014,
+            "failed": false
+          }
+        ],
+        [
+          ":src/hooks/useConquestNba.test.tsx",
+          {
+            "duration": 676.069801,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmSavePointsDoor.test.tsx",
+          {
+            "duration": 418.60894300000007,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerBallonPoolNameClash.test.tsx",
+          {
+            "duration": 177.168,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/rankShift.test.ts",
+          {
+            "duration": 98.20214199999998,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/fightPromoter.test.ts",
+          {
+            "duration": 23.094516999999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerBallonPoolRetirement.test.tsx",
+          {
+            "duration": 102.75768900000003,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/seasonReplays.test.tsx",
+          {
+            "duration": 4.616107000000056,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/GmBooksPanel.test.tsx",
+          {
+            "duration": 78.29912000000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmSavePointsHook.test.tsx",
+          {
+            "duration": 402.4076759999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/managerPenaltyMarkers.test.tsx",
+          {
+            "duration": 98.59118000000001,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/SiteMenu.escape-failure.test.tsx",
+          {
+            "duration": 130.39212799999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/data/pollFixtures.test.ts",
+          {
+            "duration": 17.711866999999984,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/home/PollOfTheDay.test.tsx",
+          {
+            "duration": 118.58350899999994,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/cmFreeAgentLegacyIdentity.test.ts",
+          {
+            "duration": 71.13759400000004,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/nbaIntlResultLines.test.tsx",
+          {
+            "duration": 43.07006999999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerSubsRule.test.ts",
+          {
+            "duration": 6.926610000000096,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/perfectSeasonReport.test.tsx",
+          {
+            "duration": 119.17076599999996,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/clubManagerGoalWeight.test.ts",
+          {
+            "duration": 33.328776000000005,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerSavePackedReaders.test.tsx",
+          {
+            "duration": 89.92518199999995,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/ownerMandateMotion.test.tsx",
+          {
+            "duration": 71.26827200000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerAwardGeneration.test.ts",
+          {
+            "duration": 76.295841,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerPuskasYear1523.test.ts",
+          {
+            "duration": 6.527827000000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerBallonPoolReadAsAbsent.test.tsx",
+          {
+            "duration": 788.911837,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/SiteMenu.load-failure.test.tsx",
+          {
+            "duration": 82.64221199999997,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/careerWallShotFriendly.test.ts",
+          {
+            "duration": 70.43178699999999,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/soccerCareerLoyaltyView.test.ts",
+          {
+            "duration": 24.001960000000054,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/reservedNames.test.ts",
+          {
+            "duration": 10.658200000000022,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/liveScoresTransport.test.ts",
+          {
+            "duration": 10.759221999999966,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/legalAiTransparency1442.test.tsx",
+          {
+            "duration": 140.73562800000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/components/front-office-shared/DraftNightCard.test.tsx",
+          {
+            "duration": 11.574455,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerShootoutDisplay.test.tsx",
+          {
+            "duration": 39.772986999999944,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/careerChanceWheel.test.ts",
+          {
+            "duration": 4.578691000000049,
+            "failed": false
+          }
+        ],
+        [
+          ":src/pages/NotFound.test.tsx",
+          {
+            "duration": 82.52478200000002,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/gridRarity.test.ts",
+          {
+            "duration": 2.9639700000000175,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/clubManagerShootoutCopy.test.tsx",
+          {
+            "duration": 28.21098100000006,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/pollDayEt.test.ts",
+          {
+            "duration": 16.257372999999973,
+            "failed": false
+          }
+        ],
+        [
+          ":src/data/gameRegistry.test.ts",
+          {
+            "duration": 2.6204309999999964,
+            "failed": false
+          }
+        ],
+        [
+          ":src/test/example.test.ts",
+          {
+            "duration": 1.9392710000000193,
+            "failed": false
+          }
+        ],
+        [
+          ":src/lib/accountPrivacy.test.ts",
+          {
+            "duration": 12.602407,
+            "failed": false
+          }
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "actualSource": "50394b38cbce7ef47041116059f9c9802ce3fe1a",
+  "baselineSource": "43f611ff12d30901f089e234001bb3b54649b0ef",
+  "actualSHA256": "12ceda31fabd47a6aa9f0d1154d1ae37c3be9bca1596b81a4c73ed32425484f9",
+  "baselineSHA256": "12ceda31fabd47a6aa9f0d1154d1ae37c3be9bca1596b81a4c73ed32425484f9",
+  "node": 823,
+  "browser": 199,
+  "fullGroupsEqual": true,
+  "sourceOnlyNoHarnessExecution": true
+}
