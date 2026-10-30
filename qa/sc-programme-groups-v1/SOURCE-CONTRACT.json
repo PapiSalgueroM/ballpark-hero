@@ -1,0 +1,162 @@
+{
+  "schema": 1,
+  "status": "DIAGNOSTIC_ONLY_NO_GUARD_OR_PRODUCT_REPAIR",
+  "product": "78e7b2ec9ea0865da3029275c060104d2668117b",
+  "productTree": "96fb865e8e38462d96f51a858150ba1be5178d92",
+  "productFiles": 5456,
+  "proofFiles": 5459,
+  "branch": "codex/sc-programme-groups-diagnostic-20261030",
+  "proofAdds": [
+    ".github/workflows/sc-programme-groups.yml",
+    "qa/sc-programme-groups-v1/SOURCE-CONTRACT.json",
+    "scripts/qa/diagnoseSoccerProgrammeGroups.mjs"
+  ],
+  "originalProgramme": {
+    "path": "scripts/simCareerProgramme.mjs",
+    "gitBlob": "11bff46e6f9415d0760f10d2a254cb74d1dc1b7d",
+    "sha256": "4348db850efb1208a3d6238d4b812751ff94369f0140356caf2597b28f55c847",
+    "bytes": 27175
+  },
+  "fixture": {
+    "path": "scripts/data/careerLeagueWorldSaves1100.json",
+    "gitBlob": "81425f731297f0ff72fc4e163dfe1a4cb86814ab",
+    "sha256": "1c2ac7441402ad6db4916c844181b869a3550726c7e0afed4cce194f5e6ca8ef",
+    "bytes": 102331,
+    "ids": [
+      "ere",
+      "cha",
+      "sco",
+      "her",
+      "nan"
+    ],
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ]
+  },
+  "groups": [
+    {
+      "id": "pool",
+      "path": "src/data/soccerCareerClubPool.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 43978,
+        "sha256": "735d636cb22c14794692fef45e22323fe85d3c38cbbdbaa1df1ccc7aba961bd8",
+        "gitBlob": "15fe51c1cfa9ffbd43bd86576ad7bbc3bea8840c"
+      },
+      "candidate": {
+        "bytes": 49030,
+        "sha256": "5e565223239c8bb5ea8f5be3d2ecfb5c72ed026d3598031fcb5221f265e01d58",
+        "gitBlob": "83e9df78441c0d16509f80b8ec0bfbadb0f08f26"
+      },
+      "spans": [
+        {
+          "before": "   premier, championship, laliga, brasileirao, seriea, bundesliga,\n   ligue1, eredivisie, saudi, mlsEast, mlsWest, primeira, scottish,\n   superlig, bundesliga2, proleague, austria, greece, denmark,\n   switzerland, croatia, ligamx, aleague.\n   Rosters baked 2026-10-07.\n   The file has no imports on purpose, so the Soccer Career page never pulls\n   Club Manager into its bundle. */\n",
+          "after": "   premier, championship, laliga, brasileirao, seriea, bundesliga,\n   ligue1, eredivisie, saudi, mlsEast, mlsWest, primeira, scottish,\n   superlig, bundesliga2, proleague, austria, greece, denmark,\n   switzerland, croatia, ligamx, aleague, serieb, ligue2.\n   Rosters baked 2026-10-07.\n   The file has no imports on purpose, so the Soccer Career page never pulls\n   Club Manager into its bundle. */\n",
+          "count": 1
+        },
+        {
+          "before": "  { id: \"cm-perth-glory\", name: \"Perth Glory\", country: \"Australia\", tier: 4, color: \"#5c2d91\", league: \"A-League\" },\n  { id: \"cm-sydney-fc\", name: \"Sydney FC\", country: \"Australia\", tier: 4, color: \"#6cabdd\", league: \"A-League\" },\n  { id: \"cm-western-sydney-wanderers\", name: \"Western Sydney Wanderers\", country: \"Australia\", tier: 4, color: \"#d02128\", league: \"A-League\" },\n];\n\n/** Every generated league as the career knows it (hand clubs included),\n",
+          "after": "  { id: \"cm-perth-glory\", name: \"Perth Glory\", country: \"Australia\", tier: 4, color: \"#5c2d91\", league: \"A-League\" },\n  { id: \"cm-sydney-fc\", name: \"Sydney FC\", country: \"Australia\", tier: 4, color: \"#6cabdd\", league: \"A-League\" },\n  { id: \"cm-western-sydney-wanderers\", name: \"Western Sydney Wanderers\", country: \"Australia\", tier: 4, color: \"#d02128\", league: \"A-League\" },\n  { id: \"cm-cremonese\", name: \"Cremonese\", country: \"Italy\", tier: 4, color: \"#e3546c\", league: \"Serie B\" },\n  { id: \"cm-verona\", name: \"Verona\", country: \"Italy\", tier: 4, color: \"#ffdd00\", league: \"Serie B\" },\n  { id: \"cm-pisa\", name: \"Pisa\", country: \"Italy\", tier: 4, color: \"#3a6fc4\", league: \"Serie B\" },\n  { id: \"cm-avellino\", name: \"Avellino\", country: \"Italy\", tier: 4, color: \"#0a7040\", league: \"Serie B\" },\n  { id: \"cm-carrarese\", name: \"Carrarese\", country: \"Italy\", tier: 4, color: \"#f7d417\", league: \"Serie B\" },\n  { id: \"cm-catanzaro\", name: \"Catanzaro\", country: \"Italy\", tier: 4, color: \"#d02128\", league: \"Serie B\" },\n  { id: \"cm-cesena\", name: \"Cesena\", country: \"Italy\", tier: 4, color: \"#d5d5d5\", league: \"Serie B\" },\n  { id: \"cm-empoli\", name: \"Empoli\", country: \"Italy\", tier: 4, color: \"#1a5dad\", league: \"Serie B\" },\n  { id: \"cm-entella\", name: \"Entella\", country: \"Italy\", tier: 4, color: \"#87d8f7\", league: \"Serie B\" },\n  { id: \"cm-juve-stabia\", name: \"Juve Stabia\", country: \"Italy\", tier: 4, color: \"#f7d417\", league: \"Serie B\" },\n  { id: \"cm-mantova\", name: \"Mantova\", country: \"Italy\", tier: 4, color: \"#d02128\", league: \"Serie B\" },\n  { id: \"cm-modena\", name: \"Modena\", country: \"Italy\", tier: 4, color: \"#f7d417\", league: \"Serie B\" },\n  { id: \"cm-padova\", name: \"Padova\", country: \"Italy\", tier: 4, color: \"#d02128\", league: \"Serie B\" },\n  { id: \"cm-palermo\", name: \"Palermo\", country: \"Italy\", tier: 4, color: \"#e75ba5\", league: \"Serie B\" },\n  { id: \"cm-sampdoria\", name: \"Sampdoria\", country: \"Italy\", tier: 4, color: \"#1b5497\", league: \"Serie B\" },\n  { id: \"cm-sudtirol\", name: \"Sudtirol\", country: \"Italy\", tier: 4, color: \"#d02128\", league: \"Serie B\" },\n  { id: \"cm-vicenza\", name: \"Vicenza\", country: \"Italy\", tier: 4, color: \"#d02128\", league: \"Serie B\" },\n  { id: \"cm-arezzo\", name: \"Arezzo\", country: \"Italy\", tier: 4, color: \"#7d1c2a\", league: \"Serie B\" },\n  { id: \"cm-benevento\", name: \"Benevento\", country: \"Italy\", tier: 4, color: \"#f5d800\", league: \"Serie B\" },\n  { id: \"cm-ascoli\", name: \"Ascoli\", country: \"Italy\", tier: 4, color: \"#c9c9c9\", league: \"Serie B\" },\n  { id: \"cm-metz\", name: \"Metz\", country: \"France\", tier: 4, color: \"#a01d3c\", league: \"Ligue 2\" },\n  { id: \"cm-saint-etienne\", name: \"Saint-Etienne\", country: \"France\", tier: 4, color: \"#0a7040\", league: \"Ligue 2\" },\n  { id: \"cm-red-star-fc\", name: \"Red Star FC\", country: \"France\", tier: 4, color: \"#0a7040\", league: \"Ligue 2\" },\n  { id: \"cm-reims\", name: \"Reims\", country: \"France\", tier: 4, color: \"#d02128\", league: \"Ligue 2\" },\n  { id: \"cm-montpellier\", name: \"Montpellier\", country: \"France\", tier: 4, color: \"#1b458f\", league: \"Ligue 2\" },\n  { id: \"cm-nancy\", name: \"Nancy\", country: \"France\", tier: 4, color: \"#d02128\", league: \"Ligue 2\" },\n  { id: \"cm-annecy\", name: \"Annecy\", country: \"France\", tier: 4, color: \"#d02128\", league: \"Ligue 2\" },\n  { id: \"cm-sochaux\", name: \"Sochaux\", country: \"France\", tier: 4, color: \"#f7d417\", league: \"Ligue 2\" },\n  { id: \"cm-dijon\", name: \"Dijon\", country: \"France\", tier: 4, color: \"#d02128\", league: \"Ligue 2\" },\n  { id: \"cm-pau\", name: \"Pau\", country: \"France\", tier: 4, color: \"#f7d417\", league: \"Ligue 2\" },\n  { id: \"cm-guingamp\", name: \"Guingamp\", country: \"France\", tier: 4, color: \"#d02128\", league: \"Ligue 2\" },\n  { id: \"cm-dunkerque\", name: \"Dunkerque\", country: \"France\", tier: 4, color: \"#1b458f\", league: \"Ligue 2\" },\n  { id: \"cm-grenoble\", name: \"Grenoble\", country: \"France\", tier: 4, color: \"#1b458f\", league: \"Ligue 2\" },\n  { id: \"cm-rodez\", name: \"Rodez\", country: \"France\", tier: 4, color: \"#d02128\", league: \"Ligue 2\" },\n  { id: \"cm-clermont\", name: \"Clermont\", country: \"France\", tier: 4, color: \"#d02128\", league: \"Ligue 2\" },\n  { id: \"cm-boulogne\", name: \"Boulogne\", country: \"France\", tier: 4, color: \"#d02128\", league: \"Ligue 2\" },\n  { id: \"cm-laval\", name: \"Laval\", country: \"France\", tier: 4, color: \"#ff6600\", league: \"Ligue 2\" },\n];\n\n/** Every generated league as the career knows it (hand clubs included),\n",
+          "count": 1
+        },
+        {
+          "before": "  \"HNL\": [[\"Dinamo Zagreb\"], [\"Hajduk Split\"], [\"Gorica\", \"Istra 1961\", \"Lokomotiva Zagreb\", \"Osijek\", \"Rijeka\", \"Rudes\", \"Slaven Belupo\", \"Varazdin\"]],\n  \"Liga MX\": [[\"Tigres UANL\"], [\"Monterrey\"], [\"Club America\"], [\"Toluca\"], [\"Cruz Azul\"], [\"Chivas\"], [\"Leon\"], [\"Pumas\"], [\"Necaxa\"], [\"Atletico San Luis\"], [\"FC Juarez\"], [\"Pachuca\"], [\"Atlante\", \"Atlas\", \"Puebla\", \"Queretaro\", \"Santos Laguna\", \"Tijuana\"]],\n  \"A-League\": [[\"Adelaide United\"], [\"Melbourne City\"], [\"Sydney FC\"], [\"Newcastle Jets\"], [\"Auckland FC\"], [\"Macarthur FC\"], [\"Melbourne Victory\"], [\"Perth Glory\"], [\"Wellington Phoenix\"], [\"Western Sydney Wanderers\"], [\"Brisbane Roar\"], [\"Central Coast Mariners\"]],\n};\n\n/** The first season (start year) the game offers a generated club, for the\n",
+          "after": "  \"HNL\": [[\"Dinamo Zagreb\"], [\"Hajduk Split\"], [\"Gorica\", \"Istra 1961\", \"Lokomotiva Zagreb\", \"Osijek\", \"Rijeka\", \"Rudes\", \"Slaven Belupo\", \"Varazdin\"]],\n  \"Liga MX\": [[\"Tigres UANL\"], [\"Monterrey\"], [\"Club America\"], [\"Toluca\"], [\"Cruz Azul\"], [\"Chivas\"], [\"Leon\"], [\"Pumas\"], [\"Necaxa\"], [\"Atletico San Luis\"], [\"FC Juarez\"], [\"Pachuca\"], [\"Atlante\", \"Atlas\", \"Puebla\", \"Queretaro\", \"Santos Laguna\", \"Tijuana\"]],\n  \"A-League\": [[\"Adelaide United\"], [\"Melbourne City\"], [\"Sydney FC\"], [\"Newcastle Jets\"], [\"Auckland FC\"], [\"Macarthur FC\"], [\"Melbourne Victory\"], [\"Perth Glory\"], [\"Wellington Phoenix\"], [\"Western Sydney Wanderers\"], [\"Brisbane Roar\"], [\"Central Coast Mariners\"]],\n  \"Serie B\": [[\"Pisa\"], [\"Verona\"], [\"Arezzo\", \"Ascoli\", \"Avellino\", \"Benevento\", \"Carrarese\", \"Catanzaro\", \"Cesena\", \"Cremonese\", \"Empoli\", \"Entella\", \"Juve Stabia\", \"Mantova\", \"Modena\", \"Padova\", \"Palermo\", \"Sampdoria\", \"Sudtirol\", \"Vicenza\"]],\n  \"Ligue 2\": [[\"Nantes\"], [\"Saint-Etienne\"], [\"Reims\"], [\"Annecy\", \"Boulogne\", \"Clermont\", \"Dijon\", \"Dunkerque\", \"Grenoble\", \"Guingamp\", \"Laval\", \"Metz\", \"Montpellier\", \"Nancy\", \"Pau\", \"Red Star FC\", \"Rodez\", \"Sochaux\"]],\n};\n\n/** The first season (start year) the game offers a generated club, for the\n",
+          "count": 1
+        },
+        {
+          "before": "  \"Necaxa\": 2026, \"Puebla\": 2026, \"Queretaro\": 2026, \"Tijuana\": 2026, \"FC Juarez\": 2026, \"Atletico San Luis\": 2026,\n  \"Atlante\": 2026, \"Adelaide United\": 2026, \"Brisbane Roar\": 2026, \"Central Coast Mariners\": 2026,\n  \"Macarthur FC\": 2026, \"Melbourne City\": 2026, \"Newcastle Jets\": 2026, \"Perth Glory\": 2026, \"Sydney FC\": 2026,\n  \"Western Sydney Wanderers\": 2026,\n};\n",
+          "after": "  \"Necaxa\": 2026, \"Puebla\": 2026, \"Queretaro\": 2026, \"Tijuana\": 2026, \"FC Juarez\": 2026, \"Atletico San Luis\": 2026,\n  \"Atlante\": 2026, \"Adelaide United\": 2026, \"Brisbane Roar\": 2026, \"Central Coast Mariners\": 2026,\n  \"Macarthur FC\": 2026, \"Melbourne City\": 2026, \"Newcastle Jets\": 2026, \"Perth Glory\": 2026, \"Sydney FC\": 2026,\n  \"Western Sydney Wanderers\": 2026, \"Cremonese\": 2026, \"Verona\": 2026, \"Pisa\": 2026, \"Avellino\": 2026,\n  \"Carrarese\": 2026, \"Catanzaro\": 2026, \"Cesena\": 2026, \"Empoli\": 2026, \"Entella\": 2026, \"Juve Stabia\": 2026,\n  \"Mantova\": 2026, \"Modena\": 2026, \"Padova\": 2026, \"Palermo\": 2026, \"Sampdoria\": 2026, \"Sudtirol\": 2026,\n  \"Vicenza\": 2026, \"Arezzo\": 2026, \"Benevento\": 2026, \"Ascoli\": 2026, \"Metz\": 2026, \"Saint-Etienne\": 2026,\n  \"Red Star FC\": 2026, \"Reims\": 2026, \"Montpellier\": 2026, \"Nancy\": 2026, \"Annecy\": 2026, \"Sochaux\": 2026,\n  \"Dijon\": 2026, \"Pau\": 2026, \"Guingamp\": 2026, \"Dunkerque\": 2026, \"Grenoble\": 2026, \"Rodez\": 2026, \"Clermont\": 2026,\n  \"Boulogne\": 2026, \"Laval\": 2026,\n};\n",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "playing-sizes",
+      "path": "src/lib/soccerCareerLeague.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 47199,
+        "sha256": "adb5555de0adc046bed402fd7386305baf5ce9e96aba023b6a64541f9785ca68",
+        "gitBlob": "7b65ad0ad43825dcc159db83de100eda8330c102"
+      },
+      "candidate": {
+        "bytes": 47020,
+        "sha256": "fe3efae2f43e780c2cd4d13ca7fa85f023a2fefe8cf1b002866a1cf0d963268a",
+        "gitBlob": "9c05bf681f30bcd3703f55ad72c1289f4eeb9844"
+      },
+      "spans": [
+        {
+          "before": "  \"Belgian Pro League\": [{ from: 2026, size: 18 }],\n  \"2. Bundesliga\": [{ from: 2026, size: 18 }],\n  \"Brasileirao\": [{ from: 2026, size: 20 }],\n};\n/* The dugout's alone: second flights whose clubs the career club pool does\n   not carry yet (the generator holds them), so no player can sign there and\n   only a manager's table needs their size. Each moves up into LEAGUE_SIZES,\n   with its format and cadence rows, in the commit that releases its clubs. */\nconst DUGOUT_SIZES: Record<string, SizeWindow[]> = {\n  /* Round 1040: Club Manager's Serie B is a manager's job now, so a Soccer\n     Career dugout can be offered one. Only the 2026-27 season is read (20\n     clubs: espn.com/soccer/standings/_/league/ita.2 and Sky Sport Italia's\n     \"Serie B 2026-27, le squadre del prossimo campionato\", 2026-06-07, read\n     2026-10-06), so no size is claimed before it. */\n  \"Serie B\": [{ from: 2026, size: 20 }],\n  /* The same for Ligue 2: 18 clubs in 2026-27 (espn.com/soccer/standings/\n     _/league/fra.2 and Saint-Étienne's own Ligue 2 BKT table, asse.fr, both\n     read 2026-10-06). */\n  \"Ligue 2\": [{ from: 2026, size: 18 }],\n  /* And the Segunda División: 22 clubs in 2026-27 (espn.com/soccer/standings/\n     _/league/esp.2 and laliga.com's LALIGA HYPERMOTION table, both read\n     2026-10-06). Club Manager plays 20 of them, but the dugout's table is\n",
+          "after": "  \"Belgian Pro League\": [{ from: 2026, size: 18 }],\n  \"2. Bundesliga\": [{ from: 2026, size: 18 }],\n  \"Brasileirao\": [{ from: 2026, size: 20 }],\n  \"Ligue 2\": [{ from: 2026, size: 18 }],\n  /* Round 1040: Club Manager's Serie B is a manager's job now, so a Soccer\n     Career dugout can be offered one. Only the 2026-27 season is read (20\n     clubs: espn.com/soccer/standings/_/league/ita.2 and Sky Sport Italia's\n     \"Serie B 2026-27, le squadre del prossimo campionato\", 2026-06-07, read\n     2026-10-06), so no size is claimed before it. */\n  \"Serie B\": [{ from: 2026, size: 20 }],\n};\n/* The dugout's alone: second flights whose clubs the career club pool does\n   not carry yet (the generator holds them), so no player can sign there and\n   only a manager's table needs their size. Each moves up into LEAGUE_SIZES,\n   with its format and cadence rows, in the commit that releases its clubs. */\nconst DUGOUT_SIZES: Record<string, SizeWindow[]> = {\n  /* And the Segunda División: 22 clubs in 2026-27 (espn.com/soccer/standings/\n     _/league/esp.2 and laliga.com's LALIGA HYPERMOTION table, both read\n     2026-10-06). Club Manager plays 20 of them, but the dugout's table is\n",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "format",
+      "path": "src/data/leagueFormat.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 7008,
+        "sha256": "76d189179c606475113e7289a1145a9d2036c7741b7c918aed0efd796bebc0ec",
+        "gitBlob": "df8aa75d55eda49dcdc455e2be9d86c57848a3a7"
+      },
+      "candidate": {
+        "bytes": 7070,
+        "sha256": "915b4acd46f103d7c371d58c043c600a85e4e592ae6b59d5a8000d930e76fca5",
+        "gitBlob": "802650466c0c4439f12c741e7d1ae28957280f9b"
+      },
+      "spans": [
+        {
+          "before": "  \"Belgian Pro League\": [{ from: 2026 }],\n  \"2. Bundesliga\": [{ from: 2026 }],\n  \"Brasileirao\": [{ from: 2026 }],\n};\n\n/* Round 1100: the leagues that are not one plain table (they split, play in\n",
+          "after": "  \"Belgian Pro League\": [{ from: 2026 }],\n  \"2. Bundesliga\": [{ from: 2026 }],\n  \"Brasileirao\": [{ from: 2026 }],\n  \"Ligue 2\": [{ from: 2026 }],\n  \"Serie B\": [{ from: 2026 }],\n};\n\n/* Round 1100: the leagues that are not one plain table (they split, play in\n",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "cadence",
+      "path": "src/lib/soccerCareerDerby.ts",
+      "mode": "100644",
+      "base": {
+        "bytes": 23313,
+        "sha256": "eafe7005ece8fe2b4c44e380ba5d980a6535d3700f3a05be69f65e776288db99",
+        "gitBlob": "60478118d744b618e30f8ed651055c12449592b8"
+      },
+      "candidate": {
+        "bytes": 23401,
+        "sha256": "24b47bb4f83a37f4c43fcd5cb42be7976eac299a5bec0f7673af0621c6c804e8",
+        "gitBlob": "e25062b2b6560957feb414fd709b7bbc5b4af7ba"
+      },
+      "spans": [
+        {
+          "before": "  \"Saudi Pro League\": [{ from: 2026, meetings: 2 }],\n  \"Belgian Pro League\": [{ from: 2026, meetings: 2 }],\n  \"2. Bundesliga\": [{ from: 2026, meetings: 2 }],\n};\n\n/** League meetings per season between two clubs of that league in the\n",
+          "after": "  \"Saudi Pro League\": [{ from: 2026, meetings: 2 }],\n  \"Belgian Pro League\": [{ from: 2026, meetings: 2 }],\n  \"2. Bundesliga\": [{ from: 2026, meetings: 2 }],\n  \"Ligue 2\": [{ from: 2026, meetings: 2 }],\n  \"Serie B\": [{ from: 2026, meetings: 2 }],\n};\n\n/** League meetings per season between two clubs of that league in the\n",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "knownActualControl": {
+    "run": 41024224630,
+    "admissionSHA256": "c512008b2ed56435035770cee5de18dec174bdd5271a4aa35b57be5ea6b28835",
+    "raw": 1,
+    "pairCount": 41,
+    "lastFixture": "nan",
+    "lastSeed": 1,
+    "marker": "Compatibility arm preserves full original season and RNG",
+    "prior40": "ere/cha/sco/her seeds1..10 actualpassed",
+    "failedPair": "nan seed1 output2029 rank2vs16,size18,Nantes promoted instead ofGrenoble,L1vsL2,QFMarseillevsPSG"
+  },
+  "scope": "Original assertions and all50 historical pairs/21 faults/all other original coverage remain byte-held in copied source. Source-group diagnostic outcomes are measured, never product passes. Cup guard and app are held."
+}

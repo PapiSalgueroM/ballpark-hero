@@ -1,0 +1,60 @@
+name: Soccer Programme league-group diagnostics only
+on:
+  push:
+    branches: [codex/sc-programme-groups-diagnostic-20261030]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sc-programme-groups-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  diagnostic:
+    if: github.ref == 'refs/heads/codex/sc-programme-groups-diagnostic-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SIM_NETWORK: offline
+      CAREER_SEASON_LOCAL_ONLY: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: External evidence and frozen diagnostic inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir "$RUNNER_TEMP/sc-programme-groups-evidence"
+          echo "SC_GROUPS_OUT=$RUNNER_TEMP/sc-programme-groups-evidence" >> "$GITHUB_ENV"
+          printf '%s  %s\n' 3cb7a4b3f6fe08d3784a189fa73326f45525829764b6baba140fdce14a3a2293 scripts/qa/diagnoseSoccerProgrammeGroups.mjs | sha256sum --check
+          printf '%s  %s\n' 54df7424ac54c5ad3296f15697f5384af5da0e2db0109cfe793291b1a8c12e46 qa/sc-programme-groups-v1/SOURCE-CONTRACT.json | sha256sum --check
+      - name: Ordinary locked dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci > "$SC_GROUPS_OUT/npm-ci.stdout.log" 2> "$SC_GROUPS_OUT/npm-ci.stderr.log"
+      - name: Syntax, real types and bounded actual diagnostics
+        shell: bash
+        env:
+          NODE_OPTIONS: --require=${{ github.workspace }}/scripts/lib/offlineTransport.cjs
+        run: |
+          set -euo pipefail
+          node --check scripts/qa/diagnoseSoccerProgrammeGroups.mjs
+          raw=0
+          node scripts/qa/diagnoseSoccerProgrammeGroups.mjs > "$SC_GROUPS_OUT/controller.stdout.log" 2> "$SC_GROUPS_OUT/controller.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$SC_GROUPS_OUT/controller.exit"
+          exit "$raw"
+      - name: Retain original diagnostics even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-programme-groups-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sc-programme-groups-evidence/
+          if-no-files-found: error
+          retention-days: 14
