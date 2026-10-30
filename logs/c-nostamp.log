@@ -1,0 +1,49 @@
+NEGATIVE CONTROL ON: the takeover goes across without Club Manager's takeover stamp; section 5 must go red
+5) A manager who keeps the job carries on in Club Manager
+  FAIL: Manchester United seed 3363520565: the handed over career carries no takeover stamp (autumn), the job opened on 23 from 14
+  FAIL: Southampton seed 2129143751: the handed over career carries no takeover stamp (autumn), the job opened on 10 from 7
+  FAIL: Bristol City seed 2505143299: the handed over career carries no takeover stamp (autumn), the job opened on 20 from 13
+  FAIL: Rayo Vallecano seed 46472915: the handed over career carries no takeover stamp (autumn), the job opened on 5 from 13
+  FAIL: AC Milan seed 354240859: the handed over career carries no takeover stamp (autumn), the job opened on 29 from 13
+  FAIL: Lecce seed 256002035: the handed over career carries no takeover stamp (autumn), the job opened on 10 from 12
+  FAIL: Bayer Leverkusen seed 1978703287: the handed over career carries no takeover stamp (autumn), the job opened on 8 from 6
+  FAIL: Lyon seed 3145330018: the handed over career carries no takeover stamp (newYear), the job opened on 22 from 14
+  FAIL: Paris FC seed 1317516283: the handed over career carries no takeover stamp (autumn), the job opened on 6 from 6
+  FAIL: Al-Ahli seed 604329556: the handed over career carries no takeover stamp (autumn), the job opened on 27 from 11
+  FAIL: Atlanta United seed 1940166480: the handed over career carries no takeover stamp (newYear), the job opened on 31 from 12
+  FAIL: New York Red Bulls seed 3722624121: the handed over career carries no takeover stamp (autumn), the job opened on 13 from 9
+  FAIL: San Diego FC seed 3037863773: the handed over career carries no takeover stamp (autumn), the job opened on 8 from 10
+  FAIL: Rangers seed 4166563788: the handed over career carries no takeover stamp (autumn), the job opened on 16 from 7
+  FAIL: Celtic seed 3271775616: the handed over career carries no takeover stamp (newYear), the job opened on 24 from 12
+  FAIL: Fenerbahçe seed 2644371663: the handed over career carries no takeover stamp (newYear), the job opened on 38 from 14
+  FAIL: Alanyaspor seed 1036092406: the handed over career carries no takeover stamp (autumn), the job opened on 18 from 10
+  FAIL: St. Pauli seed 181223470: the handed over career carries no takeover stamp (autumn), the job opened on 18 from 10
+  FAIL: Union Saint-Gilloise seed 2601737660: the handed over career carries no takeover stamp (autumn), the job opened on 5 from 6
+  FAIL: Sint-Truiden seed 2004413658: the handed over career carries no takeover stamp (autumn), the job opened on 10 from 7
+  FAIL: RB Salzburg seed 4031434727: the handed over career carries no takeover stamp (runIn), the job opened on 21 from 14
+  FAIL: Rapid Wien seed 4188792220: the handed over career carries no takeover stamp (newYear), the job opened on 24 from 9
+  FAIL: Olympiacos seed 1583074016: the handed over career carries no takeover stamp (newYear), the job opened on 32 from 14
+  FAIL: AEK Athens seed 1264500175: the handed over career carries no takeover stamp (autumn), the job opened on 18 from 10
+  FAIL: FC Midtjylland seed 4219463631: the handed over career carries no takeover stamp (newYear), the job opened on 19 from 10
+  FAIL: FC Nordsjælland seed 555865432: the handed over career carries no takeover stamp (autumn), the job opened on 3 from 6
+  FAIL: Young Boys seed 3876892485: the handed over career carries no takeover stamp (newYear), the job opened on 26 from 13
+  FAIL: Basel seed 1134408367: the handed over career carries no takeover stamp (runIn), the job opened on 40 from 14
+  FAIL: Hajduk Split seed 2868281908: the handed over career carries no takeover stamp (runIn), the job opened on 25 from 12
+  FAIL: Dinamo Zagreb seed 2203934071: the handed over career carries no takeover stamp (newYear), the job opened on 15 from 9
+  FAIL: Corinthians seed 792915288: the handed over career carries no takeover stamp (autumn), the job opened on 14 from 9
+  FAIL: São Paulo seed 2206950394: the handed over career carries no takeover stamp (autumn), the job opened on 5 from 6
+  FAIL: Guadalajara seed 465234352: the handed over career carries no takeover stamp (newYear), the job opened on 29 from 14
+  FAIL: Atlético San Luis seed 1085373004: the handed over career carries no takeover stamp (autumn), the job opened on 13 from 7
+  FAIL: Sydney FC seed 2669063318: the handed over career carries no takeover stamp (newYear), the job opened on 17 from 10
+  FAIL: Pisa seed 3445988560: the handed over career carries no takeover stamp (autumn), the job opened on 14 from 7
+  FAIL: Verona seed 2502081045: the handed over career carries no takeover stamp (autumn), the job opened on 11 from 7
+  FAIL: Nantes seed 3877975989: the handed over career carries no takeover stamp (newYear), the job opened on 31 from 14
+  FAIL: Reims seed 311012506: the handed over career carries no takeover stamp (newYear), the job opened on 8 from 14
+  FAIL: Girona seed 3609287469: the handed over career carries no takeover stamp (autumn), the job opened on 18 from 8
+  FAIL: Mallorca seed 2000764252: the handed over career carries no takeover stamp (autumn), the job opened on 16 from 10
+  FAIL: CSKA Moscow seed 1708035320: the handed over career carries no takeover stamp (autumn), the job opened on 10 from 9
+  FAIL: Rodina Moscow seed 3981509664: the handed over career carries no takeover stamp (newYear), the job opened on 16 from 14
+   54 setups in 27 leagues: 43 handed over (1 on a reprieve) from 25 leagues, 37 played to the end of the season, 6 sacked in Club Manager on the way, 24 sacked runs refused, 2 with a window before the next fixture, 164 of the previous manager's messages left behind
+   slot arms on 43 survivors: emptyDevice 43, keptSlotOne 43, intoSlotOne 43, fullAsked 43, damagedKept 43, pointsCleared 43, rolledBack 43, picked 43, changedRefused 43
+
+simManagerHotSeat: 43 failure(s)

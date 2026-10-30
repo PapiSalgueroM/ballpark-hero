@@ -1,0 +1,228 @@
+NEGATIVE CONTROL ON: the handover drops the calendar; section 5 must go red
+5) A manager who keeps the job carries on in Club Manager
+  FAIL: Manchester United seed 3363520565 (a): an empty device answered saved, active slot 1
+  FAIL: Manchester United seed 3363520565 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Manchester United seed 3363520565: Club Manager's loadCareer refused the handed over career
+  FAIL: Manchester United seed 3363520565 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Manchester United seed 3363520565 (h): a picked slot answered saved, active slot 2
+  FAIL: Southampton seed 2129143751 (a): an empty device answered saved, active slot 1
+  FAIL: Southampton seed 2129143751 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Southampton seed 2129143751: Club Manager's loadCareer refused the handed over career
+  FAIL: Southampton seed 2129143751 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Southampton seed 2129143751 (h): a picked slot answered saved, active slot 2
+  FAIL: Bristol City seed 2505143299 (a): an empty device answered saved, active slot 1
+  FAIL: Bristol City seed 2505143299 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Bristol City seed 2505143299: Club Manager's loadCareer refused the handed over career
+  FAIL: Bristol City seed 2505143299 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Bristol City seed 2505143299 (h): a picked slot answered saved, active slot 2
+  FAIL: Rayo Vallecano seed 46472915 (a): an empty device answered saved, active slot 1
+  FAIL: Rayo Vallecano seed 46472915 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Rayo Vallecano seed 46472915: Club Manager's loadCareer refused the handed over career
+  FAIL: Rayo Vallecano seed 46472915 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Rayo Vallecano seed 46472915 (h): a picked slot answered saved, active slot 2
+  FAIL: AC Milan seed 354240859 (a): an empty device answered saved, active slot 1
+  FAIL: AC Milan seed 354240859 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: AC Milan seed 354240859: Club Manager's loadCareer refused the handed over career
+  FAIL: AC Milan seed 354240859 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: AC Milan seed 354240859 (h): a picked slot answered saved, active slot 2
+  FAIL: Lecce seed 256002035 (a): an empty device answered saved, active slot 1
+  FAIL: Lecce seed 256002035 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Lecce seed 256002035: Club Manager's loadCareer refused the handed over career
+  FAIL: Lecce seed 256002035 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Lecce seed 256002035 (h): a picked slot answered saved, active slot 2
+  FAIL: Bayer Leverkusen seed 1978703287 (a): an empty device answered saved, active slot 1
+  FAIL: Bayer Leverkusen seed 1978703287 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Bayer Leverkusen seed 1978703287: Club Manager's loadCareer refused the handed over career
+  FAIL: Bayer Leverkusen seed 1978703287 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Bayer Leverkusen seed 1978703287 (h): a picked slot answered saved, active slot 2
+  FAIL: Lyon seed 3145330018 (a): an empty device answered saved, active slot 1
+  FAIL: Lyon seed 3145330018 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Lyon seed 3145330018: Club Manager's loadCareer refused the handed over career
+  FAIL: Lyon seed 3145330018 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Lyon seed 3145330018 (h): a picked slot answered saved, active slot 2
+  FAIL: Paris FC seed 1317516283 (a): an empty device answered saved, active slot 1
+  FAIL: Paris FC seed 1317516283 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Paris FC seed 1317516283: Club Manager's loadCareer refused the handed over career
+  FAIL: Paris FC seed 1317516283 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Paris FC seed 1317516283 (h): a picked slot answered saved, active slot 2
+  FAIL: Al-Ahli seed 604329556 (a): an empty device answered saved, active slot 1
+  FAIL: Al-Ahli seed 604329556 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Al-Ahli seed 604329556: Club Manager's loadCareer refused the handed over career
+  FAIL: Al-Ahli seed 604329556 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Al-Ahli seed 604329556 (h): a picked slot answered saved, active slot 2
+  FAIL: Atlanta United seed 1940166480 (a): an empty device answered saved, active slot 1
+  FAIL: Atlanta United seed 1940166480 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Atlanta United seed 1940166480: Club Manager's loadCareer refused the handed over career
+  FAIL: Atlanta United seed 1940166480 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Atlanta United seed 1940166480 (h): a picked slot answered saved, active slot 2
+  FAIL: New York Red Bulls seed 3722624121 (a): an empty device answered saved, active slot 1
+  FAIL: New York Red Bulls seed 3722624121 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: New York Red Bulls seed 3722624121: Club Manager's loadCareer refused the handed over career
+  FAIL: New York Red Bulls seed 3722624121 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: New York Red Bulls seed 3722624121 (h): a picked slot answered saved, active slot 2
+  FAIL: San Diego FC seed 3037863773 (a): an empty device answered saved, active slot 1
+  FAIL: San Diego FC seed 3037863773 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: San Diego FC seed 3037863773: Club Manager's loadCareer refused the handed over career
+  FAIL: San Diego FC seed 3037863773 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: San Diego FC seed 3037863773 (h): a picked slot answered saved, active slot 2
+  FAIL: Rangers seed 4166563788 (a): an empty device answered saved, active slot 1
+  FAIL: Rangers seed 4166563788 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Rangers seed 4166563788: Club Manager's loadCareer refused the handed over career
+  FAIL: Rangers seed 4166563788 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Rangers seed 4166563788 (h): a picked slot answered saved, active slot 2
+  FAIL: Celtic seed 3271775616 (a): an empty device answered saved, active slot 1
+  FAIL: Celtic seed 3271775616 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Celtic seed 3271775616: Club Manager's loadCareer refused the handed over career
+  FAIL: Celtic seed 3271775616 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Celtic seed 3271775616 (h): a picked slot answered saved, active slot 2
+  FAIL: Fenerbahçe seed 2644371663 (a): an empty device answered saved, active slot 1
+  FAIL: Fenerbahçe seed 2644371663 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Fenerbahçe seed 2644371663: Club Manager's loadCareer refused the handed over career
+  FAIL: Fenerbahçe seed 2644371663 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Fenerbahçe seed 2644371663 (h): a picked slot answered saved, active slot 2
+  FAIL: Alanyaspor seed 1036092406 (a): an empty device answered saved, active slot 1
+  FAIL: Alanyaspor seed 1036092406 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Alanyaspor seed 1036092406: Club Manager's loadCareer refused the handed over career
+  FAIL: Alanyaspor seed 1036092406 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Alanyaspor seed 1036092406 (h): a picked slot answered saved, active slot 2
+  FAIL: St. Pauli seed 181223470 (a): an empty device answered saved, active slot 1
+  FAIL: St. Pauli seed 181223470 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: St. Pauli seed 181223470: Club Manager's loadCareer refused the handed over career
+  FAIL: St. Pauli seed 181223470 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: St. Pauli seed 181223470 (h): a picked slot answered saved, active slot 2
+  FAIL: Union Saint-Gilloise seed 2601737660 (a): an empty device answered saved, active slot 1
+  FAIL: Union Saint-Gilloise seed 2601737660 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Union Saint-Gilloise seed 2601737660: Club Manager's loadCareer refused the handed over career
+  FAIL: Union Saint-Gilloise seed 2601737660 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Union Saint-Gilloise seed 2601737660 (h): a picked slot answered saved, active slot 2
+  FAIL: Sint-Truiden seed 2004413658 (a): an empty device answered saved, active slot 1
+  FAIL: Sint-Truiden seed 2004413658 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Sint-Truiden seed 2004413658: Club Manager's loadCareer refused the handed over career
+  FAIL: Sint-Truiden seed 2004413658 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Sint-Truiden seed 2004413658 (h): a picked slot answered saved, active slot 2
+  FAIL: RB Salzburg seed 4031434727 (a): an empty device answered saved, active slot 1
+  FAIL: RB Salzburg seed 4031434727 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: RB Salzburg seed 4031434727: Club Manager's loadCareer refused the handed over career
+  FAIL: RB Salzburg seed 4031434727 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: RB Salzburg seed 4031434727 (h): a picked slot answered saved, active slot 2
+  FAIL: Rapid Wien seed 4188792220 (a): an empty device answered saved, active slot 1
+  FAIL: Rapid Wien seed 4188792220 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Rapid Wien seed 4188792220: Club Manager's loadCareer refused the handed over career
+  FAIL: Rapid Wien seed 4188792220 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Rapid Wien seed 4188792220 (h): a picked slot answered saved, active slot 2
+  FAIL: Olympiacos seed 1583074016 (a): an empty device answered saved, active slot 1
+  FAIL: Olympiacos seed 1583074016 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Olympiacos seed 1583074016: Club Manager's loadCareer refused the handed over career
+  FAIL: Olympiacos seed 1583074016 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Olympiacos seed 1583074016 (h): a picked slot answered saved, active slot 2
+  FAIL: AEK Athens seed 1264500175 (a): an empty device answered saved, active slot 1
+  FAIL: AEK Athens seed 1264500175 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: AEK Athens seed 1264500175: Club Manager's loadCareer refused the handed over career
+  FAIL: AEK Athens seed 1264500175 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: AEK Athens seed 1264500175 (h): a picked slot answered saved, active slot 2
+  FAIL: FC Midtjylland seed 4219463631 (a): an empty device answered saved, active slot 1
+  FAIL: FC Midtjylland seed 4219463631 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: FC Midtjylland seed 4219463631: Club Manager's loadCareer refused the handed over career
+  FAIL: FC Midtjylland seed 4219463631 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: FC Midtjylland seed 4219463631 (h): a picked slot answered saved, active slot 2
+  FAIL: FC Nordsjælland seed 555865432 (a): an empty device answered saved, active slot 1
+  FAIL: FC Nordsjælland seed 555865432 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: FC Nordsjælland seed 555865432: Club Manager's loadCareer refused the handed over career
+  FAIL: FC Nordsjælland seed 555865432 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: FC Nordsjælland seed 555865432 (h): a picked slot answered saved, active slot 2
+  FAIL: Young Boys seed 3876892485 (a): an empty device answered saved, active slot 1
+  FAIL: Young Boys seed 3876892485 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Young Boys seed 3876892485: Club Manager's loadCareer refused the handed over career
+  FAIL: Young Boys seed 3876892485 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Young Boys seed 3876892485 (h): a picked slot answered saved, active slot 2
+  FAIL: Basel seed 1134408367 (a): an empty device answered saved, active slot 1
+  FAIL: Basel seed 1134408367 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Basel seed 1134408367: Club Manager's loadCareer refused the handed over career
+  FAIL: Basel seed 1134408367 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Basel seed 1134408367 (h): a picked slot answered saved, active slot 2
+  FAIL: Hajduk Split seed 2868281908 (a): an empty device answered saved, active slot 1
+  FAIL: Hajduk Split seed 2868281908 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Hajduk Split seed 2868281908: Club Manager's loadCareer refused the handed over career
+  FAIL: Hajduk Split seed 2868281908 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Hajduk Split seed 2868281908 (h): a picked slot answered saved, active slot 2
+  FAIL: Dinamo Zagreb seed 2203934071 (a): an empty device answered saved, active slot 1
+  FAIL: Dinamo Zagreb seed 2203934071 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Dinamo Zagreb seed 2203934071: Club Manager's loadCareer refused the handed over career
+  FAIL: Dinamo Zagreb seed 2203934071 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Dinamo Zagreb seed 2203934071 (h): a picked slot answered saved, active slot 2
+  FAIL: Corinthians seed 792915288 (a): an empty device answered saved, active slot 1
+  FAIL: Corinthians seed 792915288 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Corinthians seed 792915288: Club Manager's loadCareer refused the handed over career
+  FAIL: Corinthians seed 792915288 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Corinthians seed 792915288 (h): a picked slot answered saved, active slot 2
+  FAIL: São Paulo seed 2206950394 (a): an empty device answered saved, active slot 1
+  FAIL: São Paulo seed 2206950394 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: São Paulo seed 2206950394: Club Manager's loadCareer refused the handed over career
+  FAIL: São Paulo seed 2206950394 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: São Paulo seed 2206950394 (h): a picked slot answered saved, active slot 2
+  FAIL: Guadalajara seed 465234352 (a): an empty device answered saved, active slot 1
+  FAIL: Guadalajara seed 465234352 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Guadalajara seed 465234352: Club Manager's loadCareer refused the handed over career
+  FAIL: Guadalajara seed 465234352 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Guadalajara seed 465234352 (h): a picked slot answered saved, active slot 2
+  FAIL: Atlético San Luis seed 1085373004 (a): an empty device answered saved, active slot 1
+  FAIL: Atlético San Luis seed 1085373004 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Atlético San Luis seed 1085373004: Club Manager's loadCareer refused the handed over career
+  FAIL: Atlético San Luis seed 1085373004 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Atlético San Luis seed 1085373004 (h): a picked slot answered saved, active slot 2
+  FAIL: Sydney FC seed 2669063318 (a): an empty device answered saved, active slot 1
+  FAIL: Sydney FC seed 2669063318 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Sydney FC seed 2669063318: Club Manager's loadCareer refused the handed over career
+  FAIL: Sydney FC seed 2669063318 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Sydney FC seed 2669063318 (h): a picked slot answered saved, active slot 2
+  FAIL: Pisa seed 3445988560 (a): an empty device answered saved, active slot 1
+  FAIL: Pisa seed 3445988560 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Pisa seed 3445988560: Club Manager's loadCareer refused the handed over career
+  FAIL: Pisa seed 3445988560 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Pisa seed 3445988560 (h): a picked slot answered saved, active slot 2
+  FAIL: Verona seed 2502081045 (a): an empty device answered saved, active slot 1
+  FAIL: Verona seed 2502081045 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Verona seed 2502081045: Club Manager's loadCareer refused the handed over career
+  FAIL: Verona seed 2502081045 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Verona seed 2502081045 (h): a picked slot answered saved, active slot 2
+  FAIL: Nantes seed 3877975989 (a): an empty device answered saved, active slot 1
+  FAIL: Nantes seed 3877975989 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Nantes seed 3877975989: Club Manager's loadCareer refused the handed over career
+  FAIL: Nantes seed 3877975989 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Nantes seed 3877975989 (h): a picked slot answered saved, active slot 2
+  FAIL: Reims seed 311012506 (a): an empty device answered saved, active slot 1
+  FAIL: Reims seed 311012506 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Reims seed 311012506: Club Manager's loadCareer refused the handed over career
+  FAIL: Reims seed 311012506 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Reims seed 311012506 (h): a picked slot answered saved, active slot 2
+  FAIL: Girona seed 3609287469 (a): an empty device answered saved, active slot 1
+  FAIL: Girona seed 3609287469 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Girona seed 3609287469: Club Manager's loadCareer refused the handed over career
+  FAIL: Girona seed 3609287469 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Girona seed 3609287469 (h): a picked slot answered saved, active slot 2
+  FAIL: Mallorca seed 2000764252 (a): an empty device answered saved, active slot 1
+  FAIL: Mallorca seed 2000764252 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Mallorca seed 2000764252: Club Manager's loadCareer refused the handed over career
+  FAIL: Mallorca seed 2000764252 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Mallorca seed 2000764252 (h): a picked slot answered saved, active slot 2
+  FAIL: CSKA Moscow seed 1708035320 (a): an empty device answered saved, active slot 1
+  FAIL: CSKA Moscow seed 1708035320 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: CSKA Moscow seed 1708035320: Club Manager's loadCareer refused the handed over career
+  FAIL: CSKA Moscow seed 1708035320 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: CSKA Moscow seed 1708035320 (h): a picked slot answered saved, active slot 2
+  FAIL: Rodina Moscow seed 3981509664 (a): an empty device answered saved, active slot 1
+  FAIL: Rodina Moscow seed 3981509664 (b): with a career in slot 1 the carry answered saved, active slot 2, slot 1 holds {"managerName":null,"clubName":"Fakel Voronezh","season":1,"worldSeason":"2026-2
+  FAIL: Rodina Moscow seed 3981509664: Club Manager's loadCareer refused the handed over career
+  FAIL: Rodina Moscow seed 3981509664 (c): with slot 2 active and full the carry answered saved, active slot 1
+  FAIL: Rodina Moscow seed 3981509664 (h): a picked slot answered saved, active slot 2
+   54 setups in 27 leagues: 0 handed over (1 on a reprieve) from 0 leagues, 0 played to the end of the season, 0 sacked in Club Manager on the way, 24 sacked runs refused, 0 with a window before the next fixture, 0 of the previous manager's messages left behind
+  FAIL: only 0 careers were handed over (floor 20)
+  FAIL: careers were handed over from only 0 leagues (floor 15)
+  FAIL: only 0 handed over seasons were played to the end (floor 18)
+   slot arms on 43 survivors: emptyDevice 0, keptSlotOne 0, intoSlotOne 0, fullAsked 43, damagedKept 43, pointsCleared 43, rolledBack 43, picked 0, changedRefused 43
+  FAIL: the slot arm emptyDevice held on only 0 of 43 survivors (floor 20)
+  FAIL: the slot arm keptSlotOne held on only 0 of 43 survivors (floor 20)
+  FAIL: the slot arm intoSlotOne held on only 0 of 43 survivors (floor 20)
+  FAIL: the slot arm picked held on only 0 of 43 survivors (floor 20)
+
+simManagerHotSeat: 222 failure(s)

@@ -1,0 +1,49 @@
+NEGATIVE CONTROL ON: the offer card counts only the games played in the job; section 5 must go red
+5) A manager who keeps the job carries on in Club Manager
+  FAIL: Manchester United seed 3363520565: the card says 3 league games of 20 clubs, Club Manager has 17 of 20
+  FAIL: Southampton seed 2129143751: the card says 4 league games of 24 clubs, Club Manager has 11 of 24
+  FAIL: Bristol City seed 2505143299: the card says 3 league games of 24 clubs, Club Manager has 16 of 24
+  FAIL: Rayo Vallecano seed 46472915: the card says 1 league games of 20 clubs, Club Manager has 14 of 20
+  FAIL: AC Milan seed 354240859: the card says 4 league games of 20 clubs, Club Manager has 17 of 20
+  FAIL: Lecce seed 256002035: the card says 4 league games of 20 clubs, Club Manager has 16 of 20
+  FAIL: Bayer Leverkusen seed 1978703287: the card says 5 league games of 18 clubs, Club Manager has 11 of 18
+  FAIL: Lyon seed 3145330018: the card says 2 league games of 18 clubs, Club Manager has 16 of 18
+  FAIL: Paris FC seed 1317516283: the card says 3 league games of 18 clubs, Club Manager has 9 of 18
+  FAIL: Al-Ahli seed 604329556: the card says 4 league games of 18 clubs, Club Manager has 15 of 18
+  FAIL: Atlanta United seed 1940166480: the card says 5 league games of 15 clubs, Club Manager has 17 of 15
+  FAIL: New York Red Bulls seed 3722624121: the card says 5 league games of 15 clubs, Club Manager has 14 of 15
+  FAIL: San Diego FC seed 3037863773: the card says 5 league games of 15 clubs, Club Manager has 15 of 15
+  FAIL: Rangers seed 4166563788: the card says 5 league games of 12 clubs, Club Manager has 12 of 12
+  FAIL: Celtic seed 3271775616: the card says 5 league games of 12 clubs, Club Manager has 17 of 12
+  FAIL: Fenerbahçe seed 2644371663: the card says 4 league games of 18 clubs, Club Manager has 18 of 18
+  FAIL: Alanyaspor seed 1036092406: the card says 2 league games of 18 clubs, Club Manager has 12 of 18
+  FAIL: St. Pauli seed 181223470: the card says 4 league games of 18 clubs, Club Manager has 14 of 18
+  FAIL: Union Saint-Gilloise seed 2601737660: the card says 5 league games of 18 clubs, Club Manager has 11 of 18
+  FAIL: Sint-Truiden seed 2004413658: the card says 3 league games of 18 clubs, Club Manager has 10 of 18
+  FAIL: RB Salzburg seed 4031434727: the card says 3 league games of 12 clubs, Club Manager has 17 of 12
+  FAIL: Rapid Wien seed 4188792220: the card says 3 league games of 12 clubs, Club Manager has 12 of 12
+  FAIL: Olympiacos seed 1583074016: the card says 4 league games of 14 clubs, Club Manager has 18 of 14
+  FAIL: AEK Athens seed 1264500175: the card says 4 league games of 14 clubs, Club Manager has 14 of 14
+  FAIL: FC Midtjylland seed 4219463631: the card says 4 league games of 12 clubs, Club Manager has 14 of 12
+  FAIL: FC Nordsjælland seed 555865432: the card says 4 league games of 12 clubs, Club Manager has 10 of 12
+  FAIL: Young Boys seed 3876892485: the card says 4 league games of 12 clubs, Club Manager has 17 of 12
+  FAIL: Basel seed 1134408367: the card says 4 league games of 12 clubs, Club Manager has 18 of 12
+  FAIL: Hajduk Split seed 2868281908: the card says 3 league games of 10 clubs, Club Manager has 15 of 10
+  FAIL: Dinamo Zagreb seed 2203934071: the card says 4 league games of 10 clubs, Club Manager has 13 of 10
+  FAIL: Corinthians seed 792915288: the card says 5 league games of 20 clubs, Club Manager has 14 of 20
+  FAIL: São Paulo seed 2206950394: the card says 5 league games of 20 clubs, Club Manager has 11 of 20
+  FAIL: Guadalajara seed 465234352: the card says 3 league games of 18 clubs, Club Manager has 17 of 18
+  FAIL: Atlético San Luis seed 1085373004: the card says 4 league games of 18 clubs, Club Manager has 11 of 18
+  FAIL: Sydney FC seed 2669063318: the card says 4 league games of 12 clubs, Club Manager has 14 of 12
+  FAIL: Pisa seed 3445988560: the card says 5 league games of 20 clubs, Club Manager has 12 of 20
+  FAIL: Verona seed 2502081045: the card says 5 league games of 20 clubs, Club Manager has 12 of 20
+  FAIL: Nantes seed 3877975989: the card says 4 league games of 18 clubs, Club Manager has 18 of 18
+  FAIL: Reims seed 311012506: the card says 5 league games of 18 clubs, Club Manager has 19 of 18
+  FAIL: Girona seed 3609287469: the card says 5 league games of 20 clubs, Club Manager has 13 of 20
+  FAIL: Mallorca seed 2000764252: the card says 5 league games of 20 clubs, Club Manager has 15 of 20
+  FAIL: CSKA Moscow seed 1708035320: the card says 3 league games of 16 clubs, Club Manager has 12 of 16
+  FAIL: Rodina Moscow seed 3981509664: the card says 5 league games of 16 clubs, Club Manager has 19 of 16
+   54 setups in 27 leagues: 43 handed over (1 on a reprieve) from 25 leagues, 37 played to the end of the season, 6 sacked in Club Manager on the way, 24 sacked runs refused, 2 with a window before the next fixture, 164 of the previous manager's messages left behind
+   slot arms on 43 survivors: emptyDevice 43, keptSlotOne 43, intoSlotOne 43, fullAsked 43, damagedKept 43, pointsCleared 43, rolledBack 43, picked 43, changedRefused 43
+
+simManagerHotSeat: 43 failure(s)
