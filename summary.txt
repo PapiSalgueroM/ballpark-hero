@@ -1,0 +1,6 @@
+simBoardAsks exit=0 50s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+ba-nopromise exit=1 51s | simBoardAsks: 2 failures
+cv-capall exit=1 102s | simCustomClubValues: 25 checks, 5 failures (sections 1, 2) (control capall)
+ba-base exit=0 82s | simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.
+diff-base exit=0 255s | simCmDifficulty: all green (sections 1,2,3,6,7,8)
+simCmDifficulty exit=0 269s | simCmDifficulty: all green (sections 1,2,3,6,7,8)

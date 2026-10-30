@@ -1,0 +1,6 @@
+simBoardAsks: node scripts/simBoardAsks.mjs
+ba-nopromise: BOARD_ASKS_CONTROL=nopromise node scripts/simBoardAsks.mjs
+cv-capall: CUSTOM_VALUE_CONTROL=capall node scripts/simCustomClubValues.mjs
+simCmDifficulty: node scripts/simCmDifficulty.mjs
+diff-base: git worktree add -q /tmp/base 14a9af704 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cp scripts/simCmDifficulty.mjs scripts/simBoardAsks.mjs /tmp/base/scripts/ && cd /tmp/base && node scripts/simCmDifficulty.mjs
+ba-base: sleep 30 && cd /tmp/base && node scripts/simBoardAsks.mjs
