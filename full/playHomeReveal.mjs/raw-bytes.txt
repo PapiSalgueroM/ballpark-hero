@@ -1,0 +1,3 @@
+1081 /home/runner/work/_temp/rc-out/full/playHomeReveal.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playHomeReveal.mjs/stderr.log
+1081 total

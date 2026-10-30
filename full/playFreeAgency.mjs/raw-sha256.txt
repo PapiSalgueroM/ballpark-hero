@@ -1,0 +1,2 @@
+af104e44b5e0742567e41ca2422048ed2b1b9c016afbd0561ae45de8fc58f24d  /home/runner/work/_temp/rc-out/full/playFreeAgency.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playFreeAgency.mjs/stderr.log

@@ -1,0 +1,3 @@
+1019 /home/runner/work/_temp/rc-out/full/playGameReports.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playGameReports.mjs/stderr.log
+1019 total

@@ -1,0 +1,3 @@
+1552 /home/runner/work/_temp/rc-out/full/playGridCls.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playGridCls.mjs/stderr.log
+1552 total

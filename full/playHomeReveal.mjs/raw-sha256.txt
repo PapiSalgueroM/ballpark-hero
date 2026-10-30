@@ -1,0 +1,2 @@
+00a30121ab776b39dd3184e56389cbe00b40112c99b6fe67b27b00c97deb0974  /home/runner/work/_temp/rc-out/full/playHomeReveal.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playHomeReveal.mjs/stderr.log

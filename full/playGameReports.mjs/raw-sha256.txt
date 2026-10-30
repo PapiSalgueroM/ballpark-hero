@@ -1,0 +1,2 @@
+a5d04802ef2e860a9dcfae4ad441b0fa20e57ec90da628cda6a0d3921c955bbf  /home/runner/work/_temp/rc-out/full/playGameReports.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playGameReports.mjs/stderr.log

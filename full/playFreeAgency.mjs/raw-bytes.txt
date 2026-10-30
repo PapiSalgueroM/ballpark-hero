@@ -1,0 +1,3 @@
+2906 /home/runner/work/_temp/rc-out/full/playFreeAgency.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playFreeAgency.mjs/stderr.log
+2906 total

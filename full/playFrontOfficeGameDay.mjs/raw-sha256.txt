@@ -1,0 +1,2 @@
+949cc5269dcbae8414835270ba82955e59e6d0766d5a403fd07697506c9cca65  /home/runner/work/_temp/rc-out/full/playFrontOfficeGameDay.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playFrontOfficeGameDay.mjs/stderr.log

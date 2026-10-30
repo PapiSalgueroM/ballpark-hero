@@ -1,0 +1,3 @@
+873 /home/runner/work/_temp/rc-out/full/playGridCellGeometry.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playGridCellGeometry.mjs/stderr.log
+873 total

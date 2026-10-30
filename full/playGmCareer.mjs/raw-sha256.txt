@@ -1,0 +1,2 @@
+3c627f739fa93c1e8c2b79983224b1c4e6267dcfd3563bd9e59680872799a670  /home/runner/work/_temp/rc-out/full/playGmCareer.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playGmCareer.mjs/stderr.log

@@ -1,0 +1,3 @@
+50540 /home/runner/work/_temp/rc-out/full/playFrontOfficeGameDay.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playFrontOfficeGameDay.mjs/stderr.log
+50540 total

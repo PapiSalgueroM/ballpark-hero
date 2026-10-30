@@ -1,0 +1,3 @@
+2761 /home/runner/work/_temp/rc-out/full/playHomeFold.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/playHomeFold.mjs/stderr.log
+2761 total
