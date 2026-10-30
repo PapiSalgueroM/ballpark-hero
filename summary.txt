@@ -1,0 +1,9 @@
+vitest exit=0 8s |    Duration  7.08s (transform 3.07s, setup 282ms, collect 6.58s, tests 4.02s, environment 1.21s, prepare 613ms)
+c-clobber exit=1 30s | simManagerHotSeat: 481 failure(s)
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+hs exit=0 93s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+tsc exit=0 117s | 
+simHarnessAnchors exit=0 70s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simCmSavePoints exit=0 56s | simCmSavePoints: OK, all eight sections green
+simClubManagerSlots exit=0 77s | simClubManagerSlots: all sections green
