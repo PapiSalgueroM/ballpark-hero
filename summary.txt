@@ -1,0 +1,3 @@
+simWorldEuro-s0 exit=0 1s | simWorldEuro: green, 703 checks, 0 failures
+simWorldEuro-receipt exit=1 1s | simWorldEuro: control receipt FIRED (1 failures, all its own)
+probeA0 exit=0 1s | probeA0: 162 rows, 0 do not fit -> all fit
