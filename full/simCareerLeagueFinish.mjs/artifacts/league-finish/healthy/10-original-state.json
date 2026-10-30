@@ -1,0 +1,2307 @@
+{
+  "playerName": "Sim 10",
+  "nationality": "England",
+  "position": "CB",
+  "era": "2020-24",
+  "age": 27,
+  "potential": 82,
+  "potentialEarned": 0,
+  "eliteStreak": 0,
+  "startingOverall": 64,
+  "physique": {
+    "heightCm": 187,
+    "weightKg": 82
+  },
+  "attrShape": {},
+  "karma": 50,
+  "phoneUsedIds": [
+    "barber_cut",
+    "youth_bully"
+  ],
+  "phoneInbox": [
+    {
+      "id": "barber_cut-2020",
+      "defId": "barber_cut",
+      "from": "Barber",
+      "emoji": "💈",
+      "text": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+      "year": 2020,
+      "choices": [
+        {
+          "label": "Send it",
+          "reply": "Chair. Tomorrow. Do your worst",
+          "karma": 2,
+          "popularity": 4
+        },
+        {
+          "label": "Keep it classic",
+          "reply": "Usual trim mate, big game week",
+          "karma": 1
+        }
+      ]
+    },
+    {
+      "id": "youth_bully-2020",
+      "defId": "youth_bully",
+      "from": "Academy mate",
+      "emoji": "🥺",
+      "text": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+      "year": 2020,
+      "choices": [
+        {
+          "label": "Stand up for him",
+          "reply": "Sit with me at lunch. If they touch your stuff again they deal with me",
+          "karma": 10,
+          "morale": 2
+        },
+        {
+          "label": "Stay out of it",
+          "reply": "Rough mate. Keep your head down",
+          "karma": -6
+        }
+      ]
+    }
+  ],
+  "currentClub": "Everton",
+  "currentClubCountry": "England",
+  "currentClubTier": 3,
+  "currentClubColor": "#003399",
+  "currentLeague": "Premier League",
+  "contractYearsLeft": 1,
+  "weeklyWage": 11808,
+  "marketValue": 40.7,
+  "pace": 80,
+  "shooting": 83,
+  "passing": 85,
+  "dribbling": 85,
+  "defending": 77,
+  "physical": 82,
+  "reflexes": 77,
+  "overall": 82,
+  "seasons": [
+    {
+      "year": 2020,
+      "age": 16,
+      "club": "Everton Youth",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 0,
+      "goals": 0,
+      "assists": 0,
+      "cleanSheets": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "rating": 0,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "youth",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null
+    },
+    {
+      "year": 2021,
+      "age": 17,
+      "club": "Everton Youth",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 19,
+      "goals": 1,
+      "assists": 3,
+      "cleanSheets": 4,
+      "yellowCards": 0,
+      "redCards": 0,
+      "rating": 0,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "youth",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null
+    },
+    {
+      "year": 2022,
+      "age": 18,
+      "club": "Everton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 28,
+      "leagueApps": 24,
+      "goals": 2,
+      "assists": 2,
+      "cleanSheets": 8,
+      "yellowCards": 4,
+      "redCards": 0,
+      "rating": 6.9,
+      "ovr": 68,
+      "injury": "Tight calf",
+      "injuryWeeks": 2,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 20,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Liverpool",
+          "name": "Merseyside derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 0,
+              "played": true,
+              "goals": 1
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": "World Cup",
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2023,
+      "age": 19,
+      "club": "Everton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 30,
+      "leagueApps": 27,
+      "goals": 1,
+      "assists": 1,
+      "cleanSheets": 10,
+      "yellowCards": 8,
+      "redCards": 0,
+      "rating": 7.4,
+      "ovr": 70,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": true,
+      "leagueFinish": 1,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Liverpool",
+          "name": "Merseyside derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 3,
+              "ga": 0,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 0,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Ipswich Town",
+            "won": false,
+            "for": 0,
+            "against": 2,
+            "home": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "age": 20,
+      "club": "Everton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 13,
+      "leagueApps": 23,
+      "goals": 1,
+      "assists": 1,
+      "cleanSheets": 3,
+      "yellowCards": 3,
+      "redCards": 0,
+      "rating": 6.5,
+      "ovr": 72,
+      "injury": "Achilles tendon rupture",
+      "injuryWeeks": 22,
+      "injurySevere": true,
+      "leagueTitle": false,
+      "derbies": [
+        {
+          "rival": "Liverpool",
+          "name": "Merseyside derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 3,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": "European Championship",
+      "tournamentResult": null
+    },
+    {
+      "year": 2025,
+      "age": 21,
+      "club": "Everton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 28,
+      "leagueApps": 25,
+      "goals": 1,
+      "assists": 1,
+      "cleanSheets": 6,
+      "yellowCards": 7,
+      "redCards": 0,
+      "rating": 7,
+      "ovr": 72,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 20,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Liverpool",
+          "name": "Merseyside derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2026,
+      "age": 22,
+      "club": "Everton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 30,
+      "leagueApps": 28,
+      "goals": 3,
+      "assists": 3,
+      "cleanSheets": 13,
+      "yellowCards": 4,
+      "redCards": 0,
+      "rating": 7.7,
+      "ovr": 74,
+      "injury": "Twisted ankle",
+      "injuryWeeks": 4,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 18,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Liverpool",
+          "name": "Merseyside derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 3,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": true,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 14,
+      "intGoals": 1,
+      "intAssists": 1,
+      "intRating": 7,
+      "tournament": "World Cup",
+      "tournamentResult": "Winner",
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Arsenal",
+            "won": true,
+            "for": 1,
+            "against": 0,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Watford",
+            "won": false,
+            "for": 0,
+            "against": 2
+          }
+        ]
+      }
+    },
+    {
+      "year": 2027,
+      "age": 23,
+      "club": "Everton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 30,
+      "leagueApps": 28,
+      "goals": 0,
+      "assists": 1,
+      "cleanSheets": 8,
+      "yellowCards": 4,
+      "redCards": 1,
+      "rating": 7,
+      "ovr": 75,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 13,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Liverpool",
+          "name": "Merseyside derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 5,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 6.8,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Man City",
+            "won": false,
+            "for": 0,
+            "against": 3,
+            "home": true
+          }
+        ]
+      }
+    },
+    {
+      "year": 2028,
+      "age": 24,
+      "club": "Everton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 40,
+      "leagueApps": 35,
+      "goals": 0,
+      "assists": 4,
+      "cleanSheets": 10,
+      "yellowCards": 6,
+      "redCards": 0,
+      "rating": 7.9,
+      "ovr": 77,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 7,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Liverpool",
+          "name": "Merseyside derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 3,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 9,
+      "intGoals": 0,
+      "intAssists": 2,
+      "intRating": 6.9,
+      "tournament": "European Championship",
+      "tournamentResult": "Round of 16",
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Liverpool",
+            "won": false,
+            "for": 1,
+            "against": 2,
+            "home": true
+          }
+        ]
+      }
+    },
+    {
+      "year": 2029,
+      "age": 25,
+      "club": "Everton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 33,
+      "leagueApps": 31,
+      "goals": 3,
+      "assists": 2,
+      "cleanSheets": 10,
+      "yellowCards": 0,
+      "redCards": 0,
+      "rating": 7.5,
+      "ovr": 80,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 15,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Liverpool",
+          "name": "Merseyside derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 2,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 6,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 6.9,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2030,
+      "age": 26,
+      "club": "Everton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 37,
+      "leagueApps": 34,
+      "goals": 4,
+      "assists": 1,
+      "cleanSheets": 16,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 8.1,
+      "ovr": 81,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 10,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Liverpool",
+          "name": "Merseyside derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 3,
+              "ga": 1,
+              "played": true,
+              "goals": 1
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 12,
+      "intGoals": 2,
+      "intAssists": 2,
+      "intRating": 7.4,
+      "tournament": "World Cup",
+      "tournamentResult": "Quarter-final",
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2031,
+      "age": 27,
+      "club": "Everton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 35,
+      "leagueApps": 33,
+      "goals": 0,
+      "assists": 3,
+      "cleanSheets": 11,
+      "yellowCards": 3,
+      "redCards": 0,
+      "rating": 8,
+      "ovr": 82,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": true,
+      "leagueFinish": 1,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Liverpool",
+          "name": "Merseyside derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 8,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 6.9,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    "🔥 Merseyside derby against Liverpool: L 1-3 at home, D 0-0 away.",
+    "🏆 Won the league with Everton!",
+    "🏛️ Granted Club Legend status at Everton! (300+ appearances)",
+    "⚠️ Your contract is expiring!"
+  ],
+  "retired": false,
+  "phase": "newspaper",
+  "pendingOffers": [],
+  "pendingSummary": {
+    "year": 2031,
+    "age": 27,
+    "club": "Everton",
+    "clubCountry": "England",
+    "clubTier": 3,
+    "apps": 35,
+    "leagueApps": 33,
+    "goals": 0,
+    "assists": 3,
+    "cleanSheets": 11,
+    "yellowCards": 3,
+    "redCards": 0,
+    "rating": 8,
+    "ovr": 82,
+    "injury": null,
+    "injuryWeeks": 0,
+    "injurySevere": false,
+    "leagueTitle": true,
+    "leagueFinish": 1,
+    "leagueSize": 20,
+    "derbies": [
+      {
+        "rival": "Liverpool",
+        "name": "Merseyside derby",
+        "kind": "derby",
+        "meetings": [
+          {
+            "home": true,
+            "gf": 1,
+            "ga": 3,
+            "played": true,
+            "goals": 0
+          },
+          {
+            "home": false,
+            "gf": 0,
+            "ga": 0,
+            "played": true,
+            "goals": 0
+          }
+        ]
+      }
+    ],
+    "domesticCup": false,
+    "championsLeague": false,
+    "worldCup": false,
+    "ballonDor": false,
+    "ballonDorRank": null,
+    "type": "playing",
+    "intApps": 8,
+    "intGoals": 0,
+    "intAssists": 0,
+    "intRating": 6.9,
+    "tournament": null,
+    "tournamentResult": null,
+    "cupRun": {
+      "cup": "FA Cup",
+      "stages": [
+        {
+          "stage": "early",
+          "won": false
+        }
+      ]
+    }
+  },
+  "transferSituation": null,
+  "loan": null,
+  "pendingLoanOffers": null,
+  "pendingEvents": [],
+  "lastEventId": 7,
+  "statBoostNextSeason": {},
+  "pendingNews": [
+    {
+      "newspaper": "El Golazo",
+      "type": "positive",
+      "headline": "THE COLUMN: Prudence Ravensworth Has Seen Enough, And He Is Saying So",
+      "body": "35 games at a 8.0 average. Prudence Ravensworth wrote that anybody still arguing about this is arguing for the sake of it."
+    },
+    {
+      "newspaper": "The Sunday Volley",
+      "type": "positive",
+      "headline": "ONE OF OUR OWN: Sim 10 Is Everton's Greatest Homegrown Story",
+      "body": "From the academy pitches to 0 goals a season, Sim 10 never needed to leave to become world class. The club shop cannot print the name fast enough. There are babies in this town named after a CB."
+    }
+  ],
+  "internationalCareer": true,
+  "sponsorDeal": null,
+  "totalEarnings": 15.44,
+  "popularity": 100,
+  "morale": 77,
+  "isLeader": true,
+  "hasRelationship": false,
+  "intStats": {
+    "caps": 54,
+    "goals": 3,
+    "assists": 5,
+    "tournaments": 3,
+    "worldCups": 2,
+    "continentals": 1,
+    "worldCupWins": 1,
+    "continentalWins": 0,
+    "isCaptain": true,
+    "isRetired": false,
+    "debutYear": -1,
+    "debutAge": 19,
+    "worldCupResults": [],
+    "squadSnubs": 0,
+    "failedQualifications": 0
+  },
+  "pendingWorldCup": null,
+  "pendingTournament": null,
+  "lastTournament": {
+    "year": 2030,
+    "name": "World Cup",
+    "short": "World Cup",
+    "kind": "World Cup",
+    "confederation": null,
+    "nation": "England",
+    "teams": 48,
+    "qualifying": {
+      "confederation": "UEFA",
+      "table": [
+        {
+          "nation": "England",
+          "played": 10,
+          "won": 7,
+          "drawn": 2,
+          "lost": 1,
+          "gf": 29,
+          "ga": 15,
+          "points": 23
+        },
+        {
+          "nation": "Russia",
+          "played": 10,
+          "won": 5,
+          "drawn": 4,
+          "lost": 1,
+          "gf": 17,
+          "ga": 12,
+          "points": 19
+        },
+        {
+          "nation": "Scotland",
+          "played": 10,
+          "won": 3,
+          "drawn": 4,
+          "lost": 3,
+          "gf": 16,
+          "ga": 16,
+          "points": 13
+        },
+        {
+          "nation": "Latvia",
+          "played": 10,
+          "won": 3,
+          "drawn": 1,
+          "lost": 6,
+          "gf": 17,
+          "ga": 20,
+          "points": 10
+        },
+        {
+          "nation": "Montenegro",
+          "played": 10,
+          "won": 3,
+          "drawn": 0,
+          "lost": 7,
+          "gf": 13,
+          "ga": 21,
+          "points": 9
+        },
+        {
+          "nation": "Finland",
+          "played": 10,
+          "won": 2,
+          "drawn": 3,
+          "lost": 5,
+          "gf": 11,
+          "ga": 19,
+          "points": 9
+        }
+      ],
+      "myPosition": 1,
+      "through": 2,
+      "qualified": true,
+      "automatic": false
+    },
+    "qualified": true,
+    "squad": {
+      "called": true,
+      "role": "Captain",
+      "reason": "You are England's first choice in your position.",
+      "myRank": 1,
+      "poolSize": 20,
+      "places": 9,
+      "myScore": 89,
+      "cutScore": 76,
+      "xi": {
+        "formation": "4-3-3",
+        "gk": [
+          {
+            "slot": "GK",
+            "name": "Warren Whitlock",
+            "ovr": 86,
+            "me": false
+          }
+        ],
+        "def": [
+          {
+            "slot": "LB",
+            "name": "Craig Prescott",
+            "ovr": 82,
+            "me": false
+          },
+          {
+            "slot": "CB",
+            "name": "You",
+            "ovr": 81,
+            "me": true
+          },
+          {
+            "slot": "CB",
+            "name": "Eddie Kingsley",
+            "ovr": 85,
+            "me": false
+          },
+          {
+            "slot": "RB",
+            "name": "Shane Baxter",
+            "ovr": 84,
+            "me": false
+          }
+        ],
+        "mid": [
+          {
+            "slot": "CM",
+            "name": "Ross Dunmore",
+            "ovr": 86,
+            "me": false
+          },
+          {
+            "slot": "CDM",
+            "name": "Grant Hollis",
+            "ovr": 83,
+            "me": false
+          },
+          {
+            "slot": "CM",
+            "name": "Wesley Stanhope",
+            "ovr": 85,
+            "me": false
+          }
+        ],
+        "att": [
+          {
+            "slot": "LW",
+            "name": "Scott Chadwick",
+            "ovr": 81,
+            "me": false
+          },
+          {
+            "slot": "ST",
+            "name": "Stuart Ashcroft",
+            "ovr": 86,
+            "me": false
+          },
+          {
+            "slot": "RW",
+            "name": "Dean Marlowe",
+            "ovr": 85,
+            "me": false
+          }
+        ],
+        "mySlot": "CB",
+        "aheadOfMe": null
+      }
+    },
+    "groupTable": [
+      {
+        "nation": "England",
+        "played": 3,
+        "won": 3,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 14,
+        "ga": 0,
+        "points": 9
+      },
+      {
+        "nation": "Ecuador",
+        "played": 3,
+        "won": 1,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 1,
+        "ga": 3,
+        "points": 4
+      },
+      {
+        "nation": "Venezuela",
+        "played": 3,
+        "won": 1,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 1,
+        "ga": 6,
+        "points": 4
+      },
+      {
+        "nation": "South Africa",
+        "played": 3,
+        "won": 0,
+        "drawn": 0,
+        "lost": 3,
+        "gf": 0,
+        "ga": 7,
+        "points": 0
+      }
+    ],
+    "bracket": [
+      {
+        "round": "R32",
+        "slot": 0,
+        "home": "Spain",
+        "away": "England",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "England",
+        "mine": true
+      },
+      {
+        "round": "R32",
+        "slot": 1,
+        "home": "Argentina",
+        "away": "Mali",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Argentina",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 2,
+        "home": "Serbia",
+        "away": "Egypt",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Egypt",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 3,
+        "home": "Wales",
+        "away": "Netherlands",
+        "homeGoals": 0,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Netherlands",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 4,
+        "home": "Belgium",
+        "away": "South Korea",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Belgium",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 5,
+        "home": "Iran",
+        "away": "Venezuela",
+        "homeGoals": 2,
+        "awayGoals": 2,
+        "pens": true,
+        "winner": "Iran",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 6,
+        "home": "Sweden",
+        "away": "France",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 7,
+        "home": "Jamaica",
+        "away": "Canada",
+        "homeGoals": 0,
+        "awayGoals": 0,
+        "pens": true,
+        "winner": "Canada",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 8,
+        "home": "Mexico",
+        "away": "Italy",
+        "homeGoals": 3,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Mexico",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 9,
+        "home": "Ecuador",
+        "away": "Morocco",
+        "homeGoals": 0,
+        "awayGoals": 5,
+        "pens": false,
+        "winner": "Morocco",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 10,
+        "home": "Portugal",
+        "away": "Colombia",
+        "homeGoals": 0,
+        "awayGoals": 6,
+        "pens": false,
+        "winner": "Colombia",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 11,
+        "home": "Brazil",
+        "away": "Croatia",
+        "homeGoals": 1,
+        "awayGoals": 1,
+        "pens": true,
+        "winner": "Croatia",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 12,
+        "home": "Norway",
+        "away": "Australia",
+        "homeGoals": 4,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Norway",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 13,
+        "home": "Turkey",
+        "away": "USA",
+        "homeGoals": 1,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Turkey",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 14,
+        "home": "Russia",
+        "away": "Poland",
+        "homeGoals": 2,
+        "awayGoals": 2,
+        "pens": true,
+        "winner": "Russia",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 15,
+        "home": "Paraguay",
+        "away": "DR Congo",
+        "homeGoals": 1,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "DR Congo",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 0,
+        "home": "England",
+        "away": "Argentina",
+        "homeGoals": 4,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "England",
+        "mine": true
+      },
+      {
+        "round": "R16",
+        "slot": 1,
+        "home": "Egypt",
+        "away": "Netherlands",
+        "homeGoals": 0,
+        "awayGoals": 4,
+        "pens": false,
+        "winner": "Netherlands",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 2,
+        "home": "Belgium",
+        "away": "Iran",
+        "homeGoals": 1,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Iran",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 3,
+        "home": "France",
+        "away": "Canada",
+        "homeGoals": 3,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 4,
+        "home": "Mexico",
+        "away": "Morocco",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Morocco",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 5,
+        "home": "Colombia",
+        "away": "Croatia",
+        "homeGoals": 3,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Colombia",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 6,
+        "home": "Norway",
+        "away": "Turkey",
+        "homeGoals": 1,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Turkey",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 7,
+        "home": "Russia",
+        "away": "DR Congo",
+        "homeGoals": 5,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Russia",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 0,
+        "home": "England",
+        "away": "Netherlands",
+        "homeGoals": 3,
+        "awayGoals": 3,
+        "pens": true,
+        "winner": "Netherlands",
+        "mine": true
+      },
+      {
+        "round": "QF",
+        "slot": 1,
+        "home": "Iran",
+        "away": "France",
+        "homeGoals": 1,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 2,
+        "home": "Morocco",
+        "away": "Colombia",
+        "homeGoals": 1,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Colombia",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 3,
+        "home": "Turkey",
+        "away": "Russia",
+        "homeGoals": 3,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Turkey",
+        "mine": false
+      },
+      {
+        "round": "SF",
+        "slot": 0,
+        "home": "Netherlands",
+        "away": "France",
+        "homeGoals": 0,
+        "awayGoals": 4,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "SF",
+        "slot": 1,
+        "home": "Colombia",
+        "away": "Turkey",
+        "homeGoals": 1,
+        "awayGoals": 1,
+        "pens": true,
+        "winner": "Turkey",
+        "mine": false
+      },
+      {
+        "round": "F",
+        "slot": 0,
+        "home": "France",
+        "away": "Turkey",
+        "homeGoals": 2,
+        "awayGoals": 2,
+        "pens": true,
+        "winner": "Turkey",
+        "mine": false
+      }
+    ],
+    "champion": "Turkey",
+    "runnerUp": "France",
+    "groupLabel": "Group L",
+    "thirdsThrough": 8,
+    "myResult": "Quarter-final",
+    "matches": [
+      {
+        "round": "Group L",
+        "home": "England",
+        "away": "Ecuador",
+        "homeGoals": 3,
+        "awayGoals": 0,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 1,
+        "playerRating": 7.2
+      },
+      {
+        "round": "Group L",
+        "home": "England",
+        "away": "Venezuela",
+        "homeGoals": 6,
+        "awayGoals": 0,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 1,
+        "playerRating": 6.5
+      },
+      {
+        "round": "Group L",
+        "home": "England",
+        "away": "South Africa",
+        "homeGoals": 5,
+        "awayGoals": 0,
+        "pens": false,
+        "playerGoals": 2,
+        "playerAssists": 0,
+        "playerRating": 7.3
+      },
+      {
+        "round": "R32",
+        "home": "Spain",
+        "away": "England",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 0,
+        "playerRating": 6.5
+      },
+      {
+        "round": "R16",
+        "home": "England",
+        "away": "Argentina",
+        "homeGoals": 4,
+        "awayGoals": 2,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 0,
+        "playerRating": 6.2
+      },
+      {
+        "round": "QF",
+        "home": "England",
+        "away": "Netherlands",
+        "homeGoals": 3,
+        "awayGoals": 3,
+        "pens": true,
+        "playerGoals": 0,
+        "playerAssists": 0,
+        "playerRating": 6.3
+      }
+    ],
+    "playerApps": 6,
+    "playerGoals": 2,
+    "playerAssists": 2,
+    "playerAvgRating": 6.7,
+    "goldenBoot": false,
+    "bestPlayer": false
+  },
+  "intlHistory": [
+    {
+      "year": 2022,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "Hungary",
+      "myResult": "",
+      "apps": 0,
+      "goals": 0
+    },
+    {
+      "year": 2024,
+      "short": "Euros",
+      "nation": "England",
+      "champion": "Belgium",
+      "myResult": "",
+      "apps": 0,
+      "goals": 0
+    },
+    {
+      "year": 2026,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "England",
+      "myResult": "Winner",
+      "apps": 8,
+      "goals": 1
+    },
+    {
+      "year": 2028,
+      "short": "Euros",
+      "nation": "England",
+      "champion": "Spain",
+      "myResult": "Round of 16",
+      "apps": 4,
+      "goals": 0
+    },
+    {
+      "year": 2030,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "Turkey",
+      "myResult": "Quarter-final",
+      "apps": 6,
+      "goals": 2
+    }
+  ],
+  "rival": {
+    "name": "Cole Diallo",
+    "nationality": "England",
+    "position": "CB",
+    "club": "Atletico Madrid",
+    "clubTier": 2,
+    "overall": 87,
+    "careerGoals": 8,
+    "careerAssists": 16,
+    "careerApps": 219,
+    "leagueTitles": 0,
+    "championsLeagues": 0,
+    "worldCups": 0,
+    "ballonDors": 0,
+    "intCaps": 35,
+    "intGoals": 0,
+    "marketValue": 95.5,
+    "age": 27,
+    "retired": false
+  },
+  "rivalCreated": true,
+  "pendingRivalryEvent": null,
+  "lastRivalryEventId": 113,
+  "rivalrySummary": null,
+  "netWorth": 13.69,
+  "lifestyleLevel": "Wealthy",
+  "lifestyleCostPerYear": 0.8,
+  "socialMediaFollowers": 14.6,
+  "sponsorshipIncome": 3.3,
+  "properties": [],
+  "investments": [],
+  "consecutiveDeficitYears": 0,
+  "agentFeesPaid": 0,
+  "family": {
+    "isMarried": false,
+    "marriedAge": null,
+    "children": 0,
+    "isDivorced": false,
+    "divorceAge": null
+  },
+  "purchasedItems": [],
+  "investmentHoldings": [],
+  "totalAssetValue": 0,
+  "customYearlyCosts": 0,
+  "awards": [
+    {
+      "year": 2025,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    },
+    {
+      "year": 2031,
+      "name": "Club Legend",
+      "emoji": "🏛️"
+    }
+  ],
+  "pendingBallonDor": {
+    "year": 2031,
+    "nominees": [
+      {
+        "name": "Lamine Yamal",
+        "nationality": "Spain",
+        "position": "RW",
+        "club": "Barcelona",
+        "points": 93,
+        "goals": 24,
+        "trophies": [
+          "League",
+          "Cup"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Rodri",
+        "nationality": "Spain",
+        "position": "CDM",
+        "club": "PSG",
+        "points": 72,
+        "goals": 8,
+        "trophies": [
+          "UCL"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Kylian Mbappé",
+        "nationality": "France",
+        "position": "ST",
+        "club": "Real Madrid",
+        "points": 63,
+        "goals": 35,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Erling Haaland",
+        "nationality": "Norway",
+        "position": "ST",
+        "club": "Al Nassr",
+        "points": 58,
+        "goals": 41,
+        "trophies": [
+          "League"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Vinícius Jr",
+        "nationality": "Brazil",
+        "position": "LW",
+        "club": "Atletico Madrid",
+        "points": 51,
+        "goals": 19,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Raphinha",
+        "nationality": "Brazil",
+        "position": "RW",
+        "club": "Athletic Bilbao",
+        "points": 48,
+        "goals": 23,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Endrick",
+        "nationality": "Brazil",
+        "position": "ST",
+        "club": "Real Madrid",
+        "points": 46,
+        "goals": 20,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Mohamed Salah",
+        "nationality": "Egypt",
+        "position": "RW",
+        "club": "Arsenal",
+        "points": 44,
+        "goals": 24,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Florian Wirtz",
+        "nationality": "Germany",
+        "position": "CAM",
+        "club": "Liverpool",
+        "points": 43,
+        "goals": 19,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Pedri",
+        "nationality": "Spain",
+        "position": "CM",
+        "club": "Barcelona",
+        "points": 43,
+        "goals": 8,
+        "trophies": [
+          "League",
+          "Cup"
+        ],
+        "isPlayer": false
+      }
+    ],
+    "playerRank": null,
+    "playerPoints": 0,
+    "playerNominated": false
+  },
+  "lastUCLResult": {
+    "qualified": false,
+    "matches": [],
+    "result": "N/A",
+    "playerGoals": 0,
+    "isTopScorer": false
+  },
+  "legacy": null,
+  "postRetirementChoice": null,
+  "managerState": null,
+  "isFinalSeason": false,
+  "isPundit": false,
+  "punditEvents": [],
+  "primeType": "normal",
+  "socialMediaActionUsedThisSeason": false,
+  "socialMediaFocusBoost": false,
+  "pendingCoverAthleteEvent": false,
+  "coverAthleteAccepted": false,
+  "activeSponsorship": null,
+  "personality": "enigma",
+  "agentId": "self",
+  "lifeFlags": {
+    "criticAnswered": 3,
+    "refArc": -1
+  },
+  "appearance": null,
+  "corruptionHeat": 0,
+  "dirtyMoney": 0,
+  "prisonSeasons": 0,
+  "academyClubName": "Everton",
+  "moralDilemmasTriggered": [
+    "streaker_proposal",
+    "magazine_shoot",
+    "hometown_statue"
+  ],
+  "pendingMoralDilemma": null,
+  "pedSeasonsRemaining": 0,
+  "pedActive": false,
+  "matchFixBanned": 0,
+  "divingActive": false,
+  "integrityBonus": 54,
+  "pendingAppealResult": null,
+  "childEventsSeen": [],
+  "pregnancyAnnounced": false,
+  "punditState": null,
+  "ownerState": null,
+  "peakOverall": 82,
+  "retirementSuggested": false,
+  "phone": {
+    "threads": [
+      {
+        "id": "th_x_barber",
+        "c": "other",
+        "name": "Barber",
+        "emoji": "💬",
+        "lines": [
+          {
+            "w": 0,
+            "t": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Bumping this up your inbox.",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "I will assume that is a no then.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "The fame has really gotten to you.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "legacy",
+          "msgId": "barber_cut-2020"
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [],
+        "lastReplyYear": null
+      },
+      {
+        "id": "th_academy",
+        "c": "academy",
+        "name": "Academy kid",
+        "emoji": "🌱",
+        "lines": [
+          {
+            "w": 0,
+            "t": "Training with the first team tomorrow. I have been sick twice. Any advice",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Still waiting on you. Not sulking. Just saying.",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "Wow. I see how it is then.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "The fame has really gotten to you.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "convo",
+          "convo": "academy_firstteam",
+          "beat": 0
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [
+          "academy_firstteam"
+        ],
+        "lastReplyYear": null
+      }
+    ],
+    "feed": [
+      "⭐ Leverkusen are champions of Europe.",
+      "🏆 Newcastle win the Premier League.",
+      "🏆 Athletic Bilbao win La Liga.",
+      "🥅 Désiré Doué finished top scorer in the Premier League on 10.",
+      "🌍 Turkey win the World Cup.",
+      "🔄 DONE DEAL. Vinícius Jr joins Atletico Madrid from Liverpool. Fee around 105m.",
+      "🔄 DONE DEAL. Gianluigi Donnarumma joins Inter Milan from Sporting CP. Fee around 75m.",
+      "🔄 DONE DEAL. Federico Valverde joins Flamengo from Real Madrid. Fee around 100m.",
+      "⭐ PSG are champions of Europe.",
+      "🏆 Barcelona win La Liga.",
+      "🏆 Leverkusen win the Bundesliga.",
+      "🥅 Endrick finished top scorer in La Liga on 14."
+    ],
+    "world": {
+      "year": 2031,
+      "ucl": "PSG",
+      "leagues": {
+        "Premier League": "Everton",
+        "La Liga": "Barcelona",
+        "Bundesliga": "Leverkusen",
+        "Serie A": "Juventus",
+        "Ligue 1": "Lille",
+        "Primeira Liga": "Porto",
+        "Eredivisie": "PSV",
+        "Scottish Premiership": "Aberdeen",
+        "Brasileirao": "Palmeiras",
+        "Saudi Pro League": "Al Nassr",
+        "MLS": "Seattle Sounders",
+        "K League 1": "Jeonbuk Motors"
+      },
+      "cups": {
+        "Premier League": "Man United",
+        "La Liga": "Barcelona",
+        "Bundesliga": "Dortmund",
+        "Serie A": "AC Milan",
+        "Ligue 1": "Lyon",
+        "Primeira Liga": "Sporting CP",
+        "Eredivisie": "Feyenoord",
+        "Scottish Premiership": "Aberdeen",
+        "Brasileirao": "Botafogo",
+        "Saudi Pro League": "Al Ittihad",
+        "MLS": "Inter Miami",
+        "K League 1": "Jeonbuk Motors"
+      },
+      "moves": [
+        {
+          "who": "Vinícius Jr",
+          "from": "Liverpool",
+          "to": "Atletico Madrid",
+          "fee": 105
+        },
+        {
+          "who": "Gianluigi Donnarumma",
+          "from": "Sporting CP",
+          "to": "Inter Milan",
+          "fee": 75
+        },
+        {
+          "who": "Federico Valverde",
+          "from": "Real Madrid",
+          "to": "Flamengo",
+          "fee": 100
+        }
+      ],
+      "topScorer": {
+        "who": "Endrick",
+        "club": "Real Madrid",
+        "goals": 14,
+        "league": "La Liga"
+      },
+      "intl": null
+    },
+    "clubs": {
+      "Mohamed Salah": "Arsenal",
+      "Vinícius Jr": "Atletico Madrid",
+      "Jude Bellingham": "Chelsea",
+      "Rodri": "PSG",
+      "Luka Modrić": "Real Madrid",
+      "Harry Kane": "Ajax",
+      "Neymar": "PSG",
+      "Lautaro Martínez": "Bayern Munich",
+      "Bukayo Saka": "Arsenal",
+      "Phil Foden": "Real Madrid",
+      "Federico Valverde": "Flamengo",
+      "Antoine Griezmann": "Atletico Madrid",
+      "Virgil van Dijk": "Liverpool",
+      "Thibaut Courtois": "Real Madrid",
+      "Lamine Yamal": "Barcelona",
+      "Florian Wirtz": "Liverpool",
+      "Jamal Musiala": "Atalanta",
+      "Pedri": "Barcelona",
+      "Declan Rice": "Arsenal",
+      "Raphinha": "Athletic Bilbao",
+      "Endrick": "Real Madrid",
+      "Nico Williams": "Dortmund",
+      "Désiré Doué": "Liverpool",
+      "Kobbie Mainoo": "Man United",
+      "Gianluigi Donnarumma": "Inter Milan",
+      "Ousmane Dembélé": "AC Milan",
+      "Kylian Mbappé": "Real Madrid",
+      "Erling Haaland": "Al Nassr"
+    },
+    "rivalClub": "Atletico Madrid",
+    "seed": 684708797,
+    "offers": 0,
+    "perksTaken": 0
+  },
+  "frozenOut": 0,
+  "badSeasonStreak": 0,
+  "story": [
+    {
+      "year": 2020,
+      "age": 16,
+      "club": "Everton Youth",
+      "lines": [
+        "📋 Joined Everton Youth Academy aged 16"
+      ]
+    },
+    {
+      "year": 2021,
+      "age": 17,
+      "club": "Everton Youth",
+      "lines": [
+        "📈 Stats improved during youth development (OVR 68)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Everton 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (4yr, €11k/wk)",
+        "🏠 One of our own! The Everton academy kid signs a first-team deal. The ultras already have a chant ready."
+      ]
+    },
+    {
+      "year": 2022,
+      "age": 18,
+      "club": "Everton",
+      "lines": [
+        "🚑 Injury: Tight calf, out 2 weeks, missed matches",
+        "🔥 Merseyside derby against Liverpool: W 2-0 at home, L 0-1 away (you missed it).",
+        "🌍 Hungary won the World Cup.",
+        "🃏 You answered in riddles: The Enigma",
+        "👟 Rejected sponsorship offers",
+        "📣 The pen pal story melted the internet for a weekend"
+      ]
+    },
+    {
+      "year": 2023,
+      "age": 19,
+      "club": "Everton",
+      "lines": [
+        "🔥 Merseyside derby against Liverpool: W 3-0 away (you missed it), W 1-0 at home (you missed it).",
+        "🏆 Won the league with Everton!",
+        "🇺🇳 First international call-up for England!",
+        "🤝 No agent. You read every contract yourself",
+        "🎮 Declined gaming brand deal",
+        "📄 Traded a big raise for a written release clause. Cheapest insurance you ever bought"
+      ]
+    },
+    {
+      "year": 2024,
+      "age": 20,
+      "club": "Everton",
+      "lines": [
+        "🚑 Injury: Achilles tendon rupture, out 22 weeks, missed matches",
+        "🔥 Merseyside derby against Liverpool: L 2-3 away (you missed it), L 0-1 at home (you missed it).",
+        "🌍 Belgium won the European Championship.",
+        "🏥 22 weeks, the club's plan, no shortcuts. Pace -2, Physical -1, and you walk back in whole."
+      ]
+    },
+    {
+      "year": 2025,
+      "age": 21,
+      "club": "Everton",
+      "lines": [
+        "🔥 Merseyside derby against Liverpool: D 0-0 away, L 0-2 at home.",
+        "😤 A new rival emerges: Cole Diallo (🏴󠁧󠁢󠁥󠁮󠁧󠁿 England)",
+        "🏆 Won Player of the Month (November 2025)!",
+        "⚠️ Your contract is expiring!",
+        "💫 The Armband Snub",
+        "🩺 Brought the physios out at the end. The stadium clapped them longer than you",
+        "🚪 Let Prudence Ravensworth watch a full week of training. He wrote it up straight, and the lads have not let it go",
+        "📣 Came off with the head knock and said why on camera. Youth coaches keep sending you thank yous",
+        "😤 Told him where to go. Your next three penalty shouts were mysteriously waved away",
+        "🤷 Kept the expensive accountant. The strategy remains a mystery"
+      ]
+    },
+    {
+      "year": 2026,
+      "age": 22,
+      "club": "Everton",
+      "lines": [
+        "🚑 Injury: Twisted ankle, out 4 weeks, missed matches",
+        "🔥 Merseyside derby against Liverpool: L 2-3 away (you missed it), D 1-1 at home.",
+        "⚠️ Your contract is expiring!",
+        "🏆 WORLD CUP WINNER with England!",
+        "🦵 Turned down the boxing match. Cole Diallo called you scared and did a full preseason of it",
+        "👕 Sent signed shirts to the children's ward",
+        "🙄 Refused the mascot race. It did a victory lap anyway",
+        "🎧 Waited out the breakdown in silence",
+        "📝 Renewed contract with Everton for 3 years"
+      ]
+    },
+    {
+      "year": 2027,
+      "age": 23,
+      "club": "Everton",
+      "lines": [
+        "🔥 Merseyside derby against Liverpool: L 1-2 at home, L 0-1 away.",
+        "🤬 Tunnel Bust-Up",
+        "📋 Negotiated the aux schedule. Whales on Wednesdays only",
+        "👟 Stayed loyal to the brand that believed in you first"
+      ]
+    },
+    {
+      "year": 2028,
+      "age": 24,
+      "club": "Everton",
+      "lines": [
+        "🔥 Merseyside derby against Liverpool: W 3-1 at home, W 2-1 away.",
+        "⚠️ Your contract is expiring!",
+        "🌍 Spain won the European Championship.",
+        "👕 The Shirt Swap",
+        "🔍 Posted their own slide deck instead. The internet ate them alive and thanked you",
+        "🧊 Cancelled the cryo chamber and did up the family house instead. Recovered better anyway",
+        "🖼️ Framed both shirts and auctioned them for €400k. Cole Diallo matched it out of spite"
+      ]
+    },
+    {
+      "year": 2029,
+      "age": 25,
+      "club": "Everton",
+      "lines": [
+        "🔥 Merseyside derby against Liverpool: D 2-2 at home (you missed it), L 1-3 away.",
+        "⚠️ Your contract is expiring!",
+        "🧒 Brought the gate regulars inside to watch a full session. The kid told him he could not sleep the night before",
+        "🔒 Said nothing about the leak, deleted every app, and had a frighteningly focused season",
+        "📝 Renewed contract with Everton for 3 years"
+      ]
+    },
+    {
+      "year": 2030,
+      "age": 26,
+      "club": "Everton",
+      "lines": [
+        "🔥 Merseyside derby against Liverpool: W 3-1 at home, L 0-2 away.",
+        "©️ Named captain of England! Legacy +15",
+        "🌍 Turkey won the World Cup.",
+        "©️ Voted club captain by the dressing room",
+        "🎯 Scored a Puskas-nominated goal!"
+      ]
+    }
+  ],
+  "sponsorBonus": 0,
+  "money": {
+    "seed": 1587311049,
+    "vault": 0,
+    "hold": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+    },
+    "cost": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+    },
+    "price": {
+      "ladder": 179.21,
+      "bricks": 150.54,
+      "cleats": 176.61,
+      "screens": 146.42,
+      "spark": 116.4
+    },
+    "hist": {
+      "ladder": [
+        117.37,
+        128.31,
+        133.93,
+        137.62,
+        151.4,
+        157.65,
+        166.64,
+        179.21
+      ],
+      "bricks": [
+        95.69,
+        109.44,
+        113.44,
+        122.38,
+        125.11,
+        140.33,
+        160.93,
+        150.54
+      ],
+      "cleats": [
+        90.38,
+        93.97,
+        114.38,
+        130.73,
+        151.76,
+        145.58,
+        155.53,
+        176.61
+      ],
+      "screens": [
+        103.86,
+        139.64,
+        165.44,
+        165.76,
+        103.8,
+        127.15,
+        153.78,
+        146.42
+      ],
+      "spark": [
+        66.36,
+        80.51,
+        49.66,
+        80.26,
+        81.8,
+        74.62,
+        75.6,
+        116.4
+      ]
+    },
+    "log": [],
+    "year": 2031,
+    "age": 11,
+    "won": 0,
+    "lost": 0,
+    "cPlays": 0,
+    "cNet": 0,
+    "cYear": 0,
+    "cShut": false,
+    "aYear": 0,
+    "aBest": 0,
+    "aPlays": 0
+  },
+  "eventLastFired": {
+    "3": 2030,
+    "5": 2022,
+    "7": 2030,
+    "30": 2023,
+    "53": 2026,
+    "54": 2027,
+    "61": 2026,
+    "200": 2022,
+    "201": 2023,
+    "223": 2027,
+    "224": 2026,
+    "252": 2022,
+    "259": 2025,
+    "260": 2025,
+    "262": 2025,
+    "305": 2025,
+    "331": 2028,
+    "414": 2029,
+    "437": 2028,
+    "463": 2028,
+    "465": 2026,
+    "473": 2029,
+    "476": 2023,
+    "500": 2025
+  },
+  "pendingRehab": null,
+  "seriousInjuries": [
+    {
+      "year": 2024,
+      "name": "Achilles tendon rupture",
+      "weeks": 22,
+      "path": "plan",
+      "setback": false
+    }
+  ],
+  "rivalryIntensity": 2,
+  "isClubCaptain": true,
+  "captainClub": "Everton",
+  "captainSeasons": 1
+}

@@ -1,0 +1,3 @@
+5755 /home/runner/work/_temp/rc-out/full/simMmaPromotion.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simMmaPromotion.mjs/stderr.log
+5755 total

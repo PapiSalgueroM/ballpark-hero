@@ -1,0 +1,2 @@
+7cb11e55af0cdaec3a59d1d1b26a8e9609f2832701d38c1e1e74c55a23df3d4e  /home/runner/work/_temp/rc-out/full/simPlayerBingoHonours.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simPlayerBingoHonours.mjs/stderr.log

@@ -1,0 +1,3 @@
+212943 /home/runner/work/_temp/rc-out/full/simRarityAgreement.mjs/stdout.log
+     0 /home/runner/work/_temp/rc-out/full/simRarityAgreement.mjs/stderr.log
+212943 total

@@ -1,0 +1,3 @@
+1058 /home/runner/work/_temp/rc-out/full/simCareerStoryRole.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerStoryRole.mjs/stderr.log
+1058 total

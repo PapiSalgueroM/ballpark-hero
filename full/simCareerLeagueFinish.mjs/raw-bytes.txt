@@ -1,0 +1,3 @@
+2029 /home/runner/work/_temp/rc-out/full/simCareerLeagueFinish.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCareerLeagueFinish.mjs/stderr.log
+2029 total

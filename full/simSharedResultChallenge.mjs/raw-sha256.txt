@@ -1,0 +1,2 @@
+dfb6beadb13f6a0e20b649eb4d776d4f48ff5b6d7a3e0424dbebf039ad61d90d  /home/runner/work/_temp/rc-out/full/simSharedResultChallenge.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSharedResultChallenge.mjs/stderr.log

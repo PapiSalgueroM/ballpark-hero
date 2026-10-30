@@ -1,0 +1,2 @@
+83b057bcc330fc161df20cf3dc1e2f0ce01396967b1e58c459b26c94d8e204d1  /home/runner/work/_temp/rc-out/full/simCmQuickSubs.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simCmQuickSubs.mjs/stderr.log

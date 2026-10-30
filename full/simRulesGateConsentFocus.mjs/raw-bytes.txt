@@ -1,0 +1,3 @@
+755 /home/runner/work/_temp/rc-out/full/simRulesGateConsentFocus.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simRulesGateConsentFocus.mjs/stderr.log
+755 total

@@ -1,0 +1,2452 @@
+{
+  "playerName": "Sim 14",
+  "nationality": "England",
+  "position": "RB",
+  "era": "2020-24",
+  "age": 27,
+  "potential": 82,
+  "potentialEarned": 0,
+  "eliteStreak": 0,
+  "startingOverall": 64,
+  "physique": {
+    "heightCm": 178,
+    "weightKg": 73
+  },
+  "attrShape": {},
+  "karma": 50,
+  "phoneUsedIds": [
+    "matchday_nerves",
+    "youth_poach"
+  ],
+  "phoneInbox": [
+    {
+      "id": "matchday_nerves-2020",
+      "defId": "matchday_nerves",
+      "from": "Sports psych",
+      "emoji": "🧠",
+      "text": "Noticed you've been quiet before big games. My door is open Thursday if you want to talk it through.",
+      "year": 2020,
+      "choices": [
+        {
+          "label": "Book the session",
+          "reply": "Thursday works. Cheers doc",
+          "karma": 5,
+          "morale": 5
+        },
+        {
+          "label": "Tough it out",
+          "reply": "I'm fine. Just focused",
+          "karma": -2
+        }
+      ]
+    },
+    {
+      "id": "youth_poach-2020",
+      "defId": "youth_poach",
+      "from": "Stranger",
+      "emoji": "🕶️",
+      "text": "I represent players. Ditch the academy's advisor, sign with me quietly, I'll get your family paid NOW.",
+      "year": 2020,
+      "choices": [
+        {
+          "label": "Tell the academy",
+          "reply": "Reported you to the club. Don't message me again",
+          "karma": 8
+        },
+        {
+          "label": "Meet him in secret",
+          "reply": "Where and when?",
+          "karma": -8,
+          "cash": 0.05
+        }
+      ]
+    }
+  ],
+  "currentClub": "Brighton",
+  "currentClubCountry": "England",
+  "currentClubTier": 3,
+  "currentClubColor": "#0057B8",
+  "currentLeague": "Premier League",
+  "contractYearsLeft": 2,
+  "weeklyWage": 9069,
+  "marketValue": 57.7,
+  "pace": 79,
+  "shooting": 83,
+  "passing": 80,
+  "dribbling": 81,
+  "defending": 83,
+  "physical": 76,
+  "reflexes": 71,
+  "overall": 80,
+  "seasons": [
+    {
+      "year": 2020,
+      "age": 16,
+      "club": "Brighton Youth",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 0,
+      "goals": 0,
+      "assists": 0,
+      "cleanSheets": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "rating": 0,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "youth",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null
+    },
+    {
+      "year": 2021,
+      "age": 17,
+      "club": "Brighton Youth",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 13,
+      "goals": 4,
+      "assists": 1,
+      "cleanSheets": 7,
+      "yellowCards": 1,
+      "redCards": 0,
+      "rating": 0,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "youth",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null
+    },
+    {
+      "year": 2022,
+      "age": 18,
+      "club": "Brighton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 33,
+      "leagueApps": 28,
+      "goals": 1,
+      "assists": 1,
+      "cleanSheets": 9,
+      "yellowCards": 8,
+      "redCards": 0,
+      "rating": 7.1,
+      "ovr": 69,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 11,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Crystal Palace",
+          "name": "M23 derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": "World Cup",
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Cardiff City",
+            "won": false,
+            "for": 1,
+            "against": 2,
+            "home": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2023,
+      "age": 19,
+      "club": "Brighton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 33,
+      "leagueApps": 30,
+      "goals": 1,
+      "assists": 2,
+      "cleanSheets": 11,
+      "yellowCards": 1,
+      "redCards": 0,
+      "rating": 7.7,
+      "ovr": 70,
+      "injury": "Tight calf",
+      "injuryWeeks": 3,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 14,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Crystal Palace",
+          "name": "M23 derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 2,
+              "played": true,
+              "goals": 1
+            },
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 8,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 6.6,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "age": 20,
+      "club": "Brighton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 33,
+      "leagueApps": 31,
+      "goals": 2,
+      "assists": 1,
+      "cleanSheets": 12,
+      "yellowCards": 3,
+      "redCards": 1,
+      "rating": 7.2,
+      "ovr": 75,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 13,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Crystal Palace",
+          "name": "M23 derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 0,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 12,
+      "intGoals": 2,
+      "intAssists": 2,
+      "intRating": 6.8,
+      "tournament": "European Championship",
+      "tournamentResult": "Quarter-final",
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2025,
+      "age": 21,
+      "club": "Brighton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 37,
+      "leagueApps": 31,
+      "goals": 4,
+      "assists": 3,
+      "cleanSheets": 14,
+      "yellowCards": 6,
+      "redCards": 0,
+      "rating": 8.1,
+      "ovr": 76,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 15,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Crystal Palace",
+          "name": "M23 derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 0,
+              "played": true,
+              "goals": 1,
+              "won": true
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 7,
+      "intGoals": 0,
+      "intAssists": 1,
+      "intRating": 6.8,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2026,
+      "age": 22,
+      "club": "Brighton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 40,
+      "leagueApps": 35,
+      "goals": 3,
+      "assists": 3,
+      "cleanSheets": 12,
+      "yellowCards": 3,
+      "redCards": 0,
+      "rating": 7.9,
+      "ovr": 79,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 15,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Crystal Palace",
+          "name": "M23 derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 3,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 13,
+      "intGoals": 4,
+      "intAssists": 1,
+      "intRating": 7.1,
+      "tournament": "World Cup",
+      "tournamentResult": "Semi-final",
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ],
+        "opening": {
+          "opp": "Ipswich Town",
+          "country": "England",
+          "league": "Premier League",
+          "won": false,
+          "for": 0,
+          "against": 1,
+          "home": false
+        }
+      }
+    },
+    {
+      "year": 2027,
+      "age": 23,
+      "club": "Brighton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 32,
+      "leagueApps": 31,
+      "goals": 2,
+      "assists": 2,
+      "cleanSheets": 7,
+      "yellowCards": 8,
+      "redCards": 0,
+      "rating": 7.5,
+      "ovr": 79,
+      "injury": "Twisted ankle",
+      "injuryWeeks": 3,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 14,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Crystal Palace",
+          "name": "M23 derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 5,
+      "intGoals": 0,
+      "intAssists": 1,
+      "intRating": 7.4,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "QPR",
+            "won": true,
+            "for": 3,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Nottingham Forest",
+            "won": true,
+            "for": 3,
+            "against": 1
+          },
+          {
+            "stage": "F",
+            "opp": "Arsenal",
+            "won": false
+          }
+        ],
+        "final": {
+          "for": 0,
+          "against": 1,
+          "legs": 1
+        },
+        "opening": {
+          "opp": "Sunderland",
+          "country": "England",
+          "league": "Premier League",
+          "won": true,
+          "for": 1,
+          "against": 0,
+          "home": false
+        }
+      }
+    },
+    {
+      "year": 2028,
+      "age": 24,
+      "club": "Brighton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 21,
+      "leagueApps": 30,
+      "goals": 0,
+      "assists": 1,
+      "cleanSheets": 5,
+      "yellowCards": 2,
+      "redCards": 0,
+      "rating": 6.9,
+      "ovr": 80,
+      "injury": "ACL rupture",
+      "injuryWeeks": 19,
+      "injurySevere": true,
+      "leagueTitle": false,
+      "derbies": [
+        {
+          "rival": "Crystal Palace",
+          "name": "M23 derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 3,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": "European Championship",
+      "tournamentResult": null
+    },
+    {
+      "year": 2029,
+      "age": 25,
+      "club": "Brighton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 35,
+      "leagueApps": 31,
+      "goals": 0,
+      "assists": 3,
+      "cleanSheets": 12,
+      "yellowCards": 0,
+      "redCards": 0,
+      "rating": 7.8,
+      "ovr": 80,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 8,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Crystal Palace",
+          "name": "M23 derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 3,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 9,
+      "intGoals": 0,
+      "intAssists": 1,
+      "intRating": 7.4,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ],
+        "opening": {
+          "opp": "Sheffield United",
+          "country": "England",
+          "league": "Championship",
+          "won": false,
+          "for": 0,
+          "against": 2,
+          "home": true
+        }
+      }
+    },
+    {
+      "year": 2030,
+      "age": 26,
+      "club": "Brighton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 36,
+      "leagueApps": 33,
+      "goals": 2,
+      "assists": 3,
+      "cleanSheets": 11,
+      "yellowCards": 6,
+      "redCards": 0,
+      "rating": 8.3,
+      "ovr": 80,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 17,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Crystal Palace",
+          "name": "M23 derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 13,
+      "intGoals": 0,
+      "intAssists": 2,
+      "intRating": 7.6,
+      "tournament": "World Cup",
+      "tournamentResult": "Quarter-final",
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ],
+        "opening": {
+          "opp": "Man City",
+          "country": "England",
+          "league": "Premier League",
+          "won": false,
+          "for": 0,
+          "against": 2,
+          "home": false
+        }
+      }
+    },
+    {
+      "year": 2031,
+      "age": 27,
+      "club": "Brighton",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 37,
+      "leagueApps": 33,
+      "goals": 4,
+      "assists": 3,
+      "cleanSheets": 15,
+      "yellowCards": 7,
+      "redCards": 0,
+      "rating": 8.2,
+      "ovr": 80,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 9,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Crystal Palace",
+          "name": "M23 derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 5,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 6.8,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "West Ham",
+            "won": false,
+            "for": 0,
+            "against": 3,
+            "home": false
+          }
+        ],
+        "opening": {
+          "opp": "Arsenal",
+          "country": "England",
+          "league": "Premier League",
+          "won": true,
+          "for": 3,
+          "against": 2,
+          "home": false
+        }
+      }
+    }
+  ],
+  "events": [
+    "🔥 M23 derby against Crystal Palace: D 2-2 away, D 1-1 at home.",
+    "🏆 Won Player of the Month (December 2031)!"
+  ],
+  "retired": false,
+  "phase": "newspaper",
+  "pendingOffers": [],
+  "pendingSummary": {
+    "year": 2031,
+    "age": 27,
+    "club": "Brighton",
+    "clubCountry": "England",
+    "clubTier": 3,
+    "apps": 37,
+    "leagueApps": 33,
+    "goals": 4,
+    "assists": 3,
+    "cleanSheets": 15,
+    "yellowCards": 7,
+    "redCards": 0,
+    "rating": 8.2,
+    "ovr": 80,
+    "injury": null,
+    "injuryWeeks": 0,
+    "injurySevere": false,
+    "leagueTitle": false,
+    "leagueFinish": 9,
+    "leagueSize": 20,
+    "derbies": [
+      {
+        "rival": "Crystal Palace",
+        "name": "M23 derby",
+        "kind": "derby",
+        "meetings": [
+          {
+            "home": false,
+            "gf": 2,
+            "ga": 2,
+            "played": true,
+            "goals": 0
+          },
+          {
+            "home": true,
+            "gf": 1,
+            "ga": 1,
+            "played": true,
+            "goals": 0
+          }
+        ]
+      }
+    ],
+    "domesticCup": false,
+    "championsLeague": false,
+    "worldCup": false,
+    "ballonDor": false,
+    "ballonDorRank": null,
+    "type": "playing",
+    "intApps": 5,
+    "intGoals": 0,
+    "intAssists": 0,
+    "intRating": 6.8,
+    "tournament": null,
+    "tournamentResult": null,
+    "cupRun": {
+      "cup": "FA Cup",
+      "stages": [
+        {
+          "stage": "early",
+          "won": true
+        },
+        {
+          "stage": "QF",
+          "opp": "West Ham",
+          "won": false,
+          "for": 0,
+          "against": 3,
+          "home": false
+        }
+      ],
+      "opening": {
+        "opp": "Arsenal",
+        "country": "England",
+        "league": "Premier League",
+        "won": true,
+        "for": 3,
+        "against": 2,
+        "home": false
+      }
+    }
+  },
+  "transferSituation": null,
+  "loan": null,
+  "pendingLoanOffers": null,
+  "pendingEvents": [],
+  "lastEventId": 32,
+  "statBoostNextSeason": {},
+  "pendingNews": [
+    {
+      "newspaper": "El Golazo",
+      "type": "positive",
+      "headline": "THE COLUMN: Prudence Quillfeather Has Seen Enough, And He Is Saying So",
+      "body": "37 games at a 8.2 average. Prudence Quillfeather wrote that anybody still arguing about this is arguing for the sake of it."
+    },
+    {
+      "newspaper": "The Beautiful Game Report",
+      "type": "positive",
+      "headline": "Sim 14 Voted Fan Favourite At Brighton",
+      "body": "After 10 seasons of dedication, the Brighton faithful have spoken: Sim 14 is their Player of the Year. The bond between player and fans has become something truly special."
+    }
+  ],
+  "internationalCareer": true,
+  "sponsorDeal": null,
+  "totalEarnings": 12.88,
+  "popularity": 99,
+  "morale": 86,
+  "isLeader": true,
+  "hasRelationship": false,
+  "intStats": {
+    "caps": 73,
+    "goals": 6,
+    "assists": 8,
+    "tournaments": 3,
+    "worldCups": 2,
+    "continentals": 1,
+    "worldCupWins": 0,
+    "continentalWins": 0,
+    "isCaptain": false,
+    "isRetired": false,
+    "debutYear": null,
+    "debutAge": null,
+    "worldCupResults": [],
+    "squadSnubs": 0,
+    "failedQualifications": 0
+  },
+  "pendingWorldCup": null,
+  "pendingTournament": null,
+  "lastTournament": {
+    "year": 2030,
+    "name": "World Cup",
+    "short": "World Cup",
+    "kind": "World Cup",
+    "confederation": null,
+    "nation": "England",
+    "teams": 48,
+    "qualifying": {
+      "confederation": "UEFA",
+      "table": [
+        {
+          "nation": "England",
+          "played": 10,
+          "won": 8,
+          "drawn": 2,
+          "lost": 0,
+          "gf": 24,
+          "ga": 6,
+          "points": 26
+        },
+        {
+          "nation": "Denmark",
+          "played": 10,
+          "won": 5,
+          "drawn": 3,
+          "lost": 2,
+          "gf": 18,
+          "ga": 12,
+          "points": 18
+        },
+        {
+          "nation": "Bosnia & Herzegovina",
+          "played": 10,
+          "won": 4,
+          "drawn": 2,
+          "lost": 4,
+          "gf": 17,
+          "ga": 17,
+          "points": 14
+        },
+        {
+          "nation": "Ireland",
+          "played": 10,
+          "won": 2,
+          "drawn": 5,
+          "lost": 3,
+          "gf": 12,
+          "ga": 12,
+          "points": 11
+        },
+        {
+          "nation": "Belarus",
+          "played": 10,
+          "won": 1,
+          "drawn": 5,
+          "lost": 4,
+          "gf": 10,
+          "ga": 16,
+          "points": 8
+        },
+        {
+          "nation": "Malta",
+          "played": 10,
+          "won": 0,
+          "drawn": 3,
+          "lost": 7,
+          "gf": 9,
+          "ga": 27,
+          "points": 3
+        }
+      ],
+      "myPosition": 1,
+      "through": 2,
+      "qualified": true,
+      "automatic": false
+    },
+    "qualified": true,
+    "squad": {
+      "called": true,
+      "role": "Starter",
+      "reason": "You made it as number 2 of 9 in your position.",
+      "myRank": 2,
+      "poolSize": 20,
+      "places": 9,
+      "myScore": 86,
+      "cutScore": 76,
+      "xi": {
+        "formation": "4-3-3",
+        "gk": [
+          {
+            "slot": "GK",
+            "name": "Warren Whitlock",
+            "ovr": 84,
+            "me": false
+          }
+        ],
+        "def": [
+          {
+            "slot": "LB",
+            "name": "Craig Prescott",
+            "ovr": 83,
+            "me": false
+          },
+          {
+            "slot": "CB",
+            "name": "Eddie Kingsley",
+            "ovr": 88,
+            "me": false
+          },
+          {
+            "slot": "CB",
+            "name": "Shane Baxter",
+            "ovr": 85,
+            "me": false
+          },
+          {
+            "slot": "RB",
+            "name": "You",
+            "ovr": 80,
+            "me": true
+          }
+        ],
+        "mid": [
+          {
+            "slot": "CM",
+            "name": "Ross Dunmore",
+            "ovr": 85,
+            "me": false
+          },
+          {
+            "slot": "CDM",
+            "name": "Grant Hollis",
+            "ovr": 84,
+            "me": false
+          },
+          {
+            "slot": "CM",
+            "name": "Wesley Stanhope",
+            "ovr": 85,
+            "me": false
+          }
+        ],
+        "att": [
+          {
+            "slot": "LW",
+            "name": "Scott Chadwick",
+            "ovr": 83,
+            "me": false
+          },
+          {
+            "slot": "ST",
+            "name": "Stuart Ashcroft",
+            "ovr": 86,
+            "me": false
+          },
+          {
+            "slot": "RW",
+            "name": "Dean Marlowe",
+            "ovr": 83,
+            "me": false
+          }
+        ],
+        "mySlot": "RB",
+        "aheadOfMe": null
+      }
+    },
+    "groupTable": [
+      {
+        "nation": "Austria",
+        "played": 3,
+        "won": 2,
+        "drawn": 1,
+        "lost": 0,
+        "gf": 3,
+        "ga": 1,
+        "points": 7
+      },
+      {
+        "nation": "Qatar",
+        "played": 3,
+        "won": 1,
+        "drawn": 2,
+        "lost": 0,
+        "gf": 4,
+        "ga": 2,
+        "points": 5
+      },
+      {
+        "nation": "England",
+        "played": 3,
+        "won": 1,
+        "drawn": 1,
+        "lost": 1,
+        "gf": 5,
+        "ga": 2,
+        "points": 4
+      },
+      {
+        "nation": "Hungary",
+        "played": 3,
+        "won": 0,
+        "drawn": 0,
+        "lost": 3,
+        "gf": 2,
+        "ga": 9,
+        "points": 0
+      }
+    ],
+    "bracket": [
+      {
+        "round": "R32",
+        "slot": 0,
+        "home": "Canada",
+        "away": "Portugal",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Portugal",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 1,
+        "home": "Australia",
+        "away": "Romania",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Romania",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 2,
+        "home": "USA",
+        "away": "Qatar",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "USA",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 3,
+        "home": "Croatia",
+        "away": "Egypt",
+        "homeGoals": 3,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Croatia",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 4,
+        "home": "Switzerland",
+        "away": "Morocco",
+        "homeGoals": 3,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Switzerland",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 5,
+        "home": "Norway",
+        "away": "Netherlands",
+        "homeGoals": 1,
+        "awayGoals": 1,
+        "pens": true,
+        "winner": "Netherlands",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 6,
+        "home": "Nigeria",
+        "away": "Mexico",
+        "homeGoals": 2,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Mexico",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 7,
+        "home": "France",
+        "away": "Spain",
+        "homeGoals": 1,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 8,
+        "home": "Uruguay",
+        "away": "Wales",
+        "homeGoals": 3,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Uruguay",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 9,
+        "home": "Senegal",
+        "away": "Brazil",
+        "homeGoals": 0,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Brazil",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 10,
+        "home": "Denmark",
+        "away": "Czech Republic",
+        "homeGoals": 1,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Denmark",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 11,
+        "home": "Belgium",
+        "away": "Panama",
+        "homeGoals": 2,
+        "awayGoals": 2,
+        "pens": true,
+        "winner": "Belgium",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 12,
+        "home": "Ecuador",
+        "away": "England",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "England",
+        "mine": true
+      },
+      {
+        "round": "R32",
+        "slot": 13,
+        "home": "South Korea",
+        "away": "Scotland",
+        "homeGoals": 2,
+        "awayGoals": 2,
+        "pens": true,
+        "winner": "South Korea",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 14,
+        "home": "Argentina",
+        "away": "Austria",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Argentina",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 15,
+        "home": "Paraguay",
+        "away": "Colombia",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Colombia",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 0,
+        "home": "Portugal",
+        "away": "Romania",
+        "homeGoals": 3,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Portugal",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 1,
+        "home": "USA",
+        "away": "Croatia",
+        "homeGoals": 1,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Croatia",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 2,
+        "home": "Switzerland",
+        "away": "Netherlands",
+        "homeGoals": 0,
+        "awayGoals": 0,
+        "pens": true,
+        "winner": "Switzerland",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 3,
+        "home": "Mexico",
+        "away": "France",
+        "homeGoals": 1,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 4,
+        "home": "Uruguay",
+        "away": "Brazil",
+        "homeGoals": 2,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Brazil",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 5,
+        "home": "Denmark",
+        "away": "Belgium",
+        "homeGoals": 1,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Belgium",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 6,
+        "home": "England",
+        "away": "South Korea",
+        "homeGoals": 6,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "England",
+        "mine": true
+      },
+      {
+        "round": "R16",
+        "slot": 7,
+        "home": "Argentina",
+        "away": "Colombia",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Argentina",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 0,
+        "home": "Portugal",
+        "away": "Croatia",
+        "homeGoals": 0,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Croatia",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 1,
+        "home": "Switzerland",
+        "away": "France",
+        "homeGoals": 0,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 2,
+        "home": "Brazil",
+        "away": "Belgium",
+        "homeGoals": 5,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Brazil",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 3,
+        "home": "England",
+        "away": "Argentina",
+        "homeGoals": 0,
+        "awayGoals": 4,
+        "pens": false,
+        "winner": "Argentina",
+        "mine": true
+      },
+      {
+        "round": "SF",
+        "slot": 0,
+        "home": "Croatia",
+        "away": "France",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "SF",
+        "slot": 1,
+        "home": "Brazil",
+        "away": "Argentina",
+        "homeGoals": 2,
+        "awayGoals": 2,
+        "pens": true,
+        "winner": "Argentina",
+        "mine": false
+      },
+      {
+        "round": "F",
+        "slot": 0,
+        "home": "France",
+        "away": "Argentina",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Argentina",
+        "mine": false
+      }
+    ],
+    "champion": "Argentina",
+    "runnerUp": "France",
+    "groupLabel": "Group I",
+    "thirdsThrough": 8,
+    "myResult": "Quarter-final",
+    "matches": [
+      {
+        "round": "Group I",
+        "home": "England",
+        "away": "Austria",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 0,
+        "playerRating": 7.1
+      },
+      {
+        "round": "Group I",
+        "home": "England",
+        "away": "Hungary",
+        "homeGoals": 4,
+        "awayGoals": 0,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 1,
+        "playerRating": 7.2
+      },
+      {
+        "round": "Group I",
+        "home": "England",
+        "away": "Qatar",
+        "homeGoals": 1,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 1,
+        "playerRating": 7.5
+      },
+      {
+        "round": "R32",
+        "home": "Ecuador",
+        "away": "England",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 0,
+        "playerRating": 6.5
+      },
+      {
+        "round": "R16",
+        "home": "England",
+        "away": "South Korea",
+        "homeGoals": 6,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 0,
+        "playerRating": 6.5
+      },
+      {
+        "round": "QF",
+        "home": "England",
+        "away": "Argentina",
+        "homeGoals": 0,
+        "awayGoals": 4,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 0,
+        "playerRating": 6.6
+      }
+    ],
+    "playerApps": 6,
+    "playerGoals": 0,
+    "playerAssists": 2,
+    "playerAvgRating": 6.9,
+    "goldenBoot": false,
+    "bestPlayer": false
+  },
+  "intlHistory": [
+    {
+      "year": 2022,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "Brazil",
+      "myResult": "",
+      "apps": 0,
+      "goals": 0
+    },
+    {
+      "year": 2024,
+      "short": "Euros",
+      "nation": "England",
+      "champion": "France",
+      "myResult": "Quarter-final",
+      "apps": 5,
+      "goals": 2
+    },
+    {
+      "year": 2026,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "Portugal",
+      "myResult": "Semi-final",
+      "apps": 7,
+      "goals": 4
+    },
+    {
+      "year": 2028,
+      "short": "Euros",
+      "nation": "England",
+      "champion": "Spain",
+      "myResult": "",
+      "apps": 0,
+      "goals": 0
+    },
+    {
+      "year": 2030,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "Argentina",
+      "myResult": "Quarter-final",
+      "apps": 6,
+      "goals": 0
+    }
+  ],
+  "rival": {
+    "name": "Erling Kovač",
+    "nationality": "Iceland",
+    "position": "RB",
+    "club": "Benfica",
+    "clubTier": 1,
+    "overall": 93,
+    "careerGoals": 7,
+    "careerAssists": 15,
+    "careerApps": 208,
+    "leagueTitles": 2,
+    "championsLeagues": 0,
+    "worldCups": 1,
+    "ballonDors": 0,
+    "intCaps": 49,
+    "intGoals": 3,
+    "marketValue": 197.4,
+    "age": 26,
+    "retired": false
+  },
+  "rivalCreated": true,
+  "pendingRivalryEvent": {
+    "id": 102,
+    "emoji": "🏠",
+    "title": "Transfer Battle",
+    "description": "You and Erling Kovač both want to sign for the same club. The club chose your rival.",
+    "consequence": "Morale -5"
+  },
+  "lastRivalryEventId": 116,
+  "rivalrySummary": null,
+  "netWorth": 11.35,
+  "lifestyleLevel": "Comfortable",
+  "lifestyleCostPerYear": 0.2,
+  "socialMediaFollowers": 4.55,
+  "sponsorshipIncome": 2.38,
+  "properties": [],
+  "investments": [],
+  "consecutiveDeficitYears": 0,
+  "agentFeesPaid": 0,
+  "family": {
+    "isMarried": false,
+    "marriedAge": null,
+    "children": 0,
+    "isDivorced": false,
+    "divorceAge": null
+  },
+  "purchasedItems": [],
+  "investmentHoldings": [],
+  "totalAssetValue": 0,
+  "customYearlyCosts": 0,
+  "awards": [
+    {
+      "year": 2024,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    },
+    {
+      "year": 2025,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    },
+    {
+      "year": 2025,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    },
+    {
+      "year": 2026,
+      "name": "Young Player of the Year",
+      "emoji": "⭐"
+    },
+    {
+      "year": 2030,
+      "name": "Club Legend",
+      "emoji": "🏛️"
+    },
+    {
+      "year": 2031,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    }
+  ],
+  "pendingBallonDor": {
+    "year": 2031,
+    "nominees": [
+      {
+        "name": "Ousmane Dembélé",
+        "nationality": "France",
+        "position": "LW",
+        "club": "Leverkusen",
+        "points": 80,
+        "goals": 16,
+        "trophies": [
+          "UCL"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Jamal Musiala",
+        "nationality": "Germany",
+        "position": "CAM",
+        "club": "Leverkusen",
+        "points": 79,
+        "goals": 15,
+        "trophies": [
+          "UCL"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Bukayo Saka",
+        "nationality": "England",
+        "position": "RW",
+        "club": "Leverkusen",
+        "points": 71,
+        "goals": 17,
+        "trophies": [
+          "UCL"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Kylian Mbappé",
+        "nationality": "France",
+        "position": "ST",
+        "club": "Real Madrid",
+        "points": 66,
+        "goals": 42,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Florian Wirtz",
+        "nationality": "Germany",
+        "position": "CAM",
+        "club": "PSG",
+        "points": 66,
+        "goals": 20,
+        "trophies": [
+          "League"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Raphinha",
+        "nationality": "Brazil",
+        "position": "RW",
+        "club": "Barcelona",
+        "points": 53,
+        "goals": 26,
+        "trophies": [
+          "Cup"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Lamine Yamal",
+        "nationality": "Spain",
+        "position": "RW",
+        "club": "Barcelona",
+        "points": 52,
+        "goals": 17,
+        "trophies": [
+          "Cup"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Erling Haaland",
+        "nationality": "Norway",
+        "position": "ST",
+        "club": "Inter Milan",
+        "points": 51,
+        "goals": 28,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Jude Bellingham",
+        "nationality": "England",
+        "position": "CAM",
+        "club": "Chelsea",
+        "points": 51,
+        "goals": 23,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Harry Kane",
+        "nationality": "England",
+        "position": "ST",
+        "club": "Man City",
+        "points": 46,
+        "goals": 34,
+        "trophies": [],
+        "isPlayer": false
+      }
+    ],
+    "playerRank": null,
+    "playerPoints": 0,
+    "playerNominated": false
+  },
+  "lastUCLResult": {
+    "qualified": false,
+    "matches": [],
+    "result": "N/A",
+    "playerGoals": 0,
+    "isTopScorer": false,
+    "seasonYear": 2031,
+    "club": "Brighton"
+  },
+  "legacy": null,
+  "postRetirementChoice": null,
+  "managerState": null,
+  "isFinalSeason": false,
+  "isPundit": false,
+  "punditEvents": [],
+  "primeType": "normal",
+  "socialMediaActionUsedThisSeason": false,
+  "socialMediaFocusBoost": false,
+  "pendingCoverAthleteEvent": false,
+  "coverAthleteAccepted": false,
+  "activeSponsorship": null,
+  "personality": "enigma",
+  "agentId": "self",
+  "lifeFlags": {
+    "rMumHouse": 3,
+    "brotherAgent": 3
+  },
+  "appearance": null,
+  "corruptionHeat": 0,
+  "dirtyMoney": 0,
+  "prisonSeasons": 0,
+  "academyClubName": "Brighton",
+  "moralDilemmasTriggered": [
+    "diving_reputation"
+  ],
+  "pendingMoralDilemma": null,
+  "pedSeasonsRemaining": 0,
+  "pedActive": false,
+  "matchFixBanned": 0,
+  "divingActive": false,
+  "integrityBonus": 44,
+  "pendingAppealResult": null,
+  "childEventsSeen": [],
+  "pregnancyAnnounced": false,
+  "punditState": null,
+  "ownerState": null,
+  "peakOverall": 80,
+  "retirementSuggested": false,
+  "phone": {
+    "threads": [
+      {
+        "id": "th_physio",
+        "c": "physio",
+        "name": "Club physio",
+        "emoji": "🩹",
+        "lines": [
+          {
+            "w": 0,
+            "t": "Noticed you've been quiet before big games. My door is open Thursday if you want to talk it through.",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Bumping this up your inbox.",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "Wow. I see how it is.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "I will stop bothering you. Best of luck.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "legacy",
+          "msgId": "matchday_nerves-2020"
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [],
+        "lastReplyYear": null
+      },
+      {
+        "id": "th_mum",
+        "c": "mum",
+        "name": "Mum",
+        "emoji": "❤️",
+        "lines": [
+          {
+            "w": 0,
+            "t": "I saw what they were saying about you online. I know you say do not read it. I read it.",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Hello? Anyone in there?",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "Cool. Glad we are close.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "You have changed. Everyone says it and I keep defending you.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "convo",
+          "convo": "mum_worry",
+          "beat": 0
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [
+          "mum_worry"
+        ],
+        "lastReplyYear": null
+      },
+      {
+        "id": "th_x_stranger",
+        "c": "other",
+        "name": "Stranger",
+        "emoji": "💬",
+        "lines": [
+          {
+            "w": 0,
+            "t": "I represent players. Ditch the academy's advisor, sign with me quietly, I'll get your family paid NOW.",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Still need an answer on that when you get a sec.",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "Two months, nothing. Noted.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "I will stop bothering you. Best of luck.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "legacy",
+          "msgId": "youth_poach-2020"
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [],
+        "lastReplyYear": null
+      }
+    ],
+    "feed": [
+      "🏆 Newcastle win the Premier League.",
+      "🏆 Barcelona win La Liga.",
+      "🥅 Bukayo Saka finished top scorer in the Bundesliga on 24.",
+      "🌍 Argentina win the World Cup.",
+      "🔄 DONE DEAL. Vinícius Jr joins Chelsea from Real Madrid. Fee around 115m.",
+      "🔄 DONE DEAL. Ousmane Dembélé joins Leverkusen from Man United. Fee around 95m.",
+      "🔄 DONE DEAL. Endrick joins Botafogo from Inter Milan. Fee around 75m.",
+      "🔄 DONE DEAL. Phil Foden joins Barcelona from Ulsan HD. Fee around 80m.",
+      "⭐ Leverkusen are champions of Europe.",
+      "🏆 Liverpool win the Premier League.",
+      "🏆 Athletic Bilbao win La Liga.",
+      "🥅 Kylian Mbappé finished top scorer in La Liga on 39."
+    ],
+    "world": {
+      "year": 2031,
+      "ucl": "Leverkusen",
+      "leagues": {
+        "Premier League": "Liverpool",
+        "La Liga": "Athletic Bilbao",
+        "Bundesliga": "Bayern Munich",
+        "Serie A": "Napoli",
+        "Ligue 1": "PSG",
+        "Primeira Liga": "Porto",
+        "Eredivisie": "PSV",
+        "Scottish Premiership": "Rangers",
+        "Brasileirao": "Flamengo",
+        "Saudi Pro League": "Al Hilal",
+        "MLS": "LAFC",
+        "K League 1": "Jeonbuk Motors"
+      },
+      "cups": {
+        "Premier League": "Man United",
+        "La Liga": "Barcelona",
+        "Bundesliga": "Dortmund",
+        "Serie A": "Atalanta",
+        "Ligue 1": "Lille",
+        "Primeira Liga": "Porto",
+        "Eredivisie": "PSV",
+        "Scottish Premiership": "Rangers",
+        "Brasileirao": "Botafogo",
+        "Saudi Pro League": "Al Hilal",
+        "MLS": "Columbus Crew",
+        "K League 1": "Pohang Steelers"
+      },
+      "moves": [
+        {
+          "who": "Vinícius Jr",
+          "from": "Real Madrid",
+          "to": "Chelsea",
+          "fee": 115
+        },
+        {
+          "who": "Ousmane Dembélé",
+          "from": "Man United",
+          "to": "Leverkusen",
+          "fee": 95
+        },
+        {
+          "who": "Endrick",
+          "from": "Inter Milan",
+          "to": "Botafogo",
+          "fee": 75
+        },
+        {
+          "who": "Phil Foden",
+          "from": "Ulsan HD",
+          "to": "Barcelona",
+          "fee": 80
+        }
+      ],
+      "topScorer": {
+        "who": "Kylian Mbappé",
+        "club": "Real Madrid",
+        "goals": 39,
+        "league": "La Liga"
+      },
+      "intl": null
+    },
+    "clubs": {
+      "Mohamed Salah": "Chelsea",
+      "Vinícius Jr": "Chelsea",
+      "Jude Bellingham": "Chelsea",
+      "Rodri": "Celtic",
+      "Luka Modrić": "Real Madrid",
+      "Harry Kane": "Man City",
+      "Neymar": "PSG",
+      "Lautaro Martínez": "Inter Milan",
+      "Bukayo Saka": "Leverkusen",
+      "Phil Foden": "Barcelona",
+      "Federico Valverde": "Real Madrid",
+      "Antoine Griezmann": "Atletico Madrid",
+      "Virgil van Dijk": "PSG",
+      "Thibaut Courtois": "Real Madrid",
+      "Lamine Yamal": "Barcelona",
+      "Florian Wirtz": "PSG",
+      "Jamal Musiala": "Leverkusen",
+      "Pedri": "Man United",
+      "Declan Rice": "Chelsea",
+      "Raphinha": "Barcelona",
+      "Endrick": "Botafogo",
+      "Nico Williams": "Athletic Bilbao",
+      "Désiré Doué": "Celtic",
+      "Kobbie Mainoo": "Bayern Munich",
+      "Gianluigi Donnarumma": "Man City",
+      "Ousmane Dembélé": "Leverkusen",
+      "Kylian Mbappé": "Real Madrid",
+      "Erling Haaland": "Inter Milan"
+    },
+    "rivalClub": "Benfica",
+    "seed": 2629546500,
+    "offers": 0,
+    "perksTaken": 0
+  },
+  "frozenOut": 0,
+  "badSeasonStreak": 0,
+  "story": [
+    {
+      "year": 2020,
+      "age": 16,
+      "club": "Brighton Youth",
+      "lines": [
+        "📋 Joined Brighton Youth Academy aged 16"
+      ]
+    },
+    {
+      "year": 2021,
+      "age": 17,
+      "club": "Brighton Youth",
+      "lines": [
+        "📈 Stats improved during youth development (OVR 69)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Brighton 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (4yr, €9k/wk)",
+        "🏠 One of our own! The Brighton academy kid signs a first-team deal. The ultras already have a chant ready."
+      ]
+    },
+    {
+      "year": 2022,
+      "age": 18,
+      "club": "Brighton",
+      "lines": [
+        "🔥 M23 derby against Crystal Palace: W 1-0 at home, D 0-0 away.",
+        "🌍 Brazil won the World Cup.",
+        "🃏 You answered in riddles: The Enigma",
+        "🇺🇳 Called up to England national team!",
+        "📋 Dropped, trained harder to fight back",
+        "🎤 Went silent for a month. No quotes, no noise, and the best training block of your career"
+      ]
+    },
+    {
+      "year": 2023,
+      "age": 19,
+      "club": "Brighton",
+      "lines": [
+        "🧘 Social media detox paid off: +2 to all stats!",
+        "🚑 Injury: Tight calf, out 3 weeks, missed matches",
+        "🔥 M23 derby against Crystal Palace: D 2-2 at home, L 2-3 away.",
+        "🤝 No agent. You read every contract yourself",
+        "👟 Turned down every boot deal and paid a cobbler in Italy to build boots around your own feet",
+        "🧦 Went out first from the tunnel once. Four games without a shot on target. Barry said nothing, loudly",
+        "😤 Fired back at rival in media"
+      ]
+    },
+    {
+      "year": 2024,
+      "age": 20,
+      "club": "Brighton",
+      "lines": [
+        "🔥 M23 derby against Crystal Palace: W 2-0 away (you missed it), D 1-1 at home.",
+        "😤 A new rival emerges: Erling Kovač (🇮🇸 Iceland)",
+        "🏆 Won Player of the Month (April 2024)!",
+        "⚠️ Your contract is expiring!",
+        "🌍 France won the European Championship.",
+        "🤬 Tunnel Bust-Up",
+        "🤝 Lost the penalty shootout 5-4 and handed the duties over with a straight face. The squad talked about it for months",
+        "🎖️ Turned the captaincy down and let your football do the talking. Zero committee meetings attended"
+      ]
+    },
+    {
+      "year": 2025,
+      "age": 21,
+      "club": "Brighton",
+      "lines": [
+        "🔥 M23 derby against Crystal Palace: W 2-1 away, W 1-0 at home.",
+        "🔥 Your goal won the M23 derby. Derby Hero.",
+        "🏆 Won Player of the Month (August 2025)!",
+        "🏆 Won Player of the Month (October 2025)!",
+        "⚠️ Your contract is expiring!",
+        "👶 Mentored a promising youth player",
+        "🛫 Gave up part of your fee so the whole squad turned left on the plane",
+        "🧤 Gaffer Two was relocated to a lovely forest. The squad still salutes",
+        "📝 Renewed contract with Brighton for 4 years"
+      ]
+    },
+    {
+      "year": 2026,
+      "age": 22,
+      "club": "Brighton",
+      "lines": [
+        "🔥 M23 derby against Crystal Palace: W 2-1 away, W 3-0 at home.",
+        "⭐ Named Young Player of the Year!",
+        "🌍 Portugal won the World Cup.",
+        "🏴 The Banner",
+        "😤 Demanded a re-edit. Episode two opens with you sighing",
+        "🙈 Said nothing about the banner. The internet said everything",
+        "⚽ Scored a last-minute winner, stayed humble",
+        "👕 The goat now wears your shirt every matchday. Correct"
+      ]
+    },
+    {
+      "year": 2027,
+      "age": 23,
+      "club": "Brighton",
+      "lines": [
+        "🚑 Injury: Twisted ankle, out 3 weeks, missed matches",
+        "🔥 M23 derby against Crystal Palace: L 0-1 away, W 2-1 at home.",
+        "🏠 Paid to re-roof all 22 houses on your mum's street anonymously. A neighbour worked it out and told a newspaper",
+        "💎 Declined watch collection",
+        "🎧 Waited out the breakdown in silence",
+        "🕊️ Brokered the great prank war truce of the season"
+      ]
+    },
+    {
+      "year": 2028,
+      "age": 24,
+      "club": "Brighton",
+      "lines": [
+        "🚑 Injury: ACL rupture, out 19 weeks, missed matches",
+        "🔥 M23 derby against Crystal Palace: W 1-0 away, W 3-1 at home.",
+        "🌍 Spain won the European Championship.",
+        "🏥 19 weeks, the club's plan, no shortcuts. Pace -2, Physical -1, and you walk back in whole."
+      ]
+    },
+    {
+      "year": 2029,
+      "age": 25,
+      "club": "Brighton",
+      "lines": [
+        "🔥 M23 derby against Crystal Palace: W 3-0 at home, L 0-1 away (you missed it).",
+        "©️ Handed the Brighton armband. The manager wants his voice on the pitch",
+        "⚠️ Your contract is expiring!",
+        "🩺 Brought the physios out at the end. The stadium clapped them longer than you",
+        "🌍 Skipped the charity match to rest",
+        "🐎 Killed the horse stunt publicly and lost €600k a year. Terry retired to a field in the countryside"
+      ]
+    },
+    {
+      "year": 2030,
+      "age": 26,
+      "club": "Brighton",
+      "lines": [
+        "🔥 M23 derby against Crystal Palace: D 2-2 at home, D 1-1 away.",
+        "🏛️ Granted Club Legend status at Brighton! (300+ appearances)",
+        "⚠️ Your contract is expiring!",
+        "🌍 Argentina won the World Cup.",
+        "🥶 Your brother found out you said no by reading it. The group chat went dark for a year",
+        "💼 Passed on restaurant investment",
+        "💉 Press conference, cleared name completely",
+        "🎥 Declined documentary crew",
+        "📝 Renewed contract with Brighton for 3 years"
+      ]
+    }
+  ],
+  "sponsorBonus": 0,
+  "money": {
+    "seed": 809335197,
+    "vault": 0,
+    "hold": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+    },
+    "cost": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+    },
+    "price": {
+      "ladder": 163.05,
+      "bricks": 127.74,
+      "cleats": 142.8,
+      "screens": 124.9,
+      "spark": 77.04
+    },
+    "hist": {
+      "ladder": [
+        117.92,
+        124.61,
+        127.64,
+        138.7,
+        151.08,
+        155.34,
+        162.3,
+        163.05
+      ],
+      "bricks": [
+        122.46,
+        128.55,
+        128.76,
+        109.84,
+        116.03,
+        128.45,
+        127.07,
+        127.74
+      ],
+      "cleats": [
+        93.9,
+        107.95,
+        116.87,
+        112.7,
+        129.9,
+        146.17,
+        138.47,
+        142.8
+      ],
+      "screens": [
+        97.63,
+        101.41,
+        82.94,
+        95.39,
+        108.08,
+        111.45,
+        105.85,
+        124.9
+      ],
+      "spark": [
+        110.78,
+        123.62,
+        104.64,
+        115.95,
+        98.29,
+        59.29,
+        60.91,
+        77.04
+      ]
+    },
+    "log": [],
+    "year": 2031,
+    "age": 11,
+    "won": 0,
+    "lost": 0,
+    "cPlays": 0,
+    "cNet": 0,
+    "cYear": 0,
+    "cShut": false,
+    "aYear": 0,
+    "aBest": 0,
+    "aPlays": 0
+  },
+  "eventLastFired": {
+    "1": 2026,
+    "6": 2025,
+    "10": 2030,
+    "14": 2023,
+    "15": 2022,
+    "17": 2022,
+    "22": 2030,
+    "29": 2027,
+    "32": 2030,
+    "58": 2029,
+    "61": 2027,
+    "200": 2022,
+    "201": 2023,
+    "239": 2027,
+    "241": 2026,
+    "247": 2025,
+    "256": 2026,
+    "262": 2029,
+    "269": 2026,
+    "402": 2023,
+    "405": 2022,
+    "418": 2024,
+    "423": 2024,
+    "438": 2023,
+    "444": 2027,
+    "455": 2025,
+    "471": 2030,
+    "483": 2029
+  },
+  "rivalryIntensity": 25,
+  "pendingRehab": null,
+  "seriousInjuries": [
+    {
+      "year": 2028,
+      "name": "ACL rupture",
+      "weeks": 19,
+      "path": "plan",
+      "setback": false
+    }
+  ],
+  "isClubCaptain": true,
+  "captainClub": "Brighton",
+  "captainSeasons": 3
+}

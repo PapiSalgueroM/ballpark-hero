@@ -1,0 +1,3 @@
+1056 /home/runner/work/_temp/rc-out/full/simFreeAgencyFeedback.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simFreeAgencyFeedback.mjs/stderr.log
+1056 total

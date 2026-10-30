@@ -1,0 +1,3 @@
+996 /home/runner/work/_temp/rc-out/full/simPlayerBingoHonours.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simPlayerBingoHonours.mjs/stderr.log
+996 total

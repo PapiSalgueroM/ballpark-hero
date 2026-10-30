@@ -1,0 +1,3 @@
+4367 /home/runner/work/_temp/rc-out/full/simSharedResultChallenge.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSharedResultChallenge.mjs/stderr.log
+4367 total

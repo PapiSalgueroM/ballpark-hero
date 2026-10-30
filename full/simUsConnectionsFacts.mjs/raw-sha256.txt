@@ -1,0 +1,2 @@
+fed4dff84104463b49f84ea801a244c0d7a6fcd6f16d3f249f0b060995fac10d  /home/runner/work/_temp/rc-out/full/simUsConnectionsFacts.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simUsConnectionsFacts.mjs/stderr.log

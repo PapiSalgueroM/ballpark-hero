@@ -1,0 +1,892 @@
+{
+  "expected": {
+    "value": {
+      "playerName": "Story Role 119001",
+      "nationality": "England",
+      "position": "CM",
+      "era": "2020s",
+      "age": 17,
+      "potential": 88,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 75,
+      "physique": {
+        "heightCm": 180,
+        "weightKg": 75
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "nutrition_cheat",
+        "agent_boots"
+      ],
+      "phoneInbox": [
+        {
+          "id": "nutrition_cheat-2020",
+          "defId": "nutrition_cheat",
+          "from": "Nutritionist",
+          "emoji": "🥗",
+          "text": "Your body fat crept up. I'm putting you on the strict plan. No takeaways for eight weeks. Confirm?",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Commit fully",
+              "reply": "Locked in. Hide the menus",
+              "karma": 5,
+              "morale": -1
+            },
+            {
+              "label": "Secret cheat days",
+              "reply": "Confirmed 😇 (orders kebab)",
+              "karma": -4,
+              "morale": 3
+            }
+          ]
+        },
+        {
+          "id": "agent_boots-2020",
+          "defId": "agent_boots",
+          "from": "Agent",
+          "emoji": "💼",
+          "text": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Take the money",
+              "reply": "Money is money. Send the contract",
+              "karma": -7,
+              "cash": 1.5
+            },
+            {
+              "label": "Turn it down publicly",
+              "reply": "Not wearing that. And I'm saying why",
+              "karma": 9,
+              "popularity": 4
+            },
+            {
+              "label": "Quietly decline",
+              "reply": "Pass on this one. Keep it quiet",
+              "karma": 4
+            }
+          ]
+        }
+      ],
+      "currentClub": "Man City",
+      "currentClubCountry": "England",
+      "currentClubTier": 1,
+      "currentClubColor": "#6CABDD",
+      "currentLeague": "Premier League",
+      "contractYearsLeft": 4,
+      "weeklyWage": 63678,
+      "marketValue": 20.4,
+      "pace": 80,
+      "shooting": 77,
+      "passing": 76,
+      "dribbling": 77,
+      "defending": 77,
+      "physical": 78,
+      "reflexes": 80,
+      "overall": 78,
+      "seasons": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2021,
+          "age": 17,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 16,
+          "goals": 6,
+          "assists": 3,
+          "cleanSheets": 0,
+          "yellowCards": 3,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 78)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Man City 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (4yr, €64k/wk)",
+        "🏠 One of our own! The Man City academy kid signs a first-team deal. The ultras already have a chant ready."
+      ],
+      "retired": false,
+      "phase": "playing",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 20,
+      "morale": 75,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "early",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Man City",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 75,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_physio",
+            "c": "physio",
+            "name": "Club physio",
+            "emoji": "🩹",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Your body fat crept up. I'm putting you on the strict plan. No takeaways for eight weeks. Confirm?",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "nutrition_cheat-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_youthcoach",
+            "c": "youthcoach",
+            "name": "Old youth coach",
+            "emoji": "👴",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Still got the team photo from your first season up on the wall. You are the small angry one at the front.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "youth_pride",
+              "beat": 0
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [
+              "youth_pride"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_agent",
+            "c": "agent",
+            "name": "Your agent",
+            "emoji": "💼",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "agent_boots-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 3091662984,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "lines": [
+            "📋 Joined Man City Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 2597586138,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 103.66,
+          "bricks": 106.27,
+          "cleats": 110.91,
+          "screens": 124.06,
+          "spark": 100.34
+        },
+        "hist": {
+          "ladder": [
+            100,
+            103.66
+          ],
+          "bricks": [
+            100,
+            106.27
+          ],
+          "cleats": [
+            100,
+            110.91
+          ],
+          "screens": [
+            100,
+            124.06
+          ],
+          "spark": [
+            100,
+            100.34
+          ]
+        },
+        "log": [],
+        "year": 2021,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "draws": [
+      0.055477943271398544,
+      0.7192399851046503,
+      0.17871325509622693,
+      0.8612862185109407,
+      0.17182373604737222,
+      0.706274016527459,
+      0.9384871781803668,
+      0.13158345664851367,
+      0.170425689779222,
+      0.15195547020994127,
+      0.8096721202600747,
+      0.27394228312186897,
+      0.15109830675646663,
+      0.09821358625777066,
+      0.7402976474259049,
+      0.5052146245725453,
+      0.84781214594841,
+      0.7489255738910288,
+      0.7005754930432886,
+      0.39030018518678844,
+      0.6880046552978456,
+      0.5525585014838725,
+      0.6482203735504299,
+      0.4248850962612778,
+      0.991934742545709,
+      0.32089386647567153,
+      0.2721676186192781,
+      0.7949033107142895,
+      0.3287077078130096,
+      0.2448608549311757,
+      0.10019233007915318,
+      0.9437840685714036,
+      0.5384464072994888,
+      0.25218124384991825,
+      0.1122536372859031,
+      0.2297432792838663,
+      0.28718610014766455,
+      0.7321781085338444
+    ]
+  },
+  "actual": {
+    "value": {
+      "playerName": "Story Role 119001",
+      "nationality": "England",
+      "position": "CM",
+      "era": "2020s",
+      "age": 17,
+      "potential": 88,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 75,
+      "physique": {
+        "heightCm": 180,
+        "weightKg": 75
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "nutrition_cheat",
+        "agent_boots"
+      ],
+      "phoneInbox": [
+        {
+          "id": "nutrition_cheat-2020",
+          "defId": "nutrition_cheat",
+          "from": "Nutritionist",
+          "emoji": "🥗",
+          "text": "Your body fat crept up. I'm putting you on the strict plan. No takeaways for eight weeks. Confirm?",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Commit fully",
+              "reply": "Locked in. Hide the menus",
+              "karma": 5,
+              "morale": -1
+            },
+            {
+              "label": "Secret cheat days",
+              "reply": "Confirmed 😇 (orders kebab)",
+              "karma": -4,
+              "morale": 3
+            }
+          ]
+        },
+        {
+          "id": "agent_boots-2020",
+          "defId": "agent_boots",
+          "from": "Agent",
+          "emoji": "💼",
+          "text": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Take the money",
+              "reply": "Money is money. Send the contract",
+              "karma": -7,
+              "cash": 1.5
+            },
+            {
+              "label": "Turn it down publicly",
+              "reply": "Not wearing that. And I'm saying why",
+              "karma": 9,
+              "popularity": 4
+            },
+            {
+              "label": "Quietly decline",
+              "reply": "Pass on this one. Keep it quiet",
+              "karma": 4
+            }
+          ]
+        }
+      ],
+      "currentClub": "Man City",
+      "currentClubCountry": "England",
+      "currentClubTier": 1,
+      "currentClubColor": "#6CABDD",
+      "currentLeague": "Premier League",
+      "contractYearsLeft": 4,
+      "weeklyWage": 63678,
+      "marketValue": 20.4,
+      "pace": 80,
+      "shooting": 77,
+      "passing": 76,
+      "dribbling": 77,
+      "defending": 77,
+      "physical": 78,
+      "reflexes": 80,
+      "overall": 78,
+      "seasons": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2021,
+          "age": 17,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 16,
+          "goals": 6,
+          "assists": 3,
+          "cleanSheets": 0,
+          "yellowCards": 3,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 78)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Man City 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (4yr, €64k/wk)",
+        "🏠 One of our own! The Man City academy kid signs a first-team deal. The ultras already have a chant ready."
+      ],
+      "retired": false,
+      "phase": "playing",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 20,
+      "morale": 75,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "early",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Man City",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 75,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_physio",
+            "c": "physio",
+            "name": "Club physio",
+            "emoji": "🩹",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Your body fat crept up. I'm putting you on the strict plan. No takeaways for eight weeks. Confirm?",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "nutrition_cheat-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_youthcoach",
+            "c": "youthcoach",
+            "name": "Old youth coach",
+            "emoji": "👴",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Still got the team photo from your first season up on the wall. You are the small angry one at the front.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "youth_pride",
+              "beat": 0
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [
+              "youth_pride"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_agent",
+            "c": "agent",
+            "name": "Your agent",
+            "emoji": "💼",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "agent_boots-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 3091662984,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "lines": [
+            "📋 Joined Man City Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 2597586138,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 103.66,
+          "bricks": 106.27,
+          "cleats": 110.91,
+          "screens": 124.06,
+          "spark": 100.34
+        },
+        "hist": {
+          "ladder": [
+            100,
+            103.66
+          ],
+          "bricks": [
+            100,
+            106.27
+          ],
+          "cleats": [
+            100,
+            110.91
+          ],
+          "screens": [
+            100,
+            124.06
+          ],
+          "spark": [
+            100,
+            100.34
+          ]
+        },
+        "log": [],
+        "year": 2021,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "draws": [
+      0.055477943271398544,
+      0.7192399851046503,
+      0.17871325509622693,
+      0.8612862185109407,
+      0.17182373604737222,
+      0.706274016527459,
+      0.9384871781803668,
+      0.13158345664851367,
+      0.170425689779222,
+      0.15195547020994127,
+      0.8096721202600747,
+      0.27394228312186897,
+      0.15109830675646663,
+      0.09821358625777066,
+      0.7402976474259049,
+      0.5052146245725453,
+      0.84781214594841,
+      0.7489255738910288,
+      0.7005754930432886,
+      0.39030018518678844,
+      0.6880046552978456,
+      0.5525585014838725,
+      0.6482203735504299,
+      0.4248850962612778,
+      0.991934742545709,
+      0.32089386647567153,
+      0.2721676186192781,
+      0.7949033107142895,
+      0.3287077078130096,
+      0.2448608549311757,
+      0.10019233007915318,
+      0.9437840685714036,
+      0.5384464072994888,
+      0.25218124384991825,
+      0.1122536372859031,
+      0.2297432792838663,
+      0.28718610014766455,
+      0.7321781085338444
+    ]
+  }
+}

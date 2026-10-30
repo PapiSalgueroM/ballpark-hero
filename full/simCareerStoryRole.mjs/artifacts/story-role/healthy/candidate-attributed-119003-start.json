@@ -1,0 +1,892 @@
+{
+  "expected": {
+    "value": {
+      "playerName": "Story Role 119003",
+      "nationality": "England",
+      "position": "GK",
+      "era": "2020s",
+      "age": 17,
+      "potential": 88,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 75,
+      "physique": {
+        "heightCm": 190,
+        "weightKg": 84
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "granny_scam",
+        "mum_call"
+      ],
+      "phoneInbox": [
+        {
+          "id": "granny_scam-2020",
+          "defId": "granny_scam",
+          "from": "Unknown",
+          "emoji": "🎣",
+          "text": "CONGRATULATIONS! You won 2 MILLION. Just send account details plus a small release fee to claim.",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Report and warn fans",
+              "reply": "Posting this so nobody falls for it. Stay safe out there",
+              "karma": 7,
+              "popularity": 3
+            },
+            {
+              "label": "Delete it",
+              "reply": "",
+              "karma": 1
+            },
+            {
+              "label": "Reply as a joke and string them along",
+              "reply": "Amazing news!! My account number is 1-2-3-GET-A-JOB",
+              "karma": 2,
+              "popularity": 2
+            }
+          ]
+        },
+        {
+          "id": "mum_call-2020",
+          "defId": "mum_call",
+          "from": "Mum",
+          "emoji": "❤️",
+          "text": "Hi love, haven't heard from you in weeks. Everything ok? Call me when you can.",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Call her tonight",
+              "reply": "Calling you after training, promise. Love you",
+              "karma": 8,
+              "morale": 6
+            },
+            {
+              "label": "Leave it on read",
+              "reply": "",
+              "karma": -6,
+              "morale": -2
+            }
+          ]
+        }
+      ],
+      "currentClub": "Man City",
+      "currentClubCountry": "England",
+      "currentClubTier": 1,
+      "currentClubColor": "#6CABDD",
+      "currentLeague": "Premier League",
+      "contractYearsLeft": 4,
+      "weeklyWage": 46642,
+      "marketValue": 22.3,
+      "pace": 77,
+      "shooting": 79,
+      "passing": 78,
+      "dribbling": 78,
+      "defending": 80,
+      "physical": 79,
+      "reflexes": 78,
+      "overall": 79,
+      "seasons": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2021,
+          "age": 17,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 14,
+          "goals": 0,
+          "assists": 5,
+          "cleanSheets": 7,
+          "yellowCards": 1,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 79)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Man City 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (4yr, €47k/wk)",
+        "🏠 One of our own! The Man City academy kid signs a first-team deal. The ultras already have a chant ready."
+      ],
+      "retired": false,
+      "phase": "playing",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 20,
+      "morale": 75,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "normal",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Man City",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 75,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_x_unknown",
+            "c": "other",
+            "name": "Unknown",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "CONGRATULATIONS! You won 2 MILLION. Just send account details plus a small release fee to claim.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "granny_scam-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_dad",
+            "c": "dad",
+            "name": "Dad",
+            "emoji": "🧔",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Found your first pair of boots in the loft. Size 3. Held together with tape and hope.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "dad_firstboots",
+              "beat": 0
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [
+              "dad_firstboots"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_mum",
+            "c": "mum",
+            "name": "Mum",
+            "emoji": "❤️",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Hi love, haven't heard from you in weeks. Everything ok? Call me when you can.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "mum_call-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 3633629377,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "lines": [
+            "📋 Joined Man City Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 263930084,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 101.65,
+          "bricks": 104.98,
+          "cleats": 104.54,
+          "screens": 105.87,
+          "spark": 48.89
+        },
+        "hist": {
+          "ladder": [
+            100,
+            101.65
+          ],
+          "bricks": [
+            100,
+            104.98
+          ],
+          "cleats": [
+            100,
+            104.54
+          ],
+          "screens": [
+            100,
+            105.87
+          ],
+          "spark": [
+            100,
+            48.89
+          ]
+        },
+        "log": [],
+        "year": 2021,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "draws": [
+      0.3456416593398899,
+      0.23569086124189198,
+      0.3118083165027201,
+      0.27311956649646163,
+      0.05762500292621553,
+      0.16023853211663663,
+      0.21217300207354128,
+      0.43060289323329926,
+      0.25860434654168785,
+      0.6180567208211869,
+      0.9347604000940919,
+      0.44227402354590595,
+      0.7290625353343785,
+      0.9473201127257198,
+      0.6246571375522763,
+      0.6181993205100298,
+      0.5923633286729455,
+      0.36247771861962974,
+      0.7693241629749537,
+      0.28942239470779896,
+      0.8350561037659645,
+      0.7640103409066796,
+      0.32607192802242935,
+      0.39623587974347174,
+      0.5660359910689294,
+      0.8566141000483185,
+      0.34616088937036693,
+      0.09952775039710104,
+      0.542194158770144,
+      0.1821249930653721,
+      0.42218964593485,
+      0.8873149245046079,
+      0.980452372925356,
+      0.6696711299009621,
+      0.8107601623050869,
+      0.2692402240354568,
+      0.021360874408856034,
+      0.8408532743342221
+    ]
+  },
+  "actual": {
+    "value": {
+      "playerName": "Story Role 119003",
+      "nationality": "England",
+      "position": "GK",
+      "era": "2020s",
+      "age": 17,
+      "potential": 88,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 75,
+      "physique": {
+        "heightCm": 190,
+        "weightKg": 84
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "granny_scam",
+        "mum_call"
+      ],
+      "phoneInbox": [
+        {
+          "id": "granny_scam-2020",
+          "defId": "granny_scam",
+          "from": "Unknown",
+          "emoji": "🎣",
+          "text": "CONGRATULATIONS! You won 2 MILLION. Just send account details plus a small release fee to claim.",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Report and warn fans",
+              "reply": "Posting this so nobody falls for it. Stay safe out there",
+              "karma": 7,
+              "popularity": 3
+            },
+            {
+              "label": "Delete it",
+              "reply": "",
+              "karma": 1
+            },
+            {
+              "label": "Reply as a joke and string them along",
+              "reply": "Amazing news!! My account number is 1-2-3-GET-A-JOB",
+              "karma": 2,
+              "popularity": 2
+            }
+          ]
+        },
+        {
+          "id": "mum_call-2020",
+          "defId": "mum_call",
+          "from": "Mum",
+          "emoji": "❤️",
+          "text": "Hi love, haven't heard from you in weeks. Everything ok? Call me when you can.",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Call her tonight",
+              "reply": "Calling you after training, promise. Love you",
+              "karma": 8,
+              "morale": 6
+            },
+            {
+              "label": "Leave it on read",
+              "reply": "",
+              "karma": -6,
+              "morale": -2
+            }
+          ]
+        }
+      ],
+      "currentClub": "Man City",
+      "currentClubCountry": "England",
+      "currentClubTier": 1,
+      "currentClubColor": "#6CABDD",
+      "currentLeague": "Premier League",
+      "contractYearsLeft": 4,
+      "weeklyWage": 46642,
+      "marketValue": 22.3,
+      "pace": 77,
+      "shooting": 79,
+      "passing": 78,
+      "dribbling": 78,
+      "defending": 80,
+      "physical": 79,
+      "reflexes": 78,
+      "overall": 79,
+      "seasons": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2021,
+          "age": 17,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 14,
+          "goals": 0,
+          "assists": 5,
+          "cleanSheets": 7,
+          "yellowCards": 1,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 79)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Man City 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (4yr, €47k/wk)",
+        "🏠 One of our own! The Man City academy kid signs a first-team deal. The ultras already have a chant ready."
+      ],
+      "retired": false,
+      "phase": "playing",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 20,
+      "morale": 75,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "normal",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Man City",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 75,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_x_unknown",
+            "c": "other",
+            "name": "Unknown",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "CONGRATULATIONS! You won 2 MILLION. Just send account details plus a small release fee to claim.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "granny_scam-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_dad",
+            "c": "dad",
+            "name": "Dad",
+            "emoji": "🧔",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Found your first pair of boots in the loft. Size 3. Held together with tape and hope.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "dad_firstboots",
+              "beat": 0
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [
+              "dad_firstboots"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_mum",
+            "c": "mum",
+            "name": "Mum",
+            "emoji": "❤️",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Hi love, haven't heard from you in weeks. Everything ok? Call me when you can.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "mum_call-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 3633629377,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "lines": [
+            "📋 Joined Man City Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 263930084,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 101.65,
+          "bricks": 104.98,
+          "cleats": 104.54,
+          "screens": 105.87,
+          "spark": 48.89
+        },
+        "hist": {
+          "ladder": [
+            100,
+            101.65
+          ],
+          "bricks": [
+            100,
+            104.98
+          ],
+          "cleats": [
+            100,
+            104.54
+          ],
+          "screens": [
+            100,
+            105.87
+          ],
+          "spark": [
+            100,
+            48.89
+          ]
+        },
+        "log": [],
+        "year": 2021,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "draws": [
+      0.3456416593398899,
+      0.23569086124189198,
+      0.3118083165027201,
+      0.27311956649646163,
+      0.05762500292621553,
+      0.16023853211663663,
+      0.21217300207354128,
+      0.43060289323329926,
+      0.25860434654168785,
+      0.6180567208211869,
+      0.9347604000940919,
+      0.44227402354590595,
+      0.7290625353343785,
+      0.9473201127257198,
+      0.6246571375522763,
+      0.6181993205100298,
+      0.5923633286729455,
+      0.36247771861962974,
+      0.7693241629749537,
+      0.28942239470779896,
+      0.8350561037659645,
+      0.7640103409066796,
+      0.32607192802242935,
+      0.39623587974347174,
+      0.5660359910689294,
+      0.8566141000483185,
+      0.34616088937036693,
+      0.09952775039710104,
+      0.542194158770144,
+      0.1821249930653721,
+      0.42218964593485,
+      0.8873149245046079,
+      0.980452372925356,
+      0.6696711299009621,
+      0.8107601623050869,
+      0.2692402240354568,
+      0.021360874408856034,
+      0.8408532743342221
+    ]
+  }
+}

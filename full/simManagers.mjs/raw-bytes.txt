@@ -1,0 +1,3 @@
+1038 /home/runner/work/_temp/rc-out/full/simManagers.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simManagers.mjs/stderr.log
+1038 total

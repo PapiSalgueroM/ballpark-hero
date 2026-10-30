@@ -1,0 +1,5259 @@
+{
+  "playerName": "Sim 8",
+  "nationality": "England",
+  "position": "ST",
+  "era": "2020-24",
+  "age": 27,
+  "potential": 82,
+  "potentialEarned": 0,
+  "eliteStreak": 0,
+  "startingOverall": 64,
+  "physique": {
+    "heightCm": 183,
+    "weightKg": 78
+  },
+  "attrShape": {},
+  "karma": 50,
+  "phoneUsedIds": [
+    "granny_scam",
+    "barber_cut"
+  ],
+  "phoneInbox": [
+    {
+      "id": "granny_scam-2020",
+      "defId": "granny_scam",
+      "from": "Unknown",
+      "emoji": "🎣",
+      "text": "CONGRATULATIONS! You won 2 MILLION. Just send account details plus a small release fee to claim.",
+      "year": 2020,
+      "choices": [
+        {
+          "label": "Report and warn fans",
+          "reply": "Posting this so nobody falls for it. Stay safe out there",
+          "karma": 7,
+          "popularity": 3
+        },
+        {
+          "label": "Delete it",
+          "reply": "",
+          "karma": 1
+        },
+        {
+          "label": "Reply as a joke and string them along",
+          "reply": "Amazing news!! My account number is 1-2-3-GET-A-JOB",
+          "karma": 2,
+          "popularity": 2
+        }
+      ]
+    },
+    {
+      "id": "barber_cut-2020",
+      "defId": "barber_cut",
+      "from": "Barber",
+      "emoji": "💈",
+      "text": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+      "year": 2020,
+      "choices": [
+        {
+          "label": "Send it",
+          "reply": "Chair. Tomorrow. Do your worst",
+          "karma": 2,
+          "popularity": 4
+        },
+        {
+          "label": "Keep it classic",
+          "reply": "Usual trim mate, big game week",
+          "karma": 1
+        }
+      ]
+    }
+  ],
+  "currentClub": "Tottenham",
+  "currentClubCountry": "England",
+  "currentClubTier": 2,
+  "currentClubColor": "#132257",
+  "currentLeague": "Premier League",
+  "contractYearsLeft": 2,
+  "weeklyWage": 9102,
+  "marketValue": 52,
+  "pace": 80,
+  "shooting": 80,
+  "passing": 80,
+  "dribbling": 76,
+  "defending": 81,
+  "physical": 88,
+  "reflexes": 81,
+  "overall": 81,
+  "seasons": [
+    {
+      "year": 2020,
+      "age": 16,
+      "club": "Tottenham Youth",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 0,
+      "goals": 0,
+      "assists": 0,
+      "cleanSheets": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "rating": 0,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "youth",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null
+    },
+    {
+      "year": 2021,
+      "age": 17,
+      "club": "Tottenham Youth",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 19,
+      "goals": 0,
+      "assists": 0,
+      "cleanSheets": 0,
+      "yellowCards": 4,
+      "redCards": 0,
+      "rating": 0,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "youth",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null
+    },
+    {
+      "year": 2022,
+      "age": 18,
+      "club": "Tottenham",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 35,
+      "leagueApps": 24,
+      "goals": 6,
+      "assists": 7,
+      "cleanSheets": 0,
+      "yellowCards": 5,
+      "redCards": 0,
+      "rating": 6,
+      "ovr": 68,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 9,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Arsenal",
+          "name": "North London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 2,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 3,
+              "ga": 2,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "Chelsea",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "West Ham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": true,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": "World Cup",
+      "tournamentResult": "Not Selected",
+      "clubCupRun": {
+        "qualified": true,
+        "matches": [],
+        "result": "Group Stage",
+        "playerGoals": 2,
+        "isTopScorer": false,
+        "competition": "Champions League",
+        "cup": "ucl",
+        "firstStage": {
+          "kind": "groups",
+          "stages": [
+            {
+              "label": "Group stage",
+              "games": [
+                {
+                  "matchday": 1,
+                  "opponent": "PSG",
+                  "home": true,
+                  "goalsFor": 5,
+                  "goalsAgainst": 0,
+                  "playerGoals": 2
+                },
+                {
+                  "matchday": 2,
+                  "opponent": "Bayern Munich",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 3,
+                  "opponent": "Dortmund",
+                  "home": true,
+                  "goalsFor": 1,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 4,
+                  "opponent": "PSG",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 5,
+                  "opponent": "Bayern Munich",
+                  "home": true,
+                  "goalsFor": 1,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 6,
+                  "opponent": "Dortmund",
+                  "home": false,
+                  "goalsFor": 1,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                }
+              ],
+              "position": 3,
+              "of": 4,
+              "table": [
+                {
+                  "club": "Dortmund",
+                  "w": 2,
+                  "d": 3,
+                  "l": 1,
+                  "gf": 11,
+                  "ga": 8,
+                  "pts": 9
+                },
+                {
+                  "club": "Bayern Munich",
+                  "w": 2,
+                  "d": 3,
+                  "l": 1,
+                  "gf": 7,
+                  "ga": 5,
+                  "pts": 9
+                },
+                {
+                  "club": "Tottenham",
+                  "w": 1,
+                  "d": 5,
+                  "l": 0,
+                  "gf": 8,
+                  "ga": 3,
+                  "pts": 8
+                },
+                {
+                  "club": "PSG",
+                  "w": 0,
+                  "d": 3,
+                  "l": 3,
+                  "gf": 5,
+                  "ga": 15,
+                  "pts": 3
+                }
+              ],
+              "myRow": {
+                "club": "Tottenham",
+                "w": 1,
+                "d": 5,
+                "l": 0,
+                "gf": 8,
+                "ga": 3,
+                "pts": 8
+              },
+              "footnote": "Level on points splits on goal difference, then goals scored. That is this game's order: the real tiebreak for this season isn't in our records yet."
+            }
+          ],
+          "through": false
+        },
+        "seasonYear": 2022,
+        "club": "Tottenham"
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Nottingham Forest",
+            "won": true,
+            "for": 1,
+            "against": 0,
+            "home": true
+          },
+          {
+            "stage": "SF",
+            "opp": "Bristol City",
+            "won": true,
+            "for": 3,
+            "against": 2
+          },
+          {
+            "stage": "F",
+            "opp": "Chelsea",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 2,
+          "against": 1,
+          "legs": 1
+        }
+      }
+    },
+    {
+      "year": 2023,
+      "age": 19,
+      "club": "Tottenham",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 29,
+      "leagueApps": 24,
+      "goals": 7,
+      "assists": 6,
+      "cleanSheets": 0,
+      "yellowCards": 3,
+      "redCards": 0,
+      "rating": 5.8,
+      "ovr": 70,
+      "injury": "Calf tear",
+      "injuryWeeks": 7,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 11,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Arsenal",
+          "name": "North London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "Chelsea",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 2,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "West Ham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 0,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 3,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "clubCupRun": {
+        "qualified": true,
+        "matches": [
+          {
+            "opponent": "Inter Milan",
+            "round": "R16",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 3,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Inter Milan",
+            "round": "R16",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "playerGoals": 0,
+            "won": true,
+            "aggFor": 4,
+            "aggAgainst": 1,
+            "decidedBy": "aggregate"
+          },
+          {
+            "opponent": "Atletico Madrid",
+            "round": "QF",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Atletico Madrid",
+            "round": "QF",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 1,
+            "goalsAgainst": 0,
+            "playerGoals": 0,
+            "won": true,
+            "aggFor": 2,
+            "aggAgainst": 1,
+            "decidedBy": "aggregate"
+          },
+          {
+            "opponent": "Chelsea",
+            "round": "SF",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "playerGoals": 2,
+            "won": false
+          },
+          {
+            "opponent": "Chelsea",
+            "round": "SF",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 0,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "won": false,
+            "aggFor": 1,
+            "aggAgainst": 2,
+            "decidedBy": "aggregate"
+          }
+        ],
+        "result": "Semi-final",
+        "playerGoals": 6,
+        "isTopScorer": false,
+        "competition": "Champions League",
+        "cup": "ucl",
+        "firstStage": {
+          "kind": "groups",
+          "stages": [
+            {
+              "label": "Group stage",
+              "games": [
+                {
+                  "matchday": 1,
+                  "opponent": "Arsenal",
+                  "home": true,
+                  "goalsFor": 2,
+                  "goalsAgainst": 2,
+                  "playerGoals": 2
+                },
+                {
+                  "matchday": 2,
+                  "opponent": "Real Madrid",
+                  "home": false,
+                  "goalsFor": 3,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 3,
+                  "opponent": "Benfica",
+                  "home": true,
+                  "goalsFor": 1,
+                  "goalsAgainst": 1,
+                  "playerGoals": 1
+                },
+                {
+                  "matchday": 4,
+                  "opponent": "Arsenal",
+                  "home": false,
+                  "goalsFor": 1,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 5,
+                  "opponent": "Real Madrid",
+                  "home": true,
+                  "goalsFor": 1,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 6,
+                  "opponent": "Benfica",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 3,
+                  "playerGoals": 0
+                }
+              ],
+              "position": 2,
+              "of": 4,
+              "table": [
+                {
+                  "club": "Benfica",
+                  "w": 4,
+                  "d": 2,
+                  "l": 0,
+                  "gf": 11,
+                  "ga": 3,
+                  "pts": 14
+                },
+                {
+                  "club": "Tottenham",
+                  "w": 3,
+                  "d": 2,
+                  "l": 1,
+                  "gf": 8,
+                  "ga": 6,
+                  "pts": 11
+                },
+                {
+                  "club": "Real Madrid",
+                  "w": 2,
+                  "d": 0,
+                  "l": 4,
+                  "gf": 5,
+                  "ga": 11,
+                  "pts": 6
+                },
+                {
+                  "club": "Arsenal",
+                  "w": 0,
+                  "d": 2,
+                  "l": 4,
+                  "gf": 5,
+                  "ga": 9,
+                  "pts": 2
+                }
+              ],
+              "myRow": {
+                "club": "Tottenham",
+                "w": 3,
+                "d": 2,
+                "l": 1,
+                "gf": 8,
+                "ga": 6,
+                "pts": 11
+              },
+              "footnote": "Level on points splits on goal difference, then goals scored. That is this game's order: the real tiebreak for this season isn't in our records yet."
+            }
+          ],
+          "through": true
+        },
+        "seasonYear": 2023,
+        "club": "Tottenham"
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "West Brom",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": true
+          },
+          {
+            "stage": "SF",
+            "opp": "Hull City",
+            "won": true,
+            "for": 2,
+            "against": 1
+          },
+          {
+            "stage": "F",
+            "opp": "Liverpool",
+            "won": false
+          }
+        ],
+        "final": {
+          "for": 0,
+          "against": 2,
+          "legs": 1
+        }
+      }
+    },
+    {
+      "year": 2024,
+      "age": 20,
+      "club": "Tottenham",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 24,
+      "leagueApps": 21,
+      "goals": 4,
+      "assists": 5,
+      "cleanSheets": 0,
+      "yellowCards": 3,
+      "redCards": 0,
+      "rating": 5.6,
+      "ovr": 71,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 10,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Arsenal",
+          "name": "North London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 3,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "Chelsea",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "West Ham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 3,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": "European Championship",
+      "tournamentResult": "Not Selected",
+      "clubCupRun": {
+        "qualified": true,
+        "matches": [
+          {
+            "opponent": "Man City",
+            "round": "R16",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 1,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Man City",
+            "round": "R16",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 2,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "won": false,
+            "aggFor": 3,
+            "aggAgainst": 4,
+            "afterExtraTime": true,
+            "etFor": 1,
+            "etAgainst": 2,
+            "decidedBy": "extraTime"
+          }
+        ],
+        "result": "R16",
+        "playerGoals": 2,
+        "isTopScorer": false,
+        "competition": "Champions League",
+        "cup": "ucl",
+        "firstStage": {
+          "kind": "leaguePhase",
+          "stages": [
+            {
+              "label": "League phase",
+              "games": [
+                {
+                  "matchday": 1,
+                  "opponent": "Porto",
+                  "home": true,
+                  "goalsFor": 2,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 2,
+                  "opponent": "Benfica",
+                  "home": false,
+                  "goalsFor": 1,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 3,
+                  "opponent": "Barcelona",
+                  "home": true,
+                  "goalsFor": 0,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 4,
+                  "opponent": "Inter Milan",
+                  "home": false,
+                  "goalsFor": 2,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 5,
+                  "opponent": "PSG",
+                  "home": true,
+                  "goalsFor": 0,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 6,
+                  "opponent": "AC Milan",
+                  "home": false,
+                  "goalsFor": 4,
+                  "goalsAgainst": 1,
+                  "playerGoals": 2
+                },
+                {
+                  "matchday": 7,
+                  "opponent": "Arsenal",
+                  "home": true,
+                  "goalsFor": 0,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 8,
+                  "opponent": "Bayern Munich",
+                  "home": false,
+                  "goalsFor": 1,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                }
+              ],
+              "position": 7,
+              "of": 36,
+              "myRow": {
+                "club": "Tottenham",
+                "w": 4,
+                "d": 4,
+                "l": 0,
+                "gf": 10,
+                "ga": 3,
+                "pts": 16
+              },
+              "cutoffs": {
+                "direct": 15,
+                "playoff": 9
+              },
+              "footnote": "Level on points splits on goal difference, then goals scored."
+            }
+          ],
+          "through": true,
+          "playoff": false
+        },
+        "seasonYear": 2024,
+        "club": "Tottenham"
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2025,
+      "age": 21,
+      "club": "Tottenham",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 27,
+      "leagueApps": 22,
+      "goals": 4,
+      "assists": 3,
+      "cleanSheets": 0,
+      "yellowCards": 4,
+      "redCards": 0,
+      "rating": 6.1,
+      "ovr": 72,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": true,
+      "leagueFinish": 1,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Arsenal",
+          "name": "North London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 2,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "Chelsea",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 2,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "West Ham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": 24,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Burnley",
+            "won": false,
+            "for": 2,
+            "against": 4,
+            "home": true
+          }
+        ]
+      }
+    },
+    {
+      "year": 2026,
+      "age": 22,
+      "club": "Tottenham",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 24,
+      "leagueApps": 18,
+      "goals": 4,
+      "assists": 4,
+      "cleanSheets": 0,
+      "yellowCards": 1,
+      "redCards": 0,
+      "rating": 6,
+      "ovr": 74,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 7,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Arsenal",
+          "name": "North London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 2,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "Chelsea",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 2,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 3,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": "World Cup",
+      "tournamentResult": "Not Selected",
+      "leagueWorld": {
+        "league": "Premier League",
+        "members": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Everton",
+          "Fulham",
+          "Crystal Palace",
+          "Brentford",
+          "Bournemouth",
+          "Sunderland",
+          "Leeds United",
+          "Ipswich Town",
+          "Coventry City",
+          "Hull City"
+        ],
+        "champion": "Man City",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Crystal Palace",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Hull City",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Fulham",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          }
+        ]
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Brentford",
+            "won": true,
+            "for": 2,
+            "against": 1,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Man United",
+            "won": true,
+            "for": 4,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Chelsea",
+            "won": false
+          }
+        ],
+        "final": {
+          "for": 0,
+          "against": 1,
+          "legs": 1
+        },
+        "opening": {
+          "opp": "Newcastle",
+          "country": "England",
+          "league": "Premier League",
+          "won": true,
+          "for": 1,
+          "against": 0,
+          "home": true
+        }
+      }
+    },
+    {
+      "year": 2027,
+      "age": 23,
+      "club": "Tottenham",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 26,
+      "leagueApps": 16,
+      "goals": 9,
+      "assists": 6,
+      "cleanSheets": 0,
+      "yellowCards": 5,
+      "redCards": 0,
+      "rating": 6.6,
+      "ovr": 75,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 13,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Arsenal",
+          "name": "North London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 3,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "Chelsea",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "West Ham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 0,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": true,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "leagueWorld": {
+        "league": "Premier League",
+        "members": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Everton",
+          "Brentford",
+          "Bournemouth",
+          "Sunderland",
+          "Leeds United",
+          "Ipswich Town",
+          "Coventry City",
+          "West Brom",
+          "West Ham",
+          "Portsmouth"
+        ],
+        "champion": "Liverpool",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Leeds United",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Ipswich Town",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Coventry City",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          }
+        ]
+      },
+      "clubCupRun": {
+        "qualified": true,
+        "matches": [
+          {
+            "opponent": "Juventus",
+            "round": "R16",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 2,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Juventus",
+            "round": "R16",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 1,
+            "won": true,
+            "aggFor": 4,
+            "aggAgainst": 3,
+            "afterExtraTime": true,
+            "etFor": 1,
+            "etAgainst": 0,
+            "decidedBy": "extraTime"
+          },
+          {
+            "opponent": "Benfica",
+            "round": "QF",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Benfica",
+            "round": "QF",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 0,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "won": false,
+            "aggFor": 1,
+            "aggAgainst": 3,
+            "decidedBy": "aggregate"
+          }
+        ],
+        "result": "Quarter-final",
+        "playerGoals": 1,
+        "isTopScorer": false,
+        "competition": "Champions League",
+        "cup": "ucl",
+        "firstStage": {
+          "kind": "leaguePhase",
+          "stages": [
+            {
+              "label": "League phase",
+              "games": [
+                {
+                  "matchday": 1,
+                  "opponent": "Man City",
+                  "home": true,
+                  "goalsFor": 2,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 2,
+                  "opponent": "Atletico Madrid",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 3,
+                  "opponent": "Napoli",
+                  "home": true,
+                  "goalsFor": 0,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 4,
+                  "opponent": "Arsenal",
+                  "home": false,
+                  "goalsFor": 4,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 5,
+                  "opponent": "PSG",
+                  "home": true,
+                  "goalsFor": 2,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 6,
+                  "opponent": "Liverpool",
+                  "home": false,
+                  "goalsFor": 6,
+                  "goalsAgainst": 2,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 7,
+                  "opponent": "Barcelona",
+                  "home": true,
+                  "goalsFor": 1,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 8,
+                  "opponent": "Real Madrid",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 3,
+                  "playerGoals": 0
+                }
+              ],
+              "position": 7,
+              "of": 36,
+              "myRow": {
+                "club": "Tottenham",
+                "w": 5,
+                "d": 1,
+                "l": 2,
+                "gf": 15,
+                "ga": 7,
+                "pts": 16
+              },
+              "cutoffs": {
+                "direct": 16,
+                "playoff": 9
+              },
+              "footnote": "Level on points splits on goal difference, then goals scored."
+            }
+          ],
+          "through": true,
+          "playoff": false
+        },
+        "seasonYear": 2027,
+        "club": "Tottenham"
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Arsenal",
+            "won": true,
+            "for": 3,
+            "against": 2,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Man United",
+            "won": true,
+            "for": 3,
+            "against": 0
+          },
+          {
+            "stage": "F",
+            "opp": "Wolves",
+            "won": true
+          }
+        ],
+        "final": {
+          "for": 1,
+          "against": 1,
+          "legs": 1,
+          "decidedBy": "penalties",
+          "pensFor": 4,
+          "pensAgainst": 3,
+          "scored": true
+        },
+        "opening": {
+          "opp": "Brighton",
+          "country": "England",
+          "league": "Premier League",
+          "won": true,
+          "for": 1,
+          "against": 0,
+          "home": false
+        }
+      }
+    },
+    {
+      "year": 2028,
+      "age": 24,
+      "club": "Tottenham",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 34,
+      "leagueApps": 27,
+      "goals": 11,
+      "assists": 3,
+      "cleanSheets": 0,
+      "yellowCards": 3,
+      "redCards": 0,
+      "rating": 7.2,
+      "ovr": 77,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 10,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Arsenal",
+          "name": "North London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "Chelsea",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 3,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "West Ham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 4,
+      "intGoals": 1,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": "European Championship",
+      "tournamentResult": "Round of 16",
+      "leagueWorld": {
+        "league": "Premier League",
+        "members": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Everton",
+          "Brentford",
+          "Bournemouth",
+          "Sunderland",
+          "West Brom",
+          "West Ham",
+          "Portsmouth",
+          "Charlton Athletic",
+          "Sheffield United",
+          "Norwich City"
+        ],
+        "champion": "Liverpool",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Bournemouth",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Sheffield United",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Charlton Athletic",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          }
+        ]
+      },
+      "clubCupRun": {
+        "qualified": true,
+        "matches": [
+          {
+            "opponent": "Inter Milan",
+            "round": "R16",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 0,
+            "goalsAgainst": 3,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Inter Milan",
+            "round": "R16",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 0,
+            "goalsAgainst": 0,
+            "playerGoals": 0,
+            "won": false,
+            "aggFor": 0,
+            "aggAgainst": 3,
+            "decidedBy": "aggregate"
+          }
+        ],
+        "result": "R16",
+        "playerGoals": 2,
+        "isTopScorer": false,
+        "competition": "Champions League",
+        "cup": "ucl",
+        "firstStage": {
+          "kind": "leaguePhase",
+          "stages": [
+            {
+              "label": "League phase",
+              "games": [
+                {
+                  "matchday": 1,
+                  "opponent": "Arsenal",
+                  "home": true,
+                  "goalsFor": 2,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 2,
+                  "opponent": "Benfica",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 2,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 3,
+                  "opponent": "Atletico Madrid",
+                  "home": true,
+                  "goalsFor": 6,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 4,
+                  "opponent": "Juventus",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 5,
+                  "opponent": "Bayern Munich",
+                  "home": true,
+                  "goalsFor": 3,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 6,
+                  "opponent": "Liverpool",
+                  "home": false,
+                  "goalsFor": 2,
+                  "goalsAgainst": 1,
+                  "playerGoals": 2
+                },
+                {
+                  "matchday": 7,
+                  "opponent": "Napoli",
+                  "home": true,
+                  "goalsFor": 0,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 8,
+                  "opponent": "Leverkusen",
+                  "home": false,
+                  "goalsFor": 3,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                }
+              ],
+              "position": 7,
+              "of": 36,
+              "myRow": {
+                "club": "Tottenham",
+                "w": 5,
+                "d": 1,
+                "l": 2,
+                "gf": 16,
+                "ga": 6,
+                "pts": 16
+              },
+              "cutoffs": {
+                "direct": 16,
+                "playoff": 9
+              },
+              "footnote": "Level on points splits on goal difference, then goals scored."
+            }
+          ],
+          "through": true,
+          "playoff": false
+        },
+        "seasonYear": 2028,
+        "club": "Tottenham"
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ],
+        "opening": {
+          "opp": "Brentford",
+          "country": "England",
+          "league": "Premier League",
+          "won": false,
+          "for": 1,
+          "against": 2,
+          "home": false
+        }
+      }
+    },
+    {
+      "year": 2029,
+      "age": 25,
+      "club": "Tottenham",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 43,
+      "leagueApps": 30,
+      "goals": 11,
+      "assists": 6,
+      "cleanSheets": 0,
+      "yellowCards": 8,
+      "redCards": 0,
+      "rating": 6.9,
+      "ovr": 78,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": true,
+      "leagueFinish": 1,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Arsenal",
+          "name": "North London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 0,
+              "played": true,
+              "goals": 1,
+              "won": true
+            },
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 1,
+              "played": true,
+              "goals": 1,
+              "won": true
+            }
+          ]
+        },
+        {
+          "rival": "Chelsea",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 0,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "West Ham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": 18,
+      "type": "playing",
+      "intApps": 6,
+      "intGoals": 3,
+      "intAssists": 1,
+      "intRating": 7.2,
+      "tournament": null,
+      "tournamentResult": null,
+      "leagueWorld": {
+        "league": "Premier League",
+        "members": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Everton",
+          "Brentford",
+          "Sunderland",
+          "West Brom",
+          "West Ham",
+          "Portsmouth",
+          "Norwich City",
+          "Fulham",
+          "Bolton Wanderers",
+          "Southampton"
+        ],
+        "champion": "Tottenham",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Norwich City",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Bolton Wanderers",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Everton",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          }
+        ]
+      },
+      "clubCupRun": {
+        "qualified": true,
+        "matches": [
+          {
+            "opponent": "Arsenal",
+            "round": "PO",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 2,
+            "goalsAgainst": 3,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Arsenal",
+            "round": "PO",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 0,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "won": false,
+            "aggFor": 2,
+            "aggAgainst": 4,
+            "decidedBy": "aggregate"
+          }
+        ],
+        "result": "Play-off",
+        "playerGoals": 3,
+        "isTopScorer": false,
+        "competition": "Champions League",
+        "cup": "ucl",
+        "firstStage": {
+          "kind": "leaguePhase",
+          "stages": [
+            {
+              "label": "League phase",
+              "games": [
+                {
+                  "matchday": 1,
+                  "opponent": "Benfica",
+                  "home": true,
+                  "goalsFor": 2,
+                  "goalsAgainst": 1,
+                  "playerGoals": 2
+                },
+                {
+                  "matchday": 2,
+                  "opponent": "Barcelona",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 4,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 3,
+                  "opponent": "Newcastle",
+                  "home": true,
+                  "goalsFor": 3,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 4,
+                  "opponent": "Napoli",
+                  "home": false,
+                  "goalsFor": 1,
+                  "goalsAgainst": 4,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 5,
+                  "opponent": "Juventus",
+                  "home": true,
+                  "goalsFor": 1,
+                  "goalsAgainst": 0,
+                  "playerGoals": 1
+                },
+                {
+                  "matchday": 6,
+                  "opponent": "Bayern Munich",
+                  "home": false,
+                  "goalsFor": 1,
+                  "goalsAgainst": 2,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 7,
+                  "opponent": "Real Madrid",
+                  "home": true,
+                  "goalsFor": 5,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 8,
+                  "opponent": "Inter Milan",
+                  "home": false,
+                  "goalsFor": 2,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                }
+              ],
+              "position": 11,
+              "of": 36,
+              "myRow": {
+                "club": "Tottenham",
+                "w": 5,
+                "d": 0,
+                "l": 3,
+                "gf": 15,
+                "ga": 13,
+                "pts": 15
+              },
+              "cutoffs": {
+                "direct": 16,
+                "playoff": 8
+              },
+              "footnote": "Level on points splits on goal difference, then goals scored."
+            }
+          ],
+          "through": false,
+          "playoff": true
+        },
+        "seasonYear": 2029,
+        "club": "Tottenham"
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ],
+        "opening": {
+          "opp": "Watford",
+          "country": "England",
+          "league": "Championship",
+          "won": false,
+          "for": 1,
+          "against": 2,
+          "home": true
+        }
+      }
+    },
+    {
+      "year": 2030,
+      "age": 26,
+      "club": "Tottenham",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 30,
+      "leagueApps": 25,
+      "goals": 8,
+      "assists": 4,
+      "cleanSheets": 0,
+      "yellowCards": 4,
+      "redCards": 0,
+      "rating": 7,
+      "ovr": 78,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 9,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Arsenal",
+          "name": "North London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 3,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "Chelsea",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 3,
+              "played": true,
+              "goals": 1
+            }
+          ]
+        },
+        {
+          "rival": "West Ham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 3,
+              "ga": 2,
+              "played": true,
+              "goals": 1
+            },
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 10,
+      "intGoals": 6,
+      "intAssists": 1,
+      "intRating": 6.9,
+      "tournament": "World Cup",
+      "tournamentResult": "Round of 32",
+      "leagueWorld": {
+        "league": "Premier League",
+        "members": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Brentford",
+          "Sunderland",
+          "West Brom",
+          "West Ham",
+          "Portsmouth",
+          "Fulham",
+          "Southampton",
+          "Bristol City",
+          "Bournemouth",
+          "QPR"
+        ],
+        "champion": "Chelsea",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Portsmouth",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Sunderland",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Bristol City",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          }
+        ]
+      },
+      "clubCupRun": {
+        "qualified": true,
+        "matches": [
+          {
+            "opponent": "Real Madrid",
+            "round": "PO",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 2,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Real Madrid",
+            "round": "PO",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 1,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "won": true,
+            "aggFor": 3,
+            "aggAgainst": 3,
+            "afterExtraTime": true,
+            "etFor": 0,
+            "etAgainst": 0,
+            "pensFor": 5,
+            "pensAgainst": 3,
+            "decidedBy": "penalties"
+          },
+          {
+            "opponent": "Man City",
+            "round": "R16",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 3,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Man City",
+            "round": "R16",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 1,
+            "goalsAgainst": 2,
+            "playerGoals": 0,
+            "won": true,
+            "aggFor": 4,
+            "aggAgainst": 3,
+            "decidedBy": "aggregate"
+          },
+          {
+            "opponent": "Atletico Madrid",
+            "round": "QF",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 0,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Atletico Madrid",
+            "round": "QF",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 1,
+            "goalsAgainst": 2,
+            "playerGoals": 1,
+            "won": false,
+            "aggFor": 1,
+            "aggAgainst": 3,
+            "afterExtraTime": true,
+            "etFor": 0,
+            "etAgainst": 2,
+            "decidedBy": "extraTime"
+          }
+        ],
+        "result": "Quarter-final",
+        "playerGoals": 1,
+        "isTopScorer": false,
+        "competition": "Champions League",
+        "cup": "ucl",
+        "firstStage": {
+          "kind": "leaguePhase",
+          "stages": [
+            {
+              "label": "League phase",
+              "games": [
+                {
+                  "matchday": 1,
+                  "opponent": "Inter Milan",
+                  "home": true,
+                  "goalsFor": 3,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 2,
+                  "opponent": "Juventus",
+                  "home": false,
+                  "goalsFor": 2,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 3,
+                  "opponent": "Napoli",
+                  "home": true,
+                  "goalsFor": 1,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 4,
+                  "opponent": "Chelsea",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 5,
+                  "opponent": "Leverkusen",
+                  "home": true,
+                  "goalsFor": 4,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 6,
+                  "opponent": "Dortmund",
+                  "home": false,
+                  "goalsFor": 1,
+                  "goalsAgainst": 2,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 7,
+                  "opponent": "Liverpool",
+                  "home": true,
+                  "goalsFor": 1,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 8,
+                  "opponent": "PSG",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 3,
+                  "playerGoals": 0
+                }
+              ],
+              "position": 16,
+              "of": 36,
+              "myRow": {
+                "club": "Tottenham",
+                "w": 3,
+                "d": 2,
+                "l": 3,
+                "gf": 12,
+                "ga": 10,
+                "pts": 11
+              },
+              "cutoffs": {
+                "direct": 15,
+                "playoff": 9
+              },
+              "footnote": "Level on points splits on goal difference, then goals scored."
+            }
+          ],
+          "through": false,
+          "playoff": true
+        },
+        "seasonYear": 2030,
+        "club": "Tottenham"
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ],
+        "opening": {
+          "opp": "Southampton",
+          "country": "England",
+          "league": "Championship",
+          "won": false,
+          "for": 0,
+          "against": 2,
+          "home": true
+        }
+      }
+    },
+    {
+      "year": 2031,
+      "age": 27,
+      "club": "Tottenham",
+      "clubCountry": "England",
+      "clubTier": 2,
+      "apps": 29,
+      "leagueApps": 25,
+      "goals": 12,
+      "assists": 6,
+      "cleanSheets": 0,
+      "yellowCards": 4,
+      "redCards": 0,
+      "rating": 7,
+      "ovr": 81,
+      "injury": "Hip knock",
+      "injuryWeeks": 2,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 10,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Arsenal",
+          "name": "North London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 2,
+              "ga": 2,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 3,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "Chelsea",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 3,
+              "ga": 0,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        },
+        {
+          "rival": "West Ham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 3,
+              "ga": 0,
+              "played": true,
+              "goals": 2,
+              "won": true
+            },
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 1,
+              "played": true,
+              "goals": 2,
+              "won": true
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 6,
+      "intGoals": 3,
+      "intAssists": 1,
+      "intRating": 7.1,
+      "tournament": null,
+      "tournamentResult": null,
+      "leagueWorld": {
+        "league": "Premier League",
+        "members": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Brentford",
+          "West Brom",
+          "West Ham",
+          "Fulham",
+          "Southampton",
+          "Bournemouth",
+          "QPR",
+          "Wolves",
+          "Bolton Wanderers",
+          "Coventry City"
+        ],
+        "champion": "Chelsea",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Bournemouth",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Southampton",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Coventry City",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          }
+        ]
+      },
+      "clubCupRun": {
+        "qualified": true,
+        "matches": [
+          {
+            "opponent": "Inter Milan",
+            "round": "PO",
+            "leg": 1,
+            "home": true,
+            "goalsFor": 2,
+            "goalsAgainst": 1,
+            "playerGoals": 0,
+            "won": false
+          },
+          {
+            "opponent": "Inter Milan",
+            "round": "PO",
+            "leg": 2,
+            "home": false,
+            "goalsFor": 0,
+            "goalsAgainst": 4,
+            "playerGoals": 0,
+            "won": false,
+            "aggFor": 2,
+            "aggAgainst": 5,
+            "decidedBy": "aggregate"
+          }
+        ],
+        "result": "Play-off",
+        "playerGoals": 0,
+        "isTopScorer": false,
+        "competition": "Champions League",
+        "cup": "ucl",
+        "firstStage": {
+          "kind": "leaguePhase",
+          "stages": [
+            {
+              "label": "League phase",
+              "games": [
+                {
+                  "matchday": 1,
+                  "opponent": "Real Madrid",
+                  "home": true,
+                  "goalsFor": 2,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 2,
+                  "opponent": "Arsenal",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 3,
+                  "opponent": "Juventus",
+                  "home": true,
+                  "goalsFor": 1,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 4,
+                  "opponent": "Chelsea",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 3,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 5,
+                  "opponent": "Barcelona",
+                  "home": true,
+                  "goalsFor": 3,
+                  "goalsAgainst": 0,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 6,
+                  "opponent": "Napoli",
+                  "home": false,
+                  "goalsFor": 2,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 7,
+                  "opponent": "Dortmund",
+                  "home": true,
+                  "goalsFor": 0,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                },
+                {
+                  "matchday": 8,
+                  "opponent": "Newcastle",
+                  "home": false,
+                  "goalsFor": 0,
+                  "goalsAgainst": 1,
+                  "playerGoals": 0
+                }
+              ],
+              "position": 24,
+              "of": 36,
+              "myRow": {
+                "club": "Tottenham",
+                "w": 3,
+                "d": 1,
+                "l": 4,
+                "gf": 8,
+                "ga": 8,
+                "pts": 10
+              },
+              "cutoffs": {
+                "direct": 14,
+                "playoff": 10
+              },
+              "footnote": "Level on points splits on goal difference, then goals scored."
+            }
+          ],
+          "through": false,
+          "playoff": true
+        },
+        "seasonYear": 2031,
+        "club": "Tottenham"
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ],
+        "opening": {
+          "opp": "Stoke City",
+          "country": "England",
+          "league": "Championship",
+          "won": false,
+          "for": 1,
+          "against": 2,
+          "home": true
+        }
+      }
+    }
+  ],
+  "events": [
+    "🚑 Injury: Hip knock, out 2 weeks, missed matches",
+    "🔥 North London derby against Arsenal: D 2-2 away (you missed it), W 3-1 at home (you missed it).",
+    "🔥 London derby against Chelsea: L 1-3 away, W 3-0 at home (you missed it).",
+    "🔥 London derby against West Ham: W 3-0 away, W 2-1 at home.",
+    "🔥 Your goal won the London derby. Derby Hero.",
+    "🏛️ Granted Club Legend status at Tottenham! (300+ appearances)"
+  ],
+  "retired": false,
+  "phase": "newspaper",
+  "pendingOffers": [],
+  "pendingSummary": {
+    "year": 2031,
+    "age": 27,
+    "club": "Tottenham",
+    "clubCountry": "England",
+    "clubTier": 2,
+    "apps": 29,
+    "leagueApps": 25,
+    "goals": 12,
+    "assists": 6,
+    "cleanSheets": 0,
+    "yellowCards": 4,
+    "redCards": 0,
+    "rating": 7,
+    "ovr": 81,
+    "injury": "Hip knock",
+    "injuryWeeks": 2,
+    "injurySevere": false,
+    "leagueTitle": false,
+    "leagueFinish": 10,
+    "leagueSize": 20,
+    "derbies": [
+      {
+        "rival": "Arsenal",
+        "name": "North London derby",
+        "kind": "derby",
+        "meetings": [
+          {
+            "home": false,
+            "gf": 2,
+            "ga": 2,
+            "played": false,
+            "goals": 0
+          },
+          {
+            "home": true,
+            "gf": 3,
+            "ga": 1,
+            "played": false,
+            "goals": 0
+          }
+        ]
+      },
+      {
+        "rival": "Chelsea",
+        "name": "London derby",
+        "kind": "derby",
+        "meetings": [
+          {
+            "home": false,
+            "gf": 1,
+            "ga": 3,
+            "played": true,
+            "goals": 0
+          },
+          {
+            "home": true,
+            "gf": 3,
+            "ga": 0,
+            "played": false,
+            "goals": 0
+          }
+        ]
+      },
+      {
+        "rival": "West Ham",
+        "name": "London derby",
+        "kind": "derby",
+        "meetings": [
+          {
+            "home": false,
+            "gf": 3,
+            "ga": 0,
+            "played": true,
+            "goals": 2,
+            "won": true
+          },
+          {
+            "home": true,
+            "gf": 2,
+            "ga": 1,
+            "played": true,
+            "goals": 2,
+            "won": true
+          }
+        ]
+      }
+    ],
+    "domesticCup": false,
+    "championsLeague": false,
+    "worldCup": false,
+    "ballonDor": false,
+    "ballonDorRank": null,
+    "type": "playing",
+    "intApps": 6,
+    "intGoals": 3,
+    "intAssists": 1,
+    "intRating": 7.1,
+    "tournament": null,
+    "tournamentResult": null,
+    "leagueWorld": {
+      "league": "Premier League",
+      "members": [
+        "Arsenal",
+        "Man City",
+        "Liverpool",
+        "Chelsea",
+        "Man United",
+        "Tottenham",
+        "Newcastle",
+        "Nottingham Forest",
+        "Brighton",
+        "Aston Villa",
+        "Brentford",
+        "West Brom",
+        "West Ham",
+        "Fulham",
+        "Southampton",
+        "Bournemouth",
+        "QPR",
+        "Wolves",
+        "Bolton Wanderers",
+        "Coventry City"
+      ],
+      "champion": "Chelsea",
+      "simulation": "simulated",
+      "movements": [
+        {
+          "club": "Bournemouth",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        },
+        {
+          "club": "Southampton",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        },
+        {
+          "club": "Coventry City",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        }
+      ]
+    },
+    "clubCupRun": {
+      "qualified": true,
+      "matches": [
+        {
+          "opponent": "Inter Milan",
+          "round": "PO",
+          "leg": 1,
+          "home": true,
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "playerGoals": 0,
+          "won": false
+        },
+        {
+          "opponent": "Inter Milan",
+          "round": "PO",
+          "leg": 2,
+          "home": false,
+          "goalsFor": 0,
+          "goalsAgainst": 4,
+          "playerGoals": 0,
+          "won": false,
+          "aggFor": 2,
+          "aggAgainst": 5,
+          "decidedBy": "aggregate"
+        }
+      ],
+      "result": "Play-off",
+      "playerGoals": 0,
+      "isTopScorer": false,
+      "competition": "Champions League",
+      "cup": "ucl",
+      "firstStage": {
+        "kind": "leaguePhase",
+        "stages": [
+          {
+            "label": "League phase",
+            "games": [
+              {
+                "matchday": 1,
+                "opponent": "Real Madrid",
+                "home": true,
+                "goalsFor": 2,
+                "goalsAgainst": 0,
+                "playerGoals": 0
+              },
+              {
+                "matchday": 2,
+                "opponent": "Arsenal",
+                "home": false,
+                "goalsFor": 0,
+                "goalsAgainst": 1,
+                "playerGoals": 0
+              },
+              {
+                "matchday": 3,
+                "opponent": "Juventus",
+                "home": true,
+                "goalsFor": 1,
+                "goalsAgainst": 1,
+                "playerGoals": 0
+              },
+              {
+                "matchday": 4,
+                "opponent": "Chelsea",
+                "home": false,
+                "goalsFor": 0,
+                "goalsAgainst": 3,
+                "playerGoals": 0
+              },
+              {
+                "matchday": 5,
+                "opponent": "Barcelona",
+                "home": true,
+                "goalsFor": 3,
+                "goalsAgainst": 0,
+                "playerGoals": 0
+              },
+              {
+                "matchday": 6,
+                "opponent": "Napoli",
+                "home": false,
+                "goalsFor": 2,
+                "goalsAgainst": 1,
+                "playerGoals": 0
+              },
+              {
+                "matchday": 7,
+                "opponent": "Dortmund",
+                "home": true,
+                "goalsFor": 0,
+                "goalsAgainst": 1,
+                "playerGoals": 0
+              },
+              {
+                "matchday": 8,
+                "opponent": "Newcastle",
+                "home": false,
+                "goalsFor": 0,
+                "goalsAgainst": 1,
+                "playerGoals": 0
+              }
+            ],
+            "position": 24,
+            "of": 36,
+            "myRow": {
+              "club": "Tottenham",
+              "w": 3,
+              "d": 1,
+              "l": 4,
+              "gf": 8,
+              "ga": 8,
+              "pts": 10
+            },
+            "cutoffs": {
+              "direct": 14,
+              "playoff": 10
+            },
+            "footnote": "Level on points splits on goal difference, then goals scored."
+          }
+        ],
+        "through": false,
+        "playoff": true
+      },
+      "seasonYear": 2031,
+      "club": "Tottenham"
+    },
+    "cupRun": {
+      "cup": "FA Cup",
+      "stages": [
+        {
+          "stage": "early",
+          "won": false
+        }
+      ],
+      "opening": {
+        "opp": "Stoke City",
+        "country": "England",
+        "league": "Championship",
+        "won": false,
+        "for": 1,
+        "against": 2,
+        "home": true
+      }
+    }
+  },
+  "transferSituation": null,
+  "loan": null,
+  "pendingLoanOffers": null,
+  "pendingEvents": [],
+  "lastEventId": 263,
+  "statBoostNextSeason": {},
+  "pendingNews": [
+    {
+      "newspaper": "Soccer Times",
+      "type": "positive",
+      "headline": "THE COLUMN: Hollis Hargreave Has Seen Enough, And He Is Saying So",
+      "body": "12 goals and 6 assists in 29 games. Hollis Hargreave wrote that anybody still arguing about this is arguing for the sake of it."
+    },
+    {
+      "newspaper": "The Daily Sport",
+      "type": "transfer",
+      "headline": "Barcelona Launch €47M Bid For Sim 8",
+      "body": "Barcelona have made an audacious move for Sim 8, with a bid of €46.6M said to be on the table. Tottenham are yet to respond but are understood to be reluctant to sell."
+    }
+  ],
+  "internationalCareer": true,
+  "sponsorDeal": null,
+  "totalEarnings": 8.78,
+  "popularity": 68,
+  "morale": 50,
+  "isLeader": true,
+  "hasRelationship": false,
+  "intStats": {
+    "caps": 26,
+    "goals": 13,
+    "assists": 3,
+    "tournaments": 2,
+    "worldCups": 1,
+    "continentals": 1,
+    "worldCupWins": 0,
+    "continentalWins": 0,
+    "isCaptain": false,
+    "isRetired": false,
+    "debutYear": -1,
+    "debutAge": 18,
+    "worldCupResults": [],
+    "squadSnubs": 3,
+    "failedQualifications": 0
+  },
+  "pendingWorldCup": null,
+  "pendingTournament": null,
+  "lastTournament": {
+    "year": 2030,
+    "name": "World Cup",
+    "short": "World Cup",
+    "kind": "World Cup",
+    "confederation": null,
+    "nation": "England",
+    "teams": 48,
+    "qualifying": {
+      "confederation": "UEFA",
+      "table": [
+        {
+          "nation": "England",
+          "played": 10,
+          "won": 8,
+          "drawn": 0,
+          "lost": 2,
+          "gf": 22,
+          "ga": 10,
+          "points": 24
+        },
+        {
+          "nation": "Slovenia",
+          "played": 10,
+          "won": 6,
+          "drawn": 1,
+          "lost": 3,
+          "gf": 21,
+          "ga": 12,
+          "points": 19
+        },
+        {
+          "nation": "Poland",
+          "played": 10,
+          "won": 5,
+          "drawn": 2,
+          "lost": 3,
+          "gf": 18,
+          "ga": 12,
+          "points": 17
+        },
+        {
+          "nation": "Cyprus",
+          "played": 10,
+          "won": 2,
+          "drawn": 4,
+          "lost": 4,
+          "gf": 13,
+          "ga": 20,
+          "points": 10
+        },
+        {
+          "nation": "Northern Ireland",
+          "played": 10,
+          "won": 2,
+          "drawn": 2,
+          "lost": 6,
+          "gf": 13,
+          "ga": 22,
+          "points": 8
+        },
+        {
+          "nation": "Moldova",
+          "played": 10,
+          "won": 2,
+          "drawn": 1,
+          "lost": 7,
+          "gf": 11,
+          "ga": 22,
+          "points": 7
+        }
+      ],
+      "myPosition": 1,
+      "through": 2,
+      "qualified": true,
+      "automatic": false
+    },
+    "qualified": true,
+    "squad": {
+      "called": true,
+      "role": "Squad player",
+      "reason": "You made it as number 5 of 6 in your position.",
+      "myRank": 5,
+      "poolSize": 14,
+      "places": 6,
+      "myScore": 82,
+      "cutScore": 80,
+      "xi": {
+        "formation": "4-3-3",
+        "gk": [
+          {
+            "slot": "GK",
+            "name": "Warren Whitlock",
+            "ovr": 87,
+            "me": false
+          }
+        ],
+        "def": [
+          {
+            "slot": "LB",
+            "name": "Ross Dunmore",
+            "ovr": 83,
+            "me": false
+          },
+          {
+            "slot": "CB",
+            "name": "Eddie Kingsley",
+            "ovr": 87,
+            "me": false
+          },
+          {
+            "slot": "CB",
+            "name": "Shane Baxter",
+            "ovr": 85,
+            "me": false
+          },
+          {
+            "slot": "RB",
+            "name": "Craig Prescott",
+            "ovr": 83,
+            "me": false
+          }
+        ],
+        "mid": [
+          {
+            "slot": "CM",
+            "name": "Wesley Stanhope",
+            "ovr": 86,
+            "me": false
+          },
+          {
+            "slot": "CDM",
+            "name": "Stuart Ashcroft",
+            "ovr": 84,
+            "me": false
+          },
+          {
+            "slot": "CM",
+            "name": "Grant Hollis",
+            "ovr": 85,
+            "me": false
+          }
+        ],
+        "att": [
+          {
+            "slot": "LW",
+            "name": "Adam Radlett",
+            "ovr": 84,
+            "me": false
+          },
+          {
+            "slot": "ST",
+            "name": "Dean Marlowe",
+            "ovr": 87,
+            "me": false
+          },
+          {
+            "slot": "RW",
+            "name": "Scott Chadwick",
+            "ovr": 85,
+            "me": false
+          }
+        ],
+        "mySlot": null,
+        "aheadOfMe": "Adam Radlett"
+      }
+    },
+    "groupTable": [
+      {
+        "nation": "England",
+        "played": 3,
+        "won": 3,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 12,
+        "ga": 3,
+        "points": 9
+      },
+      {
+        "nation": "Iran",
+        "played": 3,
+        "won": 2,
+        "drawn": 0,
+        "lost": 1,
+        "gf": 5,
+        "ga": 8,
+        "points": 6
+      },
+      {
+        "nation": "Qatar",
+        "played": 3,
+        "won": 0,
+        "drawn": 1,
+        "lost": 2,
+        "gf": 5,
+        "ga": 7,
+        "points": 1
+      },
+      {
+        "nation": "South Korea",
+        "played": 3,
+        "won": 0,
+        "drawn": 1,
+        "lost": 2,
+        "gf": 4,
+        "ga": 8,
+        "points": 1
+      }
+    ],
+    "bracket": [
+      {
+        "round": "R32",
+        "slot": 0,
+        "home": "Morocco",
+        "away": "Russia",
+        "homeGoals": 1,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Morocco",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 1,
+        "home": "Greece",
+        "away": "Croatia",
+        "homeGoals": 1,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Croatia",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 2,
+        "home": "Australia",
+        "away": "Senegal",
+        "homeGoals": 0,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Senegal",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 3,
+        "home": "Italy",
+        "away": "Germany",
+        "homeGoals": 1,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Italy",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 4,
+        "home": "Uzbekistan",
+        "away": "Japan",
+        "homeGoals": 2,
+        "awayGoals": 2,
+        "pens": true,
+        "winner": "Uzbekistan",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 5,
+        "home": "France",
+        "away": "England",
+        "homeGoals": 1,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "France",
+        "mine": true
+      },
+      {
+        "round": "R32",
+        "slot": 6,
+        "home": "Austria",
+        "away": "Egypt",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Egypt",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 7,
+        "home": "Netherlands",
+        "away": "Argentina",
+        "homeGoals": 0,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Argentina",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 8,
+        "home": "Uruguay",
+        "away": "Oman",
+        "homeGoals": 1,
+        "awayGoals": 4,
+        "pens": false,
+        "winner": "Oman",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 9,
+        "home": "Switzerland",
+        "away": "Belgium",
+        "homeGoals": 2,
+        "awayGoals": 2,
+        "pens": true,
+        "winner": "Switzerland",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 10,
+        "home": "Guatemala",
+        "away": "Spain",
+        "homeGoals": 1,
+        "awayGoals": 1,
+        "pens": true,
+        "winner": "Spain",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 11,
+        "home": "Denmark",
+        "away": "Norway",
+        "homeGoals": 0,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Norway",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 12,
+        "home": "Ivory Coast",
+        "away": "Portugal",
+        "homeGoals": 0,
+        "awayGoals": 0,
+        "pens": true,
+        "winner": "Ivory Coast",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 13,
+        "home": "Iran",
+        "away": "Mexico",
+        "homeGoals": 0,
+        "awayGoals": 0,
+        "pens": true,
+        "winner": "Mexico",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 14,
+        "home": "Colombia",
+        "away": "Ecuador",
+        "homeGoals": 1,
+        "awayGoals": 1,
+        "pens": true,
+        "winner": "Ecuador",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 15,
+        "home": "Serbia",
+        "away": "Scotland",
+        "homeGoals": 0,
+        "awayGoals": 0,
+        "pens": true,
+        "winner": "Serbia",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 0,
+        "home": "Morocco",
+        "away": "Croatia",
+        "homeGoals": 1,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Croatia",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 1,
+        "home": "Senegal",
+        "away": "Italy",
+        "homeGoals": 1,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Italy",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 2,
+        "home": "Uzbekistan",
+        "away": "France",
+        "homeGoals": 0,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 3,
+        "home": "Egypt",
+        "away": "Argentina",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Argentina",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 4,
+        "home": "Oman",
+        "away": "Switzerland",
+        "homeGoals": 1,
+        "awayGoals": 1,
+        "pens": true,
+        "winner": "Switzerland",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 5,
+        "home": "Spain",
+        "away": "Norway",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Spain",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 6,
+        "home": "Ivory Coast",
+        "away": "Mexico",
+        "homeGoals": 3,
+        "awayGoals": 3,
+        "pens": true,
+        "winner": "Mexico",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 7,
+        "home": "Ecuador",
+        "away": "Serbia",
+        "homeGoals": 2,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Serbia",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 0,
+        "home": "Croatia",
+        "away": "Italy",
+        "homeGoals": 0,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Italy",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 1,
+        "home": "France",
+        "away": "Argentina",
+        "homeGoals": 2,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 2,
+        "home": "Switzerland",
+        "away": "Spain",
+        "homeGoals": 0,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Spain",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 3,
+        "home": "Mexico",
+        "away": "Serbia",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Mexico",
+        "mine": false
+      },
+      {
+        "round": "SF",
+        "slot": 0,
+        "home": "Italy",
+        "away": "France",
+        "homeGoals": 1,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      },
+      {
+        "round": "SF",
+        "slot": 1,
+        "home": "Spain",
+        "away": "Mexico",
+        "homeGoals": 0,
+        "awayGoals": 0,
+        "pens": true,
+        "winner": "Spain",
+        "mine": false
+      },
+      {
+        "round": "F",
+        "slot": 0,
+        "home": "France",
+        "away": "Spain",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "France",
+        "mine": false
+      }
+    ],
+    "champion": "France",
+    "runnerUp": "Spain",
+    "groupLabel": "Group H",
+    "thirdsThrough": 8,
+    "myResult": "Round of 32",
+    "matches": [
+      {
+        "round": "Group H",
+        "home": "England",
+        "away": "Iran",
+        "homeGoals": 7,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 1,
+        "playerAssists": 0,
+        "playerRating": 6.8
+      },
+      {
+        "round": "Group H",
+        "home": "England",
+        "away": "South Korea",
+        "homeGoals": 3,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 1,
+        "playerAssists": 0,
+        "playerRating": 6.8
+      },
+      {
+        "round": "Group H",
+        "home": "England",
+        "away": "Qatar",
+        "homeGoals": 2,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 1,
+        "playerAssists": 0,
+        "playerRating": 7.7
+      },
+      {
+        "round": "R32",
+        "home": "France",
+        "away": "England",
+        "homeGoals": 1,
+        "awayGoals": 0,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 0,
+        "playerRating": 7
+      }
+    ],
+    "playerApps": 4,
+    "playerGoals": 3,
+    "playerAssists": 0,
+    "playerAvgRating": 7.1,
+    "goldenBoot": false,
+    "bestPlayer": false
+  },
+  "intlHistory": [
+    {
+      "year": 2022,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "Croatia",
+      "myResult": "Not Selected",
+      "apps": 0,
+      "goals": 0
+    },
+    {
+      "year": 2024,
+      "short": "Euros",
+      "nation": "England",
+      "champion": "Croatia",
+      "myResult": "Not Selected",
+      "apps": 0,
+      "goals": 0
+    },
+    {
+      "year": 2026,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "Argentina",
+      "myResult": "Not Selected",
+      "apps": 0,
+      "goals": 0
+    },
+    {
+      "year": 2028,
+      "short": "Euros",
+      "nation": "England",
+      "champion": "Spain",
+      "myResult": "Round of 16",
+      "apps": 4,
+      "goals": 1
+    },
+    {
+      "year": 2030,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "France",
+      "myResult": "Round of 32",
+      "apps": 4,
+      "goals": 3
+    }
+  ],
+  "rival": {
+    "name": "Bukayo López",
+    "nationality": "Morocco",
+    "position": "ST",
+    "club": "Bayern Munich",
+    "clubTier": 2,
+    "overall": 87,
+    "careerGoals": 106,
+    "careerAssists": 35,
+    "careerApps": 255,
+    "leagueTitles": 0,
+    "championsLeagues": 0,
+    "worldCups": 1,
+    "ballonDors": 0,
+    "intCaps": 56,
+    "intGoals": 29,
+    "marketValue": 59.9,
+    "age": 29,
+    "retired": false
+  },
+  "rivalCreated": true,
+  "pendingRivalryEvent": null,
+  "lastRivalryEventId": 104,
+  "rivalrySummary": null,
+  "netWorth": 6.99,
+  "lifestyleLevel": "Comfortable",
+  "lifestyleCostPerYear": 0.2,
+  "socialMediaFollowers": 7.11,
+  "sponsorshipIncome": 1.62,
+  "properties": [],
+  "investments": [],
+  "consecutiveDeficitYears": 0,
+  "agentFeesPaid": 0,
+  "family": {
+    "isMarried": false,
+    "marriedAge": null,
+    "children": 0,
+    "isDivorced": false,
+    "divorceAge": null
+  },
+  "purchasedItems": [],
+  "investmentHoldings": [],
+  "totalAssetValue": 0,
+  "customYearlyCosts": 0,
+  "awards": [
+    {
+      "year": 2031,
+      "name": "Club Legend",
+      "emoji": "🏛️"
+    }
+  ],
+  "pendingBallonDor": {
+    "year": 2031,
+    "nominees": [
+      {
+        "name": "Lamine Yamal",
+        "nationality": "Spain",
+        "position": "RW",
+        "club": "Barcelona",
+        "points": 87,
+        "goals": 25,
+        "trophies": [
+          "League",
+          "Cup"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Erling Haaland",
+        "nationality": "Norway",
+        "position": "ST",
+        "club": "Man City",
+        "points": 75,
+        "goals": 37,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Jude Bellingham",
+        "nationality": "England",
+        "position": "CAM",
+        "club": "Real Madrid",
+        "points": 48,
+        "goals": 14,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Kylian Mbappé",
+        "nationality": "France",
+        "position": "ST",
+        "club": "Real Madrid",
+        "points": 44,
+        "goals": 32,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Vinícius Jr",
+        "nationality": "Brazil",
+        "position": "LW",
+        "club": "Real Madrid",
+        "points": 36,
+        "goals": 20,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Hrvoje Bogdanović",
+        "nationality": "Croatia",
+        "position": "CAM",
+        "club": "Barcelona",
+        "points": 32,
+        "goals": 10,
+        "trophies": [
+          "League",
+          "Cup"
+        ],
+        "isPlayer": false,
+        "generatedId": 11,
+        "generatedAge": 21
+      },
+      {
+        "name": "Seydou Camara-Sylla",
+        "nationality": "Senegal",
+        "position": "RW",
+        "club": "Atletico Madrid",
+        "points": 31,
+        "goals": 25,
+        "trophies": [],
+        "isPlayer": false,
+        "generatedId": 9,
+        "generatedAge": 27
+      },
+      {
+        "name": "Marius Hollerbach",
+        "nationality": "Germany",
+        "position": "CB",
+        "club": "PSG",
+        "points": 29,
+        "goals": 2,
+        "trophies": [
+          "League"
+        ],
+        "isPlayer": false,
+        "generatedId": 10,
+        "generatedAge": 26
+      },
+      {
+        "name": "Bukayo López",
+        "nationality": "Morocco",
+        "position": "ST",
+        "club": "Bayern Munich",
+        "points": 29,
+        "goals": 15,
+        "trophies": [
+          "League"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Agustín Quiroga",
+        "nationality": "Argentina",
+        "position": "RW",
+        "club": "Arsenal",
+        "points": 25,
+        "goals": 12,
+        "trophies": [
+          "Cup"
+        ],
+        "isPlayer": false,
+        "generatedId": 2,
+        "generatedAge": 24
+      }
+    ],
+    "playerRank": null,
+    "playerPoints": 10,
+    "playerNominated": false
+  },
+  "lastUCLResult": {
+    "qualified": true,
+    "matches": [
+      {
+        "opponent": "Inter Milan",
+        "round": "PO",
+        "leg": 1,
+        "home": true,
+        "goalsFor": 2,
+        "goalsAgainst": 1,
+        "playerGoals": 0,
+        "won": false
+      },
+      {
+        "opponent": "Inter Milan",
+        "round": "PO",
+        "leg": 2,
+        "home": false,
+        "goalsFor": 0,
+        "goalsAgainst": 4,
+        "playerGoals": 0,
+        "won": false,
+        "aggFor": 2,
+        "aggAgainst": 5,
+        "decidedBy": "aggregate"
+      }
+    ],
+    "result": "Play-off",
+    "playerGoals": 0,
+    "isTopScorer": false,
+    "competition": "Champions League",
+    "cup": "ucl",
+    "firstStage": {
+      "kind": "leaguePhase",
+      "stages": [
+        {
+          "label": "League phase",
+          "games": [
+            {
+              "matchday": 1,
+              "opponent": "Real Madrid",
+              "home": true,
+              "goalsFor": 2,
+              "goalsAgainst": 0,
+              "playerGoals": 0
+            },
+            {
+              "matchday": 2,
+              "opponent": "Arsenal",
+              "home": false,
+              "goalsFor": 0,
+              "goalsAgainst": 1,
+              "playerGoals": 0
+            },
+            {
+              "matchday": 3,
+              "opponent": "Juventus",
+              "home": true,
+              "goalsFor": 1,
+              "goalsAgainst": 1,
+              "playerGoals": 0
+            },
+            {
+              "matchday": 4,
+              "opponent": "Chelsea",
+              "home": false,
+              "goalsFor": 0,
+              "goalsAgainst": 3,
+              "playerGoals": 0
+            },
+            {
+              "matchday": 5,
+              "opponent": "Barcelona",
+              "home": true,
+              "goalsFor": 3,
+              "goalsAgainst": 0,
+              "playerGoals": 0
+            },
+            {
+              "matchday": 6,
+              "opponent": "Napoli",
+              "home": false,
+              "goalsFor": 2,
+              "goalsAgainst": 1,
+              "playerGoals": 0
+            },
+            {
+              "matchday": 7,
+              "opponent": "Dortmund",
+              "home": true,
+              "goalsFor": 0,
+              "goalsAgainst": 1,
+              "playerGoals": 0
+            },
+            {
+              "matchday": 8,
+              "opponent": "Newcastle",
+              "home": false,
+              "goalsFor": 0,
+              "goalsAgainst": 1,
+              "playerGoals": 0
+            }
+          ],
+          "position": 24,
+          "of": 36,
+          "myRow": {
+            "club": "Tottenham",
+            "w": 3,
+            "d": 1,
+            "l": 4,
+            "gf": 8,
+            "ga": 8,
+            "pts": 10
+          },
+          "cutoffs": {
+            "direct": 14,
+            "playoff": 10
+          },
+          "footnote": "Level on points splits on goal difference, then goals scored."
+        }
+      ],
+      "through": false,
+      "playoff": true
+    },
+    "seasonYear": 2031,
+    "club": "Tottenham"
+  },
+  "legacy": null,
+  "postRetirementChoice": null,
+  "managerState": null,
+  "isFinalSeason": false,
+  "isPundit": false,
+  "punditEvents": [],
+  "primeType": "late",
+  "socialMediaActionUsedThisSeason": false,
+  "socialMediaFocusBoost": false,
+  "pendingCoverAthleteEvent": false,
+  "coverAthleteAccepted": false,
+  "activeSponsorship": null,
+  "personality": "enigma",
+  "agentId": "self",
+  "lifeFlags": {
+    "criticAnswered": 3,
+    "rRondo": 1,
+    "refArc": -1,
+    "homePull": 3
+  },
+  "appearance": null,
+  "corruptionHeat": 0,
+  "dirtyMoney": 0,
+  "prisonSeasons": 0,
+  "academyClubName": "Tottenham",
+  "moralDilemmasTriggered": [
+    "mafia_cup_ask"
+  ],
+  "pendingMoralDilemma": null,
+  "pedSeasonsRemaining": 0,
+  "pedActive": false,
+  "matchFixBanned": 0,
+  "divingActive": false,
+  "integrityBonus": 37,
+  "pendingAppealResult": null,
+  "childEventsSeen": [],
+  "pregnancyAnnounced": false,
+  "punditState": null,
+  "ownerState": null,
+  "peakOverall": 81,
+  "retirementSuggested": false,
+  "phone": {
+    "threads": [
+      {
+        "id": "th_x_unknown",
+        "c": "other",
+        "name": "Unknown",
+        "emoji": "💬",
+        "lines": [
+          {
+            "w": 0,
+            "t": "CONGRATULATIONS! You won 2 MILLION. Just send account details plus a small release fee to claim.",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Chasing this one. Let me know either way.",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "Two months, nothing. Noted.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "The fame has really gotten to you.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "legacy",
+          "msgId": "granny_scam-2020"
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [],
+        "lastReplyYear": null
+      },
+      {
+        "id": "th_bestmate",
+        "c": "bestmate",
+        "name": "Best mate",
+        "emoji": "🤙",
+        "lines": [
+          {
+            "w": 0,
+            "t": "Went past your old house today. New people have painted the door red. Thought you should know.",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Hello? Anyone in there?",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "Cool. Glad we are close.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "The fame has really gotten to you.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "convo",
+          "convo": "mate_home",
+          "beat": 0
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [
+          "mate_home"
+        ],
+        "lastReplyYear": null
+      },
+      {
+        "id": "th_x_barber",
+        "c": "other",
+        "name": "Barber",
+        "emoji": "💬",
+        "lines": [
+          {
+            "w": 0,
+            "t": "New style idea for you. Bold. Might break the internet, might get you fined by the boss. You in?",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Chasing this one. Let me know either way.",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "I will assume that is a no then.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "You were easier to deal with before all this.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "legacy",
+          "msgId": "barber_cut-2020"
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [],
+        "lastReplyYear": null
+      }
+    ],
+    "feed": [
+      "🏆 Real Madrid win La Liga.",
+      "🏆 Stuttgart win the Bundesliga.",
+      "🔮 Your world's 2029-30, as it played out:",
+      "⭐ PSG are champions of Europe.",
+      "🏆 Chelsea win the Premier League.",
+      "🏆 Barcelona win La Liga.",
+      "🌍 France win the World Cup.",
+      "🔮 Your world's 2030-31, as it played out:",
+      "⭐ Leverkusen are champions of Europe.",
+      "🏆 Chelsea win the Premier League.",
+      "🏆 Barcelona win La Liga.",
+      "🔮 Your world's 2031-32, as it played out:"
+    ],
+    "world": {
+      "year": 2031,
+      "ucl": "Leverkusen",
+      "leagues": {
+        "Premier League": "Chelsea",
+        "La Liga": "Barcelona",
+        "Bundesliga": "Bayern Munich",
+        "Serie A": "Inter Milan",
+        "Ligue 1": "PSG",
+        "Primeira Liga": "Sporting CP",
+        "Eredivisie": "PSV",
+        "Scottish Premiership": "Aberdeen",
+        "Brasileirao": "Botafogo",
+        "Saudi Pro League": "Al Hilal",
+        "MLS": "Columbus Crew",
+        "K League 1": "Jeonbuk Motors",
+        "Championship": "Norwich City",
+        "2. Bundesliga": "Schalke 04",
+        "Ligue 2": "Clermont",
+        "Serie B": "Parma",
+        "Segunda Division": "Eldense"
+      },
+      "cups": {
+        "Premier League": "Arsenal",
+        "La Liga": "Barcelona",
+        "Bundesliga": "Dortmund",
+        "Serie A": "Napoli",
+        "Ligue 1": "Lyon",
+        "Primeira Liga": "Porto",
+        "Eredivisie": "PSV",
+        "Scottish Premiership": "Rangers",
+        "Brasileirao": "Flamengo",
+        "Saudi Pro League": "Al Ittihad",
+        "MLS": "LAFC",
+        "K League 1": "Jeonbuk Motors"
+      },
+      "moves": [],
+      "topScorer": null,
+      "intl": null
+    },
+    "clubs": {
+      "Mohamed Salah": "Trabzonspor",
+      "Vinícius Jr": "Real Madrid",
+      "Jude Bellingham": "Real Madrid",
+      "Rodri": "Barcelona",
+      "Luka Modrić": "Real Madrid",
+      "Harry Kane": "Bayern Munich",
+      "Neymar": "PSG",
+      "Lautaro Martínez": "Inter Milan",
+      "Bukayo Saka": "Arsenal",
+      "Phil Foden": "Man City",
+      "Federico Valverde": "Real Madrid",
+      "Antoine Griezmann": "Atletico Madrid",
+      "Virgil van Dijk": "Liverpool",
+      "Thibaut Courtois": "Real Madrid",
+      "Lamine Yamal": "Barcelona",
+      "Florian Wirtz": "Liverpool",
+      "Jamal Musiala": "Bayern Munich",
+      "Pedri": "Barcelona",
+      "Declan Rice": "Arsenal",
+      "Raphinha": "Barcelona",
+      "Endrick": "Real Madrid",
+      "Nico Williams": "Athletic Bilbao",
+      "Désiré Doué": "PSG",
+      "Kobbie Mainoo": "Man United",
+      "Gianluigi Donnarumma": "Man City",
+      "Ousmane Dembélé": "PSG",
+      "Kylian Mbappé": "Real Madrid",
+      "Erling Haaland": "Man City"
+    },
+    "rivalClub": "Bayern Munich",
+    "seed": 1573406499,
+    "offers": 0,
+    "perksTaken": 0
+  },
+  "frozenOut": 0,
+  "badSeasonStreak": 0,
+  "story": [
+    {
+      "year": 2020,
+      "age": 16,
+      "club": "Tottenham Youth",
+      "lines": [
+        "📋 Joined Tottenham Youth Academy aged 16"
+      ]
+    },
+    {
+      "year": 2021,
+      "age": 17,
+      "club": "Tottenham Youth",
+      "lines": [
+        "📈 Stats improved during youth development (OVR 68)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Tottenham 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (4yr, €9k/wk)",
+        "🏠 One of our own! The Tottenham academy kid signs a first-team deal. The ultras already have a chant ready."
+      ]
+    },
+    {
+      "year": 2022,
+      "age": 18,
+      "club": "Tottenham",
+      "lines": [
+        "🔥 North London derby against Arsenal: L 1-2 away (you missed it), W 3-2 at home (you missed it).",
+        "🔥 London derby against Chelsea: L 0-1 away, L 0-3 at home.",
+        "🔥 London derby against West Ham: L 0-1 at home, D 2-2 away.",
+        "😓 Out of the Champions League in the group stage",
+        "🏆 Won the FA Cup with Tottenham!",
+        "📋 Left out of the England squad for the World Cup. You watch it at home.",
+        "🇺🇳 First international call-up for England!",
+        "🃏 You answered in riddles: The Enigma",
+        "🤐 The karaoke video lives on in the group chat only",
+        "📸 Laughed off party scandal, fans loved it",
+        "🪥 The camp prank war became the squad's favourite week in years. The clips did numbers",
+        "🙄 Refused the mascot race. It did a victory lap anyway"
+      ]
+    },
+    {
+      "year": 2023,
+      "age": 19,
+      "club": "Tottenham",
+      "lines": [
+        "🚑 Injury: Calf tear, out 7 weeks, missed matches",
+        "🔥 North London derby against Arsenal: L 2-3 at home, D 1-1 away.",
+        "🔥 London derby against Chelsea: L 0-2 away (you missed it), L 0-1 at home.",
+        "🔥 London derby against West Ham: W 1-0 away (you missed it), L 1-3 at home (you missed it).",
+        "😤 A new rival emerges: Bukayo López (🇲🇦 Morocco)",
+        "🤬 Tunnel Bust-Up",
+        "🤝 No agent. You read every contract yourself",
+        "🫁 Handled the tunnel panic alone for a whole season. The crowd saw a machine and never knew",
+        "🔔 Lasted a week at the monastery. The card they sent is on your fridge"
+      ]
+    },
+    {
+      "year": 2024,
+      "age": 20,
+      "club": "Tottenham",
+      "lines": [
+        "🔥 North London derby against Arsenal: L 2-3 away (you missed it), L 1-2 at home.",
+        "🔥 London derby against Chelsea: D 1-1 at home, L 1-3 away.",
+        "🔥 London derby against West Ham: L 0-3 away (you missed it), L 2-3 at home.",
+        "⚠️ Your contract is expiring!",
+        "📋 Left out of the England squad for the European Championship. You watch it at home.",
+        "🚪 Let Hollis Hargreave watch a full week of training. He wrote it up straight, and the lads have not let it go",
+        "📋 Planning the away trips: Book extra work. Morale -1, Passing +1 next season.",
+        "📄 Traded a big raise for a written release clause. Cheapest insurance you ever bought"
+      ]
+    },
+    {
+      "year": 2025,
+      "age": 21,
+      "club": "Tottenham",
+      "lines": [
+        "🔥 North London derby against Arsenal: W 2-1 at home (you missed it), L 0-2 away (you missed it).",
+        "🔥 London derby against Chelsea: L 1-2 at home (you missed it), L 0-1 away.",
+        "🔥 London derby against West Ham: W 1-0 at home, L 0-1 away.",
+        "🏆 Won the league with Tottenham!",
+        "⚠️ Your contract is expiring!",
+        "🏖️ Paid €90k to relay a sand pitch for a club that beat you. The town put a plaque on the gate",
+        "🔁 Invented the rondo forfeit. The squad ate very well and trained very hard",
+        "🥗 Put the club nutritionist and your mum in the same kitchen. They wrote a recipe book and it actually sold",
+        "📝 Renewed contract with Tottenham for 4 years"
+      ]
+    },
+    {
+      "year": 2026,
+      "age": 22,
+      "club": "Tottenham",
+      "lines": [
+        "🔥 North London derby against Arsenal: L 1-3 at home, D 2-2 away (you missed it).",
+        "🔥 London derby against Chelsea: L 0-2 away (you missed it), L 0-3 at home (you missed it).",
+        "📋 Left out of the England squad for the World Cup. You watch it at home.",
+        "📋 Getting the kit ready: Leave it for later. Morale +2, Integrity -1.",
+        "📋 Finishing homework: Take a break. Morale +2.",
+        "📵 Kept reading every reply and turned spite into a legitimate energy source. Sleep suffered, numbers did not",
+        "🎯 Turned one veteran's free kick session into a squad wide masterclass. Four lads got better, one got a nickname"
+      ]
+    },
+    {
+      "year": 2027,
+      "age": 23,
+      "club": "Tottenham",
+      "lines": [
+        "🔥 North London derby against Arsenal: L 0-3 at home (you missed it), D 1-1 away (you missed it).",
+        "🔥 London derby against Chelsea: L 0-1 at home, L 0-2 away.",
+        "🔥 London derby against West Ham: D 0-0 at home (you missed it), D 1-1 away (you missed it).",
+        "🏆 Won the FA Cup with Tottenham!",
+        "💎 Declined watch collection",
+        "😶 Said nothing when they sacked the man who made you. Started 38 games for the next one"
+      ]
+    },
+    {
+      "year": 2028,
+      "age": 24,
+      "club": "Tottenham",
+      "lines": [
+        "🔥 North London derby against Arsenal: L 0-3 at home, D 2-2 away.",
+        "🔥 London derby against Chelsea: L 0-1 away, W 3-1 at home (you missed it).",
+        "🔥 London derby against West Ham: W 2-1 at home, L 0-1 away (you missed it).",
+        "©️ Handed the Tottenham armband. The manager wants his voice on the pitch",
+        "⚠️ Your contract is expiring!",
+        "🌍 Spain won the European Championship.",
+        "👕 The Shirt Swap",
+        "🎲 The poker habit made the back pages",
+        "🚗 Decided not to buy supercars"
+      ]
+    },
+    {
+      "year": 2029,
+      "age": 25,
+      "club": "Tottenham",
+      "lines": [
+        "🔥 North London derby against Arsenal: W 2-0 at home, W 2-1 away.",
+        "🔥 Your goal won the North London derby. Derby Hero.",
+        "🔥 London derby against Chelsea: D 0-0 away, D 0-0 at home (you missed it).",
+        "🔥 London derby against West Ham: D 1-1 away, L 2-3 at home.",
+        "🏆 Won the league with Tottenham!",
+        "⚠️ Your contract is expiring!",
+        "🤬 Tunnel Bust-Up",
+        "🖼️ Framed both shirts and auctioned them for €400k. Bukayo López matched it out of spite",
+        "🏃 Tried to do the medals and the dinner. Late to both, in a tracksuit, at a black tie event",
+        "🤷 Kept the expensive accountant. The strategy remains a mystery",
+        "📝 Renewed contract with Tottenham for 4 years"
+      ]
+    },
+    {
+      "year": 2030,
+      "age": 26,
+      "club": "Tottenham",
+      "lines": [
+        "🔥 North London derby against Arsenal: W 1-0 away, W 3-1 at home (you missed it).",
+        "🔥 London derby against Chelsea: D 2-2 at home, L 1-3 away.",
+        "🔥 London derby against West Ham: W 3-2 away, L 0-1 at home.",
+        "🌍 France won the World Cup.",
+        "⚽ Head to Head Victory!",
+        "🏋️ Trained harder. Ratings are just numbers",
+        "😤 Told him where to go. Your next three penalty shouts were mysteriously waved away",
+        "🛬 Flew home 41 times in one season. Your recovery data hated it, your family did not",
+        "⌚ Bought your Secret Santa a watch. The other nineteen gifts were socks"
+      ]
+    }
+  ],
+  "sponsorBonus": 0,
+  "money": {
+    "seed": 686168312,
+    "vault": 0,
+    "hold": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+    },
+    "cost": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+    },
+    "price": {
+      "ladder": 172.99,
+      "bricks": 144.75,
+      "cleats": 160.69,
+      "screens": 157.98,
+      "spark": 103.4
+    },
+    "hist": {
+      "ladder": [
+        112.74,
+        125.12,
+        133.2,
+        140.39,
+        146.95,
+        155.49,
+        164.93,
+        172.99
+      ],
+      "bricks": [
+        112.35,
+        112.23,
+        122.42,
+        122.53,
+        127.16,
+        132.54,
+        128.31,
+        144.75
+      ],
+      "cleats": [
+        86.45,
+        99.48,
+        88.35,
+        99.13,
+        131.33,
+        124.02,
+        144.69,
+        160.69
+      ],
+      "screens": [
+        116.39,
+        114.03,
+        112.54,
+        125.21,
+        135.94,
+        143.13,
+        147.73,
+        157.98
+      ],
+      "spark": [
+        64.37,
+        35.69,
+        63.89,
+        56.79,
+        35.52,
+        66.96,
+        86.86,
+        103.4
+      ]
+    },
+    "log": [],
+    "year": 2031,
+    "age": 11,
+    "won": 0,
+    "lost": 0,
+    "cPlays": 0,
+    "cNet": 0,
+    "cYear": 0,
+    "cShut": false,
+    "aYear": 0,
+    "aBest": 0,
+    "aPlays": 0
+  },
+  "eventLastFired": {
+    "13": 2022,
+    "25": 2028,
+    "29": 2027,
+    "52": 2028,
+    "60": 2030,
+    "200": 2022,
+    "201": 2023,
+    "218": 2023,
+    "221": 2022,
+    "224": 2022,
+    "259": 2029,
+    "263": 2030,
+    "267": 2022,
+    "268": 2029,
+    "305": 2030,
+    "400": 2025,
+    "421": 2026,
+    "428": 2025,
+    "434": 2026,
+    "435": 2025,
+    "436": 2023,
+    "463": 2029,
+    "472": 2030,
+    "476": 2024,
+    "477": 2027,
+    "500": 2024,
+    "605": 2024,
+    "616": 2026,
+    "618": 2026
+  },
+  "chanceWheel": {
+    "title": "The Under Nines' Medal Night",
+    "chance": 0.3,
+    "roll": 0.12699320493265986,
+    "hit": "Late to both events",
+    "miss": "You make both events",
+    "result": true,
+    "seen": false
+  },
+  "rivalryIntensity": 7,
+  "leagueWorld": {
+    "year": 2032,
+    "leagues": {
+      "Premier League": [
+        "Arsenal",
+        "Man City",
+        "Liverpool",
+        "Chelsea",
+        "Man United",
+        "Tottenham",
+        "Newcastle",
+        "Nottingham Forest",
+        "Brighton",
+        "Aston Villa",
+        "Brentford",
+        "West Brom",
+        "West Ham",
+        "Fulham",
+        "QPR",
+        "Wolves",
+        "Bolton Wanderers",
+        "Norwich City",
+        "Derby County",
+        "Blackburn Rovers"
+      ],
+      "Championship": [
+        "Burnley",
+        "Middlesbrough",
+        "Swansea City",
+        "Birmingham City",
+        "Stoke City",
+        "Watford",
+        "Wrexham",
+        "Millwall",
+        "Preston North End",
+        "Cardiff City",
+        "Lincoln City",
+        "Crystal Palace",
+        "Hull City",
+        "Leeds United",
+        "Ipswich Town",
+        "Sheffield United",
+        "Charlton Athletic",
+        "Everton",
+        "Portsmouth",
+        "Sunderland",
+        "Bristol City",
+        "Bournemouth",
+        "Southampton",
+        "Coventry City"
+      ],
+      "Bundesliga": [
+        "Bayern Munich",
+        "Dortmund",
+        "Leipzig",
+        "Stuttgart",
+        "Leverkusen",
+        "Frankfurt",
+        "Hoffenheim",
+        "Freiburg",
+        "Augsburg",
+        "Hamburg",
+        "Mainz",
+        "Union Berlin",
+        "Koln",
+        "Bochum",
+        "Gladbach",
+        "Osnabruck",
+        "Schalke 04",
+        "Darmstadt"
+      ],
+      "2. Bundesliga": [
+        "Wolfsburg",
+        "Heidenheim",
+        "Nurnberg",
+        "Holstein Kiel",
+        "Arminia Bielefeld",
+        "Braunschweig",
+        "Dynamo Dresden",
+        "Greuther Furth",
+        "Hertha Berlin",
+        "Kaiserslautern",
+        "Karlsruhe",
+        "St. Pauli",
+        "Energie Cottbus",
+        "Elversberg",
+        "Magdeburg",
+        "Hannover 96",
+        "Werder Bremen",
+        "Paderborn"
+      ],
+      "Ligue 1": [
+        "PSG",
+        "Lyon",
+        "Marseille",
+        "Monaco",
+        "Lille",
+        "Nice",
+        "Strasbourg",
+        "Lens",
+        "Lorient",
+        "Toulouse",
+        "Saint-Étienne",
+        "Reims",
+        "Le Havre",
+        "Nantes",
+        "Brest",
+        "Rennes",
+        "Clermont",
+        "Guingamp"
+      ],
+      "Ligue 2": [
+        "Metz",
+        "Montpellier",
+        "Nancy",
+        "Annecy",
+        "Dijon",
+        "Pau",
+        "Grenoble",
+        "Rodez",
+        "Boulogne",
+        "Le Mans",
+        "Troyes",
+        "Auxerre",
+        "Red Star FC",
+        "Dunkerque",
+        "Angers",
+        "Paris FC",
+        "Sochaux",
+        "Laval"
+      ],
+      "Serie A": [
+        "Inter Milan",
+        "Juventus",
+        "Roma",
+        "Como",
+        "AC Milan",
+        "Napoli",
+        "Atalanta",
+        "Fiorentina",
+        "Lazio",
+        "Sassuolo",
+        "Carrarese",
+        "Torino",
+        "Modena",
+        "Arezzo",
+        "Udinese",
+        "Palermo",
+        "Venezia",
+        "Parma",
+        "Cesena",
+        "Sampdoria"
+      ],
+      "Serie B": [
+        "Cremonese",
+        "Verona",
+        "Pisa",
+        "Avellino",
+        "Juve Stabia",
+        "Vicenza",
+        "Benevento",
+        "Ascoli",
+        "Genoa",
+        "Frosinone",
+        "Monza",
+        "Südtirol",
+        "Padova",
+        "Empoli",
+        "Entella",
+        "Mantova",
+        "Bologna",
+        "Catanzaro",
+        "Cagliari",
+        "Lecce"
+      ],
+      "La Liga": [
+        "Real Madrid",
+        "Barcelona",
+        "Atletico Madrid",
+        "Athletic Bilbao",
+        "Sevilla",
+        "Villarreal",
+        "Real Sociedad",
+        "Rayo Vallecano",
+        "Alaves",
+        "Girona",
+        "Osasuna",
+        "Las Palmas",
+        "Real Oviedo",
+        "Valencia",
+        "Ceuta",
+        "Getafe",
+        "Leganés",
+        "Eldense",
+        "Celta Vigo",
+        "Sabadell"
+      ],
+      "Segunda Division": [
+        "Mallorca",
+        "Castellón",
+        "Tenerife",
+        "Valladolid",
+        "Córdoba",
+        "FC Andorra",
+        "Levante",
+        "Real Betis",
+        "Malaga",
+        "Sporting Gijón",
+        "Cádiz",
+        "Almería",
+        "Espanyol",
+        "Racing Santander",
+        "Eibar",
+        "Granada",
+        "Elche",
+        "Albacete",
+        "Burgos",
+        "Deportivo"
+      ]
+    },
+    "movements": [
+      {
+        "club": "Bournemouth",
+        "from": "Premier League",
+        "to": "Championship",
+        "kind": "relegated"
+      },
+      {
+        "club": "Southampton",
+        "from": "Premier League",
+        "to": "Championship",
+        "kind": "relegated"
+      },
+      {
+        "club": "Coventry City",
+        "from": "Premier League",
+        "to": "Championship",
+        "kind": "relegated"
+      },
+      {
+        "club": "Norwich City",
+        "from": "Championship",
+        "to": "Premier League",
+        "kind": "promoted"
+      },
+      {
+        "club": "Derby County",
+        "from": "Championship",
+        "to": "Premier League",
+        "kind": "promoted"
+      },
+      {
+        "club": "Blackburn Rovers",
+        "from": "Championship",
+        "to": "Premier League",
+        "kind": "promoted"
+      },
+      {
+        "club": "Werder Bremen",
+        "from": "Bundesliga",
+        "to": "2. Bundesliga",
+        "kind": "relegated"
+      },
+      {
+        "club": "Paderborn",
+        "from": "Bundesliga",
+        "to": "2. Bundesliga",
+        "kind": "relegated"
+      },
+      {
+        "club": "Schalke 04",
+        "from": "2. Bundesliga",
+        "to": "Bundesliga",
+        "kind": "promoted"
+      },
+      {
+        "club": "Darmstadt",
+        "from": "2. Bundesliga",
+        "to": "Bundesliga",
+        "kind": "promoted"
+      },
+      {
+        "club": "Sochaux",
+        "from": "Ligue 1",
+        "to": "Ligue 2",
+        "kind": "relegated"
+      },
+      {
+        "club": "Laval",
+        "from": "Ligue 1",
+        "to": "Ligue 2",
+        "kind": "relegated"
+      },
+      {
+        "club": "Clermont",
+        "from": "Ligue 2",
+        "to": "Ligue 1",
+        "kind": "promoted"
+      },
+      {
+        "club": "Guingamp",
+        "from": "Ligue 2",
+        "to": "Ligue 1",
+        "kind": "promoted"
+      },
+      {
+        "club": "Catanzaro",
+        "from": "Serie A",
+        "to": "Serie B",
+        "kind": "relegated"
+      },
+      {
+        "club": "Cagliari",
+        "from": "Serie A",
+        "to": "Serie B",
+        "kind": "relegated"
+      },
+      {
+        "club": "Lecce",
+        "from": "Serie A",
+        "to": "Serie B",
+        "kind": "relegated"
+      },
+      {
+        "club": "Parma",
+        "from": "Serie B",
+        "to": "Serie A",
+        "kind": "promoted"
+      },
+      {
+        "club": "Cesena",
+        "from": "Serie B",
+        "to": "Serie A",
+        "kind": "promoted"
+      },
+      {
+        "club": "Sampdoria",
+        "from": "Serie B",
+        "to": "Serie A",
+        "kind": "promoted"
+      },
+      {
+        "club": "Albacete",
+        "from": "La Liga",
+        "to": "Segunda Division",
+        "kind": "relegated"
+      },
+      {
+        "club": "Burgos",
+        "from": "La Liga",
+        "to": "Segunda Division",
+        "kind": "relegated"
+      },
+      {
+        "club": "Deportivo",
+        "from": "La Liga",
+        "to": "Segunda Division",
+        "kind": "relegated"
+      },
+      {
+        "club": "Eldense",
+        "from": "Segunda Division",
+        "to": "La Liga",
+        "kind": "promoted"
+      },
+      {
+        "club": "Celta Vigo",
+        "from": "Segunda Division",
+        "to": "La Liga",
+        "kind": "promoted"
+      },
+      {
+        "club": "Sabadell",
+        "from": "Segunda Division",
+        "to": "La Liga",
+        "kind": "promoted"
+      }
+    ]
+  },
+  "isClubCaptain": true,
+  "captainClub": "Tottenham",
+  "captainSeasons": 4,
+  "generatedBallonPool": {
+    "version": 1,
+    "year": 2031,
+    "nextId": 12,
+    "entries": [
+      {
+        "name": "Ferdi Doornbos",
+        "nationality": "Belgium",
+        "position": "LW",
+        "club": "AC Milan",
+        "baseGoals": [
+          10,
+          28
+        ],
+        "id": 0,
+        "role": "primary",
+        "slot": 0,
+        "seed": 9900,
+        "firstYear": 2028,
+        "entryAge": 26,
+        "retiredYear": null
+      },
+      {
+        "name": "Shohei Nishizawa",
+        "nationality": "Japan",
+        "position": "CDM",
+        "club": "Chelsea",
+        "baseGoals": [
+          2,
+          8
+        ],
+        "id": 1,
+        "role": "primary",
+        "slot": 1,
+        "seed": 9901,
+        "firstYear": 2028,
+        "entryAge": 28,
+        "retiredYear": null
+      },
+      {
+        "name": "Agustín Quiroga",
+        "nationality": "Argentina",
+        "position": "RW",
+        "club": "Arsenal",
+        "baseGoals": [
+          10,
+          28
+        ],
+        "id": 2,
+        "role": "primary",
+        "slot": 2,
+        "seed": 9902,
+        "firstYear": 2028,
+        "entryAge": 21,
+        "retiredYear": null
+      },
+      {
+        "name": "Nahuel Lombardero",
+        "nationality": "Uruguay",
+        "position": "CB",
+        "club": "Real Madrid",
+        "baseGoals": [
+          1,
+          5
+        ],
+        "id": 3,
+        "role": "primary",
+        "slot": 3,
+        "seed": 9903,
+        "firstYear": 2029,
+        "entryAge": 23,
+        "retiredYear": null
+      },
+      {
+        "name": "Wanderson Guimarães",
+        "nationality": "Brazil",
+        "position": "CAM",
+        "club": "Tottenham",
+        "baseGoals": [
+          8,
+          22
+        ],
+        "id": 4,
+        "role": "primary",
+        "slot": 4,
+        "seed": 9904,
+        "firstYear": 2029,
+        "entryAge": 20,
+        "retiredYear": null
+      },
+      {
+        "name": "Hidde Lindeboom",
+        "nationality": "Netherlands",
+        "position": "ST",
+        "club": "Dortmund",
+        "baseGoals": [
+          18,
+          40
+        ],
+        "id": 5,
+        "role": "primary",
+        "slot": 5,
+        "seed": 9905,
+        "firstYear": 2029,
+        "entryAge": 24,
+        "retiredYear": null
+      },
+      {
+        "name": "Maxi Escalante",
+        "nationality": "Colombia",
+        "position": "CM",
+        "club": "Liverpool",
+        "baseGoals": [
+          4,
+          14
+        ],
+        "id": 6,
+        "role": "primary",
+        "slot": 6,
+        "seed": 9906,
+        "firstYear": 2030,
+        "entryAge": 26,
+        "retiredYear": null
+      },
+      {
+        "name": "Stuart Ashcroft",
+        "nationality": "England",
+        "position": "LW",
+        "club": "Man City",
+        "baseGoals": [
+          10,
+          28
+        ],
+        "id": 7,
+        "role": "primary",
+        "slot": 7,
+        "seed": 9907,
+        "firstYear": 2030,
+        "entryAge": 28,
+        "retiredYear": null
+      },
+      {
+        "name": "Mikkel Sæterbø",
+        "nationality": "Norway",
+        "position": "CDM",
+        "club": "Man United",
+        "baseGoals": [
+          2,
+          8
+        ],
+        "id": 8,
+        "role": "primary",
+        "slot": 8,
+        "seed": 9908,
+        "firstYear": 2030,
+        "entryAge": 19,
+        "retiredYear": null
+      },
+      {
+        "name": "Seydou Camara-Sylla",
+        "nationality": "Senegal",
+        "position": "RW",
+        "club": "Atletico Madrid",
+        "baseGoals": [
+          10,
+          28
+        ],
+        "id": 9,
+        "role": "primary",
+        "slot": 9,
+        "seed": 9909,
+        "firstYear": 2031,
+        "entryAge": 27,
+        "retiredYear": null
+      },
+      {
+        "name": "Marius Hollerbach",
+        "nationality": "Germany",
+        "position": "CB",
+        "club": "PSG",
+        "baseGoals": [
+          1,
+          5
+        ],
+        "id": 10,
+        "role": "primary",
+        "slot": 10,
+        "seed": 9910,
+        "firstYear": 2031,
+        "entryAge": 26,
+        "retiredYear": null
+      },
+      {
+        "name": "Hrvoje Bogdanović",
+        "nationality": "Croatia",
+        "position": "CAM",
+        "club": "Barcelona",
+        "baseGoals": [
+          8,
+          22
+        ],
+        "id": 11,
+        "role": "primary",
+        "slot": 11,
+        "seed": 9911,
+        "firstYear": 2031,
+        "entryAge": 21,
+        "retiredYear": null
+      }
+    ]
+  }
+}

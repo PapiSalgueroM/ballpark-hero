@@ -1,0 +1,3 @@
+3115 /home/runner/work/_temp/rc-out/full/simClueGameHintPoints.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simClueGameHintPoints.mjs/stderr.log
+3115 total

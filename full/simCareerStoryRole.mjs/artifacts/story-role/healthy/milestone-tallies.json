@@ -1,0 +1,1450 @@
+[
+  {
+    "seasons": [
+      {
+        "year": 2028,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 95,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "manager",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 0,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2030,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2029,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 12,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      }
+    ],
+    "row": {
+      "year": 2029,
+      "age": 19,
+      "club": "Twente",
+      "clubCountry": "Netherlands",
+      "clubTier": 4,
+      "apps": 30,
+      "leagueApps": 30,
+      "goals": 12,
+      "assists": 4,
+      "cleanSheets": 0,
+      "yellowCards": 5,
+      "redCards": 0,
+      "rating": 7.8,
+      "ovr": 73,
+      "injury": "Groin strain",
+      "injuryWeeks": 10,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 12,
+      "intGoals": 5,
+      "intAssists": 2,
+      "intRating": 6.8,
+      "tournament": "European Championship",
+      "tournamentResult": "Winner",
+      "continentalCup": true,
+      "cupRun": {
+        "cup": "KNVB Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "PSV",
+            "won": false,
+            "for": 2,
+            "against": 3,
+            "home": true
+          }
+        ]
+      }
+    },
+    "result": {
+      "value": {
+        "threshold": 100,
+        "previous": 95,
+        "total": 107
+      },
+      "draws": []
+    }
+  },
+  {
+    "seasons": [
+      {
+        "year": 2028,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 195,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "manager",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 0,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2030,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2029,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 12,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      }
+    ],
+    "row": {
+      "year": 2029,
+      "age": 19,
+      "club": "Twente",
+      "clubCountry": "Netherlands",
+      "clubTier": 4,
+      "apps": 30,
+      "leagueApps": 30,
+      "goals": 12,
+      "assists": 4,
+      "cleanSheets": 0,
+      "yellowCards": 5,
+      "redCards": 0,
+      "rating": 7.8,
+      "ovr": 73,
+      "injury": "Groin strain",
+      "injuryWeeks": 10,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 12,
+      "intGoals": 5,
+      "intAssists": 2,
+      "intRating": 6.8,
+      "tournament": "European Championship",
+      "tournamentResult": "Winner",
+      "continentalCup": true,
+      "cupRun": {
+        "cup": "KNVB Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "PSV",
+            "won": false,
+            "for": 2,
+            "against": 3,
+            "home": true
+          }
+        ]
+      }
+    },
+    "result": {
+      "value": {
+        "threshold": 200,
+        "previous": 195,
+        "total": 207
+      },
+      "draws": []
+    }
+  },
+  {
+    "seasons": [
+      {
+        "year": 2028,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 295,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "manager",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 0,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2030,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2029,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 12,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      }
+    ],
+    "row": {
+      "year": 2029,
+      "age": 19,
+      "club": "Twente",
+      "clubCountry": "Netherlands",
+      "clubTier": 4,
+      "apps": 30,
+      "leagueApps": 30,
+      "goals": 12,
+      "assists": 4,
+      "cleanSheets": 0,
+      "yellowCards": 5,
+      "redCards": 0,
+      "rating": 7.8,
+      "ovr": 73,
+      "injury": "Groin strain",
+      "injuryWeeks": 10,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 12,
+      "intGoals": 5,
+      "intAssists": 2,
+      "intRating": 6.8,
+      "tournament": "European Championship",
+      "tournamentResult": "Winner",
+      "continentalCup": true,
+      "cupRun": {
+        "cup": "KNVB Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "PSV",
+            "won": false,
+            "for": 2,
+            "against": 3,
+            "home": true
+          }
+        ]
+      }
+    },
+    "result": {
+      "value": {
+        "threshold": 300,
+        "previous": 295,
+        "total": 307
+      },
+      "draws": []
+    }
+  },
+  {
+    "seasons": [
+      {
+        "year": 2028,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 495,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "manager",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2027,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 0,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2030,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 80,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      },
+      {
+        "year": 2029,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 30,
+        "leagueApps": 30,
+        "goals": 12,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      }
+    ],
+    "row": {
+      "year": 2029,
+      "age": 19,
+      "club": "Twente",
+      "clubCountry": "Netherlands",
+      "clubTier": 4,
+      "apps": 30,
+      "leagueApps": 30,
+      "goals": 12,
+      "assists": 4,
+      "cleanSheets": 0,
+      "yellowCards": 5,
+      "redCards": 0,
+      "rating": 7.8,
+      "ovr": 73,
+      "injury": "Groin strain",
+      "injuryWeeks": 10,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 12,
+      "intGoals": 5,
+      "intAssists": 2,
+      "intRating": 6.8,
+      "tournament": "European Championship",
+      "tournamentResult": "Winner",
+      "continentalCup": true,
+      "cupRun": {
+        "cup": "KNVB Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "PSV",
+            "won": false,
+            "for": 2,
+            "against": 3,
+            "home": true
+          }
+        ]
+      }
+    },
+    "result": {
+      "value": {
+        "threshold": 500,
+        "previous": 495,
+        "total": 507
+      },
+      "draws": []
+    }
+  }
+]

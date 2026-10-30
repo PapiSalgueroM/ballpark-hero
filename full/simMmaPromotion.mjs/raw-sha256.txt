@@ -1,0 +1,2 @@
+0add0ad2f6979b01f3487ecbd94af1a94d414d2b0cd5e7ea0d4ca7e604e44bfc  /home/runner/work/_temp/rc-out/full/simMmaPromotion.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simMmaPromotion.mjs/stderr.log

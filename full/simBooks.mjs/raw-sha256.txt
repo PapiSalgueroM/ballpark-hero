@@ -1,0 +1,2 @@
+4cd5d07789bf65eb5cc7c12317f93796e1d3cc05c6d61910c6e5d1b34b850847  /home/runner/work/_temp/rc-out/full/simBooks.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simBooks.mjs/stderr.log

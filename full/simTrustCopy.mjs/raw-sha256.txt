@@ -1,0 +1,2 @@
+75f5dc1664c4a3ca6186c344124fbdbcfc6f2c8ebc7d62ff867b8d160e0f7670  /home/runner/work/_temp/rc-out/full/simTrustCopy.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTrustCopy.mjs/stderr.log

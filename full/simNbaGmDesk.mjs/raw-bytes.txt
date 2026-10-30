@@ -1,0 +1,3 @@
+4069 /home/runner/work/_temp/rc-out/full/simNbaGmDesk.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNbaGmDesk.mjs/stderr.log
+4069 total

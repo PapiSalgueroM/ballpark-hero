@@ -1,0 +1,2 @@
+bf236f2d6940a02dde728c26c21685ab1893a05c0f1aad9aebcd584ba4c83a9f  /home/runner/work/_temp/rc-out/full/simGmGameDay.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simGmGameDay.mjs/stderr.log

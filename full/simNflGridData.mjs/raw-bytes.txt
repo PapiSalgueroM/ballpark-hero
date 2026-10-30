@@ -1,0 +1,3 @@
+1103 /home/runner/work/_temp/rc-out/full/simNflGridData.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simNflGridData.mjs/stderr.log
+1103 total

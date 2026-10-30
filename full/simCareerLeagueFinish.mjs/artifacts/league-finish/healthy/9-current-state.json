@@ -1,0 +1,3431 @@
+{
+  "playerName": "Sim 9",
+  "nationality": "England",
+  "position": "CM",
+  "era": "2020-24",
+  "age": 27,
+  "potential": 82,
+  "potentialEarned": 0,
+  "eliteStreak": 0,
+  "startingOverall": 64,
+  "physique": {
+    "heightCm": 180,
+    "weightKg": 75
+  },
+  "attrShape": {},
+  "karma": 50,
+  "phoneUsedIds": [
+    "kid_dm",
+    "grandad_game"
+  ],
+  "phoneInbox": [
+    {
+      "id": "kid_dm-2020",
+      "defId": "kid_dm",
+      "from": "Fan DM",
+      "emoji": "🧒",
+      "text": "ur my favorite player ever. im in hospital and my dream is a signed shirt. no worries if not",
+      "year": 2020,
+      "choices": [
+        {
+          "label": "Send a signed shirt and visit",
+          "reply": "Shirt is on the way and I'm coming to see you next week. Stay strong",
+          "karma": 12,
+          "popularity": 6,
+          "cash": -0.1
+        },
+        {
+          "label": "Send the shirt",
+          "reply": "On its way little legend",
+          "karma": 6,
+          "popularity": 3
+        },
+        {
+          "label": "Ignore it",
+          "reply": "",
+          "karma": -8
+        }
+      ]
+    },
+    {
+      "id": "grandad_game-2020",
+      "defId": "grandad_game",
+      "from": "Grandad",
+      "emoji": "🧓",
+      "text": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+      "year": 2020,
+      "choices": [
+        {
+          "label": "Visit with your shirt",
+          "reply": "Coming round Sunday with a shirt and biscuits. Put the kettle on",
+          "karma": 9,
+          "morale": 5
+        },
+        {
+          "label": "Promise vaguely",
+          "reply": "One day grandad, promise",
+          "karma": 1
+        }
+      ]
+    }
+  ],
+  "currentClub": "West Ham",
+  "currentClubCountry": "England",
+  "currentClubTier": 3,
+  "currentClubColor": "#7A263A",
+  "currentLeague": "Premier League",
+  "contractYearsLeft": 0,
+  "weeklyWage": 4232,
+  "marketValue": 72.2,
+  "pace": 84,
+  "shooting": 74,
+  "passing": 74,
+  "dribbling": 87,
+  "defending": 90,
+  "physical": 78,
+  "reflexes": 79,
+  "overall": 81,
+  "seasons": [
+    {
+      "year": 2020,
+      "age": 16,
+      "club": "West Ham Youth",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 0,
+      "goals": 0,
+      "assists": 0,
+      "cleanSheets": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "rating": 0,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "youth",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null
+    },
+    {
+      "year": 2021,
+      "age": 17,
+      "club": "West Ham Youth",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 23,
+      "goals": 6,
+      "assists": 1,
+      "cleanSheets": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "rating": 0,
+      "leagueTitle": false,
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "youth",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null
+    },
+    {
+      "year": 2022,
+      "age": 18,
+      "club": "West Ham",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 34,
+      "leagueApps": 30,
+      "goals": 8,
+      "assists": 6,
+      "cleanSheets": 0,
+      "yellowCards": 1,
+      "redCards": 0,
+      "rating": 7.1,
+      "ovr": 68,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 17,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Tottenham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": "World Cup",
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2023,
+      "age": 19,
+      "club": "West Ham",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 25,
+      "leagueApps": 24,
+      "goals": 2,
+      "assists": 4,
+      "cleanSheets": 0,
+      "yellowCards": 1,
+      "redCards": 0,
+      "rating": 6.8,
+      "ovr": 70,
+      "injury": "Dead leg",
+      "injuryWeeks": 4,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 17,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Tottenham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 2,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Norwich City",
+            "won": true,
+            "for": 3,
+            "against": 2,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Burnley",
+            "won": false,
+            "for": 0,
+            "against": 1
+          }
+        ]
+      }
+    },
+    {
+      "year": 2024,
+      "age": 20,
+      "club": "West Ham",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 33,
+      "leagueApps": 28,
+      "goals": 4,
+      "assists": 3,
+      "cleanSheets": 0,
+      "yellowCards": 4,
+      "redCards": 0,
+      "rating": 7.2,
+      "ovr": 70,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 12,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Tottenham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": "European Championship",
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ]
+      }
+    },
+    {
+      "year": 2025,
+      "age": 21,
+      "club": "West Ham",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 30,
+      "leagueApps": 27,
+      "goals": 7,
+      "assists": 5,
+      "cleanSheets": 0,
+      "yellowCards": 6,
+      "redCards": 0,
+      "rating": 7.1,
+      "ovr": 72,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 10,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Tottenham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 2,
+              "ga": 1,
+              "played": true,
+              "goals": 1
+            },
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 0,
+      "intGoals": 0,
+      "intAssists": 0,
+      "intRating": 0,
+      "tournament": null,
+      "tournamentResult": null,
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Sunderland",
+            "won": true,
+            "for": 1,
+            "against": 0,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Southampton",
+            "won": false,
+            "for": 0,
+            "against": 2
+          }
+        ]
+      }
+    },
+    {
+      "year": 2026,
+      "age": 22,
+      "club": "West Ham",
+      "clubCountry": "England",
+      "clubTier": 4,
+      "apps": 30,
+      "leagueApps": 29,
+      "goals": 4,
+      "assists": 6,
+      "cleanSheets": 0,
+      "yellowCards": 1,
+      "redCards": 0,
+      "rating": 8.1,
+      "ovr": 74,
+      "injury": "Tight calf",
+      "injuryWeeks": 2,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 3,
+      "leagueSize": 24,
+      "derbies": [
+        {
+          "rival": "Millwall",
+          "name": "Dockers derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 12,
+      "intGoals": 5,
+      "intAssists": 3,
+      "intRating": 7.3,
+      "tournament": "World Cup",
+      "tournamentResult": "Round of 32",
+      "leagueWorld": {
+        "league": "Championship",
+        "members": [
+          "West Ham",
+          "Wolves",
+          "Burnley",
+          "Southampton",
+          "Middlesbrough",
+          "Sheffield United",
+          "Swansea City",
+          "Birmingham City",
+          "Norwich City",
+          "Stoke City",
+          "Watford",
+          "Wrexham",
+          "Derby County",
+          "QPR",
+          "West Brom",
+          "Bristol City",
+          "Millwall",
+          "Preston North End",
+          "Charlton Athletic",
+          "Blackburn Rovers",
+          "Bolton Wanderers",
+          "Cardiff City",
+          "Lincoln City",
+          "Portsmouth"
+        ],
+        "champion": "Wolves",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Wolves",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          },
+          {
+            "club": "Watford",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          },
+          {
+            "club": "West Ham",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          }
+        ],
+        "movement": {
+          "club": "West Ham",
+          "from": "Championship",
+          "to": "Premier League",
+          "kind": "promoted"
+        }
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Cardiff City",
+            "won": false,
+            "for": 1,
+            "against": 2,
+            "home": true
+          }
+        ],
+        "opening": {
+          "opp": "Bristol City",
+          "country": "England",
+          "league": "Championship",
+          "won": true,
+          "for": 1,
+          "against": 0,
+          "home": true
+        }
+      }
+    },
+    {
+      "year": 2027,
+      "age": 23,
+      "club": "West Ham",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 33,
+      "leagueApps": 31,
+      "goals": 6,
+      "assists": 4,
+      "cleanSheets": 0,
+      "yellowCards": 0,
+      "redCards": 0,
+      "rating": 7.4,
+      "ovr": 77,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 17,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Tottenham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 5,
+      "intGoals": 1,
+      "intAssists": 1,
+      "intRating": 7.1,
+      "tournament": null,
+      "tournamentResult": null,
+      "leagueWorld": {
+        "league": "Premier League",
+        "members": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Everton",
+          "Fulham",
+          "Crystal Palace",
+          "Brentford",
+          "Sunderland",
+          "Leeds United",
+          "Ipswich Town",
+          "Wolves",
+          "Watford",
+          "West Ham"
+        ],
+        "champion": "Chelsea",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Sunderland",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Ipswich Town",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Brentford",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          }
+        ]
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Newcastle",
+            "won": false,
+            "for": 0,
+            "against": 3,
+            "home": false
+          }
+        ],
+        "opening": {
+          "opp": "Sheffield United",
+          "country": "England",
+          "league": "Championship",
+          "won": true,
+          "for": 1,
+          "against": 0,
+          "home": false
+        }
+      }
+    },
+    {
+      "year": 2028,
+      "age": 24,
+      "club": "West Ham",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 34,
+      "leagueApps": 33,
+      "goals": 6,
+      "assists": 3,
+      "cleanSheets": 0,
+      "yellowCards": 4,
+      "redCards": 0,
+      "rating": 7.4,
+      "ovr": 80,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 20,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Tottenham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": false,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 10,
+      "intGoals": 6,
+      "intAssists": 2,
+      "intRating": 6.7,
+      "tournament": "European Championship",
+      "tournamentResult": "Quarter-final",
+      "leagueWorld": {
+        "league": "Premier League",
+        "members": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Everton",
+          "Fulham",
+          "Crystal Palace",
+          "Leeds United",
+          "Wolves",
+          "Watford",
+          "West Ham",
+          "Cardiff City",
+          "Birmingham City",
+          "Coventry City"
+        ],
+        "champion": "Man City",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Wolves",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Crystal Palace",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "West Ham",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          }
+        ],
+        "movement": {
+          "club": "West Ham",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        }
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Man United",
+            "won": false,
+            "for": 0,
+            "against": 1,
+            "home": false
+          }
+        ],
+        "opening": {
+          "opp": "Newcastle",
+          "country": "England",
+          "league": "Premier League",
+          "won": true,
+          "for": 1,
+          "against": 0,
+          "home": true
+        }
+      }
+    },
+    {
+      "year": 2029,
+      "age": 25,
+      "club": "West Ham",
+      "clubCountry": "England",
+      "clubTier": 4,
+      "apps": 34,
+      "leagueApps": 29,
+      "goals": 3,
+      "assists": 3,
+      "cleanSheets": 0,
+      "yellowCards": 6,
+      "redCards": 0,
+      "rating": 7.9,
+      "ovr": 80,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 2,
+      "leagueSize": 24,
+      "derbies": [
+        {
+          "rival": "Millwall",
+          "name": "Dockers derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 7,
+      "intGoals": 1,
+      "intAssists": 1,
+      "intRating": 6.9,
+      "tournament": null,
+      "tournamentResult": null,
+      "leagueWorld": {
+        "league": "Championship",
+        "members": [
+          "Southampton",
+          "Middlesbrough",
+          "Sheffield United",
+          "Swansea City",
+          "Norwich City",
+          "Stoke City",
+          "Wrexham",
+          "Derby County",
+          "QPR",
+          "West Brom",
+          "Bristol City",
+          "Millwall",
+          "Preston North End",
+          "Charlton Athletic",
+          "Blackburn Rovers",
+          "Bolton Wanderers",
+          "Portsmouth",
+          "Hull City",
+          "Sunderland",
+          "Ipswich Town",
+          "Brentford",
+          "Wolves",
+          "Crystal Palace",
+          "West Ham"
+        ],
+        "champion": "Norwich City",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Norwich City",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          },
+          {
+            "club": "West Ham",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          },
+          {
+            "club": "Brentford",
+            "from": "Championship",
+            "to": "Premier League",
+            "kind": "promoted"
+          }
+        ],
+        "movement": {
+          "club": "West Ham",
+          "from": "Championship",
+          "to": "Premier League",
+          "kind": "promoted"
+        }
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ],
+        "opening": {
+          "opp": "Coventry City",
+          "country": "England",
+          "league": "Premier League",
+          "won": false,
+          "for": 1,
+          "against": 3,
+          "home": true
+        }
+      }
+    },
+    {
+      "year": 2030,
+      "age": 26,
+      "club": "West Ham",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 35,
+      "leagueApps": 31,
+      "goals": 5,
+      "assists": 4,
+      "cleanSheets": 0,
+      "yellowCards": 8,
+      "redCards": 0,
+      "rating": 7.9,
+      "ovr": 80,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 9,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Tottenham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 1,
+              "ga": 3,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 1,
+              "ga": 2,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 12,
+      "intGoals": 3,
+      "intAssists": 2,
+      "intRating": 6.8,
+      "tournament": "World Cup",
+      "tournamentResult": "Round of 32",
+      "leagueWorld": {
+        "league": "Premier League",
+        "members": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Everton",
+          "Watford",
+          "Cardiff City",
+          "Coventry City",
+          "Burnley",
+          "Bournemouth",
+          "Lincoln City",
+          "Norwich City",
+          "West Ham",
+          "Brentford"
+        ],
+        "champion": "Man United",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Burnley",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Cardiff City",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Coventry City",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          }
+        ]
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": false
+          }
+        ],
+        "opening": {
+          "opp": "Lincoln City",
+          "country": "England",
+          "league": "Championship",
+          "won": false,
+          "for": 0,
+          "against": 3,
+          "home": true
+        }
+      }
+    },
+    {
+      "year": 2031,
+      "age": 27,
+      "club": "West Ham",
+      "clubCountry": "England",
+      "clubTier": 3,
+      "apps": 41,
+      "leagueApps": 37,
+      "goals": 7,
+      "assists": 6,
+      "cleanSheets": 0,
+      "yellowCards": 7,
+      "redCards": 0,
+      "rating": 8.2,
+      "ovr": 81,
+      "injury": null,
+      "injuryWeeks": 0,
+      "injurySevere": false,
+      "leagueTitle": false,
+      "leagueFinish": 14,
+      "leagueSize": 20,
+      "derbies": [
+        {
+          "rival": "Tottenham",
+          "name": "London derby",
+          "kind": "derby",
+          "meetings": [
+            {
+              "home": false,
+              "gf": 0,
+              "ga": 1,
+              "played": true,
+              "goals": 0
+            },
+            {
+              "home": true,
+              "gf": 0,
+              "ga": 0,
+              "played": true,
+              "goals": 0
+            }
+          ]
+        }
+      ],
+      "domesticCup": false,
+      "championsLeague": false,
+      "worldCup": false,
+      "ballonDor": false,
+      "ballonDorRank": null,
+      "type": "playing",
+      "intApps": 5,
+      "intGoals": 0,
+      "intAssists": 1,
+      "intRating": 7.6,
+      "tournament": null,
+      "tournamentResult": null,
+      "leagueWorld": {
+        "league": "Premier League",
+        "members": [
+          "Arsenal",
+          "Man City",
+          "Liverpool",
+          "Chelsea",
+          "Man United",
+          "Tottenham",
+          "Newcastle",
+          "Nottingham Forest",
+          "Brighton",
+          "Aston Villa",
+          "Everton",
+          "Watford",
+          "Bournemouth",
+          "Lincoln City",
+          "Norwich City",
+          "West Ham",
+          "Brentford",
+          "Wolves",
+          "Southampton",
+          "Bolton Wanderers"
+        ],
+        "champion": "Man United",
+        "simulation": "simulated",
+        "movements": [
+          {
+            "club": "Wolves",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Bolton Wanderers",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          },
+          {
+            "club": "Norwich City",
+            "from": "Premier League",
+            "to": "Championship",
+            "kind": "relegated"
+          }
+        ]
+      },
+      "cupRun": {
+        "cup": "FA Cup",
+        "stages": [
+          {
+            "stage": "early",
+            "won": true
+          },
+          {
+            "stage": "QF",
+            "opp": "Watford",
+            "won": true,
+            "for": 1,
+            "against": 0,
+            "home": false
+          },
+          {
+            "stage": "SF",
+            "opp": "Arsenal",
+            "won": false,
+            "for": 0,
+            "against": 1
+          }
+        ],
+        "opening": {
+          "opp": "Sheffield United",
+          "country": "England",
+          "league": "Championship",
+          "won": true,
+          "for": 1,
+          "against": 0,
+          "home": true
+        }
+      }
+    }
+  ],
+  "events": [
+    "🔥 London derby against Tottenham: L 0-1 away, D 0-0 at home.",
+    "©️ Named captain of England! Legacy +15",
+    "🏆 Won Player of the Month (September 2031)!",
+    "🏆 Won Player of the Month (February 2032)!",
+    "🏛️ Granted Club Legend status at West Ham! (300+ appearances)",
+    "⚠️ Your contract is expiring!"
+  ],
+  "retired": false,
+  "phase": "newspaper",
+  "pendingOffers": [],
+  "pendingSummary": {
+    "year": 2031,
+    "age": 27,
+    "club": "West Ham",
+    "clubCountry": "England",
+    "clubTier": 3,
+    "apps": 41,
+    "leagueApps": 37,
+    "goals": 7,
+    "assists": 6,
+    "cleanSheets": 0,
+    "yellowCards": 7,
+    "redCards": 0,
+    "rating": 8.2,
+    "ovr": 81,
+    "injury": null,
+    "injuryWeeks": 0,
+    "injurySevere": false,
+    "leagueTitle": false,
+    "leagueFinish": 14,
+    "leagueSize": 20,
+    "derbies": [
+      {
+        "rival": "Tottenham",
+        "name": "London derby",
+        "kind": "derby",
+        "meetings": [
+          {
+            "home": false,
+            "gf": 0,
+            "ga": 1,
+            "played": true,
+            "goals": 0
+          },
+          {
+            "home": true,
+            "gf": 0,
+            "ga": 0,
+            "played": true,
+            "goals": 0
+          }
+        ]
+      }
+    ],
+    "domesticCup": false,
+    "championsLeague": false,
+    "worldCup": false,
+    "ballonDor": false,
+    "ballonDorRank": null,
+    "type": "playing",
+    "intApps": 5,
+    "intGoals": 0,
+    "intAssists": 1,
+    "intRating": 7.6,
+    "tournament": null,
+    "tournamentResult": null,
+    "leagueWorld": {
+      "league": "Premier League",
+      "members": [
+        "Arsenal",
+        "Man City",
+        "Liverpool",
+        "Chelsea",
+        "Man United",
+        "Tottenham",
+        "Newcastle",
+        "Nottingham Forest",
+        "Brighton",
+        "Aston Villa",
+        "Everton",
+        "Watford",
+        "Bournemouth",
+        "Lincoln City",
+        "Norwich City",
+        "West Ham",
+        "Brentford",
+        "Wolves",
+        "Southampton",
+        "Bolton Wanderers"
+      ],
+      "champion": "Man United",
+      "simulation": "simulated",
+      "movements": [
+        {
+          "club": "Wolves",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        },
+        {
+          "club": "Bolton Wanderers",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        },
+        {
+          "club": "Norwich City",
+          "from": "Premier League",
+          "to": "Championship",
+          "kind": "relegated"
+        }
+      ]
+    },
+    "cupRun": {
+      "cup": "FA Cup",
+      "stages": [
+        {
+          "stage": "early",
+          "won": true
+        },
+        {
+          "stage": "QF",
+          "opp": "Watford",
+          "won": true,
+          "for": 1,
+          "against": 0,
+          "home": false
+        },
+        {
+          "stage": "SF",
+          "opp": "Arsenal",
+          "won": false,
+          "for": 0,
+          "against": 1
+        }
+      ],
+      "opening": {
+        "opp": "Sheffield United",
+        "country": "England",
+        "league": "Championship",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": true
+      }
+    }
+  },
+  "transferSituation": null,
+  "loan": null,
+  "pendingLoanOffers": null,
+  "pendingEvents": [],
+  "lastEventId": 479,
+  "statBoostNextSeason": {},
+  "pendingNews": [
+    {
+      "newspaper": "El Golazo",
+      "type": "positive",
+      "headline": "THE COLUMN: Rosalind Stallybrass Has Seen Enough, And He Is Saying So",
+      "body": "7 goals and 6 assists in 41 games. Rosalind Stallybrass wrote that anybody still arguing about this is arguing for the sake of it."
+    },
+    {
+      "newspaper": "El Golazo",
+      "type": "transfer",
+      "headline": "Manchester City Launch €51M Bid For Sim 9",
+      "body": "Manchester City have made an audacious move for Sim 9, with a bid of €51.4M said to be on the table. West Ham are yet to respond but are understood to be reluctant to sell."
+    }
+  ],
+  "internationalCareer": true,
+  "sponsorDeal": null,
+  "totalEarnings": 13.04,
+  "popularity": 96,
+  "morale": 61,
+  "isLeader": true,
+  "hasRelationship": false,
+  "intStats": {
+    "caps": 51,
+    "goals": 16,
+    "assists": 10,
+    "tournaments": 3,
+    "worldCups": 2,
+    "continentals": 1,
+    "worldCupWins": 0,
+    "continentalWins": 0,
+    "isCaptain": true,
+    "isRetired": false,
+    "debutYear": -1,
+    "debutAge": 21,
+    "worldCupResults": [],
+    "squadSnubs": 0,
+    "failedQualifications": 0
+  },
+  "pendingWorldCup": null,
+  "pendingTournament": null,
+  "lastTournament": {
+    "year": 2030,
+    "name": "World Cup",
+    "short": "World Cup",
+    "kind": "World Cup",
+    "confederation": null,
+    "nation": "England",
+    "teams": 48,
+    "qualifying": {
+      "confederation": "UEFA",
+      "table": [
+        {
+          "nation": "England",
+          "played": 10,
+          "won": 9,
+          "drawn": 1,
+          "lost": 0,
+          "gf": 27,
+          "ga": 5,
+          "points": 28
+        },
+        {
+          "nation": "Scotland",
+          "played": 10,
+          "won": 5,
+          "drawn": 2,
+          "lost": 3,
+          "gf": 12,
+          "ga": 10,
+          "points": 17
+        },
+        {
+          "nation": "Sweden",
+          "played": 10,
+          "won": 4,
+          "drawn": 2,
+          "lost": 4,
+          "gf": 12,
+          "ga": 12,
+          "points": 14
+        },
+        {
+          "nation": "Bosnia & Herzegovina",
+          "played": 10,
+          "won": 4,
+          "drawn": 1,
+          "lost": 5,
+          "gf": 11,
+          "ga": 14,
+          "points": 13
+        },
+        {
+          "nation": "Liechtenstein",
+          "played": 10,
+          "won": 4,
+          "drawn": 1,
+          "lost": 5,
+          "gf": 10,
+          "ga": 16,
+          "points": 13
+        },
+        {
+          "nation": "Cyprus",
+          "played": 10,
+          "won": 0,
+          "drawn": 1,
+          "lost": 9,
+          "gf": 9,
+          "ga": 24,
+          "points": 1
+        }
+      ],
+      "myPosition": 1,
+      "through": 2,
+      "qualified": true,
+      "automatic": false
+    },
+    "qualified": true,
+    "squad": {
+      "called": true,
+      "role": "Starter",
+      "reason": "You made it as number 2 of 8 in your position.",
+      "myRank": 2,
+      "poolSize": 18,
+      "places": 8,
+      "myScore": 86,
+      "cutScore": 77,
+      "xi": {
+        "formation": "4-3-3",
+        "gk": [
+          {
+            "slot": "GK",
+            "name": "Warren Whitlock",
+            "ovr": 84,
+            "me": false
+          }
+        ],
+        "def": [
+          {
+            "slot": "LB",
+            "name": "Ross Dunmore",
+            "ovr": 82,
+            "me": false
+          },
+          {
+            "slot": "CB",
+            "name": "Eddie Kingsley",
+            "ovr": 87,
+            "me": false
+          },
+          {
+            "slot": "CB",
+            "name": "Shane Baxter",
+            "ovr": 84,
+            "me": false
+          },
+          {
+            "slot": "RB",
+            "name": "Craig Prescott",
+            "ovr": 83,
+            "me": false
+          }
+        ],
+        "mid": [
+          {
+            "slot": "CM",
+            "name": "You",
+            "ovr": 81,
+            "me": true
+          },
+          {
+            "slot": "CDM",
+            "name": "Grant Hollis",
+            "ovr": 85,
+            "me": false
+          },
+          {
+            "slot": "CM",
+            "name": "Wesley Stanhope",
+            "ovr": 86,
+            "me": false
+          }
+        ],
+        "att": [
+          {
+            "slot": "LW",
+            "name": "Scott Chadwick",
+            "ovr": 82,
+            "me": false
+          },
+          {
+            "slot": "ST",
+            "name": "Stuart Ashcroft",
+            "ovr": 87,
+            "me": false
+          },
+          {
+            "slot": "RW",
+            "name": "Dean Marlowe",
+            "ovr": 85,
+            "me": false
+          }
+        ],
+        "mySlot": "CM",
+        "aheadOfMe": null
+      }
+    },
+    "groupTable": [
+      {
+        "nation": "Norway",
+        "played": 3,
+        "won": 3,
+        "drawn": 0,
+        "lost": 0,
+        "gf": 5,
+        "ga": 2,
+        "points": 9
+      },
+      {
+        "nation": "England",
+        "played": 3,
+        "won": 2,
+        "drawn": 0,
+        "lost": 1,
+        "gf": 5,
+        "ga": 3,
+        "points": 6
+      },
+      {
+        "nation": "Uzbekistan",
+        "played": 3,
+        "won": 1,
+        "drawn": 0,
+        "lost": 2,
+        "gf": 5,
+        "ga": 6,
+        "points": 3
+      },
+      {
+        "nation": "Canada",
+        "played": 3,
+        "won": 0,
+        "drawn": 0,
+        "lost": 3,
+        "gf": 2,
+        "ga": 6,
+        "points": 0
+      }
+    ],
+    "bracket": [
+      {
+        "round": "R32",
+        "slot": 0,
+        "home": "Spain",
+        "away": "Germany",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Germany",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 1,
+        "home": "Peru",
+        "away": "Wales",
+        "homeGoals": 0,
+        "awayGoals": 0,
+        "pens": true,
+        "winner": "Peru",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 2,
+        "home": "England",
+        "away": "Netherlands",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Netherlands",
+        "mine": true
+      },
+      {
+        "round": "R32",
+        "slot": 3,
+        "home": "Mexico",
+        "away": "Ecuador",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Mexico",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 4,
+        "home": "Brazil",
+        "away": "Ivory Coast",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Ivory Coast",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 5,
+        "home": "Portugal",
+        "away": "Ukraine",
+        "homeGoals": 3,
+        "awayGoals": 3,
+        "pens": true,
+        "winner": "Portugal",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 6,
+        "home": "Switzerland",
+        "away": "Venezuela",
+        "homeGoals": 1,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Venezuela",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 7,
+        "home": "Turkey",
+        "away": "Iran",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Iran",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 8,
+        "home": "Poland",
+        "away": "Norway",
+        "homeGoals": 0,
+        "awayGoals": 0,
+        "pens": true,
+        "winner": "Poland",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 9,
+        "home": "France",
+        "away": "Colombia",
+        "homeGoals": 1,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Colombia",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 10,
+        "home": "DR Congo",
+        "away": "Senegal",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Senegal",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 11,
+        "home": "Croatia",
+        "away": "Austria",
+        "homeGoals": 3,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Croatia",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 12,
+        "home": "Australia",
+        "away": "Saudi Arabia",
+        "homeGoals": 1,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Australia",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 13,
+        "home": "Belgium",
+        "away": "Uzbekistan",
+        "homeGoals": 1,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Uzbekistan",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 14,
+        "home": "Japan",
+        "away": "Argentina",
+        "homeGoals": 0,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Argentina",
+        "mine": false
+      },
+      {
+        "round": "R32",
+        "slot": 15,
+        "home": "Italy",
+        "away": "Morocco",
+        "homeGoals": 0,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Morocco",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 0,
+        "home": "Germany",
+        "away": "Peru",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Peru",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 1,
+        "home": "Netherlands",
+        "away": "Mexico",
+        "homeGoals": 1,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Mexico",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 2,
+        "home": "Ivory Coast",
+        "away": "Portugal",
+        "homeGoals": 0,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Portugal",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 3,
+        "home": "Venezuela",
+        "away": "Iran",
+        "homeGoals": 1,
+        "awayGoals": 1,
+        "pens": true,
+        "winner": "Iran",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 4,
+        "home": "Poland",
+        "away": "Colombia",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Poland",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 5,
+        "home": "Senegal",
+        "away": "Croatia",
+        "homeGoals": 2,
+        "awayGoals": 4,
+        "pens": false,
+        "winner": "Croatia",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 6,
+        "home": "Australia",
+        "away": "Uzbekistan",
+        "homeGoals": 4,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Australia",
+        "mine": false
+      },
+      {
+        "round": "R16",
+        "slot": 7,
+        "home": "Argentina",
+        "away": "Morocco",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "winner": "Morocco",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 0,
+        "home": "Peru",
+        "away": "Mexico",
+        "homeGoals": 1,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Mexico",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 1,
+        "home": "Portugal",
+        "away": "Iran",
+        "homeGoals": 2,
+        "awayGoals": 0,
+        "pens": false,
+        "winner": "Portugal",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 2,
+        "home": "Poland",
+        "away": "Croatia",
+        "homeGoals": 1,
+        "awayGoals": 3,
+        "pens": false,
+        "winner": "Croatia",
+        "mine": false
+      },
+      {
+        "round": "QF",
+        "slot": 3,
+        "home": "Australia",
+        "away": "Morocco",
+        "homeGoals": 0,
+        "awayGoals": 6,
+        "pens": false,
+        "winner": "Morocco",
+        "mine": false
+      },
+      {
+        "round": "SF",
+        "slot": 0,
+        "home": "Mexico",
+        "away": "Portugal",
+        "homeGoals": 0,
+        "awayGoals": 0,
+        "pens": true,
+        "winner": "Portugal",
+        "mine": false
+      },
+      {
+        "round": "SF",
+        "slot": 1,
+        "home": "Croatia",
+        "away": "Morocco",
+        "homeGoals": 4,
+        "awayGoals": 2,
+        "pens": false,
+        "winner": "Croatia",
+        "mine": false
+      },
+      {
+        "round": "F",
+        "slot": 0,
+        "home": "Portugal",
+        "away": "Croatia",
+        "homeGoals": 0,
+        "awayGoals": 0,
+        "pens": true,
+        "winner": "Croatia",
+        "mine": false
+      }
+    ],
+    "champion": "Croatia",
+    "runnerUp": "Portugal",
+    "groupLabel": "Group D",
+    "thirdsThrough": 8,
+    "myResult": "Round of 32",
+    "matches": [
+      {
+        "round": "Group D",
+        "home": "England",
+        "away": "Norway",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 0,
+        "playerRating": 6.1
+      },
+      {
+        "round": "Group D",
+        "home": "England",
+        "away": "Canada",
+        "homeGoals": 3,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 1,
+        "playerAssists": 0,
+        "playerRating": 6.9
+      },
+      {
+        "round": "Group D",
+        "home": "England",
+        "away": "Uzbekistan",
+        "homeGoals": 2,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 1,
+        "playerAssists": 0,
+        "playerRating": 7.4
+      },
+      {
+        "round": "R32",
+        "home": "England",
+        "away": "Netherlands",
+        "homeGoals": 0,
+        "awayGoals": 1,
+        "pens": false,
+        "playerGoals": 0,
+        "playerAssists": 0,
+        "playerRating": 7.1
+      }
+    ],
+    "playerApps": 4,
+    "playerGoals": 2,
+    "playerAssists": 0,
+    "playerAvgRating": 6.9,
+    "goldenBoot": false,
+    "bestPlayer": false
+  },
+  "intlHistory": [
+    {
+      "year": 2022,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "Germany",
+      "myResult": "",
+      "apps": 0,
+      "goals": 0
+    },
+    {
+      "year": 2024,
+      "short": "Euros",
+      "nation": "England",
+      "champion": "Norway",
+      "myResult": "",
+      "apps": 0,
+      "goals": 0
+    },
+    {
+      "year": 2026,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "Wales",
+      "myResult": "Round of 32",
+      "apps": 4,
+      "goals": 4
+    },
+    {
+      "year": 2028,
+      "short": "Euros",
+      "nation": "England",
+      "champion": "Portugal",
+      "myResult": "Quarter-final",
+      "apps": 5,
+      "goals": 5
+    },
+    {
+      "year": 2030,
+      "short": "World Cup",
+      "nation": "England",
+      "champion": "Croatia",
+      "myResult": "Round of 32",
+      "apps": 4,
+      "goals": 2
+    }
+  ],
+  "rival": {
+    "name": "Aurélien Silva",
+    "nationality": "England",
+    "position": "CM",
+    "club": "LAFC",
+    "clubTier": 2,
+    "overall": 75,
+    "careerGoals": 31,
+    "careerAssists": 43,
+    "careerApps": 212,
+    "leagueTitles": 0,
+    "championsLeagues": 0,
+    "worldCups": 0,
+    "ballonDors": 0,
+    "intCaps": 27,
+    "intGoals": 4,
+    "marketValue": 21.2,
+    "age": 27,
+    "retired": false
+  },
+  "rivalCreated": true,
+  "pendingRivalryEvent": null,
+  "lastRivalryEventId": 110,
+  "rivalrySummary": null,
+  "netWorth": 11.62,
+  "lifestyleLevel": "Comfortable",
+  "lifestyleCostPerYear": 0.2,
+  "socialMediaFollowers": 7.16,
+  "sponsorshipIncome": 2.63,
+  "properties": [],
+  "investments": [
+    "Extremely boring index fund"
+  ],
+  "consecutiveDeficitYears": 0,
+  "agentFeesPaid": 0,
+  "family": {
+    "isMarried": false,
+    "marriedAge": null,
+    "children": 0,
+    "isDivorced": false,
+    "divorceAge": null
+  },
+  "purchasedItems": [],
+  "investmentHoldings": [],
+  "totalAssetValue": 0,
+  "customYearlyCosts": 0,
+  "awards": [
+    {
+      "year": 2026,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    },
+    {
+      "year": 2027,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    },
+    {
+      "year": 2028,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    },
+    {
+      "year": 2028,
+      "name": "Euros Golden Boot",
+      "emoji": "👟"
+    },
+    {
+      "year": 2029,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    },
+    {
+      "year": 2031,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    },
+    {
+      "year": 2031,
+      "name": "Player of the Month",
+      "emoji": "🏆"
+    },
+    {
+      "year": 2031,
+      "name": "Club Legend",
+      "emoji": "🏛️"
+    }
+  ],
+  "pendingBallonDor": {
+    "year": 2031,
+    "nominees": [
+      {
+        "name": "Kylian Mbappé",
+        "nationality": "France",
+        "position": "ST",
+        "club": "Real Madrid",
+        "points": 80,
+        "goals": 34,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Erling Haaland",
+        "nationality": "Norway",
+        "position": "ST",
+        "club": "Man City",
+        "points": 63,
+        "goals": 36,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Vinícius Jr",
+        "nationality": "Brazil",
+        "position": "LW",
+        "club": "Real Madrid",
+        "points": 50,
+        "goals": 23,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Lamine Yamal",
+        "nationality": "Spain",
+        "position": "RW",
+        "club": "Barcelona",
+        "points": 39,
+        "goals": 21,
+        "trophies": [
+          "Cup"
+        ],
+        "isPlayer": false
+      },
+      {
+        "name": "Jude Bellingham",
+        "nationality": "England",
+        "position": "CAM",
+        "club": "Real Madrid",
+        "points": 37,
+        "goals": 24,
+        "trophies": [],
+        "isPlayer": false
+      },
+      {
+        "name": "Stuart Ashcroft",
+        "nationality": "England",
+        "position": "LW",
+        "club": "Man City",
+        "points": 31,
+        "goals": 27,
+        "trophies": [],
+        "isPlayer": false,
+        "generatedId": 7,
+        "generatedAge": 25
+      },
+      {
+        "name": "Agustín Quiroga",
+        "nationality": "Argentina",
+        "position": "RW",
+        "club": "Arsenal",
+        "points": 30,
+        "goals": 23,
+        "trophies": [],
+        "isPlayer": false,
+        "generatedId": 2,
+        "generatedAge": 22
+      },
+      {
+        "name": "Ferdi Doornbos",
+        "nationality": "Belgium",
+        "position": "LW",
+        "club": "AC Milan",
+        "points": 29,
+        "goals": 24,
+        "trophies": [
+          "Cup"
+        ],
+        "isPlayer": false,
+        "generatedId": 0,
+        "generatedAge": 22
+      },
+      {
+        "name": "Mikkel Sæterbø",
+        "nationality": "Norway",
+        "position": "CDM",
+        "club": "Man United",
+        "points": 27,
+        "goals": 7,
+        "trophies": [
+          "League"
+        ],
+        "isPlayer": false,
+        "generatedId": 8,
+        "generatedAge": 27
+      },
+      {
+        "name": "Hidde Lindeboom",
+        "nationality": "Netherlands",
+        "position": "ST",
+        "club": "Dortmund",
+        "points": 25,
+        "goals": 18,
+        "trophies": [],
+        "isPlayer": false,
+        "generatedId": 5,
+        "generatedAge": 25
+      }
+    ],
+    "playerRank": null,
+    "playerPoints": 0,
+    "playerNominated": false
+  },
+  "lastUCLResult": {
+    "qualified": false,
+    "matches": [],
+    "result": "N/A",
+    "playerGoals": 0,
+    "isTopScorer": false,
+    "seasonYear": 2031,
+    "club": "West Ham"
+  },
+  "legacy": null,
+  "postRetirementChoice": null,
+  "managerState": null,
+  "isFinalSeason": false,
+  "isPundit": false,
+  "punditEvents": [],
+  "primeType": "normal",
+  "socialMediaActionUsedThisSeason": false,
+  "socialMediaFocusBoost": false,
+  "pendingCoverAthleteEvent": false,
+  "coverAthleteAccepted": false,
+  "activeSponsorship": null,
+  "personality": "enigma",
+  "agentId": "self",
+  "lifeFlags": {
+    "criticAnswered": 3,
+    "energyDrink": 1,
+    "siblingTrial": 1,
+    "stadiumMove": 3
+  },
+  "appearance": null,
+  "corruptionHeat": 0,
+  "dirtyMoney": 0,
+  "prisonSeasons": 0,
+  "academyClubName": "West Ham",
+  "moralDilemmasTriggered": [
+    "sponsor_scandal",
+    "streaker_proposal",
+    "rival_charity_match"
+  ],
+  "pendingMoralDilemma": null,
+  "pedSeasonsRemaining": 0,
+  "pedActive": false,
+  "matchFixBanned": 0,
+  "divingActive": false,
+  "integrityBonus": 35,
+  "pendingAppealResult": null,
+  "childEventsSeen": [],
+  "pregnancyAnnounced": false,
+  "punditState": null,
+  "ownerState": null,
+  "peakOverall": 81,
+  "retirementSuggested": false,
+  "phone": {
+    "threads": [
+      {
+        "id": "th_x_fandm",
+        "c": "other",
+        "name": "Fan DM",
+        "emoji": "💬",
+        "lines": [
+          {
+            "w": 0,
+            "t": "ur my favorite player ever. im in hospital and my dream is a signed shirt. no worries if not",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Chasing this one. Let me know either way.",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "I will assume that is a no then.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "I will stop bothering you. Best of luck.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "legacy",
+          "msgId": "kid_dm-2020"
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [],
+        "lastReplyYear": null
+      },
+      {
+        "id": "th_mum",
+        "c": "mum",
+        "name": "Mum",
+        "emoji": "❤️",
+        "lines": [
+          {
+            "w": 0,
+            "t": "Your nan told the whole street about you again. She has a photo in her purse and everything.",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Hello? Anyone in there?",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "Wow. I see how it is then.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "You have changed. Everyone says it and I keep defending you.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "convo",
+          "convo": "mum_proud",
+          "beat": 0
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [
+          "mum_proud"
+        ],
+        "lastReplyYear": null
+      },
+      {
+        "id": "th_grandad",
+        "c": "grandad",
+        "name": "Grandad",
+        "emoji": "🧓",
+        "lines": [
+          {
+            "w": 0,
+            "t": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+            "y": 2020
+          },
+          {
+            "w": 0,
+            "t": "Did you get my last one? No rush.",
+            "y": 2021
+          },
+          {
+            "w": 0,
+            "t": "Right. Message received. Loud and clear.",
+            "y": 2022
+          },
+          {
+            "w": 0,
+            "t": "I will stop texting. You clearly have people for that now.",
+            "y": 2023
+          }
+        ],
+        "rel": 22,
+        "pending": {
+          "kind": "legacy",
+          "msgId": "grandad_game-2020"
+        },
+        "waiting": 2030,
+        "cold": 3,
+        "seen": [],
+        "lastReplyYear": null
+      }
+    ],
+    "feed": [
+      "🏆 Barcelona win La Liga.",
+      "🔮 Your world's 2029-30, as it played out:",
+      "⭐ PSG are champions of Europe.",
+      "🏆 Man United win the Premier League.",
+      "🏆 Real Madrid win La Liga.",
+      "🌍 Croatia win the World Cup.",
+      "🔮 Your world's 2030-31, as it played out:",
+      "🔄 Aurélien Silva has left Zamalek for LAFC.",
+      "⭐ Inter Milan are champions of Europe.",
+      "🏆 Man United win the Premier League.",
+      "🏆 Athletic Bilbao win La Liga.",
+      "🔮 Your world's 2031-32, as it played out:"
+    ],
+    "world": {
+      "year": 2031,
+      "ucl": "Inter Milan",
+      "leagues": {
+        "Premier League": "Man United",
+        "La Liga": "Athletic Bilbao",
+        "Bundesliga": "Leipzig",
+        "Serie A": "Inter Milan",
+        "Ligue 1": "Nice",
+        "Primeira Liga": "Benfica",
+        "Eredivisie": "PSV",
+        "Scottish Premiership": "Aberdeen",
+        "Brasileirao": "Cruzeiro",
+        "Saudi Pro League": "Al Ittihad",
+        "MLS": "Columbus Crew",
+        "K League 1": "Jeonbuk Motors",
+        "Championship": "Birmingham City",
+        "2. Bundesliga": "Nurnberg",
+        "Ligue 2": "Rodez",
+        "Serie B": "Cremonese",
+        "Segunda Division": "Malaga"
+      },
+      "cups": {
+        "Premier League": "Newcastle",
+        "La Liga": "Barcelona",
+        "Bundesliga": "Leipzig",
+        "Serie A": "AC Milan",
+        "Ligue 1": "PSG",
+        "Primeira Liga": "Sporting CP",
+        "Eredivisie": "PSV",
+        "Scottish Premiership": "Aberdeen",
+        "Brasileirao": "Flamengo",
+        "Saudi Pro League": "Al Ittihad",
+        "MLS": "Inter Miami",
+        "K League 1": "Pohang Steelers"
+      },
+      "moves": [],
+      "topScorer": null,
+      "intl": null
+    },
+    "clubs": {
+      "Mohamed Salah": "Trabzonspor",
+      "Vinícius Jr": "Real Madrid",
+      "Jude Bellingham": "Real Madrid",
+      "Rodri": "Barcelona",
+      "Luka Modrić": "Real Madrid",
+      "Harry Kane": "Bayern Munich",
+      "Neymar": "PSG",
+      "Lautaro Martínez": "Inter Milan",
+      "Bukayo Saka": "Arsenal",
+      "Phil Foden": "Man City",
+      "Federico Valverde": "Real Madrid",
+      "Antoine Griezmann": "Atletico Madrid",
+      "Virgil van Dijk": "Liverpool",
+      "Thibaut Courtois": "Real Madrid",
+      "Lamine Yamal": "Barcelona",
+      "Florian Wirtz": "Liverpool",
+      "Jamal Musiala": "Bayern Munich",
+      "Pedri": "Barcelona",
+      "Declan Rice": "Arsenal",
+      "Raphinha": "Barcelona",
+      "Endrick": "Real Madrid",
+      "Nico Williams": "Athletic Bilbao",
+      "Désiré Doué": "PSG",
+      "Kobbie Mainoo": "Man United",
+      "Gianluigi Donnarumma": "Man City",
+      "Ousmane Dembélé": "PSG",
+      "Kylian Mbappé": "Real Madrid",
+      "Erling Haaland": "Man City"
+    },
+    "rivalClub": "LAFC",
+    "seed": 911979348,
+    "offers": 0,
+    "perksTaken": 0
+  },
+  "frozenOut": 0,
+  "badSeasonStreak": 0,
+  "story": [
+    {
+      "year": 2020,
+      "age": 16,
+      "club": "West Ham Youth",
+      "lines": [
+        "📋 Joined West Ham Youth Academy aged 16"
+      ]
+    },
+    {
+      "year": 2021,
+      "age": 17,
+      "club": "West Ham Youth",
+      "lines": [
+        "📈 Stats improved during youth development (OVR 68)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with West Ham 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (3yr, €4k/wk)",
+        "🏠 One of our own! The West Ham academy kid signs a first-team deal. The ultras already have a chant ready."
+      ]
+    },
+    {
+      "year": 2022,
+      "age": 18,
+      "club": "West Ham",
+      "lines": [
+        "🔥 London derby against Tottenham: W 1-0 at home, D 0-0 away.",
+        "🃏 You answered in riddles: The Enigma",
+        "🎯 Scored a Puskas-nominated goal!",
+        "💉 Press conference, cleared name completely",
+        "🎧 Waited out the breakdown in silence",
+        "🧢 Wore a beanie until the haircut grew out. Everyone knew"
+      ]
+    },
+    {
+      "year": 2023,
+      "age": 19,
+      "club": "West Ham",
+      "lines": [
+        "🚑 Injury: Dead leg, out 4 weeks, missed matches",
+        "🔥 London derby against Tottenham: D 1-1 away (you missed it), D 2-2 at home (you missed it).",
+        "⚠️ Your contract is expiring!",
+        "🤝 No agent. You read every contract yourself",
+        "🫁 Handled the tunnel panic alone for a whole season. The crowd saw a machine and never knew",
+        "🏥💔 Flew home between matches for family",
+        "🎤 Gave the media nothing to work with"
+      ]
+    },
+    {
+      "year": 2024,
+      "age": 20,
+      "club": "West Ham",
+      "lines": [
+        "🔥 London derby against Tottenham: L 0-1 away (you missed it), L 0-1 at home.",
+        "😤 A new rival emerges: Aurélien Silva (🏴󠁧󠁢󠁥󠁮󠁧󠁿 England)",
+        "⚠️ Your contract is expiring!",
+        "🚪 Let Rosalind Stallybrass watch a full week of training. He wrote it up straight, and the lads have not let it go",
+        "🙈 Said nothing about the banner. It is still up. It is still wrong",
+        "©️ Voted club captain by the dressing room",
+        "🏖️ Paid €90k to relay a sand pitch for a club that beat you. The town put a plaque on the gate",
+        "📝 Renewed contract with West Ham for 2 years"
+      ]
+    },
+    {
+      "year": 2025,
+      "age": 21,
+      "club": "West Ham",
+      "lines": [
+        "🔥 London derby against Tottenham: W 2-1 at home, L 1-2 away.",
+        "⚠️ Your contract is expiring!",
+        "🇺🇳 First international call-up for England!",
+        "🔥 Reported the flares that landed six feet from a ball boy. That city will boo you until you retire",
+        "🎙️ Warned both of them before the podcast dropped. Awkward calls, no ambush",
+        "🎧 Waited out the breakdown in silence"
+      ]
+    },
+    {
+      "year": 2026,
+      "age": 22,
+      "club": "West Ham",
+      "lines": [
+        "🚑 Injury: Tight calf, out 2 weeks, missed matches",
+        "🔥 Dockers derby against Millwall: W 1-0 at home, D 1-1 away.",
+        "🏆 Won Player of the Month (April 2027)!",
+        "⚠️ Your contract is expiring!",
+        "🌍 Wales won the World Cup.",
+        "⬆️ West Ham promoted to Premier League in your simulated league world.",
+        "📈 Surpassed Your Rival!",
+        "😤 Fired back at rival in media",
+        "🎥 Turned down the documentary money for a quiet year. Slept like a baby, played like an adult",
+        "📝 Renewed contract with West Ham for 2 years"
+      ]
+    },
+    {
+      "year": 2027,
+      "age": 23,
+      "club": "West Ham",
+      "lines": [
+        "🔥 London derby against Tottenham: L 0-2 away, L 1-3 at home.",
+        "🏆 Won Player of the Month (February 2028)!",
+        "⚠️ Your contract is expiring!",
+        "🏥 Rival Goes Down",
+        "📣 The pen pal story melted the internet for a weekend",
+        "📝 Walking away, will leave on free"
+      ]
+    },
+    {
+      "year": 2028,
+      "age": 24,
+      "club": "West Ham",
+      "lines": [
+        "🔥 London derby against Tottenham: L 0-2 at home, L 0-1 away (you missed it).",
+        "🏆 Won Player of the Month (October 2028)!",
+        "⚠️ Your contract is expiring!",
+        "🌍 Portugal won the European Championship.",
+        "👟 Won the European Championship Golden Boot with 5 goals!",
+        "⬇️ West Ham relegated to Championship in your simulated league world.",
+        "🤬 Tunnel Bust-Up",
+        "🙄 Refused the mascot race. It did a victory lap anyway",
+        "🛌 Rested the knee. Better safe than sorry",
+        "📝 Renewed contract with West Ham for 3 years"
+      ]
+    },
+    {
+      "year": 2029,
+      "age": 25,
+      "club": "West Ham",
+      "lines": [
+        "🔥 Dockers derby against Millwall: D 1-1 away, L 0-3 at home.",
+        "🏆 Won Player of the Month (March 2030)!",
+        "⬆️ West Ham promoted to Premier League in your simulated league world.",
+        "📈 Surpassed Your Rival!",
+        "✋ Passed on Blue. A teammate signed it. He is now blue",
+        "🚗 Sent your brother to trial elsewhere. He is flying. Your mum has not forgiven you"
+      ]
+    },
+    {
+      "year": 2030,
+      "age": 26,
+      "club": "West Ham",
+      "lines": [
+        "🔥 London derby against Tottenham: L 1-3 away, L 1-2 at home.",
+        "⚠️ Your contract is expiring!",
+        "🌍 Croatia won the World Cup.",
+        "🤬 Tunnel Bust-Up",
+        "📺 Declined TV show appearance",
+        "📈 Skipped the supercar and put the money in an index fund. Your accountant sent flowers",
+        "🔥 Ceremonially burned the cursed boots. The squad attended",
+        "📢 Said the old ground should have stayed and got fined €80k for the privilege"
+      ]
+    }
+  ],
+  "sponsorBonus": 0,
+  "money": {
+    "seed": 2652475419,
+    "vault": 0,
+    "hold": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+    },
+    "cost": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+    },
+    "price": {
+      "ladder": 178.71,
+      "bricks": 153.25,
+      "cleats": 138.95,
+      "screens": 136.39,
+      "spark": 197.13
+    },
+    "hist": {
+      "ladder": [
+        113.34,
+        124.35,
+        133.48,
+        136.37,
+        144.03,
+        153.86,
+        159.37,
+        178.71
+      ],
+      "bricks": [
+        126.66,
+        134.74,
+        126.18,
+        119.74,
+        131.08,
+        132.16,
+        139.65,
+        153.25
+      ],
+      "cleats": [
+        96.26,
+        111.87,
+        98.2,
+        114.8,
+        132.03,
+        134.35,
+        117.18,
+        138.95
+      ],
+      "screens": [
+        105.14,
+        110.89,
+        140.61,
+        110.49,
+        116.41,
+        136.27,
+        152.78,
+        136.39
+      ],
+      "spark": [
+        90.93,
+        88.49,
+        117.87,
+        125.38,
+        166.33,
+        255.91,
+        301.29,
+        197.13
+      ]
+    },
+    "log": [],
+    "year": 2031,
+    "age": 11,
+    "won": 0,
+    "lost": 0,
+    "cPlays": 0,
+    "cNet": 0,
+    "cYear": 0,
+    "cShut": false,
+    "aYear": 0,
+    "aBest": 0,
+    "aPlays": 0
+  },
+  "eventLastFired": {
+    "3": 2024,
+    "7": 2022,
+    "10": 2022,
+    "14": 2026,
+    "16": 2027,
+    "21": 2023,
+    "33": 2030,
+    "49": 2023,
+    "61": 2025,
+    "62": 2028,
+    "200": 2022,
+    "201": 2023,
+    "224": 2028,
+    "230": 2030,
+    "240": 2022,
+    "252": 2027,
+    "254": 2029,
+    "257": 2029,
+    "269": 2024,
+    "408": 2026,
+    "409": 2025,
+    "424": 2025,
+    "428": 2024,
+    "436": 2023,
+    "442": 2030,
+    "479": 2030,
+    "500": 2024
+  },
+  "chanceWheel": {
+    "title": "Forty Feet, One Typo",
+    "chance": 0.5,
+    "roll": 0.7490201564505696,
+    "hit": "The typo trends",
+    "miss": "The typo stays on the banner",
+    "result": false,
+    "seen": false
+  },
+  "isClubCaptain": true,
+  "captainClub": "West Ham",
+  "captainSeasons": 7,
+  "leagueWorld": {
+    "year": 2032,
+    "leagues": {
+      "Premier League": [
+        "Arsenal",
+        "Man City",
+        "Liverpool",
+        "Chelsea",
+        "Man United",
+        "Tottenham",
+        "Newcastle",
+        "Nottingham Forest",
+        "Brighton",
+        "Aston Villa",
+        "Everton",
+        "Watford",
+        "Bournemouth",
+        "Lincoln City",
+        "West Ham",
+        "Brentford",
+        "Southampton",
+        "Birmingham City",
+        "Bristol City",
+        "Crystal Palace"
+      ],
+      "Championship": [
+        "Middlesbrough",
+        "Sheffield United",
+        "Swansea City",
+        "Stoke City",
+        "Wrexham",
+        "Derby County",
+        "QPR",
+        "West Brom",
+        "Millwall",
+        "Preston North End",
+        "Charlton Athletic",
+        "Blackburn Rovers",
+        "Portsmouth",
+        "Hull City",
+        "Sunderland",
+        "Ipswich Town",
+        "Fulham",
+        "Leeds United",
+        "Burnley",
+        "Cardiff City",
+        "Coventry City",
+        "Wolves",
+        "Bolton Wanderers",
+        "Norwich City"
+      ],
+      "Bundesliga": [
+        "Bayern Munich",
+        "Leipzig",
+        "Stuttgart",
+        "Leverkusen",
+        "Augsburg",
+        "Hamburg",
+        "Mainz",
+        "Gladbach",
+        "Koln",
+        "Union Berlin",
+        "Darmstadt",
+        "Dynamo Dresden",
+        "Heidenheim",
+        "Hannover 96",
+        "Werder Bremen",
+        "St. Pauli",
+        "Nurnberg",
+        "Dortmund"
+      ],
+      "2. Bundesliga": [
+        "Wolfsburg",
+        "Holstein Kiel",
+        "Arminia Bielefeld",
+        "Bochum",
+        "Braunschweig",
+        "Karlsruhe",
+        "Magdeburg",
+        "Osnabruck",
+        "Freiburg",
+        "Paderborn",
+        "Elversberg",
+        "Kaiserslautern",
+        "Schalke 04",
+        "Hertha Berlin",
+        "Greuther Furth",
+        "Energie Cottbus",
+        "Hoffenheim",
+        "Frankfurt"
+      ],
+      "Ligue 1": [
+        "PSG",
+        "Lyon",
+        "Marseille",
+        "Monaco",
+        "Nice",
+        "Strasbourg",
+        "Rennes",
+        "Lens",
+        "Brest",
+        "Angers",
+        "Le Havre",
+        "Le Mans",
+        "Montpellier",
+        "Lille",
+        "Sochaux",
+        "Metz",
+        "Rodez",
+        "Pau"
+      ],
+      "Ligue 2": [
+        "Nantes",
+        "Saint-Étienne",
+        "Reims",
+        "Dijon",
+        "Guingamp",
+        "Grenoble",
+        "Boulogne",
+        "Troyes",
+        "Auxerre",
+        "Paris FC",
+        "Toulouse",
+        "Lorient",
+        "Red Star FC",
+        "Clermont",
+        "Dunkerque",
+        "Nancy",
+        "Laval",
+        "Annecy"
+      ],
+      "Serie A": [
+        "Inter Milan",
+        "Juventus",
+        "Roma",
+        "Como",
+        "AC Milan",
+        "Napoli",
+        "Atalanta",
+        "Fiorentina",
+        "Parma",
+        "Udinese",
+        "Palermo",
+        "Juve Stabia",
+        "Torino",
+        "Arezzo",
+        "Bologna",
+        "Mantova",
+        "Cagliari",
+        "Cremonese",
+        "Frosinone",
+        "Cesena"
+      ],
+      "Serie B": [
+        "Pisa",
+        "Avellino",
+        "Carrarese",
+        "Catanzaro",
+        "Entella",
+        "Sampdoria",
+        "Südtirol",
+        "Vicenza",
+        "Benevento",
+        "Venezia",
+        "Verona",
+        "Genoa",
+        "Lecce",
+        "Monza",
+        "Empoli",
+        "Modena",
+        "Ascoli",
+        "Lazio",
+        "Padova",
+        "Sassuolo"
+      ],
+      "La Liga": [
+        "Real Madrid",
+        "Barcelona",
+        "Atletico Madrid",
+        "Athletic Bilbao",
+        "Sevilla",
+        "Villarreal",
+        "Elche",
+        "Girona",
+        "Ceuta",
+        "Córdoba",
+        "Castellón",
+        "Racing Santander",
+        "Valencia",
+        "Real Oviedo",
+        "Eibar",
+        "Cádiz",
+        "Espanyol",
+        "Malaga",
+        "Sporting Gijón",
+        "Mallorca"
+      ],
+      "Segunda Division": [
+        "Almería",
+        "Burgos",
+        "Granada",
+        "Las Palmas",
+        "Tenerife",
+        "Leganés",
+        "FC Andorra",
+        "Albacete",
+        "Deportivo",
+        "Getafe",
+        "Levante",
+        "Celta Vigo",
+        "Real Sociedad",
+        "Osasuna",
+        "Real Betis",
+        "Alaves",
+        "Rayo Vallecano",
+        "Valladolid",
+        "Sabadell",
+        "Eldense"
+      ]
+    },
+    "movements": [
+      {
+        "club": "Wolves",
+        "from": "Premier League",
+        "to": "Championship",
+        "kind": "relegated"
+      },
+      {
+        "club": "Bolton Wanderers",
+        "from": "Premier League",
+        "to": "Championship",
+        "kind": "relegated"
+      },
+      {
+        "club": "Norwich City",
+        "from": "Premier League",
+        "to": "Championship",
+        "kind": "relegated"
+      },
+      {
+        "club": "Birmingham City",
+        "from": "Championship",
+        "to": "Premier League",
+        "kind": "promoted"
+      },
+      {
+        "club": "Bristol City",
+        "from": "Championship",
+        "to": "Premier League",
+        "kind": "promoted"
+      },
+      {
+        "club": "Crystal Palace",
+        "from": "Championship",
+        "to": "Premier League",
+        "kind": "promoted"
+      },
+      {
+        "club": "Hoffenheim",
+        "from": "Bundesliga",
+        "to": "2. Bundesliga",
+        "kind": "relegated"
+      },
+      {
+        "club": "Frankfurt",
+        "from": "Bundesliga",
+        "to": "2. Bundesliga",
+        "kind": "relegated"
+      },
+      {
+        "club": "Nurnberg",
+        "from": "2. Bundesliga",
+        "to": "Bundesliga",
+        "kind": "promoted"
+      },
+      {
+        "club": "Dortmund",
+        "from": "2. Bundesliga",
+        "to": "Bundesliga",
+        "kind": "promoted"
+      },
+      {
+        "club": "Laval",
+        "from": "Ligue 1",
+        "to": "Ligue 2",
+        "kind": "relegated"
+      },
+      {
+        "club": "Annecy",
+        "from": "Ligue 1",
+        "to": "Ligue 2",
+        "kind": "relegated"
+      },
+      {
+        "club": "Rodez",
+        "from": "Ligue 2",
+        "to": "Ligue 1",
+        "kind": "promoted"
+      },
+      {
+        "club": "Pau",
+        "from": "Ligue 2",
+        "to": "Ligue 1",
+        "kind": "promoted"
+      },
+      {
+        "club": "Lazio",
+        "from": "Serie A",
+        "to": "Serie B",
+        "kind": "relegated"
+      },
+      {
+        "club": "Padova",
+        "from": "Serie A",
+        "to": "Serie B",
+        "kind": "relegated"
+      },
+      {
+        "club": "Sassuolo",
+        "from": "Serie A",
+        "to": "Serie B",
+        "kind": "relegated"
+      },
+      {
+        "club": "Cremonese",
+        "from": "Serie B",
+        "to": "Serie A",
+        "kind": "promoted"
+      },
+      {
+        "club": "Frosinone",
+        "from": "Serie B",
+        "to": "Serie A",
+        "kind": "promoted"
+      },
+      {
+        "club": "Cesena",
+        "from": "Serie B",
+        "to": "Serie A",
+        "kind": "promoted"
+      },
+      {
+        "club": "Valladolid",
+        "from": "La Liga",
+        "to": "Segunda Division",
+        "kind": "relegated"
+      },
+      {
+        "club": "Sabadell",
+        "from": "La Liga",
+        "to": "Segunda Division",
+        "kind": "relegated"
+      },
+      {
+        "club": "Eldense",
+        "from": "La Liga",
+        "to": "Segunda Division",
+        "kind": "relegated"
+      },
+      {
+        "club": "Malaga",
+        "from": "Segunda Division",
+        "to": "La Liga",
+        "kind": "promoted"
+      },
+      {
+        "club": "Sporting Gijón",
+        "from": "Segunda Division",
+        "to": "La Liga",
+        "kind": "promoted"
+      },
+      {
+        "club": "Mallorca",
+        "from": "Segunda Division",
+        "to": "La Liga",
+        "kind": "promoted"
+      }
+    ]
+  },
+  "rivalryIntensity": 30,
+  "generatedBallonPool": {
+    "version": 1,
+    "year": 2031,
+    "nextId": 12,
+    "entries": [
+      {
+        "name": "Ferdi Doornbos",
+        "nationality": "Belgium",
+        "position": "LW",
+        "club": "AC Milan",
+        "baseGoals": [
+          10,
+          28
+        ],
+        "id": 0,
+        "role": "primary",
+        "slot": 0,
+        "seed": 9900,
+        "firstYear": 2028,
+        "entryAge": 19,
+        "retiredYear": null
+      },
+      {
+        "name": "Shohei Nishizawa",
+        "nationality": "Japan",
+        "position": "CDM",
+        "club": "Chelsea",
+        "baseGoals": [
+          2,
+          8
+        ],
+        "id": 1,
+        "role": "primary",
+        "slot": 1,
+        "seed": 9901,
+        "firstYear": 2028,
+        "entryAge": 21,
+        "retiredYear": null
+      },
+      {
+        "name": "Agustín Quiroga",
+        "nationality": "Argentina",
+        "position": "RW",
+        "club": "Arsenal",
+        "baseGoals": [
+          10,
+          28
+        ],
+        "id": 2,
+        "role": "primary",
+        "slot": 2,
+        "seed": 9902,
+        "firstYear": 2028,
+        "entryAge": 19,
+        "retiredYear": null
+      },
+      {
+        "name": "Nahuel Lombardero",
+        "nationality": "Uruguay",
+        "position": "CB",
+        "club": "Real Madrid",
+        "baseGoals": [
+          1,
+          5
+        ],
+        "id": 3,
+        "role": "primary",
+        "slot": 3,
+        "seed": 9903,
+        "firstYear": 2029,
+        "entryAge": 25,
+        "retiredYear": null
+      },
+      {
+        "name": "Wanderson Guimarães",
+        "nationality": "Brazil",
+        "position": "CAM",
+        "club": "Tottenham",
+        "baseGoals": [
+          8,
+          22
+        ],
+        "id": 4,
+        "role": "primary",
+        "slot": 4,
+        "seed": 9904,
+        "firstYear": 2029,
+        "entryAge": 19,
+        "retiredYear": null
+      },
+      {
+        "name": "Hidde Lindeboom",
+        "nationality": "Netherlands",
+        "position": "ST",
+        "club": "Dortmund",
+        "baseGoals": [
+          18,
+          40
+        ],
+        "id": 5,
+        "role": "primary",
+        "slot": 5,
+        "seed": 9905,
+        "firstYear": 2029,
+        "entryAge": 23,
+        "retiredYear": null
+      },
+      {
+        "name": "Maxi Escalante",
+        "nationality": "Colombia",
+        "position": "CM",
+        "club": "Liverpool",
+        "baseGoals": [
+          4,
+          14
+        ],
+        "id": 6,
+        "role": "primary",
+        "slot": 6,
+        "seed": 9906,
+        "firstYear": 2030,
+        "entryAge": 26,
+        "retiredYear": null
+      },
+      {
+        "name": "Stuart Ashcroft",
+        "nationality": "England",
+        "position": "LW",
+        "club": "Man City",
+        "baseGoals": [
+          10,
+          28
+        ],
+        "id": 7,
+        "role": "primary",
+        "slot": 7,
+        "seed": 9907,
+        "firstYear": 2030,
+        "entryAge": 24,
+        "retiredYear": null
+      },
+      {
+        "name": "Mikkel Sæterbø",
+        "nationality": "Norway",
+        "position": "CDM",
+        "club": "Man United",
+        "baseGoals": [
+          2,
+          8
+        ],
+        "id": 8,
+        "role": "primary",
+        "slot": 8,
+        "seed": 9908,
+        "firstYear": 2030,
+        "entryAge": 26,
+        "retiredYear": null
+      },
+      {
+        "name": "Seydou Camara-Sylla",
+        "nationality": "Senegal",
+        "position": "RW",
+        "club": "Atletico Madrid",
+        "baseGoals": [
+          10,
+          28
+        ],
+        "id": 9,
+        "role": "primary",
+        "slot": 9,
+        "seed": 9909,
+        "firstYear": 2031,
+        "entryAge": 26,
+        "retiredYear": null
+      },
+      {
+        "name": "Marius Hollerbach",
+        "nationality": "Germany",
+        "position": "CB",
+        "club": "PSG",
+        "baseGoals": [
+          1,
+          5
+        ],
+        "id": 10,
+        "role": "primary",
+        "slot": 10,
+        "seed": 9910,
+        "firstYear": 2031,
+        "entryAge": 23,
+        "retiredYear": null
+      },
+      {
+        "name": "Hrvoje Bogdanović",
+        "nationality": "Croatia",
+        "position": "CAM",
+        "club": "Barcelona",
+        "baseGoals": [
+          8,
+          22
+        ],
+        "id": 11,
+        "role": "primary",
+        "slot": 11,
+        "seed": 9911,
+        "firstYear": 2031,
+        "entryAge": 25,
+        "retiredYear": null
+      }
+    ]
+  }
+}

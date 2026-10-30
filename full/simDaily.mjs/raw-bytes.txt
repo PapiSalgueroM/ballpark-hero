@@ -1,0 +1,3 @@
+1328 /home/runner/work/_temp/rc-out/full/simDaily.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simDaily.mjs/stderr.log
+1328 total

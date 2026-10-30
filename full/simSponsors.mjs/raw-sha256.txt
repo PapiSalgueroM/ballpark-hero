@@ -1,0 +1,2 @@
+2ba24243911c17d687a3d2410b30ae1ca21869cd708c47856926d8aecc010e50  /home/runner/work/_temp/rc-out/full/simSponsors.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSponsors.mjs/stderr.log

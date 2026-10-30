@@ -1,0 +1,3 @@
+1155 /home/runner/work/_temp/rc-out/full/simSoccerGridSearchAccessibility.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerGridSearchAccessibility.mjs/stderr.log
+1155 total

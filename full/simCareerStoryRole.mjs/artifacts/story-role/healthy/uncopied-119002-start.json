@@ -1,0 +1,892 @@
+{
+  "expected": {
+    "value": {
+      "playerName": "Story Role 119002",
+      "nationality": "England",
+      "position": "ST",
+      "era": "2020s",
+      "age": 17,
+      "potential": 88,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 75,
+      "physique": {
+        "heightCm": 183,
+        "weightKg": 78
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "youth_bully",
+        "kid_dm"
+      ],
+      "phoneInbox": [
+        {
+          "id": "youth_bully-2020",
+          "defId": "youth_bully",
+          "from": "Academy mate",
+          "emoji": "🥺",
+          "text": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Stand up for him",
+              "reply": "Sit with me at lunch. If they touch your stuff again they deal with me",
+              "karma": 10,
+              "morale": 2
+            },
+            {
+              "label": "Stay out of it",
+              "reply": "Rough mate. Keep your head down",
+              "karma": -6
+            }
+          ]
+        },
+        {
+          "id": "kid_dm-2020",
+          "defId": "kid_dm",
+          "from": "Fan DM",
+          "emoji": "🧒",
+          "text": "ur my favorite player ever. im in hospital and my dream is a signed shirt. no worries if not",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Send a signed shirt and visit",
+              "reply": "Shirt is on the way and I'm coming to see you next week. Stay strong",
+              "karma": 12,
+              "popularity": 6,
+              "cash": -0.1
+            },
+            {
+              "label": "Send the shirt",
+              "reply": "On its way little legend",
+              "karma": 6,
+              "popularity": 3
+            },
+            {
+              "label": "Ignore it",
+              "reply": "",
+              "karma": -8
+            }
+          ]
+        }
+      ],
+      "currentClub": "Man City",
+      "currentClubCountry": "England",
+      "currentClubTier": 1,
+      "currentClubColor": "#6CABDD",
+      "currentLeague": "Premier League",
+      "contractYearsLeft": 5,
+      "weeklyWage": 31166,
+      "marketValue": 19.1,
+      "pace": 78,
+      "shooting": 76,
+      "passing": 80,
+      "dribbling": 80,
+      "defending": 78,
+      "physical": 76,
+      "reflexes": 79,
+      "overall": 78,
+      "seasons": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2021,
+          "age": 17,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 13,
+          "goals": 2,
+          "assists": 5,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 78)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Man City 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (5yr, €31k/wk)",
+        "🏠 One of our own! The Man City academy kid signs a first-team deal. The ultras already have a chant ready."
+      ],
+      "retired": false,
+      "phase": "playing",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 20,
+      "morale": 75,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "late",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Man City",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 75,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_academy",
+            "c": "academy",
+            "name": "Academy kid",
+            "emoji": "🌱",
+            "lines": [
+              {
+                "w": 0,
+                "t": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "youth_bully-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_youthcoach",
+            "c": "youthcoach",
+            "name": "Old youth coach",
+            "emoji": "👴",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Still got the team photo from your first season up on the wall. You are the small angry one at the front.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "youth_pride",
+              "beat": 0
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [
+              "youth_pride"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_x_fandm",
+            "c": "other",
+            "name": "Fan DM",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "ur my favorite player ever. im in hospital and my dream is a signed shirt. no worries if not",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "kid_dm-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 3382163711,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "lines": [
+            "📋 Joined Man City Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 1616930517,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 104.67,
+          "bricks": 100.31,
+          "cleats": 114.1,
+          "screens": 88.28,
+          "spark": 88.56
+        },
+        "hist": {
+          "ladder": [
+            100,
+            104.67
+          ],
+          "bricks": [
+            100,
+            100.31
+          ],
+          "cleats": [
+            100,
+            114.1
+          ],
+          "screens": [
+            100,
+            88.28
+          ],
+          "spark": [
+            100,
+            88.56
+          ]
+        },
+        "log": [],
+        "year": 2021,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "draws": [
+      0.07514553610235453,
+      0.5205144681967795,
+      0.739168626954779,
+      0.5747918987181038,
+      0.14007582352496684,
+      0.6427512052468956,
+      0.8550541263539344,
+      0.22877497714944184,
+      0.9909378455486149,
+      0.9776432749349624,
+      0.760735888266936,
+      0.8147017394658178,
+      0.5661661173216999,
+      0.43795302184298635,
+      0.9216460436582565,
+      0.10331056173890829,
+      0.8799582440406084,
+      0.4592134307604283,
+      0.44508038042113185,
+      0.19747764547355473,
+      0.241229330888018,
+      0.8397049128543586,
+      0.07745160441845655,
+      0.734335201792419,
+      0.17915080697275698,
+      0.5242120740003884,
+      0.9732094020582736,
+      0.8676776373758912,
+      0.9182018015999347,
+      0.9919970748014748,
+      0.7174877980723977,
+      0.5888690280262381,
+      0.6985084456391633,
+      0.4062078441493213,
+      0.8375314904842526,
+      0.38435947662219405,
+      0.26701974170282483,
+      0.6508103949017823
+    ]
+  },
+  "actual": {
+    "value": {
+      "playerName": "Story Role 119002",
+      "nationality": "England",
+      "position": "ST",
+      "era": "2020s",
+      "age": 17,
+      "potential": 88,
+      "potentialEarned": 0,
+      "eliteStreak": 0,
+      "startingOverall": 75,
+      "physique": {
+        "heightCm": 183,
+        "weightKg": 78
+      },
+      "attrShape": {},
+      "karma": 50,
+      "phoneUsedIds": [
+        "youth_bully",
+        "kid_dm"
+      ],
+      "phoneInbox": [
+        {
+          "id": "youth_bully-2020",
+          "defId": "youth_bully",
+          "from": "Academy mate",
+          "emoji": "🥺",
+          "text": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Stand up for him",
+              "reply": "Sit with me at lunch. If they touch your stuff again they deal with me",
+              "karma": 10,
+              "morale": 2
+            },
+            {
+              "label": "Stay out of it",
+              "reply": "Rough mate. Keep your head down",
+              "karma": -6
+            }
+          ]
+        },
+        {
+          "id": "kid_dm-2020",
+          "defId": "kid_dm",
+          "from": "Fan DM",
+          "emoji": "🧒",
+          "text": "ur my favorite player ever. im in hospital and my dream is a signed shirt. no worries if not",
+          "year": 2020,
+          "choices": [
+            {
+              "label": "Send a signed shirt and visit",
+              "reply": "Shirt is on the way and I'm coming to see you next week. Stay strong",
+              "karma": 12,
+              "popularity": 6,
+              "cash": -0.1
+            },
+            {
+              "label": "Send the shirt",
+              "reply": "On its way little legend",
+              "karma": 6,
+              "popularity": 3
+            },
+            {
+              "label": "Ignore it",
+              "reply": "",
+              "karma": -8
+            }
+          ]
+        }
+      ],
+      "currentClub": "Man City",
+      "currentClubCountry": "England",
+      "currentClubTier": 1,
+      "currentClubColor": "#6CABDD",
+      "currentLeague": "Premier League",
+      "contractYearsLeft": 5,
+      "weeklyWage": 31166,
+      "marketValue": 19.1,
+      "pace": 78,
+      "shooting": 76,
+      "passing": 80,
+      "dribbling": 80,
+      "defending": 78,
+      "physical": 76,
+      "reflexes": 79,
+      "overall": 78,
+      "seasons": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 0,
+          "goals": 0,
+          "assists": 0,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        },
+        {
+          "year": 2021,
+          "age": 17,
+          "club": "Man City Youth",
+          "clubCountry": "England",
+          "clubTier": 1,
+          "apps": 13,
+          "goals": 2,
+          "assists": 5,
+          "cleanSheets": 0,
+          "yellowCards": 0,
+          "redCards": 0,
+          "rating": 0,
+          "leagueTitle": false,
+          "domesticCup": false,
+          "championsLeague": false,
+          "worldCup": false,
+          "ballonDor": false,
+          "ballonDorRank": null,
+          "type": "youth",
+          "intApps": 0,
+          "intGoals": 0,
+          "intAssists": 0,
+          "intRating": 0,
+          "tournament": null,
+          "tournamentResult": null
+        }
+      ],
+      "events": [
+        "📈 Stats improved during youth development (OVR 78)",
+        "📩 Professional contract offers received!",
+        "✍️ Signed with Man City 🏴󠁧󠁢󠁥󠁮󠁧󠁿 (5yr, €31k/wk)",
+        "🏠 One of our own! The Man City academy kid signs a first-team deal. The ultras already have a chant ready."
+      ],
+      "retired": false,
+      "phase": "playing",
+      "pendingOffers": [],
+      "pendingSummary": null,
+      "transferSituation": null,
+      "loan": null,
+      "pendingLoanOffers": null,
+      "pendingEvents": [],
+      "lastEventId": null,
+      "statBoostNextSeason": {},
+      "pendingNews": [],
+      "internationalCareer": false,
+      "sponsorDeal": null,
+      "totalEarnings": 0,
+      "popularity": 20,
+      "morale": 75,
+      "isLeader": false,
+      "hasRelationship": false,
+      "intStats": {
+        "caps": 0,
+        "goals": 0,
+        "assists": 0,
+        "tournaments": 0,
+        "worldCups": 0,
+        "continentals": 0,
+        "worldCupWins": 0,
+        "continentalWins": 0,
+        "isCaptain": false,
+        "isRetired": false,
+        "debutYear": null,
+        "debutAge": null,
+        "worldCupResults": [],
+        "squadSnubs": 0,
+        "failedQualifications": 0
+      },
+      "pendingWorldCup": null,
+      "pendingTournament": null,
+      "lastTournament": null,
+      "intlHistory": [],
+      "rival": null,
+      "rivalCreated": false,
+      "pendingRivalryEvent": null,
+      "lastRivalryEventId": null,
+      "rivalrySummary": null,
+      "netWorth": 0,
+      "lifestyleLevel": "Humble",
+      "lifestyleCostPerYear": 0.02,
+      "socialMediaFollowers": 0,
+      "sponsorshipIncome": 0,
+      "properties": [],
+      "investments": [],
+      "consecutiveDeficitYears": 0,
+      "agentFeesPaid": 0,
+      "family": {
+        "isMarried": false,
+        "marriedAge": null,
+        "children": 0,
+        "isDivorced": false,
+        "divorceAge": null
+      },
+      "purchasedItems": [],
+      "investmentHoldings": [],
+      "totalAssetValue": 0,
+      "customYearlyCosts": 0,
+      "awards": [],
+      "pendingBallonDor": null,
+      "lastUCLResult": null,
+      "legacy": null,
+      "postRetirementChoice": null,
+      "managerState": null,
+      "isFinalSeason": false,
+      "isPundit": false,
+      "punditEvents": [],
+      "primeType": "late",
+      "socialMediaActionUsedThisSeason": false,
+      "socialMediaFocusBoost": false,
+      "pendingCoverAthleteEvent": false,
+      "coverAthleteAccepted": false,
+      "activeSponsorship": null,
+      "personality": null,
+      "agentId": null,
+      "lifeFlags": {},
+      "appearance": null,
+      "corruptionHeat": 0,
+      "dirtyMoney": 0,
+      "prisonSeasons": 0,
+      "academyClubName": "Man City",
+      "moralDilemmasTriggered": [],
+      "pendingMoralDilemma": null,
+      "pedSeasonsRemaining": 0,
+      "pedActive": false,
+      "matchFixBanned": 0,
+      "divingActive": false,
+      "integrityBonus": 0,
+      "pendingAppealResult": null,
+      "childEventsSeen": [],
+      "pregnancyAnnounced": false,
+      "punditState": null,
+      "ownerState": null,
+      "peakOverall": 75,
+      "retirementSuggested": false,
+      "phone": {
+        "threads": [
+          {
+            "id": "th_academy",
+            "c": "academy",
+            "name": "Academy kid",
+            "emoji": "🌱",
+            "lines": [
+              {
+                "w": 0,
+                "t": "The older lads keep hiding my boots and binning my kit. Coach says toughen up. Don't know what to do.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "youth_bully-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_youthcoach",
+            "c": "youthcoach",
+            "name": "Old youth coach",
+            "emoji": "👴",
+            "lines": [
+              {
+                "w": 0,
+                "t": "Still got the team photo from your first season up on the wall. You are the small angry one at the front.",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "convo",
+              "convo": "youth_pride",
+              "beat": 0
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [
+              "youth_pride"
+            ],
+            "lastReplyYear": null
+          },
+          {
+            "id": "th_x_fandm",
+            "c": "other",
+            "name": "Fan DM",
+            "emoji": "💬",
+            "lines": [
+              {
+                "w": 0,
+                "t": "ur my favorite player ever. im in hospital and my dream is a signed shirt. no worries if not",
+                "y": 2020
+              }
+            ],
+            "rel": 50,
+            "pending": {
+              "kind": "legacy",
+              "msgId": "kid_dm-2020"
+            },
+            "waiting": 2020,
+            "cold": 0,
+            "seen": [],
+            "lastReplyYear": null
+          }
+        ],
+        "feed": [],
+        "world": null,
+        "clubs": {},
+        "rivalClub": null,
+        "seed": 3382163711,
+        "offers": 0,
+        "perksTaken": 0
+      },
+      "frozenOut": 0,
+      "badSeasonStreak": 0,
+      "story": [
+        {
+          "year": 2020,
+          "age": 16,
+          "club": "Man City Youth",
+          "lines": [
+            "📋 Joined Man City Youth Academy aged 16"
+          ]
+        }
+      ],
+      "sponsorBonus": 0,
+      "money": {
+        "seed": 1616930517,
+        "vault": 0,
+        "hold": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "cost": {
+          "ladder": 0,
+          "bricks": 0,
+          "cleats": 0,
+          "screens": 0,
+          "spark": 0
+        },
+        "price": {
+          "ladder": 104.67,
+          "bricks": 100.31,
+          "cleats": 114.1,
+          "screens": 88.28,
+          "spark": 88.56
+        },
+        "hist": {
+          "ladder": [
+            100,
+            104.67
+          ],
+          "bricks": [
+            100,
+            100.31
+          ],
+          "cleats": [
+            100,
+            114.1
+          ],
+          "screens": [
+            100,
+            88.28
+          ],
+          "spark": [
+            100,
+            88.56
+          ]
+        },
+        "log": [],
+        "year": 2021,
+        "age": 1,
+        "won": 0,
+        "lost": 0,
+        "cPlays": 0,
+        "cNet": 0,
+        "cYear": 0,
+        "cShut": false,
+        "aYear": 0,
+        "aBest": 0,
+        "aPlays": 0
+      }
+    },
+    "draws": [
+      0.07514553610235453,
+      0.5205144681967795,
+      0.739168626954779,
+      0.5747918987181038,
+      0.14007582352496684,
+      0.6427512052468956,
+      0.8550541263539344,
+      0.22877497714944184,
+      0.9909378455486149,
+      0.9776432749349624,
+      0.760735888266936,
+      0.8147017394658178,
+      0.5661661173216999,
+      0.43795302184298635,
+      0.9216460436582565,
+      0.10331056173890829,
+      0.8799582440406084,
+      0.4592134307604283,
+      0.44508038042113185,
+      0.19747764547355473,
+      0.241229330888018,
+      0.8397049128543586,
+      0.07745160441845655,
+      0.734335201792419,
+      0.17915080697275698,
+      0.5242120740003884,
+      0.9732094020582736,
+      0.8676776373758912,
+      0.9182018015999347,
+      0.9919970748014748,
+      0.7174877980723977,
+      0.5888690280262381,
+      0.6985084456391633,
+      0.4062078441493213,
+      0.8375314904842526,
+      0.38435947662219405,
+      0.26701974170282483,
+      0.6508103949017823
+    ]
+  }
+}

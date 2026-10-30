@@ -1,0 +1,3 @@
+2401 /home/runner/work/_temp/rc-out/full/simThreePointContest.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simThreePointContest.mjs/stderr.log
+2401 total
