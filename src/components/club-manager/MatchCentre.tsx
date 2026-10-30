@@ -85,8 +85,8 @@ export function MatchCentre({
       <div className="text-sm font-bold text-foreground truncate">{f.opponent}</div>
       {oppPosLabel && <div className="text-[9px] text-muted-foreground truncate">{oppPosLabel}</div>}
       {oppDugout && (
-        <div className={cn('text-[9px] text-muted-foreground flex items-center gap-1 min-w-0', mineFirst ? 'justify-start' : 'justify-end')} data-cm-mc-dugout={oppDugout.real ? 'real' : 'made-up'}>
-          <span className="truncate">Manager: {oppDugout.name}</span>
+        <div className={cn('text-[9px] text-muted-foreground flex flex-wrap items-center gap-x-1 gap-y-0.5 min-w-0', mineFirst ? 'justify-start' : 'justify-end')} data-cm-mc-dugout={oppDugout.real ? 'real' : 'made-up'}>
+          <span className="truncate max-w-full">Manager: {oppDugout.name}</span>
           {!oppDugout.real && <MadeUpTag title={oppDugout.partial ? DUGOUT_PARTIAL_TITLE : DUGOUT_MADE_UP_TITLE} />}
         </div>
       )}
