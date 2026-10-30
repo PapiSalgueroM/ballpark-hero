@@ -35,6 +35,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "Live matches and the league ladder",
         items: [
           "Follow the match at the top of the pitch. Goals and wins pay bonuses counted in seconds of your own income, wins extend your streak, and the streak multiplies income and pulls in new fans.",
+          "From the 60th minute, choose one late-match plan: Protect the lead, Balanced or Chase a goal. Protect lowers chances for both sides, and Chase raises both. Balanced keeps the regular match. Your choice lasts until full time and survives a reload; the next match starts Balanced. Leaving it alone keeps Balanced too.",
           "Win your league to climb the divisions. Each division is a small league of named rival clubs with a table on the League tab, and only the champion goes up. Every division multiplies all income up to five and a half times, each promotion pays a bonus on the spot, and higher divisions send tougher opponents.",
         ],
       },
@@ -178,9 +179,10 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "A penalty offer with the scores level",
+        heading: "A late lead and a penalty offer",
         paragraphs: [
-          "You are drawing 1-1 when a penalty offer appears. Open it and aim inside the right post with medium power. If it beats the keeper before full time, your club leads 2-1 and gets its normal goal bonus. If the keeper saves it, the score stays 1-1. The match carries on either way.",
+          "You lead 1-0 at 60 minutes. Choosing Protect the lead cuts chances at both ends: it can help you keep the lead, but it also means fewer chances to make it 2-0. Your rival can still equalise. Choose Chase a goal when you want more chances and can accept giving your rival more too.",
+          "In another match, you are drawing 1-1 when a penalty offer appears. Open it and aim inside the right post with medium power. If it beats the keeper before full time, your club leads 2-1 and gets its normal goal bonus. If the keeper saves it, the score stays 1-1. The match carries on either way.",
         ],
       },
     ],

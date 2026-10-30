@@ -16,7 +16,7 @@ import {
   activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
   GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,
   awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
-  setPieceOffer, beginSetPiece, awardSetPieceGoal,
+  setPieceOffer, beginSetPiece, awardSetPieceGoal, setMatchPlan, type MatchPlanChoice,
   setTicketPolicy,
 } from '@/lib/stadiumTycoon';
 import type { GoldenKind, LeagueClub, AwayMatch, SetPieceOffer, TicketPolicy } from '@/lib/stadiumTycoon';
@@ -91,6 +91,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
   const [golden, setGolden] = useState<PendingGolden | null>(null);
   const [activeSetPiece, setActiveSetPiece] = useState<SetPieceOffer | null>(null);
   const [setPieceError, setSetPieceError] = useState<string | null>(null);
+  const [matchPlanError, setMatchPlanError] = useState<string | null>(null);
   const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
   const [ticketSaveFailed, setTicketSaveFailed] = useState(false);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
@@ -469,6 +470,22 @@ export function useStadiumTycoon(getEdge?: () => number) {
     commit(after);
   }, [commit]);
 
+  const doSetMatchPlan = useCallback((choice: MatchPlanChoice) => {
+    const before = stateRef.current;
+    const next = setMatchPlan(before, choice);
+    if (next === before) return false;
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); }
+    catch {
+      setMatchPlanError('Could not save that plan. Try again.');
+      return false;
+    }
+    commit(next);
+    markSessionPlay();
+    setMatchPlanError(null);
+    return true;
+  }, [commit, markSessionPlay]);
+  useEffect(() => { setMatchPlanError(null); }, [state.rep, state.totalMatches]);
+
   const doBeginSetPiece = useCallback((offer: SetPieceOffer) => {
     if (!replaysOnRef.current || document.hidden) return;
     const next = beginSetPiece(stateRef.current, offer);
@@ -523,5 +540,6 @@ export function useStadiumTycoon(getEdge?: () => number) {
     replays, endReplay, watchReplays,
     setPiece: pendingSetPiece,
     activeSetPiece, setPieceError, doBeginSetPiece, doSetPieceResult, closeSetPiece,
+    doSetMatchPlan, matchPlanError,
   };
 }
