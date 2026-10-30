@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dl: node scripts/simCmDecidingLeg.mjs
+c-boardsize: DECIDING_LEG_CONTROL=boardsize node scripts/simCmDecidingLeg.mjs
+c-moralesize: DECIDING_LEG_CONTROL=moralesize node scripts/simCmDecidingLeg.mjs
+c-relief: DECIDING_LEG_CONTROL=relief node scripts/simCmDecidingLeg.mjs
+c-board: DECIDING_LEG_CONTROL=board node scripts/simCmDecidingLeg.mjs
+c-morale: DECIDING_LEG_CONTROL=morale node scripts/simCmDecidingLeg.mjs
+vitest: node_modules/.bin/vitest run src/test/managerHotSeatTieStamp.test.tsx src/test/cmDecidingLegCard.test.tsx --testTimeout=300000 --hookTimeout=120000

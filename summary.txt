@@ -1,0 +1,8 @@
+dl exit=0 87s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+c-boardsize exit=1 89s | simCmDecidingLeg: control boardsize FIRED (legs: board size went red; red in all: legs: board size)
+tsc exit=0 116s | 
+c-relief exit=1 86s | simCmDecidingLeg: control relief FIRED (legs: morale size went red; red in all: legs: morale size)
+c-moralesize exit=1 91s | simCmDecidingLeg: control moralesize FIRED (legs: morale size went red; red in all: legs: morale size)
+vitest exit=0 7s |    Duration  6.86s (transform 2.99s, setup 242ms, collect 6.91s, tests 2.28s, environment 1.25s, prepare 297ms)
+c-board exit=1 86s | simCmDecidingLeg: control board FIRED (legs: board went red; red in all: legs: board moves the tie's way on every differing leg (the report's swing | legs: board size)
+c-morale exit=1 65s | simCmDecidingLeg: control morale FIRED (legs: morale went red; red in all: legs: morale moves the tie's way on every differing leg | legs: morale size)
