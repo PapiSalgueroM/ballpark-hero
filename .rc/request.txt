@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+playGmCareer-nhl: PLAY_GM_CAREER_SPORT=nhl node scripts/playGmCareer.mjs
+playGmCareer-nfl: PLAY_GM_CAREER_SPORT=nfl node scripts/playGmCareer.mjs
+playFoHub: node scripts/playFoHub.mjs
