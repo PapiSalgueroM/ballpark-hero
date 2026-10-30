@@ -1,0 +1,16 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+shard2 exit=0 255s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+simAccessibility exit=0 0s | simAccessibility: all green
+shard1 exit=0 266s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+playHomeFold exit=0 30s | playHomeFold: green. The first thing on the page is something to play.
+shard3 exit=0 318s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+cover exit=1 41s | playFirstVisitDialogs: PLAYFIRST_CONTROL=cover FIRED. 12 of 12 dialog buttons read as covered and the walk is red
+nolift exit=1 84s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=nolift FIRED. 15 of 15 lines with the lift stripped read red, the Soccer Career hub among them
+ratchet exit=1 43s | playFirstVisitDialogs: PLAYFIRST_CONTROL=ratchet FIRED. 21 green or dialog free route widths listed as expected reds each failed the walk
+expected exit=1 40s | playFirstVisitDialogs: PLAYFIRST_CONTROL=expected FIRED. 12 of 12 covered route widths listed in EXPECTED_SITE_RED printed EXPECTED and none failed the walk
+edge exit=1 43s | playFirstVisitDialogs: PLAYFIRST_CONTROL=edge FIRED. 12 of 12 moved dialogs read red for the check it targets
+lift exit=1 44s | playFirstVisitDialogs: PLAYFIRST_CONTROL=lift FIRED. 12 of 12 moved dialogs read red for the check it targets
+stale exit=1 14s | playFirstVisitDialogs: PLAYFIRST_CONTROL=stale FIRED. 3 of 3 seeded lines with a fresh save opened no card and failed the walk
+jump exit=1 15s | playFirstVisitDialogs: PLAYFIRST_CONTROL=jump FIRED. 3 of 3 moved dialogs read red for the check it targets
+states exit=0 91s | playFirstVisitDialogs: green. Every first visit dialog can be started, and no fixed button or link meets the banner, with the cookie banner unanswered.
+nobanner exit=1 148s | playFirstVisitDialogs: PLAYFIRST_CONTROL=nobanner FIRED. 21 of 21 route widths with the banner hidden were refused as measuring nothing
