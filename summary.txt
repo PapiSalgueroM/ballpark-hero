@@ -1,0 +1,4 @@
+weightbase exit=0 70s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weighthead exit=1 68s | sweepWeight: 1 failure
+walk1592 exit=0 26s | walk1592: green, the carry never wrote over a career at any size
+playTwoTabs exit=0 32s | playTwoTabs: green at 390x844

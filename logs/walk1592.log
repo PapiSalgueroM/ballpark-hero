@@ -1,0 +1,29 @@
+fixtures: Hot Seat Arsenal (survived), careers Brighton, Everton, Manchester City
+A) a career in slot 1, two empty slots (390x844)
+   the card says: "This job goes into Club Manager slot 2. Your career in slot 1 (Brighton, 2026-27, season 1) stays exactly as it is."
+   storage: active slot 2, career key Arsenal, slot 1 parked Brighton
+   managers screen: slot 1 "SLOT 1 You Brighton 2026-27 · Season 1 🏆 0 trophies Resume CareerDele" | slot 2 "SLOT 2 · LAST PLAYED You Arsenal 2026-27 · Season 1 Week 27 of 54 · Bo" | slot 3 "SLOT 3 💼 Empty slot New manager"
+  ok    390x844 A: Brighton stays in slot 1, Arsenal is in slot 2, slot 3 is empty
+B) all three slots full (390x844)
+   option 1: "Replace slot 1 (Brighton, 2026-27, season 1)"
+   option 2: "Replace slot 2 (Everton, 2026-27, season 1)"
+   option 3: "Replace slot 3 (Manchester City, 2026-27, season 1)"
+  ok    390x844 B: the chooser named all three careers and Cancel moved no byte
+   storage: active 2, career Arsenal, kept aside 1 (Everton slot 2)
+   after the put back: active 2, career Everton, kept aside Everton, Arsenal
+  ok    390x844 B: the picked career was kept aside, offered back in slot 2, and put back, with the Hot Seat job kept aside in its place
+A) a career in slot 1, two empty slots (1280x900)
+   the card says: "This job goes into Club Manager slot 2. Your career in slot 1 (Brighton, 2026-27, season 1) stays exactly as it is."
+   storage: active slot 2, career key Arsenal, slot 1 parked Brighton
+   managers screen: slot 1 "SLOT 1 You Brighton 2026-27 · Season 1 🏆 0 trophies Resume CareerDele" | slot 2 "SLOT 2 · LAST PLAYED You Arsenal 2026-27 · Season 1 Week 27 of 54 · Bo" | slot 3 "SLOT 3 💼 Empty slot New manager"
+  ok    1280x900 A: Brighton stays in slot 1, Arsenal is in slot 2, slot 3 is empty
+B) all three slots full (1280x900)
+   option 1: "Replace slot 1 (Brighton, 2026-27, season 1)"
+   option 2: "Replace slot 2 (Everton, 2026-27, season 1)"
+   option 3: "Replace slot 3 (Manchester City, 2026-27, season 1)"
+  ok    1280x900 B: the chooser named all three careers and Cancel moved no byte
+   storage: active 2, career Arsenal, kept aside 1 (Everton slot 2)
+   after the put back: active 2, career Everton, kept aside Everton, Arsenal
+  ok    1280x900 B: the picked career was kept aside, offered back in slot 2, and put back, with the Hot Seat job kept aside in its place
+
+walk1592: green, the carry never wrote over a career at any size
