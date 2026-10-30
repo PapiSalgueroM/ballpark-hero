@@ -1,0 +1,266 @@
+name: Player Bingo loan FAQ saved page verification
+on:
+  push:
+    branches: [codex/player-bingo-loan-snapshot-qualify-20261030]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_MAIN: 28e7392f38f04a3af6da33e71ec5625ca1e2cd9f
+      EXPECTED_PARENT: b3e62110ad7c83a4428924186e132c2a7f21bcd4
+      EXPECTED_TREE: a8e559b2748380645bf60f0ff79a1585bce0cb28
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind immutable FAQ and search inputs, preserve original source
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/bgs";test ! -e "$out";mkdir -p "$out/helpers" "$out/original" "$out/runtime-tmp"
+          echo "BINGO_OUT=$out" >> "$GITHUB_ENV";echo "BUZZER_OUT=$out" >> "$GITHUB_ENV";echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV"
+          echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV";echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/player-bingo-loan-snapshot-qualify-20261030
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5453
+          git diff --name-status "$EXPECTED_MAIN" "$EXPECTED_PARENT" > "$out/product.paths"
+          printf 'M\tsrc/data/gameContent/soccer1.ts\nM\tsrc/data/searchKeywords.json\n' > "$out/expected-product.paths";cmp "$out/product.paths" "$out/expected-product.paths"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.paths"
+          printf 'A\t.github/workflows/player-bingo-loan-snapshot-qualify.yml\n' > "$out/expected-proof.paths";cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(git hash-object src/data/gameContent/soccer1.ts)" = 29790104f98538034167db0c528f3c01efd5f309
+          test "$(git hash-object src/data/searchKeywords.json)" = 9190aedd474bcd745b9d3bb5a40c6d96d21869ab
+          for pair in scripts/prerender.mjs:3d4fb1e595413c48c7bd65b927730d25cc3a2e18 scripts/genSitemap.mjs:08344dfc84be3ca24533c8d56e0f229b02b93c0a scripts/genSearchKeywords.mjs:d0a237a766215631a81d7cd6789f1fa632d3f9b7 scripts/simGuideHeadings.mjs:fa23f7e6ace62d8e71e3585ab6afbe4dbef0f674 scripts/simSiteSearch.mjs:6be8e1603e84e1a8799099e1558c415bc87a42a7;do test "$(git hash-object "${pair%:*}")" = "${pair##*:}";done
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files -z | grep -z -v -x -F -e public/player-bingo/index.html -e public/sitemap.xml -e scripts/data/lastmod.json | sort -z | xargs -0 sha256sum > "$out/source-inputs.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial";test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt";git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cp public/player-bingo/index.html "$out/original/player-bingo.html";cp public/sitemap.xml "$out/original/sitemap.xml";cp scripts/data/lastmod.json "$out/original/lastmod.json"
+          tar -cf "$out/original-generated.tar" public/player-bingo/index.html public/sitemap.xml scripts/data/lastmod.json
+          cat > "$out/helpers/run.sh" <<'RUN'
+          run() {
+            local id="$1" budget="$2"; shift 2
+            local raw=0
+            : > "$BUZZER_OUT/$id.transport"
+            { printf '%q ' "$@"; printf '\n'; } > "$BUZZER_OUT/$id.command"
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$BUZZER_OUT/$id.transport" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s "$budget" "$@" > "$BUZZER_OUT/$id.stdout" 2> "$BUZZER_OUT/$id.stderr" || raw=$?
+            printf '%s\n' "$raw" > "$BUZZER_OUT/$id.exit"
+            test ! -s "$BUZZER_OUT/$id.transport"
+          }
+          RUN
+          sha256sum "$out/helpers/run.sh" > "$out/helpers.sha256"
+      - name: Locked dependencies, real app types and byte-identical search regeneration
+        run: |
+          set -euo pipefail
+          out="$BINGO_OUT";raw=0
+          env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.exit";test "$raw" -eq 0
+          source "$out/helpers/run.sh"
+          run types 3m node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          test "$(cat "$out/types.exit")" -eq 0;test ! -s "$out/types.stdout";test ! -s "$out/types.stderr"
+          for n in 1 2;do
+            run "search-generation-$n" 2m node scripts/genSearchKeywords.mjs
+            test "$(cat "$out/search-generation-$n.exit")" -eq 0
+            grep -q '^searchKeywords.json:' "$out/search-generation-$n.stdout"
+            sha256sum -c "$out/source.initial.sha256" > "$out/search-generation-$n.source-held.log"
+          done
+      - name: Isolated exact Playwright and real prepared fonts
+        run: |
+          set -euo pipefail
+          out="$BINGO_OUT";tools="$RUNNER_TEMP/bgs-tools";test ! -e "$tools"
+          env -u NODE_OPTIONS npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright;ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          export PLAYWRIGHT_BROWSERS_PATH="$tools/browsers"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV";echo "BUZZER_TOOLS=$tools" >> "$GITHUB_ENV";echo "PLACEMENT_TOOLS=$tools" >> "$GITHUB_ENV"
+          executable=$(node -e 'const a=require("node:assert/strict");a.equal(require("playwright/package.json").version,"1.64.0");a.equal(require("playwright-core/package.json").version,"1.64.0");process.stdout.write(require("playwright").chromium.executablePath())')
+          if test ! -f "$executable";then env -u NODE_OPTIONS node "$tools/node_modules/playwright/cli.js" install chromium > "$out/chromium-install.log" 2>&1;fi
+          test -f "$executable";printf '%s\n' "$executable" > "$out/chromium.path"
+          env -u NODE_OPTIONS node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d' ' -f1);echo "FONT_CACHE_MANIFEST_SHA256=$sha" >> "$GITHUB_ENV"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Existing Brand-reader Python tools only
+        run: |
+          env -u NODE_OPTIONS python -m pip install fonttools pillow > "$BUZZER_OUT/python-install.log" 2>&1
+          python -m pip freeze > "$BUZZER_OUT/python-packages.initial"
+      - name: Initial build and actual normal stale-guide RED
+        run: |
+          set -euo pipefail
+          out="$BINGO_OUT";source "$out/helpers/run.sh"
+          unset PRERENDER_ONLY PRERENDER_CONTROL PRERENDER_SETTLE GUIDE_HEADINGS_CONTROL SIM_SEARCH_CONTROL
+          run routes-only 2m node scripts/genSitemap.mjs --routes-only;test "$(cat "$out/routes-only.exit")" -eq 0
+          run initial-build 5m npm run build -- --manifest;test "$(cat "$out/initial-build.exit")" -eq 0
+          sha256sum -c "$out/source-inputs.sha256" > "$out/source.initial-build-held.log"
+          run original-normal-guide 5m node scripts/simGuideHeadings.mjs
+          test "$(cat "$out/original-normal-guide.exit")" -eq 1
+          test "$(grep -c '^  FAIL:' "$out/original-normal-guide.stderr")" -eq 1
+          grep -Fq '/player-bingo: the saved page' "$out/original-normal-guide.stderr"
+          grep -Fq 'render at h3 "Do loans count on the club squares?"' "$out/original-normal-guide.stderr"
+          grep -Ei '\(saved h3 ".*free.*"\)' "$out/original-normal-guide.stderr"
+          grep -Fqx 'simGuideHeadings: RED, 1 failure in section 4' "$out/original-normal-guide.stderr"
+      - name: Exact prepared-font prerender preload, one route, sitemap and final build
+        run: |
+          set -euo pipefail
+          out="$BINGO_OUT";source "$out/helpers/run.sh"
+          cat > "$out/prerender-fonts.canonical.cjs" <<'FONTS'
+          'use strict';
+          const fs = require('node:fs');
+          const path = require('node:path');
+          const assert = require('node:assert/strict');
+          const { createHash } = require('node:crypto');
+          const hash = value => createHash('sha256').update(value).digest('hex');
+          if (path.basename(process.argv[1] || '') === 'prerender.mjs') {
+            const cache = process.env.FREE_KICK_FONT_CACHE;
+            const manifestBytes = fs.readFileSync(path.join(cache, 'manifest.json'));
+            assert.match(process.env.FONT_CACHE_MANIFEST_SHA256 || '', /^[a-f0-9]{64}$/);
+            assert.equal(hash(manifestBytes), process.env.FONT_CACHE_MANIFEST_SHA256, 'Prepared font manifest stays exact');
+            const sheet = [...fs.readFileSync('index.html', 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(m => new URL(m[1]).href);
+            assert.equal(sheet.length, 1, 'Use the actual single template stylesheet');
+            const entries = JSON.parse(manifestBytes);
+            assert(Array.isArray(entries) && entries.length > 1);
+            const fonts = new Map();
+            for (const entry of entries) {
+              assert(!fonts.has(entry.url), 'No duplicate font cache URL');
+              const url = new URL(entry.url);
+              assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(url.origin));
+              assert.equal(url.href, entry.url);
+              assert.equal(entry.file, hash(entry.url));
+              assert.match(entry.sha256, /^[a-f0-9]{64}$/);
+              assert.equal(typeof entry.contentType, 'string');
+              const body = fs.readFileSync(path.join(cache, entry.file));
+              assert.equal(hash(body), entry.sha256, 'Prepared font body stays exact');
+              fonts.set(entry.url, { ...entry, body });
+            }
+            assert(fonts.has(sheet[0]), 'Current template stylesheet is cached');
+            const css = fonts.get(sheet[0]);
+            assert.match(css.contentType, /^text\/css(?:;|$)/);
+            const declared = [...new Set([...css.body.toString('utf8').matchAll(/url\(\s*['"]?(https:\/\/[^)'"\s]+)/g)].map(m => m[1]))];
+            assert(declared.length > 0);
+            assert.deepEqual([...fonts.keys()].sort(), [sheet[0], ...declared].sort(), 'Only actual stylesheet dependencies are fulfilled');
+            for (const url of declared) assert.equal(new URL(url).origin, 'https://fonts.gstatic.com');
+            const pw = require('playwright-core');
+            let contextId = 0;
+            const originalLaunch = pw.chromium.launch.bind(pw.chromium);
+            pw.chromium.launch = async options => {
+              const browser = await originalLaunch(options);
+              const originalContext = browser.newContext.bind(browser);
+              browser.newContext = async options => {
+                const context = await originalContext(options);
+                const id = ++contextId;
+                await context.route(/^https:\/\/(?:fonts\.googleapis\.com|fonts\.gstatic\.com)\//, async route => {
+                  const request = route.request(), entry = fonts.get(request.url());
+                  if (request.method() !== 'GET' || !entry || !['stylesheet', 'font'].includes(request.resourceType())) return route.fallback();
+                  await route.fulfill({ status: 200, contentType: entry.contentType, body: entry.body });
+                  fs.appendFileSync(process.env.FONT_CACHE_USE_RECEIPT, JSON.stringify({ contextId: id, url: entry.url, sha256: entry.sha256, manifestSha256: hash(manifestBytes), resourceType: request.resourceType() }) + '\n');
+                });
+                return context;
+              };
+              return browser;
+            };
+          }
+          FONTS
+          node <<'ADAPTER'
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),{createHash}=require('node:crypto'),out=process.env.PLACEMENT_OUT,hash=s=>createHash('sha256').update(s).digest('hex'),original=fs.readFileSync(out+'/prerender-fonts.canonical.cjs','utf8'),before="require('playwright-core')",after="require(path.join(process.cwd(),'node_modules/playwright-core'))";a.equal(hash(original),'ac09f64a5d9592ec980864bf422c7f580880d9bd981adaef8c9c0e674d298fd3');a.equal(original.split(before).length,2);const adapted=original.replace(before,after);a.equal(adapted.replace(after,before),original);a.equal(hash(adapted),'03baeee4b5229afa0847e5202c58e6c5b7d3f407917c8494a56b60618742c13a');fs.writeFileSync(out+'/prerender-fonts.cjs',adapted,{flag:'wx'});fs.writeFileSync(out+'/font-preload-binding.json',JSON.stringify({canonicalSHA256:hash(original),adaptedSHA256:hash(adapted),resolverOnly:true,wholeInverseExact:true},null,2)+'\n',{flag:'wx'});
+          ADAPTER
+          sha256sum "$out/prerender-fonts.canonical.cjs" "$out/prerender-fonts.cjs" >> "$out/helpers.sha256"
+          node --check "$out/prerender-fonts.cjs"
+          : > "$out/prerender-font-use.jsonl"
+          run prerender 15m env PRERENDER_ONLY=/player-bingo FONT_CACHE_USE_RECEIPT="$out/prerender-font-use.jsonl" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/prerender-fonts.cjs" node scripts/prerender.mjs
+          test "$(cat "$out/prerender.exit")" -eq 0
+          grep -Fqx 'prerendering 1 routes from the sitemap' "$out/prerender.stdout"
+          grep -Fqx 'prerendered 1 routes, 0 failed' "$out/prerender.stdout"
+          grep -Fq 'clock samples at 0, 5, 11 days:' "$out/prerender.stdout"
+          test -s "$out/prerender-font-use.jsonl"
+          run sitemap 2m node scripts/genSitemap.mjs;test "$(cat "$out/sitemap.exit")" -eq 0
+          run final-build 5m npm run build -- --manifest;test "$(cat "$out/final-build.exit")" -eq 0
+          sha256sum -c "$out/source-inputs.sha256" > "$out/source.inputs-generated-held.log"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$out/source.generated.sha256"
+          cat > "$out/helpers/generation-scope.cjs" <<'SCOPE'
+          const fs=require('node:fs'),a=require('node:assert/strict'),{createHash}=require('node:crypto'),out=process.env.PLACEMENT_OUT,allowed=['public/player-bingo/index.html','public/sitemap.xml','scripts/data/lastmod.json'],route='/player-bingo',url='https://douknowball.com/player-bingo',sha=b=>createHash('sha256').update(b).digest('hex'),json=(n,v)=>fs.writeFileSync(out+'/'+n,JSON.stringify(v,null,2)+'\n',{flag:'wx'});
+          const map=file=>Object.fromEntries(fs.readFileSync(file,'utf8').trim().split(/\n/).map(line=>{const m=line.match(/^([a-f0-9]{64})  (.+)$/);a(m);return[m[2],m[1]];})),xml=text=>Object.fromEntries([...text.matchAll(/<url>[\s\S]*?<\/url>/g)].map(m=>{const loc=m[0].match(/<loc>([^<]+)<\/loc>/);a(loc);return[loc[1],m[0]];}));
+          const actual={before:{source:map(out+'/source.initial.sha256'),ledger:JSON.parse(fs.readFileSync(out+'/original/lastmod.json','utf8')),urls:xml(fs.readFileSync(out+'/original/sitemap.xml','utf8'))},after:{source:map(out+'/source.generated.sha256'),ledger:JSON.parse(fs.readFileSync('scripts/data/lastmod.json','utf8')),urls:xml(fs.readFileSync('public/sitemap.xml','utf8'))}};
+          function judge(v){a.deepEqual(Object.keys(v.after.source).sort(),Object.keys(v.before.source).sort(),'BINGO_SOURCE_MEMBERS');for(const k of Object.keys(v.before.source))if(!allowed.includes(k))a.equal(v.after.source[k],v.before.source[k],'BINGO_SOURCE_HELD');a.notEqual(v.after.source[allowed[0]],v.before.source[allowed[0]],'BINGO_PAGE_CHANGED');a.deepEqual(Object.keys(v.after.ledger).sort(),Object.keys(v.before.ledger).sort(),'BINGO_LEDGER_ROWS');for(const k of Object.keys(v.before.ledger))if(k!==route)a.deepEqual(v.after.ledger[k],v.before.ledger[k],'BINGO_OTHER_LEDGER_HELD');a.equal(typeof v.after.ledger[route].hash,'string');a.notEqual(v.after.ledger[route].hash,v.before.ledger[route].hash,'BINGO_HASH_CHANGED');a.deepEqual(Object.keys(v.after.urls).sort(),Object.keys(v.before.urls).sort(),'BINGO_URL_SET');for(const k of Object.keys(v.before.urls))if(k!==url)a.equal(v.after.urls[k],v.before.urls[k],'BINGO_OTHER_URL_HELD');const date=v.after.urls[url].match(/<lastmod>([^<]+)<\/lastmod>/);a(date);a.equal(date[1],v.after.ledger[route].date,'BINGO_DATE_PAIR');}
+          judge(actual);const foundation=Buffer.from(JSON.stringify(actual,null,2)+'\n'),working=out+'/scope-working.json';fs.writeFileSync(out+'/scope-actual-foundation.json',foundation,{flag:'wx'});fs.writeFileSync(working,foundation,{flag:'wx'});const controls=[],otherLedger=Object.keys(actual.before.ledger).find(k=>k!=='__version'&&k!==route),otherURL=Object.keys(actual.before.urls).find(k=>k!==url);a(otherLedger&&otherURL);
+          for(const[id,mutate,marker]of[['outside-source',v=>{v.after.source['src/data/gameContent/soccer1.ts']='0'.repeat(64);},'BINGO_SOURCE_HELD'],['unchanged-page',v=>{v.after.source[allowed[0]]=v.before.source[allowed[0]];},'BINGO_PAGE_CHANGED'],['other-ledger',v=>{v.after.ledger[otherLedger].date='1900-01-01';},'BINGO_OTHER_LEDGER_HELD'],['unchanged-hash',v=>{v.after.ledger[route].hash=v.before.ledger[route].hash;},'BINGO_HASH_CHANGED'],['other-url',v=>{v.after.urls[otherURL]+=' COPIED_CHANGE';},'BINGO_OTHER_URL_HELD'],['date-pair',v=>{v.after.ledger[route].date='1900-01-01';},'BINGO_DATE_PAIR']]){const copy=JSON.parse(fs.readFileSync(working,'utf8'));mutate(copy);const changed=Buffer.from(JSON.stringify(copy,null,2)+'\n');a.notEqual(sha(changed),sha(foundation));fs.writeFileSync(working,changed);fs.writeFileSync(out+'/'+id+'.changed.json',changed,{flag:'wx'});let error;try{judge(JSON.parse(fs.readFileSync(working,'utf8')));}catch(e){error=e;}finally{fs.writeFileSync(working,foundation);a.deepEqual(fs.readFileSync(working),foundation);judge(JSON.parse(fs.readFileSync(working,'utf8')));fs.writeFileSync(out+'/'+id+'.restored.json',fs.readFileSync(working),{flag:'wx'});}a(error instanceof a.AssertionError&&error.message.includes(marker));controls.push({id,marker,changedSHA256:sha(changed),restoredSHA256:sha(fs.readFileSync(working)),beforeSHA256:sha(foundation),sameCopyRestored:true,scope:'COPIED_SCOPE_CLASSIFIER_ONLY',actualFeaturePassCredit:false,refusal:{name:error.name,message:error.message}});}
+          json('GENERATION-SCOPE-ADMISSION.json',{status:'ACTUAL_ONE_PAGE_OUTPUT_SCOPE_AND_ROW_HOLDS_PASSED',source:process.env.GITHUB_SHA,allowed,changed:allowed.filter(k=>actual.after.source[k]!==actual.before.source[k]),beforePlayer:actual.before.ledger[route],afterPlayer:actual.after.ledger[route],allOtherLedgerAndURLRowsHeld:true,controls,fingerprintAuthority:'Required existing simSitemap section5 independently validates actual page hash and XML date, not copied here.'});console.log('BINGO_OUTPUT_SCOPE: actual page/hash changed, all other source/ledger/URL rows held;6 copied refusals/restores passed.');
+          SCOPE
+          sha256sum "$out/helpers/generation-scope.cjs" >> "$out/helpers.sha256"
+          node --check "$out/helpers/generation-scope.cjs"
+          run generation-scope 2m node "$out/helpers/generation-scope.cjs";test "$(cat "$out/generation-scope.exit")" -eq 0
+          sha256sum public/player-bingo/index.html public/sitemap.xml scripts/data/lastmod.json > "$out/generated.sha256"
+          tar -cf "$out/generated.tar" public/player-bingo/index.html public/sitemap.xml scripts/data/lastmod.json
+          tar -cf "$out/dist.tar" -C dist .;tar -cf "$out/font-cache.tar" -C "$FREE_KICK_FONT_CACHE" .
+          for pair in "fonts:$FREE_KICK_FONT_CACHE" "dist:dist";do label="${pair%%:*}";dir="${pair#*:}";find "$dir" -type f -print0 | sort -z > "$out/$label.members";xargs -0 sha256sum < "$out/$label.members" > "$out/$label.sha256";done
+      - name: All fifteen built readers plus actual guide and search
+        run: |
+          set -euo pipefail
+          out="$BINGO_OUT";source "$out/helpers/run.sh"
+          : > "$out/readers-server.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/readers-server.transport" node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/readers-server.log" 2>&1 & server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0;for attempt in 1 2 3 4 5;do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null;then ready=1;break;fi;sleep 1;done;test "$ready" -eq 1
+          cat > "$out/helpers/readers.cjs" <<'READERS'
+          const fs=require('node:fs'),path=require('node:path'),a=require('node:assert/strict'),cp=require('node:child_process'),{createHash}=require('node:crypto'),out=process.env.PLACEMENT_OUT,root=path.join(out,'readers'),names=["simAdsense","simBrand","simHeadTags","simHiddenPages","simHubs","simIndexNow","simIndexing","simInternalLinks","simNoRivalNames","simPrerender","simPrerenderBoot","simRetiredRoutes","simSchema","simSitemap","simSnapshotAssets","simGuideHeadings","simSiteSearch"],closings={"simAdsense":"simAdsense: green.","simBrand":"simBrand: green.","simHeadTags":"simHeadTags: green.","simHiddenPages":"simHiddenPages: green.","simHubs":"simHubs: green.","simIndexNow":"simIndexNow: green.","simIndexing":"simIndexing: green.","simInternalLinks":"simInternalLinks: green.","simNoRivalNames":"No rival product names found. 0 findings.","simPrerender":"simPrerender: green.","simPrerenderBoot":"simPrerenderBoot: green.","simRetiredRoutes":"simRetiredRoutes: all green","simSchema":"simSchema: green.","simSitemap":"simSitemap: green.","simSnapshotAssets":"simSnapshotAssets: green.","simGuideHeadings":"simGuideHeadings: green.","simSiteSearch":"simSiteSearch: green."},rows=[];fs.mkdirSync(root);for(const key of ["RESULT_MOMENT_CONTROL","SIM_SEASON_VERDICT_CONTROL"])a.equal(process.env[key],undefined,"NORMAL_RESULT_READER_CONTROL_UNSET:"+key);
+          for(const method of names){const dir=path.join(root,method);fs.mkdirSync(dir);const receipt=path.join(dir,'transport.jsonl');fs.writeFileSync(receipt,'',{flag:'wx'});const x=fs.openSync(path.join(dir,'stdout.log'),'w'),y=fs.openSync(path.join(dir,'stderr.log'),'w');let p;try{p=cp.spawnSync(process.execPath,['scripts/'+method+'.mjs'],{env:{...process.env,BASE:'http://127.0.0.1:4173',SWEEP_BASE:'http://127.0.0.1:4173',SIM_OFFLINE_RECEIPT:receipt},timeout:240000,stdio:['ignore',x,y]});}finally{fs.closeSync(x);fs.closeSync(y);}const processRecord={status:p.status,signal:p.signal,error:p.error?String(p.error):null};fs.writeFileSync(path.join(dir,'process.json'),JSON.stringify(processRecord,null,2)+'\n',{flag:'wx'});fs.writeFileSync(path.join(dir,'raw.exit'),String(p.status)+'\n',{flag:'wx'});const cli=(fs.readFileSync(path.join(dir,'stdout.log'),'utf8')+'\n'+fs.readFileSync(path.join(dir,'stderr.log'),'utf8')).replace(/\x1b\[[0-?]*[ -/]*[@-~]/g,''),closing=cli.split(/\r?\n/).filter(line=>line.startsWith(closings[method]));rows.push({method,...processRecord,closingCount:closing.length,closing:closing[0]??null,transportBytes:fs.statSync(receipt).size,scriptSHA256:createHash('sha256').update(fs.readFileSync('scripts/'+method+'.mjs')).digest('hex')});console.log(method+': raw '+p.status+', actual closing rows '+closing.length);}
+          fs.writeFileSync(path.join(out,'actual-readers-processes.json'),JSON.stringify(rows,null,2)+'\n',{flag:'wx'});a.deepEqual(rows.map(v=>v.method),names);a.equal(rows.length,17);for(const r of rows){a.equal(r.status,0,'ACTUAL_READER_RAW_ZERO:'+r.method);a.equal(r.signal,null);a.equal(r.error,null);a.equal(r.closingCount,1,'ACTUAL_NORMAL_READER_CLOSING:'+r.method);a.equal(r.transportBytes,0);}fs.writeFileSync(path.join(out,'READERS-ADMISSION.json'),JSON.stringify({status:'ACTUAL_15_BUILT_READERS_GUIDE_AND_SEARCH_PASSED',source:process.env.GITHUB_SHA,savedReaders:15,totalReaderMethods:17,publicSnapshotsRegenerated:true,regeneratedRoutes:['/player-bingo'],methods:rows,fullHarnessSuiteClaim:false},null,2)+'\n',{flag:'wx'});console.log('BINGO_SNAPSHOT_READERS: all15 built readers plus guide and search completed with raw0, normal closings and empty transports.');
+          READERS
+          sha256sum "$out/helpers/readers.cjs" >> "$out/helpers.sha256";node --check "$out/helpers/readers.cjs"
+          run readers 75m env -u GUIDE_HEADINGS_CONTROL -u SIM_SEARCH_CONTROL node "$out/helpers/readers.cjs"
+          test "$(cat "$out/readers.exit")" -eq 0;test ! -s "$out/readers-server.transport"
+      - name: Existing six effective guide controls and post-qualification dependencies
+        run: |
+          set -euo pipefail
+          out="$BINGO_OUT";source "$out/helpers/run.sh"
+          for pair in skiplevel:2 nokeyword:1 lostline:1 careerline:1 unconvert:3 snapdrift:4;do
+            control="${pair%:*}";section="${pair#*:}"
+            run "guide-$control" 3m env GUIDE_HEADINGS_CONTROL="$control" node scripts/simGuideHeadings.mjs
+            test "$(cat "$out/guide-$control.exit")" -eq 1
+            grep -Fqx "simGuideHeadings control $control: section $section red and every other section green, the break was caught where it should be (exit 1)" "$out/guide-$control.stdout"
+          done
+          sha256sum -c "$out/source.generated.sha256" > "$out/source.after-readers-held.log"
+          for pair in "deps:node_modules" "tools:$BUZZER_TOOLS";do label="${pair%%:*}";dir="${pair#*:}";find "$dir" -type f -print0 | sort -z > "$out/$label.members";xargs -0 sha256sum < "$out/$label.members" > "$out/$label.sha256";done
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.before"
+          printf '{"scope":"ONE_PLAYER_BINGO_SNAPSHOT_ONLY","source":"%s","parent":"%s","route":"/player-bingo","normalGuide":"REAL_RAW1_BEFORE_RAW0_AFTER","guideControls":6,"builtReaders":15,"normalGuideAndSearch":2,"searchRegenerations":2,"sourceScopeControls":6,"R1571Join":false,"defaultVitest":"UNRUN","globalSims":"UNRUN","weightCaps":"UNRUN","allRoutePrerender":"UNRUN","dependencyInventory":"POST_QUALIFICATION_ONLY","publication":false}\n' "$GITHUB_SHA" "$EXPECTED_PARENT" > "$out/SCOPE.json"
+      - name: Always preserve exact source, generated outputs and evidence
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/bgs";mkdir -p "$out";failed=0
+          git ls-files -z | sort -z > "$out/source-members.final";cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          sha256sum -c "$out/source-inputs.sha256" > "$out/source-inputs.final-held.log" 2>&1 || failed=1
+          if test -f "$out/source.generated.sha256";then sha256sum -c "$out/source.generated.sha256" > "$out/source-generated.final-held.log" 2>&1 || failed=1;else printf 'GENERATED_SOURCE_NOT_QUALIFIED\n' > "$out/generated-not-created.txt";failed=1;fi
+          git diff --name-status HEAD > "$out/actual-generated.paths";git diff --summary HEAD > "$out/mode-change.summary";test ! -s "$out/mode-change.summary" || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final";cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after";cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/helpers.sha256" > "$out/helpers.final-held.log" 2>&1 || failed=1
+          for pair in "deps:node_modules" "tools:${BUZZER_TOOLS:-}" "fonts:${FREE_KICK_FONT_CACHE:-}" "dist:dist";do
+            label="${pair%%:*}";dir="${pair#*:}"
+            if test -f "$out/$label.sha256";then find "$dir" -type f -print0 | sort -z > "$out/$label.members.final";cmp "$out/$label.members" "$out/$label.members.final" || failed=1;sha256sum -c "$out/$label.sha256" > "$out/$label.final-held.log" 2>&1 || failed=1;else printf 'POST_PHASE_INVENTORY_MISSING\n' > "$out/$label.not-created";failed=1;fi
+          done
+          if test -f "$out/dependency-links.before";then find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final";cmp "$out/dependency-links.before" "$out/dependency-links.final" || failed=1;else failed=1;fi
+          if test -f "$out/python-packages.initial";then python -m pip freeze > "$out/python-packages.final";cmp "$out/python-packages.initial" "$out/python-packages.final" || failed=1;fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/bgs-evidence.sha256";cp "$RUNNER_TEMP/bgs-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: player-bingo-loan-snapshot-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/bgs
+          if-no-files-found: error
+          retention-days: 14
