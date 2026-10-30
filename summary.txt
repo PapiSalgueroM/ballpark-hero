@@ -1,0 +1,4 @@
+oldcareers-head exit=1 85s | simCmOldCareersWorld: RED, 20 failure(s) (section 1 2, section 2 18) (85s)
+oldcareers-base exit=1 89s | simCmOldCareersWorld: RED, 20 failure(s) (section 1 2, section 2 18) (88s)
+unseeded-base exit=1 225s | simCmUnseededWorld: 113 FAILURE(S)
+unseeded-head exit=1 227s | simCmUnseededWorld: 113 FAILURE(S)
