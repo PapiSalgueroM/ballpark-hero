@@ -1,0 +1,64 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstderr[2m | src/test/ClubManagerSeasonSummary.expiring.test.tsx[2m > [22m[2mRound 1597: no deal ends unseen[2m > [22m[2ma final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal
+[22m[39mWarning: Each child in a list should have a unique "key" prop.
+
+Check the render method of `ExpiringDealsCheckpoint`. See https://reactjs.org/link/warning-keys for more information.
+    at div
+    at ExpiringDealsCheckpoint (/home/runner/work/ballpark-hero/ballpark-hero/src/components/club-manager/ExpiringDealsCheckpoint.tsx:48:36)
+    at div
+    at ResultScreen (/home/runner/work/ballpark-hero/ballpark-hero/src/components/game/ResultScreen.tsx:22:29)
+    at ClubManagerSeasonSummary (/home/runner/work/ballpark-hero/ballpark-hero/src/components/club-manager/ClubManagerSeasonSummary.tsx:59:37)
+    at Host (/home/runner/work/ballpark-hero/ballpark-hero/src/test/ClubManagerSeasonSummary.expiring.test.tsx:268:53)
+
+ [31m❯[39m src/test/ClubManagerSeasonSummary.expiring.test.tsx [2m([22m[2m8 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 1194[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut [33m 312[2mms[22m[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22manswering two keeps it shut, the third opens it, and a renewal is the desk's own[32m 131[2mms[22m[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22mLet the rest go answers every open deal at once and renews nobody[32m 214[2mms[22m[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22ma man the budget cannot renew can still be let go[32m 83[2mms[22m[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22ma manager leaving for a job he booked is not asked[32m 74[2mms[22m[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22mlabels a real man's deal as this game's, on the row and the hub line, and no made up man's[32m 94[2mms[22m[39m
+[31m   [31m×[31m Round 1597: no deal ends unseen[2m > [22ma final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal[39m[32m 204[2mms[22m[39m
+[31m     → expected "spy" to be called with arguments: [ undefined ][90m
+
+Number of calls: [1m0[22m
+[31m[39m
+   [32m✓[39m Round 1597: no deal ends unseen[2m > [22mthe ? opens the rules with a worked example off the engine's numbers, and no dash anywhere[32m 82[2mms[22m[39m
+ [32m✓[39m src/test/contractPreview.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 2670[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager contract preview[2m > [22mshows both complete real renewal quotes without mutating career or saving [33m 341[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager contract preview[2m > [22mmakes the plain forecast become the real contract budget wage and saved deal [33m 415[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDeskCues.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 3867[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma plain renewal says who and the terms the save now holds, on the slam, once [33m 852[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma clause renewal names the exit clause the save wrote [33m 397[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma release states the settlement row the save holds [33m 321[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma release with one week left to pay says one week, not one weeks [33m 306[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma refused press and a save that moved some other way say nothing [33m 521[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22mwhile the cookie banner is unanswered the line sits above it, and drops back once it is answered [33m 431[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerOfferConfirm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 826[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/ClubManagerSeasonSummary.expiring.test.tsx[2m > [22mRound 1597: no deal ends unseen[2m > [22ma final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal
+[31m[1mAssertionError[22m: expected "spy" to be called with arguments: [ undefined ][90m
+
+Number of calls: [1m0[22m
+[31m[39m
+[36m [2m❯[22m src/test/ClubManagerSeasonSummary.expiring.test.tsx:[2m150:21[22m[39m
+    [90m148| [39m    [34mexpect[39m([34mcontinueButton[39m(view[33m.[39mcontainer)[33m.[39mdisabled)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m149| [39m    fireEvent[33m.[39m[34mclick[39m(row[33m.[39m[34mquerySelector[39m([32m'[data-cm-deal-renew]'[39m)[33m![39m)[33m;[39m
+    [90m150| [39m    [34mexpect[39m(g[33m.[39mrenew)[33m.[39m[34mtoHaveBeenCalledWith[39m(lentMan[33m.[39mid)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m151| [39m    expect(rows(view.container)[0].getAttribute('data-cm-deal')).toBe(…
+    [90m152| [39m    [34mexpect[39m([34mcontinueButton[39m(view[33m.[39mcontainer)[33m.[39mdisabled)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m41 passed[39m[22m[90m (42)[39m
+[2m   Start at [22m 09:01:56
+[2m   Duration [22m 10.41s[2m (transform 3.42s, setup 445ms, collect 12.80s, tests 8.56s, environment 2.95s, prepare 1.06s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/ClubManagerSeasonSummary.expiring.test.tsx,title=src/test/ClubManagerSeasonSummary.expiring.test.tsx > Round 1597%3A no deal ends unseen > a final year man out on loan is listed%2C named by the hub%2C renewed where he is%2C and comes home on the new deal,line=150,column=21::AssertionError: expected "spy" to be called with arguments: [ undefined ]%0A%0ANumber of calls: 0%0A%0A ❯ src/test/ClubManagerSeasonSummary.expiring.test.tsx:150:21%0A%0A
