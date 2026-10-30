@@ -8,7 +8,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { useState } from 'react';
 import ClubManagerSeasonSummary from '@/components/club-manager/ClubManagerSeasonSummary';
-import { finishSeason, money, renewalTerms, renewContract, startCareer, type CareerState, type CMPlayer, type SeasonSummary } from '@/lib/clubManager';
+import { expiringDeals, expiringPlayers, finishSeason, money, renewalTerms, renewContract, renewContractWithClause, startCareer, startNextSeason, type CareerState, type CMPlayer, type SeasonSummary } from '@/lib/clubManager';
+import { expiringDealsLine } from '@/lib/clubManagerHubLines';
 
 afterEach(cleanup);
 
@@ -92,6 +93,55 @@ describe('Round 1597: no deal ends unseen', () => {
     const start = [...view.container.querySelectorAll('button')].find(b => b.textContent?.includes('at Brentford')) as HTMLButtonElement;
     expect(start.disabled).toBe(false);
   });
+
+  /* Review fix: a man in his last year who is out on loan came home at the summer and walked with no row here, no
+     hub line and no way to renew him (both renewals looked in the squad only). */
+  it('a final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal', () => {
+    const { state, summary } = finishSeason(startCareer('OB'));
+    const squad = state.squad.map(p => ({ ...p, contractYears: 3 }));
+    /* Under 29 and no youth pad, so the summer cannot retire him and the trim cannot cut him. */
+    const lentMan = { ...squad.filter(p => !p.onLoan && !p.isYouth && p.position !== 'GK' && p.age <= 28).sort((a, b) => b.rating - a.rating)[0], contractYears: 1 };
+    const c0: CareerState = { ...state, budget: 999, squad: squad.filter(p => p.id !== lentMan.id),
+      loanedOut: [{ player: lentMan, club: 'Loan Club Test', fee: 1, season: state.season }], pendingSummary: summary, jobHunt: undefined };
+    expect(expiringPlayers(c0).map(p => p.id)).not.toContain(lentMan.id);
+    expect(expiringDeals(c0)).toEqual([{ player: lentMan, loanClub: 'Loan Club Test' }]);
+    /* The hub line, with one league week left to play. */
+    const lastWeek = { squad: c0.squad, loanedOut: c0.loanedOut, week: 0, calendar: [{ type: 'league' }] as unknown as CareerState['calendar'] };
+    expect(expiringDealsLine(lastWeek)?.text).toBe(`1 deal ends this summer: ${lentMan.name} (on loan).`);
+    /* The review's row, and Renew through the page's own renew. */
+    const g = { nextSeason: vi.fn(), startNew: vi.fn(), renew: vi.fn() };
+    let latest = c0;
+    function Host() {
+      const [c, setC] = useState<CareerState>(c0);
+      g.renew.mockImplementation((id: string) => setC(prev => { latest = renewContract(prev, id) ?? prev; return latest; }));
+      return <ClubManagerSeasonSummary sm={{ ...summary, offers: [] }} c={c} g={g} />;
+    }
+    const view = render(<Host />);
+    expect(rows(view.container)).toHaveLength(1);
+    const row = rows(view.container)[0];
+    expect(row.getAttribute('data-cm-deal-loan')).toBe('Loan Club Test');
+    expect(row.textContent).toContain('on loan at Loan Club Test');
+    expect(continueButton(view.container).disabled).toBe(true);
+    fireEvent.click(row.querySelector('[data-cm-deal-renew]')!);
+    expect(g.renew).toHaveBeenCalledWith(lentMan.id);
+    expect(rows(view.container)[0].getAttribute('data-cm-deal')).toBe('renewed');
+    expect(continueButton(view.container).disabled).toBe(false);
+    /* The new deal is written where he is; the squad is untouched and the fee is paid. */
+    const terms = renewalTerms(lentMan);
+    expect(latest.squad).toBe(c0.squad);
+    expect(latest.loanedOut?.[0].player.contractYears).toBe(terms.years);
+    expect(latest.loanedOut?.[0].player.wage).toBe(terms.wage);
+    expect(latest.budget).toBe(Math.round((999 - terms.fee) * 10) / 10);
+    expect(renewContractWithClause(c0, lentMan.id)?.loanedOut?.[0].player.releaseClause).toBeGreaterThan(0);
+    /* And he comes home on it at the summer instead of walking. */
+    const next = startNextSeason(latest);
+    expect(next.squad.some(p => p.name === lentMan.name)).toBe(true);
+    expect((next.freeAgents ?? []).some(f => f.name === lentMan.name)).toBe(false);
+    /* Not renewed, he walks onto the list as before (nobody vanishes), now after a row that asked. */
+    const walked = startNextSeason(c0);
+    expect(walked.squad.some(p => p.name === lentMan.name)).toBe(false);
+    expect((walked.freeAgents ?? []).some(f => f.name === lentMan.name)).toBe(true);
+  }, 120000);
 
   it('the ? opens the rules with a worked example off the engine\'s numbers, and no dash anywhere', () => {
     const { view } = setup();

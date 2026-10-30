@@ -8417,21 +8417,30 @@ export function renewalTermsWithClause(p: CMPlayer): { years: number; wage: numb
   return { years: base.years, wage, fee, clause };
 }
 
+/* Round 1597 fix: a man I lent out is still mine, and so is his deal. Until this fix a renewal looked in the squad
+   only, so a man in his last year who was out on loan could not be kept by any screen: he came home at the summer
+   and walked the same day. The two below find him in the squad or out on loan and write the new deal where he is. */
+function dealHolder(career: CareerState, playerId: string): CMPlayer | undefined {
+  return career.squad.find(x => x.id === playerId) ?? (career.loanedOut ?? []).find(l => l.player.id === playerId)?.player;
+}
+function withDealRewritten(career: CareerState, playerId: string, edit: (p: CMPlayer) => CMPlayer): Pick<CareerState, 'squad' | 'loanedOut'> | Pick<CareerState, 'squad'> {
+  if (career.squad.some(x => x.id === playerId)) return { squad: career.squad.map(x => (x.id === playerId ? edit(x) : x)) };
+  return { squad: career.squad, loanedOut: (career.loanedOut ?? []).map(l => (l.player.id === playerId ? { ...l, player: edit(l.player) } : l)) };
+}
+
 /** Sign him again. Costs the fee up front and resets his deal. A plain
     renewal DELETES any release clause he carried: that is the counter-move
     once his value has grown past the number, and it costs full wage. */
 export function renewContract(career: CareerState, playerId: string): CareerState | null {
-  const p = career.squad.find(x => x.id === playerId);
+  const p = dealHolder(career, playerId);
   if (!p || p.onLoan) return null;
   const terms = renewalTerms(p);
   if (terms.fee > career.budget) return null;
   return {
     ...career,
     budget: Math.round((career.budget - terms.fee) * 10) / 10,
-    squad: career.squad.map(x => (
-      x.id === playerId
-        ? { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99), releaseClause: undefined }
-        : x
+    ...withDealRewritten(career, playerId, x => (
+      { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99), releaseClause: undefined }
     )),
   };
 }
@@ -8439,17 +8448,15 @@ export function renewContract(career: CareerState, playerId: string): CareerStat
 /** Sign him again WITH the clause: the discounted wage, and the exit door
     written into the deal at 1.5x today's sell value. */
 export function renewContractWithClause(career: CareerState, playerId: string): CareerState | null {
-  const p = career.squad.find(x => x.id === playerId);
+  const p = dealHolder(career, playerId);
   if (!p || p.onLoan) return null;
   const terms = renewalTermsWithClause(p);
   if (terms.fee > career.budget) return null;
   return {
     ...career,
     budget: Math.round((career.budget - terms.fee) * 10) / 10,
-    squad: career.squad.map(x => (
-      x.id === playerId
-        ? { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99), releaseClause: terms.clause }
-        : x
+    ...withDealRewritten(career, playerId, x => (
+      { ...x, contractYears: terms.years, wage: terms.wage, morale: clamp(x.morale + 9, 5, 99), releaseClause: terms.clause }
     )),
   };
 }
@@ -8459,6 +8466,19 @@ export function expiringPlayers(career: CareerState): CMPlayer[] {
   return career.squad
     .filter(p => !p.onLoan && (p.contractYears ?? 9) <= 1)
     .sort((a, b) => b.rating - a.rating);
+}
+
+/**
+ * Round 1597 fix: every deal of mine that ends this summer, the men out on loan from me included, best first. The
+ * contracts desk lists the squad (expiringPlayers); a man I lent out comes home at the summer and, with nothing
+ * signed, walks the same day, so the season review's checkpoint and the hub's line read this one. loanClub says
+ * where he is playing. With nobody out on loan it is expiringPlayers, in the same order.
+ */
+export function expiringDeals(career: Pick<CareerState, 'squad' | 'loanedOut'>): { player: CMPlayer; loanClub?: string }[] {
+  return [
+    ...career.squad.filter(p => !p.onLoan && (p.contractYears ?? 9) <= 1).map(player => ({ player })),
+    ...(career.loanedOut ?? []).filter(l => (l.player.contractYears ?? 9) <= 1).map(l => ({ player: l.player, loanClub: l.club })),
+  ].sort((a, b) => b.player.rating - a.player.rating);
 }
 
 /* ================================================================== */
@@ -10688,7 +10708,9 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
 
     /* ---- Round 474: the agent ---- */
     case 'renewDeal': {
-      const applied = renewContract({ ...career, squad, budget }, msg.playerId);
+      /* Round 1597 fix: renewContract now also renews a man out on loan, and this case writes back the squad and
+         the budget only, so it keeps to the squad as before (a man lent out since the message gets the old answer). */
+      const applied = squad.some(p => p.id === msg.playerId) ? renewContract({ ...career, squad, budget }, msg.playerId) : null;
       if (applied) {
         squad = applied.squad;
         budget = applied.budget;

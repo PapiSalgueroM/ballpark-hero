@@ -4,7 +4,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import { revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 import { dealAnswers, ExpiringDealsCheckpoint } from '@/components/club-manager/ExpiringDealsCheckpoint';
-import { bookAwardsState, evalWorldUcl, expiringPlayers, money } from '@/lib/clubManager';
+import { bookAwardsState, evalWorldUcl, expiringDeals, money } from '@/lib/clubManager';
 import { BOOK_FULL_SHARE, type AwardMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { TeamLines } from '@/components/club-manager/SeasonHonoursCard';
@@ -79,8 +79,9 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   }, [askingOffer]);
   /* Round 1597: the summer contracts checkpoint. The men are fixed when the review opens, so a man renewed here
      keeps his row and the page does not jump; reset if the review is ever handed another season. Not asked when
-     the manager is leaving for a job he booked (summerMove): the squad stays with the old club. */
-  const freshDeals = () => ({ season: sm.season, ids: summerMove ? [] : expiringPlayers(c).map(p => p.id), letGo: new Set<string>() });
+     the manager is leaving for a job he booked (summerMove): the squad stays with the old club. Round 1597 fix: a
+     man out on loan from me in his last year is asked about too (expiringDeals), or he came home and walked unseen. */
+  const freshDeals = () => ({ season: sm.season, ids: summerMove ? [] : expiringDeals(c).map(d => d.player.id), letGo: new Set<string>() });
   const [deals, setDeals] = useState(freshDeals);
   if (deals.season !== sm.season) setDeals(freshDeals());
   const openDeals = dealAnswers(c, deals.ids, deals.letGo).filter(r => r.answer === 'open').length;
