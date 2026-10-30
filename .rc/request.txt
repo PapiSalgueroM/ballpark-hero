@@ -1,0 +1,14 @@
+#!serial
+# Full default filenames only. UNBOUND until final source and support admission.
+prepare: bash .rc/default-support.sh prepare
+playOwnerMandate: bash .rc/default-support.sh run playOwnerMandate.mjs
+playPhonePanelLifeStories: bash .rc/default-support.sh run playPhonePanelLifeStories.mjs
+playPitchRestartContinuity: bash .rc/default-support.sh run playPitchRestartContinuity.mjs
+playPlayerAutocompleteTouchScroll: bash .rc/default-support.sh run playPlayerAutocompleteTouchScroll.mjs
+playPlayerBingoCategories: bash .rc/default-support.sh run playPlayerBingoCategories.mjs
+playReducedMotion: bash .rc/default-support.sh run playReducedMotion.mjs
+playRelatedGames: bash .rc/default-support.sh run playRelatedGames.mjs
+playReleaseClause: bash .rc/default-support.sh run playReleaseClause.mjs
+playRenderStability: bash .rc/default-support.sh run playRenderStability.mjs
+playSaveKeeper: bash .rc/default-support.sh run playSaveKeeper.mjs
+finish: bash .rc/default-support.sh finish
