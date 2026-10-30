@@ -1,0 +1,3 @@
+813 /home/runner/work/_temp/rc-out/full/playSoccerCareerDocumentaryReview.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playSoccerCareerDocumentaryReview.mjs/stderr.log
+813 total

@@ -1,0 +1,2 @@
+d6678ae058ace5ea0a59e55d244e4867c5b6c89f8405b17b55862dd504af278c  /home/runner/work/_temp/rc-out/full/playSoccerCareerDocumentaryReview.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerCareerDocumentaryReview.mjs/stderr.log

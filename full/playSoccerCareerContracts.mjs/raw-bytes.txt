@@ -1,0 +1,3 @@
+17823 /home/runner/work/_temp/rc-out/full/playSoccerCareerContracts.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playSoccerCareerContracts.mjs/stderr.log
+17823 total

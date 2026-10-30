@@ -1,0 +1,133 @@
+{
+  "x": 416,
+  "y": 131,
+  "width": 448,
+  "height": 638,
+  "bottom": 769,
+  "viewport": [
+    1280,
+    900
+  ],
+  "yScroll": 164,
+  "ownScroll": [
+    0,
+    0
+  ],
+  "opacity": "1",
+  "painted": true,
+  "finite": 0,
+  "overflow": false,
+  "dialog": true,
+  "controls": [
+    {
+      "label": "Back to mentor details",
+      "x": 441,
+      "y": 236,
+      "width": 123,
+      "height": 44,
+      "insideViewport": true,
+      "points": [
+        {
+          "x": 502.5,
+          "y": 258,
+          "painted": true
+        },
+        {
+          "x": 471.75,
+          "y": 247,
+          "painted": true
+        },
+        {
+          "x": 533.25,
+          "y": 247,
+          "painted": true
+        },
+        {
+          "x": 471.75,
+          "y": 269,
+          "painted": true
+        },
+        {
+          "x": 533.25,
+          "y": 269,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Back to your career",
+      "x": 441,
+      "y": 700,
+      "width": 398,
+      "height": 44,
+      "insideViewport": true,
+      "points": [
+        {
+          "x": 640,
+          "y": 722,
+          "painted": true
+        },
+        {
+          "x": 540.5,
+          "y": 711,
+          "painted": true
+        },
+        {
+          "x": 739.5,
+          "y": 711,
+          "painted": true
+        },
+        {
+          "x": 540.5,
+          "y": 733,
+          "painted": true
+        },
+        {
+          "x": 739.5,
+          "y": 733,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Close",
+      "x": 811,
+      "y": 140,
+      "width": 44,
+      "height": 44,
+      "insideViewport": true,
+      "points": [
+        {
+          "x": 833,
+          "y": 162,
+          "painted": true
+        },
+        {
+          "x": 822,
+          "y": 151,
+          "painted": true
+        },
+        {
+          "x": 844,
+          "y": 151,
+          "painted": true
+        },
+        {
+          "x": 822,
+          "y": 173,
+          "painted": true
+        },
+        {
+          "x": 844,
+          "y": 173,
+          "painted": true
+        }
+      ]
+    }
+  ],
+  "stable": 4,
+  "readable": true,
+  "toastObserved": 6,
+  "toastWaitMs": 3997.3904059999986,
+  "toastRemaining": 0
+}

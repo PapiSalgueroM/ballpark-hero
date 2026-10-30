@@ -1,0 +1,6012 @@
+{
+  "cases": [
+    {
+      "id": "390-push",
+      "kind": "push",
+      "width": 390,
+      "height": 844,
+      "touch": true,
+      "checks": [
+        {
+          "label": "initial: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "initial-repair: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "Rules and both exact tradeoffs precede the preseason choice",
+          "ok": true
+        },
+        {
+          "label": "All preseason dialog controls are at least 44 pixels",
+          "ok": true
+        },
+        {
+          "label": "Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Shift+Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Shift+Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "preseason-rules: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "preseason-rules: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "preseason-escape: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "Reading and closing rules preserves the full career",
+          "ok": true
+        },
+        {
+          "label": "0-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "0-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "preseason-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "Reopened dialog marks the exact saved choice",
+          "ok": true
+        },
+        {
+          "label": "1-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "1-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "balanced-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "2-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "2-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "restored-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "chosen-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "chosen-plan: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "3-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "3-advanceProSeason: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Next Season records one actual senior year at the shared club",
+          "ok": true
+        },
+        {
+          "label": "The chosen plan settles once with its exact skill modifier and is consumed",
+          "ok": true
+        },
+        {
+          "label": "recorded-season-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "recorded-season: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "4-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "4-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Actual intervening newspaper reaches the mandatory saved season summary",
+          "ok": true
+        },
+        {
+          "label": "Season summary shows the exact recorded plan outcome and modifier",
+          "ok": true
+        },
+        {
+          "label": "preseason-outcome: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "summary-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "summary-plan: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "Actual route has no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "No page or served asset errors",
+          "ok": true
+        },
+        {
+          "label": "All external write attempts are intercepted locally with no forwarded external requests",
+          "ok": true
+        },
+        {
+          "label": "Native copied detector controls preserve the entire actual saved career",
+          "ok": true
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/rest/v1/game_completions",
+          "blocked": true
+        }
+      ],
+      "intercepted": [
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/un.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/un.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "POST",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/game_completions"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "preseason-rules",
+          "x": 0,
+          "y": 158,
+          "width": 390,
+          "height": 528,
+          "bottom": 686,
+          "viewport": [
+            390,
+            844
+          ],
+          "yScroll": 250,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Development push\n+1 passing, higher injury risk",
+              "x": 25,
+              "y": 475,
+              "width": 340,
+              "height": 62,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 195,
+                  "y": 506,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 490.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 490.5,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 521.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 521.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Recovery focus\n-1 passing, lower injury risk",
+              "x": 25,
+              "y": 545,
+              "width": 340,
+              "height": 62,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 195,
+                  "y": 576,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 560.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 560.5,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 591.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 591.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Balanced workload",
+              "x": 25,
+              "y": 615,
+              "width": 340,
+              "height": 46,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 195,
+                  "y": 638,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 626.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 626.5,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 649.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 649.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 337,
+              "y": 167,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 359,
+                  "y": 189,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 178,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 178,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 200,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 200,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.600844000000052,
+          "toastRemaining": 0
+        },
+        {
+          "name": "preseason-outcome",
+          "x": 34,
+          "y": 221.21875,
+          "width": 322,
+          "height": 62,
+          "bottom": 283.21875,
+          "viewport": [
+            390,
+            844
+          ],
+          "yScroll": 395,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": false,
+          "controls": [],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.4871140000004743,
+          "toastRemaining": 0
+        }
+      ],
+      "restorations": [
+        {
+          "name": "preseason-escape",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Balanced, or choose your next-season workload</span></button>",
+          "ok": true
+        },
+        {
+          "name": "preseason-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Development push · 2029/30</span></button>",
+          "ok": true
+        },
+        {
+          "name": "balanced-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Balanced, or choose your next-season workload</span></button>",
+          "ok": true
+        },
+        {
+          "name": "restored-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Development push · 2029/30</span></button>",
+          "ok": true
+        }
+      ],
+      "reloads": [
+        {
+          "name": "chosen-plan",
+          "beforeHash": "f2e7b65ac65b55d7d44a174b6e0afb5403fa4621f0655623288f821e3b390558",
+          "afterHash": "f2e7b65ac65b55d7d44a174b6e0afb5403fa4621f0655623288f821e3b390558",
+          "beforeBytes": 17153,
+          "afterBytes": 17153,
+          "equal": true
+        },
+        {
+          "name": "recorded-season",
+          "beforeHash": "26a0910dedabc3bf973a6202537488c929c3b5e358141fc7e43328944095516c",
+          "afterHash": "26a0910dedabc3bf973a6202537488c929c3b5e358141fc7e43328944095516c",
+          "beforeBytes": 27780,
+          "afterBytes": 27780,
+          "equal": true
+        },
+        {
+          "name": "summary-plan",
+          "beforeHash": "f006a783a4670274a70afa786fc4119577db18be49053032c9221bdfa49830f2",
+          "afterHash": "f006a783a4670274a70afa786fc4119577db18be49053032c9221bdfa49830f2",
+          "beforeBytes": 27179,
+          "afterBytes": 27179,
+          "equal": true
+        }
+      ],
+      "actions": [
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "advanceProSeason",
+          "seed": 118600,
+          "phase": "newspaper",
+          "draws": 170
+        },
+        {
+          "method": "dismissNewspaper",
+          "seed": 118701,
+          "phase": "season_summary",
+          "draws": 0
+        }
+      ],
+      "seasonSeed": 118600,
+      "ok": true
+    },
+    {
+      "id": "390-recovery",
+      "kind": "recovery",
+      "width": 390,
+      "height": 844,
+      "touch": true,
+      "checks": [
+        {
+          "label": "initial: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "initial-repair: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "Rules and both exact tradeoffs precede the preseason choice",
+          "ok": true
+        },
+        {
+          "label": "All preseason dialog controls are at least 44 pixels",
+          "ok": true
+        },
+        {
+          "label": "Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Shift+Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Shift+Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "preseason-rules: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "preseason-rules: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "preseason-escape: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "Reading and closing rules preserves the full career",
+          "ok": true
+        },
+        {
+          "label": "0-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "0-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "preseason-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "Reopened dialog marks the exact saved choice",
+          "ok": true
+        },
+        {
+          "label": "1-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "1-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "balanced-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "2-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "2-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "restored-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "chosen-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "chosen-plan: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "3-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "3-advanceProSeason: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Next Season records one actual senior year at the shared club",
+          "ok": true
+        },
+        {
+          "label": "The chosen plan settles once with its exact skill modifier and is consumed",
+          "ok": true
+        },
+        {
+          "label": "recorded-season-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "recorded-season: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "4-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "4-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Actual intervening newspaper reaches the mandatory saved season summary",
+          "ok": true
+        },
+        {
+          "label": "Season summary shows the exact recorded plan outcome and modifier",
+          "ok": true
+        },
+        {
+          "label": "preseason-outcome: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "summary-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "summary-plan: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "Actual route has no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "No page or served asset errors",
+          "ok": true
+        },
+        {
+          "label": "All external write attempts are intercepted locally with no forwarded external requests",
+          "ok": true
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/rest/v1/game_completions",
+          "blocked": true
+        }
+      ],
+      "intercepted": [
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/un.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/un.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "POST",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/game_completions"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "preseason-rules",
+          "x": 0,
+          "y": 158,
+          "width": 390,
+          "height": 528,
+          "bottom": 686,
+          "viewport": [
+            390,
+            844
+          ],
+          "yScroll": 250,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Development push\n+1 passing, higher injury risk",
+              "x": 25,
+              "y": 475,
+              "width": 340,
+              "height": 62,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 195,
+                  "y": 506,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 490.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 490.5,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 521.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 521.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Recovery focus\n-1 passing, lower injury risk",
+              "x": 25,
+              "y": 545,
+              "width": 340,
+              "height": 62,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 195,
+                  "y": 576,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 560.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 560.5,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 591.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 591.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Balanced workload",
+              "x": 25,
+              "y": 615,
+              "width": 340,
+              "height": 46,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 195,
+                  "y": 638,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 626.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 626.5,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 649.5,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 649.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 337,
+              "y": 167,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 359,
+                  "y": 189,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 178,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 178,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 200,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 200,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.2990819999995438,
+          "toastRemaining": 0
+        },
+        {
+          "name": "preseason-outcome",
+          "x": 34,
+          "y": 221.21875,
+          "width": 322,
+          "height": 62,
+          "bottom": 283.21875,
+          "viewport": [
+            390,
+            844
+          ],
+          "yScroll": 395,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": false,
+          "controls": [],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.3979850000014267,
+          "toastRemaining": 0
+        }
+      ],
+      "restorations": [
+        {
+          "name": "preseason-escape",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Balanced, or choose your next-season workload</span></button>",
+          "ok": true
+        },
+        {
+          "name": "preseason-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Recovery focus · 2029/30</span></button>",
+          "ok": true
+        },
+        {
+          "name": "balanced-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Balanced, or choose your next-season workload</span></button>",
+          "ok": true
+        },
+        {
+          "name": "restored-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 250,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Recovery focus · 2029/30</span></button>",
+          "ok": true
+        }
+      ],
+      "reloads": [
+        {
+          "name": "chosen-plan",
+          "beforeHash": "21e4a599877e289285e2fc7d2e23ddeef42983473f3f1a98ea9ac537c4a5627d",
+          "afterHash": "21e4a599877e289285e2fc7d2e23ddeef42983473f3f1a98ea9ac537c4a5627d",
+          "beforeBytes": 17157,
+          "afterBytes": 17157,
+          "equal": true
+        },
+        {
+          "name": "recorded-season",
+          "beforeHash": "d0224da6f6bbdaeee436ae914810d9ca7888bd9dff62b98a9f0021c8eb83ed93",
+          "afterHash": "d0224da6f6bbdaeee436ae914810d9ca7888bd9dff62b98a9f0021c8eb83ed93",
+          "beforeBytes": 27788,
+          "afterBytes": 27788,
+          "equal": true
+        },
+        {
+          "name": "summary-plan",
+          "beforeHash": "29d8c232502b82d69120b37ecaef9bba87b3e83332e9e89c0830d32e113ad4db",
+          "afterHash": "29d8c232502b82d69120b37ecaef9bba87b3e83332e9e89c0830d32e113ad4db",
+          "beforeBytes": 27187,
+          "afterBytes": 27187,
+          "equal": true
+        }
+      ],
+      "actions": [
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "advanceProSeason",
+          "seed": 118600,
+          "phase": "newspaper",
+          "draws": 170
+        },
+        {
+          "method": "dismissNewspaper",
+          "seed": 118701,
+          "phase": "season_summary",
+          "draws": 0
+        }
+      ],
+      "seasonSeed": 118600,
+      "ok": true
+    },
+    {
+      "id": "390-mentor",
+      "kind": "mentor",
+      "width": 390,
+      "height": 844,
+      "touch": true,
+      "checks": [
+        {
+          "label": "initial: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "initial-repair: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "The actual event explains generated scope and qualifying progress before acceptance",
+          "ok": true
+        },
+        {
+          "label": "mentor-event: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "0-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "0-applyEventChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "1-stayAtClub: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "1-stayAtClub: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Accepted event creates one saved fictional protege without fabricated appearances",
+          "ok": true
+        },
+        {
+          "label": "created: tile identifies the saved generated academy player",
+          "ok": true
+        },
+        {
+          "label": "created: fictional scope and recorded age are explicit",
+          "ok": true
+        },
+        {
+          "label": "created: history contains exactly the recorded mentoring seasons",
+          "ok": true
+        },
+        {
+          "label": "created: help is reopenable and gives the qualifying and interrupted worked example",
+          "ok": true
+        },
+        {
+          "label": "created: dialog controls are at least 44 pixels",
+          "ok": true
+        },
+        {
+          "label": "created: Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "created: Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "created: Shift+Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "created: Shift+Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "created-help: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "created-help: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "created-history: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "created-history: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "created-escape: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "created: reading mentor details changes no saved bytes",
+          "ok": true
+        },
+        {
+          "label": "created-back: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "created: Back preserves the complete career",
+          "ok": true
+        },
+        {
+          "label": "created-mentor-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "created-mentor: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "2-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "2-advanceProSeason: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Next Season records one actual senior year at the shared club",
+          "ok": true
+        },
+        {
+          "label": "One qualifying recorded season credits exactly one mentoring year and age",
+          "ok": true
+        },
+        {
+          "label": "recorded-season-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "recorded-season: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "3-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "3-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Actual intervening newspaper reaches the mandatory saved season summary",
+          "ok": true
+        },
+        {
+          "label": "4-dismissSummary: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "4-dismissSummary: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "5-dismissBallonDor: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "5-dismissBallonDor: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "6-dismissRivalryEvent: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "6-dismissRivalryEvent: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "7-applySocialMediaAction: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "7-applySocialMediaAction: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "8-dismissSocialMediaPhase: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "8-dismissSocialMediaPhase: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "9-applyMoralDilemmaChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "9-applyMoralDilemmaChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "10-dismissMoralDilemma: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "10-dismissMoralDilemma: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "11-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "11-applyEventChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "12-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "12-applyEventChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "13-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "13-applyEventChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "14-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "14-applyEventChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "15-stayAtClub: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "15-stayAtClub: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Summer choices keep the same protege and exact recorded history",
+          "ok": true
+        },
+        {
+          "label": "credited: tile identifies the saved generated academy player",
+          "ok": true
+        },
+        {
+          "label": "credited: fictional scope and recorded age are explicit",
+          "ok": true
+        },
+        {
+          "label": "credited: history contains exactly the recorded mentoring seasons",
+          "ok": true
+        },
+        {
+          "label": "credited: exact saved year, progress and age 2029",
+          "ok": true
+        },
+        {
+          "label": "credited: help is reopenable and gives the qualifying and interrupted worked example",
+          "ok": true
+        },
+        {
+          "label": "credited: dialog controls are at least 44 pixels",
+          "ok": true
+        },
+        {
+          "label": "credited: Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "credited: Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "credited: Shift+Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "credited: Shift+Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "credited-help: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "credited-help: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "credited-history: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "credited-history: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "credited-escape: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "credited: reading mentor details changes no saved bytes",
+          "ok": true
+        },
+        {
+          "label": "credited-back: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "credited: Back preserves the complete career",
+          "ok": true
+        },
+        {
+          "label": "credited-mentor-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "credited-mentor: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "Viewing and reloading never credits the recorded mentoring season twice",
+          "ok": true
+        },
+        {
+          "label": "Actual route has no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "No page or served asset errors",
+          "ok": true
+        },
+        {
+          "label": "All external write attempts are intercepted locally with no forwarded external requests",
+          "ok": true
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/rest/v1/game_completions",
+          "blocked": true
+        }
+      ],
+      "intercepted": [
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/un.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "POST",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/game_completions"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/fr.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/de.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/no.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/es.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/br.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "mentor-event",
+          "x": 12,
+          "y": 407.21875,
+          "width": 366,
+          "height": 380.75,
+          "bottom": 787.96875,
+          "viewport": [
+            390,
+            844
+          ],
+          "yScroll": 0,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": false,
+          "controls": [],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 14.252776999999696,
+          "toastRemaining": 0
+        },
+        {
+          "name": "created-help",
+          "x": 0,
+          "y": 93,
+          "width": 390,
+          "height": 658,
+          "bottom": 751,
+          "viewport": [
+            390,
+            844
+          ],
+          "yScroll": 329,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Back to mentor details",
+              "x": 25,
+              "y": 198,
+              "width": 123,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 86.5,
+                  "y": 220,
+                  "painted": true
+                },
+                {
+                  "x": 55.75,
+                  "y": 209,
+                  "painted": true
+                },
+                {
+                  "x": 117.25,
+                  "y": 209,
+                  "painted": true
+                },
+                {
+                  "x": 55.75,
+                  "y": 231,
+                  "painted": true
+                },
+                {
+                  "x": 117.25,
+                  "y": 231,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Back to your career",
+              "x": 25,
+              "y": 682,
+              "width": 340,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 195,
+                  "y": 704,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 693,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 693,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 715,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 715,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 337,
+              "y": 102,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 359,
+                  "y": 124,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 113,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 113,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 135,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 135,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 2,
+          "toastWaitMs": 3941.6908750000002,
+          "toastRemaining": 0
+        },
+        {
+          "name": "created-history",
+          "x": 0,
+          "y": 209,
+          "width": 390,
+          "height": 426,
+          "bottom": 635,
+          "viewport": [
+            390,
+            844
+          ],
+          "yScroll": 329,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Academy mentoring help",
+              "x": 25,
+              "y": 314,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 47,
+                  "y": 336,
+                  "painted": true
+                },
+                {
+                  "x": 36,
+                  "y": 325,
+                  "painted": true
+                },
+                {
+                  "x": 58,
+                  "y": 325,
+                  "painted": true
+                },
+                {
+                  "x": 36,
+                  "y": 347,
+                  "painted": true
+                },
+                {
+                  "x": 58,
+                  "y": 347,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Back to your career",
+              "x": 25,
+              "y": 566,
+              "width": 340,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 195,
+                  "y": 588,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 577,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 577,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 599,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 599,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 337,
+              "y": 218,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 359,
+                  "y": 240,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 229,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 229,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 251,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 251,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.3211540000011155,
+          "toastRemaining": 0
+        },
+        {
+          "name": "credited-help",
+          "x": 0,
+          "y": 93,
+          "width": 390,
+          "height": 658,
+          "bottom": 751,
+          "viewport": [
+            390,
+            844
+          ],
+          "yScroll": 329,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Back to mentor details",
+              "x": 25,
+              "y": 198,
+              "width": 123,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 86.5,
+                  "y": 220,
+                  "painted": true
+                },
+                {
+                  "x": 55.75,
+                  "y": 209,
+                  "painted": true
+                },
+                {
+                  "x": 117.25,
+                  "y": 209,
+                  "painted": true
+                },
+                {
+                  "x": 55.75,
+                  "y": 231,
+                  "painted": true
+                },
+                {
+                  "x": 117.25,
+                  "y": 231,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Back to your career",
+              "x": 25,
+              "y": 682,
+              "width": 340,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 195,
+                  "y": 704,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 693,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 693,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 715,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 715,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 337,
+              "y": 102,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 359,
+                  "y": 124,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 113,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 113,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 135,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 135,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 6,
+          "toastWaitMs": 3928.387498,
+          "toastRemaining": 0
+        },
+        {
+          "name": "credited-history",
+          "x": 0,
+          "y": 186,
+          "width": 390,
+          "height": 472,
+          "bottom": 658,
+          "viewport": [
+            390,
+            844
+          ],
+          "yScroll": 329,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Academy mentoring help",
+              "x": 25,
+              "y": 291,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 47,
+                  "y": 313,
+                  "painted": true
+                },
+                {
+                  "x": 36,
+                  "y": 302,
+                  "painted": true
+                },
+                {
+                  "x": 58,
+                  "y": 302,
+                  "painted": true
+                },
+                {
+                  "x": 36,
+                  "y": 324,
+                  "painted": true
+                },
+                {
+                  "x": 58,
+                  "y": 324,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Back to your career",
+              "x": 25,
+              "y": 589,
+              "width": 340,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 195,
+                  "y": 611,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 600,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 600,
+                  "painted": true
+                },
+                {
+                  "x": 110,
+                  "y": 622,
+                  "painted": true
+                },
+                {
+                  "x": 280,
+                  "y": 622,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 337,
+              "y": 195,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 359,
+                  "y": 217,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 206,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 206,
+                  "painted": true
+                },
+                {
+                  "x": 348,
+                  "y": 228,
+                  "painted": true
+                },
+                {
+                  "x": 370,
+                  "y": 228,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.383761000000959,
+          "toastRemaining": 0
+        }
+      ],
+      "restorations": [
+        {
+          "name": "created-escape",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 329
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 329,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-career-mentor-tile=\"true\" class=\"w-full min-h-[64px] rounded-xl border border-border bg-card p-3 text-left\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:rm:\" data-state=\"closed\"><span class=\"block text-sm font-semibold\">🤝 Academy mentor</span><span class=\"block text-[10px] font-bold text-muted-foreground\">GENERATED academy player</span><span class=\"block text-xs\">Joris Kortenhorst · RB</span><span class=\"block text-xs text-muted-foreground\">0/3 mentoring seasons · Mentoring together</span></button>",
+          "ok": true
+        },
+        {
+          "name": "created-back",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 329
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 329,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-career-mentor-tile=\"true\" class=\"w-full min-h-[64px] rounded-xl border border-border bg-card p-3 text-left\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:rm:\" data-state=\"closed\"><span class=\"block text-sm font-semibold\">🤝 Academy mentor</span><span class=\"block text-[10px] font-bold text-muted-foreground\">GENERATED academy player</span><span class=\"block text-xs\">Joris Kortenhorst · RB</span><span class=\"block text-xs text-muted-foreground\">0/3 mentoring seasons · Mentoring together</span></button>",
+          "ok": true
+        },
+        {
+          "name": "credited-escape",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 329
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 329,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-career-mentor-tile=\"true\" class=\"w-full min-h-[64px] rounded-xl border border-border bg-card p-3 text-left\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:rp:\" data-state=\"closed\"><span class=\"block text-sm font-semibold\">🤝 Academy mentor</span><span class=\"block text-[10px] font-bold text-muted-foreground\">GENERATED academy player</span><span class=\"block text-xs\">Joris Kortenhorst · RB</span><span class=\"block text-xs text-muted-foreground\">1/3 mentoring seasons · Mentoring together</span></button>",
+          "ok": true
+        },
+        {
+          "name": "credited-back",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 329
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 329,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-career-mentor-tile=\"true\" class=\"w-full min-h-[64px] rounded-xl border border-border bg-card p-3 text-left\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:rp:\" data-state=\"closed\"><span class=\"block text-sm font-semibold\">🤝 Academy mentor</span><span class=\"block text-[10px] font-bold text-muted-foreground\">GENERATED academy player</span><span class=\"block text-xs\">Joris Kortenhorst · RB</span><span class=\"block text-xs text-muted-foreground\">1/3 mentoring seasons · Mentoring together</span></button>",
+          "ok": true
+        }
+      ],
+      "reloads": [
+        {
+          "name": "created-mentor",
+          "beforeHash": "d9a9c92012d2f150ac9f6bf0ffd965db1d59e98f613f4585cd38e4a7910fde33",
+          "afterHash": "d9a9c92012d2f150ac9f6bf0ffd965db1d59e98f613f4585cd38e4a7910fde33",
+          "beforeBytes": 17389,
+          "afterBytes": 17389,
+          "equal": true
+        },
+        {
+          "name": "recorded-season",
+          "beforeHash": "1f7e06e895168295e3e4eaed695fbc358e3d85e5a9c9bef927d83582f7c49c49",
+          "afterHash": "1f7e06e895168295e3e4eaed695fbc358e3d85e5a9c9bef927d83582f7c49c49",
+          "beforeBytes": 28025,
+          "afterBytes": 28025,
+          "equal": true
+        },
+        {
+          "name": "credited-mentor",
+          "beforeHash": "b52811eabefd5485ebf02276959b90c56dc939b945cb80ae8db7fbaee9b527db",
+          "afterHash": "b52811eabefd5485ebf02276959b90c56dc939b945cb80ae8db7fbaee9b527db",
+          "beforeBytes": 25463,
+          "afterBytes": 25463,
+          "equal": true
+        }
+      ],
+      "actions": [
+        {
+          "method": "applyEventChoice",
+          "seed": 118700,
+          "phase": "transfer_window",
+          "draws": 6
+        },
+        {
+          "method": "stayAtClub",
+          "seed": 118800,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "advanceProSeason",
+          "seed": 118600,
+          "phase": "newspaper",
+          "draws": 170
+        },
+        {
+          "method": "dismissNewspaper",
+          "seed": 118701,
+          "phase": "season_summary",
+          "draws": 0
+        },
+        {
+          "method": "dismissSummary",
+          "seed": 118800,
+          "phase": "ballon_dor",
+          "draws": 0
+        },
+        {
+          "method": "dismissBallonDor",
+          "seed": 118801,
+          "phase": "rivalry_event",
+          "draws": 0
+        },
+        {
+          "method": "dismissRivalryEvent",
+          "seed": 118802,
+          "phase": "social_media_action",
+          "draws": 0
+        },
+        {
+          "method": "applySocialMediaAction",
+          "seed": 118803,
+          "phase": "social_media_action",
+          "draws": 1
+        },
+        {
+          "method": "dismissSocialMediaPhase",
+          "seed": 118804,
+          "phase": "moral_dilemma",
+          "draws": 2
+        },
+        {
+          "method": "applyMoralDilemmaChoice",
+          "seed": 118805,
+          "phase": "moral_dilemma",
+          "draws": 0
+        },
+        {
+          "method": "dismissMoralDilemma",
+          "seed": 118806,
+          "phase": "random_events",
+          "draws": 4
+        },
+        {
+          "method": "applyEventChoice",
+          "seed": 118807,
+          "phase": "random_events",
+          "draws": 4
+        },
+        {
+          "method": "applyEventChoice",
+          "seed": 118808,
+          "phase": "random_events",
+          "draws": 4
+        },
+        {
+          "method": "applyEventChoice",
+          "seed": 118809,
+          "phase": "random_events",
+          "draws": 4
+        },
+        {
+          "method": "applyEventChoice",
+          "seed": 118810,
+          "phase": "transfer_window",
+          "draws": 13
+        },
+        {
+          "method": "stayAtClub",
+          "seed": 118811,
+          "phase": "playing",
+          "draws": 0
+        }
+      ],
+      "seasonSeed": 118600,
+      "ok": true
+    },
+    {
+      "id": "1280-push",
+      "kind": "push",
+      "width": 1280,
+      "height": 900,
+      "touch": false,
+      "checks": [
+        {
+          "label": "initial: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "initial-repair: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "Rules and both exact tradeoffs precede the preseason choice",
+          "ok": true
+        },
+        {
+          "label": "All preseason dialog controls are at least 44 pixels",
+          "ok": true
+        },
+        {
+          "label": "Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Shift+Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Shift+Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "preseason-rules: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "preseason-rules: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "preseason-escape: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "Reading and closing rules preserves the full career",
+          "ok": true
+        },
+        {
+          "label": "0-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "0-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "preseason-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "Reopened dialog marks the exact saved choice",
+          "ok": true
+        },
+        {
+          "label": "1-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "1-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "balanced-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "2-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "2-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "restored-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "chosen-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "chosen-plan: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "3-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "3-advanceProSeason: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Next Season records one actual senior year at the shared club",
+          "ok": true
+        },
+        {
+          "label": "The chosen plan settles once with its exact skill modifier and is consumed",
+          "ok": true
+        },
+        {
+          "label": "recorded-season-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "recorded-season: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "4-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "4-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Actual intervening newspaper reaches the mandatory saved season summary",
+          "ok": true
+        },
+        {
+          "label": "Season summary shows the exact recorded plan outcome and modifier",
+          "ok": true
+        },
+        {
+          "label": "preseason-outcome: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "summary-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "summary-plan: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "Actual route has no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "No page or served asset errors",
+          "ok": true
+        },
+        {
+          "label": "All external write attempts are intercepted locally with no forwarded external requests",
+          "ok": true
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/rest/v1/game_completions",
+          "blocked": true
+        }
+      ],
+      "intercepted": [
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/un.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/un.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "POST",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/game_completions"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "preseason-rules",
+          "x": 384,
+          "y": 222,
+          "width": 512,
+          "height": 456,
+          "bottom": 678,
+          "viewport": [
+            1280,
+            900
+          ],
+          "yScroll": 86,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Development push\n+1 passing, higher injury risk",
+              "x": 409,
+              "y": 467,
+              "width": 462,
+              "height": 62,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 640,
+                  "y": 498,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 482.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 482.5,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 513.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 513.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Recovery focus\n-1 passing, lower injury risk",
+              "x": 409,
+              "y": 537,
+              "width": 462,
+              "height": 62,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 640,
+                  "y": 568,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 552.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 552.5,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 583.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 583.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Balanced workload",
+              "x": 409,
+              "y": 607,
+              "width": 462,
+              "height": 46,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 640,
+                  "y": 630,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 618.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 618.5,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 641.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 641.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 843,
+              "y": 231,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 865,
+                  "y": 253,
+                  "painted": true
+                },
+                {
+                  "x": 854,
+                  "y": 242,
+                  "painted": true
+                },
+                {
+                  "x": 876,
+                  "y": 242,
+                  "painted": true
+                },
+                {
+                  "x": 854,
+                  "y": 264,
+                  "painted": true
+                },
+                {
+                  "x": 876,
+                  "y": 264,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.2923210000008112,
+          "toastRemaining": 0
+        },
+        {
+          "name": "preseason-outcome",
+          "x": 438,
+          "y": 479.5,
+          "width": 676,
+          "height": 62,
+          "bottom": 541.5,
+          "viewport": [
+            1280,
+            900
+          ],
+          "yScroll": 0,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": false,
+          "controls": [],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.3784320000049775,
+          "toastRemaining": 0
+        }
+      ],
+      "restorations": [
+        {
+          "name": "preseason-escape",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Balanced, or choose your next-season workload</span></button>",
+          "ok": true
+        },
+        {
+          "name": "preseason-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Development push · 2029/30</span></button>",
+          "ok": true
+        },
+        {
+          "name": "balanced-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Balanced, or choose your next-season workload</span></button>",
+          "ok": true
+        },
+        {
+          "name": "restored-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Development push · 2029/30</span></button>",
+          "ok": true
+        }
+      ],
+      "reloads": [
+        {
+          "name": "chosen-plan",
+          "beforeHash": "f2e7b65ac65b55d7d44a174b6e0afb5403fa4621f0655623288f821e3b390558",
+          "afterHash": "f2e7b65ac65b55d7d44a174b6e0afb5403fa4621f0655623288f821e3b390558",
+          "beforeBytes": 17153,
+          "afterBytes": 17153,
+          "equal": true
+        },
+        {
+          "name": "recorded-season",
+          "beforeHash": "26a0910dedabc3bf973a6202537488c929c3b5e358141fc7e43328944095516c",
+          "afterHash": "26a0910dedabc3bf973a6202537488c929c3b5e358141fc7e43328944095516c",
+          "beforeBytes": 27780,
+          "afterBytes": 27780,
+          "equal": true
+        },
+        {
+          "name": "summary-plan",
+          "beforeHash": "f006a783a4670274a70afa786fc4119577db18be49053032c9221bdfa49830f2",
+          "afterHash": "f006a783a4670274a70afa786fc4119577db18be49053032c9221bdfa49830f2",
+          "beforeBytes": 27179,
+          "afterBytes": 27179,
+          "equal": true
+        }
+      ],
+      "actions": [
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "advanceProSeason",
+          "seed": 118600,
+          "phase": "newspaper",
+          "draws": 170
+        },
+        {
+          "method": "dismissNewspaper",
+          "seed": 118701,
+          "phase": "season_summary",
+          "draws": 0
+        }
+      ],
+      "seasonSeed": 118600,
+      "ok": true
+    },
+    {
+      "id": "1280-recovery",
+      "kind": "recovery",
+      "width": 1280,
+      "height": 900,
+      "touch": false,
+      "checks": [
+        {
+          "label": "initial: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "initial-repair: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "Rules and both exact tradeoffs precede the preseason choice",
+          "ok": true
+        },
+        {
+          "label": "All preseason dialog controls are at least 44 pixels",
+          "ok": true
+        },
+        {
+          "label": "Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Shift+Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "Shift+Tab remains inside preseason dialog",
+          "ok": true
+        },
+        {
+          "label": "preseason-rules: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "preseason-rules: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "preseason-escape: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "Reading and closing rules preserves the full career",
+          "ok": true
+        },
+        {
+          "label": "0-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "0-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "preseason-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "Reopened dialog marks the exact saved choice",
+          "ok": true
+        },
+        {
+          "label": "1-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "1-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "balanced-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "2-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "2-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "restored-choice: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "chosen-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "chosen-plan: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "3-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "3-advanceProSeason: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Next Season records one actual senior year at the shared club",
+          "ok": true
+        },
+        {
+          "label": "The chosen plan settles once with its exact skill modifier and is consumed",
+          "ok": true
+        },
+        {
+          "label": "recorded-season-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "recorded-season: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "4-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "4-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Actual intervening newspaper reaches the mandatory saved season summary",
+          "ok": true
+        },
+        {
+          "label": "Season summary shows the exact recorded plan outcome and modifier",
+          "ok": true
+        },
+        {
+          "label": "preseason-outcome: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "summary-plan-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "summary-plan: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "Actual route has no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "No page or served asset errors",
+          "ok": true
+        },
+        {
+          "label": "All external write attempts are intercepted locally with no forwarded external requests",
+          "ok": true
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/rest/v1/game_completions",
+          "blocked": true
+        }
+      ],
+      "intercepted": [
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/un.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/un.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "POST",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/game_completions"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "preseason-rules",
+          "x": 384,
+          "y": 222,
+          "width": 512,
+          "height": 456,
+          "bottom": 678,
+          "viewport": [
+            1280,
+            900
+          ],
+          "yScroll": 86,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Development push\n+1 passing, higher injury risk",
+              "x": 409,
+              "y": 467,
+              "width": 462,
+              "height": 62,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 640,
+                  "y": 498,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 482.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 482.5,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 513.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 513.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Recovery focus\n-1 passing, lower injury risk",
+              "x": 409,
+              "y": 537,
+              "width": 462,
+              "height": 62,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 640,
+                  "y": 568,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 552.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 552.5,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 583.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 583.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Balanced workload",
+              "x": 409,
+              "y": 607,
+              "width": 462,
+              "height": 46,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 640,
+                  "y": 630,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 618.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 618.5,
+                  "painted": true
+                },
+                {
+                  "x": 524.5,
+                  "y": 641.5,
+                  "painted": true
+                },
+                {
+                  "x": 755.5,
+                  "y": 641.5,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 843,
+              "y": 231,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 865,
+                  "y": 253,
+                  "painted": true
+                },
+                {
+                  "x": 854,
+                  "y": 242,
+                  "painted": true
+                },
+                {
+                  "x": 876,
+                  "y": 242,
+                  "painted": true
+                },
+                {
+                  "x": 854,
+                  "y": 264,
+                  "painted": true
+                },
+                {
+                  "x": 876,
+                  "y": 264,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.2614729999986594,
+          "toastRemaining": 0
+        },
+        {
+          "name": "preseason-outcome",
+          "x": 438,
+          "y": 479.5,
+          "width": 676,
+          "height": 62,
+          "bottom": 541.5,
+          "viewport": [
+            1280,
+            900
+          ],
+          "yScroll": 0,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": false,
+          "controls": [],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.3409590000010212,
+          "toastRemaining": 0
+        }
+      ],
+      "restorations": [
+        {
+          "name": "preseason-escape",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Balanced, or choose your next-season workload</span></button>",
+          "ok": true
+        },
+        {
+          "name": "preseason-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Recovery focus · 2029/30</span></button>",
+          "ok": true
+        },
+        {
+          "name": "balanced-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Balanced, or choose your next-season workload</span></button>",
+          "ok": true
+        },
+        {
+          "name": "restored-choice",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 86,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Recovery focus · 2029/30</span></button>",
+          "ok": true
+        }
+      ],
+      "reloads": [
+        {
+          "name": "chosen-plan",
+          "beforeHash": "21e4a599877e289285e2fc7d2e23ddeef42983473f3f1a98ea9ac537c4a5627d",
+          "afterHash": "21e4a599877e289285e2fc7d2e23ddeef42983473f3f1a98ea9ac537c4a5627d",
+          "beforeBytes": 17157,
+          "afterBytes": 17157,
+          "equal": true
+        },
+        {
+          "name": "recorded-season",
+          "beforeHash": "d0224da6f6bbdaeee436ae914810d9ca7888bd9dff62b98a9f0021c8eb83ed93",
+          "afterHash": "d0224da6f6bbdaeee436ae914810d9ca7888bd9dff62b98a9f0021c8eb83ed93",
+          "beforeBytes": 27788,
+          "afterBytes": 27788,
+          "equal": true
+        },
+        {
+          "name": "summary-plan",
+          "beforeHash": "29d8c232502b82d69120b37ecaef9bba87b3e83332e9e89c0830d32e113ad4db",
+          "afterHash": "29d8c232502b82d69120b37ecaef9bba87b3e83332e9e89c0830d32e113ad4db",
+          "beforeBytes": 27187,
+          "afterBytes": 27187,
+          "equal": true
+        }
+      ],
+      "actions": [
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "pickCareerPreparation",
+          "seed": 118701,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "advanceProSeason",
+          "seed": 118600,
+          "phase": "newspaper",
+          "draws": 170
+        },
+        {
+          "method": "dismissNewspaper",
+          "seed": 118701,
+          "phase": "season_summary",
+          "draws": 0
+        }
+      ],
+      "seasonSeed": 118600,
+      "ok": true
+    },
+    {
+      "id": "1280-mentor",
+      "kind": "mentor",
+      "width": 1280,
+      "height": 900,
+      "touch": false,
+      "checks": [
+        {
+          "label": "initial: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "initial-repair: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "The actual event explains generated scope and qualifying progress before acceptance",
+          "ok": true
+        },
+        {
+          "label": "mentor-event: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "0-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "0-applyEventChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "1-stayAtClub: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "1-stayAtClub: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Accepted event creates one saved fictional protege without fabricated appearances",
+          "ok": true
+        },
+        {
+          "label": "created: tile identifies the saved generated academy player",
+          "ok": true
+        },
+        {
+          "label": "created: fictional scope and recorded age are explicit",
+          "ok": true
+        },
+        {
+          "label": "created: history contains exactly the recorded mentoring seasons",
+          "ok": true
+        },
+        {
+          "label": "created: help is reopenable and gives the qualifying and interrupted worked example",
+          "ok": true
+        },
+        {
+          "label": "created: dialog controls are at least 44 pixels",
+          "ok": true
+        },
+        {
+          "label": "created: Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "created: Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "created: Shift+Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "created: Shift+Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "created-help: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "created-help: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "created-history: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "created-history: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "created-escape: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "created: reading mentor details changes no saved bytes",
+          "ok": true
+        },
+        {
+          "label": "created-back: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "created: Back preserves the complete career",
+          "ok": true
+        },
+        {
+          "label": "created-mentor-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "created-mentor: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "2-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "2-advanceProSeason: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Next Season records one actual senior year at the shared club",
+          "ok": true
+        },
+        {
+          "label": "One qualifying recorded season credits exactly one mentoring year and age",
+          "ok": true
+        },
+        {
+          "label": "recorded-season-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "recorded-season: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "3-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "3-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Actual intervening newspaper reaches the mandatory saved season summary",
+          "ok": true
+        },
+        {
+          "label": "4-dismissSummary: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "4-dismissSummary: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "5-dismissBallonDor: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "5-dismissBallonDor: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "6-dismissRivalryEvent: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "6-dismissRivalryEvent: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "7-applySocialMediaAction: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "7-applySocialMediaAction: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "8-dismissSocialMediaPhase: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "8-dismissSocialMediaPhase: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "9-applyMoralDilemmaChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "9-applyMoralDilemmaChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "10-dismissMoralDilemma: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "10-dismissMoralDilemma: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "11-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "11-applyEventChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "12-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "12-applyEventChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "13-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "13-applyEventChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "14-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "14-applyEventChoice: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "15-stayAtClub: every serialized saved field and key matches the unchanged Chromium engine",
+          "ok": true
+        },
+        {
+          "label": "15-stayAtClub: the actual click consumes exactly the unchanged engine random draws",
+          "ok": true
+        },
+        {
+          "label": "Summer choices keep the same protege and exact recorded history",
+          "ok": true
+        },
+        {
+          "label": "credited: tile identifies the saved generated academy player",
+          "ok": true
+        },
+        {
+          "label": "credited: fictional scope and recorded age are explicit",
+          "ok": true
+        },
+        {
+          "label": "credited: history contains exactly the recorded mentoring seasons",
+          "ok": true
+        },
+        {
+          "label": "credited: exact saved year, progress and age 2029",
+          "ok": true
+        },
+        {
+          "label": "credited: help is reopenable and gives the qualifying and interrupted worked example",
+          "ok": true
+        },
+        {
+          "label": "credited: dialog controls are at least 44 pixels",
+          "ok": true
+        },
+        {
+          "label": "credited: Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "credited: Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "credited: Shift+Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "credited: Shift+Tab stays inside the dialog",
+          "ok": true
+        },
+        {
+          "label": "credited-help: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "credited-help: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "credited-history: screenshot target is visible, painted and stable with no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "credited-history: every actual visible dialog control is painted without an overlapping toast",
+          "ok": true
+        },
+        {
+          "label": "credited-escape: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "credited: reading mentor details changes no saved bytes",
+          "ok": true
+        },
+        {
+          "label": "credited-back: exact tile focus, body scrolling and page position restore",
+          "ok": true
+        },
+        {
+          "label": "credited: Back preserves the complete career",
+          "ok": true
+        },
+        {
+          "label": "credited-mentor-reload: the page fetched the summer deck chunk, the deck the oracle plays with",
+          "ok": true
+        },
+        {
+          "label": "credited-mentor: reload preserves the complete saved bytes",
+          "ok": true
+        },
+        {
+          "label": "Viewing and reloading never credits the recorded mentoring season twice",
+          "ok": true
+        },
+        {
+          "label": "Actual route has no horizontal overflow",
+          "ok": true
+        },
+        {
+          "label": "No page or served asset errors",
+          "ok": true
+        },
+        {
+          "label": "All external write attempts are intercepted locally with no forwarded external requests",
+          "ok": true
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "writes": [
+        {
+          "method": "POST",
+          "path": "/rest/v1/game_completions",
+          "blocked": true
+        }
+      ],
+      "intercepted": [
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/un.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "POST",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/game_completions"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/fr.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/de.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/no.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/es.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/br.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.googleapis.com",
+          "path": "/css2"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUsj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flawuiqbvjobmkfkauhw.supabase.co",
+          "path": "/rest/v1/live_scores"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj4PVksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj42Vksj.ttf"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w80/nl.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://flagcdn.com",
+          "path": "/w40/mc.png"
+        },
+        {
+          "method": "GET",
+          "origin": "https://fonts.gstatic.com",
+          "path": "/s/spacegrotesk/v22/V8mQoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUUsj.ttf"
+        }
+      ],
+      "layouts": [
+        {
+          "name": "mentor-event",
+          "x": 416,
+          "y": 270.5,
+          "width": 720,
+          "height": 296,
+          "bottom": 566.5,
+          "viewport": [
+            1280,
+            900
+          ],
+          "yScroll": 0,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": false,
+          "controls": [],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 14.124585000005027,
+          "toastRemaining": 0
+        },
+        {
+          "name": "created-help",
+          "x": 416,
+          "y": 131,
+          "width": 448,
+          "height": 638,
+          "bottom": 769,
+          "viewport": [
+            1280,
+            900
+          ],
+          "yScroll": 164,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Back to mentor details",
+              "x": 441,
+              "y": 236,
+              "width": 123,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 502.5,
+                  "y": 258,
+                  "painted": true
+                },
+                {
+                  "x": 471.75,
+                  "y": 247,
+                  "painted": true
+                },
+                {
+                  "x": 533.25,
+                  "y": 247,
+                  "painted": true
+                },
+                {
+                  "x": 471.75,
+                  "y": 269,
+                  "painted": true
+                },
+                {
+                  "x": 533.25,
+                  "y": 269,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Back to your career",
+              "x": 441,
+              "y": 700,
+              "width": 398,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 640,
+                  "y": 722,
+                  "painted": true
+                },
+                {
+                  "x": 540.5,
+                  "y": 711,
+                  "painted": true
+                },
+                {
+                  "x": 739.5,
+                  "y": 711,
+                  "painted": true
+                },
+                {
+                  "x": 540.5,
+                  "y": 733,
+                  "painted": true
+                },
+                {
+                  "x": 739.5,
+                  "y": 733,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 811,
+              "y": 140,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 833,
+                  "y": 162,
+                  "painted": true
+                },
+                {
+                  "x": 822,
+                  "y": 151,
+                  "painted": true
+                },
+                {
+                  "x": 844,
+                  "y": 151,
+                  "painted": true
+                },
+                {
+                  "x": 822,
+                  "y": 173,
+                  "painted": true
+                },
+                {
+                  "x": 844,
+                  "y": 173,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 2,
+          "toastWaitMs": 4006.523534,
+          "toastRemaining": 0
+        },
+        {
+          "name": "created-history",
+          "x": 416,
+          "y": 245,
+          "width": 448,
+          "height": 410,
+          "bottom": 655,
+          "viewport": [
+            1280,
+            900
+          ],
+          "yScroll": 164,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Academy mentoring help",
+              "x": 441,
+              "y": 350,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 463,
+                  "y": 372,
+                  "painted": true
+                },
+                {
+                  "x": 452,
+                  "y": 361,
+                  "painted": true
+                },
+                {
+                  "x": 474,
+                  "y": 361,
+                  "painted": true
+                },
+                {
+                  "x": 452,
+                  "y": 383,
+                  "painted": true
+                },
+                {
+                  "x": 474,
+                  "y": 383,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Back to your career",
+              "x": 441,
+              "y": 586,
+              "width": 398,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 640,
+                  "y": 608,
+                  "painted": true
+                },
+                {
+                  "x": 540.5,
+                  "y": 597,
+                  "painted": true
+                },
+                {
+                  "x": 739.5,
+                  "y": 597,
+                  "painted": true
+                },
+                {
+                  "x": 540.5,
+                  "y": 619,
+                  "painted": true
+                },
+                {
+                  "x": 739.5,
+                  "y": 619,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 811,
+              "y": 254,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 833,
+                  "y": 276,
+                  "painted": true
+                },
+                {
+                  "x": 822,
+                  "y": 265,
+                  "painted": true
+                },
+                {
+                  "x": 844,
+                  "y": 265,
+                  "painted": true
+                },
+                {
+                  "x": 822,
+                  "y": 287,
+                  "painted": true
+                },
+                {
+                  "x": 844,
+                  "y": 287,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.2796069999967585,
+          "toastRemaining": 0
+        },
+        {
+          "name": "credited-help",
+          "x": 416,
+          "y": 131,
+          "width": 448,
+          "height": 638,
+          "bottom": 769,
+          "viewport": [
+            1280,
+            900
+          ],
+          "yScroll": 164,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Back to mentor details",
+              "x": 441,
+              "y": 236,
+              "width": 123,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 502.5,
+                  "y": 258,
+                  "painted": true
+                },
+                {
+                  "x": 471.75,
+                  "y": 247,
+                  "painted": true
+                },
+                {
+                  "x": 533.25,
+                  "y": 247,
+                  "painted": true
+                },
+                {
+                  "x": 471.75,
+                  "y": 269,
+                  "painted": true
+                },
+                {
+                  "x": 533.25,
+                  "y": 269,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Back to your career",
+              "x": 441,
+              "y": 700,
+              "width": 398,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 640,
+                  "y": 722,
+                  "painted": true
+                },
+                {
+                  "x": 540.5,
+                  "y": 711,
+                  "painted": true
+                },
+                {
+                  "x": 739.5,
+                  "y": 711,
+                  "painted": true
+                },
+                {
+                  "x": 540.5,
+                  "y": 733,
+                  "painted": true
+                },
+                {
+                  "x": 739.5,
+                  "y": 733,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 811,
+              "y": 140,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 833,
+                  "y": 162,
+                  "painted": true
+                },
+                {
+                  "x": 822,
+                  "y": 151,
+                  "painted": true
+                },
+                {
+                  "x": 844,
+                  "y": 151,
+                  "painted": true
+                },
+                {
+                  "x": 822,
+                  "y": 173,
+                  "painted": true
+                },
+                {
+                  "x": 844,
+                  "y": 173,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 6,
+          "toastWaitMs": 3997.3904059999986,
+          "toastRemaining": 0
+        },
+        {
+          "name": "credited-history",
+          "x": 416,
+          "y": 214,
+          "width": 448,
+          "height": 472,
+          "bottom": 686,
+          "viewport": [
+            1280,
+            900
+          ],
+          "yScroll": 164,
+          "ownScroll": [
+            0,
+            0
+          ],
+          "opacity": "1",
+          "painted": true,
+          "finite": 0,
+          "overflow": false,
+          "dialog": true,
+          "controls": [
+            {
+              "label": "Academy mentoring help",
+              "x": 441,
+              "y": 319,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 463,
+                  "y": 341,
+                  "painted": true
+                },
+                {
+                  "x": 452,
+                  "y": 330,
+                  "painted": true
+                },
+                {
+                  "x": 474,
+                  "y": 330,
+                  "painted": true
+                },
+                {
+                  "x": 452,
+                  "y": 352,
+                  "painted": true
+                },
+                {
+                  "x": 474,
+                  "y": 352,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Back to your career",
+              "x": 441,
+              "y": 617,
+              "width": 398,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 640,
+                  "y": 639,
+                  "painted": true
+                },
+                {
+                  "x": 540.5,
+                  "y": 628,
+                  "painted": true
+                },
+                {
+                  "x": 739.5,
+                  "y": 628,
+                  "painted": true
+                },
+                {
+                  "x": 540.5,
+                  "y": 650,
+                  "painted": true
+                },
+                {
+                  "x": 739.5,
+                  "y": 650,
+                  "painted": true
+                }
+              ]
+            },
+            {
+              "label": "Close",
+              "x": 811,
+              "y": 223,
+              "width": 44,
+              "height": 44,
+              "insideViewport": true,
+              "points": [
+                {
+                  "x": 833,
+                  "y": 245,
+                  "painted": true
+                },
+                {
+                  "x": 822,
+                  "y": 234,
+                  "painted": true
+                },
+                {
+                  "x": 844,
+                  "y": 234,
+                  "painted": true
+                },
+                {
+                  "x": 822,
+                  "y": 256,
+                  "painted": true
+                },
+                {
+                  "x": 844,
+                  "y": 256,
+                  "painted": true
+                }
+              ]
+            }
+          ],
+          "stable": 4,
+          "readable": true,
+          "toastObserved": 0,
+          "toastWaitMs": 1.3883390000046347,
+          "toastRemaining": 0
+        }
+      ],
+      "restorations": [
+        {
+          "name": "created-escape",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 164
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 164,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-career-mentor-tile=\"true\" class=\"w-full min-h-[64px] rounded-xl border border-border bg-card p-3 text-left\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:rm:\" data-state=\"closed\"><span class=\"block text-sm font-semibold\">🤝 Academy mentor</span><span class=\"block text-[10px] font-bold text-muted-foreground\">GENERATED academy player</span><span class=\"block text-xs\">Joris Kortenhorst · RB</span><span class=\"block text-xs text-muted-foreground\">0/3 mentoring seasons · Mentoring together</span></button>",
+          "ok": true
+        },
+        {
+          "name": "created-back",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 164
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 164,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-career-mentor-tile=\"true\" class=\"w-full min-h-[64px] rounded-xl border border-border bg-card p-3 text-left\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:rm:\" data-state=\"closed\"><span class=\"block text-sm font-semibold\">🤝 Academy mentor</span><span class=\"block text-[10px] font-bold text-muted-foreground\">GENERATED academy player</span><span class=\"block text-xs\">Joris Kortenhorst · RB</span><span class=\"block text-xs text-muted-foreground\">0/3 mentoring seasons · Mentoring together</span></button>",
+          "ok": true
+        },
+        {
+          "name": "credited-escape",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 164
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 164,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-career-mentor-tile=\"true\" class=\"w-full min-h-[64px] rounded-xl border border-border bg-card p-3 text-left\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:rp:\" data-state=\"closed\"><span class=\"block text-sm font-semibold\">🤝 Academy mentor</span><span class=\"block text-[10px] font-bold text-muted-foreground\">GENERATED academy player</span><span class=\"block text-xs\">Joris Kortenhorst · RB</span><span class=\"block text-xs text-muted-foreground\">1/3 mentoring seasons · Mentoring together</span></button>",
+          "ok": true
+        },
+        {
+          "name": "credited-back",
+          "expected": {
+            "inline": "",
+            "computed": "visible",
+            "y": 164
+          },
+          "actual": {
+            "inline": "",
+            "computed": "visible",
+            "y": 164,
+            "activeMatches": true
+          },
+          "active": "<button type=\"button\" data-career-mentor-tile=\"true\" class=\"w-full min-h-[64px] rounded-xl border border-border bg-card p-3 text-left\" aria-haspopup=\"dialog\" aria-expanded=\"false\" aria-controls=\"radix-:rp:\" data-state=\"closed\"><span class=\"block text-sm font-semibold\">🤝 Academy mentor</span><span class=\"block text-[10px] font-bold text-muted-foreground\">GENERATED academy player</span><span class=\"block text-xs\">Joris Kortenhorst · RB</span><span class=\"block text-xs text-muted-foreground\">1/3 mentoring seasons · Mentoring together</span></button>",
+          "ok": true
+        }
+      ],
+      "reloads": [
+        {
+          "name": "created-mentor",
+          "beforeHash": "d9a9c92012d2f150ac9f6bf0ffd965db1d59e98f613f4585cd38e4a7910fde33",
+          "afterHash": "d9a9c92012d2f150ac9f6bf0ffd965db1d59e98f613f4585cd38e4a7910fde33",
+          "beforeBytes": 17389,
+          "afterBytes": 17389,
+          "equal": true
+        },
+        {
+          "name": "recorded-season",
+          "beforeHash": "1f7e06e895168295e3e4eaed695fbc358e3d85e5a9c9bef927d83582f7c49c49",
+          "afterHash": "1f7e06e895168295e3e4eaed695fbc358e3d85e5a9c9bef927d83582f7c49c49",
+          "beforeBytes": 28025,
+          "afterBytes": 28025,
+          "equal": true
+        },
+        {
+          "name": "credited-mentor",
+          "beforeHash": "b52811eabefd5485ebf02276959b90c56dc939b945cb80ae8db7fbaee9b527db",
+          "afterHash": "b52811eabefd5485ebf02276959b90c56dc939b945cb80ae8db7fbaee9b527db",
+          "beforeBytes": 25463,
+          "afterBytes": 25463,
+          "equal": true
+        }
+      ],
+      "actions": [
+        {
+          "method": "applyEventChoice",
+          "seed": 118700,
+          "phase": "transfer_window",
+          "draws": 6
+        },
+        {
+          "method": "stayAtClub",
+          "seed": 118800,
+          "phase": "playing",
+          "draws": 0
+        },
+        {
+          "method": "advanceProSeason",
+          "seed": 118600,
+          "phase": "newspaper",
+          "draws": 170
+        },
+        {
+          "method": "dismissNewspaper",
+          "seed": 118701,
+          "phase": "season_summary",
+          "draws": 0
+        },
+        {
+          "method": "dismissSummary",
+          "seed": 118800,
+          "phase": "ballon_dor",
+          "draws": 0
+        },
+        {
+          "method": "dismissBallonDor",
+          "seed": 118801,
+          "phase": "rivalry_event",
+          "draws": 0
+        },
+        {
+          "method": "dismissRivalryEvent",
+          "seed": 118802,
+          "phase": "social_media_action",
+          "draws": 0
+        },
+        {
+          "method": "applySocialMediaAction",
+          "seed": 118803,
+          "phase": "social_media_action",
+          "draws": 1
+        },
+        {
+          "method": "dismissSocialMediaPhase",
+          "seed": 118804,
+          "phase": "moral_dilemma",
+          "draws": 2
+        },
+        {
+          "method": "applyMoralDilemmaChoice",
+          "seed": 118805,
+          "phase": "moral_dilemma",
+          "draws": 0
+        },
+        {
+          "method": "dismissMoralDilemma",
+          "seed": 118806,
+          "phase": "random_events",
+          "draws": 4
+        },
+        {
+          "method": "applyEventChoice",
+          "seed": 118807,
+          "phase": "random_events",
+          "draws": 4
+        },
+        {
+          "method": "applyEventChoice",
+          "seed": 118808,
+          "phase": "random_events",
+          "draws": 4
+        },
+        {
+          "method": "applyEventChoice",
+          "seed": 118809,
+          "phase": "random_events",
+          "draws": 4
+        },
+        {
+          "method": "applyEventChoice",
+          "seed": 118810,
+          "phase": "transfer_window",
+          "draws": 13
+        },
+        {
+          "method": "stayAtClub",
+          "seed": 118811,
+          "phase": "playing",
+          "draws": 0
+        }
+      ],
+      "seasonSeed": 118600,
+      "ok": true
+    }
+  ],
+  "controls": [
+    {
+      "name": "full-save",
+      "changed": true,
+      "observedFailures": [
+        "full-save"
+      ],
+      "restored": true
+    },
+    {
+      "name": "readable-capture",
+      "changed": true,
+      "observedFailures": [
+        "opacity",
+        "painted-controls"
+      ],
+      "restored": true
+    },
+    {
+      "name": "focus-body",
+      "changed": true,
+      "observedFailures": [
+        "focus",
+        "computed-overflow"
+      ],
+      "restored": true
+    }
+  ],
+  "checks": 333,
+  "failed": 0,
+  "forwardedExternalRequests": 0,
+  "sourceBefore": {
+    "src/lib/soccerCareerEngine.ts": "7c79aef8322ea52d617c2390500bba5d2b93de8af2295f75dd3f2b079902711e",
+    "src/lib/soccerCareerPreparation.ts": "b6abd752e7030e8376c7ac2c00cce1296e7cb83f6220786c22335190de0014ca",
+    "src/lib/soccerCareerMentor.ts": "0b541682cd9280f5d38c357409cfdb05f9ba7bee602ae88e2ca26e1cdbdbe07e",
+    "src/components/soccer-career/PreseasonPlanTile.tsx": "959c423d73edfff7e1942d2c59d6bf9b18900a026ddfae37446b3ef050252000",
+    "src/components/soccer-career/CareerMentorTile.tsx": "a344f29a1c5e745a59fe3f416b3bce94e46f231b4fbf9c758974fbf7dbdf2ab5",
+    "src/pages/SoccerCareer.tsx": "ddc1056c3606f3f4bfac4e8bd257e8f6087b94b5dd8592e6f3ae3b7dee46b1a2",
+    "scripts/playSoccerCareerDevelopment.mjs": "64aeaac5d917cec2dde6b4496b84c63579c4af619bfb0653d646cd4885956a15"
+  },
+  "sourceAfter": {
+    "src/lib/soccerCareerEngine.ts": "7c79aef8322ea52d617c2390500bba5d2b93de8af2295f75dd3f2b079902711e",
+    "src/lib/soccerCareerPreparation.ts": "b6abd752e7030e8376c7ac2c00cce1296e7cb83f6220786c22335190de0014ca",
+    "src/lib/soccerCareerMentor.ts": "0b541682cd9280f5d38c357409cfdb05f9ba7bee602ae88e2ca26e1cdbdbe07e",
+    "src/components/soccer-career/PreseasonPlanTile.tsx": "959c423d73edfff7e1942d2c59d6bf9b18900a026ddfae37446b3ef050252000",
+    "src/components/soccer-career/CareerMentorTile.tsx": "a344f29a1c5e745a59fe3f416b3bce94e46f231b4fbf9c758974fbf7dbdf2ab5",
+    "src/pages/SoccerCareer.tsx": "ddc1056c3606f3f4bfac4e8bd257e8f6087b94b5dd8592e6f3ae3b7dee46b1a2",
+    "scripts/playSoccerCareerDevelopment.mjs": "64aeaac5d917cec2dde6b4496b84c63579c4af619bfb0653d646cd4885956a15"
+  },
+  "serverLog": "host-like server: /home/runner/work/ballpark-hero/ballpark-hero/dist on http://127.0.0.1:37313\n"
+}

@@ -1,0 +1,133 @@
+{
+  "x": 416,
+  "y": 245,
+  "width": 448,
+  "height": 410,
+  "bottom": 655,
+  "viewport": [
+    1280,
+    900
+  ],
+  "yScroll": 164,
+  "ownScroll": [
+    0,
+    0
+  ],
+  "opacity": "1",
+  "painted": true,
+  "finite": 0,
+  "overflow": false,
+  "dialog": true,
+  "controls": [
+    {
+      "label": "Academy mentoring help",
+      "x": 441,
+      "y": 350,
+      "width": 44,
+      "height": 44,
+      "insideViewport": true,
+      "points": [
+        {
+          "x": 463,
+          "y": 372,
+          "painted": true
+        },
+        {
+          "x": 452,
+          "y": 361,
+          "painted": true
+        },
+        {
+          "x": 474,
+          "y": 361,
+          "painted": true
+        },
+        {
+          "x": 452,
+          "y": 383,
+          "painted": true
+        },
+        {
+          "x": 474,
+          "y": 383,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Back to your career",
+      "x": 441,
+      "y": 586,
+      "width": 398,
+      "height": 44,
+      "insideViewport": true,
+      "points": [
+        {
+          "x": 640,
+          "y": 608,
+          "painted": true
+        },
+        {
+          "x": 540.5,
+          "y": 597,
+          "painted": true
+        },
+        {
+          "x": 739.5,
+          "y": 597,
+          "painted": true
+        },
+        {
+          "x": 540.5,
+          "y": 619,
+          "painted": true
+        },
+        {
+          "x": 739.5,
+          "y": 619,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Close",
+      "x": 811,
+      "y": 254,
+      "width": 44,
+      "height": 44,
+      "insideViewport": true,
+      "points": [
+        {
+          "x": 833,
+          "y": 276,
+          "painted": true
+        },
+        {
+          "x": 822,
+          "y": 265,
+          "painted": true
+        },
+        {
+          "x": 844,
+          "y": 265,
+          "painted": true
+        },
+        {
+          "x": 822,
+          "y": 287,
+          "painted": true
+        },
+        {
+          "x": 844,
+          "y": 287,
+          "painted": true
+        }
+      ]
+    }
+  ],
+  "stable": 4,
+  "readable": true,
+  "toastObserved": 0,
+  "toastWaitMs": 1.2796069999967585,
+  "toastRemaining": 0
+}

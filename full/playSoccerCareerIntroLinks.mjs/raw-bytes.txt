@@ -1,0 +1,3 @@
+971 /home/runner/work/_temp/rc-out/full/playSoccerCareerIntroLinks.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/playSoccerCareerIntroLinks.mjs/stderr.log
+971 total

@@ -1,0 +1,86 @@
+{
+  "seed": 118600,
+  "season": {
+    "year": 2029,
+    "age": 25,
+    "club": "Twente",
+    "clubCountry": "Netherlands",
+    "clubTier": 4,
+    "apps": 39,
+    "leagueApps": 36,
+    "goals": 4,
+    "assists": 8,
+    "cleanSheets": 0,
+    "yellowCards": 2,
+    "redCards": 0,
+    "rating": 8.4,
+    "ovr": 75,
+    "injury": null,
+    "injuryWeeks": 0,
+    "injurySevere": false,
+    "leagueTitle": false,
+    "leagueFinish": 3,
+    "leagueSize": 18,
+    "domesticCup": true,
+    "championsLeague": false,
+    "worldCup": false,
+    "ballonDor": false,
+    "ballonDorRank": null,
+    "type": "playing",
+    "intApps": 6,
+    "intGoals": 1,
+    "intAssists": 1,
+    "intRating": 7.5,
+    "tournament": null,
+    "tournamentResult": null,
+    "preparation": {
+      "id": "recovery",
+      "outcome": "completed",
+      "skill": "passing",
+      "adjustment": -1
+    },
+    "cupRun": {
+      "cup": "KNVB Cup",
+      "stages": [
+        {
+          "stage": "early",
+          "won": true
+        },
+        {
+          "stage": "QF",
+          "opp": "Ajax",
+          "won": true,
+          "for": 2,
+          "against": 1,
+          "home": true
+        },
+        {
+          "stage": "SF",
+          "opp": "PSV",
+          "won": true,
+          "for": 1,
+          "against": 0
+        },
+        {
+          "stage": "F",
+          "opp": "PEC Zwolle",
+          "won": true
+        }
+      ],
+      "final": {
+        "for": 1,
+        "against": 0,
+        "legs": 1
+      },
+      "opening": {
+        "opp": "Willem II",
+        "country": "Netherlands",
+        "league": "Eredivisie",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": true
+      }
+    }
+  }
+}

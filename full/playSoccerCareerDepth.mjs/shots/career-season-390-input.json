@@ -1,0 +1,5161 @@
+{
+  "save": {
+    "playerName": "Career Depth Fixture",
+    "nationality": "Netherlands",
+    "position": "CM",
+    "era": "2025",
+    "age": 19,
+    "potential": 86,
+    "potentialEarned": 0,
+    "eliteStreak": 0,
+    "startingOverall": 68,
+    "physique": {
+      "heightCm": 180,
+      "weightKg": 75
+    },
+    "attrShape": {},
+    "karma": 50,
+    "phoneUsedIds": [
+      "grandad_game",
+      "agent_boots"
+    ],
+    "phoneInbox": [
+      {
+        "id": "grandad_game-2025",
+        "defId": "grandad_game",
+        "from": "Grandad",
+        "emoji": "🧓",
+        "text": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+        "year": 2025,
+        "choices": [
+          {
+            "label": "Visit with your shirt",
+            "reply": "Coming round Sunday with a shirt and biscuits. Put the kettle on",
+            "karma": 9,
+            "morale": 5
+          },
+          {
+            "label": "Promise vaguely",
+            "reply": "One day grandad, promise",
+            "karma": 1
+          }
+        ]
+      },
+      {
+        "id": "agent_boots-2025",
+        "defId": "agent_boots",
+        "from": "Agent",
+        "emoji": "💼",
+        "text": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+        "year": 2025,
+        "choices": [
+          {
+            "label": "Take the money",
+            "reply": "Money is money. Send the contract",
+            "karma": -7,
+            "cash": 1.5
+          },
+          {
+            "label": "Turn it down publicly",
+            "reply": "Not wearing that. And I'm saying why",
+            "karma": 9,
+            "popularity": 4
+          },
+          {
+            "label": "Quietly decline",
+            "reply": "Pass on this one. Keep it quiet",
+            "karma": 4
+          }
+        ]
+      }
+    ],
+    "currentClub": "Twente",
+    "currentClubCountry": "Netherlands",
+    "currentClubTier": 4,
+    "currentClubColor": "#E70011",
+    "currentLeague": "Eredivisie",
+    "contractYearsLeft": 4,
+    "weeklyWage": 20000,
+    "marketValue": 17.4,
+    "pace": 71,
+    "shooting": 75,
+    "passing": 80,
+    "dribbling": 72,
+    "defending": 75,
+    "physical": 79,
+    "reflexes": 77,
+    "overall": 75,
+    "seasons": [
+      {
+        "year": 2025,
+        "age": 16,
+        "club": "Ajax Youth",
+        "clubCountry": "Netherlands",
+        "clubTier": 1,
+        "apps": 0,
+        "goals": 0,
+        "assists": 0,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2026,
+        "age": 17,
+        "club": "Ajax Youth",
+        "clubCountry": "Netherlands",
+        "clubTier": 1,
+        "apps": 20,
+        "goals": 2,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 0,
+        "redCards": 0,
+        "rating": 0,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "youth",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null
+      },
+      {
+        "year": 2027,
+        "age": 18,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 36,
+        "leagueApps": 35,
+        "goals": 4,
+        "assists": 5,
+        "cleanSheets": 0,
+        "yellowCards": 8,
+        "redCards": 0,
+        "rating": 7.3,
+        "ovr": 71,
+        "injury": "Dead leg",
+        "injuryWeeks": 4,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 0,
+        "intGoals": 0,
+        "intAssists": 0,
+        "intRating": 0,
+        "tournament": null,
+        "tournamentResult": null,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": false
+            }
+          ]
+        }
+      },
+      {
+        "year": 2028,
+        "age": 19,
+        "club": "Twente",
+        "clubCountry": "Netherlands",
+        "clubTier": 4,
+        "apps": 29,
+        "leagueApps": 31,
+        "goals": 4,
+        "assists": 4,
+        "cleanSheets": 0,
+        "yellowCards": 5,
+        "redCards": 0,
+        "rating": 7.8,
+        "ovr": 73,
+        "injury": "Groin strain",
+        "injuryWeeks": 10,
+        "injurySevere": false,
+        "leagueTitle": false,
+        "domesticCup": false,
+        "championsLeague": false,
+        "worldCup": false,
+        "ballonDor": false,
+        "ballonDorRank": null,
+        "type": "playing",
+        "intApps": 12,
+        "intGoals": 5,
+        "intAssists": 2,
+        "intRating": 6.8,
+        "tournament": "European Championship",
+        "tournamentResult": "Winner",
+        "continentalCup": true,
+        "cupRun": {
+          "cup": "KNVB Cup",
+          "stages": [
+            {
+              "stage": "early",
+              "won": true
+            },
+            {
+              "stage": "QF",
+              "opp": "PSV",
+              "won": false,
+              "for": 2,
+              "against": 3,
+              "home": true
+            }
+          ]
+        }
+      }
+    ],
+    "events": [
+      "🚑 Injury: Groin strain, out 10 weeks, missed matches",
+      "😤 A new rival emerges: Bukayo Costa (🇲🇨 Monaco)",
+      "⭐ Named Young Player of the Year!",
+      "🏆 Won the European Championship with Netherlands!",
+      "🇺🇳 Manager chose Bukayo Costa over you.",
+      "🇺🇳 National Team Battle",
+      "🩻 The scan was clear but you took three weeks anyway. The knee has never complained since",
+      "🧢 Signed with Cousin Ricky. What could go wrong"
+    ],
+    "retired": false,
+    "phase": "playing",
+    "pendingOffers": [],
+    "pendingSummary": null,
+    "transferSituation": null,
+    "loan": null,
+    "pendingLoanOffers": null,
+    "pendingEvents": [],
+    "lastEventId": 201,
+    "statBoostNextSeason": {
+      "physical": 1
+    },
+    "pendingNews": [],
+    "internationalCareer": true,
+    "sponsorDeal": null,
+    "totalEarnings": 2.3,
+    "popularity": 35,
+    "morale": 95,
+    "isLeader": false,
+    "hasRelationship": false,
+    "intStats": {
+      "caps": 12,
+      "goals": 5,
+      "assists": 2,
+      "tournaments": 1,
+      "worldCups": 0,
+      "continentals": 1,
+      "worldCupWins": 0,
+      "continentalWins": 1,
+      "isCaptain": false,
+      "isRetired": false,
+      "debutYear": -1,
+      "debutAge": 18,
+      "worldCupResults": [],
+      "squadSnubs": 0,
+      "failedQualifications": 0
+    },
+    "pendingWorldCup": null,
+    "pendingTournament": null,
+    "lastTournament": {
+      "year": 2028,
+      "name": "European Championship",
+      "short": "Euros",
+      "kind": "Continental",
+      "confederation": "UEFA",
+      "nation": "Netherlands",
+      "teams": 24,
+      "qualifying": {
+        "confederation": "UEFA",
+        "table": [
+          {
+            "nation": "Netherlands",
+            "played": 10,
+            "won": 8,
+            "drawn": 2,
+            "lost": 0,
+            "gf": 17,
+            "ga": 5,
+            "points": 26
+          },
+          {
+            "nation": "Romania",
+            "played": 10,
+            "won": 4,
+            "drawn": 5,
+            "lost": 1,
+            "gf": 20,
+            "ga": 11,
+            "points": 17
+          },
+          {
+            "nation": "Northern Ireland",
+            "played": 10,
+            "won": 5,
+            "drawn": 2,
+            "lost": 3,
+            "gf": 16,
+            "ga": 12,
+            "points": 17
+          },
+          {
+            "nation": "Ukraine",
+            "played": 10,
+            "won": 2,
+            "drawn": 4,
+            "lost": 4,
+            "gf": 11,
+            "ga": 10,
+            "points": 10
+          },
+          {
+            "nation": "Luxembourg",
+            "played": 10,
+            "won": 1,
+            "drawn": 3,
+            "lost": 6,
+            "gf": 7,
+            "ga": 18,
+            "points": 6
+          },
+          {
+            "nation": "Latvia",
+            "played": 10,
+            "won": 1,
+            "drawn": 2,
+            "lost": 7,
+            "gf": 5,
+            "ga": 20,
+            "points": 5
+          }
+        ],
+        "myPosition": 1,
+        "through": 3,
+        "qualified": true,
+        "automatic": false
+      },
+      "qualified": true,
+      "squad": {
+        "called": true,
+        "role": "Starter",
+        "reason": "You made it as number 3 of 8 in your position.",
+        "myRank": 3,
+        "poolSize": 18,
+        "places": 8,
+        "myScore": 79,
+        "cutScore": 70,
+        "xi": {
+          "formation": "4-3-3",
+          "gk": [
+            {
+              "slot": "GK",
+              "name": "Gijs Nieuwland",
+              "ovr": 81,
+              "me": false
+            }
+          ],
+          "def": [
+            {
+              "slot": "LB",
+              "name": "Wout Vlietstra",
+              "ovr": 78,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Rick Doornbos",
+              "ovr": 81,
+              "me": false
+            },
+            {
+              "slot": "CB",
+              "name": "Daan Rijkaard-Veen",
+              "ovr": 81,
+              "me": false
+            },
+            {
+              "slot": "RB",
+              "name": "Koen Heemskerk",
+              "ovr": 79,
+              "me": false
+            }
+          ],
+          "mid": [
+            {
+              "slot": "CM",
+              "name": "You",
+              "ovr": 75,
+              "me": true
+            },
+            {
+              "slot": "CDM",
+              "name": "Sem Boterman",
+              "ovr": 80,
+              "me": false
+            },
+            {
+              "slot": "CM",
+              "name": "Hidde Lindeboom",
+              "ovr": 81,
+              "me": false
+            }
+          ],
+          "att": [
+            {
+              "slot": "LW",
+              "name": "Bas Schuurmans",
+              "ovr": 77,
+              "me": false
+            },
+            {
+              "slot": "ST",
+              "name": "Ferdi Oosterveen",
+              "ovr": 84,
+              "me": false
+            },
+            {
+              "slot": "RW",
+              "name": "Mees Grevelink",
+              "ovr": 80,
+              "me": false
+            }
+          ],
+          "mySlot": "CM",
+          "aheadOfMe": null
+        }
+      },
+      "groupTable": [
+        {
+          "nation": "Turkey",
+          "played": 3,
+          "won": 2,
+          "drawn": 1,
+          "lost": 0,
+          "gf": 8,
+          "ga": 2,
+          "points": 7
+        },
+        {
+          "nation": "Switzerland",
+          "played": 3,
+          "won": 2,
+          "drawn": 0,
+          "lost": 1,
+          "gf": 3,
+          "ga": 3,
+          "points": 6
+        },
+        {
+          "nation": "Netherlands",
+          "played": 3,
+          "won": 1,
+          "drawn": 1,
+          "lost": 1,
+          "gf": 4,
+          "ga": 3,
+          "points": 4
+        },
+        {
+          "nation": "Scotland",
+          "played": 3,
+          "won": 0,
+          "drawn": 0,
+          "lost": 3,
+          "gf": 1,
+          "ga": 8,
+          "points": 0
+        }
+      ],
+      "bracket": [
+        {
+          "round": "R16",
+          "slot": 0,
+          "home": "Slovenia",
+          "away": "Netherlands",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": true
+        },
+        {
+          "round": "R16",
+          "slot": 1,
+          "home": "France",
+          "away": "Czech Republic",
+          "homeGoals": 3,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "France",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 2,
+          "home": "Turkey",
+          "away": "Italy",
+          "homeGoals": 0,
+          "awayGoals": 0,
+          "pens": true,
+          "winner": "Turkey",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 3,
+          "home": "Hungary",
+          "away": "Switzerland",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Hungary",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 4,
+          "home": "Croatia",
+          "away": "Belgium",
+          "homeGoals": 0,
+          "awayGoals": 0,
+          "pens": true,
+          "winner": "Belgium",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 5,
+          "home": "England",
+          "away": "Slovakia",
+          "homeGoals": 3,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "England",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 6,
+          "home": "Spain",
+          "away": "Norway",
+          "homeGoals": 4,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Spain",
+          "mine": false
+        },
+        {
+          "round": "R16",
+          "slot": 7,
+          "home": "Austria",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 0,
+          "home": "Netherlands",
+          "away": "France",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": true
+        },
+        {
+          "round": "QF",
+          "slot": 1,
+          "home": "Turkey",
+          "away": "Hungary",
+          "homeGoals": 2,
+          "awayGoals": 2,
+          "pens": true,
+          "winner": "Turkey",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 2,
+          "home": "Belgium",
+          "away": "England",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "England",
+          "mine": false
+        },
+        {
+          "round": "QF",
+          "slot": 3,
+          "home": "Spain",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "SF",
+          "slot": 0,
+          "home": "Netherlands",
+          "away": "Turkey",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "winner": "Netherlands",
+          "mine": true
+        },
+        {
+          "round": "SF",
+          "slot": 1,
+          "home": "England",
+          "away": "Portugal",
+          "homeGoals": 0,
+          "awayGoals": 1,
+          "pens": false,
+          "winner": "Portugal",
+          "mine": false
+        },
+        {
+          "round": "F",
+          "slot": 0,
+          "home": "Netherlands",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "winner": "Netherlands",
+          "mine": true
+        }
+      ],
+      "champion": "Netherlands",
+      "runnerUp": "Portugal",
+      "groupLabel": "Group A",
+      "thirdsThrough": 4,
+      "myResult": "Winner",
+      "matches": [
+        {
+          "round": "Group A",
+          "home": "Netherlands",
+          "away": "Switzerland",
+          "homeGoals": 0,
+          "awayGoals": 2,
+          "pens": false,
+          "playerGoals": 0,
+          "playerAssists": 0,
+          "playerRating": 6.2
+        },
+        {
+          "round": "Group A",
+          "home": "Netherlands",
+          "away": "Turkey",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 7.1
+        },
+        {
+          "round": "Group A",
+          "home": "Netherlands",
+          "away": "Scotland",
+          "homeGoals": 3,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 7.4
+        },
+        {
+          "round": "R16",
+          "home": "Slovenia",
+          "away": "Netherlands",
+          "homeGoals": 1,
+          "awayGoals": 2,
+          "pens": false,
+          "playerGoals": 0,
+          "playerAssists": 1,
+          "playerRating": 6.5
+        },
+        {
+          "round": "QF",
+          "home": "Netherlands",
+          "away": "France",
+          "homeGoals": 2,
+          "awayGoals": 1,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 6.6
+        },
+        {
+          "round": "SF",
+          "home": "Netherlands",
+          "away": "Turkey",
+          "homeGoals": 2,
+          "awayGoals": 0,
+          "pens": false,
+          "playerGoals": 1,
+          "playerAssists": 0,
+          "playerRating": 6.7
+        },
+        {
+          "round": "F",
+          "home": "Netherlands",
+          "away": "Portugal",
+          "homeGoals": 1,
+          "awayGoals": 1,
+          "pens": true,
+          "playerGoals": 0,
+          "playerAssists": 0,
+          "playerRating": 6.9
+        }
+      ],
+      "playerApps": 7,
+      "playerGoals": 4,
+      "playerAssists": 1,
+      "playerAvgRating": 6.8,
+      "goldenBoot": false,
+      "bestPlayer": false
+    },
+    "intlHistory": [
+      {
+        "year": 2028,
+        "short": "Euros",
+        "nation": "Netherlands",
+        "champion": "Netherlands",
+        "myResult": "Winner",
+        "apps": 7,
+        "goals": 4
+      }
+    ],
+    "rival": {
+      "name": "Bukayo Costa",
+      "nationality": "Monaco",
+      "position": "CM",
+      "club": "Rangers",
+      "clubTier": 2,
+      "overall": 81,
+      "careerGoals": 3,
+      "careerAssists": 6,
+      "careerApps": 24,
+      "leagueTitles": 0,
+      "championsLeagues": 0,
+      "worldCups": 0,
+      "ballonDors": 0,
+      "intCaps": 9,
+      "intGoals": 2,
+      "marketValue": 75.3,
+      "age": 20,
+      "retired": false
+    },
+    "rivalCreated": true,
+    "pendingRivalryEvent": null,
+    "lastRivalryEventId": 106,
+    "rivalrySummary": null,
+    "netWorth": 2.19,
+    "lifestyleLevel": "Humble",
+    "lifestyleCostPerYear": 0.060000000000000005,
+    "socialMediaFollowers": 2.13,
+    "sponsorshipIncome": 0.22,
+    "properties": [],
+    "investments": [],
+    "consecutiveDeficitYears": 0,
+    "agentFeesPaid": 0,
+    "family": {
+      "isMarried": false,
+      "marriedAge": null,
+      "children": 0,
+      "isDivorced": false,
+      "divorceAge": null
+    },
+    "purchasedItems": [],
+    "investmentHoldings": [],
+    "totalAssetValue": 0,
+    "customYearlyCosts": 0.01,
+    "awards": [
+      {
+        "year": 2028,
+        "name": "Young Player of the Year",
+        "emoji": "⭐"
+      }
+    ],
+    "pendingBallonDor": null,
+    "lastUCLResult": {
+      "qualified": false,
+      "matches": [],
+      "result": "N/A",
+      "playerGoals": 0,
+      "isTopScorer": false
+    },
+    "legacy": null,
+    "postRetirementChoice": null,
+    "managerState": null,
+    "isFinalSeason": false,
+    "isPundit": false,
+    "punditEvents": [],
+    "primeType": "late",
+    "socialMediaActionUsedThisSeason": false,
+    "socialMediaFocusBoost": false,
+    "pendingCoverAthleteEvent": false,
+    "coverAthleteAccepted": false,
+    "activeSponsorship": null,
+    "personality": "showman",
+    "agentId": "cousin",
+    "lifeFlags": {},
+    "appearance": null,
+    "corruptionHeat": 0,
+    "dirtyMoney": 0,
+    "prisonSeasons": 0,
+    "academyClubName": "Ajax",
+    "moralDilemmasTriggered": [],
+    "pendingMoralDilemma": null,
+    "pedSeasonsRemaining": 0,
+    "pedActive": false,
+    "matchFixBanned": 0,
+    "divingActive": false,
+    "integrityBonus": 1,
+    "pendingAppealResult": null,
+    "childEventsSeen": [],
+    "pregnancyAnnounced": false,
+    "punditState": null,
+    "ownerState": null,
+    "peakOverall": 73,
+    "retirementSuggested": false,
+    "phone": {
+      "threads": [
+        {
+          "id": "th_grandad",
+          "c": "grandad",
+          "name": "Grandad",
+          "emoji": "🧓",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Never miss you on the telly. My hip's too dodgy for the stadium now. One day take the trophy round mine eh?",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Did you get my last one? No rush.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "Wow. I see how it is then.",
+              "y": 2027
+            }
+          ],
+          "rel": 27,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "grandad_game-2025"
+          },
+          "waiting": 2027,
+          "cold": 2,
+          "seen": [],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_fitness",
+          "c": "fitness",
+          "name": "Fitness coach",
+          "emoji": "🏋️",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Optional extras start Monday. 6am. Nobody has signed up yet which tells you everything.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Bumping this up your inbox.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "I will assume that is a no then.",
+              "y": 2027
+            }
+          ],
+          "rel": 27,
+          "pending": {
+            "kind": "convo",
+            "convo": "fitness_extra",
+            "beat": 0
+          },
+          "waiting": 2027,
+          "cold": 2,
+          "seen": [
+            "fitness_extra"
+          ],
+          "lastReplyYear": null
+        },
+        {
+          "id": "th_agent",
+          "c": "agent",
+          "name": "Your agent",
+          "emoji": "💼",
+          "lines": [
+            {
+              "w": 0,
+              "t": "Boot deal on the table. Decent money but the brand got caught using sweatshops last year. Your call.",
+              "y": 2025
+            },
+            {
+              "w": 0,
+              "t": "Still need an answer on that when you get a sec.",
+              "y": 2026
+            },
+            {
+              "w": 0,
+              "t": "I will assume that is a no then.",
+              "y": 2027
+            }
+          ],
+          "rel": 27,
+          "pending": {
+            "kind": "legacy",
+            "msgId": "agent_boots-2025"
+          },
+          "waiting": 2027,
+          "cold": 2,
+          "seen": [],
+          "lastReplyYear": null
+        }
+      ],
+      "feed": [
+        "🔄 DONE DEAL. Pedri joins Feyenoord from Barcelona. Fee around 90m.",
+        "⭐ Barcelona are champions of Europe.",
+        "🏆 Liverpool win the Premier League.",
+        "🏆 Barcelona win La Liga.",
+        "🥅 Lamine Yamal finished top scorer in La Liga on 22.",
+        "🔄 DONE DEAL. Kylian Mbappé joins Sporting CP from Real Madrid. Fee around 120m.",
+        "🔄 DONE DEAL. Florian Wirtz joins Feyenoord from Liverpool. Fee around 110m.",
+        "⭐ Bayern Munich are champions of Europe.",
+        "🏆 Newcastle win the Premier League.",
+        "🏆 Real Madrid win La Liga.",
+        "🥅 Ousmane Dembélé finished top scorer in Ligue 1 on 17.",
+        "🌍 Netherlands win the European Championship."
+      ],
+      "world": {
+        "year": 2028,
+        "ucl": "Bayern Munich",
+        "leagues": {
+          "Premier League": "Newcastle",
+          "La Liga": "Real Madrid",
+          "Bundesliga": "Bayern Munich",
+          "Serie A": "Inter Milan",
+          "Ligue 1": "Lyon",
+          "Primeira Liga": "Porto",
+          "Eredivisie": "PSV",
+          "Scottish Premiership": "Rangers",
+          "Brasileirao": "Flamengo",
+          "Saudi Pro League": "Al Hilal",
+          "MLS": "Seattle Sounders",
+          "K League 1": "Jeonbuk Motors"
+        },
+        "cups": {
+          "Premier League": "Newcastle",
+          "La Liga": "Girona",
+          "Bundesliga": "Dortmund",
+          "Serie A": "Juventus",
+          "Ligue 1": "Marseille",
+          "Primeira Liga": "Porto",
+          "Eredivisie": "Feyenoord",
+          "Scottish Premiership": "Aberdeen",
+          "Brasileirao": "Palmeiras",
+          "Saudi Pro League": "Al Nassr",
+          "MLS": "Seattle Sounders",
+          "K League 1": "Ulsan HD"
+        },
+        "moves": [
+          {
+            "who": "Kylian Mbappé",
+            "from": "Real Madrid",
+            "to": "Sporting CP",
+            "fee": 120
+          },
+          {
+            "who": "Florian Wirtz",
+            "from": "Liverpool",
+            "to": "Feyenoord",
+            "fee": 110
+          }
+        ],
+        "topScorer": {
+          "who": "Ousmane Dembélé",
+          "club": "PSG",
+          "goals": 17,
+          "league": "Ligue 1"
+        },
+        "intl": {
+          "name": "European Championship",
+          "champion": "Netherlands"
+        }
+      },
+      "clubs": {
+        "Kylian Mbappé": "Sporting CP",
+        "Erling Haaland": "Barcelona",
+        "Jude Bellingham": "Real Madrid",
+        "Vinícius Jr": "Real Madrid",
+        "Lamine Yamal": "Barcelona",
+        "Florian Wirtz": "Feyenoord",
+        "Jamal Musiala": "Bayern Munich",
+        "Bukayo Saka": "Arsenal",
+        "Pedri": "Feyenoord",
+        "Rodri": "Barcelona",
+        "Federico Valverde": "Real Madrid",
+        "Harry Kane": "Bayern Munich",
+        "Mohamed Salah": "Trabzonspor",
+        "Phil Foden": "Man City",
+        "Declan Rice": "Arsenal",
+        "Raphinha": "Barcelona",
+        "Endrick": "Real Madrid",
+        "Nico Williams": "Athletic Bilbao",
+        "Désiré Doué": "PSG",
+        "Kobbie Mainoo": "Man United",
+        "Gianluigi Donnarumma": "Man City",
+        "Ousmane Dembélé": "PSG"
+      },
+      "rivalClub": "Rangers",
+      "seed": 1141312389,
+      "offers": 0,
+      "perksTaken": 0
+    },
+    "frozenOut": 0,
+    "badSeasonStreak": 0,
+    "story": [
+      {
+        "year": 2025,
+        "age": 16,
+        "club": "Ajax Youth",
+        "lines": [
+          "📋 Joined Ajax Youth Academy aged 16"
+        ]
+      },
+      {
+        "year": 2026,
+        "age": 17,
+        "club": "Ajax Youth",
+        "lines": [
+          "📈 Stats improved during youth development (OVR 71)",
+          "📩 Professional contract offers received!",
+          "✍️ Signed with Twente 🇳🇱 (5yr, €20k/wk)"
+        ]
+      },
+      {
+        "year": 2027,
+        "age": 18,
+        "club": "Twente",
+        "lines": [
+          "🚑 Injury: Dead leg, out 4 weeks, missed matches",
+          "🇺🇳 First international call-up for Netherlands!",
+          "🎭 You leaned into it: The Showman is born",
+          "🥅 Scored on international debut for Netherlands!",
+          "🐕 Adopted a rescue dog. He has his own fan account now",
+          "🦝 Gaffer Two is now official staff. Attendance: perfect",
+          "🍝 Made peace with your camp roommate over room service. He still kicks you, but he apologises now"
+        ]
+      }
+    ],
+    "sponsorBonus": 0,
+    "money": {
+      "seed": 3500022165,
+      "vault": 0,
+      "hold": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "cost": {
+        "ladder": 0,
+        "bricks": 0,
+        "cleats": 0,
+        "screens": 0,
+        "spark": 0
+      },
+      "price": {
+        "ladder": 113.44,
+        "bricks": 102.13,
+        "cleats": 112.99,
+        "screens": 111.14,
+        "spark": 70.41
+      },
+      "hist": {
+        "ladder": [
+          100,
+          104.78,
+          110.14,
+          113.44
+        ],
+        "bricks": [
+          100,
+          101.62,
+          99.6,
+          102.13
+        ],
+        "cleats": [
+          100,
+          84.1,
+          95.3,
+          112.99
+        ],
+        "screens": [
+          100,
+          98.35,
+          106.73,
+          111.14
+        ],
+        "spark": [
+          100,
+          73.51,
+          79.36,
+          70.41
+        ]
+      },
+      "log": [],
+      "year": 2028,
+      "age": 3,
+      "won": 0,
+      "lost": 0,
+      "cPlays": 0,
+      "cNet": 0,
+      "cYear": 0,
+      "cShut": false,
+      "aYear": 0,
+      "aBest": 0,
+      "aPlays": 0
+    },
+    "eventLastFired": {
+      "18": 2027,
+      "72": 2027,
+      "200": 2027,
+      "201": 2028,
+      "247": 2027,
+      "267": 2027,
+      "433": 2028
+    },
+    "pendingRehab": null,
+    "seasonAmbition": {
+      "id": "goals",
+      "label": "Score 5 club goals",
+      "stat": "goals",
+      "target": 5,
+      "rewardStat": "shooting",
+      "year": 2029,
+      "club": "Twente"
+    }
+  },
+  "clubs": [
+    {
+      "id": "fb-1",
+      "name": "Real Madrid",
+      "country": "Spain",
+      "tier": 1,
+      "color": "#FEBE10",
+      "league": "La Liga"
+    },
+    {
+      "id": "fb-2",
+      "name": "Barcelona",
+      "country": "Spain",
+      "tier": 1,
+      "color": "#A50044",
+      "league": "La Liga"
+    },
+    {
+      "id": "fb-3",
+      "name": "Man City",
+      "country": "England",
+      "tier": 1,
+      "color": "#6CABDD",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-4",
+      "name": "Liverpool",
+      "country": "England",
+      "tier": 1,
+      "color": "#C8102E",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-5",
+      "name": "Bayern Munich",
+      "country": "Germany",
+      "tier": 1,
+      "color": "#DC052D",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "fb-6",
+      "name": "PSG",
+      "country": "France",
+      "tier": 1,
+      "color": "#004170",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "fb-7",
+      "name": "Juventus",
+      "country": "Italy",
+      "tier": 1,
+      "color": "#000000",
+      "league": "Serie A"
+    },
+    {
+      "id": "fb-8",
+      "name": "Inter Milan",
+      "country": "Italy",
+      "tier": 1,
+      "color": "#0068A8",
+      "league": "Serie A"
+    },
+    {
+      "id": "fb-9",
+      "name": "Man United",
+      "country": "England",
+      "tier": 1,
+      "color": "#DA291C",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-10",
+      "name": "Arsenal",
+      "country": "England",
+      "tier": 1,
+      "color": "#EF0107",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-11",
+      "name": "Chelsea",
+      "country": "England",
+      "tier": 1,
+      "color": "#034694",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-12",
+      "name": "Ajax",
+      "country": "Netherlands",
+      "tier": 1,
+      "color": "#D2122E",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "fb-13",
+      "name": "Benfica",
+      "country": "Portugal",
+      "tier": 1,
+      "color": "#E30613",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "fb-14",
+      "name": "Porto",
+      "country": "Portugal",
+      "tier": 1,
+      "color": "#003399",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "fb-15",
+      "name": "Boca Juniors",
+      "country": "Argentina",
+      "tier": 1,
+      "color": "#003DA5",
+      "league": "Liga Profesional"
+    },
+    {
+      "id": "fb-16",
+      "name": "River Plate",
+      "country": "Argentina",
+      "tier": 1,
+      "color": "#E9040F",
+      "league": "Liga Profesional"
+    },
+    {
+      "id": "fb-17",
+      "name": "Flamengo",
+      "country": "Brazil",
+      "tier": 1,
+      "color": "#C8102E",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "fb-18",
+      "name": "Sao Paulo",
+      "country": "Brazil",
+      "tier": 1,
+      "color": "#B40404",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "fb-19",
+      "name": "Atletico Madrid",
+      "country": "Spain",
+      "tier": 2,
+      "color": "#CB3524",
+      "league": "La Liga"
+    },
+    {
+      "id": "fb-20",
+      "name": "Sevilla",
+      "country": "Spain",
+      "tier": 2,
+      "color": "#D0021B",
+      "league": "La Liga"
+    },
+    {
+      "id": "fb-21",
+      "name": "Tottenham",
+      "country": "England",
+      "tier": 2,
+      "color": "#132257",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-22",
+      "name": "Newcastle",
+      "country": "England",
+      "tier": 2,
+      "color": "#241F20",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-23",
+      "name": "Dortmund",
+      "country": "Germany",
+      "tier": 2,
+      "color": "#FDE100",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "fb-24",
+      "name": "Leipzig",
+      "country": "Germany",
+      "tier": 2,
+      "color": "#DD0741",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "fb-25",
+      "name": "AC Milan",
+      "country": "Italy",
+      "tier": 2,
+      "color": "#FB090B",
+      "league": "Serie A"
+    },
+    {
+      "id": "fb-26",
+      "name": "Napoli",
+      "country": "Italy",
+      "tier": 2,
+      "color": "#12A0D7",
+      "league": "Serie A"
+    },
+    {
+      "id": "fb-27",
+      "name": "Roma",
+      "country": "Italy",
+      "tier": 2,
+      "color": "#8E1F2F",
+      "league": "Serie A"
+    },
+    {
+      "id": "fb-28",
+      "name": "Marseille",
+      "country": "France",
+      "tier": 2,
+      "color": "#2FA0DA",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "fb-29",
+      "name": "Lyon",
+      "country": "France",
+      "tier": 2,
+      "color": "#1C2C5B",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "fb-30",
+      "name": "Feyenoord",
+      "country": "Netherlands",
+      "tier": 2,
+      "color": "#00A03C",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "fb-31",
+      "name": "PSV",
+      "country": "Netherlands",
+      "tier": 2,
+      "color": "#ED1C24",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "fb-32",
+      "name": "Sporting CP",
+      "country": "Portugal",
+      "tier": 2,
+      "color": "#008148",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "fb-33",
+      "name": "Fenerbahce",
+      "country": "Turkey",
+      "tier": 2,
+      "color": "#0A2C59",
+      "league": "Super Lig"
+    },
+    {
+      "id": "fb-34",
+      "name": "Galatasaray",
+      "country": "Turkey",
+      "tier": 2,
+      "color": "#A90432",
+      "league": "Super Lig"
+    },
+    {
+      "id": "fb-35",
+      "name": "Al Hilal",
+      "country": "Saudi Arabia",
+      "tier": 2,
+      "color": "#003DA5",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "fb-36",
+      "name": "Celtic",
+      "country": "Scotland",
+      "tier": 2,
+      "color": "#018749",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "fb-37",
+      "name": "Rangers",
+      "country": "Scotland",
+      "tier": 2,
+      "color": "#1E3A8A",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "fb-38",
+      "name": "Palmeiras",
+      "country": "Brazil",
+      "tier": 2,
+      "color": "#006437",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "fb-39",
+      "name": "LA Galaxy",
+      "country": "USA",
+      "tier": 2,
+      "color": "#00245D",
+      "league": "MLS"
+    },
+    {
+      "id": "fb-40",
+      "name": "Inter Miami",
+      "country": "USA",
+      "tier": 2,
+      "color": "#F7B5CD",
+      "league": "MLS"
+    },
+    {
+      "id": "fb-41",
+      "name": "Real Sociedad",
+      "country": "Spain",
+      "tier": 3,
+      "color": "#0067B1",
+      "league": "La Liga"
+    },
+    {
+      "id": "fb-42",
+      "name": "Villarreal",
+      "country": "Spain",
+      "tier": 3,
+      "color": "#FFE667",
+      "league": "La Liga"
+    },
+    {
+      "id": "fb-43",
+      "name": "West Ham",
+      "country": "England",
+      "tier": 3,
+      "color": "#7A263A",
+      "league": "Championship"
+    },
+    {
+      "id": "fb-44",
+      "name": "Aston Villa",
+      "country": "England",
+      "tier": 3,
+      "color": "#670E36",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-45",
+      "name": "Everton",
+      "country": "England",
+      "tier": 3,
+      "color": "#003399",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-46",
+      "name": "Leverkusen",
+      "country": "Germany",
+      "tier": 3,
+      "color": "#E32221",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "fb-47",
+      "name": "Frankfurt",
+      "country": "Germany",
+      "tier": 3,
+      "color": "#E1000F",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "fb-48",
+      "name": "Atalanta",
+      "country": "Italy",
+      "tier": 3,
+      "color": "#1E71B8",
+      "league": "Serie A"
+    },
+    {
+      "id": "fb-49",
+      "name": "Fiorentina",
+      "country": "Italy",
+      "tier": 3,
+      "color": "#5B2A86",
+      "league": "Serie A"
+    },
+    {
+      "id": "fb-50",
+      "name": "Lille",
+      "country": "France",
+      "tier": 3,
+      "color": "#C60C30",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "fb-51",
+      "name": "Monaco",
+      "country": "Monaco",
+      "tier": 3,
+      "color": "#E2231A",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "fb-52",
+      "name": "Genk",
+      "country": "Belgium",
+      "tier": 3,
+      "color": "#0055A4",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "fb-53",
+      "name": "Anderlecht",
+      "country": "Belgium",
+      "tier": 3,
+      "color": "#5E2C81",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "fb-54",
+      "name": "FC Copenhagen",
+      "country": "Denmark",
+      "tier": 3,
+      "color": "#FFFFFF",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "fb-55",
+      "name": "Malmo FF",
+      "country": "Sweden",
+      "tier": 3,
+      "color": "#5CB8E4",
+      "league": "Allsvenskan"
+    },
+    {
+      "id": "fb-56",
+      "name": "Red Bull Salzburg",
+      "country": "Austria",
+      "tier": 3,
+      "color": "#DB021D",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "fb-57",
+      "name": "Basel",
+      "country": "Switzerland",
+      "tier": 3,
+      "color": "#DB021D",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "fb-58",
+      "name": "Al Nassr",
+      "country": "Saudi Arabia",
+      "tier": 3,
+      "color": "#FFF200",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "fb-59",
+      "name": "Cruz Azul",
+      "country": "Mexico",
+      "tier": 3,
+      "color": "#00539F",
+      "league": "Liga MX"
+    },
+    {
+      "id": "fb-60",
+      "name": "Club America",
+      "country": "Mexico",
+      "tier": 3,
+      "color": "#FFC72C",
+      "league": "Liga MX"
+    },
+    {
+      "id": "fb-61",
+      "name": "Real Betis",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#00954C",
+      "league": "La Liga"
+    },
+    {
+      "id": "fb-62",
+      "name": "Celta Vigo",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#8AC3EE",
+      "league": "La Liga"
+    },
+    {
+      "id": "fb-63",
+      "name": "Crystal Palace",
+      "country": "England",
+      "tier": 4,
+      "color": "#1B458F",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-64",
+      "name": "Brentford",
+      "country": "England",
+      "tier": 4,
+      "color": "#D20000",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-65",
+      "name": "Norwich City",
+      "country": "England",
+      "tier": 4,
+      "color": "#FFF200",
+      "league": "Championship"
+    },
+    {
+      "id": "fb-66",
+      "name": "Hertha Berlin",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#004C9E",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "fb-67",
+      "name": "Werder Bremen",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#1D9053",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "fb-68",
+      "name": "Torino",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#881B1E",
+      "league": "Serie A"
+    },
+    {
+      "id": "fb-69",
+      "name": "Bologna",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#A61C2E",
+      "league": "Serie A"
+    },
+    {
+      "id": "fb-70",
+      "name": "Nantes",
+      "country": "France",
+      "tier": 4,
+      "color": "#FCE300",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "fb-71",
+      "name": "Strasbourg",
+      "country": "France",
+      "tier": 4,
+      "color": "#0072BB",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "fb-72",
+      "name": "Utrecht",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#D2122E",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "fb-73",
+      "name": "Braga",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#DA020E",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "fb-74",
+      "name": "Aberdeen",
+      "country": "Scotland",
+      "tier": 4,
+      "color": "#D71920",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "fb-75",
+      "name": "Santos",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#FFFFFF",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "fb-76",
+      "name": "Colo-Colo",
+      "country": "Chile",
+      "tier": 4,
+      "color": "#FFFFFF",
+      "league": "Primera Division"
+    },
+    {
+      "id": "fb-77",
+      "name": "Al Ahly",
+      "country": "Egypt",
+      "tier": 4,
+      "color": "#C8102E",
+      "league": "Egyptian Premier League"
+    },
+    {
+      "id": "fb-78",
+      "name": "Kaizer Chiefs",
+      "country": "South Africa",
+      "tier": 4,
+      "color": "#FFD100",
+      "league": "PSL"
+    },
+    {
+      "id": "fb-79",
+      "name": "Yokohama F. Marinos",
+      "country": "Japan",
+      "tier": 4,
+      "color": "#00559A",
+      "league": "J1 League"
+    },
+    {
+      "id": "fb-80",
+      "name": "Urawa Red Diamonds",
+      "country": "Japan",
+      "tier": 4,
+      "color": "#D2001C",
+      "league": "J1 League"
+    },
+    {
+      "id": "fb-81",
+      "name": "Seattle Sounders",
+      "country": "USA",
+      "tier": 4,
+      "color": "#5D9741",
+      "league": "MLS"
+    },
+    {
+      "id": "fb-82",
+      "name": "Al Ittihad",
+      "country": "Saudi Arabia",
+      "tier": 2,
+      "color": "#F9C623",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "fb-83",
+      "name": "Club Brugge",
+      "country": "Belgium",
+      "tier": 2,
+      "color": "#0B4494",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "fb-84",
+      "name": "Olympiacos",
+      "country": "Greece",
+      "tier": 2,
+      "color": "#D6202B",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "fb-85",
+      "name": "Shakhtar Donetsk",
+      "country": "Ukraine",
+      "tier": 2,
+      "color": "#F26522",
+      "league": "Ukrainian Premier League"
+    },
+    {
+      "id": "fb-86",
+      "name": "Corinthians",
+      "country": "Brazil",
+      "tier": 2,
+      "color": "#141414",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "fb-87",
+      "name": "Monterrey",
+      "country": "Mexico",
+      "tier": 2,
+      "color": "#0A2240",
+      "league": "Liga MX"
+    },
+    {
+      "id": "fb-88",
+      "name": "Tigres UANL",
+      "country": "Mexico",
+      "tier": 2,
+      "color": "#FDB913",
+      "league": "Liga MX"
+    },
+    {
+      "id": "fb-89",
+      "name": "Athletic Bilbao",
+      "country": "Spain",
+      "tier": 2,
+      "color": "#EE2523",
+      "league": "La Liga"
+    },
+    {
+      "id": "fb-90",
+      "name": "Brighton",
+      "country": "England",
+      "tier": 2,
+      "color": "#0057B8",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-91",
+      "name": "Stuttgart",
+      "country": "Germany",
+      "tier": 2,
+      "color": "#E32219",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "fb-92",
+      "name": "LAFC",
+      "country": "USA",
+      "tier": 2,
+      "color": "#C39E6D",
+      "league": "MLS"
+    },
+    {
+      "id": "fb-93",
+      "name": "River Plate Asuncion",
+      "country": "Paraguay",
+      "tier": 4,
+      "color": "#CE1126",
+      "league": "Primera B Paraguay"
+    },
+    {
+      "id": "fb-94",
+      "name": "Racing Club",
+      "country": "Argentina",
+      "tier": 2,
+      "color": "#75AADB",
+      "league": "Liga Profesional"
+    },
+    {
+      "id": "fb-95",
+      "name": "Zenit",
+      "country": "Russia",
+      "tier": 2,
+      "color": "#009FDF",
+      "league": "Russian Premier League"
+    },
+    {
+      "id": "fb-96",
+      "name": "Girona",
+      "country": "Spain",
+      "tier": 2,
+      "color": "#CD2534",
+      "league": "Segunda Division"
+    },
+    {
+      "id": "fb-97",
+      "name": "PAOK",
+      "country": "Greece",
+      "tier": 3,
+      "color": "#2B2B2B",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "fb-98",
+      "name": "Panathinaikos",
+      "country": "Greece",
+      "tier": 3,
+      "color": "#00743F",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "fb-99",
+      "name": "Dinamo Zagreb",
+      "country": "Croatia",
+      "tier": 3,
+      "color": "#1F4C9C",
+      "league": "HNL"
+    },
+    {
+      "id": "fb-100",
+      "name": "Red Star Belgrade",
+      "country": "Serbia",
+      "tier": 3,
+      "color": "#D6202B",
+      "league": "Serbian SuperLiga"
+    },
+    {
+      "id": "fb-101",
+      "name": "Legia Warsaw",
+      "country": "Poland",
+      "tier": 3,
+      "color": "#0F5B2F",
+      "league": "Ekstraklasa"
+    },
+    {
+      "id": "fb-102",
+      "name": "Slavia Prague",
+      "country": "Czech Republic",
+      "tier": 3,
+      "color": "#D6202B",
+      "league": "Czech First League"
+    },
+    {
+      "id": "fb-103",
+      "name": "Besiktas",
+      "country": "Turkey",
+      "tier": 3,
+      "color": "#2B2B2B",
+      "league": "Super Lig"
+    },
+    {
+      "id": "fb-104",
+      "name": "Trabzonspor",
+      "country": "Turkey",
+      "tier": 3,
+      "color": "#5C1F33",
+      "league": "Super Lig"
+    },
+    {
+      "id": "fb-105",
+      "name": "Nice",
+      "country": "France",
+      "tier": 3,
+      "color": "#CC0000",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "fb-106",
+      "name": "Wolves",
+      "country": "England",
+      "tier": 3,
+      "color": "#FDB913",
+      "league": "Championship"
+    },
+    {
+      "id": "fb-107",
+      "name": "Fulham",
+      "country": "England",
+      "tier": 3,
+      "color": "#111111",
+      "league": "Premier League"
+    },
+    {
+      "id": "fb-108",
+      "name": "Gremio",
+      "country": "Brazil",
+      "tier": 3,
+      "color": "#0D80BF",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "fb-109",
+      "name": "Atletico Nacional",
+      "country": "Colombia",
+      "tier": 3,
+      "color": "#00A650",
+      "league": "Liga BetPlay"
+    },
+    {
+      "id": "fb-110",
+      "name": "Penarol",
+      "country": "Uruguay",
+      "tier": 3,
+      "color": "#FFD100",
+      "league": "Primera Division Uruguay"
+    },
+    {
+      "id": "fb-111",
+      "name": "Kawasaki Frontale",
+      "country": "Japan",
+      "tier": 3,
+      "color": "#009FE8",
+      "league": "J1 League"
+    },
+    {
+      "id": "fb-112",
+      "name": "Jeonbuk Motors",
+      "country": "South Korea",
+      "tier": 3,
+      "color": "#0C6B3E",
+      "league": "K League 1"
+    },
+    {
+      "id": "fb-113",
+      "name": "Al Sadd",
+      "country": "Qatar",
+      "tier": 3,
+      "color": "#2B2B2B",
+      "league": "Qatar Stars League"
+    },
+    {
+      "id": "fb-114",
+      "name": "Persepolis",
+      "country": "Iran",
+      "tier": 3,
+      "color": "#D6202B",
+      "league": "Persian Gulf Pro League"
+    },
+    {
+      "id": "fb-115",
+      "name": "Shanghai Port",
+      "country": "China",
+      "tier": 3,
+      "color": "#D6202B",
+      "league": "Chinese Super League"
+    },
+    {
+      "id": "fb-116",
+      "name": "Zamalek",
+      "country": "Egypt",
+      "tier": 3,
+      "color": "#FFFFFF",
+      "league": "Egyptian Premier League"
+    },
+    {
+      "id": "fb-117",
+      "name": "Wydad Casablanca",
+      "country": "Morocco",
+      "tier": 3,
+      "color": "#D6202B",
+      "league": "Botola Pro"
+    },
+    {
+      "id": "fb-118",
+      "name": "Esperance",
+      "country": "Tunisia",
+      "tier": 3,
+      "color": "#BC0C12",
+      "league": "Ligue 1 Tunisia"
+    },
+    {
+      "id": "fb-119",
+      "name": "Mamelodi Sundowns",
+      "country": "South Africa",
+      "tier": 3,
+      "color": "#FBC403",
+      "league": "PSL"
+    },
+    {
+      "id": "fb-120",
+      "name": "Toronto FC",
+      "country": "Canada",
+      "tier": 3,
+      "color": "#B81137",
+      "league": "MLS"
+    },
+    {
+      "id": "fb-121",
+      "name": "Sparta Prague",
+      "country": "Czech Republic",
+      "tier": 4,
+      "color": "#7B0C11",
+      "league": "Czech First League"
+    },
+    {
+      "id": "fb-122",
+      "name": "Partizan",
+      "country": "Serbia",
+      "tier": 4,
+      "color": "#2B2B2B",
+      "league": "Serbian SuperLiga"
+    },
+    {
+      "id": "fb-123",
+      "name": "Ferencvaros",
+      "country": "Hungary",
+      "tier": 4,
+      "color": "#0E5C2F",
+      "league": "NB I"
+    },
+    {
+      "id": "fb-124",
+      "name": "Hajduk Split",
+      "country": "Croatia",
+      "tier": 4,
+      "color": "#0C4076",
+      "league": "HNL"
+    },
+    {
+      "id": "fb-125",
+      "name": "HJK Helsinki",
+      "country": "Finland",
+      "tier": 4,
+      "color": "#0056A3",
+      "league": "Veikkausliiga"
+    },
+    {
+      "id": "fb-126",
+      "name": "Breidablik",
+      "country": "Iceland",
+      "tier": 4,
+      "color": "#00954C",
+      "league": "Besta deild"
+    },
+    {
+      "id": "fb-127",
+      "name": "Slovan Bratislava",
+      "country": "Slovakia",
+      "tier": 4,
+      "color": "#57A8E2",
+      "league": "Slovak First League"
+    },
+    {
+      "id": "fb-128",
+      "name": "Ludogorets",
+      "country": "Bulgaria",
+      "tier": 4,
+      "color": "#00954C",
+      "league": "First League Bulgaria"
+    },
+    {
+      "id": "fb-129",
+      "name": "Sheriff Tiraspol",
+      "country": "Moldova",
+      "tier": 4,
+      "color": "#FBC403",
+      "league": "Super Liga Moldova"
+    },
+    {
+      "id": "fb-130",
+      "name": "Dinamo Tbilisi",
+      "country": "Georgia",
+      "tier": 4,
+      "color": "#0C4076",
+      "league": "Erovnuli Liga"
+    },
+    {
+      "id": "fb-131",
+      "name": "Pyunik",
+      "country": "Armenia",
+      "tier": 4,
+      "color": "#D6202B",
+      "league": "Armenian Premier League"
+    },
+    {
+      "id": "fb-132",
+      "name": "Qarabag",
+      "country": "Azerbaijan",
+      "tier": 4,
+      "color": "#2B2B2B",
+      "league": "Azerbaijan Premier League"
+    },
+    {
+      "id": "fb-133",
+      "name": "Kairat Almaty",
+      "country": "Kazakhstan",
+      "tier": 4,
+      "color": "#FBC403",
+      "league": "Kazakhstan Premier League"
+    },
+    {
+      "id": "fb-134",
+      "name": "Pakhtakor",
+      "country": "Uzbekistan",
+      "tier": 4,
+      "color": "#0056A3",
+      "league": "Uzbekistan Super League"
+    },
+    {
+      "id": "fb-135",
+      "name": "Mumbai City",
+      "country": "India",
+      "tier": 4,
+      "color": "#57A8E2",
+      "league": "Indian Super League"
+    },
+    {
+      "id": "fb-136",
+      "name": "Buriram United",
+      "country": "Thailand",
+      "tier": 4,
+      "color": "#0C2E5C",
+      "league": "Thai League 1"
+    },
+    {
+      "id": "fb-137",
+      "name": "Persija Jakarta",
+      "country": "Indonesia",
+      "tier": 4,
+      "color": "#D6202B",
+      "league": "Super League Indonesia"
+    },
+    {
+      "id": "fb-138",
+      "name": "Hanoi FC",
+      "country": "Vietnam",
+      "tier": 4,
+      "color": "#5C2D91",
+      "league": "V.League 1"
+    },
+    {
+      "id": "fb-139",
+      "name": "Johor Darul Tazim",
+      "country": "Malaysia",
+      "tier": 4,
+      "color": "#0C2E5C",
+      "league": "Malaysia Super League"
+    },
+    {
+      "id": "fb-140",
+      "name": "Melbourne Victory",
+      "country": "Australia",
+      "tier": 4,
+      "color": "#0C2E5C",
+      "league": "A-League"
+    },
+    {
+      "id": "fb-141",
+      "name": "Auckland FC",
+      "country": "New Zealand",
+      "tier": 4,
+      "color": "#2B2B2B",
+      "league": "A-League"
+    },
+    {
+      "id": "fb-142",
+      "name": "Wellington Phoenix",
+      "country": "New Zealand",
+      "tier": 4,
+      "color": "#FBC403",
+      "league": "A-League"
+    },
+    {
+      "id": "fb-143",
+      "name": "Raja Casablanca",
+      "country": "Morocco",
+      "tier": 4,
+      "color": "#00954C",
+      "league": "Botola Pro"
+    },
+    {
+      "id": "fb-144",
+      "name": "TP Mazembe",
+      "country": "DR Congo",
+      "tier": 4,
+      "color": "#2B2B2B",
+      "league": "Linafoot"
+    },
+    {
+      "id": "fb-145",
+      "name": "Enyimba",
+      "country": "Nigeria",
+      "tier": 4,
+      "color": "#0056A3",
+      "league": "NPFL"
+    },
+    {
+      "id": "fb-146",
+      "name": "Asante Kotoko",
+      "country": "Ghana",
+      "tier": 4,
+      "color": "#D6202B",
+      "league": "Ghana Premier League"
+    },
+    {
+      "id": "fb-147",
+      "name": "Gor Mahia",
+      "country": "Kenya",
+      "tier": 4,
+      "color": "#00954C",
+      "league": "Kenyan Premier League"
+    },
+    {
+      "id": "fb-148",
+      "name": "Orlando Pirates",
+      "country": "South Africa",
+      "tier": 4,
+      "color": "#2B2B2B",
+      "league": "PSL"
+    },
+    {
+      "id": "fb-149",
+      "name": "Saint George",
+      "country": "Ethiopia",
+      "tier": 4,
+      "color": "#FBC403",
+      "league": "Ethiopian Premier League"
+    },
+    {
+      "id": "fb-150",
+      "name": "Young Africans",
+      "country": "Tanzania",
+      "tier": 4,
+      "color": "#00954C",
+      "league": "NBC Premier League"
+    },
+    {
+      "id": "fb-151",
+      "name": "Atletico Petroleos",
+      "country": "Angola",
+      "tier": 4,
+      "color": "#FBC403",
+      "league": "Girabola"
+    },
+    {
+      "id": "fb-152",
+      "name": "Nacional",
+      "country": "Uruguay",
+      "tier": 4,
+      "color": "#FFFFFF",
+      "league": "Primera Division Uruguay"
+    },
+    {
+      "id": "fb-153",
+      "name": "Universidad de Chile",
+      "country": "Chile",
+      "tier": 4,
+      "color": "#0C2E5C",
+      "league": "Primera Division"
+    },
+    {
+      "id": "fb-154",
+      "name": "Millonarios",
+      "country": "Colombia",
+      "tier": 4,
+      "color": "#0056A3",
+      "league": "Liga BetPlay"
+    },
+    {
+      "id": "fb-155",
+      "name": "LDU Quito",
+      "country": "Ecuador",
+      "tier": 4,
+      "color": "#FFFFFF",
+      "league": "LigaPro"
+    },
+    {
+      "id": "fb-156",
+      "name": "Alianza Lima",
+      "country": "Peru",
+      "tier": 4,
+      "color": "#0C2E5C",
+      "league": "Liga 1 Peru"
+    },
+    {
+      "id": "fb-157",
+      "name": "Olimpia",
+      "country": "Paraguay",
+      "tier": 4,
+      "color": "#2B2B2B",
+      "league": "Primera Division Paraguay"
+    },
+    {
+      "id": "fb-158",
+      "name": "Caracas FC",
+      "country": "Venezuela",
+      "tier": 4,
+      "color": "#7B0C11",
+      "league": "Liga FUTVE"
+    },
+    {
+      "id": "fb-159",
+      "name": "Bolivar",
+      "country": "Bolivia",
+      "tier": 4,
+      "color": "#57A8E2",
+      "league": "Division Profesional"
+    },
+    {
+      "id": "fb-160",
+      "name": "Saprissa",
+      "country": "Costa Rica",
+      "tier": 4,
+      "color": "#5C2D91",
+      "league": "Liga FPD"
+    },
+    {
+      "id": "fb-161",
+      "name": "Olimpia Tegucigalpa",
+      "country": "Honduras",
+      "tier": 4,
+      "color": "#FFFFFF",
+      "league": "Liga Nacional Honduras"
+    },
+    {
+      "id": "fb-162",
+      "name": "Alianza FC",
+      "country": "El Salvador",
+      "tier": 4,
+      "color": "#FFFFFF",
+      "league": "Primera Division El Salvador"
+    },
+    {
+      "id": "fb-163",
+      "name": "Comunicaciones",
+      "country": "Guatemala",
+      "tier": 4,
+      "color": "#FFFFFF",
+      "league": "Liga Nacional Guatemala"
+    },
+    {
+      "id": "fb-164",
+      "name": "Violette AC",
+      "country": "Haiti",
+      "tier": 4,
+      "color": "#5C2D91",
+      "league": "Ligue Haitienne"
+    },
+    {
+      "id": "fb-165",
+      "name": "Waterhouse FC",
+      "country": "Jamaica",
+      "tier": 4,
+      "color": "#D6202B",
+      "league": "Jamaica Premier League"
+    },
+    {
+      "id": "fb-166",
+      "name": "Defence Force FC",
+      "country": "Trinidad and Tobago",
+      "tier": 4,
+      "color": "#7B0C11",
+      "league": "TT Premier League"
+    },
+    {
+      "id": "fb-167",
+      "name": "Vancouver Whitecaps",
+      "country": "Canada",
+      "tier": 4,
+      "color": "#0C2E5C",
+      "league": "MLS"
+    },
+    {
+      "id": "fb-168",
+      "name": "Chivas",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#D6202B",
+      "league": "Liga MX"
+    },
+    {
+      "id": "fb-169",
+      "name": "Pumas",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#0C2E5C",
+      "league": "Liga MX"
+    },
+    {
+      "id": "fb-170",
+      "name": "Al Duhail",
+      "country": "Qatar",
+      "tier": 4,
+      "color": "#D6202B",
+      "league": "Qatar Stars League"
+    },
+    {
+      "id": "fb-171",
+      "name": "Al Ain",
+      "country": "UAE",
+      "tier": 4,
+      "color": "#5C2D91",
+      "league": "UAE Pro League"
+    },
+    {
+      "id": "fb-172",
+      "name": "Beijing Guoan",
+      "country": "China",
+      "tier": 4,
+      "color": "#00954C",
+      "league": "Chinese Super League"
+    },
+    {
+      "id": "fb-173",
+      "name": "Maccabi Tel Aviv",
+      "country": "Israel",
+      "tier": 4,
+      "color": "#FBC403",
+      "league": "Israeli Premier League"
+    },
+    {
+      "id": "fb-174",
+      "name": "APOEL",
+      "country": "Cyprus",
+      "tier": 4,
+      "color": "#F26522",
+      "league": "Cypriot First Division"
+    },
+    {
+      "id": "fb-175",
+      "name": "Flora Tallinn",
+      "country": "Estonia",
+      "tier": 4,
+      "color": "#00954C",
+      "league": "Meistriliiga"
+    },
+    {
+      "id": "fb-176",
+      "name": "Zalgiris Vilnius",
+      "country": "Lithuania",
+      "tier": 4,
+      "color": "#00954C",
+      "league": "A Lyga"
+    },
+    {
+      "id": "fb-177",
+      "name": "AZ Alkmaar",
+      "country": "Netherlands",
+      "tier": 3,
+      "color": "#DD0000",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "fb-178",
+      "name": "Twente",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#E70011",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "fb-179",
+      "name": "Vitoria Guimaraes",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#F5F5F5",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "fb-180",
+      "name": "Hearts",
+      "country": "Scotland",
+      "tier": 4,
+      "color": "#800910",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "fb-181",
+      "name": "Hibernian",
+      "country": "Scotland",
+      "tier": 4,
+      "color": "#006A4E",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "fb-182",
+      "name": "Columbus Crew",
+      "country": "USA",
+      "tier": 3,
+      "color": "#FEDD00",
+      "league": "MLS"
+    },
+    {
+      "id": "fb-183",
+      "name": "Atlanta United",
+      "country": "USA",
+      "tier": 4,
+      "color": "#80000A",
+      "league": "MLS"
+    },
+    {
+      "id": "fb-184",
+      "name": "Al Ahli",
+      "country": "Saudi Arabia",
+      "tier": 3,
+      "color": "#006B3F",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "fb-185",
+      "name": "Al Shabab",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#F2F2F2",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "fb-186",
+      "name": "Ulsan HD",
+      "country": "South Korea",
+      "tier": 3,
+      "color": "#0053A0",
+      "league": "K League 1"
+    },
+    {
+      "id": "fb-187",
+      "name": "FC Seoul",
+      "country": "South Korea",
+      "tier": 4,
+      "color": "#AC1A2F",
+      "league": "K League 1"
+    },
+    {
+      "id": "fb-188",
+      "name": "Pohang Steelers",
+      "country": "South Korea",
+      "tier": 4,
+      "color": "#C8102E",
+      "league": "K League 1"
+    },
+    {
+      "id": "fb-189",
+      "name": "Botafogo",
+      "country": "Brazil",
+      "tier": 3,
+      "color": "#1A1A1A",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "fb-190",
+      "name": "Cruzeiro",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#0033A0",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-bournemouth",
+      "name": "Bournemouth",
+      "country": "England",
+      "tier": 4,
+      "color": "#da291c",
+      "league": "Premier League"
+    },
+    {
+      "id": "cm-coventry-city",
+      "name": "Coventry City",
+      "country": "England",
+      "tier": 4,
+      "color": "#66b2e8",
+      "league": "Premier League"
+    },
+    {
+      "id": "cm-hull-city",
+      "name": "Hull City",
+      "country": "England",
+      "tier": 4,
+      "color": "#f5a12d",
+      "league": "Premier League"
+    },
+    {
+      "id": "cm-ipswich-town",
+      "name": "Ipswich Town",
+      "country": "England",
+      "tier": 4,
+      "color": "#2450a3",
+      "league": "Premier League"
+    },
+    {
+      "id": "cm-leeds-united",
+      "name": "Leeds United",
+      "country": "England",
+      "tier": 4,
+      "color": "#ffcd00",
+      "league": "Premier League"
+    },
+    {
+      "id": "cm-nottingham-forest",
+      "name": "Nottingham Forest",
+      "country": "England",
+      "tier": 2,
+      "color": "#dd0000",
+      "league": "Premier League"
+    },
+    {
+      "id": "cm-sunderland",
+      "name": "Sunderland",
+      "country": "England",
+      "tier": 4,
+      "color": "#eb172b",
+      "league": "Premier League"
+    },
+    {
+      "id": "cm-birmingham-city",
+      "name": "Birmingham City",
+      "country": "England",
+      "tier": 4,
+      "color": "#2966b0",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-blackburn-rovers",
+      "name": "Blackburn Rovers",
+      "country": "England",
+      "tier": 4,
+      "color": "#009ee0",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-bolton-wanderers",
+      "name": "Bolton Wanderers",
+      "country": "England",
+      "tier": 4,
+      "color": "#263c7e",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-bristol-city",
+      "name": "Bristol City",
+      "country": "England",
+      "tier": 4,
+      "color": "#e21a23",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-burnley",
+      "name": "Burnley",
+      "country": "England",
+      "tier": 4,
+      "color": "#8b2a4a",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-cardiff-city",
+      "name": "Cardiff City",
+      "country": "Wales",
+      "tier": 4,
+      "color": "#0070b5",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-charlton-athletic",
+      "name": "Charlton Athletic",
+      "country": "England",
+      "tier": 4,
+      "color": "#d4021d",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-derby-county",
+      "name": "Derby County",
+      "country": "England",
+      "tier": 4,
+      "color": "#d8d8d8",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-lincoln-city",
+      "name": "Lincoln City",
+      "country": "England",
+      "tier": 4,
+      "color": "#e30613",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-middlesbrough",
+      "name": "Middlesbrough",
+      "country": "England",
+      "tier": 4,
+      "color": "#e21a23",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-millwall",
+      "name": "Millwall",
+      "country": "England",
+      "tier": 4,
+      "color": "#25457a",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-portsmouth",
+      "name": "Portsmouth",
+      "country": "England",
+      "tier": 4,
+      "color": "#2450a3",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-preston-north-end",
+      "name": "Preston North End",
+      "country": "England",
+      "tier": 4,
+      "color": "#b9c4d1",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-qpr",
+      "name": "QPR",
+      "country": "England",
+      "tier": 4,
+      "color": "#1d5ba4",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-sheffield-united",
+      "name": "Sheffield United",
+      "country": "England",
+      "tier": 4,
+      "color": "#ee2737",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-southampton",
+      "name": "Southampton",
+      "country": "England",
+      "tier": 4,
+      "color": "#d71920",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-stoke-city",
+      "name": "Stoke City",
+      "country": "England",
+      "tier": 4,
+      "color": "#e03a3e",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-swansea-city",
+      "name": "Swansea City",
+      "country": "Wales",
+      "tier": 4,
+      "color": "#c8c8c8",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-watford",
+      "name": "Watford",
+      "country": "England",
+      "tier": 4,
+      "color": "#fbee23",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-west-brom",
+      "name": "West Brom",
+      "country": "England",
+      "tier": 4,
+      "color": "#3a5da8",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-wrexham",
+      "name": "Wrexham",
+      "country": "Wales",
+      "tier": 4,
+      "color": "#ce1126",
+      "league": "Championship"
+    },
+    {
+      "id": "cm-alaves",
+      "name": "Alaves",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#0761af",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-deportivo",
+      "name": "Deportivo",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#0068b3",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-elche",
+      "name": "Elche",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#1a9349",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-espanyol",
+      "name": "Espanyol",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#007fc8",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-getafe",
+      "name": "Getafe",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#1265b3",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-levante",
+      "name": "Levante",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#9c2743",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-malaga",
+      "name": "Malaga",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#29a5dd",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-osasuna",
+      "name": "Osasuna",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#d91a21",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-racing-santander",
+      "name": "Racing Santander",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#009e49",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-rayo-vallecano",
+      "name": "Rayo Vallecano",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#e53027",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-valencia",
+      "name": "Valencia",
+      "country": "Spain",
+      "tier": 4,
+      "color": "#ee7f24",
+      "league": "La Liga"
+    },
+    {
+      "id": "cm-athletico-paranaense",
+      "name": "Athletico Paranaense",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#c8102e",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-fluminense",
+      "name": "Fluminense",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#7a1e3a",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-bahia",
+      "name": "Bahia",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#0057b8",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-atletico-mineiro",
+      "name": "Atletico Mineiro",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-coritiba",
+      "name": "Coritiba",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-red-bull-bragantino",
+      "name": "Red Bull Bragantino",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#d9d9d9",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-vitoria",
+      "name": "Vitoria",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-mirassol",
+      "name": "Mirassol",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-vasco-da-gama",
+      "name": "Vasco da Gama",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-internacional",
+      "name": "Internacional",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-remo",
+      "name": "Remo",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#12294a",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-chapecoense",
+      "name": "Chapecoense",
+      "country": "Brazil",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Brasileirao"
+    },
+    {
+      "id": "cm-cagliari",
+      "name": "Cagliari",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#b01028",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-como",
+      "name": "Como",
+      "country": "Italy",
+      "tier": 2,
+      "color": "#2764b0",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-frosinone",
+      "name": "Frosinone",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#f7d417",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-genoa",
+      "name": "Genoa",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#a71930",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-lazio",
+      "name": "Lazio",
+      "country": "Italy",
+      "tier": 3,
+      "color": "#87d8f7",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-lecce",
+      "name": "Lecce",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#f7d117",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-monza",
+      "name": "Monza",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#e31b23",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-parma",
+      "name": "Parma",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#f6c800",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-sassuolo",
+      "name": "Sassuolo",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#00a752",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-udinese",
+      "name": "Udinese",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#c9c9c9",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-venezia",
+      "name": "Venezia",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#f28020",
+      "league": "Serie A"
+    },
+    {
+      "id": "cm-augsburg",
+      "name": "Augsburg",
+      "country": "Germany",
+      "tier": 3,
+      "color": "#ba3733",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-gladbach",
+      "name": "Gladbach",
+      "country": "Germany",
+      "tier": 3,
+      "color": "#1a9f3d",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-freiburg",
+      "name": "Freiburg",
+      "country": "Germany",
+      "tier": 3,
+      "color": "#cc0000",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-hamburg",
+      "name": "Hamburg",
+      "country": "Germany",
+      "tier": 3,
+      "color": "#2b62b8",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-hoffenheim",
+      "name": "Hoffenheim",
+      "country": "Germany",
+      "tier": 3,
+      "color": "#1961b5",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-koln",
+      "name": "Koln",
+      "country": "Germany",
+      "tier": 3,
+      "color": "#ed1c24",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-mainz",
+      "name": "Mainz",
+      "country": "Germany",
+      "tier": 3,
+      "color": "#c3141e",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-schalke-04",
+      "name": "Schalke 04",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#004b95",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-elversberg",
+      "name": "Elversberg",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#dd1425",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-paderborn",
+      "name": "Paderborn",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#0060ae",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-union-berlin",
+      "name": "Union Berlin",
+      "country": "Germany",
+      "tier": 3,
+      "color": "#eb1923",
+      "league": "Bundesliga"
+    },
+    {
+      "id": "cm-angers",
+      "name": "Angers",
+      "country": "France",
+      "tier": 4,
+      "color": "#9aa0a6",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-auxerre",
+      "name": "Auxerre",
+      "country": "France",
+      "tier": 4,
+      "color": "#4a7fc0",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-brest",
+      "name": "Brest",
+      "country": "France",
+      "tier": 4,
+      "color": "#e30613",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-le-havre",
+      "name": "Le Havre",
+      "country": "France",
+      "tier": 4,
+      "color": "#75aadb",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-le-mans",
+      "name": "Le Mans",
+      "country": "France",
+      "tier": 4,
+      "color": "#f0b41c",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-lens",
+      "name": "Lens",
+      "country": "France",
+      "tier": 4,
+      "color": "#ffd700",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-lorient",
+      "name": "Lorient",
+      "country": "France",
+      "tier": 4,
+      "color": "#ff6600",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-paris-fc",
+      "name": "Paris FC",
+      "country": "France",
+      "tier": 4,
+      "color": "#3d5da8",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-rennes",
+      "name": "Rennes",
+      "country": "France",
+      "tier": 4,
+      "color": "#e13327",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-toulouse",
+      "name": "Toulouse",
+      "country": "France",
+      "tier": 4,
+      "color": "#8b5bb8",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-troyes",
+      "name": "Troyes",
+      "country": "France",
+      "tier": 4,
+      "color": "#2a5aa8",
+      "league": "Ligue 1"
+    },
+    {
+      "id": "cm-ado-den-haag",
+      "name": "ADO Den Haag",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#0d8a4e",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-cambuur",
+      "name": "Cambuur",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-excelsior",
+      "name": "Excelsior",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#c41f30",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-fortuna-sittard",
+      "name": "Fortuna Sittard",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#f6c500",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-go-ahead-eagles",
+      "name": "Go Ahead Eagles",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#f2c200",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-groningen",
+      "name": "Groningen",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#009651",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-heerenveen",
+      "name": "Heerenveen",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#1560bd",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-nec-nijmegen",
+      "name": "NEC Nijmegen",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#cf2038",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-pec-zwolle",
+      "name": "PEC Zwolle",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#1660a8",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-sparta-rotterdam",
+      "name": "Sparta Rotterdam",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#b01c2e",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-telstar",
+      "name": "Telstar",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#d9d9d9",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-willem-ii",
+      "name": "Willem II",
+      "country": "Netherlands",
+      "tier": 4,
+      "color": "#2f4d8f",
+      "league": "Eredivisie"
+    },
+    {
+      "id": "cm-abha",
+      "name": "Abha",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#cf3a3a",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-diriyah",
+      "name": "Al Diriyah",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#9a7b3f",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-ettifaq",
+      "name": "Al Ettifaq",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#0d7a3c",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-faisaly",
+      "name": "Al Faisaly",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#f9a11b",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-fateh",
+      "name": "Al Fateh",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#3b2a7a",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-fayha",
+      "name": "Al Fayha",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#e8871e",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-hazem",
+      "name": "Al Hazem",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#2d7dc8",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-khaleej",
+      "name": "Al Khaleej",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#cf2032",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-kholood",
+      "name": "Al Kholood",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#8f2f4f",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-qadsiah",
+      "name": "Al Qadsiah",
+      "country": "Saudi Arabia",
+      "tier": 3,
+      "color": "#e6b31e",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-riyadh",
+      "name": "Al Riyadh",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#3aa335",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-al-taawoun",
+      "name": "Al Taawoun",
+      "country": "Saudi Arabia",
+      "tier": 4,
+      "color": "#b78b28",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-neom-sc",
+      "name": "NEOM SC",
+      "country": "Saudi Arabia",
+      "tier": 3,
+      "color": "#2ab6bd",
+      "league": "Saudi Pro League"
+    },
+    {
+      "id": "cm-charlotte-fc",
+      "name": "Charlotte FC",
+      "country": "USA",
+      "tier": 4,
+      "color": "#1a85c8",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-chicago-fire",
+      "name": "Chicago Fire",
+      "country": "USA",
+      "tier": 4,
+      "color": "#cf2334",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-fc-cincinnati",
+      "name": "FC Cincinnati",
+      "country": "USA",
+      "tier": 4,
+      "color": "#fe5000",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-dc-united",
+      "name": "DC United",
+      "country": "USA",
+      "tier": 4,
+      "color": "#ee3524",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-cf-montreal",
+      "name": "CF Montreal",
+      "country": "Canada",
+      "tier": 4,
+      "color": "#244a8e",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-nashville-sc",
+      "name": "Nashville SC",
+      "country": "USA",
+      "tier": 4,
+      "color": "#ece83a",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-new-england-revolution",
+      "name": "New England Revolution",
+      "country": "USA",
+      "tier": 4,
+      "color": "#d21033",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-new-york-city-fc",
+      "name": "New York City FC",
+      "country": "USA",
+      "tier": 2,
+      "color": "#6cace4",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-new-york-red-bulls",
+      "name": "New York Red Bulls",
+      "country": "USA",
+      "tier": 4,
+      "color": "#ed1e36",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-orlando-city",
+      "name": "Orlando City",
+      "country": "USA",
+      "tier": 4,
+      "color": "#633492",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-philadelphia-union",
+      "name": "Philadelphia Union",
+      "country": "USA",
+      "tier": 4,
+      "color": "#b38707",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-austin-fc",
+      "name": "Austin FC",
+      "country": "USA",
+      "tier": 4,
+      "color": "#00b140",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-colorado-rapids",
+      "name": "Colorado Rapids",
+      "country": "USA",
+      "tier": 4,
+      "color": "#862633",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-fc-dallas",
+      "name": "FC Dallas",
+      "country": "USA",
+      "tier": 4,
+      "color": "#e81f3e",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-houston-dynamo",
+      "name": "Houston Dynamo",
+      "country": "USA",
+      "tier": 4,
+      "color": "#ff6b00",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-minnesota-united",
+      "name": "Minnesota United",
+      "country": "USA",
+      "tier": 4,
+      "color": "#8cd2f4",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-portland-timbers",
+      "name": "Portland Timbers",
+      "country": "USA",
+      "tier": 4,
+      "color": "#0d6b3f",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-real-salt-lake",
+      "name": "Real Salt Lake",
+      "country": "USA",
+      "tier": 4,
+      "color": "#b30838",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-san-diego-fc",
+      "name": "San Diego FC",
+      "country": "USA",
+      "tier": 4,
+      "color": "#00b0e7",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-san-jose-earthquakes",
+      "name": "San Jose Earthquakes",
+      "country": "USA",
+      "tier": 4,
+      "color": "#0067b1",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-sporting-kansas-city",
+      "name": "Sporting Kansas City",
+      "country": "USA",
+      "tier": 4,
+      "color": "#91b0d5",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-st-louis-city",
+      "name": "St. Louis City",
+      "country": "USA",
+      "tier": 4,
+      "color": "#dd004a",
+      "league": "MLS"
+    },
+    {
+      "id": "cm-famalicao",
+      "name": "Famalicao",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#1660a8",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-rio-ave",
+      "name": "Rio Ave",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#0a8a4e",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-casa-pia",
+      "name": "Casa Pia",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-estoril",
+      "name": "Estoril",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-moreirense",
+      "name": "Moreirense",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-arouca",
+      "name": "Arouca",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#f2b705",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-gil-vicente",
+      "name": "Gil Vicente",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#c41f30",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-santa-clara",
+      "name": "Santa Clara",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-cd-nacional",
+      "name": "CD Nacional",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-estrela-amadora",
+      "name": "Estrela Amadora",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-alverca",
+      "name": "Alverca",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-maritimo",
+      "name": "Maritimo",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-academico-de-viseu",
+      "name": "Academico de Viseu",
+      "country": "Portugal",
+      "tier": 4,
+      "color": "#2f4d8f",
+      "league": "Primeira Liga"
+    },
+    {
+      "id": "cm-dundee-united",
+      "name": "Dundee United",
+      "country": "Scotland",
+      "tier": 4,
+      "color": "#f26522",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "cm-dundee",
+      "name": "Dundee",
+      "country": "Scotland",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "cm-motherwell",
+      "name": "Motherwell",
+      "country": "Scotland",
+      "tier": 4,
+      "color": "#fbb914",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "cm-st-mirren",
+      "name": "St Mirren",
+      "country": "Scotland",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "cm-kilmarnock",
+      "name": "Kilmarnock",
+      "country": "Scotland",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "cm-falkirk",
+      "name": "Falkirk",
+      "country": "Scotland",
+      "tier": 4,
+      "color": "#1b3f8f",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "cm-st-johnstone",
+      "name": "St Johnstone",
+      "country": "Scotland",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "Scottish Premiership"
+    },
+    {
+      "id": "cm-basaksehir",
+      "name": "Basaksehir",
+      "country": "Turkey",
+      "tier": 3,
+      "color": "#163962",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-samsunspor",
+      "name": "Samsunspor",
+      "country": "Turkey",
+      "tier": 3,
+      "color": "#d02128",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-eyupspor",
+      "name": "Eyupspor",
+      "country": "Turkey",
+      "tier": 4,
+      "color": "#5c2d91",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-goztepe",
+      "name": "Goztepe",
+      "country": "Turkey",
+      "tier": 3,
+      "color": "#f2b705",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-kasimpasa",
+      "name": "Kasimpasa",
+      "country": "Turkey",
+      "tier": 4,
+      "color": "#163962",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-alanyaspor",
+      "name": "Alanyaspor",
+      "country": "Turkey",
+      "tier": 3,
+      "color": "#f26522",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-konyaspor",
+      "name": "Konyaspor",
+      "country": "Turkey",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-gaziantep-fk",
+      "name": "Gaziantep FK",
+      "country": "Turkey",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-genclerbirligi",
+      "name": "Genclerbirligi",
+      "country": "Turkey",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-kocaelispor",
+      "name": "Kocaelispor",
+      "country": "Turkey",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-rizespor",
+      "name": "Rizespor",
+      "country": "Turkey",
+      "tier": 3,
+      "color": "#0a7040",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-erzurumspor",
+      "name": "Erzurumspor",
+      "country": "Turkey",
+      "tier": 4,
+      "color": "#163962",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-amedspor",
+      "name": "Amedspor",
+      "country": "Turkey",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-corum-fk",
+      "name": "Corum FK",
+      "country": "Turkey",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Super Lig"
+    },
+    {
+      "id": "cm-wolfsburg",
+      "name": "Wolfsburg",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#65b32e",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-heidenheim",
+      "name": "Heidenheim",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#e30613",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-st-pauli",
+      "name": "St. Pauli",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#b08968",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-bochum",
+      "name": "Bochum",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#005ca9",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-magdeburg",
+      "name": "Magdeburg",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-kaiserslautern",
+      "name": "Kaiserslautern",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-holstein-kiel",
+      "name": "Holstein Kiel",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-hannover-96",
+      "name": "Hannover 96",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-dynamo-dresden",
+      "name": "Dynamo Dresden",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-braunschweig",
+      "name": "Braunschweig",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-greuther-furth",
+      "name": "Greuther Furth",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-nurnberg",
+      "name": "Nurnberg",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#7d1c2a",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-darmstadt",
+      "name": "Darmstadt",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#005ca9",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-arminia-bielefeld",
+      "name": "Arminia Bielefeld",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-karlsruhe",
+      "name": "Karlsruhe",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#005ca9",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-osnabruck",
+      "name": "Osnabruck",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#5c2d91",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-energie-cottbus",
+      "name": "Energie Cottbus",
+      "country": "Germany",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "2. Bundesliga"
+    },
+    {
+      "id": "cm-union-saint-gilloise",
+      "name": "Union Saint-Gilloise",
+      "country": "Belgium",
+      "tier": 3,
+      "color": "#f5d800",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-gent",
+      "name": "Gent",
+      "country": "Belgium",
+      "tier": 3,
+      "color": "#1b458f",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-antwerp",
+      "name": "Antwerp",
+      "country": "Belgium",
+      "tier": 3,
+      "color": "#d02128",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-standard-liege",
+      "name": "Standard Liege",
+      "country": "Belgium",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-mechelen",
+      "name": "Mechelen",
+      "country": "Belgium",
+      "tier": 3,
+      "color": "#f2b705",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-charleroi",
+      "name": "Charleroi",
+      "country": "Belgium",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-westerlo",
+      "name": "Westerlo",
+      "country": "Belgium",
+      "tier": 3,
+      "color": "#f5d800",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-sint-truiden",
+      "name": "Sint-Truiden",
+      "country": "Belgium",
+      "tier": 3,
+      "color": "#f2b705",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-oh-leuven",
+      "name": "OH Leuven",
+      "country": "Belgium",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-cercle-brugge",
+      "name": "Cercle Brugge",
+      "country": "Belgium",
+      "tier": 3,
+      "color": "#0a7857",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-la-louviere",
+      "name": "La Louviere",
+      "country": "Belgium",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-zulte-waregem",
+      "name": "Zulte Waregem",
+      "country": "Belgium",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-beveren",
+      "name": "Beveren",
+      "country": "Belgium",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-kortrijk",
+      "name": "Kortrijk",
+      "country": "Belgium",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-lommel",
+      "name": "Lommel",
+      "country": "Belgium",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Belgian Pro League"
+    },
+    {
+      "id": "cm-sturm-graz",
+      "name": "Sturm Graz",
+      "country": "Austria",
+      "tier": 3,
+      "color": "#2b2b2b",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-rapid-wien",
+      "name": "Rapid Wien",
+      "country": "Austria",
+      "tier": 3,
+      "color": "#0a7040",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-lask",
+      "name": "LASK",
+      "country": "Austria",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-wolfsberger-ac",
+      "name": "Wolfsberger AC",
+      "country": "Austria",
+      "tier": 4,
+      "color": "#d9d9d9",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-austria-wien",
+      "name": "Austria Wien",
+      "country": "Austria",
+      "tier": 4,
+      "color": "#5c2d91",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-grazer-ak",
+      "name": "Grazer AK",
+      "country": "Austria",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-hartberg",
+      "name": "Hartberg",
+      "country": "Austria",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-ried",
+      "name": "Ried",
+      "country": "Austria",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-altach",
+      "name": "Altach",
+      "country": "Austria",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-wsg-tirol",
+      "name": "WSG Tirol",
+      "country": "Austria",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-austria-lustenau",
+      "name": "Austria Lustenau",
+      "country": "Austria",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Austrian Bundesliga"
+    },
+    {
+      "id": "cm-aek-athens",
+      "name": "AEK Athens",
+      "country": "Greece",
+      "tier": 3,
+      "color": "#f5d800",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-aris",
+      "name": "Aris",
+      "country": "Greece",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-asteras-tripolis",
+      "name": "Asteras Tripolis",
+      "country": "Greece",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-atromitos",
+      "name": "Atromitos",
+      "country": "Greece",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-iraklis",
+      "name": "Iraklis",
+      "country": "Greece",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-kalamata",
+      "name": "Kalamata",
+      "country": "Greece",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-kifisia",
+      "name": "Kifisia",
+      "country": "Greece",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-levadiakos",
+      "name": "Levadiakos",
+      "country": "Greece",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-ofi",
+      "name": "OFI",
+      "country": "Greece",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-panetolikos",
+      "name": "Panetolikos",
+      "country": "Greece",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-volos",
+      "name": "Volos",
+      "country": "Greece",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Super League Greece"
+    },
+    {
+      "id": "cm-fc-midtjylland",
+      "name": "FC Midtjylland",
+      "country": "Denmark",
+      "tier": 3,
+      "color": "#b60f1f",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-brondby-if",
+      "name": "Brondby IF",
+      "country": "Denmark",
+      "tier": 3,
+      "color": "#f6d500",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-agf",
+      "name": "AGF",
+      "country": "Denmark",
+      "tier": 4,
+      "color": "#1c63b7",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-fc-nordsjaelland",
+      "name": "FC Nordsjaelland",
+      "country": "Denmark",
+      "tier": 3,
+      "color": "#f1c933",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-viborg-ff",
+      "name": "Viborg FF",
+      "country": "Denmark",
+      "tier": 4,
+      "color": "#0f7a3a",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-randers-fc",
+      "name": "Randers FC",
+      "country": "Denmark",
+      "tier": 4,
+      "color": "#1f5fa6",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-ob",
+      "name": "OB",
+      "country": "Denmark",
+      "tier": 4,
+      "color": "#0e4c92",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-silkeborg-if",
+      "name": "Silkeborg IF",
+      "country": "Denmark",
+      "tier": 4,
+      "color": "#c8102e",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-lyngby",
+      "name": "Lyngby",
+      "country": "Denmark",
+      "tier": 4,
+      "color": "#1d4f91",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-ac-horsens",
+      "name": "AC Horsens",
+      "country": "Denmark",
+      "tier": 4,
+      "color": "#f2c500",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-sonderjyske",
+      "name": "SonderjyskE",
+      "country": "Denmark",
+      "tier": 4,
+      "color": "#63b1e5",
+      "league": "Danish Superliga"
+    },
+    {
+      "id": "cm-young-boys",
+      "name": "Young Boys",
+      "country": "Switzerland",
+      "tier": 3,
+      "color": "#ffd500",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-thun",
+      "name": "Thun",
+      "country": "Switzerland",
+      "tier": 4,
+      "color": "#da291c",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-st-gallen",
+      "name": "St. Gallen",
+      "country": "Switzerland",
+      "tier": 4,
+      "color": "#009654",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-lugano",
+      "name": "Lugano",
+      "country": "Switzerland",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-servette",
+      "name": "Servette",
+      "country": "Switzerland",
+      "tier": 4,
+      "color": "#8d1b3d",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-luzern",
+      "name": "Luzern",
+      "country": "Switzerland",
+      "tier": 4,
+      "color": "#1667b1",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-lausanne-sport",
+      "name": "Lausanne-Sport",
+      "country": "Switzerland",
+      "tier": 4,
+      "color": "#0b63b2",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-fc-zurich",
+      "name": "FC Zurich",
+      "country": "Switzerland",
+      "tier": 4,
+      "color": "#0a3e86",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-grasshopper",
+      "name": "Grasshopper",
+      "country": "Switzerland",
+      "tier": 4,
+      "color": "#0053a0",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-sion",
+      "name": "Sion",
+      "country": "Switzerland",
+      "tier": 4,
+      "color": "#d2232a",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-vaduz",
+      "name": "Vaduz",
+      "country": "Liechtenstein",
+      "tier": 4,
+      "color": "#ce1126",
+      "league": "Swiss Super League"
+    },
+    {
+      "id": "cm-rijeka",
+      "name": "Rijeka",
+      "country": "Croatia",
+      "tier": 4,
+      "color": "#009fe3",
+      "league": "HNL"
+    },
+    {
+      "id": "cm-osijek",
+      "name": "Osijek",
+      "country": "Croatia",
+      "tier": 4,
+      "color": "#0f4c81",
+      "league": "HNL"
+    },
+    {
+      "id": "cm-varazdin",
+      "name": "Varazdin",
+      "country": "Croatia",
+      "tier": 4,
+      "color": "#12294a",
+      "league": "HNL"
+    },
+    {
+      "id": "cm-slaven-belupo",
+      "name": "Slaven Belupo",
+      "country": "Croatia",
+      "tier": 4,
+      "color": "#0e6eb8",
+      "league": "HNL"
+    },
+    {
+      "id": "cm-istra-1961",
+      "name": "Istra 1961",
+      "country": "Croatia",
+      "tier": 4,
+      "color": "#0a7a3c",
+      "league": "HNL"
+    },
+    {
+      "id": "cm-lokomotiva-zagreb",
+      "name": "Lokomotiva Zagreb",
+      "country": "Croatia",
+      "tier": 4,
+      "color": "#e2001a",
+      "league": "HNL"
+    },
+    {
+      "id": "cm-gorica",
+      "name": "Gorica",
+      "country": "Croatia",
+      "tier": 4,
+      "color": "#12294a",
+      "league": "HNL"
+    },
+    {
+      "id": "cm-rudes",
+      "name": "Rudes",
+      "country": "Croatia",
+      "tier": 4,
+      "color": "#1f9d55",
+      "league": "HNL"
+    },
+    {
+      "id": "cm-toluca",
+      "name": "Toluca",
+      "country": "Mexico",
+      "tier": 3,
+      "color": "#d02128",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-pachuca",
+      "name": "Pachuca",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#12294a",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-leon",
+      "name": "Leon",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-santos-laguna",
+      "name": "Santos Laguna",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-atlas",
+      "name": "Atlas",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#c8102e",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-necaxa",
+      "name": "Necaxa",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-puebla",
+      "name": "Puebla",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#1b3f94",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-queretaro",
+      "name": "Queretaro",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#2b2b2b",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-tijuana",
+      "name": "Tijuana",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#c8102e",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-fc-juarez",
+      "name": "FC Juarez",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#1f9d55",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-atletico-san-luis",
+      "name": "Atletico San Luis",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-atlante",
+      "name": "Atlante",
+      "country": "Mexico",
+      "tier": 4,
+      "color": "#0057b8",
+      "league": "Liga MX"
+    },
+    {
+      "id": "cm-adelaide-united",
+      "name": "Adelaide United",
+      "country": "Australia",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "A-League"
+    },
+    {
+      "id": "cm-brisbane-roar",
+      "name": "Brisbane Roar",
+      "country": "Australia",
+      "tier": 4,
+      "color": "#f5a800",
+      "league": "A-League"
+    },
+    {
+      "id": "cm-central-coast-mariners",
+      "name": "Central Coast Mariners",
+      "country": "Australia",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "A-League"
+    },
+    {
+      "id": "cm-macarthur-fc",
+      "name": "Macarthur FC",
+      "country": "Australia",
+      "tier": 4,
+      "color": "#1A1A1A",
+      "league": "A-League"
+    },
+    {
+      "id": "cm-melbourne-city",
+      "name": "Melbourne City",
+      "country": "Australia",
+      "tier": 4,
+      "color": "#6cabdd",
+      "league": "A-League"
+    },
+    {
+      "id": "cm-newcastle-jets",
+      "name": "Newcastle Jets",
+      "country": "Australia",
+      "tier": 4,
+      "color": "#0057b8",
+      "league": "A-League"
+    },
+    {
+      "id": "cm-perth-glory",
+      "name": "Perth Glory",
+      "country": "Australia",
+      "tier": 4,
+      "color": "#5c2d91",
+      "league": "A-League"
+    },
+    {
+      "id": "cm-sydney-fc",
+      "name": "Sydney FC",
+      "country": "Australia",
+      "tier": 4,
+      "color": "#6cabdd",
+      "league": "A-League"
+    },
+    {
+      "id": "cm-western-sydney-wanderers",
+      "name": "Western Sydney Wanderers",
+      "country": "Australia",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "A-League"
+    },
+    {
+      "id": "cm-cremonese",
+      "name": "Cremonese",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#e3546c",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-verona",
+      "name": "Verona",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#ffdd00",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-pisa",
+      "name": "Pisa",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#3a6fc4",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-avellino",
+      "name": "Avellino",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-carrarese",
+      "name": "Carrarese",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#f7d417",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-catanzaro",
+      "name": "Catanzaro",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-cesena",
+      "name": "Cesena",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#d5d5d5",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-empoli",
+      "name": "Empoli",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#1a5dad",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-entella",
+      "name": "Entella",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#87d8f7",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-juve-stabia",
+      "name": "Juve Stabia",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#f7d417",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-mantova",
+      "name": "Mantova",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-modena",
+      "name": "Modena",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#f7d417",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-padova",
+      "name": "Padova",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-palermo",
+      "name": "Palermo",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#e75ba5",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-sampdoria",
+      "name": "Sampdoria",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#1b5497",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-sudtirol",
+      "name": "Sudtirol",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-vicenza",
+      "name": "Vicenza",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-arezzo",
+      "name": "Arezzo",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#7d1c2a",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-benevento",
+      "name": "Benevento",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#f5d800",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-ascoli",
+      "name": "Ascoli",
+      "country": "Italy",
+      "tier": 4,
+      "color": "#c9c9c9",
+      "league": "Serie B"
+    },
+    {
+      "id": "cm-metz",
+      "name": "Metz",
+      "country": "France",
+      "tier": 4,
+      "color": "#a01d3c",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-saint-etienne",
+      "name": "Saint-Etienne",
+      "country": "France",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-red-star-fc",
+      "name": "Red Star FC",
+      "country": "France",
+      "tier": 4,
+      "color": "#0a7040",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-reims",
+      "name": "Reims",
+      "country": "France",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-montpellier",
+      "name": "Montpellier",
+      "country": "France",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-nancy",
+      "name": "Nancy",
+      "country": "France",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-annecy",
+      "name": "Annecy",
+      "country": "France",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-sochaux",
+      "name": "Sochaux",
+      "country": "France",
+      "tier": 4,
+      "color": "#f7d417",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-dijon",
+      "name": "Dijon",
+      "country": "France",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-pau",
+      "name": "Pau",
+      "country": "France",
+      "tier": 4,
+      "color": "#f7d417",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-guingamp",
+      "name": "Guingamp",
+      "country": "France",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-dunkerque",
+      "name": "Dunkerque",
+      "country": "France",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-grenoble",
+      "name": "Grenoble",
+      "country": "France",
+      "tier": 4,
+      "color": "#1b458f",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-rodez",
+      "name": "Rodez",
+      "country": "France",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-clermont",
+      "name": "Clermont",
+      "country": "France",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-boulogne",
+      "name": "Boulogne",
+      "country": "France",
+      "tier": 4,
+      "color": "#d02128",
+      "league": "Ligue 2"
+    },
+    {
+      "id": "cm-laval",
+      "name": "Laval",
+      "country": "France",
+      "tier": 4,
+      "color": "#ff6600",
+      "league": "Ligue 2"
+    }
+  ],
+  "now": 1791547200000
+}

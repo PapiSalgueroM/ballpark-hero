@@ -1,0 +1,2 @@
+8d9c92f7bc9a0507ac0554346a27d1661e61c07dc66f1f62c1b7e12fabf471e5  /home/runner/work/_temp/rc-out/full/playSoccerCareerBuildLazy.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/playSoccerCareerBuildLazy.mjs/stderr.log

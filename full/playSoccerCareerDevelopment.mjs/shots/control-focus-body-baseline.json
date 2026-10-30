@@ -1,0 +1,16 @@
+{
+  "name": "preseason-escape",
+  "expected": {
+    "inline": "",
+    "computed": "visible",
+    "y": 250
+  },
+  "actual": {
+    "inline": "",
+    "computed": "visible",
+    "y": 250,
+    "activeMatches": true
+  },
+  "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Balanced, or choose your next-season workload</span></button>",
+  "ok": true
+}

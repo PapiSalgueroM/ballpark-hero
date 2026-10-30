@@ -1,0 +1,3 @@
+31487 /home/runner/work/_temp/rc-out/full/playSoccerCareerDevelopment.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/playSoccerCareerDevelopment.mjs/stderr.log
+31487 total

@@ -1,0 +1,27 @@
+{
+  "x": 34,
+  "y": 221.21875,
+  "width": 322,
+  "height": 62,
+  "bottom": 283.21875,
+  "viewport": [
+    390,
+    844
+  ],
+  "yScroll": 395,
+  "ownScroll": [
+    0,
+    0
+  ],
+  "opacity": "1",
+  "painted": true,
+  "finite": 0,
+  "overflow": false,
+  "dialog": false,
+  "controls": [],
+  "stable": 4,
+  "readable": true,
+  "toastObserved": 0,
+  "toastWaitMs": 1.4871140000004743,
+  "toastRemaining": 0
+}

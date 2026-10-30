@@ -1,0 +1,14 @@
+{
+  "expected": {
+    "inline": "",
+    "computed": "visible",
+    "y": 0
+  },
+  "actual": {
+    "inline": "",
+    "computed": "visible",
+    "y": 0,
+    "active": "<button type=\"button\" aria-haspopup=\"dialog\" data-career-records-tile=\"true\" class=\"w-full min-h-[64px] scroll-mt-14 scroll-mb-24 rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">📖 Record book</span><span class=\"block text-xs text-muted-foreground\">Your best seasons and every club spell</span><span class=\"block text-xs font-bold mt-1\">65 senior appearances · 1 club spell</span></button>"
+  },
+  "ok": true
+}

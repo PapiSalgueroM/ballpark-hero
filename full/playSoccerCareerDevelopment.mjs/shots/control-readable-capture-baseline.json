@@ -1,0 +1,169 @@
+{
+  "name": "preseason-rules",
+  "x": 0,
+  "y": 158,
+  "width": 390,
+  "height": 528,
+  "bottom": 686,
+  "viewport": [
+    390,
+    844
+  ],
+  "yScroll": 250,
+  "ownScroll": [
+    0,
+    0
+  ],
+  "opacity": "1",
+  "painted": true,
+  "finite": 0,
+  "overflow": false,
+  "dialog": true,
+  "controls": [
+    {
+      "label": "Development push\n+1 passing, higher injury risk",
+      "x": 25,
+      "y": 475,
+      "width": 340,
+      "height": 62,
+      "insideViewport": true,
+      "points": [
+        {
+          "x": 195,
+          "y": 506,
+          "painted": true
+        },
+        {
+          "x": 110,
+          "y": 490.5,
+          "painted": true
+        },
+        {
+          "x": 280,
+          "y": 490.5,
+          "painted": true
+        },
+        {
+          "x": 110,
+          "y": 521.5,
+          "painted": true
+        },
+        {
+          "x": 280,
+          "y": 521.5,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Recovery focus\n-1 passing, lower injury risk",
+      "x": 25,
+      "y": 545,
+      "width": 340,
+      "height": 62,
+      "insideViewport": true,
+      "points": [
+        {
+          "x": 195,
+          "y": 576,
+          "painted": true
+        },
+        {
+          "x": 110,
+          "y": 560.5,
+          "painted": true
+        },
+        {
+          "x": 280,
+          "y": 560.5,
+          "painted": true
+        },
+        {
+          "x": 110,
+          "y": 591.5,
+          "painted": true
+        },
+        {
+          "x": 280,
+          "y": 591.5,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Balanced workload",
+      "x": 25,
+      "y": 615,
+      "width": 340,
+      "height": 46,
+      "insideViewport": true,
+      "points": [
+        {
+          "x": 195,
+          "y": 638,
+          "painted": true
+        },
+        {
+          "x": 110,
+          "y": 626.5,
+          "painted": true
+        },
+        {
+          "x": 280,
+          "y": 626.5,
+          "painted": true
+        },
+        {
+          "x": 110,
+          "y": 649.5,
+          "painted": true
+        },
+        {
+          "x": 280,
+          "y": 649.5,
+          "painted": true
+        }
+      ]
+    },
+    {
+      "label": "Close",
+      "x": 337,
+      "y": 167,
+      "width": 44,
+      "height": 44,
+      "insideViewport": true,
+      "points": [
+        {
+          "x": 359,
+          "y": 189,
+          "painted": true
+        },
+        {
+          "x": 348,
+          "y": 178,
+          "painted": true
+        },
+        {
+          "x": 370,
+          "y": 178,
+          "painted": true
+        },
+        {
+          "x": 348,
+          "y": 200,
+          "painted": true
+        },
+        {
+          "x": 370,
+          "y": 200,
+          "painted": true
+        }
+      ]
+    }
+  ],
+  "stable": 4,
+  "readable": true,
+  "toastObserved": 0,
+  "toastWaitMs": 1.600844000000052,
+  "toastRemaining": 0
+}

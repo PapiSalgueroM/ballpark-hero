@@ -1,0 +1,15 @@
+{
+  "expected": {
+    "inline": "",
+    "computed": "visible",
+    "y": 86
+  },
+  "actual": {
+    "inline": "",
+    "computed": "visible",
+    "y": 86,
+    "activeMatches": true
+  },
+  "active": "<button type=\"button\" data-preseason-plan=\"true\" aria-haspopup=\"dialog\" class=\"min-h-[64px] w-full rounded-xl border border-border bg-card p-3 text-left\"><span class=\"block text-sm font-semibold\">🏃 Preseason plan</span><span class=\"block text-xs text-muted-foreground\">Development push · 2029/30</span></button>",
+  "ok": true
+}
