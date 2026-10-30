@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+offtop exit=1 79s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=offtop FIRED. 12 of 12 lines it moved read red for offscreen, the Soccer Career hub among them
+inflow exit=1 79s | playFirstVisitDialogs: CONSENT_BAR_CONTROL=inflow FIRED. 2 of 2 lines it moved read red for inflow, the Soccer Career hub among them
+statesB exit=1 80s | playFirstVisitDialogs: RED. 1 bar lines: /soccer-career#hub 320x640

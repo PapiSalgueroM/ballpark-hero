@@ -1,0 +1,27 @@
+  NONE     /club-manager 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /club-manager 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /club-manager 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /world-cup-bracket 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /world-cup-bracket 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /world-cup-bracket 1280x900: no first visit dialog, banner 735 to 900 (pending)
+  NONE     /soccer-career 320x640: no first visit dialog, banner 335 to 640 (pending)
+  NONE     /soccer-career 390x844: no first visit dialog, banner 611 to 844 (pending)
+  NONE     /soccer-career 1280x900: no first visit dialog, banner 735 to 900 (pending)
+
+9 route widths walked over 3 routes: 0 dialogs tapped and closed, 0 expected site reds, 9 without a first visit dialog, 0 red
+
+THE BOTTOM BAR NET (Round 1605): fixed buttons and links against the pending banner
+  BARS PASS     /world-cup-bracket 320x640: 2 fixed controls, none meets the banner 335 to 640; the closest, "⚡Auto Fill Everything", 24 px above it; answered, 1 lifted control dropped by the banner's 305 px
+  BARS PASS     /world-cup-bracket 390x844: 2 fixed controls, none meets the banner 611 to 844; the closest, "⚡Auto Fill Everything", 24 px above it; answered, 1 lifted control dropped by the banner's 233 px
+  BARS PASS     /world-cup-bracket 1280x900: 2 fixed controls, none meets the banner 735 to 900; the closest, "⚡Auto Fill Everything", 24 px above it; answered, 1 lifted control dropped by the banner's 165 px
+  BARS PASS     /club-manager#club-picked 320x640: 1 fixed control, none meets the banner 335 to 640; the closest, "Take the job", 12 px above it; answered, 1 lifted control dropped by the banner's 305 px
+  BARS PASS     /club-manager#club-picked 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Take the job", 12 px above it; answered, 1 lifted control dropped by the banner's 233 px
+  BARS PASS     /club-manager#club-picked 1280x900: 1 fixed control, none meets the banner 735 to 900; the closest, "Take the job", 12 px above it; answered, 1 lifted control dropped by the banner's 165 px
+  BARS PASS     /club-manager#custom-club 320x640: 1 fixed control, none meets the banner 335 to 640; the closest, "Found the club", 15 px above it; answered, 1 lifted control dropped by the banner's 305 px
+  BARS PASS     /club-manager#custom-club 390x844: 1 fixed control, none meets the banner 611 to 844; the closest, "Found the club", 12 px above it; answered, 1 lifted control dropped by the banner's 233 px
+  BARS PASS     /club-manager#custom-club 1280x900: 1 fixed control, none meets the banner 735 to 900; the closest, "Found the club", 12 px above it; answered, 1 lifted control dropped by the banner's 165 px
+  BARS FAIL     /soccer-career#hub 320x640: a lift on an element that is not fixed shoves it through the page: "Open the training ground" (relative, bottom-[calc(var(--dukb-consent-height,230px)_+_5.5rem)]) 193 to 237; "Open your phone" (relative, bottom-[calc(var(--dukb-consent-height,230px)_+_1.25rem)]) 193 to 237. not wholly on screen below the site bar: wanted "Next Year 16Age" -133 to -49 at the page end (bar ends 44, window 640); lifted "Next Year" -115 to -67 at the page end (bar ends 44, window 640)
+  BARS FAIL     /soccer-career#hub 390x844: a lift on an element that is not fixed shoves it through the page: "Open the training ground" (relative, bottom-[calc(var(--dukb-consent-height,230px)_+_5.5rem)]) 193 to 237; "Open your phone" (relative, bottom-[calc(var(--dukb-consent-height,230px)_+_1.25rem)]) 193 to 237
+  BARS PASS     /soccer-career#hub 1280x900: 3 fixed controls, none meets the banner 735 to 900; the closest, "Next Year", 18 px above it; answered, 3 lifted controls dropped by the banner's 165 px
+18 bar lines (9 of them scripted states): 16 green over 15 fixed controls, 2 red, 0 with no pending banner; the closest green control sat 12 px above the banner ("Take the job", /club-manager#club-picked 320x640); answered, 12 lifted controls dropped back by the banner's height
+playFirstVisitDialogs: CONSENT_BAR_CONTROL=inflow FIRED. 2 of 2 lines it moved read red for inflow, the Soccer Career hub among them
