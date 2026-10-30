@@ -1,0 +1,3 @@
+simStorageWrites exit=0 7s | simStorageWrites: all green (owed: 12)
+simNoRivalNames exit=0 24s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
