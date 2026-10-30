@@ -1,0 +1,156 @@
+{
+  "phase": "main",
+  "base": "http://localhost:4175",
+  "checks": 40,
+  "failed": 19,
+  "rows": [
+    {
+      "path": "A",
+      "width": 320,
+      "issues": [
+        "A@320: threw at step \"pick /Striker/ in combobox 1\": locator.click: Timeout 20000ms exceeded. - waiting for element to be visible, enabled and stable / - element is outside of the viewport / - waiting for element to be visible, enabled and stable"
+      ],
+      "seen": {}
+    },
+    {
+      "path": "B",
+      "width": 320,
+      "issues": [
+        "B@320: threw at step \"pick /Striker/ in combobox 1\": locator.click: Timeout 20000ms exceeded. - element is outside of the viewport / - waiting for element to be visible, enabled and stable / - element is outside of the viewport"
+      ],
+      "seen": {}
+    },
+    {
+      "path": "C",
+      "width": 320,
+      "issues": [
+        "C@320: threw at step \"pick /Striker/ in combobox 1\": locator.click: Timeout 20000ms exceeded. - waiting for element to be visible, enabled and stable / - element is outside of the viewport / - waiting for element to be visible, enabled and stable"
+      ],
+      "seen": {}
+    },
+    {
+      "path": "A",
+      "width": 390,
+      "issues": [
+        "A@390: shown Stoke City Youth, started Coventry City Youth",
+        "A@390: academyClubName Coventry City is not the shown Stoke City Youth"
+      ],
+      "seen": {
+        "first": {
+          "text": "Stoke City Youth",
+          "raw": "Stoke City Youth",
+          "flag": null
+        },
+        "started": {
+          "currentClub": "Coventry City Youth",
+          "academyClubName": "Coventry City",
+          "country": "England",
+          "nationality": "England"
+        }
+      }
+    },
+    {
+      "path": "B",
+      "width": 390,
+      "issues": [
+        "B@390: shown Brighton Youth, started Botafogo Youth",
+        "B@390: academyClubName Botafogo is not the shown Brighton Youth"
+      ],
+      "seen": {
+        "first": {
+          "text": "Brighton Youth",
+          "raw": "Brighton Youth",
+          "flag": null
+        },
+        "after": {
+          "text": "Brighton Youth",
+          "raw": "Brighton Youth",
+          "flag": null
+        },
+        "started": {
+          "currentClub": "Botafogo Youth",
+          "academyClubName": "Botafogo",
+          "country": "Brazil",
+          "nationality": "Brazil"
+        }
+      }
+    },
+    {
+      "path": "C",
+      "width": 390,
+      "issues": [
+        "C@390: no Starting Potential tile before the era is picked",
+        "C@390: the roll button is missing or live",
+        "C@390: \"Pick an era to roll your potential.\" shows 0 times, 2 expected",
+        "C@390: \"Add your name, then pick an era to roll your potential.\" shows 0 times, 2 expected"
+      ],
+      "seen": {
+        "lines": 0,
+        "shotError": "TimeoutError: locator.screenshot: Timeout 20000ms exceeded.",
+        "bothLines": 0
+      }
+    },
+    {
+      "path": "A",
+      "width": 1280,
+      "issues": [
+        "A@1280: shown Leeds United Youth, started Aston Villa Youth",
+        "A@1280: academyClubName Aston Villa is not the shown Leeds United Youth"
+      ],
+      "seen": {
+        "first": {
+          "text": "Leeds United Youth",
+          "raw": "Leeds United Youth",
+          "flag": null
+        },
+        "started": {
+          "currentClub": "Aston Villa Youth",
+          "academyClubName": "Aston Villa",
+          "country": "England",
+          "nationality": "England"
+        }
+      }
+    },
+    {
+      "path": "B",
+      "width": 1280,
+      "issues": [
+        "B@1280: shown Lincoln City Youth, started Internacional Youth",
+        "B@1280: academyClubName Internacional is not the shown Lincoln City Youth"
+      ],
+      "seen": {
+        "first": {
+          "text": "Lincoln City Youth",
+          "raw": "Lincoln City Youth",
+          "flag": null
+        },
+        "after": {
+          "text": "Lincoln City Youth",
+          "raw": "Lincoln City Youth",
+          "flag": null
+        },
+        "started": {
+          "currentClub": "Internacional Youth",
+          "academyClubName": "Internacional",
+          "country": "Brazil",
+          "nationality": "Brazil"
+        }
+      }
+    },
+    {
+      "path": "C",
+      "width": 1280,
+      "issues": [
+        "C@1280: no Starting Potential tile before the era is picked",
+        "C@1280: the roll button is missing or live",
+        "C@1280: \"Pick an era to roll your potential.\" shows 0 times, 2 expected",
+        "C@1280: \"Add your name, then pick an era to roll your potential.\" shows 0 times, 2 expected"
+      ],
+      "seen": {
+        "lines": 0,
+        "shotError": "TimeoutError: locator.screenshot: Timeout 20000ms exceeded.",
+        "bothLines": 0
+      }
+    }
+  ]
+}

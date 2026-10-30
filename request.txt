@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+walk-fixed: PHASE=fixed node .rc/x/walk1604.mjs
+walk-main: git worktree add -f /tmp/base 4bd20c993 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist --emptyOutDir > /tmp/base-build.log 2>&1 || (tail -20 /tmp/base-build.log; exit 9)) && PHASE=main DIST=/tmp/base-dist PORT=4175 node .rc/x/walk1604.mjs
+base-sweepweight: (node scripts/lib/hostLikeServer.mjs /tmp/base-dist 4176 > /dev/null 2>&1 &) ; sleep 2; BASE=http://localhost:4176 SWEEP_BASE=http://localhost:4176 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+base-flagship: cd /tmp/base && ln -sfn /tmp/base-dist dist && node scripts/simFlagshipWeight.mjs
+sweepweight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs

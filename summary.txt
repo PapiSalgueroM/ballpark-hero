@@ -1,0 +1,6 @@
+build exit=0 35s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+walk-fixed exit=1 85s | walk1604 fixed: 42 checks, 3 failed, red paths: A, B, C
+walk-main exit=1 163s | walk1604 main: 40 checks, 19 failed, red paths: A, B, C
+base-sweepweight exit=1 30s | sweepWeight: 14 failures
+base-flagship exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+sweepweight exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
