@@ -1,0 +1,6 @@
+ctl-notrimpool exit=1 200s | simCmFreeAgencyFleet: CONTROL notrimpool FIRED: section 5 red (red: 1 (12), 5 (12))
+fleet exit=0 206s | simCmFreeAgencyFleet: green, all seven sections held
+ctl-ledgeroff exit=1 219s | simCmFreeAgencyFleet: CONTROL ledgeroff FIRED: section 6 red
+ctl-noloanrow exit=1 182s | simCmFreeAgencyFleet: CONTROL noloanrow FIRED: section 7 red
+ctl-staleseason exit=1 211s | simCmFreeAgencyFleet: CONTROL staleseason FIRED: section 6 red
+ctl-norenewloan exit=1 196s | simCmFreeAgencyFleet: CONTROL norenewloan FIRED: section 7 red

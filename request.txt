@@ -1,0 +1,6 @@
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+ctl-notrimpool: CM_FA_CONTROL=notrimpool node scripts/simCmFreeAgencyFleet.mjs
+ctl-ledgeroff: CM_FA_CONTROL=ledgeroff node scripts/simCmFreeAgencyFleet.mjs
+ctl-staleseason: CM_FA_CONTROL=staleseason node scripts/simCmFreeAgencyFleet.mjs
+ctl-noloanrow: CM_FA_CONTROL=noloanrow node scripts/simCmFreeAgencyFleet.mjs
+ctl-norenewloan: CM_FA_CONTROL=norenewloan node scripts/simCmFreeAgencyFleet.mjs
