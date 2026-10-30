@@ -1,0 +1,56 @@
+1) The window rule against the verified dates, and a played season firing each window once, in order
+   2 verified windows held to the rule
+   Arsenal 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Inter Miami 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   LA Galaxy 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Toronto FC 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Seattle Sounders 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Atlanta United 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Columbus Crew 2026: fired 2026-sepoct, 2026-nov, 2027-mar
+   Liverpool 2020: fired 2020-sep, 2020-oct, 2020-nov, 2021-mar
+   Juventus 2020: fired 2020-sep, 2020-oct, 2020-nov, 2021-mar
+   Lille 2020: fired 2020-sep, 2020-oct, 2020-nov, 2021-mar
+   10 seasons on the live path: 33 breaks between the right two matches of mine, 32 notes naming everyone, 0 where the match they come back for kicked off in the same play as the note
+   2 late 2020-21 season(s) whose first window starts before the opener
+2) Harder: the match they come back for, against the same save with call ups off (6 squads x 3 seeds)
+   Barcelona         9 breaks, 15.67 called a break, gap 1.77
+   PSG               9 breaks, 15.00 called a break, gap 2.09
+   Inter Milan       9 breaks, 14.89 called a break, gap 1.40
+   Juventus          9 breaks, 18.89 called a break, gap 1.87
+   Atlético Madrid   9 breaks, 14.78 called a break, gap 2.73
+   Borussia Dortmund  9 breaks, 13.89 called a break, gap 1.45
+   54 breaks: the match after is 1.88 strength weaker on average (floor 1.5)
+   sepoct  18 breaks, gap 2.92 (floor 2)
+   nov     18 breaks, gap 2.02 (floor 1.4)
+   mar     18 breaks, gap 0.71 (floor 0.6)
+   0 breaks reached the match after in the same play as the note
+3) Resting the spent ones wins back the cost over the two matches the trip touches
+   Barcelona        cost 2.14, rest wins back 0.42 (0.20); now -0.37, next 0.79
+   PSG              cost 2.78, rest wins back 1.11 (0.40); now -0.42, next 1.53
+   Inter Milan      cost 1.81, rest wins back 2.23 (1.23); now 0.72, next 1.50
+   Juventus         cost 2.50, rest wins back 0.91 (0.36); now -0.08, next 0.99
+   Atlético Madrid  cost 3.49, rest wins back 1.88 (0.54); now 0.33, next 1.55
+   Borussia Dortmund cost 1.77, rest wins back 1.07 (0.61); now 0.03, next 1.04
+   Barcelona loses: Andreas Christensen 9, Anthony Gordon 9, Dani Olmo 9, Eric García 9, Fermín López 9, Frenkie de Jong 9, Joan García 9, Jules Koundé 9, Karim Adeyemi 9, Pau Cubarsí 9, Pedri 9, Rodri 9, Roony Bardghji 9, Alejandro Balde 8, Lamine Yamal 8, Raphinha 8
+   PSG loses: Achraf Hakimi 9, Désiré Doué 9, Fabián Ruiz 9, Ferran Torres 9, Ilya Zabarnyi 9, João Neves 9, Khvicha Kvaratskhelia 9, Maghnes Akliouche 9, Marquinhos 9, Matvey Safonov 9, Nuno Mendes 9, Ousmane Dembélé 9, Vitinha 9, Warren Zaïre-Emery 9, Willian Pacho 9
+   Inter Milan loses: Aleksandar Stanković 9, Alessandro Bastoni 9, Ange-Yoan Bonny 9, Federico Dimarco 9, Hakan Çalhanoğlu 9, Henrikh Mkhitaryan 9, Lautaro Martínez 9, Marcus Thuram 9, Nicolò Barella 9, Petar Sučić 9, Pio Esposito 9, Piotr Zielinski 9, Yann Bisseck 9, Yann Sommer 9, Manuel Akanji 8
+   Juventus loses: Andrea Cambiaso 9, Bremer 9, Edon Zhegrova 9, Filip Kostić 9, Francisco Conceição 9, Guglielmo Vicario 9, Jérémie Boga 9, Jhon Lucumí 9, Juan Cabal 9, Kamil Grabara 9, Kenan Yıldız 9, Kerim Alajbegovic 9, Khéphren Thuram 9, Manuel Locatelli 9, Nick Woltemade 9, Nico González 9, Pape Matar Sarr 9, Weston McKennie 9, Pierre Kalulu 8
+   Atlético Madrid loses: Ademola Lookman 9, Álex Baena 9, Alexander Sørloth 9, Cristian Romero 9, Dávid Hancko 9, Giuliano Simeone 9, Jan Oblak 9, Johnny Cardoso 9, Jonathan David 9, Julián Alvarez 9, Kang-in Lee 9, Marcos Llorente 9, Morten Hjulmand 9, Alejandro Grimaldo 8, Pablo Barrios 8
+   Borussia Dortmund loses: Carney Chukwuemeka 9, Daniel Svensson 9, Fábio Silva 9, Felix Nmecha 9, Giannis Konstantelias 9, Gregor Kobel 9, Joey Veerman 9, Julian Ryerson 9, Konstantinos Karetsas 9, Marcel Sabitzer 9, Nico Schlotterbeck 9, Ramy Bensebaini 9, Serhou Guirassy 9, Maximilian Beier 8
+   pooled rest: now 0.04, next 1.23
+   pooled: the break costs 2.41 over two matches and the rest wins back 1.27, a share of 0.53 (floor 0.5)
+6) A rest is what plays: the rested men are out of your picked eleven, nobody fills a gap with them, picking one back plays him, and they return after the match
+   272 men rested: 0 still played with cover on the bench, 0 still in the picked eleven; 263 of 263 picked back by hand played; 263 of 263 back in their slot after the match, 0 rests still standing after it
+4) Every man called up is known to the nationality map with that country, and no made up player goes
+   Barcelona era2015: 4 breaks (4 in the season's structure)
+   Chelsea era2005: 4 breaks (4 in the season's structure)
+   1286 call ups checked: 0 with a country the map does not give him, 0 made up men
+5) A save from before this round plays its season with no break, then gets windows from the next one
+   old save, season one: 0 plays carried a block, 0 notes, week 54 of 54
+   season two: first break 2027-sepoct fired
+   damaged block: dropped, the save played on to week 1
+7) A man who started for a country on another continent from his club comes back more tired than one who stayed on his own
+   four game window: far starters 50 cost 38.78, near starters 129 cost 28.48
+   two game windows: far starters 190 cost 28.10, near starters 410 cost 18.52
+   the long trip costs 9.94 more fitness on average (floor 5)
+simCmInternationals: all green

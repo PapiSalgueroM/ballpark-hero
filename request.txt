@@ -1,0 +1,10 @@
+wA050: node scripts/simCmInternationals.mjs
+wB050: INTL_SQUADS='Barcelona,PSG,Inter Milan,Juventus,Atlético Madrid,Borussia Dortmund' node scripts/simCmInternationals.mjs
+wA025: git worktree add -q /tmp/w25 HEAD && ln -s "$PWD/node_modules" /tmp/w25/node_modules && cd /tmp/w25 && sed -i 's/^const LEGS_LATER_WEIGHT = 0.5;/const LEGS_LATER_WEIGHT = 0.25;/' src/lib/clubManagerInternationals.ts && grep -q '^const LEGS_LATER_WEIGHT = 0.25;' src/lib/clubManagerInternationals.ts && node scripts/simCmInternationals.mjs
+wA075: git worktree add -q /tmp/w75 HEAD && ln -s "$PWD/node_modules" /tmp/w75/node_modules && cd /tmp/w75 && sed -i 's/^const LEGS_LATER_WEIGHT = 0.5;/const LEGS_LATER_WEIGHT = 0.75;/' src/lib/clubManagerInternationals.ts && grep -q '^const LEGS_LATER_WEIGHT = 0.75;' src/lib/clubManagerInternationals.ts && node scripts/simCmInternationals.mjs
+wA100: git worktree add -q /tmp/w100 HEAD && ln -s "$PWD/node_modules" /tmp/w100/node_modules && cd /tmp/w100 && sed -i 's/^const LEGS_LATER_WEIGHT = 0.5;/const LEGS_LATER_WEIGHT = 1;/' src/lib/clubManagerInternationals.ts && grep -q '^const LEGS_LATER_WEIGHT = 1;' src/lib/clubManagerInternationals.ts && node scripts/simCmInternationals.mjs
+wB025: sleep 20 && cd /tmp/w25 && INTL_SQUADS='Barcelona,PSG,Inter Milan,Juventus,Atlético Madrid,Borussia Dortmund' node scripts/simCmInternationals.mjs
+wB075: sleep 20 && cd /tmp/w75 && INTL_SQUADS='Barcelona,PSG,Inter Milan,Juventus,Atlético Madrid,Borussia Dortmund' node scripts/simCmInternationals.mjs
+wB100: sleep 20 && cd /tmp/w100 && INTL_SQUADS='Barcelona,PSG,Inter Milan,Juventus,Atlético Madrid,Borussia Dortmund' node scripts/simCmInternationals.mjs
+baseA: git worktree add -q /tmp/base 14a9af704 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cp scripts/simCmInternationals.mjs /tmp/base/scripts/ && cd /tmp/base && node scripts/simCmInternationals.mjs
+baseB: sleep 25 && cd /tmp/base && INTL_SQUADS='Barcelona,PSG,Inter Milan,Juventus,Atlético Madrid,Borussia Dortmund' node scripts/simCmInternationals.mjs

@@ -1,0 +1,10 @@
+wA050 exit=1 37s | simCmInternationals: 1 FAILURES
+wB050 exit=0 39s | simCmInternationals: all green
+wA025 exit=1 39s | simCmInternationals: 1 FAILURES
+wA075 exit=1 31s | simCmInternationals: 1 FAILURES
+wA100 exit=1 30s | simCmInternationals: 1 FAILURES
+wB025 exit=0 49s | simCmInternationals: all green
+wB075 exit=0 56s | simCmInternationals: all green
+baseA exit=0 38s | simCmInternationals: all green
+wB100 exit=1 57s | simCmInternationals: 1 FAILURES
+baseB exit=0 52s | simCmInternationals: all green
