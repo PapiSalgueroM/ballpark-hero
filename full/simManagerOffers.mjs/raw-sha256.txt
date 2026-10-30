@@ -1,0 +1,2 @@
+cb5945a3853326ebd7457b159f44f914469fe99dd27a02b8cda4b80dffcf6af4  /home/runner/work/_temp/rc-out/full/simManagerOffers.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simManagerOffers.mjs/stderr.log

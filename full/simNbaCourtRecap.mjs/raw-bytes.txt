@@ -1,0 +1,3 @@
+519 /home/runner/work/_temp/rc-out/full/simNbaCourtRecap.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNbaCourtRecap.mjs/stderr.log
+519 total

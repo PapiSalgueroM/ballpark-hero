@@ -1,0 +1,3 @@
+671 /home/runner/work/_temp/rc-out/full/simBallonDorTruth.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simBallonDorTruth.mjs/stderr.log
+671 total

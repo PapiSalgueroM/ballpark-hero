@@ -1,0 +1,3 @@
+29588 /home/runner/work/_temp/rc-out/full/simPhoneSeasonBudget.mjs/stdout.log
+    0 /home/runner/work/_temp/rc-out/full/simPhoneSeasonBudget.mjs/stderr.log
+29588 total

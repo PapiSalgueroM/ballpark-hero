@@ -1,0 +1,3 @@
+584 /home/runner/work/_temp/rc-out/full/simClubCaptaincy.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simClubCaptaincy.mjs/stderr.log
+584 total

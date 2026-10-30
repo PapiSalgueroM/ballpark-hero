@@ -1,0 +1,3 @@
+535 /home/runner/work/_temp/rc-out/full/simAflHL.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simAflHL.mjs/stderr.log
+535 total

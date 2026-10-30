@@ -1,0 +1,2 @@
+702f8738dd29d6c3c3f95665ec74a4502d00a33a9340f814463e8bfc5377df35  /home/runner/work/_temp/rc-out/full/simTycoonSetPiece.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simTycoonSetPiece.mjs/stderr.log

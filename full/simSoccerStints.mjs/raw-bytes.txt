@@ -1,0 +1,3 @@
+1512 /home/runner/work/_temp/rc-out/full/simSoccerStints.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simSoccerStints.mjs/stderr.log
+1512 total

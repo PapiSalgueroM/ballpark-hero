@@ -1,0 +1,3 @@
+1090 /home/runner/work/_temp/rc-out/full/simContracts.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simContracts.mjs/stderr.log
+1090 total

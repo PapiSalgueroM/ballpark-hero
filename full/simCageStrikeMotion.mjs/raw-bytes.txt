@@ -1,0 +1,3 @@
+2273 /home/runner/work/_temp/rc-out/full/simCageStrikeMotion.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCageStrikeMotion.mjs/stderr.log
+2273 total

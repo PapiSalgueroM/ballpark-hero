@@ -1,0 +1,3 @@
+2212 /home/runner/work/_temp/rc-out/full/simUsCareerWeight.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simUsCareerWeight.mjs/stderr.log
+2212 total

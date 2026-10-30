@@ -1,0 +1,2 @@
+3a9f264cab7a85349ae1dd15168d81c779d1aa130f207ea864bc715f1fa5f8f4  /home/runner/work/_temp/rc-out/full/simUsCareerWeight.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simUsCareerWeight.mjs/stderr.log

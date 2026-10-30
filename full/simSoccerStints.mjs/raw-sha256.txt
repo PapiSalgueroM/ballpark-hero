@@ -1,0 +1,2 @@
+cb40249bce79355da03fec72e55a5e92fde81e474c27edb63201504b401d7f03  /home/runner/work/_temp/rc-out/full/simSoccerStints.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerStints.mjs/stderr.log

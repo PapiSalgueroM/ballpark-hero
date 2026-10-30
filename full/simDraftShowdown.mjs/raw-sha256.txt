@@ -1,0 +1,2 @@
+f82466d42c562a8cfdf289d1222f342479213acbf3d34a535c953e32bf15cbe5  /home/runner/work/_temp/rc-out/full/simDraftShowdown.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simDraftShowdown.mjs/stderr.log

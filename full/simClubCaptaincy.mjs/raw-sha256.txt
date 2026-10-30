@@ -1,0 +1,2 @@
+669a9ac01098793ccc1d22d17972ee70a898f885dc4b47cb7e16a27fe5cb8974  /home/runner/work/_temp/rc-out/full/simClubCaptaincy.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simClubCaptaincy.mjs/stderr.log

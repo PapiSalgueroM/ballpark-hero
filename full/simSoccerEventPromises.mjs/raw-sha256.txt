@@ -1,0 +1,2 @@
+00e5d346b8013bdcb713438099aad056e97806860ea725be292dcd6a12b883d7  /home/runner/work/_temp/rc-out/full/simSoccerEventPromises.mjs/stdout.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /home/runner/work/_temp/rc-out/full/simSoccerEventPromises.mjs/stderr.log

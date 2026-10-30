@@ -1,0 +1,3 @@
+2859 /home/runner/work/_temp/rc-out/full/simCollegeGridShipped.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simCollegeGridShipped.mjs/stderr.log
+2859 total

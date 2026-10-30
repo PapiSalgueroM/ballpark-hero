@@ -1,0 +1,3 @@
+3065 /home/runner/work/_temp/rc-out/full/simTycoonSetPiece.mjs/stdout.log
+   0 /home/runner/work/_temp/rc-out/full/simTycoonSetPiece.mjs/stderr.log
+3065 total

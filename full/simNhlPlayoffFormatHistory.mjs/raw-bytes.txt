@@ -1,0 +1,3 @@
+998 /home/runner/work/_temp/rc-out/full/simNhlPlayoffFormatHistory.mjs/stdout.log
+  0 /home/runner/work/_temp/rc-out/full/simNhlPlayoffFormatHistory.mjs/stderr.log
+998 total
