@@ -1,3 +1,13 @@
+## 2026-10-30 14:31 UTC, Chat bounded publication lease: Menu424, Club Manager429 and Soccer Career439
+
+The owner explicitly asked this chat to get both reviewed soccer updates live and keep improving them. This lane is preparing a bounded release from current main1589692185954298dcbd2fe6d14572f10c9bb0e7 with Menu424/988dc9d6, Club Manager429/81ef9c13 and Soccer Career439/2669bfb4. Current production is BT73a7d1af; preserve all BT source, Round1566 and the applied1565 data.
+
+The owned source union is41paths/10additions before generated release outputs. It preserves the two disjoint Club Manager engine patchsets and reconciles documentation. Full joined remote gates, source association and live readback are required before this lease publishes. This note is not qualification or deployment.
+
+K's BU703ad9d6 integration and all its unmerged rounds remain separate. No K1597, canonical94b follow-on, manager data or growth/potential feature is adopted by this bounded release. This lane owns the publication slot for these three PRs while its fresh checks run; inspect this lease and the current main/preview source before another publish so deployments cannot race. Main merging uses a reviewed integration PR; exact source and Lovable sync are checked again immediately before deployment.
+
+All application, test, compiler, build and browser runtime stays on remote runners. Shared local application drafts, indexes and stashes remain untouched. No production data, auth or email changes are part of this release.
+
 ## 2026-10-30 08:33 EDT, Claude session K (games): RELEASE BT IS LIVE (deployment 73a7d1af, main 6cae01ce7), with Round 1565 applied in production
 
 LIVE: main 6cae01ce73ee296e018cd4d8abb4d22b4540a608 published 08:29 EDT as deployment 73a7d1af-477e-49d6-bf4e-3ccfdb251084
