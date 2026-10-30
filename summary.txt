@@ -1,0 +1,7 @@
+mut-hookwaits exit=0 19s |    Duration  17.76s (transform 2.36s, setup 338ms, collect 3.47s, tests 25.57s, environment 2.11s, prepare 468ms)
+mut-lastoff1 exit=1 27s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlLazyDesk.test.tsx,title=src/components/nhl-front-office/NhlLazyDesk.test.tsx
+mut-outcomepre exit=0 17s |    Duration  16.20s (transform 1.92s, setup 186ms, collect 2.21s, tests 21.66s, environment 1.02s, prepare 248ms)
+mut-hubpanels exit=0 18s |    Duration  17.24s (transform 1.82s, setup 244ms, collect 2.52s, tests 24.49s, environment 1.48s, prepare 303ms)
+mut-talkskept exit=0 15s |    Duration  14.89s (transform 1.32s, setup 141ms, collect 956ms, tests 15.94s, environment 702ms, prepare 154ms)
+mut-sitnosave exit=1 15s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontO
+mut-bindlegacy exit=0 29s | MUT bindlegacy vitest=0 simFoLazyDesk=0

@@ -1,0 +1,446 @@
+MUTATION APPLIED: sitnosave in src/components/nhl-front-office/NhlFrontOfficeBoard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/components/nhl-front-office/NhlLazyDesk.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1787[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma season being played never asks for it, and the Career box reads the same before and after it [33m 1112[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 1|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [32m✓[39m src/test/frontOfficeSaveRecovery.test.tsx [2m([22m[2m38 tests[22m[2m)[22m[33m 2590[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mrestores current progress, contracts and counters without rewriting storage [33m 361[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mloads supported older saves and advances the same league once [33m 350[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 1|desk off|14 checkpoints|start,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 2|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 2|desk off|13 checkpoints|start,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 3|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 3|desk off|14 checkpoints|start,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 1|desk on|16 checkpoints|start,presser,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 1|desk off|15 checkpoints|start,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 2|desk on|15 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 2|desk off|14 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 3|desk on|14 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 3|desk off|13 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mFO_GM_CAREER|fired recap|season paid 0 XP
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2ma point spent in Ownership survives a remount, and a tree off the live list sells nothing
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mlooking at Career and GM level on the hub of a save whose desk is off writes nothing
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mFO_GM_CAREER|fired recap|season paid 0 XP
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: a title watched at the club he took[2m > [22m[2mthe title game watched to full time records one finish, at the career score, and none before it
+[22m[39mFO_GM_CAREER|watched title|stream 4|titles 1|seasons 2|calls [{"path":"/front-office","score":110}]
+
+ [31m❯[39m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx [2m([22m[2m34 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 14726[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's [33m 2768[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's [33m 1254[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's [33m 1189[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's [33m 1113[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's [33m 1246[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's [33m 1030[2mms[22m[39m
+   [32m✓[39m nfl board: the default path[2m > [22mthe record is written once, from the base[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's [33m 304[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's[32m 233[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's[32m 242[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's[32m 207[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's[32m 238[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's[32m 205[2mms[22m[39m
+   [32m✓[39m nhl board: the default path[2m > [22mthe record is written once, from the base[32m 0[2mms[22m[39m
+   [32m✓[39m nhl board: the saves the base wrote[2m > [22mfired desk on: it mounts with storage byte equal, on the phase the base wrote[32m 83[2mms[22m[39m
+   [32m✓[39m nhl board: the saves the base wrote[2m > [22mfired desk off: it mounts with storage byte equal, on the phase the base wrote[32m 81[2mms[22m[39m
+   [32m✓[39m nhl board: the saves the base wrote[2m > [22mhub desk on: it mounts with storage byte equal, on the phase the base wrote[32m 72[2mms[22m[39m
+   [32m✓[39m nfl board: the career[2m > [22mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes[32m 241[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion [33m 908[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22ma year out: two taps, the league a season on with one more champion, his counters as they were [33m 316[2mms[22m[39m
+   [32m✓[39m nfl board: the career[2m > [22ma point spent in Ownership survives a remount, and a tree off the live list sells nothing[32m 223[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22ma closed market draws no stay out button, and the new front office link deletes the save on the second tap only [33m 316[2mms[22m[39m
+   [32m✓[39m nfl board: the career[2m > [22mlooking at Career and GM level on the hub of a save whose desk is off writes nothing[32m 167[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22mlooking at all three boxes out of work, desk off, writes nothing [33m 323[2mms[22m[39m
+   [32m✓[39m nfl board: the career[2m > [22ma staff approach that runs out in the final week is still settled after the close[32m 215[2mms[22m[39m
+   [32m✓[39m nhl board: the career[2m > [22mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes[32m 62[2mms[22m[39m
+   [32m✓[39m nhl board: the career[2m > [22mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion[32m 166[2mms[22m[39m
+[31m   [31m×[31m nhl board: the career[2m > [22ma year out: two taps, the league a season on with one more champion, his counters as they were[39m[32m 78[2mms[22m[39m
+[31m     → expected [ Array(7) ] to deeply equal [ Array(7) ][39m
+   [32m✓[39m nhl board: the career[2m > [22ma point spent in Ownership survives a remount, and a tree off the live list sells nothing[32m 62[2mms[22m[39m
+   [32m✓[39m nhl board: the career[2m > [22ma closed market draws no stay out button, and the new front office link deletes the save on the second tap only[32m 75[2mms[22m[39m
+   [32m✓[39m nhl board: the career[2m > [22mlooking at Career and GM level on the hub of a save whose desk is off writes nothing[32m 60[2mms[22m[39m
+   [32m✓[39m nhl board: the career[2m > [22mlooking at all three boxes out of work, desk off, writes nothing[32m 85[2mms[22m[39m
+   [32m✓[39m nhl board: the career[2m > [22ma staff approach that runs out in the final week is still settled after the close[32m 77[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: a title watched at the club he took[2m > [22mthe title game watched to full time records one finish, at the career score, and none before it [33m 1084[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22mnhl board: the career[2m > [22ma year out: two taps, the league a season on with one more champion, his counters as they were
+[31m[1mAssertionError[22m: expected [ Array(7) ] to deeply equal [ Array(7) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -1,8 +1,8 @@[39m
+[2m  [[22m
+[32m-   2027,[39m
+[32m-   2,[39m
+[31m+   2026,[39m
+[31m+   1,[39m
+[2m    3,[22m
+[2m    0,[22m
+[2m    "fired",[22m
+[2m    true,[22m
+[2m    "DET",[22m
+
+[36m [2m❯[22m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:[2m611:10[22m[39m
+    [90m609| [39m      [35mconst[39m s [33m=[39m [34mreadSave[39m(row)[33m;[39m
+    [90m610| [39m      expect([s.league.season, s.league.champions.length, s.seasonsPla…
+    [90m611| [39m        .toEqual([before.league.season + 1, before.league.champions.le…
+    [90m   | [39m         [31m^[39m
+    [90m612| [39m      [34mexpect[39m(s[33m.[39mgm[33m.[39mblocks[33m.[39mseat[33m.[39mcareer[33m.[39mseasonsOut)[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+    [90m613| [39m      expect(s.postseason.champion).toBe(s.league.champions[s.league.c…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m78 passed[39m[22m[90m (79)[39m
+[2m   Start at [22m 03:14:35
+[2m   Duration [22m 15.49s[2m (transform 1.42s, setup 148ms, collect 1.05s, tests 19.10s, environment 735ms, prepare 202ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/FrontOfficeGmCareer.test.tsx,title=src/components/front-office-shared/FrontOfficeGmCareer.test.tsx > nhl board%3A the career > a year out%3A two taps%2C the league a season on with one more champion%2C his counters as they were,line=611,column=10::AssertionError: expected [ Array(7) ] to deeply equal [ Array(7) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -1,8 +1,8 @@%0A  [%0A-   2027,%0A-   2,%0A+   2026,%0A+   1,%0A    3,%0A    0,%0A    "fired",%0A    true,%0A    "DET",%0A%0A ❯ src/components/front-office-shared/FrontOfficeGmCareer.test.tsx:611:10%0A%0A

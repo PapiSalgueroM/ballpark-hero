@@ -1,0 +1,895 @@
+MUTATION APPLIED: lastoff1 in src/components/nhl-front-office/NhlFrontOfficeBoard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNFL Front Office, full rosters: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNFL Front Office, full rosters: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 544 -> 544, period 17, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 1|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNBA Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNBA Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2400 -> 2400, period 20, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mMLB Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mMLB Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 4860 -> 4860, period 27, phase recap -> recap
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx[2m > [22m[2mNHL Front Office: the season closes once[2m > [22m[2mREPRO: what a reload on the recap lets the player do today
+[22m[39mNHL Front Office: after finishing the season and reloading, hub shown=false, seasonsPlayed 1 -> 1, titles 0 -> 0, league games 2560 -> 2560, period 20, phase recap -> recap
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx [2m([22m[2m25 tests[22m[2m)[22m[33m 2516[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL Front Office, full rosters: the season closes once[2m > [22mplays the next season after the draft: the record refuses only the closed one [33m 714[2mms[22m[39m
+ [32m✓[39m src/test/frontOfficeSaveRecovery.test.tsx [2m([22m[2m38 tests[22m[2m)[22m[33m 3026[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mrestores current progress, contracts and counters without rewriting storage [33m 310[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL actual save recovery[2m > [22mallows a fresh club to replace the unusable save without clearing another game [33m 309[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual save recovery[2m > [22mloads supported older saves and advances the same league once [33m 365[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual save recovery[2m > [22mallows a fresh club to replace the unusable save without clearing another game [33m 319[2mms[22m[39m
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 1|desk off|14 checkpoints|start,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 2|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 2|desk off|13 checkpoints|start,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 3|desk on|15 checkpoints|start,presser,cut,sign,week 1,week 9,recap,draft,summer,week 1,week 9,recap,answered,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nfl|seed 3|desk off|14 checkpoints|start,cut,sign,week 1,week 9,recap,answered,draft,summer,week 1,week 9,recap,draft,summer
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+Warning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 1|desk on|16 checkpoints|start,presser,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 1|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 1|desk off|15 checkpoints|start,cut,sign,round 1,round 9,recap,answered,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 2|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 2|desk on|15 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 2|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 2|desk off|14 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,answered,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 3|desk on: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 3|desk on|14 checkpoints|start,presser,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the default path[2m > [22m[2mseed 3|desk off: every checkpoint of two seasons is the base's
+[22m[39mFO_GM_CAREER|nhl|seed 3|desk off|13 checkpoints|start,cut,sign,round 1,round 9,recap,draft,summer,round 1,round 9,recap,draft,summer
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mFO_GM_CAREER|fired recap|season paid 0 XP
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2ma point spent in Ownership survives a remount, and a tree off the live list sells nothing
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: the career[2m > [22m[2ma point spent in Ownership survives a remount, and a tree off the live list sells nothing
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstderr[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnhl board: the career[2m > [22m[2mfired: the recap offers who is calling and keeps the save; a remount opens the out of work screen with three boxes
+[22m[39mFO_GM_CAREER|fired recap|season paid 0 XP
+
+[90mstdout[2m | src/components/front-office-shared/FrontOfficeGmCareer.test.tsx[2m > [22m[2mnfl board: a title watched at the club he took[2m > [22m[2mthe title game watched to full time records one finish, at the career score, and none before it
+[22m[39mFO_GM_CAREER|watched title|stream 4|titles 1|seasons 2|calls [{"path":"/front-office","score":110}]
+
+ [32m✓[39m src/components/front-office-shared/FrontOfficeGmCareer.test.tsx [2m([22m[2m34 tests[22m[2m)[22m[33m 16407[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 1|desk on: every checkpoint of two seasons is the base's [33m 3219[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 1|desk off: every checkpoint of two seasons is the base's [33m 1781[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 2|desk on: every checkpoint of two seasons is the base's [33m 1437[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 2|desk off: every checkpoint of two seasons is the base's [33m 1101[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 3|desk on: every checkpoint of two seasons is the base's [33m 1274[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the default path[2m > [22mseed 3|desk off: every checkpoint of two seasons is the base's [33m 1170[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22mtaking an offer takes two taps, never the club that let him go, and the arrival stages no title even at the champion [33m 1002[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22ma year out: two taps, the league a season on with one more champion, his counters as they were [33m 374[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22ma closed market draws no stay out button, and the new front office link deletes the save on the second tap only [33m 334[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: the career[2m > [22mlooking at all three boxes out of work, desk off, writes nothing [33m 335[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl board: a title watched at the club he took[2m > [22mthe title game watched to full time records one finish, at the career score, and none before it [33m 1110[2mms[22m[39m
+ [31m❯[39m src/components/nhl-front-office/NhlLazyDesk.test.tsx [2m([22m[2m7 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 20775[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma season being played never asks for it, and the Career box reads the same before and after it [33m 320[2mms[22m[39m
+   [32m✓[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma career box opened asks for it: the box header and the holding box, then the screen[32m 136[2mms[22m[39m
+[31m   [31m×[31m NHL front office: the GM career kit loads when it is needed[2m > [22mthe last round asks for it, its press waits for it, and the press then closes the season[39m[32m 56[2mms[22m[39m
+[31m     → the last round did not ask for the kit: expected 'idle' not to be 'idle' // Object.is equality[39m
+   [32m✓[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma save that loads on the recap waits in a holding box, then draws the recap[32m 79[2mms[22m[39m
+   [32m✓[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma save that loads on the fired screen waits in a holding box, then draws the out of work screen[32m 43[2mms[22m[39m
+   [32m✓[39m NHL front office: the GM career kit loads when it is needed[2m > [22ma fetch that fails says so and asks again on Try again[32m 77[2mms[22m[39m
+[31m   [31m×[31m NHL front office: the GM career kit loads when it is needed[2m > [22ma desk off save on the last round whose fetch fails: the retry card, nothing written, then one retry closes the season as a press with the kit here[39m[33m 20063[2mms[22m[39m
+[31m     → expected null to be truthy
+
+Ignored nodes: comments, script, style
+[36m<html>[31m
+  [36m<head />[31m
+  [36m<body>[31m
+    [36m<div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"space-y-4"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex flex-wrap items-center justify-center gap-2 text-xs"[31m
+        [36m>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"rounded-full px-3 py-1 font-bold text-white"[31m
+            [33mstyle[31m=[32m"background: rgb(244, 122, 56);"[31m
+          [36m>[31m
+            [0mAnaheim Ducks[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[31m
+          [36m>[31m
+            [0m2026[0m
+            [0m-[0m
+            [0m27[0m
+            [0m · Round [0m
+            [0m20[0m
+            [0m/[0m
+            [0m20[0m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[31m
+          [36m>[31m
+            [0mRecord [0m
+            [36m<b[31m
+              [33mclass[31m=[32m"text-foreground"[31m
+            [36m>[31m
+              [0m37[0m
+              [0m-[0m
+              [0m31[0m
+              [0m-[0m
+              [0m8[0m
+            [36m</b>[31m
+            [0m · [0m
+            [36m<b[31m
+              [33mclass[31m=[32m"text-primary"[31m
+            [36m>[31m
+              [0m82[0m
+              [0m pts[0m
+            [36m</b>[31m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[31m
+          [36m>[31m
+            [0mStrength [0m
+            [36m<b[31m
+              [33mclass[31m=[32m"text-primary"[31m
+            [36m>[31m
+              [0m87[0m
+            [36m</b>[31m
+          [36m</span>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[31m
+          [36m>[31m
+            [0mCap space [0m
+            [36m<b>[31m
+              [0m$[0m
+              [0m19.6[0m
+              [0mM[0m
+            [36m</b>[31m
+          [36m</span>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33maria-atomic[31m=[32m"true"[31m
+          [33maria-live[31m=[32m"polite"[31m
+          [33mclass[31m=[32m"_status_77034c"[31m
+          [33mdata-nhl-waiver-status[31m=[32m"true"[31m
+          [33mrole[31m=[32m"status"[31m
+          [33mstyle[31m=[32m"margin: 0px;"[31m
+        [36m/>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"rounded-2xl border border-border bg-card p-3"[31m
+          [33mdata-owner-mandate[31m=[32m"true"[31m
+        [36m>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"flex items-center justify-between text-[11px]"[31m
+          [36m>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"font-bold uppercase tracking-wider text-muted-foreground"[31m
+            [36m>[31m
+              [0m🏛️ Ownership[0m
+            [36m</span>[31m
+            [36m<span[31m
+              [33mclass[31m=[32m"font-black text-emerald-400"[31m
+            [36m>[31m
+              [0mTrust [0m
+              [0m60[0m
+            [36m</span>[31m
+          [36m</div>[31m
+          [36m<div[31m
+            [33mclass[31m=[32m"mt-1.5 h-1.5 overflow-hidden rounded-full bg-secondary"[31m
+          [36m>[31m
+            [36m<div[31m
+              [33mclass[31m=[32m"h-full rounded-full _trust_1058ca bg-emerald-400"[31m
+              [33mstyle[31m=[32m"width: 60%;"[31m
+            [36m/>[31m
+          [36m</div>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"mt-1.5 text-[11px] leading-snug text-foreground"[31m
+          [36m>[31m
+            [0mMake the playoffs. Ownership thinks this roster belongs there.[0m
+          [36m</p>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"mt-1 text-[11px] font-semibold _pace_1058ca text-destructive"[31m
+          [36m>[31m
+            [0m📉 [0m
+            [0mOutside the line right now. Upstairs is watching.[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"flex items-center gap-2"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-foreground"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33mclass[31m=[32m"lucide lucide-chevron-left h-3.5 w-3.5"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"24"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"24"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"m15 18-6-6 6-6"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+            [0m Hub[0m
+          [36m</button>[31m
+          [36m<span[31m
+            [33mclass[31m=[32m"font-display text-sm font-bold text-foreground"[31m
+          [36m>[31m
+            [0mPlay[0m
+          [36m</span>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"rounded-2xl border border-gold/40 bg-card p-4 text-center"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"mb-2 text-sm text-foreground"[31m
+          [36m>[31m
+            [0mEach round simulates a stretch of games across the league. OT losses still earn a point.[0m
+          [36m</p>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33mclass[31m=[32m"lucide lucide-shield-half h-4 w-4"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"24"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"24"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M12 22V2"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+            [0m [0m
+            [0mFinal stretch + playoffs[0m
+          [36m</button>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"mt-2 text-[10px] text-muted-foreground"[31m
+          [36m>[31m
+            [0mTop three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7.[0m
+          [36m</p>[31m
+        [36m</div>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"text-center"[31m
+        [36m>[31m
+          [36m<button[31m
+            [33mclass[31m=[32m"inline-flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-destructive"[31m
+          [36m>[31m
+            [36m<svg[31m
+              [33mclass[31m=[32m"lucide lucide-rotate-ccw h-3 w-3"[31m
+              [33mfill[31m=[32m"none"[31m
+              [33mheight[31m=[32m"24"[31m
+              [33mstroke[31m=[32m"currentColor"[31m
+              [33mstroke-linecap[31m=[32m"round"[31m
+              [33mstroke-linejoin[31m=[32m"round"[31m
+              [33mstroke-width[31m=[32m"2"[31m
+              [33mviewBox[31m=[32m"0 0 24 24"[31m
+              [33mwidth[31m=[32m"24"[31m
+              [33mxmlns[31m=[32m"http://www.w3.org/2000/svg"[31m
+            [36m>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"[31m
+              [36m/>[31m
+              [36m<path[31m
+                [33md[31m=[32m"M3 3v5h5"[31m
+              [36m/>[31m
+            [36m</svg>[31m
+            [0m Abandon franchise and restart[0m
+          [36m</button>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</body>[31m
+[36m</html>[31m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/nhl-front-office/NhlLazyDesk.test.tsx[2m > [22mNHL front office: the GM career kit loads when it is needed[2m > [22mthe last round asks for it, its press waits for it, and the press then closes the season
+[31m[1mAssertionError[22m: the last round did not ask for the kit: expected 'idle' not to be 'idle' // Object.is equality[39m
+[36m [2m❯[22m src/components/nhl-front-office/NhlLazyDesk.test.tsx:[2m127:76[22m[39m
+    [90m125| [39m    localStorage[33m.[39m[34msetItem[39m([33mSAVE_KEY[39m[33m,[39m [33mJSON[39m[33m.[39m[34mstringify[39m(save))[33m;[39m
+    [90m126| [39m    [34mrender[39m([33m<[39m[33mG[39m[33m.[39m[33mBoard[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m127| [39m    expect(G.loader.state(), 'the last round did not ask for the kit')…
+    [90m   | [39m                                                                           [31m^[39m
+    [90m128| [39m    fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByText[39m([32m'Play'[39m))[33m;[39m
+    [90m129| [39m    if (G.loader.state() === 'loading') expect(press().disabled, 'the …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/components/nhl-front-office/NhlLazyDesk.test.tsx[2m > [22mNHL front office: the GM career kit loads when it is needed[2m > [22ma desk off save on the last round whose fetch fails: the retry card, nothing written, then one retry closes the season as a press with the kit here
+[31m[1mAssertionError[22m[39m: expected null to be truthy
+
+Ignored nodes: comments, script, style
+[36m<html>[39m
+  [36m<head />[39m
+  [36m<body>[39m
+    [36m<div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"space-y-4"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex flex-wrap items-center justify-center gap-2 text-xs"[39m
+        [36m>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"rounded-full px-3 py-1 font-bold text-white"[39m
+            [33mstyle[39m=[32m"background: rgb(244, 122, 56);"[39m
+          [36m>[39m
+            [0mAnaheim Ducks[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[39m
+          [36m>[39m
+            [0m2026[0m
+            [0m-[0m
+            [0m27[0m
+            [0m · Round [0m
+            [0m20[0m
+            [0m/[0m
+            [0m20[0m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[39m
+          [36m>[39m
+            [0mRecord [0m
+            [36m<b[39m
+              [33mclass[39m=[32m"text-foreground"[39m
+            [36m>[39m
+              [0m37[0m
+              [0m-[0m
+              [0m31[0m
+              [0m-[0m
+              [0m8[0m
+            [36m</b>[39m
+            [0m · [0m
+            [36m<b[39m
+              [33mclass[39m=[32m"text-primary"[39m
+            [36m>[39m
+              [0m82[0m
+              [0m pts[0m
+            [36m</b>[39m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[39m
+          [36m>[39m
+            [0mStrength [0m
+            [36m<b[39m
+              [33mclass[39m=[32m"text-primary"[39m
+            [36m>[39m
+              [0m87[0m
+            [36m</b>[39m
+          [36m</span>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"[39m
+          [36m>[39m
+            [0mCap space [0m
+            [36m<b>[39m
+              [0m$[0m
+              [0m19.6[0m
+              [0mM[0m
+            [36m</b>[39m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-atomic[39m=[32m"true"[39m
+          [33maria-live[39m=[32m"polite"[39m
+          [33mclass[39m=[32m"_status_77034c"[39m
+          [33mdata-nhl-waiver-status[39m=[32m"true"[39m
+          [33mrole[39m=[32m"status"[39m
+          [33mstyle[39m=[32m"margin: 0px;"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"rounded-2xl border border-border bg-card p-3"[39m
+          [33mdata-owner-mandate[39m=[32m"true"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center justify-between text-[11px]"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"font-bold uppercase tracking-wider text-muted-foreground"[39m
+            [36m>[39m
+              [0m🏛️ Ownership[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"font-black text-emerald-400"[39m
+            [36m>[39m
+              [0mTrust [0m
+              [0m60[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"mt-1.5 h-1.5 overflow-hidden rounded-full bg-secondary"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33mclass[39m=[32m"h-full rounded-full _trust_1058ca bg-emerald-400"[39m
+              [33mstyle[39m=[32m"width: 60%;"[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"mt-1.5 text-[11px] leading-snug text-foreground"[39m
+          [36m>[39m
+            [0mMake the playoffs. Ownership thinks this roster belongs there.[0m
+          [36m</p>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"mt-1 text-[11px] font-semibold _pace_1058ca text-destructive"[39m
+          [36m>[39m
+            [0m📉 [0m
+            [0mOutside the line right now. Upstairs is watching.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex items-center gap-2"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-foreground"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mclass[39m=[32m"lucide lucide-chevron-left h-3.5 w-3.5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"m15 18-6-6 6-6"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0m Hub[0m
+          [36m</button>[39m
+          [36m<span[39m
+            [33mclass[39m=[32m"font-display text-sm font-bold text-foreground"[39m
+          [36m>[39m
+            [0mPlay[0m
+          [36m</span>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"rounded-2xl border border-gold/40 bg-card p-4 text-center"[39m
+        [36m>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"mb-2 text-sm text-foreground"[39m
+          [36m>[39m
+            [0mEach round simulates a stretch of games across the league. OT losses still earn a point.[0m
+          [36m</p>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mclass[39m=[32m"lucide lucide-shield-half h-4 w-4"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M12 22V2"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0m [0m
+            [0mFinal stretch + playoffs[0m
+          [36m</button>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"mt-2 text-[10px] text-muted-foreground"[39m
+          [36m>[39m
+            [0mTop three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"text-center"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"inline-flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-destructive"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33mclass[39m=[32m"lucide lucide-rotate-ccw h-3 w-3"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M3 3v5h5"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0m Abandon franchise and restart[0m
+          [36m</button>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</div>[39m
+  [36m</body>[39m
+[36m</html>[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+null
+
+[36m [2m❯[22m __vi_import_1__.waitFor.timeout src/components/nhl-front-office/NhlLazyDesk.test.tsx:[2m223:86[22m[39m
+    [90m221| [39m      [34mrender[39m([33m<[39m[33mG[39m[33m.[39m[33mBoard[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m222| [39m      fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByText[39m([32m'Play'[39m))[33m;[39m
+    [90m223| [39m      await waitFor(() => expect(document.querySelector('[data-career-…
+    [90m   | [39m                                                                                     [31m^[39m
+    [90m224| [39m      expect(press().disabled, 'the press waits while the kit is missi…
+    [90m225| [39m      fireEvent[33m.[39m[34mclick[39m([34mpress[39m())[33m;[39m
+[90m [2m❯[22m runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:[2m47:12[22m[39m
+[90m [2m❯[22m checkCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m124:77[22m[39m
+[90m [2m❯[22m Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:[2m118:16[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m102 passed[39m[22m[90m (104)[39m
+[2m   Start at [22m 03:13:16
+[2m   Duration [22m 26.20s[2m (transform 2.23s, setup 159ms, collect 3.21s, tests 42.72s, environment 953ms, prepare 260ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlLazyDesk.test.tsx,title=src/components/nhl-front-office/NhlLazyDesk.test.tsx > NHL front office%3A the GM career kit loads when it is needed > the last round asks for it%2C its press waits for it%2C and the press then closes the season,line=127,column=76::AssertionError: the last round did not ask for the kit: expected 'idle' not to be 'idle' // Object.is equality%0A ❯ src/components/nhl-front-office/NhlLazyDesk.test.tsx:127:76%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/nhl-front-office/NhlLazyDesk.test.tsx,title=src/components/nhl-front-office/NhlLazyDesk.test.tsx > NHL front office%3A the GM career kit loads when it is needed > a desk off save on the last round whose fetch fails%3A the retry card%2C nothing written%2C then one retry closes the season as a press with the kit here,line=223,column=86::AssertionError: expected null to be truthy%0A%0AIgnored nodes: comments, script, style%0A<html>%0A  <head />%0A  <body>%0A    <div>%0A      <div%0A        class="space-y-4"%0A      >%0A        <div%0A          class="flex flex-wrap items-center justify-center gap-2 text-xs"%0A        >%0A          <span%0A            class="rounded-full px-3 py-1 font-bold text-white"%0A            style="background: rgb(244, 122, 56);"%0A          >%0A            Anaheim Ducks%0A          </span>%0A          <span%0A            class="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"%0A          >%0A            2026%0A            -%0A            27%0A             · Round %0A            20%0A            /%0A            20%0A          </span>%0A          <span%0A            class="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"%0A          >%0A            Record %0A            <b%0A              class="text-foreground"%0A            >%0A              37%0A              -%0A              31%0A              -%0A              8%0A            </b>%0A             · %0A            <b%0A              class="text-primary"%0A            >%0A              82%0A               pts%0A            </b>%0A          </span>%0A          <span%0A            class="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"%0A          >%0A            Strength %0A            <b%0A              class="text-primary"%0A            >%0A              87%0A            </b>%0A          </span>%0A          <span%0A            class="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground"%0A          >%0A            Cap space %0A            <b>%0A              $%0A              19.6%0A              M%0A            </b>%0A          </span>%0A        </div>%0A        <div%0A          aria-atomic="true"%0A          aria-live="polite"%0A          class="_status_77034c"%0A          data-nhl-waiver-status="true"%0A          role="status"%0A          style="margin: 0px;"%0A        />%0A        <div%0A          class="rounded-2xl border border-border bg-card p-3"%0A          data-owner-mandate="true"%0A        >%0A          <div%0A            class="flex items-center justify-between text-[11px]"%0A          >%0A            <span%0A              class="font-bold uppercase tracking-wider text-muted-foreground"%0A            >%0A              🏛️ Ownership%0A            </span>%0A            <span%0A              class="font-black text-emerald-400"%0A            >%0A              Trust %0A              60%0A            </span>%0A          </div>%0A          <div%0A            class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-secondary"%0A          >%0A            <div%0A              class="h-full rounded-full _trust_1058ca bg-emerald-400"%0A              style="width: 60%25;"%0A            />%0A          </div>%0A          <p%0A            class="mt-1.5 text-[11px] leading-snug text-foreground"%0A          >%0A            Make the playoffs. Ownership thinks this roster belongs there.%0A          </p>%0A          <p%0A            class="mt-1 text-[11px] font-semibold _pace_1058ca text-destructive"%0A          >%0A            📉 %0A            Outside the line right now. Upstairs is watching.%0A          </p>%0A        </div>%0A        <div%0A          class="flex items-center gap-2"%0A        >%0A          <button%0A            class="inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-foreground"%0A          >%0A            <svg%0A              class="lucide lucide-chevron-left h-3.5 w-3.5"%0A              fill="none"%0A              height="24"%0A              stroke="currentColor"%0A              stroke-linecap="round"%0A              stroke-linejoin="round"%0A              stroke-width="2"%0A              viewBox="0 0 24 24"%0A              width="24"%0A              xmlns="http://www.w3.org/2000/svg"%0A            >%0A              <path%0A                d="m15 18-6-6 6-6"%0A              />%0A            </svg>%0A             Hub%0A          </button>%0A          <span%0A            class="font-display text-sm font-bold text-foreground"%0A          >%0A            Play%0A          </span>%0A        </div>%0A        <div%0A          class="rounded-2xl border border-gold/40 bg-card p-4 text-center"%0A        >%0A          <p%0A            class="mb-2 text-sm text-foreground"%0A          >%0A            Each round simulates a stretch of games across the league. OT losses still earn a point.%0A          </p>%0A          <button%0A            class="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"%0A          >%0A            <svg%0A              class="lucide lucide-shield-half h-4 w-4"%0A              fill="none"%0A              height="24"%0A              stroke="currentColor"%0A              stroke-linecap="round"%0A              stroke-linejoin="round"%0A              stroke-width="2"%0A              viewBox="0 0 24 24"%0A              width="24"%0A              xmlns="http://www.w3.org/2000/svg"%0A            >%0A              <path%0A                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"%0A              />%0A              <path%0A                d="M12 22V2"%0A              />%0A            </svg>%0A             %0A            Final stretch + playoffs%0A          </button>%0A          <p%0A            class="mt-2 text-[10px] text-muted-foreground"%0A          >%0A            Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7.%0A          </p>%0A        </div>%0A        <div%0A          class="text-center"%0A        >%0A          <button%0A            class="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground hover:text-destructive"%0A          >%0A            <svg%0A              class="lucide lucide-rotate-ccw h-3 w-3"%0A              fill="none"%0A              height="24"%0A              stroke="currentColor"%0A              stroke-linecap="round"%0A              stroke-linejoin="round"%0A              stroke-width="2"%0A              viewBox="0 0 24 24"%0A              width="24"%0A              xmlns="http://www.w3.org/2000/svg"%0A            >%0A              <path%0A                d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"%0A              />%0A              <path%0A                d="M3 3v5h5"%0A              />%0A            </svg>%0A             Abandon franchise and restart%0A          </button>%0A        </div>%0A      </div>%0A    </div>%0A  </body>%0A</html>%0A%0A- Expected: %0Atrue%0A%0A+ Received: %0Anull%0A%0A ❯ __vi_import_1__.waitFor.timeout src/components/nhl-front-office/NhlLazyDesk.test.tsx:223:86%0A ❯ runWithExpensiveErrorDiagnosticsDisabled node_modules/@testing-library/dom/dist/config.js:47:12%0A ❯ checkCallback node_modules/@testing-library/dom/dist/wait-for.js:124:77%0A ❯ Timeout.checkRealTimersCallback node_modules/@testing-library/dom/dist/wait-for.js:118:16%0A%0A
