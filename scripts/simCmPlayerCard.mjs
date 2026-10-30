@@ -19,22 +19,27 @@
  *            exactly one row for that season equal to the harness's own row of the copy, a man with none holds no
  *            entry he did not hold before, nobody outside the squad and the loans holds one, no entry is empty;
  *            after the summer the list is unchanged; pastFrom is the first season ended and never moves; nobody
- *            holds more than PAST_KEPT rows; the careful reader reads a JSON round trip as the same list
+ *            holds more than PAST_KEPT rows; the careful reader reads a JSON round trip as the same list. Every
+ *            Everton career lends its busiest man out each January through loanOutPlayer, in every arm, and the
+ *            count of rows written for a man out on loan at a season end is printed and must not be zero
  *   cards    the card equals the save (src/lib/clubManagerCards.ts), on the first seed of every club: at every fifth
  *            entry, every season end and after every summer, for every man of mine, this season is his line, the
  *            league line is comp.league with his league clean sheets from the book (left off on a late book), his
  *            goals and assists are his numbers on the boards (plus his `b` line on a late book; never clean sheets
  *            there), and his seasons are the archive's with history's clubs; at every season end every rival book
  *            row reads as that row on its card, with the roster's facts or, for a man the roster no longer holds,
- *            none and the left club note; the late and thin notes follow the book; a man of a club outside the
+ *            none and the left club note, and for a man it holds the "for this club only" note; the late and
+ *            thin notes follow the book, the late one counting from the leaders card's round (from + 1), on a
+ *            rival's card and on a keeper or defender of mine; a man of a club outside the
  *            league reads no league line and the outside note; two men of one name in different positions at one
  *            club each read their own row; and on the two old saves six entries after the load (a late book)
  *   cap      a renewing Everton career (every man whose deal is in its last year renewed each summer through the
  *            engine's own renewContract) of CARDS_LONG seasons: the most rows any man held reaches PAST_KEPT (else
  *            exit 2, could not run) and never passes it; and a constructed squad archived twelve times holds exactly
- *            PAST_KEPT. Printed, never gated: the save's bytes a season, the archive's bytes and the slope over
- *            seasons 4 to the end, for the lead's size ruling against simClubManagerSaveSize's SIZE_BUDGET and
- *            SLOPE_CAP (and the base arm's bytes when CARDS_BASE is set)
+ *            PAST_KEPT rows, the newest (seasons 3 to PAST_KEPT + 2). Printed, never gated: the save's bytes a
+ *            season, the archive's bytes and the slope over seasons 4 to the end, for the lead's size ruling
+ *            against simClubManagerSaveSize's SIZE_BUDGET and SLOPE_CAP (and the base arm's bytes when
+ *            CARDS_BASE is set)
  *   oldsave  the two committed old saves simCmLeagueBook loads (Sevilla, Valencia), through loadCareer: neither key
  *            after the load and the loaded save byte equal to CARDS_OFF's load; one season played out from each:
  *            pastFrom is that season and every row is that season's; and a save parked on its season review by the
@@ -56,6 +61,10 @@
  *   loadwrite  loadCareer stamps pastFrom                                    -> oldsave
  *   allcomps   the reader's league line is the all competitions line        -> cards
  *   namekey    the reader finds a rival's book row by name alone            -> cards
+ *   latefrom   the late note counts from round `from`, not `from + 1`       -> cards
+ *   thisclub   a rival the roster holds loses the "for this club only" note -> cards
+ *   keepoldest the writer keeps the OLDEST PAST_KEPT rows, not the newest   -> cap
+ *   noloans    the writer archives the squad only, not the men out on loan  -> archive
  *   linkalways CmCardLink draws its button with no provider above it         -> markup
  *   hotseat    the Hot Seat calls finishSeason after every match it plays    -> dailies
  * Exit 0 green, 1 red (or a control fired), 2 could not run, 3 a control did not fire in its section.
@@ -96,6 +105,13 @@ const CONTROLS = {
   loadwrite: { section: 'oldsave', patches: [{ file: ENGINE, from: '    ensureMadeUpNations(parsed);\n', to: '    ensureMadeUpNations(parsed);\n    parsed.pastFrom = 1;\n' }] },
   allcomps: { section: 'cards', patches: [{ file: CARDS, from: '    const lg = p.comp?.league;', to: '    const lg = { apps: p.apps, goals: p.seasonGoals, assists: p.seasonAssists, yellows: p.seasonYellows, reds: p.seasonReds, ratingSum: p.ratingSum };' }] },
   namekey: { section: 'cards', patches: [{ file: CARDS, from: 'boards.input.book.c[ref.club]?.m[rowKey({ n: ref.name, p: ref.pos, r: 0 })]', to: "Object.entries(boards.input.book.c[ref.club]?.m ?? {}).find(([key]) => key.slice(0, key.lastIndexOf('|')) === ref.name)?.[1]" }] },
+  latefrom: { section: 'cards', patches: [
+    { file: CARDS, from: "out.push({ k: 'late', from: boards.from + 1 });", to: "out.push({ k: 'late', from: boards.from });" },
+    { file: CARDS, from: "notes.push({ k: 'late', from: boards.from + 1 });", to: "notes.push({ k: 'late', from: boards.from });" },
+  ] },
+  thisclub: { section: 'cards', patches: [{ file: CARDS, from: "(boards ? [{ k: 'thisclub' } as const] : [])", to: '[]' }] },
+  keepoldest: { section: 'cap', patches: [{ file: LINES, from: '.sort((a, b) => a[0] - b[0]).slice(-PAST_KEPT);', to: '.sort((a, b) => a[0] - b[0]).slice(0, PAST_KEPT);' }] },
+  noloans: { section: 'archive', patches: [{ file: LINES, from: '  const men: LineIn[] = [...state.squad, ...(state.loanedOut ?? []).map(l => l?.player).filter((p): p is LineIn => !!p)];', to: '  const men: LineIn[] = [...state.squad];' }] },
   linkalways: { section: 'markup', patches: [{ file: 'src/components/club-manager/CmCardLink.tsx', from: '  if (!cards || !card) return only ? null : <>{children}</>;', to: '  if (!card) return only ? null : <>{children}</>;' }] },
   hotseat: { section: 'dailies', patches: [
     { file: HOT, from: '  playNextEntry,\n', to: '  playNextEntry,\n  finishSeason,\n' },
@@ -208,7 +224,8 @@ const CLUBS = [
 ];
 const seedOf = (ci, k) => (0x1601 + k * 7919 + ci * 131) >>> 0;
 const FLEET = [];
-for (let k = 0; k < SEEDS; k++) CLUBS.forEach(([club, era, spec], ci) => FLEET.push({ club, era, spec, seed: seedOf(ci, k), name: `${club}${era === 'now' ? '' : ` (${era})`} seed ${k}` }));
+/* Every Everton career lends a man out each January (f.loan), so the loan half of the archive is tried. */
+for (let k = 0; k < SEEDS; k++) CLUBS.forEach(([club, era, spec], ci) => FLEET.push({ club, era, spec, seed: seedOf(ci, k), loan: ci === 0, name: `${club}${era === 'now' ? '' : ` (${era})`}${ci === 0 ? ' lending' : ''} seed ${k}` }));
 
 /**
  * One career on one engine: `seasons` whole seasons with their summers. Faces: the stripped save's hash and the
@@ -223,8 +240,17 @@ function playCareer(mod, f, hooks = {}, seasons = SEASONS) {
     faces.push(`start ${sha(strip(s))}|${draw.calls()}`);
     for (let season = 0; season < seasons; season++) {
       let guard = 0;
+      let lent = false;
       while (s.week < s.calendar.length && guard++ < 220) {
         s = nudge(s);
+        /* f.loan: in each January window the man of mine with the most games goes out on loan through the
+           engine's own loanOutPlayer, in every arm alike, so a season end finds a man out on loan with a line. */
+        if (f.loan && !lent && s.transferWindow === 'january') {
+          const man = s.squad.filter(p => (p.apps ?? 0) >= 1 && !cm.loanOutRefusal(s, p.id))
+            .sort((a, b) => (b.apps ?? 0) - (a.apps ?? 0) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))[0];
+          const away = man ? cm.loanOutPlayer(s, man.id) : null;
+          if (away) { s = away; lent = true; faces.push(`${season}:loan ${man.id} ${sha(strip(s))}|${draw.calls()}`); }
+        }
         const r = cm.playNextEntry(s, { skipHalftime: true });
         s = r.state;
         faces.push(`${season}:${guard} ${sha(strip(s))}|${draw.calls()}`);
@@ -265,7 +291,10 @@ const archiveHooks = (f, stats) => {
   let first = null;
   let held = null;
   return {
-    before(s) { held = { men: menOf(s).map(p => ({ id: p.id, row: rowOf(p, s.season) })), had: entriesOf(s) }; },
+    before(s) {
+      const lent = new Set((s.loanedOut ?? []).map(l => l?.player?.id).filter(Boolean));
+      held = { men: menOf(s).map(p => ({ id: p.id, row: rowOf(p, s.season), lent: lent.has(p.id) })), had: entriesOf(s) };
+    },
     finished(s, fin) {
       const where = `${f.name} season ${s.season}`;
       if (first === null) first = s.season;
@@ -289,6 +318,7 @@ const archiveHooks = (f, stats) => {
         const before = held.had.get(m.id);
         if (m.row[1] >= 1) {
           stats.rows += 1;
+          if (m.lent) stats.lent += 1;
           const mine = (rows ?? []).filter(r => r[0] === s.season);
           if (mine.length !== 1) { fail('archive', `${where}: ${m.id} played ${m.row[1]} games and holds ${mine.length} rows for the season`); continue; }
           if (JSON.stringify(mine[0]) !== JSON.stringify(m.row)) fail('archive', `${where}: ${m.id}'s row ${JSON.stringify(mine[0])} is not his line ${JSON.stringify(m.row)}`);
@@ -347,6 +377,7 @@ function checkMine(mod, s, where) {
         if (p.position === 'GK' && !late && c.league?.cleanSheets !== (sheets.get(key) ?? 0)) fail('cards', `${who}: ${c.league?.cleanSheets} league clean sheets, the board says ${sheets.get(key) ?? 0}`);
       }
       if (back && late && !c.notes.some(n => n.k === 'late')) fail('cards', `${who}: a keeper or defender on a late book with no late note`);
+      if (back && late && c.notes.find(n => n.k === 'late')?.from !== lb.from + 1) fail('cards', `${who}: the late note counts from round ${c.notes.find(n => n.k === 'late')?.from}, the leaders card from ${lb.from + 1}`);
     }
     /* Seasons finished at this club only (a job move leaves rows of another club until the next season end). */
     const here = r => { const club = s.history.find(h => h.season === r[0])?.club; return club === undefined || club === s.clubName; };
@@ -376,7 +407,11 @@ function checkRivals(mod, s, where) {
     if (JSON.stringify(got) !== JSON.stringify(want)) fail('cards', `${who}: league ${JSON.stringify(got)} is not the book row ${JSON.stringify(want)}`);
     const man = cm.oppRosterFor(s, row.club).find(x => x.n === row.name && x.p === row.pos);
     if (man ? c.age !== man.a || c.rating !== man.r : c.age !== null || !c.notes.some(x => x.k === 'leftclub')) fail('cards', `${who}: roster facts ${c.age}/${c.rating} against ${man ? `${man.a}/${man.r}` : 'a man the roster no longer holds'}`);
+    /* A man the roster holds: the note that the count is for this club only (he may have joined it this season). */
+    if (!!man !== c.notes.some(x => x.k === 'thisclub')) fail('cards', `${who}: the this club note does not follow the roster`);
     if ((lb.from !== null) !== c.notes.some(x => x.k === 'late')) fail('cards', `${who}: the late note does not follow the book`);
+    /* The late note's round is the leaders card's own "Counting from round {from + 1}" (LeagueLeadersCard.tsx). */
+    if (lb.from !== null && c.notes.find(x => x.k === 'late')?.from !== lb.from + 1) fail('cards', `${who}: the late note counts from round ${c.notes.find(x => x.k === 'late')?.from}, the leaders card from ${lb.from + 1}`);
     if ((lb.share < 95) !== c.notes.some(x => x.k === 'thin')) fail('cards', `${who}: the thin note does not follow the share ${lb.share}`);
   }
   const other = s.leagueClubs.includes('Real Madrid') ? 'Everton' : 'Real Madrid';
@@ -399,7 +434,7 @@ const cardHooks = f => {
 };
 const both = (a, b) => Object.fromEntries([...new Set([...Object.keys(a), ...Object.keys(b)])].map(key => [key, (...args) => { a[key]?.(...args); b[key]?.(...args); }]));
 {
-  const stats = { rows: 0, most: 0 };
+  const stats = { rows: 0, most: 0, lent: 0 };
   const facesC = FLEET.map((f, i) => playCareer(candidate, f, i < CLUBS.length ? both(archiveHooks(f, stats), cardHooks(f)) : archiveHooks(f, stats)));
   console.log(`cards   ${checks.get('cards') ?? 0} checks: my men at ${cardStats.mine} points, ${cardStats.rival} rival book rows at season ends, on the first seed of every club; notes seen ${JSON.stringify(Object.fromEntries(notesSeen))}`);
   const arms = [['off', off], ...(base ? [['base', base]] : [])];
@@ -419,8 +454,9 @@ const both = (a, b) => Object.fromEntries([...new Set([...Object.keys(a), ...Obj
     console.log(`stream  ${same} of ${total} faces equal to the ${name} engine (every entry, season end and summer, with the draw count)`);
   }
   if (!base) console.log('stream  base arm NOT RUN: set CARDS_BASE to a worktree of the base commit');
-  console.log(`archive ${checks.get('archive') ?? 0} checks; ${stats.rows} rows written and checked, the most rows one man held ${stats.most}`);
+  console.log(`archive ${checks.get('archive') ?? 0} checks; ${stats.rows} rows written and checked, ${stats.lent} of them for a man out on loan at the season end, the most rows one man held ${stats.most}`);
   if (!stats.rows) fail('archive', 'no row was written in the whole fleet');
+  if (!stats.lent) fail('archive', 'no man out on loan at a season end held a line, so the loan half of the archive was never tried');
   if (!cardStats.rival) fail('cards', 'no rival book row was held against its card in the whole fleet');
 }
 /* Two men of one name in different positions at one rival club (the case rowKey exists for): two goals moved off
@@ -502,8 +538,12 @@ const renewAll = (cm, fin) => {
   for (let season = 1; season <= PAST_KEPT + 2; season++) { st.season = season; candidate.lines.archiveCareerSeason(st); }
   tick('cap');
   const lens = (st.pastLines ?? []).map(e => e[1].length);
+  /* The ten kept are the NEWEST: seasons 3 to PAST_KEPT + 2, oldest first. */
+  const newest = JSON.stringify(Array.from({ length: PAST_KEPT }, (_, i) => i + 3));
+  const wrong = (st.pastLines ?? []).filter(e => JSON.stringify(e[1].map(r => r[0])) !== newest);
   if (lens.length !== 25 || lens.some(n => n !== PAST_KEPT)) fail('cap', `a constructed squad archived ${PAST_KEPT + 2} times holds ${[...new Set(lens)].join(', ')} rows a man, not ${PAST_KEPT}`);
-  else console.log(`cap     a constructed squad of 25 archived ${PAST_KEPT + 2} times holds ${PAST_KEPT} rows a man, the newest`);
+  else if (wrong.length) fail('cap', `a constructed squad archived ${PAST_KEPT + 2} times: ${wrong.length} men hold seasons ${JSON.stringify(wrong[0][1].map(r => r[0]))}, not the newest ${newest}`);
+  else console.log(`cap     a constructed squad of 25 archived ${PAST_KEPT + 2} times holds ${PAST_KEPT} rows a man, the newest (seasons 3 to ${PAST_KEPT + 2})`);
 }
 
 /* ---------- section oldsave ---------- */
