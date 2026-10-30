@@ -1,0 +1,49 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/nhlContributors.test.ts[2m > [22m[2mNHL simulation contributor outcomes[2m > [22m[2mholds the frozen automatic season outcomes and RNG counts with no override fields
+[22m[39mAUTOMATIC 117: digest=b5e307f401421b128b122b890e98b14d14390123165a5964b0bca35b2f0869af, rngCalls=12088
+AUTOMATIC 431: digest=fc273a8285ad7eab1cff2bdeba9084c3401d989e16551ad072fc03589af8044b, rngCalls=12080
+AUTOMATIC 907: digest=1da7787fbd0f1e5f2f5c410beae4a26cc6e4244e3561b9963228c9a528583ec9, rngCalls=12055
+
+[90mstdout[2m | src/test/nhlContributors.test.ts[2m > [22m[2mNHL simulation contributor outcomes[2m > [22m[2mmeasures a paired complete-season win effect for deliberate synthetic contributor choices
+[22m[39mPAIRED SYNTHETIC contributors:96 complete20-round seasons per arm, mean win gap=38.145833333333336,32-seed blocks=37.78125,36.65625,40
+
+ [32m✓[39m src/test/nhlContributors.test.ts [2m([22m[2m12 tests[22m[2m | [22m[33m1 skipped[39m[2m)[22m[33m 630[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL simulation contributor outcomes[2m > [22mmeasures a paired complete-season win effect for deliberate synthetic contributor choices [33m 425[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/lib/nhlOpeningRatings.test.ts[2m > [22m[2mNHL opening rating integration[2m > [22m[2mresumes earned and damaged-metadata saves byte-exact without inventing replacement grades
+[22m[39mNHL_RATING_SAVE_SIZE {"bytes":142865,"gzip":16846}
+
+[90mstdout[2m | src/lib/nhlOpeningRatings.test.ts[2m > [22m[2mNHL opening rating integration[2m > [22m[2mplays four full actual seasons drafts summers and saved resumes with next-cap draft commitments
+[22m[39mNHL_RATING_CAMPAIGN {"seasons":4,"games":5120,"series":60,"restores":24,"picks":48,"substitutions":1,"maxBytes":144274}
+
+ [32m✓[39m src/lib/nhlOpeningRatings.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 1849[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL opening rating integration[2m > [22mpins the source window and excludes script-only raw observations from the browser engine [33m 328[2mms[22m[39m
+ [32m✓[39m src/components/mlb-front-office/MlbGmDesk.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 1255[2mms[22m[39m
+   [33m[2m✓[22m[39m 1020 MLB GM desk on the board[2m > [22ma desk save plays October with the staff edge and takes its winter through the re-sign desk [33m 511[2mms[22m[39m
+ [32m✓[39m src/components/mlb-front-office/MlbDraftCapital.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 4565[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mordinary two choices keep the original two five-rival batches full offseason salaries and RNG [33m 692[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mone actual pick consumes exactly once through a same-frame duplicate and refresh [33m 508[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mfour acquired rights add four real players but only the two ordinary CPU batches [33m 861[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mlegacy one-left progress trims the old unconsumed first right only on a real selection [33m 322[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22man exhausted legacy prospect board can be replaced without losing earlier players or rights [33m 312[2mms[22m[39m
+   [33m[2m✓[22m[39m 966 MLB real draft-capital consequences[2m > [22mmalformed pick progress retains exact raw bytes until explicit own-key discard [33m 523[2mms[22m[39m
+ [32m✓[39m src/components/nhl-front-office/NhlWaiverReceipt.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 422[2mms[22m[39m
+ [32m✓[39m src/components/nhl-front-office/NhlFrontOfficeRatingEvidence.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 4983[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mdrops a real pending rating import after unmount without overwriting a newer save [33m 701[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mstarts actual ANA with all416 reviewed prices ratings and opening evidence [33m 916[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22msettles two same-frame franchise clicks with one initializer and one save [33m 666[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mkeeps opening estimates separate from developed grades after a real saved trade [33m 532[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mqualifies actual defense goalie and unmeasured evidence by their different limits [33m 320[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mrefuses an invalid opening version without overwriting another save and retries cleanly [33m 901[2mms[22m[39m
+   [33m[2m✓[22m[39m NHL actual opening ratings and readable saved evidence[2m > [22mforwards saved quote version through actual waiver market display and signing [33m 410[2mms[22m[39m
+ [32m✓[39m src/components/nhl-front-office/NhlTradeLists.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 469[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m76 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (77)[39m
+[2m   Start at [22m 17:52:40
+[2m   Duration [22m 10.86s[2m (transform 2.50s, setup 729ms, collect 5.51s, tests 14.17s, environment 4.70s, prepare 1.21s)[22m
+

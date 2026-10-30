@@ -1,0 +1,22 @@
+NEGATIVE CONTROL ON: eager; section 1 must go red
+1) the page carries the boxes and the loader, and not one module of the career kit
+   FAIL the page carries src/lib/gmDeskHost.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/components/front-office-shared/gmCareerKitCore.ts > src/lib/gmDeskHost.ts
+   FAIL the page carries src/lib/gmSeat.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/components/front-office-shared/gmCareerKitCore.ts > src/lib/gmSeat.ts
+   FAIL the page carries src/lib/managerOffers.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/components/front-office-shared/gmCareerKitCore.ts > src/lib/gmSeat.ts > src/lib/managerOffers.ts
+   FAIL the page carries src/data/gmSeat/packs.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/lib/gmDeskHostNfl.ts > src/data/gmSeat/packs.ts
+   FAIL the page carries src/lib/gmDeskHostNfl.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/lib/gmDeskHostNfl.ts
+   FAIL the page carries src/lib/nflGmCareer.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/lib/nflGmCareer.ts
+   FAIL the page carries src/components/front-office/nflCareerKit.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts
+   FAIL the page carries src/components/front-office-shared/GmOutOfWork.tsx, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/components/front-office-shared/gmCareerKitCore.ts > src/components/front-office-shared/GmOutOfWork.tsx
+   FAIL the page carries src/lib/gmCareerBind.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/lib/nflGmCareer.ts > src/lib/gmCareerBind.ts
+   FAIL the page carries src/components/front-office-shared/gmCareerKitCore.ts, which is the kit's: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/components/front-office-shared/gmCareerKitCore.ts
+   FAIL the page carries src/lib/nflSeasonAwards.ts, which rides in the kit or the season card's chunk: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/lib/nflSeasonAwards.ts
+   FAIL the page carries src/lib/foSeasonStats.ts, which rides in the kit or the season card's chunk: src/pages/FrontOffice.tsx > src/components/front-office/FrontOfficeBoard.tsx > src/components/front-office/nflCareerKit.ts > src/lib/nflSeasonAwards.ts > src/lib/foSeasonStats.ts
+   125 files reached from src/pages/FrontOffice.tsx, 56 dynamic edges seen, 13 kit modules and 5 season modules checked absent
+3) NHL row: /nhl-front-office carries the boxes and its loader, and not one module of any career kit
+   104 files reached from src/pages/NhlFrontOffice.tsx, 53 dynamic edges seen, 16 kit modules and 0 season modules checked absent
+2) the Career box drawn before the kit is the box drawn with it, save by save (the GM level box reads the desk alone, the same on both)
+   55296 saves over 3 leagues: the records differ in 30348, the kit's tier is not the bottom one in 39744, a last grade in 9216, a stored record read as itself in 13824
+4) NHL row: the Career box drawn before the kit is the box the NHL kit draws, save by save
+   55296 saves over 3 leagues: the records differ in 31584, the kit's tier is not the bottom one in 41472, a last grade in 9216, a stored record read as itself in 13824
+simFoLazyDesk CONTROL eager FIRED: section 1 went red with 12 failures (red sections 1)
