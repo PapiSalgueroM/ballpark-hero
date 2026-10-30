@@ -1,0 +1,7 @@
+/nhl-front-office at 390 by 844
+  PASS  nhl 390x844 A: no button on the recap deletes the save
+  PASS  nhl 390x844 A: the recap offers who is calling
+  PASS  nhl 390x844 A: no career panel chunk is asked for before a box is tapped (0)
+  CAUGHT  nhl 390x844 A: the save survives the firing, fired, on the out of work screen
+
+playGmCareer control wipebutton: all 1 guarded checks fired (mutations landed: {"wipebutton":2})

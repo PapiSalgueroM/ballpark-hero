@@ -1,0 +1,41 @@
+/nhl-front-office at 390 by 844
+  PASS  nhl 390x844 A: no button on the recap deletes the save
+  PASS  nhl 390x844 A: the recap offers who is calling
+  CAUGHT  nhl 390x844 A: no career panel chunk is asked for before a box is tapped (2)
+  PASS  nhl 390x844 A: the save survives the firing, fired, on the out of work screen
+  PASS  nhl 390x844 A: the out of work screen
+  PASS  nhl 390x844 A out of work: nothing wider than the screen (0px over)
+  PASS  nhl 390x844 A out of work: every control at least 44 px tall (all)
+  PASS  nhl 390x844 A out of work: no text under its floor (none)
+  MEASURED nhl 390x844 A: holding box 255px, landed panel 255px
+  SKIP  nhl 390x844 A: the chunk was fetched before the tap, so there is nothing to hold (the chunk check above is the one aimed at that)
+  PASS  nhl 390x844 A: the page does not move when the panel lands (top 241 to 241, scroll 185 to 185)
+  PASS  nhl 390x844 A: the Job market chunk is asked for on the tap
+  PASS  nhl 390x844 A market: nothing wider than the screen (0px over)
+  PASS  nhl 390x844 A market: every control at least 44 px tall (all)
+  PASS  nhl 390x844 A market: no text under its floor (none)
+  PASS  nhl 390x844 A: somebody calls, and never the club that let him go (ANA)
+  PASS  nhl 390x844 A: one tap only arms the offer
+  PASS  nhl 390x844 A: the second tap takes the job (ANA, trust 60, recap)
+  PASS  nhl 390x844 A: the arrival recap says who he takes over, with no confetti
+  PASS  nhl 390x844 A: the arrival recap holds the re-sign box
+  PASS  nhl 390x844 A: the new club's re-sign box opens
+  PASS  nhl 390x844 A: the new club's draft runs to the hub
+  PASS  nhl 390x844 A: the hub has the Career box
+  PASS  nhl 390x844 A: the hub has the GM level box
+  MEASURED nhl 390x844 A: the Career screen is 184 px tall at 390
+  PASS  nhl 390x844 A career: nothing wider than the screen (0px over)
+  PASS  nhl 390x844 A career: every control at least 44 px tall (all)
+  PASS  nhl 390x844 A career: no text under its floor (none)
+  MEASURED nhl 390x844 A: the GM level panel is 730 px tall at 390
+  MEASURED nhl 390x844 A: the GM level screen is 684 px tall at 390
+  PASS  nhl 390x844 A: the GM level panel fits one and a half screens at 390 (730px)
+  PASS  nhl 390x844 A GM level: nothing wider than the screen (0px over)
+  PASS  nhl 390x844 A GM level: every control at least 44 px tall (all)
+  PASS  nhl 390x844 A GM level: no text under its floor (none)
+  PASS  nhl 390x844 A: a tree off the live list sells nothing
+  PASS  nhl 390x844 A: a point spent in Ownership is in the save after a reload
+  PASS  nhl 390x844 A: a round plays at the new club
+  PASS  nhl 390x844 A: no console error (clean)
+
+playGmCareer control eagerpanel: all 1 guarded checks fired (mutations landed: {"eagerpanel":16})
