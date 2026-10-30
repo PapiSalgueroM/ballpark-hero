@@ -1,0 +1,133 @@
+name: NFL TE adoption balance measurement only
+on:
+  push:
+    branches: [codex/nfl-te-adoption-balance-20261030]
+permissions:
+  contents: read
+jobs:
+  experiment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: 'true'
+      TZ: UTC
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      FORCE_COLOR: '0'
+      EXPECTED_BASE: 988dc9d6b880d6c8a15fb4a00e09e6bf7a18eeab
+      EXPECTED_BASE_TREE: 0dcb7bd435a5f476dcb7eeadff1f838dad68b3d6
+      EXPECTED_BASE_FILES: '5456'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind unchanged application and nine diagnostic-only additions
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/nfl-te-position-experiment";test ! -e "$out";mkdir "$out"
+          echo "NFL_TE_OUT=$out" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/nfl-te-adoption-balance-20261030
+          [[ "$EXPECTED_BASE" =~ ^[a-f0-9]{40}$ && "$EXPECTED_BASE_TREE" =~ ^[a-f0-9]{40}$ && "$EXPECTED_BASE_FILES" =~ ^[0-9]+$ ]]
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_BASE"
+          test "$(git rev-parse "$EXPECTED_BASE^{tree}")" = "$EXPECTED_BASE_TREE"
+          test "$(git ls-tree -r --name-only "$EXPECTED_BASE" | wc -l)" -eq "$EXPECTED_BASE_FILES"
+          test "$(git ls-files | wc -l)" -eq "$((EXPECTED_BASE_FILES + 9))"
+          git diff --name-status "$EXPECTED_BASE" HEAD > "$out/proof-diff.txt"
+          printf 'A\t.github/workflows/nfl-te-adoption-balance.yml\nA\tscripts/qa/experimentNflTeCalibration.mjs\nA\tscripts/qa/fixtures/nfl-te/aggregate.json\nA\tscripts/qa/fixtures/nfl-te/defense.json\nA\tscripts/qa/fixtures/nfl-te/legacy-outcomes.json\nA\tscripts/qa/fixtures/nfl-te/weekly.json\nA\tscripts/qa/measureNflTeAdoptionBalance.mjs\nA\tsrc/test/nflTeAdoption.test.tsx\nA\tsrc/test/nflTeReceivingExperiment.test.ts\n' > "$out/expected-proof-diff.txt"
+          cmp "$out/proof-diff.txt" "$out/expected-proof-diff.txt"
+          git ls-files -z | sort -z > "$out/source-members.before"
+          xargs -0 sha256sum < "$out/source-members.before" > "$out/source.before.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.before";test ! -s "$out/untracked.before"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          sha256sum "$(git rev-parse --git-path index)" > "$out/default-index.before.sha256"
+          git archive --format=tar HEAD > "$out/source.tar"
+          mkdir "$out/work";tar -xf "$out/source.tar" -C "$out/work"
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$out/work/node_modules"
+          printf '{"scope":"SOURCE_BOUND_DIAGNOSTIC_EXPERIMENT_ONLY","base":"%s","proof":"%s","actualFetchSquad":"PENDING","oldPhysicalSourceControl":"PENDING","trainingFit":"PENDING_AFTER_OLD_ADMISSION","holdout":"PENDING_NO_RETUNING","actualSeasonSimulation":"PENDING","productAdoption":false,"databaseWrites":false,"emails":false,"browser":"UNRUN","ordinaryBuild":"UNRUN","SEO":"UNRUN","fullDefaultVitest":"UNRUN_SCOPED_DEFAULT_CONFIG_ONLY","defaultSims":"UNRUN"}\n' "$EXPECTED_BASE" "$GITHUB_SHA" > "$out/SCOPE.json"
+      - name: Cheap remote helper syntax before dependencies
+        run: |
+          set -euo pipefail
+          out="$NFL_TE_OUT";raw=0
+          node --check scripts/qa/experimentNflTeCalibration.mjs > "$out/syntax.stdout.log" 2> "$out/syntax.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.raw.exit";test "$raw" -eq 0
+          node --check scripts/qa/measureNflTeAdoptionBalance.mjs > "$out/balance-syntax.stdout.log" 2> "$out/balance-syntax.stderr.log"
+      - name: Locked application dependencies
+        run: |
+          set -euo pipefail
+          out="$NFL_TE_OUT";raw=0
+          npm ci > "$out/npm-ci.stdout.log" 2> "$out/npm-ci.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.raw.exit";test "$raw" -eq 0
+          find node_modules -type f -print0 | sort -z > "$out/deps.members.before"
+          xargs -0 sha256sum < "$out/deps.members.before" > "$out/deps.before.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/deps.links.before"
+      - name: Genuine application types
+        run: |
+          set -euo pipefail
+          out="$NFL_TE_OUT";raw=0;: > "$out/types.transport.jsonl"
+          SIM_OFFLINE_RECEIPT="$out/types.transport.jsonl" NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 3m node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.stdout.log" 2> "$out/types.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$out/types.raw.exit";test "$raw" -eq 0;test ! -s "$out/types.transport.jsonl"
+      - name: Old outcomes and controls before frozen training and holdout experiment
+        run: |
+          set -euo pipefail
+          out="$NFL_TE_OUT";raw=0;: > "$out/driver.transport.jsonl"
+          cd "$out/work"
+          SIM_OFFLINE_RECEIPT="$out/driver.transport.jsonl" NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 20m node scripts/qa/experimentNflTeCalibration.mjs > "$out/driver.stdout.log" 2> "$out/driver.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$out/driver.raw.exit";test "$raw" -eq 0;test ! -s "$out/driver.transport.jsonl"
+          test "$(grep -Fxc 'NFL_TE_EXPERIMENT: completed; actual source arms restored; candidate remains unadopted.' "$out/driver.stdout.log")" -eq 1
+          test -s "$out/OLD-SOURCE-ADMISSION.json";test -s "$out/TRAINING-FIT.json";test -s "$out/COHORT-EVALUATION.json"
+          test -s "$out/SIMULATION-PAIRS.json";test -s "$out/SIMULATION-RAW-PAIRS.json";test -s "$out/EXPERIMENT-ADMISSION.json";test -s "$out/MATCHED-COPY-FINAL-HOLDS.json"
+      - name: Measure two-TE FLEX and mixed-era drafts with the frozen scalar
+        run: |
+          set -euo pipefail
+          out="$NFL_TE_OUT";raw=0;: > "$out/balance.transport.jsonl"
+          cd "$out/work"
+          SIM_OFFLINE_RECEIPT="$out/balance.transport.jsonl" NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" timeout --signal=TERM --kill-after=15s 10m node scripts/qa/measureNflTeAdoptionBalance.mjs > "$out/balance-driver.stdout.log" 2> "$out/balance-driver.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$out/balance-driver.raw.exit";test "$raw" -eq 0;test ! -s "$out/balance.transport.jsonl"
+          test "$(grep -c '^NFL_TE_ADOPTION_BALANCE_MEASURED ' "$out/balance-driver.stdout.log")" -eq 1
+          test -s "$out/adoption-balance/MEASUREMENTS.json";test -s "$out/adoption-balance/PAIRED-RAW.json"
+          test -s "$out/adoption-balance/FINAL-HOLDS.json";test -s "$out/adoption-balance/FOCUSED-BASELINE-ADMISSION.json"
+      - name: Always hold original source, dependency bodies, default index and refs
+        if: always()
+        env:
+          PRIOR_STATUS: ${{ job.status }}
+        run: |
+          set -uo pipefail
+          out="$RUNNER_TEMP/nfl-te-position-experiment";mkdir -p "$out";raw=0
+          if test -f "$out/source.before.sha256";then
+            git ls-files -z | sort -z > "$out/source-members.after"
+            cmp "$out/source-members.before" "$out/source-members.after" || raw=1
+            sha256sum -c "$out/source.before.sha256" > "$out/source-held.log" 2>&1 || raw=1
+            git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.after"
+            cmp "$out/untracked.before" "$out/untracked.after" || raw=1
+            git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"
+            cmp "$out/refs.before" "$out/refs.after" || raw=1
+            sha256sum -c "$out/default-index.before.sha256" > "$out/default-index-held.log" 2>&1 || raw=1
+          else raw=1;fi
+          if test -f "$out/deps.before.sha256";then
+            find node_modules -type f -print0 | sort -z > "$out/deps.members.after"
+            cmp "$out/deps.members.before" "$out/deps.members.after" || raw=1
+            sha256sum -c "$out/deps.before.sha256" > "$out/deps-held.log" 2>&1 || raw=1
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/deps.links.after"
+            cmp "$out/deps.links.before" "$out/deps.links.after" || raw=1
+          else raw=1;fi
+          if test -d "$out/work";then tar --exclude='./node_modules' -cf "$out/matched-source.after.tar" -C "$out/work" . || raw=1;fi
+          printf '{"priorStatus":"%s","actualHoldsRaw":%s,"originalCheckoutOnly":true,"dependencyCacheExceptions":[]}\n' "$PRIOR_STATUS" "$raw" > "$out/FINAL-HOLDS.json"
+          printf '%s\n' "$raw" > "$out/final-holds.raw.exit"
+          find "$out" -type f ! -path "$out/work/*" ! -name 'evidence.sha256' -print0 | sort -z | xargs -0 sha256sum > "$out/evidence.sha256"
+          test "$raw" -eq 0
+      - name: Retain actual raw outputs, source variants, fixtures and restored archives
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nfl-te-adoption-balance-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: |
+            ${{ env.NFL_TE_OUT }}/**
+            !${{ env.NFL_TE_OUT }}/work/**
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14
