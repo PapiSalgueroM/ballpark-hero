@@ -1,0 +1,17 @@
+vitest exit=0 3s |    Duration  1.40s (transform 113ms, setup 114ms, collect 69ms, tests 8ms, environment 533ms, prepare 179ms)
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simBooks exit=0 12s | simBooks: green. Every number these games show agrees with every other number they show.
+tsc exit=0 70s | 
+simClubManagerDeals exit=0 16s | simClubManagerDeals: green. The desk reads, the table binds, and nobody signs on a handshake.
+simClubManagerMeters exit=0 23s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simClubManagerSlots exit=0 66s | simClubManagerSlots: all sections green
+simCmLedgerJourney exit=0 99s | simCmLedgerJourney: green. 45 seeded journeys, 9678 ledgers read at a step or a reload, and the reader refused none the game wrote; every owned record of my club is carri
+simCmDifficulty exit=0 209s | simCmDifficulty: all green (sections 1,2,3,6,7,8)
+simCmShirtSales exit=0 2s | CM_SHIRTS_RESULT status=passed cases=15/15 passed=15 failed=0 prefixes=6/6 chargedWeeks=72/72 sourceHold=true network=0
+simCmOwnGoals exit=0 68s | simCmOwnGoals: PASS, 8 sections green
+simFinance exit=0 7s | ALL FINANCE CHECKS PASSED
+simContracts exit=0 19s | ALL CONTRACT CHECKS PASSED
+simManagerWorldContinuity exit=1 23s |     at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerWorldContinuity.mjs:527:24
+simUclSeasonOne exit=0 14s | simUclSeasonOne: all green
+simAcademy exit=0 392s | ALL ACADEMY CHECKS PASSED
+simRoles exit=0 915s | ALL ROLE CHECKS PASSED

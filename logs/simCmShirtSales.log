@@ -1,0 +1,16 @@
+CM_SHIRTS_PASS penny-identity
+CM_SHIRTS_PASS one-counter-per-charge
+CM_SHIRTS_PASS malformed-and-overflow
+CM_SHIRTS_PASS legacy-zero-no-backpay
+CM_SHIRTS_PASS displayed-demand-and-era-scale
+CM_SHIRTS_PASS small-club-pennies
+CM_SHIRTS_PASS one-net-income-no-board-cost
+CM_SHIRTS_PASS charged-weeks-projection
+CM_SHIRTS_PASS unsafe-future-keeps-known-paid
+CM_SHIRTS_PASS actual-engine-window-cash
+CM_SHIRTS_PASS actual-skipped-night
+CM_SHIRTS_PASS save-load-and-pure-reads
+CM_SHIRTS_PASS same-club-carry-and-moves
+CM_SHIRTS_PASS no-passive-time-or-random-income
+CM_SHIRTS_PASS real-charged-prefixes
+CM_SHIRTS_RESULT status=passed cases=15/15 passed=15 failed=0 prefixes=6/6 chargedWeeks=72/72 sourceHold=true network=0

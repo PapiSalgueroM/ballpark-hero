@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerCareerLines.test.ts --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simAcademy: node scripts/simAcademy.mjs
+simBooks: node scripts/simBooks.mjs
+simClubManagerDeals: node scripts/simClubManagerDeals.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simCmDifficulty: node scripts/simCmDifficulty.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmShirtSales: node scripts/simCmShirtSales.mjs
+simContracts: node scripts/simContracts.mjs
+simFinance: node scripts/simFinance.mjs
+simManagerWorldContinuity: node scripts/simManagerWorldContinuity.mjs
+simRoles: node scripts/simRoles.mjs
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs
