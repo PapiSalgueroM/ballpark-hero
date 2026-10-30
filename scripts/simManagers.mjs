@@ -299,40 +299,6 @@ async function realDugoutsSection() {
   const byEra = era => leagues.filter(l => l.era === era);
   console.log(`   sentinel "${SENTINEL}" is in no src file; ${leagues.length} leagues across ${ERAS.length} eras hold it`);
 
-  /* 7a. day one, and only day one of the table's own year */
-  let held = 0, partialSeen = 0;
-  for (const L of leagues) {
-    const c = seeded(hashSeed(`7a|${L.era}|${L.id}`), () => S.cm.startCareer(L.career, L.era)).value;
-    if (!c.leagueClubs.includes(L.sentinel)) { fail(`7a: ${L.era} ${L.id}: the career at ${L.career} has no ${L.sentinel} in its league`); continue; }
-    const e = c.managers?.[L.sentinel];
-    if (!e || e.name !== SENTINEL || e.real !== 1 || e.appointed !== SENTINEL_MONTH) fail(`7a: ${L.era} ${L.id}: ${L.sentinel}'s chair on day one is ${JSON.stringify(e)}`);
-    else held += 1;
-    const twice = Object.entries(c.managers ?? {}).filter(([club, v]) => club !== L.sentinel && (v.name === SENTINEL || v.real === 1));
-    if (twice.length) fail(`7a: ${L.era} ${L.id}: ${twice.length} other chair(s) hold a real man`);
-    const view = S.cm.dugoutOf(c, L.sentinel);
-    if (!view || view.real !== 1 || view.name !== SENTINEL || view.appointed !== SENTINEL_MONTH) fail(`7a: ${L.era} ${L.id}: the display slot shows ${JSON.stringify(view)}`);
-    const pv = S.cm.dugoutOf(c, L.partial);
-    if (!pv || pv.real || pv.partial !== true || pv.name === SENTINEL) fail(`7a: ${L.era} ${L.id}: the partial chair ${L.partial} shows ${JSON.stringify(pv)}`);
-    else partialSeen += 1;
-    if (spoken(c).includes(SENTINEL)) fail(`7a: ${L.era} ${L.id}: a day one string outside the record names the sentinel`);
-  }
-  console.log(`   7a: ${held} of ${leagues.length} sentinel chairs held on day one, ${partialSeen} partial chairs made up and marked`);
-  if (held !== leagues.length) fail(`7a: only ${held} of ${leagues.length} sentinel chairs were held`);
-  {
-    const L = byEra('now').find(l => l.id === 'premier') ?? byEra('now')[0];
-    const later = seeded(11, () => S.cm.startCareer(L.career, 'now', undefined, undefined, { yearsOn: 2, uclField: null, keepLeagueOverrides: false })).value;
-    if (JSON.stringify(later.managers ?? {}).includes(SENTINEL)) fail('7a: a fresh save for a job taken two years on seated the sentinel');
-    const c = seeded(12, () => S.cm.startCareer(L.career, 'now')).value;
-    const two = seeded(13, () => S.cm.startNextSeason(c)).value;
-    delete two.managers;
-    S.cm.ensureManagers(two);
-    if (JSON.stringify(two.managers ?? {}).includes(SENTINEL)) fail('7a: a season two load repair seated the sentinel');
-    const cupView = S.cm.dugoutOf(two, byEra('now').find(l => l.id !== L.id)?.sentinel ?? '');
-    if (cupView) fail(`7a: a club outside the league shows ${JSON.stringify(cupView)} in season two`);
-    const cupOne = S.cm.dugoutOf(c, byEra('now').find(l => l.id !== L.id)?.sentinel ?? '');
-    if (!cupOne || cupOne.name !== SENTINEL) fail(`7a: a club outside the league does not show its opening day man in season one (${JSON.stringify(cupOne)})`);
-    console.log('   7a: a later world and a season two repair seat nobody real; an outside club shows him in season one only');
-  }
   /* 7b and 7c. Summers with the sentinel's chair emptied: the vacancy list finishSeason decided gets the
      sentinel's chair and one more (so the recycle draw has a real name to pick), in both twins alike. */
   const PER_ERA = 40;
@@ -392,6 +358,45 @@ async function realDugoutsSection() {
   console.log(`   7b: ${summers} summers, ${emptied} with the sentinel's chair emptied (${natural} by the sim's own draw), ${recycleChances} with a second chair to recycle into, ${offersChecked} offers read, ${bFails} failures (${((Date.now() - t0) / 1000).toFixed(0)} s)`);
   console.log(`   7c: ${sameStrip} of ${summers} sentinel careers equal their empty table twin after the strip, draw for draw`);
   if (emptied < 200) fail(`7b: only ${emptied} summers emptied the sentinel's chair (floor 200)`);
+  /* 7a runs after 7b and 7c on purpose: the engine numbers its youth ids with a counter, so the two twins must have run the same calls before they are compared. */
+  /* 7a. day one, and only day one of the table's own year */
+  let held = 0, partialSeen = 0;
+  for (const L of leagues) {
+    const c = seeded(hashSeed(`7a|${L.era}|${L.id}`), () => S.cm.startCareer(L.career, L.era)).value;
+    if (!c.leagueClubs.includes(L.sentinel)) { fail(`7a: ${L.era} ${L.id}: the career at ${L.career} has no ${L.sentinel} in its league`); continue; }
+    const e = c.managers?.[L.sentinel];
+    if (!e || e.name !== SENTINEL || e.real !== 1 || e.appointed !== SENTINEL_MONTH) fail(`7a: ${L.era} ${L.id}: ${L.sentinel}'s chair on day one is ${JSON.stringify(e)}`);
+    else held += 1;
+    const twice = Object.entries(c.managers ?? {}).filter(([club, v]) => club !== L.sentinel && (v.name === SENTINEL || v.real === 1));
+    if (twice.length) fail(`7a: ${L.era} ${L.id}: ${twice.length} other chair(s) hold a real man`);
+    const view = S.cm.dugoutOf(c, L.sentinel);
+    if (!view || view.real !== 1 || view.name !== SENTINEL || view.appointed !== SENTINEL_MONTH) fail(`7a: ${L.era} ${L.id}: the display slot shows ${JSON.stringify(view)}`);
+    const pv = S.cm.dugoutOf(c, L.partial);
+    if (!pv || pv.real || pv.partial !== true || pv.name === SENTINEL) fail(`7a: ${L.era} ${L.id}: the partial chair ${L.partial} shows ${JSON.stringify(pv)}`);
+    else partialSeen += 1;
+    if (spoken(c).includes(SENTINEL)) fail(`7a: ${L.era} ${L.id}: a day one string outside the record names the sentinel`);
+  }
+  console.log(`   7a: ${held} of ${leagues.length} sentinel chairs held on day one, ${partialSeen} partial chairs made up and marked`);
+  if (held !== leagues.length) fail(`7a: only ${held} of ${leagues.length} sentinel chairs were held`);
+  {
+    const L = byEra('now').find(l => l.id === 'premier') ?? byEra('now')[0];
+    const later = seeded(11, () => S.cm.startCareer(L.career, 'now', undefined, undefined, { yearsOn: 2, uclField: null, keepLeagueOverrides: false })).value;
+    if (JSON.stringify(later.managers ?? {}).includes(SENTINEL)) fail('7a: a fresh save for a job taken two years on seated the sentinel');
+    const c = seeded(12, () => S.cm.startCareer(L.career, 'now')).value;
+    const two = seeded(13, () => S.cm.startNextSeason(c)).value;
+    delete two.managers;
+    S.cm.ensureManagers(two);
+    if (JSON.stringify(two.managers ?? {}).includes(SENTINEL)) fail('7a: a season two load repair seated the sentinel');
+    /* An outside club: another league's sentinel club that the summer did not bring into this league (a club
+       promoted into it gets a made up name from season two, which is right and is not this check). */
+    const outside = byEra('now').find(l => l.id !== L.id && !two.leagueClubs.includes(l.sentinel) && !c.leagueClubs.includes(l.sentinel))?.sentinel ?? '';
+    if (!outside) fail('7a: no outside club to read, the check tests nothing');
+    const cupView = S.cm.dugoutOf(two, outside);
+    if (cupView) fail(`7a: a club outside the league shows ${JSON.stringify(cupView)} in season two`);
+    const cupOne = S.cm.dugoutOf(c, outside);
+    if (!cupOne || cupOne.name !== SENTINEL) fail(`7a: a club outside the league does not show its opening day man in season one (${JSON.stringify(cupOne)})`);
+    console.log('   7a: a later world and a season two repair seat nobody real; an outside club shows him in season one only');
+  }
   await ownAndManaged(S, byEra('now').find(l => l.id === 'premier') ?? byEra('now')[0]);
   return { bFails, bNamed };
 }
