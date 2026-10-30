@@ -13,7 +13,7 @@
  ],
  "watchRules": [
   "Written before the first decision. The season in play is 2026-27; the last finished one is 2025-26 (LAST_FINISHED nba 2025 in scripts/simUsConnectionsFacts.mjs).",
-  "Still playing: ESPN's active flag, or nba.com's roster status Active, or a season from 2024-25 on with no retirement on either host (an unsigned veteran can still sign and add to a mark).",
+  "Still playing: ESPN's active flag, or nba.com's roster status Active, or any season from 2024-25 on (an unsigned veteran can still sign and add to a mark). No retirement is read: a season from 2024-25 on counts as still playing whatever either host says, which can only watch more men, never fewer.",
   "A club group is dated in the trailing \"(as of 2025-26)\" shape on every board, whether or not a man still playing sits beside it today (one shape on every board; a date can only shrink what a group holds). Section 8 holds it.",
   "A career mark (points, rebounds, assists, three-pointers, steals, blocks, games): a man still playing within one season's worth of it on either host is watched, a season's worth being the most anyone has added in one NBA regular season (basketball-reference's single season leaders pages, read 2026-10-29, the ABA rows set aside): 4,029 points (Wilt Chamberlain, 1961-62), 2,149 rebounds (Wilt Chamberlain, 1960-61), 1,164 assists (John Stockton, 1990-91), 402 three-pointers (Stephen Curry, 2015-16), 301 steals (Alvin Robertson, 1985-86), 456 blocks (Mark Eaton, 1984-85), 88 games (Walt Bellamy, 1968-69). These are bounds of the rule (NBA_REACH in scripts/lib/usConnectionsCheck.mjs), not claims any board makes.",
   "Fixed: the draft (the overall pick) and the birthplace (a country, or a continent).",
@@ -299,7 +299,7 @@
    "label": "2,000+ career three-pointers",
    "name": "Nicolas Batum",
    "holds": false,
-   "why": "watched: still playing (a 2025-26 season, no retirement on either host) with 1,842, within a season's worth of 2,000"
+   "why": "watched: still playing (a 2025-26 season on the record) with 1,842, within a season's worth of 2,000"
   }
  ],
  "facts": [
@@ -1852,7 +1852,7 @@
    "label": "2,000+ career three-pointers",
    "name": "Nicolas Batum",
    "holds": false,
-   "why": "watched: still playing (a 2025-26 season, no retirement on either host) with 1,842, within a season's worth of 2,000",
+   "why": "watched: still playing (a 2025-26 season on the record) with 1,842, within a season's worth of 2,000",
    "sources": [
     {
      "host": "site.web.api.espn.com",
@@ -1904,7 +1904,7 @@
  "clubLabelsNote": "Each file label covers its club under the name it gives, nothing else (scripts/lib/usConnectionsCheck.mjs NBA_CLUBS). franchiseNames are the other names the franchise played under, from basketball-reference's franchise page (/teams/<code>/, read 2026-10-29): a man with a season under one of them is unknown beside the label, never a no. No man on the four file boards has a season under any of them, on either host. A lineage entry can only make a verdict unknown, never a yes or a no.",
  "decisions": [
   "nbaconn-001: the Heat group dated; no member moved.",
-  "nbaconn-002: the Bulls group dated. Tony Parker left \"Born in France\" (born in Bruges, Belgium, on both hosts) for Victor Wembanyama (born in France on both hosts: Paris on ESPN, Le Chesnay on basketball-reference; a Spur only, 400 three-pointers, 2,054 rebounds). Nicolas Batum left it too: 1,842 three-pointers with a 2025-26 season and no retirement on either host puts him a season from \"2,000+ career three-pointers\". Ian Mahinmi (born in Rouen, France; Spurs, Mavericks, Pacers, Wizards; 8 three-pointers, 2,705 rebounds; last season 2019-20) took his place.",
+  "nbaconn-002: the Bulls group dated. Tony Parker left \"Born in France\" (born in Belgium on both hosts: Bruges, Belgium on basketball-reference, Belgium on ESPN) for Victor Wembanyama (born in France on both hosts: Paris on ESPN, Le Chesnay on basketball-reference; a Spur only, 400 three-pointers, 2,054 rebounds). Nicolas Batum left it too: 1,842 three-pointers with a 2025-26 season (still playing on the record) puts him a season from \"2,000+ career three-pointers\". Ian Mahinmi (born in Rouen, France; Spurs, Mavericks, Pacers, Wizards; 8 three-pointers, 2,705 rebounds; last season 2019-20) took his place.",
   "nbaconn-003: the Warriors and Knicks groups dated; no member moved.",
   "nbaconn-004: the Celtics, Lakers and Kings groups dated. DeMarcus Cousins (a gray pair beside the Lakers) left the Kings group for De'Aaron Fox (Kings 2017-18 to 2024-25, then the Spurs; no Celtics or Lakers season on either host; born in the USA on both hosts)."
  ]

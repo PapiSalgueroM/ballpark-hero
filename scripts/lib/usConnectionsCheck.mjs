@@ -948,7 +948,8 @@ const NBA_BORN_LABELS = { france: ['France'], canada: ['Canada'], spain: ['Spain
 const NBA_CAREER_STATS = { points: 'PTS', assists: 'AST', rebounds: 'REB', threepointers: 'FG3M', steals: 'STL', blocks: 'BLK', games: 'GP' };
 /*
  * A season's worth of each career total, for the watch: the most anyone has added in one NBA regular season (the
- * single season records, read on two hosts in the ledger's watchRules), so no active man inside one season of a
+ * single season records, read on basketball-reference's single season leaders pages, cited in the ledger's
+ * watchRules), so no active man inside one season of a
  * mark beside him is missed.
  */
 export const NBA_REACH = { PTS: 4029, REB: 2149, AST: 1164, FG3M: 402, STL: 301, BLK: 456, GP: 88 };
