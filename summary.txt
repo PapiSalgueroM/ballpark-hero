@@ -1,0 +1,9 @@
+alone-c8b exit=0 14s |       Tests  4 passed | 53 skipped (57)
+alone-c8 exit=0 32s |       Tests  4 passed | 53 skipped (57)
+vt-wall exit=0 63s |    Duration  62.96s (transform 4.02s, setup 202ms, collect 7.26s, tests 57.36s, environment 1.41s, prepare 673ms)
+simWall exit=0 62s | simUsCareerHallWall: ok, 53 check ids, 7847 checks, 200 careers a sport, 152 old saves
+c-readdraw exit=1 56s | simUsCareerHallWall CONTROL readdraw: FIRED, C8b red in all four sports and C1, C3, C4, C4b, C5, C6, C7, C8, C9, C10a, C10b, C10c, J green
+simUsCareerActionConfirm exit=0 8s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+vitest-us exit=0 24s |    Duration  23.55s (transform 2.46s, setup 270ms, collect 7.81s, tests 40.24s, environment 1.36s, prepare 297ms)
+c-boarddraw exit=1 45s | simUsCareerHallWall CONTROL boarddraw: FIRED, C8 red in all four sports and C1, C3, C4, C4b, C5, C6, C7, C8b, C9, C10a, C10b, C10c, J green
+simUsBoardParity exit=0 57s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen with the proved historical main775 coaching Panel.
