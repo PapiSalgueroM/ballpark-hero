@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+playCmPlayerCard: ENGINES=chromium node scripts/playCmPlayerCard.mjs
+walk-stack: PLAY_CARDS_CONTROL=stack ENGINES=chromium node scripts/playCmPlayerCard.mjs
+playCmLeagueLeaders: ENGINES=chromium node scripts/playCmLeagueLeaders.mjs
+sweepWeight: ENGINES=chromium node scripts/sweepWeight.mjs
+playCmWorldMoves: ENGINES=chromium node scripts/playCmWorldMoves.mjs
+playCmOldCareersWorld: ENGINES=chromium node scripts/playCmOldCareersWorld.mjs
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs
