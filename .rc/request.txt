@@ -1,0 +1,21 @@
+#!build
+#!serial
+# Release BT pre publish (the lead, 2026-10-29 22:40 EDT): every harness that reads dist or public, on the release head with the build:seo snapshots committed (9064a0a28), per CLAUDE.md "Between big ships".
+simAdsense: node scripts/simAdsense.mjs
+simBrand: node scripts/simBrand.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+simHiddenPages: node scripts/simHiddenPages.mjs
+simHubs: node scripts/simHubs.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simIndexing: node scripts/simIndexing.mjs
+simInternalLinks: node scripts/simInternalLinks.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simPrerender: node scripts/simPrerender.mjs
+simPrerenderBoot: node scripts/simPrerenderBoot.mjs
+simRetiredRoutes: node scripts/simRetiredRoutes.mjs
+simSchema: node scripts/simSchema.mjs
+simSitemap: node scripts/simSitemap.mjs
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
