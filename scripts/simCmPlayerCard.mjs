@@ -41,6 +41,10 @@
  *            engine before the round (finishSeason already ran there) gains nothing on load, nothing at the summer,
  *            and sets pastFrom at the NEXT season end
  *   dailies  Manager Hot Seat days played through their whole leash and Deadline Day runs hold neither key
+ *   markup   with no card provider above them, the Squad screen, the Stats screen, a leaders board and a club page,
+ *            rendered (react-dom/server, inside a MemoryRouter) on three saves of the fleet, draw no card link, and
+ *            with CARDS_BASE their markup is byte equal to the base commit's. This protects the existing SSR
+ *            recordings only: the app always mounts the provider, so the shipped markup changes by design
  *
  * CONTROLS (CARDS_CONTROL=<name>), each asserts its anchor occurs exactly as often as it says before it is applied,
  * and the run prints how many checks it failed; a control is proven only by a red in the section it names:
@@ -52,6 +56,7 @@
  *   loadwrite  loadCareer stamps pastFrom                                    -> oldsave
  *   allcomps   the reader's league line is the all competitions line        -> cards
  *   namekey    the reader finds a rival's book row by name alone            -> cards
+ *   linkalways CmCardLink draws its button with no provider above it         -> markup
  *   hotseat    the Hot Seat calls finishSeason after every match it plays    -> dailies
  * Exit 0 green, 1 red (or a control fired), 2 could not run, 3 a control did not fire in its section.
  *
@@ -91,6 +96,7 @@ const CONTROLS = {
   loadwrite: { section: 'oldsave', patches: [{ file: ENGINE, from: '    ensureMadeUpNations(parsed);\n', to: '    ensureMadeUpNations(parsed);\n    parsed.pastFrom = 1;\n' }] },
   allcomps: { section: 'cards', patches: [{ file: CARDS, from: '    const lg = p.comp?.league;', to: '    const lg = { apps: p.apps, goals: p.seasonGoals, assists: p.seasonAssists, yellows: p.seasonYellows, reds: p.seasonReds, ratingSum: p.ratingSum };' }] },
   namekey: { section: 'cards', patches: [{ file: CARDS, from: 'boards.input.book.c[ref.club]?.m[rowKey({ n: ref.name, p: ref.pos, r: 0 })]', to: "Object.entries(boards.input.book.c[ref.club]?.m ?? {}).find(([key]) => key.slice(0, key.lastIndexOf('|')) === ref.name)?.[1]" }] },
+  linkalways: { section: 'markup', patches: [{ file: 'src/components/club-manager/CmCards.tsx', from: '  if (!cards || !card) return only ? null : <>{children}</>;', to: '  if (!card) return only ? null : <>{children}</>;' }] },
   hotseat: { section: 'dailies', patches: [
     { file: HOT, from: '  playNextEntry,\n', to: '  playNextEntry,\n  finishSeason,\n' },
     { file: HOT, from: '    run.leash = run.leaguePlayed;\n  }\n  settle(run);', to: '    run.leash = run.leaguePlayed;\n  }\n  run.state = finishSeason(run.state).state;\n  settle(run);' },
@@ -243,7 +249,7 @@ function playCareer(mod, f, hooks = {}, seasons = SEASONS) {
 /* ---------- the engines ---------- */
 let candidate, off, base = null;
 try {
-  candidate = await engine('candidate', ROOT, CONTROL ? CONTROLS[CONTROL].patches : []);
+  candidate = await engine('candidate', ROOT, CONTROL ? CONTROLS[CONTROL].patches.filter(p => !p.file.endsWith('.tsx')) : []);
   off = await engine('off', ROOT, CARDS_OFF);
   if (BASE) base = await engine('base', BASE);
 } catch (e) { cannot(`a bundle did not build: ${e.message}`); }
@@ -380,11 +386,12 @@ function checkRivals(mod, s, where) {
 }
 const cardStats = { mine: 0, rival: 0 };
 let namesakeState = null;
+const markupSaves = [];
 const cardHooks = f => {
   let k = 0;
   return {
     entry(s) { if (++k % 5 === 0) { checkMine(candidate, s, `${f.name}, entry ${k}`); cardStats.mine += 1; } },
-    before(s) { if (!namesakeState) namesakeState = JSON.parse(JSON.stringify(s)); checkMine(candidate, s, `${f.name}, season ${s.season} end`); cardStats.rival += checkRivals(candidate, s, `${f.name}, season ${s.season} end`); },
+    before(s) { if (!namesakeState) namesakeState = JSON.parse(JSON.stringify(s)); if (markupSaves.length < 3 && !markupSaves.some(x => x.clubName === s.clubName)) markupSaves.push(JSON.parse(JSON.stringify(s))); checkMine(candidate, s, `${f.name}, season ${s.season} end`); cardStats.rival += checkRivals(candidate, s, `${f.name}, season ${s.season} end`); },
     summer(fin, next) { checkMine(candidate, next, `${f.name}, after summer ${fin.season}`); },
   };
 };
@@ -585,6 +592,88 @@ const onlySeason = (fin, season) => (Array.isArray(fin.pastLines) ? fin.pastLine
     if (keyed(st)) fail('dailies', `Deadline Day ${date}: the state carries the archive`);
   }
   console.log(`dailies ${checks.get('dailies') ?? 0} states of ${HOT_DATES.length} Hot Seat days and ${DEADLINE_DATES.length} Deadline Day runs looked at`);
+}
+
+/* ---------- section markup: with no provider above them the hosts draw what they drew ---------- */
+/* This protects the existing SSR recordings and every render with no card provider (the vitest files, the SSR
+   harnesses). The app itself always mounts the provider, so the shipped markup changes by design: this is not a
+   proof of the page's default path. */
+function findUp(rel) {
+  for (let d = ROOT; ; d = path.dirname(d)) {
+    if (fs.existsSync(path.join(d, rel))) return path.join(d, rel);
+    if (path.dirname(d) === d) return null;
+  }
+}
+async function markupBundle(label, root, patches = []) {
+  const NM = findUp('node_modules');
+  if (!NM) cannot('no node_modules above the tree');
+  const R = root.replaceAll('\\', '/');
+  const entry = path.join(TMP, `${label}-markup-entry.mjs`);
+  const out = path.join(TMP, `${label}-markup.mjs`);
+  fs.writeFileSync(entry, [
+    `export * as cm from '${R}/src/lib/clubManager.ts';`,
+    ...['SquadScreen', 'StatsScreen', 'LeagueLeadersCard', 'ClubDetailScreen'].map(c => `export { ${c} } from '${R}/src/components/club-manager/${c}.tsx';`),
+    `import React from 'react';`,
+    `import { renderToStaticMarkup } from 'react-dom/server';`,
+    `import { MemoryRouter } from 'react-router-dom';`,
+    `export const render = (C, props) => renderToStaticMarkup(React.createElement(MemoryRouter, null, React.createElement(C, props)));`,
+  ].join('\n') + '\n');
+  const applied = new Set();
+  await build({
+    entryPoints: [entry], outfile: out, bundle: true, format: 'esm', platform: 'node', jsx: 'automatic', logLevel: 'error',
+    absWorkingDir: root, alias: { '@': path.join(root, 'src') }, nodePaths: [NM], define: { 'process.env.NODE_ENV': '"production"' },
+    banner: { js: "import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);" },
+    loader: { '.css': 'empty', '.png': 'empty', '.svg': 'empty', '.jpg': 'empty', '.webp': 'empty' },
+    plugins: [{ name: 'cm-cards-markup-patch', setup(b) {
+      b.onLoad({ filter: /\.tsx$/ }, args => {
+        const mine = patches.filter(p => path.resolve(root, p.file) === path.resolve(args.path));
+        if (!mine.length) return undefined;
+        let text = fs.readFileSync(args.path, 'utf8').replace(/\r\n/g, '\n');
+        for (const p of mine) {
+          if (text.split(p.from).length !== 2) throw new Error(`patch anchor is not in ${p.file} exactly once: ${p.from}`);
+          text = text.split(p.from).join(p.to);
+          applied.add(p);
+        }
+        return { contents: text, loader: 'tsx', resolveDir: path.dirname(args.path) };
+      });
+    } }],
+  });
+  if (applied.size !== patches.length) throw new Error(`${label}: ${patches.length - applied.size} markup patch(es) never met their file`);
+  const mod = await import(pathToFileURL(out).href);
+  await mod.cm.ensureAllEraRosters();
+  return mod;
+}
+{
+  if (!markupSaves.length) cannot('no season end was reached, so the markup section has no save');
+  let mc, mb = null;
+  try {
+    mc = await markupBundle('candidate', ROOT, CONTROL ? CONTROLS[CONTROL].patches.filter(p => p.file.endsWith('.tsx')) : []);
+    if (BASE) mb = await markupBundle('base', BASE);
+  } catch (e) { cannot(`a markup bundle did not build: ${e.message}`); }
+  const draw = (mod, s) => {
+    mod.cm.registerCustomClub(s.customClub ?? null, s.eraId);
+    mod.cm.registerLeagueOverrides(s.leagueOverrides ?? null);
+    const rival = s.leagueClubs.find(c => c !== s.clubName);
+    return {
+      squad: mod.render(mod.SquadScreen, { squad: s.squad, xiIds: s.xiIds, eraId: s.eraId, captainId: null, career: s }),
+      stats: mod.render(mod.StatsScreen, { career: s }),
+      board: mod.render(mod.LeagueLeadersCard, { career: s, board: 'goals', onBoard: () => {} }),
+      club: mod.render(mod.ClubDetailScreen, { clubName: rival, career: s, onBack: () => {} }),
+    };
+  };
+  let same = 0, total = 0;
+  for (const s of markupSaves) {
+    const c = onStream(0x7400, () => draw(mc, s));
+    const b = mb ? onStream(0x7400, () => draw(mb, s)) : null;
+    for (const [k, html] of Object.entries(c)) {
+      tick('markup');
+      total += 1;
+      if (html.includes('data-cm-card-link') || html.includes('Seasons: this one')) fail('markup', `${s.clubName}, ${k}: a card link is drawn with no provider above it`);
+      else if (b && b[k] !== html) fail('markup', `${s.clubName}, ${k}: the markup with no provider differs from the base commit's (${html.length} against ${b[k].length} characters)`);
+      else same += 1;
+    }
+  }
+  console.log(`markup  ${same} of ${total} renders (Squad, Stats, a leaders board, a club page, on ${markupSaves.length} saves) with no provider ${mb ? 'byte equal to the base commit\'s' : 'free of any card link (base arm NOT RUN: set CARDS_BASE)'}`);
 }
 
 /* ---------- the verdict ---------- */
