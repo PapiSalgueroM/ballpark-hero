@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+mw-hookwaits: node .rc/x/mutRun.mjs hookwaits && node_modules/.bin/vite build > /tmp/vb1.log 2>&1 && RC_OUT=$RC_OUT/hook REVIEW_WALKS=R node .rc/x/walk.mjs; a=$?; PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=E PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_OUT=/tmp/pgc1 node scripts/playGmCareer.mjs > /tmp/pgc1.log 2>&1; b=$?; tail -5 /tmp/pgc1.log; git checkout -- src scripts; echo "MW hookwaits: my walk R exit $a, playGmCareer nhl E exit $b"; exit $a
+mw-hubpanels: node .rc/x/mutRun.mjs hubpanels && node_modules/.bin/vite build > /tmp/vb2.log 2>&1 && RC_OUT=$RC_OUT/hub REVIEW_WALKS=P node .rc/x/walk.mjs; a=$?; PLAY_GM_CAREER_SPORT=nhl PLAY_GM_CAREER_WALKS=A PLAY_GM_CAREER_SIZE=390 PLAY_GM_CAREER_OUT=/tmp/pgc2 node scripts/playGmCareer.mjs > /tmp/pgc2.log 2>&1; b=$?; tail -5 /tmp/pgc2.log; git checkout -- src scripts; echo "MW hubpanels: my walk P exit $a, playGmCareer nhl A exit $b"; exit $a
