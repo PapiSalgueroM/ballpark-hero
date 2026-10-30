@@ -533,7 +533,17 @@ console.log(`   desk minus asking price: ${scoreGap >= 0 ? '+' : ''}${fmt(scoreG
    The close band 24 to 36 is about five standard errors of a 2000 hour
    sample either side of 30; the walk band 45 to 78 is four to five of a 200
    table sample either side of the engine's 60. The norivals and walkfree
-   controls take each to zero. */
+   controls take each to zero.
+   Round 1600 (Club Manager reads each man's age, and the ages moved to
+   1 August): free play here runs on that world. With the desk still dealing
+   men up to 33 the score gap fell to 1.77 and the value gap to 2.33 (runner
+   r1600-s6a, the filename seed): a man of 30 or more asks 0.9 of his value,
+   so paying his ask saves the desk nothing, and the read put more of them
+   over each need's line. The desk now deals men of 29 or under on that world
+   (dealtAgeMax, src/lib/deadlineDay.ts), and on the same six streams (runner
+   r1600-s8) the score gap is 2.96, 2.72, 2.87, 3.08, 3.25, 2.95 and the value
+   gap 3.94, 3.97, 3.87, 3.94, 4.25, 3.89: under the numbers above, over every
+   floor. The floors did not move. */
 const T = {
   scoreGap: 2.5,
   winShare: 75,
