@@ -441,7 +441,9 @@ function pruneWorldRoster(career: CareerState): CareerState {
   const year = worldYear(career), years = yearsOn(career), seed = worldSeedOf(career), era = career.eraId ?? 'now';
   const listed = (record: WorldRosterState['records'][number]): boolean => projectedRoster(record.origin.club, years, era, seed)
     .some(p => p.worldRosterKey === record.key || p.p === record.origin.position && p.n === record.origin.name && year - p.a === record.origin.birthYear);
-  const kept = held.records.filter(record => record.status === 'owned' || record.status === 'retired' && record.year >= year || listed(record));
+  const referenced = new Set((career.freeAgents ?? []).map(f => f.worldRosterKey).filter((key): key is string => typeof key === 'string'));
+  const kept = held.records.filter(record => record.status === 'owned' || record.status === 'retired' && record.year >= year
+    || record.status === 'released' && referenced.has(record.key) || listed(record));
   if (kept.length === held.records.length) return career;
   const ledger = compactWorldRoster({ ...held, records: kept });
   /* A packed ledger pruned down to owned records is stored plain, so it must not share the read's objects. */
@@ -5230,6 +5232,15 @@ const CLUB_COLORS: Record<string, string> = {
   'Brisbane Roar': '#f5a800', 'Central Coast Mariners': '#f5d800',
   'Wellington Phoenix': '#f5d800', 'Sydney FC': '#6cabdd', 'Melbourne City': '#6cabdd',
   'Melbourne Victory': '#1b3f94', 'Newcastle Jets': '#0057b8', 'Perth Glory': '#5c2d91',
+  // Ligue 2: decorative colour words, verified in soccerCareerFacts.json.
+  'Red Star FC': '#0a7040', 'Annecy': '#d02128', 'Pau': '#f7d417',
+  'Dunkerque': '#1b458f', 'Grenoble': '#1b458f', 'Rodez': '#d02128',
+  'Clermont': '#d02128', 'Boulogne': '#d02128', 'Laval': '#ff6600',
+  // Serie B: decorative colour words, verified in soccerCareerFacts.json.
+  'Avellino': '#0a7040', 'Carrarese': '#f7d417', 'Catanzaro': '#d02128',
+  'Entella': '#87d8f7', 'Juve Stabia': '#f7d417', 'Mantova': '#d02128',
+  'Modena': '#f7d417', 'Padova': '#d02128', 'Südtirol': '#d02128',
+  'Vicenza': '#d02128', 'Arezzo': '#7d1c2a',
 };
 
 /**
@@ -7587,6 +7598,8 @@ export function wageFor(p: CMPlayer): number {
    so one change makes all three honest at once. */
 
 export interface FreeAgent {
+  /** The existing saved world profile, never a second copy of the player. */
+  worldRosterKey?: string;
   name: string;
   position: Position;
   age: number;
@@ -8135,7 +8148,12 @@ export function releasePlayer(career: CareerState, playerId: string): CareerStat
       ? career.releasedNames
       : [...(career.releasedNames ?? []), p.name],
   };
-  return recordActualRosterTransfer(next, p, career.clubName, null, 'release');
+  const recorded = recordActualRosterTransfer(next, p, career.clubName, null, 'release');
+  const fa = recorded.freeAgents?.find(f => f.name === p.name);
+  const linked = fa && freeAgentRecord(recorded, { ...fa, ...(p.worldRosterKey ? { worldRosterKey: p.worldRosterKey } : {}) }, p.id);
+  return linked?.status === 'released' && linked.owner === null
+    ? { ...recorded, freeAgents: recorded.freeAgents!.map(f => f.name === p.name ? { ...f, worldRosterKey: linked.key } : f) }
+    : recorded;
 }
 
 /**
@@ -8158,6 +8176,17 @@ function addFreeAgent(pool: FreeAgent[], fa: FreeAgent, state: CareerState, stil
   return [...pool.filter(x => x.name !== fa.name), fa];
 }
 
+/** Resolve only one verified saved identity. A supplied key never falls back to a namesake. */
+function freeAgentRecord(career: CareerState, fa: FreeAgent, playerId?: string): WorldRosterState['records'][number] | null {
+  if (fa.worldRosterKey !== undefined && typeof fa.worldRosterKey !== 'string') return null;
+  const held = worldRosterView(refreshWorldRoster(career));
+  const birthYear = worldYear(career) - fa.age;
+  const matches = (held?.records ?? []).filter(record => record.origin.name === fa.name
+    && record.origin.birthYear === birthYear && record.player.position === fa.position
+    && (fa.worldRosterKey === undefined || record.key === fa.worldRosterKey)
+    && (playerId === undefined || record.player.id === playerId));
+  return matches.length === 1 ? matches[0] : null;
+}
 /** Is this man interested in signing for you? A strong free agent will refuse a weak club. */
 export function freeAgentInterest(career: CareerState, fa: FreeAgent): boolean {
   const mine = freeAgentClubLevel(career);
@@ -8222,18 +8251,21 @@ export function eleventhBestRating(squad: CMPlayer[]): number {
  */
 export const FREE_AGENT_MIN_FEE = 0.5;
 
-export function freeAgentTerms(fa: FreeAgent): { wage: number; years: number; fee: number } {
+export function freeAgentTerms(fa: FreeAgent, career?: CareerState): { wage: number; years: number; fee: number } {
   const leverage = fa.age <= 23 ? 1.15 : fa.age <= 29 ? 1.3 : 0.95;
+  const returning = career && fa.reason === 'expired' && fa.fromMyClub ? freeAgentRecord(career, fa) : null;
+  const renewal = returning?.status === 'released' && returning.owner === null ? renewalTerms(returning.player) : null;
+  /* A verified returning player keeps the paid renewal's wage and fee floors. */
   /* Round 640 review: with his name, so a youth pad in the pool asks the wage
      he asked before Round 632 (wageFor prices a pad off the curve). */
-  const wage = fa.wage ?? Math.max(1, Math.round(wageFor({ name: fa.name, rating: fa.rating, age: fa.age, value: fa.value, isYouth: false } as CMPlayer) * leverage));
+  const wage = Math.max(fa.wage ?? Math.max(1, Math.round(wageFor({ name: fa.name, rating: fa.rating, age: fa.age, value: fa.value, isYouth: false } as CMPlayer) * leverage)), renewal?.wage ?? 0);
   const years = fa.age >= 31 ? 2 : 3;
   /* Round 1033: a real man with no club knows what he is worth, so he never
      signs on for less than his value. Without this he was a free asset: over
      ten clubs and two seeds, signing every real free agent and selling him on
      made 0.16m and 0.22m a sale (a man worth 1.5m came for 0.5m). */
   const floor = fa.reason === 'unattached' && !fa.generated ? Math.max(FREE_AGENT_MIN_FEE, fa.value ?? 0) : FREE_AGENT_MIN_FEE;
-  const fee = Math.max(floor, Math.round(wage * years * 0.045 * 10) / 10);
+  const fee = Math.max(floor, Math.round(wage * years * 0.045 * 10) / 10, renewal?.fee ?? 0);
   return { wage, years, fee };
 }
 
@@ -8273,15 +8305,19 @@ export function freeAgentBlock(career: CareerState, fa: FreeAgent): FreeAgentBlo
   if (!(career.freeAgents ?? []).some(x => x.name === fa.name)) return 'notInPool';
   if (career.squad.some(p => p.name === fa.name)) return 'inSquad';
   if (releasedByYou(fa) || releasedByYouNames(career).has(fa.name)) return 'releasedByYou';
-  /* A man whose deal ran out at your club enters the pool the season after,
-     and you cannot take him straight back that season: pay nothing, re-sign
-     with no fee, is renewing him for free. */
-  if (fa.fromMyClub && fa.since === career.season) return 'justLeft';
+  /* Verified natural expiry uses the paid renewal's terms. A thin legacy row
+     with no verified contract keeps its old same-season guard. */
+  const canonical = freeAgentRecord(career, fa);
+  if ((fa.worldRosterKey !== undefined && !canonical)
+    || canonical && (canonical.status !== 'released' || canonical.owner !== null)
+    || (career.retiredNames ?? []).includes(fa.name)) return 'notInPool';
+  if (fa.fromMyClub && fa.since === career.season && !(fa.reason === 'expired' && canonical)) return 'justLeft';
   if (!freeAgentInterest(career, fa)) return 'notInterested';
   if (career.squad.length >= 30) return 'squadFull';
   const cap = career.wageCap ?? wageCapFrom(wageBill(career));
-  if (wageBill(career) + freeAgentTerms(fa).wage > cap) return 'overCap';
-  if (freeAgentTerms(fa).fee > career.budget) return 'cantAfford';
+  const terms = freeAgentTerms(fa, career);
+  if (wageBill(career) + terms.wage > cap) return 'overCap';
+  if (terms.fee > career.budget) return 'cantAfford';
   return null;
 }
 
@@ -8300,17 +8336,31 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
   const pool = career.freeAgents ?? [];
   const fa = pool.find(x => x.name === name);
   if (!fa || freeAgentBlock(career, fa)) return null;
-  const { wage, years, fee } = freeAgentTerms(fa);
+  const { wage, years, fee } = freeAgentTerms(fa, career);
+  const canonical = freeAgentRecord(career, fa);
+  const restored = canonical?.status === 'released' && canonical.owner === null ? plainCopy(canonical.player) : null;
+  if (restored) {
+    delete restored.signedTerms;
+    delete restored.releaseClause;
+    delete restored.sellOnOwed;
+    delete restored.onLoan;
+    delete restored.loanFrom;
+    delete restored.loanOptionFee;
+    delete restored.loanBreakFee;
+    delete restored.transferStatus;
+    delete restored.wantsOut;
+  }
 
   const player: CMPlayer = {
+    ...(restored ?? {}),
     /* Round 567's rule: unique inside THIS squad. slug() is not injective, so
        two free agents whose names slug the same would otherwise share an id,
        and releasing either one took both off the books. */
-    id: freeSquadId(career.squad, `fa-${slug(fa.name)}-s${career.season}`),
+    id: freeSquadId(career.squad, restored?.id ?? `fa-${slug(fa.name)}-s${career.season}`),
     name: fa.name, position: fa.position, rating: fa.rating, age: fa.age,
     fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0,
     isYouth: false, seasonGoals: 0, seasonAssists: 0,
-    value: fa.value, generated: fa.generated, ...(fa.nation ? { nation: fa.nation } : {}),
+    value: fa.value, generated: restored ? madeUp(restored) : fa.generated, ...(fa.nation ? { nation: fa.nation } : {}),
     contractYears: years,
     wage,
   };
@@ -8331,10 +8381,9 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
      career with no seed never gets), now said where it is done. Round 1508: until its first summer here, when it is
      adopted with a readable ledger (adoptLivingWorld). */
   if (!livingWorldOf(career)) return state;
-  const released = worldRosterView(career)?.records.filter(record => record.status === 'released'
-    && record.player.name === player.name && record.origin.birthYear === worldYear(career) - player.age);
-  return released?.length === 1 ? recordWorldRosterTransfer(state, { player, from: null, to: state.clubName,
-    kind: 'permanent', key: released[0].key }) : state;
+  return canonical?.status === 'released' && canonical.owner === null
+    ? recordWorldRosterTransfer(state, { player, from: null, to: state.clubName,
+      kind: 'permanent', key: canonical.key }) : state;
 }
 
 /**
@@ -22484,13 +22533,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
          deal run out and signing him back would strip it for nothing. */
       founderSaleRatio: p.founderSaleRatio,
       reason: 'expired' as const,
-      /* Round 619: these are MY players whose deals ran out, so the same season
-         re-sign block has to apply to them too. Without this, letting every
-         contract expire and re-signing the same men out of window the following
-         week beat renewing them outright: measured at Arsenal, 936k a week and
-         no fee against 1,415k and 246.2m in signing fees, with the first eleven
-         unchanged. That turns the whole Round 105 contract system into a trap
-         for anybody who uses it. Let a man go and you lose him for a season. */
+      /* Natural expiry can return on paid-renewal terms once its verified
+         canonical record is linked below. Manual release keeps its embargo. */
       fromMyClub: true as const,
     })));
     squad = stillPlaying.filter(p => (p.contractYears ?? 1) > 0);
@@ -22585,7 +22629,35 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
        his key. The exits above write no squad, so this takes exactly the emergency signings' keys. */
     if (emergencyFrom.size) squad = rosterCareer.squad;
   }
-  rosterCareer = pruneWorldRoster(refreshWorldRoster(snapshotWorldRosterClub(rosterCareer, clubName)));
+  rosterCareer = refreshWorldRoster(snapshotWorldRosterClub(rosterCareer, clubName));
+  /* Link the final live pool before pruning, including newly recorded academy exits. */
+  const nextFreeAgents = (() => {
+    const gone = new Set([...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)]);
+    const carried = decayFreeAgents(career.freeAgents ?? [], career.season + 1, gone);
+    /* Round 619 review: the made up journeymen stay with the old job. They
+       were rated off the old club's level and priced off its squad, and they
+       count toward the pool's target, so carried across a move nothing new
+       was made up at the new club. Moving from Everton to Lommel all six sat
+       above Lommel's band and refused to sign for a whole season; moving up
+       they asked the old, smaller squad's wages. topUpFreeAgents below makes
+       a fresh six for the club you actually run. */
+    let out = moving ? carried.filter(f => f.reason !== 'unattached') : carried;
+    for (const f of walkedFree619) if (!gone.has(f.name)) out = addFreeAgent(out, f, career);
+    /* Round 619 review: and nobody the new season's squad already holds. The
+       emergency fill above signs men out of this very pool and nothing took
+       them out of it, so each one sat in the squad and the pool at once with
+       a Sign button that did nothing. Checked against the final squad rather
+       than the fill's own list, so any other way in is covered too. */
+    const inSquad = new Set(squad.map(p => p.name));
+    return out.filter(f => !inSquad.has(f.name)).flatMap(f => {
+      const departed = f.reason === 'expired' && f.since === season
+        ? rosterExits.find(exit => exit.kind === 'release' && exit.player.name === f.name)?.player : undefined;
+      const linked = freeAgentRecord(rosterCareer, { ...f, ...(departed?.worldRosterKey ? { worldRosterKey: departed.worldRosterKey } : {}) }, departed?.id);
+      if (linked && (linked.status !== 'released' || linked.owner !== null)) return [];
+      return [linked ? { ...f, worldRosterKey: linked.key } : f];
+    });
+  })();
+  rosterCareer = pruneWorldRoster({ ...rosterCareer, freeAgents: nextFreeAgents });
 
   const seasonTrophyCount = weighedTrophies(career.trophies.filter(t => t.season === career.season)).length;
 
@@ -22750,26 +22822,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
        join it, anyone who retired leaves it whatever else is true of him, and
        it decays so a slowly accumulating pile of good players cannot build up:
        unsigned after a season he loses a rating point, after two he is gone. */
-    freeAgents: (() => {
-      const gone = new Set([...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)]);
-      const carried = decayFreeAgents(career.freeAgents ?? [], career.season + 1, gone);
-      /* Round 619 review: the made up journeymen stay with the old job. They
-         were rated off the old club's level and priced off its squad, and they
-         count toward the pool's target, so carried across a move nothing new
-         was made up at the new club. Moving from Everton to Lommel all six sat
-         above Lommel's band and refused to sign for a whole season; moving up
-         they asked the old, smaller squad's wages. topUpFreeAgents below makes
-         a fresh six for the club you actually run. */
-      let out = moving ? carried.filter(f => f.reason !== 'unattached') : carried;
-      for (const f of walkedFree619) if (!gone.has(f.name)) out = addFreeAgent(out, f, career);
-      /* Round 619 review: and nobody the new season's squad already holds. The
-         emergency fill above signs men out of this very pool and nothing took
-         them out of it, so each one sat in the squad and the pool at once with
-         a Sign button that did nothing. Checked against the final squad rather
-         than the fill's own list, so any other way in is covered too. */
-      const inSquad = new Set(squad.map(p => p.name));
-      return out.filter(f => !inSquad.has(f.name));
-    })(),
+    freeAgents: nextFreeAgents,
     /* A settlement outlives the season it was signed in, but NOT the job.
        It belongs to the club that agreed it, and the first version carried it
        across a move unconditionally while buildSquad replaced the whole squad.

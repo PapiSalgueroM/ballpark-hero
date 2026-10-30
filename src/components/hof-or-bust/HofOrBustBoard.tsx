@@ -37,6 +37,7 @@ export function HofOrBustBoard() {
   return (
     <GameShell
       width="narrow"
+      showNavbar={false}
       title="Hall of Fame or Bust?"
       subtitle="Look at the anonymized stats and vote: Hall of Famer or bust?"
       headerExtra={

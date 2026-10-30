@@ -1,3 +1,18 @@
+## 2026-10-30, Chat soccer release: PR 442 qualified, production publish pending
+
+This release combines PRs 424, 429, 434 and 439. Candidate f296854dc83b4337487dec8a5af50a348cd0d3cc retains the latest published BT code, including Round 1566 and the applied Round 1565 data. Session K's later main changes are WORKBOARD notes only and must be preserved. The publication lease will be released after the actual live deployment receipt.
+
+Player changes:
+- Club Manager: an expired contract moves the player into the shared Market and Contracts free-agent pool with identity, development and wage/signing floors preserved. The asking-price maximum filters before the 50-result cap. Existing two-summer free-agent turnover remains; this is not permanent storage for every former player.
+- Soccer Career: 37 current clubs added for careers from 2026, with Ligue 2's 18-team/34-match and Serie B's 20-team/38-match frames, sourced managers and first-club choices, and historical manager-entry filtering. This is current coverage, not complete historical league data.
+- Menu and Footle prerequisites are included. The ticker now pauses on actual mouse movement after touch as well as mouse entry.
+
+Validation: remote app type gate, ordinary build, all 15 fatal bundle caps and all 15 rebuilt snapshot readers passed on the candidate. Club Manager rounds to 636 KiB against 636, so there is no rounded spare capacity. Feature probes covered natural contract expiry, re-signing, development/wallet preservation, filter-before-cap, current league frames and historical manager-entry controls. The full unit record is 10,028 passed with 58 existing optional skips. Candidate ticker mouse pause, touch, explicit pause and resume were observed; its legacy width assertion still fails.
+
+The full 1,022-case default audit is preserved as 751 PASS, 211 FAIL, 21 EMPTY, 33 SKIP and 6 TIMEOUT. This release does not claim a green full suite. Main comparisons, failed preparations, strict source/cache failures and diagnostic limitations remain in the release evidence. Old saves loaded without repair differences in 445 comparisons. Club-pool and league-frame changes can alter future seeded outcomes; byte-for-byte future career equality is not promised. Some newly covered historical raw-club names still lack canonical historical IDs and remain a documented data gap.
+
+The exact deployment commit, provider deployment ID and independent public readback must be recorded after publish. A preview build or an Actions transport success is not a live receipt.
+
 ## 2026-10-30 08:33 EDT, Claude session K (games): RELEASE BT IS LIVE (deployment 73a7d1af, main 6cae01ce7), with Round 1565 applied in production
 
 LIVE: main 6cae01ce73ee296e018cd4d8abb4d22b4540a608 published 08:29 EDT as deployment 73a7d1af-477e-49d6-bf4e-3ccfdb251084
@@ -19807,3 +19822,39 @@ All fifteen required built-page readers plus the normal guide and search checks 
 Artifact `12963047372` was acquired once and verified at 56,712,266 bytes, SHA256 `78bde66ad2a69b1bbc0f19286af58d4033d7d7135293bca4a0edab41200d1f21`. All 829 ZIP bodies and every source (5,453), dist (832), font-cache (10), original-generated (3) and generated (3) TAR regular body were hashed before artifact JSON was inspected. Root's archive/API/final-hold admission is `bf5a3c7e9aeb987147d22b737a9363b2fc5074198b3e35937a12446cf43e8b1d`, independent render/readers admission `7430e4b2`, and independent output/row/control admission `403cf432`. Evidence remains under `C:/Users/antho/dukb-handoff/2026-10-30/player-bingo-loan-snapshot-fix-v1/`.
 
 Scope: one generated page and the matching source guide, search metadata and derived sitemap records. This round did not run the unfiltered default unit suite, all global sims or weight-cap sweep. It preserves Bingo's existing static boot contract; the boot harness's sampled routes were other pages, so it does not claim a newly sampled native Bingo snapshot boot. Claude retains the R1571 join, combined snapshot/release verification and publication. Preserve all other pending PROJECT-STATE append tails. No main/release ref, app dependency, score cap, database or edge function was changed.
+## 2026-10-30 14:31 UTC: bounded soccer release preparation, fresh joined gates pending
+
+The owner asked to publish the reviewed Club Manager429 and Soccer Career439 updates, then continue both games. The narrow source joins Menu424/988dc9d6, CM429/81ef9c13 and SC439/2669bfb4 onto current BT main1589692 plus documentation-only publication lease c18c4b7a. It preserves the released Round1566 application and applied1565 data. No production data writes are part of this release.
+
+The union has 40 non-State paths plus this State reconciliation, ten additions and 5,502 source files. All incoming qualified bodies remain exact except the shared Club Manager engine: qualified58adb7c6 plus the existing nine-line SC decorative-colour hunk gives962aab2c18611c40c1fc998c77c384ab02b2d7b6, with a whole inverse restoring58ad. All other current-main bodies and modes stay held. This complete current State prefix is retained; conflicting older branch State headers are represented by this current record and their immutable PR histories.
+
+Product scope: natural-expiry identity/development preservation and immediate recovery at paid-renewal floors; free agents in Transfers and Contracts; an actual public asking-price maximum before the 50-result limit; 17 more Ligue 2 entries beside Nantes and20 Serie B entries from2026 with18/34 and20/38 playing frames and dated first player/manager entry guards. Existing provenance and historical-input assertions remain held. K1597's full world retention, canonical94b follow-on, K's BU integration and rating/manager-data/growth work remain separate.
+
+Earlier scoped evidence is retained at PRs424/429/439: CM21case/control/browser qualification and SC58case/full historical qualification41049636094 (admissionc86c1fd0), plus the separate build/cap/readers and browser evidence. These do not approve this new joint release. Fresh remote app types, ordinary build, unchanged15caps/readers, default unit/sim integration, guide/SEO generation and targeted browser/save journeys must qualify the actual joint source before merge and publication. No new cap, fixture, skip or threshold exception is authorized by this note. Current production remains the previously verified BT release.
+
+
+## 2026-10-30 14:54 UTC: bounded offline-suite prerequisite from ready PR434
+
+The joined release also carries the exact qualified test-only script8aae063c6b06d99d631f583096662c7174930749 from PR434. The old simFootleKitNumbers loop could retry a blocked data request forever. The reviewed change uses the existing three-attempt transport helper, a15-second request deadline and the same22-page limit. It exits with nothing checked when data is unavailable; the unchanged runner records an offline data SKIP, not a game-data pass. No new skip rule, threshold, fixture, game behavior or production data is changed.
+
+Proof41013778788/admission24e0dc95 already reproduced both original infinite retries under a20-second bound and the fixed/restored three blocked attempts, including actual ONLY dispatch classification. Its original source archive matches this joined tree's transport helper4aec1528, runAllSimsa7d56d22 and both package blobs exactly. This is a release-test prerequisite, not a new Footle gameplay feature. The joint source now differs in42paths from its leased main base; file count stays5502.
+
+The exact application source remains the already measured43f611ff tree. Fresh preflight41073911207/admission95bc6421 passed types, ordinary build, all15 unchanged current-main caps and all15 existing readers. CM printed636.1KB, which passes the existing rounded fatal predicate at636; SC831.9/840KB. No limit changed. This test-script/State follow-up gives no new whole-tree build, full-suite, gameplay, SEO or publication credit; those final gates remain required.
+
+
+## Current joint soccer release candidate, 2026-10-30 UTC: final qualification in progress
+
+PR442 combines the reviewed Menu424, Club Manager429 and Soccer Career439 source on the current BT main, with Footle434's already reviewed offline test prerequisite. Club Manager retains a naturally expired player's identity and development in the free-agent pool, makes the same pool available from Transfers and Contracts, and applies the custom asking-price limit before the 50-result limit. Soccer Career adds 37 verified first-club entries from 2026 across Ligue 2 and Serie B, with the 18-team/34-game and 20-team/38-game frames and historical pool guard held. The application code matches preparation product f41265d50b6dc62dde65342f6da620172d47f460; K1597 and the separate BU integration remain outside this release.
+
+Generation run41082021910 attempt1 at proof22524dc549143074c40c0bc4033ce93988dc06dc completed the one controlled read-only archive refresh and offline build:seo. Archive admission31027ddea79cac33a50ff9a176d41948600d8ac7bb7a75e5e1e1812de1cbcbf5 verifies all176 old boards preserved and120 new boards, through2026-10-29. SEO admissionc933b2a172cedd881e1678ecad1a0104711b58743165442e17a57bd104a6c16f verifies all11 generated modifications, no additions/deletions, all836 dist bodies and172 derived ledger/sitemap entries. Only the four archive dates changed to2026-10-30; four other snapshots differ only in the order of identical meta tags. The original source, dependencies, browser tools, fonts, HEAD, index and refs held. No --republish or database write occurred.
+
+This candidate adopts exactly those11 generated bodies plus this state append. Final candidate types, unchanged fatal size limits, all built readers, ordinary unfiltered unit/default results and current browser journeys are pending. Prior preparation passes remain history, not final-candidate credit. The stale manifest checksums in the preparation SC browser packet were found before runtime; their narrow identity cascade is being corrected without changing cases or fixtures. Publication is pending. Current live remains BT source6cae01ce73ee296e018cd4d8abb4d22b4540a608, deployment73a7d1af-477e-49d6-bf4e-3ccfdb251084.
+
+
+## 2026-10-30 UTC: Club Manager 429 and Soccer Career 439 are live
+
+Published source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5a7b-46ae-abce-1c8859e8a441. Club Manager preserves natural-expiry identity/development, makes the free-agent pool findable and signable again, and applies the public asking-price maximum before 50 results. Soccer Career adds 37 current clubs (20 Serie B, 17 Ligue 2), with 2026 first player/manager entry guards and 18-team/34-match plus 20-team/38-match playing frames. Ratings are unchanged.
+
+Hosted-M run 41133839703 has independent scoped admission d3492ce71d7b9733addafe8b9a8bb2138ee0f838495fda9b7c3e84e6b520d8d5: 172/172 raw routes clean, exact 8 CM/SC plain/slash desktop/phone records mounted and settled without saved-text loss, 50 source fingerprints and 7 effective in-memory controls. Retained findings include denied live_scores reads, console resource errors and blocked telemetry writes. Hosted-P byte parity and gameplay are outside this observation.
+
+Broad 1022 default outcomes remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT, with raw failures retained. The Season Centre focus fix 51da27a2367cc84ca0c622def41029dbc2580b68 is separate and unshipped; its fixed/whole-old-Page/restored qualification remains pending.

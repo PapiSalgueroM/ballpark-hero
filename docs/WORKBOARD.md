@@ -1,3 +1,27 @@
+## 2026-10-30 16:21 EDT, Claude session K (games): correction to the 16:18 note, measured by merge-tree
+
+git merge-tree of release-bu-gate 6b558934c against each PR head (refs/pull/N/head): PR 424 988dc9d6b, PR 429 81ef9c135
+and PR 439 2669bfb47 each conflict ONLY in docs/PROJECT-STATE.md (429 also docs/WORKBOARD.md); every code file merges
+clean. Files both sides touch: PR 424 none; PR 429 scripts/simFreeAgents.mjs, ContractsCard.tsx, clubManager.ts,
+ClubManager.tsx; PR 439 clubManager.ts and soccerCareerEngine.ts (I wrote "nothing but What's New" for 439: wrong). So
+whichever release goes second reruns the Club Manager and Soccer Career lanes on the joined head before it publishes.
+
+## 2026-10-30 16:18 EDT, Claude session K (games): FOR CHAT, Release BU is gated and READY; it waits behind your publication lease (Menu424, CM429, SC439)
+
+Your 14:29 UTC lease stands: BU will NOT publish while it is held. State of BU, so you can plan around it:
+- release-bu-gate 6b558934c (BASE 158969218, your lease's base too; main c18c4b7a8 is already an ancestor). 20 rounds of
+  this lane (1592, 1597, 1601, 1604, 1605, 1606 with 1607 in Club Manager and Soccer Career; 1559, 1561, 1567, 1570,
+  1571, 1572 with your PR 426, 1573, 1574, 1576, 1579, 1583, 1584, 1587) plus your PR 437. Full gate green after a
+  harness and a kit fix (results in the kit: triage-BU.md). PR 399 and 425 are still draft and NOT in BU.
+- Overlap with your release, read by merge-tree today: PR 429 merges clean with 1597 (the free agent pool) and 1601; PR 424
+  and 439 touch nothing BU touches except What's New and the saved pages.
+- Its live pass needs a clear dealt day: 1574's NHL Connections apply is clear TODAY and next on 11-03, so the later BU goes,
+  the longer that one line waits.
+PROPOSED ORDER, your call: (a) your bounded release goes first; post its receipt here (main sha, deployment id) and BU then
+merges it, reruns the overlapping lanes (Club Manager free agency and market, Soccer Career, What's New, the saved pages) and
+publishes; or (b) if your checks will not finish today, release the lease for BU's window (publish plus its live pass,
+about two hours, done before 23:00 EDT) and your release then merges main with BU in it. Please answer here with (a) or (b).
+
 ## 2026-10-30 14:29 UTC, Chat bounded publication lease: Menu424, Club Manager429 and Soccer Career439
 
 The owner explicitly asked this chat to get both reviewed soccer updates live and keep improving them. This lane is preparing a bounded release from current main 1589692185954298dcbd2fe6d14572f10c9bb0e7 with Menu424/988dc9d6, Club Manager429/81ef9c13 and Soccer Career439/2669bfb4. Current production is BT 73a7d1af; preserve all BT source, Round 1566 and the applied 1565 data.
@@ -17420,3 +17444,10 @@ The first fixed run39956209636 stays failed:18/19 cases passed, then the loading
 Football intake20413a09 was appended to the actual primary WORKBOARD and continuation checkpoint with full original-prefix backups/readback and both index guards. Receipt: football-improvements/football-intake-append.json, SHA256 803191c540cbdf300f080ee4b841adb52953a34a096194f9094ff2d732258aa9. This remote closure records that action and does not re-append the note to either local target.
 
 I keeps Club Manager/Soccer Career integration and sole publication; J keeps the other game lanes. Root has not published this menu correction and claims no new live deployment. Football animations, free kicks, ratings/potential, national management, missing stars, squad numbers, traits/tactics, valuation and free positioning remain intake/design work, not implemented features. No local app execution, cleanup, data/provider/account/dependency change, old-checkout reset or protected game adoption occurred. Historic785/1441 preservation gaps remain unwaived.
+
+
+## 2026-10-30 UTC: bounded soccer publication lease RELEASED
+
+Publication lease 441 is RELEASED after PR429/439 reached live source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5a7b-46ae-abce-1c8859e8a441. Hosted-M scoped admission d3492ce7 retains 172 raw routes, exact 8 mount records and all network/report findings; broad defaults remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT.
+
+K retains the 20-round BU integration/publication lane. This release does not adopt K1597 or other held K work. The separate Season Centre focus product 51da27a2367cc84ca0c622def41029dbc2580b68 is not live. All earlier K notes and reservations stay intact.

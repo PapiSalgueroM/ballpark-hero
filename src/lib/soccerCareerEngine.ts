@@ -34,7 +34,7 @@ import {
 } from './soccerCareerContinental';
 /* Round 1013: the clubs generated from Club Manager's four leagues. The file
    imports nothing, so Club Manager never enters this page's bundle. */
-import { CAREER_CLUB_POOL } from '@/data/soccerCareerClubPool';
+import { CAREER_CLUB_POOL, CAREER_POOL_SINCE } from '@/data/soccerCareerClubPool';
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
@@ -8808,6 +8808,12 @@ export function manualRetire(prev: CareerState): CareerState {
   return s;
 }
 
+/** Only the newly listed Ligue 2 and Serie B clubs wait until their verified season. */
+export function managerEntryClubInYear(club: Pick<ClubData, 'id'> | null | undefined, year: number): boolean {
+  return !club || year >= 2026 || !CAREER_CLUB_POOL.some(row =>
+    row.id === club.id && (row.league === 'Ligue 2' || row.league === 'Serie B') && CAREER_POOL_SINCE[row.name] === 2026);
+}
+
 /* ─── Post-retirement choices ─── */
 export function choosePostRetirement(prev: CareerState, choice: PostRetirementChoice, clubs: ClubData[], ownerClub?: string): CareerState {
   const s = { ...prev };
@@ -8834,12 +8840,12 @@ export function choosePostRetirement(prev: CareerState, choice: PostRetirementCh
   }
   
   if (choice === "manager") {
-    const managerClubs = clubs.filter(c => c.tier >= 3);
+    const firstYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1;
+    const managerClubs = clubs.filter(c => c.tier >= 3 && managerEntryClubInYear(c, firstYear));
     const club = managerClubs.length > 0 ? pick(managerClubs) : { name: "Unknown FC", tier: 3 };
     /* Round 1029: the first job's league, as every later job carries one */
     const listed = (club as Partial<ClubData>).league;
     /* Round 1037: before 2026-27, the league the club was really in */
-    const firstYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1;
     const firstLeague = listed ? leagueKeyInYear({ name: club.name, league: listed }, firstYear) ?? listed : undefined;
     s.managerState = {
       club: club.name,
