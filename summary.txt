@@ -1,0 +1,3 @@
+j-setup-tsc exit=0 80s | judge calls: 1 uel arm: 1
+j-uel exit=0 23s | uelprobe GREEN: 4 of 4 green (10 legs, 3 differing)
+j-dl exit=0 63s | simCmDecidingLeg: PASS, 19 of 19 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.

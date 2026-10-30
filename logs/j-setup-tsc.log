@@ -1,0 +1,9 @@
+Auto-merging scripts/data/cmLeagueRulesDigest.json
+Auto-merging scripts/fixtures/managerAppealIsolation1081/manifest.json
+Auto-merging scripts/simCmLeagueRules.mjs
+Auto-merging src/lib/clubManager.ts
+Auto-merging src/pages/WhatsNew.tsx
+a728bd6b5c Merge remote-tracking branch 'origin/r1593-cm-europa-play' into HEAD
+69fd2ba2c7 rc request r1603-run-j for 0505fb4d1ff3aa40f8f6dc229fbb2ca4b6c0bc07
+51a666b755 Round 1593: simOneOffCups plays every engine with my own club's Europa League opt in dropped (its nights would read as super cup nights or a moved calendar); the night arm is back as it was
+judge calls: 1 uel arm: 1

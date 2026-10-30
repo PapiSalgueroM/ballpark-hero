@@ -1,0 +1,4 @@
+#!serial
+j-setup-tsc: git fetch -q origin r1593-cm-europa-play:refs/remotes/origin/r1593-cm-europa-play && git worktree add -q .rcm93 HEAD && cd .rcm93 && git -c user.email=r@x -c user.name=r merge -q --no-edit -X ours origin/r1593-cm-europa-play && git log --oneline -3 && echo "judge calls: $(grep -c "judgedByTie(state, tieLine)" src/lib/clubManager.ts) uel arm: $(grep -c "uelLeg === 2) {" src/lib/clubManager.ts)" && node ../node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+j-uel: cd .rcm93 && node ../.rc/x/uelprobe1603.mjs
+j-dl: cd .rcm93 && node scripts/simCmDecidingLeg.mjs
