@@ -1,0 +1,7 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-oldledger: node_modules/.bin/vitest run src/test/cmFreeAgentOldLedger1600.test.ts src/test/cmFreeAgentLegacyIdentity.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-oldledger-exact: node .rc/x/mutExact.mjs && node_modules/.bin/vitest run src/test/cmFreeAgentOldLedger1600.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src scripts; exit $s
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+worldcont-main: git worktree add -q /tmp/m 931308159c967c3ab9af404ed01e0b8483f90bd7 && ln -s "$PWD/node_modules" /tmp/m/node_modules && cd /tmp/m && node scripts/simManagerWorldContinuity.mjs
