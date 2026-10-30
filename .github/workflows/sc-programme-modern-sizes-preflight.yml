@@ -1,0 +1,44 @@
+name: SC modern size preflight
+on:
+  push:
+    branches: [codex/sc-modern-sizes-preflight-20261030]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preflight:
+    if: github.ref == 'refs/heads/codex/sc-modern-sizes-preflight-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SC_SIZES_PREFLIGHT_SHA256: 0e6c97ded5f606f48f15715e8584d385352be20e97419bfb1b29f8f322750bb0
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-node@v4
+        with: {node-version: '24.22.1'}
+      - shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/sc-sizes-$GITHUB_RUN_ID-a$GITHUB_RUN_ATTEMPT"
+          test ! -e "$out"
+          mkdir "$out"
+          export SC_SIZES_PREFLIGHT_OUT="$out"
+          node --check scripts/qa/preflightProgrammeModernSizes.mjs
+          node --check scripts/simCareerProgramme.mjs
+          node --check scripts/lib/careerProgrammePoolAttribution.mjs
+          set +e
+          node scripts/qa/preflightProgrammeModernSizes.mjs > "$out/controller.stdout.log" 2> "$out/controller.stderr.log"
+          raw=$?
+          printf '%s\n' "$raw" > "$out/controller.exit"
+          cat "$out/controller.stderr.log" >&2
+          exit "$raw"
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-modern-sizes-${{ github.run_id }}-a${{ github.run_attempt }}
+          include-hidden-files: true
+          if-no-files-found: error
+          path: |
+            ${{ runner.temp }}/sc-sizes-${{ github.run_id }}-a${{ github.run_attempt }}/
+            !${{ runner.temp }}/sc-sizes-${{ github.run_id }}-a${{ github.run_attempt }}/tmp/**
