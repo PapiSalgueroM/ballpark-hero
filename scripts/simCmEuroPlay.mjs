@@ -17,6 +17,22 @@
  * Control `rawlength`: section 5.1 runs on the reverted engine, so the projection charges each night as a week; it
  * must fail on exactly the seasons that hold a night (printed), and nothing else.
  *
+ * SECTIONS 1 TO 4 AND 6, YOUR CLUB PLAYS IT (step A-play), over PLAY_FLEET (a club per league size that earns a place
+ * often, plus Liverpool and Real Betis, whose real fifth place was a Champions League one), seeds 1 to 4, two seasons:
+ *   1 the nights: a participant season holds 17 'uel' entries in order, each on a Thursday, none on another entry's
+ *     day, a week apart at least, no other entry's date moved, and its tail count is step A0's table (TAIL); a
+ *     watcher's calendar holds none. Control `nothursday`.
+ *   2 one competition: a winner crowned, my club an entrant, 8 league phase games a club, no club in both
+ *     competitions, each night's log score is its record in orientation; the season review's line (summary.uelRun)
+ *     is how far my club went, worked out here from the evaluation, a season with no Europa League has no line, and a
+ *     winner's review says next season's Champions League. Control `mineflip`.
+ *   3 the tie path: a two legged tie of mine is decided on its aggregate, penalties only when level, first legs and
+ *     league phase nights never; the match report's through/out agrees. Control `legfromucl`.
+ *   4 who plays: season one never (the critic's correction 1), from season two exactly on routes L, C and P.
+ *     Control `noplaygate`.
+ *   6 the head with the participant open and the ticking weeks reverted is the base (CM_EURO_PLAY_BASE, 14a9af704)
+ *     byte for byte, every step and every draw; a save with no night in any season is the base as it stands.
+ *     Control `noplayrevert`.
  * Measured on the first run (2026-10-30, head of step A-weeks): see the closing report finish-1593.md.
  * Run: node scripts/simCmEuroPlay.mjs   (CM_EURO_PLAY_ONLY=5, CM_EURO_PLAY_SEEDS=1,2, CM_EURO_PLAY_CONTROL=rawlength)
  */
@@ -122,7 +138,8 @@ async function journey(E, club, seed, seasons, onStep) {
       step(`s${season}-e${i + 1}`, cur => { const r = M.cm.playNextEntry(cur, opts); over = r.kind === 'seasonOver'; return { state: r.state, report: r.report }; });
     }
     if (!over) throw new Error(`${club} seed ${seed}: season ${season} did not end in 300 entries`);
-    step(`s${season}-finish`, cur => ({ state: M.cm.finishSeason(cur).state }));
+    /* The summary rides along for section 2's review line (the step's hash reads the state and the draws only). */
+    step(`s${season}-finish`, cur => { const f = M.cm.finishSeason(cur); return { state: f.state, summary: f.summary }; });
     if (season < seasons) step(`s${season}-rollover`, cur => ({ state: M.cm.startNextSeason(cur) }));
   }
   return steps;
@@ -280,6 +297,24 @@ function competitionCheck(M, s, where, throughs = []) {
   return played.length;
 }
 
+/** Section 2, the season review: the line says how far my club went, worked out here from the evaluation (never
+ *  through the engine's uelRunWords), and a Europa League won says next season's Champions League (correction 13). */
+const RUN_WORDS = { PO: 'knockout play-off', R16: 'round of 16', QF: 'quarter-finals', SF: 'semi-finals', F: 'final' };
+const ORDER = ['PO', 'R16', 'QF', 'SF', 'F'];
+function reviewCheck(M, s, summary, where, counts) {
+  const res = M.cm.evalWorldComp(s, 'uel', Infinity);
+  const me = s.clubName;
+  const mine = (res?.ties ?? []).filter(t => t.home === me || t.away === me).sort((a, b) => ORDER.indexOf(b.round) - ORDER.indexOf(a.round));
+  const pos = (res?.table ?? []).findIndex(r => r.club === me) + 1;
+  const sfx = n => (n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th');
+  const want = res?.winner === me ? 'won it'
+    : mine[0] ? (mine[0].round === 'F' ? 'lost the final' : `out in the ${RUN_WORDS[mine[0].round]}`)
+      : `${pos}${sfx(pos)} of ${res?.table?.length ?? 0} in the league phase`;
+  ok(summary?.uelRun === want, `2 ${where}: the review's Europa League line reads "${summary?.uelRun}", the competition says "${want}"`);
+  if (res?.winner === me) { counts.uelWon = (counts.uelWon ?? 0) + 1; ok(summary?.qualifiedUcl === true, `2 ${where}: won the Europa League and the review does not say next season's Champions League`); }
+  counts.review = (counts.review ?? 0) + 1;
+}
+
 async function sectionPlay() {
   const head = await engine('head', CONTROL_EDITS[CONTROL] ?? []);
   const probe = await head.fresh();
@@ -321,7 +356,10 @@ async function sectionPlay() {
       if (/^s\d+-e\d+$/.test(label) && slice?.me === s.clubName) prevEnd = s;
       if (/-finish$/.test(label) && prevEnd && prevEnd.season === s.season - 0 && prevEnd.worldComps?.uel?.me === prevEnd.clubName) {
         if (runs(2) || runs(3)) counts.nightsPlayed += competitionCheck(M, prevEnd, `${where0} season ${prevEnd.season}`, throughs.splice(0));
+        if (runs(2)) reviewCheck(M, prevEnd, got?.summary, `${where0} season ${prevEnd.season}`, counts);
         prevEnd = null;
+      } else if (/-finish$/.test(label) && runs(2)) {
+        ok(got?.summary && !('uelRun' in got.summary), `2 ${where0} season ${s.season}: a season that played no Europa League carries a review line "${got?.summary?.uelRun}"`);
       }
     };
     const steps = await journey(head, club, seed, 2, onStep);
@@ -337,6 +375,7 @@ async function sectionPlay() {
   if (runs(3)) ok(counts3.ties >= Math.min(PLAY_MIN, 3), `3 only ${counts3.ties} ties of mine settled over the fleet`);
   if (runs(1) || runs(4)) ok(counts.participant >= PLAY_MIN, `1 only ${counts.participant} participant seasons in the fleet, at least ${PLAY_MIN} are needed`);
   console.log(`  play: ${PLAY_FLEET.length * PLAY_SEEDS.length} saves, ${counts.participant} participant seasons, ${counts.watcher} watcher seasons, ${counts.nightsPlayed} nights played, tails ${JSON.stringify(counts.tail)}, season one participants ${counts.seasonOneMe}, ties of mine checked ${counts3.ties}`);
+  if (runs(2)) console.log(`  2 review: ${counts.review ?? 0} participant seasons read on the review, ${counts.uelWon ?? 0} of them won it`);
   if (runs6) console.log(`  6 base ${BASE}: ${identical} saves byte equal to the base on the head, ${parted} parted (participants and super cup nights, by design)`);
 }
 
