@@ -1,0 +1,168 @@
+main runs: 3 careers x 8 seasons, 24 seasons complete, 2014 actions, 5.6 s
+
+0. Sources: every verified fact has two publishers, none of them a wiki
+  facts 15, verified 10, game rules 5, sources 18
+  ok: VERIFIED_ON is a date (2026-10-05)
+  ok: at least one fact is two sourced (the 2026 finals)
+  ok: finals2026: 2 distinct publishers
+  ok: finals2026: no wiki source
+  ok: finalEight: 3 distinct publishers
+  ok: finalEight: no wiki source
+  ok: finalsCrossover: 2 distinct publishers
+  ok: finalsCrossover: no wiki source
+  ok: extraTime: 2 distinct publishers
+  ok: extraTime: no wiki source
+  ok: ladderPoints: 2 distinct publishers
+  ok: ladderPoints: no wiki source
+  ok: percentage: 2 distinct publishers
+  ok: percentage: no wiki source
+  ok: clubs: 2 distinct publishers
+  ok: clubs: no wiki source
+  ok: games: 3 distinct publishers
+  ok: games: no wiki source
+  ok: draftOrder: 2 distinct publishers
+  ok: draftOrder: no wiki source
+  ok: matchday: 3 distinct publishers
+  ok: matchday: no wiki source
+  ok: every fact is either verified or labelled a game rule
+  ok: no club nickname is on the 51 name deny list
+  ok: the default finals format (wildcard) names its fact
+
+1. v1 frozen: the recorded Round 792 saves replay through the edited file to their hashes
+  12 recorded saves, 12 replay exactly (phases prepare, quarter, break, report, complete)
+  ok: every recorded v1 save replays bit for bit
+
+2. Calendar: 23 rounds, everyone once a round, 17 opponents, 6 doubled with venues reversed
+  5 seeds x 40 seasons checked, 0 faults; double ups changed in 3510 of 3510 club season pairs (100.0%); home games 11 to 13 (printed, not asserted)
+  ok: every season: each round has every club once, 23 games, 17 opponents, 6 met twice with venues reversed
+  ok: the double up opponents change between seasons in at least 90 percent of club season pairs
+
+3. Ladder maths: the engine's ladder against the harness's own, after every round
+  ok: no career crashed or got stuck (0)
+  552 round ladders compared over 24 seasons; 0 mismatched; 0 with broken totals; 32 drawn games
+  ok: played, W/D/L, points (4 and 2), PF, PA and percentage match the own ladder, in the same order, after every round
+  ok: sum of PF equals sum of PA, wins equal losses, draws come in pairs
+  ok: drawn games occur (32)
+  goal tally: 24 seasons (21 after the first), 0 whose tally is not that season's home and away goals, 0 leading goalkicker rows off the tally
+  ok: every season's goal tally is exactly that season's home and away goals, so it resets each summer
+  ok: the history row names the top of the tally: his club, his name and his goals
+  constructed tie: club-02 4 pts 200.0% at 1, club-10 4 pts 200.0% at 2
+  ok: an exact tie orders by club index: club 2 above club 10
+
+4. Finals: the 2026 wildcard week then the final eight, against a bracket hard coded from the receipts
+  ok: no career crashed or got stuck (0)
+  24 finals series; pair faults 0, qualifier faults 0, exit faults 0, eliminated clubs reappearing 0, path faults 0, count faults 0
+  level finals 0, finals that went to extra time 1; premiers by ladder place [[1,6],[2,7],[3,6],[4,4],[5,1]]
+  ok: every tie pairs exactly the clubs the 2026 bracket names, in the right week
+  ok: the top ten and nobody else play the finals, and only the rest missed them
+  ok: an eliminated club never plays again
+  ok: premier paths: top four lose at most a qualifying final, QF winners play QF, PF, GF, 5th and 6th play EF, SF, PF, GF, 7th to 10th add the wildcard
+  ok: eleven finals a season
+  ok: no final ends level
+  300 constructed level finals: extra time blocks mean 1.09, most 4 (printed, not asserted), bound 20, still level 0
+  ok: a final level after four quarters goes to extra time and ends with a winner
+  ok: extra time happened in the run (1 in 24 finals series)
+  resolver alone: 2000 random outcome sets, 0 faults
+  ok: the bracket resolver names every pairing the receipts name, and leaves exactly one club standing
+
+5. Score realism and the long season
+  ok: no career crashed or got stuck (0)
+  4968 games: team score 80.09, goals 11.69, behinds 9.93, accuracy 0.5408, draws 0.64%, margin 38.40, late over early 0.9607
+  ok: 4968 games measured
+  league mean fatigue after each round: rounds 1 to 6 46.90, rounds 18 to 23 56.61
+  ok: late season league fatigue 56.61 inside [50, 63]
+  ok: teamScore 80.0896 inside [76, 84]
+  ok: goals 11.6933 inside [11, 12.4]
+  ok: behinds 9.9295 inside [9.3, 10.6]
+  ok: accuracy 0.5408 inside [0.52, 0.56]
+  ok: drawRate 0.0064 inside [0.0025, 0.0135]
+  ok: margin 38.3977 inside [36, 42]
+  ok: lateOverEarly 0.9607 inside [0.94, 0.99]
+
+6. Strength decides: one club at +10 skill against the same seeds unmodified
+  ok: no career crashed or got stuck (0)
+  8 paired seeds: win share lift mean 0.158, sd 0.064, floor 0.05
+  ok: a +10 skill club wins clearly more often on the same seeds
+  10 paired first seasons, the bot countering every read: top tier win share 0.676 (sd 0.082, mean place 2.7, flags 3), bottom tier 0.474 (sd 0.060, mean place 10.3, flags 0), paired gap 0.202 (sd 0.124)
+  ok: 10 of 10 paired first seasons finished
+  ok: a top tier club wins more of its first season than a bottom tier club coached the same way (gap above 0.04)
+  ok: a top tier club coached well is a contender: first season win share above 0.57
+  ok: countering the read is no sure thing: a bottom tier club coached the same way wins under 0.61 of its first season
+  ladder leader wins mean 16.1, bottom club wins mean 7.3; AI premierships by tier [[1,8],[2,7],[3,5],[4,4]], the bot club won 0 of 24 (printed)
+  ok: no career crashed or got stuck (0)
+
+7. Summer and lists: ageing, growth inside potential, retirements, the draft refill
+  ok: no career crashed or got stuck (0)
+  36 summers (6 extra careers x 2 seasons plus the main runs), 36 season starts
+  faults: list size 0, floors 0, above potential 0, gain at ceiling 0, ages 0, retirements 0, draftee ages 0, names 0, draft order 0, picks vs vacancies 0
+  young players with headroom: 6302, mean gain 3.45; name bank load 648 of 3600 (18.0%)
+  ok: 36 players on every list at every season start
+  ok: every list keeps 7 defenders, 6 midfielders, 2 rucks and 7 forwards after every draft
+  ok: nobody grows above potential, and players at their ceiling never gain
+  ok: young players with headroom gain on average
+  ok: everyone ages a year, retirees leave, draftees are 18
+  own retirement rule: 81 players reached 35 after a summer birthday, 0 faults
+  ok: nobody under 31 retires and nobody plays on past 35 (the guide's rule, checked without the engine)
+  ok: names are unique and non-empty across every list
+  ok: the draft order follows the declared rule and each club's picks equal its vacancies
+  constructed: 4 drafts where three clubs lost every ruck, 0 lists left short
+  ok: clubs pick role need first, so a club that lost its rucks drafts back to the floor
+  constructed: one pick left and one ruck short; refusal reads "Your list still needs 1 more ruck, and this pick would leave too few picks to get there."
+  ok: a pick that leaves your list short of a floor is refused with the reason
+  ok: the pick that fills the floor is taken
+  seed 61: league mean skill 63.68 to 66.80 (range 63.35 to 67.85, slope 0.099 a season), player spread 7.32 to 15.22
+  seed 61: five season means, first and last: skill 63.80 and 65.81, spread 14.81 and 8.92
+  ok: seed 61: league mean skill and spread, averaged over the first and the last five seasons, stay inside their bands
+  ok: seed 61: no drift in league skill across 24 seasons
+
+8. Save: round trips in every phase, size over many seasons, refusals
+  ok: no career crashed or got stuck (0)
+  475 saves written and read back across phases break, draft, finals, prepare, quarter, report, seasonOver, summer; 0 refused
+  ok: every real save reads back, in every phase
+  ok: playing on from read back saves ends season 3 exactly where an uninterrupted run does
+  seed 11: save peak 137433 chars over 8 seasons (cap 400000), slope after season 3 319.9 chars a season
+  ok: seed 11: the save stays well under its cap
+  ok: seed 11: the save does not grow season on season
+  seed 22: save peak 137652 chars over 8 seasons (cap 400000), slope after season 3 416.5 chars a season
+  ok: seed 22: the save stays well under its cap
+  ok: seed 22: the save does not grow season on season
+  seed 33: save peak 137367 chars over 8 seasons (cap 400000), slope after season 3 358.1 chars a season
+  ok: seed 33: the save stays well under its cap
+  ok: seed 33: the save does not grow season on season
+  ok: a real save after one season reads
+  ok: refuses a wrong version
+  ok: refuses an unknown key
+  ok: refuses 37 players on a list
+  ok: refuses a duplicate player id
+  ok: refuses a floor broken outside the draft
+  ok: refuses a foreign club id
+  ok: refuses a raw input over the cap
+  mid match save: opponent squad 2 rucks cut to 1, engine throws on play
+  ok: refuses a mid match save whose opponent matchday 23 cannot field a lineup
+  ok: refuses broken JSON, nothing, and raw input over the cap
+
+9. Determinism and dice
+  ok: no career crashed or got stuck (0)
+  ok: the same seed and actions give the same state (85 actions)
+  ok: playing the whole match equals four quarters with the same tactic
+  ok: the same pairing in seasons 1 and 2 rolls different dice
+  finals dice labels 23, 24, 25, 26, 27 (home and away rounds 0 to 22); 7 of your finals checked, 0 off their week's label
+  ok: every finals week rolls its own dice label, above every home and away round
+  40 paired matches, each quarter countering what the opponent actually plays against playing into it: 89.3 points (sd 23.2); won 36 countering, 2 played into it; floor 40
+  ok: your tactic is applied to your side: countering what they play wins the same match by more
+  120 paired matches, the whole match countering the read against playing into it: 27.1 points (sd 39.5); floor 12
+  ok: countering the read still pays on average
+  26 of your matches, 1106 scoring events, 0 by a player outside his club's matchday 23
+  ok: every score in your matches comes from that club's own matchday 23
+
+10. Tiles and routing
+  ok: no career crashed or got stuck (0)
+  ok: tile states cover every phase (7 of 7)
+  165 states (phases preparehomeAway, quarterhomeAway, breakhomeAway, reporthomeAway, preparefinals, reportfinals, quarterfinals, breakfinals, seasonOverfinals, summerfinals, draftfinals): 0 with an empty word, 0 wrong round, 0 ladder tiles off the ladder row
+  ok: every tile has a title, a value and a second line in every phase
+  ok: the Next match tile reads "Round N of 23" with the right N
+  ok: the Ladder tile is the ladder row: place, points and percentage
+  chooseBoard: 7 cases, 0 wrong
+  ok: a valid full season opens the league, an unfinished ten round season the legacy board, otherwise the menu
+
+simAussieRulesSeason: all eleven sections green in 30.6 s

@@ -1,0 +1,23 @@
+# Release BU lane n: the Aussie Rules Manager real AFL clubs (Round 1572) with the other lane's PR 426 copy: the names sim and its controls, the season and board sims, the home copy pair and the schema pair (index.html moved).
+simAflClubNames: node scripts/simAflClubNames.mjs
+simAflClubNames-long: AFL_NAMES_LONG=1 node scripts/simAflClubNames.mjs
+c-typo: AFL_NAMES_CONTROL=typo node scripts/simAflClubNames.mjs
+c-onesource: AFL_NAMES_CONTROL=onesource node scripts/simAflClubNames.mjs
+c-ladder: AFL_NAMES_CONTROL=ladder node scripts/simAflClubNames.mjs
+c-simdrift: AFL_NAMES_CONTROL=simdrift node scripts/simAflClubNames.mjs
+c-oldsave: AFL_NAMES_CONTROL=oldsave node scripts/simAflClubNames.mjs
+c-mixed: AFL_NAMES_CONTROL=mixed node scripts/simAflClubNames.mjs
+c-screen: AFL_NAMES_CONTROL=screen node scripts/simAflClubNames.mjs
+c-switchlost: AFL_NAMES_CONTROL=switchlost node scripts/simAflClubNames.mjs
+simAussieRulesSeason: node scripts/simAussieRulesSeason.mjs
+simAussieRulesLeagueBoard: node scripts/simAussieRulesLeagueBoard.mjs
+lb-afterflag: AUSSIE_LEAGUE_BOARD_CONTROL=afterflag node scripts/simAussieRulesLeagueBoard.mjs
+lb-lastquarter: AUSSIE_LEAGUE_BOARD_CONTROL=lastquarter node scripts/simAussieRulesLeagueBoard.mjs
+lb-refusal: AUSSIE_LEAGUE_BOARD_CONTROL=refusal node scripts/simAussieRulesLeagueBoard.mjs
+lb-completion: AUSSIE_LEAGUE_BOARD_CONTROL=completion node scripts/simAussieRulesLeagueBoard.mjs
+simAussieRulesManager: node scripts/simAussieRulesManager.mjs
+simAussieRulesManagerBoard: node scripts/simAussieRulesManagerBoard.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simSchema: node scripts/simSchema.mjs

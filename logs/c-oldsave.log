@@ -1,0 +1,45 @@
+
+0. sources: 18 clubs, every printed string from two independent non wiki publishers, the data file equals its receipts
+  ok: 18 clubs in the data file, 18 in the ledger (18 expected)
+  ok: ladder places are 1 to 18 once each, in ladder order
+  ok: no club's full or short form equals another club's (36 strings)
+  ok: every string is trimmed, single spaced and dash free (0 bad)
+  ok: every full form, short form and ladder place has two or more distinct publishers (54 checked)
+  ok: no publisher or address is a wiki (14 read)
+  ok: AFL.com.au and the club sites count as the one publisher AFL (1 such source)
+  ok: the read date 2026-10-29 is a date and matches the ledger and every source's read date
+  ok: the data file's 7 sources are the ledger's, id for id and publisher for publisher
+  ok: 18 of 18 rows equal the ledger string for string and source for source
+  ok: every one of 154 receipt lines prints its string (or starts with its ladder place)
+  ok: every one of 36 ladder receipt lines names its own club in the cell after its place
+  ok: each of 2 names a ladder source prints for a club is one of that club's ladder sources and no other club's form
+
+3. old saves: every base save loads, round trips, opens the league and plays on to the base
+  ok: the record holds 16 save recipes (16 expected)
+  FAIL [3]: breakAfterSwap: readLeagueSave refused a base save
+  FAIL [3]: prepare: readLeagueSave refused a base save
+  FAIL [3]: quarter: readLeagueSave refused a base save
+  FAIL [3]: report: readLeagueSave refused a base save
+  FAIL [3]: lastHomeAway: readLeagueSave refused a base save
+  FAIL [3]: finalsPrepare: readLeagueSave refused a base save
+  FAIL [3]: finalsReport: readLeagueSave refused a base save
+  FAIL [3]: seasonOver: readLeagueSave refused a base save
+  FAIL [3]: summer: readLeagueSave refused a base save
+  FAIL [3]: draftPart: readLeagueSave refused a base save
+  FAIL [3]: season2Prepare: readLeagueSave refused a base save
+  FAIL [3]: season3Break: readLeagueSave refused a base save
+  FAIL [3]: tier1MidMatch: readLeagueSave refused a base save
+  FAIL [3]: tier2FinalsNoGame: readLeagueSave refused a base save
+  FAIL [3]: tier4Break: readLeagueSave refused a base save
+  FAIL [3]: tier5Season2Report: readLeagueSave refused a base save
+  ok: 16 of 16 recipes replay to the base's raw save string
+  FAIL [3]: 0 of 16 load and 0 round trip byte for byte
+  FAIL [3]: 0 of 16 open the league board
+  FAIL [3]: 0 of 16 play 60 more bot actions to the base's raw and masked hash
+  FAIL [3]: 0 of 16 never carry a clubSet key
+  FAIL [3]: 0 of 16 print their own invented names through clubFull and clubShort for all 18 ids
+  FAIL [3]: 0 of 0 saves with a match show "v <invented place>" on the hub's Next match
+  FAIL [3]: 0 of 16 real twins (the same save under the real names, built by this harness) load, round trip and mask to the same game
+  FAIL [3]: 0 of 64 wrong ways to write a set are refused (clubSet fictional, afl2026 over invented names, one club renamed, an invented clubName)
+
+simAflClubNames control oldsave: target section 3 RED, independent section 0 green, 1.2 s. RED as intended

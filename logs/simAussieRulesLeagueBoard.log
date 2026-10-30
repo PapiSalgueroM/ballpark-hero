@@ -1,0 +1,32 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > opens the hub from the 18 club menu, and every box opens a panel with a way back 544ms
+ ✓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > plays a round in three taps: prepare, the whole match, next 80ms
+ ✓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > shows the read before a quarter and what the opponent really played after it 32ms
+ ✓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > shows the finals tile and the bracket once the finals start 202ms
+ ✓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > lifts the cup with the Grand Final score when you win the flag 222ms
+ ✓ src/test/aussieRulesLeague.test.ts > Aussie Rules Manager full season engine > starts 18 fixed clubs of 36 generated players with unique names and a readable save 35ms
+ ✓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > shows the premiership on the hub when you wrap up the season from the match panel 194ms
+ ✓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > refuses a draft pick that would leave your list short of rucks, and says why 388ms
+ ✓ src/test/aussieRulesLeague.test.ts > Aussie Rules Manager full season engine > reads back a real save in every phase of a season and refuses forged ones 1762ms
+ ✓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > removes the old ten round save on start and writes the whole state after each action 21ms
+ ✓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > records one completion for each finished season and stays quiet when a finished season is restored 612ms
+ ✓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > keeps playing in memory with a notice when storage refuses writes 6ms
+ ✓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > refuses an unreadable save whole, says so and leaves it in place 27ms
+ ✓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > starts season two after the draft 242ms
+ ✓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > opens an unfinished ten round season on the old board, and its new season goes to the full season menu 154ms
+
+ Test Files  2 passed (2)
+      Tests  15 passed (15)
+   Start at  14:58:39
+   Duration  3.69s (transform 606ms, setup 141ms, collect 1.17s, tests 4.53s, environment 622ms, prepare 145ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > opens an unfinished ten round season on the old board, and its new season goes to the full season menu
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+simAussieRulesLeagueBoard: all 15 engine, hook, board and page tests passed (4.2 s)

@@ -1,0 +1,70 @@
+
+3. old saves: every base save loads, round trips, opens the league and plays on to the base
+  ok: the record holds 16 save recipes (16 expected)
+  ok: 16 of 16 recipes replay to the base's raw save string
+  ok: 16 of 16 load and 16 round trip byte for byte
+  ok: 16 of 16 open the league board
+  ok: 16 of 16 play 60 more bot actions to the base's raw and masked hash
+  ok: 16 of 16 never carry a clubSet key
+  ok: 16 of 16 print their own invented names through clubFull and clubShort for all 18 ids
+  ok: 10 of 10 saves with a match show "v <invented place>" on the hub's Next match
+  ok: 16 of 16 real twins (the same save under the real names, built by this harness) load, round trip and mask to the same game
+  ok: 64 of 64 wrong ways to write a set are refused (clubSet fictional, afl2026 over invented names, one club renamed, an invented clubName)
+
+5. the switch: every base save switches to the real names losslessly, once, and plays on as the same game
+  FAIL [5]: breakAfterSwap: the switched save is refused or misnamed
+  FAIL [5]: breakAfterSwap: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: breakAfterSwap: a real career is switched again
+  FAIL [5]: prepare: the switched save is refused or misnamed
+  FAIL [5]: prepare: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: prepare: a real career is switched again
+  FAIL [5]: quarter: the switched save is refused or misnamed
+  FAIL [5]: quarter: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: quarter: a real career is switched again
+  FAIL [5]: report: the switched save is refused or misnamed
+  FAIL [5]: report: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: report: a real career is switched again
+  FAIL [5]: lastHomeAway: the switched save is refused or misnamed
+  FAIL [5]: lastHomeAway: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: lastHomeAway: a real career is switched again
+  FAIL [5]: finalsPrepare: the switched save is refused or misnamed
+  FAIL [5]: finalsPrepare: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: finalsPrepare: a real career is switched again
+  FAIL [5]: finalsReport: the switched save is refused or misnamed
+  FAIL [5]: finalsReport: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: finalsReport: a real career is switched again
+  FAIL [5]: seasonOver: the switched save is refused or misnamed
+  FAIL [5]: seasonOver: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: seasonOver: a real career is switched again
+  FAIL [5]: summer: the switched save is refused or misnamed
+  FAIL [5]: summer: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: summer: a real career is switched again
+  FAIL [5]: draftPart: the switched save is refused or misnamed
+  FAIL [5]: draftPart: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: draftPart: a real career is switched again
+  FAIL [5]: season2Prepare: the switched save is refused or misnamed
+  FAIL [5]: season2Prepare: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: season2Prepare: a real career is switched again
+  FAIL [5]: season3Break: the switched save is refused or misnamed
+  FAIL [5]: season3Break: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: season3Break: a real career is switched again
+  FAIL [5]: tier1MidMatch: the switched save is refused or misnamed
+  FAIL [5]: tier1MidMatch: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: tier1MidMatch: a real career is switched again
+  FAIL [5]: tier2FinalsNoGame: the switched save is refused or misnamed
+  FAIL [5]: tier2FinalsNoGame: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: tier2FinalsNoGame: a real career is switched again
+  FAIL [5]: tier4Break: the switched save is refused or misnamed
+  FAIL [5]: tier4Break: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: tier4Break: a real career is switched again
+  FAIL [5]: tier5Season2Report: the switched save is refused or misnamed
+  FAIL [5]: tier5Season2Report: the switched save is not byte for byte the real twin (key order or a name)
+  FAIL [5]: tier5Season2Report: a real career is switched again
+  FAIL [5]: 0 of 16 switched saves load, round trip, carry clubSet 'afl2026' and the real name of the player's club
+  ok: 16 of 16 switched saves equal the base save once names are masked (nothing else changed)
+  FAIL [5]: 0 of 16 switched saves are byte for byte the real twin built by this harness (createLeague's key order)
+  FAIL [5]: 16 of 16 switch once only, and 0 of 16 real careers come back as they are
+  ok: 16 of 16 play 60 more bot actions after the switch to the base continuation's masked hash
+  ok: 16 of 16 leave the state they were given untouched
+
+simAflClubNames control switchlost: target section 5 RED, independent section 3 green, 3.2 s. RED as intended

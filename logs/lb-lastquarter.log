@@ -1,0 +1,49 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/aussieRulesLeague.test.ts > Aussie Rules Manager full season engine > starts 18 fixed clubs of 36 generated players with unique names and a readable save 53ms
+ ↓ src/test/aussieRulesLeague.test.ts > Aussie Rules Manager full season engine > reads back a real save in every phase of a season and refuses forged ones
+ ↓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > removes the old ten round save on start and writes the whole state after each action
+ ↓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > records one completion for each finished season and stays quiet when a finished season is restored
+ ↓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > keeps playing in memory with a notice when storage refuses writes
+ ↓ src/test/aussieRulesLeague.test.ts > useAussieRulesLeague > refuses an unreadable save whole, says so and leaves it in place
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > opens the hub from the 18 club menu, and every box opens a panel with a way back
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > plays a round in three taps: prepare, the whole match, next
+ × src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > shows the read before a quarter and what the opponent really played after it 88ms
+   → expected 'Opponent read: Direct, their usual st…' to contain 'Last quarter they played Control.'
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > shows the finals tile and the bracket once the finals start
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > lifts the cup with the Grand Final score when you win the flag
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > shows the premiership on the hub when you wrap up the season from the match panel
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > refuses a draft pick that would leave your list short of rucks, and says why
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > starts season two after the draft
+ ↓ src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > opens an unfinished ten round season on the old board, and its new season goes to the full season menu
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 1 passed | 13 skipped (15)
+   Start at  14:58:47
+   Duration  1.69s (transform 564ms, setup 147ms, collect 1.11s, tests 144ms, environment 597ms, prepare 265ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/aussieRulesLeagueBoard.test.tsx > AussieRulesLeagueBoard > shows the read before a quarter and what the opponent really played after it
+AssertionError: expected 'Opponent read: Direct, their usual st…' to contain 'Last quarter they played Control.'
+
+Expected: "Last quarter they played Control."
+Received: "Opponent read: Direct, their usual style, though they switch it up some quarters. Last quarter they played Direct. Quarter 1 break."
+
+ ❯ src/test/aussieRulesLeagueBoard.test.tsx:74:58
+     72|     click(view, '[data-arl-play]');
+     73|     expect(saved().phase).toBe('break');
+     74|     expect(view.getByText(/Opponent read:/).textContent).toContain(`La…
+       |                                                          ^
+     75|   });
+     76| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simAussieRulesLeagueBoard lastquarter: RED as intended, "shows the read before a quarter and what the opponent really played after it" fails and the independent engine test passes (2.1 s)

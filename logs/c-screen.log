@@ -1,0 +1,8 @@
+
+4. screens: src/test/aussieRulesClubNames.test.tsx through vitest (control screen)
+  real set pulled: {"header":5,"hub":3,"premier":2,"score":6,"events":87,"results":22,"ladder":90,"finals":4,"history":6,"draft":9}
+  vitest exit 1 in 3.5 s
+  FAIL [4]: (ii) a real club career prints only two sourced club names on every panel failed on an assertion
+  ok: (i) a new career picks from the 18 AFL clubs by name, under the five 2026 ladder bands passed
+
+simAflClubNames control screen: target section 4 RED, independent section 4i green, 3.5 s. RED as intended
