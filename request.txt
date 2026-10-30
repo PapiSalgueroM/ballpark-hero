@@ -1,0 +1,12 @@
+#!serial
+baseWrite: git worktree add /tmp/base 14a9af704 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cp .rc/x/oldLedgerProbe.test.ts /tmp/base/src/test/ && cd /tmp/base && PHASE=write LEDGER_FILE=/tmp/ledger-base.json node_modules/.bin/vitest run src/test/oldLedgerProbe.test.ts --testTimeout=600000 --hookTimeout=120000 && cp /tmp/ledger-base.json "$RC_OUT/"
+baseReadBase: cd /tmp/base && PHASE=read LEDGER_FILE=/tmp/ledger-base.json node_modules/.bin/vitest run src/test/oldLedgerProbe.test.ts --testTimeout=600000 --hookTimeout=120000
+headReadBase: cp .rc/x/oldLedgerProbe.test.ts src/test/ && PHASE=read LEDGER_FILE=/tmp/ledger-base.json node_modules/.bin/vitest run src/test/oldLedgerProbe.test.ts --testTimeout=600000 --hookTimeout=120000; s=$?; rm -f src/test/oldLedgerProbe.test.ts; exit $s
+headWrite: cp .rc/x/oldLedgerProbe.test.ts src/test/ && PHASE=write LEDGER_FILE=/tmp/ledger-head.json node_modules/.bin/vitest run src/test/oldLedgerProbe.test.ts --testTimeout=600000 --hookTimeout=120000; s=$?; rm -f src/test/oldLedgerProbe.test.ts; exit $s
+headReadHead: cp .rc/x/oldLedgerProbe.test.ts src/test/ && PHASE=read LEDGER_FILE=/tmp/ledger-head.json node_modules/.bin/vitest run src/test/oldLedgerProbe.test.ts --testTimeout=600000 --hookTimeout=120000; s=$?; rm -f src/test/oldLedgerProbe.test.ts; exit $s
+ledger-make-base: git worktree add -f /tmp/base 14a9af704 >/dev/null 2>&1; git -C /tmp/base rev-parse HEAD; node .rc/x/ledgerProbe.mjs make /tmp/base /tmp/base-saves.json
+ledger-base-on-base: node .rc/x/ledgerProbe.mjs load /tmp/base /tmp/base-saves.json
+ledger-base-on-head: node .rc/x/ledgerProbe.mjs load . /tmp/base-saves.json
+ledger-make-head: node .rc/x/ledgerProbe.mjs make . /tmp/head-saves.json
+ledger-head-on-head: node .rc/x/ledgerProbe.mjs load . /tmp/head-saves.json
+headSha: git rev-parse HEAD^ HEAD; git log -1 --format=%s HEAD

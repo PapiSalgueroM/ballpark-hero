@@ -1,0 +1,11 @@
+baseWrite exit=0 4s |    Duration  2.66s (transform 1.38s, setup 79ms, collect 1.65s, tests 122ms, environment 326ms, prepare 154ms)
+baseReadBase exit=0 3s |    Duration  2.62s (transform 1.38s, setup 71ms, collect 1.65s, tests 176ms, environment 297ms, prepare 143ms)
+headReadBase exit=0 3s |    Duration  2.69s (transform 1.42s, setup 70ms, collect 1.72s, tests 178ms, environment 306ms, prepare 102ms)
+headWrite exit=0 3s |    Duration  2.67s (transform 1.43s, setup 71ms, collect 1.74s, tests 134ms, environment 310ms, prepare 114ms)
+headReadHead exit=0 3s |    Duration  2.75s (transform 1.42s, setup 70ms, collect 1.72s, tests 199ms, environment 308ms, prepare 72ms)
+ledger-make-base exit=0 0s | saved 3
+ledger-base-on-base exit=0 0s | ledgerProbe load: 0 problems
+ledger-base-on-head exit=0 0s | ledgerProbe load: 0 problems
+ledger-make-head exit=0 0s | saved 3
+ledger-head-on-head exit=0 0s | ledgerProbe load: 0 problems
+headSha exit=0 0s | rc request r1600-vfy1 for 6ad99e30b20ea65fbe512e3a63a21b4a5d0517ea
