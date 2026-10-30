@@ -1,0 +1,27 @@
+{
+  "readOnly": true,
+  "kind": "DIAGNOSTIC_DATABASE_SNAPSHOT_NOT_INDEPENDENT_STAT_VERIFICATION_OR_APP_IMPORT",
+  "query": "select abbr,year,ypg,tdpg,ints,sacks,def_rank,rating from public.nfl_team_defense where (abbr='NE' and year=2011) or (abbr='KC' and year=2022) order by year,abbr",
+  "rows": [
+    {
+      "abbr": "NE",
+      "year": 2011,
+      "ypg": 428,
+      "tdpg": "2.4",
+      "ints": 23,
+      "sacks": 40,
+      "def_rank": 31,
+      "rating": 44
+    },
+    {
+      "abbr": "KC",
+      "year": 2022,
+      "ypg": 351,
+      "tdpg": "2.5",
+      "ints": 11,
+      "sacks": 55,
+      "def_rank": 17,
+      "rating": 69
+    }
+  ]
+}
