@@ -1,0 +1,68 @@
+name: CM1597 canonical links causal baseline only
+on:
+  push:
+    branches: [codex/cm-1597-canonical-links-baseline-20261030]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cm1597-canonical-baseline-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  baseline:
+    if: github.ref == 'refs/heads/codex/cm-1597-canonical-links-baseline-20261030'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: External evidence and frozen controller
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/cm1597-canonical-baseline-${GITHUB_RUN_ID}-a${GITHUB_RUN_ATTEMPT}"
+          mkdir "$out"
+          echo "CM_JOIN_OUT=$out" >> "$GITHUB_ENV"
+          printf '%s\n' "$GITHUB_SHA" > "$out/PROOF-SHA.txt"
+          printf '%s  %s\n' 85780fb615a782f6df2ee13ef5f8b0abaf430a32dbac4501fb96481d90df0a6c scripts/qa/proveCm1597CanonicalBaseline.mjs | sha256sum --check
+      - name: Exact package installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw=0
+          npm ci --no-audit --no-fund > "$CM_JOIN_OUT/npm-ci.stdout.log" 2> "$CM_JOIN_OUT/npm-ci.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$CM_JOIN_OUT/npm-ci.exit"
+          exit "$raw"
+      - name: Controller syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw=0
+          node --check scripts/qa/proveCm1597CanonicalBaseline.mjs > "$CM_JOIN_OUT/controller-syntax.stdout.log" 2> "$CM_JOIN_OUT/controller-syntax.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$CM_JOIN_OUT/controller-syntax.exit"
+          exit "$raw"
+      - name: Real types and exact two-red ten-preserve baseline
+        shell: bash
+        env:
+          SIM_NETWORK: offline
+        run: |
+          set -euo pipefail
+          raw=0
+          SIM_OFFLINE_RECEIPT="$CM_JOIN_OUT/transport.jsonl" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/proveCm1597CanonicalBaseline.mjs > "$CM_JOIN_OUT/controller.stdout.log" 2> "$CM_JOIN_OUT/controller.stderr.log" || raw=$?
+          printf '%s\n' "$raw" > "$CM_JOIN_OUT/controller.exit"
+          exit "$raw"
+      - name: Retain original causal evidence even on refusal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm1597-canonical-baseline-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ env.CM_JOIN_OUT }}
+          if-no-files-found: error
+          retention-days: 14
