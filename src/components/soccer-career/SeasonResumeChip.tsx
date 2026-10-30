@@ -27,7 +27,7 @@ interface Props {
   career: CareerState;
   /** Changes whenever the page wants the record read again (the Season Centre just closed). */
   at: number;
-  onOpen: (row: SeasonRecord) => void;
+  onOpen: (row: SeasonRecord, opener?: HTMLButtonElement) => void;
 }
 
 export default function SeasonResumeChip({ career, at, onOpen }: Props) {
@@ -38,7 +38,7 @@ export default function SeasonResumeChip({ career, at, onOpen }: Props) {
   if (!resume || !row || row.type !== 'playing' || !(row.apps > 0)) return null;
   return (
     <div className="mt-2">
-      <Button onClick={() => onOpen(row)} variant="outline" className="w-full h-11 text-sm font-bold" data-season-resume>
+      <Button onClick={event => onOpen(row, event.currentTarget)} variant="outline" className="w-full h-11 text-sm font-bold" data-season-resume>
         📺 {resumeLabel(resume, `${row.year}/${String(row.year + 1).slice(-2)}`, 'matchday')}
       </Button>
     </div>

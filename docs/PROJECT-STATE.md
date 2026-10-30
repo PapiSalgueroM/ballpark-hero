@@ -19834,3 +19834,14 @@ Published source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5
 Hosted-M run 41133839703 has independent scoped admission d3492ce71d7b9733addafe8b9a8bb2138ee0f838495fda9b7c3e84e6b520d8d5: 172/172 raw routes clean, exact 8 CM/SC plain/slash desktop/phone records mounted and settled without saved-text loss, 50 source fingerprints and 7 effective in-memory controls. Retained findings include denied live_scores reads, console resource errors and blocked telemetry writes. Hosted-P byte parity and gameplay are outside this observation.
 
 Broad 1022 default outcomes remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT, with raw failures retained. The Season Centre focus fix 51da27a2367cc84ca0c622def41029dbc2580b68 is separate and unshipped; its fixed/whole-old-Page/restored qualification remains pending.
+
+
+## 2026-10-30 UTC: Soccer Career pending-centre focus fix, PR446
+
+Runtime source 51da27a2367cc84ca0c622def41029dbc2580b68 captures the actual centre opener and restores it after close. Live play uses the current newspaper Continue button when the old opener has been replaced. App types and build pass, with all 15 unchanged size limits and 15 snapshot readers. Club Manager has zero rounded size-budget spare (636.2KB printed, rounded636 versus636); no budget changed.
+
+Browser run41137330144 recorded four fixed passes, four owned BODY-focus failures with the whole original Page, then four restored passes. Fixed/restored836 build bodies match the separately admitted S build. Official saves, all134 live random draws, scroll and late focus remain held; all21 finish checks passed. Root reviewed all52 original PNG references (21 unique). Independent bounded admission9f786590 applies to those exact four pending-close contexts.
+
+Existing component run41139346567 recorded phone12 healthy passes and trophy12 healthy passes, with its existing losing-season control caught (5 failed,7 passed). The retained trophy JSON is the final control report, not healthy JSON. Source and dependency holds remain strict with only the existing199-byte generated test-results cache admitted. These component checks do not cover the Page's lazy phone/trophy handoff. Resume and loaded/error-centre paths also remain outside this browser scope.
+
+This focus follow-up is queued in PR446 and has not been published. The requested Club Manager429 and Soccer Career439 updates remain the qualified live release931308/D115f. IndexNow run41136965951 accepted six updated URLs with HTTP200; acceptance does not guarantee indexing. The broad1022 results remain751PASS/211FAIL/21EMPTY/33SKIP/6TIMEOUT.

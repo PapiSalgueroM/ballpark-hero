@@ -17451,3 +17451,10 @@ I keeps Club Manager/Soccer Career integration and sole publication; J keeps the
 Publication lease 441 is RELEASED after PR429/439 reached live source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5a7b-46ae-abce-1c8859e8a441. Hosted-M scoped admission d3492ce7 retains 172 raw routes, exact 8 mount records and all network/report findings; broad defaults remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT.
 
 K retains the 20-round BU integration/publication lane. This release does not adopt K1597 or other held K work. The separate Season Centre focus product 51da27a2367cc84ca0c622def41029dbc2580b68 is not live. All earlier K notes and reservations stay intact.
+
+
+## 2026-10-30 UTC: Soccer Career focus follow-up in PR446
+
+Qualified runtime source51da27a2367cc84ca0c622def41029dbc2580b68, browser41137330144: fixed4PASS, whole-old-Page4owned focus failures, restored4PASS. Existing component41139346567: phone12PASS, trophy12healthyPASS plus effective control. Types/build/all15size limits/all15snapshot readers passed on identical runtime source. Same-round State carries scope and retained findings.
+
+PR446 is queued for integration. The earlier publication lease441 remains RELEASED and K keeps the20-round BU publication lane. Root has not published this separate focus fix. All earlier notes, reservations and the live931308/D115f receipt are retained.
