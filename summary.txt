@@ -1,0 +1,9 @@
+vitest-card exit=0 10s |    Duration  9.65s (transform 2.93s, setup 456ms, collect 10.01s, tests 8.90s, environment 2.34s, prepare 572ms)
+simUclLegs exit=0 3s | simUclLegs: green. Two legs, the right ground each week, and each season judged by its own rule for a level tie.
+simClubManagerMeters exit=0 23s | simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prints its goals pair.
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, no daily carries the real fixture key, 
+tsc exit=0 67s | 
+simExtraTime exit=0 77s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
+simManagerHotSeat exit=0 51s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+simCmSubs exit=0 41s | simCmSubs GREEN: 59 of 59 checks green (parts ledger, rule, extratime, cutover, oppextratime, opponent, coach, press)
+simCmBoardVerdict exit=0 430s | simCmBoardVerdict GREEN: 0 of 0 checks green (parts measure, 430 s)

@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-card: node_modules/.bin/vitest run src/test/managerPenaltyMarkers.test.tsx src/test/managerQuickSimLegs.test.tsx src/test/cmReportBoardWord.test.tsx src/test/managerScorerMarks.test.tsx src/lib/clubManagerReportedScorers.test.ts --testTimeout=300000 --hookTimeout=120000
+simExtraTime: node scripts/simExtraTime.mjs
+simUclLegs: node scripts/simUclLegs.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simCmBoardVerdict: node scripts/simCmBoardVerdict.mjs
+simCmSubs: node scripts/simCmSubs.mjs
