@@ -1,0 +1,49 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+plain: node scripts/simUsConnectionsFacts.mjs
+report: US_CONN_TABLES=nfl,nhl node scripts/simUsConnectionsFacts.mjs
+c-watchline: US_CONN_CONTROL=watchline node scripts/simUsConnectionsFacts.mjs
+c-watchline60: US_CONN_CONTROL=watchline60 node scripts/simUsConnectionsFacts.mjs
+c-watchbest: US_CONN_CONTROL=watchbest node scripts/simUsConnectionsFacts.mjs
+c-seasonage: US_CONN_CONTROL=seasonage node scripts/simUsConnectionsFacts.mjs
+c-rangedrop: US_CONN_CONTROL=rangedrop node scripts/simUsConnectionsFacts.mjs
+c-arod: US_CONN_CONTROL=arod node scripts/simUsConnectionsFacts.mjs
+c-bell: US_CONN_CONTROL=bell node scripts/simUsConnectionsFacts.mjs
+c-karlsson: US_CONN_CONTROL=karlsson node scripts/simUsConnectionsFacts.mjs
+c-twice: US_CONN_CONTROL=twice node scripts/simUsConnectionsFacts.mjs
+c-onehost: US_CONN_CONTROL=onehost node scripts/simUsConnectionsFacts.mjs
+c-unjudged: US_CONN_CONTROL=unjudged node scripts/simUsConnectionsFacts.mjs
+c-fingers: US_CONN_CONTROL=fingers node scripts/simUsConnectionsFacts.mjs
+c-ohtani: US_CONN_CONTROL=ohtani node scripts/simUsConnectionsFacts.mjs
+c-frobinson: US_CONN_CONTROL=frobinson node scripts/simUsConnectionsFacts.mjs
+c-undate: US_CONN_CONTROL=undate node scripts/simUsConnectionsFacts.mjs
+c-yearnfl: US_CONN_CONTROL=yearnfl node scripts/simUsConnectionsFacts.mjs
+c-yearnhl: US_CONN_CONTROL=yearnhl node scripts/simUsConnectionsFacts.mjs
+c-afternfl: US_CONN_CONTROL=afternfl node scripts/simUsConnectionsFacts.mjs
+c-afternhl: US_CONN_CONTROL=afternhl node scripts/simUsConnectionsFacts.mjs
+c-aftermlb: US_CONN_CONTROL=aftermlb node scripts/simUsConnectionsFacts.mjs
+c-futuredate: US_CONN_CONTROL=futuredate node scripts/simUsConnectionsFacts.mjs
+c-grayonehost: US_CONN_CONTROL=grayonehost node scripts/simUsConnectionsFacts.mjs
+c-tablemiss: US_CONN_CONTROL=tablemiss node scripts/simUsConnectionsFacts.mjs
+c-ages: US_CONN_CONTROL=ages node scripts/simUsConnectionsFacts.mjs
+c-newrunning: US_CONN_CONTROL=newrunning node scripts/simUsConnectionsFacts.mjs
+c-recolour: US_CONN_CONTROL=recolour node scripts/simUsConnectionsFacts.mjs
+c-dangling: US_CONN_CONTROL=dangling node scripts/simUsConnectionsFacts.mjs
+c-decisionless: US_CONN_CONTROL=decisionless node scripts/simUsConnectionsFacts.mjs
+c-permantwice: US_CONN_CONTROL=permantwice node scripts/simUsConnectionsFacts.mjs
+c-listonehost: US_CONN_CONTROL=listonehost node scripts/simUsConnectionsFacts.mjs
+c-nofact: US_CONN_CONTROL=nofact node scripts/simUsConnectionsFacts.mjs
+c-stamkos: US_CONN_CONTROL=stamkos node scripts/simUsConnectionsFacts.mjs
+simConnectionsFacts: node scripts/simConnectionsFacts.mjs
+simFairPuzzles: node scripts/simFairPuzzles.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+mig1574: node scripts/qa/usConnections1574Migration.mjs check
+mig1567: node scripts/qa/usConnections1567Migration.mjs check
+drift: node scripts/qa/usConnectionsTableImport.mjs drift nhl=.rc/x/nhl-2026-10-29.json,nfl=.rc/x/nfl-2026-10-29.json
+drift-sortorder: TABLE_DRIFT_CONTROL=sortorder node scripts/qa/usConnectionsTableImport.mjs drift nhl=.rc/x/nhl-2026-10-29.json,nfl=.rc/x/nfl-2026-10-29.json
+ck: node scripts/qa/usConnections1574Checksummed.mjs nhl=.rc/x/nhl-2026-10-29.json /tmp/ck1574.sql
+dealt: node scripts/qa/connectionsDealtDay1574.mjs nhl=.rc/x/nhl-2026-10-29.json 2026-10-31 +40
+dealt-safe1: DEALT_LABELS_ONLY_SAFE=1 node scripts/qa/connectionsDealtDay1574.mjs nhl=.rc/x/nhl-2026-10-29.json 2026-10-31 +40
+dealt-reshaped: DEALT_CONTROL=reshaped node scripts/qa/connectionsDealtDay1574.mjs nhl=.rc/x/nhl-2026-10-29.json 2026-10-31 +40
+proofs: git worktree add -q /tmp/b1 3e80cbcfe && node .rc/x/probe-proofs.mjs /tmp/b1
