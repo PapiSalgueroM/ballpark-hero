@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk-E: WALK_ONLY=E RC_OUT=$RC_OUT/e node .rc/x/walkcmsc3.mjs
+old-BCE: for i in 1 2 3 4 5 6; do git worktree add -f /tmp/ob 158969218 >/dev/null 2>&1 && break; sleep 5; done; ln -sfn "$PWD/node_modules" /tmp/ob/node_modules; FIXROOT=/tmp/ob E_EXPECT=made-up WALK_ONLY=BCE RC_OUT=$RC_OUT/old node .rc/x/walkcmsc3.mjs
