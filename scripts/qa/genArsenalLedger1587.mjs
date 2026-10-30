@@ -6,6 +6,8 @@
 // a CONMEBOL token, or is empty, or whose club has "Arsenal FC" as the middle part of a three part split (the
 // TRIPWIRE), plus every man whose name is on a fetched Arsenal de Sarandí roster whatever his nationality (the ROSTER
 // NET: it found Joel Soñora, stored as "United States", and Nicolás Giménez, stored as "United Arab Emirates").
+// At the apply: node scripts/qa/genArsenalLedger1587.mjs --market <fresh Q2.json> --check (exit 1 means the fresh
+// export would judge a different set: stop and extend the ledger first).
 // A man is a name_folded plus a birth year (year minus age); a jump of 3 or more years in birth year is another man.
 // A verdict is derived, never typed: sarandi when two hosts put him on Arsenal de Sarandí and no fetched London page
 // lists him; london the other way round; held when pages of both clubs list him; pending when fewer than two hosts.
@@ -149,7 +151,11 @@ export function buildLedger(market, pages) {
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
-  const market = JSON.parse(fs.readFileSync(path.join(DATA, MARKET_FILE), 'utf8'));
+  // --market <fresh Q2.json> (the apply's step, with --check): the ledger a FRESH export would build must equal the
+  // committed one, so a tripwire or roster net row that appeared since 10-29 (a man nobody judged) stops the apply.
+  const mi = process.argv.indexOf('--market');
+  if (mi > 0 && !process.argv.includes('--check')) { console.log('REFUSED: --market only checks (the ledger is built from the committed export)'); process.exit(2); }
+  const market = JSON.parse(fs.readFileSync(mi > 0 ? path.resolve(process.argv[mi + 1]) : path.join(DATA, MARKET_FILE), 'utf8'));
   const pages = parsePages(fs.readFileSync(path.join(DATA, PAGES_FILE), 'utf8'));
   const ledger = buildLedger(market, pages);
   const text = JSON.stringify(ledger, null, 1) + '\n';
@@ -158,7 +164,7 @@ if (isMain) {
   for (const m of ledger.men) if (m.verdict === 'pending' || m.verdict === 'held' || m.dobMismatch.length) console.log(`  ${m.verdict} ${m.name} ${m.rowYears.join(',')} sar:${m.hosts.sarandi.join('+')} lon:${m.hosts.london.join('+')}${m.dobMismatch.length ? ' DOB? ' + m.dobMismatch.join('; ') : ''}`);
   if (process.argv.includes('--check')) {
     const cur = fs.existsSync(out) ? fs.readFileSync(out, 'utf8').replace(/\r\n/g, '\n') : '';
-    if (cur !== text) { console.log('FAIL: arsenalLedger.json is not what the generator writes from the committed pages'); process.exit(1); }
+    if (cur !== text) { console.log(`FAIL: arsenalLedger.json is not what the generator writes from the committed pages and ${mi > 0 ? 'the export given' : 'the committed export'}${mi > 0 ? ': stop the apply' : ''}`); process.exit(1); }
     console.log('ok: the committed ledger equals the generator\'s output');
   } else { fs.writeFileSync(out, text); console.log('wrote ' + path.relative(ROOT, out)); }
 }
