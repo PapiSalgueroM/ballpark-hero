@@ -177,7 +177,12 @@ describe('NHL front office: the GM career kit loads when it is needed', () => {
     const E = await import('@/lib/nhlFrontOffice');
     const { openNhlDesk } = await import('@/lib/nhlGmDesk');
     const loader = await import('@/components/nhl-front-office/nhlCareerKitLoad');
-    const { default: Board } = (await import('@/components/nhl-front-office/NhlFrontOfficeBoard')) as { default: ComponentType };
+    /* the control's copy here too, so nhl-nowait reaches critic 16's case (a press that never waits writes nothing
+       while the kit is missing, and draws no retry card) */
+    const override = process.env.FO_BOARD_NHL;
+    const { default: Board } = (override
+      ? await import(/* @vite-ignore */ override)
+      : await import('@/components/nhl-front-office/NhlFrontOfficeBoard')) as { default: ComponentType };
     return { E, openNhlDesk, loader: loader.nhlCareerKitLoader, Board } as Fresh;
   }
 

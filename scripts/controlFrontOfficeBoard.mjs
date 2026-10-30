@@ -191,6 +191,7 @@ const T = {
   nlzRound: [NLZ, 'the last round asks for it, its press waits for it'],
   nlzRecap: [NLZ, 'a save that loads on the recap waits in a holding box'],
   nlzFired: [NLZ, 'a save that loads on the fired screen waits in a holding box'],
+  nlzOffline: [NLZ, 'a desk off save on the last round whose fetch fails'],
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
@@ -279,7 +280,7 @@ const CONTROLS = {
   'nhl-lookopens': ["looking at a career box switches a desk off NHL save's desk on", [['if (key !== null && !gm && league && gmPanelFor(NHL_DESK_PANELS, key)) {', 'if (key !== null && !gm && league) {']], [T.nhCaLookHub, T.nhCaLookOut], [T.nhCaFired], 'nhl'],
   'nhl-xpzero': ['the NHL recap prints the XP line on a season that paid nothing', [['setXpLine(v.desk && v.award && v.award.total > 0 ? hostXpRecapLine(', 'setXpLine(v.desk && v.award ? hostXpRecapLine(']], [T.nhCaFired], [T.nhCaTake], 'nhl'],
   'nhl-askalways': ['the NHL board asks for the career kit while a season is played', [['    presser: presser !== null,\n    boxOpen: careerBoxOpen,', '    presser: true,\n    boxOpen: careerBoxOpen,']], [T.nlzSeason], [T.nlzRecap, T.nhDefault], 'nhl'],
-  'nhl-nowait': ["the NHL last round's press does not wait for the career kit", [['  const closeWaits = careerKit.waits;', '  const closeWaits = false;']], [T.nlzRound], [T.nlzRecap, T.nhDefault], 'nhl'],
+  'nhl-nowait': ["the NHL last round's press does not wait for the career kit", [['  const closeWaits = careerKit.waits;', '  const closeWaits = false;']], [T.nlzRound, T.nlzOffline], [T.nlzRecap, T.nhDefault], 'nhl'],
   'nhl-recapnever': ['an NHL save that loads on the recap never asks for the career kit', [['  const careerKit = useGmCareerKit(nhlCareerKitLoader, {\n    phase,\n', "  const careerKit = useGmCareerKit(nhlCareerKitLoader, {\n    phase: phase === 'recap' ? 'draft' : phase,\n"]], [T.nlzRecap], [T.nlzFired, T.nlzRound], 'nhl'],
   'nhl-blank': ["THIS FILE'S OWN CONTROL on the NHL board: a comment is reworded and nothing else, so nothing may fire", [['/* Round 180: rank my roster against the league and let ownership set the ask. */', '/* Round 180: rank my roster against the league, and let ownership set the ask. */']], [T.nhDefault], [], 'nhl'],
 };

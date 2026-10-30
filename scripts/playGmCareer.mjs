@@ -19,6 +19,13 @@
  * and then draws where the box stood; the market and a seat taken; the new
  * hub's boxes drawn without it, and the GM level box holding until it lands.
  *
+ * Round 1561: the NHL Front Office joins as a second row (the board bound to
+ * the career on the same shared pieces). A row carries its own season shape
+ * (last, mid, period: the NFL's week 17 and 9, the NHL's round 20 and 9), its
+ * one press (Play Week, Play Round), its pick screen's words and how it gets
+ * under its roster limit (cut to 53, waive to 15). PLAY_GM_CAREER_SPORT=nhl
+ * (or nfl) walks one row.
+ *
  * On every screen: nothing wider than the screen, every control of the out of
  * work screen and the career panels at least 44 px tall, no text under 12 px
  * on the out of work card and link or under 11 px in the panels, no console
@@ -47,20 +54,31 @@ const CONTROL = process.env.PLAY_GM_CAREER_CONTROL || '';
 const OUT = process.env.PLAY_GM_CAREER_OUT || process.env.RC_OUT || '';
 const ONLY_SIZE = process.env.PLAY_GM_CAREER_SIZE || '';
 
+const ONLY_SPORT = process.env.PLAY_GM_CAREER_SPORT || '';
 const ROUTES = [
   {
     sport: 'nfl', route: '/front-office', key: 'front-office-save-v1', play: 'This week', final: 'Play the final week',
     ask: 'Win the Super Bowl. Anything less is a failed season upstairs.', chunks: ['GmJobMarketPanel', 'GmCareerPanel', 'GmXpDeskPanel'], kit: 'nflCareerKit',
+    /* Round 1561: the row's season shape, its one press, its pick screen and its roster limit */
+    last: s => { s.league.week = 17; }, mid: s => { s.league.week = 9; }, period: s => s.league.week, one: 'Play Week', unit: 'week',
+    picker: 'Take over a front office', trim: (page, row) => cutToFit(page, row),
   },
-];
+  {
+    sport: 'nhl', route: '/nhl-front-office', key: 'nhl-front-office-save-v1', play: 'Play', tile: 'Play', final: 'Final stretch + playoffs',
+    ask: 'Win the Stanley Cup. Anything less is a failed season upstairs.', chunks: ['GmJobMarketPanel', 'GmCareerPanel', 'GmXpDeskPanel'], kit: 'nhlCareerKit',
+    last: s => { s.league.round = 20; }, mid: s => { s.league.round = 9; }, period: s => s.league.round, one: 'Play Round', unit: 'round',
+    picker: 'Take over an NHL front office', trim: page => waiveToFit(page),
+  },
+].filter(r => !ONLY_SPORT || r.sport === ONLY_SPORT);
 const SIZES = [[320, 640], [390, 844], [1280, 900]].filter(([w]) => !ONLY_SIZE || String(w) === ONLY_SIZE);
 
 const MUTATIONS = {
-  wipebutton: [{ label: 'wipebutton', find: /onClick:\(\)=>[\w$]+\("fired"\)/g, replace: 'onClick:()=>{localStorage.removeItem("front-office-save-v1")}' }],
+  /* Round 1561: the copy deletes either board's save, so the one mutation fires on both rows */
+  wipebutton: [{ label: 'wipebutton', find: /onClick:\(\)=>[\w$]+\("fired"\)/g, replace: 'onClick:()=>{localStorage.removeItem("front-office-save-v1");localStorage.removeItem("nhl-front-office-save-v1")}' }],
   nofallback: [{ label: 'nofallback', find: /"data-gm-panel-loading":!0,style:\{minHeight:/g, replace: '"data-gm-panel-loading":!0,style:{minHeightOff:' }],
   eagerpanel: [{ label: 'eagerpanel', find: /^([\s\S]*?)(import\("(\.\/GmJobMarketPanel-[\w-]+\.js)"\))/, replace: (all, pre, imp, file) => `import("${file}");${pre}${imp}` }],
   /* Round 1550: the career kit's chunk asked for the moment the board loads (Walk E's pick screen check red) */
-  eagerkit: [{ label: 'eagerkit', find: /^([\s\S]*?)(import\("(\.\/nflCareerKit-[\w-]+\.js)"\))/, replace: (all, pre, imp, file) => `import("${file}");${pre}${imp}` }],
+  eagerkit: [{ label: 'eagerkit', find: /^([\s\S]*?)(import\("(\.\/(?:nfl|nhl)CareerKit-[\w-]+\.js)"\))/, replace: (all, pre, imp, file) => `import("${file}");${pre}${imp}` }],
 };
 if (CONTROL && !MUTATIONS[CONTROL]) { console.error(`PLAY_GM_CAREER_CONTROL=${CONTROL} is not a control of this walk (${Object.keys(MUTATIONS).join(', ')})`); process.exit(2); }
 const { say, verdict } = controlledChecks(CONTROL);
@@ -137,13 +155,17 @@ async function doomed(page, row) {
   s.trust = 5;
   s.mandate = { tier: 'title', text: row.ask, winFloor: 0, reqLevel: 4, season: s.league.season };
   for (const p of s.league.teams[s.myTeam].players) p.ovr = 60;
-  s.league.week = 17;
+  row.last(s);
   await writeSave(page, row.key, s);
   await page.reload({ waitUntil: 'networkidle' });
   await wait(900);
   await answerConsent(page);
-  await page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(row.play, 'i') }).first().click();
+  /* Round 1561: a roster over the limit holds the press (the NHL's waivers): get under it first, as a player must */
+  await row.trim(page, row);
+  await playBox(page, row).click();
   await wait(400);
+  /* the last period's press waits for the career kit (useGmCareerKit): click it once it is live */
+  await page.waitForFunction(t => [...document.querySelectorAll('button')].some(b => (b.textContent || '').includes(t) && !b.disabled), row.final, { timeout: 30000 });
   await page.locator(`button:has-text("${row.final}")`).last().click();
   await page.waitForFunction(k => JSON.parse(localStorage.getItem(k) || '{}').fired === true, row.key, { timeout: 30000 });
   await wait(1600);
@@ -155,6 +177,50 @@ const careerBox = (page, title) => page.locator(`[data-gm-desk="tiles"] button:h
 const back = async page => { const b = page.locator('[data-gm-desk="panel"] button:has-text("Hub")').first(); if (await b.count()) await b.click(); await wait(300); };
 const chunkAsked = (assets, row) => assets.filter(u => row.chunks.some(c => u.includes(`/${c}-`)));
 const bodyText = page => page.locator('body').innerText();
+/** The hub box that holds the season's press: by its exact title where the row names one (the NHL's "Play"). */
+const playBox = (page, row) => row.tile
+  ? page.locator(`button:has(div.uppercase:text-is("${row.tile}"))`).first()
+  : page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(row.play, 'i') }).first();
+
+/** The NFL board holds Play past 53 until he cuts (its own rule): cut through the Roster box the way a player does,
+    the biggest group's last man, two taps. */
+async function cutToFit(page, row) {
+  for (let n = 0; n < 8; n++) {
+    const s = await readSave(page, row.key);
+    if (s.league.teams[s.myTeam].players.length <= 53) break;
+    const hub = page.locator('button:has-text("Hub")').first();
+    if (await hub.count()) { await hub.click(); await wait(300); }
+    await page.locator('button:has(div.uppercase:text-is("Roster"))').first().click();
+    await wait(400);
+    const groups = page.locator('[data-roster-group]:not([data-roster-group="practice"])');
+    const sizes = await groups.evaluateAll(gs => gs.map(g => Number((/· (\d+)/.exec(g.textContent || '') || [])[1] || 0)));
+    if (sizes.length) { await groups.nth(sizes.indexOf(Math.max(...sizes))).click(); await wait(300); }
+    const arms = page.locator('button:not([disabled])').filter({ hasText: /^Cut, \$/ });
+    if (!(await arms.count())) break;
+    await arms.last().click();
+    await wait(200);
+    await page.locator('button:has-text("Cut him")').first().click();
+    await wait(400);
+  }
+}
+/** Round 1561: the NHL board holds Play over 15 until he waives (the line above the boxes says so): the Roster box's
+    last man, two taps, until the line goes. */
+async function waiveToFit(page) {
+  for (let n = 0; n < 8 && await page.locator('[data-roster-limit]').count(); n++) {
+    const hub = page.getByRole('button', { name: 'Hub', exact: true }).first();
+    if (await hub.count()) { await hub.click(); await wait(300); }
+    await page.locator('button:has(div.uppercase:text-is("Roster"))').first().click();
+    await wait(400);
+    const arms = page.locator('button:not([disabled])').filter({ hasText: /^Waive, \$/ });
+    if (!(await arms.count())) break;
+    await arms.last().click();
+    await wait(200);
+    await page.locator('button:has-text("Waive him")').first().click();
+    await wait(400);
+  }
+  const hub = page.getByRole('button', { name: 'Hub', exact: true }).first();
+  if (await hub.count()) { await hub.click(); await wait(300); }
+}
 
 /** The room on the arrival recap, the new club's re-sign box, then its draft, to the hub. */
 async function answerAndDraft(page, row, tag) {
@@ -173,7 +239,8 @@ async function answerAndDraft(page, row, tag) {
   for (let n = 0; n < 30 && (await readSave(page, row.key)).phase === 'draft'; n++) {
     const pick = page.getByText(/· age \d+/).first();
     if (await pick.count()) { await pick.click(); await wait(450); continue; }
-    const skip = page.locator('button').filter({ hasText: /no picks|without/i }).first();
+    /* Round 1561: the NHL board's "Finish the draft and offseason" when no pick is left */
+    const skip = page.locator('button').filter({ hasText: /no picks|without|Finish the draft/i }).first();
     if (!(await skip.count())) break;
     await skip.click(); await wait(600);
   }
@@ -286,33 +353,17 @@ async function walkA(row, w, h) {
   await screenChecks(page, `${tag} career`);
   await back(page);
   await spendAPoint(page, row, tag, w);
-  /* His new club's draft can take it past 53, and the board holds Play until he cuts (its own rule): cut through
-     the Roster box the way a player does, the biggest group's last man, two taps. */
-  for (let n = 0; n < 8; n++) {
-    const s = await readSave(page, row.key);
-    if (s.league.teams[s.myTeam].players.length <= 53) break;
-    const hub = page.locator('button:has-text("Hub")').first();
-    if (await hub.count()) { await hub.click(); await wait(300); }
-    await page.locator('button:has(div.uppercase:text-is("Roster"))').first().click();
-    await wait(400);
-    const groups = page.locator('[data-roster-group]:not([data-roster-group="practice"])');
-    const sizes = await groups.evaluateAll(gs => gs.map(g => Number((/· (\d+)/.exec(g.textContent || '') || [])[1] || 0)));
-    if (sizes.length) { await groups.nth(sizes.indexOf(Math.max(...sizes))).click(); await wait(300); }
-    const arms = page.locator('button:not([disabled])').filter({ hasText: /^Cut, \$/ });
-    if (!(await arms.count())) break;
-    await arms.last().click();
-    await wait(200);
-    await page.locator('button:has-text("Cut him")').first().click();
-    await wait(400);
-  }
+  /* His new club's draft can take it past the limit, and the board holds Play until he gets under it (its own
+     rule): the row's own way, as a player does it (cutToFit, waiveToFit). */
+  await row.trim(page, row);
   const hubBack = page.locator('button:has-text("Hub")').first();
   if (await hubBack.count()) { await hubBack.click(); await wait(300); }
-  const before = (await readSave(page, row.key)).league.week;
-  await page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(row.play, 'i') }).first().click();
+  const before = row.period(await readSave(page, row.key));
+  await playBox(page, row).click();
   await wait(400);
-  await page.locator('button:has-text("Play Week")').last().click();
+  await page.locator(`button:has-text("${row.one}")`).last().click();
   await wait(900);
-  say((await readSave(page, row.key)).league.week === before + 1, `${tag}: a week plays at the new club`);
+  say(row.period(await readSave(page, row.key)) === before + 1, `${tag}: a ${row.unit} plays at the new club`);
   say(errors.length === 0, `${tag}: no console error (${errors[0] ?? 'clean'})`);
   await ctx.close();
 }
@@ -389,7 +440,7 @@ async function walkC(row, w, h) {
   say(await page.locator('[data-gm-arm="restart"]').count() === 1 && !!(await readSave(page, row.key)), `${tag}: one tap on the new front office link only arms it`);
   await link.click();
   await wait(900);
-  say(!(await readSave(page, row.key)) && (await bodyText(page)).includes('Take over a front office'), `${tag}: the second tap deletes the save and opens the picker`);
+  say(!(await readSave(page, row.key)) && (await bodyText(page)).includes(row.picker), `${tag}: the second tap deletes the save and opens the picker`);
   say(errors.length === 0, `${tag}: no console error (${errors[0] ?? 'clean'})`);
   await ctx.close();
 }
@@ -451,14 +502,16 @@ async function walkE(row, w, h) {
 
   /* a season being played, reloaded: the hub and its career boxes, no kit */
   let s = await readSave(page, row.key);
-  s.league.week = 9;
+  row.mid(s);
   await writeSave(page, row.key, s);
   let n0 = assets.length;
   await page.reload({ waitUntil: 'networkidle' });
   await wait(900);
   await answerConsent(page);
   for (const t of ['Career', 'GM level']) say(await careerBox(page, t).count() === 1, `${tag}: mid season, the hub draws the ${t} box without the kit`);
-  await page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(row.play, 'i') }).first().click();
+  /* Round 1561: under the roster limit here, mid season, so the last round's press below waits for the kit alone */
+  await row.trim(page, row);
+  await playBox(page, row).click();
   await wait(600);
   say(kitAsked(n0) === 0, `${tag}: a season being played does not ask for the kit (${kitAsked(n0)} asks)`);
 
@@ -467,14 +520,14 @@ async function walkE(row, w, h) {
   s.trust = 5;
   s.mandate = { tier: 'title', text: row.ask, winFloor: 0, reqLevel: 4, season: s.league.season };
   for (const p of s.league.teams[s.myTeam].players) p.ovr = 60;
-  s.league.week = 17;
+  row.last(s);
   await writeSave(page, row.key, s);
   await slow(true);
   kitDelay = 1500;
   n0 = assets.length;
   await page.reload({ waitUntil: 'domcontentloaded' });
   await answerConsent(page);
-  const playTile = page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(row.play, 'i') }).first();
+  const playTile = playBox(page, row);
   await playTile.waitFor({ timeout: 90000 });
   await playTile.click();
   const final = page.locator(`button:has-text("${row.final}")`).last();
@@ -556,5 +609,5 @@ for (const row of ROUTES) {
 }
 await browser.close();
 const code = verdict('playGmCareer', CONTROL ? proof : undefined, { minGuarded: 1 });
-if (code === 0 && !CONTROL) console.log(`playGmCareer: green. ${ROUTES.length} board, ${SIZES.length} sizes, four walks each and the slow kit walk at 390 and 1280.`);
+if (code === 0 && !CONTROL) console.log(`playGmCareer: green. ${ROUTES.length} board(s) (${ROUTES.map(r => r.sport).join(", ")}), ${SIZES.length} sizes, four walks each and the slow kit walk at 390 and 1280.`);
 process.exit(code);
