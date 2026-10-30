@@ -1,0 +1,8 @@
+vt-fa exit=0 15s |    Duration  14.37s (transform 6.37s, setup 903ms, collect 12.51s, tests 15.51s, environment 4.33s, prepare 1.14s)
+tsc exit=0 87s | 
+simFreeAgents exit=0 112s | simFreeAgents: all sections passed
+appeal1081 exit=1 10s | Node.js v24.22.1
+leaguerules exit=1 71s | simCmLeagueRules: 47 failure(s)
+simContracts exit=0 23s | ALL CONTRACT CHECKS PASSED
+size-d exit=0 73s | simClubManagerSaveSize: all sections green
+fleet exit=0 218s | simCmFreeAgencyFleet: green, all eight sections held
