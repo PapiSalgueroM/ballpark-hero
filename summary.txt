@@ -1,0 +1,9 @@
+tsc exit=0 81s | 
+simCreateClub exit=1 10s | simCreateClub: 1 failure
+simCustomClubValues exit=1 104s | simCustomClubValues: 25 checks, 2 failures (sections 1, 2)
+cv-capall exit=1 111s | simCustomClubValues: 25 checks, 2 failures (sections 1, 2)
+simCmInternationals exit=1 29s | simCmInternationals: 1 FAILURES
+simBoardAsks exit=1 54s | simBoardAsks: 2 failures
+simCmLevelReads exit=0 1s | simCmLevelReads: 27 checks, 0 failures
+simCmDifficulty exit=1 220s | simCmDifficulty: 4 FAILURES (sections 1,2,3,6,7,8)
+simRoles exit=1 1199s | 1 FAILURES
