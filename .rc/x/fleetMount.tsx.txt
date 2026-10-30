@@ -1,0 +1,35 @@
+/* ===== reviewer fleet: every checkpoint save the BASE board wrote mounts on THIS tree's board, storage byte equal ===== */
+for (const row of BOARDS) {
+  describe(`${row.sport} board: fleet of base saves`, () => {
+    const inFile = process.env.FLEET_MOUNT_IN;
+    const all: any[] = inFile && fs.existsSync(inFile) ? JSON.parse(fs.readFileSync(inFile, 'utf8')) : [];
+    const seen = new Set<string>();
+    const mine = all.filter(e => e.sport === row.sport && e.save && !seen.has(e.save) && (seen.add(e.save), true));
+    it(`mounts ${mine.length} distinct base saves, writes nothing, never sticks on a holding box`, async () => {
+      const bad: string[] = [];
+      const phases: Record<string, number> = {};
+      for (const e of mine) {
+        const { Board } = await freshBoard(row, e.seed);
+        localStorage.clear();
+        localStorage.setItem(row.saveKey, e.save);
+        const view = render(<Board />);
+        const t0 = Date.now();
+        while (Date.now() - t0 < 8000 && document.querySelector('[data-gm-panel-loading], [data-career-kit-failed]')) {
+          await new Promise(r => setTimeout(r, 25));
+        }
+        await new Promise(r => setTimeout(r, 30));
+        const phase = JSON.parse(e.save).phase;
+        phases[phase] = (phases[phase] ?? 0) + 1;
+        const id = `seed ${e.seed} desk ${e.deskOn ? 'on' : 'off'} ${e.label} (${phase})`;
+        if (localStorage.getItem(row.saveKey) !== e.save) bad.push(`${id}: the mount rewrote the save`);
+        if (document.querySelector('[data-gm-panel-loading], [data-career-kit-failed]')) bad.push(`${id}: still on a holding box after 8 s`);
+        if ((document.body.textContent ?? '').trim().length < 40) bad.push(`${id}: the page is (nearly) empty`);
+        view.unmount();
+      }
+      console.log(`FLEET_MOUNT|${row.sport}|${mine.length} saves|${JSON.stringify(phases)}|${bad.length} bad`);
+      for (const b of bad.slice(0, 12)) console.log(`FLEET_MOUNT_BAD|${row.sport}|${b}`);
+      expect(mine.length, 'no base saves were read').toBeGreaterThan(0);
+      expect(bad).toEqual([]);
+    }, 900_000);
+  });
+}
