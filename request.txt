@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simClubManagerDugouts: node scripts/simClubManagerDugouts.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+ctl-onehost: DUGOUTS_CONTROL=onehost node scripts/simClubManagerDugouts.mjs
+ctl-orphan: DUGOUTS_CONTROL=orphan node scripts/simClubManagerDugouts.mjs
+ctl-gap: DUGOUTS_CONTROL=gap node scripts/simClubManagerDugouts.mjs
+ctl-monthclash: DUGOUTS_CONTROL=monthclash node scripts/simClubManagerDugouts.mjs

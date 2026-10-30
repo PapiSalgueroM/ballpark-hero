@@ -1,0 +1,23 @@
+control monthclash: mutation applied, section 4 must go red
+section 0: the shipped table equals the receipt
+  96 rows, 0 partial, 4 stored months, 25 sources on 19 registrable domains
+section 1: two hosts on two registrable domains per chair, none a wiki
+section 2: every chair belongs to its league table
+section 3: covered leagues are complete
+  Premier League: 20 verified, 0 partial, of 20
+  La Liga: 20 verified, 0 partial, of 20
+  Serie A: 20 verified, 0 partial, of 20
+  Bundesliga: 18 verified, 0 partial, of 18
+  Ligue 1: 18 verified, 0 partial, of 18
+  not declared (listed, not failed): 22 leagues: championship, eredivisie, saudi, mlsEast, mlsWest, primeira, scottish, superlig, bundesliga2, proleague, austria, greece, denmark, switzerland, croatia, brasileirao, ligamx, aleague, serieb, ligue2, segunda, russia
+section 4: names agree after accent folding, stored months are two hosted and unopposed
+  FAIL [4]: Manchester United: month 2026-01 printed on 1 domain(s), two needed
+  FAIL [4]: Manchester United: reads print 2025-12 and 2026-01, so the month must be dropped (name only)
+section 5: table names that are also player names (listed, not failed)
+  2026 world rosters (same era): 1: Carlos Cuesta = Carlos Cuesta (Vasco da Gama)
+  era 2020 bake: 1: Cesc Fàbregas = Cesc Fàbregas (Monaco)
+  era 2015 bake: 14: Mikel Arteta = Mikel Arteta (Arsenal); Xabi Alonso = Xabi Alonso (Bayern Munich); Álvaro Arbeloa = Álvaro Arbeloa (Real Madrid); Gary O'Neil = Gary O'Neil (Norwich City); Andoni Iraola = Andoni Iraola (Athletic Club); Michael Carrick = Michael Carrick (Manchester United); Cesc Fàbregas = Cesc Fàbregas (Chelsea); Daniele De Rossi = Daniele De Rossi (Roma); Alberto Aquilani = Alberto Aquilani (Fiorentina); Ignazio Abate = Ignazio Abate (AC Milan); Vincent Kompany = Vincent Kompany (Manchester City); Eugen Polanski = Eugen Polanski (Hoffenheim); Didier Digard = Didier Digard (Real Betis); Filipe Luís = Filipe Luís (Chelsea)
+  era 2010 bake: 21: Mikel Arteta = Mikel Arteta (Everton); Keith Andrews = Keith Andrews (Blackburn Rovers); Xabi Alonso = Xabi Alonso (Real Madrid); Frank Lampard = Frank Lampard (Chelsea); Álvaro Arbeloa = Álvaro Arbeloa (Real Madrid); Andoni Iraola = Andoni Iraola (Athletic Club); Michael Carrick = Michael Carrick (Manchester United); Cesc Fàbregas = Cesc Fàbregas (Arsenal); Fabio Grosso = Fabio Grosso (Juventus); Daniele De Rossi = Daniele De Rossi (Roma); Cristian Chivu = Cristian Chivu (Inter Milan); Gennaro Gattuso = Gennaro Gattuso (AC Milan); Alberto Aquilani = Alberto Aquilani (Juventus); Ignazio Abate = Ignazio Abate (AC Milan); Vincent Kompany = Vincent Kompany (Manchester City); Eugen Polanski = Eugen Polanski (Mainz); Julian Schuster = Julian Schuster (Freiburg); Martín Demichelis = Martín Demichelis (Bayern Munich); Didier Digard = Didier Digard (Nice); Filipe Luís = Filipe Luís (Deportivo La Coruña); Stéphane Dumont = Stéphane Dumont (Lille)
+  era 2005 bake: 18: Mikel Arteta = Mikel Arteta (Real Sociedad); Xabi Alonso = Xabi Alonso (Liverpool); Frank Lampard = Frank Lampard (Chelsea); Álvaro Arbeloa = Álvaro Arbeloa (Real Madrid); Gary O'Neil = Gary O'Neil (Portsmouth); Andoni Iraola = Andoni Iraola (Athletic Club); Enzo Maresca = Enzo Maresca (Sevilla); Michael Carrick = Michael Carrick (Tottenham); Cesc Fàbregas = Cesc Fàbregas (Arsenal); Fabio Grosso = Fabio Grosso (Palermo); Daniele De Rossi = Daniele De Rossi (Roma); Cristian Chivu = Cristian Chivu (Roma); Gennaro Gattuso = Gennaro Gattuso (AC Milan); Alberto Aquilani = Alberto Aquilani (Roma); Niko Kovač = Niko Kovac (Hertha BSC); Martín Demichelis = Martín Demichelis (Bayern Munich); Liam Rosenior = Liam Rosenior (Fulham); Stéphane Dumont = Stéphane Dumont (Lille)
+  generator set (160 by 200 = 32000 names) met in the table: 0 (expected none)
+control monthclash FIRED: section 4 red (2 failure(s) in all)

@@ -1,0 +1,7 @@
+simClubManagerDugouts exit=0 1s | simClubManagerDugouts: all green (96 chairs, 0 partial)
+ctl-onehost exit=1 1s | control onehost FIRED: section 1 red (1 failure(s) in all)
+ctl-orphan exit=1 1s | control orphan FIRED: section 2 red (2 failure(s) in all)
+ctl-gap exit=1 1s | control gap FIRED: section 3 red (2 failure(s) in all)
+ctl-monthclash exit=1 1s | control monthclash FIRED: section 4 red (2 failure(s) in all)
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+tsc exit=0 74s | 
