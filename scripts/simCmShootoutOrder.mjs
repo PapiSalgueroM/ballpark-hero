@@ -161,6 +161,12 @@
  *     tree's world is held to the pinned engine as it stands. Sections 4
  *     and 5 must go red (every row differs). It refuses to run once the
  *     pinned engine holds the league itself.
+ *   CM_SHOOTOUT_CONTROL=keepcurve    (Round 1600) the arm that plays a row
+ *     again with both engines on the world before the flip
+ *     (scripts/lib/cmCurve1World1600.mjs) is not built, so this tree's age
+ *     world is held to the pinned engine as it stands. Sections 4 and 5 must
+ *     go red (every row differs). It refuses to run once this tree's world
+ *     reads no age or the pinned engine reads it too.
  *
  * MEASURED, 2026-10-01, on the default seed and SIM_SEED=1 to 5 (six runs,
  * section 2 is 4000 paired shootouts an arm, 7 to 9 seconds a run):
@@ -262,8 +268,9 @@
  * Run: node scripts/simCmShootoutOrder.mjs
  */
 import './lib/seedRandom.mjs';
-import { buildSync } from 'esbuild';
+import { buildSync, build } from 'esbuild';
 import { withoutWorldSeed } from './lib/cmWorldSeed1250.mjs';
+import { worldReadsAge1600, curve1Plugin1600 } from './lib/cmCurve1World1600.mjs';
 import { withoutMadeUpNations, BRIDGE_FILES_1520 } from './lib/cmNoMadeUpNations1520.mjs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -281,7 +288,7 @@ const BUNDLE = `${TMP}/${TAG}.bundle.mjs`;
 const FIXTURE = `${ROOT}/scripts/data/cmShootoutUnset782.json`;
 
 const CONTROL = process.env.CM_SHOOTOUT_CONTROL || '';
-const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'tie-record', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst', 'thinside', 'nomakeup', 'keeperonfull', 'keepleague'];
+const KNOWN = ['ignoreorder', 'noskip', 'nocap', 'unsetpath', 'tie-record', 'ownkeeper', 'wrongkeeper', 'nooppkeeper', 'oppworst', 'thinside', 'nomakeup', 'keeperonfull', 'keepleague', 'keepcurve'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_SHOOTOUT_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(2); /* 2, like a runtime error below: a control that never ran must not read as one that fired (1) */
@@ -392,6 +399,8 @@ let baselineSourceHash = null;
 /* the coachless engine with Round 1052's league taken out (Release AO, below); null when the arm is not needed */
 const leagueOutPath = `${TMP}/${TAG}.leagueout.engine.ts`;
 let leagueOutEnginePath = null;
+/* Round 1600: whether the pinned engine reads the age world itself (then the curve 1 arm below is not needed) */
+let baselineReadsAge = false;
 /* Round 1326: the historical arm (below) is made with that round's words put
    back. It changed what six lines of the engine say and nothing they draw: the
    board's three title labels ("Win La Liga" for "Win the La Liga"), two weekly
@@ -452,6 +461,7 @@ if (!WRITE_FIXTURE) {
   fs.writeFileSync(baselinePath, baselineSource);
   baselineSourceHash = createHash('sha256').update(baselineSource).digest('hex');
   baselineEnginePath = baselinePath;
+  baselineReadsAge = baselineSource.includes('cmWorldReadsAge');
   /* Release AO (2026-10-08): Round 1052 put a league into Club Manager's
      world (the Russian Premier League), and a career draws its week from
      every club of that world, so on a tree that holds the league no row of
@@ -514,6 +524,37 @@ export const leagueOut = ${leagueOutEnginePath ? `await import('${leagueOutEngin
    that resolves node_modules by walking up (no junction, ever) bundles too. */
 buildSync({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` } });
 const { cm, historical, baseline, leagueOut } = await import(pathToFileURL(BUNDLE).href);
+/* Round 1600 (2026-10-30): the world before the flip, for sections 4 and 5. Round 1600 put the modern world on
+   curve 2 (each man's level plus points for his age, the level kept beside it as lv and read for what a club is),
+   and the pinned engine knows none of it, so on this tree's data no row can equal it (0 of 150 and 0 of 300 on
+   the round's head, after both arms above). The same move as the league out arm: a row still different is played
+   once more with BOTH engines bundled on the curve 1 world rebuilt from this tree's own files
+   (scripts/lib/cmCurve1World1600.mjs: no stamps, the main file's men at the curve 1 view's ages, the free agents
+   on curve 1), where this tree's engine reads no age at all. Equal there, the move is the round's and is counted
+   and printed; still different, it fails as before. The arm's engines are the same files the arms above import
+   (the coachless one, or the league out one when it is built), so every control still reaches it, and unsetpath
+   is the one that proves it cannot hide a changed unmanaged path. It is built only while this tree's world reads
+   age and the pinned engine does not; keepcurve leaves it out and must turn sections 4 and 5 red. Sections 1, 2,
+   3, 6 and 7 play the world as it ships. */
+const ENTRY_1600 = `${TMP}/${TAG}.curve1.entry.mjs`;
+const BUNDLE_1600 = `${TMP}/${TAG}.curve1.bundle.mjs`;
+const arm1600Needed = !WRITE_FIXTURE && worldReadsAge1600(ROOT) && !baselineReadsAge;
+if (CONTROL === 'keepcurve' && !arm1600Needed) { console.error('control cannot run: this tree\'s world reads no age, or the pinned engine reads it too, so there is no curve 1 arm to take away'); process.exit(2); }
+let curve1 = null;
+let curve1Served = null;
+if (arm1600Needed && CONTROL !== 'keepcurve') {
+  fs.writeFileSync(ENTRY_1600, `
+export const historical = await import('${historicalEnginePath}');
+export const baseline = await import('${baselineEnginePath}');
+export const leagueOut = ${leagueOutEnginePath ? `await import('${leagueOutEnginePath}')` : 'null'};
+`);
+  const bridge = curve1Plugin1600(ROOT);
+  await build({ entryPoints: [ENTRY_1600], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE_1600, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` }, plugins: [bridge.plugin] });
+  if (Object.values(bridge.served).some(n => n !== 1)) abort(`Round 1600 arm: the bundle did not take each curve 1 file exactly once (${JSON.stringify(bridge.served)})`);
+  curve1Served = bridge.served;
+  const loaded = await import(pathToFileURL(BUNDLE_1600).href);
+  curve1 = { historical: loaded.historical, baseline: loaded.baseline, arm: loaded.leagueOut ?? loaded.historical };
+}
 const {
   startCareer, playNextEntry, saveCareer, loadCareer, resolveXI, effectiveXIWithSlots, oppRosterFor,
   setShootoutOrder, shootoutOrderOf, runShootout, shootoutTakerOrder, shootoutSides, shootoutRosterSide,
@@ -577,7 +618,8 @@ const pct = x => `${(x * 100).toFixed(1)}%`;
    (historical, and the league out arm made from it) play with matchRules 'base', which is the old engine for
    subs and press by construction (scripts/simCmSubs.mjs section legacy proves it byte for byte), set again
    after a loadCareer (which drops it), and the key is taken off every state before it is hashed or compared. */
-const oldRules = engine => !WRITE_FIXTURE && (engine === historical || (!!leagueOut && engine === leagueOut));
+const oldRules = engine => !WRITE_FIXTURE && (engine === historical || (!!leagueOut && engine === leagueOut)
+  || (!!curve1 && (engine === curve1.historical || engine === curve1.arm)));
 const reachCup = (engine, baseSeed = BASE_SEED) => withSeed(baseSeed, () => {
   const start = engine.startCareer(CLUB);
   if (oldRules(engine)) start.matchRules = 'base';
@@ -604,6 +646,10 @@ const baselineCup = WRITE_FIXTURE ? atCup : reachCup(baseline);
 const leagueOutCup = leagueOut ? reachCup(leagueOut) : null;
 /* rows of sections 4 and 5 that equal the pinned engine only with Round 1052's league taken out */
 let by1052 = 0;
+/* Round 1600: the arm's own cups, both engines on the curve 1 world, and the rows that equal only there */
+const curve1BaselineCup = curve1 ? reachCup(curve1.baseline) : null;
+const curve1ArmCup = curve1 ? reachCup(curve1.arm) : null;
+let by1600 = 0;
 const cupEntry = atCup.calendar[atCup.week];
 console.log(`   base: ${CLUB}, cup ${cupEntry.cupRound} in week ${atCup.week}, squad ${atCup.squad.length}, no order set: ${!('shootoutOrder' in atCup)}`);
 
@@ -712,8 +758,14 @@ if (WRITE_FIXTURE) {
    with main are written on it. Section 1 walks the first cup tie of the
    career started on NAMED_BASE_SEED, which is Valencia again (22 on the
    roster), and refuses to run if that ever stops being a side that names an
-   eleven with a keeper. */
-const NAMED_BASE_SEED = 782_002;
+   eleven with a keeper.
+   Round 1600 (2026-10-30): moved from 782002 to 782003. On the world as it
+   ships now (the age read moves strengths, so the draw before the cup moves)
+   782002's tie is Espanyol, whose real squad in the file is 14 men with no
+   keeper (thin data, the same on main), and this guard refused it, as it is
+   here to. 782003's is Getafe, 18 with two keepers (measured on a runner,
+   r1600-scan). Section 4's walk on this base moves with it. */
+const NAMED_BASE_SEED = 782_003;
 const atNamedCup = reachCup(cm, NAMED_BASE_SEED);
 const namedOpp = atNamedCup.cupDraw?.[atNamedCup.calendar[atNamedCup.week].cupRound];
 {
@@ -946,8 +998,7 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   let baselineGolden = 0;
   for (const want of fixture.rows) {
     let out = playCup(historicalCup, want.seed, historical);
-    const baselineOut = playCup(baselineCup, want.seed, baseline);
-    const base = row(baselineOut);
+    let baselineOut = playCup(baselineCup, want.seed, baseline);
     let content = compareContent(out, baselineOut);
     if (!content.paired && leagueOut) {
       /* Release AO: once more with Round 1052's league taken out of this tree's coachless engine */
@@ -955,6 +1006,14 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
       const altContent = compareContent(alt, baselineOut);
       if (altContent.paired) { out = alt; content = altContent; by1052 += 1; }
     }
+    if (!content.paired && curve1) {
+      /* Round 1600: once more with both engines on the world before the flip; the row is then judged there */
+      const alt = playCup(curve1ArmCup, want.seed, curve1.arm);
+      const altBase = playCup(curve1BaselineCup, want.seed, curve1.baseline);
+      const altContent = compareContent(alt, altBase);
+      if (altContent.paired) { out = alt; baselineOut = altBase; content = altContent; by1600 += 1; }
+    }
+    const base = row(baselineOut);
     const got = row(out);
     const goldenCandidate = JSON.stringify(legacyRow(out)) === JSON.stringify(want);
     const goldenBaseline = JSON.stringify(legacyRow(baselineOut)) === JSON.stringify(want);
@@ -981,6 +1040,8 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
     defaultPens, withKicks };
   if (by1052) console.log(`   ${by1052} of those rows equal it only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory (the move is that round's)`);
   baselineEvidence.summary.by1052 = by1052;
+  if (by1600) console.log(`   ${by1600} of those rows equal it only with both engines on the world before Round 1600's flip (the curve 1 files rebuilt from this tree's own; the move is that round's)`);
+  baselineEvidence.summary.by1600 = by1600;
   if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the actual pre-1072 engine with no order set`);
   if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual pre-1072 main ${baselineGolden}`);
   if (withKicks !== defaultPens) fail(`${withKicks} default-order reports carried kicks for ${defaultPens} actual shootouts`);
@@ -1002,14 +1063,24 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   let namedKicks = 0;
   const namedLeagueOut = leagueOut ? reachCup(leagueOut, NAMED_BASE_SEED) : null;
   let namedBy1052 = 0;
+  const namedCurve1Arm = curve1 ? reachCup(curve1.arm, NAMED_BASE_SEED) : null;
+  const namedCurve1Baseline = curve1 ? reachCup(curve1.baseline, NAMED_BASE_SEED) : null;
+  let namedBy1600 = 0;
   for (const seed of NAMED_SEEDS) {
     let out = playCup(namedHistorical, seed, historical);
-    const baselineOut = playCup(namedBaseline, seed, baseline);
+    let baselineOut = playCup(namedBaseline, seed, baseline);
     let content = compareContent(out, baselineOut);
     if (!content.paired && leagueOut) {
       const alt = playCup(namedLeagueOut, seed, leagueOut);
       const altContent = compareContent(alt, baselineOut);
       if (altContent.paired) { out = alt; content = altContent; namedBy1052 += 1; }
+    }
+    if (!content.paired && curve1) {
+      /* Round 1600: the arm of the fixture's walk above, on section 1's base */
+      const alt = playCup(namedCurve1Arm, seed, curve1.arm);
+      const altBase = playCup(namedCurve1Baseline, seed, curve1.baseline);
+      const altContent = compareContent(alt, altBase);
+      if (altContent.paired) { out = alt; baselineOut = altBase; content = altContent; namedBy1600 += 1; }
     }
     if (content.paired) namedSame += 1;
     else if (shown++ < 3) console.error(`  differs from actual pre-1072 main on section 1's base, seed ${seed}: got ${JSON.stringify(row(out))}, baseline ${JSON.stringify(row(baselineOut))}`);
@@ -1019,7 +1090,8 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   const livePens = baselineEvidence.rows.filter(r => r.baseline.decidedBy === 'pens').length;
   console.log(`   on section 1's base: ${namedSame} of ${NAMED_SEEDS.length} rows equal actual pre-1072 main in result, next draw and full content after the default-detail allowance, ${namedPens} of them settled on penalties by main (${livePens} on the fixture's base)`);
   if (namedBy1052) console.log(`   ${namedBy1052} of those rows equal it only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
-  baselineEvidence.namedBase = { seed: NAMED_BASE_SEED, rows: NAMED_SEEDS.length, paired: namedSame, pens: namedPens, by1052: namedBy1052 };
+  if (namedBy1600) console.log(`   ${namedBy1600} of those rows equal it only with both engines on the world before Round 1600's flip`);
+  baselineEvidence.namedBase = { seed: NAMED_BASE_SEED, rows: NAMED_SEEDS.length, paired: namedSame, pens: namedPens, by1052: namedBy1052, by1600: namedBy1600 };
   if (namedSame !== NAMED_SEEDS.length) fail(`${NAMED_SEEDS.length - namedSame} rows on section 1's base differ from the actual pre-1072 engine with no order set`);
   if (namedKicks !== namedPens) fail(`${namedKicks} default-order reports on section 1's base carried kicks for ${namedPens} actual shootouts`);
   if (namedPens < 12) fail(`main settles only ${namedPens} of the rows on section 1's base on penalties, under the floor of 12, so the one draw path is barely walked`);
@@ -1054,10 +1126,10 @@ section = 5;
     if (!baseline.saveCareer(baselineOld)) abort('Actual pre-1072 main refused its old save');
     const baselineBack = baseline.loadCareer();
     if (!baselineBack) abort('Actual pre-1072 main could not open its old save');
-    const baselineOut = playCup(baselineBack, probe.seed, baseline);
-    const base = row(baselineOut);
+    let baselineOut = playCup(baselineBack, probe.seed, baseline);
     let content = compareContent(out, baselineOut);
     let oldBy1052 = false;
+    let oldBy1600 = false;
     if (!content.paired && leagueOut) {
       /* Release AO: the same old save, written, loaded and played by this tree's
          coachless engine with Round 1052's league taken out (section 4's arm) */
@@ -1072,12 +1144,34 @@ section = 5;
       const altContent = compareContent(alt, baselineOut);
       if (altContent.paired) { out = alt; content = altContent; oldBy1052 = true; }
     }
+    if (!content.paired && curve1) {
+      /* Round 1600: the same old save on the world before the flip, written, loaded and played by both engines
+         there (section 4's arm) */
+      const oldArm = JSON.parse(JSON.stringify(curve1ArmCup));
+      delete oldArm.shootoutOrder;
+      if (!curve1.arm.saveCareer(oldArm)) abort('the curve 1 arm refused its old save');
+      const backArm = curve1.arm.loadCareer();
+      if (!backArm) abort('the curve 1 arm could not open its old save');
+      if ('shootoutOrder' in backArm) fail('the curve 1 arm gave an old save an order');
+      backArm.matchRules = 'base'; /* Round 1331: set again after loadCareer (see oldRules) */
+      const alt = playCup(backArm, probe.seed, curve1.arm);
+      const oldBase = JSON.parse(JSON.stringify(curve1BaselineCup));
+      delete oldBase.shootoutOrder;
+      if (!curve1.baseline.saveCareer(oldBase)) abort('Actual pre-1072 main on the curve 1 world refused its old save');
+      const baseBack = curve1.baseline.loadCareer();
+      if (!baseBack) abort('Actual pre-1072 main on the curve 1 world could not open its old save');
+      const altBase = playCup(baseBack, probe.seed, curve1.baseline);
+      const altContent = compareContent(alt, altBase);
+      if (altContent.paired) { out = alt; baselineOut = altBase; content = altContent; oldBy1600 = true; }
+    }
+    const base = row(baselineOut);
     const got = row(out);
     const goldenCandidate = JSON.stringify(legacyRow(out)) === JSON.stringify(probe);
     const goldenBaseline = JSON.stringify(legacyRow(baselineOut)) === JSON.stringify(probe);
     const rawPaired = JSON.stringify(got) === JSON.stringify(base);
-    baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, by1052: oldBy1052, ...content };
+    baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, by1052: oldBy1052, by1600: oldBy1600, ...content };
     if (oldBy1052) console.log(`   the old save equals actual pre-1072 main only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
+    if (oldBy1600) console.log(`   the old save equals actual pre-1072 main only with both engines on the world before Round 1600's flip`);
     if (!content.paired) fail(`the loaded old save differs from actual pre-1072 main at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
     if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual pre-1072 main');
     console.log(`   loaded old save, seed ${probe.seed} (one of ${pensNow.size} rows main settles on penalties, decided ${base.decidedBy}): equal actual pre-1072 main ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
@@ -1303,6 +1397,7 @@ baselineEvidence.executedSources = [['candidate', enginePath], ['historical', hi
   return { role, hash: createHash('sha256').update(bytes).digest('hex'), copy };
 });
 baselineEvidence.executedBundleHash = createHash('sha256').update(fs.readFileSync(BUNDLE)).digest('hex');
+baselineEvidence.curve1Arm1600 = curve1 ? { served: curve1Served, bundleHash: createHash('sha256').update(fs.readFileSync(BUNDLE_1600)).digest('hex') } : null;
 baselineEvidence.sources = sourceBytes.map(({ file, bytes }) => {
   const after = fs.readFileSync(file);
   return { file: path.relative(ROOT, file), before: createHash('sha256').update(bytes).digest('hex'),
@@ -1310,7 +1405,7 @@ baselineEvidence.sources = sourceBytes.map(({ file, bytes }) => {
 });
 if (baselineEvidence.sources.some(source => !source.held)) fail('Original engine or ancient fixture source bytes changed');
 fs.writeFileSync(path.join(evidenceDir, `${CONTROL || 'normal'}-baseline.json`), JSON.stringify(baselineEvidence, null, 2));
-for (const f of [ENTRY, BUNDLE, `${TMP}/${TAG}.control.engine.ts`, historicalPath, baselinePath, leagueOutPath]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
+for (const f of [ENTRY, BUNDLE, ENTRY_1600, BUNDLE_1600, `${TMP}/${TAG}.control.engine.ts`, historicalPath, baselinePath, leagueOutPath]) { try { fs.unlinkSync(f); } catch { /* not there */ } }
 if (runtimeErrors.length || baselineEvidence.sources.some(source => !source.held)) {
   console.error('simCmShootoutOrder: runtime errors or changed original source bytes receive no control credit');
   process.exit(2);

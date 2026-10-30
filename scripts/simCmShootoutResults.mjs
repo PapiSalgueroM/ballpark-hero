@@ -3,7 +3,16 @@
    requirement; infrastructure errors use exit 2 and never earn expected-red credit.
    Ordinary discovery defaults to fixed, reads immutable b20 from Git history,
    and writes a unique .sim-artifacts directory. Explicit phase, baseline and
-   output inputs keep the same contract as the detached qualification. */
+   output inputs keep the same contract as the detached qualification.
+   Round 1600 (2026-10-30): both engines are bundled on the world before the
+   flip while this tree's world reads age (scripts/lib/cmCurve1World1600.mjs,
+   the curve 1 files rebuilt from this tree's own). Immutable b20 knows no
+   level beside a rating, no age read and no drop out shift, so on the curve 2
+   files the walk to the first cup could never be equal (exit 2, "The actual
+   walk before the first cup changed", on the round's head); on the curve 1
+   world this tree's engine reads no age and every check below is as strict as
+   before. CM_SHOOTOUT_RESULTS_CONTROL=keepcurve leaves the bridge out and must
+   end on that same exit 2 line. */
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -11,10 +20,12 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { buildSync } from 'esbuild';
+import { build } from 'esbuild';
+import { worldReadsAge1600, curve1Plugin1600 } from './lib/cmCurve1World1600.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const phase = process.env.CM_SHOOTOUT_RESULTS_PHASE ?? 'fixed';
+const control = process.env.CM_SHOOTOUT_RESULTS_CONTROL ?? '';
 let baseline = process.env.CM_SHOOTOUT_RESULTS_BASELINE;
 let output = process.env.CM_SHOOTOUT_RESULTS_OUT;
 const candidate = process.env.CM_SHOOTOUT_RESULTS_CANDIDATE ?? path.join(ROOT, 'src/lib/clubManager.ts');
@@ -152,11 +163,22 @@ try {
   Object.defineProperty(globalThis, 'localStorage', { configurable: true, value: {
     getItem: () => null, setItem: () => { throw new Error('Match proof unexpectedly wrote storage'); }, removeItem: () => {},
   } });
+  assert.ok(['', 'keepcurve'].includes(control), `Unknown CM_SHOOTOUT_RESULTS_CONTROL ${control}`);
+  /* Round 1600: the bridge, while this tree's world reads age and b20 cannot (see the header) */
+  const bridgeNeeded = worldReadsAge1600(ROOT) && !baselineBytes.includes('cmWorldReadsAge');
+  assert.ok(control !== 'keepcurve' || bridgeNeeded, 'keepcurve control cannot run: there is no curve 1 bridge to leave out');
+  const bridged = bridgeNeeded && control !== 'keepcurve';
+  receipt.bridge1600 = { needed: bridgeNeeded, used: bridged, served: {} };
   async function engine(source, name) {
     const file = path.join(temporary, `${name}.mjs`);
-    buildSync({ stdin: { contents: `export * from ${JSON.stringify(source)};`, resolveDir: ROOT, loader: 'js' },
+    const bridge = bridged ? curve1Plugin1600(ROOT) : null;
+    await build({ stdin: { contents: `export * from ${JSON.stringify(source)};`, resolveDir: ROOT, loader: 'js' },
       bundle: true, format: 'esm', platform: 'node', outfile: file, logLevel: 'error',
-      alias: { '@/lib/clubManager': source, '@': path.join(ROOT, 'src') } });
+      alias: { '@/lib/clubManager': source, '@': path.join(ROOT, 'src') }, plugins: bridge ? [bridge.plugin] : [] });
+    if (bridge) {
+      assert.ok(Object.values(bridge.served).every(n => n === 1), `Round 1600 bridge: ${name} did not take each curve 1 file exactly once (${JSON.stringify(bridge.served)})`);
+      receipt.bridge1600.served[name] = bridge.served;
+    }
     const loaded = await import(pathToFileURL(file).href);
     for (const name of ['startCareer', 'playNextEntry', 'setShootoutOrder', 'runShootout']) assert.equal(typeof loaded[name], 'function', `Missing real engine export ${name}`);
     return loaded;
@@ -265,6 +287,7 @@ try {
     && receipt.preservationPassed;
   receipt.status = receipt.failures.length ? 'assertion-failure' : 'passed';
   record('summary.json', receipt);
+  if (receipt.bridge1600.used) console.log(`Round 1600 bridge: both engines on the world before the flip (curve 1 files served ${JSON.stringify(receipt.bridge1600.served)}).`);
   console.log(`Shootout results: ${receipt.cases.length} actual matches compared; ${receipt.failures.length} assertions failed; preservation ${receipt.preservationPassed ? 'passed' : 'FAILED'}.`);
   console.log(`Current witnesses: shootout win ${witnesses.win}, shootout loss ${witnesses.loss}, ordinary match ${witnesses.regular}.`);
   const passed = label => receipt.cases.filter(item => item.passed.includes(label)).length;
