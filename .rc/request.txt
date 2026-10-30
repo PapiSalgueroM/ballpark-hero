@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+playCmPlayerCard: ENGINES=chromium node scripts/playCmPlayerCard.mjs
+clubDetailRoster: export CI=1 SIM_NETWORK=offline CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_OUT="$RC_OUT/roster" && node scripts/simClubDetailCurrentRoster.mjs && ENGINES=chromium node scripts/playClubDetailCurrentRoster.mjs
