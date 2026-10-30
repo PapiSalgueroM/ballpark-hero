@@ -611,7 +611,20 @@
       48 at the head, so the board demands, drop zones and European places
       are main's. Written with --part=modern,eras --write on 7d861da56
       (r1600-s15 rules-write, 1698 lines changed), then run green whole on
-      the same runner.
+      the same runner. The one input proofs (Round 1600's fixer, on head
+      178a1fd8c): with PAST_SEASONS_READ_AGE false the base's file replays
+      eras green (r1600-rr rr1-eras-proof); with the squads, A-League and
+      Russia files back to the base's and the real free agents' curve at 1
+      it replays modern green (r1600-rr2 rr1-modern-proof).
+      Round 1600's fixer re-took modern again: an old save's world ledger
+      reads a year either side, so a new seeded career on the age world
+      opens a stamped ledger in startCareer (curve 2), and that stamp is in
+      every modern start, whole, wholeNext and s2_whole hash (91 lines,
+      nothing else). Proof (r1600-rr2): the head reads 27 failures with the
+      file before it (rr1-stamp-head); with that one stamp line deleted the
+      file before it is green, 27 of 27 equal (rr1-stamp-proof). Written
+      with --part=modern,eras --write on 178a1fd8c (r1600-rr rr1-retake),
+      then run green whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
