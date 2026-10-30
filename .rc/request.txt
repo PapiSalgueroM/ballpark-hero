@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: git show b4a331a9c:src/data/nbaConnectionsPuzzles.ts > src/data/zzBaseNbaPuzzles.ts && node .rc/x/rwalkfix.mjs
