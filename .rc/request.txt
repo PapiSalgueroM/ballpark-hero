@@ -1,0 +1,3 @@
+levelReads: node scripts/simCmLevelReads.mjs
+lr-youth: CM_LEVEL_READS_CONTROL=youth node scripts/simCmLevelReads.mjs
+lr-noeraread: CM_LEVEL_READS_CONTROL=noeraread node scripts/simCmLevelReads.mjs
