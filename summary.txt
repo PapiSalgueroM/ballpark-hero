@@ -1,0 +1,1 @@
+main-writes exit=1 40s | simWritesAreSent: 2 failures

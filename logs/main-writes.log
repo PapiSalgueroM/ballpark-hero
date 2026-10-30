@@ -1,0 +1,8 @@
+14a9af7042 Board: the owner asks both lanes to lock in on Soccer Career and Club Manager; his eight CM asks and a proposed split
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+2) a finished round really does put a request on the wire
+  FAIL: the harness could not drive Guess the Nation to a finish: TimeoutError: locator.click: Timeout 8000ms exceeded.
+   played=false, POSTs to guess_nation_scores seen: 0
+  FAIL: no guess was ever submitted, so this section proved nothing about the write
+
+simWritesAreSent: 2 failures
