@@ -1,0 +1,62 @@
+TABLE_RANGE: nhl holds 16 table rows beside the file's 4 boards
+US_CONN_CONTROL=frobinson: the input was changed; this run must end red
+1) no group claims the present, and every recent year label is one the record judges
+   baseball: 0 present tense or unheld recent year labels
+   nfl: 0 present tense or unheld recent year labels
+   nhl: 0 present tense or unheld recent year labels
+   nba: 0 present tense or unheld recent year labels
+2) no refuted claim is on a board
+   baseball: 32 refuted claims held off every board, 0 found
+  FAIL: baseball bconn-057: Frank Robinson is back beside "Hall of Fame left fielders", a pair neither host decides (MLBHOF 1982; games by position {"LF":834,"CF":101,"1B":308,"3B":13,"RF":1270,"DH":308}; last 1976-09-18 / Hall of Fame 1982; Positions: Outfielder and First Baseman; share of games at LF: 0.30)
+   baseball: 57 gray pairs the round took off their boards, 1 back
+   nfl: 0 refuted claims held off every board, 0 found
+   nhl: 0 refuted claims held off every board, 0 found
+   nba: 1 refuted claims held off every board, 0 found
+   nba: 1 gray pairs the round took off their boards, 0 back
+3) the ledger stands on two hosts
+   baseball: 659 facts, 0 on one host; 115 flagged groups, 575 members held; 131 fixed findings
+   nfl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 1 fixed findings
+   nhl: 320 table members, each to be held by a fact
+   nhl: 359 facts, 0 on one host; 2 flagged groups, 10 members held; 57 fixed findings
+   nba: 82 facts, 0 on one host; 16 flagged groups, 80 members held; 2 fixed findings
+4) one right answer: the shared cross check over every board
+   baseball: 60 boards, 240 of 240 groups judged; members 1200 judged (0 unknown), other tiles 3599 judged (1 unknown); 0 findings
+   nfl: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 240 judged (0 unknown); 0 findings
+   nhl: 20 boards, 80 of 80 groups judged; members 400 judged (0 unknown), other tiles 1200 judged (0 unknown); 0 findings
+   nba: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 240 judged (0 unknown); 0 findings
+5) no man is a season from joining a group beside him
+   baseball: 0 watched men beside a group they may join
+   nfl: 0 watched men beside a group they may join
+   nhl: 0 watched men beside a group they may join
+   nba: 0 watched men beside a group they may join
+   nhl: the watch line of "Scored 60 goals in a season" (45 of 60, on the career best) on 2 boards read 1 men still playing beside it
+   nhl: the watch line of "Scored 70 goals in a season" (52.5 of 70, on the career best) on 2 boards read 11 men still playing beside it
+   nhl: 2 single season marks on the boards; 0 watch line problems
+6) no man is dealt twice on one board
+   baseball: 0 men dealt twice
+   nfl: 0 men dealt twice
+   nhl: 0 men dealt twice
+   nba: 0 men dealt twice
+7) what the record cannot judge may only get fewer
+  FAIL: baseball: 1 other tiles the record cannot judge, over the ceiling of 0
+   baseball: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 1 other tiles it cannot judge (ceiling 0)
+   nfl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+   nhl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+   nba: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+8) no active man is one move from a second answer
+   baseball: 15 dated club groups, 0 undated, 0 active men one move from a club group beside them
+   nfl: 8 dated club groups, 0 undated, 0 active men one move from a club group beside them
+   nhl: 39 dated club groups, 0 undated, 0 active men one move from a club group beside them
+   nba: 7 dated club groups, 0 undated, 0 active men one move from a club group beside them
+9) the table rows are the export plus recorded decisions
+   nhl: 16 decided table rows, 16 of them in TABLE_RANGE
+   nhl: 16 table rows, 64 decisions (RECORD 51, LIST 0, PERMAN 0, REBUILD 13), 0 problems
+10) every criterion kind says how it ages, and every running kind is watched
+   baseball: kinds award 6, club 43, career 6, born 91, firstPick 1, season 5, bats 2, recordList 7, awardAt 23, avg300 1, wsWith 1, undrafted 1, mvpRun 1, hofPos 38, starter 1, posEra 1, wsClubs 1, hofPitcher 11; 0 problems; running and not watched, owed to the baseball table rounds: recordList, avg300, undrafted, hofPos, starter, posEra, wsClubs, hofPitcher
+   nfl: kinds club 8, firstPick 1, yards 3, college 4; 0 problems
+   nhl: kinds club 39, career 8, season 4, award 9, pos 1, wins 3, draft 7, cupWith 3, smytheLost 1, goalieGoal 1, cupClubs 1, clubGoals 1, draftBy 1, hofClub 1; 0 problems
+   nba: kinds career 4, club 7, draft 2, born 2, continent 1; 0 problems
+11) the NBA birthplace readers: a place no list holds is unknown, and every stored country is the reader's
+   nba: 9 reader probes, 166 stored birthplaces read back on two hosts, 22 countries each in one continent set; 0 problems
+
+US_CONN_CONTROL=frobinson fired its own rule 1 time(s): gray-back x1 for Frank Robinson (all findings: gray-back 1, other-unknown 2; 2 failures in all)

@@ -1,0 +1,474 @@
+US_CONN_TABLES (report): nfl holds 16 table rows beside the file's 4 boards
+US_CONN_TABLES (report): nhl holds 16 table rows beside the file's 4 boards
+1) no group claims the present, and every recent year label is one the record judges
+   baseball: 0 present tense or unheld recent year labels
+   nfl: 0 present tense or unheld recent year labels
+   nhl: 0 present tense or unheld recent year labels
+   nba: 0 present tense or unheld recent year labels
+2) no refuted claim is on a board
+   baseball: 32 refuted claims held off every board, 0 found
+   baseball: 57 gray pairs the round took off their boards, 0 back
+   nfl: 0 refuted claims held off every board, 0 found
+   nhl: 0 refuted claims held off every board, 0 found
+   nba: 1 refuted claims held off every board, 0 found
+   nba: 1 gray pairs the round took off their boards, 0 back
+3) the ledger stands on two hosts
+   baseball: 659 facts, 0 on one host; 115 flagged groups, 575 members held; 131 fixed findings
+  FAIL: nfl nflconn-005: Emmitt Smith in "Played for the Dallas Cowboys" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Tony Romo in "Played for the Dallas Cowboys" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: DeMarcus Ware in "Played for the Dallas Cowboys" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Jason Witten in "Played for the Dallas Cowboys" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Dez Bryant in "Played for the Dallas Cowboys" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Brett Favre in "Played for the Green Bay Packers" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Aaron Rodgers in "Played for the Green Bay Packers" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Charles Woodson in "Played for the Green Bay Packers" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Davante Adams in "Played for the Green Bay Packers" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Jordy Nelson in "Played for the Green Bay Packers" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Russell Wilson in "Played for the Seattle Seahawks" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Marshawn Lynch in "Played for the Seattle Seahawks" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Richard Sherman in "Played for the Seattle Seahawks" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Bobby Wagner in "Played for the Seattle Seahawks" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Kam Chancellor in "Played for the Seattle Seahawks" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Jason Taylor in "Played for the Miami Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Tyreek Hill in "Played for the Miami Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Cameron Wake in "Played for the Miami Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Jarvis Landry in "Played for the Miami Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-005: Ryan Tannehill in "Played for the Miami Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Ben Roethlisberger in "Played for the Pittsburgh Steelers" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Troy Polamalu in "Played for the Pittsburgh Steelers" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Antonio Brown in "Played for the Pittsburgh Steelers" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Hines Ward in "Played for the Pittsburgh Steelers" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: T.J. Watt in "Played for the Pittsburgh Steelers" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Peyton Manning in "Played for the Denver Broncos" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Von Miller in "Played for the Denver Broncos" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Champ Bailey in "Played for the Denver Broncos" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Demaryius Thomas in "Played for the Denver Broncos" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Courtland Sutton in "Played for the Denver Broncos" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Colin Kaepernick in "Played for the San Francisco 49ers" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Frank Gore in "Played for the San Francisco 49ers" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: George Kittle in "Played for the San Francisco 49ers" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Deebo Samuel in "Played for the San Francisco 49ers" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Patrick Willis in "Played for the San Francisco 49ers" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Myles Garrett in "Played for the Cleveland Browns" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Joe Thomas in "Played for the Cleveland Browns" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Baker Mayfield in "Played for the Cleveland Browns" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Nick Chubb in "Played for the Cleveland Browns" (a table group) has no two host fact
+  FAIL: nfl nflconn-006: Denzel Ward in "Played for the Cleveland Browns" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Tua Tagovailoa in "Played for the Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Jaylen Waddle in "Played for the Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Jason Taylor in "Played for the Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Zach Thomas in "Played for the Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Ryan Tannehill in "Played for the Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Justin Jefferson in "Played for the Vikings" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Randy Moss in "Played for the Vikings" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Harrison Smith in "Played for the Vikings" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Dalvin Cook in "Played for the Vikings" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Adam Thielen in "Played for the Vikings" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Joe Burrow in "Played for the Bengals" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Ja'Marr Chase in "Played for the Bengals" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Tee Higgins in "Played for the Bengals" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Geno Atkins in "Played for the Bengals" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Chad Johnson in "Played for the Bengals" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Matt Ryan in "Played for the Falcons" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Julio Jones in "Played for the Falcons" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Roddy White in "Played for the Falcons" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Grady Jarrett in "Played for the Falcons" (a table group) has no two host fact
+  FAIL: nfl nflconn-007: Devonta Freeman in "Played for the Falcons" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Antonio Brown in "Played for the Steelers" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Le'Veon Bell in "Played for the Steelers" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Cameron Heyward in "Played for the Steelers" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Eli Manning in "Played for the Giants" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Saquon Barkley in "Played for the Giants" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Victor Cruz in "Played for the Giants" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Landon Collins in "Played for the Giants" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Justin Tuck in "Played for the Giants" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Drew Brees in "Played for the Saints" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Alvin Kamara in "Played for the Saints" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Cameron Jordan in "Played for the Saints" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Marshon Lattimore in "Played for the Saints" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Tyrann Mathieu in "Played for the Saints" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Derrick Henry in "Played for the Titans" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: A.J. Brown in "Played for the Titans" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Kevin Byard in "Played for the Titans" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: Jeffery Simmons in "Played for the Titans" (a table group) has no two host fact
+  FAIL: nfl nflconn-008: DeMarco Murray in "Played for the Titans" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Patrick Mahomes in "Won a Super Bowl MVP" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Tom Brady in "Won a Super Bowl MVP" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Eli Manning in "Won a Super Bowl MVP" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Nick Foles in "Won a Super Bowl MVP" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Cooper Kupp in "Won a Super Bowl MVP" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Cam Newton in "Won the Heisman Trophy" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Lamar Jackson in "Won the Heisman Trophy" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Derrick Henry in "Won the Heisman Trophy" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Kyler Murray in "Won the Heisman Trophy" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Marcus Mariota in "Won the Heisman Trophy" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Brett Favre in "Retired, then came back" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Rob Gronkowski in "Retired, then came back" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Marshawn Lynch in "Retired, then came back" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Jason Witten in "Retired, then came back" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Randy Moss in "Retired, then came back" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Emmitt Smith in "Competed on Dancing with the Stars" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Jerry Rice in "Competed on Dancing with the Stars" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Hines Ward in "Competed on Dancing with the Stars" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Von Miller in "Competed on Dancing with the Stars" (a table group) has no two host fact
+  FAIL: nfl nflconn-009: Rashad Jennings in "Competed on Dancing with the Stars" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Adam Vinatieri in "Kickers" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Justin Tucker in "Kickers" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Robbie Gould in "Kickers" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Matt Prater in "Kickers" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Stephen Gostkowski in "Kickers" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Kurt Warner in "Went undrafted" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Tony Romo in "Went undrafted" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Antonio Gates in "Went undrafted" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: James Harrison in "Went undrafted" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Adam Thielen in "Went undrafted" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Tom Brady in "Wore number 12" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Aaron Rodgers in "Wore number 12" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Andrew Luck in "Wore number 12" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Ken Stabler in "Wore number 12" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Joe Namath in "Wore number 12" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Marvin Harrison in "Caught passes from Peyton Manning" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Reggie Wayne in "Caught passes from Peyton Manning" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Dallas Clark in "Caught passes from Peyton Manning" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Demaryius Thomas in "Caught passes from Peyton Manning" (a table group) has no two host fact
+  FAIL: nfl nflconn-010: Emmanuel Sanders in "Caught passes from Peyton Manning" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Devin Hester in "Returned a kick for a Super Bowl touchdown" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Jacoby Jones in "Returned a kick for a Super Bowl touchdown" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Desmond Howard in "Returned a kick for a Super Bowl touchdown" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Percy Harvin in "Returned a kick for a Super Bowl touchdown" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Jermaine Lewis in "Returned a kick for a Super Bowl touchdown" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: David Tyree in "Made an iconic Super Bowl catch" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Santonio Holmes in "Made an iconic Super Bowl catch" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Mario Manningham in "Made an iconic Super Bowl catch" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Julian Edelman in "Made an iconic Super Bowl catch" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Lynn Swann in "Made an iconic Super Bowl catch" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Michael Strahan in "Had a 22-sack season" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: T.J. Watt in "Had a 22-sack season" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Mark Gastineau in "Had a 22-sack season" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Jared Allen in "Had a 22-sack season" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Justin Houston in "Had a 22-sack season" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Travis Kelce in "Has a brother who played in the NFL" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: J.J. Watt in "Has a brother who played in the NFL" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Joey Bosa in "Has a brother who played in the NFL" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Devin McCourty in "Has a brother who played in the NFL" (a table group) has no two host fact
+  FAIL: nfl nflconn-011: Stefon Diggs in "Has a brother who played in the NFL" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Michael Vick in "Drafted number 1 overall" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: David Carr in "Drafted number 1 overall" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Baker Mayfield in "Drafted number 1 overall" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Joe Burrow in "Drafted number 1 overall" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Trevor Lawrence in "Drafted number 1 overall" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Eric Dickerson in "Ran for 2,000 yards in a season" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Terrell Davis in "Ran for 2,000 yards in a season" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Jamal Lewis in "Ran for 2,000 yards in a season" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Chris Johnson in "Ran for 2,000 yards in a season" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Derrick Henry in "Ran for 2,000 yards in a season" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Dan Marino in "Threw for 5,000 yards in a season" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Drew Brees in "Threw for 5,000 yards in a season" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Matthew Stafford in "Threw for 5,000 yards in a season" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Jameis Winston in "Threw for 5,000 yards in a season" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Patrick Mahomes in "Threw for 5,000 yards in a season" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Barry Sanders in "Walked away in their prime" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Calvin Johnson in "Walked away in their prime" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Andrew Luck in "Walked away in their prime" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Luke Kuechly in "Walked away in their prime" (a table group) has no two host fact
+  FAIL: nfl nflconn-012: Patrick Willis in "Walked away in their prime" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Brett Favre in "Hall of Famers who played for the Jets" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Curtis Martin in "Hall of Famers who played for the Jets" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Ronnie Lott in "Hall of Famers who played for the Jets" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: LaDainian Tomlinson in "Hall of Famers who played for the Jets" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Ed Reed in "Hall of Famers who played for the Jets" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Richard Dent in "Won Super Bowl MVP on defense" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Ray Lewis in "Won Super Bowl MVP on defense" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Dexter Jackson in "Won Super Bowl MVP on defense" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Malcolm Smith in "Won Super Bowl MVP on defense" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Von Miller in "Won Super Bowl MVP on defense" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: John Elway in "Played 16 or more seasons for one franchise" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Dan Marino in "Played 16 or more seasons for one franchise" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Darrell Green in "Played 16 or more seasons for one franchise" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Jason Hanson in "Played 16 or more seasons for one franchise" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Bruce Matthews in "Played 16 or more seasons for one franchise" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Antwaan Randle El in "Threw a Super Bowl touchdown pass but is not a QB" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Trey Burton in "Threw a Super Bowl touchdown pass but is not a QB" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Jauan Jennings in "Threw a Super Bowl touchdown pass but is not a QB" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Robert Newhouse in "Threw a Super Bowl touchdown pass but is not a QB" (a table group) has no two host fact
+  FAIL: nfl nflconn-013: Lawrence McCutcheon in "Threw a Super Bowl touchdown pass but is not a QB" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Reggie White in "Recorded 100 career sacks" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Bruce Smith in "Recorded 100 career sacks" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: DeMarcus Ware in "Recorded 100 career sacks" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: J.J. Watt in "Recorded 100 career sacks" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: T.J. Watt in "Recorded 100 career sacks" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Desmond Howard in "Returned a kick or punt for a Super Bowl touchdown" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Devin Hester in "Returned a kick or punt for a Super Bowl touchdown" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Jacoby Jones in "Returned a kick or punt for a Super Bowl touchdown" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Percy Harvin in "Returned a kick or punt for a Super Bowl touchdown" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Fulton Walker in "Returned a kick or punt for a Super Bowl touchdown" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Tony Romo in "Undrafted but made a Pro Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: James Harrison in "Undrafted but made a Pro Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Antonio Gates in "Undrafted but made a Pro Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Adam Thielen in "Undrafted but made a Pro Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Kurt Warner in "Undrafted but made a Pro Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Bo Jackson in "Also played professional baseball" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Deion Sanders in "Also played professional baseball" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Brian Jordan in "Also played professional baseball" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: Drew Henson in "Also played professional baseball" (a table group) has no two host fact
+  FAIL: nfl nflconn-014: D.J. Dozier in "Also played professional baseball" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Peyton Manning in "Won the MVP award more than once" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Aaron Rodgers in "Won the MVP award more than once" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Brett Favre in "Won the MVP award more than once" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Steve Young in "Won the MVP award more than once" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Lamar Jackson in "Won the MVP award more than once" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Tony Gonzalez in "Tight ends with 10,000 receiving yards" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Antonio Gates in "Tight ends with 10,000 receiving yards" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Jason Witten in "Tight ends with 10,000 receiving yards" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Travis Kelce in "Tight ends with 10,000 receiving yards" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Shannon Sharpe in "Tight ends with 10,000 receiving yards" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Julio Jones in "Played college ball at Alabama" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Derrick Henry in "Played college ball at Alabama" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Amari Cooper in "Played college ball at Alabama" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Jalen Hurts in "Played college ball at Alabama" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: DeVonta Smith in "Played college ball at Alabama" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Bob Griese in "1972 undefeated Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Larry Csonka in "1972 undefeated Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Mercury Morris in "1972 undefeated Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Paul Warfield in "1972 undefeated Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-015: Garo Yepremian in "1972 undefeated Dolphins" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Barry Sanders in "Won the Heisman and an NFL MVP" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: O.J. Simpson in "Won the Heisman and an NFL MVP" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Marcus Allen in "Won the Heisman and an NFL MVP" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Earl Campbell in "Won the Heisman and an NFL MVP" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Paul Hornung in "Won the Heisman and an NFL MVP" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Justin Herbert in "Offensive Rookie of the Year at QB" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Kyler Murray in "Offensive Rookie of the Year at QB" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Dak Prescott in "Offensive Rookie of the Year at QB" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Vince Young in "Offensive Rookie of the Year at QB" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Robert Griffin III in "Offensive Rookie of the Year at QB" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: David Carr in "First overall picks who never made a Pro Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: JaMarcus Russell in "First overall picks who never made a Pro Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Courtney Brown in "First overall picks who never made a Pro Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Ki-Jana Carter in "First overall picks who never made a Pro Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Tim Couch in "First overall picks who never made a Pro Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Danny White in "Quarterbacks who also punted in the NFL" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Randall Cunningham in "Quarterbacks who also punted in the NFL" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Tom Tupa in "Quarterbacks who also punted in the NFL" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Sammy Baugh in "Quarterbacks who also punted in the NFL" (a table group) has no two host fact
+  FAIL: nfl nflconn-016: Bob Waterfield in "Quarterbacks who also punted in the NFL" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Tom Brady in "Threw 500 career touchdown passes" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Drew Brees in "Threw 500 career touchdown passes" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Peyton Manning in "Threw 500 career touchdown passes" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Aaron Rodgers in "Threw 500 career touchdown passes" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Brett Favre in "Threw 500 career touchdown passes" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Jerry Rice in "Caught 100 career touchdown passes" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Randy Moss in "Caught 100 career touchdown passes" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Terrell Owens in "Caught 100 career touchdown passes" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Larry Fitzgerald in "Caught 100 career touchdown passes" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Marvin Harrison in "Caught 100 career touchdown passes" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: LaDainian Tomlinson in "Played for the Chargers" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Philip Rivers in "Played for the Chargers" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Junior Seau in "Played for the Chargers" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Joey Bosa in "Played for the Chargers" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Keenan Allen in "Played for the Chargers" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Lawrence Taylor in "Won Defensive Player of the Year more than once" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: J.J. Watt in "Won Defensive Player of the Year more than once" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Aaron Donald in "Won Defensive Player of the Year more than once" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Ray Lewis in "Won Defensive Player of the Year more than once" (a table group) has no two host fact
+  FAIL: nfl nflconn-017: Joe Greene in "Won Defensive Player of the Year more than once" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Jay Cutler in "Played QB for the Bears" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Jim McMahon in "Played QB for the Bears" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Mitchell Trubisky in "Played QB for the Bears" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Justin Fields in "Played QB for the Bears" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Caleb Williams in "Played QB for the Bears" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Dick Butkus in "Hall of Fame middle linebackers" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Ray Nitschke in "Hall of Fame middle linebackers" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Mike Singletary in "Hall of Fame middle linebackers" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Willie Lanier in "Hall of Fame middle linebackers" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Jack Lambert in "Hall of Fame middle linebackers" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Jerry Rice in "Wore number 80" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Cris Carter in "Wore number 80" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Steve Largent in "Wore number 80" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Isaac Bruce in "Wore number 80" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Andre Johnson in "Wore number 80" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Justin Tucker in "Kicked a 63-yard field goal or longer" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Matt Prater in "Kicked a 63-yard field goal or longer" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Sebastian Janikowski in "Kicked a 63-yard field goal or longer" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: Tom Dempsey in "Kicked a 63-yard field goal or longer" (a table group) has no two host fact
+  FAIL: nfl nflconn-018: David Akers in "Kicked a 63-yard field goal or longer" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: DeAndre Hopkins in "Played for the Texans" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Deshaun Watson in "Played for the Texans" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Arian Foster in "Played for the Texans" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: C.J. Stroud in "Played for the Texans" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Nico Collins in "Played for the Texans" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Saquon Barkley in "Won Offensive Rookie of the Year at RB" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Eric Dickerson in "Won Offensive Rookie of the Year at RB" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Adrian Peterson in "Won Offensive Rookie of the Year at RB" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Edgerrin James in "Won Offensive Rookie of the Year at RB" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Alvin Kamara in "Won Offensive Rookie of the Year at RB" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Timmy Smith in "Rushed for 150 yards in a Super Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Marcus Allen in "Rushed for 150 yards in a Super Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: John Riggins in "Rushed for 150 yards in a Super Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Franco Harris in "Rushed for 150 yards in a Super Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Terrell Davis in "Rushed for 150 yards in a Super Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: James Harrison in "Had a pick-six in a Super Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Malcolm Smith in "Had a pick-six in a Super Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Dwight Smith in "Had a pick-six in a Super Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Robert Alford in "Had a pick-six in a Super Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-019: Tracy Porter in "Had a pick-six in a Super Bowl" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Matthew Stafford in "Played QB for the Lions" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Jared Goff in "Played QB for the Lions" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Dan Orlovsky in "Played QB for the Lions" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Jon Kitna in "Played QB for the Lions" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Charlie Batch in "Played QB for the Lions" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Randy Moss in "2007 16-0 regular season Patriots" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Wes Welker in "2007 16-0 regular season Patriots" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Junior Seau in "2007 16-0 regular season Patriots" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Asante Samuel in "2007 16-0 regular season Patriots" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Laurence Maroney in "2007 16-0 regular season Patriots" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Josh Allen in "Played for the Bills" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Stefon Diggs in "Played for the Bills" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Jim Kelly in "Played for the Bills" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Thurman Thomas in "Played for the Bills" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Andre Reed in "Played for the Bills" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Ray Guy in "Kickers and punters in the Hall of Fame" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Jan Stenerud in "Kickers and punters in the Hall of Fame" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Morten Andersen in "Kickers and punters in the Hall of Fame" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: Lou Groza in "Kickers and punters in the Hall of Fame" (a table group) has no two host fact
+  FAIL: nfl nflconn-020: George Blanda in "Kickers and punters in the Hall of Fame" (a table group) has no two host fact
+   nfl: 320 table members, each to be held by a fact
+   nfl: 12 facts, 0 on one host; 2 flagged groups, 10 members held; 1 fixed findings
+   nhl: 320 table members, each to be held by a fact
+   nhl: 359 facts, 0 on one host; 2 flagged groups, 10 members held; 57 fixed findings
+   nba: 82 facts, 0 on one host; 16 flagged groups, 80 members held; 2 fixed findings
+4) one right answer: the shared cross check over every board
+   baseball: 60 boards, 240 of 240 groups judged; members 1200 judged (0 unknown), other tiles 3600 judged (0 unknown); 0 findings
+  FAIL: nfl nflconn-007 | second-fit | Tua Tagovailoa | Played for the Falcons | listed under Played for the Dolphins, so the board has two right answers
+  FAIL: nfl nflconn-015 | not-a-member | Jalen Hurts | Played college ball at Alabama
+  FAIL: nfl nflconn-017 | second-fit | Drew Brees | Played for the Chargers | listed under Threw 500 career touchdown passes, so the board has two right answers
+   nfl: 6 MEN ON THE TABLE ROWS ARE NOT IN THE RECORD, SO THEIR GROUPS ARE NOT FULLY CHECKED. Extend the record with NAMES_FROM=<export> (scripts/usConnections/fetch*Record.mjs) and run again. First of them: Chad Johnson, Paul Hornung, Robert Griffin III, Sammy Baugh, Bob Waterfield, Lou Groza
+   nfl: 20 boards, 28 of 80 groups judged; members 134 judged (6 unknown), other tiles 294 judged (126 unknown); 3 findings
+   nhl: every man on the table rows is in the record
+   nhl: 20 boards, 80 of 80 groups judged; members 400 judged (0 unknown), other tiles 1200 judged (0 unknown); 0 findings
+   nba: 4 boards, 16 of 16 groups judged; members 80 judged (0 unknown), other tiles 240 judged (0 unknown); 0 findings
+5) no man is a season from joining a group beside him
+   baseball: 0 watched men beside a group they may join
+   nfl: 0 watched men beside a group they may join
+   nhl: 0 watched men beside a group they may join
+   nba: 0 watched men beside a group they may join
+   nhl: the watch line of "Scored 60 goals in a season" (45 of 60, on the career best) on 2 boards read 1 men still playing beside it
+   nhl: the watch line of "Scored 70 goals in a season" (52.5 of 70, on the career best) on 2 boards read 11 men still playing beside it
+   nhl: 2 single season marks on the boards; 0 watch line problems
+6) no man is dealt twice on one board
+   baseball: 0 men dealt twice
+   nfl: 0 men dealt twice
+   nhl: 0 men dealt twice
+   nba: 0 men dealt twice
+7) what the record cannot judge may only get fewer
+   baseball: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+  FAIL: nfl: 52 groups nothing judges, the ledger's uncheckedCeiling says 0: one came back
+  FAIL: nfl: 6 members the record cannot place, the ledger's memberUnknownCeiling says 0: one came back
+  FAIL: nfl: 126 other tiles the record cannot judge against a group beside them, the ledger's otherUnknownCeiling says 0: one came back, and it may be a second right answer
+   nfl: 52 groups nothing judges (ceiling 0), 6 members the record cannot place (ceiling 0), 126 other tiles it cannot judge (ceiling 0): nflconn-005 "Played for the Dallas Cowboys", nflconn-005 "Played for the Green Bay Packers", nflconn-005 "Played for the Seattle Seahawks", nflconn-005 "Played for the Miami Dolphins", nflconn-006 "Played for the Pittsburgh Steelers", nflconn-006 "Played for the Denver Broncos", nflconn-006 "Played for the San Francisco 49ers", nflconn-006 "Played for the Cleveland Browns", nflconn-009 "Won a Super Bowl MVP", nflconn-009 "Won the Heisman Trophy", nflconn-009 "Retired, then came back", nflconn-009 "Competed on Dancing with the Stars", nflconn-010 "Kickers", nflconn-010 "Went undrafted", nflconn-010 "Wore number 12", nflconn-010 "Caught passes from Peyton Manning", nflconn-011 "Returned a kick for a Super Bowl touchdown", nflconn-011 "Made an iconic Super Bowl catch", nflconn-011 "Had a 22-sack season", nflconn-011 "Has a brother who played in the NFL", nflconn-012 "Drafted number 1 overall", nflconn-012 "Ran for 2,000 yards in a season", nflconn-012 "Threw for 5,000 yards in a season", nflconn-012 "Walked away in their prime", nflconn-013 "Hall of Famers who played for the Jets", nflconn-013 "Won Super Bowl MVP on defense", nflconn-013 "Played 16 or more seasons for one franchise", nflconn-013 "Threw a Super Bowl touchdown pass but is not a QB", nflconn-014 "Recorded 100 career sacks", nflconn-014 "Returned a kick or punt for a Super Bowl touchdown", nflconn-014 "Undrafted but made a Pro Bowl", nflconn-014 "Also played professional baseball", nflconn-015 "Won the MVP award more than once", nflconn-015 "Tight ends with 10,000 receiving yards", nflconn-015 "1972 undefeated Dolphins", nflconn-016 "Won the Heisman and an NFL MVP", nflconn-016 "Offensive Rookie of the Year at QB", nflconn-016 "First overall picks who never made a Pro Bowl", nflconn-016 "Quarterbacks who also punted in the NFL", nflconn-017 "Threw 500 career touchdown passes", nflconn-017 "Caught 100 career touchdown passes", nflconn-017 "Won Defensive Player of the Year more than once", nflconn-018 "Played QB for the Bears", nflconn-018 "Hall of Fame middle linebackers", nflconn-018 "Wore number 80", nflconn-018 "Kicked a 63-yard field goal or longer", nflconn-019 "Won Offensive Rookie of the Year at RB", nflconn-019 "Rushed for 150 yards in a Super Bowl", nflconn-019 "Had a pick-six in a Super Bowl", nflconn-020 "Played QB for the Lions", nflconn-020 "2007 16-0 regular season Patriots", nflconn-020 "Kickers and punters in the Hall of Fame"
+   nhl: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+   nba: 0 groups nothing judges (ceiling 0), 0 members the record cannot place (ceiling 0), 0 other tiles it cannot judge (ceiling 0)
+8) no active man is one move from a second answer
+   baseball: 15 dated club groups, 0 undated, 0 active men one move from a club group beside them
+  FAIL: nfl nflconn-007: Justin Jefferson ("Played for the Vikings") is still playing and one move from "Played for the Dolphins": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Joe Burrow ("Played for the Bengals") is still playing and one move from "Played for the Dolphins": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Ja'Marr Chase ("Played for the Bengals") is still playing and one move from "Played for the Dolphins": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Tee Higgins ("Played for the Bengals") is still playing and one move from "Played for the Dolphins": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Tua Tagovailoa ("Played for the Dolphins") is still playing and one move from "Played for the Vikings": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Joe Burrow ("Played for the Bengals") is still playing and one move from "Played for the Vikings": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Ja'Marr Chase ("Played for the Bengals") is still playing and one move from "Played for the Vikings": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Tee Higgins ("Played for the Bengals") is still playing and one move from "Played for the Vikings": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Tua Tagovailoa ("Played for the Dolphins") is still playing and one move from "Played for the Bengals": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Justin Jefferson ("Played for the Vikings") is still playing and one move from "Played for the Bengals": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Justin Jefferson ("Played for the Vikings") is still playing and one move from "Played for the Falcons": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Joe Burrow ("Played for the Bengals") is still playing and one move from "Played for the Falcons": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Ja'Marr Chase ("Played for the Bengals") is still playing and one move from "Played for the Falcons": date the group or rebuild the board
+  FAIL: nfl nflconn-007: Tee Higgins ("Played for the Bengals") is still playing and one move from "Played for the Falcons": date the group or rebuild the board
+  FAIL: nfl nflconn-008: Marshon Lattimore ("Played for the Saints") is still playing and one move from "Played for the Steelers": date the group or rebuild the board
+  FAIL: nfl nflconn-008: T.J. Watt ("Played for the Steelers") is still playing and one move from "Played for the Giants": date the group or rebuild the board
+  FAIL: nfl nflconn-008: Marshon Lattimore ("Played for the Saints") is still playing and one move from "Played for the Giants": date the group or rebuild the board
+  FAIL: nfl nflconn-008: T.J. Watt ("Played for the Steelers") is still playing and one move from "Played for the Saints": date the group or rebuild the board
+  FAIL: nfl nflconn-008: T.J. Watt ("Played for the Steelers") is still playing and one move from "Played for the Titans": date the group or rebuild the board
+  FAIL: nfl nflconn-008: Marshon Lattimore ("Played for the Saints") is still playing and one move from "Played for the Titans": date the group or rebuild the board
+  FAIL: nfl nflconn-020: Matthew Stafford ("Played QB for the Lions") is still playing and one move from "Played for the Bills": date the group or rebuild the board
+   nfl: 8 dated club groups, 11 undated, 21 active men one move from a club group beside them
+   nhl: 39 dated club groups, 0 undated, 0 active men one move from a club group beside them
+   nba: 7 dated club groups, 0 undated, 0 active men one move from a club group beside them
+9) the table rows are the export plus recorded decisions
+   nhl: 16 decided table rows, 16 of them in TABLE_RANGE
+  FAIL: nfl nflconn-005: "Played for the Dallas Cowboys" has no tableDecisions line
+  FAIL: nfl nflconn-005: "Played for the Green Bay Packers" has no tableDecisions line
+  FAIL: nfl nflconn-005: "Played for the Seattle Seahawks" has no tableDecisions line
+  FAIL: nfl nflconn-005: "Played for the Miami Dolphins" has no tableDecisions line
+  FAIL: nfl nflconn-006: "Played for the Pittsburgh Steelers" has no tableDecisions line
+  FAIL: nfl nflconn-006: "Played for the Denver Broncos" has no tableDecisions line
+  FAIL: nfl nflconn-006: "Played for the San Francisco 49ers" has no tableDecisions line
+  FAIL: nfl nflconn-006: "Played for the Cleveland Browns" has no tableDecisions line
+  FAIL: nfl nflconn-007: "Played for the Dolphins" has no tableDecisions line
+  FAIL: nfl nflconn-007: "Played for the Vikings" has no tableDecisions line
+  FAIL: nfl nflconn-007: "Played for the Bengals" has no tableDecisions line
+  FAIL: nfl nflconn-007: "Played for the Falcons" has no tableDecisions line
+  FAIL: nfl nflconn-008: "Played for the Steelers" has no tableDecisions line
+  FAIL: nfl nflconn-008: "Played for the Giants" has no tableDecisions line
+  FAIL: nfl nflconn-008: "Played for the Saints" has no tableDecisions line
+  FAIL: nfl nflconn-008: "Played for the Titans" has no tableDecisions line
+  FAIL: nfl nflconn-009: "Won a Super Bowl MVP" has no tableDecisions line
+  FAIL: nfl nflconn-009: "Won the Heisman Trophy" has no tableDecisions line
+  FAIL: nfl nflconn-009: "Retired, then came back" has no tableDecisions line
+  FAIL: nfl nflconn-009: "Competed on Dancing with the Stars" has no tableDecisions line
+  FAIL: nfl nflconn-010: "Kickers" has no tableDecisions line
+  FAIL: nfl nflconn-010: "Went undrafted" has no tableDecisions line
+  FAIL: nfl nflconn-010: "Wore number 12" has no tableDecisions line
+  FAIL: nfl nflconn-010: "Caught passes from Peyton Manning" has no tableDecisions line
+  FAIL: nfl nflconn-011: "Returned a kick for a Super Bowl touchdown" has no tableDecisions line
+  FAIL: nfl nflconn-011: "Made an iconic Super Bowl catch" has no tableDecisions line
+  FAIL: nfl nflconn-011: "Had a 22-sack season" has no tableDecisions line
+  FAIL: nfl nflconn-011: "Has a brother who played in the NFL" has no tableDecisions line
+  FAIL: nfl nflconn-012: "Drafted number 1 overall" has no tableDecisions line
+  FAIL: nfl nflconn-012: "Ran for 2,000 yards in a season" has no tableDecisions line
+  FAIL: nfl nflconn-012: "Threw for 5,000 yards in a season" has no tableDecisions line
+  FAIL: nfl nflconn-012: "Walked away in their prime" has no tableDecisions line
+  FAIL: nfl nflconn-013: "Hall of Famers who played for the Jets" has no tableDecisions line
+  FAIL: nfl nflconn-013: "Won Super Bowl MVP on defense" has no tableDecisions line
+  FAIL: nfl nflconn-013: "Played 16 or more seasons for one franchise" has no tableDecisions line
+  FAIL: nfl nflconn-013: "Threw a Super Bowl touchdown pass but is not a QB" has no tableDecisions line
+  FAIL: nfl nflconn-014: "Recorded 100 career sacks" has no tableDecisions line
+  FAIL: nfl nflconn-014: "Returned a kick or punt for a Super Bowl touchdown" has no tableDecisions line
+  FAIL: nfl nflconn-014: "Undrafted but made a Pro Bowl" has no tableDecisions line
+  FAIL: nfl nflconn-014: "Also played professional baseball" has no tableDecisions line
+  FAIL: nfl nflconn-015: "Won the MVP award more than once" has no tableDecisions line
+  FAIL: nfl nflconn-015: "Tight ends with 10,000 receiving yards" has no tableDecisions line
+  FAIL: nfl nflconn-015: "Played college ball at Alabama" has no tableDecisions line
+  FAIL: nfl nflconn-015: "1972 undefeated Dolphins" has no tableDecisions line
+  FAIL: nfl nflconn-016: "Won the Heisman and an NFL MVP" has no tableDecisions line
+  FAIL: nfl nflconn-016: "Offensive Rookie of the Year at QB" has no tableDecisions line
+  FAIL: nfl nflconn-016: "First overall picks who never made a Pro Bowl" has no tableDecisions line
+  FAIL: nfl nflconn-016: "Quarterbacks who also punted in the NFL" has no tableDecisions line
+  FAIL: nfl nflconn-017: "Threw 500 career touchdown passes" has no tableDecisions line
+  FAIL: nfl nflconn-017: "Caught 100 career touchdown passes" has no tableDecisions line
+  FAIL: nfl nflconn-017: "Played for the Chargers" has no tableDecisions line
+  FAIL: nfl nflconn-017: "Won Defensive Player of the Year more than once" has no tableDecisions line
+  FAIL: nfl nflconn-018: "Played QB for the Bears" has no tableDecisions line
+  FAIL: nfl nflconn-018: "Hall of Fame middle linebackers" has no tableDecisions line
+  FAIL: nfl nflconn-018: "Wore number 80" has no tableDecisions line
+  FAIL: nfl nflconn-018: "Kicked a 63-yard field goal or longer" has no tableDecisions line
+  FAIL: nfl nflconn-019: "Played for the Texans" has no tableDecisions line
+  FAIL: nfl nflconn-019: "Won Offensive Rookie of the Year at RB" has no tableDecisions line
+  FAIL: nfl nflconn-019: "Rushed for 150 yards in a Super Bowl" has no tableDecisions line
+  FAIL: nfl nflconn-019: "Had a pick-six in a Super Bowl" has no tableDecisions line
+  FAIL: nfl nflconn-020: "Played QB for the Lions" has no tableDecisions line
+  FAIL: nfl nflconn-020: "2007 16-0 regular season Patriots" has no tableDecisions line
+  FAIL: nfl nflconn-020: "Played for the Bills" has no tableDecisions line
+  FAIL: nfl nflconn-020: "Kickers and punters in the Hall of Fame" has no tableDecisions line
+   nfl: 16 table rows, 0 decisions (RECORD 0, LIST 0, PERMAN 0, REBUILD 0), 64 problems
+   nhl: 16 table rows, 64 decisions (RECORD 51, LIST 0, PERMAN 0, REBUILD 13), 0 problems
+10) every criterion kind says how it ages, and every running kind is watched
+   baseball: kinds award 6, club 43, career 6, born 91, firstPick 1, season 5, bats 2, recordList 7, awardAt 23, avg300 1, wsWith 1, undrafted 1, mvpRun 1, hofPos 38, starter 1, posEra 1, wsClubs 1, hofPitcher 11; 0 problems; running and not watched, owed to the baseball table rounds: recordList, avg300, undrafted, hofPos, starter, posEra, wsClubs, hofPitcher
+   nfl: kinds club 19, firstPick 1, yards 3, college 5; 0 problems
+   nhl: kinds club 39, career 8, season 4, award 9, pos 1, wins 3, draft 7, cupWith 3, smytheLost 1, goalieGoal 1, cupClubs 1, clubGoals 1, draftBy 1, hofClub 1; 0 problems
+   nba: kinds career 4, club 7, draft 2, born 2, continent 1; 0 problems
+11) the NBA birthplace readers: a place no list holds is unknown, and every stored country is the reader's
+   nba: 9 reader probes, 166 stored birthplaces read back on two hosts, 22 countries each in one continent set; 0 problems
+
+report: 409 failure lines over the files and the table rows of nfl, nhl; findings by rule: no-fact 318, second-fit 2, not-a-member 1, trade 21, undecided 64
+REPORT ONLY
