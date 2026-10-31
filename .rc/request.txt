@@ -1,0 +1,13 @@
+# Release BV, brief section 2: the Club Manager harnesses finish-1603.md section 8 lists as red on main before these
+# rounds, each run on the head (this lane) and on a checkout of the BASE 19911f815 (lane nb), so a red is called
+# main's only by its base twin. simClubManagerDecisionDeadline as committed (the join runs it with CORE_REF=HEAD in lane j).
+deadline: node scripts/simClubManagerDecisionDeadline.mjs
+gathered: node scripts/simClubManagerGathered.mjs
+var: node scripts/simCmVar.mjs
+unseeded: node scripts/simCmUnseededWorld.mjs
+continuity: node scripts/simManagerWorldContinuity.mjs
+handover: node scripts/simCmHandoverDesk.mjs
+oldcareers: node scripts/simCmOldCareersWorld.mjs
+halftime: node scripts/simManagerHalftimeLineups.mjs
+livelineups: node scripts/simManagerLiveLineups.mjs
+worldmoves: node scripts/simCmWorldMoves.mjs
