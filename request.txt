@@ -1,0 +1,7 @@
+# Release BV, THE GATE HEAD after the carryall recipe (543235134, a harness header only): the type gate, the dash scans over the whole branch, the rival names, the anchors fence, and the carryall control on its new play seeds.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dash-diff: node .rc/x/dashScan.mjs diff 19911f815
+dash-log: node .rc/x/dashScan.mjs log 19911f815
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+c-carryall-17: CM_EURO_PLAY_PLAY_SEEDS=17,18,19,20 CM_EURO_PLAY_CONTROL=carryall node scripts/simCmEuroPlay.mjs
