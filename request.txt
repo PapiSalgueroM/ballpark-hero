@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+# Release BU lane b2: the L3 seam's negative control (the hold taken out, C11 must go red) and Round 1570's browser walk.
+l3-mut: node .rc/x/mutl3hold.mjs && node_modules/.bin/vitest run src/test/usCareerHallWall.test.tsx -t "Release BU" --testTimeout=300000; s=$?; git checkout -- src; exit $s
+playUsCareerHallWall: node scripts/playUsCareerHallWall.mjs
