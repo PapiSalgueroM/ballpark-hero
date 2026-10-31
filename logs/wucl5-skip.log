@@ -1,0 +1,67 @@
+rvProbeHolder: applied (skip after parting: true)
+ scripts/simWorldUcl.mjs | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+  5 probe: Chelsea (now) seed 1: parts at s1-rollover (step 47); rollovers s1-rollover@47 W Liverpool, s2-rollover@103 no winner
+  5 probe: Chelsea (now) seed 1 s1-rollover: holder Liverpool already in; at or before the parting; same clubs true
+  5 probe: Chelsea (now) seed 2: parts at s1-rollover (step 47); rollovers s1-rollover@47 W Atlético Madrid, s2-rollover@99 no winner
+  5 probe: Chelsea (now) seed 2 s1-rollover: holder Atlético Madrid already in; at or before the parting; same clubs true
+  5 probe: Chelsea (now) seed 3: parts at s1-rollover (step 45); rollovers s1-rollover@45 W Arsenal, s2-rollover@99 no winner
+  5 probe: Chelsea (now) seed 3 s1-rollover: holder Arsenal already in; at or before the parting; same clubs true
+  5 probe: Chelsea (now) seed 4: parts at s1-rollover (step 47); rollovers s1-rollover@47 W Aston Villa, s2-rollover@92 W PSG
+  5 probe: Chelsea (now) seed 4 s2-rollover: holder PSG already in; AFTER the parting; same clubs true
+  5 probe: Chelsea (now) seed 5: parts at s1-rollover (step 45); rollovers s1-rollover@45 W Manchester City, s2-rollover@100 no winner
+  5 probe: Chelsea (now) seed 5 s1-rollover: holder Manchester City already in; at or before the parting; same clubs true
+  5 probe: Hoffenheim (now) seed 1: parts at s1-rollover (step 42); rollovers s1-rollover@42 W Barcelona, s2-rollover@92 W Inter Milan
+  5 probe: Hoffenheim (now) seed 1 s1-rollover: holder Barcelona already in; at or before the parting; same clubs true
+  5 probe: Hoffenheim (now) seed 1 s2-rollover: holder Inter Milan already in; AFTER the parting; same clubs true
+  5 probe: Hoffenheim (now) seed 2: parts at s1-rollover (step 41); rollovers s1-rollover@41 W Atlético Madrid, s2-rollover@88 no winner
+  5 probe: Hoffenheim (now) seed 2 s1-rollover: holder Atlético Madrid already in; at or before the parting; same clubs true
+  5 probe: Hoffenheim (now) seed 3: parts at s1-rollover (step 41); rollovers s1-rollover@41 W Arsenal, s2-rollover@81 W Manchester City
+  5 probe: Hoffenheim (now) seed 3 s1-rollover: holder Arsenal already in; at or before the parting; same clubs true
+  5 probe: Hoffenheim (now) seed 3 s2-rollover: holder Manchester City already in; AFTER the parting; same clubs true
+  5 probe: Hoffenheim (now) seed 4: parts at s1-rollover (step 41); rollovers s1-rollover@41 W Barcelona, s2-rollover@91 no winner
+  5 probe: Hoffenheim (now) seed 4 s1-rollover: holder Barcelona already in; at or before the parting; same clubs true
+  5 probe: Hoffenheim (now) seed 5: parts at s1-rollover (step 41); rollovers s1-rollover@41 W Arsenal, s2-rollover@84 W Real Madrid
+  5 probe: Hoffenheim (now) seed 5 s1-rollover: holder Arsenal already in; at or before the parting; same clubs true
+  5 probe: Hoffenheim (now) seed 5 s2-rollover: holder Real Madrid already in; AFTER the parting; same clubs true
+  5 probe: Everton (now) seed 1: parts at s1-rollover (step 45); rollovers s1-rollover@45 W Inter Milan, s2-rollover@89 W Arsenal
+  5 probe: Everton (now) seed 1 s2-rollover: holder Arsenal already in; AFTER the parting; same clubs false; head has Benfica, off has Brentford
+  5 probe: Everton (now) seed 2: parts at s1-rollover (step 47); rollovers s1-rollover@47 W Real Madrid, s2-rollover@93 W PSG
+  5 probe: Everton (now) seed 2 s1-rollover: holder Real Madrid already in; at or before the parting; same clubs true
+  5 probe: Everton (now) seed 2 s2-rollover: holder PSG already in; AFTER the parting; same clubs true
+  5 probe: Everton (now) seed 3: parts at s1-rollover (step 46); rollovers s1-rollover@46 W Bayern Munich, s2-rollover@91 W Barcelona
+  5 probe: Everton (now) seed 3 s1-rollover: holder Bayern Munich already in; at or before the parting; same clubs true
+  5 probe: Everton (now) seed 3 s2-rollover: holder Barcelona already in; AFTER the parting; same clubs true
+  5 probe: Everton (now) seed 4: parts at s1-rollover (step 45); rollovers s1-rollover@45 W Inter Milan, s2-rollover@104 W Atlético Madrid
+  5 probe: Everton (now) seed 4 s1-rollover: holder Inter Milan already in; at or before the parting; same clubs true
+  5 probe: Everton (now) seed 4 s2-rollover: holder Atlético Madrid already in; AFTER the parting; same clubs true
+  5 probe: Everton (now) seed 5: parts at s1-rollover (step 44); rollovers s1-rollover@44 W Inter Milan, s2-rollover@99 W Bayern Munich
+  5 probe: Everton (now) seed 5 s1-rollover: holder Inter Milan already in; at or before the parting; same clubs true
+  5 probe: Everton (now) seed 5 s2-rollover: holder Bayern Munich already in; AFTER the parting; same clubs true
+  5 probe: América (now) seed 1: parts at s1-rollover (step 39); rollovers s1-rollover@39 W Liverpool, s2-rollover@78 W Nottingham Forest
+  5 probe: América (now) seed 1 s1-rollover: holder Liverpool already in; at or before the parting; same clubs true
+  5 probe: América (now) seed 2: parts at s1-rollover (step 39); rollovers s1-rollover@39 W Arsenal, s2-rollover@78 W Bayern Munich
+  5 probe: América (now) seed 2 s2-rollover: holder Bayern Munich already in; AFTER the parting; same clubs true
+  5 probe: América (now) seed 3: parts at s1-rollover (step 39); rollovers s1-rollover@39 W Real Madrid, s2-rollover@78 W Bayern Munich
+  5 probe: América (now) seed 3 s1-rollover: holder Real Madrid already in; at or before the parting; same clubs true
+  5 probe: América (now) seed 3 s2-rollover: holder Bayern Munich already in; AFTER the parting; same clubs true
+  5 probe: América (now) seed 4: parts at s1-rollover (step 39); rollovers s1-rollover@39 W PSG, s2-rollover@78 W Manchester City
+  5 probe: América (now) seed 4 s1-rollover: holder PSG already in; at or before the parting; same clubs true
+  5 probe: América (now) seed 4 s2-rollover: holder Manchester City already in; AFTER the parting; same clubs true
+  5 probe: América (now) seed 5: parts at s1-rollover (step 39); rollovers s1-rollover@39 W Barcelona, s2-rollover@78 W Liverpool
+  5 probe: América (now) seed 5 s1-rollover: holder Barcelona already in; at or before the parting; same clubs true
+  5 probe: América (now) seed 5 s2-rollover: holder Liverpool already in; AFTER the parting; same clubs true
+  5 probe: Proof Town Athletic (now) seed 1: parts at s1-rollover (step 53); rollovers s1-rollover@53 W Aston Villa, s2-rollover@98 W Arsenal
+  5 probe: Proof Town Athletic (now) seed 1 s2-rollover: holder Arsenal already in; AFTER the parting; same clubs false; head has Beşiktaş, off has Toulouse
+  5 probe: Proof Town Athletic (now) seed 2: parts at s1-rollover (step 53); rollovers s1-rollover@53 W Atlético Madrid, s2-rollover@97 W PSG
+  5 probe: Proof Town Athletic (now) seed 2 s1-rollover: holder Atlético Madrid already in; at or before the parting; same clubs true
+  5 probe: Proof Town Athletic (now) seed 2 s2-rollover: holder PSG already in; AFTER the parting; same clubs true
+  5 probe: Proof Town Athletic (now) seed 3: parts at s1-rollover (step 53); rollovers s1-rollover@53 W Arsenal, s2-rollover@97 W PSG
+  5 probe: Proof Town Athletic (now) seed 3 s2-rollover: holder PSG already in; AFTER the parting; same clubs false; head has Chelsea, off has Athletic Club
+  5 probe: Proof Town Athletic (now) seed 4: parts at s1-rollover (step 52); rollovers s1-rollover@52 W Liverpool, s2-rollover@105 W Liverpool
+  5 probe: Proof Town Athletic (now) seed 4 s1-rollover: holder Liverpool already in; at or before the parting; same clubs true
+  5 probe: Proof Town Athletic (now) seed 5: parts at s1-rollover (step 53); rollovers s1-rollover@53 W Manchester City, s2-rollover@98 W Bayern Munich
+  5 probe: Proof Town Athletic (now) seed 5 s1-rollover: holder Manchester City already in; at or before the parting; same clubs true
+  5 probe: Proof Town Athletic (now) seed 5 s2-rollover: holder Bayern Munich already in; AFTER the parting; same clubs true
+  5 the holder: 50 rollovers, 44 after a watched final, 37 winners already in the field (3 of those fields in another order), 7 fields the holder changed: Aston Villa in for Crystal Palace; Inter Milan in for Monaco; Nottingham Forest in for Tottenham; Arsenal in for Crystal Palace; Aston Villa in for Eintracht Frankfurt; Arsenal in for Bayer Leverkusen; Liverpool in for RB Leipzig
+simWorldUcl: green, 153 checks, 0 failures
