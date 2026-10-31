@@ -1,0 +1,4 @@
+ucl-base exit=0 2338s | simWorldUcl: green, 495868 checks, 0 failures
+oo-m2 exit=0 3933s | simOneOffCups: green, 270713 checks (3931 s)
+oo-base exit=0 3945s | simOneOffCups: green, 270670 checks (3944 s)
+ucl-m2 exit=0 2085s | simWorldUcl: green, 498821 checks, 0 failures
