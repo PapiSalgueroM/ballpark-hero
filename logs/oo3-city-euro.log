@@ -1,0 +1,4 @@
+base d94fe0a62f
+  3 self relative: 1 journeys, 155 steps each arm, 155 steps carrying a super cup
+  FAIL 3 Manchester City (now) seed 3 coach at s2-e1: the state differs in a key other than worldComps.dsc
+simOneOffCups: 1 FAILURES of 58 checks (9 s)
