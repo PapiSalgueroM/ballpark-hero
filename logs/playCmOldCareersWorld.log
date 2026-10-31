@@ -1,0 +1,8 @@
+playCmOldCareersWorld: the old Arsenal career (pre), seed 1, season 2: the summer's Moisés Caicedo from Chelsea to Bournemouth (both in the league); adopted true
+ok   (a) the old career, a summer on, resumes to the hub
+ok   (a) the market's search for Moisés Caicedo finds him at Bournemouth [CDM 🇪🇨 Moisés Caicedo Bournemouth · 25y · worth £59.6m to £61.1m Save 91 Talk · £66.6m]
+ok   (a) Talk says Moisés Caicedo only joined Bournemouth this season [Moisés Caicedo only joined Bournemouth this season. They will not sell him on until next summer.x]
+ok   (b) Bournemouth's club page lists Moisés Caicedo
+ok   (b) Chelsea's club page does not list Moisés Caicedo
+ok   (errors) no page error on any page
+playCmOldCareersWorld: green, 6 checks held; pictures in /home/runner/work/_temp/rc-out/files/head

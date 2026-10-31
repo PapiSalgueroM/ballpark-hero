@@ -1,0 +1,6 @@
+buildseo exit=0 2075s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playClubManager exit=0 218s | Played Club Manager through its own screens. 0 findings.
+playCmLeagueLeaders exit=0 104s | playCmLeagueLeaders: green, 5 sections at 320, 390 and 1280
+playCmWorldMoves exit=2 17s | playCmWorldMoves could not run: no Everton career in 40 seeds moved a man to a Premier League club who stayed a season
+playCmOldCareersWorld exit=0 5s | playCmOldCareersWorld: green, 6 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+sweepGames-bv exit=0 603s | Swept 184 routes across 1 engines and 2 viewports (368 checks). 0 findings.
