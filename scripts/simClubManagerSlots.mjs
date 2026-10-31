@@ -109,6 +109,17 @@
  *   535,303 / 534,872 / 537,624 / 535,022 / 537,211 / 534,992. The dupe control leaves 605,989 there
  *   (600,853 on main) and fired through the budget check on both. 562,500 sits 24,876 over the largest
  *   healthy total and 43,489 under the control's, the margins the old number was set with.
+ *   Release BU's re-join on main fa30aafbe moved BUDGET to 603,000 (the lead's J5, 2026-10-31, GitHub
+ *   runners, remote checks rBUj-h and rBUfx-sl). Main's PR 429 keeps the ledger record of every man on
+ *   the free agent list (pruneWorldRoster keeps a record a pool row's worldRosterKey names), and since
+ *   Round 1597 the list keeps its men until a club signs them or they retire, so the records stay for
+ *   years. Neither does it alone: the default stream reads 554,850 on Release BU before the re-join
+ *   (6b558934c) and 542,462 on main, but 576,596 on the merge (9a8445ef8) and 576,614 on the head
+ *   (a4f66b7e). Head, default stream and SIM_SEED 1 to 5: 576,614 / 575,761 / 574,588 / 576,955 /
+ *   578,045 / 576,159. The dupe control leaves 661,287 there (615,289 on main) and fired through the
+ *   budget check on both. 603,000 sits 24,955 over the largest healthy total and 58,287 under the
+ *   control's (12,289 under main's), the over margin the old number was set with. When other clubs sign
+ *   free agents (FA-3) the list and its records stop growing: measure again then.
  *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands
  *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /
  *     115,876 characters); the park cuts 1 / 2 / 2 of them, so the lean cut
@@ -139,7 +150,7 @@ const BUNDLE = `${TMP}/bundle.mjs`;
 
 const SWITCHES = Number(process.env.SLOTS_SWITCHES || 20);
 const BUDGET_SEASON = Number(process.env.SLOTS_BUDGET_SEASON || 15);
-const BUDGET = 562_500; // Release BP, main's growth since Round 1311 and Round 1520's made up countries: measured healthy 534,872 to 537,624; duplicated career control 605,989 (was 532,500 from Round 1311: healthy 504,692 to 507,107, control 570,310; before that 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801)
+const BUDGET = 603_000; // Release BU re-joined on main (PR 429 x Round 1597): measured healthy 574,588 to 578,045; duplicated career control 661,287 (was 562,500 from Release BP, main's growth since Round 1311 and Round 1520's made up countries: measured healthy 534,872 to 537,624; duplicated career control 605,989 (was 532,500 from Round 1311: healthy 504,692 to 507,107, control 570,310; before that 495,000 from Round 1052: healthy 466,396 to 470,019, control 528,801))
 const SAVE_KEY = 'dukb-club-manager-save';
 /* SIM_SEED re-roots every career's stream, to measure the fences on fresh
    samples on purpose. The default is the stream the fences are judged on. */
