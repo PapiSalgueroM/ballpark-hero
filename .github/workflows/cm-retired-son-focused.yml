@@ -1,0 +1,158 @@
+name: Club Manager retired son focused physical qualification
+on:
+  push:
+    branches: [codex/cm-retired-son-focused-20261031]
+permissions:
+  contents: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_MAIN: 19911f815ac713e8d3718cd0ee8592942a18fd00
+      EXPECTED_MAIN_TREE: 91c7f30ce30c9753d5fbdb49a8c0b0152483d73e
+      EXPECTED_BASE: 19911f815ac713e8d3718cd0ee8592942a18fd00
+      EXPECTED_PARENT: 48880a35d508bce9b634a9502927eb3315ca636b
+      EXPECTED_TREE: a69d4f81fd421ec618bb5c503647b1efbde91279
+      EXPECTED_SOURCE_COUNT: '5632'
+      EXPECTED_TEST_SHA: 30ef8f20c3979e6d3b1170ff1407ef16d6f432b51b737c654263687ccfdcd33f
+      CONTROLLER_SHA256: fa1bb118a63c6505b618c189bc660592fbcd0b723b70a08c6c1494f9fff9356f
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind fixed product and exact focused qualification source
+        run: |
+          set -euo pipefail
+          runner_temp=$(realpath "$RUNNER_TEMP")
+          workspace=$(realpath "$PWD")
+          case "$runner_temp/" in "$workspace/"*) exit 1;; esac
+          out="$runner_temp/cm-retired-son-focused"
+          test ! -e "$out"
+          mkdir -p "$out/runtime-tmp"
+          echo "CM_SON_OUT=$out" >> "$GITHUB_ENV"
+          echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/cm-retired-son-focused-20261031
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git rev-parse "$EXPECTED_MAIN^{tree}")" = "$EXPECTED_MAIN_TREE"
+          test "$(git ls-files | wc -l)" -eq 5632
+          git diff --name-status "$EXPECTED_MAIN" "$EXPECTED_PARENT" > "$out/product.paths"
+          printf 'M\tsrc/components/club-manager/AcademyScreen.tsx\nM\tsrc/components/club-manager/ClubManagerHelp.tsx\nM\tsrc/lib/clubManager.ts\nM\tsrc/pages/ClubManager.tsx\nA\tsrc/test/clubManagerRetiredSon.test.ts\n' > "$out/expected-product.paths"
+          cmp "$out/product.paths" "$out/expected-product.paths"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.paths"
+          printf 'A\t.github/workflows/cm-retired-son-focused.yml\nA\tscripts/qa/cmRetiredSonFocused.cjs\n' > "$out/expected-proof.paths"
+          cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(sha256sum src/test/clubManagerRetiredSon.test.ts | cut -d' ' -f1)" = "$EXPECTED_TEST_SHA"
+          test "$(sha256sum scripts/qa/cmRetiredSonFocused.cjs | cut -d' ' -f1)" = "$CONTROLLER_SHA256"
+          test "$(git hash-object src/lib/clubManager.ts)" = eb08e06ad31762a058688d66e36aabebaec190c3
+          test "$(git hash-object src/pages/ClubManager.tsx)" = d243cedf40a1f2375d01138e27f3a432ba20bd26
+          test "$(git hash-object src/components/club-manager/AcademyScreen.tsx)" = c6a3c10fae54380d9744387249fc6df74c1e8dee
+          test "$(git hash-object src/hooks/useClubManager.ts)" = 7297073ea60b93501df48ea9b7dfc74edd2217de
+          test "$(git hash-object src/components/club-manager/ClubManagerHelp.tsx)" = 8d96271103035dbfdb83f6294d840c35175ddddb
+          test "$(git hash-object src/test/clubManagerRetiredSon.test.ts)" = 35e576d6f657c8a7b9335e22f4b2009c7a048be6
+          test "$(git hash-object package.json)" = 2ff64986fb76ebc51b706f2fd24765768874008a
+          test "$(git hash-object package-lock.json)" = 97d6f12a052f25f400462938c241789a083f0bfe
+          test "$(git hash-object vitest.config.ts)" = ed2a9dc677f77dfe95c061064eeff5782b856864
+          test "$(git hash-object scripts/lib/offlineTransport.cjs)" = 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cp scripts/qa/cmRetiredSonFocused.cjs "$out/controller.cjs"
+          cmp scripts/qa/cmRetiredSonFocused.cjs "$out/controller.cjs"
+          sha256sum "$out/controller.cjs" > "$out/controller-copy.sha256"
+          raw=0
+          node --check scripts/qa/cmRetiredSonFocused.cjs > "$out/syntax.stdout" 2> "$out/syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/syntax.stdout"
+          test ! -s "$out/syntax.stderr"
+      - name: Locked install and actual application types
+        run: |
+          set -euo pipefail
+          out="$CM_SON_OUT"
+          raw=0
+          env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.exit"
+          test "$raw" -eq 0
+          raw=0
+          : > "$out/types.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 3m node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json > "$out/types.stdout" 2> "$out/types.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/types.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/types.stdout"
+          test ! -s "$out/types.stderr"
+          test ! -s "$out/types.transport"
+      - name: Actual fixed cases and three physical engine faults with restoration
+        run: |
+          set -euo pipefail
+          out="$CM_SON_OUT"
+          raw=0
+          : > "$out/focused-parent.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/focused-parent.transport" timeout --signal=TERM --kill-after=15s 35m node "$out/controller.cjs" > "$out/controller.stdout" 2> "$out/controller.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/controller.exit"
+          find node_modules -type f -print0 | sort -z > "$out/dependencies.members.post"
+          xargs -0 sha256sum < "$out/dependencies.members.post" > "$out/dependencies.post.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.post"
+          if test "$raw" -ne 0; then tail -80 "$out/controller.stderr"; tail -30 "$out/controller.stdout"; fi
+          test "$raw" -eq 0
+          test ! -s "$out/controller.stderr"
+          test ! -s "$out/focused-parent.transport"
+          grep -Fqx 'CM_SON_FOCUSED_FIXED: fixed12 green; original-engine selected1 owned RED; fee selected1 owned RED; duplicate selected1 owned RED; same fixed engine restored12 green;24 healthy passes/3 owned failures;5 physical copied-classifier refusals/restores. Focused only, no full-suite or browser credit.' "$out/controller.stdout"
+          test "$(cat "$out/focused-fixed/fixed-baseline/raw.exit")" -eq 0
+          test "$(cat "$out/focused-fixed/original-engine-fault/raw.exit")" -eq 1
+          test "$(cat "$out/focused-fixed/no-invite-debit-fault/raw.exit")" -eq 1
+          test "$(cat "$out/focused-fixed/duplicate-settlement-fault/raw.exit")" -eq 1
+          test "$(cat "$out/focused-fixed/fixed-restored/raw.exit")" -eq 0
+      - name: Always preserve exact source and evidence
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          out="$CM_SON_OUT"
+          mkdir -p "$out"
+          failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git diff --exit-code HEAD > "$out/working-source.diff" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"
+          cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-final-held.log" 2>&1 || failed=1
+          if test -f "$out/dependencies.post.sha256"; then
+            find node_modules -type f -print0 | sort -z > "$out/dependencies.members.final"
+            cmp "$out/dependencies.members.post" "$out/dependencies.members.final" || failed=1
+            sha256sum -c "$out/dependencies.post.sha256" > "$out/dependencies-final-held.log" 2>&1 || failed=1
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.post" "$out/dependency-links.final" || failed=1
+          else
+            printf 'POST_TEST_DEPENDENCY_INVENTORY_NOT_CREATED\n' > "$out/dependencies-not-created.txt"
+            failed=1
+          fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"CM_RETIRED_SON_FOCUSED_FIXED_AND_3_PHYSICAL_ENGINE_FAULTS","appChanged":true,"focused":"READ_ACTUAL_12_AND_3_OWNED_CAUSES","classifierControls":"READ_ACTUAL5_SAME_COPY_RESTORES","fullSuite":"UNRUN","build":"UNRUN","browser":"UNRUN","caps":"UNRUN","readers":"UNRUN","featureQualified":false,"dependencyInventoryScope":"POST_TEST_ONLY"}\n' > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/cm-retired-son-focused-evidence.sha256"
+          cp "$RUNNER_TEMP/cm-retired-son-focused-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: cm-retired-son-focused-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-retired-son-focused
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
