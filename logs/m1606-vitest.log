@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerJobHunt.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 65[2mms[22m[39m
+ [32m✓[39m src/test/clubDetailOwnClub.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 625[2mms[22m[39m
+   [33m[2m✓[22m[39m the club screen reads my own club from my squad[2m > [22min a seeded career, my own club lists my squad, its best eleven and its worth [33m 342[2mms[22m[39m
+ [32m✓[39m src/test/clubDetailDugout.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1045[2mms[22m[39m
+   [33m[2m✓[22m[39m the club page shows who is in the other dugout[2m > [22ma real opening day chair shows his name and the month he took the job, and no MADE UP [33m 353[2mms[22m[39m
+   [33m[2m✓[22m[39m the club page shows who is in the other dugout[2m > [22ma club outside your league shows its opening day man in season one only [33m 335[2mms[22m[39m
+ [32m✓[39m src/test/clubDetailFixtures.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 1520[2mms[22m[39m
+   [33m[2m✓[22m[39m Club detail saved league fixtures[2m > [22mfixtures show the saved directed score and calendar-prefix progress [33m 428[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m45 passed[39m[22m[90m (45)[39m
+[2m   Start at [22m 00:24:01
+[2m   Duration [22m 7.77s[2m (transform 3.34s, setup 1.03s, collect 11.01s, tests 3.25s, environment 3.62s, prepare 734ms)[22m
+
