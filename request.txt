@@ -1,0 +1,4 @@
+dl-careers: DECIDING_LEG_SECTION=careers node scripts/simCmDecidingLeg.mjs
+dl-salt-a: DECIDING_LEG_SALT=a DECIDING_LEG_SECTION=careers node scripts/simCmDecidingLeg.mjs
+dl-salt-b: DECIDING_LEG_SALT=b DECIDING_LEG_SECTION=careers node scripts/simCmDecidingLeg.mjs
+dl-salt-c: DECIDING_LEG_SALT=c DECIDING_LEG_SECTION=careers node scripts/simCmDecidingLeg.mjs

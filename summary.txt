@@ -1,0 +1,4 @@
+dl-salt-b exit=1 84s | simCmDecidingLeg: FAIL, 1 of 21 checks red (careers)
+dl-careers exit=0 88s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+dl-salt-a exit=0 97s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+dl-salt-c exit=0 55s | simCmDecidingLeg: PASS, 21 of 21 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
