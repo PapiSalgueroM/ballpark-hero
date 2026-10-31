@@ -131,8 +131,8 @@ const CONTROLS = {
   },
   summer: {
     file: 'src/lib/clubManagerStaff.ts', section: 4,
-    fixed: 'state.week + weeks >= state.calendar.length ?',
-    broken: 'state.week + weeks > state.calendar.length ?',
+    fixed: 'tickingWeeksDone(state.calendar, state.week) + weeks >= tickingWeeksIn(state.calendar) ?',
+    broken: 'tickingWeeksDone(state.calendar, state.week) + weeks > tickingWeeksIn(state.calendar) ?',
   },
   /* The played half of the summer check is not taken on trust: with the
      packs' walkAtSummer switched on, the man the line says stays is gone. */

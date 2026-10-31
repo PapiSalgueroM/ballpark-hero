@@ -80,6 +80,8 @@ import { staffOf, staffPayrollWeekly } from '@/lib/clubManagerStaff';
    from the engine, so there is no cycle. */
 import { gateEdge } from '@/lib/clubManagerXp';
 import { fanMeter } from '@/lib/clubManagerMeters';
+/* Round 1593: the weeks a season charges (a night is never one); worldNights.ts imports nothing from the engine. */
+import { tickingWeeksLeft } from '@/lib/worldNights';
 
 export type ConcessionTier = 0 | 1 | 2;
 
@@ -370,7 +372,8 @@ export function staffWagesWeekly(state: CareerState): number {
 /** One away trip in millions: dearer for a bigger club, dearer again for Europe. */
 export function travelCost(state: CareerState, competition: Competition): number {
   const base = [0.12, 0.09, 0.06, 0.04][careerTier(state) - 1] ?? 0.04;
-  const europe = competition === 'uclGroup' || competition === 'uclKo' ? 2.5 : 1;
+  /* Round 1593: a Europa League trip is a European one. */
+  const europe = competition === 'uclGroup' || competition === 'uclKo' || competition === 'uel' ? 2.5 : 1;
   return round3(base * europe * (eraHistOf(state) ? ERA_MONEY : 1));
 }
 
@@ -461,7 +464,7 @@ export function certainFixturesLeft(state: CareerState): { home: number; away: n
     const fx = fixtureFor(state, entry);
     if (!fx) continue;
     if (fx.home === true) home += 1;
-    else if (fx.home === false) { away += 1; if (entry.type === 'uclGroup' || entry.type === 'uclKo') euroAway += 1; }
+    else if (fx.home === false) { away += 1; if (entry.type === 'uclGroup' || entry.type === 'uclKo' || entry.type === 'uel') euroAway += 1; }
   }
   return { home, away, euroAway };
 }
@@ -503,7 +506,7 @@ export function expectedHomeCrowd(state: CareerState): number {
 export function projectFinances(state: CareerState): FinanceProjection {
   const books = booksOf(state);
   const s = books.season;
-  const weeksLeft = Math.max(0, state.calendar.length - state.week);
+  const weeksLeft = tickingWeeksLeft(state.calendar, state.week);
   const retail = readShirtSales(s.shirts);
   const retailWeeksLeft = state.calendar.slice(state.week).filter(entry => !entry.night).length;
   const quote = shirtSalesForWeek(state);

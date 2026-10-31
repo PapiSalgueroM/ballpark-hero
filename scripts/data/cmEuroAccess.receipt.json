@@ -11,8 +11,9 @@
     "The access list's columns are read off the page order (accessList.reading in the data file). Every row whose reading depends on that order is named in EURO_ACCESS_PARTIAL, so nothing the game plays stands on it.",
     "Only Serie A and the Bundesliga have a real 2026/27 access that is the game's LEAGUE_RULES row (four Champions League places, fifth in the Europa League, the cup winner). The game plays its own row for the other thirteen leagues and the screen says the places are its simplification. LEAGUE_RULES is not edited by this round.",
     "Nothing here says when the Europa League winner's Champions League place (Q4) or the cup's pass down (Q3) began: both are read for 2026/27, and no era save reads them.",
-    "U5 and U6 (the Europa League's bracket and its table order) were not read: the Champions League's library plays them, said on the screen."
+    "U5 and U6 (the Europa League's bracket and its table order) were not read: the Champions League's library plays them, said on the screen.",
+    "Round 1593 appended rows U8 (each night's weekday) and U9 (the final's place and date) on 2026-10-30 without a new read: both cite lines row U7 already holds from its two pages, and the weekdays are worked by the calendar. The Europa League's knockout play-off seeding (the twin of the Champions League's rows F7 to F10) was not read in Round 1593 either, so U5 stays toVerify and the Champions League's bracket still plays it."
   ],
   "checkedBy": "scripts/simWorldEuro.mjs",
-  "sha256": "7b83c2688fb222e81030c734c7304e3576c58c04ba7acaac9c38da1d139537e1"
+  "sha256": "c1965f4fb9c53cf3dcb8590663b86a6b814c4487f79dda3984a20cf8c5f9e659"
 }

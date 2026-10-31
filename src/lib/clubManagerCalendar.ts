@@ -60,6 +60,7 @@ import { plainCopy, snapshotWorldRosterClub, worldRosterView } from '@/lib/clubM
    proves the calendar built on them did not move a day. */
 import { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, shortDate } from '@/lib/calDate';
 import type { CalDate } from '@/lib/calDate';
+import { tickingWeeksDone, tickingWeeksIn } from '@/lib/worldNights';
 export { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, MONTH_NAMES, shortDate } from '@/lib/calDate';
 export type { CalDate } from '@/lib/calDate';
 
@@ -114,7 +115,20 @@ function drawEntries(kickoff: CalDate, worldYear: number, calendar: { type: stri
   const out: CalDate[] = [];
   let last = addDays(kickoff, -7);
   const newYear: CalDate = { y: worldYear + 1, m: 1, d: 1 };
+  /* Round 1593: the date of the last Europa League night drawn, for a night that follows another at the end. */
+  let lastUel: CalDate | null = null;
   for (const [i, entry] of calendar.entries()) {
+    if (entry.type === 'uel') {
+      /* Round 1593: a Europa League night is a Thursday. After a Saturday it is that week's Thursday; right after a
+         midweek (a Champions League week the club does not play) the next day; after another Europa League night
+         (the end of a short season) a week on. It never moves `last`, so every entry after it keeps its date. A
+         calendar with no 'uel' entry never reaches this branch. */
+      const wasSaturday = dayOfWeek(last.y, last.m, last.d) === 6;
+      const next = i > 0 && calendar[i - 1].type === 'uel' && lastUel ? addDays(lastUel, 7) : addDays(last, wasSaturday ? 5 : 1);
+      out.push(next);
+      lastUel = next;
+      continue;
+    }
     if ((entry.type === 'league' && !midweek.has(i)) || entry.type === 'window') {
       let next = saturdayAfter(last);
       if (entry.type === 'window' && dateKey(next) < dateKey(newYear)) {
@@ -186,6 +200,9 @@ export function worldCompNightDates(state: CareerState, comp: WorldCompKey): Cal
   if (!league.length) return null;
   const thursday = comp === 'uel' ? 1 : 0;
   return places.map(p => {
+    /* Round 1593 (the critic's correction 6a): a participant's own Europa League night is an entry already drawn
+       on its Thursday, so it is that entry's date, never the day after. */
+    if (p.entry && state.calendar[p.at]?.type === 'uel') return dates[p.at];
     if (p.entry) return thursday ? addDays(dates[p.at], thursday) : dates[p.at];
     const last = league.length - 1;
     return p.round <= last ? addDays(league[p.round], 4 + thursday) : addDays(league[last], 4 + thursday + 7 * (p.round - last));
@@ -301,7 +318,7 @@ export function myMatchWeeks(state: CareerState): number[] {
   /* Round 1510: a night (a super cup) is a match but never a window week (the engine's countdown skips it), so it
      is left out on both sides. */
   for (const r of state.resultLog ?? []) {
-    if (r.week < state.week && r.competition !== 'oneOff') weeks.add(r.week);
+    if (r.week < state.week && r.competition !== 'oneOff' && r.competition !== 'uel') weeks.add(r.week);
   }
   for (let w = state.week; w < state.calendar.length; w++) {
     const entry = state.calendar[w];
@@ -425,6 +442,8 @@ export function dayEmoji(day: CalendarDay): string {
     if (day.competition === 'uclGroup' || day.competition === 'uclKo') return '⭐';
     /* Round 1510: a super cup night. */
     if (day.competition === 'oneOff') return '🛡️';
+    /* Round 1593: a Europa League night. */
+    if (day.competition === 'uel') return '🟠';
     return '⚽';
   }
   return '';
@@ -481,6 +500,8 @@ export function potentialEntry(state: CareerState, entry: CalendarEntry): boolea
 function pendingLabel(state: CareerState, entry: CalendarEntry): string {
   /* Round 1510: a super cup night names its cup. */
   if (entry.type === 'oneOff') return oneOffEntryLabel(state, entry) ?? 'Super cup';
+  /* Round 1593: a Europa League night whose match is not known yet. */
+  if (entry.type === 'uel') return 'Europa League';
   const league = careerLeagueOf(state);
   if (entry.type === 'cup' && entry.cupRound) return `${league.cupName} · ${CUP_LABELS[entry.cupRound]}`;
   if (entry.type === 'uclKo' && entry.uclRound) return `Champions League · ${UCL_LABELS[entry.uclRound]}`;
@@ -988,7 +1009,10 @@ export function joinClubNow(career: CareerState): CareerState | null {
   /* The same point of the season, by share of the calendar: the two leagues
      need not be the same length. Never the very end, the Round 549 rule. */
   const total = fresh.calendar.length;
-  const frac = career.calendar.length ? career.week / career.calendar.length : 0;
+  /* Round 1593: the share of the weeks the old season has charged (a night is never one); fresh is a season one
+     save, whose calendar holds no night (a super cup's first season is a stub, and so is the Europa League's). */
+  const ticks = tickingWeeksIn(career.calendar);
+  const frac = ticks ? tickingWeeksDone(career.calendar, career.week) / ticks : 0;
   const target = Math.max(1, Math.min(total - 3, Math.round(total * frac)));
   const s = playRunIn(fresh, target);
   const interim = interimManagerName(from, career.season, career.week);

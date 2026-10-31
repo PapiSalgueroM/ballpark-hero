@@ -425,7 +425,12 @@ Object.assign(CONTROLS, {
   evalundated: [1, /^1 venue: /, /^1 /],
   nocarryusc: [1, /^1 (never falls|usc carry): .*UEFA Super Cup/, /^1 /],
 });
-const editsFor = (extra = []) => [...(ENGINE_EDITS[CONTROL] ?? []), ...extra];
+/* Round 1593: every engine here plays with my own club's Europa League opt in dropped (scripts/lib/worldUelPlay.mjs):
+   a played Europa League adds nights of its own after the super cups' (the third placer call), which every arm and
+   twin of this harness would read as super cup nights or as a moved calendar. scripts/simCmEuroPlay.mjs holds the
+   participant and, in its section 1, that its nights move no other entry's date. */
+const { PLAY_EDITS: PLAY_OFF } = await import(pathToFileURL(path.join(path.dirname(fileURLToPath(import.meta.url)), 'lib', 'worldUelPlay.mjs')).href);
+const editsFor = (extra = []) => [...PLAY_OFF, ...(ENGINE_EDITS[CONTROL] ?? []), ...extra];
 const counts = {};
 const bump = (k, n = 1) => { counts[k] = (counts[k] ?? 0) + n; };
 
@@ -845,7 +850,7 @@ const withoutDsc = st => {
  *  equal by count and value, the super cup evaluated on the live state after every step of the head arm. */
 async function selfRelative() {
   const head = await engineOf(ROOT, 'head', { edits: editsFor() }, cannot);
-  const off = await engineOf(ROOT, 'off', { edits: OPENS }, cannot);
+  const off = await engineOf(ROOT, 'off', { edits: [...PLAY_OFF, ...OPENS] }, cannot);
   const probe = await head.fresh();
   let journeys = 0, stepsSeen = 0, carried = 0;
   for (const f of fleetOf(probe)) {
@@ -993,7 +998,7 @@ function nightChecks(M, prev, s, where) {
 
 async function calendarSection() {
   const head = await engineOf(ROOT, 'cal-head', { edits: editsFor([FORCE_MINE, USC_OFF, USC_START_OFF]) }, cannot);
-  const twin = await engineOf(ROOT, 'cal-twin', { edits: [...(CONTROL === 'adjacent' ? ENGINE_EDITS.adjacent.filter(e => e.file === ROWS_FILE) : []), FORCE_MINE, INSERT_OFF, USC_OFF, USC_START_OFF] }, cannot);
+  const twin = await engineOf(ROOT, 'cal-twin', { edits: [...PLAY_OFF, ...(CONTROL === 'adjacent' ? ENGINE_EDITS.adjacent.filter(e => e.file === ROWS_FILE) : []), FORCE_MINE, INSERT_OFF, USC_OFF, USC_START_OFF] }, cannot);
   const W = await bundle('nights', { n: 'src/lib/worldNights.ts', o: ONE });
   const probe = await head.fresh();
   const fleet = fleetOf(probe).filter(f => ['Chelsea', 'Everton', 'Arsenal', 'Birmingham City'].includes(f.club) && f.era === 'now').map(f => ({ ...f, join: undefined }));
@@ -1126,7 +1131,7 @@ function readersOf(M, MT, st, seed) {
 
 async function honours() {
   const won = await engineOf(ROOT, 'won', { edits: editsFor([FORCE_MINE, WON_ARM, USC_OFF, USC_START_OFF]) }, cannot);
-  const lost = await engineOf(ROOT, 'lost', { edits: [FORCE_MINE, LOST_ARM, USC_OFF, USC_START_OFF] }, cannot);
+  const lost = await engineOf(ROOT, 'lost', { edits: [...PLAY_OFF, FORCE_MINE, LOST_ARM, USC_OFF, USC_START_OFF] }, cannot);
   const MT = await bundle('meters', { mt: 'src/lib/clubManagerMeters.ts' });
   const probe = await won.fresh();
   const fleet = fleetOf(probe).filter(f => ['Chelsea', 'Everton'].includes(f.club) && f.era === 'now').map(f => ({ ...f, join: undefined }));

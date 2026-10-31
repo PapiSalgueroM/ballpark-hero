@@ -619,6 +619,21 @@
       words move nothing here. Written with --part=modern,eras,pure --write
       on daac9d99 itself (line write, 122 lines changed), then run green
       whole on the same runner.
+      Round 1593 (2026-10-30, a club that earns a Europa League place plays
+      it from season two) took it ONCE, on its branch: the tree moves six
+      modern saves, Bundesliga, Scottish, Super Lig, Greece, Denmark and
+      Switzerland, in objectivesNext, calendarNext and wholeNext (the
+      seventeen nights and the board's Europa League target next season),
+      and the Bundesliga save in s2_table, s2_results, s2_world, s2_cup,
+      s2_objectives and s2_whole as well (its second season plays them);
+      eras held 20/20 and pure 48/48. Attribution on GitHub runners at
+      d9354f33: the base 14a9af70 reproduces the file before this retake
+      (r1593-rules, rules-base), and the tree with only my club's Europa
+      League opt in dropped (scripts/lib/worldUelPlay.mjs, sent as
+      mutPlayOff) is green whole against that file (r1593-digest,
+      rules-playoff), so the participant is the only cause. Written with
+      --part=modern,eras,pure --write on d9354f33 itself (r1593-digest,
+      line rules-write, 24 lines changed), then run green whole there.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

@@ -35,6 +35,8 @@ const VIEW_LABELS: { key: View; label: string }[] = [
   { key: 'ucl', label: 'Europe' },
   /* Round 1510: every one match cup (a super cup), shown once the club has played one this season. */
   { key: 'other', label: 'Super cups' },
+  /* Round 1593: the Europa League, shown once the club has played a night of it this season. */
+  { key: 'uel', label: 'Europa League' },
 ];
 
 function lineFor(p: CMPlayer, view: View): Line {
@@ -179,6 +181,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
   const team = useMemo(() => teamCompRecord(career, cupName), [career, cupName]);
   const inEurope = career.uclGroup !== null || !!career.uclKoRound;
   const superCups = team.other.p > 0;
+  const europaLeague = team.uel.p > 0;
 
   const lines = useMemo(() => {
     const built = career.squad.map(p => lineFor(p, view)).filter(l => l.apps > 0 || view === 'all');
@@ -200,7 +203,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
   /* An old save only splits matches played since the splits existed. Say so
      rather than letting a half empty Europe tab read like a bug. */
   const splitsPartial = career.squad.some(p => {
-    const total = (p.comp?.league?.apps ?? 0) + (p.comp?.cup?.apps ?? 0) + (p.comp?.ucl?.apps ?? 0) + (p.comp?.other?.apps ?? 0);
+    const total = (p.comp?.league?.apps ?? 0) + (p.comp?.cup?.apps ?? 0) + (p.comp?.ucl?.apps ?? 0) + (p.comp?.other?.apps ?? 0) + (p.comp?.uel?.apps ?? 0);
     return (p.apps ?? 0) > total;
   });
 
@@ -230,7 +233,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
       {/* Competition filter */}
       <div className="flex gap-1.5 overflow-x-auto pb-1">
         {/* Round 832: a league with no domestic cup has no cup tab. */}
-        {VIEW_LABELS.filter(v => (v.key !== 'ucl' || inEurope) && (v.key !== 'cup' || cupName !== null) && (v.key !== 'other' || superCups)).map(v => (
+        {VIEW_LABELS.filter(v => (v.key !== 'ucl' || inEurope) && (v.key !== 'cup' || cupName !== null) && (v.key !== 'other' || superCups) && (v.key !== 'uel' || europaLeague)).map(v => (
           <button
             key={v.key}
             onClick={() => setView(v.key)}

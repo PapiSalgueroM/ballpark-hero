@@ -35,8 +35,8 @@
  *       with the engine's scores and the engine's date (a Thursday), paged to night 5 (fixtures, no score), a club's
  *       run with how it got in (the slice's own route, in the screen's words), Knockouts, Final, and its ?
  *   (v) a club that earned a place by its cup: an Everton season played to its end with the cup final's winner
- *       set to Everton (crafted, so the line can be read), then rolled over: the tile says the place was earned and
- *       its nights are not played yet, and the screen's first line names the cup, word for word
+ *       set to Everton (crafted, so the line can be read), then rolled over: since Round 1593 the place the cup
+ *       earned is played, so the tile says the club is in it and the screen's first line names the cup, word for word
  *   (c) and (d) also: the 2005 save shows three tiles (Round 1510: the super cup beside them) and no Europa League; the Real Madrid participant shows the
  *       Europa League tile, and its screen follows it from outside
  *   (e) on every view of (a), (c), (k), (o), (r), (u), (v) and the new views of (d): scrollY and the document height the same before a
@@ -670,11 +670,12 @@ async function caseV(browser, size, tag) {
   try {
     if (!(await toCups(page, where))) return;
     const tile = ((await page.locator('[data-cm-world-tile="uel"]').first().textContent().catch(() => '')) ?? '').replace(/\s+/g, ' ');
-    if (!tile.includes('You earned a place, but your own nights are not played yet')) finding(where, `the Europa League tile does not say the place was earned: "${tile.slice(0, 120)}"`);
+    /* Round 1593: from this round the place the cup earned is PLAYED, so the tile says the club is in it. */
+    if (!tile.includes("You're in it: your nights are on your calendar, on Thursdays")) finding(where, `the Europa League tile does not say the place was earned: "${tile.slice(0, 120)}"`);
     await shot(page, `v-tiles-${tag}`);
     await roundTrip(page, `${where} screen`, page.locator('[data-cm-world-tile="uel"]'), async () => {
       const text = ((await page.locator('[data-cm-world-comp="uel"]').first().textContent().catch(() => '')) ?? '').replace(/\s+/g, ' ');
-      const want = 'Everton earned a place in it by winning its cup, but your own Europa League nights are not in the game yet, so the place went to the next club in line and you follow it from outside.';
+      const want = 'Everton are in it this season, by winning its cup: your nights are on your calendar, every one on a Thursday.';
       if (!text.includes(want)) finding(where, `the screen's first line is not "${want.slice(0, 60)}...": "${text.slice(0, 160)}"`);
       await shot(page, `v-screen-${tag}`);
     });

@@ -60,6 +60,7 @@
  * nothing that is not its own (the last line says FIRED, DID NOT FIRE CLEANLY or ABORTED).
  *   section 0, the data twisted in memory: onesource (A2 keeps one publisher) wiki (K1's second page is a wiki)
  *              thinused (A6, one publisher, carries a constant) receipt (the hash of another file)
+ *              u8thursday (Round 1593: row U8 types every night a Thursday)
  *   section 1, the engine edited in the bundle: twocomps (the field is not kept apart from the Champions League)
  *              meinfield (my club is not kept out) earned (my club's route worked out with it kept out)
  *              carryearned (the job move's carry keeps the old club's route for the new club)
@@ -76,6 +77,11 @@
  *   section 5: noholder (the line reverted: the winner stays out of the next Champions League)
  *   section 4: live (the evaluation reads today's strengths, not the snapshot) ahead (a night counts a week
  *              early) noseen (the job move's carry forgets the nights it had shown)
+ * ROUND 1593: my own club now PLAYS a Europa League place it earns from season two (startNextSeason's open passes
+ *   worldCompField's opt in). This harness holds the competition my club follows, so every engine it builds plays
+ *   with that one opt in dropped (scripts/lib/worldUelPlay.mjs, PLAY_OFF below): the field is the watcher's, never
+ *   my club, as these sections assert. scripts/simCmEuroPlay.mjs holds the participant, and its section 6 holds the
+ *   head with the same hook to the base, byte for byte.
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -83,6 +89,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
+import { PLAY_EDITS } from './lib/worldUelPlay.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const text = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');
@@ -95,6 +102,8 @@ const CONTROLS = {
   onesource: [0, /^A2 is verified and stands on fewer than two publishers/, /^A2/],
   wiki: [0, /^K1: .* is a wiki/, /^K1/],
   thinused: [0, /^A6 is not verified and carries/, /^A6/],
+  /* Round 1593: row U8 typed as all Thursdays. */
+  u8thursday: [0, /^U8 notThursday/, /^U8/],
   receipt: [0, /does not carry the hash/],
   /* fix-1509: since the carry refuses a field sharing clubs with the Champions League, the seen probe's carry of
      this control's broken field draws it again, so its nights start over: the control's own fault, said here. */
@@ -144,7 +153,7 @@ const CAREER_EDITS = {
 /* Section 2's other arm: this round's four opens taken out. */
 const UEL_OFF = [
   { file: CM, from: "    openWorldComp(state, 'uel', worldCompField(state, 'uel', null), null);\n", to: '' },
-  { file: CM, from: "    openWorldComp(state, 'uel', worldCompField(state, 'uel', tables, null, watchCup), null);\n", to: "    setWorldComp(state, 'uel', null);\n" },
+  { file: CM, from: "    openWorldComp(state, 'uel', worldCompField(state, 'uel', tables, null, watchCup, null, true), null);\n", to: "    setWorldComp(state, 'uel', null);\n" },
   { file: CAL, from: "  carryWorldComp(career, joined, 'uel');\n", to: '' },
   { file: CM, from: "    repairWorldComp(parsed, 'uel');\n", to: '' },
 ];
@@ -200,6 +209,7 @@ function section0() {
   if (CONTROL === 'onesource') { const r = row('A2'); changed = r.sources.length > 1; r.sources.length = 1; }
   if (CONTROL === 'wiki') { const s = row('K1').sources[1]; changed = !isWiki(s.url); s.url = 'https://en.wikipedia.org/wiki/2026_FA_Cup_final'; }
   if (CONTROL === 'thinused') { const r = row('A6'); changed = r.status !== 'verified' && r.usedBy.length === 0; r.usedBy = ['EURO_SLOTS.eredivisie.uel']; }
+  if (CONTROL === 'u8thursday') { const r = row('U8'); changed = r.figures.notThursday.length > 0; r.figures.notThursday = []; }
 
   /* 0.1 Every row is a reading somebody can open, and a verified row stands on two publishers. */
   const ids = new Set();
@@ -301,6 +311,27 @@ async function section0Engine() {
   const seasonOrder = m => (m + 4) % 12;
   ok(u7.figures.months.every((m, i, a) => i === 0 || seasonOrder(m) >= seasonOrder(a[i - 1])), 'U7 months are not in season order');
   ok(u7.figures.months.length === w.LEAGUE_PHASE_NIGHT_ORDER.length, 'U7 does not give a month for each of the seventeen nights');
+  /* Round 1593 (the critic's correction 11): row U8's dates are U7's two pages' lines, night by night, and its
+     notThursday is what the calendar says of them. Control `u8thursday` types every night a Thursday. */
+  const u8 = row('U8');
+  const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const isoOf = (y, m, d) => `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  const nightsOf = line => {
+    const year = Number(line.match(/(\d{4})\s*$/)?.[1]);
+    let month = null;
+    const out = [];
+    for (const part of line.slice(line.indexOf(':') + 1).split('&').map(p => p.trim()).reverse()) {
+      const m = part.match(/^(?:([A-Z][a-z]+) )?(\d{1,2})(?:\/(\d{1,2}))?(?:,? ([A-Z][a-z]+))?/);
+      if (!m) return [['unread']];
+      const named = m[1] ?? m[4];
+      if (named) month = MONTH_NAMES.indexOf(named) + 1;
+      out.unshift([m[2], m[3]].filter(Boolean).map(d => isoOf(year, month, Number(d))));
+    }
+    return out;
+  };
+  for (const s of u7.sources) ok(same(s.literal.flatMap(nightsOf), u8.figures.dates), `U8 dates are not ${s.publisher}'s lines night by night: ${JSON.stringify(s.literal.flatMap(nightsOf)).slice(0, 160)}`);
+  const notThursday = u8.figures.dates.flatMap((ds, i) => (ds.some(d => new Date(`${d}T12:00:00Z`).getUTCDay() !== 4) ? [i + 1] : []));
+  ok(same(notThursday, u8.figures.notThursday), `U8 notThursday is ${JSON.stringify(u8.figures.notThursday)}, the calendar says ${JSON.stringify(notThursday)}`);
   const marks = w.LEAGUE_PHASE_NIGHT_MARKS;
   ok(e.UEL_FINAL_MARK > marks[marks.length - 2] && e.UEL_FINAL_MARK < 1, `UEL_FINAL_MARK ${e.UEL_FINAL_MARK} is not after the semi-finals' second leg mark and before the season's end`);
   /* 0.9 No European league of today's world is Russian or Ukrainian (the critic's 9(g) for the league phase): the
@@ -316,6 +347,9 @@ const SEEDS = (process.env.WORLD_EURO_SEEDS || '1,2,3,4,5').split(',').map(Numbe
 const counts = {};
 const bump = (k, n = 1) => { counts[k] = (counts[k] ?? 0) + n; };
 const careerEdits = () => CAREER_EDITS[CONTROL] ?? [];
+/* Round 1593: every engine here follows the Europa League from outside (the header's note); never counted as a
+   control's change. */
+const PLAY_OFF = PLAY_EDITS;
 const byPlain = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 const ROUTES = 'LCPHF';
 let fleetLib = null;
@@ -522,7 +556,7 @@ async function europaPass() {
   const { engineOf, pickFleet } = await lib();
   const O = await oracleLib();
   O_MONTHS = [...O.ea.UEL_NIGHT_MONTHS];
-  const E = await engineOf(ROOT, 'head', { edits: careerEdits() }, cannot);
+  const E = await engineOf(ROOT, 'head', { edits: [...PLAY_OFF, ...careerEdits()] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await E.fresh(), 'all', cannot);
   const t0 = Date.now();
@@ -733,7 +767,7 @@ async function selfRelative() {
      on worldComps.usc by design (simOneOffCups section 3 holds that open to its own key). */
   const { USC_OPEN_OFF } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'oneOffNights1510.mjs')).href);
   const named = [UEL_HOLDER_EDIT, EURO_BOARD_EDIT, USC_OPEN_OFF];
-  const head = await engineOf(ROOT, 'head2', { edits: [...careerEdits(), ...named] }, cannot);
+  const head = await engineOf(ROOT, 'head2', { edits: [...PLAY_OFF, ...careerEdits(), ...named] }, cannot);
   const off = await engineOf(ROOT, 'off', { edits: [...UEL_OFF, ...named] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await head.fresh(), 'all', cannot);
@@ -768,7 +802,7 @@ async function selfRelative() {
 /** Section 6: the dailies take the Europa League off with everything else, and what it costs them. */
 async function dailies() {
   const { engineOf, tape } = await lib();
-  const E = await engineOf(ROOT, 'daily', { edits: careerEdits() }, cannot);
+  const E = await engineOf(ROOT, 'daily', { edits: [...PLAY_OFF, ...careerEdits()] }, cannot);
   const baseRef = process.env.WORLD_EURO_BASE || '';
   const B = baseRef ? await engineOf(ROOT, 'dailybase', { base: baseRef }, cannot) : null;
   /* A day's own start (the Hot Seat's, with DAILY_START since step 6b's ruling 1l), the median of three. */
@@ -828,7 +862,7 @@ function printMeasured() {
  *  state: each objective graded otherwise is a European rung the head met by a route the base did not have). */
 async function boardSection() {
   const { engineOf, pickFleet } = await lib();
-  const E = await engineOf(ROOT, 'board', { edits: careerEdits() }, cannot);
+  const E = await engineOf(ROOT, 'board', { edits: [...PLAY_OFF, ...careerEdits()] }, cannot);
   if (careerEdits().length) changed = true;
   const baseRef = process.env.WORLD_EURO_BASE || '';
   if (!baseRef) cannot('section 3 needs WORLD_EURO_BASE, the commit before the board step');
@@ -924,8 +958,8 @@ const SEARCH_SEEDS = (process.env.WORLD_EURO_SEARCH_SEEDS || '1,2,3,4,5,6').spli
 async function holderSection() {
   const { engineOf, pickFleet } = await lib();
   const { UEL_HOLDER_EDIT } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'lib', 'worldUelHolder1509.mjs')).href);
-  const head = await engineOf(ROOT, 'h5', { edits: careerEdits() }, cannot);
-  const ref = await engineOf(ROOT, 'h5off', { edits: [UEL_HOLDER_EDIT] }, cannot);
+  const head = await engineOf(ROOT, 'h5', { edits: [...PLAY_OFF, ...careerEdits()] }, cannot);
+  const ref = await engineOf(ROOT, 'h5off', { edits: [...PLAY_OFF, UEL_HOLDER_EDIT] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await head.fresh(), 'all', cannot).filter(f => f.era === 'now');
   const t0 = Date.now();

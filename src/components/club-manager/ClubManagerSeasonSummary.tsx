@@ -270,6 +270,12 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                 <span className="shrink-0">🌍</span>Ballon d'Or: <span className="font-bold">{sm.ballonDor.name}</span> ({sm.ballonDor.club})
               </p>
             )}
+            {/* Round 1593: the Europa League season my club played, one line. */}
+            {sm.uelRun && (
+              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()} data-cm-review-uel="1">
+                <span className="shrink-0">🟠</span>Europa League: {sm.uelRun}
+              </p>
+            )}
             {sm.qualifiedUcl && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">⭐</span>Qualified for next season's Champions League

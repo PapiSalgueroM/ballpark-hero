@@ -39,6 +39,7 @@ import { engineOf, pickFleet, tape } from './lib/worldUclFleet.mjs';
 import { HOLDER_EDIT } from './lib/worldUclHolder1502.mjs';
 import { EURO_BOARD_EDIT, UEL_HOLDER_EDIT } from './lib/worldUelHolder1509.mjs';
 import { DSC_NIGHTS_EDIT, USC_NIGHTS_EDIT } from './lib/oneOffNights1510.mjs';
+import { PLAY_EDITS } from './lib/worldUelPlay.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const arg = (name, dflt) => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : dflt; };
@@ -76,6 +77,10 @@ const DSC_NIGHTS_OFF = process.argv.includes('--dsc-nights-off');
 /* --usc-nights-off (Round 1514): the UEFA Super Cup's nights alone left off (the domestic cup's kept), for a base that
    already plays Round 1510's cup; with --strip worldComps.usc it holds the tree to that base on every other key. */
 const USC_NIGHTS_OFF = process.argv.includes('--usc-nights-off');
+/* --uel-play-off (Round 1593): THIS TREE plays with my own club's Europa League opt in dropped
+   (scripts/lib/worldUelPlay.mjs), so a club that earns a place follows it as before. Green with it against the
+   round's base holds every other change of the round to that base (the participant itself is scripts/simCmEuroPlay.mjs). */
+const UEL_PLAY_OFF = process.argv.includes('--uel-play-off');
 const oldSaves = { loaded: 0, gained: 0, kept: 0, wrong: 0 };
 const sha = v => createHash('sha256').update(typeof v === 'string' ? v : JSON.stringify(v)).digest('hex').slice(0, 16);
 
@@ -143,7 +148,7 @@ function firstDifference(a, b) {
 }
 
 const baseEngine = await engineOf(ROOT, 'base', { base: BASE }, cannot);
-const treeEngine = await engineOf(ROOT, 'tree', { edits: [...(HOLDER_OFF ? [HOLDER_EDIT] : []), ...(UEL_HOLDER_OFF ? [UEL_HOLDER_EDIT] : []), ...(EURO_BOARD_OFF ? [EURO_BOARD_EDIT] : []), ...(DSC_NIGHTS_OFF ? [DSC_NIGHTS_EDIT] : []), ...(USC_NIGHTS_OFF ? [USC_NIGHTS_EDIT] : [])] }, cannot);
+const treeEngine = await engineOf(ROOT, 'tree', { edits: [...(HOLDER_OFF ? [HOLDER_EDIT] : []), ...(UEL_HOLDER_OFF ? [UEL_HOLDER_EDIT] : []), ...(EURO_BOARD_OFF ? [EURO_BOARD_EDIT] : []), ...(DSC_NIGHTS_OFF ? [DSC_NIGHTS_EDIT] : []), ...(USC_NIGHTS_OFF ? [USC_NIGHTS_EDIT] : []), ...(UEL_PLAY_OFF ? PLAY_EDITS : [])] }, cannot);
 const fleet = pickFleet(await treeEngine.fresh(), FLEET, cannot);
 const chosen = fleet.filter(f => !ONLY || f.club.includes(ONLY));
 console.log(`base ${BASE}; fleet (${chosen.length}): ${chosen.map(f => `${f.club} (${f.era}, ${f.kind})`).join('; ')}`);

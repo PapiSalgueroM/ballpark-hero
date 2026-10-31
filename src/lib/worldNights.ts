@@ -22,14 +22,23 @@ export interface NightResult { h: number; a: number; et?: 1; pens?: 'h' | 'a' }
 /** Where a night wants to sit in the season: before the opening Saturday, in the first free midweek after the first
  *  league entry, or in the first free midweek from the window entry on. `afterLeague` starts the search that many
  *  league entries after the night placed just before it in the same list (a final after its semi finals). */
-export type NightPlace = 'open' | 'early' | 'newYear' | 'dated';
+export type NightPlace = 'open' | 'early' | 'newYear' | 'dated' | 'thursday';
 /** Round 1514: 'dated' takes the free gap whose night date (nightDateAt) is nearest `on`, the earlier on a tie, and
- *  none without `on`. */
-export interface NightWant { place: NightPlace; afterLeague?: number; on?: CalDate }
+ *  none without `on`.
+ *  Round 1593: 'thursday' is a Europa League night, never before entry `after` (the calendar index of the entry the
+ *  watched season's night follows) nor before the night placed just before it in the list. It takes the first of,
+ *  in calendar order: (gap) a free gap between two Saturday entries, (cl) the place right after a midweek entry the
+ *  caller names in `skip` (a Champions League week the club does not play) with no night after it already, or
+ *  (tail) the end of the season. It always finds a place; thursdayKinds says which kind each took. */
+export interface NightWant { place: NightPlace; afterLeague?: number; on?: CalDate; after?: number }
 
 const saturday = (d: CalDate | undefined): boolean => !!d && dayOfWeek(d.y, d.m, d.d) === 6;
 
-interface Slot { type: string; sat: boolean; night: boolean }
+interface Slot { type: string; sat: boolean; night: boolean; orig: number }
+
+/** Round 1593: the kind of place a 'thursday' want took; placeNights writes one per want into `kinds` when handed
+ *  an array (null for a want of another place), for the unit file and the harness that count them. */
+export type ThursdayKind = 'gap' | 'cl' | 'tail';
 
 /**
  * The index each wanted night goes BEFORE in `calendar` as it stands (the count of its entries before the night),
@@ -44,19 +53,21 @@ interface Slot { type: string; sat: boolean; night: boolean }
  */
 export function placeNights(
   calendar: readonly { type: string }[], dates: readonly CalDate[], wants: readonly NightWant[],
-  redate?: (types: { type: string }[]) => CalDate[],
+  redate?: (types: { type: string }[]) => CalDate[], skip?: ReadonlySet<number>, kinds?: (ThursdayKind | null)[],
 ): (number | null)[] {
-  const seq: Slot[] = calendar.map((e, i) => ({ type: e.type, sat: saturday(dates[i]), night: false }));
+  const seq: Slot[] = calendar.map((e, i) => ({ type: e.type, sat: saturday(dates[i]), night: false, orig: i }));
   const out: (number | null)[] = [];
   let last = -1;
-  const keepsDates = (gap: number): boolean => {
+  /* A night placed in this call is typed 'night', or 'uel' for a Thursday one (Round 1593), so the redraw dates it by
+     its own rule; `as` is the type the candidate is drawn as. */
+  const keepsDates = (gap: number, as = 'night'): boolean => {
     if (!redate) return true;
-    const types = seq.map(s => ({ type: s.night ? 'night' : s.type }));
-    types.splice(gap, 0, { type: 'night' });
-    const drawn = redate(types);
+    const types = seq.map(s => ({ type: s.type, night: s.night }));
+    types.splice(gap, 0, { type: as, night: true });
+    const drawn = redate(types.map(t => ({ type: t.type })));
     let j = 0;
     for (let i = 0; i < types.length; i += 1) {
-      if (types[i].type === 'night') continue;
+      if (types[i].night) continue;
       const want = dates[j];
       const got = drawn[i];
       if (!want || !got || want.y !== got.y || want.m !== got.m || want.d !== got.d) return false;
@@ -71,6 +82,26 @@ export function placeNights(
     return !!before && before.sat && !before.night && (!after || (after.sat && !after.night)) && keepsDates(gap);
   };
   for (const want of wants) {
+    if (kinds) kinds.push(null);
+    if (want.place === 'thursday') {
+      /* Round 1593: a Europa League night. The first gap at or after the entry its watched night follows and after
+         the night before it: a free Saturday to Saturday gap, the place right after a skipped midweek, or the end. */
+      const anchor = want.after === undefined ? -1 : seq.findIndex(s => s.orig === want.after);
+      let g = Math.max(1, anchor + 1, last);
+      let kind: ThursdayKind = 'tail';
+      for (; g < seq.length; g += 1) {
+        const b = seq[g - 1];
+        const a = seq[g];
+        if (b.night || a.night) continue;
+        if (b.sat && a.sat && keepsDates(g, 'uel')) { kind = 'gap'; break; }
+        if (b.orig >= 0 && !!skip?.has(b.orig)) { kind = 'cl'; break; }
+      }
+      seq.splice(g, 0, { type: 'uel', sat: false, night: true, orig: -1 });
+      last = g + 1;
+      if (kinds) kinds[kinds.length - 1] = kind;
+      out.push(g - seq.slice(0, g).filter(s => s.night).length);
+      continue;
+    }
     let from: number;
     if (want.place === 'open') from = 0;
     else {
@@ -95,7 +126,7 @@ export function placeNights(
       }
     } else for (let g = from; g <= seq.length; g += 1) if (free(g)) { gap = g; break; }
     if (gap === null) { out.push(null); continue; }
-    seq.splice(gap, 0, { type: 'night', sat: false, night: true });
+    seq.splice(gap, 0, { type: 'night', sat: false, night: true, orig: -1 });
     last = gap + 1;
     out.push(gap - seq.slice(0, gap).filter(s => s.night).length);
   }
@@ -109,6 +140,29 @@ export function nightDateAt(dates: readonly CalDate[], slot: number): CalDate | 
   if (slot === 0) return dates[0] ? addDays(dates[0], -3) : null;
   const before = dates[slot - 1];
   return before ? addDays(before, 4) : null;
+}
+
+/**
+ * Round 1593 (decision 6, critic-1348 correction 4): the weeks a season charges. Every calendar entry ticks a week
+ * (the wages, the recovery, the books) except a night, which is a match and nothing else (playNextEntry skips the
+ * tick for it). So every reader that means "weeks of the season" counts these, never the raw length: a super cup
+ * night, and from this round a Europa League night, would otherwise be charged as a week. A calendar with no night
+ * entry gives exactly the numbers the raw length gave, for any week from 0 to the calendar's length.
+ */
+export function tickingWeeksIn(calendar: readonly { night?: unknown }[]): number {
+  let n = 0;
+  for (const e of calendar) if (!e.night) n += 1;
+  return n;
+}
+/** The ticking weeks before entry `week` (the ones already charged). */
+export function tickingWeeksDone(calendar: readonly { night?: unknown }[], week: number): number {
+  let n = 0;
+  for (let i = 0; i < week && i < calendar.length; i += 1) if (!calendar[i].night) n += 1;
+  return n;
+}
+/** The ticking weeks from entry `week` on (the ones still to charge). */
+export function tickingWeeksLeft(calendar: readonly { night?: unknown }[], week: number): number {
+  return tickingWeeksIn(calendar) - tickingWeeksDone(calendar, week);
 }
 
 /** How many of a watched season's nights the save has passed: a night sits before calendar entry `slot`, so it is

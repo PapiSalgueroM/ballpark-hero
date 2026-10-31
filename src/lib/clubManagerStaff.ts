@@ -71,6 +71,8 @@ import {
   gmSackStaff, gmSeverance, gmStaffPayroll, gmStaffPortraitSvg, gmStaffShortlist, gmStaffWage, gmTickStaff,
 } from '@/lib/gmStaff';
 import type { Position } from '@/types/game';
+/* Round 1593: the weeks a season charges (a night is never one). */
+import { tickingWeeksDone, tickingWeeksIn } from '@/lib/worldNights';
 
 export type StaffPostId = 'attack' | 'defence' | 'goalkeeping' | 'scout';
 
@@ -446,7 +448,7 @@ export function tickStaff(state: CareerState): void {
   const inWeeks = `${weeks} week${weeks === 1 ? '' : 's'}`;
   const n = s.matchesLeft;
   const lead = `${STAFF_POST_INFO[post].emoji} ${club} have come in for ${person.name}, your ${STAFF_POST_INFO[post].label.toLowerCase()}.`;
-  const lapse = !Array.isArray(state.calendar) || state.week + weeks >= state.calendar.length ? ' If the season ends first, the offer lapses and he stays.' : '';
+  const lapse = !Array.isArray(state.calendar) || tickingWeeksDone(state.calendar, state.week) + weeks >= tickingWeeksIn(state.calendar) ? ' If the season ends first, the offer lapses and he stays.' : '';
   state.aiHeadlines = [
     event.kind === 'walked'
       ? `${STAFF_POST_INFO[post].emoji} ${person.name} has gone to ${club} unanswered. ${state.clubName} need a new ${STAFF_POST_INFO[post].label.toLowerCase()}.`
