@@ -2,9 +2,9 @@
   "_comment": "Round 485. The sha256 of each function's repo index.ts at the moment it was last deployed, line endings normalised. See scripts/simEdgeSync.mjs for why this exists: evaluate-lineup sat for months with a repo file that looked correct and a deployed file that did not. When you deploy a function, update its entry here in the same commit.",
   "synced": {
     "validate-player": {
-      "sha256": "6d86c56262128569e97c6017ed626def0ca13b47c73ce8a54837b4e8f7cf56d4",
-      "version": 12,
-      "date": "2026-10-01"
+      "sha256": "dd0e02e9c9218f12455fe4efc685cb5a6b01fb6e119140e6717e2d9f37aa249d",
+      "version": 13,
+      "date": "2026-10-11"
     },
     "evaluate-lineup": {
       "sha256": "f1dbebaa834bd88955888559cf76302aea16eb370f98d2c01c6775888fc4cbef",
@@ -27,9 +27,9 @@
       "date": "2026-09-07"
     },
     "soccer-grid-validate": {
-      "sha256": "1dc92b2450f188dd63760323452d724990105a0564500e0caeaf59a0c8735c10",
-      "version": 25,
-      "date": "2026-10-01"
+      "sha256": "cf122ea239b6c9e0102a403ec747cfed219ee8ad3413ecc41fc0cee64c8fc856",
+      "version": 26,
+      "date": "2026-10-31"
     },
     "college-grid-validate": {
       "sha256": "8dd6414f253d0c57af5b94e4ef9c55d38862bf1c600cb2e0ad1f00563156f7fc",
