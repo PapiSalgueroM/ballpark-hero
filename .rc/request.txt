@@ -1,0 +1,13 @@
+#!serial
+# Release BV, Round 1593 (the Europa League) lines that need a base checkout, one at a time. CM_EURO_PLAY_BASE is brief
+# V2's recipe B carried past Round 1600 (V1 merges 1600 after 1593): .rc/x/bvbase.sh euro builds the join just before
+# 1593 (68f7432d6) with 1600 merged, every BV engine round but 1593. euro-m1 is V2 read literally (base 68f7432d6 on
+# the head): red by construction at section 6 "at start", since 1600 is not in it (rBVg-a: 73 failures, all section 6).
+euro: B=$(bash .rc/x/bvbase.sh euro) && echo "CM_EURO_PLAY_BASE=$B" && CM_EURO_PLAY_BASE=$B node scripts/simCmEuroPlay.mjs
+euro-noplayrevert: B=$(bash .rc/x/bvbase.sh euro) && CM_EURO_PLAY_BASE=$B CM_EURO_PLAY_CONTROL=noplayrevert node scripts/simCmEuroPlay.mjs
+proof-uel: B=$(bash .rc/x/bvbase.sh euro) && echo "base $B" && node scripts/proofWorldUclFleet.mjs --old-saves --uel-play-off --base $B
+worldEuro-a: WORLD_EURO_ONLY=0,1,4,5,7 node scripts/simWorldEuro.mjs
+worldEuro-2: WORLD_EURO_ONLY=2 node scripts/simWorldEuro.mjs
+worldEuro-3: WORLD_EURO_ONLY=3 WORLD_EURO_BASE=b0236c4c node scripts/simWorldEuro.mjs
+worldEuro-6: WORLD_EURO_ONLY=6 WORLD_EURO_BASE=77556430 node scripts/simWorldEuro.mjs
+worldEuro-u8thursday: WORLD_EURO_CONTROL=u8thursday node scripts/simWorldEuro.mjs
