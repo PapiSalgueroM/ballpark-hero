@@ -1,0 +1,361 @@
+FAIL [healthy] inactive: Entire inactive AR result and saved bytes match
++ actual - expected
+... Skipped lines
+
+  {
+    loaded: {
+      academy: {
+        candidates: [
+          {
+...
+          playerWages: 0,
++         shirts: {
++           costPence: 0,
++           grossPence: 0,
++           openingPence: 0,
++           paidPence: 0,
++           v: 1,
++           weeks: 0
++         },
+          sponsor: 0,
+          staffWages: 0,
+          tickets: 0,
+          travel: 0,
+          weeks: 0
+...
+            playerWages: 0.533,
++           shirts: {
++             costPence: 672000,
++             grossPence: 1680000,
++             openingPence: 0,
++             paidPence: 1000000,
++             v: 1,
++             weeks: 1
++           },
+            sponsor: 0,
+            staffWages: 0.167,
+            tickets: 1.63,
+            travel: 0,
+            weeks: 1
+...
+        },
++       budget: 56.03,
+-       budget: 56.02,
+        calendar: [
+          {
+            round: 0,
+            type: 'league'
+          },
+...
+          {
++           deckId: 'injurySupport',
++           from: 'The medical team',
++           id: 'desk-1-0-injurySupport',
+-           deckId: 'finesKitty',
+-           from: 'The head coach',
+-           id: 'desk-1-0-finesKitty',
+            kind: 'situation',
+            options: [
+              {
+                effect: {
++                 delta: 6,
+-                 delta: 2,
+                  kind: 'move',
++                 meter: 'morale'
+-                 meter: 'press'
+                },
++               label: 'Check in with him (his morale +6)'
+-               label: "Give it to the club's community partner (press mood +2)"
+              },
+              {
+                effect: {
++                 delta: 2,
+-                 delta: 0.1,
+                  kind: 'move',
++                 meter: 'board'
+-                 meter: 'budget'
+                },
++               label: 'Update the board (board patience +2)'
+-               label: 'Put it in the transfer pot (£100k into the transfer budget)'
+              },
+              {
+                effect: {
+                  kind: 'none'
+                },
++               label: 'Leave it with medical staff (nothing changes)'
+-               label: 'Leave it in the kitty (nothing changes)'
+              }
+            ],
++           playerId: 'p-thierno-barry',
++           playerName: 'Thierno Barry',
+            season: 1,
++           text: 'Thierno Barry had 2 injury weeks left when this note was written. Staff suggest a check in or a board update. Neither changes the recovery time.',
+-           text: "The squad's fines kitty has £100k in it from late arrivals and phones in meetings. The head coach asks where it should go. The local paper always runs it when it goes to charity.",
+            week: 0
+          }
+        ],
+        eraId: 'now',
+        facilities: {
+...
+        {
+-         age: 38,
+-         name: 'Dani Parejo',
+-         position: 'CM',
+-         rating: 64,
+-         reason: 'unattached',
+-         since: 1,
+-         value: 0.8
+-       },
+-       {
+          age: 31,
+          name: 'Dele Alli',
+          position: 'CAM',
+          rating: 64,
+          reason: 'unattached',
+          since: 1,
++         value: 0.6
+-         value: 0.8
+        },
+        {
+-         age: 41,
+-         name: 'Sergio Ramos',
+-         position: 'CB',
+-         rating: 62,
+-         reason: 'unattached',
+-         since: 1,
+-         value: 0.7
+-       },
+-       {
+-         age: 40,
+-         name: 'Edinson Cavani',
+-         position: 'ST',
+-         rating: 59,
+-         reason: 'unattached',
+-         since: 1,
+-         value: 0.4
+-       },
+-       {
+          age: 33,
+          name: 'Tiemoué Bakayoko',
+          position: 'CDM',
+          rating: 59,
+          reason: 'unattached',
+          since: 1,
++         value: 0.3
+-         value: 0.4
+        },
+        {
+          age: 37,
+          name: 'Wissam Ben Yedder',
+          position: 'ST',
++         rating: 55,
+-         rating: 59,
+          reason: 'unattached',
+          since: 1,
++         value: 0.2
+-         value: 0.4
+        },
+        {
+-         age: 39,
+-         name: 'Willian',
+-         position: 'LW',
+-         rating: 58,
+-         reason: 'unattached',
+-         since: 1,
+-         value: 0.3
+-       },
+-       {
+          age: 32,
+          founderSaleRatio: undefined,
+          fromMyClub: true,
+          generated: undefined,
+          name: 'Jordan Pickford',
+...
+      ],
++     freeAgentsRetired: [
++       {
++         age: 38,
++         name: 'Dani Parejo',
++         rating: 59
++       },
++       {
++         age: 41,
++         name: 'Sergio Ramos',
++         rating: 58
++       },
++       {
++         age: 40,
++         name: 'Edinson Cavani',
++         rating: 54
++       },
++       {
++         age: 39,
++         name: 'Willian',
++         rating: 51
++       }
++     ],
+      goneNames: [
+        'Trent Alexander-Arnold',
+        'Alejandro Balde',
+        'Erling Haaland',
+        'Martin Ødegaard',
+...
+      retiredLastSummer: [],
++     retiredNames: [
++       'Dani Parejo',
++       'Sergio Ramos',
++       'Edinson Cavani',
++       'Willian'
++     ],
+-     retiredNames: [],
+      sacked: false,
+      saveVersion: 3,
+      scorerRace: [
+        {
+          club: 'Arsenal',
+
+FAIL [healthy] constructors: Fresh constructor changes only the declared held seed
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 4,
+...
+      'Aston Villa': {
++       name: 'Unai Emery',
++       real: 1,
+-       name: 'Salim Wagner',
+        since: 1
+      },
+      'Coventry City': {
++       name: 'Frank Lampard',
++       real: 1,
+-       name: 'Goran Fernandes',
+        since: 1
+      },
+      'Crystal Palace': {
++       name: 'Pierre Sage',
++       real: 1,
+-       name: 'Goran Mucci',
+        since: 1
+      },
+      'Hull City': {
++       name: 'Sergej Jakirović',
++       real: 1,
+-       name: 'Alfie Gallardo',
+        since: 1
+      },
+      'Ipswich Town': {
++       name: "Gary O'Neil",
++       real: 1,
+-       name: 'Tadeo Falk',
+        since: 1
+      },
+      'Leeds United': {
++       name: 'Daniel Farke',
++       real: 1,
+-       name: 'Amadou Arslan',
+        since: 1
+      },
+      'Manchester City': {
++       name: 'Enzo Maresca',
++       real: 1,
+-       name: 'Felipe Karlsson',
+        since: 1
+      },
+      'Manchester United': {
++       name: 'Michael Carrick',
++       real: 1,
+-       name: 'Asier Nielsen',
+        since: 1
+      },
+      'Nottingham Forest': {
++       name: 'Oliver Glasner',
++       real: 1,
+-       name: 'Jaden Machado',
+        since: 1
+      },
+      Arsenal: {
++       name: 'Mikel Arteta',
++       real: 1,
+-       name: 'Youri Sagna',
+        since: 1
+      },
+      Bournemouth: {
++       name: 'Marco Rose',
++       real: 1,
+-       name: 'Zoran Idrissi',
+        since: 1
+      },
+      Brentford: {
++       name: 'Keith Andrews',
++       real: 1,
+-       name: 'Ionut Fernandes',
+        since: 1
+      },
+      Brighton: {
++       name: 'Fabian Hurzeler',
++       real: 1,
+-       name: 'Hugo Doherty',
+        since: 1
+      },
+      Chelsea: {
++       name: 'Xabi Alonso',
++       real: 1,
+-       name: 'Ari Vidal',
+        since: 1
+      },
+      Fulham: {
++       name: 'Álvaro Arbeloa',
++       real: 1,
+-       name: 'Caio Aguirre',
+        since: 1
+      },
+      Liverpool: {
++       name: 'Andoni Iraola',
++       real: 1,
+-       name: 'Zeke Trevisan',
+        since: 1
+      },
+      Newcastle: {
++       appointed: '2026-08',
++       name: 'Matthias Jaissle',
++       real: 1,
+-       name: 'Wout Martel',
+        since: 1
+      },
+      Sunderland: {
++       name: 'Régis Le Bris',
++       real: 1,
+-       name: 'Felipe Lampe',
+        since: 1
+      },
+      Tottenham: {
++       name: 'Roberto De Zerbi',
++       real: 1,
+-       name: 'Ivo Colombo',
+        since: 1
+      }
+    },
+    mentality: 'balanced',
+    negotiation: null,
+
+PASS [healthy] identity
+PASS [healthy] buy-job
+PASS [healthy] year-away
+PASS [healthy] sale
+PASS [healthy] option
+PASS [healthy] release
+PASS [healthy] refresh
+PASS [healthy] seeded-world
+PASS [healthy] storage
+AssertionError [ERR_ASSERTION]: Healthy complete outcome groups all pass
+
+2 !== 0
+
+    at arm (file:///home/runner/work/ballpark-hero/ballpark-hero/.rcbv-base/scripts/simManagerWorldContinuity.mjs:519:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/.rcbv-base/scripts/simManagerWorldContinuity.mjs:527:24
