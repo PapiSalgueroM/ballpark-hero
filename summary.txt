@@ -1,0 +1,13 @@
+dash-log exit=0 0s | commit messages 19911f815..HEAD: 0 lines with an en or em dash
+dash-diff exit=0 0s | git diff 19911f815 HEAD: 0 added lines with an en or em dash 
+simNoRivalNames exit=0 32s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 75s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 131s | 
+dl exit=0 231s | simCmDecidingLeg: PASS, 23 of 23 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+dl-salt-a exit=0 259s | simCmDecidingLeg: PASS, 23 of 23 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+cc-base exit=1 18s | simCreateClub: 1 failure
+dl-salt-b exit=0 231s | simCmDecidingLeg: PASS, 23 of 23 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+fleet-b1600 exit=1 103s | Node.js v24.22.1
+dl-salt-c exit=0 284s | simCmDecidingLeg: PASS, 23 of 23 checks green. A deciding second leg is judged by the tie, the record keeps the night, Hot Seat replays and hauls are counted.
+vt-two exit=0 287s |  Test Files  2 passed (2)
+vitest-all exit=0 1076s |  Test Files  711 passed | 2 skipped (713)
