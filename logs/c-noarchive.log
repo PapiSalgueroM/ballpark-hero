@@ -1,0 +1,45 @@
+simCmPlayerCard: 6 careers of 3 seasons, engines: candidate (control noarchive), off; PAST_KEPT 10
+  FAIL archive: Everton lending seed 0 season 1: pastFrom is undefined, the first season ended was 1
+  FAIL archive: Everton lending seed 0 season 1: p-jarrad-branthwaite played 37 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-james-garner played 39 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-kiernan-dewsbury-hall played 39 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-hayden-hackney played 39 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-thierno-barry played 39 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-jack-grealish played 37 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-vitaliy-mykolenko played 38 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-tyler-dibling played 15 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-tyrique-george played 21 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-jake-o-brien played 11 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-merlin-rohl played 7 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-carlos-alcaraz played 1 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-jordan-pickford played 38 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-harrison-armstrong played 1 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-ainsley-maitland-niles played 9 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-james-tarkowski played 39 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-christian-norgaard played 2 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-michael-keane played 38 games and holds 0 rows for the season
+  FAIL archive: Everton lending seed 0 season 1: p-mark-travers played 1 games and holds 0 rows for the season
+cards   7804 checks: my men at 157 points, 3540 rival book rows at season ends, on the first seed of every club; notes seen {"thisclub":3520,"leftclub":20,"keptfrom":3021,"thin":931}
+stream  841 of 841 faces equal to the off engine (every entry, season end and summer, with the draw count)
+stream  base arm NOT RUN: set CARDS_BASE to a worktree of the base commit
+archive 448 checks; 376 rows written and checked, 3 of them for a man out on loan at the season end, the most rows one man held 0
+cards   the namesake case at Coventry City: each of two men of one name reads his own row
+cap     Everton renewing, 4 seasons: 4 seasons, the most rows one man held 0
+size    candidate bytes a season: 162614 177604 179268 200153
+size    archive bytes a season:   2 2 2 2
+size    season 4: 200153 bytes, of which the archive 2; slope over seasons 4 to 4 n/a bytes a season (printed for the lead, not gated here)
+cap     a constructed squad of 25 archived 12 times holds 10 rows a man, the newest (seasons 3 to 12)
+oldsave the committed save of Round 1052 (Sevilla): six entries on, book 34 (late round index), 144 rival rows held, kept from no line
+oldsave the committed save of Round 1052 (Sevilla): loaded clean, season 1 played out, pastFrom undefined, 0 men with a row
+oldsave the committed second tier save (Valencia): six entries on, book 34 (late round index), 133 rival rows held, kept from no line
+oldsave the committed second tier save (Valencia): loaded clean, season 1 played out, pastFrom undefined, 0 men with a row
+dailies 39 states of 4 Hot Seat days and 2 Deadline Day runs looked at
+markup  12 of 12 renders (Squad, Stats, a leaders board, a club page, on 3 saves) with no provider free of any card link (base arm NOT RUN: set CARDS_BASE)
+  cards    8127 checks, 0 failed
+  archive  448 checks, 394 failed
+  stream   6 checks, 0 failed
+  cap      1 checks, 0 failed
+  oldsave  12 checks, 3 failed
+  dailies  39 checks, 0 failed
+  markup   12 checks, 0 failed
+simCmPlayerCard: control noarchive FIRED, 394 failures in section archive (397 in all) (52s)

@@ -1,0 +1,135 @@
+{
+  "arm": "fixed",
+  "sourceHead": "758e37896b86177f8f290ca76446f12e636d1478",
+  "parentAppRef": "1ed26406",
+  "parentAppHashes": [
+    {
+      "file": "src/lib/clubManager.ts",
+      "parentSha256": "df83f3b6209b361a9eebb6c1c0ea8be31ac74e94eaf3f727ae15965409c337aa",
+      "candidateSha256": "df83f3b6209b361a9eebb6c1c0ea8be31ac74e94eaf3f727ae15965409c337aa"
+    },
+    {
+      "file": "src/lib/clubManagerDecisions.ts",
+      "parentSha256": "b97ae890b7998cbbaf7bcdd021d04fe008573d109e10240e464fe5e9d1e8d611",
+      "candidateSha256": "04a2a47ea77c87bc2e3db2cb62e8d579bdbb05e3af232234813842a60aec229a"
+    },
+    {
+      "file": "src/lib/clubManagerMeters.ts",
+      "parentSha256": "1e5ab362a9c9a0d3ae3df8cfdc4ef615bc5be7eab7077da1dc70e706930fb094",
+      "candidateSha256": "1e5ab362a9c9a0d3ae3df8cfdc4ef615bc5be7eab7077da1dc70e706930fb094"
+    },
+    {
+      "file": "src/hooks/useClubManager.ts",
+      "parentSha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "candidateSha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62"
+    },
+    {
+      "file": "src/pages/ClubManager.tsx",
+      "parentSha256": "bac3150b6f52345b49da3c922e3c292b212a2c5b201908fab770a4247e3289b9",
+      "candidateSha256": "bac3150b6f52345b49da3c922e3c292b212a2c5b201908fab770a4247e3289b9"
+    },
+    {
+      "file": "src/components/club-manager/InboxCard.tsx",
+      "parentSha256": "98a59f1c2d06b827eaf5c3d9db56ad85060fae0eddc9b8b755e070b37aa28d47",
+      "candidateSha256": "98a59f1c2d06b827eaf5c3d9db56ad85060fae0eddc9b8b755e070b37aa28d47"
+    }
+  ],
+  "sourceReceipts": [
+    {
+      "file": "src/lib/clubManager.ts",
+      "beforeSha256": "df83f3b6209b361a9eebb6c1c0ea8be31ac74e94eaf3f727ae15965409c337aa",
+      "afterSha256": "df83f3b6209b361a9eebb6c1c0ea8be31ac74e94eaf3f727ae15965409c337aa"
+    },
+    {
+      "file": "src/lib/clubManagerDecisions.ts",
+      "beforeSha256": "04a2a47ea77c87bc2e3db2cb62e8d579bdbb05e3af232234813842a60aec229a",
+      "afterSha256": "04a2a47ea77c87bc2e3db2cb62e8d579bdbb05e3af232234813842a60aec229a"
+    },
+    {
+      "file": "src/lib/clubManagerMeters.ts",
+      "beforeSha256": "1e5ab362a9c9a0d3ae3df8cfdc4ef615bc5be7eab7077da1dc70e706930fb094",
+      "afterSha256": "1e5ab362a9c9a0d3ae3df8cfdc4ef615bc5be7eab7077da1dc70e706930fb094"
+    },
+    {
+      "file": "src/hooks/useClubManager.ts",
+      "beforeSha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62",
+      "afterSha256": "dce880b04eb80792eb3ea97354aa5f0d146f89c5280f57055c04dbb1db274b62"
+    },
+    {
+      "file": "src/pages/ClubManager.tsx",
+      "beforeSha256": "bac3150b6f52345b49da3c922e3c292b212a2c5b201908fab770a4247e3289b9",
+      "afterSha256": "bac3150b6f52345b49da3c922e3c292b212a2c5b201908fab770a4247e3289b9"
+    },
+    {
+      "file": "src/components/club-manager/InboxCard.tsx",
+      "beforeSha256": "98a59f1c2d06b827eaf5c3d9db56ad85060fae0eddc9b8b755e070b37aa28d47",
+      "afterSha256": "98a59f1c2d06b827eaf5c3d9db56ad85060fae0eddc9b8b755e070b37aa28d47"
+    },
+    {
+      "file": "src/test/clubManagerDecisionDeadline.test.ts",
+      "beforeSha256": "e833e58f618520ef1f3ba8988ef2f27d80476af6b08221fa6c5ba143d0cd7f80",
+      "afterSha256": "e833e58f618520ef1f3ba8988ef2f27d80476af6b08221fa6c5ba143d0cd7f80"
+    },
+    {
+      "file": "scripts/simClubManagerDecisionDeadline.mjs",
+      "beforeSha256": "9a374a86f34a0697d1362ce81e58f164a9096a8f0144b4725c57f3f6b83745d0",
+      "afterSha256": "9a374a86f34a0697d1362ce81e58f164a9096a8f0144b4725c57f3f6b83745d0"
+    },
+    {
+      "file": "scripts/playClubManagerDecisionDeadline.mjs",
+      "beforeSha256": "373bc787f0bc58408ec2463fcc96f1d5207cce9781279726d095926a5b81839a",
+      "afterSha256": "373bc787f0bc58408ec2463fcc96f1d5207cce9781279726d095926a5b81839a"
+    },
+    {
+      "file": ".github/workflows/manager-decision-deadline.yml",
+      "beforeSha256": "beb2981ca38f835ed1578013faee6b95b3cd5e48bf820be1ca2b03ee7d13e525",
+      "afterSha256": "beb2981ca38f835ed1578013faee6b95b3cd5e48bf820be1ca2b03ee7d13e525"
+    }
+  ],
+  "actualSourceEdits": [],
+  "compiled": [
+    {
+      "file": "engine.mjs",
+      "sha256": "3e1141a801a30635700ce8066fd61f47ead244b61d3a9934ea2ea26e55788b7b"
+    },
+    {
+      "file": "decisions.mjs",
+      "sha256": "a36a3b08bd7a5cf06cada453d3d845e79abe1f95659849d94db2ff857f544ff8"
+    },
+    {
+      "file": "engine-whistle.mjs",
+      "sha256": "3e1141a801a30635700ce8066fd61f47ead244b61d3a9934ea2ea26e55788b7b"
+    },
+    {
+      "file": "engine-neutral.mjs",
+      "sha256": "3e1141a801a30635700ce8066fd61f47ead244b61d3a9934ea2ea26e55788b7b"
+    }
+  ],
+  "exitCode": 0,
+  "processSignal": null,
+  "processError": null,
+  "completedNames": [
+    "manager deadline missing: saved board reply closes after actual kickoff",
+    "manager deadline missing: saved press reply closes after actual kickoff",
+    "manager deadline missing: saved morale reply closes after actual kickoff",
+    "manager deadline missing: saved budget reply closes after actual kickoff",
+    "manager deadline missing: saved decline reply closes after actual kickoff",
+    "manager deadline preservation: board reply keeps its exact before-kickoff effect",
+    "manager deadline preservation: press reply keeps its exact before-kickoff effect",
+    "manager deadline preservation: morale reply keeps its exact before-kickoff effect",
+    "manager deadline preservation: budget reply keeps its exact before-kickoff effect",
+    "manager deadline preservation: decline reply keeps its exact before-kickoff effect",
+    "manager deadline preservation: live appeal keeps its original expired outcome",
+    "manager deadline preservation: live acceptBan keeps its original accepted outcome",
+    "manager deadline preservation: before-kickoff appeal keeps its deterministic verdict",
+    "manager deadline preservation: before-kickoff acceptBan keeps its original accepted outcome",
+    "manager deadline preservation: missing card returns the same object",
+    "manager deadline preservation: resolved card returns the same object",
+    "manager deadline preservation: invalid before-kickoff choice returns the same object",
+    "manager deadline preservation: invalid live choice returns the same object",
+    "manager deadline preservation: real whistle expires the unanswered card without a desk benefit",
+    "manager deadline preservation: a previously answered card stays consumed across actual kickoff and reloads"
+  ],
+  "passed": 20,
+  "intendedFailures": 0
+}

@@ -1,0 +1,30 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline missing: saved board reply closes after actual kickoff 174ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline missing: saved press reply closes after actual kickoff 108ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline missing: saved morale reply closes after actual kickoff 99ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline missing: saved budget reply closes after actual kickoff 87ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline missing: saved decline reply closes after actual kickoff 91ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: board reply keeps its exact before-kickoff effect 55ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: press reply keeps its exact before-kickoff effect 65ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: morale reply keeps its exact before-kickoff effect 74ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: budget reply keeps its exact before-kickoff effect 42ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: decline reply keeps its exact before-kickoff effect 39ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: live appeal keeps its original expired outcome 80ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: live acceptBan keeps its original accepted outcome 71ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: before-kickoff appeal keeps its deterministic verdict 37ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: before-kickoff acceptBan keeps its original accepted outcome 32ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: missing card returns the same object 37ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: resolved card returns the same object 41ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: invalid before-kickoff choice returns the same object 21ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: invalid live choice returns the same object 34ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: real whistle expires the unanswered card without a desk benefit 2218ms
+ ✓ src/test/clubManagerDecisionDeadline.test.ts > Club Manager saved situation reply deadline > manager deadline preservation: a previously answered card stays consumed across actual kickoff and reloads 84ms
+
+ Test Files  1 passed (1)
+      Tests  20 passed (20)
+   Start at  19:19:48
+   Duration  6.08s (transform 2.81s, setup 59ms, collect 1.81s, tests 3.50s, environment 254ms, prepare 147ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/tmp/manager-decision-deadline-compiled-x2XvXr/unit.json

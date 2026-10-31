@@ -1,0 +1,32 @@
+simCmPlayerCard: 6 careers of 3 seasons, engines: candidate (control draw), off; PAST_KEPT 10
+cards   7833 checks: my men at 158 points, 3536 rival book rows at season ends, on the first seed of every club; notes seen {"thisclub":3525,"leftclub":11,"thin":1167}
+  FAIL stream: Everton lending seed 0: the candidate leaves the off engine at face 42 of 131 (end 0 a383ddca3db48f4652ec0609|48277 against end 0 a383ddca3db48f4652ec0609|48257)
+  FAIL stream: Real Madrid seed 0: the candidate leaves the off engine at face 48 of 156 (end 0 d3386be4366aa1a301b28dcc|57410 against end 0 d3386be4366aa1a301b28dcc|57384)
+  FAIL stream: Lincoln City seed 0: the candidate leaves the off engine at face 0 of 151 (start 113a4c9324db6276ebd568cd|784 against start eccb91f8c0bd7beba6b18666|784)
+  FAIL stream: Hertha BSC seed 0: the candidate leaves the off engine at face 0 of 117 (start 396031b3729f5518964dca6c|743 against start c7b2087f0edb92d526b9788e|743)
+  FAIL stream: Real Anthony seed 0: the candidate leaves the off engine at face 1 of 144 (0:1 b670aa4cdd2409dda637c0e5|2031 against 0:1 f2503703d0e3497abd079899|2031)
+  FAIL stream: Arsenal (era2010) seed 0: the candidate leaves the off engine at face 1 of 142 (0:1 5cbb8d316e7dd8ea059cf93e|1021 against 0:1 a112db201c822d8cb563e950|1021)
+stream  92 of 851 faces equal to the off engine (every entry, season end and summer, with the draw count)
+stream  base arm NOT RUN: set CARDS_BASE to a worktree of the base commit
+archive 825 checks; 371 rows written and checked, 3 of them for a man out on loan at the season end, the most rows one man held 3
+cards   the namesake case at Coventry City: each of two men of one name reads his own row
+cap     Everton renewing, 4 seasons: 4 seasons, the most rows one man held 4
+size    candidate bytes a season: 163427 176686 176902 187052
+size    archive bytes a season:   787 1248 1594 1796
+size    season 4: 187052 bytes, of which the archive 1796; slope over seasons 4 to 4 n/a bytes a season (printed for the lead, not gated here)
+cap     a constructed squad of 25 archived 12 times holds 10 rows a man, the newest (seasons 3 to 12)
+oldsave the committed save of Round 1052 (Sevilla): six entries on, book 34 (late round index), 144 rival rows held, kept from no line
+oldsave the committed save of Round 1052 (Sevilla): loaded clean, season 1 played out, pastFrom 1, 20 men with a row
+oldsave the committed second tier save (Valencia): six entries on, book 34 (late round index), 133 rival rows held, kept from no line
+oldsave the committed second tier save (Valencia): loaded clean, season 1 played out, pastFrom 1, 17 men with a row
+oldsave a save parked on its season 1 review: nothing on load or at the summer, pastFrom 2 after season 2
+dailies 39 states of 4 Hot Seat days and 2 Deadline Day runs looked at
+markup  12 of 12 renders (Squad, Stats, a leaders board, a club page, on 3 saves) with no provider free of any card link (base arm NOT RUN: set CARDS_BASE)
+  cards    8156 checks, 0 failed
+  archive  825 checks, 0 failed
+  stream   6 checks, 6 failed
+  cap      86 checks, 0 failed
+  oldsave  12 checks, 0 failed
+  dailies  39 checks, 0 failed
+  markup   12 checks, 0 failed
+simCmPlayerCard: control draw FIRED, 6 failures in section stream (6 in all) (52s)

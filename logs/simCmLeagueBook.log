@@ -1,0 +1,88 @@
+simCmLeagueBook: 5 careers x 2 seasons (default fleet, seed set 0)
+stream  20 of 20 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 8.8s with the book and this harness watching every entry, 7.3s with the book out and nothing watching
+        the book's own cost: 4 careers x 2 seasons took 7031ms with the book and 6336ms with it out (11.0% more)
+stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit
+shapes  credited rival goals 7475: forwards 58.7%, midfielders 32.8%, defenders 8.5%, keepers 0 goals
+        between other clubs (5653 goals), dealt against the weight: ATT 3162 vs 3168.1 (z -0.16), MID 1825 vs 1789.2 (z 1.02), DEF 529 vs 540.2 (z -0.51)
+        clubs with an eleven: assists 3532 on 5796 credited goals = 0.609 a goal (the rule 0.614, z -0.66); own goals 142 of 5938 = 2.39% (the rule 2.75%, z -1.69); every club: 4270 assists on 7475 credited goals = 0.571 a goal
+        who is given an assist, between other clubs (3358 assists), against the harness's own two tables: ATT 1242 vs 1278.1 = 37.0% vs 38.1% (z -1.28), MID 1346 vs 1358.1 = 40.1% vs 40.4% (z -0.42), DEF 770 vs 721.9 = 22.9% vs 21.5% (z 2.02)
+        every goal its own roll: one man took every goal in 222 of 1614 matches a club with an eleven scored two or more in = 13.8% (the weight says 13.3%, z 0.57)
+        unnamed goals 838 (club weeks with no named eleven: 2100); my league matches 360, reports whose lines did not add up to the score: 0
+        no named eleven in championship: 414 of 1058 club weeks, 9 of 23 rival clubs seen (Blackburn Rovers 7 men, 1 keepers; Bolton Wanderers 3 men, 0 keepers; Cardiff City 4 men, 1 keepers; Charlton Athletic 8 men, 1 keepers; Lincoln City 2 men, 0 keepers; Millwall 11 men, 0 keepers; ...)
+        no named eleven in bundesliga2: 1122 of 1156 club weeks, 18 of 19 rival clubs seen (Arminia Bielefeld 3 men, 1 keepers; Bochum 4 men, 0 keepers; Braunschweig 2 men, 1 keepers; Darmstadt 4 men, 0 keepers; Dynamo Dresden 1 men, 0 keepers; Elversberg 10 men, 1 keepers; ...)
+        no named eleven in laliga2010: 76 of 1444 club weeks, 1 of 19 rival clubs seen (Levante 10 men, 1 keepers)
+        no named eleven in mlsEast: 488 of 758 club weeks, 9 of 14 rival clubs seen (Atlanta United 11 men, 0 keepers; CF Montréal 7 men, 1 keepers; Charlotte FC 10 men, 1 keepers; D.C. United 6 men, 0 keepers; FC Cincinnati 6 men, 1 keepers; Nashville SC 7 men, 0 keepers; ...)
+        top ten of the Goals board held by forwards and wingers: 10.00 on the book, 4.90 on the old race, rise 5.10 (floor 1.5) over 10 seasons
+thin    clubs with no eleven, against other clubs: 1562 of 2202 goals on a named row = 70.9% (the harness's own partial eleven says 70.4%, z 0.66, floor 1200 goals)
+        keeper rows of 31 club seasons with no eleven held against the table (275 clean sheets on them, 16 kept against me)
+        who is given a thin club's clean sheet: 1880 single matches of clubs with no eleven judged row by row, 493 of them clean sheets, 887 credits to named men of a back line, 0 club entries left out for a roster that moved inside the entry
+        one way to take an eleven: the module's partial eleven held against the engine's eleven on 118 rosters and against the harness's own reading on 62 rosters with no eleven
+        thin (iv) NOT RUN: set BOOK_BASE to a worktree of the base commit
+boards  233 checks over 10 season ends: each board against the harness's own reading, every reader before every entry of the fleet
+        premier       3 seasons: on record 100 in 100, keepers on record 19 of 19; leaders, mean: goals 25.3, assists 11.3, clean sheets 16.0; one of mine top of the Goals board in 0
+        championship  1 seasons: on record 92 in 100, keepers on record 19 of 23; leaders, mean: goals 42.0, assists 16.0, clean sheets 29.0; one of mine top of the Goals board in 0
+        bundesliga2   2 seasons: on record 54 in 100, keepers on record 9 of 17; leaders, mean: goals 23.5, assists 12.0, clean sheets 16.5; one of mine top of the Goals board in 1
+        laliga2010    2 seasons: on record 100 in 100, keepers on record 19 of 19; leaders, mean: goals 31.0, assists 13.5, clean sheets 20.5; one of mine top of the Goals board in 0
+        mlsEast       2 seasons: on record 96 in 100, keepers on record 9 of 14; leaders, mean: goals 19.5, assists 8.5, clean sheets 13.5; one of mine top of the Goals board in 0
+        premier, Everton (now, seed 4649) at the end of season 1 (on record 100 in 100):
+          Top scorers: Georginio Rutter, Brighton, ST 23; Nicolas Jackson, Aston Villa, ST 22; Erling Haaland, Manchester City, ST 21; Omar Marmoush, Tottenham, ST 18; Dominic Calvert-Lewin, Leeds United, ST 18; Viktor Gyökeres, Arsenal, ST 17; Jørgen Strand Larsen, Crystal Palace, ST 17; Alexander Isak, Liverpool, ST 17; Brian Brobbey, Sunderland, ST 17; Igor Thiago, Brentford, ST 15
+          Assists: Bukayo Saka, Liverpool, RW 9; Erling Haaland, Manchester City, ST 8; Evanilson, Bournemouth, ST 8; Dominik Szoboszlai, Liverpool, CAM 8; Omar Marmoush, Tottenham, ST 7
+          Clean sheets: David Raya, Arsenal, GK 16; Zion Suzuki, Aston Villa, GK 15; Gianluigi Donnarumma, Manchester City, GK 13; Kjell Scherpen, Ipswich Town, GK 13; James Trafford, Leeds United, GK 13
+        bundesliga2, Hertha BSC (now, seed 4911) at the end of season 1 (on record 54 in 100):
+          Top scorers: Phil Harres, Holstein Kiel, ST 24; Jovan Mijatovic, Braunschweig, ST 21; Fraser Hornby, Wolfsburg, ST 19; Alessandro Vogt, Heidenheim, ST 19; William Bøving, Nürnberg, ST 19; Louey Ben Farhat, Karlsruhe, CF 18; Emeka Okonjo (Youth) (mine), Hertha BSC, ST 15; Martijn Kaars, St. Pauli, ST 13; Kento Shiogai, Wolfsburg, ST 13; Milos Lukovic, Kaiserslautern, ST 13
+          Assists: Fraser Hornby, Wolfsburg, ST 12; Mergim Berisha, Kaiserslautern, ST 7; Husseyn Chakroun, Hannover 96, LW 7; Emeka Okonjo (Youth) (mine), Hertha BSC, ST 6; Farid Alfa-Ruprecht (mine), Hertha BSC, RW 6
+          Clean sheets: Timon Wellenreuther, Wolfsburg, GK 19; Nikola Vasilj, St. Pauli, GK 18; Jan Reichert, Nürnberg, GK 12; Tjark Ernst (mine), Hertha BSC, GK 11; Hans Christian Bernat, Karlsruhe, GK 10
+        championship, Southampton (now, seed 4780) at the end of season 1 (on record 92 in 100):
+          Top scorers: Tommy Conway, Middlesbrough, ST 42; Nathan Broadhead, Wrexham, LW 36; Taty Castellanos, West Ham, ST 35; Josh Sargent, Norwich City, ST 31; Tyrese Campbell, Sheffield United, ST 28; Luca Kjerrumgaard, Watford, ST 24; Raúl Jiménez, Wolves, ST 24; Karlan Grant, Charlton Athletic, ST 24; Aune Heggebø, West Brom, ST 24; Rumarn Burrell, QPR, ST 23
+          Assists: Taty Castellanos, West Ham, ST 16; Rumarn Burrell, QPR, ST 11; Mihailo Ivanović, Millwall, ST 11; Marvin Ducksch, Birmingham City, ST 10; Josh Maja, West Brom, ST 10
+          Clean sheets: Mads Hermansen, West Ham, GK 29; James Beadle, Birmingham City, GK 16; Michael Cooper, Sheffield United, GK 16; Max Weiß, Burnley, GK 16; Josh Griffiths, West Brom, GK 16
+awards  back four: 1.63 men of one club on average over 8 teams of the season (line 2.17, printed only: under 20 teams); 0 seasons the book decided had no team
+awards  seven seasons of Everton: awards on 7 records, a team on 5 (seasons 7, 6, 5, 4, 3)
+awards  65 checks over 12 season ends: 8 decided by the book, 2 under the floor or with no book, 2 on a late book (2 from the late arm)
+        awards (iii) NOT RUN: set BOOK_BASE to a worktree of the base commit
+        premier      4 season ends: on record 100 100 100 100, decided by the book 3, one of mine won the boot 0
+        championship 2 season ends: on record 92 93, decided by the book 1, one of mine won the boot 0
+        bundesliga2  2 season ends: on record 54 54, decided by the book 0, one of mine won the boot 0
+        laliga2010   2 season ends: on record 100 100, decided by the book 2, one of mine won the boot 0
+        mlsEast      2 season ends: on record 95 97, decided by the book 2, one of mine won the boot 0
+facts   38 match seasons: the fleet's top scorer 27.6 over 5 seasons (standard error 1.86); the real leagues: Premier League 26.9 (10), gap 0.4 standard errors; La Liga 31.1 (9), gap -1.9 standard errors; Serie A 28.7 (10), gap -0.6 standard errors; Ligue 1 31.1 (7), gap -1.9 standard errors
+facts   34 match seasons: the fleet's top scorer 23.5 over 2 seasons (standard error 0.50); the real leagues: Bundesliga 30.0 (10), gap -13.0 standard errors; Ligue 1 24.0 (2), gap -1.0 standard errors
+facts   the band on 38 match seasons: 21.32 to 36.72 (real league means 26.9 to 31.1, widened by three standard errors of 1.86); the fleet 27.60 over 5 seasons, 3.4 standard errors over the low edge and 4.9 under the high one, printed and not judged (under 20 seasons; the full fleet judges it)
+names   30448 checks; 4 purchases probed of 4 saves kept (the best scorer of the rivals signed at week 22, twelve entries played on)
+        the book against the report of 358 league matches of mine: 410 goal lines, 392 naming a man of that club's roster (each on his row), 10 naming nobody its roster holds, 43 from the spot or a free kick, 174 assists (each by a man on their pitch); 2 matches not judged, the opponent played twice in the entry
+oldsave 5290 checks: 6 saves with no book finished on the candidate and on the book out engine (5 of them on a late book, one of those with a goalless first round in its table; one parked at the first week on a whole one), the season after each, six unreadable books replaced and the match week's own guard with the repair off, the stale book, and no book of the fleet reopened
+        (vi) 2 committed saves of seasons in play, written by the base commit WITH its book, carried on by the candidate to the season's end (1 of the 2 in a league with clubs that have no eleven): the book taken as it is, never reopened
+        oldsave (vi) from a base tree NOT RUN (the committed saves were): set BOOK_BASE to a worktree of the base commit
+        (vi) Hertha BSC closed on record 40 in 100: no awards from the book, the golden boot from the old race (Alessandro Vogt 32)
+        (vi) Everton closed on record 100 in 100: awards from the book (top scorer Brian Brobbey 25, team of 11)
+doors   2685 checks: three takeovers and two joined jobs (season one and season three), the law at the handover and after every entry to the end of the season
+dailies 86 checks: 6 Hot Seat dates played to a verdict, handed over and played on, 3 Deadline Day dates, each state byte equal to the book out engine's
+boards  by league, the book against the old race on the same seasons (penalties and free kicks to the taker)
+        premier      20 clubs,  3 seasons: on record 100 in 100 rival goals, best rival mean 25.3, top scorer mean 25.3 (23 25 28), old race mean 28.0, most assists mean 11.3, leading keeper's clean sheets mean 16.0
+        championship 24 clubs,  1 seasons: on record 92 in 100 rival goals, best rival mean 42.0, top scorer mean 42.0 (42), old race mean 39.0, most assists mean 16.0, leading keeper's clean sheets mean 29.0
+        bundesliga2  18 clubs,  2 seasons: on record 54 in 100 rival goals, best rival mean 23.5, top scorer mean 23.5 (24 23), old race mean 28.0, most assists mean 12.0, leading keeper's clean sheets mean 16.5
+        laliga2010   20 clubs,  2 seasons: on record 100 in 100 rival goals, best rival mean 31.0, top scorer mean 31.0 (28 34), old race mean 34.5, most assists mean 13.5, leading keeper's clean sheets mean 20.5
+        mlsEast      15 clubs,  2 seasons: on record 96 in 100 rival goals, best rival mean 19.5, top scorer mean 19.5 (18 21), old race mean 23.5, most assists mean 8.5, leading keeper's clean sheets mean 13.5
+        38 game leagues: 5 seasons, top scorer mean 27.60, standard deviation 3.72, standard error 1.66; old race mean 30.60
+        34 game leagues: 2 seasons, top scorer mean 23.50, standard deviation 0.50, standard error 0.35; old race mean 28.00
+        46 game leagues: 1 seasons, top scorer mean 42.00, standard deviation 0.00, standard error 0.00; old race mean 39.00
+        28 game leagues (15 clubs): 2 seasons, top scorer mean 19.50, standard deviation 1.50, standard error 1.06; old race mean 23.50
+        the top scorer was a: ATT 10, MID 0, DEF 0 (of 10 seasons)
+        the old race on the same seasons: 5221 of 8519 rival goals given to anybody (61.3%), of those forwards 50.0%, midfielders 47.1%; the book names a man for 87.7% and marks 206 own goals and 838 unnamed
+        a Clean sheets board of every man (keepers and defenders): its top ten holds men of 3.00 clubs and 1.90 keepers on average
+        a back four picked by clean sheets + goals + assists: 3.00 men of one club on average; by goals + assists (club clean sheets, then table place, to split): 1.70, with 0.00 of the four on no goal and no assist
+law     4 weeks I did not play in which the rest of the round did (a league with an odd number of clubs), 26 club entries holding two matches of one club, 9 club seasons whose clean sheets are judged on a range for it
+law     15027 checks over 414 entries of 5 careers, and 263 entries of 6 seasons with the video referee on (228 league matches of mine, 33 reviews, 0 reports whose lines did not add up to the score)
+green stream   20 checks
+green law      15027 checks
+green names    30448 checks
+green shapes   12 checks
+green oldsave  5290 checks
+green doors    2685 checks
+green dailies  86 checks
+green thin     7047 checks
+green boards   233 checks
+green awards   65 checks
+green facts    2 checks
+simCmLeagueBook: green, 11 sections, 5 careers x 2 seasons (86s)
