@@ -1,0 +1,8 @@
+euro exit=0 237s | simCmEuroPlay: green, 1806 checks, 0 failures
+euro-noplayrevert exit=1 156s | simCmEuroPlay: control noplayrevert FIRED (13 failures, all its own)
+proof-uel exit=0 735s | proofWorldUclFleet: GREEN, 190 journeys and 24214 steps byte equal to 46612e720a96dbda2684e3200dab297163e1e646, draws equal
+worldEuro-a exit=0 243s | simWorldEuro: green, 36795 checks, 0 failures
+worldEuro-2 exit=0 490s | simWorldEuro: green, 14747 checks, 0 failures
+worldEuro-3 exit=0 293s | simWorldEuro: green, 507 checks, 0 failures
+worldEuro-6 exit=0 12s | simWorldEuro: green, 30 checks, 0 failures
+worldEuro-u8thursday exit=1 0s | simWorldEuro: control u8thursday FIRED (1 failures, all its own)
