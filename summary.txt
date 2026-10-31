@@ -1,0 +1,12 @@
+sl-2 exit=0 96s | simClubManagerSlots: all sections green
+sl-1 exit=0 98s | simClubManagerSlots: all sections green
+sl-d exit=0 99s | simClubManagerSlots: all sections green
+sl-3 exit=0 98s | simClubManagerSlots: all sections green
+sl-4 exit=0 96s | simClubManagerSlots: all sections green
+sl-5 exit=0 99s | simClubManagerSlots: all sections green
+appeal exit=0 53s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simHarnessAnchors exit=0 61s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+dash-diff exit=0 0s | git diff 158969218 HEAD: 0 added lines with an en or em dash 
+dash-log exit=0 0s | commit messages 158969218..HEAD: 0 lines with an en or em dash
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+sl-dupe exit=1 91s | CONTROL FIRED: SLOTS_CONTROL=dupe turned section 2 red through its budget check (red sections: 2, 3), as it must
