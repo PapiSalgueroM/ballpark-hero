@@ -460,7 +460,7 @@ function fleetOf(M) {
 /** One journey: startCareer, every playNextEntry, finishSeason, startNextSeason, through `seasons`, with a reload in
  *  every season, a mid season move where the fleet row asks (season one, entry 25) and a summer move where it asks
  *  (the first rollover). Every step on its own stretch of the counter stream; `onStep` sees every state. */
-async function journey(E, f, seed, mode, { evalEach = false, record = null, mark = null, onStep, onRollover, moves2 = false } = {}) {
+async function journey(E, f, seed, mode, { evalEach = false, record = null, mark = null, extra = null, onStep, onRollover, moves2 = false } = {}) {
   const M = await E.fresh();
   const opts = mode === 'coach' ? { skipHalftime: true } : { skipHalftime: true, noCoach: true };
   const steps = [];
@@ -475,7 +475,7 @@ async function journey(E, f, seed, mode, { evalEach = false, record = null, mark
     });
     const got = r.value ?? {};
     if (got.state) s = got.state;
-    steps.push({ label, m: mark && s ? mark(s) : false, h: record && s ? createHash('sha256').update(record(s)).digest('hex').slice(0, 16) : null, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16) });
+    steps.push({ label, m: mark && s ? mark(s) : false, x: extra && s ? extra(s) : null, h: record && s ? createHash('sha256').update(record(s)).digest('hex').slice(0, 16) : null, draws: r.draws.length, drawSha: createHash('sha256').update(JSON.stringify(r.draws)).digest('hex').slice(0, 16) });
     onStep?.(M, s, label, got);
   };
   step('start', () => ({ state: f.custom ? M.cm.startCareer(f.club, f.era, f.custom) : M.cm.startCareer(f.club, f.era) }));
@@ -846,23 +846,33 @@ const withoutDsc = st => {
 };
 
 /** Section 3, SELF RELATIVE: the engine against itself with this round's three opens taken out (each asserted to
- *  stand once), every fleet save, both coach modes: equal at every step in every key but worldComps.dsc, every draw
- *  equal by count and value, the super cup evaluated on the live state after every step of the head arm. */
+ *  stand once), every fleet save, both coach modes: equal at every step in every key but worldComps.dsc (and the
+ *  press block at a step where the participant's next match is its night, Release BV), every draw equal by count
+ *  and value, the super cup evaluated on the live state after every step of the head arm. */
 async function selfRelative() {
   const head = await engineOf(ROOT, 'head', { edits: editsFor() }, cannot);
   const off = await engineOf(ROOT, 'off', { edits: [...PLAY_OFF, ...OPENS] }, cannot);
   const probe = await head.fresh();
-  let journeys = 0, stepsSeen = 0, carried = 0;
+  let journeys = 0, stepsSeen = 0, carried = 0, nightNextSteps = 0, askedAboutNight = 0;
+  /* Release BV (review cm-bv F2): the press's pending question previews the NEXT match. While that is the
+     participant's own super cup night, the head arm asks about the night and the other arm (no nights) about the
+     league match after it (or asks nothing, so the block's lastWeek differs too), so at those steps alone the press
+     block is left out; everywhere else it is compared with the state. The next match is the engine's own
+     nextFixture, read on `probe` (its own vm), so neither journey is touched; a read that throws counts as not the
+     night, which keeps the strict comparison. */
+  const pressOf = st => createHash('sha256').update(JSON.stringify(st.press ?? null)).digest('hex').slice(0, 16);
+  const withoutPress = st => { if (!('press' in st)) return st; const c = { ...st }; delete c.press; return c; };
+  const nightNext = st => { try { const nx = probe.cm.nextFixture(st); return nx.kind === 'match' && nx.competition === 'oneOff'; } catch { return false; } };
   for (const f of fleetOf(probe)) {
     for (const seed of SEEDS) {
       for (const mode of COACH === 'both' ? ['coach', 'nocoach'] : [COACH]) {
         const tag = `${f.club} (${f.era}) seed ${seed} ${mode}`;
         /* A participant's season holds its nights: compared with them taken out of the calendar, and only until the
            week passes the first of them (from there it moves because it played, the match half's attribution). */
-        const headRecord = st => ((st.calendar ?? []).some(e => e.night) ? withoutDsc({ ...st, calendar: st.calendar.filter(e => !e.night) }) : withoutDsc(st));
+        const headRecord = st0 => { const st = withoutPress(st0); return ((st.calendar ?? []).some(e => e.night) ? withoutDsc({ ...st, calendar: st.calendar.filter(e => !e.night) }) : withoutDsc(st)); };
         const pastNight = st => (!!st.worldComps?.dsc?.clubs?.includes(st.clubName) || !!st.worldComps?.usc?.clubs?.includes(st.clubName)) && (st.calendar ?? []).some((e, i) => e.night && i < st.week);
-        const a = await journey(head, f, seed, mode, { evalEach: true, record: headRecord, mark: pastNight, onStep: (M, s) => { if (s?.worldComps?.dsc) carried += 1; } });
-        const b = await journey(off, f, seed, mode, { record: st => JSON.stringify(st) });
+        const a = await journey(head, f, seed, mode, { evalEach: true, record: headRecord, mark: pastNight, extra: st => ({ press: pressOf(st), night: nightNext(st) }), onStep: (M, s) => { if (s?.worldComps?.dsc) carried += 1; } });
+        const b = await journey(off, f, seed, mode, { record: st => JSON.stringify(withoutPress(st)), extra: st => ({ press: pressOf(st) }) });
         journeys += 1;
         stepsSeen += a.length;
         let compared = 0;
@@ -870,7 +880,8 @@ async function selfRelative() {
           const x = a[i], y = b[i];
           if (x.m) { bump('3 participant journeys compared up to their first night'); break; }
           if (x.draws !== y.draws || x.drawSha !== y.drawSha) { ok(false, `3 ${tag} at ${x.label}: the draws differ (${x.draws} against ${y.draws})`); break; }
-          if (x.h !== y.h) { ok(false, `3 ${tag} at ${x.label}: the state differs in a key other than worldComps.dsc`); break; }
+          if (x.h !== y.h || (!x.x.night && x.x.press !== y.x.press)) { ok(false, `3 ${tag} at ${x.label}: the state differs in a key other than worldComps.dsc`); break; }
+          if (x.x.night) { nightNextSteps += 1; if (x.x.press !== y.x.press) askedAboutNight += 1; }
           ok(true, '');
           compared += 1;
         }
@@ -878,7 +889,7 @@ async function selfRelative() {
       }
     }
   }
-  console.log(`  3 self relative: ${journeys} journeys, ${stepsSeen} steps each arm, ${carried} steps carrying a super cup`);
+  console.log(`  3 self relative: ${journeys} journeys, ${stepsSeen} steps each arm, ${carried} steps carrying a super cup, ${nightNextSteps} compared steps with the participant's night next (the press block left out; ${askedAboutNight} of them with the two presses apart)`);
 }
 
 /** Section 6: the dailies' state shape. No Hot Seat or Deadline Day state carries worldComps or a night, and the
