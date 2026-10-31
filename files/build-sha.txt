@@ -1,0 +1,2 @@
+0dd06f42c33fbba67226a167716ab1360f17b0704658e79d7c48da4ce5fa6a4d  public/whats-new/index.html
+4912b6b54f44a6da977c8709af8dca1d3210c190e1d1cea3be5b6af81c5c291c  scripts/data/lastmod.json

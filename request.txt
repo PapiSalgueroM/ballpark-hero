@@ -1,0 +1,4 @@
+#!buildseo
+#!export
+# Release BU redraw of /whats-new after 8fcdd7307 (the Sports Millionaire line no longer quotes the old error), then simPrerender on the built dist.
+simPrerender: node scripts/simPrerender.mjs
