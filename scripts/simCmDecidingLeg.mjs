@@ -315,10 +315,11 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
   const baseBad = [];
   const parted = [];
   let inUcl = 0;
-  let uelMet = null;
+  let uelSeasons = 0;
+  let uelTotal = 0;
   const uelTried = [];
+  const uelDisagree = [];
   for (const [club, era, kind] of [...FLEET.map(c => [...c, 'ucl']), ...UEL_FLEET.map(c => [...c, 'uel'])]) {
-    if (kind === 'uel' && uelMet) break;
     const tag = `${club} ${era}`;
     const H = await fresh(headFile);
     const O = await fresh(oldFile);
@@ -335,6 +336,7 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
     let guard = 0;
     let seasonNo = 1;
     let uelLegs = 0;
+    let uelNights = 0;
     const over = s => (kind === 'uel' ? uelWindowOver(s, seasonNo) : windowOver(s));
     while (!over(sH) && guard++ < (kind === 'uel' ? 400 : 160)) {
       const seed = keyOf(tag, sH.season, sH.week);
@@ -342,6 +344,12 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
       const pre = atLeg ? clone(sH) : null;
       const rH = step(H, sH, seed);
       if (atLeg && kind === 'uel') uelLegs += 1;
+      if (kind === 'uel' && sH.calendar[sH.week]?.type === 'uel') {
+        /* decidingLegAt must agree with what the whistle judged: a report with tie.leg 2 and through set. */
+        const judged = rH.report?.tie?.leg === 2 && typeof rH.report.tie.through === 'boolean';
+        if (judged !== atLeg) uelDisagree.push(`${tag} week ${sH.week}: decidingLegAt ${atLeg}, the report ${judged ? 'judged a deciding leg' : 'judged none'}`);
+        if (rH.report) uelNights += 1;
+      }
       if (atLeg) legPre.push({ tag, week: sH.week, round: legRound(sH), pre, seed, walk: legOf(rH.report) });
       scanHauls(H, rH.report);
       if (!split || B) {
@@ -380,8 +388,9 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
     if (split && !split.broken) parted.push(`${tag} week ${split.week} (${split.round}, night ${split.leg.night}, tie ${split.leg.tie}, ${split.leg.how})`);
     if (kind === 'uel') {
       const played = seasonNo >= 2 && H.cm.uelParticipant(sH);
-      uelTried.push(`${tag}: ${played ? `in the Europa League in season two, ${uelLegs} deciding second legs` : (sH.sacked ? 'sacked' : 'no Europa League place in season two')}`);
-      if (uelLegs > 0) uelMet = `${tag} (${uelLegs} deciding second legs)`;
+      uelTried.push(`${tag}: ${played ? `in the Europa League in season two, ${uelNights} nights played, ${uelLegs} deciding second legs` : (sH.sacked ? 'sacked' : 'no Europa League place in season two')}`);
+      if (played) uelSeasons += 1;
+      uelTotal += uelLegs;
       console.log(`   ${tag} (Europa League candidate): ${split ? (split.broken ? 'BROKE' : `parted at week ${split.week}`) : `equal to week ${sH.week}`}; ${uelTried.at(-1)}`);
       continue;
     }
@@ -389,7 +398,8 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
   }
   console.log(`   ${inUcl} careers in the Champions League, ${parted.length} parted at a deciding leg: ${parted.join('; ') || 'none'}`);
   check('careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ)', identityBad.length === 0 && inUcl >= 8, identityBad.slice(0, 3).join('; ') || `${inUcl} careers`);
-  if (UEL_FLEET.length) check('careers: a Europa League career meets a deciding second leg (Round 1593, the Release BV join)', !!uelMet, uelMet ?? uelTried.join('; '));
+  if (UEL_FLEET.length) check('careers: the Europa League careers meet a deciding second leg (Round 1593, the Release BV join)', uelTotal >= 1, `${uelTotal} deciding second legs in ${uelSeasons} Europa League seasons of ${UEL_FLEET.length} candidates`);
+  if (UEL_FLEET.length) check('careers: decidingLegAt agrees with the whistle on every Europa League night', uelDisagree.length === 0, uelDisagree.slice(0, 3).join('; ') || `${uelSeasons} seasons`);
   if (baseFile) check('careers: OLD is the base tree, week for week over the whole window (a named haul read as the old words)', baseBad.length === 0, baseBad.slice(0, 3).join('; ') || `${namedHauls} saves or reports carried a named haul`);
   console.log(`   ${legPre.length} deciding second legs met (${legPre.filter(l => l.walk?.differ).length} differing on the walk's own dice)`);
 }
