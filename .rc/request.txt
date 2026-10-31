@@ -1,0 +1,4 @@
+#!serial
+# Release BU lane m2: Round 1606 current roster runs, one at a time (they swap ClubDetailScreen.tsx in the checkout while they run).
+m1606-roster-head: CM_OWN_ROSTER_CORE_REF=HEAD node scripts/simClubDetailCurrentRoster.mjs
+m1606-roster-ctl-original: CM_OWN_ROSTER_CORE_REF=HEAD CM_OWN_ROSTER_CONTROL=original node scripts/simClubDetailCurrentRoster.mjs
