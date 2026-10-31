@@ -1,0 +1,24 @@
+#!buildseo
+# Release BV gate, rcg lane B (after a full build:seo): the Club Manager engine harnesses of Release BD's lanes B and C
+# (gate-bd lists) that no other BV lane runs, first half.
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simClubManagerStart: node scripts/simClubManagerStart.mjs
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simManagerWorldBrowser: node scripts/simManagerWorldBrowser.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simClubManagerDeskCues: node scripts/simClubManagerDeskCues.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs
+simClubVerdict: node scripts/simClubVerdict.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simClubManagerFinances: node scripts/simClubManagerFinances.mjs
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs
