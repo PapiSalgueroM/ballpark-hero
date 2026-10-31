@@ -1,0 +1,6 @@
+munProbe: planted
+PROBE Nation Probe 0 (Türkiye): in the pool false; in my squad true; listed at []; pool size 23, my squad 26, season 4
+PROBE Nation Probe 1 (Cote d'Ivoire): in the pool false; in my squad false; listed at []; pool size 23, my squad 26, season 4
+PROBE Nation Probe 2 (Japan): in the pool false; in my squad false; listed at []; pool size 23, my squad 26, season 4
+  FAIL: only 0 scouted boys could be signed back from the pool, the free agency door was not tried
+simCmMadeUpNations: RED, 1 failure(s)

@@ -1,0 +1,2 @@
+mun-probe-m2 exit=0 130s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+mun-probe-head exit=1 134s | simCmMadeUpNations: RED, 1 failure(s)
