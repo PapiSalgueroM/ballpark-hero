@@ -1,0 +1,12 @@
+sl-d: node scripts/simClubManagerSlots.mjs
+sl-1: SIM_SEED=1 node scripts/simClubManagerSlots.mjs
+sl-2: SIM_SEED=2 node scripts/simClubManagerSlots.mjs
+sl-3: SIM_SEED=3 node scripts/simClubManagerSlots.mjs
+sl-4: SIM_SEED=4 node scripts/simClubManagerSlots.mjs
+sl-5: SIM_SEED=5 node scripts/simClubManagerSlots.mjs
+sl-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+dash-diff: node .rc/x/dashScan.mjs diff 158969218
+dash-log: node .rc/x/dashScan.mjs log 158969218
