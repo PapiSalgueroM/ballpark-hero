@@ -1,0 +1,9 @@
+simManagers exit=0 75s | simManagers: all green
+fleet-base exit=1 80s | simManagers: 8 failure(s)
+simNoInventedQuotes exit=0 40s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+dash-diff exit=0 1s | git diff 19911f815 HEAD: 0 added lines with an en or em dash 
+dash-log exit=0 1s | commit messages 19911f815..HEAD: 0 lines with an en or em dash
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+fleet-b1600 exit=1 150s | simManagers: 3 failure(s)
+tsc exit=0 106s | 
+simHarnessAnchors exit=0 59s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

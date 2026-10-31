@@ -1,0 +1,10 @@
+# Release BV, THE GATE HEAD after the base tree fix (54fb28060, scripts/lib/cmDugoutSentinel.mjs only): simManagers plain, against the BASE, and against the BASE with Round 1600 merged (the attribution twin); simNoInventedQuotes (the other user of the lib); the type gate, dashes, rivals and anchors over the whole branch.
+simManagers: node scripts/simManagers.mjs
+fleet-base: SIM_MANAGERS_BASE=19911f815 node scripts/simManagers.mjs
+fleet-b1600: B=$(bash .rc/x/bvbase.sh dailies) && echo "SIM_MANAGERS_BASE=$B" && SIM_MANAGERS_BASE=$B node scripts/simManagers.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dash-diff: node .rc/x/dashScan.mjs diff 19911f815
+dash-log: node .rc/x/dashScan.mjs log 19911f815
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
