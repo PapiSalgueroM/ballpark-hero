@@ -1,0 +1,10 @@
+#!buildseo
+#!serve
+#!serial
+# Release BV gate, rcg lane H2 (after a full build:seo, served): the Club Manager browser walks of Release BD's browser
+# list and BU's lane j2 that read the saved pages' build, and the sweep of the BV routes at two sizes.
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+playCmLeagueLeaders: ENGINES=chromium node scripts/playCmLeagueLeaders.mjs
+playCmWorldMoves: ENGINES=chromium node scripts/playCmWorldMoves.mjs
+playCmOldCareersWorld: ENGINES=chromium node scripts/playCmOldCareersWorld.mjs
+sweepGames-bv: ONLY=/club-manager,/manager-hot-seat,/deadline-day,/whats-new SIZES=phone,desktop ENGINES=chromium node scripts/sweepGames.mjs
