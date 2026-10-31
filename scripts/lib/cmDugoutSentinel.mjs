@@ -168,10 +168,13 @@ export async function sentinelPlan(cm) {
   return { table, partial, leagues };
 }
 
-/** A base commit's src tree, read with git archive into `dir` (an empty folder). Returns the src path. */
+/** A base commit's src tree, read with git archive into `dir` (an empty folder). Returns the src path.
+ *  Release BV: scripts/lib comes along. Since Round 1600 src/lib/cmAgeRead.ts imports the age rule from
+ *  scripts/lib/cmValueCurve.mjs and scripts/lib/cmAges.mjs (written once, there), so a base at or after 1600 did not
+ *  bundle from src alone (rBVg-fin fleet-b1600: "Could not resolve ../../scripts/lib/cmValueCurve.mjs"). */
 export function baseTree(root, commit, dir) {
   const sha = execFileSync('git', ['rev-parse', '--verify', `${commit}^{commit}`], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-  execFileSync('git', ['archive', '--format=tar', '-o', path.join(dir, 'src.tar'), sha, 'src'], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
+  execFileSync('git', ['archive', '--format=tar', '-o', path.join(dir, 'src.tar'), sha, 'src', 'scripts/lib'], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
   execFileSync('tar', ['-xf', 'src.tar'], { cwd: dir, stdio: ['ignore', 'pipe', 'pipe'] });
   return { sha, src: path.join(dir, 'src') };
 }
