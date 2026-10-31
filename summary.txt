@@ -1,0 +1,2 @@
+m1606-roster-head exit=0 3s | simClubDetailCurrentRoster normal: green.
+m1606-roster-ctl-original exit=0 3s | simClubDetailCurrentRoster original: green.
