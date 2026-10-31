@@ -1,0 +1,10 @@
+# Release BV attribution (lane rBVg-rgC on 40bee2a4f): simCmMadeUpNations, simManagerCareer and simCareerTransferBrief on the BASE, m2 and Round 1600's own head, in their own worktrees.
+mun-base: git worktree add /tmp/munbase 19911f815 >/dev/null 2>&1; test -e /tmp/munbase/node_modules || ln -s "$PWD/node_modules" /tmp/munbase/node_modules; cd /tmp/munbase && node scripts/simCmMadeUpNations.mjs
+mc-base: git worktree add /tmp/mcbase 19911f815 >/dev/null 2>&1; test -e /tmp/mcbase/node_modules || ln -s "$PWD/node_modules" /tmp/mcbase/node_modules; cd /tmp/mcbase && node scripts/simManagerCareer.mjs
+tb-base: git worktree add /tmp/tbbase 19911f815 >/dev/null 2>&1; test -e /tmp/tbbase/node_modules || ln -s "$PWD/node_modules" /tmp/tbbase/node_modules; cd /tmp/tbbase && node scripts/simCareerTransferBrief.mjs
+mun-m2: git worktree add /tmp/munm2 5df0e72e5 >/dev/null 2>&1; test -e /tmp/munm2/node_modules || ln -s "$PWD/node_modules" /tmp/munm2/node_modules; cd /tmp/munm2 && node scripts/simCmMadeUpNations.mjs
+mc-m2: git worktree add /tmp/mcm2 5df0e72e5 >/dev/null 2>&1; test -e /tmp/mcm2/node_modules || ln -s "$PWD/node_modules" /tmp/mcm2/node_modules; cd /tmp/mcm2 && node scripts/simManagerCareer.mjs
+tb-m2: git worktree add /tmp/tbm2 5df0e72e5 >/dev/null 2>&1; test -e /tmp/tbm2/node_modules || ln -s "$PWD/node_modules" /tmp/tbm2/node_modules; cd /tmp/tbm2 && node scripts/simCareerTransferBrief.mjs
+mun-r1600: git worktree add /tmp/munr1600 ed30d7601 >/dev/null 2>&1; test -e /tmp/munr1600/node_modules || ln -s "$PWD/node_modules" /tmp/munr1600/node_modules; cd /tmp/munr1600 && node scripts/simCmMadeUpNations.mjs
+mc-r1600: git worktree add /tmp/mcr1600 ed30d7601 >/dev/null 2>&1; test -e /tmp/mcr1600/node_modules || ln -s "$PWD/node_modules" /tmp/mcr1600/node_modules; cd /tmp/mcr1600 && node scripts/simManagerCareer.mjs
+tb-r1600: git worktree add /tmp/tbr1600 ed30d7601 >/dev/null 2>&1; test -e /tmp/tbr1600/node_modules || ln -s "$PWD/node_modules" /tmp/tbr1600/node_modules; cd /tmp/tbr1600 && node scripts/simCareerTransferBrief.mjs

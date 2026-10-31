@@ -1,0 +1,9 @@
+tb-base exit=1 3s | Node.js v24.22.1
+mc-base exit=1 9s | 1 FAILURES
+mc-m2 exit=1 9s | 1 FAILURES
+tb-m2 exit=1 3s | Node.js v24.22.1
+mun-base exit=0 115s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+mun-m2 exit=0 117s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+mc-r1600 exit=1 7s | 1 FAILURES
+tb-r1600 exit=1 2s | Node.js v24.22.1
+mun-r1600 exit=1 106s | simCmMadeUpNations: RED, 1 failure(s)
