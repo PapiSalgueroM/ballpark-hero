@@ -1,0 +1,7 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playCmDecidingLeg exit=0 53s | playCmDecidingLeg GREEN: 42 of 42 checks green
+playCmEuroPlay exit=0 56s | playCmEuroPlay: green, three cases at three sizes, pictures in /home/runner/work/_temp/rc-out/files/shots
+walk-notile exit=1 46s | playCmEuroPlay: control notile FIRED (3 findings of "the Europa League tile", 6 in all)
+walk-nofixture exit=2 1s | playCmEuroPlay: could not run. control nofixture: its line stands in src/lib/clubManager.ts 0 times, it must be exactly once
+playWorldUcl exit=0 253s | playWorldUcl: green. Nine saves at three sizes, 93 views measured, every check held; pictures in /home/runner/work/_temp/rc-out/files/shots
+playClubManager exit=0 216s | Played Club Manager through its own screens. 0 findings.
