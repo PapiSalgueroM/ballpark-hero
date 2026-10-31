@@ -1,0 +1,20 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/soccerCareerLeague.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/SiteMenu.page-chrome.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1076[2mms[22m[39m
+ [32m✓[39m src/test/SiteMenu.finder.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 4144[2mms[22m[39m
+   [33m[2m✓[22m[39m Menu game finder[2m > [22mopens without editable autofocus and keeps original navigation [33m 1439[2mms[22m[39m
+   [33m[2m✓[22m[39m Menu game finder[2m > [22mranks actual catalog games and updates results as query changes [33m 575[2mms[22m[39m
+   [33m[2m✓[22m[39m Menu game finder[2m > [22mshows honest no results and clears without navigating [33m 1000[2mms[22m[39m
+   [33m[2m✓[22m[39m Menu game finder[2m > [22mclears the finder after close and a real route-key change [33m 566[2mms[22m[39m
+   [33m[2m✓[22m[39m Menu game finder[2m > [22mkeeps draft searches out of the location and saved storage [33m 348[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m52 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 00:23:34
+[2m   Duration [22m 5.22s[2m (transform 995ms, setup 183ms, collect 1.77s, tests 5.27s, environment 939ms, prepare 191ms)[22m
+

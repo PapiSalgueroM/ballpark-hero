@@ -1,0 +1,7 @@
+simCareerClubPool exit=0 17s | simCareerClubPool: all sections green
+simCareerProgramme exit=0 51s | Career programme:50 historical pool and playing size original/on/off pairs,50 inherited-current opening pairs and50 pristine-production opening pairs with exact RNG,240 o
+simHomeFront exit=0 0s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simResultMoment exit=0 4s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simSeasonVerdict exit=0 2s | simSeasonVerdict: green. Four pages hand the card the sim's record, 16 renders moved nothing, and the slam lands under either motion setting.
+vt-sc exit=0 5s |    Duration  5.22s (transform 995ms, setup 183ms, collect 1.77s, tests 5.27s, environment 939ms, prepare 191ms)
+lr-mergefile exit=0 50s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)

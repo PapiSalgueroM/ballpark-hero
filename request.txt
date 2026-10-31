@@ -1,0 +1,9 @@
+#!playwright
+#!serial
+simCareerClubPool: node scripts/simCareerClubPool.mjs
+simCareerProgramme: node scripts/simCareerProgramme.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simSeasonVerdict: node scripts/simSeasonVerdict.mjs
+vt-sc: node_modules/.bin/vitest run src/lib/soccerCareerLeague.test.ts src/test/SiteMenu.finder.test.tsx src/test/SiteMenu.page-chrome.test.tsx --testTimeout=300000 --hookTimeout=120000
+lr-mergefile: git checkout 9a8445ef8 -- src && node scripts/simCmLeagueRules.mjs; s=$?; git checkout HEAD -- src; exit $s
