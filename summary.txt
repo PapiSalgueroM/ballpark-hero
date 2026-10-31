@@ -1,0 +1,2 @@
+oo3-nopress exit=0 684s | simOneOffCups: green, 14936 checks (683 s)
+oo3-plain exit=1 689s | simOneOffCups: 2 FAILURES of 14936 checks (689 s)

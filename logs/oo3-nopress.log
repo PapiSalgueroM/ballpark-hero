@@ -1,0 +1,6 @@
+rvProbeOneOff: applied (the press block left out of both arms of section 3)
+ scripts/simOneOffCups.mjs | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+  3 self relative: 130 journeys, 19295 steps each arm, 14992 steps carrying a super cup
+  3 participant journeys compared up to their first night: 49
+simOneOffCups: green, 14936 checks (683 s)

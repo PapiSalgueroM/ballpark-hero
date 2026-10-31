@@ -1,0 +1,2 @@
+oo3-plain: ONE_OFF_ONLY=3 node scripts/simOneOffCups.mjs
+oo3-nopress: R=$PWD; git worktree add -q /tmp/rvo HEAD && ln -s $R/node_modules /tmp/rvo/node_modules && cd /tmp/rvo && node $R/.rc/x/rvProbeOneOff.mjs && git diff --stat && ONE_OFF_ONLY=3 node scripts/simOneOffCups.mjs

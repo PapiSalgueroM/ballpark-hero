@@ -1,0 +1,5 @@
+  3 self relative: 130 journeys, 19295 steps each arm, 14992 steps carrying a super cup
+  3 participant journeys compared up to their first night: 47
+  FAIL 3 Manchester City (now) seed 3 coach at s2-e1: the state differs in a key other than worldComps.dsc
+  FAIL 3 Juventus (now) seed 4 nocoach at s3-e1: the state differs in a key other than worldComps.dsc
+simOneOffCups: 2 FAILURES of 14936 checks (689 s)
