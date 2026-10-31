@@ -40,6 +40,11 @@ beforeEach(() => {
       for (const event of feed) {
         if (!['goal', 'save', 'shot'].includes(event.kind) || event.minute < 2 || event.minute > 42 || fixtures.has(event.kind)) continue;
         if (feed.some(other => other !== event && ['goal', 'save', 'shot'].includes(other.kind) && other.minute >= event.minute && other.minute < event.minute + 1.2)) continue;
+        /* Release BV: nor a goal whose own minute tells something else first (a foul, a throw in), since that line
+           plays before it and the goal's flight starts late. Round 1600's re-rating put a foul at 15 just before this
+           career's first goal (runner result rBVg-x8 goal-head), and the goal sequence read 'pass' where it waits for
+           'goal'; before 1600 that minute held the goal alone (goal-m2), and this pick is the same there. */
+        if (event.kind === 'goal' && feed.some((other, i) => other !== event && other.minute === event.minute && i < feed.indexOf(event))) continue;
         const copy = structuredClone(career); copy.live!.minute = event.minute - .2;
         fixtures.set(event.kind, { career: copy, event });
       }
