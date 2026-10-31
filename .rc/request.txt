@@ -1,0 +1,3 @@
+dl-uelnight: R=$PWD; git worktree add -q /tmp/rvmut HEAD && ln -s $R/node_modules /tmp/rvmut/node_modules && cd /tmp/rvmut && node $R/.rc/x/rvMutUel.mjs && git diff --stat && node scripts/simCmDecidingLeg.mjs
+wucl5-skip: R=$PWD; git worktree add -q /tmp/rvh HEAD && ln -s $R/node_modules /tmp/rvh/node_modules && cd /tmp/rvh && RV_HOLDER_SKIP=1 node $R/.rc/x/rvProbeHolder.mjs && git diff --stat && WORLD_UCL_ONLY=5 node scripts/simWorldUcl.mjs
+oldsave: node .rc/x/rvOldSave.mjs
