@@ -43,15 +43,12 @@ const CONTROLS = {
     to: `    return { mode: 'watching', value: at, sub: 'You are following it from outside' };`, finding: 'the Europa League tile' },
   /* Release BV join: re-anchored. Round 1593's fixer split this return over lines (the notneutral and noet
      controls of simCmEuroPlay read its lines one by one), so the old one line anchor stood 0 times on 1593's own
-     head fa479238a and the control could not run (rBVg-w, exit 2). The branch still returns null under it. */
+     head fa479238a and the control could not run (rBVg-w, exit 2). The anchor is the one line above that return,
+     standing once in the file, and the branch still returns null under it (its own if (!my) return null). A
+     multi line anchor read raw here would match nothing on a CRLF checkout (simHarnessAnchors, rBVg-w2b). */
   nofixture: { file: 'src/lib/clubManager.ts', cases: ['a', 'c'],
-    from: `    return {
-      competition: 'uel',
-      compLabel: uelNightLabel(my),`,
-    to: `    return null;
-    return {
-      competition: 'uel',
-      compLabel: uelNightLabel(my),`, finding: 'names no Europa League night' },
+    from: '    const my = uelMyNight(state, entry);',
+    to: '    const my = null;', finding: 'names no Europa League night' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`unknown control ${CONTROL}`);
 
