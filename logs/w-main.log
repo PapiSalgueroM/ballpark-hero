@@ -1,0 +1,24 @@
+   /                   244K gz over   3 files (budget 245K, 243.9K to the tenth)
+   /club-manager       636K gz over  43 files (budget 636K, 636.1K to the tenth)
+   /soccer-career      832K gz over  50 files (budget 840K, 831.9K to the tenth)
+   /stadium-tycoon     304K gz over  25 files (budget 305K, 303.9K to the tenth)
+   /wonderkid-factory  277K gz over  21 files (budget 278K, 277.0K to the tenth)
+   /minefield          295K gz over  21 files (budget 295K, 294.6K to the tenth)
+   /footle             354K gz over  39 files (budget 354K, 353.6K to the tenth)
+   /nfl-my-career      497K gz over  49 files (budget 498K, 496.5K to the tenth)
+   /front-office       387K gz over  42 files (budget 388K, 386.8K to the tenth)
+   /soccer-grid        319K gz over  36 files (budget 320K, 319.3K to the tenth)
+   /leaderboard        252K gz over   9 files (budget 266K, 251.9K to the tenth)
+   /manager-hot-seat   651K gz over  45 files (budget 652K, 650.5K to the tenth)
+   /deadline-day       660K gz over  48 files (budget 661K, 660.4K to the tenth)
+   /transfer-path      379K gz over  39 files (budget 381K, 379.3K to the tenth)
+   /nba-front-office   396K gz over  43 files (budget 397K, 395.7K to the tenth)
+sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+main /nhl-front-office: 368.1K over 39 files
+main /front-office: 386.8K over 42 files
+main /nfl-my-career: 496.5K over 49 files
+main /aussie-rules-manager: 290.1K over 27 files
+main /player-bingo: 306.8K over 34 files
+main /sports-millionaire: 306.1K over 31 files
+main /whats-new: 370.0K over 3 files
+weighBU main: done, 7 routes
