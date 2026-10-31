@@ -1,0 +1,21 @@
+# Release BU lane i: Club Manager free agency part one (Round 1597): the fleet and its nine controls (each exit 1), the free agent and contract sims, the save size fences over six streams and the uncapped control (exit 1).
+vitest: node_modules/.bin/vitest run src/test/ClubManagerSeasonSummary.expiring.test.tsx src/test/cmTablesTruth.test.tsx src/test/clubManagerOfferConfirm.test.tsx src/test/contractPreview.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerHubLines.test.ts src/test/clubManagerLoanPlanIntegration.test.ts src/test/clubManagerLoanPlanMounted.test.tsx src/test/clubManagerSaveSize.test.tsx src/lib/clubManagerReportAge.test.ts --testTimeout=300000 --hookTimeout=120000
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simContracts: node scripts/simContracts.mjs
+ctl-notrimpool: CM_FA_CONTROL=notrimpool node scripts/simCmFreeAgencyFleet.mjs
+ctl-ledgeroff: CM_FA_CONTROL=ledgeroff node scripts/simCmFreeAgencyFleet.mjs
+ctl-staleseason: CM_FA_CONTROL=staleseason node scripts/simCmFreeAgencyFleet.mjs
+ctl-noloanrow: CM_FA_CONTROL=noloanrow node scripts/simCmFreeAgencyFleet.mjs
+ctl-norenewloan: CM_FA_CONTROL=norenewloan node scripts/simCmFreeAgencyFleet.mjs
+ctl-deletepool: CM_FA_CONTROL=deletepool node scripts/simCmFreeAgencyFleet.mjs
+ctl-noretire: CM_FA_CONTROL=noretire node scripts/simCmFreeAgencyFleet.mjs
+ctl-nodedupe: CM_FA_CONTROL=nodedupe node scripts/simCmFreeAgencyFleet.mjs
+ctl-norecover: CM_FA_CONTROL=norecover node scripts/simCmFreeAgencyFleet.mjs
+size-d: node scripts/simClubManagerSaveSize.mjs
+size-1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+size-2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+size-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+size-4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+size-5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+size-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
