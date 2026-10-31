@@ -1,0 +1,55 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerCareerLines.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerCards.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 3712[2mms[22m[39m
+[90mstderr[2m | src/test/cmPlayerCard.test.tsx[2m > [22m[2mthe stack and the link[2m > [22m[2mopens the card a link names, calls the host hold first, and Back pops one
+[22m[39mError: Not implemented: window.scrollTo
+    at module.exports (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at scrollTo (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/browser/Window.js:870:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/club-manager/CmCards.tsx:58:12
+    at commitHookEffectListMount (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+    at commitLayoutEffectOnFiber (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:23312:15)
+    at commitLayoutMountEffects_complete (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24727:9)
+    at commitLayoutEffects_begin (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24713:7)
+    at commitLayoutEffects (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24651:3)
+    at commitRootImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:26862:5)
+    at commitRoot (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:26721:5) [90mundefined[39m
+
+[90mstderr[2m | src/test/cmPlayerCard.test.tsx[2m > [22m[2mthe stack and the link[2m > [22m[2ma board row opens that man's card, and Back finds the Stats screen on that board again
+[22m[39mError: Not implemented: window.scrollTo
+    at module.exports (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at scrollTo (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/browser/Window.js:870:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/club-manager/CmCards.tsx:58:12
+    at commitHookEffectListMount (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+    at commitLayoutEffectOnFiber (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:23312:15)
+    at commitLayoutMountEffects_complete (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24727:9)
+    at commitLayoutEffects_begin (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24713:7)
+    at commitLayoutEffects (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24651:3)
+    at commitRootImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:26862:5)
+    at commitRoot (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:26721:5) [90mundefined[39m
+
+[90mstderr[2m | src/test/cmPlayerCard.test.tsx[2m > [22m[2mthe stack and the link[2m > [22m[2mthe Seasons button opens my man's card, and Back finds his row open again
+[22m[39mError: Not implemented: window.scrollTo
+    at module.exports (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/browser/not-implemented.js:9:17)
+    at scrollTo (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/jsdom/lib/jsdom/browser/Window.js:870:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/src/components/club-manager/CmCards.tsx:58:12
+    at commitHookEffectListMount (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:23189:26)
+    at commitLayoutEffectOnFiber (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:23312:15)
+    at commitLayoutMountEffects_complete (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24727:9)
+    at commitLayoutEffects_begin (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24713:7)
+    at commitLayoutEffects (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:24651:3)
+    at commitRootImpl (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:26862:5)
+    at commitRoot (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-dom/cjs/react-dom.development.js:26721:5) [90mundefined[39m
+
+ [32m✓[39m src/test/cmPlayerCard.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 4140[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerWorldEditorPage.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 4616[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager page: the world editor reaches the career[2m > [22mstarts Celtic in the Premier League after a swap made on the World editor tile [33m 4613[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerEraPicker.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 889[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager picker: a past season waits for its squads[2m > [22mholds the league step on a loading line until the 2010-11 squads land, then draws it [33m 887[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m35 passed[39m[22m[90m (35)[39m
+[2m   Start at [22m 00:24:44
+[2m   Duration [22m 11.34s[2m (transform 3.94s, setup 821ms, collect 10.09s, tests 13.38s, environment 3.34s, prepare 901ms)[22m
+
