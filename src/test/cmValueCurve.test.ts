@@ -504,8 +504,9 @@ describe('one order in every world: the stretch first, then the age points', () 
       if (found.length !== 1) { wrong.push(`${world} ${name}: ${found.length} rows of that name`); continue; }
       const row = found[0];
       checked += 1;
-      if (row.a !== fileAge) wrong.push(`${world} ${name}: the file holds age ${row.a}, the table was typed from ${fileAge}`);
-      /* in 2026 the file will hold the August age at the flip; until then it is typed beside the row */
+      /* Round 1600: the 2026 file holds the August age since the flip; a past season still the 1 January one */
+      const holds = world === 'now' ? ratedAt : fileAge;
+      if (row.a !== holds) wrong.push(`${world} ${name}: the file holds age ${row.a}, the table says ${holds}`);
       const got = world === 'now' ? readInWorld(row.r, ratedAt) : readInWorld(row.r, row.a, eraWorld(world));
       if (got.level !== mainShows) wrong.push(`${world} ${name}: main shows ${got.level}, the table says ${mainShows}`);
       if (got.age !== ratedAt) wrong.push(`${world} ${name}: rated at ${got.age}, the table says ${ratedAt}`);
@@ -924,9 +925,9 @@ describe('what every 2026 age will stand on (the basis file), man for man agains
   });
 
   it('every line is what the ages rule resolves from the committed ledgers, and its last item is the value rating', () => {
-    /* While the squads file is on curve 1 its rating IS the value rating. The round that re-rates the
-       file changes this one comparison to the level (levelFrom of the shipped rating and age). */
-    expect((CM_ROSTER_META as any).curve ?? 1).toBe(1);
+    /* Round 1600 put the squads file on curve 2, and kept its rating the value rating (the level): the engine
+       adds the age at load (src/data/clubManagerWorldRosters.ts), so this comparison holds on either curve. */
+    expect((CM_ROSTER_META as any).curve).toBe(2);
     const births = realBirths();
     const wrong: string[] = [];
     const basisCount: Record<string, number> = {};
@@ -959,7 +960,10 @@ describe('what every 2026 age will stand on (the basis file), man for man agains
        how far the August age sits from the age main ships today. A new pull recounts them, and
        scripts/genCmAgesBasis2026.mjs prints all three. */
     expect(basisCount).toEqual({ born: 427, moved: 3974 });
-    expect(againstShipped).toEqual({ '1': 4221, '0': 176, '-1': 4 });
+    /* Round 1600: the squads file ships these August ages now (before it, one over for 4,221 men, the same
+       for 176 and one under for 4). The one input proof (Round 1600's fixer, remote check r1600-rr, line rr3-proof,
+       head 178a1fd8c): with the squads file put back to the base's (14a9af704) the old count replays green. */
+    expect(againstShipped).toEqual({ '0': 4401 });
     expect(changed).toBe(2078);
     console.log(`2026 at the flip: ${changed} of 4401 ratings change; by points ${JSON.stringify(swing)}`);
   });
@@ -975,7 +979,8 @@ describe('what every 2026 age will stand on (the basis file), man for man agains
       const august = augustAge2026({ name, club, age, year, id }, births);
       expect([name, august.basis]).toEqual([name, 'born']);
       got.push([name, august.age, list[i].r, rateFrom(list[i].r, august.age, list[i].p)]);
-      expect([name, list[i].a, august.age, list[i].r, rateFrom(list[i].r, august.age, list[i].p)]).toEqual([name, fileAge, ratedAt, mainShows, shown]);
+      /* Round 1600: the file holds the August age (it held the table's, fileAge, before the flip) */
+      expect([name, list[i].a, august.age, list[i].r, rateFrom(list[i].r, august.age, list[i].p), fileAge <= ratedAt]).toEqual([name, ratedAt, ratedAt, mainShows, shown, true]);
     }
     expect(got.length).toBe(8);
   });
@@ -1145,14 +1150,10 @@ describe('the folded final tables: two table publishers a league, neither a wiki
   });
 });
 
-/* THE TYPED DOOR, src/lib/cmAgeRead.ts: what the engine will import. It must be the script's own
-   functions (one implementation for the bake and the engine), typed, and imported by nothing yet. */
-const IMPORTS_THE_AGE_READ = /(?:\bfrom\s*|\bimport\s*\(\s*|\brequire\s*\(\s*|^\s*import\s+)['"][^'"\n]*(?:cmAgeRead|scripts\/lib\/cmValueCurve|scripts\/lib\/cmAges)(?:\.[a-z]+)?['"]/m;
-const sourceFilesUnder = (dir: string): string[] => fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
-  const full = path.join(dir, entry.name);
-  if (entry.isDirectory()) return sourceFilesUnder(full);
-  return /\.(ts|tsx|mts|js|jsx|mjs)$/.test(entry.name) ? [full] : [];
-});
+/* THE TYPED DOOR, src/lib/cmAgeRead.ts: what the engine imports (since Round 1600, through
+   src/data/clubManagerWorldRosters.ts and src/lib/clubManagerEras.ts). It must be the script's own
+   functions (one implementation for the bake and the engine), typed. Round 1214's last test here, that
+   nothing imported it yet, was deleted with the first import, as its own name ordered. */
 
 describe('the typed door the engine will import (src/lib/cmAgeRead.ts)', () => {
   it('is the script library itself, not a second implementation', () => {
@@ -1178,24 +1179,8 @@ describe('the typed door the engine will import (src/lib/cmAgeRead.ts)', () => {
     expect(door.levelFrom(nedved.rating, nedved.age, 96)).toBe(nedved.level);
   });
 
-  it('nothing shipped imports it, or either script library, yet (part two deletes this test with its first import)', () => {
-    /* the shape fires on an import and stays quiet on prose about the file */
-    expect(IMPORTS_THE_AGE_READ.test("import { ageRead } from '@/lib/cmAgeRead';")).toBe(true);
-    expect(IMPORTS_THE_AGE_READ.test("import { ageRead } from './cmAgeRead';")).toBe(true);
-    expect(IMPORTS_THE_AGE_READ.test("const m = await import('../../scripts/lib/cmValueCurve.mjs');")).toBe(true);
-    expect(IMPORTS_THE_AGE_READ.test("import '../../scripts/lib/cmAges.mjs';")).toBe(true);
-    expect(IMPORTS_THE_AGE_READ.test('// rated on the curve (scripts/lib/cmValueCurve.mjs). 310 players')).toBe(false);
-    expect(IMPORTS_THE_AGE_READ.test(' * the typed door is src/lib/cmAgeRead.ts')).toBe(false);
+  it('imports the two script libraries and nothing else', () => {
     const root = path.resolve(process.cwd(), 'src');
-    const files = sourceFilesUnder(root);
-    expect(files.length).toBeGreaterThan(1500);
-    const allowed = new Set(['lib/cmAgeRead.ts', 'test/cmValueCurve.test.ts']);
-    const importers = files
-      .map(file => path.relative(root, file).split(path.sep).join('/'))
-      .filter(rel => !allowed.has(rel))
-      .filter(rel => IMPORTS_THE_AGE_READ.test(fs.readFileSync(path.join(root, rel), 'utf8')));
-    expect(importers).toEqual([]);
-    /* and the door itself imports the two script libraries and nothing else */
     const doorSource = fs.readFileSync(path.join(root, 'lib/cmAgeRead.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
     const doorImports = [...doorSource.matchAll(/from\s+'([^']+)'/g)].map(m => m[1]);
     expect(doorImports).toEqual(['../../scripts/lib/cmValueCurve.mjs', '../../scripts/lib/cmAges.mjs']);

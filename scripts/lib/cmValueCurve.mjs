@@ -5,8 +5,10 @@
  * rather than a copy. The bake imports these; nothing here may differ from
  * what the bake shipped with, so every baked rating is unchanged.
  *
- * Round 1214 (part one of four): the age read is written here, once, and
- * NOTHING SHIPPED USES IT YET. The value curve is untouched (valueRatingOf,
+ * Round 1214 (part one of four): the age read is written here, once. Round
+ * 1600 wires it into the engine (src/lib/cmAgeRead.ts is imported by
+ * src/data/clubManagerWorldRosters.ts and src/lib/clubManagerEras.ts). The
+ * value curve is untouched (valueRatingOf,
  * and ratingOf with one argument still answers with it, so every generator
  * writes the bytes it wrote before). The new functions are the library the
  * later parts stand on: agePoints, ageRead, levelFrom, readInWorld, rateFrom

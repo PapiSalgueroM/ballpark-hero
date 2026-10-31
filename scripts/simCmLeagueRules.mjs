@@ -634,6 +634,44 @@
       rules-playoff), so the participant is the only cause. Written with
       --part=modern,eras,pure --write on d9354f33 itself (r1593-digest,
       line rules-write, 24 lines changed), then run green whole there.
+      Round 1600 (2026-10-30, Club Manager rates every man by his level
+      plus Round 1214's age read) re-took modern and eras. Attribution on
+      GitHub runners: the base 14a9af704 is green whole (r1600-s12
+      rules-base); the round's two inert steps are green whole on the base
+      file, 555f9ebcc and 8044d4070 (r1600-s15 rules-p1, rules-p2); the
+      2026 flip 3edef3897 moves modern 27 of 27 and nothing else
+      (r1600-s6b), the era flip moves eras 20 of 20, and pure holds 48 of
+      48 at the head, so the board demands, drop zones and European places
+      are main's. Written with --part=modern,eras --write on 7d861da56
+      (r1600-s15 rules-write, 1698 lines changed), then run green whole on
+      the same runner. The one input proofs (Round 1600's fixer, on head
+      178a1fd8c): with PAST_SEASONS_READ_AGE false the base's file replays
+      eras green (r1600-rr rr1-eras-proof); with the squads, A-League and
+      Russia files back to the base's and the real free agents' curve at 1
+      it replays modern green (r1600-rr2 rr1-modern-proof).
+      Round 1600's fixer re-took modern again: an old save's world ledger
+      reads a year either side, so a new seeded career on the age world
+      opens a stamped ledger in startCareer (curve 2), and that stamp is in
+      every modern start, whole, wholeNext and s2_whole hash (91 lines,
+      nothing else). Proof (r1600-rr2): the head reads 27 failures with the
+      file before it (rr1-stamp-head); with that one stamp line deleted the
+      file before it is green, 27 of 27 equal (rr1-stamp-proof). Written
+      with --part=modern,eras --write on 178a1fd8c (r1600-rr rr1-retake),
+      then run green whole on the same runner.
+      Round 1600's merge of main at 931308159 (2026-10-30) re-took modern
+      and eras for main's free agent continuity (Chat's soccer release,
+      43f611ff1: the summer links the live free agent pool to the ledger
+      in startNextSeason and keeps a released record the pool still points
+      at). All 47 entries moved in wholeNext and the ten pyramid saves in
+      s2_whole, nothing else (pure 48 of 48). Attribution on a runner at
+      41b25abf9 (r1600-x2e): the head reads 47 failures (rules-head); with
+      clubManager.ts back to the pre-merge head 1b182d1ca's the file is
+      green whole (rules-premerge), so main's engine lines are the only
+      cause; with the merge's one line of its own (freeAgentRecord's near
+      read) taken out it still reads 47 (rules-mutexact); main 931308159
+      on its own file reads the same 47 (rules-main). Written with
+      --part=modern,eras --write on 41b25abf9 (rules-write, 57 lines
+      changed), then run green whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

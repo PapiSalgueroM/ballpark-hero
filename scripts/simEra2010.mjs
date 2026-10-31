@@ -57,6 +57,8 @@
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+// Round 1600: a past season's squad is held to the read THROUGH both steps (scripts/lib/cmEraRead.mjs).
+import { eraShown, eraLevel } from './lib/cmEraRead.mjs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -190,9 +192,9 @@ console.log('1) A fresh 2010 save is the real 2010 squad, untouched');
     /* Round 166: names, ages and values are the bake untouched. Ratings go
        through the documented era uplift (legends rate like legends), which
        is deterministic, so the identity check asserts THROUGH it. */
-    if (b.a !== p.age || eraUpliftRating('era2010', b.r) !== p.rating) {
+    if (b.a !== p.age || eraShown(ER, 'era2010', b) !== p.rating) {
       mismatches += 1;
-      fail(`${p.name}: bake says age ${b.a} rating ${b.r} (uplift ${eraUpliftRating('era2010', b.r)}), squad says ${p.age}/${p.rating}`);
+      fail(`${p.name}: bake says age ${b.a} rating ${b.r} (read ${eraShown(ER, 'era2010', b)}), squad says ${p.age}/${p.rating}`);
     }
   }
   const gen = s.squad.filter(p => p.generated).length;
@@ -220,7 +222,7 @@ console.log('1) A fresh 2010 save is the real 2010 squad, untouched');
     let bad = 0;
     for (const p of t.squad.filter(p => !p.isYouth)) {
       const r = b.get(p.name);
-      if (!r || r.a !== p.age || eraUpliftRating('era2010', r.r) !== p.rating) { bad += 1; fail(`2010 ${club}: ${p.name} is not the bake's line (${r ? `${r.a}/${r.r}` : 'no line'} vs ${p.age}/${p.rating})`); }
+      if (!r || r.a !== p.age || eraShown(ER, 'era2010', r) !== p.rating) { bad += 1; fail(`2010 ${club}: ${p.name} is not the bake's line (${r ? `${r.a}/${r.r}` : 'no line'} vs ${p.age}/${p.rating})`); }
     }
     const gen = t.squad.filter(p => p.generated).length;
     console.log(`   ${club}: ${t.squad.length} in squad, ${bad} mismatches, ${gen} generated`);
@@ -579,7 +581,7 @@ console.log('6) The era uplift: giants above the modern best, order preserved');
   // The uplift is monotone: sort order inside every club is untouched.
   for (const [club, raw] of Object.entries(ERA2010_ROSTERS)) {
     const before = [...raw].sort((a, b) => b.r - a.r).map(p => p.n).join('|');
-    const after = [...lifted[club]].sort((a, b) => b.r - a.r).map(p => p.n).join('|');
+    const after = [...lifted[club]].sort((a, b) => eraLevel(b) - eraLevel(a)).map(p => p.n).join('|');
     if (before !== after) fail(`${club}: the uplift reordered the squad`);
   }
   // The rank and file below the pivot are byte for byte the bake.
@@ -588,7 +590,7 @@ console.log('6) The era uplift: giants above the modern best, order preserved');
     for (let i = 0; i < raw.length; i++) {
       if (raw[i].r <= 80) {
         below++;
-        if (lifted[club][i].r !== raw[i].r) fail(`${raw[i].n} rates ${raw[i].r} in the bake but ${lifted[club][i].r} lifted, below the pivot`);
+        if (eraLevel(lifted[club][i]) !== raw[i].r) fail(`${raw[i].n} rates ${raw[i].r} in the bake but ${lifted[club][i].r} lifted, below the pivot`);
       }
       if (lifted[club][i].v !== raw[i].v) fail(`${raw[i].n}: the uplift touched his VALUE, it must only touch ratings`);
       if (lifted[club][i].r > 99) fail(`${raw[i].n} lifted past 99`);

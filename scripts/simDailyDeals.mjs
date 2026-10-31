@@ -125,9 +125,16 @@ const BASELINE = {
        they are, it does not (exit 1); and the head as committed deals exactly this recording (retake identical). */
     '2026-10-27': '0400c7b1a2d756911454',
     '2026-11-14': '67cb2096bdc45751340e',
-    '2027-01-19': 'b33b5b04a41504ec5f53',
-    '2027-01-30': '9b6451735725f9ce1ba8',
-    '2027-02-06': '75a43fcbf0106a1f29e3',
+    /* Round 1600: the three dates from CM_DAILY_NEW_NUMBERS_FROM (2026-11-16) on deal on the age read by design
+       (Club Manager's 2026 world reads each man's age; every earlier date deals on the curve 1 view and keeps its
+       recording above, 2026-11-14 included). Recorded again from the Round 1600 tree with --print (remote check
+       r1600-s8, line dailyDeals-print, head 604fbbe64). Round 1331's tree dealt b33b5b04, 9b645173 and 75a43fcb.
+       The one input proof (Round 1600's fixer, 2026-10-30, remote check r1600-rr on head 178a1fd8c): with
+       CM_DAILY_NEW_NUMBERS_FROM moved to 2027-03-01 and these three put back to Round 1331's values the tree replays
+       green (line rr2-proof, exit 0), and the head as committed prints these three again (line rr2-retake). */
+    '2027-01-19': '0f5c7f4df3f4b53c5531',
+    '2027-01-30': 'a065461da7accfc4228e',
+    '2027-02-06': '7dc686ab3b392aa070ca',
   },
   deadline: {
     '2026-10-10': 'e57fbb3c1e90b2d46068',

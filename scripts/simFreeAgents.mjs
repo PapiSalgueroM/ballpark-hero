@@ -120,6 +120,7 @@ import { execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { buildFreeAgents, renderFile } from './genClubManagerFreeAgents.mjs';
+import { ageRead } from './lib/cmValueCurve.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
@@ -394,8 +395,8 @@ if (CONTROL === 'nosev') {
      the loan filter after this one, 1606068d made the deal check return a reason), so these two controls
      aborted on every head before this train. Each now cuts the same rule from today's line. */
   rewrite('marketreleased', 'engine',
-    ' && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));',
-    ' && !onLoanOut.has(sameManKey(p)));');
+    ' && !released.has(p.name) && !onLoanOut.some(mine => sameManNearAge(mine, p)));',
+    ' && !onLoanOut.some(mine => sameManNearAge(mine, p)));');
 } else if (CONTROL === 'buyreleased') {
   rewrite('buyreleased', 'engine',
     '  if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;\n  /* Round 634: nor a man you have out on loan',
@@ -1671,7 +1672,9 @@ console.log("18) a modern day one opens with today's real free agents, and only 
     if (JSON.stringify(got) !== JSON.stringify(want)) wrongSet.push(`${DAY_CLUBS[i]} lists [${got.join(', ')}]`);
     for (const f of realIn) {
       const row = CM_REAL_FREE_AGENTS.find(r => r.name === f.name);
-      if (!row || f.since !== st.season || f.rating !== row.rating || f.age !== row.age || f.value !== row.value || f.wage !== undefined || f.fromMyClub) wrongRow.push(`${f.name} at ${DAY_CLUBS[i]}`);
+      /* Round 1600: a file on curve 2 is seeded with the age read of its rating (seedRealFreeAgents). */
+      const shown = row && /CM_REAL_FREE_AGENTS_CURVE = 2;/.test(sources.faData) ? ageRead(row.rating, row.age) : row?.rating;
+      if (!row || f.since !== st.season || f.rating !== shown || f.age !== row.age || f.value !== row.value || f.wage !== undefined || f.fromMyClub) wrongRow.push(`${f.name} at ${DAY_CLUBS[i]}`);
     }
     const jm = (st.freeAgents ?? []).filter(f => f.reason === 'unattached' && f.generated).length;
     if (jm !== cm.FREE_AGENT_POOL_TARGET) shortJm.push(`${DAY_CLUBS[i]} ${jm}`);

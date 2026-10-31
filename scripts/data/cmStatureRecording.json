@@ -1,0 +1,3637 @@
+{
+ "about": "Round 1600: what every modern club IS on the files as shipped (curve 1), read off the engine by scripts/simCmLevelReads.mjs --record: the best eleven bakedXIAvg ranks with (xi), the value scale of its projected men (scale), a digest of its slot anchors at year 0 (anchors), and for a club of a real league its tier, budget and the finish its board expects (exp). The age read must leave every one of these where it is: the harness holds the files as shipped and both stamped arms to it.",
+ "clubs": {
+  "AC Horsens": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "AC Milan": {
+   "xi": 82.9,
+   "scale": 0.117932937,
+   "anchors": "c875d5e15c73",
+   "tier": 3,
+   "budget": 56,
+   "exp": 5
+  },
+  "ADO Den Haag": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "AEK Athens": {
+   "xi": 73.2,
+   "scale": 0.063902586,
+   "anchors": "9f004803d308",
+   "tier": 4,
+   "budget": 9,
+   "exp": 4
+  },
+  "AGF": {
+   "xi": 64.5,
+   "scale": 0.043801879,
+   "anchors": "264469a7a9b7",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "AZ Alkmaar": {
+   "xi": 76.9,
+   "scale": 0.058968631,
+   "anchors": "4e64b2e4d881",
+   "tier": 4,
+   "budget": 18,
+   "exp": 4
+  },
+  "Aberdeen": {
+   "xi": 62.4,
+   "scale": 0.049136198,
+   "anchors": "477b47b40ffe",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Abha": {
+   "xi": 62.4,
+   "scale": 0.151348231,
+   "anchors": "9a54592a076a",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Académico de Viseu": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Ajax": {
+   "xi": 79.5,
+   "scale": 0.104750819,
+   "anchors": "1e24e10eba3e",
+   "tier": 3,
+   "budget": 31,
+   "exp": 1
+  },
+  "Al-Ahli": {
+   "xi": 80,
+   "scale": 0.110562128,
+   "anchors": "05b2b32dada2",
+   "tier": 3,
+   "budget": 29,
+   "exp": 2
+  },
+  "Al-Diriyah": {
+   "xi": 62.7,
+   "scale": 0.076879766,
+   "anchors": "ac97c7db8ecc",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Al-Ettifaq": {
+   "xi": 67.4,
+   "scale": 0.076879766,
+   "anchors": "1ce59552d642",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Al-Faisaly": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Al-Fateh": {
+   "xi": 62.5,
+   "scale": 0.067813926,
+   "anchors": "04b712e76b4c",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Al-Fayha": {
+   "xi": 61.8,
+   "scale": 0.062574113,
+   "anchors": "242d803f369d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Al-Hazem": {
+   "xi": 61.5,
+   "scale": 0.109504698,
+   "anchors": "c47f911f667f",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Al-Hilal": {
+   "xi": 81.8,
+   "scale": 0.127873154,
+   "anchors": "c9c35d3b967b",
+   "tier": 3,
+   "budget": 40,
+   "exp": 1
+  },
+  "Al-Ittihad": {
+   "xi": 75.8,
+   "scale": 0.095392977,
+   "anchors": "fc055d9ed39a",
+   "tier": 4,
+   "budget": 15,
+   "exp": 5
+  },
+  "Al-Khaleej": {
+   "xi": 64.9,
+   "scale": 0.091289409,
+   "anchors": "4982f8940d98",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Al-Kholood": {
+   "xi": 62.9,
+   "scale": 0.048963601,
+   "anchors": "6ed379075df3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Al-Nassr": {
+   "xi": 76.7,
+   "scale": 0.095513877,
+   "anchors": "b0f424bdf236",
+   "tier": 4,
+   "budget": 18,
+   "exp": 4
+  },
+  "Al-Qadsiah": {
+   "xi": 77.4,
+   "scale": 0.088887056,
+   "anchors": "c868210fd627",
+   "tier": 4,
+   "budget": 23,
+   "exp": 3
+  },
+  "Al-Riyadh": {
+   "xi": 61.3,
+   "scale": 0.134539591,
+   "anchors": "7876d756add2",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Al-Shabab": {
+   "xi": 69.1,
+   "scale": 0.124105325,
+   "anchors": "e05d83e50564",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Al-Taawoun": {
+   "xi": 64.4,
+   "scale": 0.071841453,
+   "anchors": "cf4f5b7e0ac5",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Alanyaspor": {
+   "xi": 67.4,
+   "scale": 0.046722005,
+   "anchors": "eb7dfe546984",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Alavés": {
+   "xi": 73.1,
+   "scale": 0.056308141,
+   "anchors": "f54e0727e946",
+   "tier": 4,
+   "budget": 9,
+   "exp": 19
+  },
+  "Albacete": {
+   "xi": 60.7,
+   "scale": 0.033693753,
+   "anchors": "8fc9a0314c33",
+   "tier": 4,
+   "budget": 8,
+   "exp": 20
+  },
+  "Almería": {
+   "xi": 65.5,
+   "scale": 0.049136198,
+   "anchors": "c5de04be7187",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Altach": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Alverca": {
+   "xi": 64.7,
+   "scale": 0.049155836,
+   "anchors": "468263ba77ac",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Amedspor": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "América": {
+   "xi": 74.3,
+   "scale": 0.058968631,
+   "anchors": "65082fec5179",
+   "tier": 4,
+   "budget": 11,
+   "exp": 1
+  },
+  "Anderlecht": {
+   "xi": 72.7,
+   "scale": 0.052164558,
+   "anchors": "74c1ad4d68b6",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Angers": {
+   "xi": 73.2,
+   "scale": 0.063172375,
+   "anchors": "afad3108d3f3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Annecy": {
+   "xi": 60.4,
+   "scale": 0.036552889,
+   "anchors": "00f9f95c19f3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Antwerp": {
+   "xi": 69.5,
+   "scale": 0.053815836,
+   "anchors": "c8552b8c88ed",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Arezzo": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Aris": {
+   "xi": 67,
+   "scale": 0.056308141,
+   "anchors": "6e8fa74df795",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Arminia Bielefeld": {
+   "xi": 61.8,
+   "scale": 0.038088591,
+   "anchors": "41d6c286d97e",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Arouca": {
+   "xi": 62,
+   "scale": 0.043801879,
+   "anchors": "1c67757ab9b4",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Arsenal": {
+   "xi": 88.7,
+   "scale": 0.162879854,
+   "anchors": "c09ce4979b22",
+   "tier": 1,
+   "budget": 167,
+   "exp": 1
+  },
+  "Ascoli": {
+   "xi": 60.4,
+   "scale": 0.031785121,
+   "anchors": "00f9f95c19f3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 20
+  },
+  "Asteras Tripolis": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Aston Villa": {
+   "xi": 83.7,
+   "scale": 0.115867336,
+   "anchors": "496b17c6e1ee",
+   "tier": 2,
+   "budget": 73,
+   "exp": 9
+  },
+  "Atalanta": {
+   "xi": 82.2,
+   "scale": 0.113385063,
+   "anchors": "9588d0a8e187",
+   "tier": 3,
+   "budget": 56,
+   "exp": 7
+  },
+  "Athletic Club": {
+   "xi": 80.3,
+   "scale": 0.097351991,
+   "anchors": "f9df2e8dbe4d",
+   "tier": 3,
+   "budget": 36,
+   "exp": 5
+  },
+  "Athletico Paranaense": {
+   "xi": 68.6,
+   "scale": 0.048963601,
+   "anchors": "a321776c3570",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Atlanta United": {
+   "xi": 72.1,
+   "scale": 0.060765895,
+   "anchors": "1a2285e44d71",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Atlante": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Atlas": {
+   "xi": 65.5,
+   "scale": 0.049136198,
+   "anchors": "8731cda5a9e6",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Atlético Madrid": {
+   "xi": 85.4,
+   "scale": 0.14448865,
+   "anchors": "c49090f6a24b",
+   "tier": 2,
+   "budget": 89,
+   "exp": 3
+  },
+  "Atlético Mineiro": {
+   "xi": 74.3,
+   "scale": 0.063902586,
+   "anchors": "573822de2139",
+   "tier": 4,
+   "budget": 11,
+   "exp": 10
+  },
+  "Atlético San Luis": {
+   "xi": 68.3,
+   "scale": 0.043801879,
+   "anchors": "f1286354f22c",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Atromitos": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Augsburg": {
+   "xi": 77.2,
+   "scale": 0.069308899,
+   "anchors": "f40f5ed45147",
+   "tier": 4,
+   "budget": 20,
+   "exp": 9
+  },
+  "Austin FC": {
+   "xi": 69.8,
+   "scale": 0.062574113,
+   "anchors": "3c49956b79ed",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Austria Lustenau": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Austria Wien": {
+   "xi": 62,
+   "scale": 0.035997215,
+   "anchors": "1c67757ab9b4",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Auxerre": {
+   "xi": 74.4,
+   "scale": 0.055567466,
+   "anchors": "884101b38919",
+   "tier": 4,
+   "budget": 11,
+   "exp": 12
+  },
+  "Avellino": {
+   "xi": 61.9,
+   "scale": 0.046568686,
+   "anchors": "1592c160daae",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Bahia": {
+   "xi": 75.5,
+   "scale": 0.073841831,
+   "anchors": "4655cc417354",
+   "tier": 4,
+   "budget": 15,
+   "exp": 5
+  },
+  "Barcelona": {
+   "xi": 88.9,
+   "scale": 0.143732558,
+   "anchors": "dd37afd50485",
+   "tier": 1,
+   "budget": 158,
+   "exp": 2
+  },
+  "Basel": {
+   "xi": 71.5,
+   "scale": 0.053815836,
+   "anchors": "0233ebbc973d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 2
+  },
+  "Bayer Leverkusen": {
+   "xi": 82.9,
+   "scale": 0.11195479,
+   "anchors": "bb6241d58e2a",
+   "tier": 3,
+   "budget": 60,
+   "exp": 4
+  },
+  "Bayern Munich": {
+   "xi": 87.6,
+   "scale": 0.15019165,
+   "anchors": "ff40b26e0f55",
+   "tier": 1,
+   "budget": 130,
+   "exp": 1
+  },
+  "Başakşehir": {
+   "xi": 73.6,
+   "scale": 0.063172375,
+   "anchors": "7b0e30f69e27",
+   "tier": 4,
+   "budget": 9,
+   "exp": 5
+  },
+  "Benevento": {
+   "xi": 61.1,
+   "scale": 0.033693753,
+   "anchors": "683d8d061fab",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Benfica": {
+   "xi": 81,
+   "scale": 0.082950414,
+   "anchors": "b92e1cf7401e",
+   "tier": 3,
+   "budget": 44,
+   "exp": 2
+  },
+  "Beveren": {
+   "xi": 60.4,
+   "scale": 0.031785121,
+   "anchors": "00f9f95c19f3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Beşiktaş": {
+   "xi": 79.9,
+   "scale": 0.080440201,
+   "anchors": "7e0a704306a7",
+   "tier": 3,
+   "budget": 33,
+   "exp": 3
+  },
+  "Birmingham City": {
+   "xi": 74.5,
+   "scale": 0.055883255,
+   "anchors": "461965fc8daf",
+   "tier": 4,
+   "budget": 12,
+   "exp": 8
+  },
+  "Blackburn Rovers": {
+   "xi": 65.2,
+   "scale": 0.043801879,
+   "anchors": "114a9c3b7d0d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 20
+  },
+  "Bochum": {
+   "xi": 63.1,
+   "scale": 0.043313954,
+   "anchors": "cefdfbdbf1d9",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Bologna": {
+   "xi": 79.4,
+   "scale": 0.091656966,
+   "anchors": "f443f27253c6",
+   "tier": 3,
+   "budget": 31,
+   "exp": 10
+  },
+  "Bolton Wanderers": {
+   "xi": 61.5,
+   "scale": 0.036552889,
+   "anchors": "1bd46de770de",
+   "tier": 4,
+   "budget": 8,
+   "exp": 23
+  },
+  "Borussia Dortmund": {
+   "xi": 84.4,
+   "scale": 0.110562128,
+   "anchors": "c97f71d42280",
+   "tier": 2,
+   "budget": 70,
+   "exp": 2
+  },
+  "Botafogo": {
+   "xi": 75.2,
+   "scale": 0.069308899,
+   "anchors": "8c117f33800f",
+   "tier": 4,
+   "budget": 13,
+   "exp": 7
+  },
+  "Boulogne": {
+   "xi": 60.4,
+   "scale": 0.031785121,
+   "anchors": "00f9f95c19f3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Bournemouth": {
+   "xi": 83.4,
+   "scale": 0.098640354,
+   "anchors": "63f92ba037d1",
+   "tier": 2,
+   "budget": 68,
+   "exp": 12
+  },
+  "Braga": {
+   "xi": 76.9,
+   "scale": 0.063172375,
+   "anchors": "43f7ab3a2297",
+   "tier": 4,
+   "budget": 19,
+   "exp": 4
+  },
+  "Braunschweig": {
+   "xi": 61.3,
+   "scale": 0.037797076,
+   "anchors": "7876d756add2",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Brentford": {
+   "xi": 83.5,
+   "scale": 0.11195479,
+   "anchors": "295baf29f761",
+   "tier": 2,
+   "budget": 69,
+   "exp": 11
+  },
+  "Brest": {
+   "xi": 73.3,
+   "scale": 0.066947201,
+   "anchors": "f5b9e8d6938b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Brighton": {
+   "xi": 83.4,
+   "scale": 0.113016283,
+   "anchors": "54fe0ec65899",
+   "tier": 2,
+   "budget": 73,
+   "exp": 13
+  },
+  "Bristol City": {
+   "xi": 72,
+   "scale": 0.053815836,
+   "anchors": "3d55f68147e6",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Brøndby IF": {
+   "xi": 67.5,
+   "scale": 0.056308141,
+   "anchors": "a74b6f6e146b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Burgos": {
+   "xi": 60.7,
+   "scale": 0.062574113,
+   "anchors": "8fc9a0314c33",
+   "tier": 4,
+   "budget": 8,
+   "exp": 19
+  },
+  "Burnley": {
+   "xi": 77,
+   "scale": 0.064799974,
+   "anchors": "1c85eeffa59c",
+   "tier": 4,
+   "budget": 23,
+   "exp": 3
+  },
+  "CF Montréal": {
+   "xi": 65.9,
+   "scale": 0.043801879,
+   "anchors": "e2411e2212d3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Cagliari": {
+   "xi": 75.6,
+   "scale": 0.062249152,
+   "anchors": "4393b19b4e15",
+   "tier": 4,
+   "budget": 16,
+   "exp": 16
+  },
+  "Cambuur": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Cardiff City": {
+   "xi": 63.5,
+   "scale": 0.048963601,
+   "anchors": "e9d3934d83a5",
+   "tier": 4,
+   "budget": 8,
+   "exp": 22
+  },
+  "Carrarese": {
+   "xi": 61.6,
+   "scale": 0.041396797,
+   "anchors": "1791088e797c",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Casa Pia": {
+   "xi": 64,
+   "scale": 0.053815836,
+   "anchors": "cf64c6ccc6e9",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Castellón": {
+   "xi": 61.5,
+   "scale": 0.053036559,
+   "anchors": "52437f6b4cef",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Catanzaro": {
+   "xi": 62.3,
+   "scale": 0.040881754,
+   "anchors": "9957a68f0087",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Celta Vigo": {
+   "xi": 76.7,
+   "scale": 0.078349191,
+   "anchors": "d9363416542b",
+   "tier": 4,
+   "budget": 18,
+   "exp": 10
+  },
+  "Celtic": {
+   "xi": 75,
+   "scale": 0.063902586,
+   "anchors": "4fca4ee6eb0e",
+   "tier": 4,
+   "budget": 13,
+   "exp": 2
+  },
+  "Cercle Brugge": {
+   "xi": 67.6,
+   "scale": 0.043801879,
+   "anchors": "0eb78e75f6ec",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Cesena": {
+   "xi": 63.3,
+   "scale": 0.053815836,
+   "anchors": "42c68393a686",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Ceuta": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Chapecoense": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 20
+  },
+  "Charleroi": {
+   "xi": 64.5,
+   "scale": 0.055567466,
+   "anchors": "a41f44c8d677",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Charlotte FC": {
+   "xi": 70.4,
+   "scale": 0.062574113,
+   "anchors": "77afa07edb40",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Charlton Athletic": {
+   "xi": 66.5,
+   "scale": 0.048963601,
+   "anchors": "ee6396a5918f",
+   "tier": 4,
+   "budget": 8,
+   "exp": 19
+  },
+  "Chelsea": {
+   "xi": 87.5,
+   "scale": 0.143732558,
+   "anchors": "9119af753077",
+   "tier": 1,
+   "budget": 131,
+   "exp": 4
+  },
+  "Chicago Fire": {
+   "xi": 71.5,
+   "scale": 0.052227841,
+   "anchors": "587bc0102533",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Clermont": {
+   "xi": 60.7,
+   "scale": 0.035549351,
+   "anchors": "8fc9a0314c33",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Club Brugge": {
+   "xi": 77.5,
+   "scale": 0.064799974,
+   "anchors": "94b5c94c372d",
+   "tier": 4,
+   "budget": 19,
+   "exp": 1
+  },
+  "Colorado Rapids": {
+   "xi": 69,
+   "scale": 0.043801879,
+   "anchors": "0446ba2be330",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Columbus Crew": {
+   "xi": 71.1,
+   "scale": 0.062574113,
+   "anchors": "667a584ecb56",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Como": {
+   "xi": 83.4,
+   "scale": 0.10432529,
+   "anchors": "6f271f226dac",
+   "tier": 2,
+   "budget": 61,
+   "exp": 4
+  },
+  "Corinthians": {
+   "xi": 77,
+   "scale": 0.077085601,
+   "anchors": "759603870396",
+   "tier": 4,
+   "budget": 18,
+   "exp": 4
+  },
+  "Coritiba": {
+   "xi": 64.9,
+   "scale": 0.049155836,
+   "anchors": "76134ae2ecd5",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Coventry City": {
+   "xi": 79.1,
+   "scale": 0.086533285,
+   "anchors": "cffe8bac8a1b",
+   "tier": 3,
+   "budget": 32,
+   "exp": 19
+  },
+  "Cremonese": {
+   "xi": 65.3,
+   "scale": 0.053815836,
+   "anchors": "f267c66e4dc0",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Cruz Azul": {
+   "xi": 72.8,
+   "scale": 0.055567466,
+   "anchors": "5c7eaee53662",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Cruzeiro": {
+   "xi": 77.8,
+   "scale": 0.080440201,
+   "anchors": "6af2e525e9bc",
+   "tier": 4,
+   "budget": 19,
+   "exp": 3
+  },
+  "Crystal Palace": {
+   "xi": 83.6,
+   "scale": 0.110562128,
+   "anchors": "537511794513",
+   "tier": 2,
+   "budget": 76,
+   "exp": 10
+  },
+  "Cádiz": {
+   "xi": 61.6,
+   "scale": 0.049136198,
+   "anchors": "1791088e797c",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Córdoba": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "D.C. United": {
+   "xi": 65.5,
+   "scale": 0.055567466,
+   "anchors": "968187126449",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Darmstadt": {
+   "xi": 63.7,
+   "scale": 0.046796379,
+   "anchors": "9deef20846c6",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Deportivo La Coruña": {
+   "xi": 75.4,
+   "scale": 0.067813926,
+   "anchors": "f5886d3ad426",
+   "tier": 4,
+   "budget": 14,
+   "exp": 12
+  },
+  "Derby County": {
+   "xi": 72.7,
+   "scale": 0.053815836,
+   "anchors": "3244a1e86863",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Dijon": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Dinamo Zagreb": {
+   "xi": 67.3,
+   "scale": 0.041396797,
+   "anchors": "f5acc0b13fd9",
+   "tier": 4,
+   "budget": 8,
+   "exp": 2
+  },
+  "Dundee": {
+   "xi": 60.4,
+   "scale": 0.052218413,
+   "anchors": "00f9f95c19f3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Dundee United": {
+   "xi": 60.7,
+   "scale": 0.036552889,
+   "anchors": "de57d94daac3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Dunkerque": {
+   "xi": 59.7,
+   "scale": 0.102566511,
+   "anchors": "a36ff6889c44",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Dynamo Dresden": {
+   "xi": 60.9,
+   "scale": 0.042727129,
+   "anchors": "9a3616dcd8bb",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Eibar": {
+   "xi": 61.1,
+   "scale": 0.102204385,
+   "anchors": "683d8d061fab",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Eintracht Frankfurt": {
+   "xi": 80.8,
+   "scale": 0.091087668,
+   "anchors": "242847a2d664",
+   "tier": 3,
+   "budget": 39,
+   "exp": 6
+  },
+  "Elche": {
+   "xi": 73.2,
+   "scale": 0.056308141,
+   "anchors": "a47234a42dda",
+   "tier": 4,
+   "budget": 9,
+   "exp": 18
+  },
+  "Eldense": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Elversberg": {
+   "xi": 69,
+   "scale": 0.043801879,
+   "anchors": "7e6b32f35aa6",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Empoli": {
+   "xi": 62,
+   "scale": 0.036552889,
+   "anchors": "1c67757ab9b4",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Energie Cottbus": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Entella": {
+   "xi": 61.5,
+   "scale": 0.036552889,
+   "anchors": "1bd46de770de",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Erzurumspor": {
+   "xi": 61.1,
+   "scale": 0.060062017,
+   "anchors": "298102af5917",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Espanyol": {
+   "xi": 76.3,
+   "scale": 0.078349191,
+   "anchors": "c398191ea81f",
+   "tier": 4,
+   "budget": 15,
+   "exp": 11
+  },
+  "Estoril": {
+   "xi": 69.5,
+   "scale": 0.063902586,
+   "anchors": "eae4d15e5113",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Estrela Amadora": {
+   "xi": 62.2,
+   "scale": 0.035549351,
+   "anchors": "3d071fcbb3e8",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Everton": {
+   "xi": 83.2,
+   "scale": 0.117932937,
+   "anchors": "902c5e99d45e",
+   "tier": 2,
+   "budget": 54,
+   "exp": 14
+  },
+  "Excelsior": {
+   "xi": 60.4,
+   "scale": 0.031785121,
+   "anchors": "00f9f95c19f3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Eyüpspor": {
+   "xi": 61.6,
+   "scale": 0.062574113,
+   "anchors": "1791088e797c",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "FC Andorra": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "FC Cincinnati": {
+   "xi": 67.4,
+   "scale": 0.066851971,
+   "anchors": "ec440a00ee53",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "FC Copenhagen": {
+   "xi": 73.5,
+   "scale": 0.056308141,
+   "anchors": "8c8c12936b22",
+   "tier": 4,
+   "budget": 9,
+   "exp": 2
+  },
+  "FC Dallas": {
+   "xi": 65.6,
+   "scale": 0.043801879,
+   "anchors": "05c634b54582",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "FC Juárez": {
+   "xi": 67.7,
+   "scale": 0.043801879,
+   "anchors": "da1fb0d518cc",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "FC Midtjylland": {
+   "xi": 74.1,
+   "scale": 0.058968631,
+   "anchors": "42ab5c64a67d",
+   "tier": 4,
+   "budget": 11,
+   "exp": 1
+  },
+  "FC Nordsjælland": {
+   "xi": 67,
+   "scale": 0.046722005,
+   "anchors": "62ec9bf07045",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "FC Zürich": {
+   "xi": 62.3,
+   "scale": 0.043801879,
+   "anchors": "9957a68f0087",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Falkirk": {
+   "xi": 60.7,
+   "scale": 0.036552889,
+   "anchors": "de57d94daac3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Famalicão": {
+   "xi": 72.7,
+   "scale": 0.048963601,
+   "anchors": "9c077ca5380d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Fenerbahçe": {
+   "xi": 81.1,
+   "scale": 0.115867336,
+   "anchors": "2692fc666172",
+   "tier": 3,
+   "budget": 45,
+   "exp": 2
+  },
+  "Feyenoord": {
+   "xi": 78.2,
+   "scale": 0.076178952,
+   "anchors": "771e3f8357d2",
+   "tier": 3,
+   "budget": 24,
+   "exp": 3
+  },
+  "Fiorentina": {
+   "xi": 81,
+   "scale": 0.087140244,
+   "anchors": "09989cea06ae",
+   "tier": 3,
+   "budget": 39,
+   "exp": 8
+  },
+  "Flamengo": {
+   "xi": 78.8,
+   "scale": 0.103783187,
+   "anchors": "ac13a7f6322d",
+   "tier": 3,
+   "budget": 28,
+   "exp": 1
+  },
+  "Fluminense": {
+   "xi": 75.4,
+   "scale": 0.063902586,
+   "anchors": "374c3728bd1d",
+   "tier": 4,
+   "budget": 12,
+   "exp": 6
+  },
+  "Fortuna Sittard": {
+   "xi": 62,
+   "scale": 0.035940004,
+   "anchors": "1c67757ab9b4",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Freiburg": {
+   "xi": 77.3,
+   "scale": 0.073379213,
+   "anchors": "b7b7865dee21",
+   "tier": 4,
+   "budget": 22,
+   "exp": 8
+  },
+  "Frosinone": {
+   "xi": 72.7,
+   "scale": 0.053036559,
+   "anchors": "a5986bf691d1",
+   "tier": 4,
+   "budget": 8,
+   "exp": 20
+  },
+  "Fulham": {
+   "xi": 82.5,
+   "scale": 0.113385063,
+   "anchors": "148e9c4953f4",
+   "tier": 3,
+   "budget": 54,
+   "exp": 15
+  },
+  "Galatasaray": {
+   "xi": 82.4,
+   "scale": 0.118670017,
+   "anchors": "2b4f0fab1db1",
+   "tier": 3,
+   "budget": 51,
+   "exp": 1
+  },
+  "Gaziantep FK": {
+   "xi": 64.5,
+   "scale": 0.058968631,
+   "anchors": "7e012c43a81a",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Genk": {
+   "xi": 74.4,
+   "scale": 0.053815836,
+   "anchors": "be46e128bc5f",
+   "tier": 4,
+   "budget": 12,
+   "exp": 2
+  },
+  "Genoa": {
+   "xi": 76.9,
+   "scale": 0.072648231,
+   "anchors": "a1fd0b1bfb49",
+   "tier": 4,
+   "budget": 17,
+   "exp": 13
+  },
+  "Gent": {
+   "xi": 70.7,
+   "scale": 0.053815836,
+   "anchors": "5e55bc7f5c14",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Gençlerbirliği": {
+   "xi": 62.8,
+   "scale": 0.053036559,
+   "anchors": "01f6dc0c648a",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Getafe": {
+   "xi": 74.8,
+   "scale": 0.072648231,
+   "anchors": "30b581a48617",
+   "tier": 4,
+   "budget": 12,
+   "exp": 14
+  },
+  "Gil Vicente": {
+   "xi": 66.2,
+   "scale": 0.048963601,
+   "anchors": "1a19a70be3fa",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Girona": {
+   "xi": 72.2,
+   "scale": 0.085774221,
+   "anchors": "120f6c06c253",
+   "tier": 4,
+   "budget": 8,
+   "exp": 1
+  },
+  "Gladbach": {
+   "xi": 76.1,
+   "scale": 0.067813926,
+   "anchors": "c15f8cd03734",
+   "tier": 4,
+   "budget": 16,
+   "exp": 12
+  },
+  "Go Ahead Eagles": {
+   "xi": 64.5,
+   "scale": 0.046796379,
+   "anchors": "c77b593b041e",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Gorica": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Granada": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Grasshopper": {
+   "xi": 62.9,
+   "scale": 0.028117607,
+   "anchors": "5f703baec6b4",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Grazer AK": {
+   "xi": 60.7,
+   "scale": 0.091382223,
+   "anchors": "de57d94daac3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Grenoble": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Greuther Fürth": {
+   "xi": 62.7,
+   "scale": 0.033693753,
+   "anchors": "7f276cdb38b1",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Groningen": {
+   "xi": 66.2,
+   "scale": 0.062249152,
+   "anchors": "48b13b52bf52",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Grêmio": {
+   "xi": 73.6,
+   "scale": 0.060539292,
+   "anchors": "3421cc1669c7",
+   "tier": 4,
+   "budget": 10,
+   "exp": 11
+  },
+  "Guadalajara": {
+   "xi": 73.6,
+   "scale": 0.062249152,
+   "anchors": "ce02fd76aa04",
+   "tier": 4,
+   "budget": 9,
+   "exp": 3
+  },
+  "Guingamp": {
+   "xi": 60.7,
+   "scale": 0.043801879,
+   "anchors": "8fc9a0314c33",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Göztepe": {
+   "xi": 71.9,
+   "scale": 0.055567466,
+   "anchors": "6ef0b0ef77b3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Hajduk Split": {
+   "xi": 68,
+   "scale": 0.043801879,
+   "anchors": "f33a3071c339",
+   "tier": 4,
+   "budget": 8,
+   "exp": 1
+  },
+  "Hamburg": {
+   "xi": 76.3,
+   "scale": 0.070797461,
+   "anchors": "9b4d32c83ff8",
+   "tier": 4,
+   "budget": 17,
+   "exp": 10
+  },
+  "Hannover 96": {
+   "xi": 64.4,
+   "scale": 0.040881754,
+   "anchors": "2328265d1c01",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Hartberg": {
+   "xi": 61.8,
+   "scale": 0.036552889,
+   "anchors": "d0c06e29bc92",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Hearts": {
+   "xi": 62.4,
+   "scale": 0.067813926,
+   "anchors": "0cb7c43a5021",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Heerenveen": {
+   "xi": 70.6,
+   "scale": 0.043801879,
+   "anchors": "3a95e17060cd",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Heidenheim": {
+   "xi": 68.5,
+   "scale": 0.056308141,
+   "anchors": "62fc413fab7a",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Hertha BSC": {
+   "xi": 65.2,
+   "scale": 0.048963601,
+   "anchors": "ddbbdbf117d0",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Hibernian": {
+   "xi": 63.3,
+   "scale": 0.049136198,
+   "anchors": "668d3688b14d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Hoffenheim": {
+   "xi": 79.3,
+   "scale": 0.090101569,
+   "anchors": "0c03d2d1f55b",
+   "tier": 3,
+   "budget": 31,
+   "exp": 7
+  },
+  "Holstein Kiel": {
+   "xi": 66.5,
+   "scale": 0.035997215,
+   "anchors": "1350b959e6d7",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Houston Dynamo": {
+   "xi": 69.3,
+   "scale": 0.056308141,
+   "anchors": "b3dc4885e20a",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Hull City": {
+   "xi": 78.6,
+   "scale": 0.078349191,
+   "anchors": "743e3ddd7a4f",
+   "tier": 3,
+   "budget": 27,
+   "exp": 20
+  },
+  "Inter Miami": {
+   "xi": 74,
+   "scale": 0.056308141,
+   "anchors": "44b104875523",
+   "tier": 4,
+   "budget": 10,
+   "exp": 1
+  },
+  "Inter Milan": {
+   "xi": 85.5,
+   "scale": 0.146921167,
+   "anchors": "c648b79c90a1",
+   "tier": 2,
+   "budget": 94,
+   "exp": 1
+  },
+  "Internacional": {
+   "xi": 71.6,
+   "scale": 0.053815836,
+   "anchors": "252f30913ae9",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Ipswich Town": {
+   "xi": 80.4,
+   "scale": 0.091656966,
+   "anchors": "53bb5c700507",
+   "tier": 3,
+   "budget": 43,
+   "exp": 18
+  },
+  "Iraklis": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Istra 1961": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Juve Stabia": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Juventus": {
+   "xi": 84.3,
+   "scale": 0.1159436,
+   "anchors": "8b5c47360d8d",
+   "tier": 2,
+   "budget": 85,
+   "exp": 2
+  },
+  "Kaiserslautern": {
+   "xi": 66.1,
+   "scale": 0.049155836,
+   "anchors": "e0389837708b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Kalamata": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Karlsruhe": {
+   "xi": 63.2,
+   "scale": 0.037797076,
+   "anchors": "b4f3a136bdcf",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Kasımpaşa": {
+   "xi": 64.2,
+   "scale": 0.060539292,
+   "anchors": "1651493ab303",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Kifisia": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Kilmarnock": {
+   "xi": 61.6,
+   "scale": 0.042727129,
+   "anchors": "2cdd63bcd713",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Kocaelispor": {
+   "xi": 61.7,
+   "scale": 0.102204385,
+   "anchors": "c4641999db69",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Konyaspor": {
+   "xi": 66.5,
+   "scale": 0.053815836,
+   "anchors": "003bbef9c3e4",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Kortrijk": {
+   "xi": 61.4,
+   "scale": 0.051017843,
+   "anchors": "50dbbc272574",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Köln": {
+   "xi": 76.1,
+   "scale": 0.067813926,
+   "anchors": "8355465efb0e",
+   "tier": 4,
+   "budget": 18,
+   "exp": 13
+  },
+  "LA Galaxy": {
+   "xi": 65.5,
+   "scale": 0.067813926,
+   "anchors": "602ad7984ca2",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "LAFC": {
+   "xi": 69.1,
+   "scale": 0.053815836,
+   "anchors": "5321c5134984",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "LASK": {
+   "xi": 65.5,
+   "scale": 0.043801879,
+   "anchors": "7b2ea135e8a5",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "La Louvière": {
+   "xi": 62.7,
+   "scale": 0.036552889,
+   "anchors": "086767b47417",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Las Palmas": {
+   "xi": 64,
+   "scale": 0.043801879,
+   "anchors": "7c6bf74a7130",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Lausanne-Sport": {
+   "xi": 66.4,
+   "scale": 0.043313954,
+   "anchors": "297e8050ea06",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Laval": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Lazio": {
+   "xi": 79.5,
+   "scale": 0.091656966,
+   "anchors": "c868d99e81dc",
+   "tier": 3,
+   "budget": 30,
+   "exp": 9
+  },
+  "Le Havre": {
+   "xi": 72.1,
+   "scale": 0.055567466,
+   "anchors": "60a63695b5b0",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Le Mans": {
+   "xi": 60.7,
+   "scale": 0.038088591,
+   "anchors": "8fc9a0314c33",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Lecce": {
+   "xi": 74.5,
+   "scale": 0.056308141,
+   "anchors": "1d49517cfc0c",
+   "tier": 4,
+   "budget": 12,
+   "exp": 17
+  },
+  "Leeds United": {
+   "xi": 81.5,
+   "scale": 0.104750819,
+   "anchors": "db84db6bd807",
+   "tier": 3,
+   "budget": 48,
+   "exp": 17
+  },
+  "Leganés": {
+   "xi": 63.2,
+   "scale": 0.052839909,
+   "anchors": "9312ad3cddda",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Lens": {
+   "xi": 77.4,
+   "scale": 0.069308899,
+   "anchors": "dcd029e25af9",
+   "tier": 4,
+   "budget": 22,
+   "exp": 8
+  },
+  "Levadiakos": {
+   "xi": 61,
+   "scale": 0.05867052,
+   "anchors": "d0b27c6068da",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Levante": {
+   "xi": 75.3,
+   "scale": 0.063172375,
+   "anchors": "4c0fa9cb74b5",
+   "tier": 4,
+   "budget": 12,
+   "exp": 13
+  },
+  "León": {
+   "xi": 69.5,
+   "scale": 0.046796379,
+   "anchors": "09dcd0caaa42",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Lille": {
+   "xi": 79.1,
+   "scale": 0.090101569,
+   "anchors": "ef61832d7283",
+   "tier": 3,
+   "budget": 25,
+   "exp": 5
+  },
+  "Lincoln City": {
+   "xi": 60.7,
+   "scale": 0.031785121,
+   "anchors": "de57d94daac3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 24
+  },
+  "Liverpool": {
+   "xi": 88.3,
+   "scale": 0.127757537,
+   "anchors": "a8d2b51bcb52",
+   "tier": 1,
+   "budget": 137,
+   "exp": 3
+  },
+  "Lokomotiva Zagreb": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Lommel": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Lorient": {
+   "xi": 75.3,
+   "scale": 0.066947201,
+   "anchors": "9f9f7c4cca6e",
+   "tier": 4,
+   "budget": 13,
+   "exp": 10
+  },
+  "Lugano": {
+   "xi": 67.2,
+   "scale": 0.059222524,
+   "anchors": "8387280a4b19",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Luzern": {
+   "xi": 64.7,
+   "scale": 0.046796379,
+   "anchors": "3ae420d0423d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Lyngby": {
+   "xi": 61.5,
+   "scale": 0.040881754,
+   "anchors": "c47f911f667f",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Lyon": {
+   "xi": 79.4,
+   "scale": 0.082334662,
+   "anchors": "0a2f035f5e21",
+   "tier": 3,
+   "budget": 32,
+   "exp": 4
+  },
+  "Magdeburg": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Mainz": {
+   "xi": 76.3,
+   "scale": 0.073379213,
+   "anchors": "7eb039e23f43",
+   "tier": 4,
+   "budget": 19,
+   "exp": 11
+  },
+  "Mallorca": {
+   "xi": 68,
+   "scale": 0.080440201,
+   "anchors": "b0da4426b310",
+   "tier": 4,
+   "budget": 8,
+   "exp": 2
+  },
+  "Manchester City": {
+   "xi": 88.5,
+   "scale": 0.15019165,
+   "anchors": "109f1da77471",
+   "tier": 1,
+   "budget": 160,
+   "exp": 2
+  },
+  "Manchester United": {
+   "xi": 86.5,
+   "scale": 0.127148032,
+   "anchors": "ce6adeb45221",
+   "tier": 2,
+   "budget": 118,
+   "exp": 5
+  },
+  "Mantova": {
+   "xi": 61.9,
+   "scale": 0.049155836,
+   "anchors": "1592c160daae",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Marseille": {
+   "xi": 78.2,
+   "scale": 0.127146447,
+   "anchors": "75ac06d2743c",
+   "tier": 3,
+   "budget": 22,
+   "exp": 7
+  },
+  "Marítimo": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Mechelen": {
+   "xi": 67.1,
+   "scale": 0.043313954,
+   "anchors": "ba525a7a166f",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Metz": {
+   "xi": 66.5,
+   "scale": 0.053815836,
+   "anchors": "5fcc10ab1318",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Middlesbrough": {
+   "xi": 75.8,
+   "scale": 0.058968631,
+   "anchors": "4d50d96609a6",
+   "tier": 4,
+   "budget": 16,
+   "exp": 5
+  },
+  "Millwall": {
+   "xi": 71.7,
+   "scale": 0.055567466,
+   "anchors": "e2199084e893",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Minnesota United": {
+   "xi": 68.4,
+   "scale": 0.060765895,
+   "anchors": "ad7e9751cb6f",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Mirassol": {
+   "xi": 63.5,
+   "scale": 0.056308141,
+   "anchors": "e9d3934d83a5",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Modena": {
+   "xi": 60.7,
+   "scale": 0.091382223,
+   "anchors": "de57d94daac3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 19
+  },
+  "Monaco": {
+   "xi": 80.6,
+   "scale": 0.091289409,
+   "anchors": "7806916809ae",
+   "tier": 3,
+   "budget": 39,
+   "exp": 3
+  },
+  "Monterrey": {
+   "xi": 71.8,
+   "scale": 0.066851971,
+   "anchors": "dfd9bda72fdb",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Montpellier": {
+   "xi": 65.2,
+   "scale": 0.058402506,
+   "anchors": "9149e0dce622",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Monza": {
+   "xi": 74.5,
+   "scale": 0.053815836,
+   "anchors": "69c5de93e301",
+   "tier": 4,
+   "budget": 12,
+   "exp": 18
+  },
+  "Moreirense": {
+   "xi": 65.5,
+   "scale": 0.043801879,
+   "anchors": "270fa767dd2a",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Motherwell": {
+   "xi": 62.2,
+   "scale": 0.036552889,
+   "anchors": "3e2ba32ca065",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Málaga": {
+   "xi": 66.1,
+   "scale": 0.053815836,
+   "anchors": "1236a8453b76",
+   "tier": 4,
+   "budget": 8,
+   "exp": 20
+  },
+  "NEC Nijmegen": {
+   "xi": 67.7,
+   "scale": 0.053815836,
+   "anchors": "2141e5233afa",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "NEOM SC": {
+   "xi": 73.4,
+   "scale": 0.104750819,
+   "anchors": "4c7815c87b58",
+   "tier": 4,
+   "budget": 12,
+   "exp": 6
+  },
+  "Nacional": {
+   "xi": 61.3,
+   "scale": 0.046796379,
+   "anchors": "7876d756add2",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Nancy": {
+   "xi": 60.7,
+   "scale": 0.035549351,
+   "anchors": "8fc9a0314c33",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Nantes": {
+   "xi": 72.7,
+   "scale": 0.063334355,
+   "anchors": "ddd7824bfb0c",
+   "tier": 4,
+   "budget": 10,
+   "exp": 1
+  },
+  "Napoli": {
+   "xi": 82.5,
+   "scale": 0.127873154,
+   "anchors": "4ba027676d57",
+   "tier": 3,
+   "budget": 58,
+   "exp": 6
+  },
+  "Nashville SC": {
+   "xi": 67.5,
+   "scale": 0.062574113,
+   "anchors": "d8d6a75999ec",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Necaxa": {
+   "xi": 69,
+   "scale": 0.046796379,
+   "anchors": "e57526a70368",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "New England Revolution": {
+   "xi": 69.2,
+   "scale": 0.053815836,
+   "anchors": "bfd534171ef1",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "New York City FC": {
+   "xi": 72.2,
+   "scale": 0.046796379,
+   "anchors": "4928cb723fca",
+   "tier": 4,
+   "budget": 8,
+   "exp": 2
+  },
+  "New York Red Bulls": {
+   "xi": 68.2,
+   "scale": 0.043801879,
+   "anchors": "d2b68498d6ce",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Newcastle": {
+   "xi": 84.1,
+   "scale": 0.125642304,
+   "anchors": "16010ade1f17",
+   "tier": 2,
+   "budget": 69,
+   "exp": 7
+  },
+  "Nice": {
+   "xi": 76.6,
+   "scale": 0.082334662,
+   "anchors": "851fea06a275",
+   "tier": 4,
+   "budget": 18,
+   "exp": 9
+  },
+  "Norwich City": {
+   "xi": 74,
+   "scale": 0.052227841,
+   "anchors": "61fdf47214d8",
+   "tier": 4,
+   "budget": 12,
+   "exp": 9
+  },
+  "Nottingham Forest": {
+   "xi": 83.8,
+   "scale": 0.113760657,
+   "anchors": "77c7eae13e4c",
+   "tier": 2,
+   "budget": 70,
+   "exp": 8
+  },
+  "Nürnberg": {
+   "xi": 66.6,
+   "scale": 0.043801879,
+   "anchors": "9b7ad500a4ae",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "OB": {
+   "xi": 60.4,
+   "scale": 0.028117607,
+   "anchors": "00f9f95c19f3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "OFI": {
+   "xi": 61.3,
+   "scale": 0.070194569,
+   "anchors": "7876d756add2",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "OH Leuven": {
+   "xi": 62.5,
+   "scale": 0.043801879,
+   "anchors": "d7cd028e5c43",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Olympiacos": {
+   "xi": 75.6,
+   "scale": 0.076879766,
+   "anchors": "a5f493d9b08b",
+   "tier": 4,
+   "budget": 14,
+   "exp": 1
+  },
+  "Orlando City": {
+   "xi": 70.9,
+   "scale": 0.05867052,
+   "anchors": "b93aa7b4a6aa",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Osasuna": {
+   "xi": 73.6,
+   "scale": 0.070797461,
+   "anchors": "515589a5b823",
+   "tier": 4,
+   "budget": 10,
+   "exp": 17
+  },
+  "Osijek": {
+   "xi": 61.8,
+   "scale": 0.046796379,
+   "anchors": "9b638f4ae689",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Osnabrück": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "PAOK": {
+   "xi": 73.9,
+   "scale": 0.067813926,
+   "anchors": "87491d0711dd",
+   "tier": 4,
+   "budget": 9,
+   "exp": 3
+  },
+  "PEC Zwolle": {
+   "xi": 65.2,
+   "scale": 0.035549351,
+   "anchors": "2a55fe95ce47",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "PSG": {
+   "xi": 88.9,
+   "scale": 0.155907964,
+   "anchors": "49c631a946f4",
+   "tier": 1,
+   "budget": 158,
+   "exp": 1
+  },
+  "PSV": {
+   "xi": 79.5,
+   "scale": 0.086119069,
+   "anchors": "ed118b47bca0",
+   "tier": 3,
+   "budget": 26,
+   "exp": 2
+  },
+  "Pachuca": {
+   "xi": 67.2,
+   "scale": 0.053815836,
+   "anchors": "95e50be4e7e0",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Paderborn": {
+   "xi": 69.4,
+   "scale": 0.041396797,
+   "anchors": "6298d2cae10f",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Padova": {
+   "xi": 62.5,
+   "scale": 0.046722005,
+   "anchors": "3fa20f0ea4ff",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Palermo": {
+   "xi": 66,
+   "scale": 0.053815836,
+   "anchors": "f17f4795b1fd",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Palmeiras": {
+   "xi": 78.8,
+   "scale": 0.090525988,
+   "anchors": "072b3ae13631",
+   "tier": 3,
+   "budget": 27,
+   "exp": 2
+  },
+  "Panathinaikos": {
+   "xi": 74,
+   "scale": 0.063902586,
+   "anchors": "fc553b106a02",
+   "tier": 4,
+   "budget": 11,
+   "exp": 2
+  },
+  "Panetolikos": {
+   "xi": 60.7,
+   "scale": 0.043801879,
+   "anchors": "8fc9a0314c33",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Paris FC": {
+   "xi": 73.5,
+   "scale": 0.067813926,
+   "anchors": "da734d17d6c6",
+   "tier": 4,
+   "budget": 9,
+   "exp": 13
+  },
+  "Parma": {
+   "xi": 76.8,
+   "scale": 0.069308899,
+   "anchors": "2c7e45a56fc6",
+   "tier": 4,
+   "budget": 18,
+   "exp": 14
+  },
+  "Pau": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Philadelphia Union": {
+   "xi": 67.2,
+   "scale": 0.043313954,
+   "anchors": "bad9e4e778cc",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Pisa": {
+   "xi": 71.5,
+   "scale": 0.049155836,
+   "anchors": "3699dfe63ab2",
+   "tier": 4,
+   "budget": 8,
+   "exp": 1
+  },
+  "Portland Timbers": {
+   "xi": 70.4,
+   "scale": 0.048963601,
+   "anchors": "57da07d8d689",
+   "tier": 4,
+   "budget": 8,
+   "exp": 2
+  },
+  "Porto": {
+   "xi": 82.6,
+   "scale": 0.095392977,
+   "anchors": "d93f6edb5ae4",
+   "tier": 3,
+   "budget": 54,
+   "exp": 1
+  },
+  "Portsmouth": {
+   "xi": 64.8,
+   "scale": 0.052839909,
+   "anchors": "7e07e503ef16",
+   "tier": 4,
+   "budget": 8,
+   "exp": 21
+  },
+  "Preston North End": {
+   "xi": 69.6,
+   "scale": 0.053815836,
+   "anchors": "83b0b0c4e17d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 18
+  },
+  "Puebla": {
+   "xi": 61.1,
+   "scale": 0.038088591,
+   "anchors": "683d8d061fab",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Pumas UNAM": {
+   "xi": 69.5,
+   "scale": 0.056308141,
+   "anchors": "e63a2dac6af8",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "QPR": {
+   "xi": 72.7,
+   "scale": 0.055567466,
+   "anchors": "987dc55a60e0",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Querétaro": {
+   "xi": 63,
+   "scale": 0.043801879,
+   "anchors": "68ea32e57966",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "RB Leipzig": {
+   "xi": 83.2,
+   "scale": 0.100754205,
+   "anchors": "6823f5a8979b",
+   "tier": 2,
+   "budget": 62,
+   "exp": 3
+  },
+  "RB Salzburg": {
+   "xi": 74.2,
+   "scale": 0.049155836,
+   "anchors": "3fcaad792fcc",
+   "tier": 4,
+   "budget": 10,
+   "exp": 1
+  },
+  "Racing Santander": {
+   "xi": 73.9,
+   "scale": 0.067813926,
+   "anchors": "39281ca9e957",
+   "tier": 4,
+   "budget": 10,
+   "exp": 15
+  },
+  "Randers FC": {
+   "xi": 61.7,
+   "scale": 0.060765895,
+   "anchors": "c4641999db69",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Rangers": {
+   "xi": 75.5,
+   "scale": 0.059954372,
+   "anchors": "d01d7b15c1c7",
+   "tier": 4,
+   "budget": 14,
+   "exp": 1
+  },
+  "Rapid Wien": {
+   "xi": 69.5,
+   "scale": 0.046796379,
+   "anchors": "18106c810c93",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Rayo Vallecano": {
+   "xi": 73.7,
+   "scale": 0.064799974,
+   "anchors": "be2f7026bc9a",
+   "tier": 4,
+   "budget": 11,
+   "exp": 16
+  },
+  "Real Betis": {
+   "xi": 80,
+   "scale": 0.090101569,
+   "anchors": "b48ff435c13a",
+   "tier": 3,
+   "budget": 38,
+   "exp": 6
+  },
+  "Real Madrid": {
+   "xi": 89.6,
+   "scale": 0.148196441,
+   "anchors": "2efe556b82b7",
+   "tier": 1,
+   "budget": 195,
+   "exp": 1
+  },
+  "Real Oviedo": {
+   "xi": 62.7,
+   "scale": 0.062574113,
+   "anchors": "ac97c7db8ecc",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Real Salt Lake": {
+   "xi": 64.3,
+   "scale": 0.063902586,
+   "anchors": "4fd10a0855f5",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Real Sociedad": {
+   "xi": 79.8,
+   "scale": 0.081417081,
+   "anchors": "fb12509bed3c",
+   "tier": 3,
+   "budget": 35,
+   "exp": 7
+  },
+  "Red Bull Bragantino": {
+   "xi": 73.5,
+   "scale": 0.053815836,
+   "anchors": "483bb7030401",
+   "tier": 4,
+   "budget": 9,
+   "exp": 12
+  },
+  "Red Star FC": {
+   "xi": 60.7,
+   "scale": 0.035549351,
+   "anchors": "8fc9a0314c33",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Reims": {
+   "xi": 68.2,
+   "scale": 0.060062017,
+   "anchors": "ecf70f8499e6",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Remo": {
+   "xi": 61.7,
+   "scale": 0.050289017,
+   "anchors": "c4641999db69",
+   "tier": 4,
+   "budget": 8,
+   "exp": 19
+  },
+  "Rennes": {
+   "xi": 78.5,
+   "scale": 0.086119069,
+   "anchors": "22e71fecd682",
+   "tier": 3,
+   "budget": 28,
+   "exp": 6
+  },
+  "Ried": {
+   "xi": 61.1,
+   "scale": 0.036552889,
+   "anchors": "97f59f9760f7",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Rijeka": {
+   "xi": 66.2,
+   "scale": 0.053815836,
+   "anchors": "84309108aa8a",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Rio Ave": {
+   "xi": 68.5,
+   "scale": 0.046796379,
+   "anchors": "67acc5ce4ebc",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Rizespor": {
+   "xi": 67.3,
+   "scale": 0.053815836,
+   "anchors": "42149604d2ea",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Rodez": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Roma": {
+   "xi": 83.5,
+   "scale": 0.11195479,
+   "anchors": "3d02b2773782",
+   "tier": 2,
+   "budget": 61,
+   "exp": 3
+  },
+  "Rudeš": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Sabadell": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Saint-Étienne": {
+   "xi": 68.9,
+   "scale": 0.049155836,
+   "anchors": "d03f27a4d0fe",
+   "tier": 4,
+   "budget": 8,
+   "exp": 2
+  },
+  "Sampdoria": {
+   "xi": 63.5,
+   "scale": 0.060062017,
+   "anchors": "1fa5815ff92c",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Samsunspor": {
+   "xi": 70.9,
+   "scale": 0.056308141,
+   "anchors": "b0d1df4d4381",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "San Diego FC": {
+   "xi": 67.3,
+   "scale": 0.063902586,
+   "anchors": "ba5eebbe85b4",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "San Jose Earthquakes": {
+   "xi": 65.7,
+   "scale": 0.062574113,
+   "anchors": "6e1b8cada315",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Santa Clara": {
+   "xi": 66,
+   "scale": 0.053815836,
+   "anchors": "7450ac26497a",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Santos": {
+   "xi": 75,
+   "scale": 0.070194569,
+   "anchors": "477f432d479e",
+   "tier": 4,
+   "budget": 12,
+   "exp": 8
+  },
+  "Santos Laguna": {
+   "xi": 63.6,
+   "scale": 0.056308141,
+   "anchors": "2f2138155011",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Sassuolo": {
+   "xi": 77,
+   "scale": 0.063902586,
+   "anchors": "4909bf7ede23",
+   "tier": 4,
+   "budget": 20,
+   "exp": 12
+  },
+  "Schalke 04": {
+   "xi": 72.2,
+   "scale": 0.048963601,
+   "anchors": "dc11d1b99b6c",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Seattle Sounders": {
+   "xi": 70.6,
+   "scale": 0.070194569,
+   "anchors": "d95b1f0caca4",
+   "tier": 4,
+   "budget": 8,
+   "exp": 1
+  },
+  "Servette": {
+   "xi": 63.9,
+   "scale": 0.053815836,
+   "anchors": "f5b2b603d002",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Sevilla": {
+   "xi": 77.1,
+   "scale": 0.072648231,
+   "anchors": "4b0ca37496d0",
+   "tier": 4,
+   "budget": 19,
+   "exp": 8
+  },
+  "Sheffield United": {
+   "xi": 75.5,
+   "scale": 0.063902586,
+   "anchors": "a56b62aa6686",
+   "tier": 4,
+   "budget": 14,
+   "exp": 6
+  },
+  "Silkeborg IF": {
+   "xi": 60.7,
+   "scale": 0.043801879,
+   "anchors": "8fc9a0314c33",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Sint-Truiden": {
+   "xi": 67.5,
+   "scale": 0.049155836,
+   "anchors": "6b4440407084",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Sion": {
+   "xi": 63.7,
+   "scale": 0.038088591,
+   "anchors": "990794fcff62",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Slaven Belupo": {
+   "xi": 61.5,
+   "scale": 0.049155836,
+   "anchors": "52437f6b4cef",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Sochaux": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Southampton": {
+   "xi": 76.6,
+   "scale": 0.071595358,
+   "anchors": "0701b7f269e6",
+   "tier": 4,
+   "budget": 20,
+   "exp": 4
+  },
+  "Sparta Rotterdam": {
+   "xi": 66.1,
+   "scale": 0.040881754,
+   "anchors": "05994145ce52",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Sporting CP": {
+   "xi": 80.7,
+   "scale": 0.091087668,
+   "anchors": "1b2ce0b6c8a7",
+   "tier": 3,
+   "budget": 33,
+   "exp": 3
+  },
+  "Sporting Gijón": {
+   "xi": 62.7,
+   "scale": 0.053815836,
+   "anchors": "086767b47417",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Sporting Kansas City": {
+   "xi": 64.1,
+   "scale": 0.056308141,
+   "anchors": "f9db763daa60",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "St Johnstone": {
+   "xi": 60.7,
+   "scale": 0.031983778,
+   "anchors": "de57d94daac3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "St Mirren": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "St. Gallen": {
+   "xi": 65.4,
+   "scale": 0.049155836,
+   "anchors": "b9aa0e12ba5e",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "St. Louis City": {
+   "xi": 67.2,
+   "scale": 0.046722005,
+   "anchors": "e4242b67d725",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "St. Pauli": {
+   "xi": 70.3,
+   "scale": 0.060765895,
+   "anchors": "e5428cb29262",
+   "tier": 4,
+   "budget": 8,
+   "exp": 2
+  },
+  "Standard Liège": {
+   "xi": 65.5,
+   "scale": 0.049155836,
+   "anchors": "52f884a48889",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Stoke City": {
+   "xi": 73.9,
+   "scale": 0.052839909,
+   "anchors": "3dfc03a52ee7",
+   "tier": 4,
+   "budget": 10,
+   "exp": 10
+  },
+  "Strasbourg": {
+   "xi": 80.7,
+   "scale": 0.073472213,
+   "anchors": "e66612f8409e",
+   "tier": 3,
+   "budget": 36,
+   "exp": 2
+  },
+  "Sturm Graz": {
+   "xi": 69.9,
+   "scale": 0.066851971,
+   "anchors": "eb62776165e1",
+   "tier": 4,
+   "budget": 8,
+   "exp": 2
+  },
+  "Stuttgart": {
+   "xi": 81.6,
+   "scale": 0.090101569,
+   "anchors": "4d3af3043193",
+   "tier": 3,
+   "budget": 48,
+   "exp": 5
+  },
+  "Sunderland": {
+   "xi": 82.2,
+   "scale": 0.10432529,
+   "anchors": "d768ecc2a519",
+   "tier": 3,
+   "budget": 50,
+   "exp": 16
+  },
+  "Swansea City": {
+   "xi": 74.8,
+   "scale": 0.058968631,
+   "anchors": "20073ad591df",
+   "tier": 4,
+   "budget": 12,
+   "exp": 7
+  },
+  "São Paulo": {
+   "xi": 73.4,
+   "scale": 0.059222524,
+   "anchors": "325eb6c05a64",
+   "tier": 4,
+   "budget": 9,
+   "exp": 13
+  },
+  "SønderjyskE": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Südtirol": {
+   "xi": 63,
+   "scale": 0.049155836,
+   "anchors": "a940f1459072",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Telstar": {
+   "xi": 61.8,
+   "scale": 0.031785121,
+   "anchors": "d0c06e29bc92",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Tenerife": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Thun": {
+   "xi": 62,
+   "scale": 0.038088591,
+   "anchors": "1c67757ab9b4",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Tigres UANL": {
+   "xi": 73.2,
+   "scale": 0.062574113,
+   "anchors": "8ef4e8ca03b7",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Tijuana": {
+   "xi": 65.4,
+   "scale": 0.053815836,
+   "anchors": "af26e6a160b9",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Toluca": {
+   "xi": 73.9,
+   "scale": 0.071586524,
+   "anchors": "52940952ad11",
+   "tier": 4,
+   "budget": 10,
+   "exp": 2
+  },
+  "Torino": {
+   "xi": 77.5,
+   "scale": 0.078349191,
+   "anchors": "9ed410070b29",
+   "tier": 4,
+   "budget": 24,
+   "exp": 11
+  },
+  "Toronto FC": {
+   "xi": 67.6,
+   "scale": 0.063902586,
+   "anchors": "571d83cd4774",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Tottenham": {
+   "xi": 85.8,
+   "scale": 0.128716528,
+   "anchors": "0fd2ed12e4dd",
+   "tier": 2,
+   "budget": 114,
+   "exp": 6
+  },
+  "Toulouse": {
+   "xi": 75.1,
+   "scale": 0.063902586,
+   "anchors": "546fce4618e3",
+   "tier": 4,
+   "budget": 12,
+   "exp": 11
+  },
+  "Trabzonspor": {
+   "xi": 77.4,
+   "scale": 0.071595358,
+   "anchors": "8902e255ffd4",
+   "tier": 4,
+   "budget": 21,
+   "exp": 4
+  },
+  "Troyes": {
+   "xi": 64.6,
+   "scale": 0.053815836,
+   "anchors": "e55e25a01c91",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Twente": {
+   "xi": 72.8,
+   "scale": 0.062574113,
+   "anchors": "f8198bd82132",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Udinese": {
+   "xi": 75.8,
+   "scale": 0.063902586,
+   "anchors": "94581dd7a6c5",
+   "tier": 4,
+   "budget": 18,
+   "exp": 15
+  },
+  "Union Berlin": {
+   "xi": 75.5,
+   "scale": 0.067813926,
+   "anchors": "cf9052518083",
+   "tier": 4,
+   "budget": 15,
+   "exp": 14
+  },
+  "Union Saint-Gilloise": {
+   "xi": 73.7,
+   "scale": 0.056308141,
+   "anchors": "5735dfa5ed04",
+   "tier": 4,
+   "budget": 9,
+   "exp": 3
+  },
+  "Utrecht": {
+   "xi": 72.7,
+   "scale": 0.055883255,
+   "anchors": "f56a1f444d55",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Vaduz": {
+   "xi": 60.4,
+   "scale": 0.031785121,
+   "anchors": "00f9f95c19f3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Valencia": {
+   "xi": 77,
+   "scale": 0.07870225,
+   "anchors": "5053c52c6f94",
+   "tier": 4,
+   "budget": 20,
+   "exp": 9
+  },
+  "Valladolid": {
+   "xi": 61.1,
+   "scale": 0.043801879,
+   "anchors": "683d8d061fab",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Vancouver Whitecaps": {
+   "xi": 70.4,
+   "scale": 0.080440201,
+   "anchors": "b77e09029d58",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Varaždin": {
+   "xi": null,
+   "scale": 1,
+   "anchors": "4f53cda18c2b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Vasco da Gama": {
+   "xi": 74.9,
+   "scale": 0.060539292,
+   "anchors": "5881521723ec",
+   "tier": 4,
+   "budget": 12,
+   "exp": 9
+  },
+  "Venezia": {
+   "xi": 73.9,
+   "scale": 0.053815836,
+   "anchors": "a37d0b9c6a10",
+   "tier": 4,
+   "budget": 11,
+   "exp": 19
+  },
+  "Verona": {
+   "xi": 70.5,
+   "scale": 0.055567466,
+   "anchors": "d4f8ac211c3e",
+   "tier": 4,
+   "budget": 8,
+   "exp": 2
+  },
+  "Viborg FF": {
+   "xi": 63.3,
+   "scale": 0.043801879,
+   "anchors": "c5fa29b4e72f",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Vicenza": {
+   "xi": 62.5,
+   "scale": 0.033693753,
+   "anchors": "6c1fd81d827a",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Villarreal": {
+   "xi": 80.5,
+   "scale": 0.095392977,
+   "anchors": "39912a13b475",
+   "tier": 3,
+   "budget": 40,
+   "exp": 4
+  },
+  "Vitória": {
+   "xi": 67.5,
+   "scale": 0.046796379,
+   "anchors": "e23a40f50ea1",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Vitória Guimarães": {
+   "xi": 68.9,
+   "scale": 0.049136198,
+   "anchors": "710657b7ad19",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Volos": {
+   "xi": 61.6,
+   "scale": 0.245680992,
+   "anchors": "1791088e797c",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "WSG Tirol": {
+   "xi": 60.4,
+   "scale": 0.031785121,
+   "anchors": "00f9f95c19f3",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Watford": {
+   "xi": 73.8,
+   "scale": 0.049155836,
+   "anchors": "97d2449fe4d2",
+   "tier": 4,
+   "budget": 10,
+   "exp": 11
+  },
+  "Werder Bremen": {
+   "xi": 75,
+   "scale": 0.063902586,
+   "anchors": "c3d90bfb4dbe",
+   "tier": 4,
+   "budget": 13,
+   "exp": 15
+  },
+  "West Brom": {
+   "xi": 72.2,
+   "scale": 0.056308141,
+   "anchors": "ea622c46589f",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "West Ham": {
+   "xi": 80.3,
+   "scale": 0.091656966,
+   "anchors": "7b332de5aefd",
+   "tier": 3,
+   "budget": 35,
+   "exp": 1
+  },
+  "Westerlo": {
+   "xi": 68.9,
+   "scale": 0.046796379,
+   "anchors": "58aaad611642",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Willem II": {
+   "xi": 60.9,
+   "scale": 0.035997215,
+   "anchors": "9a3616dcd8bb",
+   "tier": 4,
+   "budget": 8,
+   "exp": 17
+  },
+  "Wolfsberger AC": {
+   "xi": 61.8,
+   "scale": 0.048963601,
+   "anchors": "242d803f369d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Wolfsburg": {
+   "xi": 75.4,
+   "scale": 0.063334355,
+   "anchors": "bf00000a96af",
+   "tier": 4,
+   "budget": 15,
+   "exp": 1
+  },
+  "Wolves": {
+   "xi": 79.1,
+   "scale": 0.082950414,
+   "anchors": "7685652dcde0",
+   "tier": 3,
+   "budget": 27,
+   "exp": 2
+  },
+  "Wrexham": {
+   "xi": 73.3,
+   "scale": 0.067813926,
+   "anchors": "bc06cf116301",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Young Boys": {
+   "xi": 71.7,
+   "scale": 0.063172375,
+   "anchors": "0e0e73f836b9",
+   "tier": 4,
+   "budget": 8,
+   "exp": 1
+  },
+  "Zulte Waregem": {
+   "xi": 62.5,
+   "scale": 0.041396797,
+   "anchors": "88515d70b1ff",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Çorum FK": {
+   "xi": 62.3,
+   "scale": 0.076989281,
+   "anchors": "166e459cc327",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Adelaide United": {
+   "xi": 60.9,
+   "scale": 0.016062559,
+   "anchors": "2d9b8d89bb09",
+   "tier": 4,
+   "budget": 8,
+   "exp": 1
+  },
+  "Auckland FC": {
+   "xi": 60.2,
+   "scale": 0.02593148,
+   "anchors": "51654f0dab51",
+   "tier": 4,
+   "budget": 8,
+   "exp": 5
+  },
+  "Brisbane Roar": {
+   "xi": 59.3,
+   "scale": 0.019015288,
+   "anchors": "adc649e92e0d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Central Coast Mariners": {
+   "xi": 57.5,
+   "scale": 0.014054739,
+   "anchors": "cd567a22a951",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Macarthur FC": {
+   "xi": 60.1,
+   "scale": 0.017453881,
+   "anchors": "a8119b07c314",
+   "tier": 4,
+   "budget": 8,
+   "exp": 6
+  },
+  "Melbourne City": {
+   "xi": 60.5,
+   "scale": 0.017709675,
+   "anchors": "60786fda790c",
+   "tier": 4,
+   "budget": 8,
+   "exp": 2
+  },
+  "Melbourne Victory": {
+   "xi": 60.1,
+   "scale": 0.022920233,
+   "anchors": "9686f7d1dcbd",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Newcastle Jets": {
+   "xi": 60.4,
+   "scale": 0.021610078,
+   "anchors": "ecd917a882a5",
+   "tier": 4,
+   "budget": 8,
+   "exp": 4
+  },
+  "Perth Glory": {
+   "xi": 60.1,
+   "scale": 0.019947292,
+   "anchors": "e4a10f1769c5",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Sydney FC": {
+   "xi": 60.5,
+   "scale": 0.019015288,
+   "anchors": "9651951ed4d5",
+   "tier": 4,
+   "budget": 8,
+   "exp": 3
+  },
+  "Wellington Phoenix": {
+   "xi": 60,
+   "scale": 0.020881327,
+   "anchors": "20c16c75f462",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Western Sydney Wanderers": {
+   "xi": 60,
+   "scale": 0.019015288,
+   "anchors": "d852099e9ad0",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "Akhmat Grozny": {
+   "xi": 68.5,
+   "scale": 0.039600065,
+   "anchors": "e0571ff7579d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 9
+  },
+  "Akron Tolyatti": {
+   "xi": 67,
+   "scale": 0.034434839,
+   "anchors": "88643577a23b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 11
+  },
+  "Baltika": {
+   "xi": 68.4,
+   "scale": 0.039819073,
+   "anchors": "1070a59642d2",
+   "tier": 4,
+   "budget": 8,
+   "exp": 10
+  },
+  "CSKA Moscow": {
+   "xi": 74.6,
+   "scale": 0.04730603,
+   "anchors": "54c87281a09a",
+   "tier": 4,
+   "budget": 14,
+   "exp": 4
+  },
+  "Dynamo Makhachkala": {
+   "xi": 65.5,
+   "scale": 0.032182435,
+   "anchors": "aca562b21f43",
+   "tier": 4,
+   "budget": 8,
+   "exp": 15
+  },
+  "Dynamo Moscow": {
+   "xi": 74.5,
+   "scale": 0.06785475,
+   "anchors": "a863419ebf08",
+   "tier": 4,
+   "budget": 12,
+   "exp": 5
+  },
+  "Fakel Voronezh": {
+   "xi": 62.5,
+   "scale": 0.03267973,
+   "anchors": "c69ae2de7670",
+   "tier": 4,
+   "budget": 8,
+   "exp": 16
+  },
+  "Krasnodar": {
+   "xi": 75,
+   "scale": 0.078460089,
+   "anchors": "f78bd9399617",
+   "tier": 4,
+   "budget": 12,
+   "exp": 2
+  },
+  "Krylia Sovetov": {
+   "xi": 66.5,
+   "scale": 0.039600065,
+   "anchors": "cc1edfb2145b",
+   "tier": 4,
+   "budget": 8,
+   "exp": 12
+  },
+  "Lokomotiv Moscow": {
+   "xi": 72.5,
+   "scale": 0.05091763,
+   "anchors": "7af50d505a8c",
+   "tier": 4,
+   "budget": 9,
+   "exp": 6
+  },
+  "Orenburg": {
+   "xi": 65.6,
+   "scale": 0.031211255,
+   "anchors": "93b146088158",
+   "tier": 4,
+   "budget": 8,
+   "exp": 14
+  },
+  "Rodina Moscow": {
+   "xi": 66.3,
+   "scale": 0.039600065,
+   "anchors": "e9ace82d3290",
+   "tier": 4,
+   "budget": 8,
+   "exp": 13
+  },
+  "Rostov": {
+   "xi": 69,
+   "scale": 0.037009801,
+   "anchors": "ba4ff861710d",
+   "tier": 4,
+   "budget": 8,
+   "exp": 8
+  },
+  "Rubin Kazan": {
+   "xi": 70.2,
+   "scale": 0.044587507,
+   "anchors": "d1f0ba97ee37",
+   "tier": 4,
+   "budget": 8,
+   "exp": 7
+  },
+  "Spartak Moscow": {
+   "xi": 74.7,
+   "scale": 0.07323904,
+   "anchors": "2725766cced6",
+   "tier": 4,
+   "budget": 12,
+   "exp": 3
+  },
+  "Zenit": {
+   "xi": 76.5,
+   "scale": 0.067580042,
+   "anchors": "babfc2c9c1d3",
+   "tier": 4,
+   "budget": 16,
+   "exp": 1
+  }
+ }
+}

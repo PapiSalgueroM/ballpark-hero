@@ -87,6 +87,8 @@ export function renderFile(ledger, rows) {
     `}`,
     ``,
     `export const CM_REAL_FREE_AGENTS_CHECKED_ON = '${ledger.checkedOn}';`,
+    `/** Round 1600: curve 2. Each rating is the value curve's (the level); a career seeds the pool with the age read of it. */`,
+    `export const CM_REAL_FREE_AGENTS_CURVE = 2;`,
     ``,
     `export const CM_REAL_FREE_AGENTS: RealFreeAgent[] = [`,
     ...lines,

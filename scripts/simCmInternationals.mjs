@@ -31,8 +31,10 @@
  *     (answerMessage, answerBreak, restPlan): the cost of the break over the two matches it
  *     touches (the one they come back for and the one after it, read at each
  *     kick off with form and morale held to the switched off arm, so only
- *     legs and selection differ) is pooled over every break, and the rest
- *     must win back at least REC_FLOOR of it.
+ *     legs and selection differ) is pooled over every break of the twelve
+ *     squads (sets A and B) and the share the rest wins back must sit
+ *     inside REC_BAND, both ways: resting stays worth choosing and never
+ *     becomes the only answer (Round 1600, see the measured headroom below).
  *  4. NOBODY UNKNOWN GOES. Every man called up in any season of any check, in
  *     the current world and two past ones, is a man the nationality map knows
  *     with that very country, and no made up player is ever called.
@@ -69,6 +71,25 @@
  * just as tired buys nothing, which is real. The pooled share is the claim,
  * and it is over half, so the floor says "most".
  *
+ * ROUND 1600, CHECK 3 RE-CUT (the lead's ruling). The national team now calls
+ * up by level, so the breaks take veterans where they took youths, and a
+ * rested veteran's deputy is a younger man the age read shows lower: resting
+ * buys less of the match itself (set A alone fell to 0.42 against the old
+ * floor of 0.50; no LEGS_LATER_WEIGHT cleared it, so the weight stays 0.5).
+ * So check 3 reads the POOLED twelve squads (set A, the six the weight was
+ * fitted on, and set B, six it never saw: Barcelona, PSG, Inter Milan,
+ * Juventus, Atletico Madrid, Borussia Dortmund) and holds resting as a real
+ * choice both ways. Measured on GitHub runners (r1600-f3a, SEEDS=18), the
+ * share seed by seed over the twelve:
+ *   head 4950135f6  mean 0.492, sd 0.061 (se of the mean 0.014), pooled 0.49
+ *   base 14a9af704  mean 0.497, sd 0.051, pooled 0.50
+ * The check reads three seeds, so its own standard error is 0.061 / sqrt 3 =
+ * 0.035, and the band is the head's mean plus and minus three of them, 0.386
+ * to 0.598, rounded outward to 0.38 to 0.60. The low edge is under the base's
+ * share less 0.10 (0.40), as the ruling asks. The six three seed batches of
+ * the 18 read about 0.45 to 0.53. Controls: norest (the rest effect at zero) and
+ * freelegs (a rest refills the rested men's legs) each turn check 3 red.
+ *
  * NEGATIVE CONTROLS, SIM_CMINTL_CONTROL=<name>, each rewrites one line of
  * the module or the engine as the bundler loads it (it refuses to run unless
  * the file holds exactly one copy of the line) and must turn its check red.
@@ -81,6 +102,7 @@
  *            own (Round 1021: 2020-21 started late)          -> check 1
  *   nocost   a break takes no fitness                       -> check 2
  *   norest   the assistant never rests anybody              -> check 3
+ *   freelegs a rest hands the rested men back on full legs   -> check 3 (Round 1600: the band's top)
  *   anyone   a man with no known country is called as well   -> check 4
  *   oldsave  a save with no block is given one on the spot   -> check 5
  *   writexi  the rest is not written into the picked eleven  -> check 6
@@ -90,6 +112,8 @@
  *   near     the long trip cost goes to the short trips       -> check 7
  *
  * Run: node scripts/simCmInternationals.mjs   (SEEDS=<n> to widen the sample)
+ *   INTL_SQUADS=<club>,<club>,... measures other squads instead (then checks 2
+ *   and 3 both read them).
  */
 import { build } from 'esbuild';
 import fs from 'node:fs';
@@ -106,7 +130,8 @@ const SEED_BASE = Math.max(0, Number(process.env.SEED_BASE ?? 0));
 /* Bands, set from the measured headroom written in the header. */
 const GAP_FLOOR = 1.5;
 const KIND_FLOOR = { sepoct: 2.0, nov: 1.4, mar: 0.6 };
-const REC_FLOOR = 0.50;
+/* Round 1600: a two sided band on the pooled twelve, cut from the measured headroom in the header. */
+const REC_BAND = [0.38, 0.60];
 const FAR_FLOOR = 5;
 
 /* Each control rewrites one line of the module, or of the engine where the
@@ -160,6 +185,11 @@ const CONTROLS = {
   norest: {
     fixed: '    if (!moved) break;\n  }\n  return chosen;',
     broken: '    if (!moved) break;\n  }\n  return [];',
+  },
+  /* Round 1600: resting made too good to turn down (the band's top edge). */
+  freelegs: {
+    fixed: '    state.xiIds = state.xiIds.map((id, i) => (i === s.slot ? s.out : id));\n  }\n  delete intl.rest;\n',
+    broken: '    state.xiIds = state.xiIds.map((id, i) => (i === s.slot ? s.out : id));\n  }\n  for (const p of state.squad) if (rest.ids.includes(p.id)) p.fitness = 100;\n  delete intl.rest;\n',
   },
   anyone: {
     fixed: '    if (!nation) continue;',
@@ -355,7 +385,13 @@ console.log('1) The window rule against the verified dates, and a played season 
 }
 
 /* ---------- 2 and 3. The forks ---------- */
-const HEAVY = ['Arsenal', 'Manchester City', 'Real Madrid', 'Liverpool', 'Chelsea', 'Bayern Munich'];
+/* Round 1600: set A is the six the rest rule's weight was fitted on, set B six it never saw. Check 2 reads set A
+   (its floors were measured there), check 3 the pooled twelve (the lead's ruling, see the header). Each club's
+   stream is seeded on its own, so set A's breaks are the same with set B beside them. */
+const SET_A = ['Arsenal', 'Manchester City', 'Real Madrid', 'Liverpool', 'Chelsea', 'Bayern Munich'];
+const SET_B = ['Barcelona', 'PSG', 'Inter Milan', 'Juventus', 'Atlético Madrid', 'Borussia Dortmund'];
+const HEAVY = process.env.INTL_SQUADS ? process.env.INTL_SQUADS.split(',') : [...SET_A, ...SET_B];
+const CHECK2 = process.env.INTL_SQUADS ? HEAVY : SET_A;
 const rows = [];
 let missedAll = 0;
 const restCheck = { rested: 0, playing: 0, picked: 0, repicks: 0, repickPlays: 0, swaps: 0, returned: 0, lingering: 0 };
@@ -438,7 +474,7 @@ for (const club of HEAVY) {
         if (rest2.intl?.rest) restCheck.lingering += 1;
       }
       rows.push({
-        club, seed, kind: s.intl.last.windowId.split('-')[1], called: s.intl.last.called.length,
+        club, seed, kind: s.intl.last.windowId.split('-')[1], called: s.intl.last.called.length, names: s.intl.last.called.map(c => c.name),
         off: cm.matchStrengthNow(off), start: cm.matchStrengthNow(start), rest: cm.matchStrengthNow(rest),
         off2: held(off2), start2: held(toNext(start)), rest2: held(rest2),
       });
@@ -448,18 +484,19 @@ for (const club of HEAVY) {
 }
 
 const mean = (list, k) => (list.length ? list.reduce((x, r) => x + k(r), 0) / list.length : 0);
-console.log(`2) Harder: the match they come back for, against the same save with call ups off (${HEAVY.length} squads x ${SEEDS} seeds)`);
+console.log(`2) Harder: the match they come back for, against the same save with call ups off (${CHECK2.length} squads x ${SEEDS} seeds)`);
 {
-  for (const club of HEAVY) {
-    const list = rows.filter(r => r.club === club);
+  const rows2 = rows.filter(r => CHECK2.includes(r.club));
+  for (const club of CHECK2) {
+    const list = rows2.filter(r => r.club === club);
     console.log(`   ${club.padEnd(16)} ${String(list.length).padStart(2)} breaks, ${f2(mean(list, r => r.called))} called a break, gap ${f2(mean(list, r => r.off - r.start))}`);
   }
-  const gap = mean(rows, r => r.off - r.start);
-  console.log(`   ${rows.length} breaks: the match after is ${f2(gap)} strength weaker on average (floor ${GAP_FLOOR})`);
-  if (rows.length < HEAVY.length * SEEDS * 2) fail(`only ${rows.length} breaks measured, the sample is too thin to say anything`);
+  const gap = mean(rows2, r => r.off - r.start);
+  console.log(`   ${rows2.length} breaks: the match after is ${f2(gap)} strength weaker on average (floor ${GAP_FLOOR})`);
+  if (rows2.length < CHECK2.length * SEEDS * 2) fail(`only ${rows2.length} breaks measured, the sample is too thin to say anything`);
   if (gap < GAP_FLOOR) fail(`the match after a break is only ${f2(gap)} weaker than with call ups off, floor ${GAP_FLOOR}`);
   for (const kind of ['sepoct', 'nov', 'mar']) {
-    const list = rows.filter(r => r.kind === kind);
+    const list = rows2.filter(r => r.kind === kind);
     const g = mean(list, r => r.off - r.start);
     console.log(`   ${kind.padEnd(7)} ${String(list.length).padStart(2)} breaks, gap ${f2(g)} (floor ${KIND_FLOOR[kind]})`);
     if (!list.length) fail(`no ${kind} break was measured`);
@@ -480,8 +517,26 @@ console.log('3) Resting the spent ones wins back the cost over the two matches t
     const w = mean(list, r => (r.rest - r.start) + (r.rest2 - r.start2));
     console.log(`   ${club.padEnd(16)} cost ${f2(c)}, rest wins back ${f2(w)} (${f2(c > 0 ? w / c : 0)}); now ${f2(mean(list, r => r.rest - r.start))}, next ${f2(mean(list, r => r.rest2 - r.start2))}`);
   }
-  console.log(`   pooled: the break costs ${f2(cost)} over two matches and the rest wins back ${f2(won)}, a share of ${f2(share)} (floor ${REC_FLOOR})`);
-  if (share < REC_FLOOR) fail(`resting wins back only ${f2(share)} of the break's cost, floor ${REC_FLOOR}`);
+  /* Round 1600: who each squad loses to its breaks (every seed), and the two halves of the pooled rest, printed. */
+  for (const club of HEAVY) {
+    const n = new Map();
+    for (const r of rows.filter(x => x.club === club)) for (const nm of r.names) n.set(nm, (n.get(nm) ?? 0) + 1);
+    console.log(`   ${club} loses: ${[...n.entries()].sort((x, y) => y[1] - x[1] || x[0].localeCompare(y[0])).map(([k, v]) => `${k} ${v}`).join(', ')}`);
+  }
+  console.log(`   pooled rest: now ${f2(mean(rows, r => r.rest - r.start))}, next ${f2(mean(rows, r => r.rest2 - r.start2))}`);
+  /* Round 1600: the share seed by seed over every squad, its mean and standard error, so the band in the header
+     can be read against the spread it was cut from (SEEDS=<n> to widen it). */
+  const perSeed = [...new Set(rows.map(r => r.seed))].sort((x, y) => x - y).map(seed => {
+    const list = rows.filter(r => r.seed === seed);
+    const c = mean(list, r => (r.off - r.start) + (r.off2 - r.start2));
+    return { seed, share: c > 0 ? mean(list, r => (r.rest - r.start) + (r.rest2 - r.start2)) / c : 0 };
+  });
+  const sm = perSeed.reduce((x, r) => x + r.share, 0) / perSeed.length;
+  const sd = perSeed.length > 1 ? Math.sqrt(perSeed.reduce((x, r) => x + (r.share - sm) ** 2, 0) / (perSeed.length - 1)) : 0;
+  console.log(`   share seed by seed: ${perSeed.map(r => `${r.seed} ${f2(r.share)}`).join(', ')}; mean ${f2(sm)}, sd ${f2(sd)}, se ${(sd / Math.sqrt(perSeed.length)).toFixed(3)} (${perSeed.length} seeds)`);
+  console.log(`   pooled over ${HEAVY.length} squads: the break costs ${f2(cost)} over two matches and the rest wins back ${f2(won)}, a share of ${f2(share)} (band ${REC_BAND.join(' to ')})`);
+  if (share < REC_BAND[0]) fail(`resting wins back only ${f2(share)} of the break's cost, band ${REC_BAND.join(' to ')}: resting has stopped being worth choosing`);
+  else if (share > REC_BAND[1]) fail(`resting wins back ${f2(share)} of the break's cost, band ${REC_BAND.join(' to ')}: resting has become the only answer`);
 }
 
 console.log('6) A rest is what plays: the rested men are out of your picked eleven, nobody fills a gap with them, picking one back plays him, and they return after the match');

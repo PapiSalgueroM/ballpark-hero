@@ -19,6 +19,8 @@ export interface RealFreeAgent {
 }
 
 export const CM_REAL_FREE_AGENTS_CHECKED_ON = '2026-10-06';
+/** Round 1600: curve 2. Each rating is the value curve's (the level); a career seeds the pool with the age read of it. */
+export const CM_REAL_FREE_AGENTS_CURVE = 2;
 
 export const CM_REAL_FREE_AGENTS: RealFreeAgent[] = [
   { name: 'Dani Parejo', position: 'CM', age: 37, value: 0.8, rating: 65 },

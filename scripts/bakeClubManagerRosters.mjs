@@ -26,6 +26,10 @@ import { createClient } from '@supabase/supabase-js';
 import { TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
 import { DB_TO_ENGINE } from './lib/dbClubNames.mjs';
 import { POS_MAP, ratingOf, gbpM } from './lib/cmValueCurve.mjs';
+// Round 1600: the file is written on curve 2 (stamped, each age moved on to 1 August 2026 by the rule in
+// scripts/lib/cmAges.mjs: exact where a birth date is on file, otherwise a year over for a man born after 1 August)
+// by the shared library.
+import { stampedSquads, agedSquads } from './lib/cmSquadAges.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -424,7 +428,11 @@ let out = `// Rounds 70+72: real rosters for every Club Manager club, generated 
 // The overlay does not cover Serie B, Ligue 2 or the Segunda División: their
 // squads are the table's men that each club's ESPN 2026-27 squad page still
 // lists (the roster ledger withholds the rest), with no summer arrivals added.
-// Values in £m, ratings 48-94 from the value curve.
+// Values in £m, ratings 48-94 from the value curve: each rating is the man's LEVEL,
+// and the engine adds points for his age at load (curve 2, Round 1600). Ages are
+// moved on to 1 August 2026 (scripts/data/cmAgesBasis2026.json): exact where a
+// birth date is on file, otherwise the value table's 1 January age plus one,
+// which is a year over for a man born after 1 August (about three in ten).
 // Regenerate with: node scripts/bakeClubManagerRosters.mjs
 // DO NOT EDIT BY HAND.
 import type { Position } from '@/types/game';
@@ -440,6 +448,9 @@ export interface BakedPlayer {
   v: number;
   /** Game rating 48-94 derived from market value. */
   r: number;
+  /** Round 1600: never written by a bake. The engine sets it where a world reads age (levelOf in
+   *  src/lib/clubManagerEras.ts): the level the price gives, when it is not the rating. */
+  lv?: number;
 }
 
 export const CM_ROSTER_META = {
@@ -471,6 +482,11 @@ if (carried.length) {
 }
 out += `};\n`;
 
+/* Round 1600: curve 2. The basis file must line up with these men, man for man and on each value rating, or this
+   throws naming the man: run scripts/genCmAgesBasis2026.mjs for the men who moved, then bake again. */
+const curve2 = agedSquads(stampedSquads(out), JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/cmAgesBasis2026.json'), 'utf8')));
+out = curve2.text;
+console.log(`Curve 2: ${curve2.rows} men with ages moved on to 1 August 2026 (exact only where a birth date is on file), ${curve2.moved} of them moved off the table's age`);
 fs.writeFileSync(path.join(ROOT, 'src/data/clubManagerRosters.ts'), out);
 console.log(`Wrote src/data/clubManagerRosters.ts (${(out.length / 1024).toFixed(0)}KB), ${partial.length} partial clubs`);
 

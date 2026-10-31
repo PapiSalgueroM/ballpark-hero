@@ -9,6 +9,20 @@ import { PRE_AZ_ANCHOR, PRE_AZ_RULE } from './lib/cmOwnClubMarket1339.mjs';
 import { withoutAiMoves } from './lib/cmNoAiMoves1344.mjs';
 import { withoutAdoption } from './lib/cmNoAdoption1508.mjs';
 import { withoutMadeUpNations } from './lib/cmNoMadeUpNations1520.mjs';
+import { worldReadsAge1600, curve1Files1600 } from './lib/cmCurve1World1600.mjs';
+
+/* Round 1600 (2026-10-30), the bridge for this kit pinned to an old engine: that round put today's world on curve 2
+   (the age read at load, the level kept as lv, and the past seasons read the same way), which the pinned engine
+   cannot read, so the current arm loads the world before the flip (scripts/lib/cmCurve1World1600.mjs: the four
+   modern data files rebuilt from this tree's own and the past seasons' switch off, on which the current engine
+   reads no age). Without it the inactive group's first comparison differs in nearly every man's age and rating,
+   and node's assertion message for two whole career states that far apart took more memory than a GitHub runner
+   has (r1600-h5b to r1600-h5h: the run step killed, nothing published). With the data files alone the modern
+   inputs of the inactive group played exactly as main's engine and the era ones did not (r1600-h5k); with the
+   switch too, see the proof named in the round's report. */
+const CURVE1_1600 = worldReadsAge1600(ROOT) ? (f => ({ 'src/lib/clubManagerEras.ts': f.clubManagerEras, 'src/data/clubManagerRosters.ts': f.clubManagerRosters,
+  'src/data/clubManagerALeague2026.ts': f.clubManagerALeague2026, 'src/data/clubManagerRussia2026.ts': f.clubManagerRussia2026,
+  'src/data/clubManagerFreeAgents2026.ts': f.clubManagerFreeAgents2026 }))(curve1Files1600(ROOT)) : {};
 
 const OUT = path.resolve(process.env.MANAGER_WORLD_CONTINUITY_ARTIFACTS || '.tmp-fx/manager-world-continuity');
 const CONTROL = process.env.MANAGER_WORLD_CONTINUITY_CONTROL || '';
@@ -149,7 +163,7 @@ async function arm(control) {
        Round 1520: and made up men's countries, the board's count of them and the marks that travel with them
        (scripts/lib/cmNoMadeUpNations1520.mjs, fail closed), which the pinned engine never had; simCmMadeUpNations
        section 7 proves that cut plays as its base. */
-    const bridged = withoutMadeUpNations(withoutAdoption(withoutAiMoves(source, file), file), file);
+    const bridged = withoutMadeUpNations(withoutAdoption(withoutAiMoves(CURVE1_1600[file] ?? source, file), file), file);
     return defect && file === defect.file ? uniquePatch(bridged, defect.from, defect.to, file, receipts) : bridged;
   } });
   const originalEngine = A; const currentEngine = B;

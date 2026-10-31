@@ -24,7 +24,7 @@
  * It prints the three counts the test restates (how each age is known, how far the
  * August age sits from the shipped age, how many ratings the age read would move), so
  * the test's numbers can follow a real change. It never touches the squads file.
- * Once CM_ROSTER_META says curve 2 the bake owns the basis file and this script refuses.
+ * Round 1600 stamped the squads file curve 2: this script still keeps the basis file (see the check below).
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -57,7 +57,10 @@ const write = doc => `{\n  "about": ${JSON.stringify(doc.about)},\n  "asOf": ${J
 
 const squadsText = read(SQUADS);
 const meta = squadsText.slice(squadsText.indexOf('export const CM_ROSTER_META'), squadsText.indexOf('export const CM_ROSTERS'));
-if (/\bcurve:\s*2\b/.test(meta)) stop('the squads file is on curve 2, so the bake owns the basis file now and this script must not write it');
+/* Round 1600: the squads file is on curve 2 and KEEPS each man's value rating in r (the engine adds the age at
+   load), so this script still keeps the basis file, and the bake reads it (scripts/lib/cmSquadAges.mjs) to write
+   every man's August age. A round that moves a 2026 man runs this first, then the bake. */
+if (!/\bcurve:\s*2\b/.test(meta)) stop('the squads file is not on curve 2 (Round 1600 stamped it): this script reads it as the bake writes it now');
 const now = squadsOf(squadsText);
 const committed = read(BASIS);
 const oldSquads = squadsOf(atRev(SQUADS));

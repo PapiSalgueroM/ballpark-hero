@@ -137,7 +137,8 @@ const out = renderGatheredFile({
     nationalities: `/** Nationality where two hosts agree (_people.json); a name missing here is
  *  unknown and shows no flag. */`,
   },
-  meta: { read: values.read, players: total, clubs: clubNames.length },
+  /* Round 1600: curve 2, the engine reads each man's age at load (src/data/clubManagerWorldRosters.ts). */
+  meta: { curve: 2, read: values.read, players: total, clubs: clubNames.length },
   rosters, partial, noValue, supersedes: SUPERSEDES, nationalities,
 });
 fs.writeFileSync(OUT, out);

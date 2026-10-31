@@ -44,6 +44,8 @@ const NAMED_BLOCKS = [
   '  /* Round 1502: a club not in the Champions League watches it, opened after the seed it is keyed on. */\n  openWorldUclOnStart(state, world);\n',
   /* Round 1510 (the lead's ruling 2d): the domestic super cup's season one edition, keyed on the seed the same way. */
   "  /* Round 1510: the country's super cup, season one's edition, followed, opened after the seed it is keyed on. */\n  openOneOffsOnStart(state, world);\n",
+  /* Round 1600 fix: the stamped ledger of a new seeded career on today's world; with the seed block cut it writes none. */
+  "  /* Round 1600 fix: a new seeded career on today's world as it reads now (never the dailies' curve 1 view) starts a stamped ledger, so its identity stays exact (nearAges). */\n  if (!world && state.worldSeed !== undefined && (state.eraId ?? 'now') === 'now' && cmWorldReadsAge()) state.worldRoster = { version: 1, eraId: 'now', records: [], curve: CM_AGE_CURVE };\n",
 ];
 const afterSeedBlock = (text, end) => {
   let at = end;

@@ -45,6 +45,9 @@
  *     465's rule that only a final whistle sacks anybody and the exact
  *     defect the review of Rounds 465 to 469 found on the finance desk.
  *     Section 7's source count must go red.
+ *   BOARD_ASKS_CONTROL=nopromise (Round 1600) a word given to the board
+ *     settles nothing at the season's end (openingConfidence is handed a
+ *     promiseNet of 0). Section 7's word kept and word broken must go red.
  * Each control refuses to run if its rewrite found nothing to rewrite.
  *
  * Numbers, measured on this tree 2026-09-06 (the harness prints all of them):
@@ -91,7 +94,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.BOARD_ASKS_CONTROL || '';
-if (CONTROL && !['typed', 'quote', 'nomigrate', 'flavour', 'unfloored'].includes(CONTROL)) {
+if (CONTROL && !['typed', 'quote', 'nomigrate', 'flavour', 'unfloored', 'nopromise'].includes(CONTROL)) {
   console.error(`BOARD_ASKS_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -173,6 +176,13 @@ if (CONTROL === 'flavour') {
   ], 'clubManager.flavour.ts', "the board's own answers");
   console.log('NEGATIVE CONTROL ON: the board money never lands and the word given is never marked; section 7 must go red');
 }
+if (CONTROL === 'nopromise') {
+  enginePath = rewrite(ENGINE_SRC, [[
+    'hit: o.hit })), promiseNet });',
+    'hit: o.hit })), promiseNet: 0 });',
+  ]], 'clubManager.nopromise.ts', "the next season's opening");
+  console.log("NEGATIVE CONTROL ON: a word given to the board settles nothing at the season's end; section 7's promise settlement must go red");
+}
 if (CONTROL === 'unfloored') {
   enginePath = rewrite(ENGINE_SRC, [[
     '      boardConfidence = clamp(boardConfidence - 3, 1, 100);',
@@ -194,6 +204,7 @@ globalThis.localStorage = {
 export const cm = await import('${enginePath}');
 export const asks = await import('${asksPath}');
 export const nations = await import('${ROOT_URL}/src/data/playerNationalities.ts');
+export const verdict = await import('${ROOT_URL}/src/lib/clubManagerBoardVerdict.ts');
 export const fin = await import('${ROOT_URL}/src/lib/clubManagerFinances.ts');
 `);
 execSync(
@@ -202,7 +213,7 @@ execSync(
   + ` --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`,
   { stdio: 'inherit' },
 );
-const { cm, asks, nations, fin } = await import(pathToFileURL(BUNDLE).href);
+const { cm, asks, nations, fin, verdict } = await import(pathToFileURL(BUNDLE).href);
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await cm.ensureAllEraRosters();
 const {
@@ -710,7 +721,11 @@ console.log('7) Every answer in the inbox moves a number that has a screen');
      none of them does. The two assertions are untouched and the clubs are
      fixed, so nothing here is a rerun until green. */
   const PROMISE_ROOM = 3;
-  const fixtures = ['Everton', 'Napoli', 'Brentford', 'Sevilla', 'Wolfsburg'];
+  /* Round 1600: ten more clubs after the first five, in a fixed order. On the age read all five land on a clamp
+     (runner r1600-s12: Everton 69 grade A, Napoli 35 grade F, Brentford nothing both hit and missed, Sevilla 69
+     grade B, Wolfsburg 69 grade A), so the list is longer, never the bounds wider. */
+  const fixtures = ['Everton', 'Napoli', 'Brentford', 'Sevilla', 'Wolfsburg',
+    'Fulham', 'Bologna', 'Real Betis', 'Eintracht Frankfurt', 'Lyon', 'Crystal Palace', 'Fiorentina', 'Villarreal', 'Mainz', 'Lille'];
   let settled = null;
   const tried = [];
   for (const club of fixtures) {
@@ -725,8 +740,16 @@ console.log('7) Every answer in the inbox moves a number that has a screen');
     const missed = graded.find(x => x.status === 'failed');
     if (!hit || !missed) { tried.push(`${club}: nothing both hit and missed`); continue; }
     const neutral = startNextSeason(done).boardConfidence;
-    if (!(neutral > 35 + PROMISE_ROOM && neutral < 82 - PROMISE_ROOM)) {
-      tried.push(`${club}: opens on ${neutral}, against the clamp`);
+    /* Round 1600: Round 1335's grade band is a clamp as well (an A or a B opens at least at BOARD_FRESH, a D or
+       an F under BOARD_SAFE_LINE, openingConfidence), so a season it binds on is skipped exactly like one on 35
+       or 82. Measured on the age read (runner r1600-s11h): Everton's season opens on 69, BOARD_FRESH, with a word
+       kept, none given and one broken alike, and the old test read that as a promise doing nothing. The clubs
+       and the two assertions are unchanged; BOARD_ASKS_CONTROL=nopromise proves the settlement is still seen. */
+    const grade = done.pendingSummary?.verdictGrade ?? 'C';
+    const lo = grade === 'A' || grade === 'B' ? Math.max(35, verdict.BOARD_FRESH) : 35;
+    const hi = grade === 'D' || grade === 'F' ? Math.min(82, verdict.BOARD_SAFE_LINE - 1) : 82;
+    if (!(neutral > lo + PROMISE_ROOM && neutral < hi - PROMISE_ROOM)) {
+      tried.push(`${club}: opens on ${neutral}, against the ${lo === 35 && hi === 82 ? 'clamp' : `grade ${grade} band`}`);
       continue;
     }
     settled = { club, done, hit, missed, neutral, short: played.sacked || played.week < played.calendar.length };

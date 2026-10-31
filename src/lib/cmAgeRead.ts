@@ -1,8 +1,10 @@
 /**
  * Round 1214 (part one of four): the typed door to Club Manager's age read.
  *
- * NOTHING IMPORTS THIS FILE YET. It lands first, with the libraries it wraps and their proof, so
- * that the round which makes the engine read the age (part two) adds an import and no rule.
+ * It landed first, with the libraries it wraps and their proof, so that the round which makes the
+ * engine read the age added an import and no rule. Round 1600 is that round: the modern world reads
+ * it at load (src/data/clubManagerWorldRosters.ts) and the engine's level reads stand on it
+ * (src/lib/clubManagerEras.ts).
  *
  * WHY A WRAPPER AND NOT A COPY. The age rule is written once, in scripts/lib/cmValueCurve.mjs,
  * because the roster bake has to run the very same lines the engine runs: a rating the bake wrote

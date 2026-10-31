@@ -107,6 +107,8 @@
  * Run: node scripts/simEra2020.mjs
  */
 import fs from 'node:fs';
+// Round 1600: a past season's squad is held to the read THROUGH both steps (scripts/lib/cmEraRead.mjs).
+import { eraShown, eraLevel } from './lib/cmEraRead.mjs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -316,7 +318,7 @@ console.log('1) A fresh 2020 save is the real 2020 squad, untouched');
     for (const p of save.squad.filter(p => !p.isYouth && !p.generated)) {
       const b = rows.get(p.name);
       if (!b) { off += 1; fail(`${p.name} is in the 2020 ${club} squad but not in the bake`); continue; }
-      if (b.a !== p.age || eraUpliftRating('era2020', b.r) !== p.rating) {
+      if (b.a !== p.age || eraShown(ER, 'era2020', b) !== p.rating) {
         off += 1;
         fail(`${club}'s ${p.name}: bake says age ${b.a} rating ${b.r}, squad says ${p.age}/${p.rating}`);
       }

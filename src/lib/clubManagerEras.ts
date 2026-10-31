@@ -47,7 +47,8 @@ import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 import { advanceClubManagerTrajectory } from '@/lib/clubManagerTrajectory';
 // Round 1035: the modern squads, baked plus the A-League Men, joined once.
-import { CM_WORLD_ROSTERS as CM_ROSTERS } from '@/data/clubManagerWorldRosters';
+import { CM_WORLD_ROSTERS as CM_ROSTERS, cmWorld, cmWorldTag, cmWorldReadsAge } from '@/data/clubManagerWorldRosters';
+import { readInWorld, levelFrom, RATING_CEIL, ERA_RATING_AGE_SHIFT } from '@/lib/cmAgeRead';
 import { loadNationalityWorld, registerNationalityWorld } from '@/data/playerNationalities';
 // Round 1606: the real opening day managers, so no made up player or manager can wear one's name.
 import { CM_DUGOUTS } from '@/data/clubManagerDugouts';
@@ -217,9 +218,10 @@ export function dropOutChance(age: number, rating: number, position: Position): 
   return clamp(base * quality * keeper, 0, 0.9);
 }
 
-/** Retirement and dropping out, combined: the chance he is gone from the game. */
-export function worldExitChance(age: number, rating: number, position: Position): number {
-  return 1 - (1 - retireChance(age, rating, position)) * (1 - dropOutChance(age, rating, position));
+/** Retirement and dropping out, combined: the chance he is gone from the game.
+ *  Round 1600: `dropAge` is the age the drop out table reads, his age unless his world says otherwise (ageOne). */
+export function worldExitChance(age: number, rating: number, position: Position, dropAge = age): number {
+  return 1 - (1 - retireChance(age, rating, position)) * (1 - dropOutChance(dropAge, rating, position));
 }
 
 /**
@@ -447,17 +449,46 @@ export interface ProjectedPlayer {
   potential?: number;
   /** Original source identity, carried unchanged when a player moves. */
   worldRosterKey?: string;
+  /** Round 1600: the LEVEL his price gave him on his world's scale in its year 0, carried only where that world
+   *  reads age and the level is not his rating (see levelOf). Absent on every row of a world on curve 1. ageOne
+   *  carries it unchanged while his rating drifts, so in a projected year it is still the year 0 level, and
+   *  futureRead (the world exit) reads the higher of that and his rating (a known simplification, recorded by the
+   *  Round 1600 reviews: a declined veteran or a stalled boy exits on his year 0 level). */
+  lv?: number;
 }
 
-/** How a projected club's values relate to the raw curve, from its real data. */
-function valueScaleFor(club: string, baked: BakedPlayer[]): number {
+/**
+ * Round 1600: a man's LEVEL, the number his price gives him on his world's scale, as against the rating a screen
+ * shows (the level plus points for his age, Round 1214's read, src/lib/cmAgeRead.ts). A row carries `lv` only
+ * where its world reads age and the two differ, so on every world still on curve 1 this IS the rating and every
+ * read below is the read it always was.
+ *
+ * What a CLUB is reads the level: tier, budget, expected finish and title demand (bakedXIAvg, eraXIAvgFrom), the
+ * level a slot regenerates around (projectClub's anchor), the club's value scale (valueScaleFor). What a man DOES
+ * on the pitch reads the rating. Where a man's future is read (his ceiling, whether he is still in the game next
+ * summer) the higher of the two is read: a boy is not marked down on promise for being young, and a veteran is
+ * not marked down on survival for being priced like one.
+ */
+export function levelOf(row: { r: number; lv?: number }): number {
+  return row.lv ?? row.r;
+}
+
+/** Round 1600: the higher of a row's rating and its level, for the reads of a man's future. */
+export function futureRead(row: { r: number; lv?: number }): number {
+  return Math.max(row.r, row.lv ?? row.r);
+}
+
+/** How a projected club's values relate to the raw curve, from its real data. Round 1600: exported for
+ *  scripts/simCmLevelReads.mjs, which holds every club's scale to its recording (the scale reads the level). */
+export function valueScaleFor(club: string, baked: BakedPlayer[]): number {
   // Round 105's lesson, applied to a different number: anchor on the squad you
   // were handed. A generated player's value has to sit on the same scale as
   // the real values in the same league, so it is derived from this club's own
   // ratio of real market value to raw curve value rather than from the curve.
   if (!baked.length) return 1;
+  /* Round 1600: on the level, so a club's scale is read off what its men's prices say, never off age points. */
   const ratios = baked
-    .map(b => b.v / Math.max(0.5, rawCurveValue(b.r, b.a)))
+    .map(b => b.v / Math.max(0.5, rawCurveValue(levelOf(b), b.a)))
     .sort((x, y) => x - y);
   return ratios[Math.floor(ratios.length / 2)] || 1;
 }
@@ -479,10 +510,12 @@ export function rawCurveValue(rating: number, age: number): number {
 }
 
 /** One year on for one projected player. Null means he is gone from the game. */
-function ageOne(club: string, pl: ProjectedPlayer, year: number, scale: number, worldSeed?: number): ProjectedPlayer | null {
+function ageOne(club: string, pl: ProjectedPlayer, year: number, scale: number, worldSeed?: number, dropShift = 0): ProjectedPlayer | null {
   const age = pl.a + 1;
   const key = `${club}|${pl.n}|${year}`;
-  if (rnd(`${key}|ret`) < worldExitChance(age, pl.r, pl.p)) return null;
+  /* Round 1600 (critic correction 5 of the ratings design): the exit reads the higher of his rating and his level,
+     so a boy shown under his level by the age read does not leave the game more often for it. */
+  if (rnd(`${key}|ret`) < worldExitChance(age, futureRead(pl), pl.p, age - dropShift)) return null;
   if (worldSeed !== undefined && pl.worldRosterKey) {
     const next = advanceClubManagerTrajectory(pl, { seed: worldSeed, identity: pl.worldRosterKey, year,
       ageBand: ageDriftBand(age), declineScale: declineScale(pl.p) });
@@ -633,6 +666,14 @@ export function historicEraIds(): string[] {
  * below the pivot stay exactly as baked. Monotone, so no two players ever
  * swap order, and applied at load, so the AUTO-GENERATED data file stays
  * byte for byte the real bake.
+ *
+ * Round 1600: what this stretch gives is a man's LEVEL. Since then the rating
+ * a past season SHOWS is that level plus Round 1214's points for his age, on
+ * the season's own top (eraTop below; eraRosters applies both, in that order),
+ * so the order and "exactly as baked" above are true of the level, and a man
+ * of 30 or more shows a few points over it, a boy under 24 a few under. The
+ * comments on each gain below speak of levels: 2005-06 Messi is level 73 and
+ * shows 67 at 18, the rule applied to every 18 year old.
  */
 const ERA_RATING_UPLIFT: Record<string, { pivot: number; gain: number }> = {
   era2010: { pivot: 80, gain: 0.7 },
@@ -682,6 +723,29 @@ export function eraBakeRating(eraId: string | undefined, r: number): number {
   return u.pivot + (r - u.pivot) / (1 + u.gain);
 }
 
+/* Round 1600: the best LEVEL of each world, the `top` its age read is held to (Round 1214's read: both the youth
+   half distance and the upper clamp read it, so nobody is lifted past the best of his day). Each is
+   eraUpliftRating of the highest rating in that season's file (raw 86, 90, 91, 93 give 96, 97, 98, 94);
+   scripts/simCmLevelReads.mjs holds every one to that derivation. Today's world is 94, the curve's ceiling. */
+const ERA_RATING_TOP: Record<string, number> = { era2005: 96, era2010: 97, era2015: 98, era2020: 94 };
+export function eraTop(eraId: string | undefined): number {
+  return (eraId ? ERA_RATING_TOP[eraId] : undefined) ?? RATING_CEIL;
+}
+
+/* Round 1600: whether the past seasons show their men through the age read (Proposal 4): read at load in
+   eraRosters, the stretch first and then the points, on each season's own top. */
+const PAST_SEASONS_READ_AGE = true;
+
+/** Round 1600: the level a SHOWN rating stands on, for a man the game made up at that rating (a created club's
+ *  founder), so he is priced as the market prices a real man shown at that rating and age: the age read run
+ *  backwards (levelFrom, total, so every whole rating answers), at the age the world's own rows are read at. In a
+ *  world that does not read age (the curve 1 view, a file with no stamp) it is the rating. */
+export function levelForShown(eraId: string | undefined, rating: number, age: number): number {
+  if (isHistoricEra(eraId) ? !PAST_SEASONS_READ_AGE : !cmWorldReadsAge()) return rating;
+  const shift = isHistoricEra(eraId) ? ERA_RATING_AGE_SHIFT : 0;
+  return levelFrom(Math.round(rating), Math.round(age) + shift, eraTop(eraId));
+}
+
 /**
  * Round 640: the money the bakes put on a bake rating, in pounds millions,
  * unrounded. Every roster bake turns a real market value into a rating with
@@ -710,7 +774,8 @@ export function eraRostersRaw(eraId: string | undefined): Record<string, BakedPl
     if (!world) throw new Error(`Club Manager: the ${eraId} squads are not loaded yet (await ensureEraRosters first)`);
     return world;
   }
-  return CM_ROSTERS;
+  /* Round 1600: the live world, or the curve 1 view while a daily dated before the age read deals. */
+  return cmWorld();
 }
 
 const UPLIFTED_CACHE = new Map<string, Record<string, BakedPlayer[]>>();
@@ -723,8 +788,17 @@ export function eraRosters(eraId: string | undefined): Record<string, BakedPlaye
   const hit = UPLIFTED_CACHE.get(eraId);
   if (hit) return hit;
   const out: Record<string, BakedPlayer[]> = {};
+  /* Round 1600 (Proposal 4): with PAST_SEASONS_READ_AGE each man is read the way today's world is, in one order:
+     the season's stretch first (the level), then the points for his age on that season's own top, at the file's
+     age plus ERA_RATING_AGE_SHIFT (its files hold the 1 January age). The level rides as lv where they differ. */
+  const world = { stretch: (r: number) => eraUpliftRating(eraId, r), top: eraTop(eraId), ageShift: ERA_RATING_AGE_SHIFT };
   for (const [club, list] of Object.entries(raw)) {
-    out[club] = list.map(b => ({ ...b, r: eraUpliftRating(eraId, b.r) }));
+    out[club] = list.map(b => {
+      const level = eraUpliftRating(eraId, b.r);
+      if (!PAST_SEASONS_READ_AGE) return { ...b, r: level };
+      const shown = readInWorld(b.r, b.a, world).rating;
+      return shown === level ? { ...b, r: level } : { ...b, r: shown, lv: level };
+    });
   }
   UPLIFTED_CACHE.set(eraId, out);
   return out;
@@ -767,7 +841,8 @@ function worldKeyOf(eraId: string, yearsOn: number, worldSeed?: number): { y: nu
   const seed = Number.isSafeInteger(worldSeed) && worldSeed! >= 0 && worldSeed! <= 4294967295
     && Number.isSafeInteger(y) && y > 0 ? worldSeed : undefined;
   const key = `${trajectoryEra}|${y}${seed === undefined ? '' : `|seed:${seed}`}`;
-  return { y, trajectoryEra, seed, key };
+  /* Round 1600: today's world puts its tag first, so the curve 1 view keeps its own projections (cmWorldTag). */
+  return { y, trajectoryEra, seed, key: trajectoryEra === 'now' ? `${cmWorldTag()}${key}` : key };
 }
 
 /* One club's projection. Every draw in it is keyed on the club (ageOne, generateFor) and nothing is shared
@@ -775,8 +850,17 @@ function worldKeyOf(eraId: string, yearsOn: number, worldSeed?: number): { y: nu
    alone and get the same list. */
 function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number | undefined, trajectoryEra: string): ProjectedPlayer[] {
   const scale = valueScaleFor(club, baked);
+  /* Round 1600: dropOutChance's table was FITTED to the age column the bake shipped, each man's age on 1 January (its
+     comment: "the ratio of one age band to the next IS the survival rate"). Today's world on curve 2 holds his age on
+     1 August, a year more for 4,225 of 4,401 men, and the column refitted on it is the old table one year later
+     (docs/audits/ROUND-1600-NOTES.md prints both), so it hands the table its age less one. The past seasons, whose
+     files still hold the 1 January age, and the curve 1 view hand it the age as it is. retireChance and ageDriftBand
+     are anchored on real ages and read the age as it is everywhere. */
+  const dropShift = trajectoryEra === 'now' && cmWorldReadsAge() ? 1 : 0;
+  /* Round 1600: the slot's anchor is the man's level, and a row that carries one keeps it. */
   let roster: ProjectedPlayer[] = baked.map(b => ({
-    n: b.n, p: b.p, a: b.a, v: b.v, r: b.r, anchor: b.r, since: 0,
+    n: b.n, p: b.p, a: b.a, v: b.v, r: b.r, anchor: levelOf(b), since: 0,
+    ...(b.lv === undefined ? {} : { lv: b.lv }),
     ...(seed === undefined ? {} : { worldRosterKey: JSON.stringify([
       trajectoryEra, club, b.n, b.p, eraById(trajectoryEra).startYear - b.a, 0,
     ]) }),
@@ -786,7 +870,7 @@ function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number
     const kept: ProjectedPlayer[] = [];
     const emptied: ProjectedPlayer[] = [];
     for (const pl of roster) {
-      const next = ageOne(club, pl, year, scale, seed);
+      const next = ageOne(club, pl, year, scale, seed, dropShift);
       if (next) kept.push(next); else emptied.push(pl);
     }
     // Every slot that emptied gets filled the same summer. A real club does

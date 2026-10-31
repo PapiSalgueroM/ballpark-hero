@@ -92,6 +92,21 @@
  *                                       overprice 1.01 / 1.25 / 1.78, rawcurve 10.11 / 17.62 / 28.04
  *              man by man              fixed 0.87-0.90 / 0.96 / 1.02-1.03        bands 0.8 / 0.88-1.08 / 1.15
  *                                       overprice 1.14 / 1.18 / 1.28, capall p10 0.34, rawcurve 7.77 / 12.98 / 24.17
+ *              Round 1600, the lead's ruling: man by man now reads the YEAR grain (the founder against real men of
+ *              his era, rating and exact age), the three bands unchanged. The age read (src/lib/cmAgeRead.ts)
+ *              prices men of one shown rating apart by age on purpose, so an age band up to four years wide holds
+ *              real men up to six levels apart, and a band wide comparison measures the bucket, not the founder
+ *              price (at the head, runner r1600-s12: band grain p90 1.33, by band up to 1.67 at 21 or under;
+ *              year grain 0.87 / 0.96 / 1.03 on 6,554 men). The band grain is still printed.
+ *              Year grain, head 4950135f6, runners r1600-f3b and r1600-f3c, default seed and SIM_SEED 1, 2, 3:
+ *                                       fixed 0.87-0.92 / 0.96 / 1.03 (5,886 to 6,896 men)
+ *                                       overprice 1.13 / 1.18 / 1.30, rawcurve 8.93 / 15.66 / 25.25
+ *              The top at the year grain: a founder over 80 almost never has 8 real men of his exact age and
+ *              rating, so the cell of 8 cannot reach the men capall reprices (108 of its 2,664 moved men sat in
+ *              it, too few to move a percentile: capall read 0.87 / 0.96 / 1.03 there). Founders over 80
+ *              against the real men of their era and exact age within a point (3 or more), every era:
+ *                p50 fixed 1.00-1.05 (1,851 to 2,056 men), capall 0.40 (1,458 of 2,056 moved), overprice 1.25
+ *                band 0.7 to 1.4 (TOP_P50, the past eras' top band)
  *              (5,192 to 6,032 founders a run with 8 or more real players of their era, rating and age band;
  *              about 260 of 567 created squads a run have a real squad within two points in their league)
  *              past eras over 80, p50  fixed 1.00 to 1.02    noerabake 1.62    band 0.7 to 1.4
@@ -182,7 +197,7 @@ const ok = (m) => { checks += 1; console.log(`   ok   ${m}`); };
 /* ---------- the engine, pristine and rewritten ---------- */
 const PRISTINE = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8').replaceAll('\r\n', '\n');
 
-const VALUE_LINE = '      value: customFounderValue(rating, eraId),\n';
+const VALUE_LINE = '      value: customFounderValue(rating, eraId, age),\n';
 const OLD_VALUE_LINE = '      value: preRound640FounderValue(rating, age),\n';
 const LOAD_LINE = '      const repriced = ensureCustomClubValues(parsed);\n';
 const NO_LOAD = '      const repriced = false;\n';
@@ -194,7 +209,8 @@ const CAP_FLOOR_LINE = '  if (custom) state.wageCap = Math.max(state.wageCap, re
 const ROOM_AT_FOUNDING = '  if (custom) state.founderWageRoom = foundersWageRoom(state) || undefined;\n';
 const ROOM_AT_SUMMER = '  state.founderWageRoom = roomNow || undefined;\n';
 const CAP_LOAD_LINE = '      if (repriced) ensureCustomClubWageCap(parsed);\n';
-const PRICE_LINE = '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, rating)) * 10) / 10);\n';
+/* Round 1600: the founder is priced off the level his shown rating stands on at his age (customFounderValue). */
+const PRICE_LINE = '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, level)) * 10) / 10);\n';
 const LINE_K = 'export const REAL_CAP_PER_BUDGET_K = 37.13;\n';
 const ROLLOVER_CAP = '    : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - (career.founderWageRoom ?? 0)), club.expectation, prevPos, seasonTrophyCount) + roomNow;\n';
 const OLD_ROLLOVER_CAP = '    : nextWageCap(career.wageCap ?? wageCapFrom(wageBill(career)), club.expectation, prevPos, seasonTrophyCount);\n';
@@ -224,7 +240,7 @@ if (CONTROL === 'realtoo') {
 if (CONTROL === 'nosalecap') live = rewrite(live, SALE_CAP_LINE, '    const worth = p.value;\n', 'control nosalecap');
 /* The cap lowers the founder's own value too, not just his sale price. */
 if (CONTROL === 'capall') {
-  live = rewrite(live, VALUE_LINE, '      value: Math.min(customFounderValue(rating, eraId), customFounderValue(ceilingRating, eraId)),\n', 'control capall');
+  live = rewrite(live, VALUE_LINE, '      value: Math.min(customFounderValue(rating, eraId, age), customFounderValue(ceilingRating, eraId, age)),\n', 'control capall');
 }
 /* The bill based cap only, at the founding and on load. */
 if (CONTROL === 'tightcap') {
@@ -238,11 +254,11 @@ if (CONTROL === 'stingycap') {
 }
 /* Founders priced 25 percent over the market. */
 if (CONTROL === 'overprice') {
-  live = rewrite(live, PRICE_LINE, '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, rating)) * 1.25 * 10) / 10);\n', 'control overprice');
+  live = rewrite(live, PRICE_LINE, '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, level)) * 1.25 * 10) / 10);\n', 'control overprice');
 }
 /* A historic founder priced by his engine rating, the era's uplift not taken back. */
 if (CONTROL === 'noerabake') {
-  live = rewrite(live, PRICE_LINE, '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(rating) * 10) / 10);\n', 'control noerabake');
+  live = rewrite(live, PRICE_LINE, '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(level) * 10) / 10);\n', 'control noerabake');
 }
 /* The summer moves the whole cap on, founders' room and all, as before the review. */
 if (CONTROL === 'stickycap') live = rewrite(live, ROLLOVER_CAP, OLD_ROLLOVER_CAP, 'control stickycap');
@@ -445,6 +461,9 @@ const realCaps = [];
         const k = `${era}|${p.rating}|${ageBand(p.age)}`;
         if (!realByRating.has(k)) realByRating.set(k, []);
         realByRating.get(k).push(p.value);
+        const ka = `${era}|${p.rating}|a${p.age}`;
+        if (!realByRating.has(ka)) realByRating.set(ka, []);
+        realByRating.get(ka).push(p.value);
         const e = `${era}|${p.rating}`;
         if (!realByEraRating.has(e)) realByEraRating.set(e, []);
         realByEraRating.get(e).push(p.value);
@@ -453,6 +472,9 @@ const realCaps = [];
     }));
   }
   const manByMan = [];
+  const manByBand = {};
+  const manByAge = [];
+  const topByAge = [];
   const topEnd = [];
   const ratios = [];
   const byCfg = {};
@@ -469,9 +491,24 @@ const realCaps = [];
           squads += 1;
           founderCount += f.length;
           for (const p of f) {
-            if (p.value !== cm.customFounderValue(p.rating, era)) wrongValue += 1;
+            if (p.value !== cm.customFounderValue(p.rating, era, p.age)) wrongValue += 1;
             const same = realByRating.get(`${era}|${p.rating}|${ageBand(p.age)}`) ?? [];
-            if (same.length >= 8) manByMan.push(p.value / median(same));
+            if (same.length >= 8) {
+              manByMan.push(p.value / median(same));
+              (manByBand[`${era === 'now' ? 'now' : 'past'} band ${ageBand(p.age)}`] ??= []).push(p.value / median(same));
+            }
+            /* Round 1600, printed only: the same man against real players of his exact age, the grain the age
+               read prices at (a band spans up to four years of it). */
+            const sameAge = realByRating.get(`${era}|${p.rating}|a${p.age}`) ?? [];
+            if (sameAge.length >= 8) manByAge.push(p.value / median(sameAge));
+            /* Round 1600 (the lead's ruling on stop 1): the top of the market at the year grain. A founder over
+               80 almost never has 8 real men of his exact age and rating, so the cell above cannot reach him;
+               he is held against the real men of his era and exact age the engine rates within a point of him
+               (3 or more), the way the past eras' top is held below. */
+            if (p.rating > 80) {
+              const nearAge = [-1, 0, 1].flatMap(d => realByRating.get(`${era}|${p.rating + d}|a${p.age}`) ?? []);
+              if (nearAge.length >= 3) topByAge.push(p.value / median(nearAge));
+            }
             /* Historic founders above the uplift pivot, against the era's real
                players the engine rates within a point of him. */
             if (era !== 'now' && p.rating > 80) {
@@ -498,11 +535,22 @@ const realCaps = [];
   else if (!(pct(ratios, 0.1) >= BAND_P10 && inBand(median(ratios), BAND_P50) && pct(ratios, 0.9) <= BAND_P90)) {
     fail(`a created squad's value a head runs p10 ${f2(pct(ratios, 0.1))}, p50 ${f2(median(ratios))}, p90 ${f2(pct(ratios, 0.9))} of the real squads of its level, outside p10 ${BAND_P10}, p50 ${BAND_P50.join(' to ')}, p90 ${BAND_P90}`);
   } else ok(`a created squad's value a head runs p10 ${f2(pct(ratios, 0.1))}, p50 ${f2(median(ratios))}, p90 ${f2(pct(ratios, 0.9))} of the real squads of its level in its league (bands p10 ${BAND_P10}, p50 ${BAND_P50.join(' to ')}, p90 ${BAND_P90})`);
-  console.log(`   man by man, ${manByMan.length} founders against the median real player of the same era, rating and age band (8 or more of them): p10 ${f2(pct(manByMan, 0.1))}, p50 ${f2(median(manByMan))}, p90 ${f2(pct(manByMan, 0.9))}`);
-  if (manByMan.length < 3000) fail(`only ${manByMan.length} founders had 8 real players of their era, rating and age band to compare with`);
-  else if (!(pct(manByMan, 0.1) >= MAN_P10 && inBand(median(manByMan), MAN_P50) && pct(manByMan, 0.9) <= MAN_P90)) {
-    fail(`a founder is worth p10 ${f2(pct(manByMan, 0.1))}, p50 ${f2(median(manByMan))}, p90 ${f2(pct(manByMan, 0.9))} of the real players of his era, rating and age band, outside p10 ${MAN_P10}, p50 ${MAN_P50.join(' to ')}, p90 ${MAN_P90}`);
-  } else ok(`a founder is worth p10 ${f2(pct(manByMan, 0.1))}, p50 ${f2(median(manByMan))}, p90 ${f2(pct(manByMan, 0.9))} of the real players of his era, rating and age band (bands p10 ${MAN_P10}, p50 ${MAN_P50.join(' to ')}, p90 ${MAN_P90})`);
+  /* Round 1600 (the lead's ruling on stop 1): the man by man check reads the YEAR grain, the founder against real
+     players of his era, rating and exact age, with the bands unchanged. The age read prices a man by the year, so
+     an age band up to four years wide holds real men of one shown rating whose prices sit up to six levels apart
+     by design, and a comparison across the band measures the bucket, not the founder's price. The band grain
+     stays printed below for the record. */
+  console.log(`   man by man, ${manByMan.length} founders against the median real player of the same era, rating and age band (8 or more of them, printed only): p10 ${f2(pct(manByMan, 0.1))}, p50 ${f2(median(manByMan))}, p90 ${f2(pct(manByMan, 0.9))}`);
+  console.log(`   by age band (0 is 21 or under, 1 is 22 to 24, 2 is 25 to 28, 3 is 29 to 31): ${Object.entries(manByBand).sort().map(([k, v]) => `${k} p10 ${f2(pct(v, 0.1))} p50 ${f2(median(v))} p90 ${f2(pct(v, 0.9))} (${v.length})`).join('; ')}`);
+  console.log(`   the same founders against real players of their exact age (8 or more, ${manByAge.length} men): p10 ${f2(pct(manByAge, 0.1))}, p50 ${f2(median(manByAge))}, p90 ${f2(pct(manByAge, 0.9))}`);
+  if (manByAge.length < 3000) fail(`only ${manByAge.length} founders had 8 real players of their era, rating and exact age to compare with`);
+  else if (!(pct(manByAge, 0.1) >= MAN_P10 && inBand(median(manByAge), MAN_P50) && pct(manByAge, 0.9) <= MAN_P90)) {
+    fail(`a founder is worth p10 ${f2(pct(manByAge, 0.1))}, p50 ${f2(median(manByAge))}, p90 ${f2(pct(manByAge, 0.9))} of the real players of his era, rating and exact age, outside p10 ${MAN_P10}, p50 ${MAN_P50.join(' to ')}, p90 ${MAN_P90}`);
+  } else ok(`a founder is worth p10 ${f2(pct(manByAge, 0.1))}, p50 ${f2(median(manByAge))}, p90 ${f2(pct(manByAge, 0.9))} of the real players of his era, rating and exact age (bands p10 ${MAN_P10}, p50 ${MAN_P50.join(' to ')}, p90 ${MAN_P90})`);
+  console.log(`   the top at the year grain, ${topByAge.length} founders rated over 80 against the real men of their era and exact age the engine rates within a point (3 or more): p10 ${f2(pct(topByAge, 0.1))}, p50 ${f2(median(topByAge))}, p90 ${f2(pct(topByAge, 0.9))}`);
+  if (topByAge.length < 1000) fail(`only ${topByAge.length} founders over 80 had 3 real men of their era and exact age within a point of them to compare with`);
+  else if (!inBand(median(topByAge), TOP_P50)) fail(`a founder over 80 is worth ${f2(median(topByAge))} of the real men of his era and exact age within a point of him at the median, outside ${TOP_P50.join(' to ')}`);
+  else ok(`a founder over 80 is worth ${f2(median(topByAge))} of the real men of his era and exact age within a point of him at the median, inside ${TOP_P50.join(' to ')} (the year grain at the top of the market, where the cell of 8 cannot reach)`);
   console.log(`   the top of the past eras, ${topEnd.length} founders rated over 80 against the era's real players the engine rates within a point of him (3 or more): p10 ${f2(pct(topEnd, 0.1))}, p50 ${f2(median(topEnd))}, p90 ${f2(pct(topEnd, 0.9))}`);
   if (topEnd.length < 200) fail(`only ${topEnd.length} historic founders over 80 had real players of their engine rating to compare with`);
   else if (!inBand(median(topEnd), TOP_P50)) fail(`a historic founder over 80 is worth ${f2(median(topEnd))} of the era's real players of his engine rating at the median, outside ${TOP_P50.join(' to ')}: the era's uplift is not being taken back before he is priced`);
@@ -540,7 +588,7 @@ const realCaps = [];
         const before = new Map(was.squad.map(p => [p.id, p]));
         foundings += 1;
         for (const p of founders(st)) {
-          const honest = cm.customFounderValue(p.rating, era);
+          const honest = cm.customFounderValue(p.rating, era, p.age);
           const c = atCeiling.get(p.id);
           if (!c || !(c.value < honest)) continue;
           capped += 1;

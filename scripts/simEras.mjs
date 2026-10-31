@@ -253,7 +253,9 @@ console.log('1) Year zero is the identity');
      clubs the bake does not hold carry as many men as the generated leagues
      say they ship (CM_GENERATED_LEAGUES, each file's own count). A league
      that joins later is counted through that list with no edit here. */
-  const same = (a, b) => a.n === b.n && a.p === b.p && a.a === b.a && a.r === b.r && a.v === b.v;
+  /* Round 1600: the world shows a man of a curve 2 file read with age and keeps his level as lv; the bake holds
+     the level, so the world's row is held to the bake on the level. */
+  const same = (a, b) => a.n === b.n && a.p === b.p && a.a === b.a && a.r === (b.lv ?? b.r) && a.v === b.v;
   const moved = [];
   for (const club of Object.keys(BAKED)) {
     const inWorld = REAL[club];

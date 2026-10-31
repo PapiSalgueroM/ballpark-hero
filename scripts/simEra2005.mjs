@@ -82,6 +82,8 @@
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+// Round 1600: a past season's squad is held to the read THROUGH both steps (scripts/lib/cmEraRead.mjs).
+import { eraShown, eraLevel } from './lib/cmEraRead.mjs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -196,9 +198,9 @@ console.log('1) A fresh 2005 save is the real 2005 squad, untouched');
   for (const p of s.squad.filter(p => !p.isYouth)) {
     const b = bake.get(p.name);
     if (!b) { mismatches += 1; fail(`${p.name} is in the 2005 Barcelona squad but not in the bake`); continue; }
-    if (b.a !== p.age || eraUpliftRating('era2005', b.r) !== p.rating) {
+    if (b.a !== p.age || eraShown(ER, 'era2005', b) !== p.rating) {
       mismatches += 1;
-      fail(`${p.name}: bake says age ${b.a} rating ${b.r} (uplift ${eraUpliftRating('era2005', b.r)}), squad says ${p.age}/${p.rating}`);
+      fail(`${p.name}: bake says age ${b.a} rating ${b.r} (read ${eraShown(ER, 'era2005', b)}), squad says ${p.age}/${p.rating}`);
     }
   }
   const gen = s.squad.filter(p => p.generated).length;
@@ -231,7 +233,7 @@ console.log('1) A fresh 2005 save is the real 2005 squad, untouched');
     for (const p of save.squad.filter(p => !p.isYouth && !p.generated)) {
       const b = rows.get(p.name);
       if (!b) { off += 1; fail(`${p.name} is in the 2005 ${club} squad but not in the bake`); continue; }
-      if (b.a !== p.age || eraUpliftRating('era2005', b.r) !== p.rating) {
+      if (b.a !== p.age || eraShown(ER, 'era2005', b) !== p.rating) {
         off += 1;
         fail(`${club}'s ${p.name}: bake says age ${b.a} rating ${b.r}, squad says ${p.age}/${p.rating}`);
       }
@@ -670,11 +672,11 @@ console.log('6) Ronaldinho and Henry above the modern best; teenage Messi honest
   if (dinho && dinho.r <= modernBest) fail(`2005 Ronaldinho (${dinho.r}) does not outrate the modern best (${modernBest})`);
   // The 17 year old is a prospect, not a legend yet, and must stay one.
   const rawMessi = ERA2005_ROSTERS['Barcelona'].find(p => p.n === 'Lionel Messi');
-  if (messi && rawMessi && messi.r !== rawMessi.r) fail(`teenage Messi lifted from ${rawMessi.r} to ${messi.r}, he sits below the pivot and must stay honest`);
+  if (messi && rawMessi && eraLevel(messi) !== rawMessi.r) fail(`teenage Messi lifted from ${rawMessi.r} to ${messi.r}, he sits below the pivot and must stay honest`);
   // Monotone, values untouched, capped, sealed to its era.
   for (const [club, raw] of Object.entries(ERA2005_ROSTERS)) {
     const before = [...raw].sort((a, b) => b.r - a.r).map(p => p.n).join('|');
-    const after = [...lifted[club]].sort((a, b) => b.r - a.r).map(p => p.n).join('|');
+    const after = [...lifted[club]].sort((a, b) => eraLevel(b) - eraLevel(a)).map(p => p.n).join('|');
     if (before !== after) fail(`${club}: the uplift reordered the squad`);
     for (let i = 0; i < raw.length; i++) {
       if (lifted[club][i].v !== raw[i].v) fail(`${raw[i].n}: the uplift touched his VALUE`);
