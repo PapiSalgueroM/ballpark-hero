@@ -244,7 +244,7 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
      Round 529: the scene player mounts inside this same ref, and its key does
      not change from one scene to the next, so a new scene never moves the
      page. */
-  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}-${picksMade}`);
+  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}-${picksMade}`, { skipFirst: phase !== 'preview' });
 
   // Lock in the daily result the moment the season ends.
   useEffect(() => {
