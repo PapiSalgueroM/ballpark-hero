@@ -1,0 +1,24 @@
+#!buildseo
+#!export
+# Release BV gate, rcg lane A (after a full build:seo, the build output exported for the lead): the type gate, the
+# rival scan and every harness that reads dist/ or the saved pages in public/ (CLAUDE.md's list), the flagship weight
+# and the home copy. BV's areas: Club Manager and the manager games on its engine, What's New.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simAdsense: node scripts/simAdsense.mjs
+simBrand: pip3 install --quiet fonttools pillow && node scripts/simBrand.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+simHiddenPages: node scripts/simHiddenPages.mjs
+simHubs: node scripts/simHubs.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simIndexing: node scripts/simIndexing.mjs
+simInternalLinks: node scripts/simInternalLinks.mjs
+simPrerender: node scripts/simPrerender.mjs
+simPrerenderBoot: node scripts/simPrerenderBoot.mjs
+simRetiredRoutes: node scripts/simRetiredRoutes.mjs
+simSchema: node scripts/simSchema.mjs
+simSitemap: node scripts/simSitemap.mjs
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simClubSquads: node scripts/simClubSquads.mjs
