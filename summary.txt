@@ -1,0 +1,2 @@
+euro-m2 exit=0 321s | simCmEuroPlay: green, 1728 checks, 0 failures
+euro-head-b1600 exit=0 325s | simCmEuroPlay: green, 1806 checks, 0 failures

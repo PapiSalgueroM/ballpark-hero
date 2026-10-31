@@ -1,0 +1,27 @@
+at 5df0e72e5b
+  7 passed over: Everton 0x7a00: up into the Premier League
+  7 passed over: Everton 0x7b00: up into the Premier League
+  7 passed over: Everton 0x7c00: up into the Premier League
+  7 passed over: Everton 0x7d00: up into the Premier League
+  7 passed over: Everton 0x7e00: up into the Premier League
+  7 passed over: Everton 0x7f00: up into the Premier League
+  7 passed over: Millwall 0x7a00: sacked in season two (week 80 of 80)
+  7 passed over: Millwall 0x7b00: sacked in season two (week 80 of 80)
+  7 crafted: Millwall season 2 (stream 0x7c00, EFL Championship), 7 runs graded, 15 fixtures read, next season EFL Championship with the Champions League group played to matchday 6
+  play: 44 saves, 12 participant seasons, 32 watcher seasons, 141 nights played, tails {"18":1,"20":0}, season one participants 0, ties of mine checked 23
+  2 review: 12 participant seasons read on the review, 1 of them won it, 3 of the participant seasons ended with the manager sacked (the engine plays on after a sacking, so their nights after it are no player's, counted in the totals all the same)
+  2b moves: 6 job moves out of 3 participant seasons, each played to the season's end; 3 moves to a Champions League club (3 joined with its group, 3 kept the Europa League); 0 moves dropped it, each into a Champions League sharing clubs with it
+  6 base 68f7432d6: 32 saves byte equal to the base on the head, 12 parted (participants and super cup nights, by design)
+  5.4 not moved: Arsenal seed 1, nights by season 0/1
+  5.4 not moved: Arsenal seed 2, nights by season 0/1
+  5.4 not moved: Manchester City seed 1, nights by season 0/2
+  5.4 not moved: Manchester City seed 2, nights by season 0/1
+  5.4 not moved: Bayern Munich seed 1, nights by season 0/2
+  5.4 not moved: Bayern Munich seed 2, nights by season 0/1
+  5.4 not moved: Barcelona seed 1, nights by season 0/1
+  5.4 not moved: PSG seed 1, nights by season 0/2
+  5.4 not moved: PSG seed 2, nights by season 0/1
+  5.4 not moved: Celtic seed 2, nights by season 0/17
+  5.4 not moved: Everton seed 2, nights by season 0/1
+  5 weeks: 20 saves, 11 seasons with a night, 9 saves with none (byte equal to the step reverted), 0 moved by the step
+simCmEuroPlay: green, 1728 checks, 0 failures
