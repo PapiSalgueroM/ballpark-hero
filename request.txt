@@ -1,0 +1,22 @@
+#!build
+#!playwright
+#!serial
+# Release BU pre publish (the lead, 2026-10-31): every harness that reads dist or public, on the release head with the build:seo snapshots committed (e94f3b390), per CLAUDE.md Between big ships; simBrand with fonttools and pillow, simPrerenderBoot with playwright (BT's two environment reds).
+simAdsense: node scripts/simAdsense.mjs
+simBrand: pip3 install --quiet fonttools pillow > /tmp/pip.log 2>&1; node scripts/simBrand.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+simHiddenPages: node scripts/simHiddenPages.mjs
+simHubs: node scripts/simHubs.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simIndexing: node scripts/simIndexing.mjs
+simInternalLinks: node scripts/simInternalLinks.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simPrerender: node scripts/simPrerender.mjs
+simPrerenderBoot: node scripts/simPrerenderBoot.mjs
+simRetiredRoutes: node scripts/simRetiredRoutes.mjs
+simSchema: node scripts/simSchema.mjs
+simSitemap: node scripts/simSitemap.mjs
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
