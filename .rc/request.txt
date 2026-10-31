@@ -1,0 +1,17 @@
+#!serial
+# Release BV, brief section 2, the base twins: each harness of lane n on a checkout of the BASE 19911f815 (.rcbv-base), one at a time, plus
+# simCmBoardVerdict pure and title on the head and on the base, and the dailies against Release BU plus Round 1600 (brief V4).
+deadline-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && node scripts/simClubManagerDecisionDeadline.mjs
+gathered-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && node scripts/simClubManagerGathered.mjs
+var-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && node scripts/simCmVar.mjs
+unseeded-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && node scripts/simCmUnseededWorld.mjs
+continuity-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && node scripts/simManagerWorldContinuity.mjs
+handover-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && node scripts/simCmHandoverDesk.mjs
+oldcareers-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && node scripts/simCmOldCareersWorld.mjs
+halftime-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && node scripts/simManagerHalftimeLineups.mjs
+livelineups-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && node scripts/simManagerLiveLineups.mjs
+worldmoves-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && node scripts/simCmWorldMoves.mjs
+bv-pure-title: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && CM_BOARD_BASE=$PWD/.rcbv-base node scripts/simCmBoardVerdict.mjs --part=pure,title
+bv-pure-title-base: (test -d .rcbv-base || git worktree add -q .rcbv-base 19911f815) && cd .rcbv-base && CM_BOARD_BASE=$PWD node scripts/simCmBoardVerdict.mjs --part=pure,title
+bv-dailies-1600: P=$(bash .rc/x/bvbase.sh dailies) && echo "base $P (19911f815 with 1600 merged)" && CM_BOARD_BASE=$PWD/.rcbv-dailies node scripts/simCmBoardVerdict.mjs --part=dailies
+bv-dailies-1600-hscard: P=$(bash .rc/x/bvbase.sh dailies) && CM_BOARD_BASE=$PWD/.rcbv-dailies SIM_CM_BOARD_CONTROL=hscard node scripts/simCmBoardVerdict.mjs --part=dailies
