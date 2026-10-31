@@ -1,0 +1,20 @@
+[22m[39mCGFAILCLOSED| board cg611-045: yes Jerry Hughes, no Tom Brady
+[22m[39mCGFAILCLOSED| fail closed: 5 of 5 failure worlds left the pick unverified and judged it after the network healed
+[22m[39mCGFAILCLOSED| decoder: 44 of 44 damaged pairs refused
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own ne
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own ne
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real chance shares its place and an…'): one card, the scor
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('two places before the whistle, a real…'): one card, the scor
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mKNOWN OPEN, dark: a real action is under the card of a penalty a review gives ('a real chance shares its place and an…')
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real chance shares its place and an…')
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over no
+[41m[1m FAIL [22m[49m src/test/liveSimMotion.test.tsx[2m > [22mThe goal sequence[2m > [22mthe score waits for the ball and the card lands at net contact
+[41m[1m FAIL [22m[49m src/test/liveSimMotion.test.tsx[2m > [22mThe goal sequence[2m > [22mnothing says GOAL before the ball is in: not the list beside the pitch, not the line under it
+[41m[1m FAIL [22m[49m src/test/liveSimMotion.test.tsx[2m > [22mThe goal sequence[2m > [22mno frame draws the new score before the ball is in
+[41m[1m FAIL [22m[49m src/test/liveSimMotion.test.tsx[2m > [22mThe goal sequence[2m > [22munder reduced motion the card is held for its first stretch only, and then the match runs on
+[41m[1m FAIL [22m[49m src/test/liveSimMotion.test.tsx[2m > [22mThe goal sequence[2m > [22ma substitution in a goal's wind up takes the card with the action, and the score stops waiting
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m709 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (713)[39m

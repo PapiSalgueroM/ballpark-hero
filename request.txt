@@ -1,0 +1,11 @@
+# Release BV lane g (BU lane g, base moved to 19911f815): the join's core on the gate head: the type gate, every vitest file, the rival name scan, the harness anchors, the storage writes, site search, the guide outline, the keyword index regenerated and compared, and the dash scan against the BASE 19911f815.
+tsc:node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/va.log | head -40 | cut -c1-250; exit $s
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+kw-fresh: node scripts/genSearchKeywords.mjs && git diff --exit-code --stat src/data/searchKeywords.json && echo "keyword index current"
+dash-diff: node .rc/x/dashScan.mjs diff 19911f815
+dash-log: node .rc/x/dashScan.mjs log 19911f815
