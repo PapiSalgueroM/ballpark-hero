@@ -1,0 +1,219 @@
+name: Soccer Conquest pending draft and early scene diagnostic
+on:
+  push:
+    branches: [codex/conquest-pending-draft-observe-20261031]
+permissions:
+  contents: read
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_MAIN: 19911f815ac713e8d3718cd0ee8592942a18fd00
+      EXPECTED_PARENT: 7a30fe9fccf5fc3879c6faba94247f022193ad7e
+      EXPECTED_TREE: 81b33def9af1bc3ef11953dec9d8270895b9c6e4
+      OBSERVER_SHA256: f8b509205bad68d4bdb19ae30a88c2099888f306b75b66e09821a7ca0b80e529
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind exact PR447 source and one-context diagnostic proof
+        run: |
+          set -euo pipefail
+          runner_temp=$(realpath "$RUNNER_TEMP")
+          workspace=$(realpath "$PWD")
+          case "$runner_temp/" in "$workspace/"*) exit 1;; esac
+          out="$runner_temp/conquest-pending-draft-observe"
+          test ! -e "$out"
+          mkdir -p "$out/helpers" "$out/runtime-tmp"
+          echo "CONQUEST_OUT=$out" >> "$GITHUB_ENV"
+          echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/conquest-pending-draft-observe-20261031
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5631
+          git diff --name-status "$EXPECTED_MAIN" "$EXPECTED_PARENT" > "$out/product.paths"
+          printf 'M\tdocs/PROJECT-STATE.md\nM\tsrc/components/conquest/ImperialismBoardShared.tsx\n' > "$out/expected-product.paths"
+          cmp "$out/product.paths" "$out/expected-product.paths"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.paths"
+          printf 'A\t.github/workflows/conquest-pending-draft-observe.yml\nA\tscripts/qa/observeSoccerConquestPendingDraft.mjs\n' > "$out/expected-proof.paths"
+          cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(sha256sum scripts/qa/observeSoccerConquestPendingDraft.mjs | cut -d' ' -f1)" = "$OBSERVER_SHA256"
+          test "$(git hash-object src/pages/SoccerConquest.tsx)" = 661ab723cc81b6484d5298bd62c5bfc2c9ab0820
+          test "$(git hash-object src/components/conquest/ImperialismBoardShared.tsx)" = 478b2d778d7da659f050053c7cb51a193efc9622
+          test "$(git hash-object src/components/conquest/ImperialismHowToPlay.tsx)" = 5b5a085a13a20052528765d2e18fefc22229625e
+          test "$(git hash-object src/lib/imperialismEngine.ts)" = 3da6c79cd604fa92dc99d8ec0af43cfc25fa908f
+          test "$(git hash-object src/lib/conquestRun.ts)" = fd155a5f86588c87b39a6241c3e2c1560e28f322
+          test "$(git hash-object src/lib/conquestDaily.ts)" = fc09754cfa372fc8627b533594ed492c1231b22b
+          test "$(git hash-object src/lib/dailyRecord.ts)" = f24c37aa4e0a8bda34d51f93d1ac44b0257fb3b6
+          test "$(git hash-object src/lib/dateUtils.ts)" = 12c9de0ed37b0797492f3e936bcba70bdc03d585
+          test "$(git hash-object src/data/soccerConquest.ts)" = 370baf910baca2181b6d5dbe7f50b2722dcdbc27
+          test "$(git hash-object src/hooks/useRevealScroll.ts)" = 0cd106080bfb4e0461d9b86f0a973689f717d502
+          test "$(git hash-object src/index.css)" = 775df500bd7c9730e5b04aedd3d6b2a1564d49b4
+          test "$(git hash-object src/components/conquest/ConquestScenePlayer.tsx)" = ce24607085579ccc3631fe85415daea012c53db2
+          test "$(git hash-object src/lib/conquestScenes.ts)" = 198bccb1295b0f780b408d5fed87de8ab6d9c41c
+          test "$(git hash-object scripts/qa/observeSoccerConquestPendingDraft.mjs)" = 33581e584d0bf4cf4ec7821757de81425636f035
+          test "$(git hash-object scripts/lib/offlineTransport.cjs)" = 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          test "$(git hash-object package.json)" = 2ff64986fb76ebc51b706f2fd24765768874008a
+          test "$(git hash-object package-lock.json)" = 97d6f12a052f25f400462938c241789a083f0bfe
+          test "$(git hash-object scripts/lib/hostLikeServer.mjs)" = 21059d5e8114669df61106c125d5272d357b6236
+          test "$(git hash-object scripts/lib/playwrightLoader.mjs)" = 4f7739e217e0a47ee82e6bfc8be1c04bed17454a
+          test "$(git hash-object scripts/qa/siteMenuNavigationSupport.mjs)" = 7909ce5805171367646e17a468fd919b88ad710e
+          test "$(git hash-object scripts/sweepWeight.mjs)" = 21d47bdf97c1d7a924dc0d9f6825c09bfbdc0c85
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cp scripts/qa/observeSoccerConquestPendingDraft.mjs "$out/observer-copy.mjs"
+          cmp scripts/qa/observeSoccerConquestPendingDraft.mjs "$out/observer-copy.mjs"
+          sha256sum "$out/observer-copy.mjs" > "$out/helpers.sha256"
+          raw=0
+          node --check scripts/qa/observeSoccerConquestPendingDraft.mjs > "$out/syntax.stdout" 2> "$out/syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"
+          test "$raw" -eq 0;test ! -s "$out/syntax.stdout";test ! -s "$out/syntax.stderr"
+          cat > "$out/helpers/run.sh" <<'RUN'
+          run() {
+            local id="$1" budget="$2"; shift 2
+            local raw=0
+            : > "$CONQUEST_OUT/$id.transport"
+            { printf '%q ' "$@"; printf '\n'; } > "$CONQUEST_OUT/$id.command"
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$CONQUEST_OUT/$id.transport" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s "$budget" "$@" > "$CONQUEST_OUT/$id.stdout" 2> "$CONQUEST_OUT/$id.stderr" || raw=$?
+            printf '%s\n' "$raw" > "$CONQUEST_OUT/$id.exit"
+            test ! -s "$CONQUEST_OUT/$id.transport"
+          }
+          RUN
+          sha256sum "$out/helpers/run.sh" >> "$out/helpers.sha256"
+      - name: Locked dependencies and actual application types
+        run: |
+          set -euo pipefail
+          out="$CONQUEST_OUT"
+          raw=0
+          env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.exit"
+          test "$raw" -eq 0
+          raw=0
+          : > "$out/types.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 3m node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json > "$out/types.stdout" 2> "$out/types.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/types.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/types.stdout"
+          test ! -s "$out/types.stderr"
+          test ! -s "$out/types.transport"
+      - name: Isolated exact Playwright and real prepared fonts
+        run: |
+          set -euo pipefail
+          out="$CONQUEST_OUT";tools="$RUNNER_TEMP/conquest-pending-draft-observe-tools";test ! -e "$tools"
+          env -u NODE_OPTIONS npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright;ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          export PLAYWRIGHT_BROWSERS_PATH="$tools/browsers"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV";echo "CONQUEST_TOOLS=$tools" >> "$GITHUB_ENV";echo "PLACEMENT_TOOLS=$tools" >> "$GITHUB_ENV"
+          executable=$(node -e 'const a=require("node:assert/strict");a.equal(require("playwright/package.json").version,"1.64.0");a.equal(require("playwright-core/package.json").version,"1.64.0");process.stdout.write(require("playwright").chromium.executablePath())')
+          if test ! -f "$executable";then env -u NODE_OPTIONS node "$tools/node_modules/playwright/cli.js" install chromium > "$out/chromium-install.log" 2>&1;fi
+          test -f "$executable";printf '%s\n' "$executable" > "$out/chromium.path"
+          env -u NODE_OPTIONS node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d' ' -f1);echo "FONT_CACHE_MANIFEST_SHA256=$sha" >> "$GITHUB_ENV"
+      - name: Actual Vite manifest build and post-build inventories
+        id: build
+        run: |
+          set -euo pipefail
+          out="$CONQUEST_OUT";source "$out/helpers/run.sh"
+          run build 5m npm run build -- --manifest;test "$(cat "$out/build.exit")" -eq 0
+          test -f dist/.vite/manifest.json
+          sha256sum -c "$out/source.initial.sha256" > "$out/source.prebrowser-held.log"
+          for pair in "deps:node_modules" "tools:$CONQUEST_TOOLS" "fonts:$FREE_KICK_FONT_CACHE" "dist:dist";do
+            label="${pair%%:*}";dir="${pair#*:}";find "$dir" -type f -print0 | sort -z > "$out/$label.members";xargs -0 sha256sum < "$out/$label.members" > "$out/$label.sha256"
+          done
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.before"
+          tar -cf "$out/dist.tar" -C dist .;tar -cf "$out/font-cache.tar" -C "$FREE_KICK_FONT_CACHE" .
+      - name: One pending draft and early scene diagnostic, no feature qualification
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$CONQUEST_OUT";raw=0
+          test ! -e "$out/observation"
+          : > "$out/observation.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/observation.transport" CONQUEST_REPORT_OUT="$out/observation" env -u ONLY -u NO_DOUBLE_SWAP timeout --signal=TERM --kill-after=15s 10m node scripts/qa/observeSoccerConquestPendingDraft.mjs > "$out/observation.stdout" 2> "$out/observation.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/observation.exit"
+          tail -n 20 "$out/observation.stdout"
+          if test "$raw" -ne 0;then sed -n '1,100p' "$out/observation.stderr";fi
+          sha256sum -c "$out/helpers.sha256" > "$out/helpers.post-observation-held.log"
+          test "$raw" -eq 0;test ! -s "$out/observation.stderr";test ! -s "$out/observation.transport"
+          grep -Eq '^CONQUEST_DRAFT_DIAGNOSTIC_COMPLETE: .*; status=OBSERVATION_COMPLETE; no feature qualification\.$' "$out/observation.stdout"
+          cat > "$out/helpers/observation-summary.cjs" <<'SUMMARY'
+          const fs=require('node:fs'),a=require('node:assert/strict'),out=process.env.CONQUEST_OUT;
+          const report=JSON.parse(fs.readFileSync(out+'/observation/OBSERVATION.json','utf8'));
+          a.equal(report.source,process.env.GITHUB_SHA);a.equal(report.expectedParent,process.env.EXPECTED_PARENT);a.equal(report.expectedMain,process.env.EXPECTED_MAIN);
+          a.equal(report.observationOnly,true);a.equal(report.featureQualified,false);a.equal(report.dateRngPerformanceTimersAndMotionUnmodified,true);
+          a.equal(report.status,'OBSERVATION_COMPLETE');a.equal(report.fatal,null);a.equal(report.sourceHeld,true);a.equal(report.profiles.length,1);a.equal(report.counts.profiles,1);a.equal(report.counts.driverLimitations,0);
+          const row=report.profiles[0],completed=row.status==='OBSERVED_DRAFT_RELOAD_RESELECTION_AND_FIRST_ROUND',blocked=row.status.startsWith('BLOCKED_AT_');
+          a.equal(row.id,'daily-pending-draft-reload');a(completed||blocked);a(row.images.length<=2);a.equal(report.counts.screenshots,row.images.length);
+          const stops=['draft-reload-before-reselection','first-scene-native-stop'];a.deepEqual(row.images.map(x=>x.declaredStop),stops.slice(0,row.images.length));
+          if(completed){a.equal(row.images.length,2);a.equal(row.firstRoundObserved,true);a.equal(row.earlyAnimation.reason,'STABLE220_AND_NATIVE_AT_LEAST1S');a(row.earlyAnimation.finalStableMS>=220);a(row.earlyAnimation.stopSample.elapsedMS>=1000);}
+          const summary={status:'BOUNDED_DIAGNOSTIC_OBSERVATION_RETAINED',source:report.source,parent:report.expectedParent,caseStatus:row.status,blocked,firstRoundWitnessed:row.firstRoundObserved===true,images:row.images.length,counts:report.counts,nativeExecutionStarted:report.nativeExecutionStarted,naturalET:row.startedNaturalET,earlyGeometryReason:row.earlyAnimation?.reason||null,featureQualified:false,originalReportedBugFixed:false,scope:'One diagnostic, literal blocked/limit data retained, no regression/global/publication qualification'};
+          fs.writeFileSync(out+'/DIAGNOSTIC-OBSERVATION-SUMMARY.json',JSON.stringify(summary,null,2)+'\n',{flag:'wx'});console.log('CONQUEST_DRAFT_SUMMARY: one bounded diagnostic retained; no feature qualification.');
+          SUMMARY
+          sha256sum "$out/helpers/observation-summary.cjs" >> "$out/helpers.sha256"
+          source "$out/helpers/run.sh"
+          run summary-syntax 1m node --check "$out/helpers/observation-summary.cjs"
+          test "$(cat "$out/summary-syntax.exit")" -eq 0;test ! -s "$out/summary-syntax.stdout";test ! -s "$out/summary-syntax.stderr"
+          run observation-summary 1m node "$out/helpers/observation-summary.cjs"
+          test "$(cat "$out/observation-summary.exit")" -eq 0;test ! -s "$out/observation-summary.stderr"
+          grep -Fx 'CONQUEST_DRAFT_SUMMARY: one bounded diagnostic retained; no feature qualification.' "$out/observation-summary.stdout"
+      - name: Always retain source, post-qualification inventories and originals
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          runner_temp=$(realpath "$RUNNER_TEMP")
+          workspace=$(realpath "$PWD")
+          case "$runner_temp/" in "$workspace/"*) exit 1;; esac
+          out="$runner_temp/conquest-pending-draft-observe";mkdir -p "$out";failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          xargs -0 sha256sum < "$out/source-members.final" > "$out/source.final.sha256"
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git diff --exit-code HEAD > "$out/working-source.diff" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"
+          cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/helpers.sha256" > "$out/helpers-held.log" 2>&1 || failed=1
+          for pair in "deps:node_modules" "tools:${CONQUEST_TOOLS:-}" "fonts:${FREE_KICK_FONT_CACHE:-}" "dist:dist";do
+            label="${pair%%:*}";dir="${pair#*:}"
+            if test -f "$out/$label.sha256";then
+              find "$dir" -type f -print0 | sort -z > "$out/$label.members.final"
+              cmp "$out/$label.members" "$out/$label.members.final" || failed=1
+              sha256sum -c "$out/$label.sha256" > "$out/$label-held.log" 2>&1 || failed=1
+            else printf 'POST_QUALIFICATION_INVENTORY_NOT_CREATED\n' > "$out/$label-not-created.txt";failed=1;fi
+          done
+          if test -f "$out/dependency-links.before";then
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.before" "$out/dependency-links.final" || failed=1
+          else failed=1;fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"SOCCER_CONQUEST_PENDING_DRAFT_AND_EARLY_SCENE_DIAGNOSTIC_ONLY","source":"%s","main":"%s","parent":"%s","appChangedByThisProof":false,"target":"EXACT_PR447_FIXED_SOURCE_ONLY_NOT_FAMILY","observations":"READ_LITERAL_STATUS_BLOCKED_LIMITS_DRAFT_AND_NATIVE_SCENE_DATA","featureQualified":false,"firstMatchBugOrFixClaim":false,"contexts":1,"maxOriginalPNGs":2,"dateRngAndAnimationUnmodified":true,"types":"READ_ACTUAL","build":"READ_ACTUAL_FRESH","capsAndBuiltReaders":"NOT_RERUN_APP_SOURCE_ALREADY_QUALIFIED_SEPARATELY","python":"UNRUN","fullDefaultSuite":"UNRUN","globalSims":"UNRUN","publicSnapshotsRegenerated":false,"fullSEO":"UNRUN","liveGameplay":"UNRUN_FROZEN_SOURCE_LOCALHOST_ONLY","releaseOrPublicationReady":false,"dependencyInventoryScope":"POST_BUILD_ONLY"}\n' "$GITHUB_SHA" "$EXPECTED_MAIN" "$EXPECTED_PARENT" > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/conquest-pending-draft-observe-evidence.sha256"
+          cp "$RUNNER_TEMP/conquest-pending-draft-observe-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: conquest-pending-draft-observe-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/conquest-pending-draft-observe
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
