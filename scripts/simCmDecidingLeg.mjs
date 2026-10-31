@@ -95,7 +95,9 @@
    MEASURED on GitHub runners, 2026-10-31, the default dice and DECIDING_LEG_SALT a, b, c: eight candidates without
    the cup gave 4, 5, 1, 1 Europa League seasons and 1, 4, 0, 2 deciding legs (rBVg-c, salt b red); with the cup 6,
    6, 2, 3 seasons and 3, 8, 0, 6 legs (rBVg-c2, salt b red again), so the fleet grew to 24 candidates rather than
-   the floor coming down. decidingLegAt agreed with the whistle on every night of every run.
+   the floor coming down. With the 24 (rBVg-r03, head 40bee2a4f): 15, 17, 11 and 11 Europa League seasons and 11, 20,
+   11 and 16 deciding legs, so UEL_LEG_FLOOR is 5, under half the lowest count seen, as LEG_FLOOR is. decidingLegAt
+   agreed with the whistle on every night of every run.
 
    Run: node scripts/simCmDecidingLeg.mjs   (DECIDING_LEG_CAREERS, DECIDING_LEG_UEL_CAREERS, DECIDING_LEG_REPLAYS,
    DECIDING_LEG_SECTION) */
@@ -112,6 +114,8 @@ const CONTROL = process.env.DECIDING_LEG_CONTROL || '';
 const SECTION = process.env.DECIDING_LEG_SECTION || '';
 const REPLAYS = Number(process.env.DECIDING_LEG_REPLAYS || 8);
 const LEG_FLOOR = 30;
+/* Release BV join: the Europa League candidates' deciding second legs, at least (see THE EUROPA LEAGUE above). */
+const UEL_LEG_FLOOR = 5;
 /* The day the round's base commit (4bd20c993, origin/main) was made. */
 const BASE_COMMIT_DATE = '2026-10-30';
 const FIXED_NOW = 1793000000000;
@@ -420,7 +424,7 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
   }
   console.log(`   ${inUcl} careers in the Champions League, ${parted.length} parted at a deciding leg: ${parted.join('; ') || 'none'}`);
   check('careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ)', identityBad.length === 0 && inUcl >= 8, identityBad.slice(0, 3).join('; ') || `${inUcl} careers`);
-  if (UEL_FLEET.length) check('careers: the Europa League careers meet a deciding second leg (Round 1593, the Release BV join)', uelTotal >= 1, `${uelTotal} deciding second legs in ${uelSeasons} Europa League seasons of ${UEL_FLEET.length} candidates`);
+  if (UEL_FLEET.length) check('careers: the Europa League careers meet a deciding second leg (Round 1593, the Release BV join)', uelTotal >= UEL_LEG_FLOOR, `${uelTotal} deciding second legs in ${uelSeasons} Europa League seasons of ${UEL_FLEET.length} candidates, floor ${UEL_LEG_FLOOR}`);
   if (UEL_FLEET.length) check('careers: decidingLegAt agrees with the whistle on every Europa League night', uelDisagree.length === 0, uelDisagree.slice(0, 3).join('; ') || `${uelSeasons} seasons`);
   if (baseFile) check('careers: OLD is the base tree, week for week over the whole window (a named haul read as the old words)', baseBad.length === 0, baseBad.slice(0, 3).join('; ') || `${namedHauls} saves or reports carried a named haul`);
   console.log(`   ${legPre.length} deciding second legs met (${legPre.filter(l => l.walk?.differ).length} differing on the walk's own dice)`);
