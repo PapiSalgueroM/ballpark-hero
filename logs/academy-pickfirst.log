@@ -1,0 +1,16 @@
+grid: 134 nations x 8 eras x 5 bands x 3 seeds, 497 clubs
+
+1. KEPT: the career starts at the academy the screen showed
+  16080 of 16080 careers started at the academy shown
+  1340 of 1340 stray names (no such club, and Leipzig before it existed in 1990) fell back to a club in the list
+
+2. OLD PATH: two independent draws, the way it was before this round
+  old path agreement 16080 of 16080 (100.0%), by band: 35: 100.0%, 45: 100.0%, 60: 100.0%, 70: 100.0%, 80: 100.0%
+  FAIL [2]: two independent draws agreed 100.0% of the time, not under 35%: the grid cannot see the defect
+
+3. UNCHANGED: initCareer without a name is the base engine, byte for byte
+  base half skipped (set SC_ACADEMY_BASE=<commit> to compare the default path with that engine)
+  16080 of 16080 equal with a null name, 16080 of 16080 with a name in no list
+
+1 failure(s), red sections: 2
+control pickfirst FIRED: section 2 went red as it must

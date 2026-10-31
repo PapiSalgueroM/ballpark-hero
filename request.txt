@@ -1,0 +1,7 @@
+# Release BU lane k: Soccer Career create: the academy shown is the academy you join (Round 1604), its base half named at the BU base, and three controls (each exit 1).
+vitest-create: node_modules/.bin/vitest run src/test/soccerCareerCreationRoll.test.tsx src/test/soccerCareerSaveRecovery.test.tsx src/test/soccerCareerSaveRetry.test.tsx --testTimeout=300000 --hookTimeout=120000
+academy: node scripts/simSoccerAcademyPlacement.mjs
+academy-base: SC_ACADEMY_BASE=158969218 node scripts/simSoccerAcademyPlacement.mjs
+academy-redraw: SC_ACADEMY_CONTROL=redraw node scripts/simSoccerAcademyPlacement.mjs
+academy-pickfirst: SC_ACADEMY_CONTROL=pickfirst node scripts/simSoccerAcademyPlacement.mjs
+academy-extradraw: SC_ACADEMY_CONTROL=extradraw node scripts/simSoccerAcademyPlacement.mjs

@@ -1,0 +1,16 @@
+grid: 134 nations x 8 eras x 5 bands x 3 seeds, 497 clubs
+
+1. KEPT: the career starts at the academy the screen showed
+  4192 of 16080 careers started at the academy shown
+  FAIL [1]: 11888 careers started somewhere else, first: Albania 1990-94 35: shown Pakhtakor, started Pumas Youth; Albania 1990-94 45: shown Mamelodi Sundowns, started Trabzonspor Youth; Albania 1990-94 60: shown Jeonbuk Motors, started Botafogo Youth
+  1340 of 1340 stray names (no such club, and Leipzig before it existed in 1990) fell back to a club in the list
+
+2. OLD PATH: two independent draws, the way it was before this round
+  old path agreement 4177 of 16080 (26.0%), by band: 35: 39.5%, 45: 42.1%, 60: 21.2%, 70: 8.6%, 80: 18.6%
+
+3. UNCHANGED: initCareer without a name is the base engine, byte for byte
+  base half skipped (set SC_ACADEMY_BASE=<commit> to compare the default path with that engine)
+  16080 of 16080 equal with a null name, 16080 of 16080 with a name in no list
+
+1 failure(s), red sections: 1
+control redraw FIRED: section 1 went red as it must
