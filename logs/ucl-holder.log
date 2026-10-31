@@ -1,0 +1,5 @@
+cupProbe: planted (ucl)
+FAIL 5 holder: Everton (now) seed 1 s2-rollover: Arsenal was in the field already and the field still changed its clubs; head only ["Benfica"], holder off only ["Brentford"]
+FAIL 5 holder: Proof Town Athletic (now) seed 1 s2-rollover: Arsenal was in the field already and the field still changed its clubs; head only ["Beşiktaş"], holder off only ["Toulouse"]
+FAIL 5 holder: Proof Town Athletic (now) seed 3 s2-rollover: PSG was in the field already and the field still changed its clubs; head only ["Chelsea"], holder off only ["Athletic Club"]
+simWorldUcl: RED, 69 checks, 3 failures

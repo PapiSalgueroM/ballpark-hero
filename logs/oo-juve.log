@@ -1,0 +1,4 @@
+cupProbe: planted (oo)
+PROBE 3 Juventus (now) seed 4 nocoach at s3-e1: .press.pending.text: "Newcastle on paper are a level above you. Realistically, what are you going there for?" vs "Atalanta on paper are a level above you. Realistically, what are you going there for?"
+  FAIL 3 Juventus (now) seed 4 nocoach at s3-e1: the state differs in a key other than worldComps.dsc
+simOneOffCups: 1 FAILURES of 103 checks (5 s)

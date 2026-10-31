@@ -1,0 +1,3 @@
+oo-city exit=1 8s | simOneOffCups: 1 FAILURES of 58 checks (7 s)
+oo-juve exit=1 5s | simOneOffCups: 1 FAILURES of 103 checks (5 s)
+ucl-holder exit=1 41s | simWorldUcl: RED, 69 checks, 3 failures

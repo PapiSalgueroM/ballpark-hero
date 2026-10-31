@@ -1,0 +1,4 @@
+cupProbe: planted (oo)
+PROBE 3 Manchester City (now) seed 3 coach at s2-e1: .press.pending: {"kind":"bigGame","text":"Liverpool on paper are a level above you. Realistically, what are you going there for?","options":[{"label":"Nobody gives us a prayer, vs null
+  FAIL 3 Manchester City (now) seed 3 coach at s2-e1: the state differs in a key other than worldComps.dsc
+simOneOffCups: 1 FAILURES of 58 checks (7 s)
