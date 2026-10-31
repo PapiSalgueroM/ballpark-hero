@@ -1,0 +1,12 @@
+ca-21 exit=4 577s | seeds 21,22,23,24: no move dropped the Europa League
+ca-25 exit=4 578s | seeds 25,26,27,28: no move dropped the Europa League
+ca-17 exit=1 719s | simCmEuroPlay: control carryall FIRED (2 failures, all its own)
+ca-33 exit=4 583s | seeds 33,34,35,36: no move dropped the Europa League
+ca-37 exit=4 586s | seeds 37,38,39,40: no move dropped the Europa League
+ca-29 exit=1 736s | simCmEuroPlay: control carryall FIRED (2 failures, all its own)
+ca-41 exit=4 577s | seeds 41,42,43,44: no move dropped the Europa League
+ca-45 exit=4 581s | seeds 45,46,47,48: no move dropped the Europa League
+ca-49 exit=4 585s | seeds 49,50,51,52: no move dropped the Europa League
+ca-53 exit=1 722s | simCmEuroPlay: control carryall FIRED (2 failures, all its own)
+ca-57 exit=4 583s | seeds 57,58,59,60: no move dropped the Europa League
+ca-61 exit=1 677s | simCmEuroPlay: control carryall FIRED (1 failures, all its own)

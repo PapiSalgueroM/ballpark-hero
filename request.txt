@@ -1,0 +1,13 @@
+# Release BV: simCmEuroPlay control carryall has no event on the joined head for play seeds 1 to 16 (rBVg-x2). A scan of seeds 17 to 64, four at a time: plain run, then the control where a move dropped the Europa League.
+ca-17: bash .rc/x/cascan.sh 17,18,19,20
+ca-21: bash .rc/x/cascan.sh 21,22,23,24
+ca-25: bash .rc/x/cascan.sh 25,26,27,28
+ca-29: bash .rc/x/cascan.sh 29,30,31,32
+ca-33: bash .rc/x/cascan.sh 33,34,35,36
+ca-37: bash .rc/x/cascan.sh 37,38,39,40
+ca-41: bash .rc/x/cascan.sh 41,42,43,44
+ca-45: bash .rc/x/cascan.sh 45,46,47,48
+ca-49: bash .rc/x/cascan.sh 49,50,51,52
+ca-53: bash .rc/x/cascan.sh 53,54,55,56
+ca-57: bash .rc/x/cascan.sh 57,58,59,60
+ca-61: bash .rc/x/cascan.sh 61,62,63,64
