@@ -1,0 +1,6 @@
+#!build
+#!playwright
+#!serial
+walk: node scripts/playUsCareerHallWall.mjs
+walk-plant: node .rc/x/mutwallbar.mjs && ONLY=/nba-my-career node scripts/playUsCareerHallWallBar.tmp.mjs; s=$?; rm -f scripts/playUsCareerHallWallBar.tmp.mjs; exit $s
+walk-bu: R=$PWD && git worktree add /tmp/bu 6b558934c >/dev/null 2>&1 && ln -s "$R/node_modules" /tmp/bu/node_modules && cd /tmp/bu && node_modules/.bin/vite build > /tmp/bu-build.log 2>&1 && git -C "$R" show HEAD:scripts/playUsCareerHallWall.mjs > scripts/playUsCareerHallWall.mjs && ONLY=/nba-my-career node scripts/playUsCareerHallWall.mjs
