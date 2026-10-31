@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+w-m1: git worktree add /tmp/m1 68f7432d6 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m1/node_modules && (cd /tmp/m1 && node_modules/.bin/vite build > /tmp/m1-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m1/dist 4175 > /tmp/m1-server.log 2>&1 &) && sleep 4 && cd /tmp/m1 && (BASE=http://localhost:4175 SWEEP_BASE=http://localhost:4175 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs | grep -E "K gz|sweepWeight:")
+w-m2: git worktree add /tmp/m2 5df0e72e5 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m2/node_modules && (cd /tmp/m2 && node_modules/.bin/vite build > /tmp/m2-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/m2/dist 4176 > /tmp/m2-server.log 2>&1 &) && sleep 4 && cd /tmp/m2 && (BASE=http://localhost:4176 SWEEP_BASE=http://localhost:4176 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs | grep -E "K gz|sweepWeight:")
