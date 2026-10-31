@@ -1,0 +1,73 @@
+import "./chunk-6DZX6EAA.mjs";
+
+// src/data/clubManagerBundesligaFixtures2026.ts
+var BUNDESLIGA_FIXTURES_2026 = {
+  schemaVersion: 1,
+  key: "bundesliga-2026-27-v1",
+  leagueId: "bundesliga",
+  seasonStartYear: 2026,
+  coverage: "Real league opponent order and home/away venues only. Calendar dates and match results are simulated.",
+  clubs: [
+    "Augsburg",
+    "Bayer Leverkusen",
+    "Bayern Munich",
+    "Borussia Dortmund",
+    "Eintracht Frankfurt",
+    "Elversberg",
+    "Freiburg",
+    "Gladbach",
+    "Hamburg",
+    "Hoffenheim",
+    "K\xF6ln",
+    "Mainz",
+    "Paderborn",
+    "RB Leipzig",
+    "Schalke 04",
+    "Stuttgart",
+    "Union Berlin",
+    "Werder Bremen"
+  ],
+  rounds: [
+    [["Bayern Munich", "Stuttgart"], ["Borussia Dortmund", "Hamburg"], ["RB Leipzig", "Gladbach"], ["Freiburg", "Werder Bremen"], ["Augsburg", "Schalke 04"], ["Mainz", "Paderborn"], ["Union Berlin", "Eintracht Frankfurt"], ["K\xF6ln", "Hoffenheim"], ["Elversberg", "Bayer Leverkusen"]],
+    [["Stuttgart", "K\xF6ln"], ["Hoffenheim", "Borussia Dortmund"], ["Bayer Leverkusen", "Union Berlin"], ["Eintracht Frankfurt", "Augsburg"], ["Gladbach", "Elversberg"], ["Hamburg", "Mainz"], ["Werder Bremen", "RB Leipzig"], ["Schalke 04", "Bayern Munich"], ["Paderborn", "Freiburg"]],
+    [["Borussia Dortmund", "Paderborn"], ["RB Leipzig", "Hamburg"], ["Hoffenheim", "Stuttgart"], ["Freiburg", "Gladbach"], ["Augsburg", "Bayer Leverkusen"], ["Mainz", "Eintracht Frankfurt"], ["Union Berlin", "Schalke 04"], ["K\xF6ln", "Werder Bremen"], ["Elversberg", "Bayern Munich"]],
+    [["Bayern Munich", "Union Berlin"], ["Stuttgart", "Borussia Dortmund"], ["Bayer Leverkusen", "RB Leipzig"], ["Eintracht Frankfurt", "Freiburg"], ["Gladbach", "Mainz"], ["Hamburg", "K\xF6ln"], ["Werder Bremen", "Augsburg"], ["Schalke 04", "Elversberg"], ["Paderborn", "Hoffenheim"]],
+    [["Borussia Dortmund", "Werder Bremen"], ["RB Leipzig", "Eintracht Frankfurt"], ["Hoffenheim", "Hamburg"], ["Freiburg", "Schalke 04"], ["Augsburg", "Bayern Munich"], ["Mainz", "Bayer Leverkusen"], ["Union Berlin", "Elversberg"], ["K\xF6ln", "Gladbach"], ["Paderborn", "Stuttgart"]],
+    [["Bayern Munich", "RB Leipzig"], ["Bayer Leverkusen", "Freiburg"], ["Eintracht Frankfurt", "K\xF6ln"], ["Union Berlin", "Borussia Dortmund"], ["Gladbach", "Hoffenheim"], ["Hamburg", "Stuttgart"], ["Werder Bremen", "Paderborn"], ["Schalke 04", "Mainz"], ["Elversberg", "Augsburg"]],
+    [["Borussia Dortmund", "Eintracht Frankfurt"], ["RB Leipzig", "Elversberg"], ["Stuttgart", "Gladbach"], ["Hoffenheim", "Bayer Leverkusen"], ["Freiburg", "Bayern Munich"], ["Augsburg", "Union Berlin"], ["Mainz", "Werder Bremen"], ["K\xF6ln", "Schalke 04"], ["Paderborn", "Hamburg"]],
+    [["Bayern Munich", "Borussia Dortmund"], ["Bayer Leverkusen", "Stuttgart"], ["Eintracht Frankfurt", "Hamburg"], ["Augsburg", "Freiburg"], ["Union Berlin", "K\xF6ln"], ["Gladbach", "Paderborn"], ["Werder Bremen", "Hoffenheim"], ["Schalke 04", "RB Leipzig"], ["Elversberg", "Mainz"]],
+    [["Borussia Dortmund", "Elversberg"], ["RB Leipzig", "Augsburg"], ["Stuttgart", "Werder Bremen"], ["Hoffenheim", "Schalke 04"], ["Freiburg", "Union Berlin"], ["Mainz", "Bayern Munich"], ["Hamburg", "Gladbach"], ["K\xF6ln", "Bayer Leverkusen"], ["Paderborn", "Eintracht Frankfurt"]],
+    [["Bayern Munich", "K\xF6ln"], ["Bayer Leverkusen", "Paderborn"], ["Eintracht Frankfurt", "Hoffenheim"], ["Augsburg", "Mainz"], ["Union Berlin", "RB Leipzig"], ["Gladbach", "Borussia Dortmund"], ["Werder Bremen", "Hamburg"], ["Schalke 04", "Stuttgart"], ["Elversberg", "Freiburg"]],
+    [["Borussia Dortmund", "Bayer Leverkusen"], ["Stuttgart", "Eintracht Frankfurt"], ["Hoffenheim", "Augsburg"], ["Freiburg", "RB Leipzig"], ["Mainz", "Union Berlin"], ["Hamburg", "Bayern Munich"], ["K\xF6ln", "Elversberg"], ["Werder Bremen", "Gladbach"], ["Paderborn", "Schalke 04"]],
+    [["Bayern Munich", "Paderborn"], ["RB Leipzig", "Mainz"], ["Bayer Leverkusen", "Gladbach"], ["Freiburg", "Hoffenheim"], ["Eintracht Frankfurt", "Werder Bremen"], ["Augsburg", "K\xF6ln"], ["Union Berlin", "Hamburg"], ["Schalke 04", "Borussia Dortmund"], ["Elversberg", "Stuttgart"]],
+    [["Borussia Dortmund", "Augsburg"], ["Stuttgart", "Union Berlin"], ["Hoffenheim", "Bayern Munich"], ["Mainz", "Freiburg"], ["Gladbach", "Eintracht Frankfurt"], ["Hamburg", "Schalke 04"], ["K\xF6ln", "RB Leipzig"], ["Werder Bremen", "Bayer Leverkusen"], ["Paderborn", "Elversberg"]],
+    [["Bayern Munich", "Werder Bremen"], ["RB Leipzig", "Borussia Dortmund"], ["Bayer Leverkusen", "Eintracht Frankfurt"], ["Freiburg", "Stuttgart"], ["Augsburg", "Paderborn"], ["Mainz", "K\xF6ln"], ["Union Berlin", "Hoffenheim"], ["Schalke 04", "Gladbach"], ["Elversberg", "Hamburg"]],
+    [["Borussia Dortmund", "Mainz"], ["Stuttgart", "Augsburg"], ["Hoffenheim", "Elversberg"], ["Eintracht Frankfurt", "Schalke 04"], ["Gladbach", "Bayern Munich"], ["Hamburg", "Bayer Leverkusen"], ["K\xF6ln", "Freiburg"], ["Werder Bremen", "Union Berlin"], ["Paderborn", "RB Leipzig"]],
+    [["Bayern Munich", "Bayer Leverkusen"], ["RB Leipzig", "Stuttgart"], ["Freiburg", "Hamburg"], ["Augsburg", "Gladbach"], ["Mainz", "Hoffenheim"], ["Union Berlin", "Paderborn"], ["K\xF6ln", "Borussia Dortmund"], ["Schalke 04", "Werder Bremen"], ["Elversberg", "Eintracht Frankfurt"]],
+    [["Borussia Dortmund", "Freiburg"], ["Stuttgart", "Mainz"], ["Hoffenheim", "RB Leipzig"], ["Bayer Leverkusen", "Schalke 04"], ["Eintracht Frankfurt", "Bayern Munich"], ["Gladbach", "Union Berlin"], ["Hamburg", "Augsburg"], ["Werder Bremen", "Elversberg"], ["Paderborn", "K\xF6ln"]],
+    [["Stuttgart", "Bayern Munich"], ["Hoffenheim", "K\xF6ln"], ["Bayer Leverkusen", "Elversberg"], ["Eintracht Frankfurt", "Union Berlin"], ["Gladbach", "RB Leipzig"], ["Hamburg", "Borussia Dortmund"], ["Werder Bremen", "Freiburg"], ["Schalke 04", "Augsburg"], ["Paderborn", "Mainz"]],
+    [["Bayern Munich", "Schalke 04"], ["Borussia Dortmund", "Hoffenheim"], ["RB Leipzig", "Werder Bremen"], ["Freiburg", "Paderborn"], ["Augsburg", "Eintracht Frankfurt"], ["Mainz", "Hamburg"], ["Union Berlin", "Bayer Leverkusen"], ["K\xF6ln", "Stuttgart"], ["Elversberg", "Gladbach"]],
+    [["Bayern Munich", "Elversberg"], ["Stuttgart", "Hoffenheim"], ["Bayer Leverkusen", "Augsburg"], ["Eintracht Frankfurt", "Mainz"], ["Gladbach", "Freiburg"], ["Hamburg", "RB Leipzig"], ["Werder Bremen", "K\xF6ln"], ["Schalke 04", "Union Berlin"], ["Paderborn", "Borussia Dortmund"]],
+    [["Borussia Dortmund", "Stuttgart"], ["RB Leipzig", "Bayer Leverkusen"], ["Hoffenheim", "Paderborn"], ["Freiburg", "Eintracht Frankfurt"], ["Augsburg", "Werder Bremen"], ["Mainz", "Gladbach"], ["Union Berlin", "Bayern Munich"], ["K\xF6ln", "Hamburg"], ["Elversberg", "Schalke 04"]],
+    [["Bayern Munich", "Augsburg"], ["Stuttgart", "Paderborn"], ["Bayer Leverkusen", "Mainz"], ["Eintracht Frankfurt", "RB Leipzig"], ["Gladbach", "K\xF6ln"], ["Hamburg", "Hoffenheim"], ["Werder Bremen", "Borussia Dortmund"], ["Schalke 04", "Freiburg"], ["Elversberg", "Union Berlin"]],
+    [["Borussia Dortmund", "Union Berlin"], ["RB Leipzig", "Bayern Munich"], ["Stuttgart", "Hamburg"], ["Hoffenheim", "Gladbach"], ["Freiburg", "Bayer Leverkusen"], ["Augsburg", "Elversberg"], ["Mainz", "Schalke 04"], ["K\xF6ln", "Eintracht Frankfurt"], ["Paderborn", "Werder Bremen"]],
+    [["Bayern Munich", "Freiburg"], ["Bayer Leverkusen", "Hoffenheim"], ["Eintracht Frankfurt", "Borussia Dortmund"], ["Union Berlin", "Augsburg"], ["Gladbach", "Stuttgart"], ["Hamburg", "Paderborn"], ["Werder Bremen", "Mainz"], ["Schalke 04", "K\xF6ln"], ["Elversberg", "RB Leipzig"]],
+    [["Borussia Dortmund", "Bayern Munich"], ["RB Leipzig", "Schalke 04"], ["Stuttgart", "Bayer Leverkusen"], ["Hoffenheim", "Werder Bremen"], ["Freiburg", "Augsburg"], ["Mainz", "Elversberg"], ["Hamburg", "Eintracht Frankfurt"], ["K\xF6ln", "Union Berlin"], ["Paderborn", "Gladbach"]],
+    [["Bayern Munich", "Mainz"], ["Bayer Leverkusen", "K\xF6ln"], ["Eintracht Frankfurt", "Paderborn"], ["Augsburg", "RB Leipzig"], ["Union Berlin", "Freiburg"], ["Gladbach", "Hamburg"], ["Werder Bremen", "Stuttgart"], ["Schalke 04", "Hoffenheim"], ["Elversberg", "Borussia Dortmund"]],
+    [["Borussia Dortmund", "Gladbach"], ["RB Leipzig", "Union Berlin"], ["Stuttgart", "Schalke 04"], ["Hoffenheim", "Eintracht Frankfurt"], ["Freiburg", "Elversberg"], ["Mainz", "Augsburg"], ["Hamburg", "Werder Bremen"], ["K\xF6ln", "Bayern Munich"], ["Paderborn", "Bayer Leverkusen"]],
+    [["Bayern Munich", "Hamburg"], ["RB Leipzig", "Freiburg"], ["Bayer Leverkusen", "Borussia Dortmund"], ["Eintracht Frankfurt", "Stuttgart"], ["Augsburg", "Hoffenheim"], ["Union Berlin", "Mainz"], ["Gladbach", "Werder Bremen"], ["Schalke 04", "Paderborn"], ["Elversberg", "K\xF6ln"]],
+    [["Borussia Dortmund", "Schalke 04"], ["Stuttgart", "Elversberg"], ["Hoffenheim", "Freiburg"], ["Mainz", "RB Leipzig"], ["Gladbach", "Bayer Leverkusen"], ["Hamburg", "Union Berlin"], ["K\xF6ln", "Augsburg"], ["Werder Bremen", "Eintracht Frankfurt"], ["Paderborn", "Bayern Munich"]],
+    [["Bayern Munich", "Hoffenheim"], ["RB Leipzig", "K\xF6ln"], ["Bayer Leverkusen", "Werder Bremen"], ["Freiburg", "Mainz"], ["Eintracht Frankfurt", "Gladbach"], ["Augsburg", "Borussia Dortmund"], ["Union Berlin", "Stuttgart"], ["Schalke 04", "Hamburg"], ["Elversberg", "Paderborn"]],
+    [["Borussia Dortmund", "RB Leipzig"], ["Stuttgart", "Freiburg"], ["Hoffenheim", "Union Berlin"], ["Eintracht Frankfurt", "Bayer Leverkusen"], ["Gladbach", "Schalke 04"], ["Hamburg", "Elversberg"], ["K\xF6ln", "Mainz"], ["Werder Bremen", "Bayern Munich"], ["Paderborn", "Augsburg"]],
+    [["Bayern Munich", "Gladbach"], ["RB Leipzig", "Paderborn"], ["Bayer Leverkusen", "Hamburg"], ["Freiburg", "K\xF6ln"], ["Augsburg", "Stuttgart"], ["Mainz", "Borussia Dortmund"], ["Union Berlin", "Werder Bremen"], ["Schalke 04", "Eintracht Frankfurt"], ["Elversberg", "Hoffenheim"]],
+    [["Borussia Dortmund", "K\xF6ln"], ["Stuttgart", "RB Leipzig"], ["Hoffenheim", "Mainz"], ["Bayer Leverkusen", "Bayern Munich"], ["Eintracht Frankfurt", "Elversberg"], ["Gladbach", "Augsburg"], ["Hamburg", "Freiburg"], ["Werder Bremen", "Schalke 04"], ["Paderborn", "Union Berlin"]],
+    [["Bayern Munich", "Eintracht Frankfurt"], ["RB Leipzig", "Hoffenheim"], ["Freiburg", "Borussia Dortmund"], ["Augsburg", "Hamburg"], ["Mainz", "Stuttgart"], ["Union Berlin", "Gladbach"], ["K\xF6ln", "Paderborn"], ["Schalke 04", "Bayer Leverkusen"], ["Elversberg", "Werder Bremen"]]
+  ],
+  sources: [
+    { label: "DFL", url: "https://www.bundesliga.com/de/bundesliga/news/spielplan-saison-start-termine-daten-2026-27-22043" },
+    { label: "Fixture Download", url: "https://fixturedownload.com/results/bundesliga-2026" }
+  ]
+};
+export {
+  BUNDESLIGA_FIXTURES_2026
+};
