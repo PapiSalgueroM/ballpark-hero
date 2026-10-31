@@ -1,0 +1,26 @@
+# Release BU lane m: Club Manager dugouts (Rounds 1606 and 1607, together): simManagers with its fleet and controls, the dugout fence and its controls (each exit 1), the quotes control, the current roster with CM_OWN_ROSTER_CORE_REF=HEAD. The fleet compares with d8a1f38e3, the join just before Round 1606 (Round 1606 used its own base c0c66e087, which on the joined head is red by construction: Round 1597 moves season one, rBUg-km 8 failures).
+m1606-vitest: node_modules/.bin/vitest run src/test/clubDetailDugout.test.tsx src/test/clubDetailOwnClub.test.tsx src/test/clubManagerJobHunt.test.ts src/test/clubDetailFixtures.test.tsx --testTimeout=300000 --hookTimeout=120000
+m1606-simManagers: node scripts/simManagers.mjs
+m1606-simManagers-fleet: SIM_MANAGERS_BASE=19911f815 node scripts/simManagers.mjs
+m1606-ctl-namedsack: SIM_MANAGERS_CONTROL=namedsack node scripts/simManagers.mjs
+m1606-ctl-recycle: SIM_MANAGERS_CONTROL=recycle node scripts/simManagers.mjs
+m1606-ctl-takeover: SIM_MANAGERS_CONTROL=takeover node scripts/simManagers.mjs
+m1606-ctl-liveevent: SIM_MANAGERS_CONTROL=liveevent node scripts/simManagers.mjs
+m1606-ctl-offer: SIM_MANAGERS_CONTROL=offer node scripts/simManagers.mjs
+m1606-ctl-sever: SIM_MANAGERS_CONTROL=sever node scripts/simManagers.mjs
+m1606-ctl-bogus: SIM_MANAGERS_CONTROL=bogus node scripts/simManagers.mjs
+m1606-quotes-dugout: QUOTES_CONTROL=dugout node scripts/simNoInventedQuotes.mjs
+m1606-simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+m1606-quotes-desk: QUOTES_CONTROL=desk node scripts/simNoInventedQuotes.mjs
+m1607-fence: node scripts/simClubManagerDugouts.mjs
+m1607-ctl-spelling: DUGOUTS_CONTROL=spelling node scripts/simClubManagerDugouts.mjs
+m1607-ctl-twochairs: DUGOUTS_CONTROL=twochairs node scripts/simClubManagerDugouts.mjs
+m1607-ctl-onehost: DUGOUTS_CONTROL=onehost node scripts/simClubManagerDugouts.mjs
+m1607-ctl-samedomain: DUGOUTS_CONTROL=samedomain node scripts/simClubManagerDugouts.mjs
+m1607-ctl-wikimirror: DUGOUTS_CONTROL=wikimirror node scripts/simClubManagerDugouts.mjs
+m1607-ctl-orphan: DUGOUTS_CONTROL=orphan node scripts/simClubManagerDugouts.mjs
+m1607-ctl-gap: DUGOUTS_CONTROL=gap node scripts/simClubManagerDugouts.mjs
+m1607-ctl-monthclash: DUGOUTS_CONTROL=monthclash node scripts/simClubManagerDugouts.mjs
+m1607-ctl-monthsamedomain: DUGOUTS_CONTROL=monthsamedomain node scripts/simClubManagerDugouts.mjs
+m1607-ctl-latereads: DUGOUTS_CONTROL=latereads node scripts/simClubManagerDugouts.mjs
+m1607-ctl-bogus: DUGOUTS_CONTROL=bogus node scripts/simClubManagerDugouts.mjs
