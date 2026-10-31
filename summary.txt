@@ -1,0 +1,4 @@
+simClubDetailFixtures exit=0 11s | PASS complete component/test restoration and actual saved league fixture outcomes
+simClubDetailCurrentRoster exit=0 3s | simClubDetailCurrentRoster normal: green.
+cards-full exit=1 222s | simCmPlayerCard: RED, 33 failures (221s)
+cards-1601 exit=0 221s | simCmPlayerCard: all green, 12825 checks (219s)

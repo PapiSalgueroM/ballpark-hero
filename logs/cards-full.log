@@ -1,0 +1,48 @@
+simCmPlayerCard: 30 careers of 3 seasons, engines: candidate, off, base; PAST_KEPT 10
+cards   7861 checks: my men at 160 points, 3508 rival book rows at season ends, on the first seed of every club; notes seen {"thisclub":3499,"leftclub":9,"thin":917}
+stream  4302 of 4302 faces equal to the off engine (every entry, season end and summer, with the draw count)
+  FAIL stream: Everton lending seed 0: the candidate leaves the base engine at face 0 of 140 (start c19ac5457ec6b6390aa0bd02|711 against start ed97b511dad797766b4efcec|711)
+  FAIL stream: Real Madrid seed 0: the candidate leaves the base engine at face 0 of 164 (start f5839cfe0938fbfdd3df0588|772 against start 4c488409104be24c174799c3|772)
+  FAIL stream: Lincoln City seed 0: the candidate leaves the base engine at face 50 of 151 (summer 0 16f90df8766eba485f03a563|51142 against summer 0 f6d800226ecff7a65c8dd641|51142)
+  FAIL stream: Hertha BSC seed 0: the candidate leaves the base engine at face 38 of 116 (summer 0 a95ebe07beafb5316f6af748|47032 against summer 0 dbd123e81d68de13bedb48f0|47032)
+  FAIL stream: Real Anthony seed 0: the candidate leaves the base engine at face 0 of 145 (start be5dde851c0c28733285a4b5|714 against start 0476185f0b34015f013d1cb3|714)
+  FAIL stream: Arsenal (era2010) seed 0: the candidate leaves the base engine at face 51 of 146 (summer 0 6cf7eda20e37881157174f10|27625 against summer 0 876e58030d85dfb1f8286c6f|27625)
+  FAIL stream: Everton lending seed 1: the candidate leaves the base engine at face 0 of 140 (start 330b5d6f4992d3a8ecc0ae1d|715 against start 0fadf7db300f669099b180c6|715)
+  FAIL stream: Real Madrid seed 1: the candidate leaves the base engine at face 0 of 161 (start c896350bdead67008f800a24|762 against start 2f62abf31f426bc43726e9fa|762)
+  FAIL stream: Lincoln City seed 1: the candidate leaves the base engine at face 0 of 153 (start 4b9280fb431ff09144845064|784 against start 58ad119ff7e76b7287da1e3f|784)
+  FAIL stream: Hertha BSC seed 1: the candidate leaves the base engine at face 0 of 116 (start d54a15eafbb3f70df7832c5d|748 against start e0a60d828110145fa30860dd|748)
+  FAIL stream: Real Anthony seed 1: the candidate leaves the base engine at face 0 of 143 (start a5caf5b9bdc2b04034c8e9c4|711 against start 11237764bf0e01e516f5e127|711)
+  FAIL stream: Arsenal (era2010) seed 1: the candidate leaves the base engine at face 3 of 149 (0:3 25bd1ed2bd8841547a525f8f|2228 against 0:3 c246397b33eb35da08ba046b|2228)
+  FAIL stream: Everton lending seed 2: the candidate leaves the base engine at face 0 of 142 (start 1a632cf65508629a14d99203|716 against start 85e243a25d2e82307f4486f9|716)
+  FAIL stream: Real Madrid seed 2: the candidate leaves the base engine at face 0 of 161 (start cf4f206bedd43c3942466acf|768 against start 31367c5e7f8c71a4ca6b51c2|768)
+  FAIL stream: Lincoln City seed 2: the candidate leaves the base engine at face 0 of 151 (start 85656212b2dfa60c1585dcde|785 against start 3f06b791d9e393884b91cd52|785)
+  FAIL stream: Hertha BSC seed 2: the candidate leaves the base engine at face 0 of 117 (start b1985d456110c52ecc9f27f8|745 against start 4073f2bbf518bd0884e39a09|745)
+  FAIL stream: Real Anthony seed 2: the candidate leaves the base engine at face 0 of 145 (start d3fc21d110a35554f731cd64|713 against start 71152249f6df99d3edb34d31|713)
+  FAIL stream: Arsenal (era2010) seed 2: the candidate leaves the base engine at face 1 of 142 (0:1 b06cefe994399871c2024290|902 against 0:1 8836ab5e91112480b88c623f|902)
+  FAIL stream: Everton lending seed 3: the candidate leaves the base engine at face 0 of 139 (start 141ab1c371f3072ae41fb5fd|712 against start 17deb2435ae4f14d104e89e0|712)
+  FAIL stream: Real Madrid seed 3: the candidate leaves the base engine at face 0 of 160 (start fd5abd856b32e8dfad38a158|766 against start 3491fbdc5dbe827d367c4565|766)
+stream  145 of 4302 faces equal to the base engine (every entry, season end and summer, with the draw count)
+archive 4182 checks; 1913 rows written and checked, 15 of them for a man out on loan at the season end, the most rows one man held 3
+cards   the namesake case at Coventry City: each of two men of one name reads his own row
+cap     Everton renewing, 15 seasons: 15 seasons, the most rows one man held 10
+size    candidate bytes a season: 162809 176313 187579 187347 192154 227014 202728 203788 206474 206462 206954 206881 211419 209735 211933
+size    archive bytes a season:   836 1219 1584 1941 2193 2543 2871 2999 3141 3308 3310 3534 3458 3178 3463
+size    season 15: 211933 bytes, of which the archive 3463; slope over seasons 4 to 15 1223 bytes a season (printed for the lead, not gated here)
+size    base bytes a season:      161746 175064 185532 185071 189626 224136 199542 200572 203180 203001 203491 203194 207808 206404 208317
+size    base season 15: 208317 bytes, slope 1116; candidate minus base: 1063 1249 2047 2276 2528 2878 3186 3216 3294 3461 3463 3687 3611 3331 3616
+cap     a constructed squad of 25 archived 12 times holds 10 rows a man, the newest (seasons 3 to 12)
+oldsave the committed save of Round 1052 (Sevilla): six entries on, book 34 (late round index), 146 rival rows held, kept from no line
+oldsave the committed save of Round 1052 (Sevilla): loaded clean, season 1 played out, pastFrom 1, 20 men with a row
+oldsave the committed second tier save (Valencia): six entries on, book 34 (late round index), 136 rival rows held, kept from no line
+oldsave the committed second tier save (Valencia): loaded clean, season 1 played out, pastFrom 1, 17 men with a row
+oldsave a save parked on its season 1 review: nothing on load or at the summer, pastFrom 2 after season 2
+dailies 38 states of 4 Hot Seat days and 2 Deadline Day runs looked at
+markup  9 of 12 renders (Squad, Stats, a leaders board, a club page, on 3 saves) with no provider byte equal to the base commit's
+  cards    8189 checks, 0 failed
+  archive  4182 checks, 0 failed
+  stream   60 checks, 30 failed
+  cap      332 checks, 0 failed
+  oldsave  12 checks, 0 failed
+  dailies  38 checks, 0 failed
+  markup   12 checks, 3 failed
+simCmPlayerCard: RED, 33 failures (221s)
