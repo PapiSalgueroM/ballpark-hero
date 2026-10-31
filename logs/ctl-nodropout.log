@@ -1,0 +1,22 @@
+  Everton now none: 60 men left, lost 0, twice 0, 12 retired off the list; at season 9 46 on the list besides the journeymen, median age 25
+  Everton now eleven: 31 men left, lost 0, twice 0, 12 retired off the list; at season 9 25 on the list besides the journeymen, median age 23
+  Villarreal now none: 68 men left, lost 0, twice 0, 10 retired off the list; at season 9 56 on the list besides the journeymen, median age 25
+  Villarreal now eleven: 39 men left, lost 0, twice 0, 9 retired off the list; at season 9 35 on the list besides the journeymen, median age 24
+  Freiburg now none: 66 men left, lost 0, twice 0, 10 retired off the list; at season 9 51 on the list besides the journeymen, median age 25
+  Freiburg now eleven: 37 men left, lost 0, twice 0, 13 retired off the list; at season 9 28 on the list besides the journeymen, median age 23
+  Ajax now none: 73 men left, lost 0, twice 0, 16 retired off the list; at season 9 55 on the list besides the journeymen, median age 24
+  Ajax now eleven: 39 men left, lost 0, twice 0, 16 retired off the list; at season 9 27 on the list besides the journeymen, median age 23
+  Braga now none: 69 men left, lost 0, twice 0, 10 retired off the list; at season 9 58 on the list besides the journeymen, median age 25
+  Braga now eleven: 37 men left, lost 0, twice 0, 10 retired off the list; at season 9 34 on the list besides the journeymen, median age 25
+  Southampton era2015 none: 58 men left, lost 0, twice 0, 5 retired off the list; at season 9 46 on the list besides the journeymen, median age 26
+  Southampton era2015 eleven: 36 men left, lost 0, twice 0, 6 retired off the list; at season 9 30 on the list besides the journeymen, median age 23
+  trim Everton now: squad 35 into the summer, 30 after; 3 trimmed, listed as {"released mine":3}; lent out Christian Nørgaard
+  trim Ajax now: squad 39 into the summer, 30 after; 5 trimmed, listed as {"released mine":5}; lent out Simon Adingra
+  trim Southampton era2015: squad 36 into the summer, 30 after; 0 trimmed, listed as {}; lent out Graziano Pellè
+  trim Freiburg now: squad 38 into the summer, 30 after; 4 trimmed, listed as {"released mine":4}; lent out Maximilian Eggestein
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 5
+  FAIL section 8: 0 men left the list for a league the game does not follow, against 151.1 expected on the world's odds (band 44.5)
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 746 men left a squad, 2678 summer checks; lost 0, twice 0; 148 retired off the list (0 summers unseen); list size at the end median 46, its median age median 25; left for a league the game does not follow 0 (expected 151.1, sd 10.6; real 0; tracked men among them 0); trimmed 12 (mine and never barred 12); signed back off the list by the fill 162 (squad summers held as released by the ledger by another path, older than this round: 2); ledger held list men 2476, a summer on 1865; out on loan in the last year 4 (left 4, renewed 4); old saves recoverable 13, recovered 13
+simCmFreeAgencyFleet: CONTROL nodropout FIRED: section 8 red

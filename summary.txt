@@ -1,0 +1,10 @@
+vt-fa exit=0 14s |    Duration  13.89s (transform 5.65s, setup 850ms, collect 12.01s, tests 16.16s, environment 4.30s, prepare 1.21s)
+tsc exit=0 83s | 
+fleet exit=0 229s | simCmFreeAgencyFleet: green, all eight sections held
+ctl-trimstranger exit=1 223s | simCmFreeAgencyFleet: CONTROL trimstranger FIRED: section 5 red
+ctl-trimbar exit=1 227s | simCmFreeAgencyFleet: CONTROL trimbar FIRED: section 5 red
+ctl-nofilllink exit=1 229s | simCmFreeAgencyFleet: CONTROL nofilllink FIRED: section 6 red
+ctl-dropreal exit=1 232s | simCmFreeAgencyFleet: CONTROL dropreal FIRED: section 8 red
+ctl-nodropout exit=1 217s | simCmFreeAgencyFleet: CONTROL nodropout FIRED: section 8 red
+simFreeAgents exit=0 101s | simFreeAgents: all sections passed
+ctl-leftunsaid exit=1 184s | simCmFreeAgencyFleet: CONTROL leftunsaid FIRED: section 8 red (red: 1 (126), 4 (5), 8 (129))

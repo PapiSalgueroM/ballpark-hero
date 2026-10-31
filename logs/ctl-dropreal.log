@@ -1,0 +1,29 @@
+  FAIL section 8: Everton none, summer into season 2: Wissam Ben Yedder, a real player, left the list for a league the game does not follow
+  FAIL section 8: Everton none, summer into season 3: Dele Alli, a real player, left the list for a league the game does not follow
+  FAIL section 8: Everton none, summer into season 3: Tiemoué Bakayoko, a real player, left the list for a league the game does not follow
+  FAIL section 8: Everton none, summer into season 3: Jordan Pickford, a real player, left the list for a league the game does not follow
+  FAIL section 8: Everton none, summer into season 4: Michael Keane, a real player, left the list for a league the game does not follow
+  FAIL section 8: Everton none, summer into season 6: Mark Travers, a real player, left the list for a league the game does not follow
+  FAIL section 8: Everton none, summer into season 6: Jack Grealish, a real player, left the list for a league the game does not follow
+  FAIL section 8: Everton none, summer into season 7: Merlin Röhl, a real player, left the list for a league the game does not follow
+  Everton now none: 63 men left, lost 0, twice 0, 6 retired off the list; at season 9 32 on the list besides the journeymen, median age 24
+  Everton now eleven: 31 men left, lost 0, twice 0, 5 retired off the list; at season 9 16 on the list besides the journeymen, median age 23
+  Villarreal now none: 71 men left, lost 0, twice 0, 6 retired off the list; at season 9 35 on the list besides the journeymen, median age 24
+  Villarreal now eleven: 39 men left, lost 0, twice 0, 6 retired off the list; at season 9 21 on the list besides the journeymen, median age 22
+  Freiburg now none: 67 men left, lost 0, twice 0, 5 retired off the list; at season 9 33 on the list besides the journeymen, median age 24
+  Freiburg now eleven: 36 men left, lost 0, twice 0, 6 retired off the list; at season 9 21 on the list besides the journeymen, median age 22
+  Ajax now none: 73 men left, lost 0, twice 0, 10 retired off the list; at season 9 33 on the list besides the journeymen, median age 23
+  Ajax now eleven: 39 men left, lost 0, twice 0, 7 retired off the list; at season 9 18 on the list besides the journeymen, median age 23
+  Braga now none: 73 men left, lost 0, twice 0, 6 retired off the list; at season 9 32 on the list besides the journeymen, median age 23
+  Braga now eleven: 37 men left, lost 0, twice 0, 5 retired off the list; at season 9 22 on the list besides the journeymen, median age 23
+  Southampton era2015 none: 58 men left, lost 0, twice 0, 1 retired off the list; at season 9 30 on the list besides the journeymen, median age 25
+  Southampton era2015 eleven: 36 men left, lost 0, twice 0, 2 retired off the list; at season 9 20 on the list besides the journeymen, median age 23
+  trim Everton now: squad 35 into the summer, 30 after; 3 trimmed, listed as {"released mine":3}; lent out Christian Nørgaard
+  trim Ajax now: squad 39 into the summer, 30 after; 5 trimmed, listed as {"released mine":5}; lent out Simon Adingra
+  trim Southampton era2015: squad 36 into the summer, 30 after; 0 trimmed, listed as {}; lent out Graziano Pellè
+  trim Freiburg now: squad 38 into the summer, 30 after; 4 trimmed, listed as {"released mine":4}; lent out Maximilian Eggestein
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 5
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 756 men left a squad, 2230 summer checks; lost 0, twice 0; 81 retired off the list (0 summers unseen); list size at the end median 30, its median age median 23; left for a league the game does not follow 295 (expected 122.7, sd 9.5; real 160; tracked men among them 263); trimmed 12 (mine and never barred 12); signed back off the list by the fill 149 (squad summers held as released by the ledger by another path, older than this round: 2); ledger held list men 1849, a summer on 1156; out on loan in the last year 4 (left 4, renewed 4); old saves recoverable 13, recovered 13
+simCmFreeAgencyFleet: CONTROL dropreal FIRED: section 8 red

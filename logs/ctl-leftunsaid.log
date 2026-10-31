@@ -1,0 +1,42 @@
+  FAIL section 8: Everton none, summer into season 4: Milo Voskuil (Youth) left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now none, summer into season 4: Milo Voskuil (Youth) (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 8: Everton none, summer into season 6: Kaan Novak (Youth) left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 6: Oscar Nyman (Youth) left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 6: Jonas Weston (Youth) left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 6: Ferran Konate left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now none, summer into season 6: Kaan Novak (Youth) (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 6: Oscar Nyman (Youth) (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 6: Jonas Weston (Youth) (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 6: Ferran Konate (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 8: Everton none, summer into season 7: Noah Dubois (Youth) left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 7: Diogo Guerrero left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 7: Dario Molina left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now none, summer into season 7: Noah Dubois (Youth) (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 7: Diogo Guerrero (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 7: Dario Molina (left at a summer) is in no squad, not on the list and not retired
+  Everton now none: 69 men left, lost 14, twice 0, 11 retired off the list; at season 9 43 on the list besides the journeymen, median age 24
+  Everton now eleven: 31 men left, lost 7, twice 0, 12 retired off the list; at season 9 18 on the list besides the journeymen, median age 23
+  Villarreal now none: 66 men left, lost 14, twice 0, 8 retired off the list; at season 9 41 on the list besides the journeymen, median age 25
+  Villarreal now eleven: 39 men left, lost 8, twice 0, 9 retired off the list; at season 9 27 on the list besides the journeymen, median age 24
+  Freiburg now none: 66 men left, lost 13, twice 0, 10 retired off the list; at season 9 39 on the list besides the journeymen, median age 25
+  Freiburg now eleven: 37 men left, lost 5, twice 0, 13 retired off the list; at season 9 23 on the list besides the journeymen, median age 22
+  Ajax now none: 73 men left, lost 18, twice 0, 14 retired off the list; at season 9 42 on the list besides the journeymen, median age 25
+  Ajax now eleven: 39 men left, lost 4, twice 0, 16 retired off the list; at season 9 23 on the list besides the journeymen, median age 23
+  Braga now none: 71 men left, lost 15, twice 0, 10 retired off the list; at season 9 46 on the list besides the journeymen, median age 27
+  Braga now eleven: 37 men left, lost 8, twice 0, 10 retired off the list; at season 9 26 on the list besides the journeymen, median age 23
+  Southampton era2015 none: 58 men left, lost 9, twice 0, 4 retired off the list; at season 9 38 on the list besides the journeymen, median age 26
+  Southampton era2015 eleven: 36 men left, lost 8, twice 0, 6 retired off the list; at season 9 22 on the list besides the journeymen, median age 23
+  trim Everton now: squad 35 into the summer, 30 after; 3 trimmed, listed as {"released mine":3}; lent out Christian Nørgaard
+  trim Ajax now: squad 39 into the summer, 30 after; 5 trimmed, listed as {"released mine":5}; lent out Simon Adingra
+  trim Southampton era2015: squad 36 into the summer, 30 after; 0 trimmed, listed as {}; lent out Graziano Pellè
+  trim Freiburg now: squad 38 into the summer, 30 after; 4 trimmed, listed as {"released mine":4}; lent out Maximilian Eggestein
+  FAIL section 4: Everton: Marco Ravenhill (Youth), on the old save's list, is gone after its next summer
+  FAIL section 4: Everton: Ravi Tarrant (Youth), on the old save's list, is gone after its next summer
+  FAIL section 4: Everton: Ferran Konate, on the old save's list, is gone after its next summer
+  FAIL section 4: Everton: Noah Weston (Youth), on the old save's list, is gone after its next summer
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  FAIL section 4: Ajax: Nils Hallberg (Youth), on the old save's list, is gone after its next summer
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 5
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 755 men left a squad, 2487 summer checks; lost 126, twice 0; 142 retired off the list (0 summers unseen); list size at the end median 38, its median age median 24; left for a league the game does not follow 0 (expected 85.8, sd 8.4; real 0; tracked men among them 0); trimmed 12 (mine and never barred 12); signed back off the list by the fill 155 (squad summers held as released by the ledger by another path, older than this round: 2); ledger held list men 2184, a summer on 1568; out on loan in the last year 4 (left 4, renewed 4); old saves recoverable 13, recovered 13
+simCmFreeAgencyFleet: CONTROL leftunsaid FIRED: section 8 red (red: 1 (126), 4 (5), 8 (129))

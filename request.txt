@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-fa: node_modules/.bin/vitest run src/test/cmFreeAgentContinuity.test.ts src/test/cmFreeAgentDiscovery.test.tsx src/test/cmFreeAgentLegacyIdentity.test.ts src/test/cmMarketMaxPrice.test.tsx src/test/cmWorldIdentity1052.test.ts src/test/cmFreeAgencyJoinNow.test.ts src/test/ClubManagerSeasonSummary.expiring.test.tsx src/test/freeAgencyFeedback.test.tsx --testTimeout=300000 --hookTimeout=120000
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+ctl-trimstranger: CM_FA_CONTROL=trimstranger node scripts/simCmFreeAgencyFleet.mjs
+ctl-trimbar: CM_FA_CONTROL=trimbar node scripts/simCmFreeAgencyFleet.mjs
+ctl-nofilllink: CM_FA_CONTROL=nofilllink node scripts/simCmFreeAgencyFleet.mjs
+ctl-dropreal: CM_FA_CONTROL=dropreal node scripts/simCmFreeAgencyFleet.mjs
+ctl-nodropout: CM_FA_CONTROL=nodropout node scripts/simCmFreeAgencyFleet.mjs
+ctl-leftunsaid: CM_FA_CONTROL=leftunsaid node scripts/simCmFreeAgencyFleet.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs

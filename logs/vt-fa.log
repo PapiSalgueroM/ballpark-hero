@@ -1,0 +1,37 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/ClubManagerSeasonSummary.expiring.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1663[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut [33m 389[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22ma final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal [33m 393[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgentContinuity.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 2154[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent continuity[2m > [22mrecovers a naturally expired player in the arrival season without a cheaper contract [33m 585[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent continuity[2m > [22mrestores a later free-agent signing with the same identity and durable development [33m 455[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent continuity[2m > [22muses renewal wage and fee floors when an expired player returns [33m 423[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgentDiscovery.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 2520[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mkeeps the contracts desk quotes and signing callback intact [33m 366[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mshows the existing free-agent pool and signing terms in the open transfer window [33m 1221[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mshows the same free-agent signing action with the transfer window closed [33m 309[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/cmWorldIdentity1052.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 1310[2mms[22m[39m
+ [32m✓[39m src/test/freeAgencyFeedback.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 1992[2mms[22m[39m
+   [33m[2m✓[22m[39m Free agency committed negotiation feedback[2m > [22mpreserves original offer order exact terms and signing indices as an independent baseline [33m 393[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgencyJoinNow.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1589[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: a mid season job move loses nobody off the free agent list[2m > [22mcarries the men who left me, my released names and the once only pass, and leaves the old journeymen [33m 846[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: a mid season job move loses nobody off the free agent list[2m > [22ma save with nothing of the kind joins exactly as before [33m 742[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgentLegacyIdentity.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 155[2mms[22m[39m
+ [32m✓[39m src/test/cmMarketMaxPrice.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 4775[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mkeeps existing price presets and the default Buy results unchanged [33m 900[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mincludes the exact asking-price boundary and excludes the next higher ask [33m 559[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mfilters public asking prices without using stored market values [33m 467[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mapplies the asking-price ceiling before the fifty-result limit [33m 1409[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mrejects malformed ceilings without silently parsing a partial number [33m 323[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22muses each selected currency symbol without converting the asking-price amount [33m 876[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m54 passed[39m[22m[90m (54)[39m
+[2m   Start at [22m 16:06:06
+[2m   Duration [22m 13.89s[2m (transform 5.65s, setup 850ms, collect 12.01s, tests 16.16s, environment 4.30s, prepare 1.21s)[22m
+
