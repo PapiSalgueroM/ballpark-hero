@@ -1,0 +1,23 @@
+/bin/sh: 1: /home/runner/work/ballpark-hero/ballpark-hero/.rcb/node_modules/.bin/esbuild: not found
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: "/home/runner/work/ballpark-hero/ballpark-hero/.rcb/node_modules/.bin/esbuild" "/home/runner/work/_temp/t-cc-base/createClubEntry.mjs" --bundle --format=esm --platform=node --outfile="/home/runner/work/_temp/t-cc-base/createClub.bundle.mjs" --log-level=error
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:943:11)
+    at execSync (node:child_process:1015:15)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rcb/scripts/simCreateClub.mjs:53:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 127,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 3151,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v24.22.1

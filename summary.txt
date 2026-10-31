@@ -1,0 +1,6 @@
+ledger-alone exit=0 234s | simCmLedgerBound: green, all four sections held
+cls-head exit=1 11s | simCareerLeagueSeasons: 582 failures (sections a)
+cls-base exit=1 11s | simCareerLeagueSeasons: 582 failures (sections a)
+cls-m2 exit=1 11s | simCareerLeagueSeasons: 582 failures (sections a)
+cls-1600 exit=1 11s | simCareerLeagueSeasons: 582 failures (sections a)
+cc-base exit=1 0s | Node.js v24.22.1
