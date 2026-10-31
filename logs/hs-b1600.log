@@ -1,0 +1,12 @@
+Auto-merging scripts/data/cmLeagueRulesDigest.json
+Auto-merging scripts/simFreeAgents.mjs
+Auto-merging src/lib/clubManager.ts
+Auto-merging src/lib/clubManagerEras.ts
+Auto-merging src/lib/managerHotSeat.ts
+Auto-merging src/pages/WhatsNew.tsx
+hsProbe: planted
+PROBE Hot Seat at Bournemouth: ".state.tieRules: undefined vs \"night\""
+PROBE Hot Seat at Crystal Palace: ".state.tieRules: undefined vs \"night\""
+PROBE Hot Seat at Leeds United: ".state.tieRules: undefined vs \"night\""
+   60 careers over 3 seasons, 3 mid season starts and 3 Hot Seat runs: 1146 states compared, 3 differ (48 s, base c6dd994b2)
+simManagers: 3 failure(s)

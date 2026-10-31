@@ -1,0 +1,2 @@
+hs-b1600 exit=1 102s | simManagers: 3 failure(s)
+hs-beuro exit=0 102s | simManagers: all green

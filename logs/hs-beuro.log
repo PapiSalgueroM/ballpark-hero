@@ -1,0 +1,14 @@
+Auto-merging scripts/data/cmLeagueRulesDigest.json
+Auto-merging scripts/simCmLeagueRules.mjs
+Auto-merging scripts/simCmShootoutOrder.mjs
+Auto-merging scripts/simFreeAgents.mjs
+Auto-merging src/lib/clubManager.ts
+Auto-merging src/lib/clubManagerEras.ts
+Auto-merging src/lib/managerHotSeat.ts
+Auto-merging src/pages/WhatsNew.tsx
+hsProbe: planted
+PROBE Hot Seat at Bournemouth: null
+PROBE Hot Seat at Crystal Palace: null
+PROBE Hot Seat at Leeds United: null
+   60 careers over 3 seasons, 3 mid season starts and 3 Hot Seat runs: 1146 states compared, 0 differ (48 s, base 4bd101066)
+simManagers: all green
