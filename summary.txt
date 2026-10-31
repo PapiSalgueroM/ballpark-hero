@@ -1,0 +1,12 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playFoHub exit=0 61s | playFoHub: green. Four front offices, nine live boxes each, and the five the walk opens open what they name.
+playOwnerMandate exit=0 24s | ALL OWNER MANDATE WALK CHECKS PASSED
+playDraftNight exit=0 207s | playDraftNight: ALL GREEN, 49 nights walked
+playGmPress exit=1 80s | playGmPress: 2 failures
+nofallback-nhl exit=1 58s | playGmCareer control nofallback: 4/4 guarded checks fired, 0 missed, 6 unrelated failure(s)
+playGmCareer-nhl exit=0 495s | playGmCareer: green. 1 board(s) (nhl), 3 sizes, four walks each and the slow kit walk at 390 and 1280.
+nofallback-nfl exit=1 66s | playGmCareer control nofallback: 4/4 guarded checks fired, 0 missed, 6 unrelated failure(s)
+eagerkit-nhl exit=0 3s | playGmCareer control eagerkit: all 1 guarded checks fired (mutations landed: {"eagerkit":4})
+wipebutton-nhl exit=0 11s | playGmCareer control wipebutton: all 1 guarded checks fired (mutations landed: {"wipebutton":2})
+eagerpanel-nhl exit=0 25s | playGmCareer control eagerpanel: all 1 guarded checks fired (mutations landed: {"eagerpanel":16})
+playGmCareer-nfl exit=0 534s | playGmCareer: green. 1 board(s) (nfl), 3 sizes, four walks each and the slow kit walk at 390 and 1280.
