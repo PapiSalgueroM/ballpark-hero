@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+# Release BV walks on the served head, one at a time (playCmEuroPlay's controls build their own dist from a patched
+# copy and put the line back): 1603's deciding leg card, 1593's Europa League walk with notile and nofixture (each
+# exit 1, FIRED), and the World Champions League walk 1593 ran.
+playCmDecidingLeg: ENGINES=chromium node scripts/playCmDecidingLeg.mjs
+playCmEuroPlay: ENGINES=chromium node scripts/playCmEuroPlay.mjs
+walk-notile: PLAY_EURO_CONTROL=notile ENGINES=chromium node scripts/playCmEuroPlay.mjs
+walk-nofixture: PLAY_EURO_CONTROL=nofixture ENGINES=chromium node scripts/playCmEuroPlay.mjs
+playWorldUcl: ENGINES=chromium node scripts/playWorldUcl.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
