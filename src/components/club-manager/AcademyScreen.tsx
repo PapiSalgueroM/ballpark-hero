@@ -5,6 +5,7 @@ import {
   SCOUT_REGIONS, SCOUT_TRIPS, MAX_SCOUTS, MAX_PROSPECTS,
   FACILITY_INFO, academyUpgradeCost, tripCost, money, moneyIn,
 } from '@/lib/clubManager';
+import { retiredSonOffer, acceptRetiredSon, declineRetiredSon } from '@/lib/clubManagerRetiredSonActions';
 import type { CareerState, FacilityKind, Prospect, Scout } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
@@ -18,6 +19,7 @@ interface AcademyScreenProps {
   onRecall: (scoutId: string) => void;
   onPromote: (prospectId: string) => void;
   onRelease: (prospectId: string) => void;
+  onCommitRecruitment?: (make: (career: CareerState) => CareerState | null) => boolean;
 }
 
 function levelTone(level: number): string {
@@ -85,6 +87,61 @@ function ProspectRow({
   );
 }
 
+function RetiredSonApplicationCard({ career, offer, onCommit }: {
+  career: CareerState;
+  offer: NonNullable<ReturnType<typeof retiredSonOffer>>;
+  onCommit: AcademyScreenProps['onCommitRecruitment'];
+}) {
+  const [refused, setRefused] = useState(false);
+  const fmt = moneyIn(career);
+  const p = offer.prospect;
+  const pending = offer.status === 'pending';
+  const count = career.academy?.prospects.length ?? 0;
+  const full = count >= MAX_PROSPECTS;
+  const shortOfFunds = career.budget < offer.fee;
+  const message = offer.status === 'accepted'
+    ? 'Invited. The recruitment fee was paid once. Development and first-team signing follow the normal academy rules.'
+    : offer.status === 'declined'
+      ? 'Passed. No fee, morale or reputation cost.'
+      : !pending
+        ? 'This application is no longer open.'
+        : !onCommit
+          ? 'Choices are unavailable in this view.'
+          : refused
+            ? 'The choice did not go through. Check this card and any save notice, then try again.'
+            : full && shortOfFunds
+              ? 'The academy is full and there is not enough money for the fee. Pass costs nothing.'
+              : full
+                ? 'The academy is full. Free a place before inviting him. Pass costs nothing.'
+                : shortOfFunds
+                  ? `Not enough funds. You need ${fmt(offer.fee)} in the kitty to invite him. Pass costs nothing.`
+                  : 'Optional. Invite pays the fee once and adds him to the academy. Pass costs nothing.';
+  const choose = (invite: boolean) => {
+    if (!onCommit) return;
+    setRefused(!onCommit(now => invite ? acceptRetiredSon(now, offer.id) : declineRetiredSon(now, offer.id)));
+  };
+  return (
+    <section aria-labelledby="cm-retired-son-title" data-testid="cm-retired-son-application" className="bg-card border border-primary/40 rounded-xl p-3 space-y-2">
+      <h3 id="cm-retired-son-title" className="text-xs font-bold text-foreground">A family application</h3>
+      <p className="text-[11px] text-muted-foreground">Retired {offer.parentName}'s son has asked to join your academy. Both players are made up.</p>
+      <div className="text-xs text-foreground break-words">
+        <div className="font-bold">{p.name}</div>
+        <p className="text-[11px] text-muted-foreground">Application report: {p.age} years old · {p.position} · ability {p.rating}</p>
+        <p className="text-[11px] text-muted-foreground">Scout ceiling {p.lowGuess} to {p.highGuess}. An estimate, not a promise.</p>
+      </div>
+      <p className="text-[11px] text-muted-foreground">Fee {fmt(offer.fee)} · Kitty {fmt(career.budget)} · Academy {count}/{MAX_PROSPECTS}</p>
+      <div className="grid grid-cols-2 gap-2">
+        <button type="button" onClick={() => choose(true)} disabled={!onCommit || !pending || full || shortOfFunds} aria-describedby="cm-retired-son-status" className="min-h-[44px] min-w-[44px] rounded-lg border border-primary/50 px-2 text-xs font-bold text-primary hover:bg-primary/10 disabled:opacity-40 disabled:hover:bg-transparent">
+          Invite to academy
+        </button>
+        <button type="button" onClick={() => choose(false)} disabled={!onCommit || !pending} aria-describedby="cm-retired-son-status" className="min-h-[44px] min-w-[44px] rounded-lg border border-border px-2 text-xs text-muted-foreground hover:text-foreground disabled:opacity-40">
+          Pass
+        </button>
+      </div>
+      <p id="cm-retired-son-status" role="status" aria-live="polite" className="min-h-[60px] text-[11px] leading-5 text-muted-foreground">{message}</p>
+    </section>
+  );
+}
 function ScoutOnTheRoad({ s, onRecall }: { s: Scout; onRecall: (id: string) => void }) {
   return (
     <div className="flex items-center gap-2 py-1.5 border-b border-border/30 last:border-0">
@@ -110,7 +167,7 @@ function ScoutOnTheRoad({ s, onRecall }: { s: Scout; onRecall: (id: string) => v
  * scouts you can have on the road, and everyone they turn up sitting on the
  * books waiting for you to decide.
  */
-export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, onRelease }: AcademyScreenProps) {
+export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, onRelease, onCommitRecruitment }: AcademyScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
@@ -148,6 +205,7 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
     return <p className="text-xs text-muted-foreground text-center py-6">Your academy opens the first time you play a match.</p>;
   }
 
+  const familyOffer = retiredSonOffer(career);
   const cand = a.candidates.find(c => c.id === picking) ?? null;
   const squadFull = career.squad.length >= 30;
   const positions = [...new Set(a.prospects.map(p => p.position))].sort();
@@ -272,6 +330,8 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
           </div>
         )}
       </div>
+
+      {familyOffer && <RetiredSonApplicationCard key={familyOffer.id} career={career} offer={familyOffer} onCommit={onCommitRecruitment} />}
 
       {/* ---- the kids ---- */}
       <div className="bg-card border border-border rounded-xl p-3">
