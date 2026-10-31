@@ -87,9 +87,15 @@
    with no second copy of the logic. decidingLegAt now reads the 'uel' second leg too (the engine's own
    uelLegTonight, exported in HEAD and OLD alike by a probe line that changes nothing), and section 1 plays
    Europa League candidates (UEL_CAREERS) after the Champions League fleet: season one, the rollover on every
-   engine, then season two to its last Europa League night, HEAD and OLD in lockstep as above, until one candidate
-   meets a deciding second leg (check "careers: a Europa League career meets a deciding second leg"). Its legs join
-   the leg fleet, the gate and the hauls like any other.
+   engine with season one's cup final handed to the club (so it plays the Europa League by the cup unless its
+   league place takes it to the Champions League), then season two to its last Europa League night, HEAD and OLD
+   in lockstep as above. Two checks: the candidates meet at least one deciding second leg, and decidingLegAt agrees
+   with the whistle (a report with tie.leg 2 and through set) on every Europa League night. Their legs join the leg
+   fleet, the gate and the hauls like any other.
+   MEASURED on GitHub runners, 2026-10-31, the default dice and DECIDING_LEG_SALT a, b, c: eight candidates without
+   the cup gave 4, 5, 1, 1 Europa League seasons and 1, 4, 0, 2 deciding legs (rBVg-c, salt b red); with the cup 6,
+   6, 2, 3 seasons and 3, 8, 0, 6 legs (rBVg-c2, salt b red again), so the fleet grew to 24 candidates rather than
+   the floor coming down. decidingLegAt agreed with the whistle on every night of every run.
 
    Run: node scripts/simCmDecidingLeg.mjs   (DECIDING_LEG_CAREERS, DECIDING_LEG_UEL_CAREERS, DECIDING_LEG_REPLAYS,
    DECIDING_LEG_SECTION) */
@@ -254,11 +260,16 @@ const CAREERS = [
 ];
 const FLEET = CAREERS.slice(0, Number(process.env.DECIDING_LEG_CAREERS || CAREERS.length));
 /* Release BV join (Round 1593's bind 3): Europa League careers. A club earns its place in season one and plays the
-   competition from season two, so a candidate plays season one, the rollover and season two to its last Europa
-   League night. Candidates are tried in this order until one meets a deciding second leg; the rest are not played.
-   Every name is a club of PLAY_FLEET_ALL in scripts/simCmEuroPlay.mjs (today's world, not a Champions League club). */
+   competition from season two, so every candidate plays season one, the rollover (season one's cup handed to it,
+   see rollover) and season two to its last Europa League night. Clubs of today's world outside the usual
+   Champions League places: the first eight are PLAY_FLEET_ALL's of scripts/simCmEuroPlay.mjs, the rest were added
+   when eight gave 0 to 8 deciding legs a dice set (rBVg-c2), so a floor of one was still a coin toss on eight.
+   A name that is not a club of the world aborts the run (exit 2). */
 const UEL_CAREERS = [['Aston Villa', 'now'], ['Real Betis', 'now'], ['Lazio', 'now'], ['Eintracht Frankfurt', 'now'],
-  ['Lyon', 'now'], ['Real Sociedad', 'now'], ['Braga', 'now'], ['AZ Alkmaar', 'now']];
+  ['Lyon', 'now'], ['Real Sociedad', 'now'], ['Braga', 'now'], ['AZ Alkmaar', 'now'],
+  ['Villarreal', 'now'], ['Fiorentina', 'now'], ['Bologna', 'now'], ['Atalanta', 'now'], ['Roma', 'now'], ['Freiburg', 'now'],
+  ['Stuttgart', 'now'], ['Hoffenheim', 'now'], ['Nice', 'now'], ['Lille', 'now'], ['Marseille', 'now'], ['Celta Vigo', 'now'],
+  ['Sevilla', 'now'], ['Brighton', 'now'], ['Crystal Palace', 'now'], ['Twente', 'now']];
 const UEL_FLEET = UEL_CAREERS.slice(0, Number(process.env.DECIDING_LEG_UEL_CAREERS ?? UEL_CAREERS.length));
 const OPTS = { skipHalftime: true };
 const step = (m, s, seed) => withStream(seed, () => m.cm.playNextEntry(clone(s), OPTS));
@@ -325,6 +336,10 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
   let uelTotal = 0;
   const uelTried = [];
   const uelDisagree = [];
+  if (UEL_FLEET.length) {
+    const world = new Set((await fresh(headFile)).cm.REAL_LEAGUES.flatMap(l => l.clubs));
+    for (const [club] of UEL_FLEET) if (!world.has(club)) abort(`the Europa League candidate ${club} is not a club of today's world`);
+  }
   for (const [club, era, kind] of [...FLEET.map(c => [...c, 'ucl']), ...UEL_FLEET.map(c => [...c, 'uel'])]) {
     const tag = `${club} ${era}`;
     const H = await fresh(headFile);
