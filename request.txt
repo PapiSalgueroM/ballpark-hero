@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dl: node scripts/simCmDecidingLeg.mjs
+euro-head: CM_EURO_PLAY_BASE=68f7432d6 node scripts/simCmEuroPlay.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+vitest-tie: node_modules/.bin/vitest run src/test/managerHotSeatTieStamp.test.tsx src/test/cmDecidingLegCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+dl-board: DECIDING_LEG_CONTROL=board node scripts/simCmDecidingLeg.mjs
+dl-morale: DECIDING_LEG_CONTROL=morale node scripts/simCmDecidingLeg.mjs
+dl-fans: DECIDING_LEG_CONTROL=fans node scripts/simCmDecidingLeg.mjs
+dl-tieall: DECIDING_LEG_CONTROL=tieall node scripts/simCmDecidingLeg.mjs
+dl-hattrick: DECIDING_LEG_CONTROL=hattrick node scripts/simCmDecidingLeg.mjs
+dl-nogate: DECIDING_LEG_CONTROL=nogate node scripts/simCmDecidingLeg.mjs
+dl-cutover: DECIDING_LEG_CONTROL=cutover node scripts/simCmDecidingLeg.mjs
+dl-boardsize: DECIDING_LEG_CONTROL=boardsize node scripts/simCmDecidingLeg.mjs
+dl-moralesize: DECIDING_LEG_CONTROL=moralesize node scripts/simCmDecidingLeg.mjs
+dl-relief: DECIDING_LEG_CONTROL=relief node scripts/simCmDecidingLeg.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

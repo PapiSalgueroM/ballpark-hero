@@ -1,0 +1,62 @@
+1) careers in lockstep, HEAD against OLD (16 careers)
+   Real Madrid now: parted at week 34; Champions League out
+   Bayern Munich now: parted at week 32; Champions League out
+   Manchester City now: equal to week 24; Champions League out
+   Liverpool now: not in the Champions League, skipped
+   Arsenal now: parted at week 34; Champions League out
+   Inter Milan now: equal to week 24; Champions League out
+   Barcelona now: equal to week 35; Champions League out
+   Barcelona era2005: equal to week 47; Champions League out
+   Chelsea era2005: equal to week 32; Champions League out
+   Real Madrid era2010: equal to week 54; Champions League won
+   Bayern Munich era2010: parted at week 34; Champions League out
+   Barcelona era2015: equal to week 24; Champions League out
+   Juventus era2015: equal to week 24; Champions League out
+   Liverpool era2020: parted at week 31; Champions League out
+   Bayern Munich era2020: parted at week 34; Champions League out
+   Chelsea era2020: equal to week 32; Champions League out
+   Aston Villa now (Europa League candidate): equal to week 0; Aston Villa now: no Europa League place in season two
+   Real Betis now (Europa League candidate): equal to week 71; Real Betis now: in the Europa League in season two, 0 deciding second legs
+   Lazio now (Europa League candidate): equal to week 0; Lazio now: no Europa League place in season two
+   Eintracht Frankfurt now (Europa League candidate): equal to week 37; Eintracht Frankfurt now: in the Europa League in season two, 0 deciding second legs
+   Lyon now (Europa League candidate): equal to week 0; Lyon now: no Europa League place in season two
+   Real Sociedad now (Europa League candidate): equal to week 0; Real Sociedad now: no Europa League place in season two
+   Braga now (Europa League candidate): equal to week 67; Braga now: in the Europa League in season two, 0 deciding second legs
+   AZ Alkmaar now (Europa League candidate): equal to week 67; AZ Alkmaar now: in the Europa League in season two, 1 deciding second legs
+   15 careers in the Champions League, 6 parted at a deciding leg: Real Madrid now week 34 (QF, night L, tie W, regular); Bayern Munich now week 32 (QF, night L, tie W, regular); Arsenal now week 34 (QF, night D, tie W, regular); Bayern Munich era2010 week 34 (QF, night D, tie W, regular); Liverpool era2020 week 31 (R16, night W, tie L, regular); Bayern Munich era2020 week 34 (QF, night D, tie L, regular)
+  ok   careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ) (15 careers)
+  ok   careers: a Europa League career meets a deciding second leg (Round 1593, the Release BV join) (AZ Alkmaar now (1 deciding second legs))
+   22 deciding second legs met (6 differing on the walk's own dice)
+2) the leg fleet: every deciding leg replayed on 8 more streams through both engines
+   198 deciding legs played: 116 where night and tie agree, 82 where they differ (56 through, 26 out; 5 on penalties, 3 in extra time)
+   through: board swing 2.17 and squad morale 3.86 above the old reading on average
+   out: board swing -7.22 and squad morale -5.33 against the old reading on average
+   sizes: the board's swing held to the tenth on 198 legs; 4707 men's shifts held exactly (1964 on differing legs, 423 of them men who played under the captain on the losing side of night or tie, where his relief decides the number)
+  ok   legs: at least 30 deciding legs where the night and the tie differ (82)
+  ok   legs: the record is the night on both engines (log, form, totals, head to head, bracket, ratings)
+  ok   legs: tie is logged exactly where the tie and the night differ
+  ok   legs: where night and tie agree, board, morale and fans are the old engine's
+  ok   legs: board moves the tie's way on every differing leg (the report's swing, before the clamp)
+  FAIL legs: board size, on every deciding leg the swing is exactly what the same tie gives won or lost on the night (patience, press and level applied, to the tenth) (Real Madrid now QF week 34 stream 177656846: night L, tie W: swing 5 before the clamp, the tie on the night gives 8.00 (old -0.7); Real Madrid now QF week 34 stream 4209806606: night D, tie W: swing 5 before the clamp, the tie on the night gives 8.00 (old 4.5))
+  ok   legs: morale moves the tie's way on every differing leg
+  ok   legs: morale size, on every deciding leg each man's shift is exactly the tie's (the captain's relief and lift included) (4707 men, 423 under the captain's relief)
+  ok   legs: fans count the tie, to the last digit, on every differing leg
+3) the gate: the night's reading for a Hot Seat run that plays it, the date, the stamp, the save
+   10 leg pre-saves played on the old reading, 6 of them legs where the night and the tie differ
+  ok   gate: night, tieRules 'night' plays the old engine byte for byte (10 legs)
+  ok   gate: base, matchRules 'base' plays the old engine byte for byte (10 legs)
+  ok   gate: cutover, HOT_SEAT_TIE_FROM is a real date after the round's base commit (2026-11-09, base 2026-10-30)
+  ok   gate: tieRulesOf answers by the date for a daily and by the 1603 stamp for a free run
+  ok   gate: startHotSeat writes the night's reading before the cutover and nothing from it on
+  ok   gate: handoverState takes it off
+  ok   gate: loadCareer drops it, so no Club Manager save plays it
+4) Manager Hot Seat: the days before the cutover replay as they did
+   47 dailies (40 before 2026-11-09) and 6 of 6 unstamped free runs (a club outside the pool is skipped); 0 of the runs met a second leg at all; 0 days from the cutover on moved
+   2026-09-30 Brentford survived 4; 2026-10-01 FC Nordsjælland survived 5; 2026-10-02 Lausanne-Sport survived 9; 2026-10-03 Inter Miami sacked 5 ...
+  ok   hotseat: every daily before the cutover replays the same verdict, points, target, takeover and log (40 days)
+  ok   hotseat: every unstamped free run replays as it did (0 moved)
+5) the haul words
+  ok   hauls: planted lines, three a hat-trick, four and five by their count, two nothing
+   the fleet's matches scored 30 hauls of three or more (26 of three, 4 of four or more)
+  ok   hauls: every haul the fleet scored is announced by its own count
+simCmDecidingLeg: control boardsize FIRED (legs: board size went red; red in all: legs: board size)
