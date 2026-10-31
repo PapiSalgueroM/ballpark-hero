@@ -1,0 +1,72 @@
+nba-my-career at 390 by 844
+  PASS  A nba 390: Start over says the card stays on the Hall wall
+  PASS  A nba 390: the create screen's top is in view after the restart (258 of 844)
+  PASS  A nba 390: the create screen offers the wall below Enter the draft, 358 by 46
+  PASS  A nba 390 cold from create: the wall's top is in view under the bar (56 of 844, the bar ends at 44)
+  PASS  A nba 390 cold from create: no sideways scroll on the wall (390 on 390)
+  PASS  A nba 390: the "?" shows the four lines
+  PASS  A nba 390: the plaque's headline is the card's ("Never made the ballot.")
+  PASS  A nba 390: Back gives the tile focus, scrollY 185 then 185
+  PASS  A nba 390: a reload keeps the wall's bytes and its one tile
+  PASS  A nba 390: no page error 
+  PASS  B nba 390: the retirement screen's opener is 46 px tall
+  PASS  B nba 390 cold from the retirement screen: the wall's top is in view under the bar (56 of 844, the bar ends at 44)
+  PASS  B nba 390 cold from the retirement screen: no sideways scroll on the wall (390 on 390)
+  PASS  B nba 390: Start over on the wall lands on create, top in view (258 of 844), wall closed true, opener reads 1 true
+  PASS  B nba 390: no page error 
+  PASS  C nba 390: no tile line is cut (0 lines wider than their box)
+  PASS  C nba 390: the whole wall of 12 fits the screen (56 to 670 of 844, the bar ends at 44)
+  PASS  C nba 390: every tile is at least 44 px tall (81)
+  PASS  C nba 390: no page error 
+nba-my-career at 1280 by 900
+  PASS  A nba 1280: Start over says the card stays on the Hall wall
+  PASS  A nba 1280: the create screen's top is in view after the restart (206 of 900)
+  PASS  A nba 1280: the create screen offers the wall below Enter the draft, 448 by 46
+  PASS  A nba 1280 cold from create: the wall's top is in view under the bar (56 of 900, the bar ends at 44)
+  PASS  A nba 1280 cold from create: no sideways scroll on the wall (1280 on 1280)
+  PASS  A nba 1280: the "?" shows the four lines
+  PASS  A nba 1280: the plaque's headline is the card's ("Never made the ballot.")
+  PASS  A nba 1280: Back gives the tile focus, scrollY 133 then 133
+  PASS  A nba 1280: a reload keeps the wall's bytes and its one tile
+  PASS  A nba 1280: no page error 
+  PASS  B nba 1280: the retirement screen's opener is 46 px tall
+  PASS  B nba 1280 cold from the retirement screen: the wall's top is in view under the bar (56 of 900, the bar ends at 44)
+  PASS  B nba 1280 cold from the retirement screen: no sideways scroll on the wall (1280 on 1280)
+  PASS  B nba 1280: Start over on the wall lands on create, top in view (73 of 900), wall closed true, opener reads 1 true
+  PASS  B nba 1280: no page error 
+  PASS  C nba 1280: no tile line is cut (0 lines wider than their box)
+  PASS  C nba 1280: the whole wall of 12 fits the screen (56 to 396 of 900, the bar ends at 44)
+  PASS  C nba 1280: every tile is at least 44 px tall (65)
+  PASS  C nba 1280: no page error 
+nba-my-career at 320 by 640
+  MEASURED  A nba 320: Start over says the card stays on the Hall wall: holds
+  MEASURED  A nba 320: the create screen's top is in view after the restart (258 of 640): holds
+  MEASURED  A nba 320: the create screen offers the wall below Enter the draft, 288 by 46: holds
+  MEASURED  A nba 320 cold from create: the wall's top is in view under the bar (56 of 640, the bar ends at 44): holds
+  MEASURED  A nba 320 cold from create: no sideways scroll on the wall (320 on 320): holds
+  MEASURED  A nba 320: the "?" shows the four lines: holds
+  MEASURED  A nba 320: the plaque's headline is the card's ("Never made the ballot."): holds
+  MEASURED  A nba 320: Back gives the tile focus, scrollY 185 then 185: holds
+  MEASURED  A nba 320: a reload keeps the wall's bytes and its one tile: holds
+  MEASURED  A nba 320: no page error : holds
+  MEASURED  B nba 320: the retirement screen's opener is 46 px tall: holds
+  MEASURED  B nba 320 cold from the retirement screen: the wall's top is in view under the bar (56 of 640, the bar ends at 44): holds
+  MEASURED  B nba 320 cold from the retirement screen: no sideways scroll on the wall (320 on 320): holds
+  MEASURED  B nba 320: Start over on the wall lands on create, top in view (258 of 640), wall closed true, opener reads 1 true: holds
+  MEASURED  B nba 320: no page error : holds
+  MEASURED  C nba 320: no tile line is cut (0 lines wider than their box): holds
+  MEASURED  C nba 320: the whole wall of 12 fits the screen (56 to 769 of 640, the bar ends at 44): does not hold
+  MEASURED  C nba 320: every tile is at least 44 px tall (98): holds
+  MEASURED  C nba 320: no page error : holds
+  MEASURED  A nba 390 cold from create: wall top 56 of 844 under a 44 px bar, page 390 wide on 390
+  MEASURED  B nba 390 cold from the retirement screen: wall top 56 of 844 under a 44 px bar, page 390 wide on 390
+  MEASURED  C nba 390: 12 tiles from 56 to 670 of 844, the shortest tile 81 px
+  MEASURED  A nba 1280 cold from create: wall top 56 of 900 under a 44 px bar, page 1280 wide on 1280
+  MEASURED  B nba 1280 cold from the retirement screen: wall top 56 of 900 under a 44 px bar, page 1280 wide on 1280
+  MEASURED  C nba 1280: layout shift of the create screen 0.2457 with a wall of 12, 0.2457 with none
+  MEASURED  C nba 1280: 12 tiles from 56 to 396 of 900, the shortest tile 65 px
+  MEASURED  A nba 320 cold from create: wall top 56 of 640 under a 44 px bar, page 320 wide on 320
+  MEASURED  B nba 320 cold from the retirement screen: wall top 56 of 640 under a 44 px bar, page 320 wide on 320
+  MEASURED  C nba 320: 12 tiles from 56 to 769 of 640, the shortest tile 98 px
+screenshots in /home/runner/work/_temp/rc-out/files
+
