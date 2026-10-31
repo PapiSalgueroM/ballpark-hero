@@ -1,0 +1,23 @@
+viewport 390x844
+  case morton: Tyler Morton on Played for 4+ clubs
+   ? open: Club squares present, sideways overflow 0 px, Let's Play button 44 px tall
+   seed 4: Tyler Morton dealt after 280 skips; tapped From France; strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile reads "From France"; scrollY 0 -> 0; height 5814 -> 5814
+  FAIL: the tap on From France cost a strike at 390
+  FAIL: From France did not lock with Tyler Morton at 390
+  case window: Marcus Rashford on Played for Barcelona
+   seed 3: Marcus Rashford dealt after 339 skips; tapped From Portugal; strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile reads "From Portugal"; scrollY 0 -> 0; height 5811 -> 5811
+  FAIL: the tap on From Portugal cost a strike at 390
+  FAIL: From Portugal did not lock with Marcus Rashford at 390
+  part d: 1 entry titled "Player Bingo: last season's clubs are back for 13 players.", text word for word, link /player-bingo, sideways overflow 0 px
+viewport 1280x900
+  case morton: Tyler Morton on Played for 4+ clubs
+   ? open: Club squares present, sideways overflow 0 px, Let's Play button 44 px tall
+   seed 4: Tyler Morton dealt after 280 skips; tapped From France; strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile reads "From France"; scrollY 0 -> 0; height 4299 -> 4299
+  FAIL: the tap on From France cost a strike at 1280
+  FAIL: From France did not lock with Tyler Morton at 1280
+  case window: Marcus Rashford on Played for Barcelona
+   seed 3: Marcus Rashford dealt after 339 skips; tapped From Portugal; strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile reads "From Portugal"; scrollY 0 -> 0; height 4299 -> 4299
+  FAIL: the tap on From Portugal cost a strike at 1280
+  FAIL: From Portugal did not lock with Marcus Rashford at 1280
+  part d: 1 entry titled "Player Bingo: last season's clubs are back for 13 players.", text word for word, link /player-bingo, sideways overflow 0 px
+playBingoClubRules: CONTROL=wrongtile FIRED (tapped From Portugal for Marcus Rashford; 8 failures)

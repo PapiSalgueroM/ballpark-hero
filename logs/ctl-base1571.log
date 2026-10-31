@@ -1,0 +1,13 @@
+[32m✓ built in 23.51s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+viewport 390x844
+  case window: Marcus Rashford on Played for Barcelona
+   seed 3: Marcus Rashford dealt after 309 skips; tapped Played for Barcelona; strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile reads "👕Played for Barcelona"; scrollY 0 -> 0; height 5690 -> 5690
+  FAIL: the tap on Played for Barcelona cost a strike at 390
+  FAIL: Played for Barcelona did not lock with Marcus Rashford at 390
+viewport 1280x900
+  case window: Marcus Rashford on Played for Barcelona
+   seed 3: Marcus Rashford dealt after 309 skips; tapped Played for Barcelona; strikes 0 of 3 strikes used -> 1 of 3 strikes used; tile reads "👕Played for Barcelona"; scrollY 0 -> 0; height 4192 -> 4192
+  FAIL: the tap on Played for Barcelona cost a strike at 1280
+  FAIL: Played for Barcelona did not lock with Marcus Rashford at 1280
+playBingoClubRules: CONTROL=base1571 FIRED (the walk ran on a dist built from Round 1571's closed head; 4 failures)

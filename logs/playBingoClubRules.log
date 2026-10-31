@@ -1,0 +1,15 @@
+viewport 390x844
+  case morton: Tyler Morton on Played for 4+ clubs
+   ? open: Club squares present, sideways overflow 0 px, Let's Play button 44 px tall
+   seed 4: Tyler Morton dealt after 280 skips; tapped Played for 4+ clubs; strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile reads "🧳Played for 4+ clubsTyler Morton"; scrollY 0 -> 0; height 5814 -> 5814
+  case window: Marcus Rashford on Played for Barcelona
+   seed 3: Marcus Rashford dealt after 339 skips; tapped Played for Barcelona; strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile reads "👕Played for BarcelonaMarcus Rashford"; scrollY 0 -> 0; height 5811 -> 5811
+  part d: 1 entry titled "Player Bingo: last season's clubs are back for 13 players.", text word for word, link /player-bingo, sideways overflow 0 px
+viewport 1280x900
+  case morton: Tyler Morton on Played for 4+ clubs
+   ? open: Club squares present, sideways overflow 0 px, Let's Play button 44 px tall
+   seed 4: Tyler Morton dealt after 280 skips; tapped Played for 4+ clubs; strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile reads "🧳Played for 4+ clubsTyler Morton"; scrollY 0 -> 0; height 4299 -> 4299
+  case window: Marcus Rashford on Played for Barcelona
+   seed 3: Marcus Rashford dealt after 339 skips; tapped Played for Barcelona; strikes 0 of 3 strikes used -> 0 of 3 strikes used; tile reads "👕Played for BarcelonaMarcus Rashford"; scrollY 0 -> 0; height 4299 -> 4299
+  part d: 1 entry titled "Player Bingo: last season's clubs are back for 13 players.", text word for word, link /player-bingo, sideways overflow 0 px
+playBingoClubRules: GREEN, both viewports held
