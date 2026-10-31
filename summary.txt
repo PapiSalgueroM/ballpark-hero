@@ -1,0 +1,10 @@
+buildseo exit=0 2088s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+sweepWeight exit=0 32s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+playHomeFold exit=0 29s | playHomeFold: green. The first thing on the page is something to play.
+playSoftFourOhFour exit=0 7s | playSoftFourOhFour: green. A dead address says it is dead before a line of app code runs, and no real page is touched.
+simFaqSchema exit=0 42s | simFaqSchema: green. One block per type per page, written once and never rewritten.
+playGames-club-manager exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-manager-hot-seat exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-deadline-day exit=0 47s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-transfer-path exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+playGames-whats-new exit=1 75s | Played 1 games. 14 findings, 0 the harness could not drive.
