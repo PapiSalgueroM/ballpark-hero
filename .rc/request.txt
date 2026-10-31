@@ -1,0 +1,14 @@
+# Release BV, THE GATE HEAD: the core lines again, and every lane a commit after 40bee2a4f touched (simCmDecidingLeg's Europa League floor, the anchors fence over the walk fixes), with the base twins section 6 owes (simCreateClub on the BASE, simManagers' fleet on the BASE with Round 1600 merged).
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dash-diff: node .rc/x/dashScan.mjs diff 19911f815
+dash-log: node .rc/x/dashScan.mjs log 19911f815
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+dl: node scripts/simCmDecidingLeg.mjs
+dl-salt-a: DECIDING_LEG_SALT=a node scripts/simCmDecidingLeg.mjs
+dl-salt-b: DECIDING_LEG_SALT=b node scripts/simCmDecidingLeg.mjs
+dl-salt-c: DECIDING_LEG_SALT=c node scripts/simCmDecidingLeg.mjs
+cc-base: git worktree add /tmp/ccb 19911f815 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/ccb/node_modules && cd /tmp/ccb && node scripts/simCreateClub.mjs
+fleet-b1600: B=$(bash .rc/x/bvbase.sh dailies) && echo "SIM_MANAGERS_BASE=$B" && SIM_MANAGERS_BASE=$B node scripts/simManagers.mjs
+vt-two: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/v2.log 2>&1; s=$?; grep -E "STALE|FAIL|Test Files|Tests  " /tmp/v2.log | head -40 | cut -c1-250; exit $s
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > /tmp/va.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests  " /tmp/va.log | head -40 | cut -c1-250; exit $s
