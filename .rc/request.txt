@@ -1,0 +1,5 @@
+#!serial
+# Release BV diagnosis on 54fb28060: simOneOffCups section 3 (2 of 271081) and simWorldUcl section 5 (3) are red on the joined head and green on the BASE and m2 (rBVg-x9). A probe (restored after each line) prints WHAT differs, on the failing cases only.
+oo-city: node .rc/x/cupProbe.mjs oo && ONE_OFF_ONLY=3 ONE_OFF_FLEET="Manchester City" ONE_OFF_SEEDS=3 ONE_OFF_COACH=coach node scripts/simOneOffCups.mjs > /tmp/oo1.log 2>&1; s=$?; git checkout -- scripts; grep -E "PROBE|FAIL|simOneOffCups:" /tmp/oo1.log | head -10 | cut -c1-700; exit $s
+oo-juve: node .rc/x/cupProbe.mjs oo && ONE_OFF_ONLY=3 ONE_OFF_FLEET="Juventus" ONE_OFF_SEEDS=4 ONE_OFF_COACH=nocoach node scripts/simOneOffCups.mjs > /tmp/oo2.log 2>&1; s=$?; git checkout -- scripts; grep -E "PROBE|FAIL|simOneOffCups:" /tmp/oo2.log | head -10 | cut -c1-700; exit $s
+ucl-holder: node .rc/x/cupProbe.mjs ucl && WORLD_UCL_ONLY=5 WORLD_UCL_SEEDS=1,3 node scripts/simWorldUcl.mjs > /tmp/u1.log 2>&1; s=$?; git checkout -- scripts; grep -E "FAIL|simWorldUcl:" /tmp/u1.log | head -10 | cut -c1-700; exit $s
