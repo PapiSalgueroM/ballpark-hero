@@ -1,0 +1,4 @@
+order-base exit=1 16s | simCmShootoutOrder: 4 FAILURE(S)
+results-base exit=2 0s |     at addChunk (node:internal/streams/readable:569:12)
+order-m2 exit=1 16s | simCmShootoutOrder: 4 FAILURE(S)
+results-m2 exit=2 0s |     at addChunk (node:internal/streams/readable:569:12)
