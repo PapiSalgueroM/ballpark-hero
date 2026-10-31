@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+# Release BU lane d2: Round 1579's Swap Question walk with its noclick control (exit 1), from results-g/kit1579.
+walk: PLAY_DATE=2026-11-02 node .rc/x/walk1579.mjs
+walk-noclick: PLAY_DATE=2026-11-02 PLAY_SWAP_CONTROL=noclick node .rc/x/walk1579.mjs
