@@ -1,0 +1,2 @@
+m-fleet-nod exit=0 90s | simManagers: all green
+m-fleet-d8a exit=1 59s | simManagers: 8 failure(s)
