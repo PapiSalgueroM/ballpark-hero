@@ -35,8 +35,12 @@
  *     season's Champions League (its own stream): after every move no club is in both competitions, and a move
  *     drops the competition only into a Champions League sharing clubs with it (fix-1509's guard; never a move to an
  *     entrant). Control `carryall` (the guard stood down for every slice of mine, as the round first wrote it): run it
- *     with CM_EURO_PLAY_PLAY_SEEDS=5,6,7,8, where Eintracht Frankfurt seed 7's move to Tottenham joins such a
- *     Champions League; the default seeds hold no such move, so there it cannot fire.
+ *     with CM_EURO_PLAY_PLAY_SEEDS=17,18,19,20, which hold two such moves; the default seeds hold none, so there it
+ *     cannot fire. Release BV: the round's own recipe was seeds 5 to 8 (Eintracht Frankfurt seed 7's move to
+ *     Tottenham), but Round 1600's re-rating moves those careers, and on the join seeds 1 to 16 hold no such move
+ *     (rBVg-r93b and rBVg-x2, exit 3, "DID NOT FIRE"; at m2, before 1600, seeds 5 to 8 still fire). A scan of seeds 17
+ *     to 64, four at a time (rBVg-x6): 17-20, 29-32, 53-56 and 61-64 each drop the Europa League twice (once for
+ *     61-64) and the control FIRES on each; the other eight sets drop it never.
  *   3 the tie path: a two legged tie of mine is decided on its aggregate, penalties only when level, first legs and
  *     league phase nights never; the match report's through/out agrees. Control `legfromucl`.
  *   4 who plays: season one never (the critic's correction 1), from season two exactly on routes L, C and P.
