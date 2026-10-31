@@ -1,0 +1,2 @@
+bv-dailies-b1600 exit=1 61s | simCmBoardVerdict RED: 1 of 3 checks green (parts dailies, 60 s)
+bv-dailies-hscard exit=1 60s | control hscard FIRED: 2 of 3 checks red

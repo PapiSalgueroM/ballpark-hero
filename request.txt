@@ -1,0 +1,3 @@
+#!serial
+bv-dailies-b1600: git worktree add -q .rcb6 ed30d7601 && echo "base $(git -C .rcb6 rev-parse --short HEAD) (Round 1600's head)" && CM_BOARD_BASE=$PWD/.rcb6 node scripts/simCmBoardVerdict.mjs --part=dailies
+bv-dailies-hscard: (test -d .rcb6 || git worktree add -q .rcb6 ed30d7601) && CM_BOARD_BASE=$PWD/.rcb6 SIM_CM_BOARD_CONTROL=hscard node scripts/simCmBoardVerdict.mjs --part=dailies
