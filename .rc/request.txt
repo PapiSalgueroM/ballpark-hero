@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+# Release BV, THE GATE HEAD: Round 1593's walk and its two controls after the nofixture re-anchor (one line), and playCmWorldMoves after its seed search widened to 160.
+playCmEuroPlay: ENGINES=chromium node scripts/playCmEuroPlay.mjs
+walk-notile: PLAY_EURO_CONTROL=notile ENGINES=chromium node scripts/playCmEuroPlay.mjs
+walk-nofixture: PLAY_EURO_CONTROL=nofixture ENGINES=chromium node scripts/playCmEuroPlay.mjs
+playCmWorldMoves: ENGINES=chromium node scripts/playCmWorldMoves.mjs
