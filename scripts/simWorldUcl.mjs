@@ -81,6 +81,7 @@
  *              memokey (the evaluation's memo forgets the night count)
  *   section 4: keep (the rollover keeps last season's slice under a second key)
  *   section 5: noholder (the holder line reverted: the watched winner stays out of next season's field)
+ *              holderin (a holder already in the field still costs the last league place its spot)
  *   section 7: titles (the strengths swapped: the band on the titles by quartile)
  */
 import fs from 'node:fs';
@@ -154,6 +155,7 @@ Object.assign(CONTROLS, {
   marks: [3, /^3 dates: /],
   keep: [4, /^4 slices: /, /^4 /],
   noholder: [5, /^5 holder: .*is not in next season's field/, /^5 /],
+  holderin: [5, /^5 holder: .*was in the field already and the field still changed its clubs/, /^5 /],
 });
 const CAREER_EDITS = {
   dropnight: [{ file: MODULE_FILE, from: '  for (let md = 0; md < firstStage; md += 1) {', to: '  for (let md = 0; md < firstStage - 1; md += 1) {' }],
@@ -183,6 +185,9 @@ const CAREER_EDITS = {
     { file: MODULE_FILE, from: '0.79, 0.82, 0.87, 0.90, 1.0];', to: '0.79, 0.82, 0.87, 0.87, 1.0];' },
   ],
   noholder: HOLDER_EDIT ? [HOLDER_EDIT] : [],
+  /* Release BV (review cm-bv F1): the next season's field, when the holder already had a league place, loses its
+     last club for the next in line, so the field changes its clubs at the very rollover where the careers part. */
+  holderin: [{ file: CM, from: '  return uclFieldFromTables(tables, uclHolderOf(career), undefined, undefined, uelHolderOf(career));', to: '  { const h = uclHolderOf(career), g = uclFieldFromTables(tables, h, UCL_FIELD_SIZE + 1, undefined, uelHolderOf(career)); return h && uclDirectQualifiersFromTables(tables).includes(h) && g.length > UCL_FIELD_SIZE ? [...g.slice(0, UCL_FIELD_SIZE - 1), g[UCL_FIELD_SIZE]] : g.slice(0, UCL_FIELD_SIZE); }' }],
   keep: [{ file: CM, from: '    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);', to: '    openWorldUcl(state, worldUclField(state, tables, watchHolder, watchUelHolder), watchHolder);\n    (state as unknown as Record<string, unknown>).worldCompsKept = career.worldComps;' }],
 };
 /* The review of 2026-10-17 (results-g/review-run-1502.md and review-read-1502.md): each mutation it showed every
@@ -1092,8 +1097,10 @@ async function customExitProbe() {
  * Section 5 (step E5): the holder. Today's world's watchers through three seasons on the engine as it is and on
  * the same engine with the holder line reverted (scripts/lib/worldUclHolder1502.mjs). Every season that ends with
  * a watched winner hands it to next season's field (and to the watched field, unless it is my club now); where
- * the winner was already in the field, the field holds the same clubs; and the two engines part only at a
- * rollover after a watched final, on the field (the attribution: the line is the whole of the change).
+ * the winner was already in the field, the field holds the same clubs (compared at a rollover at or before the step
+ * where the two careers first part, never after it: from there they play two different worlds, Release BV, review
+ * cm-bv F1; control holderin); and the two engines part only at a rollover after a watched final, on the field (the
+ * attribution: the line is the whole of the change).
  */
 async function holderSection() {
   if (!hasE5()) { console.log('  5 the holder: not in this tree (step E5 not built)'); return; }
@@ -1101,7 +1108,7 @@ async function holderSection() {
   const ref = await engineOf(ROOT, 'holder-off', { edits: [HOLDER_EDIT] }, cannot);
   if (careerEdits().length) changed = true;
   const fleet = pickFleet(await head.fresh(), 'watchers', cannot).filter(f => f.era === 'now');
-  let rollovers = 0, withWinner = 0, moved = 0, already = 0, reordered = 0;
+  let rollovers = 0, withWinner = 0, moved = 0, already = 0, reordered = 0, compared = 0, skipped = 0;
   const movedClubs = [];
   for (const f of fleet) for (const seed of SEEDS) {
     const name = `${f.club} (${f.era}) seed ${seed}`;
@@ -1112,6 +1119,11 @@ async function holderSection() {
     const record = st => JSON.stringify(st);
     const a = await careerJourney(head, { ...f, seed }, { seasons: 3, record, onStep: watch(0) });
     const b = await careerJourney(ref, { ...f, seed }, { seasons: 3, record, onStep: watch(1) });
+    /* Release BV (review cm-bv F1): the step where the two careers first part. From there on they are two different
+       worlds (a field the holder moved draws other groups, so other clubs finish where), so the two fields are
+       compared only at a rollover at or before it; a later one is counted as skipped, never compared. */
+    const at = a.findIndex((x, i) => !b[i] || x.json !== b[i].json || x.drawSha !== b[i].drawSha);
+    const stepOf = label => a.findIndex(x => x.label === label);
     rolls[0].forEach((ra, j) => {
       const rb = rolls[1][j];
       rollovers += 1;
@@ -1121,11 +1133,12 @@ async function holderSection() {
       if (!ra.inIt && ra.W !== ra.club && ra.watched.length) ok(ra.watched.includes(ra.W), `5 holder: ${name} ${ra.label}: the watched winner ${ra.W} is not in next season's watched field`);
       if (rb.field.includes(ra.W)) {
         already += 1;
+        if (at >= 0 && stepOf(ra.label) > at) { skipped += 1; return; }
+        compared += 1;
         ok(same([...ra.field].sort(), [...rb.field].sort()), `5 holder: ${name} ${ra.label}: ${ra.W} was in the field already and the field still changed its clubs`);
         if (!same(ra.field, rb.field)) reordered += 1;
       } else if (rb.field.length) { moved += 1; movedClubs.push(`${ra.W} in for ${rb.field.filter(c => !ra.field.includes(c)).join(' and ') || 'nobody'}`); }
     });
-    const at = a.findIndex((x, i) => !b[i] || x.json !== b[i].json || x.drawSha !== b[i].drawSha);
     if (at < 0) continue;
     const label = a[at].label;
     ok(/rollover/.test(label) && !!rolls[0].find(r => r.label === label)?.W, `5 attribution: ${name}: the engine without the holder line parts at ${label}, not at a rollover after a watched final`);
@@ -1136,7 +1149,10 @@ async function holderSection() {
     }
   }
   ok(withWinner > 0, '5 holder: no watched season ended with a winner, so nothing was checked');
-  console.log(`  5 the holder: ${rollovers} rollovers, ${withWinner} after a watched final, ${already} winners already in the field (${reordered} of those fields in another order), ${moved} fields the holder changed: ${movedClubs.slice(0, 8).join('; ') || 'none'}`);
+  /* Measured on the Release BV gate head 54fb28060: 37 winners already in, 20 compared (all the same clubs), 17 after a
+     parting. The floor is half of the 20, so a fleet that parts early everywhere cannot pass on nothing. */
+  ok(compared >= 10, `5 holder: only ${compared} fields with the winner already in were compared before the careers parted (floor 10)`);
+  console.log(`  5 the holder: ${rollovers} rollovers, ${withWinner} after a watched final, ${already} winners already in the field (${compared} compared at or before the careers parted, ${skipped} after it skipped; ${reordered} of the compared in another order), ${moved} fields the holder changed: ${movedClubs.slice(0, 8).join('; ') || 'none'}`);
 }
 
 /** Section 6: the dailies' state shape (scripts/simDailyDeals.mjs holds the deal). */
