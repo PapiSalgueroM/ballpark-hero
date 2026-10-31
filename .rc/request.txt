@@ -1,0 +1,20 @@
+# Release BU lane j: the Club Manager player card (Round 1601): the card fleet against the BU base and its ten controls (each exit 1), the digest and the 1081 pin as retaken by L8, the club detail sims with CM_OWN_ROSTER_CORE_REF=HEAD.
+vitest: node_modules/.bin/vitest run src/lib/clubManagerCareerLines.test.ts src/lib/clubManagerCards.test.ts src/test/cmPlayerCard.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerWorldEditorPage.test.tsx --testTimeout=300000 --hookTimeout=120000
+cards-default: node scripts/simCmPlayerCard.mjs
+c-noarchive: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=noarchive node scripts/simCmPlayerCard.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simSaveFence: node scripts/simSaveFence.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simClubManagerDecisionDeadline: CI=1 SIM_NETWORK=offline CM_DEADLINE_CORE_REF=HEAD MANAGER_DEADLINE_OUT="$RC_OUT/deadline" node scripts/simClubManagerDecisionDeadline.mjs
+cards-draw: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=draw node scripts/simCmPlayerCard.mjs
+cards-emptykey: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=emptykey node scripts/simCmPlayerCard.mjs
+cards-offbyone: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=offbyone node scripts/simCmPlayerCard.mjs
+cards-loadwrite: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=loadwrite node scripts/simCmPlayerCard.mjs
+cards-hotseat: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=hotseat node scripts/simCmPlayerCard.mjs
+cards-allcomps: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=allcomps node scripts/simCmPlayerCard.mjs
+cards-namekey: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=namekey node scripts/simCmPlayerCard.mjs
+cards-linkalways: CARDS_SEEDS=1 CARDS_LONG=4 CARDS_CONTROL=linkalways node scripts/simCmPlayerCard.mjs
+cards-nocap: CARDS_SEEDS=1 CARDS_CONTROL=nocap node scripts/simCmPlayerCard.mjs
