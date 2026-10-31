@@ -57,6 +57,13 @@
  * asserts the open defect ITSELF (a real action under that card, that kick not played out): green only while
  * exactly that is on the screen, red on a timeout or any other throw, and red the day the defect is mended. They
  * are still titled KNOWN OPEN and their rows still say OPEN. No case of this file passes by failing any more.
+ * Release BV (the join of Rounds 1603, 1593 and 1600): Round 1600 re-rates the veterans by level, which moves the
+ * seeded stream of this career, and eleven cases found no half in their hint and 2,500 seeds (red on Round 1600's
+ * own head ed30d7601 as on the join, green on the base 19911f815: runner results rBVg-x5 and rBVg-x3). With the
+ * three searches widened to 60,000 seeds all 46 cases passed on the joined engine (rBVg-x8), and those eleven take
+ * the halves that run's STALE HINT lines named: 2042 to 32574, 42322 to 4963, 2219 to 4248, 2483 to 15042, 6428 to
+ * 21215, 2022 to 9041, 1940 to 20560, 8058 to 18626, 3827 to 11238. The seeds the comments below cite are the
+ * halves each case was first found on. The other stale hints still find their case inside the search.
  */
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -297,7 +304,7 @@ describe('Club Manager: the review screen', () => {
      in the air and the score at 0-0, read "goal ruled out", and then my goal counted. Kept here as its own case,
      played from before my goal to the whistle. The search asks for that shape (seed 2042 is tried first). */
   it('the last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal', async () => {
-    const h = half(0, 2042, feed => {
+    const h = half(0, 32574, feed => {
       const all = reviewsOf(feed), r = all[0];
       return all.length === 1 && r.review!.decision === 'disallowed' && r.side === 'opp' && r.minute === 45 && !r.plus
         && feed.some(e => e.kind === 'goal' && e.side === 'me' && place(e) === 44) ? r : null;
@@ -617,10 +624,10 @@ describe('Club Manager: the review screen', () => {
     return [...byPlace.values()].sort((a, b) => place(a) - place(b));
   }
   it.each([
-    { what: 'a real goal is the last kick after it and no instant is free before the wind up', hint: 42322, shape: (x: LateShape) => place(x.r) === x.whistle - 1 && x.real.some(e => e.kind === 'goal' && place(e) === x.whistle) && at(x, 2) },
+    { what: 'a real goal is the last kick after it and no instant is free before the wind up', hint: 4963, shape: (x: LateShape) => place(x.r) === x.whistle - 1 && x.real.some(e => e.kind === 'goal' && place(e) === x.whistle) && at(x, 2) },
     { what: 'it is at the whistle and a real chance is one place before it', hint: 6203, shape: (x: LateShape) => place(x.r) === x.whistle && !at(x, 0) && at(x, 1) },
     { what: 'a real chance has its own place, one before the whistle', hint: 4670, shape: (x: LateShape) => place(x.r) === x.whistle - 1 && !at(x, 0) && at(x, 1) },
-    { what: 'it is at the whistle and so is a real last kick', hint: 2219, shape: (x: LateShape) => place(x.r) === x.whistle && at(x, 0) },
+    { what: 'it is at the whistle and so is a real last kick', hint: 4248, shape: (x: LateShape) => place(x.r) === x.whistle && at(x, 0) },
     { what: 'a real last kick follows it and the pitch is free before the wind up', hint: 1987, shape: (x: LateShape) => place(x.r) === x.whistle - 1 && at(x, 0) && !at(x, 1) && !at(x, 2) && !at(x, 3) },
   ])('a goal ruled out at the end of a half that real chances fill ($what): it is drawn, in its own net, and nothing real gives way', async ({ hint, shape }) => {
     const h = half(1, hint, lateRuledOut(shape));
@@ -671,7 +678,7 @@ describe('Club Manager: the review screen', () => {
      awarded twin of the ruled out goals above). It says what it finds, and asks the rule every other awarded card
      is held to: no action under the card, and the score does not move under it. */
   it('a review at the very end of a crowded half is still shown once, and the half ends on the engine score', async () => {
-    const h = half(0, 2483, lastMinutes('awarded', false));
+    const h = half(0, 15042, lastMinutes('awarded', false));
     const v = h.review;
     const { frames, last, whistle } = await toTheWhistle(h);
     const first = frames.findIndex(cardUp), up = frames.filter(cardUp);
@@ -712,10 +719,10 @@ describe('Club Manager: the review screen', () => {
        and the goal of a penalty a review gives is such a goal, so the kick is played out after its card. The case
        marked `fails` for it went red on the runner the day the screen was mended (r1303-fx-e), as it was built to. */
     { what: 'a real last kick follows it and the pitch is free before', match: 1, hint: 2287, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 1 && at(x, 0) && !at(x, 1) && !at(x, 2) && !at(x, 3) },
-    { what: 'a real chance shares its place and another has the place before', match: 1, hint: 6428, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && !at(x, 0) && at(x, 1) && at(x, 2) },
+    { what: 'a real chance shares its place and another has the place before', match: 1, hint: 21215, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && !at(x, 0) && at(x, 1) && at(x, 2) },
     /* Round 1303: on the lower penalty rate the half this row stood on (match 3, seed 8615) holds no review. A scan of
        200,000 first halves of entries 5 to 24 (runner result r1303-scan2) found one half of this shape: entry 11, seed 2022. */
-    { what: 'two places before the whistle, a real chance at its place and one after', match: 10, hint: 2022, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 2 && !at(x, 0) && at(x, 1) && at(x, 2) },
+    { what: 'two places before the whistle, a real chance at its place and one after', match: 10, hint: 9041, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 2 && !at(x, 0) && at(x, 1) && at(x, 2) },
   ];
   type AwardedRun = { h: Half; frames: Frame[]; last: number; whistle: number };
   const awardedRuns = new Map<number, AwardedRun>();
@@ -773,7 +780,7 @@ describe('Club Manager: the review screen', () => {
   const ogCards = (frames: Frame[]) => frames.map((f, i) => (f.goalCard?.includes('(O.G)') ? i : -1)).filter(i => i >= 0);
 
   it('an own goal the minute after a ruled out goal: the review first, then the own goal as an own goal', async () => {
-    const h = half(1, 1940, feed => {
+    const h = half(1, 20560, feed => {
       const all = reviewsOf(feed), r = all[0];
       return all.length === 1 && r.review!.decision === 'disallowed' && r.minute >= 4 && r.minute <= 38 && !r.plus
         && feed.some(e => e.kind === 'goal' && e.og && place(e) === place(r) + 1) ? r : null;
@@ -796,9 +803,9 @@ describe('Club Manager: the review screen', () => {
   }, 180000);
 
   it.each([
-    { what: 'injury', match: 2, hint: 8058, says: 'Injury: ', shared: false },
+    { what: 'injury', match: 2, hint: 18626, says: 'Injury: ', shared: false },
     { what: 'injury', match: 0, hint: 3861, says: 'Injury: ', shared: true },
-    { what: 'red', match: 1, hint: 3827, says: 'RED CARD! ', shared: false },
+    { what: 'red', match: 1, hint: 11238, says: 'RED CARD! ', shared: false },
   ] as const)("a review in the same minute as the other side's $what (a chance at the same place: $shared): both are told, and the card sits over nothing", async ({ what, match, hint, says, shared }) => {
     /* A ruled out goal with its clock place to itself is played on the clock. Where a real chance shares the place
        the plan plays the real one (one action a place), and the ruled out goal is played with the clock stopped,
