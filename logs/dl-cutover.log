@@ -1,0 +1,79 @@
+1) careers in lockstep, HEAD against OLD (16 careers)
+   Real Madrid now: parted at week 34; Champions League out
+   Bayern Munich now: parted at week 32; Champions League out
+   Manchester City now: equal to week 24; Champions League out
+   Liverpool now: not in the Champions League, skipped
+   Arsenal now: parted at week 34; Champions League out
+   Inter Milan now: equal to week 24; Champions League out
+   Barcelona now: equal to week 35; Champions League out
+   Barcelona era2005: equal to week 47; Champions League out
+   Chelsea era2005: equal to week 32; Champions League out
+   Real Madrid era2010: equal to week 54; Champions League won
+   Bayern Munich era2010: parted at week 34; Champions League out
+   Barcelona era2015: equal to week 24; Champions League out
+   Juventus era2015: equal to week 24; Champions League out
+   Liverpool era2020: parted at week 31; Champions League out
+   Bayern Munich era2020: parted at week 34; Champions League out
+   Chelsea era2020: equal to week 32; Champions League out
+   Aston Villa now (Europa League candidate): equal to week 14; Aston Villa now: in the Europa League in season two, 0 nights played, 0 deciding second legs
+   Real Betis now (Europa League candidate): equal to week 71; Real Betis now: in the Europa League in season two, 8 nights played, 0 deciding second legs
+   Lazio now (Europa League candidate): parted at week 52; Lazio now: in the Europa League in season two, 8 nights played, 2 deciding second legs
+   Eintracht Frankfurt now (Europa League candidate): equal to week 37; Eintracht Frankfurt now: in the Europa League in season two, 2 nights played, 0 deciding second legs
+   Lyon now (Europa League candidate): equal to week 0; Lyon now: no Europa League place in season two
+   Real Sociedad now (Europa League candidate): equal to week 0; Real Sociedad now: no Europa League place in season two
+   Braga now (Europa League candidate): equal to week 67; Braga now: in the Europa League in season two, 6 nights played, 0 deciding second legs
+   AZ Alkmaar now (Europa League candidate): equal to week 67; AZ Alkmaar now: in the Europa League in season two, 6 nights played, 1 deciding second legs
+   Villarreal now (Europa League candidate): parted at week 34; Villarreal now: in the Europa League in season two, 8 nights played, 2 deciding second legs
+   Fiorentina now (Europa League candidate): equal to week 32; Fiorentina now: in the Europa League in season two, 0 nights played, 0 deciding second legs
+   Bologna now (Europa League candidate): equal to week 0; Bologna now: no Europa League place in season two
+   Atalanta now (Europa League candidate): equal to week 0; Atalanta now: no Europa League place in season two
+   Roma now (Europa League candidate): equal to week 0; Roma now: no Europa League place in season two
+   Freiburg now (Europa League candidate): equal to week 0; Freiburg now: no Europa League place in season two
+   Stuttgart now (Europa League candidate): equal to week 20; Stuttgart now: sacked
+   Hoffenheim now (Europa League candidate): equal to week 26; Hoffenheim now: in the Europa League in season two, 0 nights played, 0 deciding second legs
+   Nice now (Europa League candidate): equal to week 68; Nice now: in the Europa League in season two, 6 nights played, 0 deciding second legs
+   Lille now (Europa League candidate): equal to week 68; Lille now: in the Europa League in season two, 6 nights played, 1 deciding second legs
+   Marseille now (Europa League candidate): equal to week 52; Marseille now: in the Europa League in season two, 4 nights played, 0 deciding second legs
+   Celta Vigo now (Europa League candidate): equal to week 37; Celta Vigo now: in the Europa League in season two, 1 nights played, 0 deciding second legs
+   Sevilla now (Europa League candidate): equal to week 25; Sevilla now: sacked
+   Brighton now (Europa League candidate): parted at week 46; Brighton now: in the Europa League in season two, 8 nights played, 3 deciding second legs
+   Crystal Palace now (Europa League candidate): equal to week 44; Crystal Palace now: sacked
+   Twente now (Europa League candidate): equal to week 67; Twente now: in the Europa League in season two, 6 nights played, 0 deciding second legs
+   15 careers in the Champions League, 9 parted at a deciding leg: Real Madrid now week 34 (QF, night L, tie W, regular); Bayern Munich now week 32 (QF, night L, tie W, regular); Arsenal now week 34 (QF, night D, tie W, regular); Bayern Munich era2010 week 34 (QF, night D, tie W, regular); Liverpool era2020 week 31 (R16, night W, tie L, regular); Bayern Munich era2020 week 34 (QF, night D, tie L, regular); Lazio now week 52 (uel, night D, tie W, regular); Villarreal now week 34 (QF, night D, tie L, regular); Brighton now week 46 (uel, night D, tie W, regular)
+  ok   careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ) (15 careers)
+  ok   careers: the Europa League careers meet a deciding second leg (Round 1593, the Release BV join) (11 deciding second legs in 15 Europa League seasons of 24 candidates)
+  ok   careers: decidingLegAt agrees with the whistle on every Europa League night (15 seasons)
+   32 deciding second legs met (11 differing on the walk's own dice)
+2) the leg fleet: every deciding leg replayed on 8 more streams through both engines
+   288 deciding legs played: 171 where night and tie agree, 117 where they differ (72 through, 45 out; 7 on penalties, 6 in extra time)
+   through: board swing 5.17 and squad morale 4.12 above the old reading on average
+   out: board swing -6.94 and squad morale -5.88 against the old reading on average
+   sizes: the board's swing held to the tenth on 288 legs; 6759 men's shifts held exactly (2762 on differing legs, 601 of them men who played under the captain on the losing side of night or tie, where his relief decides the number)
+  ok   legs: at least 30 deciding legs where the night and the tie differ (117)
+  ok   legs: the record is the night on both engines (log, form, totals, head to head, bracket, ratings)
+  ok   legs: tie is logged exactly where the tie and the night differ
+  ok   legs: where night and tie agree, board, morale and fans are the old engine's
+  ok   legs: board moves the tie's way on every differing leg (the report's swing, before the clamp)
+  ok   legs: board size, on every deciding leg the swing is exactly what the same tie gives won or lost on the night (patience, press and level applied, to the tenth)
+  ok   legs: morale moves the tie's way on every differing leg
+  ok   legs: morale size, on every deciding leg each man's shift is exactly the tie's (the captain's relief and lift included) (6759 men, 601 under the captain's relief)
+  ok   legs: fans count the tie, to the last digit, on every differing leg
+3) the gate: the night's reading for a Hot Seat run that plays it, the date, the stamp, the save
+   12 leg pre-saves played on the old reading, 8 of them legs where the night and the tie differ
+  ok   gate: night, tieRules 'night' plays the old engine byte for byte (12 legs)
+  ok   gate: base, matchRules 'base' plays the old engine byte for byte (12 legs)
+  FAIL gate: cutover, HOT_SEAT_TIE_FROM is a real date after the round's base commit (2026-10-01, base 2026-10-30)
+  ok   gate: tieRulesOf answers by the date for a daily and by the 1603 stamp for a free run
+  ok   gate: startHotSeat writes the night's reading before the cutover and nothing from it on
+  ok   gate: handoverState takes it off
+  ok   gate: loadCareer drops it, so no Club Manager save plays it
+4) Manager Hot Seat: the days before the cutover replay as they did
+   8 dailies (1 before 2026-10-01) and 6 of 6 unstamped free runs (a club outside the pool is skipped); 0 of the runs met a second leg at all; 0 days from the cutover on moved
+   2026-09-30 Brentford survived 4; 2026-10-01 FC Nordsjælland survived 5; 2026-10-02 Lausanne-Sport survived 9; 2026-10-03 Inter Miami sacked 5 ...
+  ok   hotseat: every daily before the cutover replays the same verdict, points, target, takeover and log (1 days)
+  ok   hotseat: every unstamped free run replays as it did (0 moved)
+5) the haul words
+  ok   hauls: planted lines, three a hat-trick, four and five by their count, two nothing
+   the fleet's matches scored 41 hauls of three or more (36 of three, 5 of four or more)
+  ok   hauls: every haul the fleet scored is announced by its own count
+simCmDecidingLeg: control cutover FIRED (gate: cutover went red; red in all: gate: cutover)
