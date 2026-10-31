@@ -1,0 +1,34 @@
+#!buildseo
+# Release BV gate, rcg lane C (after a full build:seo): the rest of the Club Manager and manager game harnesses, among
+# them the world competitions Round 1593 plays (simWorldUcl, simOneOffCups whole).
+simCmVarLedger: node scripts/simCmVarLedger.mjs
+simCmLeaguePhase: node scripts/simCmLeaguePhase.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simCmLeagueBookFacts: node scripts/simCmLeagueBookFacts.mjs
+simCareerTransferBrief: node scripts/simCareerTransferBrief.mjs
+simTransferBriefPageControl: node scripts/simTransferBriefPageControl.mjs
+simCmLedgerJourney: node scripts/simCmLedgerJourney.mjs
+simManagerEraWorldOracles: node scripts/simManagerEraWorldOracles.mjs
+simCmTablesTruth: node scripts/simCmTablesTruth.mjs
+simClubManagerNewLeagues: node scripts/simClubManagerNewLeagues.mjs
+simWorldUcl: node scripts/simWorldUcl.mjs
+simOneOffCups: node scripts/simOneOffCups.mjs
+simCmNoSack: node scripts/simCmNoSack.mjs
+simCmRetire: node scripts/simCmRetire.mjs
+simCmFixtureFleet: node scripts/simCmFixtureFleet.mjs
+simCmApplications: node scripts/simCmApplications.mjs
+simCmMadeUpNations: node scripts/simCmMadeUpNations.mjs
+simCmOwnClubMarket: node scripts/simCmOwnClubMarket.mjs
+simCmShirtSales: node scripts/simCmShirtSales.mjs
+simCmTactics: node scripts/simCmTactics.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simManagerCustomPromotion: node scripts/simManagerCustomPromotion.mjs
+simManagerEpilogue: node scripts/simManagerEpilogue.mjs
+simManagerOffers: node scripts/simManagerOffers.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
+simManagerXp: node scripts/simManagerXp.mjs
+simYouthPadding: node scripts/simYouthPadding.mjs
+simCareerAcademy: node scripts/simCareerAcademy.mjs
+simEra2005: node scripts/simEra2005.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2015: node scripts/simEra2015.mjs

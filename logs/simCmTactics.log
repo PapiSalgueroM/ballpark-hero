@@ -1,0 +1,83 @@
+
+[table] the instruction table on its own
+  ok [table]: balanced is exactly zero in all 48 reads (8 styles, both halves, three fitness levels)
+  ok [table]: 12 settings carry a label, a does line and a costs line
+  ok [table]: every setting off balanced scores less or concedes more somewhere
+    best answer to gegenpress: press- tempo+ width- line- (net 0.130)
+    best answer to possession: press+ tempo+ width- line+ (net 0.153)
+    best answer to patient: press+ tempo- width- line+ (net 0.093)
+    best answer to wingplay: press+ tempo- (net 0.013)
+    best answer to direct: press- line- (net 0.060)
+    best answer to counter: press- tempo- width- line- (net 0.100)
+    best answer to lowblock: press+ tempo- width- (net 0.053)
+    best answer to balanced: press+ tempo- width- line+ (net 0.023)
+  ok [table]: the help's worked example reads the table and its words still hold
+
+[styles] the other dugout's style
+  ok [styles]: dealing 3200 styles drew nothing from the game's stream
+  ok [styles]: the same club at the same strength is always dealt the same style
+  ok [styles]: every style is dealt at a middling strength
+    press high: strong 0.400 weak 0.049; stand off: strong 0.070 weak 0.364; high line: strong 0.400 weak 0.049
+  ok [styles]: strong sides press high 0.351 more often than weak ones
+  ok [styles]: weak sides stand off 0.294 more often
+  ok [styles]: Everton: the preview's Crystal Palace plays gegenpress, the style the engine's goal rates read
+    Everton's league: wingplay 4, patient 2, gegenpress 3, possession 2, balanced 3, counter 2, lowblock 2, direct 1
+  ok [styles]: Real Madrid: the preview's Rayo Vallecano plays direct, the style the engine's goal rates read
+    Real Madrid's league: lowblock 2, patient 3, wingplay 4, balanced 4, possession 2, gegenpress 2, direct 2
+  ok [styles]: Napoli: the preview's Cagliari plays patient, the style the engine's goal rates read
+    Napoli's league: direct 3, balanced 8, patient 3, counter 1, gegenpress 1, possession 3
+
+[balanced] all four on balanced is the untouched career, to the byte
+  ok [balanced]: Everton seed 1: the same season to the byte (161096 characters, 50041 draws)
+  ok [balanced]: Everton seed 2: the same season to the byte (160309 characters, 49391 draws)
+  ok [balanced]: Barcelona seed 1: the same season to the byte (168320 characters, 55808 draws)
+  ok [balanced]: Barcelona seed 2: the same season to the byte (170779 characters, 56567 draws)
+  ok [balanced]: Brighton seed 1: the same season to the byte (167709 characters, 52684 draws)
+  ok [balanced]: Brighton seed 2: the same season to the byte (166028 characters, 51189 draws)
+
+[fleet] folded 1584 season rows from 4 files in /home/runner/work/_temp/t-simCmTactics/cm-tactics-fleet-34Bnrl
+
+  expected points a league game against balanced, paired (mid: pooled | block 0 to 7 | block 8 to 15; big; small) and actual points a game (mid, balanced 1.234)
+    adapt                        mid +2.37% | +2.31% | +2.42%   big +2.14%   small +4.14%   ppg 1.213   (48 mid seasons)
+    line-                        mid +0.28% | -0.30% | +0.87%   big +0.85%   small -2.39%   ppg 1.213   (48 mid seasons)
+    width-                       mid -0.27% | -0.38% | -0.15%   big +0.06%   small -3.39%   ppg 1.225   (48 mid seasons)
+    tempo+                       mid -1.18% | -2.20% | -0.15%   big -0.79%   small -1.12%   ppg 1.190   (48 mid seasons)
+    press-                       mid -1.26% | -1.48% | -1.05%   big +1.27%   small -3.89%   ppg 1.163   (48 mid seasons)
+    line+                        mid -1.77% | -1.10% | -2.45%   big -1.02%   small +1.42%   ppg 1.168   (48 mid seasons)
+    misread                      mid -2.49% | -3.79% | -1.18%   big +0.26%   small -2.64%   ppg 1.154   (48 mid seasons)
+    tempo-                       mid -2.61% | -3.65% | -1.56%   big -0.55%   small -2.88%   ppg 1.178   (48 mid seasons)
+    width+                       mid -3.82% | -3.99% | -3.64%   big -1.57%   small -5.67%   ppg 1.161   (48 mid seasons)
+    press+                       mid -5.49% | -5.52% | -5.46%   big -4.05%   small -5.12%   ppg 1.144   (48 mid seasons)
+  ok [dominance]: none of 8 fixed sets beats balanced by over +6.00% at a mid table club in either block (top line-)
+  ok [read]: reading the opponent beats misreading them by +4.86% at a mid table club (+6.11% | +3.60%; big +1.88%, small +6.78%)
+  ok [adapt]: the best answer to each opponent's style gains +2.37% at a mid table club (+2.31% | +2.42%; big +2.14%, small +4.14%)
+
+  per match, every competition (balanced first):
+    balanced  poss 49.7  shots 11.323  wonHigh 6.105  crosses 10.848  offsides 1.998  breakC 0.221  wideShare 0.254  fit 80.9  inj 0.245  h2Opp 0.656  myG 1.267  oppG 1.334
+    adapt     poss 51.7  shots 11.641  wonHigh 6.228  crosses 6.886  offsides 1.770  breakC 0.154  wideShare 0.148  fit 80.1  inj 0.252  h2Opp 0.639  myG 1.241  oppG 1.255
+    line+     poss 51.4  shots 11.560  wonHigh 5.898  crosses 11.211  offsides 4.642  breakC 0.386  wideShare 0.262  fit 80.8  inj 0.247  h2Opp 0.698  myG 1.320  oppG 1.411
+    line-     poss 47.8  shots 11.040  wonHigh 6.296  crosses 10.413  offsides 0.792  breakC 0.046  wideShare 0.262  fit 81.0  inj 0.247  h2Opp 0.639  myG 1.222  oppG 1.287
+    misread   poss 48.5  shots 11.112  wonHigh 5.792  crosses 6.643  offsides 1.785  breakC 0.159  wideShare 0.164  fit 80.4  inj 0.250  h2Opp 0.651  myG 1.207  oppG 1.299
+    press+    poss 52.5  shots 11.299  wonHigh 10.972  crosses 11.367  offsides 1.990  breakC 0.303  wideShare 0.263  fit 76.3  inj 0.325  h2Opp 0.752  myG 1.275  oppG 1.450
+    press-    poss 45.9  shots 10.988  wonHigh 3.287  crosses 10.007  offsides 1.981  breakC 0.203  wideShare 0.262  fit 82.8  inj 0.211  h2Opp 0.642  myG 1.207  oppG 1.292
+    tempo+    poss 43.8  shots 9.896  wonHigh 6.800  crosses 9.558  offsides 2.002  breakC 0.224  wideShare 0.258  fit 80.9  inj 0.246  h2Opp 0.690  myG 1.278  oppG 1.388
+    tempo-    poss 55.1  shots 12.443  wonHigh 5.469  crosses 12.014  offsides 2.020  breakC 0.205  wideShare 0.264  fit 80.8  inj 0.238  h2Opp 0.653  myG 1.234  oppG 1.319
+    width+    poss 49.1  shots 11.190  wonHigh 6.155  crosses 18.238  offsides 1.964  breakC 0.222  wideShare 0.407  fit 80.9  inj 0.244  h2Opp 0.683  myG 1.242  oppG 1.383
+    width-    poss 49.7  shots 11.121  wonHigh 6.105  crosses 5.466  offsides 1.970  breakC 0.209  wideShare 0.119  fit 80.9  inj 0.248  h2Opp 0.649  myG 1.235  oppG 1.317
+  ok [effects]: press+ wonHigh: ratio 1.797 (band 1.4 to Infinity)
+  ok [effects]: press+ fit: diff -4.628 (band -Infinity to -1)
+  ok [effects]: press- wonHigh: ratio 0.538 (band 0 to 0.7)
+  ok [effects]: press- fit: diff 1.876 (band 0.3 to Infinity)
+  ok [effects]: tempo+ poss: diff -5.840 (band -Infinity to -3)
+  ok [effects]: tempo+ shots: ratio 0.874 (band 0 to 0.93)
+  ok [effects]: tempo- poss: diff 5.472 (band 3 to Infinity)
+  ok [effects]: tempo- shots: ratio 1.099 (band 1.07 to Infinity)
+  ok [effects]: width+ crosses: ratio 1.681 (band 1.35 to Infinity)
+  ok [effects]: width+ wideShare: diff 0.154 (band 0.08 to Infinity)
+  ok [effects]: width- crosses: ratio 0.504 (band 0 to 0.7)
+  ok [effects]: width- wideShare: diff -0.134 (band -Infinity to -0.08)
+  ok [effects]: line+ offsides: ratio 2.323 (band 1.7 to Infinity)
+  ok [effects]: line+ breakC: ratio 1.750 (band 1.3 to Infinity)
+  ok [effects]: line- offsides: ratio 0.397 (band 0 to 0.6)
+  ok [effects]: line- breakC: ratio 0.208 (band 0 to 0.75)
+simCmTactics: all green (sections table, styles, balanced, fleet)
