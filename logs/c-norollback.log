@@ -1,0 +1,50 @@
+NEGATIVE CONTROL ON: a refused swap leaves the new career parked in the free slot; section 5 must go red
+5) A manager who keeps the job carries on in Club Manager
+  FAIL: Manchester United seed 3363520565 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Southampton seed 2129143751 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Bristol City seed 2505143299 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Rayo Vallecano seed 46472915 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: AC Milan seed 354240859 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Lecce seed 256002035 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Bayer Leverkusen seed 1978703287 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Lyon seed 3145330018 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Paris FC seed 1317516283 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Al-Ahli seed 604329556 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Atlanta United seed 1940166480 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: New York Red Bulls seed 3722624121 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: San Diego FC seed 3037863773 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Rangers seed 4166563788 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Celtic seed 3271775616 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Fenerbahçe seed 2644371663 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Alanyaspor seed 1036092406 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: St. Pauli seed 181223470 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Union Saint-Gilloise seed 2601737660 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Sint-Truiden seed 2004413658 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: RB Salzburg seed 4031434727 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Rapid Wien seed 4188792220 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Olympiacos seed 1583074016 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: AEK Athens seed 1264500175 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: FC Midtjylland seed 4219463631 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: FC Nordsjælland seed 555865432 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Young Boys seed 3876892485 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Basel seed 1134408367 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Hajduk Split seed 2868281908 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Dinamo Zagreb seed 2203934071 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Corinthians seed 792915288 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: São Paulo seed 2206950394 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Guadalajara seed 465234352 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Atlético San Luis seed 1085373004 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Sydney FC seed 2669063318 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Pisa seed 3445988560 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Verona seed 2502081045 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Nantes seed 3877975989 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Reims seed 311012506 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Girona seed 3609287469 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Mallorca seed 2000764252 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: CSKA Moscow seed 1708035320 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+  FAIL: Rodina Moscow seed 3981509664 (g): a refused write on the swap answered failed, active slot 1 and the store changed
+   54 setups in 27 leagues: 43 handed over (1 on a reprieve) from 25 leagues, 37 played to the end of the season, 6 sacked in Club Manager on the way, 24 sacked runs refused, 2 with a window before the next fixture, 164 of the previous manager's messages left behind
+   slot arms on 43 survivors: emptyDevice 43, keptSlotOne 43, intoSlotOne 43, fullAsked 43, damagedKept 43, pointsCleared 43, rolledBack 0, picked 43, changedRefused 43
+  FAIL: the slot arm rolledBack held on only 0 of 43 survivors (floor 20)
+
+simManagerHotSeat: 44 failure(s)

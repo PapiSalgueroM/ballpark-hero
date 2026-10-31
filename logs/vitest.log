@@ -1,0 +1,11 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/managerHotSeatCarryOn.test.ts [2m([22m[2m16 tests[22m[2m)[22m[33m 796[2mms[22m[39m
+ [32m✓[39m src/test/managerHotSeatCarryOnCard.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1184[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m24 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m 00:21:51
+[2m   Duration [22m 4.05s[2m (transform 1.92s, setup 119ms, collect 4.16s, tests 1.98s, environment 651ms, prepare 168ms)[22m
+
