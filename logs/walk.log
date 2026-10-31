@@ -1,0 +1,59 @@
+(u) looking for a Europa League second leg: stream 0: found at week 58
+ok   (u) the hub's next match is the second leg (uel Valencia)
+(u) Europa League · Round of 16, second leg v Valencia, night 11, first leg was {"h":0,"a":1}, planted 1-0 to Everton
+ok   (u) the engine reads the planted first leg as 1-0 on 60 of 60 replays
+(u) lost on the night and through on penalties in 3 of 60 engine replays
+ok   (u) 390: the hub names the Europa League second leg
+(u) 390: 39 seeds tried; cards seen {"THROUGH | Drew 0-0 on the night":3,"THROUGH | Won 3-0 on the night":3,"THROUGH | Won 3-1 on the night":1,"THROUGH | Won 1-0 on the night":6,"THROUGH | Won 2-1 on the night":6,"THROUGH | Drew 1-1 on the night":7,"THROUGH | Drew 2-2 on the night":2,"THROUGH (AET) | Drew 2-2 on the night":2,"THROUGH (AET) | Drew 1-1 on the night":1,"THROUGH | Won 7-2 on the night":1,"OUT (AET) | Lost 3-6 on the night":1,"THROUGH | Won 2-0 on the night":1,"THROUGH | Won 4-0 on the night":2,"OUT | Lost 0-3 on the night":1,"OUT (PENS) | Lost 0-1 on the night":1,"THROUGH (PENS) | Lost 0-1 on the night":1}
+(u) 390: seed 39: "THROUGH (PENS)", "Lost 0-1 on the night", label "Europa League · Round of 16, second leg", lines ["Still level 1-1 on aggregate after extra time. Through 12-11 on penalties","Penalties, kick by kick12-11","🎯 Penalty: Hugo Duro","🧤 Penalty saved: Hugo Duro"], motion {"cls":"pulse","anim":"cmWinPulse"}
+ok   (u) 390: THROUGH in the winning tone
+ok   (u) 390: the card is labelled a Europa League night (Europa League · Round of 16, second leg)
+ok   (u) 390: a penalties line on the card
+ok   (u) 390: no sideways scroll
+ok   (u) 390: the card sits inside the view {"x":16,"y":169,"w":358,"h":3403.5,"right":374,"bottom":3572.5}
+ok   (u) 390: the night line inside the card
+ok   (u) 390: the card pulses ({"cls":"pulse","anim":"cmWinPulse"})
+ok   (u) 390: no page error 
+ok   (u) 1280: the hub names the Europa League second leg
+(u) 1280: 1 seeds tried; cards seen {"THROUGH (PENS) | Lost 0-1 on the night":1}
+(u) 1280: seed 39: "THROUGH (PENS)", "Lost 0-1 on the night", label "Europa League · Round of 16, second leg", lines ["Still level 1-1 on aggregate after extra time. Through 12-11 on penalties","Penalties, kick by kick12-11","🎯 Penalty: Hugo Duro","🧤 Penalty saved: Hugo Duro"], motion {"cls":"pulse","anim":"cmWinPulse"}
+ok   (u) 1280: THROUGH in the winning tone
+ok   (u) 1280: the card is labelled a Europa League night (Europa League · Round of 16, second leg)
+ok   (u) 1280: a penalties line on the card
+ok   (u) 1280: no sideways scroll
+ok   (u) 1280: the card sits inside the view {"x":416,"y":185,"w":448,"h":2836,"right":864,"bottom":3021}
+ok   (u) 1280: the night line inside the card
+ok   (u) 1280: the card pulses ({"cls":"pulse","anim":"cmWinPulse"})
+ok   (u) 1280: no page error 
+ok   (u) 390-rm: the hub names the Europa League second leg
+(u) 390-rm: 1 seeds tried; cards seen {"THROUGH (PENS) | Lost 0-1 on the night":1}
+(u) 390-rm: seed 39: "THROUGH (PENS)", "Lost 0-1 on the night", label "Europa League · Round of 16, second leg", lines ["Still level 1-1 on aggregate after extra time. Through 12-11 on penalties","Penalties, kick by kick12-11","🎯 Penalty: Hugo Duro","🧤 Penalty saved: Hugo Duro"], motion {"cls":"pulse","anim":"none"}
+ok   (u) 390-rm: THROUGH in the winning tone
+ok   (u) 390-rm: the card is labelled a Europa League night (Europa League · Round of 16, second leg)
+ok   (u) 390-rm: a penalties line on the card
+ok   (u) 390-rm: no sideways scroll
+ok   (u) 390-rm: the card sits inside the view {"x":16,"y":169,"w":358,"h":3403.5,"right":374,"bottom":3572.5}
+ok   (u) 390-rm: the night line inside the card
+ok   (u) 390-rm: still under reduced motion ({"cls":"pulse","anim":"none"})
+ok   (u) 390-rm: no page error 
+(m) 390 Messi: RW 🇦🇷 Lionel Messi Inter Miami · 39y · worth £8.8m to £9.6m Save 86 Talk · £8.6m
+ok   (m) 390: Lionel Messi on the market at 86 (row numbers 86)
+ok   (m) 390: Messi's row inside the view
+(m) 390 Ronaldo: ST 🇵🇹 Cristiano Ronaldo Al-Nassr · 41y · worth £9.6m to £10m Save 86 Talk · £8.8m
+ok   (m) 390: Cristiano Ronaldo on the market at 86 (row numbers 86)
+ok   (m) 390: Ronaldo's row inside the view
+(m) 390 Modri: CM 🇭🇷 Luka Modrić AC Milan · 40y · worth £3m to £3.1m Save 80 Talk · £2.7m Loan £300k
+ok   (m) 390: Luka Modri on the market at 80 (row numbers 80)
+ok   (m) 390: Modri's row inside the view
+ok   (m) 390: no page error 
+(m) 1280 Messi: RW 🇦🇷 Lionel Messi Inter Miami · 39y · worth £8.8m to £9.6m Save 86 Talk · £8.6m
+ok   (m) 1280: Lionel Messi on the market at 86 (row numbers 86)
+ok   (m) 1280: Messi's row inside the view
+(m) 1280 Ronaldo: ST 🇵🇹 Cristiano Ronaldo Al-Nassr · 41y · worth £9.6m to £10m Save 86 Talk · £8.8m
+ok   (m) 1280: Cristiano Ronaldo on the market at 86 (row numbers 86)
+ok   (m) 1280: Ronaldo's row inside the view
+(m) 1280 Modri: CM 🇭🇷 Luka Modrić AC Milan · 40y · worth £3m to £3.1m Save 80 Talk · £2.7m Loan £300k
+ok   (m) 1280: Luka Modri on the market at 80 (row numbers 80)
+ok   (m) 1280: Modri's row inside the view
+ok   (m) 1280: no page error 
+rvWalk GREEN: 0 findings
