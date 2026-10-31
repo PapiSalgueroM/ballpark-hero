@@ -1,0 +1,65 @@
+varwide: 3 searches widened to 60000 seeds
+clubManagerVarScreen: STALE HINT, league match 2 hint 1724: the case was found on seed 2607
+clubManagerVarScreen: STALE HINT, league match 3 hint 2099: the case was found on seed 2183
+clubManagerVarScreen: STALE HINT, league match 1 hint 2042: the case was found on seed 32574
+clubManagerVarScreen: STALE HINT, league match 1 hint 1735: the case was found on seed 1798
+clubManagerVarScreen: STALE HINT, league match 1 hint 1735: the case was found on seed 1798
+clubManagerVarScreen: STALE HINT, league match 2 hint 1984: the case was found on seed 1784
+clubManagerVarScreen: STALE HINT, league match 2 hint 1984: the case was found on seed 1784
+clubManagerVarScreen: STALE HINT, league match 2 hint 42322: the case was found on seed 4963
+clubManagerVarScreen: STALE HINT, league match 2 hint 6203: the case was found on seed 3760
+clubManagerVarScreen: STALE HINT, league match 2 hint 2219: the case was found on seed 4248
+clubManagerVarScreen: STALE HINT, league match 2 hint 1987: the case was found on seed 2958
+clubManagerVarScreen: STALE HINT, league match 1 hint 2483: the case was found on seed 15042
+clubManagerVarScreen: STALE HINT, league match 2 hint 2287: the case was found on seed 2073
+clubManagerVarScreen: STALE HINT, league match 2 hint 6428: the case was found on seed 21215
+clubManagerVarScreen: STALE HINT, league match 11 hint 2022: the case was found on seed 9041
+clubManagerVarScreen: STALE HINT, league match 2 hint 1940: the case was found on seed 20560
+clubManagerVarScreen: STALE HINT, league match 3 hint 8058: the case was found on seed 18626
+clubManagerVarScreen: STALE HINT, league match 2 hint 3827: the case was found on seed 11238
+clubManagerVarScreen: STALE HINT, the last kick of a half, hint 1742: the case was found on seed 1860
+clubManagerVarScreen: STALE HINT, the last kick of a half, hint 1742: the case was found on seed 1860
+clubManagerVarScreen: STALE HINT, the last kick of a half, hint 1773: the case was found on seed 3145
+clubManagerVarScreen: STALE HINT, the last kick of a half, hint 1742: the case was found on seed 1860
+ ✓ src/test/clubManagerVarScreen.test.tsx (46 tests) 316803ms
+   ✓ Club Manager: the review screen > a goal a review rules out is drawn first, and its review opens with the ball in the net  1834ms
+   ✓ Club Manager: the review screen > a review never opens over another action: the goal of the minute before is in and counted first ('disallowed')  4406ms
+   ✓ Club Manager: the review screen > a review never opens over another action: the goal of the minute before is in and counted first ('awarded')  2972ms
+   ✓ Club Manager: the review screen > the last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal  48742ms
+   ✓ Club Manager: the review screen > a penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it  2288ms
+   ✓ Club Manager: the review screen > a penalty a review gives that is saved: the save is drawn after the card and the score stays  1597ms
+   ✓ Club Manager: the review screen > two reviews in one half each get their own card, in turn  5852ms
+   ✓ Club Manager: the review screen > two goals ruled out in one minute (staged by hand): each is drawn before its own card, one card at a time  1957ms
+   ✓ Club Manager: the review screen > two goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute  2253ms
+   ✓ Club Manager: the review screen > Skip to the whistle during a review takes the card away and leaves the half as the engine has it  709ms
+   ✓ Club Manager: the review screen > leaving the site in the middle of a review and coming back shows the review again, then its penalty  2223ms
+   ✓ Club Manager: the review screen > reduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion  493ms
+   ✓ Club Manager: the review screen > a penalty a review gives in the last minute of a half is still played before the whistle  3130ms
+   ✓ Club Manager: the review screen > a goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends  2369ms
+   ✓ Club Manager: the review screen > a goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends  2835ms
+   ✓ Club Manager: the review screen > reduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net  1748ms
+   ✓ Club Manager: the review screen > reduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net  2315ms
+   ✓ Club Manager: the review screen > a goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way  8922ms
+   ✓ Club Manager: the review screen > a goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way  5776ms
+   ✓ Club Manager: the review screen > a goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way  2874ms
+   ✓ Club Manager: the review screen > a goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way  6624ms
+   ✓ Club Manager: the review screen > a goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way  4260ms
+   ✓ Club Manager: the review screen > a review at the very end of a crowded half is still shown once, and the half ends on the engine score  22272ms
+   ✓ Club Manager: the review screen > a penalty a review gives at the end of a half that real chances fill ('a real goal is the last kick after it…'): one card, the score still under it  3768ms
+   ✓ Club Manager: the review screen > a penalty a review gives at the end of a half that real chances fill ('a real last kick follows it and the p…'): one card, the score still under it  5169ms
+   ✓ Club Manager: the review screen > a penalty a review gives at the end of a half that real chances fill ('a real chance shares its place and an…'): one card, the score still under it  36540ms
+   ✓ Club Manager: the review screen > a penalty a review gives at the end of a half that real chances fill ('two places before the whistle, a real…'): one card, the score still under it  18932ms
+   ✓ Club Manager: the review screen > an own goal the minute after a ruled out goal: the review first, then the own goal as an own goal  35214ms
+   ✓ Club Manager: the review screen > a review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing  33133ms
+   ✓ Club Manager: the review screen > a review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing  2289ms
+   ✓ Club Manager: the review screen > a review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing  18667ms
+   ✓ Club Manager: the review screen > a review in the same minute as the other side's substitution: the change is told and the review is whole  2619ms
+   ✓ Club Manager: the review screen > a review in extra time ('disallowed'): its own card, over nothing, on the score the engine has  2734ms
+   ✓ Club Manager: the review screen > a review in extra time ('awarded'): its own card, over nothing, on the score the engine has  3958ms
+   ✓ Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303) > a real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion false)  2571ms
+   ✓ Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303) > a real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1860, reduced motion false)  2294ms
+   ✓ Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303) > a real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion true)  2328ms
+   ✓ Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303) > two goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773)  6013ms
+   ✓ Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303) > Skip during the card of the last kick ends the half at once, on the engine score (seed 1742)  1783ms
+ Test Files  1 passed (1)
+      Tests  46 passed (46)

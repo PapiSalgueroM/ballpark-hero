@@ -1,0 +1,14 @@
+PROBE shot: attempt 0, Brighton, minute 5, side opp, text "Yankuba Minteh"
+PROBE     foul 4 "Pau Torres"
+PROBE     foul 5 "João Gomes"
+PROBE   > shot 5 "Yankuba Minteh"
+PROBE     throwin 6 "Mats Wieffer"
+PROBE goal: attempt 0, Brighton, minute 15, side me, text "Nicolas Jackson"
+PROBE   > goal 15 "Nicolas Jackson"
+PROBE save: attempt 0, Brighton, minute 17, side me, text "Amadou Onana"
+PROBE     goal 15 "Nicolas Jackson"
+PROBE   > save 17 "Amadou Onana"
+      Tests  1 passed (1)
+   Start at  20:39:05
+   Duration  2.60s (transform 1.36s, setup 70ms, collect 1.64s, tests 149ms, environment 292ms, prepare 67ms)
+

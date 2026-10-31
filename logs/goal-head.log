@@ -1,0 +1,18 @@
+PROBE shot: attempt 0, Brighton, minute 5, side opp, text "Yankuba Minteh"
+PROBE   > shot 5 "Yankuba Minteh"
+PROBE     throwin 6 "Mats Wieffer"
+PROBE save: attempt 0, Brighton, minute 7, side opp, text "Georginio Rutter"
+PROBE     shot 5 "Yankuba Minteh"
+PROBE     throwin 6 "Mats Wieffer"
+PROBE     throwin 7 "Maxim De Cuyper"
+PROBE     foul 7 "Diego Gómez"
+PROBE   > save 7 "Georginio Rutter"
+PROBE goal: attempt 0, Brighton, minute 15, side me, text "Nicolas Jackson"
+PROBE     shot 14 "Matt O'Riley"
+PROBE     foul 15 "Aaron Wan-Bissaka"
+PROBE   > goal 15 "Nicolas Jackson"
+PROBE     throwin 16 "Maxim De Cuyper"
+      Tests  1 passed (1)
+   Start at  20:39:02
+   Duration  2.50s (transform 1.32s, setup 65ms, collect 1.60s, tests 104ms, environment 288ms, prepare 66ms)
+

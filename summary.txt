@@ -1,0 +1,3 @@
+var-wide exit=0 321s |       Tests  46 passed (46)
+goal-head exit=0 3s |    Duration  2.50s (transform 1.32s, setup 65ms, collect 1.60s, tests 104ms, environment 288ms, prepare 66ms)
+goal-m2 exit=0 4s |    Duration  2.60s (transform 1.36s, setup 70ms, collect 1.64s, tests 149ms, environment 292ms, prepare 67ms)
