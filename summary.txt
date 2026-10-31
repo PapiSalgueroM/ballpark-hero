@@ -1,0 +1,7 @@
+ctl-keeper-partplayoffs exit=0 5s | simSaveKeeper control partplayoffs: FIRED. Section 1 is red.
+ctl-keeper-partballon exit=0 5s | simSaveKeeper control partballon: FIRED. Section 1 is red.
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+neg-directv exit=1 5s | CONTROL directv FIRED: section 0 red
+neg-spreadv exit=1 6s | CONTROL spreadv FIRED: the version check caught it
+c-nocurtain exit=1 6s | ::error file=/tmp/nocurtain/src/test/usCareerStartOverClears.test.tsx,title=src/test/usCareerStartOverClears.test.tsx > Start over leaves no screen of the old career behi
+c-nointl exit=1 3s | ::error file=/tmp/nointl/src/test/usCareerStartOverClears.test.tsx,title=src/test/usCareerStartOverClears.test.tsx > Start over leaves no screen of the old career behind 

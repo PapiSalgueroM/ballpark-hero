@@ -1,0 +1,130 @@
+MUT nointl applied to src/components/us-career/UsCareerBoard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/nointl[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/usCareerStartOverClears.test.tsx[2m > [22m[2mStart over leaves no screen of the old career behind[2m > [22m[2mleak-intl: Start over on the national team result, then Enter the draft
+[22m[39mPROBE leak-intl new career on the save: Trey Buckets, age 19, year 2026, 0 seasons, intl null; the screen reads:  Start over🥈 SilverThe 2004 Olympics in AthensRecord 6-2. You averaged 3.6 points, 2 rebounds and 0.8 assists a game.You came home healthy.The real tournament was played, but these groups and results are this career's own.Your games8 gamesThe bracket2 groupsContinue
+
+[90mstdout[2m | src/test/usCareerStartOverClears.test.tsx[2m > [22m[2mStart over leaves no screen of the old career behind[2m > [22m[2mleak-curtain: Start over on the season curtain, then Enter the draft
+[22m[39mPROBE curtain before Start over:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be
+
+[90mstdout[2m | src/test/usCareerStartOverClears.test.tsx[2m > [22m[2mStart over leaves no screen of the old career behind[2m > [22m[2mleak-curtain: Start over on the season curtain, then Enter the draft
+[22m[39mPROBE leak-curtain new career on the save: Trey Buckets, age 19, 0 seasons; the screen's curtain reads: (none)
+
+ [31m❯[39m src/test/usCareerStartOverClears.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 364[2mms[22m[39m
+[31m   [31m×[31m Start over leaves no screen of the old career behind[2m > [22mleak-intl: Start over on the national team result, then Enter the draft[39m[32m 193[2mms[22m[39m
+[31m     → the new career opens on the old career's national team result:  Start over🥈 SilverThe 2004 Olympics in AthensRecord 6-2. You averaged 3.6 points, 2 rebounds and 0.8 assists a game.You came home healthy.The real tournament was played, but these groups and results are this career's own.Your games8 gamesThe bracket2 groupsContinue: expected <div data-intl-result="true" …(2)>…(6)</div> to be null[39m
+   [32m✓[39m Start over leaves no screen of the old career behind[2m > [22mcontrol-intl: Continue first, then Start over and Enter the draft[32m 56[2mms[22m[39m
+   [32m✓[39m Start over leaves no screen of the old career behind[2m > [22mleak-curtain: Start over on the season curtain, then Enter the draft[32m 56[2mms[22m[39m
+   [32m✓[39m Start over leaves no screen of the old career behind[2m > [22mcontrol-curtain: Continue first, then Start over and Enter the draft[32m 59[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerStartOverClears.test.tsx[2m > [22mStart over leaves no screen of the old career behind[2m > [22mleak-intl: Start over on the national team result, then Enter the draft
+[31m[1mAssertionError[22m: the new career opens on the old career's national team result:  Start over🥈 SilverThe 2004 Olympics in AthensRecord 6-2. You averaged 3.6 points, 2 rebounds and 0.8 assists a game.You came home healthy.The real tournament was played, but these groups and results are this career's own.Your games8 gamesThe bracket2 groupsContinue: expected <div data-intl-result="true" …(2)>…(6)</div> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<div
+  class="rounded-xl border-2 border-sky-500/40 bg-gradient-to-b from-sky-500/10 to-transparent p-4 space-y-3"
+  data-intl-result="true"
+  data-intl-view="main"
+>
+  <div
+    class="text-center space-y-1"
+  >
+    <h3
+      class="text-lg font-black tracking-tight"
+      data-intl-place="silver"
+    >
+      🥈 Silver
+    </h3>
+    <p
+      class="text-sm text-muted-foreground"
+    >
+      The 2004 Olympics in Athens
+    </p>
+  </div>
+  <p
+    class="text-sm"
+  >
+    Record 
+    6
+    -
+    2
+    . You averaged 
+    3.6 points, 2 rebounds and 0.8 assists
+     a game.
+  </p>
+  <p
+    class="text-sm"
+  >
+    You came home healthy.
+  </p>
+  <p
+    class="text-xs text-muted-foreground"
+  >
+    The real tournament was played, but these groups and results are this career's own.
+  </p>
+  <div
+    class="grid grid-cols-2 gap-2"
+  >
+    <button
+      class="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-left hover:bg-secondary/60"
+      data-intl-tile="games"
+      type="button"
+    >
+      <span
+        class="block text-sm font-bold"
+      >
+        Your games
+      </span>
+      <span
+        class="block text-xs text-muted-foreground"
+      >
+        8 games
+      </span>
+    </button>
+    <button
+      class="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-left hover:bg-secondary/60"
+      data-intl-tile="bracket"
+      type="button"
+    >
+      <span
+        class="block text-sm font-bold"
+      >
+        The bracket
+      </span>
+      <span
+        class="block text-xs text-muted-foreground"
+      >
+        2 groups
+      </span>
+    </button>
+  </div>
+  <button
+    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 min-h-[44px] w-full text-sm"
+    data-intl-continue="true"
+  >
+    Continue
+  </button>
+</div>
+
+[36m [2m❯[22m src/test/usCareerStartOverClears.test.tsx:[2m99:113[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 00:21:33
+[2m   Duration [22m 1.97s[2m (transform 839ms, setup 40ms, collect 1.16s, tests 364ms, environment 155ms, prepare 60ms)[22m
+
+
+::error file=/tmp/nointl/src/test/usCareerStartOverClears.test.tsx,title=src/test/usCareerStartOverClears.test.tsx > Start over leaves no screen of the old career behind > leak-intl%3A Start over on the national team result%2C then Enter the draft,line=99,column=113::AssertionError: the new career opens on the old career's national team result:  Start over🥈 SilverThe 2004 Olympics in AthensRecord 6-2. You averaged 3.6 points, 2 rebounds and 0.8 assists a game.You came home healthy.The real tournament was played, but these groups and results are this career's own.Your games8 gamesThe bracket2 groupsContinue: expected <div data-intl-result="true" …(2)>…(6)</div> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<div%0A  class="rounded-xl border-2 border-sky-500/40 bg-gradient-to-b from-sky-500/10 to-transparent p-4 space-y-3"%0A  data-intl-result="true"%0A  data-intl-view="main"%0A>%0A  <div%0A    class="text-center space-y-1"%0A  >%0A    <h3%0A      class="text-lg font-black tracking-tight"%0A      data-intl-place="silver"%0A    >%0A      🥈 Silver%0A    </h3>%0A    <p%0A      class="text-sm text-muted-foreground"%0A    >%0A      The 2004 Olympics in Athens%0A    </p>%0A  </div>%0A  <p%0A    class="text-sm"%0A  >%0A    Record %0A    6%0A    -%0A    2%0A    . You averaged %0A    3.6 points, 2 rebounds and 0.8 assists%0A     a game.%0A  </p>%0A  <p%0A    class="text-sm"%0A  >%0A    You came home healthy.%0A  </p>%0A  <p%0A    class="text-xs text-muted-foreground"%0A  >%0A    The real tournament was played, but these groups and results are this career's own.%0A  </p>%0A  <div%0A    class="grid grid-cols-2 gap-2"%0A  >%0A    <button%0A      class="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-left hover:bg-secondary/60"%0A      data-intl-tile="games"%0A      type="button"%0A    >%0A      <span%0A        class="block text-sm font-bold"%0A      >%0A        Your games%0A      </span>%0A      <span%0A        class="block text-xs text-muted-foreground"%0A      >%0A        8 games%0A      </span>%0A    </button>%0A    <button%0A      class="w-full min-h-[44px] rounded-lg border border-border bg-card px-3 py-2 text-left hover:bg-secondary/60"%0A      data-intl-tile="bracket"%0A      type="button"%0A    >%0A      <span%0A        class="block text-sm font-bold"%0A      >%0A        The bracket%0A      </span>%0A      <span%0A        class="block text-xs text-muted-foreground"%0A      >%0A        2 groups%0A      </span>%0A    </button>%0A  </div>%0A  <button%0A    class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 min-h-[44px] w-full text-sm"%0A    data-intl-continue="true"%0A  >%0A    Continue%0A  </button>%0A</div>%0A%0A ❯ src/test/usCareerStartOverClears.test.tsx:99:113%0A%0A

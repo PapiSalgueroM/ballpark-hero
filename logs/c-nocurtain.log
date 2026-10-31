@@ -1,0 +1,135 @@
+MUT nocurtain applied to src/components/us-career/UsCareerBoard.tsx
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/nocurtain[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/usCareerStartOverClears.test.tsx[2m > [22m[2mStart over leaves no screen of the old career behind[2m > [22m[2mleak-intl: Start over on the national team result, then Enter the draft
+[22m[39mPROBE leak-intl new career on the save: Trey Buckets, age 19, year 2026, 0 seasons, intl null; the screen reads:  Start overTrey Buckets · PGAtlanta Hawks2026 · age 19OVR 69$2.5M x4🪑 Second unit @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transfor
+
+[90mstdout[2m | src/test/usCareerStartOverClears.test.tsx[2m > [22m[2mStart over leaves no screen of the old career behind[2m > [22m[2mleak-curtain: Start over on the season curtain, then Enter the draft
+[22m[39mPROBE curtain before Start over:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be
+
+[90mstdout[2m | src/test/usCareerStartOverClears.test.tsx[2m > [22m[2mStart over leaves no screen of the old career behind[2m > [22m[2mleak-curtain: Start over on the season curtain, then Enter the draft
+[22m[39mPROBE leak-curtain new career on the save: Trey Buckets, age 19, 0 seasons; the screen's curtain reads:  @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { op
+
+ [31m❯[39m src/test/usCareerStartOverClears.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 526[2mms[22m[39m
+   [33m[2m✓[22m[39m Start over leaves no screen of the old career behind[2m > [22mleak-intl: Start over on the national team result, then Enter the draft [33m 305[2mms[22m[39m
+   [32m✓[39m Start over leaves no screen of the old career behind[2m > [22mcontrol-intl: Continue first, then Start over and Enter the draft[32m 69[2mms[22m[39m
+[31m   [31m×[31m Start over leaves no screen of the old career behind[2m > [22mleak-curtain: Start over on the season curtain, then Enter the draft[39m[32m 79[2mms[22m[39m
+[31m     → the new career opens on the old career's season curtain:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be: expected <div …(2)>…(7)</div> to be null[39m
+   [32m✓[39m Start over leaves no screen of the old career behind[2m > [22mcontrol-curtain: Continue first, then Start over and Enter the draft[32m 70[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerStartOverClears.test.tsx[2m > [22mStart over leaves no screen of the old career behind[2m > [22mleak-curtain: Start over on the season curtain, then Enter the draft
+[31m[1mAssertionError[22m: the new career opens on the old career's season curtain:  Start over @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be: expected <div …(2)>…(7)</div> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<div
+  class="relative overflow-hidden rounded-2xl border p-4 text-center border-border bg-card"
+  data-season-reveal="true"
+>
+  <style>
+    
+      @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } }
+      .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }
+      @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }
+      .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }
+      @keyframes cmWinPulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100% { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }
+      .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }
+      @keyframes cmLossShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 55% { transform: translateX(3px); } 80% { transform: translateX(-2px); } }
+      .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }
+      @keyframes cmGoldGlow { 0%, 100% { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }
+      .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }
+      @keyframes cmTickIn { 0% { opacity: 0; transform: translateX(-6px); } 100% { opacity: 1; transform: translateX(0); } }
+      .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }
+      /* cm-rise for a control that must not be pressed before it shows: hidden
+         (so unclickable) through its delay, visible from its first frame. */
+      @keyframes cmRiseGated { 0% { opacity: 0; visibility: visible; transform: translateY(7px); } 100% { opacity: 1; visibility: visible; transform: translateY(0); } }
+      .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }
+
+
+      @media (prefers-reduced-motion: reduce) {
+        .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }
+        .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }
+      }
+    
+  </style>
+  <p
+    class="cm-slam text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+    style="animation-delay: 0.05s;"
+  >
+    The 2004 season
+  </p>
+  <p
+    class="cm-slam mt-0.5 text-xs text-muted-foreground"
+    style="animation-delay: 0.15s;"
+  >
+    Memphis Grizzlies · age 24 · SF
+  </p>
+  <p
+    class="cm-slam mt-2 font-display text-xl font-black text-foreground"
+    style="animation-delay: 0.25s;"
+  >
+    Missed the playoffs
+  </p>
+  <p
+    class="cm-rise mt-1 text-xs font-semibold text-foreground"
+    style="animation-delay: 0.45s;"
+  >
+    3.5 ppg, 1.6 rpg, 0.6 apg
+  </p>
+  <div
+    class="mt-3 space-y-1 text-left"
+  >
+    <p
+      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"
+      style="animation-delay: 0.6s;"
+    >
+      🪑 Still the second unit. The minutes will come, keep pushing.
+    </p>
+    <p
+      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"
+      style="animation-delay: 0.82s;"
+    >
+      🪑 Second unit season: your numbers come in bench minutes.
+    </p>
+    <p
+      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"
+      style="animation-delay: 1.04s;"
+    >
+      📊 13.5 mpg, 0.4 spg, 0.1 bpg.
+    </p>
+    <p
+      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"
+      style="animation-delay: 1.26s;"
+    >
+      🪞 Kai Novak went 3.5 ppg, 2.2 rpg, 0.6 apg and had the better year of the two of you. Head to head 1-1.
+    </p>
+  </div>
+  <button
+    class="cm-rise mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"
+    style="animation-delay: 1.63s;"
+  >
+    Continue
+  </button>
+</div>
+
+[36m [2m❯[22m src/test/usCareerStartOverClears.test.tsx:[2m128:109[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 00:21:28
+[2m   Duration [22m 4.10s[2m (transform 1.73s, setup 65ms, collect 2.66s, tests 526ms, environment 342ms, prepare 117ms)[22m
+
+
+::error file=/tmp/nocurtain/src/test/usCareerStartOverClears.test.tsx,title=src/test/usCareerStartOverClears.test.tsx > Start over leaves no screen of the old career behind > leak-curtain%3A Start over on the season curtain%2C then Enter the draft,line=128,column=109::AssertionError: the new career opens on the old career's season curtain:  Start over @keyframes cmRise { 0%25 { opacity: 0; transform: translateY(7px); } 100%25 { opacity: 1; transform: translateY(0); } } .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; } @keyframes cmSlam { 0%25 { opacity: 0; transform: scale(1.6); } 60%25 { opacity: 1; transform: scale(0.94); } 100%25 { opacity: 1; transform: scale(1); } } .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-be: expected <div …(2)>…(7)</div> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<div%0A  class="relative overflow-hidden rounded-2xl border p-4 text-center border-border bg-card"%0A  data-season-reveal="true"%0A>%0A  <style>%0A    %0A      @keyframes cmRise { 0%25 { opacity: 0; transform: translateY(7px); } 100%25 { opacity: 1; transform: translateY(0); } }%0A      .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }%0A      @keyframes cmSlam { 0%25 { opacity: 0; transform: scale(1.6); } 60%25 { opacity: 1; transform: scale(0.94); } 100%25 { opacity: 1; transform: scale(1); } }%0A      .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }%0A      @keyframes cmWinPulse { 0%25 { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100%25 { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }%0A      .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }%0A      @keyframes cmLossShake { 0%25, 100%25 { transform: translateX(0); } 25%25 { transform: translateX(-4px); } 55%25 { transform: translateX(3px); } 80%25 { transform: translateX(-2px); } }%0A      .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }%0A      @keyframes cmGoldGlow { 0%25, 100%25 { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50%25 { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }%0A      .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }%0A      @keyframes cmTickIn { 0%25 { opacity: 0; transform: translateX(-6px); } 100%25 { opacity: 1; transform: translateX(0); } }%0A      .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }%0A      /* cm-rise for a control that must not be pressed before it shows: hidden%0A         (so unclickable) through its delay, visible from its first frame. */%0A      @keyframes cmRiseGated { 0%25 { opacity: 0; visibility: visible; transform: translateY(7px); } 100%25 { opacity: 1; visibility: visible; transform: translateY(0); } }%0A      .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }%0A%0A%0A      @media (prefers-reduced-motion: reduce) {%0A        .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }%0A        .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }%0A      }%0A    %0A  </style>%0A  <p%0A    class="cm-slam text-[10px] font-bold uppercase tracking-widest text-muted-foreground"%0A    style="animation-delay: 0.05s;"%0A  >%0A    The 2004 season%0A  </p>%0A  <p%0A    class="cm-slam mt-0.5 text-xs text-muted-foreground"%0A    style="animation-delay: 0.15s;"%0A  >%0A    Memphis Grizzlies · age 24 · SF%0A  </p>%0A  <p%0A    class="cm-slam mt-2 font-display text-xl font-black text-foreground"%0A    style="animation-delay: 0.25s;"%0A  >%0A    Missed the playoffs%0A  </p>%0A  <p%0A    class="cm-rise mt-1 text-xs font-semibold text-foreground"%0A    style="animation-delay: 0.45s;"%0A  >%0A    3.5 ppg, 1.6 rpg, 0.6 apg%0A  </p>%0A  <div%0A    class="mt-3 space-y-1 text-left"%0A  >%0A    <p%0A      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"%0A      style="animation-delay: 0.6s;"%0A    >%0A      🪑 Still the second unit. The minutes will come, keep pushing.%0A    </p>%0A    <p%0A      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-destructive/10 text-foreground"%0A      style="animation-delay: 0.82s;"%0A    >%0A      🪑 Second unit season: your numbers come in bench minutes.%0A    </p>%0A    <p%0A      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"%0A      style="animation-delay: 1.04s;"%0A    >%0A      📊 13.5 mpg, 0.4 spg, 0.1 bpg.%0A    </p>%0A    <p%0A      class="cm-tick-in rounded-lg px-2.5 py-1.5 text-xs leading-snug bg-background text-muted-foreground"%0A      style="animation-delay: 1.26s;"%0A    >%0A      🪞 Kai Novak went 3.5 ppg, 2.2 rpg, 0.6 apg and had the better year of the two of you. Head to head 1-1.%0A    </p>%0A  </div>%0A  <button%0A    class="cm-rise mt-4 inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110"%0A    style="animation-delay: 1.63s;"%0A  >%0A    Continue%0A  </button>%0A</div>%0A%0A ❯ src/test/usCareerStartOverClears.test.tsx:128:109%0A%0A
