@@ -1,0 +1,22 @@
+# Release BV, Round 1593 (the Europa League): every CM_EURO_PLAY_CONTROL of scripts/simCmEuroPlay.mjs (the brief's 8
+# and the rest), each must exit 1 with "FIRED (N failures, all its own)"; noplayrevert needs the base and is in r93a.
+vitest-1593: node_modules/.bin/vitest run src/lib/worldNights.test.ts src/lib/worldCompetition.test.ts src/lib/euroAccess.test.ts src/lib/clubManagerWorldView.test.ts src/test/clubManagerOfferConfirm.test.tsx src/test/clubManagerShootoutCopy.test.tsx src/test/cmLeagueLeadersCard.test.tsx src/test/cmSavePointsDoor.test.tsx --testTimeout=300000 --hookTimeout=120000
+c-friday: CM_EURO_PLAY_CONTROL=friday node scripts/simCmEuroPlay.mjs
+c-uelrank: CM_EURO_PLAY_CONTROL=uelrank node scripts/simCmEuroPlay.mjs
+c-noplace: CM_EURO_PLAY_CONTROL=noplace node scripts/simCmEuroPlay.mjs
+c-nowinnerucl: CM_EURO_PLAY_CONTROL=nowinnerucl node scripts/simCmEuroPlay.mjs
+c-notneutral: CM_EURO_PLAY_CONTROL=notneutral node scripts/simCmEuroPlay.mjs
+c-noet: CM_EURO_PLAY_CONTROL=noet node scripts/simCmEuroPlay.mjs
+c-inplace: CM_EURO_PLAY_CONTROL=inplace node scripts/simCmEuroPlay.mjs
+c-nouelucl: CM_EURO_PLAY_CONTROL=nouelucl node scripts/simCmEuroPlay.mjs
+c-nocarry: CM_EURO_PLAY_CONTROL=nocarry node scripts/simCmEuroPlay.mjs
+c-carryall: CM_EURO_PLAY_PLAY_SEEDS=5,6,7,8 CM_EURO_PLAY_CONTROL=carryall node scripts/simCmEuroPlay.mjs
+c-legfromucl: CM_EURO_PLAY_CONTROL=legfromucl node scripts/simCmEuroPlay.mjs
+c-nothursday: CM_EURO_PLAY_CONTROL=nothursday node scripts/simCmEuroPlay.mjs
+c-mineflip: CM_EURO_PLAY_CONTROL=mineflip node scripts/simCmEuroPlay.mjs
+c-noplaygate: CM_EURO_PLAY_CONTROL=noplaygate node scripts/simCmEuroPlay.mjs
+simOneOffCups-2: ONE_OFF_ONLY=2 node scripts/simOneOffCups.mjs
+simCmCopy: node scripts/simCmCopy.mjs
+simBoardObjectives: node scripts/simBoardObjectives.mjs
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
