@@ -1,0 +1,11 @@
+sl-d: node scripts/simClubManagerSlots.mjs
+sl-1: SIM_SEED=1 node scripts/simClubManagerSlots.mjs
+sl-2: SIM_SEED=2 node scripts/simClubManagerSlots.mjs
+sl-3: SIM_SEED=3 node scripts/simClubManagerSlots.mjs
+sl-4: SIM_SEED=4 node scripts/simClubManagerSlots.mjs
+sl-5: SIM_SEED=5 node scripts/simClubManagerSlots.mjs
+sl-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+sl-bu: git worktree add /tmp/bu 6b558934c >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/bu/node_modules && cd /tmp/bu && node scripts/simClubManagerSlots.mjs
+sl-main: git worktree add /tmp/main fa30aafbe >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/main/node_modules && cd /tmp/main && node scripts/simClubManagerSlots.mjs
+sl-merge: git worktree add /tmp/merge 9a8445ef8 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/merge/node_modules && cd /tmp/merge && node scripts/simClubManagerSlots.mjs
+sl-dupe-main: git worktree add /tmp/maind fa30aafbe >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/maind/node_modules && cd /tmp/maind && SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
