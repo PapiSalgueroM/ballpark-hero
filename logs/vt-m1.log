@@ -1,0 +1,197 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/tmp/v1[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[22m[39mclubManagerVarScreen: the 44 and 45 case was found on seed 2042, whistle 50
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mtwo goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute
+[22m[39mclubManagerVarScreen: back to back (staged by hand) on seed 2460: reviews at 9 and 10, cards at 9 and 11, 2 goal(s) played, starting at 1040 ms (minute 9) and 4896 ms (minute 10), first card up from 1808 to 4304 ms
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mthe material is 200 half feeds from five clubs in five leagues
+[22m[39m[1101 material] Aston Villa 20 matches 40 halves, Real Madrid 20 matches 40 halves, Lyon 20 matches 40 halves, Ajax 20 matches 40 halves, Celtic 20 matches 40 halves; frames replayed 168778
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR1: the ball is in the goal mouth on goals only
+[22m[39m[1101 R1] goals staged 285, with a frame in the net 285, frames in the mouth 2019, offenders 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR2: nobody stands on a team mate
+[22m[39m[1101 R2] scenes 20391; overlapping pairs in a scene: new 0, Round 504 0; pairs overlapping two samples running: in a tween 0, in an action 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR3: at a kick off each side is in its own half, far from the other keeper
+[22m[39m[1101 R3] kick off beats 479, hard rule offenders 0; attack line to the other keeper per seed: new 54.13 54.27 54.17 53.98 53.70, Round 504 18.33 18.59 18.36 18.19 17.85; floor 45
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR4: the block follows the ball
+[22m[39m[1101 R4] open beats 8168; slope of the centroid on the ball per seed (the lower of with and without the ball): new 0.464 0.471 0.488 0.465 0.475, Round 504 0.002 0.000 0.005 -0.002 0.000 (a centroid that never moves reports 0); with 0.505 0.501 0.488 0.503 0.493, without 0.464 0.471 0.494 0.465 0.475; floor 0.3
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR5: nothing is decided here
+[22m[39m[1101 R5] matches 100, frames replayed 168778, Math.random calls inside the replays 0; engine alone 48925b90 5de9efc9 e47d104b 9bbe576f 3d47594c; engine with replays 48925b90 5de9efc9 e47d104b 9bbe576f 3d47594c
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR6: a chance starts with the ball at the shooter and ends in its follow up
+[22m[39m[1101 R6] chances staged 2156; holder offenders 0, steady offenders 0, follow up offenders 0; a miss or a save followed by its goal kick or its keeper 1373, led straight on to the next chance 457; set aside and counted: no lead in 131, started from a kick off picture 0, the last kick of the period 42
+[1101 R6 turns] chances that waited for their turn 755 of 2156, by 0.55 on average, later than 0.9 0; still playing when the next one starts 20 (per seed 2 5 4 5 4), by more than a tenth of a minute 0
+[1101 R6 kick offs] goals with play left after them 284: kick off seen whole (0.76 or more) 166, for 0.6 or more 71, for a beat or more 36, cut under a beat by the next chance 11, none because the last kick's wind up came first 0; on average 0.661 of the clock; 0.6 or more per seed 46 of 53, 54 of 68, 40 of 44, 52 of 63, 45 of 56; whole per seed 35 of 53, 37 of 68, 25 of 44, 37 of 63, 32 of 56; under a beat per seed 2 of 53, 4 of 68, 1 of 44, 0 of 63, 4 of 56; no lead in per seed 22 of 421, 32 of 446, 18 of 406, 26 of 437, 33 of 446
+[1101 R6 short kick offs] under 0.6: 47 of 284 (per seed 7 14 4 11 11); the goal itself had to wait 30, the next chance was squeezed from behind 14, the period was ending 3, none of these 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR7: every dead ball is taken by the right side from the right place
+[22m[39m[1101 R7] dead balls read against their own line of the feed: opening 200, restart 279, corner 690, throwin 1116, freekick 1301, goalkick 921, keeper 452; corners whose line names a flank 690; taken by a stand in because that side has no keeper on 5; offenders 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe pitch part on real feeds[2m > [22m[2mR8: the pitch is handed the right kick off and the right share of the ball
+[22m[39m[1101 R8] halves handed to the pitch 200 (90 of them away from home, 196 with a share of the ball that is not 50); kick off offenders 0, share offenders 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521: the live match looks like football[2m > [22m[2mR10: the ball travels with height and lands at its man, and every chance rises and comes down in the right net
+[22m[39m[1521 R10] passes drawn: on the grass 10671, in the air 2935, crosses 665, throws 1116, dead balls placed 4804; open play passes in the air 0.216, their length in metres p25 20.9, p50 30.4, p75 41.5, p90 53.2; on the grass but lifted 0, in the air but never rose 0, not landing at their man 0; chances read: first halves 1085, second halves 1071, offenders 0
+[1521 R10 air] open play passes in the air per seed 0.208 0.208 0.231 0.222 0.209, band 0.18 to 0.245
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521: the live match looks like football[2m > [22m[2mR11: every foul the plan stages is seen at its own place, on the right two men, with only the card the feed gave
+[22m[39m[1521 R11] foul lines staged 2002, with their cue 1301 (0.650; per seed 0.650 0.668 0.671 0.645 0.617), of them waiting inside their minute 455, held over their spot through the free kick 1019 (offenders 0; the man it names by the spot through it 832, away from it 0), the man fouled of the line the fouler faces: read 1063, offenders 0, under a stretch that outranks them 701 (their minute held by: a chance 527, a chance of the same minute 246, a corner 153, a goal kick 135, another foul 102, the kick off after a goal 72, a keeper with the ball 67, a throw in 63, a period kick off 19, its own set piece 1), with no such reason 0; cue offenders 0; named on the grass 1063, meetings read 1580, apart 0; cards in the feed 260, carded cues 187, card offenders 0; fouls the stats count 2016 (at the whistle itself 14), halves where the feed and the stats differ 0
+[1521 R11 closing check] whistles the two met before 619, whistles a chance waited for: of the same minute 198, of the minute after 22; the fouler's name on the walk into the whistle: frames read 11693, held back while he walked in 4314, offenders 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521: the live match looks like football[2m > [22m[2mR12: an attack builds by lines, more directly the more attacking the side, and goes back only as a reset
+[22m[39m[1521 R12] my possessions defensive 1888, balanced 1888, attacking 1888; passes inside one: forward defensive 1203, balanced 1336, attacking 1370, across defensive 1174, balanced 1170, attacking 1317, back defensive 527, balanced 411, attacking 236; forward share per seed: defensive 0.417 0.397 0.420 0.420 0.420; balanced 0.469 0.436 0.470 0.451 0.470; attacking 0.452 0.445 0.506 0.471 0.476; back share per seed: defensive 0.192 0.191 0.174 0.180 0.169; balanced 0.138 0.152 0.142 0.138 0.132; attacking 0.079 0.090 0.083 0.076 0.074; from behind the front line defensive 2509, balanced 2207, attacking 1834, forward share per seed: defensive 0.492 0.461 0.472 0.498 0.481; balanced 0.644 0.578 0.592 0.600 0.623; attacking 0.765 0.728 0.747 0.742 0.758; resets per possession per seed: defensive 0.293 0.325 0.239 0.264 0.274; balanced 0.213 0.261 0.196 0.202 0.214; attacking 0.121 0.155 0.115 0.111 0.121; by reason: press defensive 348, balanced 259, attacking 148, switch defensive 179, balanced 152, attacking 88; back with no reason defensive 0, balanced 0, attacking 0, switches not across defensive 0, balanced 0, attacking 0, pressure not drawn defensive 0, balanced 0, attacking 0; nearest man to the ball: pressed 2.39 (329), not pressed 5.82 (4476); chances with the feeder drawn 1092, with the man before him too 383, out of order 0
+[1521 R12 every pass] passes inside one possession, whatever drew them: defensive 4477, balanced 4471, attacking 4469; of them back defensive 980, balanced 853, attacking 663; turned back for nothing defensive 0, balanced 0, attacking 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521 by hand, and through the viewer[2m > [22m[2mR13: every figure is his own generic person, a keyed draw from his id and never from his name or nationality
+[22m[39m[1521 R13] 300 ids: 264 different looks (skin, hair style, hair colour, boots), heights 0.92 to 1.08
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521 by hand, and through the viewer[2m > [22m[2mthe ball leaves the grass on a chance, its element staying where it always was, and never under reduced motion
+[22m[39m[1521 lift] frames with the ball off the grass: 30 of 45, under reduced motion 0 of 45
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mRound 1521 by hand, and through the viewer[2m > [22m[2ma foul is seen at its minute: the whistle and the name over its spot, and the ball goes up only when it should
+[22m[39m[1521 viewer] the foul at 19': "Foul by De Cuyper"; frames with the ball off the grass on the way 0
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2mthe card's season count is the settled count
+[22m[39m[1101 card] matches 4, cards of mine checked against the settled squad row 9
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2mafter Skip the second half opens on the right score, with no card and nothing replayed
+[22m[39m[1101 skip] the half found: board 5, its last chance a goal at 44
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 1 real goal(s) of that clock place had been told (Brennan Johnson)
+clubManagerVarScreen: the crowded end was found on seed 42322, whistle 49, review at 48, card at 49, played shot goal goal goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 6203, whistle 49, review at 49, card at 49, played shot save shot goal
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2ma goal with the last kick of a period takes nothing off the score while it winds up
+[22m[39m[1101 last kick] the period found ends at 90+7 on a goal by opp, the score before it 2 - 3
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 4670, whistle 50, review at 49, card at 50, played shot save shot save goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 2219, whistle 49, review at 49, card at 49, played shot shot goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 1987, whistle 49, review at 48, card at 47, played goal shot
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2ma line fired late by Skip is not played again when extra time starts
+[22m[39m[1101 extra] the late line is a shot at 85, the board is 8, found on seed 954 of 30000
+
+[90mstdout[2m | src/test/liveSimMotion.test.tsx[2m > [22m[2mThe goal sequence[2m > [22m[2ma goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[22m[39m[AR held cast] the half found on attempt 103: a goal at 63 for me, its action staged at 63.300 behind save at 62, the ball in at 64.056, and the line up changes at 64
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma review at the very end of a crowded half is still shown once, and the half ends on the engine score
+[22m[39mclubManagerVarScreen: the crowded end with a penalty given was found on seed 2483, whistle 50, review at 50, card at 48, under the card pass/pass, score under it 1 - 3, at the whistle 1 - 4, played shot, goal (after the card), chances from 44 on opp shot at 47, opp goal at 50 (P)
+
+ [32m✓[39m src/test/liveSimMotion.test.tsx [2m([22m[2m66 tests[22m[2m)[22m[33m 34781[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mactual feed triggers player strikes, ball flight, saves and net contact [33m 805[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false) [33m 1296[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true) [33m 777[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false) [33m 406[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true) [33m 379[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false) [33m 1399[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true) [33m 1314[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false) [33m 602[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true) [33m 596[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mterminal resume shows contact and Skip keeps immediate exactly-once whistle callbacks [33m 4056[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22ma tactics redraw cancels a terminal action that is no longer committed [33m 330[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: refused means full time, never thirty empty minutes [33m 2680[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given [33m 797[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22mthe extra time banner says what is true: a second leg is level on aggregate [33m 788[2mms[22m[39m
+   [33m[2m✓[22m[39m Live simcast motion[2m > [22ma goal in the board is announced with its plus, GOAL! ... 90+N [33m 481[2mms[22m[39m
+   [33m[2m✓[22m[39m The pitch part on real feeds[2m > [22mthe material is 200 half feeds from five clubs in five leagues [33m 4016[2mms[22m[39m
+   [33m[2m✓[22m[39m The pitch part on real feeds[2m > [22mR5: nothing is decided here [33m 644[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1521 by hand, and through the viewer[2m > [22mthe ball leaves the grass on a chance, its element staying where it always was, and never under reduced motion [33m 493[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22mthe score waits for the ball and the card lands at net contact [33m 339[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22mafter Skip the second half opens on the right score, with no card and nothing replayed [33m 302[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma goal with the last kick of a period takes nothing off the score while it winds up [33m 3089[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma line fired late by Skip is not played again when extra time starts [33m 3941[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22munder reduced motion the card is held for its first stretch only, and then the match runs on [33m 338[2mms[22m[39m
+   [33m[2m✓[22m[39m The goal sequence[2m > [22ma goal still on its way when the line up changes off the clock keeps its net, its card and its men [33m 1182[2mms[22m[39m
+   [33m[2m✓[22m[39m Match mode[2m > [22mBack folds the match to a card and pauses it, and the card puts it back [33m 620[2mms[22m[39m
+   [33m[2m✓[22m[39m Match mode[2m > [22mthe stats line a phone keeps in view reads the same count as the full stats [33m 512[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('a real goal is the last kick after it…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 10321 of match 2: whistle 50, review at 49 (opp), card at 49, under the card goal/net in the top net, score under it 3 - 0, at the whistle 4 - 1, played goal, goal, goal, the kick NOT played out (goal pictures between the card and the whistle: net), chances from 44 on opp save at 47, me goal at 47, me goal at 48, opp goal at 49 (P), me goal at 50
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('a real last kick follows it and the p…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 2287 of match 2: whistle 50, review at 49 (opp), card at 48, under the card pass/pass, score under it 2 - 2, at the whistle 2 - 3, played goal (after the card), shot (after the card), the kick played after the card, chances from 44 on me goal at 44, opp goal at 49 (P), me shot at 50
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('a real chance shares its place and an…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 6428 of match 2: whistle 50, review at 49 (opp), card at 49, under the card shot/wide, score under it 2 - 0, at the whistle 2 - 1, played shot, shot, shot, goal (after the card), the kick NOT played out (goal pictures between the card and the whistle: plant), chances from 44 on opp shot at 46, me shot at 48, me shot at 49, opp goal at 49 (P)
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma penalty a review gives at the end of a half that real chances fill ('two places before the whistle, a real…'): one card, the score still under it
+[22m[39mclubManagerVarScreen: a penalty given at a crowded end, seed 2022 of match 11: whistle 50, review at 48 (opp), card at 48, under the card pass/pass, score under it 0 - 3, at the whistle 0 - 4, played shot, shot, goal (after the card), save (after the card), the kick played after the card, chances from 44 on me shot at 45, opp shot at 46, opp shot at 48, opp goal at 48 (P), opp save at 49
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion false)
+[22m[39mclubManagerVarScreen: the last kick of the half, hint 1742, found on seed 1742: whistle 49, me goal by Kiernan Dewsbury-Hall, score at the end 1 - 1, scorer cards seen 115 frames
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1860, reduced motion false)
+[22m[39mclubManagerVarScreen: the last kick of the half, hint 1860, found on seed 1860: whistle 48, opp goal by Alexander Isak, score at the end 1 - 1, scorer cards seen 115 frames
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion true)
+[22m[39mclubManagerVarScreen: the last kick of the half, hint 1742, found on seed 1742: whistle 49, me goal by Kiernan Dewsbury-Hall, score at the end 1 - 1, scorer cards seen 115 frames
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22m[2mtwo goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773)
+[22m[39mclubManagerVarScreen: two goals in the last two places, hint 1773, found on seed 1773: whistle 48, goals at 47 and 48, goals drawn 2, score at the end 2 - 0
+
+ [32m✓[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m46 tests[22m[2m)[22m[33m 60139[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net [33m 1160[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed') [33m 1373[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded') [33m 1019[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal [33m 2062[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it [33m 1286[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays [33m 941[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn [33m 3509[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo goals ruled out in one minute (staged by hand): each is drawn before its own card, one card at a time [33m 1087[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute [33m 1192[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it [33m 429[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty [33m 1183[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle [33m 1827[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 1374[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 1927[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net [33m 955[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net [33m 1398[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way [33m 2201[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way [33m 1363[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way [33m 1587[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way [33m 1365[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way [33m 1467[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score [33m 1929[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real goal is the last kick after it…'): one card, the score still under it [33m 2364[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real last kick follows it and the p…'): one card, the score still under it [33m 1802[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('a real chance shares its place and an…'): one card, the score still under it [33m 1333[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives at the end of a half that real chances fill ('two places before the whistle, a real…'): one card, the score still under it [33m 1607[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal [33m 1313[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1168[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing [33m 1203[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1177[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole [33m 1425[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has [33m 5396[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has [33m 1544[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion false) [33m 1468[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1860, reduced motion false) [33m 1250[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion true) [33m 1251[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mtwo goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773) [33m 1647[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mSkip during the card of the last kick ends the half at once, on the engine score (seed 1742) [33m 1094[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m112 passed[39m[22m[90m (112)[39m
+[2m   Start at [22m 20:19:07
+[2m   Duration [22m 62.17s[2m (transform 1.25s, setup 86ms, collect 2.93s, tests 94.92s, environment 361ms, prepare 91ms)[22m
+

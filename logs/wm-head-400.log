@@ -1,0 +1,27 @@
+wmbound: seed search widened to 400
+playCmWorldMoves: Everton seed 83, the opening window's Vitinha from PSG to Manchester City
+ok   (a) 320: the market's search for Vitinha finds him at Manchester City [CDM 🇵🇹 Vitinha Manchester City · 26y · worth £111.5m to £115.9m Save 92 Talk · £124.7m]
+ok   (a) 320: Talk says he only joined Manchester City this season [Vitinha only joined Manchester City this season. They will not sell him on until next summer.x]
+ok   (a) 320: with the squad full the same Talk says so first [Your squad is full at 30. Somebody has to leave first.x]
+ok   (e) 320: the refused press moves the card no more than today's refusal does (joined: card 0 px, scrollY 945 to 945, height 32632 to 32632, note 287 to 353 of 640; squad full: card 0 px, scrollY 945 to 945, height 32655 to 32655, note 314 to 376 of 640)
+ok   (e) 320: the desk note is at least 12 px and inside the screen's width [12 px, 16 to 304 of 320]
+     the Talk button is 23 px tall at 320 (today's button, not this round's)
+ok   (a) 390: the market's search for Vitinha finds him at Manchester City [CDM 🇵🇹 Vitinha Manchester City · 26y · worth £111.5m to £115.9m Save 92 Talk · £124.7m]
+ok   (a) 390: Talk says he only joined Manchester City this season [Vitinha only joined Manchester City this season. They will not sell him on until next summer.x]
+ok   (a) 390: with the squad full the same Talk says so first [Your squad is full at 30. Somebody has to leave first.x]
+ok   (e) 390: the refused press moves the card no more than today's refusal does (joined: card 0 px, scrollY 745 to 745, height 25986 to 25986, note 389 to 455 of 844; squad full: card 0 px, scrollY 745 to 745, height 26009 to 26009, note 416 to 478 of 844)
+ok   (e) 390: the desk note is at least 12 px and inside the screen's width [12 px, 16 to 374 of 390]
+     the Talk button is 23 px tall at 390 (today's button, not this round's)
+ok   (a) 1280: the market's search for Vitinha finds him at Manchester City [CDM 🇵🇹 Vitinha Manchester City · 26y · worth £111.5m to £115.9m Save 92 Talk · £124.7m]
+ok   (a) 1280: Talk says he only joined Manchester City this season [Vitinha only joined Manchester City this season. They will not sell him on until next summer.x]
+ok   (a) 1280: with the squad full the same Talk says so first [Your squad is full at 30. Somebody has to leave first.x]
+ok   (e) 1280: the refused press moves the card no more than today's refusal does (joined: card 0 px, scrollY 491 to 491, height 14912 to 14912, note 421 to 483 of 900; squad full: card 0 px, scrollY 491 to 491, height 14935 to 14935, note 444 to 506 of 900)
+ok   (e) 1280: the desk note is at least 12 px and inside the screen's width [12 px, 208 to 1072 of 1280]
+     the Talk button is 23 px tall at 1280 (today's button, not this round's)
+ok   (b) Manchester City's club page lists Vitinha
+ok   (c) a season later Manchester City's club page still lists Vitinha
+ok   (c) a season later the market lists Vitinha at Manchester City
+ok   (c) and Talk no longer says he only joined [no note: the talks opened]
+ok   (d) a save BASE's engine wrote: after Resume Career Manchester City's club page lists Vitinha
+ok   (errors) no page error on any page
+playCmWorldMoves: green, 21 checks held; pictures in /home/runner/work/_temp/rc-out/files/head

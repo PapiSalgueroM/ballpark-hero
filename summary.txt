@@ -1,0 +1,7 @@
+wm-head exit=2 35s | playCmWorldMoves could not run: no Everton career in 40 seeds moved a man to a Premier League club who stayed a season
+wm-head-400 exit=0 37s | playCmWorldMoves: green, 21 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+wm-1600 exit=2 35s | playCmWorldMoves could not run: no Everton career in 40 seeds moved a man to a Premier League club who stayed a season
+vt-base exit=0 62s |    Duration  60.93s (transform 1.23s, setup 95ms, collect 2.90s, tests 92.86s, environment 399ms, prepare 136ms)
+vt-m1 exit=0 63s |    Duration  62.17s (transform 1.25s, setup 86ms, collect 2.93s, tests 94.92s, environment 361ms, prepare 91ms)
+vt-m2 exit=0 63s |    Duration  62.10s (transform 1.30s, setup 82ms, collect 3.00s, tests 94.94s, environment 370ms, prepare 89ms)
+vt-1600 exit=1 83s | ::error file=/tmp/v16/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The goal sequence > a substitution in a goal's wind up takes the card with t
