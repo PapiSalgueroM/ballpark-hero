@@ -672,6 +672,15 @@
       on its own file reads the same 47 (rules-main). Written with
       --part=modern,eras --write on 41b25abf9 (rules-write, 57 lines
       changed), then run green whole on the same runner.
+      Release BV's join (2026-10-31) took it ONCE on the merged tree
+      (Rounds 1603, 1593 and 1600 on Release BU's 19911f81), never from
+      one side of a conflict. Remote check rBVg-a2 on cb146432: the BASE
+      19911f81 in its own checkout is green whole on its own file
+      (lr-base), so the base engine reproduces it; the joined head reads
+      47 failures against it, every modern and era save (lr-head).
+      Written with --part=modern,eras,pure --write on cb146432 itself
+      (lr-write, 858 lines changed, blob 5cf06409), then run green whole
+      on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
