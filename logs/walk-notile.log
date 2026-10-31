@@ -1,0 +1,27 @@
+(a) Everton season 2, week 4: next "Europa League · League phase, matchday 1" at Dinamo Zagreb on Thu 2 Sep
+(b) after the night: Dinamo Zagreb 1-0 Everton
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+[1m[33mwarn[39m[22m - The class `duration-[800ms]` is ambiguous and matches multiple utilities.
+[1m[33mwarn[39m[22m - If this is content and not a class, replace it with `duration-&lsqb;800ms&rsqb;` to silence this warning.
+[33m
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+control notile: built src/lib/clubManagerWorldView.ts with its line patched into /home/runner/work/_temp/t-walk-notile/dukb-euro-play-walk-vlDvvv/dist-notile (served on 44863); the file is back as it was
+   FAIL (a) Everton before matchday 1 320: the Cups panel says there is no European football this season for a club in the Europa League
+   (a) Everton before matchday 1 320 tiles: 5 controls measured
+   FAIL (a) Everton before matchday 1 320: the Europa League tile reads "🌍 EUROPA LEAGUE League phase, matchday 1 of 8 next You are following it from outside", not that the club is in it with matchday 1 next
+   (a) Everton before matchday 1 320 screen: 6 controls measured
+   FAIL (a) Everton before matchday 1 390: the Cups panel says there is no European football this season for a club in the Europa League
+   (a) Everton before matchday 1 390 tiles: 5 controls measured
+   FAIL (a) Everton before matchday 1 390: the Europa League tile reads "🌍 EUROPA LEAGUE League phase, matchday 1 of 8 next You are following it from outside", not that the club is in it with matchday 1 next
+   (a) Everton before matchday 1 390 screen: 6 controls measured
+   FAIL (a) Everton before matchday 1 1280: the Cups panel says there is no European football this season for a club in the Europa League
+   (a) Everton before matchday 1 1280 tiles: 5 controls measured
+   FAIL (a) Everton before matchday 1 1280: the Europa League tile reads "🌍 EUROPA LEAGUE League phase, matchday 1 of 8 next You are following it from outside", not that the club is in it with matchday 1 next
+   (a) Everton before matchday 1 1280 screen: 6 controls measured
+playCmEuroPlay: control notile FIRED (3 findings of "the Europa League tile", 6 in all)
