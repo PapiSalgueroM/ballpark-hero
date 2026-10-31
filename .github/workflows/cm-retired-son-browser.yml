@@ -1,0 +1,362 @@
+name: Club Manager retired son real Academy browser qualification
+on:
+  push:
+    branches: [codex/cm-retired-son-browser-focus-20261031]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_MAIN: 19911f815ac713e8d3718cd0ee8592942a18fd00
+      EXPECTED_PARENT: d64b7686031ee022b17c63384315b64ae1e8fe4c
+      EXPECTED_TREE: 45b51f8e66adcd7a4518ac7a48a2ea0e60d3be3e
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind fixed family product and two-file browser proof
+        run: |
+          set -euo pipefail
+          runner_temp=$(realpath "$RUNNER_TEMP")
+          workspace=$(realpath "$PWD")
+          case "$runner_temp/" in "$workspace/"*) exit 1;; esac
+          out="$runner_temp/cm-retired-son-browser"
+          test ! -e "$out"
+          mkdir -p "$out/helpers" "$out/runtime-tmp"
+          echo "CM_FAMILY_BROWSER_ROOT=$out" >> "$GITHUB_ENV"
+          echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV"
+          echo "FREE_KICK_FONT_CACHE=$out/font-cache" >> "$GITHUB_ENV"
+          echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/cm-retired-son-browser-focus-20261031
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5633
+          git diff --name-status "$EXPECTED_MAIN" "$EXPECTED_PARENT" > "$out/product.paths"
+          printf 'M\tsrc/components/club-manager/AcademyScreen.tsx\nM\tsrc/components/club-manager/ClubManagerHelp.tsx\nM\tsrc/lib/clubManager.ts\nA\tsrc/lib/clubManagerRetiredSonActions.ts\nM\tsrc/pages/ClubManager.tsx\nM\tsrc/test/academyFilters.test.tsx\nA\tsrc/test/clubManagerRetiredSon.test.ts\n' > "$out/expected-product.paths"
+          cmp "$out/product.paths" "$out/expected-product.paths"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.paths"
+          printf 'A\t.github/workflows/cm-retired-son-browser.yml\nA\tscripts/qa/playCmRetiredSon.mjs\n' > "$out/expected-proof.paths"
+          cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(git hash-object src/lib/clubManager.ts)" = c536fde7afe03e77db48962e60030159056ce8fa
+          test "$(git hash-object src/lib/clubManagerRetiredSonActions.ts)" = a05051de70852334dcb471efe8f1672d006a4c82
+          test "$(git hash-object src/components/club-manager/AcademyScreen.tsx)" = 625912401ce727f6bd009bfed79b9c5f2b2213d4
+          test "$(git hash-object src/components/club-manager/ClubManagerHelp.tsx)" = 8d96271103035dbfdb83f6294d840c35175ddddb
+          test "$(git hash-object src/pages/ClubManager.tsx)" = d243cedf40a1f2375d01138e27f3a432ba20bd26
+          test "$(git hash-object src/test/clubManagerRetiredSon.test.ts)" = 358a06e5edc2747f8a2d94fe0ed654b0a9827610
+          test "$(git hash-object src/test/academyFilters.test.tsx)" = 8b4437d263d0ab84ec58ee3be1953e365c951661
+          test "$(git hash-object src/hooks/useClubManager.ts)" = 7297073ea60b93501df48ea9b7dfc74edd2217de
+          test "$(git hash-object src/lib/saveFence.ts)" = 1de45b573fd866433eb0982495af927a5427e8f4
+          test "$(git hash-object src/lib/clubManagerSlots.ts)" = cd1a683637ce1fa0444b86b1cff46821aa75127d
+          test "$(git hash-object src/lib/keyedRng.ts)" = acfd3a0a410e03ac0950953aa05b82e4c46e004f
+          test "$(git hash-object src/lib/clubManagerEras.ts)" = fa604790c580845ed9b91aef407e205383b4012b
+          test "$(git hash-object scripts/lib/hostLikeServer.mjs)" = 21059d5e8114669df61106c125d5272d357b6236
+          test "$(git hash-object scripts/lib/playwrightLoader.mjs)" = 4f7739e217e0a47ee82e6bfc8be1c04bed17454a
+          test "$(git hash-object scripts/qa/siteMenuNavigationSupport.mjs)" = 7909ce5805171367646e17a468fd919b88ad710e
+          test "$(git hash-object scripts/sweepWeight.mjs)" = 21d47bdf97c1d7a924dc0d9f6825c09bfbdc0c85
+          test "$(git hash-object package.json)" = 2ff64986fb76ebc51b706f2fd24765768874008a
+          test "$(git hash-object package-lock.json)" = 97d6f12a052f25f400462938c241789a083f0bfe
+          test "$(git hash-object vitest.config.ts)" = ed2a9dc677f77dfe95c061064eeff5782b856864
+          test "$(git hash-object vite.config.ts)" = 0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d
+          test "$(git hash-object scripts/qa/playCmRetiredSon.mjs)" = adb4cbac512a274cb7f9a2d4a9ca7a15baca390b
+          printf '8fc185ad8fba9df8cbd187348ae44ab79989c83acbac89707046bb6d3781ca5c  scripts/qa/playCmRetiredSon.mjs\n' | sha256sum -c -
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          : > "$out/helpers.sha256"
+          cat > "$out/helpers/run.sh" <<'RUN'
+          run() {
+            local id="$1" budget="$2"; shift 2
+            local raw=0
+            : > "$CM_FAMILY_BROWSER_ROOT/$id.transport"
+            { printf '%q ' "$@"; printf '\n'; } > "$CM_FAMILY_BROWSER_ROOT/$id.command"
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$CM_FAMILY_BROWSER_ROOT/$id.transport" FORCE_COLOR=0 env -u NO_COLOR timeout --signal=TERM --kill-after=15s "$budget" "$@" > "$CM_FAMILY_BROWSER_ROOT/$id.stdout" 2> "$CM_FAMILY_BROWSER_ROOT/$id.stderr" || raw=$?
+            printf '%s\n' "$raw" > "$CM_FAMILY_BROWSER_ROOT/$id.exit"
+            test ! -s "$CM_FAMILY_BROWSER_ROOT/$id.transport"
+          }
+          RUN
+          sha256sum "$out/helpers/run.sh" >> "$out/helpers.sha256"
+          cat > "$out/helpers/browser-binding-controller.cjs" <<'BINDING'
+          'use strict';
+          const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict');
+          const {createHash} = require('node:crypto'), {spawnSync} = require('node:child_process');
+          const root = fs.realpathSync(process.cwd()), out = fs.realpathSync(process.env.CM_FAMILY_BROWSER_ROOT);
+          const sha = b => createHash('sha256').update(b).digest('hex');
+          assert(!out.startsWith(root + path.sep) && out !== root, 'Outside evidence root');
+          const pageFile = 'src/pages/ClubManager.tsx', page = path.join(root,pageFile);
+          const goodSha = '6db80040a4b04d2487c64dbadca5d295f9d7500e4060c5beba8371380d0f8950';
+          const faultSha = '9abae3f67be8c502cee39bbde27a558a0a079bb734678fa803740e818c7c4a59';
+          const originalPath = path.join(out,'Page.original.tsx');
+          const json = (name,value) => fs.writeFileSync(path.join(out,name),JSON.stringify(value,null,2)+'\n',{flag:'wx'});
+          const sourceRows = fs.readFileSync(path.join(out,'source.initial.sha256'),'utf8').trimEnd().split('\n').map(line => {
+            const m=/^([a-f0-9]{64})  (.+)$/.exec(line);assert(m,'Exact source ledger row');return {sha256:m[1],file:m[2]};
+          });
+          assert.equal(sourceRows.length,5633);assert.equal(new Set(sourceRows.map(x=>x.file)).size,5633);
+          let gitRead = 0;
+          function git(args) {
+            const prefix=process.argv[2]+'-git-'+(++gitRead), a=fs.openSync(path.join(out,prefix+'.stdout'),'wx'), b=fs.openSync(path.join(out,prefix+'.stderr'),'wx');
+            let p;try {p=spawnSync('git',args,{cwd:root,stdio:['ignore',a,b]});}finally {fs.closeSync(a);fs.closeSync(b);}
+            json(prefix+'.process.json',{args,status:p.status,signal:p.signal,error:p.error?{name:p.error.name,code:p.error.code,message:p.error.message}:null});
+            assert.equal(p.status,0);assert.equal(p.signal,null);assert.equal(p.error,undefined);assert.equal(fs.readFileSync(path.join(out,prefix+'.stderr'),'utf8'),'');
+            return fs.readFileSync(path.join(out,prefix+'.stdout'),'utf8');
+          }
+          function held(label,fault=false) {
+            for(const row of sourceRows)assert.equal(sha(fs.readFileSync(path.join(root,row.file))),fault&&row.file===pageFile?faultSha:row.sha256,'Source held: '+row.file);
+            const members=git(['ls-files','-z']).split('\0').filter(Boolean).sort();
+            const initial=fs.readFileSync(path.join(out,'source-members.initial'),'utf8').split('\0').filter(Boolean).sort();
+            assert.deepEqual(members,initial);assert.equal(git(['for-each-ref','--format=%(refname) %(objectname)']),fs.readFileSync(path.join(out,'refs.before'),'utf8'));
+            assert.equal(git(['rev-parse','HEAD']).trim(),process.env.GITHUB_SHA);
+            assert.equal(git(['status','--porcelain=v1','--untracked-files=all']).trim(),fault?'M '+pageFile:'');
+            json(label+'.source-held.json',{sourceCount:sourceRows.length,onlyException:fault?pageFile:null,pageSha256:sha(fs.readFileSync(page)),head:process.env.GITHUB_SHA,allOtherBodiesHeld:true,membersAndRefsHeld:true});
+          }
+          function inventory(dir) {
+            const rows=[];
+            function walk(base,rel=''){for(const name of fs.readdirSync(base).sort()){const file=path.join(base,name),key=rel?rel+'/'+name:name,st=fs.lstatSync(file);assert(!st.isSymbolicLink(),'No built links');if(st.isDirectory())walk(file,key);else {assert(st.isFile());rows.push({file:key,bytes:st.size,sha256:sha(fs.readFileSync(file))});}}}
+            walk(dir);return rows;
+          }
+          function built(label,dir) {
+            assert(path.isAbsolute(dir));const rows=inventory(dir),manifest=JSON.parse(fs.readFileSync(path.join(dir,'.vite/manifest.json'),'utf8'));
+            const entry=manifest['index.html'];assert(entry&&entry.isEntry&&entry.file,'Actual Vite index entry');
+            const modules=s=>[...s.matchAll(/<script[^>]+type="module"[^>]+src="(\/assets\/[^"?#]+)"[^>]*>/g)].map(m=>m[1]);
+            const styles=s=>[...s.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="(\/assets\/[^"?#]+)"[^>]*>/g)].map(m=>m[1]);
+            const index=fs.readFileSync(path.join(dir,'index.html'),'utf8'),route=fs.readFileSync(path.join(dir,'club-manager/index.html'),'utf8');
+            assert.deepEqual(modules(index),['/'+entry.file]);assert.deepEqual(modules(route),modules(index),'Saved route uses its own built module');
+            assert.deepEqual([...new Set(styles(route))].sort(),[...new Set(styles(index))].sort(),'Saved route uses its own built CSS');
+            assert.deepEqual([...new Set(styles(index))].sort(),(entry.css||[]).map(f=>'/'+f).sort());
+            const files=new Set(rows.map(x=>x.file));
+            for(const value of Object.values(manifest)){assert(files.has(value.file),'Manifest file exists');for(const f of [...(value.css||[]),...(value.assets||[])])assert(files.has(f));for(const key of [...(value.imports||[]),...(value.dynamicImports||[])])assert(manifest[key]);}
+            json(label+'.built.json',{dir,indexSha256:sha(index),servedRouteSha256:sha(route),manifestSha256:sha(fs.readFileSync(path.join(dir,'.vite/manifest.json'))),modules:modules(route),styles:[...new Set(styles(route))],inventory:rows});
+            return {rows,routeSha:sha(route)};
+          }
+          function judge(name,status,count,pngs,controls,dir) {
+            const actual=JSON.parse(fs.readFileSync(path.join(out,name,'report.json'),'utf8'));
+            assert.equal(actual.status,status);assert.equal(actual.product,process.env.EXPECTED_PARENT);assert.equal(actual.proof,process.env.GITHUB_SHA);
+            assert.equal(actual.bindingFault,status==='OWNED_PHYSICAL_BINDING_CONTROL_REFUSAL');assert.equal(actual.restoredBindingSmoke,status==='RESTORED_BINDING_SMOKE_PASS');
+            assert.deepEqual(actual.setupErrors,[]);assert.equal(actual.forwardedExternal,0);assert.equal(actual.cases.length,count);assert.equal(actual.screenshots.length,pngs);assert.equal(actual.controls.length,controls);
+            assert.deepEqual(actual.sourceAfter,actual.sourceBefore);assert(Number.isSafeInteger(actual.server.pid)&&actual.server.pid>0);assert.equal(actual.server.dist,dir);assert.equal(actual.server.servedSha256,sha(fs.readFileSync(path.join(dir,'club-manager/index.html'))));
+            assert(actual.serverExit&&actual.serverExit.pid===actual.server.pid);assert(actual.serverExit.exitCode===0||actual.serverExit.signal==='SIGTERM');
+            const ids=count===12?[320,390,1440].flatMap(w=>['invite','pass','full','poor'].map(s=>w+'-'+s)):['390-invite'];
+            assert.deepEqual(actual.cases.map(x=>x.id),ids);
+            for(const row of actual.cases){for(const key of ['errors','unknown','localFailures'])assert.deepEqual(row[key],[]);assert.equal(row.status,status==='OWNED_PHYSICAL_BINDING_CONTROL_REFUSAL'?'PRODUCT_ASSERTION_FAILURE':'PASS');}
+            if(status==='OWNED_PHYSICAL_BINDING_CONTROL_REFUSAL'){const row=actual.cases[0];assert.equal(row.failure.name,'AssertionError');assert(row.failure.message.includes('CM_FAMILY_INVITE_ENABLED'));assert(row.initial&&row.initial.state.retiredSonApplication.offer.status==='pending');}
+            for(const row of actual.controls){assert.notEqual(row.beforeSha256,row.changedSha256);assert.equal(row.restored,true);assert.equal(row.refusal.name,'AssertionError');assert(row.refusal.message.includes(row.marker));assert.equal(sha(fs.readFileSync(path.join(out,name,row.file))),row.beforeSha256);}
+            const closing='CM retired-son browser: '+status+'; contexts='+count+'; originalPNGs='+pngs+'; copiedControls='+controls+'; forwardedExternal=0';
+            const text=fs.readFileSync(path.join(out,name+'.stdout'),'utf8');assert.equal(text.trimEnd().split('\n').filter(x=>x===closing).length,1);assert(text.trimEnd().endsWith(closing));assert.equal(fs.readFileSync(path.join(out,name+'.stderr'),'utf8'),'');
+            return {status,contexts:count,originalPNGs:pngs,copiedControls:controls,servedRouteSha256:actual.server.servedSha256};
+          }
+          let stage=0;
+          function child(name,exe,args,budget,extra={}) {
+            const stdout=path.join(out,name+'.stdout'),stderr=path.join(out,name+'.stderr'),transport=path.join(out,name+'.transport');
+            fs.writeFileSync(transport,'',{flag:'wx'});const a=fs.openSync(stdout,'wx'),b=fs.openSync(stderr,'wx');
+            const env={...process.env,NODE_OPTIONS:'--require='+path.join(root,'scripts/lib/offlineTransport.cjs'),SIM_OFFLINE_RECEIPT:transport,FORCE_COLOR:'0',CI:'1',SIM_OFFLINE:'1'};
+            for(const key of ['ONLY','NO_DOUBLE_SWAP','NO_COLOR','CM_FAMILY_BINDING_FAULT','CM_FAMILY_RESTORED_BINDING_SMOKE','CM_FAMILY_BROWSER_OUT','CM_FAMILY_DIST'])delete env[key];
+            Object.assign(env,extra);
+            const command=['--signal=TERM','--kill-after=15s',budget,exe,...args];let p;
+            try {p=spawnSync('timeout',command,{cwd:root,env,stdio:['ignore',a,b]});}finally{fs.closeSync(a);fs.closeSync(b);}
+            json(name+'.process.json',{exe:'timeout',args:command,status:p.status,signal:p.signal,error:p.error?{name:p.error.name,code:p.error.code,message:p.error.message}:null,source:process.env.GITHUB_SHA,stage:++stage});
+            fs.writeFileSync(path.join(out,name+'.exit'),String(p.status)+'\n',{flag:'wx'});
+            assert.equal(p.signal,null,name+' signal');assert.equal(p.error,undefined,name+' startup');assert.equal(fs.readFileSync(transport,'utf8'),'',name+' offline transport');
+            return p.status;
+          }
+          function browser(name,dist,status,raw,smoke=false) {
+            const extra={EXPECTED_FAMILY_PRODUCT_HEAD:process.env.EXPECTED_PARENT,CM_FAMILY_BROWSER_OUT:path.join(out,name),CM_FAMILY_FONT_MANIFEST_SHA:process.env.FONT_CACHE_MANIFEST_SHA256,CM_FAMILY_DIST:dist};
+            if(smoke)extra.CM_FAMILY_RESTORED_BINDING_SMOKE='1';else extra.CM_FAMILY_BINDING_FAULT='1';
+            assert.equal(child(name,process.execPath,['scripts/qa/playCmRetiredSon.mjs'],'5m',extra),raw,name+' raw browser status');
+            return judge(name,status,1,0,0,dist);
+          }
+          function build(name,dir) {
+            assert(!fs.existsSync(dir),'Fresh outside build');
+            assert.equal(child(name,'npm',['run','build','--','--manifest','--outDir',dir],'5m'),0,'Actual full Vite build');
+            assert.match(fs.readFileSync(path.join(out,name+'.stdout'),'utf8'),/built in/);
+            return built(name,dir);
+          }
+          if(process.argv[2]==='built') {
+            held('primary-prebrowser');built('primary-prebrowser',path.join(root,'dist'));
+            console.log('CM_FAMILY_BUILT: own manifest and saved-route assets bound');
+          } else if(process.argv[2]==='primary') {
+            const dir=path.join(root,'dist');held('primary-final');const bound=built('primary',dir);
+            const result=judge('browser-primary','PASS',12,12,11,dir);
+            assert.equal(fs.readFileSync(path.join(out,'browser-primary.exit'),'utf8'),'0\n');
+            assert.equal(fs.readFileSync(path.join(out,'browser-primary.transport'),'utf8'),'');
+            json('primary-admission.json',{...result,source:process.env.GITHUB_SHA,product:process.env.EXPECTED_PARENT,builtRoute:bound.routeSha,scope:'Primary12contexts12PNGs11copiesOnly'});
+            console.log('CM_FAMILY_PRIMARY: contexts12 originals12 copied11 sourceHeld');
+          } else {
+            assert.equal(process.argv[2],'binding');assert(fs.existsSync(originalPath),'Shell retained original Page');
+            const original=fs.readFileSync(originalPath);assert.equal(sha(original),goodSha);assert(fs.readFileSync(page).equals(original));
+            const before='                  onRelease={g.release}\n                  onCommitRecruitment={g.commitRecruitment}',after='                  onRelease={g.release}';
+            const text=original.toString('utf8');assert.equal(text.split(before).length,2,'Exactly one actual binding');
+            const changed=Buffer.from(text.replace(before,after));assert.notEqual(sha(changed),sha(original));assert.equal(sha(changed),faultSha);assert.equal(changed.toString('utf8').replace(after+'\n                />',before+'\n                />'),text,'Exact unique inverse');
+            fs.writeFileSync(path.join(out,'Page.binding-fault.tsx'),changed,{flag:'wx'});
+            json('binding-mutation.json',{file:pageFile,originalSha256:sha(original),changedSha256:sha(changed),before,after,onlyOwnedPage:true,originalSource:'Actual same working buffer',notFabricatedOffer:true});
+            const results={scope:'PhysicalPageBindingFaultAndOneRestoredSmokeOnly',source:process.env.GITHUB_SHA,product:process.env.EXPECTED_PARENT,fault:null,restored:null,errors:[],pageRestored:false};
+            const faultDist=path.join(out,'binding-fault-dist'),restoreDist=path.join(out,'binding-restored-dist');
+            const remember=(phase,error)=>results.errors.push({phase,name:error.name,message:error.message,stack:error.stack});
+            try {
+              held('binding-before');fs.writeFileSync(page,changed);held('binding-actual-fault',true);
+              const builtFault=build('binding-fault-build',faultDist);held('binding-fault-postbuild',true);
+              results.fault=browser('browser-binding-fault',faultDist,'OWNED_PHYSICAL_BINDING_CONTROL_REFUSAL',1);
+              assert.deepEqual(inventory(faultDist),builtFault.rows,'Fault dist held');held('binding-fault-final',true);
+            } catch(error) {remember('fault',error);}
+            finally {
+              try {
+                fs.writeFileSync(page,original);assert(fs.readFileSync(page).equals(original));results.pageRestored=true;held('binding-restored-source');
+                const builtRestored=build('binding-restored-build',restoreDist);held('binding-restored-postbuild');
+                results.restored=browser('browser-binding-restored',restoreDist,'RESTORED_BINDING_SMOKE_PASS',0,true);
+                assert.deepEqual(inventory(restoreDist),builtRestored.rows,'Restored dist held');held('binding-restored-final');
+              } catch(error) {remember('restore',error);}
+              finally {fs.writeFileSync(page,original);assert(fs.readFileSync(page).equals(original));results.pageRestored=true;json('binding-admission.json',results);}
+            }
+            assert.deepEqual(results.errors,[],'Physical binding control and healthy restoration must both complete');
+            assert(results.fault&&results.restored&&results.pageRestored);
+            console.log('CM_FAMILY_BINDING: physicalFault1 raw1 originals0 ownedInviteDisabled restoredSmoke1 raw0 originals0 sourceHeld');
+          }
+          BINDING
+          cp scripts/qa/playCmRetiredSon.mjs "$out/helpers/playCmRetiredSon.mjs"
+          cmp scripts/qa/playCmRetiredSon.mjs "$out/helpers/playCmRetiredSon.mjs"
+          sha256sum "$out/helpers/browser-binding-controller.cjs" "$out/helpers/playCmRetiredSon.mjs" >> "$out/helpers.sha256"
+          export CM_FAMILY_BROWSER_ROOT="$out";source "$out/helpers/run.sh";run driver-syntax 1m node --check scripts/qa/playCmRetiredSon.mjs
+          test "$(cat "$out/driver-syntax.exit")" -eq 0;test ! -s "$out/driver-syntax.stdout";test ! -s "$out/driver-syntax.stderr"
+          run binding-syntax 1m node --check "$out/helpers/browser-binding-controller.cjs"
+          test "$(cat "$out/binding-syntax.exit")" -eq 0;test ! -s "$out/binding-syntax.stdout";test ! -s "$out/binding-syntax.stderr"
+      - name: Locked dependencies and actual application types
+        run: |
+          set -euo pipefail
+          out="$CM_FAMILY_BROWSER_ROOT"
+          raw=0
+          env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.exit"
+          test "$raw" -eq 0
+          raw=0
+          : > "$out/types.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 3m node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json > "$out/types.stdout" 2> "$out/types.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/types.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/types.stdout"
+          test ! -s "$out/types.stderr"
+          test ! -s "$out/types.transport"
+      - name: Isolated exact Playwright and real prepared fonts
+        run: |
+          set -euo pipefail
+          out="$CM_FAMILY_BROWSER_ROOT";tools="$RUNNER_TEMP/cm-retired-son-browser-tools";test ! -e "$tools"
+          env -u NODE_OPTIONS npm install --prefix "$tools" --no-save --package-lock=false playwright@1.64.0 > "$out/browser-install.log" 2>&1
+          test ! -e node_modules/playwright;test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright;ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          export PLAYWRIGHT_BROWSERS_PATH="$tools/browsers"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV";echo "CM_FAMILY_BROWSER_TOOLS=$tools" >> "$GITHUB_ENV";echo "PLACEMENT_TOOLS=$tools" >> "$GITHUB_ENV"
+          executable=$(node -e 'const a=require("node:assert/strict");a.equal(require("playwright/package.json").version,"1.64.0");a.equal(require("playwright-core/package.json").version,"1.64.0");process.stdout.write(require("playwright").chromium.executablePath())')
+          if test ! -f "$executable";then env -u NODE_OPTIONS node "$tools/node_modules/playwright/cli.js" install chromium > "$out/chromium-install.log" 2>&1;fi
+          test -f "$executable";printf '%s\n' "$executable" > "$out/chromium.path"
+          env -u NODE_OPTIONS node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > "$out/font-prefetch.log" 2>&1
+          sha=$(sha256sum "$FREE_KICK_FONT_CACHE/manifest.json" | cut -d' ' -f1);echo "FONT_CACHE_MANIFEST_SHA256=$sha" >> "$GITHUB_ENV"
+      - name: Actual Vite manifest build and post-build inventories
+        id: build
+        run: |
+          set -euo pipefail
+          out="$CM_FAMILY_BROWSER_ROOT";source "$out/helpers/run.sh"
+          run build 5m npm run build -- --manifest;test "$(cat "$out/build.exit")" -eq 0
+          test -f dist/.vite/manifest.json
+          sha256sum -c "$out/source.initial.sha256" > "$out/source.prebrowser-held.log"
+          for pair in "deps:node_modules" "tools:$CM_FAMILY_BROWSER_TOOLS" "fonts:$FREE_KICK_FONT_CACHE" "dist:dist";do
+            label="${pair%%:*}";dir="${pair#*:}";find "$dir" -type f -print0 | sort -z > "$out/$label.members";xargs -0 sha256sum < "$out/$label.members" > "$out/$label.sha256"
+          done
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.before"
+          tar -cf "$out/dist.tar" -C dist .;tar -cf "$out/font-cache.tar" -C "$FREE_KICK_FONT_CACHE" .
+      - name: Twelve real Academy browser contexts and eleven copied guards
+        id: browser
+        run: |
+          set -euo pipefail
+          out="$CM_FAMILY_BROWSER_ROOT";source "$out/helpers/run.sh"
+          run primary-built 2m node "$out/helpers/browser-binding-controller.cjs" built
+          test "$(cat "$out/primary-built.exit")" -eq 0;test ! -s "$out/primary-built.stderr"
+          run browser-primary 20m env -u ONLY -u NO_DOUBLE_SWAP -u CM_FAMILY_BINDING_FAULT -u CM_FAMILY_RESTORED_BINDING_SMOKE CI=1 SIM_OFFLINE=1 EXPECTED_FAMILY_PRODUCT_HEAD="$EXPECTED_PARENT" CM_FAMILY_BROWSER_OUT="$out/browser-primary" CM_FAMILY_FONT_MANIFEST_SHA="$FONT_CACHE_MANIFEST_SHA256" CM_FAMILY_DIST="$PWD/dist" node scripts/qa/playCmRetiredSon.mjs
+          if test "$(cat "$out/browser-primary.exit")" -ne 0;then sed -n '1,100p' "$out/browser-primary.stderr";tail -n 40 "$out/browser-primary.stdout";exit 1;fi
+          run primary-admission 2m node "$out/helpers/browser-binding-controller.cjs" primary
+          test "$(cat "$out/primary-admission.exit")" -eq 0;test ! -s "$out/primary-admission.stderr"
+          grep -Fx 'CM_FAMILY_PRIMARY: contexts12 originals12 copied11 sourceHeld' "$out/primary-admission.stdout"
+      - name: Physical Page-binding removal, rebuilt refusal and restored healthy smoke
+        id: binding
+        run: |
+          set -euo pipefail
+          out="$CM_FAMILY_BROWSER_ROOT";source "$out/helpers/run.sh"
+          test ! -e "$out/Page.original.tsx"
+          cp src/pages/ClubManager.tsx "$out/Page.original.tsx"
+          printf '6db80040a4b04d2487c64dbadca5d295f9d7500e4060c5beba8371380d0f8950  %s\n' "$out/Page.original.tsx" > "$out/Page.original.sha256"
+          sha256sum -c "$out/Page.original.sha256"
+          cat "$out/Page.original.sha256" >> "$out/helpers.sha256"
+          trap 'sha256sum -c "$out/Page.original.sha256" && cp "$out/Page.original.tsx" src/pages/ClubManager.tsx' EXIT
+          run binding-controller 25m node "$out/helpers/browser-binding-controller.cjs" binding
+          if test "$(cat "$out/binding-controller.exit")" -ne 0;then sed -n '1,100p' "$out/binding-controller.stderr";tail -n 40 "$out/binding-controller.stdout";exit 1;fi
+          test ! -s "$out/binding-controller.stderr"
+          grep -Fx 'CM_FAMILY_BINDING: physicalFault1 raw1 originals0 ownedInviteDisabled restoredSmoke1 raw0 originals0 sourceHeld' "$out/binding-controller.stdout"
+          for label in binding-fault-dist binding-restored-dist;do
+            dir="$out/$label";test -f "$dir/.vite/manifest.json"
+            find "$dir" -type f -print0 | sort -z > "$out/$label.members"
+            xargs -0 sha256sum < "$out/$label.members" > "$out/$label.sha256"
+          done
+      - name: Always retain source, post-qualification inventories and originals
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          runner_temp=$(realpath "$RUNNER_TEMP")
+          workspace=$(realpath "$PWD")
+          case "$runner_temp/" in "$workspace/"*) exit 1;; esac
+          out="$runner_temp/cm-retired-son-browser";mkdir -p "$out";failed=0
+          if test -f "$out/Page.original.tsx";then
+            if sha256sum -c "$out/Page.original.sha256" > "$out/Page.restore-always.log" 2>&1;then cp "$out/Page.original.tsx" src/pages/ClubManager.tsx;else failed=1;fi
+          fi
+          git ls-files -z | sort -z > "$out/source-members.final"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          xargs -0 sha256sum < "$out/source-members.final" > "$out/source.final.sha256"
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git diff --exit-code HEAD > "$out/working-source.diff" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"
+          cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/helpers.sha256" > "$out/helpers-held.log" 2>&1 || failed=1
+          for pair in "deps:node_modules" "tools:${CM_FAMILY_BROWSER_TOOLS:-}" "fonts:${FREE_KICK_FONT_CACHE:-}" "dist:dist";do
+            label="${pair%%:*}";dir="${pair#*:}"
+            if test -f "$out/$label.sha256";then
+              find "$dir" -type f -print0 | sort -z > "$out/$label.members.final"
+              cmp "$out/$label.members" "$out/$label.members.final" || failed=1
+              sha256sum -c "$out/$label.sha256" > "$out/$label-held.log" 2>&1 || failed=1
+            else printf 'POST_QUALIFICATION_INVENTORY_NOT_CREATED\n' > "$out/$label-not-created.txt";failed=1;fi
+          done
+          if test -f "$out/dependency-links.before";then
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.before" "$out/dependency-links.final" || failed=1
+          else failed=1;fi
+          for label in binding-fault-dist binding-restored-dist;do
+            if test -f "$out/$label.sha256";then
+              find "$out/$label" -type f -print0 | sort -z > "$out/$label.members.final"
+              cmp "$out/$label.members" "$out/$label.members.final" || failed=1
+              sha256sum -c "$out/$label.sha256" > "$out/$label-held.log" 2>&1 || failed=1
+            else printf 'PHASE_INVENTORY_NOT_CREATED\n' > "$out/$label-not-created.txt";failed=1;fi
+          done
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"CLUB_MANAGER_RETIRED_SON_REAL_ACADEMY_BROWSER_ONLY","source":"%s","main":"%s","productChanged":true,"featureQualified":false,"types":"READ_ACTUAL","build":"READ_ACTUAL_FRESH_PRIMARY_AND_FAULT_RESTORED","browserPrimary":"READ_ACTUAL_12_CONTEXTS_12_ORIGINALS_11_COPIED_CONTROLS","physicalBindingFault":"READ_ACTUAL_1_CONTEXT_0_PNG_OWNED_RAW1","restoredBindingSmoke":"READ_ACTUAL_1_CONTEXT_0_PNG_RAW0_NO_MATRIX_CREDIT","caps16":"SEPARATE_ROOT_BUILD_V3","builtReaders15":"SEPARATE_ROOT_BUILD_V3","focusedUnit":"SEPARATE_RUN","fullDefaultSuite":"SEPARATE_RUN","globalSims":"UNRUN","publicSnapshotsRegenerated":false,"fullSEO":"UNRUN","liveGameplay":"UNRUN","releaseOrPublicationReady":false,"dependencyInventoryScope":"POST_PRIMARY_BUILD_ONLY"}\n' "$GITHUB_SHA" "$EXPECTED_MAIN" > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/cm-retired-son-browser-evidence.sha256"
+          cp "$RUNNER_TEMP/cm-retired-son-browser-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: cm-retired-son-browser-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-retired-son-browser
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
