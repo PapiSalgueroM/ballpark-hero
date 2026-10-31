@@ -1,0 +1,4 @@
+wm-base exit=0 52s | playCmWorldMoves: green, 22 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+wm-m1 exit=0 50s | playCmWorldMoves: green, 22 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+wm-m2 exit=0 49s | playCmWorldMoves: green, 22 checks held; pictures in /home/runner/work/_temp/rc-out/files/head
+c-rawlength exit=1 34s | simCmEuroPlay: control rawlength FIRED (16 failures, all its own)
