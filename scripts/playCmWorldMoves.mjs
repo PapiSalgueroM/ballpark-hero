@@ -94,9 +94,16 @@ function playSeason(cm, s, seed) {
 }
 
 /* ---- the career: a new Everton career whose opening window moved a man X from A to a Premier League club B, who
-   is still at B a season later (by the ledger; by the news alone under norecord) ---- */
+   is still at B a season later (by the ledger; by the news alone under norecord) ----
+   Release BV: 160 seeds, not 40. The pick must also be a deal the BASE engine d4f2c6f6 makes on the same seed, and
+   Round 1600 re-rates the veterans by level, so the opening windows of the two engines part far more often: on Round
+   1600's own head ed30d7601 and on the joined head no seed of the first 40 matched (exit 2, rBVg-x5 wm-1600 and
+   wm-head), and the first that does is seed 83 (Vitinha, PSG to Manchester City; rBVg-x5 wm-head-400, green). Before
+   1600 it was seed 1 (Jurrien Timber, Arsenal to Manchester United; rBVg-x1 on the BASE, m1 and m2). The search stops
+   at the first pick, so the bound costs nothing on a tree that finds one early. */
+const SEEDS = 160;
 let pick = null;
-for (let seed = 1; seed <= 40 && !pick; seed += 1) {
+for (let seed = 1; seed <= SEEDS && !pick; seed += 1) {
   const s = withSeed(seed, () => H.startCareer('Everton'));
   const lines = aiLines(s).filter(line => s.leagueClubs.includes(line.to));
   if (!lines.length) continue;
@@ -111,7 +118,7 @@ for (let seed = 1; seed <= 40 && !pick; seed += 1) {
   pick = { seed, X: line.name, A: line.from, B: line.to, aInLeague: s.leagueClubs.includes(line.from),
     save1: saveOf(H, s), save2: saveOf(H, s2), baseSave: saveOf(B, base) };
 }
-if (!pick) cannot('no Everton career in 40 seeds moved a man to a Premier League club who stayed a season');
+if (!pick) cannot(`no Everton career in ${SEEDS} seeds moved a man to a Premier League club who stayed a season`);
 const { X, A } = pick, BUYER = pick.B;
 console.log(`playCmWorldMoves: Everton seed ${pick.seed}, the opening window's ${X} from ${A} to ${BUYER}${pick.aInLeague ? ' (both in the league)' : ''}`);
 
