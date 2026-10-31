@@ -1,0 +1,66 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/cmFreeAgentCanonicalLinks.test.ts [2m([22m[2m2 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 354[2mms[22m[39m
+[31m   [31m×[31m Club Manager canonical free-agent links[2m > [22mages a keyed expired player through its own canonical record when a namesake exists[39m[32m 28[2mms[22m[39m
+[31m     → CM_FA_JOIN_KEYED_SUMMER: expected { age: 22, rating: 44, value: 0.4 } to deeply equal { age: 22, rating: 47, value: 0.7 }[39m
+[31m   [31m×[31m Club Manager canonical free-agent links[2m > [22mrecovers an old-save release with its known key across reload and the next summer[39m[32m 22[2mms[22m[39m
+[31m     → CM_FA_JOIN_RECOVERY_KEY: expected undefined to be '["now","Everton","Jarrad Branthwaite"…' // Object.is equality[39m
+ [32m✓[39m src/test/cmFreeAgentRetention.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 464[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager long free-agent retention[2m > [22mkeeps a living naturally expired player available after the third summer and reload [33m 364[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmFreeAgentCanonicalLinks.test.ts[2m > [22mClub Manager canonical free-agent links[2m > [22mages a keyed expired player through its own canonical record when a namesake exists
+[31m[1mAssertionError[22m: CM_FA_JOIN_KEYED_SUMMER: expected { age: 22, rating: 44, value: 0.4 } to deeply equal { age: 22, rating: 47, value: 0.7 }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "age": 22,[22m
+[32m-   "rating": 47,[39m
+[32m-   "value": 0.7,[39m
+[31m+   "rating": 44,[39m
+[31m+   "value": 0.4,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/cmFreeAgentCanonicalLinks.test.ts:[2m103:34[22m[39m
+    [90m101| [39m    expect(summer.retired.some(row => row.name === a.player.name)).toB…
+    [90m102| [39m    expect({ age: aged[0].age, rating: aged[0].rating, value: aged[0].…
+    [90m103| [39m      'CM_FA_JOIN_KEYED_SUMMER').toEqual({ age: forecast.player.age, r…
+    [90m   | [39m                                 [31m^[39m
+    [90m104| [39m
+    [90m105| [39m    [35mconst[39m next [33m=[39m [34mreload[39m([34mroll[39m(() [33m=>[39m [34mstartNextSeason[39m(career)))[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmFreeAgentCanonicalLinks.test.ts[2m > [22mClub Manager canonical free-agent links[2m > [22mrecovers an old-save release with its known key across reload and the next summer
+[31m[1mAssertionError[22m: CM_FA_JOIN_RECOVERY_KEY: expected undefined to be '["now","Everton","Jarrad Branthwaite"…' // Object.is equality[39m
+
+[32m- Expected:[39m 
+"[\"now\",\"Everton\",\"Jarrad Branthwaite\",\"CB\",2003,0]"
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/cmFreeAgentCanonicalLinks.test.ts:[2m161:67[22m[39m
+    [90m159| [39m    expect(restored, 'CM_FA_JOIN_SETUP_RECOVERED_PLAYER_RELOADS').toHa…
+    [90m160| [39m    expect(durable(canonical(stored, RECOVERED_KEY).player)).toEqual(d…
+    [90m161| [39m    expect(restored[0].worldRosterKey, 'CM_FA_JOIN_RECOVERY_KEY').toBe…
+    [90m   | [39m                                                                  [31m^[39m
+    [90m162| [39m
+    [90m163| [39m    [34mexpect[39m([34mrecoverPooledReleases[39m(stored))[33m.[39m[34mtoEqual[39m(stored)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 16:11:30
+[2m   Duration [22m 2.03s[2m (transform 1.82s, setup 77ms, collect 2.20s, tests 818ms, environment 358ms, prepare 88ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmFreeAgentCanonicalLinks.test.ts,title=src/test/cmFreeAgentCanonicalLinks.test.ts > Club Manager canonical free-agent links > ages a keyed expired player through its own canonical record when a namesake exists,line=103,column=34::AssertionError: CM_FA_JOIN_KEYED_SUMMER: expected { age: 22, rating: 44, value: 0.4 } to deeply equal { age: 22, rating: 47, value: 0.7 }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "age": 22,%0A-   "rating": 47,%0A-   "value": 0.7,%0A+   "rating": 44,%0A+   "value": 0.4,%0A  }%0A%0A ❯ src/test/cmFreeAgentCanonicalLinks.test.ts:103:34%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmFreeAgentCanonicalLinks.test.ts,title=src/test/cmFreeAgentCanonicalLinks.test.ts > Club Manager canonical free-agent links > recovers an old-save release with its known key across reload and the next summer,line=161,column=67::AssertionError: CM_FA_JOIN_RECOVERY_KEY: expected undefined to be '["now","Everton","Jarrad Branthwaite"…' // Object.is equality%0A%0A- Expected: %0A"[\"now\",\"Everton\",\"Jarrad Branthwaite\",\"CB\",2003,0]"%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/cmFreeAgentCanonicalLinks.test.ts:161:67%0A%0A
