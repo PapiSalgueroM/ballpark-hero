@@ -1,0 +1,11 @@
+(r) 390: rules sheet open, the Swap sentence present
+(s) 390 before: {"rung":"Question 1 of 15","question":"Who was worth the most in the 2026 market values?","swapDisabled":false,"scrollX":0,"scrollY":0,"sideways":false}
+(s) 390 after: {"rung":"Question 1 of 15","question":"Who was worth the most in the 2026 market values?","swapDisabled":false,"scrollX":0,"scrollY":0,"sideways":false}
+(r) 1280: rules sheet open, the Swap sentence present
+(s) 1280 before: {"rung":"Question 1 of 15","question":"Who was worth the most in the 2026 market values?","swapDisabled":false,"scrollX":0,"scrollY":0,"sideways":false}
+(s) 1280 after: {"rung":"Question 1 of 15","question":"Who was worth the most in the 2026 market values?","swapDisabled":false,"scrollX":0,"scrollY":0,"sideways":false}
+  RED: 390: the question changed: no, still "Who was worth the most in the 2026 market values?"
+  RED: 390: the Swap button is not disabled after the swap
+  RED: 1280: the question changed: no, still "Who was worth the most in the 2026 market values?"
+  RED: 1280: the Swap button is not disabled after the swap
+walk1579: control noclick fired (4 red line(s))
