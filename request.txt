@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+# Release BV: the Europa League walk and its two controls again after the nofixture re-anchor.
+playCmEuroPlay: ENGINES=chromium node scripts/playCmEuroPlay.mjs
+walk-notile: PLAY_EURO_CONTROL=notile ENGINES=chromium node scripts/playCmEuroPlay.mjs
+walk-nofixture: PLAY_EURO_CONTROL=nofixture ENGINES=chromium node scripts/playCmEuroPlay.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

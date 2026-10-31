@@ -1,0 +1,5 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+playCmEuroPlay exit=0 57s | playCmEuroPlay: green, three cases at three sizes, pictures in /home/runner/work/_temp/rc-out/files/shots
+walk-notile exit=1 45s | playCmEuroPlay: control notile FIRED (3 findings of "the Europa League tile", 6 in all)
+walk-nofixture exit=1 52s | playCmEuroPlay: control nofixture FIRED (6 findings of "names no Europa League night", 6 in all)
+simHarnessAnchors exit=1 35s | simHarnessAnchors: 1 failure(s)
