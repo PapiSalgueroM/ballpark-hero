@@ -1,0 +1,9 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 181 snapshots (11 left alone)
+simIndexNow exit=0 0s | simIndexNow: green. The key file, the script and the sitemap agree.
+simSitemap exit=0 0s | simSitemap: green. Google only ever hears about real pages.
+simPrerender exit=0 0s | simPrerender: green. Every page answers with its own words, no JavaScript required.
+simHeadTags exit=0 0s | simHeadTags: green. Every page says its own thing, once.
+simSchema exit=0 0s | simSchema: green. Every page says what it is, and everything it generates reaches the file a crawler reads.
+simIndexing exit=0 0s | simIndexing: green. Every page is either worth finding or honestly hidden.
+simHiddenPages exit=0 0s | simHiddenPages: green. Every page we keep out of Google says so itself.
+simSnapshotAssets exit=0 0s | simSnapshotAssets: green. Every page knows where its own code is, and finding out costs nobody a round trip.

@@ -1,0 +1,10 @@
+#!build
+# Release BU pre publish recheck on the final head: the harnesses that read the lastmod ledger, the sitemap and the snapshots.
+simPrerender: node scripts/simPrerender.mjs
+simSitemap: node scripts/simSitemap.mjs
+simIndexNow: node scripts/simIndexNow.mjs
+simHeadTags: node scripts/simHeadTags.mjs
+simSchema: node scripts/simSchema.mjs
+simIndexing: node scripts/simIndexing.mjs
+simHiddenPages: node scripts/simHiddenPages.mjs
+simSnapshotAssets: node scripts/simSnapshotAssets.mjs
