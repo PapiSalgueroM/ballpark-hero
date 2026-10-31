@@ -1,0 +1,10 @@
+#!playwright
+#!serial
+# Release BV attribution on f11a6575d: playCmWorldMoves exit 2 on the gate head (no Everton seed in 40 matches its pinned base d4f2c6f6's opening deal) on the head, on the head with the search widened to 400 (a probe, restored), and on Round 1600's own head; then the two vitest files red in vitest-all (rBVg-gg, rBVg-x3 vt-head) on the BASE, m1, m2 and Round 1600's own head, each in its own worktree.
+wm-head: node_modules/.bin/vite build > /tmp/hb.log 2>&1 && ENGINES=chromium node scripts/playCmWorldMoves.mjs
+wm-head-400: (test -f dist/index.html || node_modules/.bin/vite build > /tmp/hb2.log 2>&1) && node .rc/x/wmbound.mjs 400 && ENGINES=chromium node scripts/playCmWorldMoves.mjs; s=$?; git checkout -- scripts; exit $s
+wm-1600: git worktree add /tmp/w16 ed30d7601 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/w16/node_modules && (cd /tmp/w16 && node_modules/.bin/vite build > /tmp/w16-build.log 2>&1) && cd /tmp/w16 && ENGINES=chromium node scripts/playCmWorldMoves.mjs
+vt-base: git worktree add /tmp/vb 19911f815 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/vb/node_modules && cd /tmp/vb && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-m1: git worktree add /tmp/v1 68f7432d6 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/v1/node_modules && cd /tmp/v1 && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-m2: git worktree add /tmp/v2 5df0e72e5 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/v2/node_modules && cd /tmp/v2 && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-1600: git worktree add /tmp/v16 ed30d7601 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/v16/node_modules && cd /tmp/v16 && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
