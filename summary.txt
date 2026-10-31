@@ -1,0 +1,3 @@
+ucl5-b1600 exit=1 74s | simWorldUcl: RED, 69 checks, 3 failures
+oo3-city-b1600 exit=1 12s | simOneOffCups: 1 FAILURES of 58 checks (12 s)
+oo3-juve-b1600 exit=1 9s | simOneOffCups: 1 FAILURES of 103 checks (9 s)

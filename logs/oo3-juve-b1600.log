@@ -1,0 +1,4 @@
+base e26b6d1332
+  3 self relative: 1 journeys, 154 steps each arm, 45 steps carrying a super cup
+  FAIL 3 Juventus (now) seed 4 nocoach at s3-e1: the state differs in a key other than worldComps.dsc
+simOneOffCups: 1 FAILURES of 103 checks (9 s)

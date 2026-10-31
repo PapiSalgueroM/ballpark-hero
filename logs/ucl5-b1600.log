@@ -1,0 +1,6 @@
+base e26b6d1332
+  5 the holder: 20 rollovers, 18 after a watched final, 14 winners already in the field (3 of those fields in another order), 4 fields the holder changed: Inter Milan in for Monaco; Nottingham Forest in for Tottenham; Aston Villa in for Eintracht Frankfurt; Arsenal in for Bayer Leverkusen
+FAIL 5 holder: Everton (now) seed 1 s2-rollover: Arsenal was in the field already and the field still changed its clubs
+FAIL 5 holder: Proof Town Athletic (now) seed 1 s2-rollover: Arsenal was in the field already and the field still changed its clubs
+FAIL 5 holder: Proof Town Athletic (now) seed 3 s2-rollover: PSG was in the field already and the field still changed its clubs
+simWorldUcl: RED, 69 checks, 3 failures
