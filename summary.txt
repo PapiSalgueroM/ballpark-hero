@@ -1,0 +1,4 @@
+vt-head exit=1 84s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The goal sequence > a substitution in a
+vt-base exit=1 1s |    Duration  531ms (transform 10ms, setup 0ms, collect 0ms, tests 0ms, environment 728ms, prepare 201ms)
+vt-m2 exit=1 1s |    Duration  534ms (transform 15ms, setup 0ms, collect 0ms, tests 0ms, environment 741ms, prepare 181ms)
+size-uncapped-alone exit=1 54s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else

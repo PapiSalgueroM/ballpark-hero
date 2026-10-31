@@ -1,0 +1,6 @@
+#!serial
+# Release BV: the two vitest files red in vitest-all (rBVg-gg) and the size harness section 4 test red under the uncapped control (rBVg-gi), each alone, on the head, on the BASE and on m2 (before 1600), then the uncapped control alone.
+vt-head: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/liveSimMotion.test.tsx src/test/clubManagerSaveSize.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-base: git worktree add -q .rcvb 19911f815 && cd .rcvb && ../node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/liveSimMotion.test.tsx src/test/clubManagerSaveSize.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-m2: git worktree add -q .rcv2 5df0e72e5 && cd .rcv2 && ../node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/liveSimMotion.test.tsx src/test/clubManagerSaveSize.test.tsx --testTimeout=300000 --hookTimeout=120000
+size-uncapped-alone: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
