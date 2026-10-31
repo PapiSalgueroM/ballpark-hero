@@ -4,7 +4,8 @@
  *   A  an active save six seasons in, retired with Hang them up now and its confirmation; the Hall card's headline
  *      is on the page; Start over's prompt says the card stays on the Hall wall; confirmed, the create screen's
  *      top is in view under the menu bar (1569's R1 measure); the wall opener below Enter the draft is at least
- *      44 by 44; opened cold (the first open of the visit), the wall's top is in view below the 48 px bar with no
+ *      44 by 44; opened cold (the first open of the visit), the wall's top is in view below the site's bar (measured:
+ *      none on a phone's game page since PR 424, 32 px from md up, 44 px on every page before it) with no
  *      sideways scroll; the "?" shows the four lines; a tile opens the plaque, whose headline is the card's; Back
  *      gives the tile focus and moves scrollY by at most 1 px; a reload keeps the wall's bytes and its tiles.
  *   B  a retired save: the retirement screen's opener, scrolled to and pressed once the card has landed, opens
@@ -143,13 +144,21 @@ const shot = (page, name) => page.screenshot({ path: path.join(OUT, `${name}.png
 const sayAt = (size, ok, what, guarded = false) => (size.assert ? say(ok, what, guarded) : console.log(`  MEASURED  ${what}: ${ok ? 'holds' : 'does not hold'}`));
 const tap = (size, locator) => (size.touch ? locator.tap() : locator.click());
 
-/** The wall's top under the 48 px bar and on screen, no sideways scroll. */
+/* Release BU's re-join on main (PR 424, the site menu): the site's bar across the top is measured, not assumed.
+   It was a 44 px sticky bar on every page; since PR 424 a game page has none on a phone and a 32 px one from md
+   up (App.tsx: data-site-chrome, `hidden h-8 md:block` off the home page). The bottom of every shown sticky or
+   fixed data-site-chrome box that starts in the top 120 px, 0 when there is none. */
+const barBottom = page => page.evaluate(() => Math.max(0, ...[...document.querySelectorAll('[data-site-chrome]')]
+  .filter(b => { const s = getComputedStyle(b); return (s.position === 'sticky' || s.position === 'fixed') && s.display !== 'none'; })
+  .map(b => b.getBoundingClientRect()).filter(r => r.height > 0 && r.top < 120).map(r => r.bottom)));
+
+/** The wall's top under the site's bar (measured) and on screen, no sideways scroll. */
 async function wallInView(page, size, id) {
   await page.waitForSelector('[data-career-hall-wall]');
   await page.waitForTimeout(700);
-  const r = await box(page, '[data-career-hall-wall]'), v = await view(page);
-  measured.push(`${id}: wall top ${Math.round(r.top)} of ${v.ih}, page ${v.sw} wide on ${v.iw}`);
-  sayAt(size, r.top >= 40 && r.top <= v.ih - 120, `${id}: the wall's top is in view under the bar (${Math.round(r.top)} of ${v.ih})`);
+  const r = await box(page, '[data-career-hall-wall]'), v = await view(page), bar = await barBottom(page);
+  measured.push(`${id}: wall top ${Math.round(r.top)} of ${v.ih} under a ${Math.round(bar)} px bar, page ${v.sw} wide on ${v.iw}`);
+  sayAt(size, r.top >= bar && r.top <= v.ih - 120, `${id}: the wall's top is in view under the bar (${Math.round(r.top)} of ${v.ih}, the bar ends at ${Math.round(bar)})`);
   sayAt(size, v.sw <= v.iw, `${id}: no sideways scroll on the wall (${v.sw} on ${v.iw})`);
 }
 
@@ -278,9 +287,10 @@ async function journeyC(browser, sport, size) {
       const cut = [...document.querySelectorAll('[data-career-hall-wall-tile] span')].filter(s => s.scrollWidth > s.clientWidth + 1).length;
       return { n: tiles.length, top: wall.top, bottom: Math.max(...tiles.map(r => r.bottom)), ih: innerHeight, tileH: Math.min(...tiles.map(r => r.height)), cut };
     });
+    fit.bar = await barBottom(page);
     sayAt(size, fit.cut === 0, `${id}: no tile line is cut (${fit.cut} lines wider than their box)`);
     measured.push(`${id}: 12 tiles from ${Math.round(fit.top)} to ${Math.round(fit.bottom)} of ${fit.ih}, the shortest tile ${Math.round(fit.tileH)} px`);
-    sayAt(size, fit.n === 12 && fit.top >= 40 && fit.bottom <= fit.ih, `${id}: the whole wall of 12 fits the screen (${Math.round(fit.top)} to ${Math.round(fit.bottom)} of ${fit.ih})`);
+    sayAt(size, fit.n === 12 && fit.top >= fit.bar && fit.bottom <= fit.ih, `${id}: the whole wall of 12 fits the screen (${Math.round(fit.top)} to ${Math.round(fit.bottom)} of ${fit.ih}, the bar ends at ${Math.round(fit.bar)})`);
     sayAt(size, fit.tileH >= 44, `${id}: every tile is at least 44 px tall (${Math.round(fit.tileH)})`);
     await shot(page, `C-${sport.slug}-${size.width}-wall-of-12`);
   } finally {
