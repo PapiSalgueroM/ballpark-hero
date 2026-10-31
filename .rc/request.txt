@@ -1,0 +1,10 @@
+# Release BU lane h: Manager Hot Seat never wipes a Club Manager career (Round 1592): its sim and five controls (each exit 1), the slots and save points sims.
+vitest: node_modules/.bin/vitest run src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+hs: node scripts/simManagerHotSeat.mjs
+c-clobber: HOT_SEAT_CONTROL=clobber node scripts/simManagerHotSeat.mjs
+simCmSavePoints: node scripts/simCmSavePoints.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+c-damagedfree: HOT_SEAT_CONTROL=damagedfree node scripts/simManagerHotSeat.mjs
+c-nopoints: HOT_SEAT_CONTROL=nopoints node scripts/simManagerHotSeat.mjs
+c-norollback: HOT_SEAT_CONTROL=norollback node scripts/simManagerHotSeat.mjs
+c-nobackup: HOT_SEAT_CONTROL=nobackup node scripts/simManagerHotSeat.mjs
