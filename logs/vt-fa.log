@@ -1,0 +1,46 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/ClubManagerSeasonSummary.expiring.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 2261[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22mlists the three final year men and keeps Continue shut [33m 458[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22ma final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal [33m 751[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgentContinuity.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 3995[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent continuity[2m > [22mrecovers a naturally expired player in the arrival season without a cheaper contract [33m 932[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent continuity[2m > [22mrestores a later free-agent signing with the same identity and durable development [33m 797[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent continuity[2m > [22muses renewal wage and fee floors when an expired player returns [33m 874[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent continuity[2m > [22mkeeps a promoted academy identity after expiry and reload [33m 594[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent continuity[2m > [22mkeeps summer retirement terminal instead of listing the player as free [33m 463[2mms[22m[39m
+ [32m✓[39m src/test/cmWorldIdentity1052.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 2795[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgentDiscovery.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 7188[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mkeeps the contracts desk quotes and signing callback intact [33m 654[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mshows the existing free-agent pool and signing terms in the open transfer window [33m 3914[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mshows the same free-agent signing action with the transfer window closed [33m 827[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mkeeps engine refusals disabled and a refused callback leaves the pool unchanged [33m 586[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22mshows an empty pool without inventing signable rows [33m 330[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager free-agent discovery on Transfers[2m > [22muses the existing signing hook once and retains its actual saved deal after reload [33m 870[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/freeAgencyFeedback.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 3099[2mms[22m[39m
+   [33m[2m✓[22m[39m Free agency committed negotiation feedback[2m > [22mpreserves original offer order exact terms and signing indices as an independent baseline [33m 403[2mms[22m[39m
+   [33m[2m✓[22m[39m Free agency committed negotiation feedback[2m > [22mpreserves the real one-use negotiation and exact callback index as an independent baseline [33m 424[2mms[22m[39m
+   [33m[2m✓[22m[39m Free agency committed negotiation feedback[2m > [22mclears stale negotiation feedback when a new unpushed window replaces the market [33m 329[2mms[22m[39m
+   [33m[2m✓[22m[39m Free agency committed negotiation feedback[2m > [22mpreserves deliberate connected outside focus while the push response commits [33m 510[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgencyJoinNow.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 3395[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: a mid season job move loses nobody off the free agent list[2m > [22mcarries the men who left me, my released names and the once only pass, and leaves the old journeymen [33m 2174[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: a mid season job move loses nobody off the free agent list[2m > [22ma save with nothing of the kind joins exactly as before [33m 1219[2mms[22m[39m
+ [32m✓[39m src/test/cmFreeAgentLegacyIdentity.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 206[2mms[22m[39m
+ [32m✓[39m src/test/cmMarketMaxPrice.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 10474[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mkeeps existing price presets and the default Buy results unchanged [33m 2875[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mincludes the exact asking-price boundary and excludes the next higher ask [33m 885[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mfilters public asking prices without using stored market values [33m 522[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mapplies the asking-price ceiling before the fifty-result limit [33m 2751[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mclears the custom ceiling and keeps preset shortcuts usable [33m 495[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22mrejects malformed ceilings without silently parsing a partial number [33m 758[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager exact maximum asking price[2m > [22muses each selected currency symbol without converting the asking-price amount [33m 2181[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m      Tests [22m [1m[32m54 passed[39m[22m[90m (54)[39m
+[2m   Start at [22m 23:31:41
+[2m   Duration [22m 28.51s[2m (transform 10.32s, setup 2.69s, collect 17.93s, tests 33.41s, environment 8.46s, prepare 2.47s)[22m
+

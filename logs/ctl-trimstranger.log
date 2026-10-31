@@ -1,0 +1,29 @@
+  Everton now none: 69 men left, lost 0, twice 0, 11 retired off the list; at season 9 43 on the list besides the journeymen, median age 24
+  Everton now eleven: 31 men left, lost 0, twice 0, 12 retired off the list; at season 9 18 on the list besides the journeymen, median age 23
+  Villarreal now none: 66 men left, lost 0, twice 0, 8 retired off the list; at season 9 41 on the list besides the journeymen, median age 25
+  Villarreal now eleven: 39 men left, lost 0, twice 0, 9 retired off the list; at season 9 27 on the list besides the journeymen, median age 24
+  Freiburg now none: 66 men left, lost 0, twice 0, 10 retired off the list; at season 9 39 on the list besides the journeymen, median age 25
+  Freiburg now eleven: 37 men left, lost 0, twice 0, 13 retired off the list; at season 9 23 on the list besides the journeymen, median age 22
+  Ajax now none: 73 men left, lost 0, twice 0, 14 retired off the list; at season 9 42 on the list besides the journeymen, median age 25
+  Ajax now eleven: 39 men left, lost 0, twice 0, 16 retired off the list; at season 9 23 on the list besides the journeymen, median age 23
+  Braga now none: 71 men left, lost 0, twice 0, 10 retired off the list; at season 9 46 on the list besides the journeymen, median age 27
+  Braga now eleven: 37 men left, lost 0, twice 0, 10 retired off the list; at season 9 26 on the list besides the journeymen, median age 23
+  Southampton era2015 none: 58 men left, lost 0, twice 0, 4 retired off the list; at season 9 38 on the list besides the journeymen, median age 26
+  Southampton era2015 eleven: 36 men left, lost 0, twice 0, 6 retired off the list; at season 9 22 on the list besides the journeymen, median age 23
+  FAIL section 5: Everton: Michael Keane, trimmed at the summer, is listed released, not mine and the desk answers squadFull (want 'justLeft', never barred)
+  FAIL section 5: Everton: Fleet Trim 1130, trimmed at the summer, is listed released, not mine and the desk answers squadFull (want 'justLeft', never barred)
+  FAIL section 5: Everton: Fleet Trim 1131, trimmed at the summer, is listed released, not mine and the desk answers squadFull (want 'justLeft', never barred)
+  trim Everton now: squad 35 into the summer, 30 after; 3 trimmed, listed as {"released":3}; lent out Christian Nørgaard
+  FAIL section 5: Ajax: Marc-André ter Stegen, trimmed at the summer, is listed released, not mine and the desk answers squadFull (want 'justLeft', never barred)
+  FAIL section 5: Ajax: Matheus, trimmed at the summer, is listed released, not mine and the desk answers squadFull (want 'justLeft', never barred)
+  FAIL section 5: Ajax: Fleet Trim 1140, trimmed at the summer, is listed released, not mine and the desk answers squadFull (want 'justLeft', never barred)
+  FAIL section 5: Ajax: Fleet Trim 1141, trimmed at the summer, is listed released, not mine and the desk answers squadFull (want 'justLeft', never barred)
+  FAIL section 5: Ajax: Fleet Trim 1142, trimmed at the summer, is listed released, not mine and the desk answers squadFull (want 'justLeft', never barred)
+  trim Ajax now: squad 39 into the summer, 30 after; 5 trimmed, listed as {"released":5}; lent out Simon Adingra
+  trim Southampton era2015: squad 36 into the summer, 30 after; 0 trimmed, listed as {}; lent out Graziano Pellè
+  trim Freiburg now: squad 38 into the summer, 30 after; 4 trimmed, listed as {"released":4}; lent out Maximilian Eggestein
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 5
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 755 men left a squad, 2487 summer checks; lost 0, twice 0; 142 retired off the list (0 summers unseen); list size at the end median 38, its median age median 24; left for a league the game does not follow 128 (expected 117.6, sd 9.4; real 0; tracked men among them 126); trimmed 12 (mine and never barred 0); signed back off the list by the fill 155 (squad summers held as released by the ledger by another path, older than this round: 2); ledger held list men 2184, a summer on 1568; out on loan in the last year 4 (left 4, renewed 4); old saves recoverable 13, recovered 13
+simCmFreeAgencyFleet: CONTROL trimstranger FIRED: section 5 red

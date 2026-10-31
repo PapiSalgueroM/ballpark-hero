@@ -1,0 +1,28 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vt-fa: node_modules/.bin/vitest run src/test/cmFreeAgentContinuity.test.ts src/test/cmFreeAgentDiscovery.test.tsx src/test/cmFreeAgentLegacyIdentity.test.ts src/test/cmMarketMaxPrice.test.tsx src/test/cmWorldIdentity1052.test.ts src/test/cmFreeAgencyJoinNow.test.ts src/test/ClubManagerSeasonSummary.expiring.test.tsx src/test/freeAgencyFeedback.test.tsx --testTimeout=300000 --hookTimeout=120000
+vt-cm: node_modules/.bin/vitest run src/test/ClubManagerSeasonSummary.expiring.test.tsx src/test/cmTablesTruth.test.tsx src/test/clubManagerOfferConfirm.test.tsx src/test/contractPreview.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerHubLines.test.ts src/test/clubManagerLoanPlanIntegration.test.ts src/test/clubManagerLoanPlanMounted.test.tsx src/test/clubManagerSaveSize.test.tsx src/lib/clubManagerReportAge.test.ts --testTimeout=300000 --hookTimeout=120000
+fleet: node scripts/simCmFreeAgencyFleet.mjs
+ctl-notrimpool: CM_FA_CONTROL=notrimpool node scripts/simCmFreeAgencyFleet.mjs
+ctl-ledgeroff: CM_FA_CONTROL=ledgeroff node scripts/simCmFreeAgencyFleet.mjs
+ctl-staleseason: CM_FA_CONTROL=staleseason node scripts/simCmFreeAgencyFleet.mjs
+ctl-noloanrow: CM_FA_CONTROL=noloanrow node scripts/simCmFreeAgencyFleet.mjs
+ctl-norenewloan: CM_FA_CONTROL=norenewloan node scripts/simCmFreeAgencyFleet.mjs
+ctl-deletepool: CM_FA_CONTROL=deletepool node scripts/simCmFreeAgencyFleet.mjs
+ctl-noretire: CM_FA_CONTROL=noretire node scripts/simCmFreeAgencyFleet.mjs
+ctl-nodedupe: CM_FA_CONTROL=nodedupe node scripts/simCmFreeAgencyFleet.mjs
+ctl-norecover: CM_FA_CONTROL=norecover node scripts/simCmFreeAgencyFleet.mjs
+ctl-trimstranger: CM_FA_CONTROL=trimstranger node scripts/simCmFreeAgencyFleet.mjs
+ctl-trimbar: CM_FA_CONTROL=trimbar node scripts/simCmFreeAgencyFleet.mjs
+ctl-nofilllink: CM_FA_CONTROL=nofilllink node scripts/simCmFreeAgencyFleet.mjs
+ctl-dropreal: CM_FA_CONTROL=dropreal node scripts/simCmFreeAgencyFleet.mjs
+ctl-nodropout: CM_FA_CONTROL=nodropout node scripts/simCmFreeAgencyFleet.mjs
+ctl-leftunsaid: CM_FA_CONTROL=leftunsaid node scripts/simCmFreeAgencyFleet.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simContracts: node scripts/simContracts.mjs
+size-d: node scripts/simClubManagerSaveSize.mjs
+size-1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+size-2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+size-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+size-4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+size-5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+size-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs

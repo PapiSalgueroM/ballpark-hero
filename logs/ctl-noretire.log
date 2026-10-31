@@ -1,0 +1,38 @@
+  FAIL section 8: Everton none, summer into season 4: Christian Nørgaard left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now none, summer into season 4: Christian Nørgaard (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 8: Everton none, summer into season 6: Pau Ramires left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now none, summer into season 6: Pau Ramires (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 8: Everton none, summer into season 7: Jack Grealish left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton none, summer into season 7: Dele Alli left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now none, summer into season 7: Jack Grealish (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now none, summer into season 7: Dele Alli (left at a summer) is in no squad, not on the list and not retired
+  Everton now none: 68 men left, lost 4, twice 0, 0 retired off the list; at season 9 46 on the list besides the journeymen, median age 27
+  FAIL section 8: Everton eleven, summer into season 5: Michael Keane left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now eleven, summer into season 5: Michael Keane (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 8: Everton eleven, summer into season 8: Christian Nørgaard left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now eleven, summer into season 8: Christian Nørgaard (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 8: Everton eleven, summer into season 9: Jordan Pickford left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 8: Everton eleven, summer into season 9: Ainsley Maitland-Niles left the list unsigned, not retired, and the first screen does not name him
+  FAIL section 1: Everton now eleven, summer into season 9: Jordan Pickford (left at a summer) is in no squad, not on the list and not retired
+  FAIL section 1: Everton now eleven, summer into season 9: Ainsley Maitland-Niles (left at a summer) is in no squad, not on the list and not retired
+  Everton now eleven: 31 men left, lost 5, twice 0, 0 retired off the list; at season 9 25 on the list besides the journeymen, median age 23
+  Villarreal now none: 66 men left, lost 1, twice 0, 0 retired off the list; at season 9 47 on the list besides the journeymen, median age 29
+  Villarreal now eleven: 39 men left, lost 2, twice 0, 0 retired off the list; at season 9 34 on the list besides the journeymen, median age 25
+  Freiburg now none: 64 men left, lost 3, twice 0, 0 retired off the list; at season 9 40 on the list besides the journeymen, median age 28
+  Freiburg now eleven: 35 men left, lost 5, twice 0, 0 retired off the list; at season 9 26 on the list besides the journeymen, median age 28
+  Ajax now none: 69 men left, lost 9, twice 0, 0 retired off the list; at season 9 44 on the list besides the journeymen, median age 26
+  Ajax now eleven: 39 men left, lost 9, twice 0, 0 retired off the list; at season 9 30 on the list besides the journeymen, median age 29
+  Braga now none: 77 men left, lost 2, twice 0, 0 retired off the list; at season 9 56 on the list besides the journeymen, median age 28
+  Braga now eleven: 37 men left, lost 3, twice 0, 0 retired off the list; at season 9 33 on the list besides the journeymen, median age 26
+  Southampton era2015 none: 63 men left, lost 3, twice 0, 0 retired off the list; at season 9 43 on the list besides the journeymen, median age 25
+  Southampton era2015 eleven: 36 men left, lost 6, twice 0, 0 retired off the list; at season 9 22 on the list besides the journeymen, median age 23
+  trim Everton now: squad 35 into the summer, 30 after; 3 trimmed, listed as {"released mine":3}; lent out Christian Nørgaard
+  trim Ajax now: squad 39 into the summer, 30 after; 5 trimmed, listed as {"released mine":5}; lent out Simon Adingra
+  trim Southampton era2015: squad 36 into the summer, 30 after; 0 trimmed, listed as {}; lent out Graziano Pellè
+  trim Freiburg now: squad 38 into the summer, 30 after; 4 trimmed, listed as {"released mine":4}; lent out Maximilian Eggestein
+  old save Everton now (written on 14a9af704, end of season 5): main had lost 12 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Ajax now (written on 14a9af704, end of season 5): main had lost 15 men, 4 of them recoverable; recoverable here 4, back after the summer 4
+  old save Southampton era2015 (written on 14a9af704, end of season 5): main had lost 11 men, 5 of them recoverable; recoverable here 5, back after the summer 5
+  FAIL section 2: only 0 men retired off the list over the fleet, under 13
+simCmFreeAgencyFleet: 12 careers to season 9, 4 trim and loan careers to season 4; 757 men left a squad, 2476 summer checks; lost 54, twice 0; 0 retired off the list (0 summers unseen); list size at the end median 40, its median age median 27; left for a league the game does not follow 124 (expected 113.8, sd 9.3; real 0; tracked men among them 122); trimmed 12 (mine and never barred 12); signed back off the list by the fill 160 (squad summers held as released by the ledger by another path, older than this round: 0); ledger held list men 2165, a summer on 2034; out on loan in the last year 4 (left 4, renewed 4); old saves recoverable 13, recovered 13
+simCmFreeAgencyFleet: CONTROL noretire FIRED: section 2 red (red: 1 (54), 2 (1), 8 (54))
