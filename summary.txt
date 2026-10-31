@@ -1,0 +1,4 @@
+lr-base exit=0 51s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+lr-head exit=1 51s | simCmLeagueRules: 47 failure(s)
+lr-write exit=0 77s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+bv-dailies exit=1 47s | simCmBoardVerdict RED: 1 of 3 checks green (parts dailies, 46 s)

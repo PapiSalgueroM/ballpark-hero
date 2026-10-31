@@ -1,0 +1,5 @@
+#!serial
+lr-base: git worktree add -q .rcb0 19911f815 && cd .rcb0 && node scripts/simCmLeagueRules.mjs
+lr-head: node scripts/simCmLeagueRules.mjs
+lr-write: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && node scripts/simCmLeagueRules.mjs; s=$?; cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/cmLeagueRulesDigest.json"; git checkout -- scripts/data/cmLeagueRulesDigest.json; exit $s
+bv-dailies: (test -d .rcb0 || git worktree add -q .rcb0 19911f815) && CM_BOARD_BASE=$PWD/.rcb0 node scripts/simCmBoardVerdict.mjs --part=dailies
