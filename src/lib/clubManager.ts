@@ -1520,6 +1520,26 @@ export interface Prospect {
   season: number;
 }
 
+export interface RetiredSonOffer {
+  id: string;
+  club: string;
+  season: number;
+  year: number;
+  parentId: string;
+  parentName: string;
+  parentAge: number;
+  parentGenerated: true;
+  prospect: Prospect;
+  fee: number;
+  status: 'pending' | 'accepted' | 'declined' | 'expired';
+}
+
+/** One application, not a family tree. Absent on saves from before this feature. */
+export interface RetiredSonApplication {
+  version: 1;
+  lastConsideredYear: number;
+  offer: RetiredSonOffer | null;
+}
 export type FacilityKind = 'recruitment' | 'coaching' | 'facilities';
 
 /** The club's youth setup. Everything here is upgradable and everything bites. */
@@ -3041,6 +3061,7 @@ export interface CareerState {
   promisedStarts?: string[];
   /** Round 116: the youth setup, the scouts on the road and the kids on the books. */
   academy?: Academy;
+  retiredSonApplication?: RetiredSonApplication;
   /** Round 116: how the squad is being worked this week. */
   training?: TrainingPlan;
   /** Round 116: how many of your own kids you have promoted, all time. */
@@ -6147,7 +6168,7 @@ function cInt(seed: string, lo: number, hi: number): number {
 
 /** Fold a club name for collision checks: lowercase, accents stripped both
  *  ways (NFD plus the special Latin letters NFD misses), spaces collapsed. */
-function foldClubName(s: string): string {
+export function foldClubName(s: string): string {
   return foldSpecialLatin(s)
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')
@@ -19704,23 +19725,26 @@ export function recallScout(career: CareerState, scoutId: string): CareerState {
   return next;
 }
 
-function prospectPosition(): Position {
-  const roll = Math.random();
-  if (roll < 0.09) return 'GK';
-  if (roll < 0.4) return pick(POS_DEF);
-  if (roll < 0.74) return pick(POS_MID);
-  return pick(POS_ATT);
+function prospectRoll(random: () => number, lo: number, hi: number): number {
+  return lo + Math.floor(random() * (hi - lo + 1));
 }
 
+function prospectPosition(random: () => number = Math.random): Position {
+  const roll = random();
+  const choose = (positions: Position[]) => positions[Math.floor(random() * positions.length)];
+  if (roll < 0.09) return 'GK';
+  if (roll < 0.4) return choose(POS_DEF);
+  if (roll < 0.74) return choose(POS_MID);
+  return choose(POS_ATT);
+}
 /** The band a report puts around a ceiling. Bad judgement, wide band. */
-function reportBand(potential: number, judgement: number): { lowGuess: number; highGuess: number } {
+function reportBand(potential: number, judgement: number, random: () => number = Math.random): { lowGuess: number; highGuess: number } {
   const spread = Math.max(1, 12 - judgement * 2);
   return {
-    lowGuess: clamp(potential - ri(0, spread), 40, 99),
-    highGuess: clamp(potential + ri(0, spread), 40, 99),
+    lowGuess: clamp(potential - prospectRoll(random, 0, spread), 40, 99),
+    highGuess: clamp(potential + prospectRoll(random, 0, spread), 40, 99),
   };
 }
-
 /** Round 206: every name this club already uses, squad and academy books. */
 function squadAndBookNames(state: CareerState): Set<string> {
   const out = new Set<string>(state.squad.map(p => p.name));
@@ -19736,15 +19760,17 @@ function makeProspect(
   fee: number,
   season: number,
   taken: Set<string> = new Set(),
+  draw?: { random: () => number; id: string; name: string; minAge: number; maxAge?: number },
 ): Prospect {
-  const age = ri(15, 18);
-  const rating = clamp(potential - ri(8, 22), 40, 76);
-  const band = reportBand(potential, judgement);
+  const random = draw?.random ?? Math.random;
+  const age = prospectRoll(random, draw?.minAge ?? 15, draw?.maxAge ?? 18);
+  const rating = clamp(potential - prospectRoll(random, 8, 22), 40, 76);
+  const band = reportBand(potential, judgement, random);
   return {
-    id: `pr-${Date.now().toString(36)}-${ri(1000, 9999)}-${ri(100, 999)}`,
+    id: draw?.id ?? `pr-${Date.now().toString(36)}-${prospectRoll(random, 1000, 9999)}-${prospectRoll(random, 100, 999)}`,
     /* Round 206: never a name already on the books or in the squad. */
-    name: uniqueYouthName(taken),
-    position: prospectPosition(),
+    name: draw?.name ?? uniqueYouthName(taken),
+    position: prospectPosition(random),
     age,
     rating,
     potential,
@@ -19757,6 +19783,24 @@ function makeProspect(
   };
 }
 
+function scoutedProspectFee(potential: number): number {
+  return Math.max(0.2, Math.round((potential - 52) * 0.14 * 10) / 10);
+}
+
+function academyIntakeQuality(state: CareerState): number {
+  const a = state.academy!;
+  return (a.recruitment * 1.3 + a.facilities * 0.9 + a.coaching * 0.8) / 3 + youthIntakeEdge(state);
+}
+
+function academyReportJudgement(state: CareerState): number {
+  return clamp(Math.round(state.academy!.coaching / 4) + youthReportEdge(state), 1, 5);
+}
+
+function rollAcademyPotential(q: number, random: () => number = Math.random): number {
+  let potential = clamp(50 + Math.round(q * 1.55) + prospectRoll(random, 0, 10), 52, 92);
+  if (random() < 0.07) potential = clamp(potential + prospectRoll(random, 3, 9), 52, 95);
+  return potential;
+}
 /** Drops the worst reported kid when the books are full. */
 function addProspect(a: Academy, p: Prospect): void {
   a.prospects.push(p);
@@ -19793,7 +19837,7 @@ function tickScouting(state: CareerState): void {
         54, 93,
       );
       if (Math.random() < 0.06) potential = clamp(potential + ri(3, 8), 54, 95);
-      const fee = Math.max(0.2, Math.round((potential - 52) * 0.14 * 10) / 10);
+      const fee = scoutedProspectFee(potential);
       /* Round 206: a scout cannot come home with a boy who has the name of
          somebody already on the books or already in the first team. */
       addProspect(a, makeProspect(potential, region.name, region.flag, s.judgement, fee, state.season, squadAndBookNames(state)));
@@ -19828,7 +19872,7 @@ function runYouthIntake(state: CareerState): string[] {
   /* Round 513: the Youth tree's continuous half. The report edge below lands
      on a 1 to 5 integer and cannot carry five points, so this is what makes
      every point pay. Zero points is the figure Round 116 shipped. */
-  const q = (a.recruitment * 1.3 + a.facilities * 0.9 + a.coaching * 0.8) / 3 + youthIntakeEdge(state);
+  const q = academyIntakeQuality(state);
   let count = 1;
   if (a.recruitment >= 8) count += 1;
   if (a.recruitment >= 14) count += 1;
@@ -19836,12 +19880,11 @@ function runYouthIntake(state: CareerState): string[] {
   /* Round 513: the Youth tree sharpens the intake report, on the same 1 to 5
      scale the academy already uses and inside its own clamp, so zero points is
      the report Round 315 shipped. */
-  const judgement = clamp(Math.round(a.coaching / 4) + youthReportEdge(state), 1, 5);
+  const judgement = academyReportJudgement(state);
   const flag = '\u{1F3E0}';
   let best = 0;
   for (let i = 0; i < count; i++) {
-    let potential = clamp(50 + Math.round(q * 1.55) + ri(0, 10), 52, 92);
-    if (Math.random() < 0.07) potential = clamp(potential + ri(3, 9), 52, 95);
+    const potential = rollAcademyPotential(q);
     best = Math.max(best, potential);
     addProspect(a, makeProspect(potential, 'Academy', flag, judgement, 0, state.season, squadAndBookNames(state)));
   }
@@ -19862,7 +19905,7 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
   if (next.squad.length >= 30) return null;
   if (pr.fee > next.budget) return null;
   a.prospects.splice(idx, 1);
-  next.budget = Math.round((next.budget - pr.fee) * 10) / 10;
+  if (pr.fee !== 0) next.budget = Math.round((next.budget - pr.fee) * 10) / 10;
   const player: CMPlayer = {
     id: freeSquadId(next.squad, `ac-${pr.id}`),
     name: pr.name,
@@ -19899,6 +19942,118 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
   return next;
 }
 
+/* The one-in-eight rate is a design trial, not a measured offers-per-career rate. */
+const RETIRED_SON_CHANCE = 1 / 8;
+
+function familyInteger(value: unknown, lo: number, hi: number): value is number {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= lo && value <= hi;
+}
+
+function familyText(value: unknown, max: number): value is string {
+  return typeof value === 'string' && value.length > 0 && value.length <= max && value.trim() === value;
+}
+
+function familyParentSurname(name: string): string | null {
+  const clean = name.endsWith(YOUTH_PAD_SUFFIX) ? name.slice(0, -YOUTH_PAD_SUFFIX.length) : name;
+  if (!familyText(clean, 100) || realPersonNamesFolded().has(foldClubName(clean))) return null;
+  const parts = clean.split(/\s+/);
+  return parts.length > 1 ? parts.slice(1).join(' ') : null;
+}
+
+export function familyBookNames(state: CareerState): Set<string> {
+  return new Set([
+    ...state.squad.map(p => p.name),
+    ...(state.academy?.prospects ?? []).map(p => p.name),
+    ...(state.loanedOut ?? []).map(p => p.player.name),
+    ...(state.freeAgents ?? []).map(p => p.name),
+    ...(state.retiredNames ?? []),
+    ...(state.goneNames ?? []),
+    ...(state.releasedNames ?? []),
+  ].map(foldClubName));
+}
+
+export function retiredSonApplicationOf(career: CareerState): RetiredSonApplication | null {
+  const raw: unknown = career.retiredSonApplication;
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const b = raw as Record<string, unknown>;
+  if (Object.keys(b).length !== 3
+    || b.version !== 1 || !familyInteger(b.lastConsideredYear, 1, 9999)) return null;
+  if (b.offer === null) return raw as RetiredSonApplication;
+  if (!b.offer || typeof b.offer !== 'object' || Array.isArray(b.offer)) return null;
+  const o = b.offer as Record<string, unknown>;
+  if (Object.keys(o).length !== 11
+    || !familyText(o.id, 200) || !familyText(o.club, 100)
+    || !familyInteger(o.season, 1, 9999) || !familyInteger(o.year, 1, b.lastConsideredYear)
+    || !familyText(o.parentId, 160) || !familyText(o.parentName, 100)
+    || !familyInteger(o.parentAge, 34, 120) || o.parentGenerated !== true
+    || !['pending', 'accepted', 'declined', 'expired'].includes(o.status as string)
+    || !o.prospect || typeof o.prospect !== 'object' || Array.isArray(o.prospect)) return null;
+  const pr = o.prospect as Record<string, unknown>;
+  if (Object.keys(pr).length !== 12
+    || !familyText(pr.id, 200) || !familyText(pr.name, 100)
+    || !ALL_POSITIONS.includes(pr.position as Position)
+    || !familyInteger(pr.age, 16, 18) || o.parentAge - pr.age < 18
+    || !familyInteger(pr.rating, 40, 76) || !familyInteger(pr.potential, 52, 95)
+    || !familyInteger(pr.lowGuess, 40, 99) || !familyInteger(pr.highGuess, 40, 99)
+    || pr.lowGuess > pr.potential || pr.highGuess < pr.potential || pr.rating > pr.potential
+    || pr.source !== 'Academy' || pr.flag !== '\u{1F3E0}' || pr.season !== o.season
+    || pr.fee !== scoutedProspectFee(pr.potential) || o.fee !== pr.fee) return null;
+  const surname = familyParentSurname(o.parentName);
+  if (!surname || !pr.name.endsWith(' ' + surname)
+    || !YOUTH_FIRST.includes(pr.name.slice(0, -(surname.length + 1)))
+    || foldClubName(pr.name) === foldClubName(o.parentName.replace(YOUTH_PAD_SUFFIX, ''))
+    || realPersonNamesFolded().has(foldClubName(pr.name))) return null;
+  return raw as RetiredSonApplication;
+}
+
+function nextRetiredSonApplication(
+  previous: CareerState, state: CareerState, retired: readonly CMPlayer[], moving: boolean,
+): RetiredSonApplication | undefined {
+  const year = worldYear(state);
+  const old = retiredSonApplicationOf(previous);
+  const oldOffer = old?.offer;
+  const carried = oldOffer?.status === 'pending' ? { ...oldOffer, status: 'expired' as const } : oldOffer ?? null;
+  if (moving) return old ? { version: 1, lastConsideredYear: year, offer: carried } : undefined;
+  if (old?.lastConsideredYear === year) return old;
+  const eligible = retired.filter(p => familyText(p.id, 160) && familyText(p.name, 100)
+    && (p.generated === true || p.isYouth === true || p.academyGrad === true)
+    && p.onLoan !== true && familyInteger(p.age, 34, 120) && familyParentSurname(p.name))
+    .sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+  if (!eligible.length) return old ? { version: 1, lastConsideredYear: year, offer: carried } : undefined;
+  const block: RetiredSonApplication = { version: 1, lastConsideredYear: year, offer: carried };
+  const a = state.academy;
+  if (!a || ![a.recruitment, a.coaching, a.facilities].every(v => familyInteger(v, 1, 20))) return block;
+  const taken = familyBookNames(state);
+  for (const parent of eligible) {
+    const seed = worldSeedOf(state) ?? ('legacy:' + (state.eraId ?? 'now') + ':' + (state.startYear ?? CM_BASE_YEAR));
+    const key = JSON.stringify(['cm-retired-son-v1', seed, state.clubName, year, parent.id]);
+    const random = keyedRng(key);
+    if (random() >= RETIRED_SON_CHANCE) continue;
+    const surname = familyParentSurname(parent.name)!;
+    const first = prospectRoll(random, 0, YOUTH_FIRST.length - 1);
+    let name: string | null = null;
+    for (let i = 0; i < YOUTH_FIRST.length; i += 1) {
+      const choice = YOUTH_FIRST[(first + i) % YOUTH_FIRST.length] + ' ' + surname;
+      const folded = foldClubName(choice);
+      if (familyText(choice, 100) && folded !== foldClubName(parent.name.replace(YOUTH_PAD_SUFFIX, ''))
+        && !taken.has(folded) && !realPersonNamesFolded().has(folded)) { name = choice; break; }
+    }
+    if (!name) continue;
+    const id = 'retired-son-' + year + '-' + Math.floor(keyedRng(key + '|id')() * 0x100000000).toString(36);
+    const potential = rollAcademyPotential(academyIntakeQuality(state), random);
+    const fee = scoutedProspectFee(potential);
+    const prospect = makeProspect(potential, 'Academy', '\u{1F3E0}', academyReportJudgement(state),
+      fee, state.season, new Set(), { random, id: id + '-prospect', name, minAge: 16, maxAge: Math.min(18, parent.age - 18) });
+    if (a.prospects.some(p => p.id === prospect.id)) continue;
+    block.offer = {
+      id, club: state.clubName, season: state.season, year,
+      parentId: parent.id, parentName: parent.name, parentAge: parent.age, parentGenerated: true,
+      prospect, fee, status: 'pending',
+    };
+    break;
+  }
+  return block;
+}
 /** Let one go. Frees a slot on the books. */
 export function releaseProspect(career: CareerState, prospectId: string): CareerState {
   const next: CareerState = JSON.parse(JSON.stringify(career));
@@ -22938,6 +23093,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 1520: the summer's new made up men (the intake, the gap fillers, a new club's squad) get their country
      before the board's new asks count them. */
   ensureMadeUpNations(state);
+  const family = nextRetiredSonApplication(career, state,
+    rosterExits.filter(exit => exit.kind === 'retire').map(exit => exit.player), moving);
+  if (family) state.retiredSonApplication = family;
+  else delete state.retiredSonApplication;
   /* Round 436: a new club sets its ceiling off the squad it hands you, which
      is the Round 105 anchor doing its job. Staying carries last season's
      ceiling and moves it on the CLUB's season, never on your own wage bill.
@@ -23229,6 +23388,10 @@ export const SAVE_CAPS = { h2h: 300, transferLog: 80, resultLog: 60, inbox: 8, a
 export function trimCareer(state: CareerState): CareerState {
   if (!state || typeof state !== 'object') return state;
   let out = state;
+  if (out.retiredSonApplication !== undefined && !retiredSonApplicationOf(out)) {
+    out = { ...out };
+    delete out.retiredSonApplication;
+  }
   if (Array.isArray(out.h2h) && out.h2h.length > SAVE_CAPS.h2h) out = { ...out, h2h: out.h2h.slice(-SAVE_CAPS.h2h) };
   if (Array.isArray(out.transferLog) && out.transferLog.length > SAVE_CAPS.transferLog) out = { ...out, transferLog: out.transferLog.slice(-SAVE_CAPS.transferLog) };
   if (Array.isArray(out.resultLog) && out.resultLog.length > SAVE_CAPS.resultLog) out = { ...out, resultLog: out.resultLog.slice(-SAVE_CAPS.resultLog) };
