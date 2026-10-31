@@ -1,8 +1,8 @@
 {
   "__version": 3,
   "/": {
-    "hash": "4da619e70db2d4e9",
-    "date": "2026-10-22"
+    "hash": "4fa0856128e89413",
+    "date": "2026-10-31"
   },
   "/about": {
     "hash": "0ef705596909dcc0",
@@ -13,16 +13,16 @@
     "date": "2026-10-13"
   },
   "/afl-higher-lower": {
-    "hash": "fc854d1cd1cd050e",
-    "date": "2026-10-06"
+    "hash": "9faf859db582af34",
+    "date": "2026-10-31"
   },
   "/alphabet-sprint": {
     "hash": "5fca3b9e05212f90",
     "date": "2026-09-30"
   },
   "/aussie-rules-manager": {
-    "hash": "bf3eefead9a779ac",
-    "date": "2026-10-06"
+    "hash": "e6d4a5eddd52b7e9",
+    "date": "2026-10-31"
   },
   "/ball-iq": {
     "hash": "6f8a7e00e1863905",
@@ -201,16 +201,16 @@
     "date": "2026-10-22"
   },
   "/front-office": {
-    "hash": "20a1948c48c32dcc",
-    "date": "2026-10-23"
+    "hash": "2df9b4838a052d29",
+    "date": "2026-10-31"
   },
   "/gauntlet-draft": {
     "hash": "36beece8c33d7f2d",
     "date": "2026-09-30"
   },
   "/golf-higher-lower": {
-    "hash": "7676579fceea228c",
-    "date": "2026-10-06"
+    "hash": "3d1cc41d320c0d2c",
+    "date": "2026-10-31"
   },
   "/guess-cbb-team": {
     "hash": "9598e629323813ba",
@@ -229,8 +229,8 @@
     "date": "2026-10-13"
   },
   "/guess-the-golfer": {
-    "hash": "d0a5ded74d80c9ae",
-    "date": "2026-10-06"
+    "hash": "aa6688263b789db9",
+    "date": "2026-10-31"
   },
   "/guess-the-nation": {
     "hash": "5164e64fe7417ff0",
@@ -437,8 +437,8 @@
     "date": "2026-10-23"
   },
   "/nhl-front-office": {
-    "hash": "07544286355fd84c",
-    "date": "2026-10-03"
+    "hash": "5898420495d09415",
+    "date": "2026-10-31"
   },
   "/nhl-gauntlet-draft": {
     "hash": "821c9a6630b34184",
@@ -601,8 +601,8 @@
     "date": "2026-10-22"
   },
   "/soccer-career": {
-    "hash": "e23fd5147ff5aad3",
-    "date": "2026-10-29"
+    "hash": "e386b1d0b823c405",
+    "date": "2026-10-31"
   },
   "/soccer-conquest": {
     "hash": "c2c02b2757b166c2",
@@ -661,8 +661,8 @@
     "date": "2026-10-06"
   },
   "/whats-new": {
-    "hash": "b4f9b4043d376db1",
-    "date": "2026-10-29"
+    "hash": "2b7208a603098ce3",
+    "date": "2026-10-31"
   },
   "/who-am-i": {
     "hash": "567323061a3fc691",
