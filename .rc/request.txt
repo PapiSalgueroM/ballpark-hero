@@ -1,0 +1,5 @@
+# Release BV attribution (lane rBVg-rgC on 40bee2a4f): the two long reds, simOneOffCups (2 of 271081) and simWorldUcl (3, section 5 holder), each on the BASE and on m2 (before Round 1600), in their own worktrees.
+oo-base: git worktree add /tmp/oob 19911f815 >/dev/null 2>&1; test -e /tmp/oob/node_modules || ln -s "$PWD/node_modules" /tmp/oob/node_modules; cd /tmp/oob && node scripts/simOneOffCups.mjs
+ucl-base: git worktree add /tmp/uclb 19911f815 >/dev/null 2>&1; test -e /tmp/uclb/node_modules || ln -s "$PWD/node_modules" /tmp/uclb/node_modules; cd /tmp/uclb && node scripts/simWorldUcl.mjs
+oo-m2: git worktree add /tmp/oom2 5df0e72e5 >/dev/null 2>&1; test -e /tmp/oom2/node_modules || ln -s "$PWD/node_modules" /tmp/oom2/node_modules; cd /tmp/oom2 && node scripts/simOneOffCups.mjs
+ucl-m2: git worktree add /tmp/uclm2 5df0e72e5 >/dev/null 2>&1; test -e /tmp/uclm2/node_modules || ln -s "$PWD/node_modules" /tmp/uclm2/node_modules; cd /tmp/uclm2 && node scripts/simWorldUcl.mjs
