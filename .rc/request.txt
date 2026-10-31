@@ -1,0 +1,4 @@
+#!serial
+# Release BV attribution on 54fb28060: simManagers section 8 against the BASE plus Round 1600 leaves 3 differences, all three Hot Seat runs (rBVg-fin4 fleet-b1600). A probe (restored) prints where each run first differs, against the BASE plus 1600 and against the BASE plus 1603 plus 1600 (.rc/x/bvbase.sh euro: everything but 1593 and V4).
+hs-b1600: B=$(bash .rc/x/bvbase.sh dailies) && node .rc/x/hsProbe.mjs && SIM_MANAGERS_BASE=$B node scripts/simManagers.mjs > /tmp/h1.log 2>&1; s=$?; git checkout -- scripts; grep -E "PROBE|differ \(|simManagers:" /tmp/h1.log | cut -c1-700; exit $s
+hs-beuro: B=$(bash .rc/x/bvbase.sh euro) && node .rc/x/hsProbe.mjs && SIM_MANAGERS_BASE=$B node scripts/simManagers.mjs > /tmp/h2.log 2>&1; s=$?; git checkout -- scripts; grep -E "PROBE|differ \(|simManagers:" /tmp/h2.log | cut -c1-700; exit $s
