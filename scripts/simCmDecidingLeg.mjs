@@ -278,6 +278,12 @@ function uelWindowOver(s, seasonNo) {
 /* finishSeason and startNextSeason on their own keyed streams, the same for every engine. */
 function rollover(m, s, tag) {
   const f = withStream(keyOf(tag, 'finish'), () => m.cm.finishSeason(clone(s)));
+  /* Season one's cup final handed to the club, the same on every engine (simCmEuroPlay section 7's craft), so a
+     candidate plays the Europa League by the cup unless its league place takes it to the Champions League. Measured
+     before the craft (remote check rBVg-c, 8 candidates, four dice sets): 11 of 32 seasons in the Europa League and
+     0 to 4 deciding legs a set, so a floor of one was a coin toss. */
+  const final = (f.state.cupBracket ?? []).find(t => t.round === 'F');
+  if (final) final.winner = s.clubName;
   return withStream(keyOf(tag, 'rollover'), () => m.cm.startNextSeason(f.state));
 }
 function legOf(report) {
@@ -323,7 +329,8 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
     const tag = `${club} ${era}`;
     const H = await fresh(headFile);
     const O = await fresh(oldFile);
-    const B = baseFile ? await fresh(baseFile) : null;
+    /* A base tree before Round 1593 has no Europa League of mine, so a candidate is held to OLD only. */
+    const B = baseFile && kind === 'ucl' ? await fresh(baseFile) : null;
     const seed0 = keyOf(tag, 'start');
     let sH = withStream(seed0, () => H.cm.startCareer(club, era));
     let sO = withStream(seed0, () => O.cm.startCareer(club, era));
