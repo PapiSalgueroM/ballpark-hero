@@ -1,0 +1,100 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerDeskCues.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 4031[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma plain renewal says who and the terms the save now holds, on the slam, once [33m 1002[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma clause renewal names the exit clause the save wrote [33m 383[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma release states the settlement row the save holds [33m 381[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma release with one week left to pay says one week, not one weeks [33m 347[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma refused press and a save that moved some other way say nothing [33m 518[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22mwhile the cookie banner is unanswered the line sits above it, and drops back once it is answered [33m 318[2mms[22m[39m
+ [32m✓[39m src/test/ClubManagerSeasonSummary.expiring.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1382[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22manswering two keeps it shut, the third opens it, and a renewal is the desk's own [33m 303[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1597: no deal ends unseen[2m > [22ma final year man out on loan is listed, named by the hub, renewed where he is, and comes home on the new deal [33m 318[2mms[22m[39m
+ [32m✓[39m src/test/contractPreview.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 1936[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager contract preview[2m > [22mshows both complete real renewal quotes without mutating career or saving [33m 376[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerLoanPlanIntegration.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1980[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan authority and refusal boundaries[2m > [22mpreserves the unchanged annual loan settlement and only retains explicitly recorded recall history [33m 1321[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mpagehide writes the career held in memory, with nothing else able to
+[22m[39m  after pagehide the disk holds 58799 bytes, memory 58799
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mthe tab going hidden writes it too
+[22m[39m  after the tab went hidden the disk holds 60956 bytes, memory 60956
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: the write when the page goes[2m > [22m[2mtwo writes of one career are the same bytes
+[22m[39m  three writes, 60494 bytes each, identical
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2msaveFailed goes up when the store throws and comes down when a write lands
+[22m[39m  with a throwing store, saveFailed is true
+  with the store back, saveFailed is false and the disk matches memory: true
+
+[90mstdout[2m | src/test/clubManagerSaveSize.test.tsx[2m > [22m[2mClub Manager: a refused write is said out loud[2m > [22m[2ma refused press on the transfer desk says why, and one that goes through clears it
+[22m[39m  second press on Serge Gnabry: "Serge Gnabry is already in your squad."
+  loan out again after the recall: "Christian Pulisic has already been out on loan once this season. One loan out a season."
+
+ [32m✓[39m src/test/clubManagerSaveSize.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1464[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the write when the page goes[2m > [22mpagehide writes the career held in memory, with nothing else able to [33m 705[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerHubLines.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerLoanPlanMounted.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 24353[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mshows rules and a worked example before confirmation, and cancel saves nothing [33m 3698[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mconfirms the real standard loan terms and restores the plan after actual unmount/reload [33m 2254[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22muses the actual existing incoming loan bid price and removes that accepted bid [33m 1470[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mrejects a displayed bid after the real bid has been withdrawn [33m 1585[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mshows unknown host data honestly and refuses an opt-in record on a partial host [33m 1150[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22msaves a real weekly review without inventing host minutes or changing the player rating [33m 2409[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mrecalls through the existing engine, pays its fee and retains the one-loan season stamp [33m 2329[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mrefuses all plan mutations after another manager slot becomes active [33m 1825[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mdoes not commit a loan in memory when actual persistence fails [33m 1528[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mrejects a real displayed quote after the saved date advances [33m 1258[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mrefuses confirmation after an actual window close even with its old displayed token [33m 1362[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mkeeps an unsupported saved plan unavailable and refuses plan review or recall [33m 1217[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mkeeps actual legacy recall available for malformed optional plan metadata [33m 1131[2mms[22m[39m
+   [33m[2m✓[22m[39m Loan plan through the actual transfer screen and saved hook[2m > [22mkeeps actual legacy recall available for a schema-valid foreign loan record [33m 918[2mms[22m[39m
+ [32m✓[39m src/lib/clubManagerReportAge.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2121[2mms[22m[39m
+   [33m[2m✓[22m[39m reported historical Club Manager retirement[2m > [22mclassifies the first simulated Messi contract expiry separately from retirement and renewal [33m 1874[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerOfferConfirm.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 865[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1335: an offer asks first[2m > [22ma tap on an offer moves nothing and opens the question in the same panel [33m 362[2mms[22m[39m
+ [32m✓[39m src/test/cmTablesTruth.test.tsx [2m([22m[2m58 tests[22m[2m)[22m[33m 31739[2mms[22m[39m
+   [33m[2m✓[22m[39m 1 the contracts desk labels a real man's deal as this game's, and no made up man's[2m > [22mLiverpool 2026-27 [33m 407[2mms[22m[39m
+   [33m[2m✓[22m[39m 1 the contracts desk labels a real man's deal as this game's, and no made up man's[2m > [22mValencia second tier old save [33m 301[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mLiverpool 2026-27 [33m 1202[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mDundee 2026-27 [33m 542[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mEverton 2005-06 [33m 753[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mOB 2026-27 [33m 461[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mBrentford with an academy graduate [33m 1107[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mBrentford with a made up free agent signed [33m 983[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mSevilla old save (Round 1052) [33m 555[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mValencia second tier old save [33m 706[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mEverton book save [33m 785[2mms[22m[39m
+   [33m[2m✓[22m[39m 2 the squad list labels a real man's deal as this game's, and no made up man's[2m > [22mHertha book save [33m 324[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mLiverpool 2026-27 [33m 399[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mBrentford with an academy graduate [33m 309[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mValencia second tier old save [33m 383[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mEverton book save [33m 389[2mms[22m[39m
+   [33m[2m✓[22m[39m 3 the dressing room labels a real man's wage as this game's, and no made up man's[2m > [22mHertha book save [33m 325[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mLiverpool 2026-27 [33m 1408[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mDundee 2026-27 [33m 839[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mEverton 2005-06 [33m 860[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mOB 2026-27 [33m 546[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mBrentford with an academy graduate [33m 1382[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mBrentford with a made up free agent signed [33m 1413[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mSevilla old save (Round 1052) [33m 971[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mValencia second tier old save [33m 939[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mEverton book save [33m 1130[2mms[22m[39m
+   [33m[2m✓[22m[39m 5 rendering the four screens draws nothing and leaves the career byte equal[2m > [22mHertha book save [33m 620[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mLiverpool 2026-27 [33m 1304[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mDundee 2026-27 [33m 677[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mEverton 2005-06 [33m 917[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mOB 2026-27 [33m 470[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mBrentford with an academy graduate [33m 753[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mBrentford with a made up free agent signed [33m 760[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mSevilla old save (Round 1052) [33m 664[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mValencia second tier old save [33m 791[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mEverton book save [33m 680[2mms[22m[39m
+   [33m[2m✓[22m[39m 6 nothing drawn reads undefined, NaN, [object Object] or Infinity[2m > [22mHertha book save [33m 484[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m      Tests [22m [1m[32m147 passed[39m[22m[90m (147)[39m
+[2m   Start at [22m 00:23:06
+[2m   Duration [22m 37.32s[2m (transform 4.20s, setup 1.25s, collect 17.08s, tests 69.90s, environment 6.87s, prepare 1.76s)[22m
+
