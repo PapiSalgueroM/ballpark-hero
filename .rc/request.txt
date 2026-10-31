@@ -1,0 +1,14 @@
+#!buildseo
+#!serve
+#!serial
+# Release BV gate, rcg lane H1 (after a full build:seo, served): the weight rows (brief V5), the home fold, the soft
+# 404, the FAQ schema, and playGames on the BV routes.
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+playSoftFourOhFour: node scripts/playSoftFourOhFour.mjs
+simFaqSchema: node scripts/simFaqSchema.mjs
+playGames-club-manager: ONLY=/club-manager node scripts/playGames.mjs
+playGames-manager-hot-seat: ONLY=/manager-hot-seat node scripts/playGames.mjs
+playGames-deadline-day: ONLY=/deadline-day node scripts/playGames.mjs
+playGames-transfer-path: ONLY=/transfer-path node scripts/playGames.mjs
+playGames-whats-new: ONLY=/whats-new node scripts/playGames.mjs
