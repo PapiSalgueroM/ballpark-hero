@@ -238,6 +238,24 @@
  * healthy slope's top and 1,210 under the defect's. Both are back down from
  * Round 1597's 231,000 and 3,600, which were measured before Round 1601's
  * base and are no longer mid gap on the joined engine.
+ * Release BU's re-join on main fa30aafbe (the lead's J3, 2026-10-30) measured
+ * again, the same way (remote check rBUfx-j2a, head 1307a3f26, the default
+ * stream and SIM_SEED 1 to 5): healthy 209,474 to 223,936 at season 15 (Real
+ * Madrid 209,474 to 218,464, Everton 219,908 to 222,441, Lincoln City 220,807
+ * to 223,936), slope 967 to 2,424. Uncapped, default stream: Real Madrid
+ * 243,970, Everton 255,472, Lincoln City 255,739, slope 4,823 to 5,623 (the
+ * control fired, section 1 red, 33 failures). The growth is main's PR 429
+ * meeting Round 1597: every man on the free agent list now keeps his released
+ * ledger record (pruneWorldRoster keeps a record a pool row's worldRosterKey
+ * names), and since Round 1597 the list keeps its men for years, so those
+ * records stay too. The default stream before the re-join (rBUg-ki, head
+ * af22e8a38): 209,047, 214,047, 217,675, slope 1,447 to 1,901; on the merge
+ * alone (rBUfx-j1, 9a8445ef8): 216,719, 222,444, 220,809, slope 2,073 to
+ * 2,341, within 17 bytes of the head, so J2 moved nothing here. 227,000 sat
+ * only 3,064 over the healthy top. 234,000 sits 10,064 over it and 9,970
+ * under the defect's bottom; 3,600 sits 1,176 over the healthy slope's top
+ * and 1,223 under the defect's. When other clubs sign free agents (FA-3) the
+ * list and its records stop growing: measure again then.
  * The first cut of this file set 5,000 and 240,000 by feel, and both passed
  * the uncapped engine, which is exactly the mistake the house rule names.
  *
@@ -262,8 +280,8 @@ const ENTRY = `${TMP}/cmSaveSize.entry.mjs`;
 const BUNDLE = `${TMP}/cmSaveSize.bundle.mjs`;
 
 /* Measured ranges beside each, see the header. */
-const SIZE_BUDGET = 227_000;   // Release BU, Rounds 1597 and 1601 joined: healthy 203,478 to 217,675; uncapped 236,616 to 252,464 (was 231,000: Round 1597, nobody leaves the free agent list but by signing or retiring: healthy 206,589 to 223,145; uncapped 239,460 to 257,928 (was 214,000: Round 1344, every club's deals recorded: healthy 191,625 to 206,555; uncapped 227,507 to 239,176 (was 203,000: Round 1229, the league book, healthy 180,907 to 193,046, uncapped 215,793 to 226,422))
-const SLOPE_CAP = 3_000;       // Release BU, Rounds 1597 and 1601 joined: healthy 479 to 1,911 bytes a season; uncapped 4,210 to 5,357 (was 3,600: Round 1597, the free agent list keeps its men: healthy 1,056 to 2,648 bytes a season; uncapped 4,611 to 5,585 (was 2,000: Round 1344, every club's deals recorded: healthy -181 to 1,517 bytes a season; uncapped 3,965 to 4,802 (was healthy 249 to 1,178, uncapped 3,052 to 4,408))
+const SIZE_BUDGET = 234_000;   // Release BU re-joined on main (PR 429): healthy 209,474 to 223,936; uncapped 243,970 to 255,739 (was 227,000: Release BU, Rounds 1597 and 1601 joined: healthy 203,478 to 217,675; uncapped 236,616 to 252,464 (was 231,000: Round 1597, nobody leaves the free agent list but by signing or retiring: healthy 206,589 to 223,145; uncapped 239,460 to 257,928 (was 214,000: Round 1344, every club's deals recorded: healthy 191,625 to 206,555; uncapped 227,507 to 239,176 (was 203,000: Round 1229, the league book, healthy 180,907 to 193,046, uncapped 215,793 to 226,422)))
+const SLOPE_CAP = 3_600;       // Release BU re-joined on main (PR 429): healthy 967 to 2,424 bytes a season; uncapped 4,823 to 5,623 (was 3,000: Release BU, Rounds 1597 and 1601 joined: healthy 479 to 1,911 bytes a season; uncapped 4,210 to 5,357 (was 3,600: Round 1597, the free agent list keeps its men: healthy 1,056 to 2,648 bytes a season; uncapped 4,611 to 5,585 (was 2,000: Round 1344, every club's deals recorded: healthy -181 to 1,517 bytes a season; uncapped 3,965 to 4,802 (was healthy 249 to 1,178, uncapped 3,052 to 4,408)))
 const CLUBS = ['Real Madrid', 'Everton', 'Lincoln City'];
 const SEASONS = 15;
 const SAVE_KEY = 'dukb-club-manager-save';
