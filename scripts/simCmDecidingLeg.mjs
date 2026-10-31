@@ -125,7 +125,7 @@ const CONTROLS = {
   tieall: [[CM, "    ...(reactWon !== won || reactDrawn !== drawn ? { tie: reactWon ? 'W' as const : 'L' as const } : {}),", "    ...(tieJudged ? { tie: reactWon ? 'W' as const : 'L' as const } : {}),"]],
   hattrick: [[CM, '  return count === 3 ? `⚽ ${name} bagged a hat-trick!` : `⚽ ${name} scored ${HAUL_WORDS[count] ?? count}!`;', '  return `⚽ ${name} bagged a hat-trick!`;']],
   nogate: [[CM, JUDGE, "  return tie?.leg === 2 && typeof tie.through === 'boolean';"]],
-  cutover: [[HS, "export const HOT_SEAT_TIE_FROM = '2026-11-06';", "export const HOT_SEAT_TIE_FROM = '2026-10-01';"]],
+  cutover: [[HS, "export const HOT_SEAT_TIE_FROM = '2026-11-09';", "export const HOT_SEAT_TIE_FROM = '2026-10-01';"]],
   /* Review fix: three slips that keep every sign and break a size, so only section 2's size checks can see them. */
   boardsize: [[CM, '  let confDelta = reactWon ? 4 : reactDrawn ? 0.5 : -4.5;', '  let confDelta = reactWon ? (reactWon !== won ? 1 : 4) : reactDrawn ? 0.5 : -4.5;']],
   moralesize: [[CM, '  const moraleShift = reactWon ? 5 : reactDrawn ? -1 : -6;', '  const moraleShift = reactWon ? (reactWon !== won ? 1 : 5) : reactDrawn ? -1 : -6;']],

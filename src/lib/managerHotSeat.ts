@@ -351,7 +351,7 @@ export function rulesOf(setup: HotSeatSetup): CareerState['matchRules'] {
  * reading and replays exactly as it did. The lead re-dates it at the join if the release lands later (never
  * earlier than the release day). scripts/simCmDecidingLeg.mjs holds it.
  */
-export const HOT_SEAT_TIE_FROM = '2026-11-06';
+export const HOT_SEAT_TIE_FROM = '2026-11-09';
 
 /** Round 1603: 'night' for a daily dated before HOT_SEAT_TIE_FROM or a free run without the 1603 stamp,
  *  undefined (the tie's reading) otherwise. */
