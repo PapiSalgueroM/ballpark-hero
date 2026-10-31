@@ -1,0 +1,22 @@
+playCmPlayerCard: saves built: S1 season 3 week 26, 22 men with kept seasons, share 100; S4 share 100; S2 week 27, share 53; S3 kept from 3
+playCmPlayerCard: page seed 1397084510
+  FAIL 3: S1-320-top: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S1-320-keeper: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S1-320-idle: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S1-320-goals: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S1-320-sheets: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S1-320-assists: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S2-320-goals: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S2-320-sheets: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S2-320-assists: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S4-320-goals: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S4-320-sheets: with the card open the document still holds [data-cm-squad-list]
+  FAIL 3: S4-320-assists: with the card open the document still holds [data-cm-squad-list]
+4       lines read on 9 S1 rival cards (share 100), 9 S4 rival cards (share 100), 9 S1 cards of mine, 9 S2 rival cards (share 53), 9 S3 cards of mine (kept from 2028-29)
+5       the page drew 7 and 7 times before the match; the two saves are equal (147667 characters)
+green 1 the page is the reader: 45 checks
+green 2 the fit: 468 checks
+RED   3 nothing stacks or jumps: 135 checks, 45 failed
+green 4 the lines: 45 checks
+green 5 a match with cards opened: 2 checks
+playCmPlayerCard: CONTROL stack FIRED: section 3 went red (45 failures) and no other did

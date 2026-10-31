@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+# Release BU lane j2: Round 1601's walks: the player card and its stack control, the current roster walk, the league leaders, world moves, old careers and the nation job.
+playCmPlayerCard: ENGINES=chromium node scripts/playCmPlayerCard.mjs
+walk-write: PLAY_CARDS_CONTROL=write ENGINES=chromium node scripts/playCmPlayerCard.mjs
+roster-head: export CI=1 SIM_NETWORK=offline CM_OWN_ROSTER_PHASE=fixed CM_OWN_ROSTER_CORE_REF=HEAD ENGINES=chromium CM_OWN_ROSTER_OUT="$RC_OUT/roster-head" FREE_KICK_FONT_CACHE=/tmp/fk-head && node .rc/x/rosterInstalled.mjs && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubDetailCurrentRoster.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playClubDetailCurrentRoster.mjs
+walk-stack: PLAY_CARDS_CONTROL=stack ENGINES=chromium node scripts/playCmPlayerCard.mjs
+playCmLeagueLeaders: ENGINES=chromium node scripts/playCmLeagueLeaders.mjs
+playCmWorldMoves: ENGINES=chromium node scripts/playCmWorldMoves.mjs
+playCmOldCareersWorld: ENGINES=chromium node scripts/playCmOldCareersWorld.mjs
+playNationJob: ENGINES=chromium node scripts/playNationJob.mjs
