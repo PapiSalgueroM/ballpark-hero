@@ -198,13 +198,22 @@ export function MatchReportCard({ report, clubName, onContinue, noSack = false }
   const board = boardMeter({ boardConfidence: r.confidence });
   const boardWord = noSack && board.value < BOARD_EDGE ? 'Lost the board · No sacking' : board.band;
   const boardTone = BOARD_TONE[board.tone];
-  const resultTone = r.won ? 'text-correct' : r.drawn ? 'text-yellow-400' : 'text-destructive';
-  const resultWord = r.won ? 'VICTORY' : r.drawn ? 'DRAW' : 'DEFEAT';
+  /* Round 1603 (player report b7b51855): a deciding second leg is headlined by the tie, THROUGH or OUT in the
+     tie's tone, and the night it was settled on sits under it as a fact ("Lost 1-2 on the night"). Every other
+     match keeps the night's word. The engine's reactions read the same way (judgedByTie in clubManager.ts). */
+  const decider = r.tie?.leg === 2 && typeof r.tie.through === 'boolean';
+  const tieThrough = decider && r.tie?.through === true;
+  const resultTone = decider
+    ? (tieThrough ? 'text-correct' : 'text-destructive')
+    : r.won ? 'text-correct' : r.drawn ? 'text-yellow-400' : 'text-destructive';
+  const resultWord = decider ? (tieThrough ? 'THROUGH' : 'OUT') : r.won ? 'VICTORY' : r.drawn ? 'DRAW' : 'DEFEAT';
+  const myNight = r.home === clubName ? r.homeGoals : r.awayGoals;
+  const theirNight = r.home === clubName ? r.awayGoals : r.homeGoals;
+  const nightLine = decider ? `${r.won ? 'Won' : r.drawn ? 'Drew' : 'Lost'} ${myNight}-${theirNight} on the night` : '';
   /* Round 507: on a two legged tie the night and the shootout are different
      results, so "DEFEAT (PENS)" over a 0-3 that put you through reads as being
-     knocked out. The headline keeps the night's word, because that is the score
-     printed under it, and the shootout gets its own line saying which way it
-     went. */
+     knocked out. The shootout gets its own line saying which way it went (and
+     since Round 1603 the headline on a deciding second leg is the tie, above). */
   /* Round 782: with the kicks played one by one, the count goes in the line. */
   const penCount = r.shootout ? ` ${r.shootout.mine}-${r.shootout.theirs}` : '';
   const penLine = r.decidedBy === 'pens'
@@ -347,8 +356,9 @@ export function MatchReportCard({ report, clubName, onContinue, noSack = false }
       <CelebrationStyles />
       <div className={cn(
         'relative overflow-hidden bg-surface-1 border border-border rounded-2xl p-5 text-center animate-in fade-in zoom-in-95 duration-300',
-        verdict && r.won && 'cm-win-pulse',
-        verdict && !r.won && !r.drawn && 'cm-loss-shake',
+        /* Round 1603: a deciding second leg pulses for going through and shakes for going out. */
+        verdict && (decider ? tieThrough : r.won) && 'cm-win-pulse',
+        verdict && (decider ? !tieThrough : !r.won && !r.drawn) && 'cm-loss-shake',
       )}>
         {verdict && r.trophyWon && <ConfettiBurst seed={r.homeGoals * 7 + r.awayGoals * 3 + 1} count={34} />}
         <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">{r.compLabel}</div>
@@ -385,6 +395,11 @@ export function MatchReportCard({ report, clubName, onContinue, noSack = false }
         <h2 className={cn('text-2xl font-display font-bold mb-3', resultTone, verdict ? 'cm-slam' : 'opacity-0')}>
           {resultWord}{r.decidedBy === 'pens' ? ' (PENS)' : r.decidedBy === 'aet' ? ' (AET)' : ''}
         </h2>
+        {nightLine && (
+          <div data-cm-night-line={r.won ? 'W' : r.drawn ? 'D' : 'L'} className="text-[11px] text-muted-foreground mb-1 tabular-nums">
+            {nightLine}
+          </div>
+        )}
         {penLine && (
           <div className={cn('text-[11px] font-bold mb-2', (r.shootoutWon ?? r.won) ? 'text-correct' : 'text-destructive')}>
             {etPensLead}{penLine}

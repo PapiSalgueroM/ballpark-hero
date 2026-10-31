@@ -669,7 +669,18 @@ function hsPlay(arm, date) {
   let run = hs.startHotSeat({ club: setup.club, seed: setup.seed, daily: date });
   let guard = 0;
   while (!run.verdict && guard++ < 40) run = hs.pendingPress(run) ? hs.answerHotSeatPress(run, 0) : hs.playHotSeatMatch(run, 'balanced', null);
-  return run;
+  return as1603Base(run);
+}
+/* Round 1603: the two things that round changes on purpose, read the base's way before a run is compared with
+   CM_BOARD_BASE, and nothing else. A run dated before HOT_SEAT_TIE_FROM (and a free run without the 1603 stamp)
+   carries tieRules 'night', the key that keeps the night's reading of a deciding second leg, which the base never
+   writes; and a haul of four or more is named by its count ("scored four!") where the base said hat-trick.
+   scripts/simCmDecidingLeg.mjs holds both rules themselves. */
+const HAUL_NAMED = /⚽ ([^"!]+?) scored (four|five|six|seven|eight|[0-9]+)!/g;
+function as1603Base(run) {
+  const c = JSON.parse(JSON.stringify(run).replace(HAUL_NAMED, (_, name) => `⚽ ${name} bagged a hat-trick!`));
+  if (c.state) delete c.state.tieRules;
+  return c;
 }
 /** A day's whole run with the three suitor fields masked (correction 9): the approach's club and its words,
  *  the headlines that name a suitor, and the log's event lines that open with the phone. */
@@ -701,7 +712,7 @@ async function hsCardChecks(head, base, dates, store) {
     const d = h.hs.dailyHotSeat(date);
     for (const setup of [{ club: d.club, seed: d.seed, daily: date }, { club: d.club, seed: d.seed, rules: 1331 }]) {
       store.clear();
-      const hState = h.hs.startHotSeat(setup).state;
+      const hState = as1603Base({ state: h.hs.startHotSeat(setup).state }).state;
       store.clear();
       const bState = b.hs.startHotSeat(setup).state;
       const current = h.hs.rulesOf(setup) === undefined;

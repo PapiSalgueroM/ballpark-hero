@@ -666,6 +666,12 @@ function legacyDefaultReport(report, noOrder) {
 }
 const sortedJSON = value => JSON.stringify(value, (_key, item) => item && typeof item === 'object' && !Array.isArray(item)
   ? Object.fromEntries(Object.keys(item).sort().map(key => [key, item[key]])) : item);
+/* Round 1603: the pinned engine called every haul of three or more a hat-trick, and today's names four and more
+   by the count ("scored four!", player report 3ce0d4ff). A named haul is read as the old words in the comparison,
+   on both sides (the pinned engine never writes one), and nothing else about the match is allowed to move.
+   scripts/simCmDecidingLeg.mjs section 5 holds the words themselves. */
+const HAUL_NAMED = /⚽ ([^"!]+?) scored (four|five|six|seven|eight|[0-9]+)!/g;
+const asOldHaulWords = s => s.replace(HAUL_NAMED, (_, name) => `⚽ ${name} bagged a hat-trick!`);
 function compareContent(candidate, baseline) {
   const readings = [candidate, baseline].map(out => {
     const present = Object.prototype.hasOwnProperty.call(out.state, 'live');
@@ -678,7 +684,7 @@ function compareContent(candidate, baseline) {
        field out on both sides. scripts/simCmLeagueBook.mjs holds the book itself, and that the whole save
        but the book and the count of draws are what they were with the book taken out of the engine. */
     delete state.leagueBook;
-    const content = sortedJSON({ report: legacyDefaultReport(out.report, out.noOrder), state });
+    const content = asOldHaulWords(sortedJSON({ report: legacyDefaultReport(out.report, out.noOrder), state }));
     return { present, inactive, content, hash: createHash('sha256').update(content).digest('hex') };
   });
   const [a, b] = readings;

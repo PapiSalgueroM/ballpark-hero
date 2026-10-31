@@ -25,6 +25,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">November 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">Club Manager: going through counts as going through.</strong> Lose a Champions League second leg in <Link to="/club-manager" className="text-primary hover:underline">Club Manager</Link> but win the tie, on aggregate or on penalties, and the report now says THROUGH, with the night's score right under it. The board, the dressing room and the fans react to the tie too, so a semi final reached on penalties is no longer treated like a defeat, and winning the night but going out is no longer free. The score and the W, D or L in your record still show what happened on the night. And a player who scores four or five in a match gets the right count instead of a hat-trick.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">Arsenal de Sarandí players no longer count as Arsenal.</strong> 56 players from Arsenal de Sarandí, a club in Argentina, were filed under plain Arsenal in our player data. That put them in <Link to="/rarity-round" className="text-primary hover:underline">Rarity Round</Link>'s Arsenal category, and our own records in Soccer Grid, Soccer Connect 4 and Build Your XI could back them as Arsenal answers. We checked all 74 players who could have been mixed up, each against two sources: the 56 now sit under Arsenal de Sarandí, so Rarity Round stops counting them for Arsenal and our records stop backing them there, and the 18 who really played in London stay at Arsenal. Club Manager and Soccer Career squads still have a few of them at Arsenal for now, and an answer our records can't settle is still judged the usual way.</li>

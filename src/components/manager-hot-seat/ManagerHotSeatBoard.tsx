@@ -266,7 +266,8 @@ export default function ManagerHotSeatBoard() {
         const seed = Number(p.seed);
         if (p.v === 1 && actions && hotSeatPool().some(c => c.club === club) && Number.isFinite(seed)) {
           /* Round 1331: the match rules stamp passes through; a run saved without it replays on the base rules. */
-          const stamp: Pick<HotSeatSetup, 'rules'> = p.rules === 1331 ? { rules: 1331 } : {};
+          /* Round 1603: and so does the tie stamp; a run saved without it replays the night's reading. */
+          const stamp: Pick<HotSeatSetup, 'rules' | 'tie'> = { ...(p.rules === 1331 ? { rules: 1331 as const } : {}), ...(p.tie === 1603 ? { tie: 1603 as const } : {}) };
           if (p.done !== true) setFreeSaved({ setup: { club, seed: seed >>> 0, ...stamp }, actions });
           /* kind is new in Round 956 and optional: an older finished record has none and gets no offer. */
           else if (typeof p.kind === 'string' && keepsJob(p.kind as VerdictKind)) setFreeFinished({ setup: { club, seed: seed >>> 0, ...stamp }, actions });
@@ -295,7 +296,7 @@ export default function ManagerHotSeatBoard() {
       setDailySaved(r.verdict || !r.actions.length ? null : r.actions);
     } else {
       try {
-        localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, ...(r.setup.rules === 1331 ? { rules: 1331 } : {}), actions: r.actions, done: !!r.verdict, ...(r.verdict ? { kind: r.verdict.kind } : {}) }));
+        localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, ...(r.setup.rules === 1331 ? { rules: 1331 } : {}), ...(r.setup.tie === 1603 ? { tie: 1603 } : {}), actions: r.actions, done: !!r.verdict, ...(r.verdict ? { kind: r.verdict.kind } : {}) }));
       } catch {
         /* storage full or blocked: the run still plays, it just will not survive a refresh */
       }
@@ -323,7 +324,8 @@ export default function ManagerHotSeatBoard() {
     const seed = Math.floor(Math.random() * 4294967296) >>> 0;
     setFreeSaved(null);
     /* Round 1331: every new free run plays the current match rules, and its save says so. */
-    open({ club, seed, rules: 1331 });
+    /* Round 1603: and judges a deciding second leg by the tie. */
+    open({ club, seed, rules: 1331, tie: 1603 });
   };
   const randomFree = () => {
     const pool = hotSeatPool();

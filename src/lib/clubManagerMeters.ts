@@ -135,8 +135,9 @@ export function fanBand(value: number, resultsSeen: number): { band: string; ton
  *  or, on a save from before the log existed, the five the form dots show. */
 function seasonResults(state: CareerState): FormResult[] {
   const log = Array.isArray(state.resultLog) ? state.resultLog : null;
+  /* Round 1603: a deciding second leg counts as the tie it settled (ResultLogEntry.tie), the night otherwise. */
   const fromLog = log
-    ? log.map(e => e && e.res).filter((r): r is FormResult => r === 'W' || r === 'D' || r === 'L')
+    ? log.map(e => e && (e.tie ?? e.res)).filter((r): r is FormResult => r === 'W' || r === 'D' || r === 'L')
     : [];
   const fromForm = Array.isArray(state.form)
     ? state.form.filter((r): r is FormResult => r === 'W' || r === 'D' || r === 'L')

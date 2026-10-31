@@ -1424,6 +1424,11 @@ export interface ResultLogEntry {
   /** Round 164: the typed competition, so the stats centre can bucket
    *  without parsing display labels. Absent on entries logged before it. */
   competition?: Competition;
+  /** Round 1603: the tie a deciding second leg settled, written only when it differs from the night in `res`
+   *  (lost 1-2 and through on penalties is res 'L', tie 'W'). `res` stays the night for every reader of the
+   *  record; the fans read the tie (clubManagerMeters.ts seasonResults). Absent on every other entry, so an
+   *  entry logged before this round, or one where the night and the tie agree, reads exactly as before. */
+  tie?: 'W' | 'L';
 }
 
 export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support' | 'laugh' | 'setRole'
@@ -3017,6 +3022,13 @@ export interface CareerState {
   transferLog?: TransferNews[];
   /** Round 73: this season's played fixtures, newest last, capped at 60. */
   resultLog?: ResultLogEntry[];
+  /** Round 1603: 'night' reads a deciding second leg's reactions off the night, the way every match did
+   *  before Round 1603 (judgedByTie). Set only by Manager Hot Seat on a day dated before HOT_SEAT_TIE_FROM or
+   *  a free run started before it, so a run in flight and every past daily replay exactly; taken off when the
+   *  run is carried on and dropped by loadCareer, so no Club Manager save plays it. A field of its own and not
+   *  a value of matchRules, because the harnesses of Rounds 1331 and 1335 read rulesOf answering undefined as
+   *  the current rules, and the days from HOT_SEAT_RULES_FROM to HOT_SEAT_TIE_FROM play those. */
+  tieRules?: 'night';
   /** Round 1229: the league book of the season in play: every rival's league goals, assists and clean
    *  sheets by man, and my men's league clean sheets. Opened where a season starts (startCareer,
    *  startNextSeason) and replaced every summer, so it never grows season over season. Absent on a
@@ -18474,6 +18486,34 @@ function matchAttendance(state: CareerState, fx: { home: boolean | null; opponen
 }
 
 /**
+ * Round 1603 (player report b7b51855): whether tonight's reactions read the tie rather than the night. True on a
+ * deciding second leg, the one match whose report carries `tie.leg === 2` with `through` set, in any competition
+ * that writes that tie line (today the Champions League knockout rounds played over two legs; a second
+ * competition's deciding legs are judged the same way the moment it writes the same line, with no second copy
+ * of this rule). Round 507 kept the night and the tie apart on purpose and that stays true of the record (the
+ * fixture log's score and W/D/L, the form guide, the career totals, the head to head book, the ratings); what
+ * changes is the reaction: the board's base swing, the dressing room's morale swing and the fans' result.
+ * Lost 1-2 on the night and through on penalties is a tie won, and the board, the squad and the stands treat it
+ * as one; won 2-1 and out on aggregate is an exit. False on a Manager Hot Seat run that plays the old reading
+ * (tieRules 'night', or matchRules 'base', the engine from before Round 1331, which also predates this).
+ * scripts/simCmDecidingLeg.mjs forces it false to replay the old engine.
+ */
+export function judgedByTie(state: Pick<CareerState, 'matchRules' | 'tieRules'>, tie: MatchWeekReport['tie']): boolean {
+  return state.matchRules !== 'base' && state.tieRules !== 'night' && tie?.leg === 2 && typeof tie.through === 'boolean';
+}
+
+/** Round 1603: a haul past a hat-trick says its number in words (narration of the save's own match). */
+const HAUL_WORDS: Record<number, string> = { 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight' };
+
+/** Round 1603 (player report 3ce0d4ff): the match line for a man's goals tonight. Three is a hat-trick, four
+ *  and five are named ("scored four"), fewer gets no line. It used to call every haul of three or more a
+ *  hat-trick, so a five goal night read as three. */
+export function haulLine(name: string, count: number): string | null {
+  if (count < 3) return null;
+  return count === 3 ? `⚽ ${name} bagged a hat-trick!` : `⚽ ${name} scored ${HAUL_WORDS[count] ?? count}!`;
+}
+
+/**
  * Plays my match for this entry, mutating state (tables, squad, cups, board)
  * and returning the report. state must already be a private copy.
  */
@@ -18646,6 +18686,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
        pitch, so it is a W or an L like any other. */
     decidedBy = 'aet';
   }
+  /* Round 1603: what the reactions read, the tie on a deciding second leg (judgedByTie) and the night on every
+     other match. A tie is never drawn, so a deciding leg reacts as a win or a defeat. */
+  const tieJudged = judgedByTie(state, tieLine);
+  const reactWon = tieJudged ? advanced : won;
+  const reactDrawn = tieJudged ? false : drawn;
 
   const events: string[] = [];
   let trophyWon: string | null = null;
@@ -18677,7 +18722,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const tally = new Map<string, number>();
   for (const sc of myScorers) if (!sc.og) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
   tally.forEach((count, name) => {
-    if (count >= 3) events.push(`⚽ ${name} bagged a hat-trick!`);
+    const line = haulLine(name, count);
+    if (line) events.push(line);
   });
   /* Round 670: extra time gets a line of its own, before the shootout's. */
   if (decidedBy === 'aet') events.push(advanced ? '⏱️ Settled in extra time, and you are through.' : '⏱️ Settled in extra time, and you are out.');
@@ -18693,7 +18739,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
 
   /* ----- competition bookkeeping + other results ----- */
   const otherResults: OtherResult[] = [];
-  let confDelta = won ? 4 : drawn ? 0.5 : -4.5;
+  let confDelta = reactWon ? 4 : reactDrawn ? 0.5 : -4.5;
 
   if (fx.competition === 'league') {
     const pairs = careerRoundPairs(state, entry.round);
@@ -18969,7 +19015,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      with fifteen or more appearances finished on an average of four and a half
      morale more than players with none, and in three of the eight runs the gap
      was under one and a half. Leaving your best striker out was free. */
-  const moraleShift = won ? 5 : drawn ? -1 : -6;
+  /* Round 1603: the dressing room reacts to the tie on a deciding second leg (reactWon), the night elsewhere. */
+  const moraleShift = reactWon ? 5 : reactDrawn ? -1 : -6;
   /* Round 505: the armband. With the captain out there a defeat costs the
      men who played one point less, bounded at zero so a loss can never
      turn into a gain, and he himself takes one point for every match he
@@ -18978,7 +19025,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const captainPlayed = !!captainId && xiIdSet.has(captainId);
   const shiftFor = (p: CMPlayer): number => {
     let shift = moraleShift;
-    if (captainPlayed && !won && !drawn && xiIdSet.has(p.id)) shift = Math.min(0, shift + CAPTAIN_DEFEAT_RELIEF);
+    if (captainPlayed && !reactWon && !reactDrawn && xiIdSet.has(p.id)) shift = Math.min(0, shift + CAPTAIN_DEFEAT_RELIEF);
     if (captainPlayed && p.id === captainId) shift += CAPTAIN_MATCH_LIFT;
     return shift;
   };
@@ -19121,6 +19168,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     res: won ? 'W' : drawn ? 'D' : 'L',
     // Round 164: typed, so the stats centre buckets without label parsing.
     competition: fx.competition,
+    /* Round 1603: the tie, only where it differs from the night, for the fans (ResultLogEntry.tie). */
+    ...(reactWon !== won || reactDrawn !== drawn ? { tie: reactWon ? 'W' as const : 'L' as const } : {}),
   });
   state.resultLog = log.slice(-60);
 
@@ -23350,6 +23399,8 @@ export function loadCareer(): CareerState | null {
     if (parsed && parsed.balancedFixtures !== undefined && parsed.balancedFixtures !== true) delete parsed.balancedFixtures;
     /* Round 1331: the base match rules are Manager Hot Seat's alone; no Club Manager save plays them. */
     if (parsed && 'matchRules' in parsed) delete parsed.matchRules;
+    /* Round 1603: and so is the old reading of a deciding second leg. */
+    if (parsed && 'tieRules' in parsed) delete parsed.tieRules;
     if (
       !parsed ||
       parsed.saveVersion !== SAVE_VERSION ||

@@ -304,6 +304,10 @@ export interface HotSeatSetup {
    *  Only the number 1331 counts; a run without it (every free run in flight on the release day)
    *  replays on the base rules for ever. Dailies ignore it and go by their date (rulesOf). */
   rules?: 1331;
+  /** Round 1603: a free run started on a build that judges a deciding second leg by the tie (judgedByTie in
+   *  clubManager.ts). Only the number 1603 counts; a run without it replays the night's reading for ever.
+   *  Dailies ignore it and go by their date (tieRulesOf). */
+  tie?: 1603;
 }
 
 /**
@@ -322,6 +326,22 @@ export const HOT_SEAT_RULES_FROM = '2026-10-24';
 export function rulesOf(setup: HotSeatSetup): CareerState['matchRules'] {
   if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;
   return setup.rules === 1331 ? undefined : 'base';
+}
+
+/**
+ * Round 1603: the first daily whose deciding second legs are judged by the tie (the board, the dressing room
+ * and the fans react to going through or going out, not to the night). A day replays from its seed and its
+ * choices, so every daily dated before this, and every free run without the 1603 stamp, keeps the night's
+ * reading and replays exactly as it did. The lead re-dates it at the join if the release lands later (never
+ * earlier than the release day). scripts/simCmDecidingLeg.mjs holds it.
+ */
+export const HOT_SEAT_TIE_FROM = '2026-11-06';
+
+/** Round 1603: 'night' for a daily dated before HOT_SEAT_TIE_FROM or a free run without the 1603 stamp,
+ *  undefined (the tie's reading) otherwise. */
+export function tieRulesOf(setup: HotSeatSetup): CareerState['tieRules'] {
+  if (setup.daily) return setup.daily < HOT_SEAT_TIE_FROM ? 'night' : undefined;
+  return setup.tie === 1603 ? undefined : 'night';
 }
 
 export type HotSeatAction =
@@ -554,6 +574,9 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
      scripts/simCmSubs.mjs (section hotseat, control nodate) hold this. */
   const rules = rulesOf(setup);
   if (rules) s.matchRules = rules;
+  /* Round 1603: and how its deciding second legs are read (tieRulesOf); handoverState takes it off again. */
+  const tieRules = tieRulesOf(setup);
+  if (tieRules) s.tieRules = tieRules;
   const rounds = leagueRounds(s);
   const lastWeek = Math.max(HOT_SEAT_TAKEOVER_MIN, Math.min(HOT_SEAT_TAKEOVER_MAX, rounds - HOT_SEAT_LEASH - 1));
   let best: { state: CareerState; formPts: number; week: number } | null = null;
@@ -847,6 +870,7 @@ export function handoverState(run: HotSeatRun): CareerState {
   const copy = JSON.parse(JSON.stringify(run.state)) as CareerState;
   /* Round 1331: a career carried on plays Club Manager's current rules, whatever rules the day played. */
   delete copy.matchRules;
+  delete copy.tieRules;
   const from = run.takeover.calendarWeek;
   if (Array.isArray(copy.inbox)) copy.inbox = copy.inbox.filter(m => !(typeof m.week === 'number' && m.week < from));
   return copy;
