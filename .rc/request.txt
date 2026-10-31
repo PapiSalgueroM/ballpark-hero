@@ -1,0 +1,27 @@
+# Release BV, Round 1603 (a deciding leg judged by the tie): simCmDecidingLeg (now with the Europa League candidates,
+# brief V2 bind 3) and its ten controls (each exit 1, FIRED), the vitest files of its final gate, and the engine sims
+# it ran on its merged head.
+dl: node scripts/simCmDecidingLeg.mjs
+dl-salt-a: DECIDING_LEG_SALT=a node scripts/simCmDecidingLeg.mjs
+dl-salt-b: DECIDING_LEG_SALT=b node scripts/simCmDecidingLeg.mjs
+dl-salt-c: DECIDING_LEG_SALT=c node scripts/simCmDecidingLeg.mjs
+dl-board: DECIDING_LEG_CONTROL=board node scripts/simCmDecidingLeg.mjs
+dl-morale: DECIDING_LEG_CONTROL=morale node scripts/simCmDecidingLeg.mjs
+dl-fans: DECIDING_LEG_CONTROL=fans node scripts/simCmDecidingLeg.mjs
+dl-tieall: DECIDING_LEG_CONTROL=tieall node scripts/simCmDecidingLeg.mjs
+dl-hattrick: DECIDING_LEG_CONTROL=hattrick node scripts/simCmDecidingLeg.mjs
+dl-nogate: DECIDING_LEG_CONTROL=nogate node scripts/simCmDecidingLeg.mjs
+dl-cutover: DECIDING_LEG_CONTROL=cutover node scripts/simCmDecidingLeg.mjs
+dl-boardsize: DECIDING_LEG_CONTROL=boardsize node scripts/simCmDecidingLeg.mjs
+dl-moralesize: DECIDING_LEG_CONTROL=moralesize node scripts/simCmDecidingLeg.mjs
+dl-relief: DECIDING_LEG_CONTROL=relief node scripts/simCmDecidingLeg.mjs
+vitest-1603: node_modules/.bin/vitest run src/test/managerHotSeatTieStamp.test.tsx src/test/cmDecidingLegCard.test.tsx src/test/managerPenaltyMarkers.test.tsx src/test/managerQuickSimLegs.test.tsx src/test/cmReportBoardWord.test.tsx src/test/managerScorerMarks.test.tsx src/lib/clubManagerReportedScorers.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmMatchDay: node scripts/simCmMatchDay.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simUclLegs: node scripts/simUclLegs.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simCmSubs: node scripts/simCmSubs.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simCmShootoutResults: node scripts/simCmShootoutResults.mjs
+simUclLegMigration: node scripts/simUclLegMigration.mjs
