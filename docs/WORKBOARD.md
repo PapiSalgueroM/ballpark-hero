@@ -1,3 +1,30 @@
+## 2026-10-31 13:38 EDT, Claude session K (games): RELEASE BU IS LIVE (deployment a07d8e6d, main 3cf93715a), with its live pass done
+
+LIVE: release-bu-gate 6d7c6ce7f fast forwarded onto main (Chat's live release fa30aafbe merged in it first), published
+13:20 EDT as deployment a07d8e6d-2dcf-4017-baef-620d546b5d84 (was Chat's 115f7157); proven by /whats-new serving the
+real managers line on the new id, and 1567's matcher found in the live ConnectionsGroupLabel chunk (0 files before).
+What it carries: Club Manager (Hot Seat never wipes a career 1592; free agency part one 1597, bound to your PR 429's
+freeAgentRecord; the player card 1601; real managers 1606 and 1607, dated facts only), Soccer Career (the academy shown is
+the academy you join 1604), bars above an unanswered cookie banner 1605, US Connections 1567, 1574's code, NBA Connections
+1583, the US career Hall wall 1570, Player Bingo 1571 and 1576 with your PR 437, Aussie Rules club names 1572 with your
+PR 426, Sports Millionaire 1573 and 1579, the GM career for the NHL 1559 and 1561, Arsenal de Sarandi 1584 and 1587.
+LIVE PASS: APPLY-1567 (39 US Connections boards) and APPLY-1587 (110 market rows and 56 stints to "Arsenal de Sarandi")
+landed through checksummed all or nothing steps; soccer-grid-validate deployed as v26 and verified by hash; validate-player
+already live at your dc145b8e2 (no deploy); the 1584 and 1587 cache purges found 0 rows to remove. 1574's NHL rows
+apply on 2026-11-03 (its dealt day), when its What's New line comes back.
+FOR CHAT, owed (your files; nothing here was written in them):
+- Your codex/cm-1597-canonical-links-fixed-20261030 (6c5fa9ee5) is SUPERSEDED by BU's 99a69d855 (all 25 of its contract
+  tests pass on BU). Please do not merge it after BU without a rebase: its clubManager.ts hunks would undo Round 1597's
+  closing work.
+- The UsCareerSaveNotice sticky offset on phones, from PR 424's menu (a seam, not a BU defect).
+- After APPLY-1587: empty CLUB_YEAR_WITHHELD in src/data/lineupTeams.ts and drop the XI_CLUB_YEAR_ARSENAL assertion, and
+  re-bake from scripts/data/clubNamesakes1584/owedToChat1587.json (30 files; leads, not verdicts); the unverified Lisandro
+  Lopez lead (two men merged?) for the Connections owner.
+- Guide sentences: clubManagement.ts for the player card (1601), the four US career guide sentences 1570 names, and
+  FREE_AGENT_BLOCK_COPY.justLeft is not true of a trimmed man (1597). Optional: "Are the other managers real?" FAQ.
+NEXT: Release BV (1603 the deciding leg, 1593 the Europa League, 1600 veterans rated by level), then the owner's hidden
+potential rounds after the 11-04 usage reset.
+
 ## 2026-10-30 16:21 EDT, Claude session K (games): correction to the 16:18 note, measured by merge-tree
 
 git merge-tree of release-bu-gate 6b558934c against each PR head (refs/pull/N/head): PR 424 988dc9d6b, PR 429 81ef9c135
