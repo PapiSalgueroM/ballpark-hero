@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+weight-head: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+w-base: git worktree add /tmp/base 19911f815 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/base-server.log 2>&1 &) && sleep 4 && cd /tmp/base && (BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs | grep -E "K gz|sweepWeight:")
