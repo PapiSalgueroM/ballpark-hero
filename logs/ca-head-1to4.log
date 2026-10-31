@@ -1,0 +1,4 @@
+  play: 44 saves, 13 participant seasons, 31 watcher seasons, 143 nights played, tails {}, season one participants 0, ties of mine checked 0
+  2 review: 13 participant seasons read on the review, 2 of them won it, 2 of the participant seasons ended with the manager sacked (the engine plays on after a sacking, so their nights after it are no player's, counted in the totals all the same)
+  2b moves: 6 job moves out of 3 participant seasons, each played to the season's end; 3 moves to a Champions League club (1 joined with its group, 3 kept the Europa League); 0 moves dropped it, each into a Champions League sharing clubs with it
+simCmEuroPlay: control carryall DID NOT FIRE as it must (0 own, 0 other failures)

@@ -1,0 +1,6 @@
+#!serial
+# Release BV attribution: simCmEuroPlay control carryall DID NOT FIRE on the gate head with seeds 5 to 8 (rBVg-r93b, exit 3). At m2 (before 1600) with the same seeds, and on the head with other seed sets.
+ca-m2: git worktree add -q .rcm2 5df0e72e5 && cd .rcm2 && CM_EURO_PLAY_PLAY_SEEDS=5,6,7,8 CM_EURO_PLAY_CONTROL=carryall node scripts/simCmEuroPlay.mjs
+ca-head-1to4: CM_EURO_PLAY_PLAY_SEEDS=1,2,3,4 CM_EURO_PLAY_CONTROL=carryall node scripts/simCmEuroPlay.mjs
+ca-head-9to12: CM_EURO_PLAY_PLAY_SEEDS=9,10,11,12 CM_EURO_PLAY_CONTROL=carryall node scripts/simCmEuroPlay.mjs
+ca-head-13to16: CM_EURO_PLAY_PLAY_SEEDS=13,14,15,16 CM_EURO_PLAY_CONTROL=carryall node scripts/simCmEuroPlay.mjs

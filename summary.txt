@@ -1,0 +1,4 @@
+ca-m2 exit=1 55s | simCmEuroPlay: control carryall FIRED (2 failures, all its own)
+ca-head-1to4 exit=3 57s | simCmEuroPlay: control carryall DID NOT FIRE as it must (0 own, 0 other failures)
+ca-head-9to12 exit=3 58s | simCmEuroPlay: control carryall DID NOT FIRE as it must (0 own, 0 other failures)
+ca-head-13to16 exit=3 60s | simCmEuroPlay: control carryall DID NOT FIRE as it must (0 own, 0 other failures)
