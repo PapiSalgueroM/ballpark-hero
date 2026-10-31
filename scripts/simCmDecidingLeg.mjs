@@ -82,7 +82,17 @@
    had shown +1.24 through, because a leg at 100 passed on the clamp. Controls boardsize, moralesize and relief each
    FIRED with only their own size check red (every sign check stayed green), board and morale FIRED on both.
 
-   Run: node scripts/simCmDecidingLeg.mjs   (DECIDING_LEG_CAREERS, DECIDING_LEG_REPLAYS, DECIDING_LEG_SECTION) */
+   THE EUROPA LEAGUE (Release BV join, Round 1593's bind 3, 2026-10-31). Round 1593 plays a club's own Europa
+   League from season two through the same second leg block, so a Europa League deciding leg is judged by the tie
+   with no second copy of the logic. decidingLegAt now reads the 'uel' second leg too (the engine's own
+   uelLegTonight, exported in HEAD and OLD alike by a probe line that changes nothing), and section 1 plays
+   Europa League candidates (UEL_CAREERS) after the Champions League fleet: season one, the rollover on every
+   engine, then season two to its last Europa League night, HEAD and OLD in lockstep as above, until one candidate
+   meets a deciding second leg (check "careers: a Europa League career meets a deciding second leg"). Its legs join
+   the leg fleet, the gate and the hauls like any other.
+
+   Run: node scripts/simCmDecidingLeg.mjs   (DECIDING_LEG_CAREERS, DECIDING_LEG_UEL_CAREERS, DECIDING_LEG_REPLAYS,
+   DECIDING_LEG_SECTION) */
 import { build } from 'esbuild';
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
@@ -129,9 +139,13 @@ const CONTROL_CHECK = { board: 'legs: board', morale: 'legs: morale', fans: 'leg
    must be in the file exactly once, or the bundle aborts (exit 2). */
 const PATIENCE_LINE = '  const patience = club.tier === 1 ? 1.3 : club.tier === 2 ? 1.15 : club.tier === 3 ? 1 : 0.85;';
 const LIFT_LINE = '    if (captainPlayed && p.id === captainId) shift += CAPTAIN_MATCH_LIFT;';
+/* Release BV join (Round 1593's bind 3): the engine's own reading of a Europa League night of mine (leg 1, leg 2
+   or neither), exported in HEAD and OLD alike so decidingLegAt reads the 'uel' second leg the way the whistle does. */
+const UEL_LEG_LINE = 'function uelLegTonight(state: CareerState, entry: CalendarEntry): 0 | 1 | 2 {';
 const PROBES = [
   [CM, PATIENCE_LINE, `${PATIENCE_LINE} globalThis.__dlBoard?.push([confDelta, patience, state.press ? pressPatience(state.press.mood) : 1]);`],
   [CM, LIFT_LINE, `${LIFT_LINE} globalThis.__dlMorale?.push([p.id, shift, xiIdSet.has(p.id), captainPlayed, p.id === captainId]);`],
+  [CM, UEL_LEG_LINE, `export ${UEL_LEG_LINE}`],
 ];
 /* The control's own check must go red; these go red beside it and are printed. */
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -239,11 +253,32 @@ const CAREERS = [
   ['Bayern Munich', 'era2020'], ['Chelsea', 'era2020'],
 ];
 const FLEET = CAREERS.slice(0, Number(process.env.DECIDING_LEG_CAREERS || CAREERS.length));
+/* Release BV join (Round 1593's bind 3): Europa League careers. A club earns its place in season one and plays the
+   competition from season two, so a candidate plays season one, the rollover and season two to its last Europa
+   League night. Candidates are tried in this order until one meets a deciding second leg; the rest are not played.
+   Every name is a club of PLAY_FLEET_ALL in scripts/simCmEuroPlay.mjs (today's world, not a Champions League club). */
+const UEL_CAREERS = [['Aston Villa', 'now'], ['Real Betis', 'now'], ['Lazio', 'now'], ['Eintracht Frankfurt', 'now'],
+  ['Lyon', 'now'], ['Real Sociedad', 'now'], ['Braga', 'now'], ['AZ Alkmaar', 'now']];
+const UEL_FLEET = UEL_CAREERS.slice(0, Number(process.env.DECIDING_LEG_UEL_CAREERS ?? UEL_CAREERS.length));
 const OPTS = { skipHalftime: true };
 const step = (m, s, seed) => withStream(seed, () => m.cm.playNextEntry(clone(s), OPTS));
 function decidingLegAt(m, s) {
   const e = s.calendar?.[s.week];
+  if (e?.type === 'uel') return m.cm.uelLegTonight(s, e) === 2;
   return !!e && e.type === 'uclKo' && e.uclLeg === 2 && m.cm.uclLegsFor(s.eraId, e.uclRound) === 2 && s.uclKoRound === e.uclRound;
+}
+const legRound = s => (s.calendar[s.week]?.type === 'uel' ? 'uel' : s.calendar[s.week]?.uclRound);
+/* A Europa League career's window: season two's last Europa League night played (or the sack). */
+function uelWindowOver(s, seasonNo) {
+  if (s.sacked) return true;
+  if (seasonNo < 2) return false;
+  const lastUel = (s.calendar ?? []).reduce((m, e, i) => (e.type === 'uel' ? i : m), -1);
+  return s.week > lastUel;
+}
+/* finishSeason and startNextSeason on their own keyed streams, the same for every engine. */
+function rollover(m, s, tag) {
+  const f = withStream(keyOf(tag, 'finish'), () => m.cm.finishSeason(clone(s)));
+  return withStream(keyOf(tag, 'rollover'), () => m.cm.startNextSeason(f.state));
 }
 function legOf(report) {
   const t = report?.tie;
@@ -280,7 +315,10 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
   const baseBad = [];
   const parted = [];
   let inUcl = 0;
-  for (const [club, era] of FLEET) {
+  let uelMet = null;
+  const uelTried = [];
+  for (const [club, era, kind] of [...FLEET.map(c => [...c, 'ucl']), ...UEL_FLEET.map(c => [...c, 'uel'])]) {
+    if (kind === 'uel' && uelMet) break;
     const tag = `${club} ${era}`;
     const H = await fresh(headFile);
     const O = await fresh(oldFile);
@@ -291,16 +329,20 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
     let sB = B ? withStream(seed0, () => B.cm.startCareer(club, era)) : null;
     if (J(sH) !== J(sO)) identityBad.push(`${tag} at the start`);
     if (B && J(sB) !== J(sO)) baseBad.push(`${tag} at the start`);
-    if (sH.uclGroup === null) { console.log(`   ${tag}: not in the Champions League, skipped`); continue; }
-    inUcl += 1;
+    if (kind === 'ucl' && sH.uclGroup === null) { console.log(`   ${tag}: not in the Champions League, skipped`); continue; }
+    if (kind === 'ucl') inUcl += 1;
     let split = null;
     let guard = 0;
-    while (!windowOver(sH) && guard++ < 160) {
+    let seasonNo = 1;
+    let uelLegs = 0;
+    const over = s => (kind === 'uel' ? uelWindowOver(s, seasonNo) : windowOver(s));
+    while (!over(sH) && guard++ < (kind === 'uel' ? 400 : 160)) {
       const seed = keyOf(tag, sH.season, sH.week);
       const atLeg = decidingLegAt(H, sH);
       const pre = atLeg ? clone(sH) : null;
       const rH = step(H, sH, seed);
-      if (atLeg) legPre.push({ tag, week: sH.week, round: sH.calendar[sH.week].uclRound, pre, seed, walk: legOf(rH.report) });
+      if (atLeg && kind === 'uel') uelLegs += 1;
+      if (atLeg) legPre.push({ tag, week: sH.week, round: legRound(sH), pre, seed, walk: legOf(rH.report) });
       scanHauls(H, rH.report);
       if (!split || B) {
         const rO = step(O, sO, seed);
@@ -312,19 +354,42 @@ if (run('careers') || run('legs') || run('gate') || run('hauls')) {
         if (!split) {
           const leg = legOf(rH.report);
           const same = J(rH.state) === J(rO.state) && J(rH.report ?? null) === J(rO.report ?? null);
-          if (leg?.differ) split = { week: sH.week, round: sH.calendar[sH.week].uclRound, leg };
+          if (leg?.differ) split = { week: sH.week, round: legRound(sH), leg };
           else if (!same) { identityBad.push(`${tag} week ${sH.week} (${sH.calendar[sH.week]?.type})`); split = { week: sH.week, broken: true }; }
         }
         sO = rO.state;
       }
       sH = rH.state;
-      if (rH.kind === 'seasonOver') break;
+      if (rH.kind === 'seasonOver') {
+        if (kind !== 'uel' || seasonNo >= 2 || sH.sacked) break;
+        /* A Europa League candidate: season one is over, so the rollover on every engine, then season two. */
+        seasonNo = 2;
+        sH = rollover(H, sH, tag);
+        if (!split || B) {
+          const nO = rollover(O, sO, tag);
+          if (B) {
+            sB = rollover(B, sB, tag);
+            if (J(sB) !== baseJ(nO)) baseBad.push(`${tag} at the rollover`);
+          }
+          if (!split && J(sH) !== J(nO)) { identityBad.push(`${tag} at the rollover`); split = { week: sH.week, broken: true }; }
+          sO = nO;
+        }
+        if (!H.cm.uelParticipant(sH)) break;
+      }
     }
     if (split && !split.broken) parted.push(`${tag} week ${split.week} (${split.round}, night ${split.leg.night}, tie ${split.leg.tie}, ${split.leg.how})`);
+    if (kind === 'uel') {
+      const played = seasonNo >= 2 && H.cm.uelParticipant(sH);
+      uelTried.push(`${tag}: ${played ? `in the Europa League in season two, ${uelLegs} deciding second legs` : (sH.sacked ? 'sacked' : 'no Europa League place in season two')}`);
+      if (uelLegs > 0) uelMet = `${tag} (${uelLegs} deciding second legs)`;
+      console.log(`   ${tag} (Europa League candidate): ${split ? (split.broken ? 'BROKE' : `parted at week ${split.week}`) : `equal to week ${sH.week}`}; ${uelTried.at(-1)}`);
+      continue;
+    }
     console.log(`   ${tag}: ${split ? (split.broken ? 'BROKE' : `parted at week ${split.week}`) : `equal to week ${sH.week}`}; Champions League ${sH.uclKoRound ?? 'group'}`);
   }
   console.log(`   ${inUcl} careers in the Champions League, ${parted.length} parted at a deciding leg: ${parted.join('; ') || 'none'}`);
   check('careers: identity (HEAD equals OLD to the first deciding leg where night and tie differ)', identityBad.length === 0 && inUcl >= 8, identityBad.slice(0, 3).join('; ') || `${inUcl} careers`);
+  if (UEL_FLEET.length) check('careers: a Europa League career meets a deciding second leg (Round 1593, the Release BV join)', !!uelMet, uelMet ?? uelTried.join('; '));
   if (baseFile) check('careers: OLD is the base tree, week for week over the whole window (a named haul read as the old words)', baseBad.length === 0, baseBad.slice(0, 3).join('; ') || `${namedHauls} saves or reports carried a named haul`);
   console.log(`   ${legPre.length} deciding second legs met (${legPre.filter(l => l.walk?.differ).length} differing on the walk's own dice)`);
 }
