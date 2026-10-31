@@ -1,0 +1,7 @@
+#!playwright
+#!serial
+# Release BV attribution: playCmWorldMoves (exit 2 on the gate head, rBVg-gj2) on each state built in its own worktree (the walk serves its own dist), and simCmEuroPlay control rawlength (missing from lane r93b).
+wm-base: git worktree add /tmp/base 19911f815 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1) && cd /tmp/base && ENGINES=chromium node scripts/playCmWorldMoves.mjs
+wm-m1: git worktree add /tmp/m1 68f7432d6 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m1/node_modules && (cd /tmp/m1 && node_modules/.bin/vite build > /tmp/m1-build.log 2>&1) && cd /tmp/m1 && ENGINES=chromium node scripts/playCmWorldMoves.mjs
+wm-m2: git worktree add /tmp/m2 5df0e72e5 >/dev/null 2>&1 && ln -s "$PWD/node_modules" /tmp/m2/node_modules && (cd /tmp/m2 && node_modules/.bin/vite build > /tmp/m2-build.log 2>&1) && cd /tmp/m2 && ENGINES=chromium node scripts/playCmWorldMoves.mjs
+c-rawlength: CM_EURO_PLAY_CONTROL=rawlength node scripts/simCmEuroPlay.mjs
