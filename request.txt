@@ -1,0 +1,28 @@
+# Release BV, Round 1600 (veterans rated by level): its new harnesses and controls (each exit 1), the CUSTOM_VALUE_CONTROL
+# spelling the harness reads, and the final gate lines of finish-1600.md (r1600-s16a and the balance gates of s16b).
+vitest-1600: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts src/lib/clubManagerOwnClubLevel.test.ts src/lib/clubManagerTrajectory.test.ts src/lib/cmMatchDisplay.test.ts src/test/cmFreeAgentOldLedger1600.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmLevelReads: node scripts/simCmLevelReads.mjs
+lr-exit: CM_LEVEL_READS_CONTROL=exit node scripts/simCmLevelReads.mjs
+lr-pointsfirst: CM_LEVEL_READS_CONTROL=pointsfirst node scripts/simCmLevelReads.mjs
+lr-noeraread: CM_LEVEL_READS_CONTROL=noeraread node scripts/simCmLevelReads.mjs
+simCmDailyView: node scripts/simCmDailyView.mjs
+dv-stuck: CM_DAILY_VIEW_CONTROL=stuck node scripts/simCmDailyView.mjs
+dv-off: CM_DAILY_VIEW_CONTROL=off node scripts/simCmDailyView.mjs
+simBoardAsks: node scripts/simBoardAsks.mjs
+ba-nopromise: BOARD_ASKS_CONTROL=nopromise node scripts/simBoardAsks.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+cv-capall: CUSTOM_VALUE_CONTROL=capall node scripts/simCustomClubValues.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simCmDifficulty: node scripts/simCmDifficulty.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simCmLedgerBound: node scripts/simCmLedgerBound.mjs
+simCmInternationals: node scripts/simCmInternationals.mjs
+simRoles: node scripts/simRoles.mjs
+simPress: node scripts/simPress.mjs
+simEras: node scripts/simEras.mjs
+simClubManagerScore: node scripts/simClubManagerScore.mjs
+simTransfers: node scripts/simTransfers.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCreateClub: node scripts/simCreateClub.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
