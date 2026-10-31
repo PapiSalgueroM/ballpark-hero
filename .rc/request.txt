@@ -1,0 +1,9 @@
+#!serial
+lr: node scripts/simCmLeagueRules.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+size-d: node scripts/simClubManagerSaveSize.mjs
+size-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+sl-d: node scripts/simClubManagerSlots.mjs
+sl-dupe: SLOTS_CONTROL=dupe node scripts/simClubManagerSlots.mjs
+vt-chat94b: git checkout 94b5dda5a -- src/test/cmFreeAgentCanonicalLinks.test.ts src/test/cmFreeAgentRetention.test.ts src/test/fixtures/cmCanonicalLinks && node_modules/.bin/vitest run src/test/cmFreeAgentCanonicalLinks.test.ts src/test/cmFreeAgentRetention.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git rm -r -q --cached src/test/cmFreeAgentCanonicalLinks.test.ts src/test/cmFreeAgentRetention.test.ts src/test/fixtures/cmCanonicalLinks; rm -f src/test/cmFreeAgentCanonicalLinks.test.ts src/test/cmFreeAgentRetention.test.ts; rm -rf src/test/fixtures/cmCanonicalLinks; exit $s
+vt-chat94b-old: git checkout 9a8445ef8 -- src/lib/clubManager.ts && git checkout 94b5dda5a -- src/test/cmFreeAgentCanonicalLinks.test.ts src/test/cmFreeAgentRetention.test.ts src/test/fixtures/cmCanonicalLinks && node_modules/.bin/vitest run src/test/cmFreeAgentCanonicalLinks.test.ts src/test/cmFreeAgentRetention.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout HEAD -- src/lib/clubManager.ts; git rm -r -q --cached src/test/cmFreeAgentCanonicalLinks.test.ts src/test/cmFreeAgentRetention.test.ts src/test/fixtures/cmCanonicalLinks; rm -f src/test/cmFreeAgentCanonicalLinks.test.ts src/test/cmFreeAgentRetention.test.ts; rm -rf src/test/fixtures/cmCanonicalLinks; exit $s
