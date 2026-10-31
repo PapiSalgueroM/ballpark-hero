@@ -1,0 +1,6 @@
+#!serial
+# Release BV attribution: simCmShootoutOrder (4 failures) and simCmShootoutResults (exit 2, a pinned engine copy lacks freeAgencyCarry) on the gate head (rBVg-r03), each on a checkout of the BASE 19911f815 and of m2 5df0e72e5 (before 1600).
+order-base: git worktree add -q .rcob 19911f815 && cd .rcob && node scripts/simCmShootoutOrder.mjs
+results-base: (test -d .rcob || git worktree add -q .rcob 19911f815) && cd .rcob && node scripts/simCmShootoutResults.mjs
+order-m2: git worktree add -q .rcom2 5df0e72e5 && cd .rcom2 && node scripts/simCmShootoutOrder.mjs
+results-m2: (test -d .rcom2 || git worktree add -q .rcom2 5df0e72e5) && cd .rcom2 && node scripts/simCmShootoutResults.mjs
