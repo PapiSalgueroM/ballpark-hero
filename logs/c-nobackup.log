@@ -1,0 +1,92 @@
+NEGATIVE CONTROL ON: a picked career is replaced without a kept aside copy; section 5 must go red
+5) A manager who keeps the job carries on in Club Manager
+  FAIL: Manchester United seed 3363520565 (h): the replaced career has 0 kept aside copies
+  FAIL: Manchester United seed 3363520565 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Leeds United seed 3876630285 (h): the replaced career has 0 kept aside copies
+  FAIL: Leeds United seed 3876630285 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Southampton seed 2129143751 (h): the replaced career has 0 kept aside copies
+  FAIL: Southampton seed 2129143751 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Bristol City seed 2505143299 (h): the replaced career has 0 kept aside copies
+  FAIL: Bristol City seed 2505143299 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Villarreal seed 2527425588 (h): the replaced career has 0 kept aside copies
+  FAIL: Villarreal seed 2527425588 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Rayo Vallecano seed 46472915 (h): the replaced career has 0 kept aside copies
+  FAIL: Rayo Vallecano seed 46472915 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: AC Milan seed 354240859 (h): the replaced career has 0 kept aside copies
+  FAIL: AC Milan seed 354240859 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Bayer Leverkusen seed 1978703287 (h): the replaced career has 0 kept aside copies
+  FAIL: Bayer Leverkusen seed 1978703287 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Lyon seed 3145330018 (h): the replaced career has 0 kept aside copies
+  FAIL: Lyon seed 3145330018 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: PSV seed 2792087670 (h): the replaced career has 0 kept aside copies
+  FAIL: PSV seed 2792087670 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Utrecht seed 545450603 (h): the replaced career has 0 kept aside copies
+  FAIL: Utrecht seed 545450603 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Al-Ahli seed 604329556 (h): the replaced career has 0 kept aside copies
+  FAIL: Al-Ahli seed 604329556 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: NEOM SC seed 2045875097 (h): the replaced career has 0 kept aside copies
+  FAIL: NEOM SC seed 2045875097 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Atlanta United seed 1940166480 (h): the replaced career has 0 kept aside copies
+  FAIL: Atlanta United seed 1940166480 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: New York Red Bulls seed 3722624121 (h): the replaced career has 0 kept aside copies
+  FAIL: New York Red Bulls seed 3722624121 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Vancouver Whitecaps seed 1296218415 (h): the replaced career has 0 kept aside copies
+  FAIL: Vancouver Whitecaps seed 1296218415 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: San Diego FC seed 3037863773 (h): the replaced career has 0 kept aside copies
+  FAIL: San Diego FC seed 3037863773 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Benfica seed 4127816210 (h): the replaced career has 0 kept aside copies
+  FAIL: Benfica seed 4127816210 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Vitória Guimarães seed 662549376 (h): the replaced career has 0 kept aside copies
+  FAIL: Vitória Guimarães seed 662549376 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Rangers seed 4166563788 (h): the replaced career has 0 kept aside copies
+  FAIL: Rangers seed 4166563788 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Celtic seed 3271775616 (h): the replaced career has 0 kept aside copies
+  FAIL: Celtic seed 3271775616 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Fenerbahçe seed 2644371663 (h): the replaced career has 0 kept aside copies
+  FAIL: Fenerbahçe seed 2644371663 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Alanyaspor seed 1036092406 (h): the replaced career has 0 kept aside copies
+  FAIL: Alanyaspor seed 1036092406 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: St. Pauli seed 181223470 (h): the replaced career has 0 kept aside copies
+  FAIL: St. Pauli seed 181223470 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Union Saint-Gilloise seed 2601737660 (h): the replaced career has 0 kept aside copies
+  FAIL: Union Saint-Gilloise seed 2601737660 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Sint-Truiden seed 2004413658 (h): the replaced career has 0 kept aside copies
+  FAIL: Sint-Truiden seed 2004413658 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: RB Salzburg seed 4031434727 (h): the replaced career has 0 kept aside copies
+  FAIL: RB Salzburg seed 4031434727 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Rapid Wien seed 4188792220 (h): the replaced career has 0 kept aside copies
+  FAIL: Rapid Wien seed 4188792220 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Olympiacos seed 1583074016 (h): the replaced career has 0 kept aside copies
+  FAIL: Olympiacos seed 1583074016 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: AEK Athens seed 1264500175 (h): the replaced career has 0 kept aside copies
+  FAIL: AEK Athens seed 1264500175 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: FC Midtjylland seed 4219463631 (h): the replaced career has 0 kept aside copies
+  FAIL: FC Midtjylland seed 4219463631 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Young Boys seed 3876892485 (h): the replaced career has 0 kept aside copies
+  FAIL: Young Boys seed 3876892485 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Basel seed 1134408367 (h): the replaced career has 0 kept aside copies
+  FAIL: Basel seed 1134408367 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Hajduk Split seed 2868281908 (h): the replaced career has 0 kept aside copies
+  FAIL: Hajduk Split seed 2868281908 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Corinthians seed 792915288 (h): the replaced career has 0 kept aside copies
+  FAIL: Corinthians seed 792915288 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: São Paulo seed 2206950394 (h): the replaced career has 0 kept aside copies
+  FAIL: São Paulo seed 2206950394 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Guadalajara seed 465234352 (h): the replaced career has 0 kept aside copies
+  FAIL: Guadalajara seed 465234352 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Sydney FC seed 2669063318 (h): the replaced career has 0 kept aside copies
+  FAIL: Sydney FC seed 2669063318 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Wellington Phoenix seed 708376328 (h): the replaced career has 0 kept aside copies
+  FAIL: Wellington Phoenix seed 708376328 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Nantes seed 3877975989 (h): the replaced career has 0 kept aside copies
+  FAIL: Nantes seed 3877975989 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Reims seed 311012506 (h): the replaced career has 0 kept aside copies
+  FAIL: Reims seed 311012506 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+  FAIL: Rodina Moscow seed 3981509664 (h): the replaced career has 0 kept aside copies
+  FAIL: Rodina Moscow seed 3981509664 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 2 and the store changed
+   54 setups in 27 leagues: 42 handed over (0 on a reprieve) from 25 leagues, 37 played to the end of the season, 5 sacked in Club Manager on the way, 25 sacked runs refused, 2 with a window before the next fixture, 167 of the previous manager's messages left behind
+   slot arms on 42 survivors: emptyDevice 42, keptSlotOne 42, intoSlotOne 42, fullAsked 42, damagedKept 42, pointsCleared 42, rolledBack 0, picked 0, changedRefused 42
+  FAIL: the slot arm rolledBack held on only 0 of 42 survivors (floor 20)
+  FAIL: the slot arm picked held on only 0 of 42 survivors (floor 20)
+
+simManagerHotSeat: 86 failure(s)

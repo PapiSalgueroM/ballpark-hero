@@ -1,0 +1,9 @@
+vitest exit=0 7s |    Duration  6.69s (transform 2.95s, setup 301ms, collect 6.44s, tests 3.44s, environment 1.13s, prepare 508ms)
+c-clobber exit=1 31s | simManagerHotSeat: 470 failure(s)
+simCmSavePoints exit=0 70s | simCmSavePoints: OK, all eight sections green
+hs exit=0 84s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+c-damagedfree exit=1 31s | simManagerHotSeat: 172 failure(s)
+c-nopoints exit=1 32s | simManagerHotSeat: 43 failure(s)
+c-norollback exit=1 25s | simManagerHotSeat: 43 failure(s)
+c-nobackup exit=1 27s | simManagerHotSeat: 86 failure(s)
+simClubManagerSlots exit=0 116s | simClubManagerSlots: all sections green

@@ -1,0 +1,476 @@
+NEGATIVE CONTROL ON: the handover writes over the career being played, the report fe949903 shape; section 5 must go red
+5) A manager who keeps the job carries on in Club Manager
+  FAIL: Manchester United seed 3363520565 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Manchester United seed 3363520565 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Manchester United seed 3363520565 (b): slot 1 opens on Manchester United week 12, not Fakel Voronezh week 0
+  FAIL: Manchester United seed 3363520565 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Manchester United seed 3363520565 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Manchester United seed 3363520565 (i): a slot changed into an unreadable save answered saved
+  FAIL: Manchester United seed 3363520565 (i): a slot changed into another career answered saved
+  FAIL: Manchester United seed 3363520565 (h): a picked slot answered saved, active slot 1
+  FAIL: Manchester United seed 3363520565 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Manchester United seed 3363520565 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Manchester United seed 3363520565 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Leeds United seed 3876630285 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Leeds United seed 3876630285 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Leeds United seed 3876630285 (b): slot 1 opens on Leeds United week 11, not Fakel Voronezh week 0
+  FAIL: Leeds United seed 3876630285 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Leeds United seed 3876630285 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Leeds United seed 3876630285 (i): a slot changed into an unreadable save answered saved
+  FAIL: Leeds United seed 3876630285 (i): a slot changed into another career answered saved
+  FAIL: Leeds United seed 3876630285 (h): a picked slot answered saved, active slot 1
+  FAIL: Leeds United seed 3876630285 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Leeds United seed 3876630285 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Leeds United seed 3876630285 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Southampton seed 2129143751 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Southampton seed 2129143751 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Southampton seed 2129143751 (b): slot 1 opens on Southampton week 13, not Fakel Voronezh week 0
+  FAIL: Southampton seed 2129143751 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Southampton seed 2129143751 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Southampton seed 2129143751 (i): a slot changed into an unreadable save answered saved
+  FAIL: Southampton seed 2129143751 (i): a slot changed into another career answered saved
+  FAIL: Southampton seed 2129143751 (h): a picked slot answered saved, active slot 1
+  FAIL: Southampton seed 2129143751 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Southampton seed 2129143751 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Southampton seed 2129143751 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Bristol City seed 2505143299 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Bristol City seed 2505143299 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Bristol City seed 2505143299 (b): slot 1 opens on Bristol City week 19, not Fakel Voronezh week 0
+  FAIL: Bristol City seed 2505143299 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Bristol City seed 2505143299 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Bristol City seed 2505143299 (i): a slot changed into an unreadable save answered saved
+  FAIL: Bristol City seed 2505143299 (i): a slot changed into another career answered saved
+  FAIL: Bristol City seed 2505143299 (h): a picked slot answered saved, active slot 1
+  FAIL: Bristol City seed 2505143299 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Bristol City seed 2505143299 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Bristol City seed 2505143299 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Villarreal seed 2527425588 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Villarreal seed 2527425588 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Villarreal seed 2527425588 (b): slot 1 opens on Villarreal week 20, not Fakel Voronezh week 0
+  FAIL: Villarreal seed 2527425588 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Villarreal seed 2527425588 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Villarreal seed 2527425588 (i): a slot changed into an unreadable save answered saved
+  FAIL: Villarreal seed 2527425588 (i): a slot changed into another career answered saved
+  FAIL: Villarreal seed 2527425588 (h): a picked slot answered saved, active slot 1
+  FAIL: Villarreal seed 2527425588 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Villarreal seed 2527425588 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Villarreal seed 2527425588 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Rayo Vallecano seed 46472915 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Rayo Vallecano seed 46472915 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Rayo Vallecano seed 46472915 (b): slot 1 opens on Rayo Vallecano week 21, not Fakel Voronezh week 0
+  FAIL: Rayo Vallecano seed 46472915 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Rayo Vallecano seed 46472915 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Rayo Vallecano seed 46472915 (i): a slot changed into an unreadable save answered saved
+  FAIL: Rayo Vallecano seed 46472915 (i): a slot changed into another career answered saved
+  FAIL: Rayo Vallecano seed 46472915 (h): a picked slot answered saved, active slot 1
+  FAIL: Rayo Vallecano seed 46472915 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Rayo Vallecano seed 46472915 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Rayo Vallecano seed 46472915 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: AC Milan seed 354240859 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: AC Milan seed 354240859 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: AC Milan seed 354240859 (b): slot 1 opens on AC Milan week 15, not Fakel Voronezh week 0
+  FAIL: AC Milan seed 354240859 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: AC Milan seed 354240859 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: AC Milan seed 354240859 (i): a slot changed into an unreadable save answered saved
+  FAIL: AC Milan seed 354240859 (i): a slot changed into another career answered saved
+  FAIL: AC Milan seed 354240859 (h): a picked slot answered saved, active slot 1
+  FAIL: AC Milan seed 354240859 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: AC Milan seed 354240859 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: AC Milan seed 354240859 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Bayer Leverkusen seed 1978703287 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Bayer Leverkusen seed 1978703287 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Bayer Leverkusen seed 1978703287 (b): slot 1 opens on Bayer Leverkusen week 14, not Fakel Voronezh week 0
+  FAIL: Bayer Leverkusen seed 1978703287 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Bayer Leverkusen seed 1978703287 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Bayer Leverkusen seed 1978703287 (i): a slot changed into an unreadable save answered saved
+  FAIL: Bayer Leverkusen seed 1978703287 (i): a slot changed into another career answered saved
+  FAIL: Bayer Leverkusen seed 1978703287 (h): a picked slot answered saved, active slot 1
+  FAIL: Bayer Leverkusen seed 1978703287 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Bayer Leverkusen seed 1978703287 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Bayer Leverkusen seed 1978703287 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Lyon seed 3145330018 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Lyon seed 3145330018 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Lyon seed 3145330018 (b): slot 1 opens on Lyon week 24, not Fakel Voronezh week 0
+  FAIL: Lyon seed 3145330018 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Lyon seed 3145330018 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Lyon seed 3145330018 (i): a slot changed into an unreadable save answered saved
+  FAIL: Lyon seed 3145330018 (i): a slot changed into another career answered saved
+  FAIL: Lyon seed 3145330018 (h): a picked slot answered saved, active slot 1
+  FAIL: Lyon seed 3145330018 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Lyon seed 3145330018 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Lyon seed 3145330018 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: PSV seed 2792087670 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: PSV seed 2792087670 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: PSV seed 2792087670 (b): slot 1 opens on PSV week 24, not Fakel Voronezh week 0
+  FAIL: PSV seed 2792087670 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: PSV seed 2792087670 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: PSV seed 2792087670 (i): a slot changed into an unreadable save answered saved
+  FAIL: PSV seed 2792087670 (i): a slot changed into another career answered saved
+  FAIL: PSV seed 2792087670 (h): a picked slot answered saved, active slot 1
+  FAIL: PSV seed 2792087670 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: PSV seed 2792087670 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: PSV seed 2792087670 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Utrecht seed 545450603 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Utrecht seed 545450603 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Utrecht seed 545450603 (b): slot 1 opens on Utrecht week 25, not Fakel Voronezh week 0
+  FAIL: Utrecht seed 545450603 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Utrecht seed 545450603 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Utrecht seed 545450603 (i): a slot changed into an unreadable save answered saved
+  FAIL: Utrecht seed 545450603 (i): a slot changed into another career answered saved
+  FAIL: Utrecht seed 545450603 (h): a picked slot answered saved, active slot 1
+  FAIL: Utrecht seed 545450603 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Utrecht seed 545450603 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Utrecht seed 545450603 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Al-Ahli seed 604329556 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Al-Ahli seed 604329556 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Al-Ahli seed 604329556 (b): slot 1 opens on Al-Ahli week 24, not Fakel Voronezh week 0
+  FAIL: Al-Ahli seed 604329556 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Al-Ahli seed 604329556 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Al-Ahli seed 604329556 (i): a slot changed into an unreadable save answered saved
+  FAIL: Al-Ahli seed 604329556 (i): a slot changed into another career answered saved
+  FAIL: Al-Ahli seed 604329556 (h): a picked slot answered saved, active slot 1
+  FAIL: Al-Ahli seed 604329556 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Al-Ahli seed 604329556 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Al-Ahli seed 604329556 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: NEOM SC seed 2045875097 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: NEOM SC seed 2045875097 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: NEOM SC seed 2045875097 (b): slot 1 opens on NEOM SC week 27, not Fakel Voronezh week 0
+  FAIL: NEOM SC seed 2045875097 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: NEOM SC seed 2045875097 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: NEOM SC seed 2045875097 (i): a slot changed into an unreadable save answered saved
+  FAIL: NEOM SC seed 2045875097 (i): a slot changed into another career answered saved
+  FAIL: NEOM SC seed 2045875097 (h): a picked slot answered saved, active slot 1
+  FAIL: NEOM SC seed 2045875097 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: NEOM SC seed 2045875097 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: NEOM SC seed 2045875097 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Atlanta United seed 1940166480 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Atlanta United seed 1940166480 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Atlanta United seed 1940166480 (b): slot 1 opens on Atlanta United week 26, not Fakel Voronezh week 0
+  FAIL: Atlanta United seed 1940166480 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Atlanta United seed 1940166480 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Atlanta United seed 1940166480 (i): a slot changed into an unreadable save answered saved
+  FAIL: Atlanta United seed 1940166480 (i): a slot changed into another career answered saved
+  FAIL: Atlanta United seed 1940166480 (h): a picked slot answered saved, active slot 1
+  FAIL: Atlanta United seed 1940166480 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Atlanta United seed 1940166480 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Atlanta United seed 1940166480 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: New York Red Bulls seed 3722624121 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: New York Red Bulls seed 3722624121 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: New York Red Bulls seed 3722624121 (b): slot 1 opens on New York Red Bulls week 23, not Fakel Voronezh week 0
+  FAIL: New York Red Bulls seed 3722624121 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: New York Red Bulls seed 3722624121 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: New York Red Bulls seed 3722624121 (i): a slot changed into an unreadable save answered saved
+  FAIL: New York Red Bulls seed 3722624121 (i): a slot changed into another career answered saved
+  FAIL: New York Red Bulls seed 3722624121 (h): a picked slot answered saved, active slot 1
+  FAIL: New York Red Bulls seed 3722624121 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: New York Red Bulls seed 3722624121 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: New York Red Bulls seed 3722624121 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Vancouver Whitecaps seed 1296218415 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Vancouver Whitecaps seed 1296218415 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Vancouver Whitecaps seed 1296218415 (b): slot 1 opens on Vancouver Whitecaps week 13, not Fakel Voronezh week 0
+  FAIL: Vancouver Whitecaps seed 1296218415 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Vancouver Whitecaps seed 1296218415 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Vancouver Whitecaps seed 1296218415 (i): a slot changed into an unreadable save answered saved
+  FAIL: Vancouver Whitecaps seed 1296218415 (i): a slot changed into another career answered saved
+  FAIL: Vancouver Whitecaps seed 1296218415 (h): a picked slot answered saved, active slot 1
+  FAIL: Vancouver Whitecaps seed 1296218415 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Vancouver Whitecaps seed 1296218415 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Vancouver Whitecaps seed 1296218415 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: San Diego FC seed 3037863773 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: San Diego FC seed 3037863773 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: San Diego FC seed 3037863773 (b): slot 1 opens on San Diego FC week 32, not Fakel Voronezh week 0
+  FAIL: San Diego FC seed 3037863773 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: San Diego FC seed 3037863773 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: San Diego FC seed 3037863773 (i): a slot changed into an unreadable save answered saved
+  FAIL: San Diego FC seed 3037863773 (i): a slot changed into another career answered saved
+  FAIL: San Diego FC seed 3037863773 (h): a picked slot answered saved, active slot 1
+  FAIL: San Diego FC seed 3037863773 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: San Diego FC seed 3037863773 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: San Diego FC seed 3037863773 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Benfica seed 4127816210 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Benfica seed 4127816210 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Benfica seed 4127816210 (b): slot 1 opens on Benfica week 19, not Fakel Voronezh week 0
+  FAIL: Benfica seed 4127816210 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Benfica seed 4127816210 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Benfica seed 4127816210 (i): a slot changed into an unreadable save answered saved
+  FAIL: Benfica seed 4127816210 (i): a slot changed into another career answered saved
+  FAIL: Benfica seed 4127816210 (h): a picked slot answered saved, active slot 1
+  FAIL: Benfica seed 4127816210 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Benfica seed 4127816210 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Benfica seed 4127816210 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Vitória Guimarães seed 662549376 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Vitória Guimarães seed 662549376 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Vitória Guimarães seed 662549376 (b): slot 1 opens on Vitória Guimarães week 17, not Fakel Voronezh week 0
+  FAIL: Vitória Guimarães seed 662549376 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Vitória Guimarães seed 662549376 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Vitória Guimarães seed 662549376 (i): a slot changed into an unreadable save answered saved
+  FAIL: Vitória Guimarães seed 662549376 (i): a slot changed into another career answered saved
+  FAIL: Vitória Guimarães seed 662549376 (h): a picked slot answered saved, active slot 1
+  FAIL: Vitória Guimarães seed 662549376 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Vitória Guimarães seed 662549376 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Vitória Guimarães seed 662549376 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Rangers seed 4166563788 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Rangers seed 4166563788 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Rangers seed 4166563788 (b): slot 1 opens on Rangers week 32, not Fakel Voronezh week 0
+  FAIL: Rangers seed 4166563788 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Rangers seed 4166563788 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Rangers seed 4166563788 (i): a slot changed into an unreadable save answered saved
+  FAIL: Rangers seed 4166563788 (i): a slot changed into another career answered saved
+  FAIL: Rangers seed 4166563788 (h): a picked slot answered saved, active slot 1
+  FAIL: Rangers seed 4166563788 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Rangers seed 4166563788 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Rangers seed 4166563788 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Celtic seed 3271775616 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Celtic seed 3271775616 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Celtic seed 3271775616 (b): slot 1 opens on Celtic week 25, not Fakel Voronezh week 0
+  FAIL: Celtic seed 3271775616 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Celtic seed 3271775616 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Celtic seed 3271775616 (i): a slot changed into an unreadable save answered saved
+  FAIL: Celtic seed 3271775616 (i): a slot changed into another career answered saved
+  FAIL: Celtic seed 3271775616 (h): a picked slot answered saved, active slot 1
+  FAIL: Celtic seed 3271775616 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Celtic seed 3271775616 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Celtic seed 3271775616 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Fenerbahçe seed 2644371663 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Fenerbahçe seed 2644371663 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Fenerbahçe seed 2644371663 (b): slot 1 opens on Fenerbahçe week 27, not Fakel Voronezh week 0
+  FAIL: Fenerbahçe seed 2644371663 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Fenerbahçe seed 2644371663 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Fenerbahçe seed 2644371663 (i): a slot changed into an unreadable save answered saved
+  FAIL: Fenerbahçe seed 2644371663 (i): a slot changed into another career answered saved
+  FAIL: Fenerbahçe seed 2644371663 (h): a picked slot answered saved, active slot 1
+  FAIL: Fenerbahçe seed 2644371663 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Fenerbahçe seed 2644371663 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Fenerbahçe seed 2644371663 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Alanyaspor seed 1036092406 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Alanyaspor seed 1036092406 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Alanyaspor seed 1036092406 (b): slot 1 opens on Alanyaspor week 23, not Fakel Voronezh week 0
+  FAIL: Alanyaspor seed 1036092406 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Alanyaspor seed 1036092406 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Alanyaspor seed 1036092406 (i): a slot changed into an unreadable save answered saved
+  FAIL: Alanyaspor seed 1036092406 (i): a slot changed into another career answered saved
+  FAIL: Alanyaspor seed 1036092406 (h): a picked slot answered saved, active slot 1
+  FAIL: Alanyaspor seed 1036092406 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Alanyaspor seed 1036092406 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Alanyaspor seed 1036092406 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: St. Pauli seed 181223470 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: St. Pauli seed 181223470 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: St. Pauli seed 181223470 (b): slot 1 opens on St. Pauli week 13, not Fakel Voronezh week 0
+  FAIL: St. Pauli seed 181223470 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: St. Pauli seed 181223470 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: St. Pauli seed 181223470 (i): a slot changed into an unreadable save answered saved
+  FAIL: St. Pauli seed 181223470 (i): a slot changed into another career answered saved
+  FAIL: St. Pauli seed 181223470 (h): a picked slot answered saved, active slot 1
+  FAIL: St. Pauli seed 181223470 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: St. Pauli seed 181223470 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: St. Pauli seed 181223470 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Union Saint-Gilloise seed 2601737660 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Union Saint-Gilloise seed 2601737660 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Union Saint-Gilloise seed 2601737660 (b): slot 1 opens on Union Saint-Gilloise week 23, not Fakel Voronezh week 0
+  FAIL: Union Saint-Gilloise seed 2601737660 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Union Saint-Gilloise seed 2601737660 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Union Saint-Gilloise seed 2601737660 (i): a slot changed into an unreadable save answered saved
+  FAIL: Union Saint-Gilloise seed 2601737660 (i): a slot changed into another career answered saved
+  FAIL: Union Saint-Gilloise seed 2601737660 (h): a picked slot answered saved, active slot 1
+  FAIL: Union Saint-Gilloise seed 2601737660 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Union Saint-Gilloise seed 2601737660 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Union Saint-Gilloise seed 2601737660 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Sint-Truiden seed 2004413658 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Sint-Truiden seed 2004413658 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Sint-Truiden seed 2004413658 (b): slot 1 opens on Sint-Truiden week 14, not Fakel Voronezh week 0
+  FAIL: Sint-Truiden seed 2004413658 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Sint-Truiden seed 2004413658 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Sint-Truiden seed 2004413658 (i): a slot changed into an unreadable save answered saved
+  FAIL: Sint-Truiden seed 2004413658 (i): a slot changed into another career answered saved
+  FAIL: Sint-Truiden seed 2004413658 (h): a picked slot answered saved, active slot 1
+  FAIL: Sint-Truiden seed 2004413658 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Sint-Truiden seed 2004413658 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Sint-Truiden seed 2004413658 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: RB Salzburg seed 4031434727 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: RB Salzburg seed 4031434727 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: RB Salzburg seed 4031434727 (b): slot 1 opens on RB Salzburg week 23, not Fakel Voronezh week 0
+  FAIL: RB Salzburg seed 4031434727 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: RB Salzburg seed 4031434727 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: RB Salzburg seed 4031434727 (i): a slot changed into an unreadable save answered saved
+  FAIL: RB Salzburg seed 4031434727 (i): a slot changed into another career answered saved
+  FAIL: RB Salzburg seed 4031434727 (h): a picked slot answered saved, active slot 1
+  FAIL: RB Salzburg seed 4031434727 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: RB Salzburg seed 4031434727 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: RB Salzburg seed 4031434727 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Rapid Wien seed 4188792220 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Rapid Wien seed 4188792220 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Rapid Wien seed 4188792220 (b): slot 1 opens on Rapid Wien week 21, not Fakel Voronezh week 0
+  FAIL: Rapid Wien seed 4188792220 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Rapid Wien seed 4188792220 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Rapid Wien seed 4188792220 (i): a slot changed into an unreadable save answered saved
+  FAIL: Rapid Wien seed 4188792220 (i): a slot changed into another career answered saved
+  FAIL: Rapid Wien seed 4188792220 (h): a picked slot answered saved, active slot 1
+  FAIL: Rapid Wien seed 4188792220 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Rapid Wien seed 4188792220 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Rapid Wien seed 4188792220 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Olympiacos seed 1583074016 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Olympiacos seed 1583074016 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Olympiacos seed 1583074016 (b): slot 1 opens on Olympiacos week 29, not Fakel Voronezh week 0
+  FAIL: Olympiacos seed 1583074016 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Olympiacos seed 1583074016 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Olympiacos seed 1583074016 (i): a slot changed into an unreadable save answered saved
+  FAIL: Olympiacos seed 1583074016 (i): a slot changed into another career answered saved
+  FAIL: Olympiacos seed 1583074016 (h): a picked slot answered saved, active slot 1
+  FAIL: Olympiacos seed 1583074016 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Olympiacos seed 1583074016 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Olympiacos seed 1583074016 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: AEK Athens seed 1264500175 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: AEK Athens seed 1264500175 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: AEK Athens seed 1264500175 (b): slot 1 opens on AEK Athens week 27, not Fakel Voronezh week 0
+  FAIL: AEK Athens seed 1264500175 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: AEK Athens seed 1264500175 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: AEK Athens seed 1264500175 (i): a slot changed into an unreadable save answered saved
+  FAIL: AEK Athens seed 1264500175 (i): a slot changed into another career answered saved
+  FAIL: AEK Athens seed 1264500175 (h): a picked slot answered saved, active slot 1
+  FAIL: AEK Athens seed 1264500175 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: AEK Athens seed 1264500175 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: AEK Athens seed 1264500175 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: FC Midtjylland seed 4219463631 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: FC Midtjylland seed 4219463631 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: FC Midtjylland seed 4219463631 (b): slot 1 opens on FC Midtjylland week 22, not Fakel Voronezh week 0
+  FAIL: FC Midtjylland seed 4219463631 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: FC Midtjylland seed 4219463631 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: FC Midtjylland seed 4219463631 (i): a slot changed into an unreadable save answered saved
+  FAIL: FC Midtjylland seed 4219463631 (i): a slot changed into another career answered saved
+  FAIL: FC Midtjylland seed 4219463631 (h): a picked slot answered saved, active slot 1
+  FAIL: FC Midtjylland seed 4219463631 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: FC Midtjylland seed 4219463631 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: FC Midtjylland seed 4219463631 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Young Boys seed 3876892485 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Young Boys seed 3876892485 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Young Boys seed 3876892485 (b): slot 1 opens on Young Boys week 27, not Fakel Voronezh week 0
+  FAIL: Young Boys seed 3876892485 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Young Boys seed 3876892485 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Young Boys seed 3876892485 (i): a slot changed into an unreadable save answered saved
+  FAIL: Young Boys seed 3876892485 (i): a slot changed into another career answered saved
+  FAIL: Young Boys seed 3876892485 (h): a picked slot answered saved, active slot 1
+  FAIL: Young Boys seed 3876892485 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Young Boys seed 3876892485 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Young Boys seed 3876892485 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Basel seed 1134408367 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Basel seed 1134408367 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Basel seed 1134408367 (b): slot 1 opens on Basel week 17, not Fakel Voronezh week 0
+  FAIL: Basel seed 1134408367 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Basel seed 1134408367 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Basel seed 1134408367 (i): a slot changed into an unreadable save answered saved
+  FAIL: Basel seed 1134408367 (i): a slot changed into another career answered saved
+  FAIL: Basel seed 1134408367 (h): a picked slot answered saved, active slot 1
+  FAIL: Basel seed 1134408367 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Basel seed 1134408367 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Basel seed 1134408367 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Hajduk Split seed 2868281908 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Hajduk Split seed 2868281908 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Hajduk Split seed 2868281908 (b): slot 1 opens on Hajduk Split week 20, not Fakel Voronezh week 0
+  FAIL: Hajduk Split seed 2868281908 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Hajduk Split seed 2868281908 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Hajduk Split seed 2868281908 (i): a slot changed into an unreadable save answered saved
+  FAIL: Hajduk Split seed 2868281908 (i): a slot changed into another career answered saved
+  FAIL: Hajduk Split seed 2868281908 (h): a picked slot answered saved, active slot 1
+  FAIL: Hajduk Split seed 2868281908 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Hajduk Split seed 2868281908 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Hajduk Split seed 2868281908 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Corinthians seed 792915288 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Corinthians seed 792915288 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Corinthians seed 792915288 (b): slot 1 opens on Corinthians week 20, not Fakel Voronezh week 0
+  FAIL: Corinthians seed 792915288 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Corinthians seed 792915288 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Corinthians seed 792915288 (i): a slot changed into an unreadable save answered saved
+  FAIL: Corinthians seed 792915288 (i): a slot changed into another career answered saved
+  FAIL: Corinthians seed 792915288 (h): a picked slot answered saved, active slot 1
+  FAIL: Corinthians seed 792915288 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Corinthians seed 792915288 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Corinthians seed 792915288 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: São Paulo seed 2206950394 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: São Paulo seed 2206950394 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: São Paulo seed 2206950394 (b): slot 1 opens on São Paulo week 26, not Fakel Voronezh week 0
+  FAIL: São Paulo seed 2206950394 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: São Paulo seed 2206950394 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: São Paulo seed 2206950394 (i): a slot changed into an unreadable save answered saved
+  FAIL: São Paulo seed 2206950394 (i): a slot changed into another career answered saved
+  FAIL: São Paulo seed 2206950394 (h): a picked slot answered saved, active slot 1
+  FAIL: São Paulo seed 2206950394 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: São Paulo seed 2206950394 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: São Paulo seed 2206950394 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Guadalajara seed 465234352 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Guadalajara seed 465234352 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Guadalajara seed 465234352 (b): slot 1 opens on Guadalajara week 25, not Fakel Voronezh week 0
+  FAIL: Guadalajara seed 465234352 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Guadalajara seed 465234352 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Guadalajara seed 465234352 (i): a slot changed into an unreadable save answered saved
+  FAIL: Guadalajara seed 465234352 (i): a slot changed into another career answered saved
+  FAIL: Guadalajara seed 465234352 (h): a picked slot answered saved, active slot 1
+  FAIL: Guadalajara seed 465234352 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Guadalajara seed 465234352 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Guadalajara seed 465234352 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Sydney FC seed 2669063318 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Sydney FC seed 2669063318 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Sydney FC seed 2669063318 (b): slot 1 opens on Sydney FC week 17, not Fakel Voronezh week 0
+  FAIL: Sydney FC seed 2669063318 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Sydney FC seed 2669063318 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Sydney FC seed 2669063318 (i): a slot changed into an unreadable save answered saved
+  FAIL: Sydney FC seed 2669063318 (i): a slot changed into another career answered saved
+  FAIL: Sydney FC seed 2669063318 (h): a picked slot answered saved, active slot 1
+  FAIL: Sydney FC seed 2669063318 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Sydney FC seed 2669063318 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Sydney FC seed 2669063318 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Wellington Phoenix seed 708376328 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Wellington Phoenix seed 708376328 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Wellington Phoenix seed 708376328 (b): slot 1 opens on Wellington Phoenix week 27, not Fakel Voronezh week 0
+  FAIL: Wellington Phoenix seed 708376328 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Wellington Phoenix seed 708376328 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Wellington Phoenix seed 708376328 (i): a slot changed into an unreadable save answered saved
+  FAIL: Wellington Phoenix seed 708376328 (i): a slot changed into another career answered saved
+  FAIL: Wellington Phoenix seed 708376328 (h): a picked slot answered saved, active slot 1
+  FAIL: Wellington Phoenix seed 708376328 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Wellington Phoenix seed 708376328 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Wellington Phoenix seed 708376328 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Nantes seed 3877975989 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Nantes seed 3877975989 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Nantes seed 3877975989 (b): slot 1 opens on Nantes week 19, not Fakel Voronezh week 0
+  FAIL: Nantes seed 3877975989 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Nantes seed 3877975989 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Nantes seed 3877975989 (i): a slot changed into an unreadable save answered saved
+  FAIL: Nantes seed 3877975989 (i): a slot changed into another career answered saved
+  FAIL: Nantes seed 3877975989 (h): a picked slot answered saved, active slot 1
+  FAIL: Nantes seed 3877975989 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Nantes seed 3877975989 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Nantes seed 3877975989 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Reims seed 311012506 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Reims seed 311012506 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Reims seed 311012506 (b): slot 1 opens on Reims week 16, not Fakel Voronezh week 0
+  FAIL: Reims seed 311012506 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Reims seed 311012506 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Reims seed 311012506 (i): a slot changed into an unreadable save answered saved
+  FAIL: Reims seed 311012506 (i): a slot changed into another career answered saved
+  FAIL: Reims seed 311012506 (h): a picked slot answered saved, active slot 1
+  FAIL: Reims seed 311012506 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Reims seed 311012506 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Reims seed 311012506 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+  FAIL: Rodina Moscow seed 3981509664 (b): with a career in slot 1 the carry answered saved, active slot 1, slot 1 holds null
+  FAIL: Rodina Moscow seed 3981509664 (f): the free slot's old points stayed, or the kept career's points moved
+  FAIL: Rodina Moscow seed 3981509664 (b): slot 1 opens on Rodina Moscow week 20, not Fakel Voronezh week 0
+  FAIL: Rodina Moscow seed 3981509664 (c): with slot 2 active and full the carry answered saved, active slot 2
+  FAIL: Rodina Moscow seed 3981509664 (d): with all three slots full the carry answered saved and the store changed
+  FAIL: Rodina Moscow seed 3981509664 (i): a slot changed into an unreadable save answered saved
+  FAIL: Rodina Moscow seed 3981509664 (i): a slot changed into another career answered saved
+  FAIL: Rodina Moscow seed 3981509664 (h): a picked slot answered saved, active slot 1
+  FAIL: Rodina Moscow seed 3981509664 (e): with slot 2 unreadable the carry answered saved, active slot 1, slot 2 kept
+  FAIL: Rodina Moscow seed 3981509664 (g): a refused write on the parked write answered saved, active slot 1 and the store changed
+  FAIL: Rodina Moscow seed 3981509664 (g): a refused write on a parked replace, its kept aside copy answered saved, active slot 1 and the store changed
+   54 setups in 27 leagues: 42 handed over (0 on a reprieve) from 25 leagues, 37 played to the end of the season, 5 sacked in Club Manager on the way, 25 sacked runs refused, 2 with a window before the next fixture, 167 of the previous manager's messages left behind
+   slot arms on 42 survivors: emptyDevice 42, keptSlotOne 0, intoSlotOne 0, fullAsked 0, damagedKept 0, pointsCleared 0, rolledBack 0, picked 0, changedRefused 0
+  FAIL: the slot arm keptSlotOne held on only 0 of 42 survivors (floor 20)
+  FAIL: the slot arm intoSlotOne held on only 0 of 42 survivors (floor 20)
+  FAIL: the slot arm fullAsked held on only 0 of 42 survivors (floor 20)
+  FAIL: the slot arm damagedKept held on only 0 of 42 survivors (floor 20)
+  FAIL: the slot arm pointsCleared held on only 0 of 42 survivors (floor 20)
+  FAIL: the slot arm rolledBack held on only 0 of 42 survivors (floor 20)
+  FAIL: the slot arm picked held on only 0 of 42 survivors (floor 20)
+  FAIL: the slot arm changedRefused held on only 0 of 42 survivors (floor 20)
+
+simManagerHotSeat: 470 failure(s)
