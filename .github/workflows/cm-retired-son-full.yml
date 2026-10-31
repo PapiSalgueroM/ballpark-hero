@@ -1,0 +1,177 @@
+name: Club Manager retired son full default suite
+on:
+  push:
+    branches: [codex/cm-retired-son-full-history-20261031]
+permissions:
+  contents: read
+jobs:
+  full-default:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: 'true'
+      SIM_NETWORK: offline
+      GIT_OPTIONAL_LOCKS: '0'
+      EXPECTED_MAIN: 19911f815ac713e8d3718cd0ee8592942a18fd00
+      EXPECTED_PARENT: d64b7686031ee022b17c63384315b64ae1e8fe4c
+      EXPECTED_TREE: 45b51f8e66adcd7a4518ac7a48a2ea0e60d3be3e
+      TEST_SHA256: 4c28f5e6eee81217be0fabafe42585222e499df1f7428057c9c395129d5c77fa
+      CONTROLLER_SHA256: cb203ac6b14b639cc6ceb721e1f7d5cc502c5ccc5705204609ce8cb53804834d
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Bind fixed product and exact shared qualification source
+        run: |
+          set -euo pipefail
+          runner_temp=$(realpath "$RUNNER_TEMP")
+          workspace=$(realpath "$PWD")
+          case "$runner_temp/" in "$workspace/"*) exit 1;; esac
+          out="$runner_temp/cm-retired-son-full"
+          test ! -e "$out"
+          mkdir -p "$out/runtime-tmp"
+          echo "CM_FULL_OUT=$out" >> "$GITHUB_ENV"
+          echo "PLACEMENT_OUT=$out" >> "$GITHUB_ENV"
+          echo "TMPDIR=$out/runtime-tmp" >> "$GITHUB_ENV"
+          test "$GITHUB_REF_NAME" = codex/cm-retired-son-full-history-20261031
+          test "$(git rev-list --parents -n1 HEAD)" = "$GITHUB_SHA $EXPECTED_PARENT"
+          test "$(git rev-list --parents -n1 "$EXPECTED_PARENT")" = "$EXPECTED_PARENT $EXPECTED_MAIN"
+          test "$(git rev-parse "$EXPECTED_PARENT^{tree}")" = "$EXPECTED_TREE"
+          test "$(git ls-files | wc -l)" -eq 5633
+          git diff --name-status "$EXPECTED_MAIN" "$EXPECTED_PARENT" > "$out/product.paths"
+          printf 'M\tsrc/components/club-manager/AcademyScreen.tsx\nM\tsrc/components/club-manager/ClubManagerHelp.tsx\nM\tsrc/lib/clubManager.ts\nA\tsrc/lib/clubManagerRetiredSonActions.ts\nM\tsrc/pages/ClubManager.tsx\nM\tsrc/test/academyFilters.test.tsx\nA\tsrc/test/clubManagerRetiredSon.test.ts\n' > "$out/expected-product.paths"
+          cmp "$out/product.paths" "$out/expected-product.paths"
+          git diff --name-status "$EXPECTED_PARENT" HEAD > "$out/proof.paths"
+          printf 'A\t.github/workflows/cm-retired-son-full.yml\nA\tscripts/qa/cmRetiredSonFull.cjs\n' > "$out/expected-proof.paths"
+          cmp "$out/proof.paths" "$out/expected-proof.paths"
+          test "$(sha256sum src/test/clubManagerRetiredSon.test.ts | cut -d' ' -f1)" = "$TEST_SHA256"
+          test "$(sha256sum scripts/qa/cmRetiredSonFull.cjs | cut -d' ' -f1)" = "$CONTROLLER_SHA256"
+          test "$(git hash-object src/lib/clubManager.ts)" = c536fde7afe03e77db48962e60030159056ce8fa
+          test "$(git hash-object src/lib/clubManagerRetiredSonActions.ts)" = a05051de70852334dcb471efe8f1672d006a4c82
+          test "$(git hash-object src/components/club-manager/AcademyScreen.tsx)" = 625912401ce727f6bd009bfed79b9c5f2b2213d4
+          test "$(git hash-object src/components/club-manager/ClubManagerHelp.tsx)" = 8d96271103035dbfdb83f6294d840c35175ddddb
+          test "$(git hash-object src/pages/ClubManager.tsx)" = d243cedf40a1f2375d01138e27f3a432ba20bd26
+          test "$(git hash-object scripts/sweepWeight.mjs)" = 21d47bdf97c1d7a924dc0d9f6825c09bfbdc0c85
+          cat > "$out/historical-required.tsv" <<'HISTORY'
+          56356be9a5d4d310f1759c09ba8e3811a8a05c1b	src/lib/frontOffice.ts	d8b522aa7e7701525350c392269deec346aad578
+          56356be9a5d4d310f1759c09ba8e3811a8a05c1b	src/data/frontOfficePlayers.ts	fc9d3b3eff5bb32e02045d184f6da956d16d6a24
+          56356be9a5d4d310f1759c09ba8e3811a8a05c1b	src/data/frontOfficeDepth.ts	ead49841cef31d56fdb1ea655d799a17a9725781
+          0c66a55929dfe8d6493a86aa00a28ef0ed2db25d	src/lib/frontOffice.ts	b6cbc80a636fc678f5e8d12d270393e2b5f959e9
+          0c66a55929dfe8d6493a86aa00a28ef0ed2db25d	src/data/frontOfficePlayers.ts	fc9d3b3eff5bb32e02045d184f6da956d16d6a24
+          0c66a55929dfe8d6493a86aa00a28ef0ed2db25d	src/data/frontOfficeDepth.ts	5f894d576901b0e157cec4b19c00da07c3bebe5c
+          e8b39ccc39f763351d4439c833b853c2e3ed2188	src/lib/nbaFrontOffice.ts	7754be07c1843e795bb95f3aeae8d8c5c3b100e5
+          e8b39ccc39f763351d4439c833b853c2e3ed2188	src/lib/nbaSeasonStats.ts	1ab419866a2a1c57d3fc34fd38087ac6fca74dce
+          e8b39ccc39f763351d4439c833b853c2e3ed2188	src/lib/nbaRotation.ts	acd7dbb36dda24f640647613e0daf63caff7d7cf
+          e8b39ccc39f763351d4439c833b853c2e3ed2188	src/data/conquestDataNba.ts	e1d7a088605c264ea7139e0c9fd3020191557271
+          6b7596d2c009802e6c011492ae1cefa8af29c62a	src/lib/nhlFrontOffice.ts	1e1882ca10bdaace7f5135cdbf13a1932a6c6791
+          6b7596d2c009802e6c011492ae1cefa8af29c62a	src/data/nhlFoPlayers.ts	b4fe8f8fdf970a9c876211ff306901c5cb341129
+          31a4ec01f13dde6ce5614d371f5aa135e08ef8da	src/lib/cageClash.ts	5a71e48523a1261f3842f46819b1dae2ed190af2
+          2b7dda2951fb9b63e76a2af66970cb682f312105	src/lib/cageClash.ts	1bedbee6b0ca319fc230082e0319d6e5f18a5048
+          HISTORY
+          : > "$out/historical-observed.tsv"
+          while IFS=$'\t' read -r commit file expected; do
+            actual=$(git rev-parse "$commit:$file")
+            test "$actual" = "$expected"
+            git cat-file -e "$commit:$file"
+            printf '%s\t%s\t%s\n' "$commit" "$file" "$actual" >> "$out/historical-observed.tsv"
+          done < "$out/historical-required.tsv"
+          git ls-files -z | sort -z > "$out/source-members.initial"
+          xargs -0 sha256sum < "$out/source-members.initial" > "$out/source.initial.sha256"
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.initial"
+          test ! -s "$out/untracked.initial"
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.before"
+          git rev-parse HEAD > "$out/head.txt"
+          git rev-parse 'HEAD^{tree}' > "$out/tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          cp scripts/qa/cmRetiredSonFull.cjs "$out/full-default-controller.cjs"
+          cmp scripts/qa/cmRetiredSonFull.cjs "$out/full-default-controller.cjs"
+          sha256sum "$out/full-default-controller.cjs" > "$out/controller-copy.sha256"
+          raw=0
+          node --check scripts/qa/cmRetiredSonFull.cjs > "$out/syntax.stdout" 2> "$out/syntax.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/syntax.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/syntax.stdout"
+          test ! -s "$out/syntax.stderr"
+      - name: Locked dependencies and actual application types
+        run: |
+          set -euo pipefail
+          out="$CM_FULL_OUT"
+          raw=0
+          env -u NODE_OPTIONS npm ci > "$out/npm-ci.stdout" 2> "$out/npm-ci.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/npm-ci.exit"
+          test "$raw" -eq 0
+          raw=0
+          : > "$out/types.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/types.transport" timeout --signal=TERM --kill-after=15s 3m node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json > "$out/types.stdout" 2> "$out/types.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/types.exit"
+          test "$raw" -eq 0
+          test ! -s "$out/types.stdout"
+          test ! -s "$out/types.stderr"
+          test ! -s "$out/types.transport"
+      - name: Actual collected positive identities and unfiltered default suite with ten controls
+        run: |
+          set -euo pipefail
+          out="$CM_FULL_OUT"
+          raw=0
+          : > "$out/red.transport"
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$out/red.transport" timeout --signal=TERM --kill-after=15s 110m node "$out/full-default-controller.cjs" > "$out/red.stdout" 2> "$out/red.stderr" || raw=$?
+          printf '%s\n' "$raw" > "$out/red.exit"
+          if test "$raw" -ne 0; then
+            sed -n '1,100p' "$out/red.stderr"
+            tail -n 40 "$out/red.stdout"
+          fi
+          test "$raw" -eq 0
+          test ! -s "$out/red.stderr"
+          test ! -s "$out/red.transport"
+          grep -Fqx 'CM_RETIRED_SON_DEFAULT_GREEN: actual unfiltered npm test matched actual collected positive identities with zero failures/runtime errors, exact58 source-owned optional skips and12 retired-son cases;10 copied classifier refusals/restores passed.' "$out/red.stdout"
+          test "$(cat "$out/full-suite/raw.exit")" -eq 0
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-held.log"
+          find node_modules -type f -print0 | sort -z > "$out/dependencies.members.post"
+          xargs -0 sha256sum < "$out/dependencies.members.post" > "$out/dependencies.post.sha256"
+          find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.post"
+      - name: Always preserve source and qualification evidence
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          runner_temp=$(realpath "$RUNNER_TEMP")
+          workspace=$(realpath "$PWD")
+          case "$runner_temp/" in "$workspace/"*) exit 1;; esac
+          out="$runner_temp/cm-retired-son-full"
+          mkdir -p "$out"
+          failed=0
+          git ls-files -z | sort -z > "$out/source-members.final"
+          cmp "$out/source-members.initial" "$out/source-members.final" || failed=1
+          sha256sum -c "$out/source.initial.sha256" > "$out/source-held.log" 2>&1 || failed=1
+          git ls-files --others --exclude-standard -z | sort -z > "$out/untracked.final"
+          cmp "$out/untracked.initial" "$out/untracked.final" || failed=1
+          git diff --exit-code HEAD > "$out/working-source.diff" || failed=1
+          git for-each-ref --format='%(refname) %(objectname)' > "$out/refs.after"
+          cmp "$out/refs.before" "$out/refs.after" || failed=1
+          sha256sum -c "$out/controller-copy.sha256" > "$out/controller-copy-final-held.log" 2>&1 || failed=1
+          if test -f "$out/dependencies.post.sha256"; then
+            find node_modules -type f -print0 | sort -z > "$out/dependencies.members.final"
+            cmp "$out/dependencies.members.post" "$out/dependencies.members.final" || failed=1
+            sha256sum -c "$out/dependencies.post.sha256" > "$out/dependencies-final-held.log" 2>&1 || failed=1
+            find node_modules -type l -printf '%p -> %l\n' | sort > "$out/dependency-links.final"
+            cmp "$out/dependency-links.post" "$out/dependency-links.final" || failed=1
+          else
+            printf 'POST_QUALIFICATION_DEPENDENCY_SNAPSHOT_NOT_CREATED\n' > "$out/dependencies-not-created.txt"
+            failed=1
+          fi
+          printf '%s\n' "$failed" > "$out/final-holds.exit"
+          printf '{"scope":"ACTUAL_UNFILTERED_DEFAULT_SUITE_ONLY","applicationFix":true,"fullSuite":"READ_ACTUAL_ADMISSION_AND_LITERAL_IDENTITIES","sourceCollection":"ACTUAL_POSITIVE_IDENTITIES_PREREQUISITE","capPolicy":"CURRENT_UPSTREAM_MAIN21D47_UNCHANGED_CAPS_NOT_RUN_IN_THIS_PROFILE","optionalProfilesExecuted":false,"runtimeCallbackErrors":"READ_ACTUAL_CALLBACK","focusedInverseProof":"SEPARATE_FOCUSED_BRANCH","build":"UNRUN","browser":"UNRUN","caps":"UNRUN","builtReaders":"UNRUN","globalSims":"UNRUN","featureReady":false,"dependencyInventoryScope":"POST_QUALIFICATION_ONLY"}\n' > "$out/SCOPE.json"
+          find "$out" -type f -print0 | sort -z | xargs -0 sha256sum > "$RUNNER_TEMP/cm-retired-son-full-evidence.sha256"
+          cp "$RUNNER_TEMP/cm-retired-son-full-evidence.sha256" "$out/evidence.sha256"
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: cm-retired-son-full-${{ github.run_id }}-a${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-retired-son-full
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
