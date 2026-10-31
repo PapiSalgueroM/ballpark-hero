@@ -1,0 +1,8 @@
+#!serial
+# Release BV attribution on f11a6575d (lane r00 on 40bee2a4f): simCmLedgerBound section 1 (3, matchday timings under load) alone; simCareerLeagueSeasons 582 failures (section a) on the head alone, the BASE, m2 and Round 1600's own head; simCreateClub (1) on the BASE.
+ledger-alone: node scripts/simCmLedgerBound.mjs
+cls-head: node scripts/simCareerLeagueSeasons.mjs
+cls-base: git worktree add -q .rcb 19911f815 && cd .rcb && node scripts/simCareerLeagueSeasons.mjs
+cls-m2: git worktree add -q .rcm2 5df0e72e5 && cd .rcm2 && node scripts/simCareerLeagueSeasons.mjs
+cls-1600: git worktree add -q .rc16 ed30d7601 && cd .rc16 && node scripts/simCareerLeagueSeasons.mjs
+cc-base: (test -d .rcb || git worktree add -q .rcb 19911f815) && cd .rcb && node scripts/simCreateClub.mjs
