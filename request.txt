@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+# Release BU lane n3: Round 1572's walk and its bundlename control (exit 1).
+walk: node scripts/playAflClubNames.mjs
+walk-bundlename: PLAY_AFL_NAMES_CONTROL=bundlename node scripts/playAflClubNames.mjs

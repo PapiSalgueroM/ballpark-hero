@@ -1,0 +1,42 @@
+
+390 by 844
+  PASS (a) the menu drew 18 club tiles with a name on the list (18: Fremantle, Sydney Swans, Brisbane Lions, Hawthorn, Geelong Cats, Adelaide Crows, Melbourne, Western Bulldogs, Collingwood, Carlton, St Kilda, GWS Giants, Gold Coast Suns, North Melbourne, Port Adelaide, West Coast Eagles, Richmond, Essendon)
+  PASS (a) the 18 names are exactly the two sourced 2026 full forms
+  PASS (a) no sideways scroll (scrollWidth 390, innerWidth 390)
+  PASS (a) no tile name is clipped (0)
+  PASS (a) no page errors (0)
+  PASS (b) the header names the club picked (Essendon · Season 1)
+  PASS (b) two taps play the match, and the score card names two listed clubs (Essendon v Hawthorn)
+  PASS (b) the opened ladder sits in view (heading at 293 of 844, scrollY 47 to 47)
+  PASS (b) the ladder's 18 names are on the list (none off it)
+  PASS (b) the hub's Next match names a listed club (v Hawthorn)
+  PASS (b) no page errors (0)
+  PASS (c) an invented league career opens under its own name (Caldermere Comets · Season 1)
+  PASS (c) the Club panel offers the switch (Play on with the real AFL club names? Caldermere Comets become Fremantle. Players, results and your history stay exactly as they are.)
+  PASS (c) after the switch the header reads Fremantle · Season 1 and the offer is gone
+  PASS (c) the ladder's order and 108 numbers did not move
+  PASS (c) the ladder now prints the listed names (Hawthorn, Western Bulldogs, Geelong...)
+  PASS (c) a reload keeps the switch (Fremantle · Season 1)
+  PASS (c) no page errors (0)
+
+1280 by 800
+  PASS (a) the menu drew 18 club tiles with a name on the list (18: Fremantle, Sydney Swans, Brisbane Lions, Hawthorn, Geelong Cats, Adelaide Crows, Melbourne, Western Bulldogs, Collingwood, Carlton, St Kilda, GWS Giants, Gold Coast Suns, North Melbourne, Port Adelaide, West Coast Eagles, Richmond, Essendon)
+  PASS (a) the 18 names are exactly the two sourced 2026 full forms
+  PASS (a) no sideways scroll (scrollWidth 1280, innerWidth 1280)
+  PASS (a) no tile name is clipped (0)
+  PASS (a) no page errors (0)
+  PASS (b) the header names the club picked (Essendon · Season 1)
+  PASS (b) two taps play the match, and the score card names two listed clubs (Essendon v Western Bulldogs)
+  PASS (b) the opened ladder sits in view (heading at 292 of 800, scrollY 28 to 28)
+  PASS (b) the ladder's 18 names are on the list (none off it)
+  PASS (b) the hub's Next match names a listed club (v Western Bulldogs)
+  PASS (b) no page errors (0)
+  PASS (c) an invented league career opens under its own name (Caldermere Comets · Season 1)
+  PASS (c) the Club panel offers the switch (Play on with the real AFL club names? Caldermere Comets become Fremantle. Players, results and your history stay exactly as they are.)
+  PASS (c) after the switch the header reads Fremantle · Season 1 and the offer is gone
+  PASS (c) the ladder's order and 108 numbers did not move
+  PASS (c) the ladder now prints the listed names (Hawthorn, Western Bulldogs, Geelong...)
+  PASS (c) a reload keeps the switch (Fremantle · Season 1)
+  PASS (c) no page errors (0)
+
+playAflClubNames: 36 checks, 0 failures (a 0, b 0, c 0), 2 viewports, 4 routes walked, 13.9 s
