@@ -23,6 +23,7 @@ vi.mock('@/lib/clubManager', () => ({
   tripCost: () => 1,
   money: (n: number) => `£${n}`,
   moneyIn: () => (n: number) => `£${n}`,
+  retiredSonApplicationOf: () => null,
 }));
 
 function prospect(id: string, name: string, position: Prospect['position'], age: number, highGuess: number, fee = 0): Prospect {

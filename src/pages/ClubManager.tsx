@@ -1561,6 +1561,7 @@ const ClubManager = () => {
                   onRecall={g.callScoutHome}
                   onPromote={g.promote}
                   onRelease={g.release}
+                  onCommitRecruitment={g.commitRecruitment}
                 /></ScreenLoading>
               )}
 
