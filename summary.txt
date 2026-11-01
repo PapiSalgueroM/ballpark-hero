@@ -1,0 +1,12 @@
+mun-fasign exit=1 127s | simCmMadeUpNations: RED, 3 failure(s)
+mun-expiry exit=1 128s | simCmMadeUpNations: RED, 10 failure(s)
+mun exit=0 128s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+mun-nocarry exit=1 122s | simCmMadeUpNations: RED, 5 failure(s)
+mun-noledger exit=1 123s | simCmMadeUpNations: RED, 11 failure(s)
+fasign-before exit=2 2s | simCmMadeUpNations: CANNOT RUN: an edit's text is in clubManager.ts 0 times, it must be exactly once (    value: fa.value, generated: fa.generated, ...(fa.nation ? { nati
+mun-nopromote exit=1 126s | simCmMadeUpNations: RED, 12 failure(s)
+rivals exit=0 15s | No rival product names found. 0 findings.
+anchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+storage exit=0 3s | simStorageWrites: all green (owed: 12)
+tsc exit=0 71s | 
+mun-aiswap exit=1 105s | simCmMadeUpNations: RED, 10 failure(s)
