@@ -549,7 +549,7 @@ let moved = null;
     }
     ok(`the season after next: ${doors.back} signed back from the pool, ${doors.topUp} by the summer top up, ${doors.owned} at a club of the ledger, `
       + `${doors.left} left these leagues, ${doors.retired} retired${doors.refused.length ? `; refused: ${doors.refused.join(', ')}` : ''}`);
-    let back = 0;
+    let back = 0, kept = 0;
     const refused = [];
     for (const [name, want] of expiring) {
       const fa = (atWalk.freeAgents ?? []).find(f => f.name === name);
@@ -561,9 +561,10 @@ let moved = null;
       const after = mm.cm.playNextEntry(signed, { skipHalftime: true }).state;
       const got = after.squad.find(p => p.name === name)?.nation;
       if (got !== want) fail(`${name}, scouted as ${want}, was signed back from the pool the summer he walked as "${got}"`);
+      else kept += 1;
     }
     if (back < 2) fail(`only ${back} scouted boys could be signed back from the pool the summer they walked${refused.length ? ` (refused: ${refused.join(', ')})` : ''}, the free agency door was not tried`);
-    else ok(`${back} scouted boys signed back from the pool the summer they walked kept the trip's country through a match`);
+    else ok(`${back} scouted boys signed back from the pool the summer they walked, ${kept} of them with the trip's country through a match`);
   });
   ok(`${tracked.size} men tracked through the moves`);
 }
