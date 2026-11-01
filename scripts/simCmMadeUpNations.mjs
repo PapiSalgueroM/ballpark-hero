@@ -74,7 +74,10 @@ const CONTROLS = {
   aiswap: [{ file: E, from: "madeUpNationAt(player.name, from === state.clubName ? careerPlace(state) : clubPlace(from, state.eraId), state.eraId);",
     to: "madeUpNationAt(player.name, from === state.clubName ? careerPlace(state) : clubPlace(to, state.eraId), state.eraId);" }],
   expiry: [{ file: E, from: 'generated: madeUp(p) || undefined, ...(p.nation ? { nation: p.nation } : {}), since: career.season + 1,', to: 'generated: madeUp(p) || undefined, since: career.season + 1,' }],
-  fasign: [{ file: E, from: '    value: fa.value, generated: fa.generated, ...(fa.nation ? { nation: fa.nation } : {}),', to: '    value: fa.value, generated: fa.generated,' }],
+  /* Release BV: the sign back's line reads a ledger record too since 43f611ff1, so the old anchor stood nowhere and
+     the control could not run; the door now drops the country outright (a restored record can carry one as well). */
+  fasign: [{ file: E, from: '    value: fa.value, generated: restored ? madeUp(restored) : fa.generated, ...(fa.nation ? { nation: fa.nation } : {}),',
+    to: '    value: fa.value, generated: restored ? madeUp(restored) : fa.generated, nation: undefined,' }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) cannot(`CM_NATIONS_CONTROL=${CONTROL} is not a control this harness knows`);
 /* NONATION is the bridge every kit pinned to an older engine composes (scripts/lib/cmNoMadeUpNations1520.mjs): no
@@ -502,20 +505,65 @@ let moved = null;
     }
     if (recorded < 5) fail(`only ${recorded} of ${picks.length} AI deals of made up men were written, the ledger door was not tried`);
     else ok(`${keptAi} of ${recorded} made up men sold between two other clubs kept their country on the buyer's list`);
-    /* The review's fix: signed back from the pool the season after next, each keeps the trip's country. */
+    /* The review's fix: signed back from the pool, each keeps the trip's country. Release BV, after Round 1600: this
+       door's floor was read the season after next, and how many of the three are still on the list by then is a draw
+       of the world, not a rule. At that summer a made up man on the list leaves these leagues on dropOutChance (about
+       one in six at 19 and 63, leavesTheLeagues) and the summer top up may sign him: before Round 1600 two of the
+       three were still listed, on its head none (the top up signed one, two left). So the floor is read where every
+       boy surely is, the summer they walked, each signed back on a copy of the career (the career goes on untouched)
+       and taken through a match. The season after next keeps its sign back for the boys still listed and now accounts
+       for each of the three by a door the engine names: signed back there, signed by the top up (in my squad), owned
+       by a club in the world's ledger (on its roster), left these leagues (freeAgentsLeft) or retired
+       (freeAgentsRetired). Where he plays he has the trip's country; a boy behind none of the doors fails. */
+    const atWalk = structuredClone(s);
     let t = mm.cm.startNextSeason(playSeason(mm, s));
-    let back = 0;
+    const summer = t;
+    const doors = { back: 0, topUp: 0, owned: 0, left: 0, retired: 0, refused: [] };
     for (const [name, want] of expiring) {
-      if (!(t.freeAgents ?? []).some(f => f.name === name)) continue;
-      const signed = mm.cm.signFreeAgent({ ...t, budget: 9999, wageCap: 9999 }, name);
-      if (!signed) continue;
-      back += 1;
-      t = mm.cm.playNextEntry(signed, { skipHalftime: true }).state;
-      const got = t.squad.find(p => p.name === name)?.nation;
-      if (got !== want) fail(`${name}, scouted as ${want}, was signed back from the pool as "${got}"`);
+      const listed = (t.freeAgents ?? []).find(f => f.name === name);
+      if (listed) {
+        const signed = mm.cm.signFreeAgent({ ...t, budget: 9999, wageCap: 9999 }, name);
+        if (!signed) { doors.refused.push(`${name}: ${mm.cm.freeAgentBlock({ ...t, budget: 9999, wageCap: 9999 }, listed)}`); continue; }
+        doors.back += 1;
+        t = mm.cm.playNextEntry(signed, { skipHalftime: true }).state;
+        const got = t.squad.find(p => p.name === name)?.nation;
+        if (got !== want) fail(`${name}, scouted as ${want}, was signed back from the pool the season after next as "${got}"`);
+        continue;
+      }
+      const mine = summer.squad.find(p => p.name === name);
+      if (mine) {
+        doors.topUp += 1;
+        if (mine.nation !== want) fail(`${name}, scouted as ${want}, was signed back by the summer top up as "${mine.nation}"`);
+        continue;
+      }
+      const rec = (mm.wr.worldRosterView(summer)?.records ?? []).find(r => r.origin.name === name && r.owner && r.owner !== summer.clubName);
+      if (rec) {
+        doors.owned += 1;
+        const there = mm.cm.worldRosterFor(summer, rec.owner).find(p => p.n === name);
+        if (there?.nation !== want) fail(`${name}, scouted as ${want}, is on ${rec.owner}'s roster as "${there?.nation}"`);
+        continue;
+      }
+      if ((summer.freeAgentsLeft ?? []).some(l => l.name === name)) { doors.left += 1; continue; }
+      if ((summer.freeAgentsRetired ?? []).some(r => r.name === name)) { doors.retired += 1; continue; }
+      fail(`${name} is off the free agent list the season after next by no door the engine names`);
     }
-    if (back < 2) fail(`only ${back} scouted boys could be signed back from the pool, the free agency door was not tried`);
-    else ok(`${back} scouted boys signed back from the pool kept the trip's country through a match`);
+    ok(`the season after next: ${doors.back} signed back from the pool, ${doors.topUp} by the summer top up, ${doors.owned} at a club of the ledger, `
+      + `${doors.left} left these leagues, ${doors.retired} retired${doors.refused.length ? `; refused: ${doors.refused.join(', ')}` : ''}`);
+    let back = 0;
+    const refused = [];
+    for (const [name, want] of expiring) {
+      const fa = (atWalk.freeAgents ?? []).find(f => f.name === name);
+      if (!fa) continue;
+      const copy = { ...structuredClone(atWalk), budget: 9999, wageCap: 9999 };
+      const signed = mm.cm.signFreeAgent(copy, name);
+      if (!signed) { refused.push(`${name}: ${mm.cm.freeAgentBlock(copy, fa)}`); continue; }
+      back += 1;
+      const after = mm.cm.playNextEntry(signed, { skipHalftime: true }).state;
+      const got = after.squad.find(p => p.name === name)?.nation;
+      if (got !== want) fail(`${name}, scouted as ${want}, was signed back from the pool the summer he walked as "${got}"`);
+    }
+    if (back < 2) fail(`only ${back} scouted boys could be signed back from the pool the summer they walked${refused.length ? ` (refused: ${refused.join(', ')})` : ''}, the free agency door was not tried`);
+    else ok(`${back} scouted boys signed back from the pool the summer they walked kept the trip's country through a match`);
   });
   ok(`${tracked.size} men tracked through the moves`);
 }
