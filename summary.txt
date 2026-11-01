@@ -1,0 +1,4 @@
+tsc exit=0 71s | 
+ucl5 exit=0 161s | simWorldUcl: green, 154 checks, 0 failures
+ucl-holderin exit=1 140s | simWorldUcl: control holderin FIRED (20 failures, all its own)
+oo3 exit=0 737s | simOneOffCups: green, 14936 checks (736 s)

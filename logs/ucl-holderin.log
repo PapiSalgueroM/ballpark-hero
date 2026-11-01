@@ -1,0 +1,22 @@
+  5 the holder: 50 rollovers, 44 after a watched final, 37 winners already in the field (20 compared at or before the careers parted, 17 after it skipped; 20 of the compared in another order), 7 fields the holder changed: Aston Villa in for Crystal Palace; Inter Milan in for Monaco; Nottingham Forest in for Tottenham; Arsenal in for Crystal Palace; Aston Villa in for Eintracht Frankfurt; Arsenal in for Bayer Leverkusen; Liverpool in for RB Leipzig
+FAIL 5 holder: Chelsea (now) seed 1 s1-rollover: Liverpool was in the field already and the field still changed its clubs
+FAIL 5 holder: Chelsea (now) seed 2 s1-rollover: Atlético Madrid was in the field already and the field still changed its clubs
+FAIL 5 holder: Chelsea (now) seed 3 s1-rollover: Arsenal was in the field already and the field still changed its clubs
+FAIL 5 holder: Chelsea (now) seed 5 s1-rollover: Manchester City was in the field already and the field still changed its clubs
+FAIL 5 holder: Hoffenheim (now) seed 1 s1-rollover: Barcelona was in the field already and the field still changed its clubs
+FAIL 5 holder: Hoffenheim (now) seed 2 s1-rollover: Atlético Madrid was in the field already and the field still changed its clubs
+FAIL 5 holder: Hoffenheim (now) seed 3 s1-rollover: Arsenal was in the field already and the field still changed its clubs
+FAIL 5 holder: Hoffenheim (now) seed 4 s1-rollover: Barcelona was in the field already and the field still changed its clubs
+FAIL 5 holder: Hoffenheim (now) seed 5 s1-rollover: Arsenal was in the field already and the field still changed its clubs
+FAIL 5 holder: Everton (now) seed 2 s1-rollover: Real Madrid was in the field already and the field still changed its clubs
+FAIL 5 holder: Everton (now) seed 3 s1-rollover: Bayern Munich was in the field already and the field still changed its clubs
+FAIL 5 holder: Everton (now) seed 4 s1-rollover: Inter Milan was in the field already and the field still changed its clubs
+FAIL 5 holder: Everton (now) seed 5 s1-rollover: Inter Milan was in the field already and the field still changed its clubs
+FAIL 5 holder: América (now) seed 1 s1-rollover: Liverpool was in the field already and the field still changed its clubs
+FAIL 5 holder: América (now) seed 3 s1-rollover: Real Madrid was in the field already and the field still changed its clubs
+FAIL 5 holder: América (now) seed 4 s1-rollover: PSG was in the field already and the field still changed its clubs
+FAIL 5 holder: América (now) seed 5 s1-rollover: Barcelona was in the field already and the field still changed its clubs
+FAIL 5 holder: Proof Town Athletic (now) seed 2 s1-rollover: Atlético Madrid was in the field already and the field still changed its clubs
+FAIL 5 holder: Proof Town Athletic (now) seed 4 s1-rollover: Liverpool was in the field already and the field still changed its clubs
+FAIL 5 holder: Proof Town Athletic (now) seed 5 s1-rollover: Manchester City was in the field already and the field still changed its clubs
+simWorldUcl: control holderin FIRED (20 failures, all its own)

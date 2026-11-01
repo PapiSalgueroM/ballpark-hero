@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ucl5: WORLD_UCL_ONLY=5 node scripts/simWorldUcl.mjs
+oo3: ONE_OFF_ONLY=3 node scripts/simOneOffCups.mjs
+ucl-holderin: WORLD_UCL_CONTROL=holderin node scripts/simWorldUcl.mjs
