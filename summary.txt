@@ -1,0 +1,3 @@
+tsc exit=0 69s | 
+mun-fasign exit=1 101s | simCmMadeUpNations: RED, 3 failure(s)
+mun exit=0 102s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
