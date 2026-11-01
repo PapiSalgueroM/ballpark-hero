@@ -1,0 +1,12 @@
+oo-full: node scripts/simOneOffCups.mjs
+ucl-full: node scripts/simWorldUcl.mjs
+oo-form: ONE_OFF_CONTROL=form node scripts/simOneOffCups.mjs
+ucl-holderin: WORLD_UCL_CONTROL=holderin node scripts/simWorldUcl.mjs
+ucl-noholder: WORLD_UCL_CONTROL=noholder node scripts/simWorldUcl.mjs
+oo-stream: ONE_OFF_CONTROL=stream node scripts/simOneOffCups.mjs
+oo-participant: ONE_OFF_CONTROL=participant node scripts/simOneOffCups.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+trust: node scripts/simTrustCopy.mjs

@@ -1,0 +1,12 @@
+oo-form exit=1 1315s | simOneOffCups: control form FIRED (86 failures, all its own: 3 Arsenal (now) seed 3 coach at s1-rollover: the state differs in a key other than worldComps.dsc)
+ucl-holderin exit=1 195s | simWorldUcl: control holderin FIRED (20 failures, all its own)
+ucl-noholder exit=1 203s | simWorldUcl: control noholder FIRED (23 failures, all its own)
+ucl-full exit=0 1836s | simWorldUcl: green, 517280 checks, 0 failures
+oo-stream exit=1 1294s | simOneOffCups: control stream FIRED (86 failures, all its own: 3 Arsenal (now) seed 3 coach at s1-rollover: the draws differ (771 against 769))
+oo-full exit=0 3088s | simOneOffCups: green, 271081 checks (3088 s)
+tsc exit=0 84s | 
+rivals exit=0 20s | No rival product names found. 0 findings.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+trust exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+oo-participant exit=1 1297s | simOneOffCups: control participant FIRED (120 failures, all its own: 3 Arsenal (now) seed 1 coach at s1-e2: the draws differ (1442 against 1520))
+anchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

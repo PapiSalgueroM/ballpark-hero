@@ -1,0 +1,25 @@
+  5 the holder: 50 rollovers, 44 after a watched final, 32 winners already in the field (32 compared at or before the careers parted, 0 after it skipped; 0 of the compared in another order), 12 fields the holder changed: Aston Villa in for nobody; Arsenal in for nobody; Inter Milan in for nobody; Chelsea in for nobody; Arsenal in for nobody; Arsenal in for nobody; Chelsea in for nobody; Tottenham in for nobody
+FAIL 5 holder: Chelsea (now) seed 4 s1-rollover: the watched winner Aston Villa is not in next season's field
+FAIL 5 holder: Chelsea (now) seed 4 s1-rollover: the watched winner Aston Villa is not in next season's watched field
+FAIL 5 holder: Chelsea (now) seed 4 s2-rollover: the watched winner Arsenal is not in next season's field
+FAIL 5 holder: Chelsea (now) seed 4 s2-rollover: the watched winner Arsenal is not in next season's watched field
+FAIL 5 holder: Everton (now) seed 1 s1-rollover: the watched winner Inter Milan is not in next season's field
+FAIL 5 holder: Everton (now) seed 1 s1-rollover: the watched winner Inter Milan is not in next season's watched field
+FAIL 5 holder: Everton (now) seed 2 s2-rollover: the watched winner Chelsea is not in next season's field
+FAIL 5 holder: Everton (now) seed 2 s2-rollover: the watched winner Chelsea is not in next season's watched field
+FAIL 5 holder: América (now) seed 1 s2-rollover: the watched winner Arsenal is not in next season's field
+FAIL 5 holder: América (now) seed 2 s1-rollover: the watched winner Arsenal is not in next season's field
+FAIL 5 holder: América (now) seed 2 s1-rollover: the watched winner Arsenal is not in next season's watched field
+FAIL 5 holder: América (now) seed 2 s2-rollover: the watched winner Chelsea is not in next season's field
+FAIL 5 holder: América (now) seed 2 s2-rollover: the watched winner Chelsea is not in next season's watched field
+FAIL 5 holder: América (now) seed 4 s2-rollover: the watched winner Tottenham is not in next season's field
+FAIL 5 holder: América (now) seed 4 s2-rollover: the watched winner Tottenham is not in next season's watched field
+FAIL 5 holder: Proof Town Athletic (now) seed 1 s1-rollover: the watched winner Aston Villa is not in next season's field
+FAIL 5 holder: Proof Town Athletic (now) seed 1 s1-rollover: the watched winner Aston Villa is not in next season's watched field
+FAIL 5 holder: Proof Town Athletic (now) seed 3 s1-rollover: the watched winner Arsenal is not in next season's field
+FAIL 5 holder: Proof Town Athletic (now) seed 3 s1-rollover: the watched winner Arsenal is not in next season's watched field
+FAIL 5 holder: Proof Town Athletic (now) seed 3 s2-rollover: the watched winner Tottenham is not in next season's field
+FAIL 5 holder: Proof Town Athletic (now) seed 3 s2-rollover: the watched winner Tottenham is not in next season's watched field
+FAIL 5 holder: Proof Town Athletic (now) seed 5 s2-rollover: the watched winner Liverpool is not in next season's field
+FAIL 5 holder: Proof Town Athletic (now) seed 5 s2-rollover: the watched winner Liverpool is not in next season's watched field
+simWorldUcl: control noholder FIRED (23 failures, all its own)
