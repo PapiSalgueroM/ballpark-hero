@@ -1,0 +1,11 @@
+0) 10 live routes that are not submitted and ask not to be indexed
+1) every one of them has a document
+   10 of 10
+2) each one declares noindex in the HTML, before any JavaScript runs
+   10 documents, all declaring it
+3) none of them is a copy of the home page
+   10 documents, none of them the home page
+4) not in the sitemap, and no hashed paths in the committed copy
+   none submitted, 0 with a hashed path
+
+simHiddenPages: green. Every page we keep out of Google says so itself.

@@ -1,0 +1,9 @@
+1) 172 crawlable documents against 172 sitemap routes
+2) every sitemap route is linked from somewhere
+   0 orphans, thinnest linked route has 4 inbound, median 8
+3) the pages that exist to gather other pages
+   13 hubs, every one linked from most of the site; sport hubs 171 to 171 inbound
+4) no page is a dead end
+   outbound links: min 14 (/privacy), median 22, max 107
+
+simInternalLinks: green. Every page can be reached, and every page leads somewhere.
