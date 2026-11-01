@@ -1,0 +1,11 @@
+mun exit=0 177s | simCmMadeUpNations: green. Made up men carry a country of their own, drawn and kept honestly.
+mun-expiry exit=1 180s | simCmMadeUpNations: RED, 10 failure(s)
+mun-fasign exit=1 187s | simCmMadeUpNations: RED, 3 failure(s)
+mun-nocarry exit=1 179s | simCmMadeUpNations: RED, 5 failure(s)
+mun-noledger exit=1 181s | simCmMadeUpNations: RED, 11 failure(s)
+mun-nopromote exit=1 184s | simCmMadeUpNations: RED, 12 failure(s)
+rivals exit=0 25s | No rival product names found. 0 findings.
+anchors exit=0 72s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+storage exit=0 4s | simStorageWrites: all green (owed: 12)
+tsc exit=0 119s | 
+mun-aiswap exit=1 165s | simCmMadeUpNations: RED, 10 failure(s)

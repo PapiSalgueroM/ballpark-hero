@@ -1,0 +1,11 @@
+mun: node scripts/simCmMadeUpNations.mjs
+mun-fasign: CM_NATIONS_CONTROL=fasign node scripts/simCmMadeUpNations.mjs
+mun-expiry: CM_NATIONS_CONTROL=expiry node scripts/simCmMadeUpNations.mjs
+mun-nocarry: CM_NATIONS_CONTROL=nocarry node scripts/simCmMadeUpNations.mjs
+mun-noledger: CM_NATIONS_CONTROL=noledger node scripts/simCmMadeUpNations.mjs
+mun-nopromote: CM_NATIONS_CONTROL=nopromote node scripts/simCmMadeUpNations.mjs
+mun-aiswap: CM_NATIONS_CONTROL=aiswap node scripts/simCmMadeUpNations.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
