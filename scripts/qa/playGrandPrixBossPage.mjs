@@ -284,9 +284,11 @@ try {
               const asset = assets.get(parsed.pathname);
               if (!asset && parsed.pathname === '/favicon.ico') { row.localAssets.push({ path: parsed.pathname, status: 204, bytes: 0, sha256: null }); return await route.fulfill({ status: 204, body: '' }); }
               assert(asset, 'Only declared immutable fixture assets are served');
-              const [body, contentType] = asset;
-              row.localAssets.push({ path: parsed.pathname, status: 200, bytes: body.length, sha256: sha(body) });
-              return await route.fulfill({ status: 200, body, contentType });
+              const [body, contentType] = asset, payload = Buffer.from(body);
+              assert.equal(payload.length, body.length, 'Owned fixture payload length is preserved');
+              assert.equal(sha(payload), sha(body), 'Owned fixture payload bytes are preserved');
+              row.localAssets.push({ path: parsed.pathname, status: 200, bytes: payload.length, sha256: sha(payload), sourceSha256: sha(body), sourceBodyType: body.constructor.name, fulfilledBodyType: payload.constructor.name });
+              return await route.fulfill({ status: 200, body: payload, contentType });
             }
             const font = fonts.get(address);
             if (font) return await route.fulfill({ status: 200, body: font.body, contentType: font.contentType });
