@@ -1,0 +1,171 @@
+name: Soccer Career Community Shield screen baseline
+on:
+  push:
+    branches: [codex/sc-community-shield-ui-baseline-20261102]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the exact parent two additions and existing inputs
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-community-shield-ui-baseline"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-ui-baseline-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = cc9a55a2f35b6215d5e6e664cc401d10d7f76291
+          test "$(git rev-parse 'HEAD^^{tree}')" = 90d580e7007917a4959187bd449d054d63191b08
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\n' '.github/workflows/sc-community-shield-ui-baseline.yml' 'src/test/soccerCommunityShieldUiAcceptance.test.tsx' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/input-blobs.txt" <<'PINS'
+          src/lib/soccerCareerEngine.ts 722b2285628775dff77f8de0138cf44d7b104b49
+          src/lib/soccerCareerLeagueWorld.ts 72fcabdd0c557a743aa849b01208140c3030048f
+          src/lib/soccerPhone.ts f81e5a1b5207d776aea9594e28f130d0e8888832
+          src/test/fixtures/soccerSeasonCompetitions1173.ts a9d674dc7a830856dbeed148a65438626745303c
+          scripts/data/careerLeagueWorldSaves1100.json 81425f731297f0ff72fc4e163dfe1a4cb86814ab
+          src/lib/soccerSeasonCompetitions.ts d14c80a218f405215e58f0e860e6226c7733f826
+          src/lib/soccerSeasonCalendar.ts 6b8ebaaf2812c3f9d3f8f95fbc756e578535baba
+          src/components/soccer-career/TrophyCabinet.tsx 39184dbdc4bb6a70af1e9366239d26701d06796c
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          src/test/setup.ts df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          PINS
+          while read -r path blob; do test "$(git rev-parse "HEAD:$path")" = "$blob"; done < "$OUT/input-blobs.txt"
+          printf '%s\n' '7ad03f9f0b55e7f5b6501ad64791301d514d429f81b438b25507ebb3fbb73118  src/test/soccerCommunityShieldUiAcceptance.test.tsx' | sha256sum --check -
+          git diff --raw HEAD^ HEAD > "$OUT/tree-delta.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from offline proof
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Actual app types then exactly three owned screen absence assertions
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE
+          source "$OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          code=0
+          capture baseline node node_modules/vitest/vitest.mjs run src/test/soccerCommunityShieldUiAcceptance.test.tsx --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$OUT/baseline.vitest.json" || code=$?
+          test "$code" -eq 1
+          test ! -s "$OUT/baseline.transport"
+          cat > "$OUT/classify.mjs" <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          const dir=process.env.OUT, read=f=>fs.readFileSync(dir+'/'+f,'utf8');
+          const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const clean=s=>s.replace(/\x1b\[[0-9;]*m/g,'');
+          const original=read('baseline.vitest.json'), raw=read('baseline.stdout')+'\n'+read('baseline.stderr');
+          const suite='Soccer Career Community Shield screens';
+          const expected=new Map([
+            ['SC_SHIELD_UI_NAV: projects the recorded represented-club opening match into existing competitions','SC_SHIELD_UI_NAV_MISSING'],
+            ['SC_SHIELD_UI_OPENING: places a saved neutral opening before league game one','SC_SHIELD_UI_OPENING_MISSING'],
+            ['SC_SHIELD_UI_CABINET: lists the same valid played Shield win as its own trophy category','SC_SHIELD_UI_CABINET_MISSING'],
+          ]);
+          function classify(r) {
+            assert.equal(r.success,false);
+            for(const [k,n] of Object.entries({numTotalTests:3,numFailedTests:3,numPassedTests:0,numPendingTests:0,numTodoTests:0})) assert.equal(r[k],n);
+            assert.equal(r.testResults.length,1);
+            const s=r.testResults[0], seen=new Set();
+            assert(s.name.endsWith('/src/test/soccerCommunityShieldUiAcceptance.test.tsx'));
+            assert.equal(s.status,'failed'); assert.equal(s.message,''); assert.equal(s.assertionResults.length,3);
+            for(const row of s.assertionResults) {
+              assert(expected.has(row.title)&&!seen.has(row.title)); seen.add(row.title);
+              assert.deepEqual(row.ancestorTitles,[suite]); assert.equal(row.fullName,suite+' '+row.title);
+              assert.equal(row.status,'failed'); assert.equal(row.failureMessages.length,1);
+              const first=clean(row.failureMessages[0]).split(/\r?\n/).find(x=>x.trim())?.trim();
+              assert.equal(first?.startsWith('AssertionError: '+expected.get(row.title)+':'),true,'SC_BASELINE_PRIMARY_OWNERSHIP: '+row.title);
+            }
+            const counts={numUnhandledErrors:r.numUnhandledErrors??null,numRuntimeErrorTestSuites:r.numRuntimeErrorTestSuites??null};
+            for(const [k,v] of Object.entries(counts)) if(r[k]!==undefined){assert.equal(typeof v,'number');assert.equal(v,0);}
+            for(const k of ['errors','unhandledErrors']) if(r[k]!==undefined){assert(Array.isArray(r[k]));assert.equal(r[k].length,0);}
+            return counts;
+          }
+          assert.equal(Number(read('baseline.exit')),1);
+          assert(!/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled|ERR_MODULE_NOT_FOUND|Failed to load url|Cannot find module|SyntaxError:|ReferenceError:)/i.test(raw));
+          const report=JSON.parse(original), runtimeCounters=classify(report), copy=structuredClone(report);
+          const row=copy.testResults[0].assertionResults[0], marker=expected.get(row.title);
+          const frame=clean(read('baseline.stderr')).split(/\r?\n/).filter(s=>/^\s*\d+\|/.test(s)&&s.includes(marker));
+          assert(frame.length>0,'SC_BASELINE_CODE_FRAME_REQUIRED');
+          copy.diagnosticCodeFrame=frame.join('\n');
+          const healthy=JSON.stringify(copy,null,2)+'\n', file=dir+'/classifier-control.json';
+          fs.writeFileSync(file,healthy,{flag:'wx'}); classify(JSON.parse(read('classifier-control.json')));
+          row.failureMessages[0]=row.failureMessages[0].replace(marker,'UNOWNED_SHIELD_ASSERTION');
+          const mutant=JSON.stringify(copy,null,2)+'\n';
+          assert.notEqual(hash(mutant),hash(healthy)); assert(copy.diagnosticCodeFrame.includes(marker));
+          fs.writeFileSync(dir+'/classifier-control.mutant.json',mutant,{flag:'wx'}); fs.writeFileSync(file,mutant);
+          let error;
+          try{classify(JSON.parse(read('classifier-control.json')));}catch(e){error=e;}finally{fs.writeFileSync(file,healthy);}
+          assert.equal(error?.name,'AssertionError'); assert(error.message.startsWith('SC_BASELINE_PRIMARY_OWNERSHIP:'));
+          assert.equal(read('classifier-control.json'),healthy); classify(JSON.parse(read('classifier-control.json')));
+          assert.equal(read('baseline.vitest.json'),original);
+          fs.writeFileSync(dir+'/classifier-negative.json',JSON.stringify({changed:true,beforeSha256:hash(healthy),mutantSha256:hash(mutant),restoredSha256:hash(read('classifier-control.json')),preservedActualCodeFrame:copy.diagnosticCodeFrame,refusal:{name:error.name,message:error.message}},null,2)+'\n');
+          fs.writeFileSync(dir+'/summary.json',JSON.stringify({scope:'Three screen acceptance absences only.',ownedAssertionFailures:3,passed:0,skipped:0,todo:0,executed:3,classifierControls:{ownedRefusals:1,restored:true},runtimeCounters,runtimeCounterCompleteness:Object.values(runtimeCounters).some(v=>v===null)?'UNKNOWN':'REPORTED'},null,2)+'\n');
+          console.log('SC_SHIELD_UI_BASELINE: three primary-owned assertions; changed diagnostic-trap copy refused and restored.');
+          CHECK
+          capture classifier node "$OUT/classify.mjs"
+      - name: Always hold all source dependency bytes and source membership
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-community-shield-ui-baseline-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-community-shield-ui-baseline/
+          retention-days: 14
