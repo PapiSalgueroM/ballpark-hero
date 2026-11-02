@@ -1,0 +1,50 @@
+name: Report Palmer dismissal criterion verification
+on:
+  push:
+    branches: [codex/report-palmer-red-fixed-20261101]
+permissions:
+  contents: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      PLAYER_BINGO_PALMER_OUT: ${{ github.workspace }}/evidence/palmer
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked sources and dependencies
+        run: |
+          mkdir evidence
+          git rev-parse HEAD | tee evidence/head.txt
+          sha256sum package.json package-lock.json src/lib/playerBingo.ts src/test/playerBingoPalmerRed.test.ts scripts/simPlayerBingoPalmerRed.mjs > evidence/holds.txt
+          npm ci
+      - name: App types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee evidence/types.log
+      - name: Actual criterion, six source faults and restored outcomes
+        run: node scripts/simPlayerBingoPalmerRed.mjs 2>&1 | tee evidence/criterion.log
+      - name: Existing Bingo criterion regressions
+        run: |
+          for harness in simPlayerBingoHonours simPlayerBingoRodriHonour simPlayerBingoWorldCupAlias; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "evidence/$harness.log"
+          done
+      - name: Source holds
+        if: always()
+        run: sha256sum --check evidence/holds.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: palmer-focused-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
