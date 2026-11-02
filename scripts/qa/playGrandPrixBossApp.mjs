@@ -37,7 +37,7 @@ for (const [file, expected] of [
   ['src/lib/grandPrixBoss.ts', '3dcaa003a5f71b6d85db9b4fd4097c5f54bb97d90a863b78bc7604b3027d1911'],
   ['src/hooks/useGrandPrixBoss.ts', 'b06293c184ba51e002189973c0eb39c6f52616023bb9f17fb3a5b3f67e8d2260'],
   ['src/test/fixtures/grandPrixBossV5Starter.json', 'cf3b484781dbff04df9033d0e1dfe239e6d9562f5cf026db2e4b1e233162a028'],
-  ['scripts/qa/fixtures/siteFonts.captured.json', 'e0e0bbc34d41ebd3c926bd475dfee311b323137e26628bc3b93caaa6fd357993'],
+  ['scripts/qa/fixtures/siteFonts.captured.json', 'a6c24e3ec7711d400f53a1baf10a3a6a3925d1f269e48ee0cd14bdca5b749938'],
 ]) assert.equal(sha(held.get(file)), expected, 'Exact final App input: ' + file);
 const sourceReceipts = () => [...held].map(([file, bytes]) => ({ file, bytes: bytes.length, sha256: sha(bytes) }));
 write('source-before.json', sourceReceipts());
@@ -77,7 +77,7 @@ const fontRows = fontsPayload.entries;
 assert(Array.isArray(fontRows)); assert.equal(fontRows.length, 9);
 const fonts = new Map(fontRows.map(row => {
   const url = new URL(row.url); assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(url.origin));
-  assert.equal(row.encoding, 'gzip+base64'); const body = gunzipSync(Buffer.from(row.body, 'base64'));
+  assert.equal(row.encoding, 'gzip+hex'); const body = gunzipSync(Buffer.from(row.body, 'hex'));
   assert.equal(body.length, row.bytes); assert.equal(sha(body), row.sha256);
   return [row.url, { body, contentType: row.contentType, sha256: row.sha256 }];
 }));
@@ -287,6 +287,10 @@ async function collect(spec) {
       const focus = driver.focus === 'pace' ? 'wet' : 'pace', select = page.getByRole('combobox', { name: 'Development focus for ' + driver.name, exact: true });
       await target(select, 'Owned development focus');
       const action = { type: 'setDriverFocus', driverId: driver.id, focus, expectedRevision: career.revision };
+      await select.focus();
+      const focusedBeforeChange = await select.evaluate(el => el === document.activeElement);
+      row.focus.push({ name: 'Focus select before change', correct: focusedBeforeChange });
+      assert.equal(focusedBeforeChange, true, 'Focus setup before selecting the actual development option');
       await select.selectOption(focus); await page.waitForFunction(({ key, revision }) => JSON.parse(localStorage.getItem(key)).career.revision === revision, { key: gameKey, revision: career.revision + 1 });
       row.turns.push({ name: 'Save focus', action, before, after: await snapshot('focus-after') }); assert.equal(await select.inputValue(), focus); assert.match(await gameStatus(page).innerText(), /training focus saved\./); row.focus.push({ name: 'Saved native focus select', correct: await select.evaluate(el => el === document.activeElement) }); await shot('saved-focus');
       await back('Drivers'); await reload();
