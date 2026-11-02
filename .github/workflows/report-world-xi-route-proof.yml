@@ -1,7 +1,7 @@
 name: World XI archived roster actual route proof
 on:
   push:
-    branches: [codex/report-world-xi-route-proof-v2-20261102]
+    branches: [codex/report-world-xi-route-proof-v3-20261102]
 permissions:
   contents: read
   actions: read
@@ -12,15 +12,15 @@ jobs:
     env:
       CI: '1'
       ENGINES: chromium
-      WORLD_XI_ROUTE_OUT: ${{ runner.temp }}/world-xi-route-artifacts
-      FREE_KICK_FONT_CACHE: ${{ runner.temp }}/world-xi-route-artifacts/font-cache
+      WORLD_XI_ROUTE_OUT: ${{ github.workspace }}/world-xi-route-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/world-xi-route-artifacts/font-cache
     defaults:
       run:
         shell: bash
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 3
+          fetch-depth: 4
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -33,9 +33,9 @@ jobs:
         run: |
           set -euo pipefail
           out="$WORLD_XI_ROUTE_OUT"; mkdir "$out"
-          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-route-proof-v2-20261102
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-route-proof-v3-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = 93338f6bc7ceab51e48dc8fb00b240f693ccd80a
+          test "$(git rev-parse HEAD^)" = e704f70abbbf35514e4af0a4f15c041a0fd2425b
           git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
           git diff --exit-code ebb19d19e9f6e2fa42561cd80845176093b59b26 -- src public scripts/data index.html package.json package-lock.json
           printf '0d90fad86a05ea6761ff078550be643750a335cee43c47c57d6ac51eca97d69c  scripts/qa/captureWorldXiRoster.mjs\nf5fed87ebfe9a5f55d90f7fa30f3f1e8e4b7ac9c4d4d52b29d18989298c8983a  scripts/qa/playWorldXiRoute.mjs\n' | sha256sum --check -
@@ -72,7 +72,7 @@ jobs:
           name: world-xi-actual-route-41424730828
           run-id: 41424730828
           github-token: ${{ github.token }}
-          path: ${{ runner.temp }}/world-xi-route-artifacts/original-capture
+          path: ${{ github.workspace }}/world-xi-route-artifacts/original-capture
       - name: Bind the original capture and copy only offline payloads
         id: archive
         run: |
@@ -178,5 +178,5 @@ jobs:
         if: always()
         with:
           name: world-xi-actual-route-${{ github.run_id }}
-          path: ${{ runner.temp }}/world-xi-route-artifacts/
+          path: ${{ github.workspace }}/world-xi-route-artifacts/
           retention-days: 14
