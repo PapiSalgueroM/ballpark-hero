@@ -1,0 +1,193 @@
+name: Community Shield full ordinary units
+on:
+  push:
+    branches: [codex/sc-community-shield-full-units-20261102]
+permissions:
+  contents: read
+jobs:
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind final qualified match parent and one workflow addition
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-shield-full-units"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          parent='1b0e7543c58372ab36b5dbc4bde3f7597ece5bd5'
+          tree='3041fcea83599279d19a991a61aaecaacf6ff872'
+          [[ "$parent" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$tree" =~ ^[0-9a-f]{40}$ ]]
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-full-units-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = "$parent"
+          test "$(git rev-parse 'HEAD^^{tree}')" = "$tree"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\n' '.github/workflows/sc-community-shield-full-units.yml' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          src/lib/soccerCareerEngine.ts 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          src/lib/soccerCareerExtraCups.ts ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          src/test/soccerCommunityShieldAcceptance.test.ts 72cf4787781245c914ebc0b178de5d56b5991687
+          src/test/soccerCommunityShieldRules.test.ts aee086a743f4c0c261d805ee0d994b01323d092f
+          src/test/soccerCommunityShieldMatch.test.ts 0f337b3f65fe9d7d506ff387956ff025c75e8944
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 18 "$OUT/$tag.stdout"; tail -n 18 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          cat > "$OUT/expected-provenance.json" <<'PROVENANCE'
+          {"sources":[{"run":"41500946381","sha256":"448bafbc2c664f0793ecd2194f910f1d02c32a59b26e83e6c3b6dc97269f9d2e","scope":"Actual all ordinary units:10366passed58pending726files"},{"run":"41538266773","sha256":"12a0f23bed6a5471a8fea30cf75c6da1836816167b55c2887f6dd8ba92918002","scope":"Actual UI/core73passed; select only19new and verify54old are already present"},{"run":"41544563317","sha256":"446de523849d3fb7221543505c56fbfc3fca3c28b7cd2357b9493b778554d6f9","scope":"Actual current six match cases passed; overall unrelated anchor admission failed"}],"excludedRacingFiles":[{"file":"src/test/grandPrixBoss.test.ts","cases":13},{"file":"src/test/grandPrixBossFocusSave.test.tsx","cases":2},{"file":"src/test/grandPrixBossHistoryTies.test.ts","cases":2},{"file":"src/test/grandPrixBossLifecycle.test.ts","cases":15},{"file":"src/test/grandPrixBossLifecyclePage.test.tsx","cases":3},{"file":"src/test/grandPrixBossManagementPage.test.tsx","cases":6},{"file":"src/test/grandPrixBossMarket.test.ts","cases":12},{"file":"src/test/grandPrixBossMarketSave.test.tsx","cases":4},{"file":"src/test/grandPrixBossPage.test.tsx","cases":9},{"file":"src/test/grandPrixBossRollover.test.ts","cases":13},{"file":"src/test/grandPrixBossRolloverSave.test.tsx","cases":2},{"file":"src/test/grandPrixBossSave.test.tsx","cases":16},{"file":"src/test/grandPrixBossStarterBalance.test.ts","cases":7}],"oldAffectedUiCasesAlreadyIncluded":54,"encoding":"UTF8 of ordinal-sorted file+NUL+fullName+NUL+status joined by LF, no terminal LF","scope":"Expected inventory assembled from actual retained reports; not new full-suite runtime credit."}
+          PROVENANCE
+      - name: Actual full history closure before the long suite
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          cat > "$OUT/history-preflight.sh" <<'HISTORY'
+          set -euo pipefail
+          test "$(git rev-parse --is-shallow-repository)" = false
+          : > "$OUT/historical-baselines.tsv"
+          while read -r ref file; do
+            git cat-file -e "$ref:$file"
+            printf '%s\t%s\t%s\t%s\n' "$ref" "$file" "$(git rev-parse "$ref:$file")" "$(git cat-file -s "$ref:$file")" >> "$OUT/historical-baselines.tsv"
+          done <<'BASELINES'
+          56356be9 src/lib/frontOffice.ts
+          56356be9 src/data/frontOfficePlayers.ts
+          56356be9 src/data/frontOfficeDepth.ts
+          0c66a559 src/lib/frontOffice.ts
+          0c66a559 src/data/frontOfficePlayers.ts
+          0c66a559 src/data/frontOfficeDepth.ts
+          e8b39ccc src/lib/nbaFrontOffice.ts
+          e8b39ccc src/lib/nbaSeasonStats.ts
+          e8b39ccc src/lib/nbaRotation.ts
+          e8b39ccc src/data/conquestDataNba.ts
+          6b7596d2 src/lib/nhlFrontOffice.ts
+          6b7596d2 src/data/nhlFoPlayers.ts
+          2b7dda2951fb9b63e76a2af66970cb682f312105 src/lib/cageClash.ts
+          31a4ec01 src/lib/cageClash.ts
+          BASELINES
+          test "$(wc -l < "$OUT/historical-baselines.tsv")" -eq 14
+          cat "$OUT/historical-baselines.tsv"
+          HISTORY
+          capture history-availability bash "$OUT/history-preflight.sh"
+      - name: Locked online install separate from guarded execution
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Proper app types and one full ordinary suite
+        timeout-minutes: 60
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP SC_EXTRA_CUPS_ENGINE
+          source "$OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture all-units node node_modules/vitest/vitest.mjs run --maxWorkers=2 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$OUT/all-units.json"
+      - name: Exact actual baseline identities and unchanged optional pending cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const out=process.env.OUT;
+          const report=JSON.parse(fs.readFileSync(out+'/all-units.json','utf8'));
+          const expected={"files":718,"total":10345,"passed":10287,"failed":0,"pending":58,"todo":0,"identitySha256":"6e41291039b5698afdf3652833dba5e1d12b1db8dfc7612171aeea76b8c55346","passedIdentitySha256":"2981f36e6c03022cfdb87e746067b5d4b60877f90d825f2825927b43d4763e70","pendingIdentitySha256":"9c0f051d352996bf0bcc403f327d42d33b7eeed379efc55c122540cd6e454376","fileIdentitySha256":"2781d264eaa70f677b72f07e3a149c2698e96c0253821b3441a1feb62651ec19","scIdentitySha256":"e51de9f18baa775c395e2431d4590b6846d0dcdde3681e5ea7afa75d09191a97","scFiles":[{"file":"src/test/soccerCommunityShieldAcceptance.test.ts","cases":2},{"file":"src/test/soccerCommunityShieldMatch.test.ts","cases":6},{"file":"src/test/soccerCommunityShieldRules.test.ts","cases":8},{"file":"src/test/soccerCommunityShieldScreens.test.tsx","cases":6},{"file":"src/test/soccerCommunityShieldUiAcceptance.test.tsx","cases":3}]};
+          const suffix=name=>{const normalized=name.replaceAll('\\','/');return normalized.slice(normalized.lastIndexOf('/src/')+1);};
+          const hash=values=>createHash('sha256').update(values.sort().join('\n')).digest('hex');
+          const identities=rows=>hash(rows.map(row=>row.file+'\0'+row.fullName+'\0'+row.status));
+          const suites=report.testResults.map(suite=>({file:suffix(suite.name),rows:suite.assertionResults}));
+          const rows=suites.flatMap(suite=>suite.rows.map(row=>({file:suite.file,fullName:row.fullName,status:row.status})));
+          const passed=rows.filter(row=>row.status==='passed'), pending=rows.filter(row=>row.status!=='passed');
+          const sc=suites.filter(suite=>suite.file.startsWith('src/test/soccerCommunityShield')).flatMap(suite=>suite.rows.map(row=>({file:suite.file,fullName:row.fullName,status:row.status})));
+          const observed={files:suites.length,total:rows.length,passed:passed.length,pending:pending.length,
+            identitySha256:identities(rows),passedIdentitySha256:identities(passed),pendingIdentitySha256:identities(pending),
+            fileIdentitySha256:hash(suites.map(suite=>suite.file)),scIdentitySha256:identities(sc)};
+          fs.writeFileSync(out+'/observed-identities.json',JSON.stringify({observed,sc,pending},null,2)+'\n');
+          assert.equal(Number(fs.readFileSync(out+'/all-units.exit','utf8')),0);
+          assert.equal(report.success,true);assert.equal(report.numFailedTests,0);assert.equal(report.numTodoTests,0);
+          for(const key of ['files','total','passed','pending','identitySha256','passedIdentitySha256','pendingIdentitySha256','fileIdentitySha256','scIdentitySha256']) assert.equal(observed[key],expected[key],key);
+          assert.equal(report.numTotalTests,expected.total);assert.equal(report.numPassedTests,expected.passed);assert.equal(report.numPendingTests,expected.pending);
+          assert.equal(suites.filter(suite=>suite.file.startsWith('src/test/grandPrixBoss')).length,0);
+          assert.equal(sc.length,25);
+          assert.deepEqual(suites.filter(suite=>suite.file.startsWith('src/test/soccerCommunityShield')).map(suite=>({file:suite.file,cases:suite.rows.length})).sort((a,b)=>a.file.localeCompare(b.file)),expected.scFiles);
+          for(const suite of suites)for(const row of suite.rows){
+            assert(['passed','skipped','pending'].includes(row.status));
+            assert.deepEqual(row.failureMessages,[]);
+          }
+          const runtimeCounters={numUnhandledErrors:report.numUnhandledErrors??null,numRuntimeErrorTestSuites:report.numRuntimeErrorTestSuites??null,numRuntimeErrorTests:report.numRuntimeErrorTests??null};
+          for(const [key,value] of Object.entries(runtimeCounters))if(report[key]!==undefined){assert.equal(typeof value,'number');assert.equal(value,0);}
+          for(const key of ['errors','unhandledErrors'])if(report[key]!==undefined){assert(Array.isArray(report[key]));assert.deepEqual(report[key],[]);}
+          const raw=fs.readFileSync(out+'/all-units.stdout','utf8')+'\n'+fs.readFileSync(out+'/all-units.stderr','utf8');
+          const detectedRuntimeError=/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw);
+          assert.equal(detectedRuntimeError,false);
+          fs.writeFileSync(out+'/unit-summary.json',JSON.stringify({scope:'One full ordinary suite on the held final Shield source. No build or browser credit.',
+            expectedProvenance:JSON.parse(fs.readFileSync(out+'/expected-provenance.json','utf8')),observed,failed:report.numFailedTests,todo:report.numTodoTests,
+            exactShieldCases:sc,existingPending:pending,runtimeCounters,runtimeCounterCompleteness:Object.values(runtimeCounters).some(value=>value===null)?'UNKNOWN':'REPORTED',
+            rawErrors:report.errors??null,rawUnhandledErrors:report.unhandledErrors??null,detectedRuntimeError,
+            installNetwork:'Locked npm ci is explicitly online, before guarded execution.'},null,2)+'\n');
+          console.log('SC_FULL_UNITS: exact actual-derived718files/10287passes/58old pending identities; no new skips.');
+          VERIFY
+          capture verify node "$OUT/verify.mjs"
+      - name: Always hold all source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"; fi
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-shield-full-units-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-shield-full-units/
+          retention-days: 14
