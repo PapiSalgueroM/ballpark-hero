@@ -67,7 +67,7 @@ globalThis.__wxRecoveryArchiveClient = {
     assert(['player_market_values', 'player_verified_positions'].includes(table), 'Only the original read tables');
     const params = {};
     const request = {
-      select(columns) { assert.equal(params.select, undefined); params.select = columns; return request; },
+      select(columns) { assert.equal(params.select, undefined); assert.equal(columns, (table === 'player_market_values' ? select : historySelect).replaceAll(',', ', '), 'Exact source projection before SDK cleanup'); params.select = columns.replaceAll(', ', ','); return request; },
       eq(column, value) { assert.equal(table, 'player_market_values'); assert.equal(column, 'year'); assert([2026, 2025].includes(value)); params.year = 'eq.' + value; return request; },
       gt(column, value) { assert.equal(column, 'market_value_usd'); assert.equal(value, 0); params.market_value_usd = 'gt.0'; return request; },
       order(column, options) { assert.equal(column, 'id'); assert.equal(options.ascending, true); params.order = 'id.asc'; return request; },

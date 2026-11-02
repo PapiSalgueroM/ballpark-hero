@@ -1,7 +1,7 @@
 name: World XI alias and empty-slot quality baseline
 on:
   push:
-    branches: [codex/report-world-xi-quality-baseline-20261102]
+    branches: [codex/report-world-xi-quality-baseline-v2-20261102]
 permissions:
   contents: read
   actions: read
@@ -25,19 +25,19 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Bind the exact joined source and three test-first files
+      - name: Bind exact test-first source and two archive-adapter repair paths
         run: |
           set -euo pipefail
-          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-quality-baseline-20261102
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-quality-baseline-v2-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = 2f4ead8894d2aadfbf66ecc2b59db30402bb950f
+          test "$(git rev-parse HEAD^)" = 199c54c8e83db16739e43f386b46c4bbcb577319
           out="$WORLD_XI_QUALITY_OUT"; test ! -e "$out"; mkdir -p "$out"
           git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
           git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
-          printf '%s\n' '.github/workflows/report-world-xi-quality-baseline.yml' 'scripts/qa/witnessWorldXiRecoveryArchive.mjs' 'src/test/worldXiRecovery.test.tsx' > "$out/expected-paths.txt"
+          printf '%s\n' '.github/workflows/report-world-xi-quality-baseline.yml' 'scripts/qa/witnessWorldXiRecoveryArchive.mjs' > "$out/expected-paths.txt"
           cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
-          git diff --exit-code HEAD^ -- src/pages src/lib src/data src/integrations src/hooks public scripts/data index.html package.json package-lock.json vitest.config.ts src/test/setup.ts
-          printf '320b5e1542654f601608bbb90e181064b260853877a03232a9e5ac4ba8af3cd3  src/test/worldXiRecovery.test.tsx\n5e29b515abfa2686752ae2c5dc66e6613237831c4321aba59a40a821ebbf87e6  scripts/qa/witnessWorldXiRecoveryArchive.mjs\nab177001f66c5d62a67454075ef1b4f84326e682b40334fb0dfd55e3da77af83  src/pages/WorldXi.tsx\nd8cd50ebc118c618799193f473d2db1b7c094dc0603ebf6d7235e655932accf5  src/lib/worldXiNationPools.ts\nfa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe  src/lib/worldXi.ts\n' | sha256sum --check -
+          git diff --exit-code HEAD^ -- src/test src/pages src/lib src/data src/integrations src/hooks public scripts/data index.html package.json package-lock.json vitest.config.ts src/test/setup.ts
+          printf '320b5e1542654f601608bbb90e181064b260853877a03232a9e5ac4ba8af3cd3  src/test/worldXiRecovery.test.tsx\n16e4c373183cbb915f8ddd7a56ddd8944444b572253281b2c8d245f0f9b7bb6f  scripts/qa/witnessWorldXiRecoveryArchive.mjs\nab177001f66c5d62a67454075ef1b4f84326e682b40334fb0dfd55e3da77af83  src/pages/WorldXi.tsx\nd8cd50ebc118c618799193f473d2db1b7c094dc0603ebf6d7235e655932accf5  src/lib/worldXiNationPools.ts\nfa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe  src/lib/worldXi.ts\n' | sha256sum --check -
           test "$(git rev-parse HEAD:src/test/worldXiNationPools.test.ts)" = ffb0dfb1e9b227aca253ffe014dd618ff7e6f325
           test "$(git rev-parse HEAD:src/test/worldXiNations.test.tsx)" = 51e2c0ec6cd2cd647a4d85edbf89c4637e9edb12
           test "$(git rev-parse HEAD:src/test/worldXiRespins.test.tsx)" = c24155ca3220823587d5ab5fe7d3e76d098547d8
