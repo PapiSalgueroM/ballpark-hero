@@ -1,0 +1,96 @@
+name: Grand Prix save report retention
+on:
+  push:
+    branches: [codex/grand-prix-save-retention-20261102]
+permissions:
+  contents: read
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind unchanged qualified source and one QA workflow addition
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/gp-save-retention"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-save-retention-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = f417aa30107a749b46cce2d4a25b4996326fcf42
+          test "$(git rev-parse 'HEAD^^{tree}')" = 157161a393e22e0191a07244a3d16797ef454387
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t.github/workflows/grand-prix-save-retention.yml\n' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          test "$(git rev-parse HEAD:src/lib/grandPrixBoss.ts)" = f85074736a50221d7cd74c9195cc68078cc68e0c
+          test "$(git rev-parse HEAD:src/hooks/useGrandPrixBoss.ts)" = a66fe58c641217ccce0dffb191748f42551c86c6
+          test "$(git rev-parse HEAD:scripts/simGrandPrixBossSave.mjs)" = 12975150382ab1999ad649869c8442ad3146c495
+          test "$(git rev-parse HEAD:src/test/grandPrixBossSave.test.tsx)" = 5f8d61ca7cd9f678c3a9aab9cae17d1cc5fcb01e
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+      - name: Locked online install separate from guarded save proof
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Run only the unchanged save wrapper and retain its actual child reports
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export GP_BOSS_SAVE_OUT="$PWD/tmp"
+          printf '%s\0' node scripts/simGrandPrixBossSave.mjs > "$OUT/save.argv"
+          : > "$OUT/save.transport"
+          code=0
+          SIM_OFFLINE_RECEIPT="$OUT/save.transport" node scripts/simGrandPrixBossSave.mjs > "$OUT/save.stdout" 2> "$OUT/save.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/save.exit"
+          tail -n 10 "$OUT/save.stdout"; tail -n 10 "$OUT/save.stderr"
+          test "$code" -eq 0
+          test ! -s "$OUT/save.transport"
+          mapfile -t saved < <(find "$PWD/tmp" -mindepth 1 -maxdepth 1 -type d -name 'grand-prix-save-*')
+          test "${#saved[@]}" -eq 1
+          test -s "${saved[0]}/current.json"
+          test -s "${saved[0]}/restored-copy.json"
+          printf '%s\n' "${saved[0]}" > "$OUT/retained-directory.txt"
+      - name: Always hold source dependency bytes and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - name: Always preserve actual save wrapper files
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -d tmp; then cp -a -- tmp "$OUT/results"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gp-save-retention-${{ github.run_id }}
+          path: ${{ runner.temp }}/gp-save-retention/
+          retention-days: 14
