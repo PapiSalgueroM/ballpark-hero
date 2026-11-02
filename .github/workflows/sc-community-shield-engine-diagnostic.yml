@@ -1,0 +1,95 @@
+name: Community Shield annual graph diagnostic
+on:
+  push:
+    branches: [codex/sc-community-shield-engine-diagnostic-20261102]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind qualified core and exactly two QA additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-shield-engine"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-engine-diagnostic-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = 5aad960a2ecb0f8419934dc9308f2ba9ed184422
+          test "$(git rev-parse 'HEAD^^{tree}')" = c82bcafcb271b5f3aca5461a15be68a1b5862f62
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\n' '.github/workflows/sc-community-shield-engine-diagnostic.yml' 'scripts/qa/measureCommunityShieldEngine.mjs' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          test "$(git rev-parse HEAD:src/lib/soccerCareerEngine.ts)" = 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          test "$(git rev-parse HEAD:src/lib/soccerCareerExtraCups.ts)" = ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          test "$(git rev-parse HEAD:scripts/qa/measureCommunityShieldEngine.mjs)" = c9f95e6a1ffe18721b6f1f72146c5e7e2a905cb1
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+      - name: Locked online install separate from descriptive offline proof
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Actual fixed annual closes paired openings and interrupted seasons
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SC_SHIELD_ENGINE_OUT="$PWD/tmp/sc-shield-engine-$GITHUB_RUN_ID"
+          printf 'SC_SHIELD_ENGINE_OUT=%s\n' "$SC_SHIELD_ENGINE_OUT" >> "$GITHUB_ENV"
+          test ! -e "$SC_SHIELD_ENGINE_OUT"
+          printf '%s\0' node scripts/qa/measureCommunityShieldEngine.mjs > "$OUT/probe.argv"
+          : > "$OUT/probe.transport"
+          code=0
+          SIM_OFFLINE_RECEIPT="$OUT/probe.transport" node scripts/qa/measureCommunityShieldEngine.mjs > "$OUT/probe.stdout" 2> "$OUT/probe.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/probe.exit"
+          tail -n 10 "$OUT/probe.stdout"; tail -n 10 "$OUT/probe.stderr"
+          test "$code" -eq 0
+          test ! -s "$OUT/probe.transport"
+          test -s "$SC_SHIELD_ENGINE_OUT/summary.json"
+          test -s "$SC_SHIELD_ENGINE_OUT/index.json"
+          test -s "$SC_SHIELD_ENGINE_OUT/receipt.json"
+      - name: Always hold complete source dependency bytes and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - name: Always preserve original measurement files
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${SC_SHIELD_ENGINE_OUT:-}" && test -d "$SC_SHIELD_ENGINE_OUT"; then cp -a -- "$SC_SHIELD_ENGINE_OUT" "$OUT/probe"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-shield-engine-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-shield-engine/
+          retention-days: 14
