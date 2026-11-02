@@ -69,6 +69,7 @@ const GuessNflTeam = lazy(() => import("./pages/GuessNflTeam"));
 const GuessTheNation = lazy(() => import("./pages/GuessTheNation"));
 const F1Driver = lazy(() => import("./pages/F1Driver"));
 const F1Constructor = lazy(() => import("./pages/F1Constructor"));
+const GrandPrixBoss = lazy(() => import("./pages/GrandPrixBoss"));
 const GuessCbbTeam = lazy(() => import("./pages/GuessCbbTeam"));
 const GuessTennisPlayer = lazy(() => import("./pages/GuessTennisPlayer"));
 const TennisChain = lazy(() => import("./pages/TennisChain"));
@@ -387,6 +388,7 @@ const AppContent = () => {
         <Route path="/guess-the-nation" element={<GuessTheNation />} />
         <Route path="/f1-driver" element={<F1Driver />} />
         <Route path="/f1-constructor" element={<F1Constructor />} />
+        <Route path="/grand-prix-boss" element={<GrandPrixBoss />} />
         <Route path="/guess-cbb-team" element={<GuessCbbTeam />} />
         <Route path="/guess-tennis-player" element={<GuessTennisPlayer />} />
         <Route path="/tennis-chain" element={<TennisChain />} />

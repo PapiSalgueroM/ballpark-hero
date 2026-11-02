@@ -1,7 +1,6 @@
 import './lib/offlineTransport.cjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
@@ -19,7 +18,7 @@ const heldPaths = [ENGINE, TEST, TIES, BASELINE, 'src/test/grandPrixBoss.test.ts
 const held = new Map(heldPaths.map(file => [file, fs.readFileSync(path.join(root, file))]));
 const original = held.get(ENGINE), source = original.toString('utf8');
 assert.equal(sha(held.get(BASELINE)), '6d0e754c28f631ea590472b9ea2a1647206db67ec7dc1580bcf054cede74364f', 'Exact qualified market A control source');
-const outBase = path.resolve(process.env.GP_BOSS_ROLLOVER_OUT || os.tmpdir());
+const outBase = path.resolve(process.env.GP_BOSS_ROLLOVER_OUT || path.join(root, 'tmp'));
 fs.mkdirSync(outBase, { recursive: true });
 const out = fs.mkdtempSync(path.join(outBase, 'dukb-grand-prix-rollover-'));
 const candidate = path.join(out, 'grandPrixBoss.ts');
