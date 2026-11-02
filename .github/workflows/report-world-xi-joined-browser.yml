@@ -1,0 +1,173 @@
+name: World XI joined modes and isolated recovery browser proof
+on:
+  push:
+    branches: [codex/report-world-xi-joined-browser-20261102]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  browser-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: '1'
+      ENGINES: chromium
+      WORLD_XI_ROUTE_OUT: ${{ github.workspace }}/world-xi-route-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/world-xi-route-artifacts/font-cache
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the qualified product and exact six QA paths
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_ROUTE_OUT"; mkdir "$out"
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-joined-browser-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = d189a93ff13ab9daeeb67b4a6f16fae7d194d43d
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git diff --exit-code HEAD^ -- src public scripts/data index.html package.json package-lock.json
+          printf '%s\n' .github/workflows/report-world-xi-joined-browser.yml scripts/qa/fixtures/worldXiRecovery.entry.tsx scripts/qa/fixtures/worldXiRecovery938.ts scripts/qa/fixtures/worldXiRecoveryBoundary.ts scripts/qa/playWorldXiRecovery.mjs scripts/qa/playWorldXiRoute.mjs | sort > "$out/expected-paths.txt"
+          git diff --name-only HEAD^ HEAD | sort > "$out/changed-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          printf 'ebd9d5924fd73fd1a4064350b7295e2f223bdad90cb1d6318f21d53590e6ec4a  scripts/qa/playWorldXiRoute.mjs\n1758ac5335629aff99c4954018d11229f45a2de189aa5677e44deabe2adf1476  scripts/qa/playWorldXiRecovery.mjs\n941f15666ca88444ff46d46e64bc3cf2900d4aae694067b3da1edc87c1045a63  scripts/qa/fixtures/worldXiRecovery938.ts\na2804960ff52b30534461dad3192c4d06a488d0ea07b65a0c499c8d9218b0e42  scripts/qa/fixtures/worldXiRecoveryBoundary.ts\n9e96f9c6b1c0edc77fadd285d642bfc8a1cf4d414553dc233929f71f42d0c490  scripts/qa/fixtures/worldXiRecovery.entry.tsx\n4569d859387827a09d1009e1ff2efa31a96fd47ad7c717e6f3dd747495d09f2e  src/pages/WorldXi.tsx\n69b1e153b0f6b52d58008847d5d4267b3a0e321437b2b77b892302834e4d47e2  src/lib/worldXiNationPools.ts\nfa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe  src/lib/worldXi.ts\nbe5f1f5be7bd0dfd031040427e7d42b113b8b72b438881864b72305e956b8640  src/data/gameContent/soccer1.ts\nc8bd6d5ebf2610a34eda085224ae087293162b1fda6d4b7d03ae51d77e369684  src/integrations/supabase/client.ts\n' | sha256sum --check -
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$WORLD_XI_ROUTE_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$WORLD_XI_ROUTE_OUT/$tag.argv"
+            : > "$WORLD_XI_ROUTE_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$WORLD_XI_ROUTE_OUT/$tag.transport" "$@" > "$WORLD_XI_ROUTE_OUT/$tag.stdout" 2> "$WORLD_XI_ROUTE_OUT/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$WORLD_XI_ROUTE_OUT/$tag.exit"
+            tail -n 8 "$WORLD_XI_ROUTE_OUT/$tag.stdout"; tail -n 8 "$WORLD_XI_ROUTE_OUT/$tag.stderr"
+            test ! -s "$WORLD_XI_ROUTE_OUT/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+      - name: Locked app, fixture types and both driver syntaxes
+        id: types
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_ROUTE_OUT"; source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+          capture route-syntax env NODE_OPTIONS='' node --check scripts/qa/playWorldXiRoute.mjs
+          capture recovery-syntax env NODE_OPTIONS='' node --check scripts/qa/playWorldXiRecovery.mjs
+          capture types env NODE_OPTIONS='' node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          printf '{"extends":"../tsconfig.app.json","include":["../src","../scripts/qa/fixtures/worldXiRecovery938.ts","../scripts/qa/fixtures/worldXiRecoveryBoundary.ts","../scripts/qa/fixtures/worldXiRecovery.entry.tsx"]}\n' > "$out/tsconfig.fixture.json"
+          capture fixture-types env NODE_OPTIONS='' node_modules/.bin/tsc --noEmit -p "$out/tsconfig.fixture.json"
+      - name: Reuse the original one-capture artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: world-xi-actual-route-41424730828
+          run-id: 41424730828
+          github-token: ${{ github.token }}
+          path: ${{ github.workspace }}/world-xi-route-artifacts/original-capture
+      - name: Bind the original capture and copy only offline payloads
+        id: archive
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_ROUTE_OUT"; source "$out/capture.sh"
+          original="$out/original-capture"
+          test "$(find "$original" -type f | wc -l)" -eq 246
+          cd "$original"
+          printf '93075e1a52b07446145b459987ba51f636adb9078265442d8e3049447ba14ebf  manifest.json\n079600855b6c7a79ef80a1a14b2bf3e497337ff4e805806d961b60dd85a3e75b  head-tree.txt\n3171c3241bbb489c22f51489f8b2cd94c880f071dfe9760a5c9aabdf48363d82  font-cache/manifest.json\n9fd974c704e9f719758243b263b0e66cec3e19bc7d49bb6ca724c7ef861f7b70  cached-fonts.cjs\n63ddaf129b54c5c6da5e984fd9d2d0100e4008f49c9759d6359a0c70f12c3a28  source-holds.before.json\n63ddaf129b54c5c6da5e984fd9d2d0100e4008f49c9759d6359a0c70f12c3a28  source-holds.after.json\n' | sha256sum --check -
+          test "$(cat public-roster.exit)" -eq 0
+          test ! -s public-roster.transport
+          cd "$GITHUB_WORKSPACE"
+          find "$original" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/original-files.sha256"
+          cp "$original/manifest.json" "$out/manifest.json"
+          cp -R "$original/responses" "$original/font-cache" "$out/"
+          cp "$original/cached-fonts.cjs" "$out/cached-fonts.cjs"
+          cat > "$out/verify-reuse.mjs" <<'REUSE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const out=process.env.WORLD_XI_ROUTE_OUT,original=path.join(out,'original-capture'),sha=b=>createHash('sha256').update(b).digest('hex');
+          const bytes=fs.readFileSync(path.join(out,'manifest.json')),manifest=JSON.parse(bytes);
+          assert.equal(manifest.schemaVersion,1); assert.equal(manifest.responses.length,17);
+          assert.deepEqual(manifest.totals.observed,{'2025':6414,'2026':5865,history:134});
+          assert.equal(manifest.captureControls.length,9);
+          for(const record of manifest.captureControls){
+            assert.equal(record.file,'capture-controls/'+record.name+'.json');
+            assert.equal(sha(fs.readFileSync(path.join(original,record.file))),record.sha256,'Original capture control bytes');
+          }
+          fs.writeFileSync(path.join(out,'reuse-provenance.json'),JSON.stringify({runId:41424730828,artifactId:13132710070,artifactName:'world-xi-actual-route-41424730828',originalZipSha256:'372ecf1d5f64d25f41f36010d94cc4154f44e66b2370df67c29f7de807f8dd6f',zipHashScope:'Root verified the original downloaded ZIP; this job binds the downloaded artifact members and manifest, not a reconstructed ZIP.',source:'93338f6bc7ceab51e48dc8fb00b240f693ccd80a',tree:'b544684379afe19c34c0b6fec28bec3a8156410c',manifestSha256:sha(bytes),publicRequestsThisJob:0,observedRows:manifest.totals.observed},null,2));
+          console.log('Reused original capture: seventeen held response bodies and nine prior controls, no public roster requests.');
+          REUSE
+          capture reuse-archive env NODE_OPTIONS='' node "$out/verify-reuse.mjs"
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          sha256sum "$out/cached-fonts.cjs" > "$out/cached-fonts.sha256"
+      - name: Isolated pinned browser tooling
+        id: tools
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_ROUTE_OUT"; source "$out/capture.sh"
+          browser_tools="$RUNNER_TEMP/world-xi-joined-browser-tools"; test ! -e "$browser_tools"; mkdir "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          capture browser-install env NODE_OPTIONS='' npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$out/browser-package.json"; cp "$browser_tools/package-lock.json" "$out/browser-package-lock.json"
+          capture chromium env NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-files.sha256"
+      - name: Ordinary production build under the offline gate
+        id: build
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_ROUTE_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/cached-fonts.cjs"
+          capture build npm run build
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"
+          test ! -s "$out/font-cache-misses.jsonl"
+      - name: Actual built route, three native archived mode contexts
+        if: ${{ !cancelled() && steps.types.outcome == 'success' && steps.archive.outcome == 'success' && steps.tools.outcome == 'success' && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_ROUTE_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/route-server.log" 2>&1 &
+          host_pid=$!; trap 'kill "$host_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+          capture actual-route env BASE=http://127.0.0.1:4173 node scripts/qa/playWorldXiRoute.mjs
+      - name: Separate actual-page fictional938 recovery component
+        if: ${{ !cancelled() && steps.types.outcome == 'success' && steps.archive.outcome == 'success' && steps.tools.outcome == 'success' && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_ROUTE_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          capture fictional-recovery node scripts/qa/playWorldXiRecovery.mjs
+      - name: Source packages tools fonts original archive and completed build held
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_ROUTE_OUT"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+          for list in dependency-files browser-files font-files cached-fonts dist original-files; do if test -f "$out/$list.sha256"; then sha256sum --check "$out/$list.sha256" > "$out/$list-held.log"; fi; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world-xi-joined-browser-${{ github.run_id }}
+          path: ${{ github.workspace }}/world-xi-route-artifacts/
+          retention-days: 14
