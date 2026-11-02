@@ -1,0 +1,165 @@
+name: Grand Prix generated-name bank qualification
+on:
+  push:
+    branches: [codex/grand-prix-boss-invented-names-20261102]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the clean racing parent and two exact paths
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/grand-prix-invented-names"
+          COPY="$GITHUB_WORKSPACE/scripts/__grand_prix_name_control_$GITHUB_RUN_ID.mjs"
+          export OUT COPY
+          printf 'OUT=%s\nCOPY=%s\n' "$OUT" "$COPY" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test ! -e "$COPY"
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-invented-names-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = a7ab7f45ee34d89a7d08922b7c1811b55bb34b8b
+          test "$(git rev-parse 'HEAD^^{tree}')" = 17795fb58fe1822b58c0b37699c7bc1a94fa35bf
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\nM\t%s\n' '.github/workflows/grand-prix-boss-invented-names.yml' 'scripts/simInventedNames.mjs' > "$OUT/expected-paths.txt"
+          cmp "$OUT/changed-paths.txt" "$OUT/expected-paths.txt"
+          test "$(git rev-parse HEAD^:scripts/simInventedNames.mjs)" = 631fd5921268134accea4b29771c8fea4d56257d
+          test "$(git rev-parse HEAD:scripts/simInventedNames.mjs)" = e6785d32914275955e19ca810ebc328886fdb39a
+          test "$(git rev-parse HEAD:src/lib/grandPrixBoss.ts)" = f85074736a50221d7cd74c9195cc68078cc68e0c
+          git show HEAD^:scripts/simInventedNames.mjs > "$OUT/original.mjs"
+          cp -- scripts/simInventedNames.mjs "$OUT/fixed.mjs"
+          test "$(git hash-object "$OUT/original.mjs")" = 631fd5921268134accea4b29771c8fea4d56257d
+          test "$(git hash-object "$OUT/fixed.mjs")" = e6785d32914275955e19ca810ebc328886fdb39a
+          sha256sum "$OUT/original.mjs" "$OUT/fixed.mjs" > "$OUT/scanner-bodies.sha256"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/cleanup.sh" <<'CLEANUP'
+          cleanup_copy() {
+            test "$COPY" = "$GITHUB_WORKSPACE/scripts/__grand_prix_name_control_$GITHUB_RUN_ID.mjs"
+            rm -f -- "$COPY"
+            test ! -e "$COPY"
+          }
+          CLEANUP
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1" expected="$2"; shift 2
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            local code=0
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr" || code=$?
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 10 "$OUT/$tag.stdout"; tail -n 10 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport"
+            test "$code" -eq "$expected"
+          }
+          CAPTURE
+      - name: Locked online install separate from guarded scanner proof
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Actual scanner whole-original refusal and whole-fixed restore
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset INVENTED_LEDGER_CONTROL INVENTED_RIVAL_CONTROL
+          source "$OUT/capture.sh"
+          source "$OUT/cleanup.sh"
+          trap cleanup_copy EXIT
+          capture healthy 0 node scripts/simInventedNames.mjs
+          cp -- "$OUT/original.mjs" "$COPY"
+          cmp "$OUT/original.mjs" "$COPY"
+          sha256sum "$COPY" > "$OUT/old-copy.before.sha256"
+          capture old-copy 1 node "$COPY"
+          cmp "$OUT/original.mjs" "$COPY"
+          sha256sum --check "$OUT/old-copy.before.sha256" > "$OUT/old-copy.held.log"
+          cp -- "$OUT/fixed.mjs" "$COPY"
+          cmp "$OUT/fixed.mjs" "$COPY"
+          sha256sum "$COPY" > "$OUT/restored-copy.before.sha256"
+          capture restored-copy 0 node "$COPY"
+          cmp "$OUT/fixed.mjs" "$COPY"
+          sha256sum --check "$OUT/restored-copy.before.sha256" > "$OUT/restored-copy.held.log"
+          cmp "$OUT/fixed.mjs" scripts/simInventedNames.mjs
+          cat > "$OUT/check.mjs" <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          const out = process.env.OUT;
+          const sha = body => crypto.createHash('sha256').update(body).digest('hex');
+          const original = fs.readFileSync(out + '/original.mjs'), fixed = fs.readFileSync(out + '/fixed.mjs');
+          assert.equal(sha(original), 'd1521a72fa551e792fe258b4a10724d7fe1bc2748b9e1e2f3b822e922699dd03');
+          assert.equal(sha(fixed), 'c064f0a99be51128514cf571fd532a2085440b94cb399008abe1499315583bac');
+          assert.notEqual(sha(original), sha(fixed), 'Control must change the actual scanner bytes');
+          const green = 'simInventedNames: green. Every invented man on this site is invented all the way down.';
+          const owner = 'FAIL: name banks with nobody checking them: src/lib/grandPrixBoss.ts::FIRST_NAMES. Register them in GENERATORS or route them through intlNames.';
+          const observations = [];
+          for (const name of ['healthy', 'old-copy', 'restored-copy']) {
+            const stdout = fs.readFileSync(out + '/' + name + '.stdout', 'utf8');
+            const stderr = fs.readFileSync(out + '/' + name + '.stderr', 'utf8');
+            const raw = stdout + '\n' + stderr, old = name === 'old-copy';
+            const exit = Number(fs.readFileSync(out + '/' + name + '.exit', 'utf8'));
+            assert.equal(exit, old ? 1 : 0);
+            assert.equal(fs.statSync(out + '/' + name + '.transport').size, 0);
+            const detectedRuntimeError = /(?:^|\n)\s*(?:Error(?: \[[^\]]+\])?:|SyntaxError:|ReferenceError:|TypeError:|RangeError:|AssertionError:|node:internal)|ERR_MODULE_NOT_FOUND|Cannot find module|Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException/m.test(raw);
+            assert.equal(detectedRuntimeError, false, 'GP_NAMES_RUNTIME_OR_SETUP: ' + name);
+            const failures = raw.split(/\r?\n/).map(line => line.trim()).filter(line => line.startsWith('FAIL:'));
+            assert.deepEqual(failures, old ? [owner] : [], 'GP_NAMES_PRIMARY_OWNER: ' + name);
+            const failureSummaries = raw.match(/^simInventedNames: \d+ failures?$/gm) ?? [];
+            assert.deepEqual(failureSummaries, old ? ['simInventedNames: 1 failure'] : []);
+            assert.equal(stdout.split(/\r?\n/).filter(line => line === green).length, old ? 0 : 1);
+            const counts = [...stdout.matchAll(/^\s*(\d+) invented names across (\d+) generators plus the international pools, 0 belong to anybody real$/gm)];
+            assert.equal(counts.length, 1, 'Actual exhaustive enumeration output required');
+            observations.push({ name, exit, enumeratedNames: Number(counts[0][1]), registeredGenerators: Number(counts[0][2]), ownedFailures: old ? 1 : 0, stdoutSha256: sha(Buffer.from(stdout)), stderrSha256: sha(Buffer.from(stderr)), runtimeCounters: null, runtimeCounterCompleteness: 'UNKNOWN', detectedRuntimeError });
+          }
+          assert.equal(observations[0].enumeratedNames - observations[1].enumeratedNames, 676);
+          assert.equal(observations[0].registeredGenerators - observations[1].registeredGenerators, 1);
+          assert.equal(observations[2].enumeratedNames, observations[0].enumeratedNames);
+          assert.equal(observations[2].registeredGenerators, observations[0].registeredGenerators);
+          fs.writeFileSync(out + '/summary.json', JSON.stringify({ scope: 'Generated-name scanner registration only. No game, name-data, type, unit, build or browser qualification.', observations, healthyExecutions: 2, ownedFailures: 1, extraCombinationsActuallyEnumerated: 676, originalSha256: sha(original), fixedSha256: sha(fixed), sourceControlChanged: true, restoredHealthy: true }, null, 2) + '\n');
+          console.log('GP_NAMES: actual scanner healthy, whole-original sole owned refusal, fixed-copy restored;676 additional combinations enumerated.');
+          CHECK
+          capture classify 0 node "$OUT/check.mjs"
+          cleanup_copy
+      - name: Always remove only the owned copy and hold source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          source "$OUT/cleanup.sh"
+          cleanup_copy
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          sha256sum --check "$OUT/scanner-bodies.sha256" > "$OUT/scanner-bodies-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-invented-names-${{ github.run_id }}
+          path: ${{ runner.temp }}/grand-prix-invented-names/
+          retention-days: 14
