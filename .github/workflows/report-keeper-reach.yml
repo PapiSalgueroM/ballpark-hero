@@ -1,0 +1,163 @@
+name: Report keeper reach verification
+on:
+  push:
+    branches: [codex/report-keeper-reach-fixed-20261101]
+permissions:
+  contents: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      SIM_DRILL_KEEPER_ARTIFACTS: ${{ github.workspace }}/evidence/keeper
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked dependencies and source
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD | tee evidence/head.txt
+          sha256sum package.json package-lock.json src/components/soccer-career/DrillPlayers.tsx src/test/drillKeeperReach.test.tsx scripts/simDrillKeeperReach.mjs scripts/sweepWeight.mjs > evidence/holds.txt
+          npm ci
+      - name: App types and healthy geometry
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee evidence/types.log
+          node scripts/simDrillKeeperReach.mjs 2>&1 | tee evidence/geometry.log
+      - name: Effective old-stretch control and unchanged restored source
+        run: |
+          set +e
+          DRILL_KEEPER_REACH_CONTROL=stretch node scripts/simDrillKeeperReach.mjs > evidence/stretch.log 2>&1
+          code=$?
+          set -e
+          cat evidence/stretch.log
+          test "$code" -eq 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const rows = fs.readdirSync('evidence/keeper').map(p => JSON.parse(fs.readFileSync('evidence/keeper/' + p + '/summary.json')));
+          const controls = rows.filter(r => r.control === 'stretch');
+          assert.equal(controls.length, 1);
+          assert.equal(controls[0].expected, true);
+          assert.equal(controls[0].rawExit, 1);
+          assert.equal(controls[0].passed, 3);
+          assert.equal(controls[0].failed.length, 3);
+          console.log('Old stretch control: exactly three owned assertion failures, three preservation passes.');
+          NODE
+          node scripts/simDrillKeeperReach.mjs 2>&1 | tee evidence/restored.log
+      - name: Existing board and simulation regressions
+        run: |
+          node_modules/.bin/vitest run src/test/drillBoardMarkup.test.tsx src/test/drillBoardMatch.test.tsx --reporter=verbose --reporter=json --outputFile=evidence/boards.json 2>&1 | tee evidence/boards.log
+          node scripts/simCareerDrills.mjs 2>&1 | tee evidence/drills.log
+      - name: Source holds
+        if: always()
+        run: sha256sum --check evidence/holds.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: keeper-focused-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
+  build-and-motion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SWEEP_OFFLINE: '1'
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/evidence/font-cache
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked source and isolated build tools
+        run: |
+          mkdir -p evidence/tmp
+          git rev-parse HEAD | tee evidence/head.txt
+          sha256sum package.json package-lock.json src/components/soccer-career/DrillPlayers.tsx scripts/sweepWeight.mjs > evidence/holds.txt
+          npm ci
+          npm install --prefix "$RUNNER_TEMP/report-browser" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/report-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/report-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/report-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee evidence/fonts.log
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: App build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee evidence/types.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build 2>&1 | tee evidence/build.log
+      - name: All saved-output readers
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "evidence/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Every unchanged page cap
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > evidence/host.log 2>&1 &
+          host_pid=$!
+          trap 'kill "$host_pid"' EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+          node scripts/sweepWeight.mjs 2>&1 | tee evidence/weight.log
+      - name: Actual wall, tackle and glove motion
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: TMPDIR="$PWD/evidence/tmp" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDrillMotion.mjs 2>&1 | tee evidence/motion.log
+      - name: Source holds
+        if: always()
+        run: sha256sum --check evidence/holds.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: keeper-build-motion-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
+  full-units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: mkdir evidence && npm ci
+      - name: Full ordinary unit suite
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --reporter=verbose --reporter=json --outputFile=evidence/all-units.json 2>&1 | tee evidence/all-units.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: keeper-full-units-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
