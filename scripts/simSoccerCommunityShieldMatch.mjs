@@ -52,7 +52,11 @@ async function main() {
   const relative = file => path.relative(root, file).split(path.sep).join('/');
   const paths = [SOURCE, TEST, 'src/lib/keyedRng.ts', 'src/lib/soccerCareerLeagueWorld.ts', 'src/lib/soccerCareerContinental.ts',
     'vitest.config.ts', 'package.json', 'package-lock.json', 'tsconfig.app.json', 'scripts/lib/offlineTransport.cjs', relative(fileURLToPath(import.meta.url))];
-  const held = new Map(paths.map(file => [file, Buffer.from(fs.readFileSync(path.join(root, file)))]));
+  const held = new Map();
+  for (const file of paths) {
+    const rawBytes = await fs.promises.readFile(path.join(root, file));
+    held.set(file, Buffer.from(rawBytes));
+  }
   const holds = () => {
     const receipt = [];
     for (const [file, expected] of held) {

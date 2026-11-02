@@ -1,0 +1,224 @@
+name: Community Shield match custody repair
+on:
+  push:
+    branches: [codex/sc-community-shield-match-custody-20261102]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the admitted match parent and exactly two QA paths
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-shield-match"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-match-custody-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = 299a2487e5d683df613b4949f84d281de3d8a646
+          test "$(git rev-parse 'HEAD^^{tree}')" = ba0b46d95d968a4370775811e4ccef3b2cd7cff7
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\nM\t%s\n' '.github/workflows/sc-community-shield-match-custody.yml' 'scripts/simSoccerCommunityShieldMatch.mjs' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          src/lib/soccerCareerEngine.ts 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          src/lib/soccerCareerExtraCups.ts ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          src/test/soccerCommunityShieldMatch.test.ts 0f337b3f65fe9d7d506ff387956ff025c75e8944
+          scripts/simSoccerCommunityShieldMatch.mjs e708d3ec427e612bb9bfeb6c442130b2ade713f1
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          scripts/simHarnessAnchors.mjs 1cb32d353c317aacd32fd51f25f7ba000ac24e8d
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from offline match proof
+        id: install
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Proper joined app types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Actual six-case source controls and restored physical copy
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SC_SHIELD_MATCH_OUT="$PWD/tmp/sc-shield-match-$GITHUB_RUN_ID"
+          printf 'SC_SHIELD_MATCH_OUT=%s\n' "$SC_SHIELD_MATCH_OUT" >> "$GITHUB_ENV"
+          test ! -e "$SC_SHIELD_MATCH_OUT"
+          source "$OUT/capture.sh"
+          capture match node scripts/simSoccerCommunityShieldMatch.mjs
+          test ! -s "$OUT/match.transport"
+      - name: Bind raw children and the actual scope totals
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          const out = process.env.OUT, dir = process.env.SC_SHIELD_MATCH_OUT;
+          const read = file => JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+          const sha = body => crypto.createHash('sha256').update(body).digest('hex');
+          assert.equal(Number(fs.readFileSync(path.join(out, 'match.exit'), 'utf8')), 0);
+          const summary = read('summary.json'), receipt = read('receipt.json');
+          assert.equal(receipt.complete, true); assert.equal(receipt.primary, null); assert.deepEqual(receipt.secondary, []);
+          assert.equal(receipt.completedChildren, 9); assert.equal(receipt.removedSourceCopy, true);
+          assert.equal(summary.children, 9); assert.equal(summary.results.length, 9); assert.equal(summary.physicalControls, 6);
+          assert.deepEqual(summary.totals, { passed: 18, ownedFailures: 6, declaredUnselectedSkips: 30, executed: 24 });
+          const healthy = new Set(['current', 'healthy-copy', 'restored-copy']);
+          const controls = ['normal-player-goal', 'fixed-shootout', 'team-uses-player-role', 'keeper-goal', 'ignore-availability', 'global-team-draw'];
+          const expectedNames = ['current', 'healthy-copy', ...controls, 'restored-copy'];
+          assert.deepEqual(summary.results.map(row => row.name), expectedNames);
+          const rawChildren = [];
+          for (const result of summary.results) {
+            const good = healthy.has(result.name), reportFile = path.join(dir, result.name + '.vitest.json');
+            const body = fs.readFileSync(reportFile), report = JSON.parse(body);
+            assert.equal(sha(body), result.rawReportSha256);
+            assert.equal(Number(fs.readFileSync(path.join(dir, result.name + '.exit'), 'utf8')), good ? 0 : 1);
+            assert.equal(fs.statSync(path.join(dir, result.name + '.transport')).size, 0);
+            const processReceipt = read(result.name + '.process.json');
+            assert.equal(processReceipt.status, good ? 0 : 1); assert.equal(processReceipt.signal, null); assert.equal(processReceipt.error, null);
+            assert.equal(report.success, good); assert.equal(report.numTotalTests, 6);
+            assert.equal(report.numPassedTests, good ? 6 : 0); assert.equal(report.numFailedTests, good ? 0 : 1);
+            assert.equal(report.numPendingTests, good ? 0 : 5); assert.equal(report.numTodoTests, 0);
+            assert.equal(report.testResults.length, 1); assert.equal(report.testResults[0].assertionResults.length, 6);
+            assert.equal(result.detectedRuntimeError, false);
+            const observedCounters = Object.fromEntries(['numUnhandledErrors', 'numRuntimeErrorTestSuites', 'numRuntimeErrorTests'].map(key => [key, report[key] ?? null]));
+            assert.deepEqual(result.counters, observedCounters);
+            for (const value of Object.values(observedCounters)) if (value !== null) assert.equal(value, 0);
+            assert.equal(result.runtimeCounterCompleteness, Object.values(observedCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED');
+            rawChildren.push({ name: result.name, rawReportSha256: sha(body), counters: observedCounters,
+              runtimeCounterCompleteness: result.runtimeCounterCompleteness, passed: report.numPassedTests,
+              failed: report.numFailedTests, declaredUnselectedSkips: report.numPendingTests });
+          }
+          for (const id of controls) {
+            const edit = read(id + '.edit.json'), changed = fs.readFileSync(path.join(dir, id + '.source.ts'));
+            assert.equal(edit.id, id); assert.notEqual(edit.changed.sha256, edit.original.sha256);
+            assert.equal(changed.length, edit.changed.bytes); assert.equal(sha(changed), edit.changed.sha256);
+            assert.equal(edit.inverse.sha256, edit.original.sha256); assert.equal(edit.physicalRestoreSha256, edit.original.sha256);
+            const result = summary.results.find(row => row.name === id);
+            assert.equal(result.sourceCopySha256, edit.changed.sha256);
+          }
+          assert.deepEqual(read('source-after.json'), read('source-before.json'));
+          fs.writeFileSync(path.join(out, 'qualification-summary.json'), JSON.stringify({
+            scope: summary.scope, vitestChildren: 9, totals: summary.totals, rawChildren,
+            physicalControls: 6, restored: true,
+            limits: 'No replay of prior Rules or acceptance suites, no build/browser proof, no rate or whole-season readiness threshold.'
+          }, null, 2) + '\n');
+          console.log('SC_SHIELD_MATCH_QUALIFIED: 9 children, 24 executed outcomes, 18 healthy, 6 primary-owned faults and 30 declared unselected skips.');
+          VERIFY
+          capture verify node "$OUT/verify.mjs"
+      - name: Separately admit the new permanent harness to the existing anchor fence
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset ANCHOR_CONTROL
+          source "$OUT/capture.sh"
+          capture anchor-fence node scripts/simHarnessAnchors.mjs
+      - name: Real stripped-normalizer negative control and source-fence classification
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          capture anchor-strip env ANCHOR_CONTROL=strip node scripts/simHarnessAnchors.mjs
+          cat > "$OUT/verify-anchors.mjs" <<'ANCHORS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          const dir = process.env.OUT, sha = body => crypto.createHash('sha256').update(body).digest('hex');
+          const records = [];
+          for (const name of ['anchor-fence', 'anchor-strip']) {
+            assert.equal(Number(fs.readFileSync(dir + '/' + name + '.exit', 'utf8')), 0);
+            assert.equal(fs.statSync(dir + '/' + name + '.transport').size, 0);
+            const stdout = fs.readFileSync(dir + '/' + name + '.stdout', 'utf8'), stderr = fs.readFileSync(dir + '/' + name + '.stderr', 'utf8');
+            const raw = stdout + '\n' + stderr;
+            assert.equal(/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|SyntaxError:|ReferenceError:|TypeError:)/i.test(raw), false);
+            const failures = raw.split(/\r?\n/).map(line => line.trim()).filter(line => line.startsWith('FAIL '));
+            if (name === 'anchor-fence') {
+              assert.deepEqual(failures, []);
+              assert.equal(stdout.split(/\r?\n/).filter(line => line === 'simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.').length, 1);
+            } else {
+              assert.equal(failures.length, 1);
+              assert.equal(failures[0].startsWith('FAIL simFightCareer.mjs reads '), true);
+              assert.equal(stdout.includes('[control strip applied to a copy of simFightCareer.mjs]'), true);
+              assert.equal(stdout.split(/\r?\n/).filter(line => line === 'control "strip": the planted fault in simFightCareer.mjs was named and nothing else was, the check works').length, 1);
+            }
+            records.push({ name, rawExit: 0, stdoutSha256: sha(Buffer.from(stdout)), stderrSha256: sha(Buffer.from(stderr)), failures, runtimeCounters: null, runtimeCounterCompleteness: 'UNKNOWN' });
+          }
+          fs.writeFileSync(dir + '/anchor-summary.json', JSON.stringify({ scope: 'Actual existing source-anchor admission plus its real stripped-normalizer control, no new checker exemption.', healthy: true, stripControl: 'changed copied simFightCareer normalizer, sole owner refused', records }, null, 2) + '\n');
+          ANCHORS
+          capture anchor-classify node "$OUT/verify-anchors.mjs"
+      - name: Always preserve original child and control evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${SC_SHIELD_MATCH_OUT:-}" && test -d "$SC_SHIELD_MATCH_OUT"; then cp -a -- "$SC_SHIELD_MATCH_OUT" "$OUT/match"; fi
+      - name: Always hold all source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-shield-match-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-shield-match/
+          retention-days: 14
