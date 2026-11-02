@@ -699,9 +699,9 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     },
     howToPlaySections: [
       {
-        heading: "Picking a formation, a timer and a respin budget",
+        heading: "Picking a nation pool, formation, timer and respin budget",
         items: [
-          "Pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.",
+          "Choose Expanded, Classic or 2026 Nations, then pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.",
         ],
       },
       {
@@ -734,15 +734,18 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     ],
     ruleSections: [
       {
-        heading: "Drafting only nations with real squad depth",
+        heading: "Choosing nations that can cover each slot",
         items: [
-          "Every slot gets a different nation, and only countries with depth make the draw: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",
+          "Expanded uses more nations from the existing player pool, including countries that only cover a few positions. Every drawn nation still needs a player who fits its assigned slot, and all eleven nations are different.",
+          "Classic keeps the original depth rule: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",
+          "2026 Nations uses countries from the tournament that are available in the game. Players come from the existing game pool. The optional season simulation is still a 38-game club league.",
         ],
       },
       {
         heading: "Spending a shared respin budget on tough nations",
         items: [
           "Respins reroll a nation you cannot solve, shared across all slots. You choose your budget before the draw: none, 3, 5 or 10, with 3 as the default.",
+          "The count below the nation shows unused player names that fit this slot. If it reaches zero, Replace empty nation (free) changes only this slot to a nation with an unused fitting name, if one is available. Your picks, timer and paid respins stay as they are.",
         ],
       },
       {
@@ -778,7 +781,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Spending respins on the thinnest nations",
         items: [
-          "Spend respins on goalkeepers and centre backs, where thin footballing nations truly have nobody famous.",
+          "Save respins for nations and positions you find hardest. Try Classic if you want deeper player pools while learning the game.",
         ],
       },
       {
@@ -789,6 +792,10 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       },
     ],
     faqs: [
+      {
+        q: "What does 2026 Nations change?",
+        a: "It changes the country draw to nations from the 2026 tournament that have players in the existing game pool. The count on setup shows how many are available. Draws and respins still check positions and keep eleven different nations.",
+      },
       {
         q: "What is the chemistry bonus?",
         a: "Extra points for pairs of picked players who share a club or a league. Bragging rights on top of the finish, not a requirement.",
