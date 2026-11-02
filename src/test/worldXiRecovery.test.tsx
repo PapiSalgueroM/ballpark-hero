@@ -83,8 +83,17 @@ function filled(view: View) {
   expect(matches, 'WX_RECOVERY_REAL_FILLED_COUNTER').toHaveLength(1);
   return matches[0].textContent!.replace(/\s+/g, ' ').trim();
 }
+function pitchNode(view: View): HTMLDivElement {
+  const matches = [...view.container.querySelectorAll('div')].filter(node => {
+    const slots = [...node.children].filter((child): child is HTMLDivElement => child instanceof HTMLDivElement && child.style.left !== '' && child.style.top !== '');
+    return slots.length === FORMATIONS[0].slots.length && slots.every((slot, index) =>
+      slot.style.left === FORMATIONS[0].slots[index].x + '%' && slot.style.top === FORMATIONS[0].slots[index].y + '%');
+  });
+  expect(matches, 'WX_RECOVERY_UNIQUE_ELEVEN_SLOT_PITCH').toHaveLength(1);
+  return matches[0];
+}
 function board(view: View) {
-  const pitch = view.container.querySelector('[style*="aspect-ratio"]');
+  const pitch = pitchNode(view);
   expect(pitch, 'WX_RECOVERY_REAL_PITCH').not.toBeNull();
   const paid = view.queryByRole('button', { name: 'Respin nation (0 left)' });
   expect(paid, 'WX_RECOVERY_PAID_BUDGET_MUST_STAY_ZERO').not.toBeNull();
@@ -123,6 +132,7 @@ async function emptyStriker(noAlternative: boolean) {
   act(() => { vi.advanceTimersByTime(3000); });
   expect(view.queryByText('87s')).not.toBeNull();
   expect(H.record).not.toHaveBeenCalled();
+  board(view);
   return { view, pool, chosen };
 }
 
@@ -161,7 +171,7 @@ describe('World XI stored spelling and unused-answer recovery', () => {
     const button = view.queryByRole('button', { name: 'Replace empty nation (free)' });
     expect(button, 'WORLD_XI_FREE_RECOVERY_MISSING').not.toBeNull();
     expect(view.queryByText('0 unused player names fit this slot.')).not.toBeNull();
-    const before = board(view), pitch = view.container.querySelector('[style*="aspect-ratio"]')!;
+    const before = board(view), pitch = pitchNode(view);
     const slotsBefore = [...pitch.querySelectorAll(':scope > div[style]')].map(node => node.innerHTML);
     expect(slotsBefore).toHaveLength(11);
     fireEvent.click(button!);

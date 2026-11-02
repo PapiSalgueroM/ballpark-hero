@@ -12,8 +12,9 @@ assert.equal(process.env.SIM_NETWORK, 'offline', 'Offline transport required');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PAGE = 'src/pages/WorldXi.tsx', HELPER = 'src/lib/worldXiNationPools.ts';
 const TEST = 'src/test/worldXiRecovery.test.tsx';
+const OLD = 'scripts/qa/source-controls/WorldXi.before-recovery.tsx.txt';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const files = [PAGE, HELPER, TEST, 'src/data/gameContent/soccer1.ts', 'src/lib/worldXi.ts',
+const files = [PAGE, HELPER, TEST, OLD, 'src/data/gameContent/soccer1.ts', 'src/lib/worldXi.ts',
   'src/test/worldXiNationPools.test.ts', 'src/test/worldXiNations.test.tsx', 'src/test/worldXiRespins.test.tsx',
   'src/test/worldXiSummary.test.tsx', 'src/test/worldXiRosterDepth.test.ts', 'src/lib/positionFit.ts',
   'src/lib/squadShape.ts', 'src/data/wc2026Results.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'];
@@ -21,7 +22,7 @@ const held = new Map(files.map(file => [file, fs.readFileSync(path.join(root, fi
 for (const [file, expected] of [
   [PAGE, '4569d859387827a09d1009e1ff2efa31a96fd47ad7c717e6f3dd747495d09f2e'],
   [HELPER, '69b1e153b0f6b52d58008847d5d4267b3a0e321437b2b77b892302834e4d47e2'],
-  [TEST, '963069474041fac3d15a8b6e314fa1950c14309ccff01a08895e14bfbd5797c5'],
+  [TEST, '3d81b2186be9c13e2e4beac2991e78b99dd54ef3ad9b66bc759264d0539d9b8b'],
   ['src/data/gameContent/soccer1.ts', 'be5f1f5be7bd0dfd031040427e7d42b113b8b72b438881864b72305e956b8640'],
   ['src/lib/worldXi.ts', 'fa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe'],
 ]) assert.equal(sha(held.get(file)), expected, file + ': exact qualified input');
@@ -93,12 +94,12 @@ function control(name, target, edits, selected) {
 }
 try {
   run('current'); run('healthy-helper-copy', HELPER); run('healthy-page-copy', PAGE);
-  const oldPage = spawnSync('git', ['cat-file', 'blob', 'f1d4155192611287d3c1f8dcdf96c6890c9d04d1'], { cwd: root });
-  assert.ifError(oldPage.error); assert.equal(oldPage.signal, null); assert.equal(oldPage.status, 0);
-  assert.equal(createHash('sha1').update(`blob ${oldPage.stdout.length}\0`).update(oldPage.stdout).digest('hex'), 'f1d4155192611287d3c1f8dcdf96c6890c9d04d1');
-  assert.equal(sha(oldPage.stdout), 'ab177001f66c5d62a67454075ef1b4f84326e682b40334fb0dfd55e3da77af83');
-  assert.notEqual(sha(oldPage.stdout), sha(held.get(PAGE))); fs.writeFileSync(path.join(out, 'whole-old-page.tsx'), oldPage.stdout);
-  fs.writeFileSync(candidates.get(PAGE), oldPage.stdout);
+  const oldPage = held.get(OLD);
+  assert.equal(oldPage.length, 35192);
+  assert.equal(createHash('sha1').update(`blob ${oldPage.length}\0`).update(oldPage).digest('hex'), 'f1d4155192611287d3c1f8dcdf96c6890c9d04d1');
+  assert.equal(sha(oldPage), 'ab177001f66c5d62a67454075ef1b4f84326e682b40334fb0dfd55e3da77af83');
+  assert.notEqual(sha(oldPage), sha(held.get(PAGE))); fs.writeFileSync(path.join(out, 'whole-old-page.tsx'), oldPage);
+  fs.writeFileSync(candidates.get(PAGE), oldPage);
   try { run('whole-old-page', PAGE, cases[2]); }
   finally { fs.writeFileSync(candidates.get(PAGE), held.get(PAGE)); assert.equal(sha(fs.readFileSync(candidates.get(PAGE))), sha(held.get(PAGE))); hold(); }
   control('curacao-alias', HELPER, [["    case 'Curacao': return 'Curaçao';\n", '']], cases[0]);
