@@ -17,7 +17,30 @@ const held = new Map(paths.map(file => [file, fs.readFileSync(path.join(root, fi
 const original = held.get(HOOK), source = original.toString('utf8');
 assert.equal(sha(held.get(OLD)), 'f0ec04a26c60db6c4a5b1e4b555a699979a2fdad464e404d0e906f2538b8c23b');
 assert.equal(sha(held.get(TEST)), '2bbb6ec266def6e4df1ffbf0b041673aee9564f11a924f734fb75ab8408fff47');
-assert.equal(sha(held.get('src/lib/grandPrixBoss.ts')), '3a3e5652fbf43bfe13e9802521821378cc3221f7942f05f15b7242c98b1fea92');
+const startupSource = held.get('src/lib/grandPrixBoss.ts').toString('utf8');
+let beforeStarter = startupSource;
+const startupProof = [];
+for (const [before, after] of [
+  ['const teamId = teams[4].id;', 'const teamId = teams[6].id;'],
+  ['drivers[8].contract!.wagePerRace = 180_000;', 'drivers[12].contract!.wagePerRace = 180_000;'],
+  ['drivers[9].contract!.wagePerRace = 120_000;', 'drivers[13].contract!.wagePerRace = 120_000;'],
+]) {
+  const executed = beforeStarter.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\n)\s*\/\/[^\n]*/g, '$1');
+  assert.equal(executed.split(before).length - 1, 1, 'One executed startup provenance span');
+  assert.equal(beforeStarter.split(before).length - 1, 1, 'One raw startup provenance span');
+  const offset = beforeStarter.indexOf(before);
+  beforeStarter = beforeStarter.slice(0, offset) + after + beforeStarter.slice(offset + before.length);
+  startupProof.push({ offset, before, after });
+}
+assert.equal(sha(Buffer.from(beforeStarter)), '3a3e5652fbf43bfe13e9802521821378cc3221f7942f05f15b7242c98b1fea92', 'Only three startup edits recover the qualified same-C engine');
+let startupRestored = beforeStarter;
+for (const { offset, before, after } of startupProof.slice().reverse()) {
+  assert.equal(startupRestored.slice(offset, offset + after.length), after);
+  startupRestored = startupRestored.slice(0, offset) + before + startupRestored.slice(offset + after.length);
+}
+assert.equal(startupRestored, startupSource, 'Whole startup provenance inverse');
+const engineCompatibility = { actualSha256: sha(Buffer.from(startupSource)), sameCBeforeStarterSha256: sha(Buffer.from(beforeStarter)),
+  edits: startupProof, restoredSha256: sha(Buffer.from(startupRestored)) };
 const addedFocus = "  if (action.type === 'setDriverFocus') {\n    const driver = career.drivers.find(row => row.id === action.driverId)!;\n    return driver.name + ' training focus saved.';\n  }\n";
 const beforeIntervals = "  if (career.phase === 'seasonReview') return 'Season ' + career.season + ' saved.';\n  if (career.phase === 'raceResult') return 'Round ' + (career.round + 1) + ' result saved.';\n  return 'Lap ' + career.race!.lap + ' saved. Make your next race call.';", afterIntervals = "  if (action.type === 'raceInterval') {\n    if (career.phase === 'seasonReview') return 'Season ' + career.season + ' saved.';\n    if (career.phase === 'raceResult') return 'Round ' + (career.round + 1) + ' result saved.';\n    return 'Lap ' + career.race!.lap + ' saved. Make your next race call.';\n  }\n  const exhaustive: never = action;\n  return exhaustive;";
 assert.equal(source.split(addedFocus).length, 2); assert.equal(source.split(afterIntervals).length, 2);
@@ -28,6 +51,7 @@ const outBase = path.resolve(process.env.GP_BOSS_FOCUS_SAVE_OUT || path.join(roo
 fs.mkdirSync(outBase, { recursive: true });
 const out = fs.mkdtempSync(path.join(outBase, 'dukb-grand-prix-focus-save-'));
 const copy = path.join(out, 'useGrandPrixBoss.ts');
+fs.writeFileSync(path.join(out, 'engine-compatibility.json'), JSON.stringify(engineCompatibility, null, 2) + '\n');
 const ids = ['GP_HOOK_FOCUS_SAVE:', 'GP_HOOK_FOCUS_QUOTA:'];
 const results = [];
 function run(name, file = null, failures = new Map()) {

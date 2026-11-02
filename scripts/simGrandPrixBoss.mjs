@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
@@ -14,7 +13,7 @@ const source = original.toString('utf8');
 const heldFiles = new Map([ENGINE, TEST, 'src/lib/keyedRng.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'].map(file => {
   const absolute = path.resolve(ROOT, file); return [absolute, SHA(fs.readFileSync(absolute))];
 }));
-const base = process.env.GP_BOSS_OUT || os.tmpdir();
+const base = process.env.GP_BOSS_OUT || path.join(ROOT, 'tmp');
 fs.mkdirSync(base, { recursive: true });
 const OUT = fs.mkdtempSync(path.join(base, 'dukb-grand-prix-boss-'));
 fs.writeFileSync(path.join(OUT, 'original-grandPrixBoss.ts'), original);

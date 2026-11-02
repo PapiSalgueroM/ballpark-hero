@@ -1,0 +1,159 @@
+name: Grand Prix Boss joined compatibility
+on:
+  push:
+    branches: [codex/grand-prix-boss-compatibility-20261102]
+permissions:
+  contents: read
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      GP_COMPAT_OUT: ${{ github.workspace }}/tmp/grand-prix-compatibility-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind exact joined source and eleven compatible QA files
+        run: |
+          set -euo pipefail
+          out="$GP_COMPAT_OUT"; test ! -e "$out"; mkdir -p "$out"
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-compatibility-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = df06298b19645b936d09882ad99d47c23ba23bd3
+          test "$(git rev-parse 'HEAD^1^{tree}')" = cadc4f591635afcd623b3714b7f9d58634fff65d
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-compatibility.yml' 'scripts/qa/source-controls/useGrandPrixBoss.before-market.ts.txt' 'scripts/qa/source-controls/useGrandPrixBoss.before-rollover.ts.txt' 'scripts/simGrandPrixBoss.mjs' 'scripts/simGrandPrixBossFocusSave.mjs' 'scripts/simGrandPrixBossLifecycle.mjs' 'scripts/simGrandPrixBossMarket.mjs' 'scripts/simGrandPrixBossMarketSave.mjs' 'scripts/simGrandPrixBossRollover.mjs' 'scripts/simGrandPrixBossRolloverSave.mjs' 'scripts/simGrandPrixBossSave.mjs' 'scripts/simGrandPrixBossStarterBalance.mjs' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          git diff --exit-code HEAD^ -- src public index.html package.json package-lock.json bun.lock vitest.config.ts tsconfig.app.json > "$out/held-product-tests.log"
+          printf '%s\n' \
+            '3dcaa003a5f71b6d85db9b4fd4097c5f54bb97d90a863b78bc7604b3027d1911  src/lib/grandPrixBoss.ts' \
+            'b06293c184ba51e002189973c0eb39c6f52616023bb9f17fb3a5b3f67e8d2260  src/hooks/useGrandPrixBoss.ts' \
+            'cf3b484781dbff04df9033d0e1dfe239e6d9562f5cf026db2e4b1e233162a028  src/test/fixtures/grandPrixBossV5Starter.json' \
+            '0827f8b419bc26c902c9ea257999ecdc852015248737289c23d66f19a235fa23  src/test/grandPrixBossStarterBalance.test.ts' \
+            'd67ee3bc7fd21553b7c8949368b51d1ed545987c6e7666b5ea5067bd61ae7c52  scripts/simGrandPrixBoss.mjs' \
+            'f28de1a89ddf838b5c254a1d2b3e7b1e5ec92bb0af45f779d0296c527f8402f8  scripts/simGrandPrixBossMarket.mjs' \
+            '0d23ff6b26fba56ae9cc58f3f0ac097ab41b475455f52003bc88b072748f540e  scripts/simGrandPrixBossRollover.mjs' \
+            '64db4f7a33934bfe460ce9202b13b71e65707ee5326526f195db3e334f834fe6  scripts/simGrandPrixBossLifecycle.mjs' \
+            '8ca43bb508271408f628560f430eae46cb27bfbc09c7003ff2d6c8a35fdb647d  scripts/simGrandPrixBossSave.mjs' \
+            '5d4976b42332f9d40aebd258db98741cf3094521c5873699b507eecd7ccdbf07  scripts/simGrandPrixBossMarketSave.mjs' \
+            '307cf84d1512984c3eda405ca7e4881418d49e131f3357f3f1836af0774e0382  scripts/simGrandPrixBossRolloverSave.mjs' \
+            '0cbe319f33fecf99a37dd73f2aca23dcea980b3a43d64c46ff891bda280ce962  scripts/simGrandPrixBossFocusSave.mjs' \
+            '60b68023d9871bf2735383f40991d3511e1429b83c84d18d0010872c7f8b0c6b  scripts/simGrandPrixBossStarterBalance.mjs' \
+            'b2024f84b91cec4d263772b906b8adeb6903c0a2e5eef5ab3bf878b5b9484298  scripts/qa/source-controls/useGrandPrixBoss.before-market.ts.txt' \
+            'be8ac387c5b3158788d28b2186155c137c4a89d6fff30fd571df4d86965ec046  scripts/qa/source-controls/useGrandPrixBoss.before-rollover.ts.txt' | sha256sum --check -
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          for file in src/lib/grandPrixBoss.ts src/hooks/useGrandPrixBoss.ts src/test/grandPrixBoss*.ts src/test/grandPrixBoss*.tsx src/test/fixtures/grandPrixBossV5Starter.json scripts/simGrandPrixBoss*.mjs scripts/qa/source-controls/*randPrix*; do
+            test -f "$file" || continue; mkdir -p "$out/source/$(dirname "$file")"; cp "$file" "$out/source/$file"
+          done
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$GP_COMPAT_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$GP_COMPAT_OUT/$tag.argv"
+            : > "$GP_COMPAT_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$GP_COMPAT_OUT/$tag.transport" "$@" > "$GP_COMPAT_OUT/$tag.stdout" 2> "$GP_COMPAT_OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$GP_COMPAT_OUT/$tag.exit"
+            tail -n 18 "$GP_COMPAT_OUT/$tag.stdout"; tail -n 18 "$GP_COMPAT_OUT/$tag.stderr"
+            test ! -s "$GP_COMPAT_OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked install before offline execution
+        run: |
+          set -euo pipefail
+          out="$GP_COMPAT_OUT"
+          printf '%s\0' env NODE_OPTIONS= npm ci > "$out/install.argv"
+          set +e
+          env NODE_OPTIONS='' npm ci > "$out/install.stdout" 2> "$out/install.stderr"
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$out/install.exit"
+          tail -n 18 "$out/install.stdout"; tail -n 18 "$out/install.stderr"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Proper app types and nine actual source control families
+        run: |
+          set -euo pipefail
+          out="$GP_COMPAT_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          while read -r scope variable script; do
+            capture "$scope-syntax" node --check "$script"
+            capture "$scope" env "$variable=$out/$scope" node "$script"
+          done <<'SCOPES'
+          core GP_BOSS_OUT scripts/simGrandPrixBoss.mjs
+          market GP_BOSS_MARKET_OUT scripts/simGrandPrixBossMarket.mjs
+          rollover GP_BOSS_ROLLOVER_OUT scripts/simGrandPrixBossRollover.mjs
+          lifecycle GP_BOSS_LIFECYCLE_OUT scripts/simGrandPrixBossLifecycle.mjs
+          save GP_BOSS_SAVE_OUT scripts/simGrandPrixBossSave.mjs
+          market-save GP_BOSS_MARKET_SAVE_OUT scripts/simGrandPrixBossMarketSave.mjs
+          rollover-save GP_BOSS_ROLLOVER_SAVE_OUT scripts/simGrandPrixBossRolloverSave.mjs
+          focus-save GP_BOSS_FOCUS_SAVE_OUT scripts/simGrandPrixBossFocusSave.mjs
+          starter GP_BOSS_STARTER_OUT scripts/simGrandPrixBossStarterBalance.mjs
+          SCOPES
+          node --input-type=module <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out=process.env.GP_COMPAT_OUT;
+          const specs=[["core","GP_BOSS_OUT","scripts/simGrandPrixBoss.mjs",18,39,15,180],["market","GP_BOSS_MARKET_OUT","scripts/simGrandPrixBossMarket.mjs",25,37,32,231],["rollover","GP_BOSS_ROLLOVER_OUT","scripts/simGrandPrixBossRollover.mjs",33,45,42,326],["lifecycle","GP_BOSS_LIFECYCLE_OUT","scripts/simGrandPrixBossLifecycle.mjs",37,45,48,462],["save","GP_BOSS_SAVE_OUT","scripts/simGrandPrixBossSave.mjs",22,48,19,285],["market-save","GP_BOSS_MARKET_SAVE_OUT","scripts/simGrandPrixBossMarketSave.mjs",6,12,6,6],["rollover-save","GP_BOSS_ROLLOVER_SAVE_OUT","scripts/simGrandPrixBossRolloverSave.mjs",5,7,3,0],["focus-save","GP_BOSS_FOCUS_SAVE_OUT","scripts/simGrandPrixBossFocusSave.mjs",5,7,3,0],["starter","GP_BOSS_STARTER_OUT","scripts/simGrandPrixBossStarterBalance.mjs",7,22,9,18]];
+          const walk=folder=>fs.readdirSync(folder,{withFileTypes:true}).flatMap(row=>row.isDirectory()?walk(path.join(folder,row.name)):[path.join(folder,row.name)]);
+          const actual=[];
+          for(const [scope,,script,children,passed,ownedFailures,declaredSkips] of specs){
+            assert.equal(Number(fs.readFileSync(path.join(out,scope+'.exit'),'utf8')),0);
+            assert.equal(fs.statSync(path.join(out,scope+'.transport')).size,0);
+            const reports=[];
+            for(const file of walk(path.join(out,scope)).filter(file=>file.endsWith('.json'))){
+              const report=JSON.parse(fs.readFileSync(file,'utf8'));
+              if(typeof report.numTotalTests==='number'&&Array.isArray(report.testResults))reports.push({file:path.relative(out,file),report});
+            }
+            assert.equal(reports.length,children,'Exact actual child-report count: '+scope);
+            const counts={passed:0,ownedFailures:0,declaredSkips:0},runtime=[];
+            for(const {file,report} of reports){
+              counts.passed+=report.numPassedTests;counts.ownedFailures+=report.numFailedTests;counts.declaredSkips+=report.numPendingTests;
+              assert.equal(report.numTodoTests,0);assert.equal(report.numTotalTests,report.numPassedTests+report.numFailedTests+report.numPendingTests);
+              for(const errors of [report.errors,report.unhandledErrors])if(errors!=null){assert(Array.isArray(errors));assert.equal(errors.length,0);}
+              const counters={numUnhandledErrors:report.numUnhandledErrors??null,numRuntimeErrorTestSuites:report.numRuntimeErrorTestSuites??null};
+              for(const value of Object.values(counters))if(value!==null){assert.equal(typeof value,'number');assert.equal(value,0);}
+              runtime.push({file,counters});
+            }
+            assert.deepEqual(counts,{passed,ownedFailures,declaredSkips},'Actual compatible source outcomes: '+scope);
+            actual.push({scope,script,children:reports.length,...counts,executed:counts.passed+counts.ownedFailures,runtime});
+          }
+          const total=actual.reduce((sum,row)=>({children:sum.children+row.children,passed:sum.passed+row.passed,ownedFailures:sum.ownedFailures+row.ownedFailures,declaredSkips:sum.declaredSkips+row.declaredSkips,executed:sum.executed+row.executed}),{children:0,passed:0,ownedFailures:0,declaredSkips:0,executed:0});
+          assert.deepEqual(total,{children:158,passed:262,ownedFailures:177,declaredSkips:1508,executed:439});
+          fs.writeFileSync(path.join(out,'qualification-summary.json'),JSON.stringify({scope:'Nine joined pure engine and save-hook source-control families. No page, browser, App route, full ordinary suite, build or publication credit.',parent:'df06298b19645b936d09882ad99d47c23ba23bd3',total,actual,runtimeCounterCompleteness:actual.some(row=>row.runtime.some(value=>Object.values(value.counters).some(counter=>counter===null)))?'UNKNOWN':'REPORTED',installNetwork:'Locked online install precedes offline captures. No empty install transport claim.'},null,2)+'\n');
+          console.log('GP_JOINED_COMPATIBILITY:158 children,262 healthy,177 owned source assertions,1508 unselected,439 executed.');
+          VERIFY
+      - name: Hold all source dependencies and tracked membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$GP_COMPAT_OUT"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-joined-compatibility-${{ github.run_id }}
+          path: ${{ github.workspace }}/tmp/grand-prix-compatibility-artifacts/
+          retention-days: 14
