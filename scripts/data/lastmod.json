@@ -125,8 +125,8 @@
     "date": "2026-09-30"
   },
   "/conquest-nhl": {
-    "hash": "40b7e98bc6ce9d9d",
-    "date": "2026-09-30"
+    "hash": "d34ca81a1430d5aa",
+    "date": "2026-11-02"
   },
   "/contact": {
     "hash": "a681f93116dd8c3b",
@@ -145,24 +145,24 @@
     "date": "2026-10-09"
   },
   "/deadline-day": {
-    "hash": "9b435186d0297d66",
-    "date": "2026-10-01"
+    "hash": "81380e56739f70ca",
+    "date": "2026-11-02"
   },
   "/emoji-guess": {
     "hash": "8efdfa83625d452f",
     "date": "2026-10-01"
   },
   "/f1-constructor": {
-    "hash": "49c2ad0ea3272ecb",
-    "date": "2026-10-01"
+    "hash": "9bf80134c4f0095e",
+    "date": "2026-11-02"
   },
   "/f1-driver": {
     "hash": "240f8d0a0d003871",
     "date": "2026-10-23"
   },
   "/f1-higher-lower": {
-    "hash": "cf38e505c03f8ee5",
-    "date": "2026-10-23"
+    "hash": "d577a88c55240702",
+    "date": "2026-11-02"
   },
   "/face-off": {
     "hash": "0406b6fb7583c2ab",
@@ -211,6 +211,10 @@
   "/golf-higher-lower": {
     "hash": "3d1cc41d320c0d2c",
     "date": "2026-10-31"
+  },
+  "/grand-prix-boss": {
+    "hash": "ea51ef99d43b44c1",
+    "date": "2026-11-02"
   },
   "/guess-cbb-team": {
     "hash": "9598e629323813ba",
@@ -437,8 +441,8 @@
     "date": "2026-10-23"
   },
   "/nhl-front-office": {
-    "hash": "5898420495d09415",
-    "date": "2026-10-31"
+    "hash": "82aa59a30343d72e",
+    "date": "2026-11-02"
   },
   "/nhl-gauntlet-draft": {
     "hash": "821c9a6630b34184",
@@ -457,8 +461,8 @@
     "date": "2026-10-01"
   },
   "/perfect-lineup-f1": {
-    "hash": "cfedb79c242d5df9",
-    "date": "2026-10-13"
+    "hash": "705074d677c92e36",
+    "date": "2026-11-02"
   },
   "/perfect-lineup-nba": {
     "hash": "5c818e4a0df3cf7d",
@@ -481,8 +485,8 @@
     "date": "2026-10-01"
   },
   "/perfect-season-nhl": {
-    "hash": "40b6b5c47b36b0a6",
-    "date": "2026-10-01"
+    "hash": "7ec4ddc0185d3543",
+    "date": "2026-11-02"
   },
   "/player-bingo": {
     "hash": "99ebadcc618a5bfc",
@@ -649,8 +653,8 @@
     "date": "2026-10-21"
   },
   "/transfer-path": {
-    "hash": "27152604c9584ef0",
-    "date": "2026-09-30"
+    "hash": "f6b15d5c2b0bb90d",
+    "date": "2026-11-02"
   },
   "/ufc": {
     "hash": "32404de6a055ffb4",

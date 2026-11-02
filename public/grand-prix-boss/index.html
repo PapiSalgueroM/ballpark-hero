@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Grand Prix Boss: Free F1 Team Manager | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Grand Prix Boss","item":"https://douknowball.com/grand-prix-boss"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does Grand Prix Boss use real racing teams or drivers?","acceptedAnswer":{"@type":"Answer","text":"No. Its teams, drivers, tracks and results are fictional. It does not replay a real championship or use real logos, liveries or driver photos."}},{"@type":"Question","name":"Can I manage both drivers?","acceptedAnswer":{"@type":"Answer","text":"Yes. Choose the tyres and pace for both cars before the start. At later race decisions, give each driver a separate pace and pit choice."}},{"@type":"Question","name":"Why can I not afford an upgrade when I have enough cash?","acceptedAnswer":{"@type":"Answer","text":"The remaining signed wages and race entry fees are protected first. Available to spend is the part left after those commitments."}},{"@type":"Question","name":"Can I reroll qualifying or the race weather?","acceptedAnswer":{"@type":"Answer","text":"No. The same saved team and actions use the same held race conditions. Going Back, reloading or reopening the result does not roll a new weekend."}},{"@type":"Question","name":"Can I keep playing after the first season?","acceptedAnswer":{"@type":"Answer","text":"Yes. Check the next season plan after the final race, then start another year with the same saved team. History keeps the latest twelve detailed seasons and your recorded career totals."}},{"@type":"Question","name":"When can I change a driver or training focus?","acceptedAnswer":{"@type":"Answer","text":"Before the first qualifying session or during season review. Paid review signings and renewals start next year. A different focus saves for free, while hiring and renewals use the actual displayed quotes."}},{"@type":"Question","name":"What happens when a driver retires?","acceptedAnswer":{"@type":"Answer","text":"A driver whose contract expires as they turn forty or older is replaced at rollover. The plan names the prospect and lists the signing fee, wage, term and reserve before you advance. Active and already paid future contracts stay honored."}},{"@type":"Question","name":"Does the game need an account?","acceptedAnswer":{"@type":"Answer","text":"No. The management game plays signed out. Your career is kept in this browser, so use the same browser and avoid clearing its site data if you want to continue it."}},{"@type":"Question","name":"What happens if the browser refuses to save?","acceptedAnswer":{"@type":"Answer","text":"The displayed team stays at its last confirmed state. A refused write can be tried again. If the save may already have landed, the game asks you to reload before making another decision."}},{"@type":"Question","name":"Is Grand Prix Boss free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Grand Prix Boss is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Grand Prix Boss: Free F1 Team Manager | DoUKnowBall","description":"Run a fictional F1 racing team for free. Sign drivers, choose training, upgrade your car and make tyre and pit calls across seasons. Plays signed out.","url":"https://douknowball.com/grand-prix-boss","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script data-dukb-consent-bootstrap="">
+      // Keep this gate aligned with consentPreferences and consentedScripts.
+      (function () {
+        var ANALYTICS_READY = false;
+        if (!ANALYTICS_READY) return;
+        try {
+          var value = JSON.parse(localStorage.getItem('cookie-consent-v2') || 'null');
+          var now = Date.now();
+          if (!value || value.version !== 2 || typeof value.advertising !== 'boolean'
+            || typeof value.analytics !== 'boolean' || value.analytics !== true
+            || typeof value.updatedAt !== 'number' || !Number.isFinite(value.updatedAt)
+            || value.updatedAt < 0 || value.updatedAt > now
+            || now - value.updatedAt >= 180 * 24 * 60 * 60 * 1000) return;
+          if (/^\/(?:reset-password|auth|account|profile|admin)(?:\/|$)/.test(location.pathname)) return;
+          function cleanUrl(input) {
+            try {
+              var url = new URL(input, location.origin);
+              return url.protocol === 'https:' || url.protocol === 'http:' ? url.origin + url.pathname : '';
+            } catch (e) { return ''; }
+          }
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('consent', 'default', {
+            ad_storage: 'denied', analytics_storage: 'denied',
+            ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.__DUKB_CONSENT_DEFAULTED__ = true;
+          window.gtag('consent', 'update', {
+            ad_storage: value.advertising && navigator.globalPrivacyControl !== true ? 'granted' : 'denied',
+            analytics_storage: 'granted', ad_user_data: 'denied', ad_personalization: 'denied'
+          });
+          window.gtag('js', new Date());
+          window.gtag('config', 'G-KZQK2G68YC', {
+            send_page_view: false, page_location: cleanUrl(location.href),
+            page_referrer: document.referrer ? cleanUrl(document.referrer) : '',
+            allow_google_signals: false, allow_ad_personalization_signals: false
+          });
+          var g = document.createElement('script');
+          g.async = true;
+          g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+          document.head.appendChild(g);
+        } catch (e) { /* Blocked storage keeps optional analytics off. */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/grand-prix-boss" data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/grand-prix-boss" data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="description" content="Run a fictional F1 racing team for free. Sign drivers, choose training, upgrade your car and make tyre and pit calls across seasons. Plays signed out." data-rh="true"><meta property="og:title" content="Grand Prix Boss: Free F1 Team Manager | DoUKnowBall" data-rh="true"><meta property="og:description" content="Run a fictional F1 racing team for free. Sign drivers, choose training, upgrade your car and make tyre and pit calls across seasons. Plays signed out." data-rh="true"><meta name="twitter:title" content="Grand Prix Boss: Free F1 Team Manager | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Run a fictional F1 racing team for free. Sign drivers, choose training, upgrade your car and make tyre and pit calls across seasons. Plays signed out." data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Grand Prix Boss</h1>
+<p>Fictional teams, drivers and tracks.</p>
+<h2>Your team starts here</h2>
+<p>Choose the car upgrades, hire the drivers and call the race strategy. Play signed out. Your team saves in this browser.</p>
+<h2>Grand Prix Boss: Free F1 Team Manager</h2>
+<p>A saved fictional racing championship with two-driver strategy, car development and team finances.</p>
+<p>Grand Prix Boss puts you on the pit wall of a fictional racing team. You have two drivers, a car to improve and a budget that has to last. Decide where to spend before qualifying, then choose the tyres, pace and pit calls for both cars.</p>
+<p>A season has twelve rounds. Race in short decision stages, sign or renew your drivers and build toward the driver and team championships. Finish the year, check your next season plan and keep the same career going. Everything plays signed out, with your team saved in this browser. All teams, drivers, tracks and results are made up for this game.</p>
+<h2>How to play Grand Prix Boss</h2>
+<li>Use Start your team to begin a saved career. Read the rules before your first race. The question button opens them again whenever you need them.</li>
+<li>The team hub has six tiles. Next race runs the weekend. Drivers shows your seats, contracts and training. Car shows development, Finances explains your budget, Standings holds both championships and History holds your saved seasons and race results. Back to team returns to the tiles.</li>
+<li>Before qualifying, check the track profile and rain chance. Power has more influence on faster tracks, while aero has more influence on technical tracks. A reliability upgrade makes a mechanical retirement less likely.</li>
+<li>Use Run qualifying when you are ready. It fixes the grid and the race weather. Choose a tyre and a pace for each driver, then use Start race. Opening another screen cannot roll a new grid.</li>
+<li>Run the race to lap 12, make your next decisions, continue to lap 26 and finish at lap 40. Each stage shows both cars, their tyre wear and their current position.</li>
+<li>At a later decision point, choose Stay out or pit for fresh tyres. You can give your two drivers different plans. Retired cars remain in the result but cannot return to the race.</li>
+<li>After the finish, read the actual prize, entry and wage costs. Check the driver and team standings, then continue to the next round. Your result and money save together.</li>
+<li>Driver changes open before the first qualifying session and after the last race. Compare the incoming driver with the seat you want to change. Read the signing fee, any buyout, wages, start year and reserve before signing. A deal paid during season review starts next year.</li>
+<li>Choose training for each of your two drivers before the first qualifying session or during season review. Balanced spreads development. Pace, consistency, tyre care and wet training target one skill. The selected focus saves for that driver.</li>
+<li>At the end of the year, check the next season plan in Next race. It lists the sponsor payment, automatic renewals, retiring seats and their quoted prospects, all fees, the next reserve and the cash left after those payments. Start next season uses that exact plan.</li>
+<li>Open History to see saved champions, your final car and all twelve race summaries. The latest twelve seasons keep their details. Career totals keep earlier recorded seasons too, and older saves plainly show where their records begin.</li>
+<h2>Grand Prix Boss rules for racing and money</h2>
+<li>Ten fictional teams hold two race seats each. A race has twenty different entrants. One driver cannot occupy two seats.</li>
+<li>A race runs for forty laps, with decisions at laps twelve and twenty-six. This game uses its own simplified racing rules.</li>
+<li>Soft tyres trade shorter life for pace. Medium and hard tyres last longer. Wet tyres are useful in wet conditions and lose time when they do not suit the race.</li>
+<li>Push gains pace but uses tyres faster and raises retirement risk. Conserve protects the car and tyres at a pace cost. Balanced sits between them.</li>
+<li>A pit stop adds time before the fresh tyres can help. A stop near the end may not have enough laps left to repay that loss.</li>
+<li>The top ten finishers earn 25, 18, 15, 12, 10, 8, 6, 4, 2 and 1 points. There is no fastest-lap bonus. Retired cars earn no points.</li>
+<li>Both drivers contribute their earned points to the team championship. The driver and team tables are separate. Ties use wins, podiums and then a fixed driver or team order.</li>
+<li>Your available budget is cash minus the remaining signed wages and entry fees. An upgrade cannot spend that reserve. Future race prizes are not available before you earn them.</li>
+<li>A car upgrade adds two to that area, up to one hundred. The displayed quote is the amount charged for that purchase. Prices rise as the car improves.</li>
+<li>Each finish settles its prize and costs once. Reopening a result or pressing an old action cannot pay it again.</li>
+<li>Signing pays the displayed signing fee and any buyout now. Wages are separate commitments. Review renewals cover the next year, so an already paid renewal is removed from the automatic renewal bill.</li>
+<li>Drivers age once when the next year begins. Development uses that new age. Training gains stop at potential. Up to age twenty-six, Balanced adds one to each skill while a chosen skill gains three. From twenty-seven to thirty-two, Balanced adds one to the weakest skill while a chosen skill gains one.</li>
+<li>From age thirty-three, pace drops by one unless pace training preserves it. A chosen consistency, tyre care or wet focus can still gain one within potential. Training is free, but it is locked after the first qualifying session until season review.</li>
+<li>An expiring driver who turns forty or older leaves the seat at rollover. An active contract with more time left, or a deal already paid for a future year, stays honored. The next season plan names each required prospect with age, skills, potential, contract and signing fee before you advance.</li>
+<li>Each retiring seat has a signing fee equal to two race wages for its quoted prospect. The plan pays those replacement fees as well as any automatic renewal fees, then protects all twelve race wages and entry fees. Sponsor money arrives only when the new year is saved.</li>
+<li>At rollover, each car keeps seventy percent of purchased development above its saved original baseline, rounded down in each area. Rival teams then add two to their weakest car area, up to one hundred. Keep a budget for further upgrades instead of expecting a finished car to stay at its peak forever.</li>
+<li>Your local season score is rounded and capped at one hundred. Championship points contribute eighty percent, compared with the maximum forty-three team points per race. Bringing both cars home contributes the remaining twenty percent.</li>
+<li>The team is stored in this browser. A refused save does not advance the displayed team. If another tab has played on, or a new save cannot be confirmed, reload the saved team before making another decision.</li>
+<h2>Grand Prix Boss example: two different tyre plans</h2>
+<p>This is a made-up example of the decision, not a real race. At lap twelve, your first driver has used the tyres hard while your second driver has conserved them. Both still need to reach lap forty.</p>
+<p>Send the first driver into the pits for fresh hard tyres and leave the second driver out. The first car loses time in the stop, then starts using the new tyres. The second keeps track position but continues on its older set.</p>
+<p>At lap twenty-six, compare the positions, wear and stops on the two driver rows. If the fresh set has not recovered the pit loss, an extra stop would have made the result worse. If the old set has become slow, staying out again carries a different cost.</p>
+<p>A one-two finish earns twenty-five plus eighteen, or forty-three team points. A fifth and seventh earn ten plus six, or sixteen. Only the actual classified result changes the saved standings.</p>
+<p>For a simple budget example, cash of one million with six hundred thousand already committed leaves four hundred thousand available. An upgrade costing more than that must wait, even though the cash balance itself is higher.</p>
+<p>For an offseason example, inspect a retiring seat in the plan. Its named prospect has a signing fee and a wage for each of the twelve races. Starting the next year pays that quoted fee and protects the listed wages and entry costs. The old driver remains named in the saved season record.</p>
+<p>Compare that with a driver whose paid contract still covers the next year. That seat stays occupied and gets no retirement replacement charge. An automatic renewal, a renewal you already paid and a required replacement are different lines in the plan.</p>
+<h2>Grand Prix Boss tips for your first season</h2>
+<li>Read the next track before spending. Improving the area that suits its profile gives a different result from buying the same upgrade every time.</li>
+<li>Keep the two drivers in view. One can stay out while the other stops, so you do not have to make the same gamble with both cars.</li>
+<li>Use tyre wear and the laps remaining together. Fresh tyres need enough racing time to repay a pit stop.</li>
+<li>Compare places and reliability as well as points. Finishing ahead of a direct rival still tells you something when neither car reaches the top ten.</li>
+<li>Choose training before qualifying. Check age and potential as well as current pace, especially when deciding whether to keep a veteran for another season.</li>
+<li>Read the next season plan after changing a contract. A bigger signing fee or wage can leave less money for the car, and the game protects the reserve before accepting a deal.</li>
+<li>Keep one team open in one tab. If the save has moved elsewhere, Reload saved team brings you back to the latest stored progress.</li>
+<h2>Grand Prix Boss FAQ: saves and race strategy</h2>
+<h3>Does Grand Prix Boss use real racing teams or drivers?</h3>
+<p>No. Its teams, drivers, tracks and results are fictional. It does not replay a real championship or use real logos, liveries or driver photos.</p>
+<h3>Can I manage both drivers?</h3>
+<p>Yes. Choose the tyres and pace for both cars before the start. At later race decisions, give each driver a separate pace and pit choice.</p>
+<h3>Why can I not afford an upgrade when I have enough cash?</h3>
+<p>The remaining signed wages and race entry fees are protected first. Available to spend is the part left after those commitments.</p>
+<h3>Can I reroll qualifying or the race weather?</h3>
+<p>No. The same saved team and actions use the same held race conditions. Going Back, reloading or reopening the result does not roll a new weekend.</p>
+<h3>Can I keep playing after the first season?</h3>
+<p>Yes. Check the next season plan after the final race, then start another year with the same saved team. History keeps the latest twelve detailed seasons and your recorded career totals.</p>
+<h3>When can I change a driver or training focus?</h3>
+<p>Before the first qualifying session or during season review. Paid review signings and renewals start next year. A different focus saves for free, while hiring and renewals use the actual displayed quotes.</p>
+<h3>What happens when a driver retires?</h3>
+<p>A driver whose contract expires as they turn forty or older is replaced at rollover. The plan names the prospect and lists the signing fee, wage, term and reserve before you advance. Active and already paid future contracts stay honored.</p>
+<h3>Does the game need an account?</h3>
+<p>No. The management game plays signed out. Your career is kept in this browser, so use the same browser and avoid clearing its site data if you want to continue it.</p>
+<h3>What happens if the browser refuses to save?</h3>
+<p>The displayed team stays at its last confirmed state. A refused write can be tried again. If the save may already have landed, the game asks you to reload before making another decision.</p>
+<h3>Is Grand Prix Boss free to play?</h3>
+<p>Yes. Grand Prix Boss is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/f1-driver">🏎️ Guess The F1 Driver Guess the mystery F1 driver from clues</a>
+<a href="/f1-higher-lower">📊 F1 Higher or Lower Which driver won more Grands Prix?</a>
+<a href="/f1-constructor">🏗️ Guess The Constructor Guess the mystery F1 team from clues</a>
+<a href="/guess-tennis-player">🎾 Guess The Player Guess the mystery tennis player from clues</a>
+<a href="/tennis-chain">🔗 Tennis Chain Build a chain of Grand Slam defeats</a>
+<a href="/tennis-higher-lower">📊 Tennis Higher or Lower Which legend won more Grand Slam titles?</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">NBA</a>
+<a href="/hockey">NHL</a>
+<a href="/pro-football">NFL</a>
+<a href="/baseball">MLB</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/cookie-policy">Cookie Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -405,6 +405,10 @@ export const SEO_META: Record<string, SeoMeta> = {
     title: 'Perfect Lineup: NHL Hockey Dream Line Game',
     description: 'Build an NHL dream line of three forwards, two defensemen and a goalie where slots demand a random team or era, then simulate. Free hockey puzzle game.',
   },
+  '/grand-prix-boss': {
+    title: 'Grand Prix Boss: Free F1 Team Manager',
+    description: 'Run a fictional F1 racing team for free. Sign drivers, choose training, upgrade your car and make tyre and pit calls across seasons. Plays signed out.',
+  },
   '/f1-driver': {
     title: 'Guess The F1 Driver: Formula 1 Trivia Game',
     description: 'A mystery Formula 1 great hides behind six clues: race wins, titles, teams, nationality and a famous moment. Solve it early to score big. Free daily F1 quiz.',
