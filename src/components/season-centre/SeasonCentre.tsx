@@ -116,7 +116,7 @@ export interface CentreModel {
   /** Round 1047: the moments he may play this season; null or absent: none. */
   moments?: CentreMoments | null;
   /** Optional saved cup nights; positions are the game's order, not real dates. */
-  calendar?: { games: CalendarCupGame[]; note: string; onCompetition: (id: 'domestic' | 'club') => void };
+  calendar?: { games: CalendarCupGame[]; note: string; onCompetition: (id: 'domestic' | 'club' | 'shield') => void };
 }
 
 /** The sport's side of the viewer: its clock, its words for a fixed game,
@@ -196,6 +196,14 @@ function FixtureList({ model, played, current, short, cupSeen = new Set<string>(
   const yours = new Set((model.moments?.list ?? []).map(m => m.md));
   return (
     <ol className="space-y-1" data-fixtures>
+      {visibleCupGames(model.calendar?.games ?? [], cupSeen).filter(cup => cup.afterLeague === 0).map(cup => <li key={cup.id} data-fixture-cup={cup.id} data-cup-after-league={0} aria-current={cupCurrent === cup.id ? 'true' : undefined} className={`rounded-lg border border-sky-500/30 px-2 py-1 text-xs ${cupCurrent === cup.id ? 'bg-primary/15 ring-1 ring-primary/40' : ''}`}>
+        <button type="button" className="min-h-11 w-full min-w-0 text-left" onClick={() => model.calendar?.onCompetition(cup.competition)}>
+          <span className="block font-bold text-sky-400">{cup.name} · {cup.match.round}</span>
+          <span className="block text-muted-foreground">Before league game 1</span>
+          <span className="block break-words" data-fixture-cup-opponent>{cup.match.opponent ?? 'Opponents not recorded'}</span>
+          {cupSeen.has(cup.id) && <span className="block font-bold tabular-nums" data-fixture-cup-result>{cup.match.goalsFor === null || cup.match.goalsAgainst === null ? cup.match.result ?? 'Score not recorded' : `${cup.match.goalsFor}-${cup.match.goalsAgainst}`}</span>}
+        </button>
+      </li>)}
       {s.games.map(g => {
         const done = g.md <= played;
         const r = resultOf(g);
@@ -609,10 +617,10 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
       const match = cup.match;
       return <div className="space-y-3" data-centre-calendar-cup={cup.id} data-cup-revealed={stage.revealed ? 'true' : 'false'}>
         <h3 className="text-sm font-black">{cup.name} · {match.round}</h3>
-        <p className="text-xs text-muted-foreground">After league game {cup.afterLeague}. {model.calendar?.note}</p>
+        <p className="text-xs text-muted-foreground">{cup.afterLeague === 0 ? "Before league game 1." : `After league game ${cup.afterLeague}.`} {model.calendar?.note}</p>
         <div className="rounded-xl bg-muted/30 p-4 text-center">
           <p className="font-bold" data-calendar-cup-opponent>{model.header.club} vs {match.opponent ?? 'Opponents not recorded'}</p>
-          <p className="mt-1 text-xs">{match.home === undefined ? 'Venue not recorded' : match.home ? 'Home' : 'Away'}</p>
+          <p className="mt-1 text-xs">{match.neutral ? 'Neutral ground' : match.home === undefined ? 'Venue not recorded' : match.home ? 'Home' : 'Away'}</p>
           {stage.revealed ? <>
             <p className="my-2 text-3xl font-black tabular-nums" data-calendar-cup-score>{match.goalsFor === null || match.goalsAgainst === null ? 'Score not recorded' : `${match.goalsFor}-${match.goalsAgainst}`}</p>
             {match.result && <p className="text-sm font-bold" data-calendar-cup-verdict>{match.result}</p>}
@@ -620,7 +628,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
             {match.playerGoals !== undefined && <p className="mt-1 text-xs">You scored {match.playerGoals}. Already included in your season totals.</p>}
           </> : <p className="mt-3 text-xs text-muted-foreground">This is the result already kept in your career. Watching it does not replay the simulation.</p>}
         </div>
-        <button type="button" className="min-h-11 w-full rounded-lg border border-border px-3 text-xs font-bold" onClick={() => model.calendar?.onCompetition(cup.competition)} data-calendar-cup-competition>Open {cup.name} bracket</button>
+        <button type="button" className="min-h-11 w-full rounded-lg border border-border px-3 text-xs font-bold" onClick={() => model.calendar?.onCompetition(cup.competition)} data-calendar-cup-competition>Open {cup.name}{cup.competition === "shield" ? "" : " bracket"}</button>
       </div>;
     }
     const g = s.games[stage.md - 1];

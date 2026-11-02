@@ -1,0 +1,310 @@
+name: Soccer Career Community Shield UI qualification
+on:
+  push:
+    branches: [codex/sc-community-shield-ui-20261102]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the qualified core parent and exactly ten UI paths
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-community-shield-ui"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT" "$OUT/old-leaves"
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-ui-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = 5aad960a2ecb0f8419934dc9308f2ba9ed184422
+          test "$(git rev-parse 'HEAD^^{tree}')" = c82bcafcb271b5f3aca5461a15be68a1b5862f62
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          cat > "$OUT/expected-paths.txt" <<'PATHS'
+          A	.github/workflows/sc-community-shield-ui.yml
+          A	src/test/soccerCommunityShieldUiAcceptance.test.tsx
+          A	src/test/soccerCommunityShieldScreens.test.tsx
+          M	src/components/season-centre/SeasonCentre.tsx
+          M	src/components/soccer-career/SeasonCompetitionPanel.tsx
+          M	src/components/soccer-career/SoccerSeasonCentre.tsx
+          M	src/components/soccer-career/TrophyCabinet.tsx
+          M	src/lib/soccerSeasonCalendar.ts
+          M	src/lib/soccerSeasonCompetitions.ts
+          M	src/pages/SoccerCareer.tsx
+          PATHS
+          sort "$OUT/expected-paths.txt" > "$OUT/expected-paths.sorted"
+          sort "$OUT/changed-paths.txt" > "$OUT/changed-paths.sorted"
+          cmp "$OUT/expected-paths.sorted" "$OUT/changed-paths.sorted"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          src/components/season-centre/SeasonCentre.tsx 6c7db13797d18410da32a664a0029ad54e7a9752
+          src/components/soccer-career/SeasonCompetitionPanel.tsx ad3a79f5cb03bb3f02149ad9496dd48ecebd1991
+          src/components/soccer-career/SoccerSeasonCentre.tsx b3839c18814e6350fdcb4e3a2de6f789eea99df8
+          src/components/soccer-career/TrophyCabinet.tsx 2c084986319e798140af26e8652d0a739be047a4
+          src/lib/soccerSeasonCalendar.ts 164d980cb5edfbe542dd863586131e027f75fa86
+          src/lib/soccerSeasonCompetitions.ts e00266f57feb0bd0b4a60d4a4c5407e55074d2c1
+          src/pages/SoccerCareer.tsx fded4663b974857ce3068ad152f643eeb54d3d30
+          src/test/soccerCommunityShieldScreens.test.tsx 70e9a4a688d611f838f7960cc7231e1ae0b89df4
+          src/test/soccerSeasonCompetitions.test.tsx 54bc15dc68700cbce4659eb316f3129f372f8b7f
+          src/test/soccerSeasonCalendarUi.test.tsx f6ed1f4cfe0726cd4703c230873fc6ba632ffd27
+          src/test/trophyCabinet.test.tsx 9466daa474ea303eca8fd328f2db4eed98e6e7da
+          src/test/trophyCabinetCampaign.test.tsx 6976b163fc26bd8999721681c9b3ac2165667736
+          src/test/soccerCommunityShieldUiAcceptance.test.tsx 52cc2d31bcf186cb1193068940bd70d45a4c5a2e
+          src/test/soccerCommunityShieldAcceptance.test.ts 72cf4787781245c914ebc0b178de5d56b5991687
+          src/test/soccerCommunityShieldRules.test.ts aee086a743f4c0c261d805ee0d994b01323d092f
+          src/lib/soccerCareerEngine.ts 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          src/lib/soccerCareerExtraCups.ts ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          src/test/setup.ts df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          PINS
+          while read -r path blob; do test "$(git rev-parse "HEAD:$path")" = "$blob"; done < "$OUT/input-pins.txt"
+          cat > "$OUT/tests.txt" <<'TESTS'
+          src/test/soccerSeasonCompetitions.test.tsx
+          src/test/soccerSeasonCalendarUi.test.tsx
+          src/test/trophyCabinet.test.tsx
+          src/test/trophyCabinetCampaign.test.tsx
+          src/test/soccerCommunityShieldAcceptance.test.ts
+          src/test/soccerCommunityShieldRules.test.ts
+          src/test/soccerCommunityShieldUiAcceptance.test.tsx
+          src/test/soccerCommunityShieldScreens.test.tsx
+          TESTS
+          test "$(git rev-parse HEAD^:src/lib/soccerSeasonCompetitions.ts)" = d14c80a218f405215e58f0e860e6226c7733f826
+          test "$(git rev-parse HEAD^:src/lib/soccerSeasonCalendar.ts)" = 6b8ebaaf2812c3f9d3f8f95fbc756e578535baba
+          test "$(git rev-parse HEAD^:src/components/soccer-career/TrophyCabinet.tsx)" = 39184dbdc4bb6a70af1e9366239d26701d06796c
+          git show HEAD^:src/lib/soccerSeasonCompetitions.ts > "$OUT/old-leaves/nav.ts.txt"
+          git show HEAD^:src/lib/soccerSeasonCalendar.ts > "$OUT/old-leaves/opening.ts.txt"
+          git show HEAD^:src/components/soccer-career/TrophyCabinet.tsx > "$OUT/old-leaves/cabinet.tsx.txt"
+          git diff --raw HEAD^ HEAD > "$OUT/tree-delta.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          cat > "$OUT/cleanup.sh" <<'CLEANUP'
+          cleanup_siblings() {
+            if test -f "$OUT/sibling-copies.txt"; then
+              while IFS= read -r candidate; do
+                case "$candidate" in
+                  "$GITHUB_WORKSPACE"/src/lib/__sc_shield_control_*.ts|"$GITHUB_WORKSPACE"/src/components/soccer-career/__sc_shield_control_*.tsx) rm -f -- "$candidate" ;;
+                  *) printf 'Refused unexpected cleanup target\n' >&2; return 1 ;;
+                esac
+              done < "$OUT/sibling-copies.txt"
+            fi
+          }
+          CLEANUP
+      - name: Locked online install separate from offline UI proof
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Write exact identity and primary-failure classifiers
+        run: |
+          set -euo pipefail
+          cat > "$OUT/classify.mjs" <<'CLASSIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import { fileURLToPath } from 'node:url';
+          export const expected = {"src/test/soccerSeasonCompetitions.test.tsx":["saved Soccer Career competitions copies the named cup, known scores, recorded ground and penalties without inventing early fixtures","saved Soccer Career competitions keeps European legs and the deciding aggregate on their saved scores","saved Soccer Career competitions shows both saved continental final legs, grounds and aggregate in the existing panel","saved Soccer Career competitions keeps a neutral single-match Champions League final without a leg or away label","saved Soccer Career competitions refuses an unanchored result and a different year or club","saved Soccer Career competitions keeps the actual saved group or league-phase nights when there were no knockouts","saved Soccer Career competitions reads a season-owned snapshot after the latest club campaign has changed","saved Soccer Career competitions does not add a competition to an old row without participation evidence","saved Soccer Career competitions shows missing cup final scores instead of borrowing a score from another stage","saved Soccer Career competitions opens the recorded score tile, returns to the compact grid and writes no save","saved Soccer Career competitions the switcher names recorded competitions and identifies the squad as current","Soccer Career competition navigation keeps the actual league view freezes and resumes the same live clock, pause state and completed review across cup tabs","Soccer Career competition navigation keeps the actual league view a hidden instant clock does not deliver full time or a moment hold (null)","Soccer Career competition navigation keeps the actual league view a hidden instant clock does not deliver full time or a moment hold (70)","Soccer Career competition navigation keeps the actual league view opens an old saved campaign without drawing a league table against a later world","Soccer Career competition navigation keeps the actual league view labels the current squad with its current club and upcoming year on an old replay"],"src/test/soccerSeasonCalendarUi.test.tsx":["cup nights in the actual Season Centre opens the saved domestic cup after league game five and keeps the next opponent hidden until its result","cup nights in the actual Season Centre a deciding early loss reveals no future domestic fixture and resumes league game six","cup nights in the actual Season Centre opens the cup competition from a scheduled cup without rerolling or adding scores","cup nights in the actual Season Centre replaying a resume at the cup boundary uses the existing saved result","cup nights in the actual Season Centre models without cup data keep the original league route","cup nights in the actual Season Centre shows an actual saved bracket with separate legs and keeps all input bytes","cup nights in the actual Season Centre shows only the recorded league-phase club row rather than inventing a full table","cup nights in the actual Season Centre a kept quarter-final retains its actual away ground while missing grounds stay missing"],"src/test/trophyCabinet.test.tsx":["Soccer Career trophy cabinet records matches all seven actual career counters without counting awards or national history twice","Soccer Career trophy cabinet records returns the actual winning rows newest first and leaves the source seasons untouched","Soccer Career trophy cabinet records does not grant a win just because a losing season has a cup run, an award or a national winner","Soccer Career trophy cabinet records keeps old flags without fabricating names or numbers missing from a saved row","Soccer Career trophy cabinet panel opens the recorded year and club, shows full season stats, then returns to the same win list","Soccer Career trophy cabinet panel uses the recorded continental competition and keeps national numbers separate from club totals","Soccer Career trophy cabinet panel reads a non-European club cup under its own saved name","Soccer Career trophy cabinet panel shows a saved domestic cup route and final without substituting season goals for cup goals","Soccer Career trophy cabinet panel keeps the saved loan parent instead of the player current club","Soccer Career trophy cabinet panel keeps help reopenable, returns to the picked win, and never changes the career record","Soccer Career trophy cabinet panel locks the page, keeps keyboard focus inside, and restores the opener and body styles on close","Soccer Career trophy cabinet panel closes by Escape, Back and the backdrop but keeps content clicks inside the panel"],"src/test/trophyCabinetCampaign.test.tsx":["recorded club trophy campaigns shows every first-stage game and knockout leg in saved order with exact scores and player goals","recorded club trophy campaigns keeps away-goals, aggregate, extra-time goals and penalties separate from the saved match score","recorded club trophy campaigns separates season totals, campaign goals and goals in individual games","recorded club trophy campaigns reads a season-owned campaign instead of a newer campaign from another club","recorded club trophy campaigns uses the latest campaign only when its saved club and year match the selected old row","recorded club trophy campaigns keeps unanchored campaigns missing instead of inventing or borrowing games","recorded club trophy campaigns keeps year campaigns missing instead of inventing or borrowing games","recorded club trophy campaigns keeps club campaigns missing instead of inventing or borrowing games","recorded club trophy campaigns keeps invalid campaigns missing instead of inventing or borrowing games","recorded club trophy campaigns keeps invalid-stage campaigns missing instead of inventing or borrowing games","recorded club trophy campaigns keeps an old trophy flag without guessing a competition name or final","recorded club trophy campaigns shows both saved non-European final legs and the retained simulation note","recorded club trophy campaigns leaves a single neutral final without a forged home or away label","recorded club trophy campaigns marks missing penalty numbers and keeps invalid optional extra-time counts out of the display","recorded club trophy campaigns restores the original picked win and list scroll through detail and reopenable help","recorded club trophy campaigns keeps the full career bytes and saved row references unchanged through all cabinet actions","recorded club trophy campaigns does not fill in a final when a named anchored campaign kept no games","recorded club trophy campaigns leaves domestic trophy details on their existing saved cup route"],"src/test/soccerCommunityShieldAcceptance.test.ts":["Soccer Career Community Shield first slice SC_SHIELD_QUALIFIED_MATCH: automatically plays the next opening match from an actual prospective close","Soccer Career Community Shield first slice SC_SHIELD_PERSONAL_TITLE: counts a valid saved played win separately and never reapplies its recorded stats"],"src/test/soccerCommunityShieldRules.test.ts":["Soccer Career Community Shield saved rules SC_SHIELD_RULES_VALID: reads complete saved wins and preserves nonwinning personal outcomes","Soccer Career Community Shield saved rules SC_SHIELD_RULES_QUALIFICATION: refuses malformed year seed entrant and source proof","Soccer Career Community Shield saved rules SC_SHIELD_RULES_BINDING: binds the stored result to its row and complete qualification","Soccer Career Community Shield saved rules SC_SHIELD_RULES_DECIDER: keeps ninety-minute scores and actual shootout totals separate","Soccer Career Community Shield saved rules SC_SHIELD_RULES_PERSONAL: refuses fabricated participation stats ratings and personal titles","Soccer Career Community Shield saved rules SC_SHIELD_RULES_DUPLICATES: refuses ambiguous valid editions without changing old totals or row order","Soccer Career Community Shield saved rules SC_SHIELD_RULES_CODEC: preserves complete recorded proofs in literal and genuinely packed saves","Soccer Career Community Shield saved rules SC_SHIELD_RULES_OLD_SAVE: never backfills missing or partial qualification while reading older careers"],"src/test/soccerCommunityShieldUiAcceptance.test.tsx":["Soccer Career Community Shield screens SC_SHIELD_UI_NAV: projects the recorded represented-club opening match into existing competitions","Soccer Career Community Shield screens SC_SHIELD_UI_OPENING: places a saved neutral opening before league game one","Soccer Career Community Shield screens SC_SHIELD_UI_CABINET: lists the same valid played Shield win as its own trophy category"],"src/test/soccerCommunityShieldScreens.test.tsx":["Community Shield saved screen adapters SC_SHIELD_UI_RESULTS: keeps selected, bench and losing club results on their saved sides","Community Shield saved screen adapters SC_SHIELD_UI_REFUSAL: reaches a represented zero-app match while refusing nonentrant invalid and duplicate titles","Community Shield saved screen adapters SC_SHIELD_UI_PANEL: shows an unused club win with its score, neutral venue and reopenable worked help","Community Shield saved screen adapters SC_SHIELD_UI_CALENDAR: reveals the saved opening before game one then continues without changing the season","Community Shield saved screen adapters SC_SHIELD_UI_CABINET_DETAIL: keeps the original win row and shows the same saved match separately from season totals","Community Shield saved screen adapters SC_SHIELD_UI_TOTALS: shows the separate personal title in career and legacy totals without changing other counters"]};
+          export const uiFile = 'src/test/soccerCommunityShieldUiAcceptance.test.tsx';
+          export const cleanKeys = ['SC_EXTRA_CUPS_ENGINE', 'US_BOARD_CONTROL_ALIAS', 'US_BOARD_CONTROL_FILE', 'NO_DOUBLE_SWAP', 'TYCOON_AWAY_CONTROL', 'COMPLETION_HOOK', 'OWNED_TIMEOUTS_HOOK', 'CONQUEST_NBA_HOOK', 'CONQUEST_NBA_BOARD', 'POLL_FIXTURES', 'DAILY_RECORD_CONTROL', 'TYCOON_ROOMS_PAGE', 'TYCOON_LOADS_STADIUM_HOOK', 'TYCOON_LOADS_ACADEMY_HOOK', 'TYCOON_PITCH_COMPONENT', 'TYCOON_PACKS_REWARDS', 'TYCOON_PACKS_PANEL'];
+          export const sha = value => crypto.createHash('sha256').update(value).digest('hex');
+          const strip = value => value.replace(/\x1b\[[0-9;]*m/g, '');
+          assert.equal(Object.keys(expected).length, 8);
+          assert.equal(Object.values(expected).reduce((n, rows) => n + rows.length, 0), 73);
+          export function classify(report, raw, mode, control = null) {
+            const inventory = mode === 'healthy' ? expected : { [uiFile]: expected[uiFile] };
+            const total = mode === 'healthy' ? 73 : 3, old = mode === 'old';
+            assert.equal(report.success, !old);
+            for (const [key, value] of Object.entries({ numTotalTests: total, numPassedTests: old ? 0 : total, numFailedTests: old ? 1 : 0, numPendingTests: old ? 2 : 0, numTodoTests: 0 })) assert.equal(report[key], value, key);
+            assert.equal(report.testResults.length, Object.keys(inventory).length);
+            const seenFiles = new Set(), identities = [];
+            for (const suite of report.testResults) {
+              const file = path.relative(process.cwd(), suite.name).split(path.sep).join('/');
+              assert(Object.hasOwn(inventory, file) && !seenFiles.has(file), 'SC_UI_EXACT_FILE: ' + file); seenFiles.add(file);
+              assert.equal(suite.status, old ? 'failed' : 'passed'); assert.equal(suite.message, '');
+              assert.deepEqual(suite.assertionResults.map(row => row.fullName).sort(), [...inventory[file]].sort(), 'SC_UI_EXACT_IDENTITIES: ' + file);
+              for (const row of suite.assertionResults) {
+                assert.equal(row.fullName, [...row.ancestorTitles, row.title].join(' '));
+                if (old && row.title.startsWith(control.id)) {
+                  assert.equal(row.status, 'failed'); assert.equal(row.failureMessages.length, 1);
+                  const first = strip(row.failureMessages[0]).split(/\r?\n/).find(line => line.trim())?.trim();
+                  assert.equal(first?.startsWith('AssertionError: ' + control.marker + ':'), true, 'SC_UI_PRIMARY_OWNERSHIP: ' + control.id);
+                } else if (old) { assert(['pending', 'skipped'].includes(row.status)); assert.equal(row.failureMessages.length, 0); }
+                else { assert.equal(row.status, 'passed'); assert.equal(row.failureMessages.length, 0); }
+                identities.push({ file, fullName: row.fullName, status: row.status });
+              }
+            }
+            const counters = Object.fromEntries(['numUnhandledErrors', 'numRuntimeErrorTestSuites', 'numRuntimeErrorTests'].map(key => [key, report[key] ?? null]));
+            for (const value of Object.values(counters)) if (value !== null) { assert.equal(typeof value, 'number'); assert.equal(value, 0); }
+            const rawErrors = Object.fromEntries(['errors', 'unhandledErrors'].map(key => [key, report[key] ?? null]));
+            for (const value of Object.values(rawErrors)) if (value !== null) { assert(Array.isArray(value)); assert.equal(value.length, 0); }
+            const detectedRuntimeError = /(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled|ERR_MODULE_NOT_FOUND|Failed to load url|Cannot find module|SyntaxError:|ReferenceError:|TypeError:)/i.test(raw) || Object.values(counters).some(value => typeof value === 'number' && value > 0) || Object.values(rawErrors).some(value => Array.isArray(value) && value.length > 0);
+            assert.equal(detectedRuntimeError, false, 'SC_UI_RUNTIME_OR_SETUP');
+            return { mode, files: seenFiles.size, passed: old ? 0 : total, ownedFailures: old ? 1 : 0, declaredUnselectedSkips: old ? 2 : 0, executed: old ? 1 : total, counters, rawErrors, runtimeCounterCompleteness: Object.values(counters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED', detectedRuntimeError, identities, scope: 'Scoped ordinary component/reader tests only. No build, browser, route or physical touch qualification.' };
+          }
+          if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+            assert.equal(process.argv[2], 'healthy'); const out = process.env.OUT;
+            const bytes = fs.readFileSync(out + '/healthy.vitest.json');
+            assert.equal(Number(fs.readFileSync(out + '/healthy.exit', 'utf8')), 0);
+            const result = classify(JSON.parse(bytes), fs.readFileSync(out + '/healthy.stdout', 'utf8') + '\n' + fs.readFileSync(out + '/healthy.stderr', 'utf8'), 'healthy');
+            assert.equal(sha(fs.readFileSync(out + '/healthy.vitest.json')), sha(bytes));
+            fs.writeFileSync(out + '/healthy-summary.json', JSON.stringify({ ...result, rawReportSha256: sha(bytes) }, null, 2) + '\n');
+            console.log('SC_SHIELD_UI: 73 exact healthy cases in eight files, including all54 previously executed UI identities.');
+          }
+          CLASSIFY
+          cat > "$OUT/old-leaf-controls.mjs" <<'CONTROLS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import { spawnSync } from 'node:child_process';
+          import { classify, expected, uiFile, cleanKeys, sha } from './classify.mjs';
+          const root = process.cwd(), out = process.env.OUT;
+          const sourcePaths = ["src/components/season-centre/SeasonCentre.tsx","src/components/soccer-career/SeasonCompetitionPanel.tsx","src/components/soccer-career/SoccerSeasonCentre.tsx","src/components/soccer-career/TrophyCabinet.tsx","src/lib/soccerSeasonCalendar.ts","src/lib/soccerSeasonCompetitions.ts","src/pages/SoccerCareer.tsx","src/test/soccerCommunityShieldScreens.test.tsx","src/test/soccerSeasonCompetitions.test.tsx","src/test/soccerSeasonCalendarUi.test.tsx","src/test/trophyCabinet.test.tsx","src/test/trophyCabinetCampaign.test.tsx","src/test/soccerCommunityShieldUiAcceptance.test.tsx","src/test/soccerCommunityShieldAcceptance.test.ts","src/test/soccerCommunityShieldRules.test.ts","src/lib/soccerCareerEngine.ts","src/lib/soccerCareerExtraCups.ts","vitest.config.ts","package.json","package-lock.json","src/test/setup.ts","tsconfig.app.json","scripts/lib/offlineTransport.cjs"];
+          const held = new Map(sourcePaths.map(file => [file, fs.readFileSync(path.join(root, file))]));
+          const receipts = () => [...held].map(([file, bytes]) => ({ file, bytes: bytes.length, sha256: sha(bytes) }));
+          const hold = () => { for (const [file, bytes] of held) assert.deepEqual(fs.readFileSync(path.join(root, file)), bytes, 'Held actual source: ' + file); };
+          const specs = [
+            { name: 'nav', source: 'src/lib/soccerSeasonCompetitions.ts', alias: '@/lib/soccerSeasonCompetitions', oldFile: 'nav.ts.txt', oldGit: 'd14c80a218f405215e58f0e860e6226c7733f826', id: 'SC_SHIELD_UI_NAV:', marker: 'SC_SHIELD_UI_NAV_MISSING' },
+            { name: 'opening', source: 'src/lib/soccerSeasonCalendar.ts', alias: '@/lib/soccerSeasonCalendar', oldFile: 'opening.ts.txt', oldGit: '6b8ebaaf2812c3f9d3f8f95fbc756e578535baba', id: 'SC_SHIELD_UI_OPENING:', marker: 'SC_SHIELD_UI_OPENING_MISSING' },
+            { name: 'cabinet', source: 'src/components/soccer-career/TrophyCabinet.tsx', alias: '@/components/soccer-career/TrophyCabinet', oldFile: 'cabinet.tsx.txt', oldGit: '39184dbdc4bb6a70af1e9366239d26701d06796c', id: 'SC_SHIELD_UI_CABINET:', marker: 'SC_SHIELD_UI_CABINET_MISSING' },
+          ];
+          const copied = new Set(), results = [];
+          fs.writeFileSync(out + '/control-source-before.json', JSON.stringify(receipts(), null, 2) + '\n');
+          fs.writeFileSync(out + '/sibling-copies.txt', '', { flag: 'wx' });
+          function remove(file) {
+            assert(copied.has(file));
+            assert(file.startsWith(root + path.sep + 'src' + path.sep));
+            assert(path.basename(file).startsWith('__sc_shield_control_'));
+            if (fs.existsSync(file)) fs.unlinkSync(file);
+            assert.equal(fs.existsSync(file), false);
+          }
+          function run(name, spec = null, file = null) {
+            const env = { ...process.env }; for (const key of cleanKeys) delete env[key];
+            if (spec) { env.US_BOARD_CONTROL_ALIAS = spec.alias; env.US_BOARD_CONTROL_FILE = file; }
+            env.SIM_OFFLINE_RECEIPT = out + '/' + name + '.transport'; fs.writeFileSync(env.SIM_OFFLINE_RECEIPT, '', { flag: 'wx' });
+            const reportFile = out + '/' + name + '.vitest.json'; assert.equal(fs.existsSync(reportFile), false);
+            const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', uiFile, '--maxWorkers=1', '--minWorkers=1', '--no-file-parallelism', '--reporter=verbose', '--reporter=json', '--outputFile=' + reportFile];
+            if (spec) args.push('--testNamePattern=' + spec.id);
+            fs.writeFileSync(out + '/' + name + '.argv.json', JSON.stringify([process.execPath, ...args], null, 2) + '\n');
+            const bytesBefore = file ? fs.readFileSync(file) : null;
+            const child = spawnSync(process.execPath, args, { cwd: root, env, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 180000 });
+            fs.writeFileSync(out + '/' + name + '.stdout', child.stdout || ''); fs.writeFileSync(out + '/' + name + '.stderr', child.stderr || '');
+            fs.writeFileSync(out + '/' + name + '.exit', String(child.status) + '\n');
+            fs.writeFileSync(out + '/' + name + '.process.json', JSON.stringify({ status: child.status, signal: child.signal, error: child.error ? { name: child.error.name, message: child.error.message } : null }, null, 2) + '\n');
+            assert.ifError(child.error); assert.equal(child.signal, null); assert.equal(child.status, spec ? 1 : 0);
+            assert.equal(fs.statSync(env.SIM_OFFLINE_RECEIPT).size, 0); hold();
+            if (file) assert.deepEqual(fs.readFileSync(file), bytesBefore, 'Exact old physical leaf remained held during child');
+            const reportBytes = fs.readFileSync(reportFile), report = JSON.parse(reportBytes);
+            const result = classify(report, (child.stdout || '') + '\n' + (child.stderr || ''), spec ? 'old' : 'restored', spec);
+            assert.equal(result.identities.filter(row => row.status === 'failed').length, spec ? 1 : 0);
+            assert.equal(result.identities.filter(row => ['pending', 'skipped'].includes(row.status)).length, spec ? 2 : 0);
+            assert.equal(sha(fs.readFileSync(reportFile)), sha(reportBytes));
+            const summary = { name, ...result, rawExit: child.status, rawReportSha256: sha(reportBytes), alias: spec?.alias ?? null, copySha256: bytesBefore ? sha(bytesBefore) : null };
+            fs.writeFileSync(out + '/' + name + '.summary.json', JSON.stringify(summary, null, 2) + '\n'); results.push(summary);
+          }
+          let complete = false;
+          try {
+            for (const spec of specs) {
+              assert.equal(expected[uiFile].filter(fullName => fullName.includes(spec.id)).length, 1);
+              const bytes = fs.readFileSync(out + '/old-leaves/' + spec.oldFile);
+              const blob = crypto.createHash('sha1').update(Buffer.from('blob ' + bytes.length + '\0')).update(bytes).digest('hex'); assert.equal(blob, spec.oldGit);
+              assert.notEqual(sha(bytes), sha(held.get(spec.source)), 'The old leaf must differ from the current product leaf');
+              const folder = path.dirname(path.join(root, spec.source)), copy = path.join(folder, '__sc_shield_control_' + spec.name + '_' + process.pid + path.extname(spec.source));
+              assert.equal(path.dirname(copy), folder); assert.notEqual(copy, path.join(root, spec.source)); assert.equal(fs.existsSync(copy), false);
+              copied.add(copy); fs.appendFileSync(out + '/sibling-copies.txt', copy + '\n'); fs.writeFileSync(copy, bytes, { flag: 'wx' });
+              assert.deepEqual(fs.readFileSync(copy), bytes);
+              fs.writeFileSync(out + '/old-' + spec.name + '.copy.json', JSON.stringify({ source: spec.source, sourceKind: 'HEAD^ immutable leaf', oldGit: blob, bytes: bytes.length, oldSha256: sha(bytes), currentSha256: sha(held.get(spec.source)), copy, alias: spec.alias, changed: true }, null, 2) + '\n');
+              try { run('old-' + spec.name, spec, copy); } finally { remove(copy); hold(); }
+            }
+            for (const copy of copied) assert.equal(fs.existsSync(copy), false);
+            run('restored'); hold();
+            assert.equal(results.length, 4);
+            const totals = results.reduce((sum, row) => ({ passed: sum.passed + row.passed, ownedFailures: sum.ownedFailures + row.ownedFailures, declaredUnselectedSkips: sum.declaredUnselectedSkips + row.declaredUnselectedSkips, executed: sum.executed + row.executed }), { passed: 0, ownedFailures: 0, declaredUnselectedSkips: 0, executed: 0 });
+            assert.deepEqual(totals, { passed: 3, ownedFailures: 3, declaredUnselectedSkips: 6, executed: 6 });
+            fs.writeFileSync(out + '/controls-summary.json', JSON.stringify({ scope: 'Three separate immutable old leaves on the held three-case UI acceptance file, then healthy actual UI acceptance after cleanup.', results, totals, ordinaryHealthyExecuted: 73, totalVitestExecutions: 79, totalHealthyExecutions: 76, totalOwnedFailures: 3, totalDeclaredUnselectedSkips: 6, vitestChildren: 5 }, null, 2) + '\n');
+            complete = true;
+            console.log('SC_SHIELD_UI_CONTROLS: three primary-owned old-leaf assertions, six declared unselected skips and restored actual three passes.');
+          } finally {
+            for (const copy of copied) remove(copy);
+            hold(); fs.writeFileSync(out + '/control-source-after.json', JSON.stringify(receipts(), null, 2) + '\n');
+            fs.writeFileSync(out + '/controls-status.json', JSON.stringify({ complete, completedChildren: results.length, allSiblingCopiesRemoved: [...copied].every(file => !fs.existsSync(file)) }, null, 2) + '\n');
+          }
+          CONTROLS
+      - name: Proper joined types and all 73 exact healthy cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP TYCOON_AWAY_CONTROL COMPLETION_HOOK OWNED_TIMEOUTS_HOOK CONQUEST_NBA_HOOK CONQUEST_NBA_BOARD POLL_FIXTURES DAILY_RECORD_CONTROL TYCOON_ROOMS_PAGE TYCOON_LOADS_STADIUM_HOOK TYCOON_LOADS_ACADEMY_HOOK TYCOON_PITCH_COMPONENT TYCOON_PACKS_REWARDS TYCOON_PACKS_PANEL
+          source "$OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          mapfile -t tests < "$OUT/tests.txt"
+          test "${#tests[@]}" -eq 8
+          capture healthy node node_modules/vitest/vitest.mjs run "${tests[@]}" --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$OUT/healthy.vitest.json"
+          capture classify-healthy node "$OUT/classify.mjs" healthy
+      - name: Separate old-leaf controls and restored actual UI acceptance
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          source "$OUT/cleanup.sh"
+          trap cleanup_siblings EXIT
+          capture controls node "$OUT/old-leaf-controls.mjs"
+      - name: Always clean owned sibling copies then hold source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          source "$OUT/cleanup.sh"
+          cleanup_siblings
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-community-shield-ui-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-community-shield-ui/
+          retention-days: 14

@@ -3,15 +3,16 @@ import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { readMatchRating } from '@/lib/careerSeasonRatings';
 import { cupChipLabel, readCupRun } from '@/lib/soccerCareerCup';
 import { savedClubCampaign, savedSeasonCompetitions } from '@/lib/soccerSeasonCompetitions';
+import { readCommunityShield, communityShieldWinningSeasons } from '@/lib/soccerCareerExtraCups';
 import { escapeCloses, focusDialogOnMount } from '@/lib/dialogA11y';
 import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { SeasonCupWinBlock } from './CupRunLines';
 
-export type TrophyCategory = 'league' | 'domestic' | 'ucl' | 'club' | 'world' | 'continental' | 'ballon';
+export type TrophyCategory = 'league' | 'domestic' | 'ucl' | 'club' | 'world' | 'continental' | 'ballon' | 'shield';
 
 export const TROPHY_LABELS: Record<TrophyCategory, string> = {
   league: 'League titles', domestic: 'Domestic cups', ucl: 'European club titles',
-  club: 'Club cups', world: 'World Cups', continental: 'Continental titles', ballon: "Ballon d'Or",
+  club: 'Club cups', world: 'World Cups', continental: 'Continental titles', ballon: "Ballon d'Or", shield: 'Community Shield',
 };
 
 const TROPHY_FIELDS = {
@@ -21,6 +22,10 @@ const TROPHY_FIELDS = {
 
 /** One win per recorded season, just like the career's cabinet counts. */
 export function trophyWins(career: Pick<CareerState, 'seasons'>, category: TrophyCategory): SeasonRecord[] {
+  if (category === 'shield') {
+    const years = new Set(communityShieldWinningSeasons(career.seasons ?? []).map(row => row.year));
+    return (career.seasons ?? []).filter(row => years.has(row.year) && readCommunityShield(row)?.player.title === true).sort((a, b) => b.year - a.year);
+  }
   return (career.seasons ?? []).filter(row => {
     const trophy = row[TROPHY_FIELDS[category]];
     return Boolean(trophy);
@@ -28,6 +33,7 @@ export function trophyWins(career: Pick<CareerState, 'seasons'>, category: Troph
 }
 
 function trophyName(row: SeasonRecord, category: TrophyCategory): string {
+  if (category === 'shield') return 'Community Shield';
   if (category === 'domestic') return cupChipLabel(row) === 'Cup' ? 'Domestic cup' : cupChipLabel(row);
   if (category === 'club') return row.clubCupTitle!;
   if (category === 'continental') return row.tournament && row.tournament !== 'Continental' ? row.tournament : 'Continental title';
@@ -103,6 +109,20 @@ export function TrophyClubCampaign({ career, row }: { career: CareerState; row: 
   </section>;
 }
 
+function TrophyShieldMatch({ career, row }: { career: CareerState; row: SeasonRecord }) {
+  const match = savedSeasonCompetitions(career, row).find(item => item.id === 'shield')?.matches[0];
+  if (!match) return null;
+  return <section aria-label="Saved Community Shield match" className="space-y-2 rounded-xl border border-border bg-muted/20 p-3" data-trophy-shield>
+    <h4 className="text-sm font-bold">Community Shield opening match</h4>
+    <p className="break-words text-xs">{row.club} vs {match.opponent}</p>
+    <p className="text-lg font-black tabular-nums" data-trophy-shield-score>{match.goalsFor}-{match.goalsAgainst}</p>
+    <p className="text-xs text-muted-foreground">Neutral ground</p>
+    <p className="text-xs font-bold">{match.result}</p>
+    <p className="text-xs" data-trophy-shield-note>{match.note}</p>
+    <p className="text-xs">Your goals in this game: {match.playerGoals}</p>
+  </section>;
+}
+
 export default function TrophyCabinet({ career, category, onClose }: {
   career: CareerState; category: TrophyCategory; onClose: () => void;
 }) {
@@ -160,6 +180,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
             <div className="space-y-3 text-xs leading-relaxed" data-trophy-help>
               <p>Pick a trophy, then a winning season. Back returns to your career.</p>
               <p>Only wins in your saved seasons count. An award listed elsewhere does not add a second trophy.</p>
+              <p>A personal Community Shield win needs a valid saved appearance for the winning club. A club win from an unused place adds no personal Shield trophy. Example: a 1-1 match won 5-4 on penalties stays 1-1, with the shootout separate. Your saved contribution is already included in the season totals.</p>
               <p>The numbers are season totals, not just the cup games. International totals stay separate from your club totals. A dash means the save did not record that number.</p>
               <p>Example: a season with one league title and one domestic cup appears once in each category. It is two trophies from the same season.</p>
               <p>European and club cup details show only the simulated campaign that season kept. Each card is one saved game, including separate legs. The campaign goal total and your goals in each game are different from your season totals.</p>
@@ -178,6 +199,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
               {(category === 'world' || category === 'continental') && <SeasonTotals row={picked} international />}
               <SeasonTotals row={picked} />
               <p className="text-[10px] text-muted-foreground">These are the saved season totals, across all competitions.</p>
+              {category === 'shield' && <TrophyShieldMatch career={career} row={picked} />}
               {(category === 'ucl' || category === 'club') && <TrophyClubCampaign career={career} row={picked} />}
               {category === 'domestic' && (readCupRun(picked)
                 ? <SeasonCupWinBlock season={picked} />
