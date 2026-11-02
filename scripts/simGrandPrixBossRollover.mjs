@@ -49,7 +49,10 @@ const controls = [
   control('next-year-reserve', 'GP_ROLLOVER_FUNDS:', "    if (!plan.affordable) return { ok: false, reason: 'funds' };", "    if (false && !plan.affordable) return { ok: false, reason: 'funds' };"),
   control('unknown-earlier-seasons', 'GP_ROLLOVER_LEGACY:', 'earlierSeasonsUnknown: state.season > 1', 'earlierSeasonsUnknown: false'),
   control('tracking-start', 'GP_ROLLOVER_LEGACY:', 'sinceSeason: state.season', 'sinceSeason: 1'),
-  control('partial-ledger', 'GP_ROLLOVER_BAD_LEDGER:', 'if (state.history === undefined && state.careerTotals === undefined)', 'if (state.history === undefined || state.careerTotals === undefined)'),
+  { name: 'partial-ledger', id: 'GP_ROLLOVER_BAD_LEDGER:', patches: [
+    ["  if (state.history === undefined || state.careerTotals === undefined) return 'invalid';\n", ''],
+    ['if (state.history === undefined && state.careerTotals === undefined)', 'if (state.history === undefined || state.careerTotals === undefined)'],
+  ] },
   control('contiguous-years', 'GP_ROLLOVER_BAD_LEDGER:', ' && row.season === state.season - state.history.length + index', ''),
   { name: 'archive-count-coherence', id: 'GP_ROLLOVER_BAD_LEDGER:', patches: [
     ['totals.archivedSeasons !== state.season - totals.sinceSeason || ', ''],

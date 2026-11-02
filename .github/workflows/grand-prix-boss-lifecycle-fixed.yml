@@ -1,0 +1,112 @@
+name: Grand Prix Boss candidate lifecycle and paired world measurement
+on:
+  push:
+    branches: [codex/grand-prix-boss-lifecycle-fixed-20261102]
+permissions:
+  contents: read
+jobs:
+  lifecycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_BOSS_OUT: ${{ github.workspace }}/grand-prix-lifecycle-artifacts/engine
+      GP_BOSS_MARKET_OUT: ${{ github.workspace }}/grand-prix-lifecycle-artifacts/market
+      GP_BOSS_ROLLOVER_OUT: ${{ github.workspace }}/grand-prix-lifecycle-artifacts/rollover
+      GP_BOSS_LIFECYCLE_OUT: ${{ github.workspace }}/grand-prix-lifecycle-artifacts/lifecycle
+      GP_BOSS_LIFECYCLE_MEASURE_OUT: ${{ github.workspace }}/grand-prix-lifecycle-artifacts/measurement
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind admitted C absence baseline and exactly nine reviewed paths
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-lifecycle-fixed-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = 44274597f599fa7e2c5d6fe63c3454845374b65a
+          out="$PWD/grand-prix-lifecycle-artifacts"
+          mkdir "$out"
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-lifecycle-fixed.yml' 'scripts/qa/measureGrandPrixBossLifecycle.mjs' 'scripts/qa/source-controls/grandPrixBoss.before-lifecycle.ts.txt' 'scripts/simGrandPrixBossLifecycle.mjs' 'scripts/simGrandPrixBossMarket.mjs' 'scripts/simGrandPrixBossRollover.mjs' 'src/lib/grandPrixBoss.ts' 'src/test/grandPrixBossLifecycle.test.ts' 'src/test/grandPrixBossRollover.test.ts' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          printf '%s\n' '3a3e5652fbf43bfe13e9802521821378cc3221f7942f05f15b7242c98b1fea92  src/lib/grandPrixBoss.ts' 'b255030d5aee772ee46b7e25122570e91be3afee7e1236f42c2b47a8fd19f6f3  src/test/grandPrixBossLifecycle.test.ts' 'aba46336d5786acf3428cc74fd64e3d90a4bf60c94de1175eecf5cea84de5f8b  scripts/simGrandPrixBossLifecycle.mjs' '0909b11249a29bcb58df9d98cab85b8770abe7718ebe0c0fd709ce82ce136c51  scripts/qa/measureGrandPrixBossLifecycle.mjs' 'cae28d2852bfa6f23ffc5afca171486d017809327caded4cbf63f300f3fd8db0  scripts/qa/source-controls/grandPrixBoss.before-lifecycle.ts.txt' '50e5c522cd80dd89ee6a2ec6cac512564f409e3b67b575ffc3d58db3ce7bae4f  src/test/grandPrixBossRollover.test.ts' '5fb7de406b61afe9e171f09b1002542468681450bfc23c934eb9fbf1b88ab264  scripts/simGrandPrixBossMarket.mjs' '168546a5aa0480ae5e930af054b1435d88ebd7940e2a0e6aee54a3f633148349  scripts/simGrandPrixBossRollover.mjs' '8822d2af417739a0164babc5b15d13cd2a5e5c5dd4e263a9e465602798765887  src/test/grandPrixBoss.test.ts' '59a01e6dc561c11013e9e9092b139dd5da5494ff1d1fee7b1976057a94a405c0  src/test/grandPrixBossMarket.test.ts' 'a8b9ccdf1ac5f07fb4e87e35a56e3eca1071cee5346b21f604a814057da385c4  src/test/grandPrixBossHistoryTies.test.ts' 'dd8b7f4fd26d0037be5b3be25d3ec9938429fae872bca94cec06124d6ae6bff5  scripts/simGrandPrixBoss.mjs' 'ec793e9cacb47bf770d599b1677f76ac753d2cafde9c1f85e6bb0cf7dc7bc69b  scripts/qa/source-controls/grandPrixBoss.before-market.ts.txt' '6d0e754c28f631ea590472b9ea2a1647206db67ec7dc1580bcf054cede74364f  scripts/qa/source-controls/grandPrixBoss.before-rollover.ts.txt' | sha256sum -c -
+          git diff --exit-code HEAD^ HEAD -- src/test/grandPrixBoss.test.ts src/test/grandPrixBossMarket.test.ts src/test/grandPrixBossHistoryTies.test.ts scripts/simGrandPrixBoss.mjs scripts/qa/source-controls/grandPrixBoss.before-market.ts.txt scripts/qa/source-controls/grandPrixBoss.before-rollover.ts.txt src/lib/keyedRng.ts package.json package-lock.json vitest.config.ts src/test/setup.ts src/App.tsx src/data/gameRegistry.ts src/integrations/supabase/client.ts
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-lifecycle-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$out/$tag.exit"
+            tail -n 18 "$out/$tag.stdout"; tail -n 18 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types and preserved active race and market controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source grand-prix-lifecycle-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax-market node --check scripts/simGrandPrixBossMarket.mjs
+          capture syntax-rollover node --check scripts/simGrandPrixBossRollover.mjs
+          capture syntax-lifecycle node --check scripts/simGrandPrixBossLifecycle.mjs
+          capture syntax-measure node --check scripts/qa/measureGrandPrixBossLifecycle.mjs
+          capture engine-controls node scripts/simGrandPrixBoss.mjs
+          capture market-controls node scripts/simGrandPrixBossMarket.mjs
+      - name: All existing rollover history and new lifecycle physical-copy controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source grand-prix-lifecycle-artifacts/capture.sh
+          capture rollover-controls node scripts/simGrandPrixBossRollover.mjs
+          capture lifecycle-controls node scripts/simGrandPrixBossLifecycle.mjs
+      - name: Three-copy ten-season paired candidate measurement
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source grand-prix-lifecycle-artifacts/capture.sh
+          capture measurement node scripts/qa/measureGrandPrixBossLifecycle.mjs
+      - name: Preserve all actual source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-lifecycle-artifacts"
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum -c "$out/dependency-files.sha256" > "$out/dependency-hold.log"; fi
+          git ls-files -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/working-source-hold.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"
+          test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-lifecycle-C-${{ github.run_id }}
+          path: grand-prix-lifecycle-artifacts/
+          retention-days: 14

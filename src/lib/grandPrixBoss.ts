@@ -3,8 +3,9 @@ import { keyedRng } from '@/lib/keyedRng';
 export type CarArea = 'power' | 'aero' | 'reliability';
 export type Pace = 'conserve' | 'balanced' | 'push';
 export type Compound = 'soft' | 'medium' | 'hard' | 'wet';
+export type GrandPrixFocus = 'balanced' | 'pace' | 'consistency' | 'tyreCare' | 'wet';
 export interface GrandPrixDriver {
-  id: string; name: string; age: number; potential: number;
+  id: string; name: string; age: number; potential: number; focus: GrandPrixFocus;
   skills: { pace: number; consistency: number; tyreCare: number; wet: number };
   contract: null | { teamId: string; years: number; wagePerRace: number; startsSeason?: number };
 }
@@ -16,6 +17,8 @@ export interface GrandPrixNextSeasonPlan {
   nextSeason: number; sponsor: number;
   automaticRenewals: { driverId: string; wagePerRace: number; signingFee: number }[];
   totalRenewalFee: number; nextReserved: number; cashAfter: number; affordable: boolean;
+  seatReplacements: { departingDriverId: string; rookie: GrandPrixDriver; signingFee: number }[];
+  totalReplacementFee: number;
 }
 export interface GrandPrixSeasonSummary {
   season: number; rounds: number;
@@ -30,7 +33,7 @@ export interface GrandPrixSeasonSummary {
 export interface GrandPrixCareerTotals {
   archivedSeasons: number; driverTitles: number; constructorTitles: number; sinceSeason: number; earlierSeasonsUnknown: boolean;
 }
-export interface GrandPrixTeam { id: string; name: string; car: Record<CarArea, number> }
+export interface GrandPrixTeam { id: string; name: string; car: Record<CarArea, number>; baselineCar: Record<CarArea, number> }
 export interface GrandPrixTrack {
   id: string; name: string; laps: number; entryCost: number;
   powerWeight: number; aeroWeight: number; rainChance: number;
@@ -68,11 +71,12 @@ export type GrandPrixAction = { expectedRevision: number } & (
   { type: 'upgrade'; area: CarArea } | { type: 'qualify' } |
   { type: 'startRace'; setups: GrandPrixSetup[] } | { type: 'raceInterval'; orders: GrandPrixOrder[] } |
   { type: 'continue' } | { type: 'signDriver'; outgoingDriverId: string; incomingDriverId: string } |
-  { type: 'renewDriver'; driverId: string } | { type: 'startNextSeason' }
+  { type: 'renewDriver'; driverId: string } | { type: 'startNextSeason' } |
+  { type: 'setDriverFocus'; driverId: string; focus: GrandPrixFocus }
 );
 export type GrandPrixTransition = {
   ok: true; state: GrandPrixCareer;
-  receipt: { type: string; revision: number; cost?: number; teamPrize?: number; operatingCost?: number; sponsor?: number; renewalFee?: number; cashDelta?: number };
+  receipt: { type: string; revision: number; cost?: number; teamPrize?: number; operatingCost?: number; sponsor?: number; renewalFee?: number; replacementFee?: number; cashDelta?: number };
 } | { ok: false; reason: 'stale' | 'phase' | 'funds' | 'invalid' };
 
 const AREAS: CarArea[] = ['power', 'aero', 'reliability'];
@@ -80,6 +84,10 @@ const PACES: Pace[] = ['conserve', 'balanced', 'push'];
 const TYRES: Compound[] = ['soft', 'medium', 'hard', 'wet'];
 const POINTS = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
 const INTERVALS = [12, 26, 40];
+const SKILLS = ['pace', 'consistency', 'tyreCare', 'wet'] as const;
+const FOCUSES: GrandPrixFocus[] = ['balanced', ...SKILLS];
+const CAR_CARRY = 0.7;
+const AI_INVESTMENT = 2;
 const TEAM_NAMES = ['Cobalt Crane', 'Ember Vale', 'Juniper Pulse', 'Northstar Loom', 'Copper Harbor', 'Quartz Arrow', 'Indigo Crest', 'Silver Finch', 'Redwood Rally', 'Saffron Wing'];
 const FIRST_NAMES = ['Arin', 'Tavo', 'Esko', 'Lio', 'Bren', 'Ilan', 'Soren', 'Tevo', 'Ari', 'Miro', 'Eren', 'Vico', 'Jaro', 'Nilo', 'Oren', 'Eli', 'Ravi', 'Kato', 'Davi', 'Zeno', 'Tarin', 'Avo', 'Ruen', 'Kiro', 'Elan', 'Toma'];
 const LAST_NAMES = ['Venn', 'Marr', 'Leto', 'Keld', 'Roe', 'Dalen', 'Neri', 'Selo', 'Fenn', 'Vora', 'Taren', 'Vahl', 'Mori', 'Renn', 'Kova', 'Daro', 'Lenn', 'Sava', 'Rilo', 'Kern', 'Navo', 'Senn', 'Karo', 'Vero', 'Lorn', 'Daroa'];
@@ -113,10 +121,80 @@ const marketOpen = (state: GrandPrixCareer) => state.phase === 'preRace' && stat
 function normalizeContractSeasons(state: GrandPrixCareer): void {
   for (const driver of state.drivers) if (driver.contract && driver.contract.startsSeason === undefined) driver.contract.startsSeason = state.season;
 }
-function projectedSeason(state: GrandPrixCareer, seats = mine(state), cash = state.cash): GrandPrixNextSeasonPlan {
+function retiring(driver: GrandPrixDriver, season: number): boolean {
+  return driver.age + 1 >= 40 && (!driver.contract
+    || (driver.contract.startsSeason ?? season) <= season && driver.contract.years === 1);
+}
+function retirementRookies(state: GrandPrixCareer, seats = mine(state)): Map<string, GrandPrixDriver> {
+  const world = state.drivers.map(driver => seats.find(seat => seat.id === driver.id)
+    ?? (driver.contract?.teamId === state.teamId ? { ...driver, contract: null } : driver));
+  const usedIds = new Set(state.drivers.map(driver => driver.id)), usedNames = new Set(state.drivers.map(driver => driver.name));
+  const rookies = new Map<string, GrandPrixDriver>();
+  world.forEach((driver, index) => {
+    if (!retiring(driver, state.season)) return;
+    const random = keyedRng(`grand-prix-rookie|${state.seed}|${state.season + 1}|${index}`);
+    const ri = (lo: number, hi: number) => lo + Math.floor(random() * (hi - lo + 1));
+    const baseId = `gp-rookie-${state.seed}-${state.season + 1}-${index}`;
+    let id = baseId, suffix = 0;
+    while (usedIds.has(id)) id = baseId + '-' + ++suffix;
+    usedIds.add(id);
+    let pair = ri(0, 675), name = '';
+    do { name = FIRST_NAMES[pair % 26] + ' ' + LAST_NAMES[Math.floor(pair / 26)]; pair = (pair + 1) % 676; } while (usedNames.has(name));
+    usedNames.add(name);
+    const pace = ri(55, 72);
+    const rookie: GrandPrixDriver = { id, name, age: ri(18, 21), potential: ri(pace + 8, Math.min(99, pace + 20)), focus: 'balanced',
+      skills: { pace, consistency: ri(65, 85), tyreCare: ri(58, 85), wet: ri(50, 85) }, contract: null };
+    if (driver.contract) rookie.contract = { teamId: driver.contract.teamId, years: 1, startsSeason: state.season + 1, wagePerRace: dealWage(rookie) };
+    rookies.set(driver.id, rookie);
+  });
+  return rookies;
+}
+function developDriver(driver: GrandPrixDriver): void {
+  driver.age += 1;
+  const grow = (skill: typeof SKILLS[number], amount: number) => {
+    if (driver.skills[skill] < driver.potential) driver.skills[skill] = Math.min(driver.potential, driver.skills[skill] + amount, 100);
+  };
+  if (driver.age < 27) {
+    if (driver.focus === 'balanced') for (const skill of SKILLS) grow(skill, 1);
+    else grow(driver.focus, 3);
+  } else if (driver.age <= 32) {
+    const weakest = SKILLS.reduce((held, skill) => driver.skills[skill] < driver.skills[held] ? skill : held);
+    grow(driver.focus === 'balanced' ? weakest : driver.focus, 1);
+  } else {
+    if (driver.focus !== 'pace') driver.skills.pace = Math.max(0, driver.skills.pace - 1);
+    if (driver.focus !== 'balanced' && driver.focus !== 'pace') grow(driver.focus, 1);
+  }
+}
+function initializeLifecycle(state: GrandPrixCareer): void {
+  const random = keyedRng(`grand-prix-world|${state.seed}`);
+  const ri = (lo: number, hi: number) => lo + Math.floor(random() * (hi - lo + 1));
+  const baselines = TEAM_NAMES.map((_, index) => ({ power: 86 - index * 3 + ri(-2, 2), aero: 84 - index * 3 + ri(-2, 2), reliability: 91 - index * 2 }));
+  for (const driver of state.drivers) driver.focus = 'balanced';
+  for (const team of state.teams) {
+    const index = Array.from({ length: 10 }, (_, i) => `gp-team-${i}`).indexOf(team.id);
+    const original = index >= 0 ? baselines[index] : team.car;
+    team.baselineCar = { power: Math.min(original.power, team.car.power), aero: Math.min(original.aero, team.car.aero), reliability: Math.min(original.reliability, team.car.reliability) };
+  }
+}
+function lifecycleShape(state: GrandPrixCareer): 'legacy' | 'current' | 'invalid' {
+  const absent = state.drivers.every(driver => driver.focus === undefined) && state.teams.every(team => team.baselineCar === undefined);
+  if (absent) return 'legacy';
+  if (state.history === undefined || state.careerTotals === undefined) return 'invalid';
+  return state.drivers.every(driver => FOCUSES.includes(driver.focus)) && state.teams.every(team => record(team.baselineCar)
+    && AREAS.every(area => integer(team.baselineCar[area], 0, team.car[area]))) ? 'current' : 'invalid';
+}
+function projectedSeason(state: GrandPrixCareer, seats = mine(state), cash = state.cash, lifecycle = true): GrandPrixNextSeasonPlan {
   const automaticRenewals: GrandPrixNextSeasonPlan['automaticRenewals'] = [];
+  const seatReplacements: GrandPrixNextSeasonPlan['seatReplacements'] = [];
+  const rookies = lifecycle ? retirementRookies(state, seats) : new Map<string, GrandPrixDriver>();
   const wages = seats.reduce((sum, driver) => {
     const contract = driver.contract!;
+    const rookie = rookies.get(driver.id);
+    if (rookie) {
+      const wagePerRace = rookie.contract!.wagePerRace;
+      seatReplacements.push({ departingDriverId: driver.id, rookie, signingFee: wagePerRace * 2 });
+      return sum + wagePerRace;
+    }
     if ((contract.startsSeason ?? state.season) <= state.season && contract.years === 1) {
       const wagePerRace = dealWage(driver);
       automaticRenewals.push({ driverId: driver.id, wagePerRace, signingFee: wagePerRace * 2 });
@@ -127,11 +205,12 @@ function projectedSeason(state: GrandPrixCareer, seats = mine(state), cash = sta
   const sponsor = 12_000_000;
   const totalRenewalFee = automaticRenewals.reduce((sum, renewal) => sum + renewal.signingFee, 0);
   const nextReserved = state.calendar.reduce((sum, track) => sum + track.entryCost, 0) + state.calendar.length * wages;
-  const cashAfter = cash + sponsor - totalRenewalFee;
-  return { nextSeason: state.season + 1, sponsor, automaticRenewals, totalRenewalFee, nextReserved, cashAfter,
+  const totalReplacementFee = seatReplacements.reduce((sum, row) => sum + row.signingFee, 0);
+  const cashAfter = cash + sponsor - totalRenewalFee - totalReplacementFee;
+  return { nextSeason: state.season + 1, sponsor, automaticRenewals, totalRenewalFee, seatReplacements, totalReplacementFee, nextReserved, cashAfter,
     affordable: integer(cashAfter) && integer(nextReserved) && cashAfter >= nextReserved };
 }
-function offerFor(state: GrandPrixCareer, outgoing: GrandPrixDriver, incoming: GrandPrixDriver, renewal = false): GrandPrixMarketOffer {
+function offerFor(state: GrandPrixCareer, outgoing: GrandPrixDriver, incoming: GrandPrixDriver, renewal = false, lifecycle = true): GrandPrixMarketOffer {
   const startsSeason = state.phase === 'seasonReview' ? state.season + 1 : state.season;
   const wagePerRace = dealWage(incoming), signingFee = wagePerRace * 2;
   const old = outgoing.contract!;
@@ -140,7 +219,7 @@ function offerFor(state: GrandPrixCareer, outgoing: GrandPrixDriver, incoming: G
   const buyout = renewal ? 0 : Math.ceil(unserved * old.wagePerRace / 2), totalFee = signingFee + buyout;
   const replacement: GrandPrixDriver = { ...incoming, contract: { teamId: state.teamId, years: 1, startsSeason, wagePerRace } };
   const seats = mine(state).map(driver => driver.id === outgoing.id ? replacement : driver);
-  const projected = state.phase === 'seasonReview' ? projectedSeason(state, seats, state.cash - totalFee) : null;
+  const projected = state.phase === 'seasonReview' ? projectedSeason(state, seats, state.cash - totalFee, lifecycle) : null;
   const reserveAfter = projected ? projected.nextReserved
     : state.calendar.reduce((sum, track) => sum + track.entryCost, 0)
       + state.calendar.length * seats.reduce((sum, driver) => sum + driver.contract!.wagePerRace, 0);
@@ -148,36 +227,49 @@ function offerFor(state: GrandPrixCareer, outgoing: GrandPrixDriver, incoming: G
   return { outgoingDriverId: outgoing.id, incomingDriverId: incoming.id, startsSeason, years: 1,
     wagePerRace, signingFee, buyout, totalFee, reserveAfter, affordable };
 }
-function marketOffers(state: GrandPrixCareer): GrandPrixMarketOffer[] {
+function marketOffers(state: GrandPrixCareer, lifecycle = true): GrandPrixMarketOffer[] {
   if (!marketOpen(state)) return [];
   const offers: GrandPrixMarketOffer[] = [], available = state.drivers.filter(driver => driver.contract === null);
   for (const outgoing of mine(state)) {
-    for (const incoming of available) offers.push(offerFor(state, outgoing, incoming));
-    if (state.phase === 'seasonReview' && outgoing.contract!.years === 1 && (outgoing.contract!.startsSeason ?? state.season) <= state.season) {
-      offers.push(offerFor(state, outgoing, outgoing, true));
+    for (const incoming of available.filter(driver => !lifecycle || driver.age + (state.phase === 'seasonReview' ? 1 : 0) < 40)) offers.push(offerFor(state, outgoing, incoming, false, lifecycle));
+    if (state.phase === 'seasonReview' && outgoing.contract!.years === 1 && (outgoing.contract!.startsSeason ?? state.season) <= state.season && (!lifecycle || !retiring(outgoing, state.season))) {
+      offers.push(offerFor(state, outgoing, outgoing, true, lifecycle));
     }
   }
   return offers;
 }
-function refreshMarket(state: GrandPrixCareer): void {
-  state.marketOffers = marketOffers(state);
-  state.nextSeasonPlan = state.phase === 'seasonReview' ? projectedSeason(state) : null;
+function refreshMarket(state: GrandPrixCareer, lifecycle = true): void {
+  state.marketOffers = marketOffers(state, lifecycle);
+  state.nextSeasonPlan = state.phase === 'seasonReview' ? projectedSeason(state, mine(state), state.cash, lifecycle) : null;
 }
 function rowsMatch(raw: unknown, expected: object[], keys: string[]): boolean {
   return Array.isArray(raw) && raw.length === expected.length && raw.every((row, index) => record(row)
     && Object.keys(row).length === keys.length && keys.every(key => row[key] === (expected[index] as Record<string, unknown>)[key]));
 }
-function planMatches(raw: unknown, expected: GrandPrixNextSeasonPlan | null): boolean {
+function replacementMatches(raw: unknown, expected: GrandPrixNextSeasonPlan['seatReplacements']): boolean {
+  return Array.isArray(raw) && raw.length === expected.length && raw.every((row, index) => {
+    const wanted = expected[index];
+    if (!record(row) || Object.keys(row).length !== 3 || row.departingDriverId !== wanted.departingDriverId || row.signingFee !== wanted.signingFee || !record(row.rookie)) return false;
+    const rookie = row.rookie, driver = wanted.rookie, skills = rookie.skills, contract = rookie.contract;
+    return Object.keys(rookie).length === 7 && ['id', 'name', 'age', 'potential', 'focus'].every(key => rookie[key] === driver[key])
+      && record(skills) && Object.keys(skills).length === 4 && SKILLS.every(key => skills[key] === driver.skills[key])
+      && record(contract) && Object.keys(contract).length === 4
+      && ['teamId', 'years', 'wagePerRace', 'startsSeason'].every(key => contract[key] === driver.contract![key]);
+  });
+}
+function planMatches(raw: unknown, expected: GrandPrixNextSeasonPlan | null, lifecycle = true): boolean {
   if (expected === null) return raw === null;
-  return record(raw) && Object.keys(raw).length === PLAN_KEYS.length + 1
+  return record(raw) && Object.keys(raw).length === PLAN_KEYS.length + (lifecycle ? 3 : 1)
     && PLAN_KEYS.every(key => raw[key] === (expected as unknown as Record<string, unknown>)[key])
-    && rowsMatch(raw.automaticRenewals, expected.automaticRenewals, RENEWAL_KEYS);
+    && rowsMatch(raw.automaticRenewals, expected.automaticRenewals, RENEWAL_KEYS)
+    && (!lifecycle || raw.totalReplacementFee === expected.totalReplacementFee && replacementMatches(raw.seatReplacements, expected.seatReplacements));
 }
 function safeMarket(state: GrandPrixCareer): boolean {
   if (!state.marketOffers.every(offer => [offer.startsSeason, offer.years, offer.wagePerRace, offer.signingFee, offer.buyout, offer.totalFee, offer.reserveAfter].every(value => integer(value)))) return false;
   const plan = state.nextSeasonPlan;
-  return plan === null || [plan.nextSeason, plan.sponsor, plan.totalRenewalFee, plan.nextReserved, plan.cashAfter].every(value => integer(value))
-    && plan.automaticRenewals.every(renewal => integer(renewal.wagePerRace, 1) && integer(renewal.signingFee, 1));
+  return plan === null || [plan.nextSeason, plan.sponsor, plan.totalRenewalFee, plan.totalReplacementFee, plan.nextReserved, plan.cashAfter].every(value => integer(value))
+    && plan.automaticRenewals.every(renewal => integer(renewal.wagePerRace, 1) && integer(renewal.signingFee, 1))
+    && plan.seatReplacements.every(row => integer(row.signingFee, 1) && integer(row.rookie.contract!.wagePerRace, 1));
 }
 const honorsOrder = (a: { points: number; wins: number; podiums: number }, b: { points: number; wins: number; podiums: number }) => b.points - a.points || b.wins - a.wins || b.podiums - a.podiums;
 function summarizeSeason(state: GrandPrixCareer): GrandPrixSeasonSummary {
@@ -289,17 +381,17 @@ export function createCareer(seed: number): GrandPrixCareer {
   if (!integer(seed, 0, 0xffffffff)) throw new RangeError('Use a whole seed from 0 to 4294967295.');
   const random = keyedRng(`grand-prix-world|${seed}`);
   const ri = (lo: number, hi: number) => lo + Math.floor(random() * (hi - lo + 1));
-  const teams = TEAM_NAMES.map((name, index) => ({
-    id: `gp-team-${index}`, name,
-    car: { power: 86 - index * 3 + ri(-2, 2), aero: 84 - index * 3 + ri(-2, 2), reliability: 91 - index * 2 },
-  }));
+  const teams = TEAM_NAMES.map((name, index) => {
+    const car = { power: 86 - index * 3 + ri(-2, 2), aero: 84 - index * 3 + ri(-2, 2), reliability: 91 - index * 2 };
+    return { id: `gp-team-${index}`, name, car, baselineCar: { ...car } };
+  });
   const firstOffset = ri(0, 25), lastOffset = ri(0, 25);
   const drivers = Array.from({ length: 26 }, (_, index): GrandPrixDriver => {
     const team = index < 20 ? teams[Math.floor(index / 2)] : null;
     const pace = team ? clamp(team.car.power + ri(-6, 4), 45, 96) : ri(55, 76);
     return {
       id: `gp-driver-${index}`, name: `${FIRST_NAMES[(index + firstOffset) % 26]} ${LAST_NAMES[(index * 5 + lastOffset) % 26]}`,
-      age: ri(19, 34), potential: clamp(pace + ri(4, 12), pace, 99),
+      age: ri(19, 34), potential: clamp(pace + ri(4, 12), pace, 99), focus: 'balanced',
       skills: { pace, consistency: ri(65, 94), tyreCare: ri(58, 93), wet: ri(50, 92) },
       contract: team ? { teamId: team.id, years: ri(1, 3), wagePerRace: Math.round((70_000 + pace * 1_500) / 1_000) * 1_000 } : null,
     };
@@ -431,6 +523,14 @@ export function applyAction(state: GrandPrixCareer, action: GrandPrixAction): Gr
   if (!record(action) || !integer(action.expectedRevision)) return { ok: false, reason: 'invalid' };
   if (action.expectedRevision !== state.revision) return { ok: false, reason: 'stale' };
   const a = action as unknown as Record<string, unknown>;
+  if (a.type === 'setDriverFocus') {
+    if (!marketOpen(state)) return { ok: false, reason: 'phase' };
+    const driver = mine(state).find(held => held.id === a.driverId);
+    if (!driver || !FOCUSES.includes(a.focus as GrandPrixFocus) || driver.focus === a.focus) return { ok: false, reason: 'invalid' };
+    const next = clone(state);
+    next.drivers.find(held => held.id === driver.id)!.focus = a.focus as GrandPrixFocus;
+    return committed(next, { type: 'setDriverFocus' });
+  }
   if (a.type === 'startNextSeason') {
     if (state.phase !== 'seasonReview' || state.results.length !== state.calendar.length || state.round !== state.calendar.length - 1) return { ok: false, reason: 'phase' };
     const plan = projectedSeason(state);
@@ -438,11 +538,13 @@ export function applyAction(state: GrandPrixCareer, action: GrandPrixAction): Gr
     const next = clone(state);
     if (!normalizeHistory(next)) return { ok: false, reason: 'invalid' };
     const summary = summarizeSeason(next);
+    const rookies = retirementRookies(state);
     next.history = [...next.history, summary].slice(-12);
     next.careerTotals.archivedSeasons += 1;
     if (summary.driverChampion.teamId === next.teamId) next.careerTotals.driverTitles += 1;
     if (summary.constructorChampion.teamId === next.teamId) next.careerTotals.constructorTitles += 1;
     for (const driver of next.drivers) {
+      if (rookies.has(driver.id)) continue;
       const contract = driver.contract;
       if (!contract || (contract.startsSeason ?? state.season) > state.season) continue;
       if (contract.years > 1) { contract.years -= 1; continue; }
@@ -451,13 +553,26 @@ export function applyAction(state: GrandPrixCareer, action: GrandPrixAction): Gr
       driver.contract = { teamId: contract.teamId, years: 1, startsSeason: plan.nextSeason,
         wagePerRace: contract.teamId === next.teamId ? renewal!.wagePerRace : dealWage(driver) };
     }
+    next.drivers = next.drivers.map(driver => {
+      const rookie = rookies.get(driver.id);
+      if (rookie) return clone(rookie);
+      developDriver(driver);
+      return driver;
+    });
+    for (const team of next.teams) {
+      for (const area of AREAS) team.car[area] = team.baselineCar[area] + Math.floor(Math.max(0, team.car[area] - team.baselineCar[area]) * CAR_CARRY);
+      if (team.id !== next.teamId) {
+        const weakest = AREAS.reduce((held, area) => team.car[area] < team.car[held] ? area : held);
+        team.car[weakest] = Math.min(100, team.car[weakest] + AI_INVESTMENT);
+      }
+    }
     next.cash = plan.cashAfter;
     next.season = plan.nextSeason; next.round = 0; next.phase = 'preRace'; next.race = null; next.results = [];
     next.calendar = state.calendar.map((track, index) => ({ ...track, id: `gp-season-${next.season}-round-${index}`,
       rainChance: 0.12 + keyedRng(`grand-prix-calendar|${next.seed}|${next.season}|${index}`)() * 0.25 }));
     next.driverStandings = next.drivers.map(driver => ({ driverId: driver.id, points: 0, wins: 0, podiums: 0 }));
     next.constructorStandings = next.teams.map(team => ({ teamId: team.id, points: 0, wins: 0, podiums: 0 }));
-    return committed(next, { type: 'startNextSeason', sponsor: plan.sponsor, renewalFee: plan.totalRenewalFee, cashDelta: plan.cashAfter - state.cash });
+    return committed(next, { type: 'startNextSeason', sponsor: plan.sponsor, renewalFee: plan.totalRenewalFee, replacementFee: plan.totalReplacementFee, cashDelta: plan.cashAfter - state.cash });
   }
   if (a.type === 'signDriver' || a.type === 'renewDriver') {
     if (!marketOpen(state) || a.type === 'renewDriver' && state.phase !== 'seasonReview') return { ok: false, reason: 'phase' };
@@ -533,7 +648,7 @@ export function validateSavedCareer(raw: unknown): { ok: true; state: GrandPrixC
     && record(team.car) && AREAS.every(area => integer(team.car[area], 0, 100))) || !unique(s.teams.map(team => team.id))) return invalid;
   const teamIds = new Set(s.teams.map(team => team.id));
   if (!teamIds.has(s.teamId) || !Array.isArray(s.drivers) || s.drivers.length !== 26
-    || !s.drivers.every(driver => record(driver) && text(driver.id) && text(driver.name) && integer(driver.age, 16, 50)
+    || !s.drivers.every(driver => record(driver) && text(driver.id) && text(driver.name) && integer(driver.age, 16)
       && integer(driver.potential, 0, 100) && record(driver.skills)
       && ['pace', 'consistency', 'tyreCare', 'wet'].every(key => integer(driver.skills[key], 0, 100))
       && (driver.contract === null || record(driver.contract) && teamIds.has(driver.contract.teamId)
@@ -588,13 +703,16 @@ export function validateSavedCareer(raw: unknown): { ok: true; state: GrandPrixC
   if (s.reserved !== reserve(s) || !record(s.upgradeCosts)) return invalid;
   const expectedQuotes = quotes(s);
   if (AREAS.some(area => s.upgradeCosts[area] !== expectedQuotes[area])) return invalid;
+  const shape = lifecycleShape(s);
+  if (shape === 'invalid') return invalid;
   const normalized = clone(s);
   normalizeContractSeasons(normalized);
-  refreshMarket(normalized);
+  refreshMarket(normalized, shape === 'current');
   if (!safeMarket(normalized)
     || s.marketOffers !== undefined && !rowsMatch(s.marketOffers, normalized.marketOffers, OFFER_KEYS)
-    || s.nextSeasonPlan !== undefined && !planMatches(s.nextSeasonPlan, normalized.nextSeasonPlan)) return invalid;
+    || s.nextSeasonPlan !== undefined && !planMatches(s.nextSeasonPlan, normalized.nextSeasonPlan, shape === 'current')) return invalid;
   if (!normalizeHistory(normalized)) return invalid;
+  if (shape === 'legacy') { initializeLifecycle(normalized); refreshMarket(normalized); }
   return { ok: true, state: normalized };
 }
 

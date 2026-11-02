@@ -277,6 +277,8 @@ describe('Grand Prix Boss atomic next season and history', { timeout: 240000 }, 
     const raw = clone(fixture().state);
     raw.season = 14; stripQuotes(raw);
     delete raw.history; delete raw.careerTotals;
+    for (const driver of raw.drivers) delete (driver as unknown as { focus?: unknown }).focus;
+    for (const team of raw.teams) delete (team as unknown as { baselineCar?: unknown }).baselineCar;
     const bytes = JSON.stringify(raw), loaded = read(raw), ledger = book(loaded);
     expect(JSON.stringify(raw)).toBe(bytes);
     expect(ledger.history).toEqual([]);

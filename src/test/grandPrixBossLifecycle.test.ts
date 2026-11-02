@@ -148,11 +148,14 @@ describe('Grand Prix Boss lifecycle C', { timeout: 180000 }, () => {
   });
 
   it('GP_LIFECYCLE_YOUTH: a focused next-age26 year differs from balanced growth on the same world', () => {
-    let state = lab(), [balanced, focused] = own(state);
+    let state = lab(raw => { own(raw)[0].contract!.years = 1; }), [balanced, focused] = own(state);
     state = move(state, { type: 'setDriverFocus', driverId: focused.id, focus: 'pace' }).state;
-    const completed = review(state), advanced = next(completed).state;
+    const completed = review(state);
+    expect(completed.nextSeasonPlan!.automaticRenewals).toContainEqual({ driverId: balanced.id, wagePerRace: 160_000, signingFee: 320_000 });
+    const advanced = next(completed).state;
     const first = advanced.drivers.find(driver => driver.id === balanced.id)!, second = advanced.drivers.find(driver => driver.id === focused.id)!;
     expect(first.age, 'GP_YOUTH_AGE_MISSING').toBe(26); expect(second.age).toBe(26);
+    expect(first.contract!.wagePerRace, 'GP_YOUTH_RENEWAL_MUST_KEEP_PRE_GROWTH_QUOTE').toBe(160_000);
     expect(first.skills).toEqual({ pace: 61, consistency: 61, tyreCare: 61, wet: 61 });
     expect(second.skills).toEqual({ pace: 63, consistency: 60, tyreCare: 60, wet: 60 });
     expect(second.focus).toBe('pace'); expect(completed.drivers.find(driver => driver.id === focused.id)!.skills.pace).toBe(60);
@@ -244,6 +247,8 @@ describe('Grand Prix Boss lifecycle C', { timeout: 180000 }, () => {
     stripLegacyMetadata(raw); completed = read(raw);
     const plan = completed.nextSeasonPlan!, advanced = next(completed).state;
     const retainedFirst = advanced.drivers.find(driver => driver.id === first.id)!, retainedSecond = advanced.drivers.find(driver => driver.id === second.id)!;
+    expect(retainedFirst, 'GP_PAID_MULTIYEAR_DRIVER_MUST_REMAIN').toBeDefined();
+    expect(retainedSecond, 'GP_PAID_FUTURE_DRIVER_MUST_REMAIN').toBeDefined();
     expect(retainedFirst.age, 'GP_PAID_OLD_CONTRACT_AGE_NOT_ADVANCED').toBe(51); expect(retainedSecond.age).toBe(51);
     expect(retainedFirst.contract).toEqual({ ...first.contract, years: 2 }); expect(retainedSecond.contract).toEqual(second.contract);
     expect(replacements(completed).rows).toEqual([]); expect(plan.totalRenewalFee).toBe(0); expect(plan.totalReplacementFee).toBe(0);
@@ -321,6 +326,8 @@ describe('Grand Prix Boss lifecycle C', { timeout: 180000 }, () => {
 
   it('GP_LIFECYCLE_PLAN: reloads the same rookie transaction and refuses forged supplied prices or people', () => {
     const completed = review(retiringLab()), { plan } = replacements(completed);
+    const focused = move(completed, { type: 'setDriverFocus', driverId: own(completed)[0].id, focus: 'pace' }).state;
+    expect(focused.nextSeasonPlan, 'GP_REVIEW_FOCUS_MUST_NOT_REROLL_ROOKIES').toEqual(plan);
     const reloaded = read(clone(completed)); expect(reloaded.nextSeasonPlan).toEqual(plan);
     const a = next(completed), b = next(reloaded);
     expect(b).toEqual(a); expect(a.state.history).toHaveLength(1);

@@ -25,7 +25,7 @@ const candidate = path.join(out, 'grandPrixBoss.ts');
 const ids = ['GP_MARKET_PUBLIC_QUOTES:', 'GP_MARKET_SIGN:', 'GP_MARKET_NEW_WAGES:', 'GP_MARKET_BUYOUT:', 'GP_MARKET_FUNDS:', 'GP_MARKET_REROUND:', 'GP_MARKET_RENEW:', 'GP_MARKET_EXCLUSIVITY:', 'GP_MARKET_WINDOWS:', 'GP_MARKET_REPLAY:', 'GP_MARKET_SAVE:', 'GP_MARKET_HOLDS:'];
 const timing = "        && (driver.contract.startsSeason === undefined || integer(driver.contract.startsSeason, 1, s.season + (s.phase === 'seasonReview' ? 1 : 0))\n          && (driver.contract.startsSeason <= s.season || driver.contract.years === 1))";
 const controls = [
-  ['public-offers', 'GP_MARKET_PUBLIC_QUOTES:', '  state.marketOffers = marketOffers(state);', '  state.marketOffers = [];'],
+  ['public-offers', 'GP_MARKET_PUBLIC_QUOTES:', '  state.marketOffers = marketOffers(state, lifecycle);', '  state.marketOffers = [];'],
   ['signing-fee', 'GP_MARKET_PUBLIC_QUOTES:', 'const wagePerRace = dealWage(incoming), signingFee = wagePerRace * 2;', 'const wagePerRace = dealWage(incoming), signingFee = wagePerRace;'],
   ['release-seat', 'GP_MARKET_SIGN:', '    if (outgoingId !== incomingId) outgoing.contract = null;', '    if (false && outgoingId !== incomingId) outgoing.contract = null;'],
   ['charge-fee', 'GP_MARKET_SIGN:', '    next.cash -= offer.totalFee;', '    next.cash -= 0;'],
@@ -34,7 +34,7 @@ const controls = [
   ['current-reserve', 'GP_MARKET_FUNDS:', 'state.cash - totalFee >= reserveAfter', 'state.cash >= totalFee'],
   ['review-reserve', 'GP_MARKET_FUNDS:', 'projected ? projected.affordable :', 'projected ? true :'],
   ['default-renewal-fee', 'GP_MARKET_REROUND:', 'automaticRenewals.push({ driverId: driver.id, wagePerRace, signingFee: wagePerRace * 2 });', 'automaticRenewals.push({ driverId: driver.id, wagePerRace, signingFee: wagePerRace });'],
-  ['default-renewal-wage', 'GP_MARKET_REROUND:', '      return sum + wagePerRace;', '      return sum + contract.wagePerRace;'],
+  ['default-renewal-wage', 'GP_MARKET_REROUND:', '      automaticRenewals.push({ driverId: driver.id, wagePerRace, signingFee: wagePerRace * 2 });\n      return sum + wagePerRace;', '      automaticRenewals.push({ driverId: driver.id, wagePerRace, signingFee: wagePerRace * 2 });\n      return sum + contract.wagePerRace;'],
   ['review-term', 'GP_MARKET_REROUND:', "const startsSeason = state.phase === 'seasonReview' ? state.season + 1 : state.season;", 'const startsSeason = state.season;'],
   ['renewal-repeat', 'GP_MARKET_RENEW:', ' && (outgoing.contract!.startsSeason ?? state.season) <= state.season', ''],
   ['foreign-seat', 'GP_MARKET_EXCLUSIVITY:', 'state.drivers.filter(driver => driver.contract === null)', 'state.drivers.filter(driver => driver.contract?.teamId !== state.teamId)'],
@@ -44,7 +44,7 @@ const controls = [
   ['legacy-timing', 'GP_MARKET_SAVE:', '  normalizeContractSeasons(normalized);\n', '', 'GP_MARKET_ABSENT_LEGACY_TIMING_MUST_NORMALIZE_TO_ACTIVE_CURRENT_SEASON'],
   ['present-timing', 'GP_MARKET_SAVE:', timing, ''],
   ['saved-offers', 'GP_MARKET_SAVE:', '    || s.marketOffers !== undefined && !rowsMatch(s.marketOffers, normalized.marketOffers, OFFER_KEYS)\n', ''],
-  ['saved-plan', 'GP_MARKET_SAVE:', '    || s.nextSeasonPlan !== undefined && !planMatches(s.nextSeasonPlan, normalized.nextSeasonPlan)', '', 'GP_MARKET_STORED_PLAN_MUST_MATCH_ACTUAL_OBLIGATIONS'],
+  ['saved-plan', 'GP_MARKET_SAVE:', '    || s.nextSeasonPlan !== undefined && !planMatches(s.nextSeasonPlan, normalized.nextSeasonPlan, shape === \'current\')', '', 'GP_MARKET_STORED_PLAN_MUST_MATCH_ACTUAL_OBLIGATIONS'],
   ['race-preservation', 'GP_MARKET_HOLDS:', '      const failure = (100 - team.car.reliability) * 0.000025 * risk;', '      const failure = 0;'],
 ];
 const results = [];
