@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -37,6 +39,14 @@ type Api = {
 let engine: Api;
 beforeAll(async () => { engine = await import(/* @vite-ignore */ pathToFileURL(ENGINE_PATH).href) as Api; });
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+function legacyV5World(): Career {
+  const bytes = fs.readFileSync(path.resolve(process.cwd(), 'src/test/fixtures/grandPrixBossV5Starter.json'));
+  expect(createHash('sha256').update(bytes).digest('hex'), 'GP_MARKET_CAPTURED_V5_BYTES').toBe('cf3b484781dbff04df9033d0e1dfe239e6d9562f5cf026db2e4b1e233162a028');
+  const state = read(JSON.parse(bytes.toString('utf8')));
+  expect(state, 'GP_MARKET_CAPTURED_V5_WORLD').toMatchObject({ version: 1, seed: 1, season: 1, revision: 0, round: 0, phase: 'preRace', teamId: 'gp-team-6' });
+  expect(own(state).map(driver => driver.id)).toEqual(['gp-driver-12', 'gp-driver-13']);
+  return state;
+}
 function own(state: Career) {
   const rows = state.drivers.filter(driver => driver.contract?.teamId === state.teamId);
   expect(rows, 'GP_MARKET_FIXTURE_MUST_HAVE_TWO_SEATS').toHaveLength(2);
@@ -355,7 +365,7 @@ describe('Grand Prix Boss paid driver market', { timeout: 120000 }, () => {
   });
 
   it('GP_MARKET_HOLDS: no market action preserves the actual qualified seed-one race outcome', () => {
-    const finished = race(engine.createCareer(1));
+    const finished = race(legacyV5World());
     // Literal result captured from admitted run 41400272528 measurement, natural seed 1 aware arm.
     expect(finished.results[0].classification.map(row => row.driverId)).toEqual([0, 2, 4, 3, 1, 5, 7, 6, 8, 9, 10, 13, 11, 14, 15, 16, 17, 18, 19, 12].map(index => 'gp-driver-' + index));
     expect(finished.results[0].classification.map(row => row.points)).toEqual([25, 18, 15, 12, 10, 8, 6, 4, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);

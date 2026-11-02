@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -30,8 +32,19 @@ function move(state: Career, action: Record<string, unknown>) {
   expect(engine.validateSavedCareer(result.state).ok, 'GP_HISTORY_TIE_REAL_STATE_MUST_BE_ADMITTED').toBe(true);
   return result.state;
 }
+function legacyV5World(): Career {
+  const bytes = fs.readFileSync(path.resolve(process.cwd(), 'src/test/fixtures/grandPrixBossV5Starter.json'));
+  expect(createHash('sha256').update(bytes).digest('hex'), 'GP_HISTORY_CAPTURED_V5_BYTES').toBe('cf3b484781dbff04df9033d0e1dfe239e6d9562f5cf026db2e4b1e233162a028');
+  const raw = JSON.parse(bytes.toString('utf8')), before = JSON.stringify(raw), read = engine.validateSavedCareer(raw);
+  expect(JSON.stringify(raw), 'GP_HISTORY_CAPTURED_V5_INPUT_HELD').toBe(before);
+  expect(read.ok, 'GP_HISTORY_CAPTURED_V5_READER_ADMISSION').toBe(true);
+  if (read.ok === false) throw new Error('Unreachable rejected captured v5 world');
+  expect(read.state, 'GP_HISTORY_CAPTURED_V5_WORLD').toMatchObject({ version: 1, seed: 1, season: 1, revision: 0, round: 0, phase: 'preRace', teamId: 'gp-team-6' });
+  expect(own(read.state).map(driver => driver.id)).toEqual(['gp-driver-12', 'gp-driver-13']);
+  return read.state;
+}
 function archived() {
-  let state = engine.createCareer(291);
+  let state = legacyV5World();
   for (let round = 0; round < 12; round += 1) {
     state = move(state, { type: 'qualify' });
     state = move(state, { type: 'startRace', setups: own(state).map(driver => ({ driverId: driver.id, pace: 'balanced', compound: state.race!.weather === 'wet' ? 'wet' : 'medium' })) });
