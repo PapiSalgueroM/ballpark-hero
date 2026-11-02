@@ -1,7 +1,7 @@
-name: Grand Prix Boss joined source and save preservation
+name: Grand Prix Boss complete unit history qualification
 on:
   push:
-    branches: [codex/grand-prix-boss-source-join-20261102]
+    branches: [codex/grand-prix-boss-source-join-history-20261102]
 permissions:
   contents: read
 jobs:
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -27,14 +27,14 @@ jobs:
       - name: Bind exact joined source and locked dependencies
         run: |
           set -euo pipefail
-          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-source-join-20261102
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-source-join-history-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = dbef522edfd4f45f42ac255ce0af7e5a35a4e9c5
+          test "$(git rev-parse HEAD^)" = df06298b19645b936d09882ad99d47c23ba23bd3
           out="$PWD/grand-prix-joined-unit-artifacts"; mkdir "$out"
           git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
           git archive --format=tar HEAD > "$out/source.tar"
           git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
-          printf '%s\n' '.github/workflows/grand-prix-boss-source-join.yml' 'src/lib/grandPrixBoss.ts' 'src/pages/GrandPrixBoss.tsx' 'src/test/fixtures/grandPrixBossV5Starter.json' 'src/test/grandPrixBossHistoryTies.test.ts' 'src/test/grandPrixBossManagementPage.test.tsx' 'src/test/grandPrixBossMarket.test.ts' 'src/test/grandPrixBossMarketSave.test.tsx' 'src/test/grandPrixBossPage.test.tsx' 'src/test/grandPrixBossRolloverSave.test.tsx' 'src/test/grandPrixBossSave.test.tsx' 'src/test/grandPrixBossStarterBalance.test.ts' > "$out/expected-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-source-join.yml' > "$out/expected-paths.txt"
           cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
           printf '%s\n' '3dcaa003a5f71b6d85db9b4fd4097c5f54bb97d90a863b78bc7604b3027d1911  src/lib/grandPrixBoss.ts' '53a400b58a3fe36776ea54dab48961a1479bcbf3c326a3806b711467950d1f18  src/pages/GrandPrixBoss.tsx' 'e8cc17bd6047a775557632e0984f59cfc385f922d9c80fee0638e6e94b98bb25  src/test/grandPrixBossPage.test.tsx' 'cb88dc315147e257531ce728f21a0e4a06c9e0870c509f20d984066a064be17f  src/test/grandPrixBossManagementPage.test.tsx' '3eaefb7502c450d6e27bc6474d2f39bfef0b7ee34b5ba33fd26f46628583d287  src/test/grandPrixBossSave.test.tsx' 'c6a64b60b25770a3ab38bd7bb2749809fc266302ffcdd5cbe8661673991e83b9  src/test/grandPrixBossMarketSave.test.tsx' '0827f8b419bc26c902c9ea257999ecdc852015248737289c23d66f19a235fa23  src/test/grandPrixBossStarterBalance.test.ts' '72fe3feb2d606c8c4e611a9b33bcb3f9375be22c77537a3a1bdf352477c3d06e  src/test/grandPrixBossMarket.test.ts' '058dbcb356840517c7b4ef8f02d0c0414de1a8bcb611827061b16478a44a88c6  src/test/grandPrixBossHistoryTies.test.ts' 'cf3b484781dbff04df9033d0e1dfe239e6d9562f5cf026db2e4b1e233162a028  src/test/fixtures/grandPrixBossV5Starter.json' '37b5dc1988904f28694e909488c8bc9007dc6f14cf0bd0938aa08ce77e3f9f3f  src/test/grandPrixBossRolloverSave.test.tsx' 'b06293c184ba51e002189973c0eb39c6f52616023bb9f17fb3a5b3f67e8d2260  src/hooks/useGrandPrixBoss.ts' | sha256sum --check -
           git diff --exit-code HEAD^ -- src/hooks src/lib/saveFence.ts src/lib/keyedRng.ts src/integrations/supabase/client.ts src/App.tsx src/data/gameRegistry.ts package.json package-lock.json vitest.config.ts
@@ -57,7 +57,7 @@ jobs:
           CAPTURE
           source "$out/capture.sh"; capture install env NODE_OPTIONS='' npm ci
           find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
-      - name: Actual app types and retained 101 racing cases
+      - name: Actual app types and physical historical file availability
         run: |
           set -euo pipefail
           out="$PWD/grand-prix-joined-unit-artifacts"
@@ -65,23 +65,34 @@ jobs:
           unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
           source "$out/capture.sh"
           capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
-          capture joined-cases node node_modules/vitest/vitest.mjs run src/test/grandPrixBoss.test.ts src/test/grandPrixBossMarket.test.ts src/test/grandPrixBossRollover.test.ts src/test/grandPrixBossHistoryTies.test.ts src/test/grandPrixBossLifecycle.test.ts src/test/grandPrixBossSave.test.tsx src/test/grandPrixBossMarketSave.test.tsx src/test/grandPrixBossRolloverSave.test.tsx src/test/grandPrixBossFocusSave.test.tsx src/test/grandPrixBossStarterBalance.test.ts src/test/grandPrixBossPage.test.tsx src/test/grandPrixBossManagementPage.test.tsx --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/joined-cases.json"
-          node --input-type=module <<'VERIFY'
-          import fs from 'node:fs'; import assert from 'node:assert/strict';
-          const out='grand-prix-joined-unit-artifacts', r=JSON.parse(fs.readFileSync(out+'/joined-cases.json','utf8'));
-          const expected=new Map([["src/test/grandPrixBoss.test.ts",13],["src/test/grandPrixBossMarket.test.ts",12],["src/test/grandPrixBossRollover.test.ts",13],["src/test/grandPrixBossHistoryTies.test.ts",2],["src/test/grandPrixBossLifecycle.test.ts",15],["src/test/grandPrixBossSave.test.tsx",16],["src/test/grandPrixBossMarketSave.test.tsx",4],["src/test/grandPrixBossRolloverSave.test.tsx",2],["src/test/grandPrixBossFocusSave.test.tsx",2],["src/test/grandPrixBossStarterBalance.test.ts",7],["src/test/grandPrixBossPage.test.tsx",9],["src/test/grandPrixBossManagementPage.test.tsx",6]]);
-          assert.equal(r.success,true); assert.equal(r.numTotalTests,101); assert.equal(r.numPassedTests,101);
-          assert.equal(r.numFailedTests,0); assert.equal(r.numPendingTests,0); assert.equal(r.numTodoTests,0);
-          assert.equal(r.testResults.length,expected.size);
-          const cases=[];
-          for(const [file,count] of expected) { const suites=r.testResults.filter(s=>s.name.endsWith('/'+file)); assert.equal(suites.length,1); assert.equal(suites[0].assertionResults.length,count); for(const row of suites[0].assertionResults){assert.equal(row.status,'passed'); assert.equal(row.failureMessages.length,0); cases.push({file,title:row.title,status:row.status});}}
-          const counters={numUnhandledErrors:r.numUnhandledErrors??null,numRuntimeErrorTestSuites:r.numRuntimeErrorTestSuites??null};
-          for(const value of Object.values(counters))if(value!==null){assert.equal(typeof value,'number');assert.equal(value,0);}
-          for(const errors of[r.errors,r.unhandledErrors])if(Array.isArray(errors))assert.equal(errors.length,0);
-          const raw=fs.readFileSync(out+'/joined-cases.stdout','utf8')+'\n'+fs.readFileSync(out+'/joined-cases.stderr','utf8');
-          const detectedRuntimeError=/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw); assert.equal(detectedRuntimeError,false);
-          fs.writeFileSync(out+'/joined-summary.json',JSON.stringify({scope:'Joined ordinary source/save cases only. No copied-control compatibility, route, browser or publication credit.',files:12,executed:101,passed:101,failed:0,pending:0,cases,runtimeCounters:counters,runtimeCounterCompleteness:Object.values(counters).some(v=>v===null)?'UNKNOWN':'REPORTED',detectedRuntimeError},null,2));
-          VERIFY
+          cat > "$out/history-preflight.sh" <<'HISTORY'
+          set -euo pipefail
+          out="$PWD/grand-prix-joined-unit-artifacts"
+          test "$(git rev-parse --is-shallow-repository)" = false
+          : > "$out/historical-baselines.tsv"
+          while read -r ref file; do
+            git cat-file -e "$ref:$file"
+            printf '%s\t%s\t%s\t%s\n' "$ref" "$file" "$(git rev-parse "$ref:$file")" "$(git cat-file -s "$ref:$file")" >> "$out/historical-baselines.tsv"
+          done <<'BASELINES'
+          56356be9 src/lib/frontOffice.ts
+          56356be9 src/data/frontOfficePlayers.ts
+          56356be9 src/data/frontOfficeDepth.ts
+          0c66a559 src/lib/frontOffice.ts
+          0c66a559 src/data/frontOfficePlayers.ts
+          0c66a559 src/data/frontOfficeDepth.ts
+          e8b39ccc src/lib/nbaFrontOffice.ts
+          e8b39ccc src/lib/nbaSeasonStats.ts
+          e8b39ccc src/lib/nbaRotation.ts
+          e8b39ccc src/data/conquestDataNba.ts
+          6b7596d2 src/lib/nhlFrontOffice.ts
+          6b7596d2 src/data/nhlFoPlayers.ts
+          2b7dda2951fb9b63e76a2af66970cb682f312105 src/lib/cageClash.ts
+          31a4ec01 src/lib/cageClash.ts
+          BASELINES
+          test "$(wc -l < "$out/historical-baselines.tsv")" -eq 14
+          cat "$out/historical-baselines.tsv"
+          HISTORY
+          capture history-availability bash "$out/history-preflight.sh"
       - name: Full ordinary unit suite on joined source
         timeout-minutes: 60
         run: |
@@ -95,12 +106,16 @@ jobs:
           import fs from 'node:fs';import assert from 'node:assert/strict';
           const out='grand-prix-joined-unit-artifacts',r=JSON.parse(fs.readFileSync(out+'/all-units.json','utf8'));
           assert.equal(r.success,true); assert.equal(r.numFailedTests,0); assert(r.numPassedTests>=101);
+          const expected=new Map([["src/test/grandPrixBoss.test.ts",13],["src/test/grandPrixBossMarket.test.ts",12],["src/test/grandPrixBossRollover.test.ts",13],["src/test/grandPrixBossHistoryTies.test.ts",2],["src/test/grandPrixBossLifecycle.test.ts",15],["src/test/grandPrixBossSave.test.tsx",16],["src/test/grandPrixBossMarketSave.test.tsx",4],["src/test/grandPrixBossRolloverSave.test.tsx",2],["src/test/grandPrixBossFocusSave.test.tsx",2],["src/test/grandPrixBossStarterBalance.test.ts",7],["src/test/grandPrixBossPage.test.tsx",9],["src/test/grandPrixBossManagementPage.test.tsx",6]]);
+          let ownedRacingCases=0;
+          for(const [file,count] of expected){const suites=r.testResults.filter(s=>s.name.endsWith('/'+file));assert.equal(suites.length,1);assert.equal(suites[0].assertionResults.length,count);for(const row of suites[0].assertionResults){assert.equal(row.status,'passed');assert.equal(row.failureMessages.length,0);ownedRacingCases++;}}
+          assert.equal(ownedRacingCases,101);
           const counters={numUnhandledErrors:r.numUnhandledErrors??null,numRuntimeErrorTestSuites:r.numRuntimeErrorTestSuites??null};
           for(const value of Object.values(counters))if(value!==null){assert.equal(typeof value,'number');assert.equal(value,0);}
           for(const errors of[r.errors,r.unhandledErrors])if(Array.isArray(errors))assert.equal(errors.length,0);
           const raw=fs.readFileSync(out+'/all-units.stdout','utf8')+'\n'+fs.readFileSync(out+'/all-units.stderr','utf8');
           const detectedRuntimeError=/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw);assert.equal(detectedRuntimeError,false);
-          fs.writeFileSync(out+'/all-unit-summary.json',JSON.stringify({scope:'Full ordinary units. Existing optional skips reported separately.',success:r.success,files:r.testResults.length,total:r.numTotalTests,passed:r.numPassedTests,failed:r.numFailedTests,pending:r.numPendingTests??null,todo:r.numTodoTests??null,runtimeCounters:counters,runtimeCounterCompleteness:Object.values(counters).some(v=>v===null)?'UNKNOWN':'REPORTED',detectedRuntimeError},null,2));
+          fs.writeFileSync(out+'/all-unit-summary.json',JSON.stringify({scope:'Full ordinary units. Existing optional skips reported separately.',success:r.success,files:r.testResults.length,total:r.numTotalTests,passed:r.numPassedTests,failed:r.numFailedTests,ownedRacingCases,pending:r.numPendingTests??null,todo:r.numTodoTests??null,runtimeCounters:counters,runtimeCounterCompleteness:Object.values(counters).some(v=>v===null)?'UNKNOWN':'REPORTED',detectedRuntimeError},null,2));
           ALL
       - name: Complete source dependency and membership holds
         if: always()
