@@ -1,0 +1,165 @@
+name: World XI alias and empty-slot quality fixed proof
+on:
+  push:
+    branches: [codex/report-world-xi-quality-fixed-20261102]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      WORLD_XI_QUALITY_OUT: ${{ github.workspace }}/tmp/world-xi-quality-artifacts
+      WORLD_XI_RECOVERY_OUT: ${{ github.workspace }}/tmp/world-xi-quality-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind seven exact changes and the admitted baseline parent
+        id: prepare
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-quality-fixed-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = 9a4c8d07fc0190ed8305f1f0be5d09cd2837359f
+          out="$WORLD_XI_QUALITY_OUT"; test ! -e "$out"; mkdir -p "$out"
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/report-world-xi-quality-fixed.yml' 'scripts/qa/witnessWorldXiRecoveryArchive.mjs' 'scripts/simWorldXiRecovery.mjs' 'src/data/gameContent/soccer1.ts' 'src/lib/worldXiNationPools.ts' 'src/pages/WorldXi.tsx' 'src/test/worldXiRecovery.test.tsx' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          printf '4569d859387827a09d1009e1ff2efa31a96fd47ad7c717e6f3dd747495d09f2e  src/pages/WorldXi.tsx\n69b1e153b0f6b52d58008847d5d4267b3a0e321437b2b77b892302834e4d47e2  src/lib/worldXiNationPools.ts\nbe5f1f5be7bd0dfd031040427e7d42b113b8b72b438881864b72305e956b8640  src/data/gameContent/soccer1.ts\n963069474041fac3d15a8b6e314fa1950c14309ccff01a08895e14bfbd5797c5  src/test/worldXiRecovery.test.tsx\n642debf51b23a1b0f2e885ec9fbdabcb602f88472ccf3536602ae057dea91d3f  scripts/simWorldXiRecovery.mjs\n009e8d7b993503aaab59609dc65d119946ee1061ddfdc5b0100aaae4380c320d  scripts/qa/witnessWorldXiRecoveryArchive.mjs\nfa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe  src/lib/worldXi.ts\n' | sha256sum --check -
+          test "$(git rev-parse HEAD^:src/pages/WorldXi.tsx)" = f1d4155192611287d3c1f8dcdf96c6890c9d04d1
+          test "$(git rev-parse HEAD^:src/test/worldXiRecovery.test.tsx)" = a3599a16bcf73cd3a482ab14c5093391322a32ba
+          test "$(git rev-parse HEAD:src/test/worldXiNationPools.test.ts)" = ffb0dfb1e9b227aca253ffe014dd618ff7e6f325
+          test "$(git rev-parse HEAD:src/test/worldXiNations.test.tsx)" = 51e2c0ec6cd2cd647a4d85edbf89c4637e9edb12
+          test "$(git rev-parse HEAD:src/test/worldXiRespins.test.tsx)" = c24155ca3220823587d5ab5fe7d3e76d098547d8
+          test "$(git rev-parse HEAD:src/test/worldXiSummary.test.tsx)" = 5c5af750d3f81258d0d69fcdeef12322b903edda
+          test "$(git rev-parse HEAD:src/test/worldXiRosterDepth.test.ts)" = ad928f0098697f946bc986309dbed8a4b8cdc156
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$WORLD_XI_QUALITY_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$WORLD_XI_QUALITY_OUT/$tag.argv"
+            : > "$WORLD_XI_QUALITY_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$WORLD_XI_QUALITY_OUT/$tag.transport" "$@" > "$WORLD_XI_QUALITY_OUT/$tag.stdout" 2> "$WORLD_XI_QUALITY_OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$WORLD_XI_QUALITY_OUT/$tag.exit"
+            tail -n 14 "$WORLD_XI_QUALITY_OUT/$tag.stdout"; tail -n 14 "$WORLD_XI_QUALITY_OUT/$tag.stderr"
+            test ! -s "$WORLD_XI_QUALITY_OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual app types and both harness syntax checks
+        id: types
+        run: |
+          set -euo pipefail
+          source "$WORLD_XI_QUALITY_OUT/capture.sh"
+          capture types env NODE_OPTIONS='' node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture witness-syntax env NODE_OPTIONS='' node --check scripts/qa/witnessWorldXiRecoveryArchive.mjs
+          capture wrapper-syntax env NODE_OPTIONS='' node --check scripts/simWorldXiRecovery.mjs
+      - name: Reuse the original single roster capture
+        id: archive
+        uses: actions/download-artifact@v4
+        with:
+          name: world-xi-actual-route-41424730828
+          run-id: 41424730828
+          github-token: ${{ github.token }}
+          path: ${{ github.workspace }}/tmp/world-xi-quality-artifacts/original-capture
+      - name: Bind original custody and verify the actual canonical 48-nation pool offline
+        if: always() && steps.prepare.outcome == 'success' && steps.types.outcome == 'success' && steps.archive.outcome == 'success'
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_QUALITY_OUT"; original="$out/original-capture"
+          test "$(find "$original" -type f | wc -l)" -eq 246
+          cd "$original"
+          printf '93075e1a52b07446145b459987ba51f636adb9078265442d8e3049447ba14ebf  manifest.json\n079600855b6c7a79ef80a1a14b2bf3e497337ff4e805806d961b60dd85a3e75b  head-tree.txt\n63ddaf129b54c5c6da5e984fd9d2d0100e4008f49c9759d6359a0c70f12c3a28  source-holds.before.json\n63ddaf129b54c5c6da5e984fd9d2d0100e4008f49c9759d6359a0c70f12c3a28  source-holds.after.json\n' | sha256sum --check -
+          test "$(cat public-roster.exit)" -eq 0; test ! -s public-roster.transport
+          cd "$GITHUB_WORKSPACE"
+          find "$original" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/original-files.sha256"
+          source "$out/capture.sh"; export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          capture archive-witness node scripts/qa/witnessWorldXiRecoveryArchive.mjs
+      - name: Thirty-four ordinary actual World XI cases
+        if: always() && steps.prepare.outcome == 'success' && steps.types.outcome == 'success'
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_QUALITY_OUT"; source "$out/capture.sh"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture ordinary node node_modules/vitest/vitest.mjs run src/test/worldXiNationPools.test.ts src/test/worldXiNations.test.tsx src/test/worldXiRespins.test.tsx src/test/worldXiSummary.test.tsx src/test/worldXiRosterDepth.test.ts src/test/worldXiRecovery.test.tsx --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/ordinary.vitest.json"
+          node --input-type=module <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const out=process.env.WORLD_XI_QUALITY_OUT,r=JSON.parse(fs.readFileSync(out+'/ordinary.vitest.json','utf8'));
+          const raw=fs.readFileSync(out+'/ordinary.stdout','utf8')+'\n'+fs.readFileSync(out+'/ordinary.stderr','utf8');
+          assert.equal(Number(fs.readFileSync(out+'/ordinary.exit','utf8')),0);
+          assert.equal(r.success,true);assert.equal(r.numTotalTests,34);assert.equal(r.numPassedTests,34);assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);
+          const files=new Map([['src/test/worldXiNationPools.test.ts',8],['src/test/worldXiNations.test.tsx',2],['src/test/worldXiRespins.test.tsx',3],['src/test/worldXiSummary.test.tsx',4],['src/test/worldXiRosterDepth.test.ts',12],['src/test/worldXiRecovery.test.tsx',5]]);
+          const ids=['WX_CURACAO:','WX_UNUSED_COUNT:','WX_FREE_RECOVERY:','WX_NO_ALTERNATIVE:','WX_FOCUS:'],seenFiles=new Set(),seenCases=new Set(),cases=[];
+          assert.equal(r.testResults.length,6);
+          for(const file of r.testResults){
+            const matches=[...files.keys()].filter(name=>file.name.endsWith('/'+name));assert.equal(matches.length,1);const name=matches[0];assert(!seenFiles.has(name));seenFiles.add(name);
+            assert.equal(file.assertionResults.length,files.get(name));
+            for(const row of file.assertionResults){
+              assert.equal(row.status,'passed');assert.equal(row.failureMessages.length,0);
+              if(name.endsWith('/worldXiRecovery.test.tsx')){const matches=ids.filter(id=>row.title.startsWith(id));assert.equal(matches.length,1);assert(!seenCases.has(matches[0]));seenCases.add(matches[0]);}
+              cases.push({file:name,title:row.title,status:row.status});
+            }
+          }
+          const runtimeCounters={numUnhandledErrors:r.numUnhandledErrors??null,numRuntimeErrorTestSuites:r.numRuntimeErrorTestSuites??null};
+          for(const value of Object.values(runtimeCounters))if(value!==null){assert.equal(typeof value,'number');assert.equal(value,0);}
+          for(const errors of[r.errors,r.unhandledErrors])if(Array.isArray(errors))assert.equal(errors.length,0);
+          const detectedRuntimeError=/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw);assert.equal(detectedRuntimeError,false);
+          fs.writeFileSync(out+'/ordinary-summary.json',JSON.stringify({scope:'Actual 34-case focused corpus only. No build, route or full-game readiness.',executed:34,passed:34,failed:0,declaredSkips:0,runtimeCounters,runtimeCounterCompleteness:Object.values(runtimeCounters).some(value=>value===null)?'UNKNOWN':'REPORTED',detectedRuntimeError,rawErrors:r.errors??null,rawUnhandledErrors:r.unhandledErrors??null,cases},null,2));
+          console.log('WORLD_XI_QUALITY_FIXED: all34pass, zero failures, zero declared skips.');
+          CHECK
+      - name: Twelve causal source controls with healthy copies and restoration
+        if: always() && steps.prepare.outcome == 'success' && steps.types.outcome == 'success'
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_QUALITY_OUT"; source "$out/capture.sh"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture recovery-controls node scripts/simWorldXiRecovery.mjs
+          node --input-type=module <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out=process.env.WORLD_XI_QUALITY_OUT,dirs=fs.readdirSync(out).filter(name=>name.startsWith('dukb-world-xi-recovery-'));
+          assert.equal(dirs.length,1);const r=JSON.parse(fs.readFileSync(path.join(out,dirs[0],'summary.json'),'utf8'));
+          assert.equal(r.childRuns,16);assert.equal(r.totalExecuted,32);assert.deepEqual(r.totals,{passed:20,ownedFailures:12,declaredSkips:48});assert.equal(r.results.length,16);
+          console.log('WORLD_XI_CAUSAL: 20 healthy passes,12owned assertions,48declared skips,32executed.');
+          CHECK
+      - name: Hold all source dependencies original archive and tracked membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_QUALITY_OUT"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          for list in dependency-files original-files; do if test -f "$out/$list.sha256"; then sha256sum --check "$out/$list.sha256" > "$out/$list-held.log"; fi; done
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world-xi-quality-fixed-${{ github.run_id }}
+          path: tmp/world-xi-quality-artifacts/
+          retention-days: 14

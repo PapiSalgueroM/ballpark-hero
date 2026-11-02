@@ -114,12 +114,29 @@ try {
     assert.equal(selected.players, data.players, 'Real helper preserves loaded player references');
     modes[mode] = { countries: selected.countries.length, includesStoredCuracao: selected.countries.includes('Curacao'), includesCanonicalCuracao: selected.countries.includes('Curaçao') };
   }
+  function fixedNationWitness(value) {
+    assert.equal(value['2026'].countries, 48, 'WX_ARCHIVE_CANONICAL_2026_COUNT_48');
+    assert.equal(value['2026'].includesCanonicalCuracao, true, 'WX_ARCHIVE_CANONICAL_CURACAO_PRESENT');
+  }
+  fixedNationWitness(modes);
+  const modeSnapshot = JSON.stringify(modes), copiedModeControls = [];
+  for (const [name, field, changedValue, marker] of [
+    ['canonical-count', 'countries', 47, 'WX_ARCHIVE_CANONICAL_2026_COUNT_48'],
+    ['canonical-presence', 'includesCanonicalCuracao', false, 'WX_ARCHIVE_CANONICAL_CURACAO_PRESENT'],
+  ]) {
+    const copied = JSON.parse(modeSnapshot); copied['2026'][field] = changedValue;
+    const file = path.join(out, name + '-control.json'); fs.writeFileSync(file, JSON.stringify(copied));
+    assert.notEqual(sha(fs.readFileSync(file)), sha(Buffer.from(modeSnapshot)), 'Copied mode observation must change');
+    assert.throws(() => fixedNationWitness(JSON.parse(fs.readFileSync(file))), error => error.name === 'AssertionError' && error.message.includes(marker));
+    assert.equal(JSON.stringify(modes), modeSnapshot, 'Actual mode observation held'); fixedNationWitness(modes);
+    copiedModeControls.push({ name, changed: true, ownedAssertion: marker, rejected: true, restored: true });
+  }
   assert.equal(JSON.stringify({ players: data.players, countries: data.countries, byCountry: [...data.byCountry] }), loadedBefore, 'Actual loaded DTO remains unchanged');
   for (const response of responses.values()) assert.equal(sha(Buffer.from(JSON.stringify(response.data))), response.before, 'All original seven-field/history DTOs remain unchanged');
-  const summary = { scope: 'Original artifact only, actual loader and helper, no HTTP or real roster rows added to source. Canonical omission is an observation, not a setup failure.',
+  const summary = { scope: 'Original artifact only, actual loader and helper, no HTTP or real roster rows added to source. The actual 2026 pool has 48 nations including canonical Curaçao; raw stored DTOs remain held.',
     originalRun: 41424730828, artifact: 13132710070, manifestSha256: sha(manifestBytes), publicRequests: 0, actualLoaderReads: calls.size,
     literalRows: { total: curacaoRows.length, current: 3, previous: 5 }, loadedCuracaoPlayers: data.byCountry.get('Curacao')?.length ?? 0, modes,
-    canonicalOmissionObserved: !modes['2026'].includesCanonicalCuracao, copiedLiteralControl: { changed: true, ownedAssertion: 'WX_ARCHIVE_LITERAL_CURACAO_8_ROWS_3_AND_5', rejected: true, restored: true },
+    canonicalAliasVerified: true, copiedModeControls, canonicalOmissionObserved: !modes['2026'].includesCanonicalCuracao, copiedLiteralControl: { changed: true, ownedAssertion: 'WX_ARCHIVE_LITERAL_CURACAO_8_ROWS_3_AND_5', rejected: true, restored: true },
     sourceHolds: [...held].map(([file, bytes]) => ({ file, sha256: sha(bytes) })) };
   fs.writeFileSync(path.join(out, 'summary.json'), JSON.stringify(summary, null, 2));
   fs.writeFileSync(path.join(out, 'actual-curacao-archive-rows.json'), JSON.stringify(curacaoRows, null, 2));

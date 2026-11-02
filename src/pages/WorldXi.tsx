@@ -145,7 +145,7 @@ const WorldXi = () => {
 
   // Keep the input focused as slots advance.
   useEffect(() => {
-    if (phase === 'playing') inputRef.current?.focus();
+    if (phase === 'playing') inputRef.current?.focus({ preventScroll: true });
   }, [phase, step]);
 
   // Slot-machine reveal: whenever a new slot comes up during play, run the
@@ -176,6 +176,14 @@ const WorldXi = () => {
     () => new Set(filled.filter((p): p is WxPlayer => p !== null).map(p => p.name)),
     [filled],
   );
+  const unusedFittingCount = useMemo(() => {
+    if (!selectedData || !slot) return 0;
+    const names = new Set<string>();
+    for (const player of selectedData.byCountry.get(country) ?? []) {
+      if (!usedNames.has(player.name) && fitsSlot(player, slot)) names.add(player.name);
+    }
+    return names.size;
+  }, [selectedData, slot, country, usedNames]);
   const suggestions = useMemo(
     () => (selectedData && slot && country ? suggestCountryPlayers(selectedData, country, query, usedNames) : []),
     [selectedData, slot, country, query, usedNames],
@@ -246,6 +254,25 @@ const WorldXi = () => {
     setRespinsLeft(n => n - 1);
     const next = respinSlotCountry(formation, selectedData, slotIndex, countries);
     if (next === countries[slotIndex]) return;
+    const updated = [...countries];
+    updated[slotIndex] = next;
+    setCountries(updated);
+    setQuery('');
+    setFeedback(null);
+    if (reducedMotionRef.current) return;
+    setSpinning(true);
+    setSpinKey(k => k + 1);
+  };
+
+  const replaceEmptyNation = () => {
+    if (phase !== 'playing' || !selectedData || !slot || slotIndex < 0 || spinning || unusedFittingCount !== 0) return;
+    const available = selectedData.countries.filter(c => (selectedData.byCountry.get(c) ?? [])
+      .some(player => !usedNames.has(player.name) && fitsSlot(player, slot)));
+    const next = respinSlotCountry(formation, { ...selectedData, countries: available }, slotIndex, countries);
+    if (next === country) {
+      setFeedback('No unused nation has a fitting player left. Your squad stays as it is.');
+      return;
+    }
     const updated = [...countries];
     updated[slotIndex] = next;
     setCountries(updated);
@@ -506,6 +533,19 @@ const WorldXi = () => {
                   : `Name a player from ${displayCountry(country)} who can play ${slot.label}. Accepts ${allowedLabel(slot)}.`}
               </p>
 
+              <p className="text-xs text-muted-foreground mb-3" aria-live="polite">
+                {unusedFittingCount === 1 ? '1 unused player name fits this slot.' : `${unusedFittingCount} unused player names fit this slot.`}
+              </p>
+              {unusedFittingCount === 0 && (
+                <button
+                  type="button"
+                  onClick={replaceEmptyNation}
+                  disabled={spinning}
+                  className="mb-3 mr-2 inline-flex min-h-11 items-center gap-1.5 px-3 py-1.5 rounded-full border border-primary/40 bg-primary/10 text-xs font-semibold text-foreground hover:bg-accent transition-all disabled:opacity-50"
+                >
+                  Replace empty nation (free)
+                </button>
+              )}
               <button
                 type="button"
                 onClick={respin}

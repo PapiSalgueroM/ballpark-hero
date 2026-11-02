@@ -86,10 +86,12 @@ function filled(view: View) {
 function board(view: View) {
   const pitch = view.container.querySelector('[style*="aspect-ratio"]');
   expect(pitch, 'WX_RECOVERY_REAL_PITCH').not.toBeNull();
+  const paid = view.queryByRole('button', { name: 'Respin nation (0 left)' });
+  expect(paid, 'WX_RECOVERY_PAID_BUDGET_MUST_STAY_ZERO').not.toBeNull();
   return { pitch: pitch!.innerHTML, prompt: prompt(view), filled: filled(view),
     step: view.getByText(/^Slot \d+ of 11/).textContent,
     timer: view.getByText(/^\d+s$/).textContent,
-    paid: view.getByRole('button', { name: 'Respin nation (0 left)' }).textContent,
+    paid: paid!.textContent,
     query: (view.getByRole('textbox', { name: 'Name a player for this slot' }) as HTMLInputElement).value };
 }
 async function emptyStriker(noAlternative: boolean) {

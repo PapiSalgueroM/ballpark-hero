@@ -7,6 +7,7 @@ function nationKey(country: string): string {
   switch (country) {
     case 'USA': return 'United States';
     case 'Turkey': return 'Türkiye';
+    case 'Curacao': return 'Curaçao';
     case 'Ivory Coast': return "Cote d'Ivoire";
     case 'South Korea': return 'Korea, South';
     case 'Bosnia & Herzegovina': return 'Bosnia-Herzegovina';

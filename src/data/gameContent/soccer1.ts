@@ -745,6 +745,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Spending a shared respin budget on tough nations",
         items: [
           "Respins reroll a nation you cannot solve, shared across all slots. You choose your budget before the draw: none, 3, 5 or 10, with 3 as the default.",
+          "The count below the nation shows unused player names that fit this slot. If it reaches zero, Replace empty nation (free) changes only this slot to a nation with an unused fitting name, if one is available. Your picks, timer and paid respins stay as they are.",
         ],
       },
       {
