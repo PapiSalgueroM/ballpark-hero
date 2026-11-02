@@ -1,0 +1,104 @@
+name: Report MLB playoff native focus baseline
+on:
+  push:
+    branches: [codex/report-mlb-playoffs-focus-baseline-20261102]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind unchanged product and focused test
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/report-mlb-playoffs-focus-baseline-20261102
+          mkdir evidence
+          git rev-parse HEAD HEAD^{tree} > evidence/head-tree.txt
+          printf 'eaa7bfa64416343084b0cea9535af5149941998eb99253280e2395f9eae725a8  src/components/us-career/season/UsSeasonCentre.tsx\n18df6cb8abda99ffe36b588da13d0f8314622456e98fcd6df347df2540b6ba21  src/components/us-career/season/MlbPlayoffReplay.tsx\n3ea96c74c4ea5104c5d5b89d9b47626c99c67d5eed8672e2099618df3cc0c6b3  src/lib/season/mlbPlayoffReplay.ts\nbc73ac4dc2d15c19996c10e16ca2223f61abc28a73c3104b8cebef4274743e8f  src/test/mlbPlayoffReplay.test.tsx\nca21167ecfbda07ae2b15b15dbc9f96550c43a81ea5fcb6db85498dc874129a5  src/test/mlbPlayoffReplayModel.test.ts\n' | sha256sum --check -
+          git ls-files -z > evidence/source-members.before
+          git ls-files -z | xargs -0 sha256sum > evidence/source.sha256
+          cat > evidence/capture.sh <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "evidence/$tag.exit"
+            printf '%s\0' "$@" > "evidence/$tag.argv"
+            set +e
+            "$@" > "evidence/$tag.stdout" 2> "evidence/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "evidence/$tag.exit"
+            cat "evidence/$tag.stdout"
+            cat "evidence/$tag.stderr" >&2
+            return "$status"
+          }
+          CAPTURE
+          source evidence/capture.sh
+          capture install npm ci
+      - name: Actual app types before focus outcomes
+        run: |
+          set -euo pipefail
+          source evidence/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: One owned focus failure and eleven preserved outcomes
+        run: |
+          set -euo pipefail
+          source evidence/capture.sh
+          status=0
+          capture focus env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/mlbPlayoffReplay.test.tsx src/test/mlbPlayoffReplayModel.test.ts --reporter=verbose --reporter=json --outputFile.json=evidence/focus.json --maxWorkers=1 --no-file-parallelism || status=$?
+          test "$status" -eq 1
+          FOCUS_RAW_EXIT="$status" node --input-type=module <<'CHECK'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const report = JSON.parse(fs.readFileSync('evidence/focus.json', 'utf8'));
+          assert(Array.isArray(report.testResults) && report.testResults.length === 2, 'Both actual replay test files must run');
+          const rows = report.testResults.flatMap(file => file.assertionResults || []);
+          const failed = rows.filter(row => row.status === 'failed');
+          const passed = rows.filter(row => row.status === 'passed');
+          const runtimeCounts = {
+            numUnhandledErrors: report.numUnhandledErrors === undefined ? null : report.numUnhandledErrors,
+            numRuntimeErrorTestSuites: report.numRuntimeErrorTestSuites === undefined ? null : report.numRuntimeErrorTestSuites,
+          };
+          const raw = fs.readFileSync('evidence/focus.stdout', 'utf8') + fs.readFileSync('evidence/focus.stderr', 'utf8');
+          const rawErrors = report.errors === undefined ? null : report.errors;
+          const rawUnhandledErrors = report.unhandledErrors === undefined ? null : report.unhandledErrors;
+          const detectedRuntimeError = Object.values(runtimeCounts).some(value => typeof value === 'number' && value > 0)
+            || [rawErrors, rawUnhandledErrors].some(value => Array.isArray(value) && value.length > 0)
+            || /Unhandled (?:Errors?|Rejection)|Vitest caught \d+ unhandled/.test(raw);
+          const expected = rows.length === 12 && passed.length === 11 && failed.length === 1 && !detectedRuntimeError
+            && failed[0].title === 'steps through every game of the saved playoff run and returns to the same regular review'
+            && failed[0].failureMessages.some(message => /AssertionError/.test(message) && message.includes('Revealing a playoff result must keep native focus on the next action'));
+          const summary = { rawExit: Number(process.env.FOCUS_RAW_EXIT), expected, passed: passed.length, failed: failed.map(row => row.title), runtimeCounts, detectedRuntimeError, rawErrors, rawUnhandledErrors };
+          fs.writeFileSync('evidence/focus-summary.json', JSON.stringify(summary, null, 2) + '\n');
+          console.log(JSON.stringify(summary));
+          assert.equal(summary.rawExit, 1);
+          assert.equal(expected, true, 'Only the native-focus assertion may fail before product correction');
+          CHECK
+      - name: Whole source and membership holds
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check evidence/source.sha256 > evidence/source-held.log
+          git ls-files -z > evidence/source-members.after
+          cmp evidence/source-members.before evidence/source-members.after
+          git diff --exit-code HEAD > evidence/source-diff.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mlb-playoffs-focus-baseline-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14

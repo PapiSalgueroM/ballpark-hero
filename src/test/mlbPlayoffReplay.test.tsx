@@ -109,7 +109,12 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
         const card = replay.querySelector('[data-mlb-playoff-game]')!;
         expect(card.textContent).toContain(series.round);
         expect(card.textContent).toContain(`Game ${game}`);
+        const showResult = within(replay).getByRole('button', { name: 'Show game result' });
+        showResult.focus();
+        expect(document.activeElement).toBe(showResult);
         if (reveal(replay)) mine += 1; else theirs += 1;
+        const action = within(replay).getByRole('button', { name: count < 6 ? 'Next playoff game' : 'Replay again' });
+        expect(document.activeElement, 'Revealing a playoff result must keep native focus on the next action').toBe(action);
         expect(within(replay).queryByText(`Series wins: ${mine}-${theirs}`, { exact: true })).toBeTruthy();
         count += 1;
         if (count < 7) fireEvent.click(within(replay).getByRole('button', { name: 'Next playoff game' }));
@@ -121,11 +126,14 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
     expect(within(replay).queryByRole('button', { name: 'Next playoff game' })).toBeNull();
     expect(replay.textContent).toContain(row.teamResult);
     expect(within(replay).getAllByText(POST_LINE, { exact: true })).toHaveLength(1);
+    expect(onClose).not.toHaveBeenCalled();
+    fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
+    expect(onClose).toHaveBeenCalledTimes(1);
     fireEvent.click(within(replay).getByRole('button', { name: 'Back to regular season' }));
     expect(view.container.querySelector('[data-mlb-playoff-replay]')).toBeNull();
     expect(view.container.querySelector('[data-season-centre]')!.getAttribute('aria-hidden')).not.toBe('true');
     expect(view.container.querySelector('[data-review]')!.innerHTML).toBe(regularReview);
-    expect(onClose).not.toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalledTimes(1);
     expect(JSON.stringify(career)).toBe(saved);
     expect(localStorage.getItem(MLB_CAREER_SPORT.saveKey)).toBe(saved);
   });
