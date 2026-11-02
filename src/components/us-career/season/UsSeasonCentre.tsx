@@ -13,13 +13,15 @@
    keeps a render error inside the overlay; the host wraps the lazy mount in
    a second one, because a boundary inside this chunk cannot catch the chunk
    failing to load. */
-import { Component, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
 import { deriveSeason, type DerivedGame, type DerivedSeason } from '@/lib/season/core';
 import { buildUsSeason, usPlayoffPath, type UsPlayoffPath, type UsRow, type UsSeasonBind, type UsSeasonCtx } from '@/lib/season/us';
 import { SeasonCentre, type CentreModel } from '@/components/season-centre/SeasonCentre';
 import { CentreTile } from '@/components/season-centre/CentreTile';
 import { MiniBasketballCourt } from '@/components/us-career/season/MiniBasketballCourt';
+import MlbPlayoffReplay from '@/components/us-career/season/MlbPlayoffReplay';
+import { buildMlbPlayoffReplay } from '@/lib/season/mlbPlayoffReplay';
 import type { ClockStageAt } from '@/components/season-centre/MatchClock';
 
 export interface UsSeasonCentreProps {
@@ -134,6 +136,8 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
   const [bind, setBind] = useState<UsSeasonBind | null>(null);
   const [failed, setFailed] = useState(false);
   const [tries, setTries] = useState(0);
+  const [part, setPart] = useState<'regular' | 'playoffs'>('regular');
+  const replayOpener = useRef<HTMLButtonElement | null>(null);
   useEffect(() => {
     let live = true;
     setFailed(false);
@@ -148,6 +152,7 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
     () => (bind && built && built.ok === true && season ? buildUsModel(sport, bind, career, row as UsRow, built.ctx, season, built.key) : null),
     [bind, built, season, sport, career, row],
   );
+  const replay = useMemo(() => (bind && built && built.ok === true ? buildMlbPlayoffReplay(bind, row as UsRow, built.ctx, built.key) : null), [bind, built, row]);
   if (failed) return <CentreTile title={TITLE} text="The season could not be loaded. Your career is safe." exitLabel={EXIT} onClose={onClose} onRetry={() => setTries(n => n + 1)} />;
   if (!bind || !built) {
     return (
@@ -161,7 +166,20 @@ function CentreBody({ sport, career, row, onClose }: UsSeasonCentreProps) {
   }
   if (built.ok === false) return <CentreTile title={TITLE} text={built.why === 'held' ? built.line : CANNOT} exitLabel={EXIT} onClose={onClose} />;
   if (!model) return <CentreTile title={TITLE} text={CANNOT} exitLabel={EXIT} onClose={onClose} />;
-  return <SeasonCentre model={model} exitLabel={EXIT} onClose={onClose} />;
+  const backToRegular = () => {
+    setPart('regular');
+    requestAnimationFrame(() => replayOpener.current?.focus({ preventScroll: true }));
+  };
+  return (
+    <>
+      <SeasonCentre model={model} exitLabel={EXIT} onClose={onClose} active={part === 'regular'} navigation={replay ? (
+        <div className="border-b border-border px-3 py-2">
+          <button type="button" ref={replayOpener} onClick={() => setPart('playoffs')} className="min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold">Replay playoffs</button>
+        </div>
+      ) : undefined} />
+      {part === 'playoffs' && replay && <MlbPlayoffReplay replay={replay} club={model.header.club} year={row.year} onBack={backToRegular} onClose={onClose} />}
+    </>
+  );
 }
 
 export default function UsSeasonCentre(props: UsSeasonCentreProps) {
