@@ -714,6 +714,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Typing a player who covers the nation and slot",
         items: [
           "Type 2 or more letters and pick a player of that nationality who covers the slot.",
+          "The pool uses 2026 and 2025 records. Club, age and value come from each player's latest stored record, so some entries show an older club or age.",
         ],
         subsections: [
           {

@@ -1,0 +1,265 @@
+name: Report World XI roster depth qualification
+on:
+  push:
+    branches: [codex/report-world-xi-roster-fixed-20261101]
+permissions:
+  contents: read
+jobs:
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      WORLD_XI_OUT: ${{ github.workspace }}/world-xi-fixed-unit-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind source and locked dependencies
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"; mkdir "$out"
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-roster-fixed-20261101
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          printf 'fa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe  src/lib/worldXi.ts\nb393eb0edeb096925eca9c578abeb973743dffabc0b47a462ec9c7a1a9f1bd6c  src/test/worldXiRosterDepth.test.ts\n3d7d5d153cc21e8b62ae0582489c2151077851821289a244c0ada8e422253dfd  scripts/simWorldXiRosterDepth.mjs\n' | sha256sum -c -
+          git diff --exit-code cc9a55a2f35b6215d5e6e664cc401d10d7f76291 -- scripts/sweepWeight.mjs src/lib/positionFit.ts src/lib/squadShape.ts src/integrations/supabase/client.ts
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$WORLD_XI_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$WORLD_XI_OUT/$tag.argv"
+            : > "$WORLD_XI_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$WORLD_XI_OUT/$tag.transport" "$@" > "$WORLD_XI_OUT/$tag.stdout" 2> "$WORLD_XI_OUT/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$WORLD_XI_OUT/$tag.exit"
+            tail -n 6 "$WORLD_XI_OUT/$tag.stdout"; tail -n 6 "$WORLD_XI_OUT/$tag.stderr"
+            test ! -s "$WORLD_XI_OUT/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types loader controls and existing offline World XI simulations
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$WORLD_XI_OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture loader env WORLD_XI_ROSTER_OUT="$WORLD_XI_OUT/loader-proof" node scripts/simWorldXiRosterDepth.mjs
+          capture season-report node scripts/simWorldXiReport.mjs
+          capture season-detail node scripts/simWorldXiSeasonReport.mjs
+          capture existing-pages node node_modules/vitest/vitest.mjs run src/test/worldXiRespins.test.tsx src/test/worldXiSummary.test.tsx --reporter=verbose --reporter=json --outputFile="$WORLD_XI_OUT/existing-pages.json" --maxWorkers=1 --no-file-parallelism
+      - name: Full ordinary unit suite
+        timeout-minutes: 60
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$WORLD_XI_OUT/capture.sh"
+          capture all-units node node_modules/vitest/vitest.mjs run --reporter=verbose --reporter=json --outputFile="$WORLD_XI_OUT/all-units.json" --maxWorkers=2 --no-file-parallelism
+          node --input-type=module <<'CHECK'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.WORLD_XI_OUT,r=JSON.parse(fs.readFileSync(out+'/all-units.json','utf8'));
+          assert.equal(r.success,true);assert.equal(r.numFailedTests,0);assert(r.numPassedTests>=12);
+          const counters={numUnhandledErrors:r.numUnhandledErrors??null,numRuntimeErrorTestSuites:r.numRuntimeErrorTestSuites??null};
+          for(const [key,count] of Object.entries(counters)){if(count===null)continue;assert.equal(typeof count,'number');assert.equal(count,0,key);}
+          const owned=r.testResults.filter(f=>f.name.endsWith('/src/test/worldXiRosterDepth.test.ts'));assert.equal(owned.length,1);assert.equal(owned[0].assertionResults.length,12);assert(owned[0].assertionResults.every(a=>a.status==='passed'));
+          fs.writeFileSync(out+'/ordinary-unit-summary.json',JSON.stringify({success:r.success,physicalFiles:r.testResults.length,total:r.numTotalTests,passed:r.numPassedTests,failed:r.numFailedTests,pending:r.numPendingTests??null,todo:r.numTodoTests??null,runtimeCounters:counters,runtimeCounterCompleteness:Object.values(counters).some(v=>v===null)?'UNKNOWN':'REPORTED',rawErrorFields:{errors:r.errors??null,unhandledErrors:r.unhandledErrors??null},ownedLoaderCases:12},null,2));
+          CHECK
+      - name: End source and dependency holds
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum -c "$out/dependency-files.sha256" > "$out/dependency-hold.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/working-source-hold.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world-xi-fixed-units-${{ github.run_id }}
+          path: world-xi-fixed-unit-artifacts/
+          retention-days: 14
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PRERENDER_ONLY: /world-xi
+      WORLD_XI_OUT: ${{ github.workspace }}/world-xi-fixed-build-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind source and generated boundaries
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"; mkdir "$out"
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-roster-fixed-20261101
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          git ls-files -z > "$out/source-members.before"
+          while IFS= read -r -d '' file; do
+            case "$file" in public/world-xi/index.html|public/sitemap.xml|scripts/data/lastmod.json|src/data/searchKeywords.json|scripts/data/guideHeadingsFrozen.json) continue;; esac
+            sha256sum "$file"
+          done < "$out/source-members.before" > "$out/immutable-source.sha256"
+          cp scripts/data/guideHeadingsFrozen.json "$out/guide-before.json"
+          cp scripts/data/lastmod.json "$out/lastmod-before.json"
+          git diff --exit-code cc9a55a2f35b6215d5e6e664cc401d10d7f76291 -- scripts/sweepWeight.mjs src/lib/positionFit.ts src/lib/squadShape.ts src/integrations/supabase/client.ts
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$WORLD_XI_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$WORLD_XI_OUT/$tag.argv"
+            : > "$WORLD_XI_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$WORLD_XI_OUT/$tag.transport" "$@" > "$WORLD_XI_OUT/$tag.stdout" 2> "$WORLD_XI_OUT/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$WORLD_XI_OUT/$tag.exit"
+            tail -n 6 "$WORLD_XI_OUT/$tag.stdout"; tail -n 6 "$WORLD_XI_OUT/$tag.stderr"
+            test ! -s "$WORLD_XI_OUT/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+      - name: Locked app isolated pinned browser Python and held fonts
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"; source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+          browser_tools="$RUNNER_TEMP/world-xi-roster-tools"; test ! -e "$browser_tools"; mkdir "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          capture browser-install env NODE_OPTIONS='' npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$out/browser-package.json"; cp "$browser_tools/package-lock.json" "$out/browser-package-lock.json"
+          capture chromium env NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m venv "$browser_tools/python"
+          capture python-fonts "$browser_tools/python/bin/python" -m pip install fonttools==4.60.1 Pillow==11.3.0
+          "$browser_tools/python/bin/python" -m pip freeze > "$out/python-packages.txt"
+          echo "$browser_tools/python/bin" >> "$GITHUB_PATH"
+          capture font-prefetch env NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-files.sha256"
+          cat > "$out/cached-fonts.cjs" <<'FONTS'
+          'use strict';
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const out=process.env.WORLD_XI_OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const manifest=JSON.parse(fs.readFileSync(path.join(out,'font-cache/manifest.json'),'utf8'));
+          const cache=new Map(manifest.map(row=>{const body=fs.readFileSync(path.join(out,'font-cache',row.file));assert.equal(sha(body),row.sha256);return[row.url,{body,contentType:row.contentType,sha256:row.sha256}];}));
+          const pw=require(path.join(process.cwd(),'node_modules/playwright'));
+          const launch=pw.chromium.launch.bind(pw.chromium);
+          pw.chromium.launch=async(...args)=>{
+            const browser=await launch(...args),newContext=browser.newContext.bind(browser);
+            browser.newContext=async(...options)=>{
+              const context=await newContext(...options);
+              await context.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//,async route=>{
+                const url=route.request().url(),row=cache.get(url);
+                if(!row){fs.appendFileSync(path.join(out,'font-cache-misses.jsonl'),JSON.stringify({url})+'\n');return route.abort();}
+                fs.appendFileSync(path.join(out,'font-cache-use.jsonl'),JSON.stringify({url,sha256:row.sha256})+'\n');
+                return route.fulfill({status:200,body:row.body,contentType:row.contentType});
+              });
+              await context.route(/^https:\/\/flagcdn\.com\//,route=>{fs.appendFileSync(path.join(out,'blocked-external.jsonl'),JSON.stringify({kind:'flag',url:route.request().url()})+'\n');return route.abort();});
+              await context.route(/^https:\/\/[^/]+\.supabase\.co\//,route=>{fs.appendFileSync(path.join(out,'blocked-external.jsonl'),JSON.stringify({kind:'database',url:route.request().url()})+'\n');return route.abort();});
+              return context;
+            };
+            return browser;
+          };
+          FONTS
+          sha256sum "$out/cached-fonts.cjs" > "$out/cached-fonts.sha256"
+      - name: Actual types and narrowly derived guide search and snapshot outputs
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"; source "$out/capture.sh"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/cached-fonts.cjs"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture guide-refresh node scripts/simGuideHeadings.mjs --refresh /world-xi
+          capture search-refresh node scripts/genSearchKeywords.mjs
+          capture build-seo npm run build:seo
+          node --input-type=module <<'GENERATED'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import{execFileSync}from'node:child_process';import{createHash}from'node:crypto';
+          const out=process.env.WORLD_XI_OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const allowed=['public/world-xi/index.html','public/sitemap.xml','scripts/data/lastmod.json','src/data/searchKeywords.json','scripts/data/guideHeadingsFrozen.json'];
+          const changed=execFileSync('git',['diff','--name-only','-z','HEAD']).toString().split('\0').filter(Boolean);assert(changed.every(file=>allowed.includes(file)),'No unrelated application or generated file may change');
+          const before=JSON.parse(fs.readFileSync(out+'/guide-before.json')),after=JSON.parse(fs.readFileSync('scripts/data/guideHeadingsFrozen.json'));const route='/world-xi';
+          const sentence="The pool uses 2026 and 2025 records. Club, age and value come from each player's latest stored record, so some entries show an older club or age.";
+          const expected=structuredClone(before),items=expected.routes[route].howToPlay,anchor='Type 2 or more letters and pick a player of that nationality who covers the slot.';
+          assert.equal(items.filter(v=>v===anchor).length,1);assert(items.filter(v=>v===sentence).length<=1);if(!items.includes(sentence))items.splice(items.indexOf(anchor)+1,0,sentence);else assert.equal(items.indexOf(sentence),items.indexOf(anchor)+1);assert.deepEqual(after,expected,'Only the adopted World XI snapshot note changes the frozen guide');
+          const ledgerBefore=JSON.parse(fs.readFileSync(out+'/lastmod-before.json')),ledgerAfter=JSON.parse(fs.readFileSync('scripts/data/lastmod.json'));assert.deepEqual(Object.keys(ledgerAfter).sort(),Object.keys(ledgerBefore).sort());for(const key of Object.keys(ledgerBefore))if(key!==route)assert.deepEqual(ledgerAfter[key],ledgerBefore[key],`Unrelated lastmod ${key} stays held`);
+          const records=allowed.map(file=>{const body=fs.readFileSync(file),dest=path.join(out,'generated',file);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.writeFileSync(dest,body);return{file,changed:changed.includes(file),bytes:body.length,sha256:sha(body)};});
+          fs.writeFileSync(out+'/generated-manifest.json',JSON.stringify({allowed,changed,records},null,2));
+          fs.writeFileSync(out+'/generated.patch',execFileSync('git',['diff','--binary','HEAD']));
+          fs.writeFileSync(out+'/scope.json',JSON.stringify({loaderTests:true,existingPageUnits:true,productionTransport:false,actualWorldXiBrowserSelection:false,mobileLayout:false,bootLatency:false,liveRosterChecks:false,nationModesAdopted:false},null,2));
+          GENERATED
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"
+      - name: Every saved-output reader search guide and unchanged full page caps
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"; source "$out/capture.sh"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/cached-fonts.cjs"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for reader in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            status=0; capture "$reader" env BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$reader.mjs" || status=$?
+            printf '%s\t%s\n' "$reader" "$status" >> "$out/readers.tsv"; test "$status" -eq 0 || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 17
+          status=0; capture all-page-caps env BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs || status=$?
+          test "$status" -eq 0 || failed=1
+          test ! -s "$out/font-cache-misses.jsonl" || failed=1
+          test -s "$out/font-cache-use.jsonl" || failed=1
+          exit "$failed"
+      - name: Always retain generated differences and enforce all immutable sources
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"
+          git diff --binary HEAD > "$out/final-generated.patch"
+          git diff --name-status HEAD > "$out/final-changed-paths.txt"
+          for file in public/world-xi/index.html public/sitemap.xml scripts/data/lastmod.json src/data/searchKeywords.json scripts/data/guideHeadingsFrozen.json; do
+            if test -f "$file"; then mkdir -p "$out/final-generated/$(dirname "$file")"; cp "$file" "$out/final-generated/$file"; sha256sum "$file" >> "$out/final-generated.sha256"; fi
+          done
+          sha256sum -c "$out/immutable-source.sha256" > "$out/source-hold.log"
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+          for list in dependency-files browser-files font-files cached-fonts; do if test -f "$out/$list.sha256"; then sha256sum -c "$out/$list.sha256" > "$out/$list-hold.log"; fi; done
+          if test -f "$out/dist.sha256"; then sha256sum -c "$out/dist.sha256" > "$out/dist-hold.log"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world-xi-fixed-build-${{ github.run_id }}
+          path: world-xi-fixed-build-artifacts/
+          retention-days: 14
