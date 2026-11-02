@@ -1,0 +1,118 @@
+name: Grand Prix Boss market save integration baseline
+on:
+  push:
+    branches: [codex/grand-prix-boss-market-hook-baseline-20261102]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the held market engine and original persistence hook
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-market-save-baseline-artifacts"
+          mkdir "$out"
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-market-hook-baseline-20261102
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          printf '%s\n' '6d0e754c28f631ea590472b9ea2a1647206db67ec7dc1580bcf054cede74364f  src/lib/grandPrixBoss.ts' 'b2024f84b91cec4d263772b906b8adeb6903c0a2e5eef5ab3bf878b5b9484298  src/hooks/useGrandPrixBoss.ts' 'c6a64b60b25770a3ab38bd7bb2749809fc266302ffcdd5cbe8661673991e83b9  src/test/grandPrixBossMarketSave.test.tsx' | sha256sum --check -
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-market-save-baseline-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$out/$tag.exit"
+            tail -n 18 "$out/$tag.stdout"; tail -n 18 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types and four owned contract save assertions
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-market-save-baseline-artifacts"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source "$out/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          code=0
+          capture baseline node node_modules/vitest/vitest.mjs run src/test/grandPrixBossMarketSave.test.tsx --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/baseline.vitest.json" || code=$?
+          test "$code" -eq 1
+          test ! -s "$out/baseline.transport"
+          node --input-type=module <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const out = process.cwd() + '/grand-prix-market-save-baseline-artifacts';
+          const r = JSON.parse(fs.readFileSync(out + '/baseline.vitest.json', 'utf8'));
+          const raw = fs.readFileSync(out + '/baseline.stdout', 'utf8') + '\n' + fs.readFileSync(out + '/baseline.stderr', 'utf8');
+          assert.equal(Number(fs.readFileSync(out + '/baseline.exit', 'utf8')), 1);
+          assert.equal(r.success, false); assert.equal(r.numTotalTests, 4); assert.equal(r.numFailedTests, 4);
+          assert.equal(r.numPassedTests, 0); assert.equal(r.numPendingTests, 0); assert.equal(r.numTodoTests, 0);
+          assert.equal(r.testResults.length, 1);
+          assert(r.testResults[0].name.endsWith('/src/test/grandPrixBossMarketSave.test.tsx'));
+          const expected = new Map([
+            ['GP_HOOK_MARKET_SIGN:', 'GP_HOOK_MARKET_SIGN_MUST_NOT_THROW'],
+            ['GP_HOOK_MARKET_QUOTA:', 'GP_HOOK_MARKET_QUOTA_MUST_NOT_THROW'],
+            ['GP_HOOK_MARKET_UNCERTAIN:', 'GP_HOOK_MARKET_UNCERTAIN_MUST_NOT_THROW'],
+            ['GP_HOOK_MARKET_RENEW:', 'GP_HOOK_MARKET_RENEW_MESSAGE'],
+          ]);
+          const seen = new Set();
+          const cases = r.testResults[0].assertionResults; assert.equal(cases.length, 4);
+          for (const row of cases) {
+            const ids = [...expected.keys()].filter(id => row.title.startsWith(id)); assert.equal(ids.length, 1);
+            const id = ids[0]; assert(!seen.has(id)); seen.add(id);
+            assert.equal(row.status, 'failed'); assert.equal(row.failureMessages.length, 1);
+            assert.match(row.failureMessages[0], /AssertionError:/); assert(row.failureMessages[0].includes(expected.get(id)));
+          }
+          const runtimeCounters = { numUnhandledErrors: r.numUnhandledErrors ?? null, numRuntimeErrorTestSuites: r.numRuntimeErrorTestSuites ?? null };
+          for (const value of Object.values(runtimeCounters)) if (value !== null) { assert.equal(typeof value, 'number'); assert.equal(value, 0); }
+          for (const errors of [r.errors, r.unhandledErrors]) if (Array.isArray(errors)) assert.equal(errors.length, 0);
+          assert(!/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw));
+          fs.writeFileSync(out + '/summary.json', JSON.stringify({ scope: 'Contract save integration absence only; original hook unchanged.',
+            ownedAssertionFailures: 4, passed: 0, declaredSkips: 0, totalExecuted: 4, runtimeCounters,
+            runtimeCounterCompleteness: Object.values(runtimeCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED',
+            cases: cases.map(row => ({ title: row.title, status: row.status, failureMessages: row.failureMessages })) }, null, 2) + '\n');
+          console.log('GP_MARKET_SAVE_BASELINE: four exact owned contract-save assertions; original hook and qualified engine held.');
+          CHECK
+      - name: Hold all source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-market-save-baseline-artifacts"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-market-save-baseline-${{ github.run_id }}
+          path: grand-prix-market-save-baseline-artifacts/
+          retention-days: 14
