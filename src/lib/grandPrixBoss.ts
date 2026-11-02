@@ -304,9 +304,9 @@ export function createCareer(seed: number): GrandPrixCareer {
       contract: team ? { teamId: team.id, years: ri(1, 3), wagePerRace: Math.round((70_000 + pace * 1_500) / 1_000) * 1_000 } : null,
     };
   });
-  const teamId = teams[6].id;
-  drivers[12].contract!.wagePerRace = 180_000;
-  drivers[13].contract!.wagePerRace = 120_000;
+  const teamId = teams[4].id;
+  drivers[8].contract!.wagePerRace = 180_000;
+  drivers[9].contract!.wagePerRace = 120_000;
   const calendar = TRACK_NAMES.map((name, index) => {
     const powerWeight = [0.8, 0.25, 0.5, 0.7, 0.3, 0.45][index % 6];
     return { id: `gp-round-${index}`, name, laps: 40, entryCost: 250_000, powerWeight, aeroWeight: 1 - powerWeight, rainChance: 0.12 + random() * 0.25 };

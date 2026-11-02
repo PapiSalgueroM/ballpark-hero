@@ -1,0 +1,171 @@
+name: Grand Prix Boss management UI baseline
+on:
+  push:
+    branches: [codex/grand-prix-boss-management-ui-baseline-20261102]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the starter join and held initial page
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/grand-prix-management-ui-baseline-artifacts"
+          mkdir "$out"
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-management-ui-baseline-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = 5ff2eed3932e008dad5ff2637513e5b2da194edb
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-management-ui-baseline.yml' 'src/lib/grandPrixBoss.ts' 'src/pages/GrandPrixBoss.tsx' 'src/test/grandPrixBossManagementPage.test.tsx' 'src/test/grandPrixBossPage.test.tsx' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          git diff --exit-code HEAD^ -- src/hooks src/integrations src/App.tsx src/data/gameRegistry.ts src/lib/saveFence.ts src/lib/completions.ts package.json package-lock.json vitest.config.ts src/test/setup.ts > "$out/held-parent-paths.log"
+          printf '%s\n' \
+            '9565fb9a17489ae21d0b0451cdadede08509ac5fd8d94fbf71ffd88802895af5  src/lib/grandPrixBoss.ts' \
+            '75299ffcee86f41575e1b3f7769eb3706c81d83868c42eec305925f6171a9c1f  src/pages/GrandPrixBoss.tsx' \
+            'e8cc17bd6047a775557632e0984f59cfc385f922d9c80fee0638e6e94b98bb25  src/test/grandPrixBossPage.test.tsx' \
+            '77a3d05742e9621ab6146bfbfe3f5b33f1853b99a12008b66134f0387c351922  src/test/grandPrixBossManagementPage.test.tsx' \
+            'f0ec04a26c60db6c4a5b1e4b555a699979a2fdad464e404d0e906f2538b8c23b  src/hooks/useGrandPrixBoss.ts' | sha256sum --check -
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          for file in src/lib/grandPrixBoss.ts src/pages/GrandPrixBoss.tsx src/test/grandPrixBossPage.test.tsx src/test/grandPrixBossManagementPage.test.tsx src/hooks/useGrandPrixBoss.ts; do
+            mkdir -p "$out/source/$(dirname "$file")"
+            cp "$file" "$out/source/$file"
+          done
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$RUNNER_TEMP/grand-prix-management-ui-baseline-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$out/$tag.exit"
+            tail -n 18 "$out/$tag.stdout"; tail -n 18 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Install locked dependencies before the offline checks
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/grand-prix-management-ui-baseline-artifacts"
+          printf '%s\0' env NODE_OPTIONS= npm ci > "$out/install.argv"
+          set +e
+          env NODE_OPTIONS='' npm ci > "$out/install.stdout" 2> "$out/install.stderr"
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$out/install.exit"
+          tail -n 18 "$out/install.stdout"; tail -n 18 "$out/install.stderr"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types and six owned management UI assertions
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/grand-prix-management-ui-baseline-artifacts"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source "$out/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          code=0
+          capture baseline node node_modules/vitest/vitest.mjs run src/test/grandPrixBossPage.test.tsx src/test/grandPrixBossManagementPage.test.tsx --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/baseline.vitest.json" || code=$?
+          test "$code" -eq 1
+          test ! -s "$out/baseline.transport"
+          node --input-type=module <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const out = process.env.RUNNER_TEMP + '/grand-prix-management-ui-baseline-artifacts';
+          const r = JSON.parse(fs.readFileSync(out + '/baseline.vitest.json', 'utf8'));
+          const raw = fs.readFileSync(out + '/baseline.stdout', 'utf8') + '\n' + fs.readFileSync(out + '/baseline.stderr', 'utf8');
+          assert.equal(Number(fs.readFileSync(out + '/baseline.exit', 'utf8')), 1);
+          assert.equal(r.success, false);
+          assert.equal(r.numTotalTests, 15); assert.equal(r.numPassedTests, 9); assert.equal(r.numFailedTests, 6);
+          assert.equal(r.numPendingTests, 0); assert.equal(r.numTodoTests, 0);
+          assert.equal(r.testResults.length, 2);
+          const expected = new Map([
+            ['src/test/grandPrixBossPage.test.tsx', new Map([
+              ['GP_PAGE_AVAILABLE:', null], ['GP_PAGE_START:', null], ['GP_PAGE_HUB:', null],
+              ['GP_PAGE_UPGRADE:', null], ['GP_PAGE_ORDERS:', null], ['GP_PAGE_STANDINGS:', null],
+              ['GP_PAGE_BACK:', null], ['GP_PAGE_MOVED_EMPTY:', null], ['GP_PAGE_PROTECTED_SAVE:', null],
+            ])],
+            ['src/test/grandPrixBossManagementPage.test.tsx', new Map([
+              ['GP_MANAGEMENT_SIGN:', 'GP_PAGE_MARKET_SIGN_MISSING'],
+              ['GP_MANAGEMENT_RENEW:', 'GP_PAGE_MARKET_RENEW_MISSING'],
+              ['GP_MANAGEMENT_NEXT_YEAR:', 'GP_PAGE_NEXT_SEASON_MISSING'],
+              ['GP_MANAGEMENT_GUARDS:', 'GP_PAGE_MANAGEMENT_GUARDS_MISSING'],
+              ['GP_MANAGEMENT_HISTORY:', 'GP_PAGE_ARCHIVED_HISTORY_MISSING'],
+              ['GP_MANAGEMENT_REVIEW_CARDS:', 'GP_PAGE_HISTORICAL_RACE_PARTICIPANTS_WRONG'],
+            ])],
+          ]);
+          const seenFiles = new Set(), cases = [];
+          for (const file of r.testResults) {
+            const normalized = file.name.replaceAll('\\', '/');
+            const names = [...expected.keys()].filter(name => normalized.endsWith('/' + name));
+            assert.equal(names.length, 1);
+            const name = names[0]; assert(!seenFiles.has(name)); seenFiles.add(name);
+            const identities = expected.get(name), seen = new Set();
+            assert.equal(file.assertionResults.length, identities.size);
+            for (const row of file.assertionResults) {
+              const ids = [...identities.keys()].filter(id => row.title.startsWith(id)); assert.equal(ids.length, 1);
+              const id = ids[0]; assert(!seen.has(id)); seen.add(id);
+              const marker = identities.get(id), failed = marker !== null;
+              assert.equal(row.status, failed ? 'failed' : 'passed');
+              assert.equal(row.failureMessages.length, failed ? 1 : 0);
+              if (failed) { assert.match(row.failureMessages[0], /AssertionError:/); assert(row.failureMessages[0].includes(marker)); }
+              cases.push({ file: name, title: row.title, status: row.status, failureMessages: row.failureMessages });
+            }
+            assert.equal(seen.size, identities.size);
+          }
+          assert.equal(seenFiles.size, 2);
+          const runtimeCounters = { numUnhandledErrors: r.numUnhandledErrors ?? null, numRuntimeErrorTestSuites: r.numRuntimeErrorTestSuites ?? null };
+          for (const value of Object.values(runtimeCounters)) if (value !== null) { assert.equal(typeof value, 'number'); assert.equal(value, 0); }
+          for (const errors of [r.errors, r.unhandledErrors]) if (errors != null) { assert(Array.isArray(errors)); assert.equal(errors.length, 0); }
+          const detectedRuntimeError = /(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw);
+          assert.equal(detectedRuntimeError, false);
+          fs.writeFileSync(out + '/summary.json', JSON.stringify({
+            scope: 'Initial management UI feature absence with nine original page cases preserved. Component and engine fixtures only; no build, route or global chrome claim.',
+            parent: '5ff2eed3932e008dad5ff2637513e5b2da194edb', rawExit: 1,
+            passed: 9, ownedAssertionFailures: 6, declaredSkips: 0, totalExecuted: 15,
+            runtimeCounters, runtimeCounterCompleteness: Object.values(runtimeCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED',
+            detectedRuntimeError, rawErrors: r.errors ?? null, rawUnhandledErrors: r.unhandledErrors ?? null, cases,
+            installNetwork: 'Locked dependency install precedes offline gate; no empty-transport claim for install.',
+          }, null, 2) + '\n');
+          console.log('GP_MANAGEMENT_UI_BASELINE: nine original page passes, six exact owned feature assertions, zero skips; 15 executed outcomes.');
+          CHECK
+      - name: Hold all source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/grand-prix-management-ui-baseline-artifacts"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log"; fi
+          git ls-files -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"
+          test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-management-ui-baseline-${{ github.run_id }}
+          path: ${{ runner.temp }}/grand-prix-management-ui-baseline-artifacts/
+          retention-days: 14
