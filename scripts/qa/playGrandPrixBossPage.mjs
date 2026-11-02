@@ -482,7 +482,7 @@ try {
       );
       else controls.push(['held-ui', 'Failed save preserves the displayed team', value => { value.fault.panelAfter += 'changed'; }], ['fault-consumed', 'Owned storage fault was consumed', value => { value.fault.after.armed = mode; }]);
       if (mode === 'quota' || mode === 'noop') controls.push(['held-bytes', 'Refused save preserves exact game bytes', value => { value.fault.after.raw += ' '; }], ['held-fence', 'Refused save restores exact fence', value => { value.fault.after.generation = String(Number(value.fault.after.generation) + 1); }]);
-      if (mode === 'uncertain') controls.push(['blocked', 'Uncertain team blocks further mutation', value => { value.fault.disabled = false; }], ['landed', 'Uncertain write physically landed once', value => { value.fault.after.raw = value.fault.before.raw; }], ['reload', 'Actual native reload navigation', value => { value.reloads[0].after.navigationType = 'navigate'; }]);
+      if (mode === 'uncertain') controls.push(['blocked', 'Uncertain team blocks further mutation', value => { value.fault.disabled = false; }], ['landed', 'Uncertain write physically landed once', value => { value.fault.after = { ...value.fault.after, raw: value.fault.before.raw }; }], ['reload', 'Actual native reload navigation', value => { value.reloads[0].after.navigationType = 'navigate'; }]);
       row.controls = [];
       for (const [name, owned, change] of controls) {
         const copy = structuredClone(row), before = JSON.stringify(copy); change(copy);
