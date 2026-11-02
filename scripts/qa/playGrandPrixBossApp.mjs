@@ -260,7 +260,10 @@ async function collect(spec) {
       row.routeWeight.checkpoints.push(await routeWeight('settled-guide-before-action'));
       write('phone-natural-route-weight.json', row.routeWeight);
     }
-    const consent = page.getByRole('region', { name: 'Cookie choices', exact: true }); await consent.waitFor();
+    const firstRulesForConsent = spec.catalog ? null : page.getByRole('dialog', { name: 'How to play Grand Prix Boss', exact: true });
+    if (firstRulesForConsent) await firstRulesForConsent.waitFor();
+    const consentScope = firstRulesForConsent ? firstRulesForConsent.locator('[data-dukb-help-cookie-choices]') : page;
+    const consent = consentScope.getByRole('region', { name: 'Cookie choices', exact: true }); await consent.waitFor();
     row.consent = { initialPresent: true, label: await consent.getAttribute('aria-label') };
     await press(consent.getByRole('button', { name: 'Reject all', exact: true }), 'Reject actual consent'); await consent.waitFor({ state: 'hidden' });
     row.consent.preferences = JSON.parse((await snapshot('consent-rejected')).consent);
