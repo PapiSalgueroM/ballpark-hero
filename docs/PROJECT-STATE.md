@@ -19904,3 +19904,20 @@ Published source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5
 Hosted-M run 41133839703 has independent scoped admission d3492ce71d7b9733addafe8b9a8bb2138ee0f838495fda9b7c3e84e6b520d8d5: 172/172 raw routes clean, exact 8 CM/SC plain/slash desktop/phone records mounted and settled without saved-text loss, 50 source fingerprints and 7 effective in-memory controls. Retained findings include denied live_scores reads, console resource errors and blocked telemetry writes. Hosted-P byte parity and gameplay are outside this observation.
 
 Broad 1022 default outcomes remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT, with raw failures retained. The Season Centre focus fix 51da27a2367cc84ca0c622def41029dbc2580b68 is separate and unshipped; its fixed/whole-old-Page/restored qualification remains pending.
+
+
+## Report continuation: MLB playoff replay, 2026-11-02
+
+A qualified MLB playoff replay packet is prepared from main cc9a55a2f35b6215d5e6e664cc401d10d7f76291. No merge or live deployment was performed; K owns integration and publication.
+
+Supported saved MLB hitter seasons gain Replay playoffs inside Season Center. The panel reconstructs repeatable wins/losses from the saved finish and team playoff game count using the existing canonical rounds. It clearly states that individual game scores and player stats were not saved. It changes no result, save, RNG stream or completion write. Unsupported/historical layouts keep the regular viewer, which also stays mounted under the replay so Back restores the same review and focus. Pitcher entry remains unchanged, a coverage limit rather than missing team-count data.
+
+Final immutable qualification source0f387be3d1971390e0efb239aa77b610092914c4, run41404000550, all three jobs passed. Types, build, all fifteen saved-output readers, all sixteen unchanged caps and the existing39 season/playoff cases pass. Full units10,274 passed58 optional skipped0 failed715 physical files. Replay proof has180 actual observations across healthy/restored runs and seven effective faults:168 passes/12 exact owned failures. Missing runtime counters remain UNKNOWN.
+
+Actual compiled Season Center browser proof at320x664,392x731 and1440x900 plays the same seven-game replay twice, handles rules/Back/native Escape, preserves all17 career/save/RNG snapshots per context and records no overflow, page jumps or observed browser/network errors. Thirty-three copied-report guards are effective;15 original screenshots are retained. Root visually viewed exactly five final originals, including320px help and final controls. Source/cap identities and original artifact ZIP/member hashes are held.
+
+Browser testing found and causally reproduced a native-focus bug that unit tests had missed. Three conditional action buttons dropped focus when replaced. The product now uses one stable button; its original whole panel is an effective copied-source negative control. The prior browser run remains failed/incomplete. A stalled image HTTP transfer was recovered without rerunning or canceling any Actions job.
+
+Remaining before release closure: actual full-route/header/consent/save-admission play, pitcher entry expansion if chosen and K's integrated gates. The clean packet excludes temporary qualification workflows. See docs/audits/mlb-playoff-replay-2026-11-02.md for exact baseline, controls, counts, image scope and artifact identities.
+
+Other forwarded reports remain tracked separately: PR450 academy/keeper/Bingo fixes draft with broad profiles incomplete; PR451 World XI archive-depth fix draft awaiting actual route/live gates and PR399 mode integration; PR449 Conquest READY with original hard blocker unreproduced; PR448 generated-family son draft; PR379 finite-wall balance owned elsewhere. The new fictional racing manager has a qualified first engine and is adding persistence, balance, market and UI. Extra Soccer Career trophies remain researched design, not implemented.
