@@ -30,7 +30,7 @@ const controls = [
   ['payment', 'GP_SETTLEMENT:', '  state.cash += teamPrize - operatingCost;', '  state.cash += teamPrize;'],
   ['revision', 'GP_DUPLICATE:', 'if (action.expectedRevision !== state.revision)', 'if (false && action.expectedRevision !== state.revision)'],
   ['resume', 'GP_RESUME:', 'const roll = (state: Pick<GrandPrixCareer, \'seed\' | \'season\' | \'round\'>, key: string) => keyedRng(`grand-prix|${state.seed}|${state.season}|${state.round}|${key}`)();', 'const roll = (_state: Pick<GrandPrixCareer, \'seed\' | \'season\' | \'round\'>, _key: string) => Math.random();'],
-  ['entrant', 'GP_INVALID_SAVE:', '        && s.drivers.find(driver => driver.id === row.driverId)?.contract?.teamId === row.teamId', '        && true'],
+  ['entrant', 'GP_INVALID_SAVE:', '          : s.drivers.find(driver => driver.id === row.driverId)?.contract?.teamId === row.teamId)', '          : true)'],
   ['lifecycle', 'GP_INVALID_SAVE:', "        && (race.lap === 0 ? entry.status === 'running' && entry.completedLaps === 0 && entry.stops === 0\n          : entry.status === 'retired' ? entry.completedLaps < race.lap : entry.completedLaps === race.lap)\n", ''],
   ['future', 'GP_INVALID_SAVE:', 'if (integer(raw.version, 2))', 'if (false && integer(raw.version, 2))'],
   ['score', 'GP_SCORE:', 'const raceMaximum = POINTS[0] + POINTS[1];', 'const raceMaximum = POINTS[0];'],

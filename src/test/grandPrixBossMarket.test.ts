@@ -334,6 +334,24 @@ describe('Grand Prix Boss paid driver market', { timeout: 120000 }, () => {
       expect(engine.validateSavedCareer(raw)).toEqual({ ok: false, reason: 'invalid' });
       expect(JSON.stringify(raw)).toBe(before);
     }
+    const reviewFixture = fixture(1);
+    const ended = review(reviewFixture.state);
+    expect(ended.nextSeasonPlan).toMatchObject({ nextSeason: 2, sponsor: 12_000_000, totalRenewalFee: 320_000 });
+    const cheapPlan = clone(ended);
+    (cheapPlan.nextSeasonPlan as Record<string, unknown>).totalRenewalFee = 0;
+    const shortReserve = clone(ended);
+    (shortReserve.nextSeasonPlan as Record<string, unknown>).nextReserved = -1;
+    const freeCash = clone(ended);
+    (freeCash.nextSeasonPlan as Record<string, unknown>).cashAfter = ended.cash + 24_000_000;
+    const emptyPlan = clone(ended);
+    emptyPlan.nextSeasonPlan = null;
+    const earlyPlan = clone(state);
+    earlyPlan.nextSeasonPlan = clone(ended.nextSeasonPlan);
+    for (const raw of [cheapPlan, shortReserve, freeCash, emptyPlan, earlyPlan]) {
+      const before = JSON.stringify(raw);
+      expect(engine.validateSavedCareer(raw), 'GP_MARKET_STORED_PLAN_MUST_MATCH_ACTUAL_OBLIGATIONS').toEqual({ ok: false, reason: 'invalid' });
+      expect(JSON.stringify(raw)).toBe(before);
+    }
   });
 
   it('GP_MARKET_HOLDS: no market action preserves the actual qualified seed-one race outcome', () => {

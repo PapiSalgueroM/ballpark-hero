@@ -6,7 +6,16 @@ export type Compound = 'soft' | 'medium' | 'hard' | 'wet';
 export interface GrandPrixDriver {
   id: string; name: string; age: number; potential: number;
   skills: { pace: number; consistency: number; tyreCare: number; wet: number };
-  contract: null | { teamId: string; years: number; wagePerRace: number };
+  contract: null | { teamId: string; years: number; wagePerRace: number; startsSeason?: number };
+}
+export interface GrandPrixMarketOffer {
+  outgoingDriverId: string; incomingDriverId: string; startsSeason: number; years: 1;
+  wagePerRace: number; signingFee: number; buyout: number; totalFee: number; reserveAfter: number; affordable: boolean;
+}
+export interface GrandPrixNextSeasonPlan {
+  nextSeason: number; sponsor: number;
+  automaticRenewals: { driverId: string; wagePerRace: number; signingFee: number }[];
+  totalRenewalFee: number; nextReserved: number; cashAfter: number; affordable: boolean;
 }
 export interface GrandPrixTeam { id: string; name: string; car: Record<CarArea, number> }
 export interface GrandPrixTrack {
@@ -33,6 +42,7 @@ export interface GrandPrixCareer {
   version: 1; worldKind: 'fictional'; careerId: string; seed: number; revision: number;
   season: number; round: number; phase: 'preRace' | 'grid' | 'race' | 'raceResult' | 'seasonReview';
   teamId: string; cash: number; reserved: number; upgradeCosts: Record<CarArea, number | null>;
+  marketOffers: GrandPrixMarketOffer[]; nextSeasonPlan: GrandPrixNextSeasonPlan | null;
   teams: GrandPrixTeam[]; drivers: GrandPrixDriver[]; calendar: GrandPrixTrack[];
   race: GrandPrixRace | null; results: GrandPrixRaceResult[];
   driverStandings: { driverId: string; points: number; wins: number; podiums: number }[];
@@ -43,7 +53,8 @@ export interface GrandPrixOrder { driverId: string; pace: Pace; pitTo?: Compound
 export type GrandPrixAction = { expectedRevision: number } & (
   { type: 'upgrade'; area: CarArea } | { type: 'qualify' } |
   { type: 'startRace'; setups: GrandPrixSetup[] } | { type: 'raceInterval'; orders: GrandPrixOrder[] } |
-  { type: 'continue' }
+  { type: 'continue' } | { type: 'signDriver'; outgoingDriverId: string; incomingDriverId: string } |
+  { type: 'renewDriver'; driverId: string }
 );
 export type GrandPrixTransition = {
   ok: true; state: GrandPrixCareer;
@@ -79,10 +90,86 @@ function reserve(state: GrandPrixCareer): number {
   return remaining.reduce((sum, track) => sum + track.entryCost, 0)
     + remaining.length * mine(state).reduce((sum, driver) => sum + driver.contract!.wagePerRace, 0);
 }
+const OFFER_KEYS = ['outgoingDriverId', 'incomingDriverId', 'startsSeason', 'years', 'wagePerRace', 'signingFee', 'buyout', 'totalFee', 'reserveAfter', 'affordable'];
+const RENEWAL_KEYS = ['driverId', 'wagePerRace', 'signingFee'];
+const PLAN_KEYS = ['nextSeason', 'sponsor', 'totalRenewalFee', 'nextReserved', 'cashAfter', 'affordable'];
+const dealWage = (driver: GrandPrixDriver) => Math.round((70_000 + driver.skills.pace * 1_500) / 1_000) * 1_000;
+const marketOpen = (state: GrandPrixCareer) => state.phase === 'preRace' && state.round === 0 && state.results.length === 0
+  || state.phase === 'seasonReview' && state.results.length === state.calendar.length && state.round === state.calendar.length - 1;
+function normalizeContractSeasons(state: GrandPrixCareer): void {
+  for (const driver of state.drivers) if (driver.contract && driver.contract.startsSeason === undefined) driver.contract.startsSeason = state.season;
+}
+function projectedSeason(state: GrandPrixCareer, seats = mine(state), cash = state.cash): GrandPrixNextSeasonPlan {
+  const automaticRenewals: GrandPrixNextSeasonPlan['automaticRenewals'] = [];
+  const wages = seats.reduce((sum, driver) => {
+    const contract = driver.contract!;
+    if ((contract.startsSeason ?? state.season) <= state.season && contract.years === 1) {
+      const wagePerRace = dealWage(driver);
+      automaticRenewals.push({ driverId: driver.id, wagePerRace, signingFee: wagePerRace * 2 });
+      return sum + wagePerRace;
+    }
+    return sum + contract.wagePerRace;
+  }, 0);
+  const sponsor = 12_000_000;
+  const totalRenewalFee = automaticRenewals.reduce((sum, renewal) => sum + renewal.signingFee, 0);
+  const nextReserved = state.calendar.reduce((sum, track) => sum + track.entryCost, 0) + state.calendar.length * wages;
+  const cashAfter = cash + sponsor - totalRenewalFee;
+  return { nextSeason: state.season + 1, sponsor, automaticRenewals, totalRenewalFee, nextReserved, cashAfter,
+    affordable: integer(cashAfter) && integer(nextReserved) && cashAfter >= nextReserved };
+}
+function offerFor(state: GrandPrixCareer, outgoing: GrandPrixDriver, incoming: GrandPrixDriver, renewal = false): GrandPrixMarketOffer {
+  const startsSeason = state.phase === 'seasonReview' ? state.season + 1 : state.season;
+  const wagePerRace = dealWage(incoming), signingFee = wagePerRace * 2;
+  const old = outgoing.contract!;
+  const unserved = (old.startsSeason ?? state.season) > state.season ? old.years * state.calendar.length
+    : state.calendar.length - state.results.length + (old.years - 1) * state.calendar.length;
+  const buyout = renewal ? 0 : Math.ceil(unserved * old.wagePerRace / 2), totalFee = signingFee + buyout;
+  const replacement: GrandPrixDriver = { ...incoming, contract: { teamId: state.teamId, years: 1, startsSeason, wagePerRace } };
+  const seats = mine(state).map(driver => driver.id === outgoing.id ? replacement : driver);
+  const projected = state.phase === 'seasonReview' ? projectedSeason(state, seats, state.cash - totalFee) : null;
+  const reserveAfter = projected ? projected.nextReserved
+    : state.calendar.reduce((sum, track) => sum + track.entryCost, 0)
+      + state.calendar.length * seats.reduce((sum, driver) => sum + driver.contract!.wagePerRace, 0);
+  const affordable = integer(totalFee) && state.cash >= totalFee && (projected ? projected.affordable : state.cash - totalFee >= reserveAfter);
+  return { outgoingDriverId: outgoing.id, incomingDriverId: incoming.id, startsSeason, years: 1,
+    wagePerRace, signingFee, buyout, totalFee, reserveAfter, affordable };
+}
+function marketOffers(state: GrandPrixCareer): GrandPrixMarketOffer[] {
+  if (!marketOpen(state)) return [];
+  const offers: GrandPrixMarketOffer[] = [], available = state.drivers.filter(driver => driver.contract === null);
+  for (const outgoing of mine(state)) {
+    for (const incoming of available) offers.push(offerFor(state, outgoing, incoming));
+    if (state.phase === 'seasonReview' && outgoing.contract!.years === 1 && (outgoing.contract!.startsSeason ?? state.season) <= state.season) {
+      offers.push(offerFor(state, outgoing, outgoing, true));
+    }
+  }
+  return offers;
+}
+function refreshMarket(state: GrandPrixCareer): void {
+  state.marketOffers = marketOffers(state);
+  state.nextSeasonPlan = state.phase === 'seasonReview' ? projectedSeason(state) : null;
+}
+function rowsMatch(raw: unknown, expected: object[], keys: string[]): boolean {
+  return Array.isArray(raw) && raw.length === expected.length && raw.every((row, index) => record(row)
+    && Object.keys(row).length === keys.length && keys.every(key => row[key] === (expected[index] as Record<string, unknown>)[key]));
+}
+function planMatches(raw: unknown, expected: GrandPrixNextSeasonPlan | null): boolean {
+  if (expected === null) return raw === null;
+  return record(raw) && Object.keys(raw).length === PLAN_KEYS.length + 1
+    && PLAN_KEYS.every(key => raw[key] === (expected as unknown as Record<string, unknown>)[key])
+    && rowsMatch(raw.automaticRenewals, expected.automaticRenewals, RENEWAL_KEYS);
+}
+function safeMarket(state: GrandPrixCareer): boolean {
+  if (!state.marketOffers.every(offer => [offer.startsSeason, offer.years, offer.wagePerRace, offer.signingFee, offer.buyout, offer.totalFee, offer.reserveAfter].every(value => integer(value)))) return false;
+  const plan = state.nextSeasonPlan;
+  return plan === null || [plan.nextSeason, plan.sponsor, plan.totalRenewalFee, plan.nextReserved, plan.cashAfter].every(value => integer(value))
+    && plan.automaticRenewals.every(renewal => integer(renewal.wagePerRace, 1) && integer(renewal.signingFee, 1));
+}
 function committed(state: GrandPrixCareer, receipt: Omit<Extract<GrandPrixTransition, { ok: true }>['receipt'], 'revision'>): GrandPrixTransition {
   state.revision += 1;
   state.reserved = reserve(state);
   state.upgradeCosts = quotes(state);
+  refreshMarket(state);
   return { ok: true, state, receipt: { ...receipt, revision: state.revision } };
 }
 
@@ -115,10 +202,12 @@ export function createCareer(seed: number): GrandPrixCareer {
   const state: GrandPrixCareer = {
     version: 1, worldKind: 'fictional', careerId: `grand-prix-${seed}`, seed, revision: 0,
     season: 1, round: 0, phase: 'preRace', teamId, cash: 12_000_000, reserved: 0,
-    upgradeCosts: { power: null, aero: null, reliability: null }, teams, drivers, calendar, race: null, results: [],
+    upgradeCosts: { power: null, aero: null, reliability: null }, marketOffers: [], nextSeasonPlan: null, teams, drivers, calendar, race: null, results: [],
     driverStandings: drivers.map(driver => ({ driverId: driver.id, points: 0, wins: 0, podiums: 0 })),
     constructorStandings: teams.map(team => ({ teamId: team.id, points: 0, wins: 0, podiums: 0 })),
   };
+  normalizeContractSeasons(state);
+  refreshMarket(state);
   state.reserved = reserve(state);
   state.upgradeCosts = quotes(state);
   return state;
@@ -228,6 +317,22 @@ export function applyAction(state: GrandPrixCareer, action: GrandPrixAction): Gr
   if (!record(action) || !integer(action.expectedRevision)) return { ok: false, reason: 'invalid' };
   if (action.expectedRevision !== state.revision) return { ok: false, reason: 'stale' };
   const a = action as unknown as Record<string, unknown>;
+  if (a.type === 'signDriver' || a.type === 'renewDriver') {
+    if (!marketOpen(state) || a.type === 'renewDriver' && state.phase !== 'seasonReview') return { ok: false, reason: 'phase' };
+    const outgoingId = a.type === 'renewDriver' ? a.driverId : a.outgoingDriverId;
+    const incomingId = a.type === 'renewDriver' ? a.driverId : a.incomingDriverId;
+    if (!text(outgoingId) || !text(incomingId)) return { ok: false, reason: 'invalid' };
+    const offer = marketOffers(state).find(row => row.outgoingDriverId === outgoingId && row.incomingDriverId === incomingId);
+    if (!offer || a.type === 'signDriver' && outgoingId === incomingId) return { ok: false, reason: 'invalid' };
+    if (!offer.affordable) return { ok: false, reason: 'funds' };
+    const next = clone(state);
+    const outgoing = next.drivers.find(driver => driver.id === outgoingId)!;
+    const incoming = next.drivers.find(driver => driver.id === incomingId)!;
+    if (outgoingId !== incomingId) outgoing.contract = null;
+    incoming.contract = { teamId: next.teamId, years: 1, startsSeason: offer.startsSeason, wagePerRace: offer.wagePerRace };
+    next.cash -= offer.totalFee;
+    return committed(next, { type: a.type, cost: offer.totalFee });
+  }
   if (a.type === 'upgrade') {
     if (state.phase !== 'preRace') return { ok: false, reason: 'phase' };
     if (!AREAS.includes(a.area as CarArea)) return { ok: false, reason: 'invalid' };
@@ -290,7 +395,9 @@ export function validateSavedCareer(raw: unknown): { ok: true; state: GrandPrixC
       && integer(driver.potential, 0, 100) && record(driver.skills)
       && ['pace', 'consistency', 'tyreCare', 'wet'].every(key => integer(driver.skills[key], 0, 100))
       && (driver.contract === null || record(driver.contract) && teamIds.has(driver.contract.teamId)
-        && integer(driver.contract.years, 1, 5) && integer(driver.contract.wagePerRace, 1)))
+        && integer(driver.contract.years, 1, 5) && integer(driver.contract.wagePerRace, 1)
+        && (driver.contract.startsSeason === undefined || integer(driver.contract.startsSeason, 1, s.season + (s.phase === 'seasonReview' ? 1 : 0))
+          && (driver.contract.startsSeason <= s.season || driver.contract.years === 1))))
     || !unique(s.drivers.map(driver => driver.id))) return invalid;
   if (s.teams.some(team => s.drivers.filter(driver => driver.contract?.teamId === team.id).length !== 2)) return invalid;
   const driverIds = new Set(s.drivers.map(driver => driver.id));
@@ -324,7 +431,9 @@ export function validateSavedCareer(raw: unknown): { ok: true; state: GrandPrixC
       || !['dry', 'wet'].includes(race.weather) || (settled ? race.lap !== 40 : race.lap === 40)
       || s.phase === 'grid' && race.lap !== 0 || !Array.isArray(race.grid) || race.grid.length !== 20 || !unique(race.grid.map(row => row?.driverId))
       || !race.grid.every((row, index) => record(row) && driverIds.has(row.driverId) && teamIds.has(row.teamId) && integer(row.timeMs, 1)
-        && s.drivers.find(driver => driver.id === row.driverId)?.contract?.teamId === row.teamId
+        && (s.phase === 'seasonReview'
+          ? s.results[s.round].classification.some(held => held.driverId === row.driverId && held.teamId === row.teamId)
+          : s.drivers.find(driver => driver.id === row.driverId)?.contract?.teamId === row.teamId)
         && (index === 0 || row.timeMs >= race.grid[index - 1].timeMs))
       || !Array.isArray(race.entries) || race.entries.length !== 20 || !unique(race.entries.map(row => row?.driverId))
       || !race.entries.every(entry => record(entry) && race.grid.some(row => row.driverId === entry.driverId && row.teamId === entry.teamId)
@@ -337,7 +446,13 @@ export function validateSavedCareer(raw: unknown): { ok: true; state: GrandPrixC
   if (s.reserved !== reserve(s) || !record(s.upgradeCosts)) return invalid;
   const expectedQuotes = quotes(s);
   if (AREAS.some(area => s.upgradeCosts[area] !== expectedQuotes[area])) return invalid;
-  return { ok: true, state: clone(s) };
+  const normalized = clone(s);
+  normalizeContractSeasons(normalized);
+  refreshMarket(normalized);
+  if (!safeMarket(normalized)
+    || s.marketOffers !== undefined && !rowsMatch(s.marketOffers, normalized.marketOffers, OFFER_KEYS)
+    || s.nextSeasonPlan !== undefined && !planMatches(s.nextSeasonPlan, normalized.nextSeasonPlan)) return invalid;
+  return { ok: true, state: normalized };
 }
 
 export function seasonScore(summary: { teamPoints: number; roundsBothDriversFinished: number; rounds: number }): number {
