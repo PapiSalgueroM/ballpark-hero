@@ -14,8 +14,12 @@ const TEST = 'src/test/grandPrixBossLifecycle.test.ts';
 const BASELINE = 'scripts/qa/source-controls/grandPrixBoss.before-lifecycle.ts.txt';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const heldPaths = [ENGINE, TEST, BASELINE, 'src/test/grandPrixBoss.test.ts', 'src/test/grandPrixBossMarket.test.ts', 'src/test/grandPrixBossRollover.test.ts', 'src/test/grandPrixBossHistoryTies.test.ts', 'scripts/simGrandPrixBoss.mjs', 'scripts/simGrandPrixBossMarket.mjs', 'scripts/simGrandPrixBossRollover.mjs', 'src/lib/keyedRng.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'];
-const held = new Map(heldPaths.map(file => [file, fs.readFileSync(path.join(root, file))]));
-const original = held.get(ENGINE), source = original.toString('utf8');
+const held = new Map();
+for (const file of heldPaths) {
+  const bytes = fs.readFileSync(path.join(root, file));
+  held.set(file, Buffer.from(bytes));
+}
+const original = held.get(ENGINE), source = fs.readFileSync(path.join(root, ENGINE), 'utf8').replace(/\r\n?/g, '\n');
 assert.equal(sha(held.get(BASELINE)), 'cae28d2852bfa6f23ffc5afca171486d017809327caded4cbf63f300f3fd8db0', 'Exact qualified B control source');
 const outBase = path.resolve(process.env.GP_BOSS_LIFECYCLE_OUT || path.join(root, 'tmp'));
 fs.mkdirSync(outBase, { recursive: true });
@@ -272,7 +276,10 @@ function run(name, mode = 'healthy', selectedId = null, file = null) {
     detectedRuntimeError, rawErrors: report.errors ?? null, rawUnhandledErrors: report.unhandledErrors ?? null };
   results.push(result);
   fs.writeFileSync(path.join(out, name + '.summary.json'), JSON.stringify(result, null, 2));
-  for (const [filePath, bytes] of held) assert.deepEqual(fs.readFileSync(path.join(root, filePath)), bytes, name + ': actual held input changed');
+  for (const [filePath, bytes] of held) {
+    const actualBytes = fs.readFileSync(path.join(root, filePath));
+    assert.deepEqual(actualBytes, bytes, name + ': actual held input changed');
+  }
   console.log(name + ': ' + expectedPasses + ' passes, ' + expectedFailures + ' owned assertions, ' + expectedSkips + ' declared skips.');
 }
 try {
@@ -304,7 +311,14 @@ try {
   fs.writeFileSync(path.join(out, 'summary.json'), JSON.stringify({ scope: 'Candidate lifecycle behavior only. Carry and AI coefficients still await paired measurements. No hook, UI, route or readiness credit.', childRuns: 37, executed: 93, totals, results }, null, 2));
   console.log('simGrandPrixBossLifecycle: 45 passes, 48 owned assertions, 462 declared unselected skips; 93 executed outcomes.');
 } finally {
-  const after = [...held].map(([file]) => { const bytes = fs.readFileSync(path.join(root, file)); return { file, bytes: bytes.length, sha256: sha(bytes) }; });
+  const after = [];
+  for (const [file, expected] of held) {
+    {
+      const actualBytes = fs.readFileSync(path.join(root, file));
+      assert.deepEqual(actualBytes, expected, 'Final held input: ' + file);
+    }
+    after.push({ file, bytes: expected.length, sha256: sha(expected) });
+  }
   fs.writeFileSync(path.join(out, 'source-after.json'), JSON.stringify(after, null, 2));
   assert.deepEqual(after, sourceReceipts());
   console.log('Grand Prix Boss lifecycle evidence: ' + out);
