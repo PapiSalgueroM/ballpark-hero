@@ -1,0 +1,45 @@
+name: Grand Prix Boss first-engine baseline
+on:
+  push:
+    branches: [codex/grand-prix-boss-engine-baseline-20261101]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked source and intended feature absence
+        run: |
+          mkdir evidence
+          git rev-parse HEAD | tee evidence/head.txt
+          test ! -e src/lib/grandPrixBoss.ts
+          sha256sum package.json package-lock.json src/App.tsx src/data/gameRegistry.ts src/test/grandPrixBoss.test.ts > evidence/holds.txt
+          npm ci
+      - name: App types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee evidence/types.log
+      - name: Explicit missing-feature baseline and declared behavioral skips
+        run: node_modules/.bin/vitest run src/test/grandPrixBoss.test.ts --reporter=verbose --reporter=json --outputFile=evidence/engine.json 2>&1 | tee evidence/engine.log
+      - name: Source holds
+        if: always()
+        run: sha256sum --check evidence/holds.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-engine-baseline-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
