@@ -19,7 +19,7 @@ const files = [PAGE, ORIGINAL, TEST, OLD, 'src/lib/grandPrixBoss.ts', 'src/hooks
   'src/components/game/RulesGate.tsx', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'];
 const held = new Map(files.map(file => [file, fs.readFileSync(path.join(root, file))]));
 for (const [file, expected] of [
-  [PAGE, '53a400b58a3fe36776ea54dab48961a1479bcbf3c326a3806b711467950d1f18'],
+  [PAGE, '1474ae6a5e7c5ca99cc56e43c53502af4a4639ec1345f78af51a1af5588c8fc1'],
   [ORIGINAL, 'e8cc17bd6047a775557632e0984f59cfc385f922d9c80fee0638e6e94b98bb25'],
   [TEST, '77a3d05742e9621ab6146bfbfe3f5b33f1853b99a12008b66134f0387c351922'],
   ['src/lib/grandPrixBoss.ts', '9565fb9a17489ae21d0b0451cdadede08509ac5fd8d94fbf71ffd88802895af5'],

@@ -20,7 +20,7 @@ const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const files = ['src/pages/GrandPrixBoss.tsx', 'src/hooks/useGrandPrixBoss.ts', 'src/lib/grandPrixBoss.ts', 'src/lib/saveFence.ts', 'src/hooks/useSaveFenceWatch.ts', 'src/hooks/useRevealScroll.ts', 'src/components/game/RulesGate.tsx', 'scripts/qa/fixtures/grandPrixBoss.entry.tsx'];
 const held = new Map(files.map(file => [file, fs.readFileSync(path.join(root, file))]));
 for (const [file, expected] of [
-  ['src/pages/GrandPrixBoss.tsx', '53a400b58a3fe36776ea54dab48961a1479bcbf3c326a3806b711467950d1f18'],
+  ['src/pages/GrandPrixBoss.tsx', '1474ae6a5e7c5ca99cc56e43c53502af4a4639ec1345f78af51a1af5588c8fc1'],
   ['src/hooks/useGrandPrixBoss.ts', 'f0ec04a26c60db6c4a5b1e4b555a699979a2fdad464e404d0e906f2538b8c23b'],
   ['src/lib/grandPrixBoss.ts', '9565fb9a17489ae21d0b0451cdadede08509ac5fd8d94fbf71ffd88802895af5'],
   ['scripts/qa/fixtures/grandPrixBoss.entry.tsx', 'b008f7ece22c001e2b3fc639d9ba9c02a9feae0f651f65265852a3c1e955f158'],

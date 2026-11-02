@@ -55,6 +55,7 @@ function Championship({ career }: { career: GrandPrixCareer }) {
 function Drivers({ career, dispatch, blocked }: { career: GrandPrixCareer; dispatch: (action: GrandPrixAction) => boolean; blocked: boolean }) {
   const [outgoingId, setOutgoingId] = useState('');
   const [incomingId, setIncomingId] = useState('');
+  const seatHeadings = useRef<Record<string, HTMLHeadingElement | null>>({});
   const seats = ownDrivers(career);
   const outgoing = seats.find(driver => driver.id === outgoingId) ?? seats[0];
   const offers = career.marketOffers.filter(offer => offer.outgoingDriverId === outgoing.id && offer.incomingDriverId !== outgoing.id);
@@ -65,7 +66,7 @@ function Drivers({ career, dispatch, blocked }: { career: GrandPrixCareer; dispa
       const contract = driver.contract!;
       const renewal = career.marketOffers.find(value => value.outgoingDriverId === driver.id && value.incomingDriverId === driver.id);
       return <article key={driver.id} className="space-y-3 border-b border-border pb-3">
-        <h4 className="break-words font-bold">{driver.name}, {driver.age}</h4>
+        <h4 ref={element => { seatHeadings.current[driver.id] = element; }} tabIndex={-1} className="break-words font-bold">{driver.name}, {driver.age}</h4>
         <p className="text-sm text-muted-foreground">{money(contract.wagePerRace)} per race. Signed through year {Math.max(career.season, contract.startsSeason ?? career.season) + contract.years - 1}.{(contract.startsSeason ?? career.season) > career.season ? ' Starts year ' + contract.startsSeason + '.' : ''}</p>
         <p className="text-sm">Pace {driver.skills.pace}, consistency {driver.skills.consistency}, tyre care {driver.skills.tyreCare}, wet {driver.skills.wet}</p>
         {renewal && <div data-testid={'gp-renewal-' + driver.id} className="space-y-3 rounded-lg border border-border bg-background p-3">
@@ -74,7 +75,7 @@ function Drivers({ career, dispatch, blocked }: { career: GrandPrixCareer; dispa
             <Stat title="Term">{renewal.years} season</Stat><Stat title="Starts">Year {renewal.startsSeason}</Stat>
             <Stat title="Next season reserve">{money(renewal.reserveAfter)}</Stat>
           </div>
-          <button type="button" className={button + ' w-full'} disabled={blocked || !renewal.affordable} onClick={() => { if (!blocked && renewal.affordable) dispatch({ type: 'renewDriver', driverId: driver.id, expectedRevision: career.revision }); }}>Renew {driver.name}</button>
+          <button type="button" className={button + ' w-full'} disabled={blocked || !renewal.affordable} onClick={() => { if (!blocked && renewal.affordable && dispatch({ type: 'renewDriver', driverId: driver.id, expectedRevision: career.revision })) requestAnimationFrame(() => seatHeadings.current[driver.id]?.focus({ preventScroll: true })); }}>Renew {driver.name}</button>
         </div>}
       </article>;
     })}

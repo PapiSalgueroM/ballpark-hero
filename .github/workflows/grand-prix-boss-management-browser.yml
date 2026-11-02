@@ -1,14 +1,14 @@
-name: Grand Prix Boss management compiled browser proof
+name: Grand Prix Boss management renewal focus qualification
 on:
   push:
-    branches: [codex/grand-prix-boss-management-browser-20261102]
+    branches: [codex/grand-prix-boss-management-focus-fixed-20261102]
 permissions:
   contents: read
   actions: read
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       CI: '1'
       ENGINES: chromium
@@ -29,23 +29,24 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Bind the qualified B management source and three QA paths
+      - name: Bind the three-span focus fix and three qualification paths
         id: prepare
         run: |
           set -euo pipefail
           out="$GP_BOSS_BROWSER_OUT"; test ! -e "$out"; mkdir -p "$out"
-          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-management-browser-20261102
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-management-focus-fixed-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = f26594d99b213996bec298a07bd6b929a2373573
+          test "$(git rev-parse HEAD^)" = a323116cca3286dd191e0a8de571aefb37bd7e0b
           git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
           git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
-          printf '%s\n' '.github/workflows/grand-prix-boss-management-browser.yml' 'scripts/qa/fixtures/grandPrixBoss.entry.tsx' 'scripts/qa/playGrandPrixBossManagement.mjs' > "$out/expected-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-management-browser.yml' 'scripts/qa/playGrandPrixBossManagement.mjs' 'scripts/simGrandPrixBossManagement.mjs' 'src/pages/GrandPrixBoss.tsx' > "$out/expected-paths.txt"
           cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
-          git diff --exit-code HEAD^ -- src public scripts/data index.html package.json package-lock.json vitest.config.ts
+          git diff --exit-code HEAD^ -- src public scripts/data index.html package.json package-lock.json vitest.config.ts ':!src/pages/GrandPrixBoss.tsx'
           printf '%s\n' \
-            '4ec03f324ab7d6506514caa9894399e65726ec963ac95c84b6a78a716a9af1f6  scripts/qa/playGrandPrixBossManagement.mjs' \
+            '2dbcbdc5db4d7156925cb1451ff0c12dbc8462af032fdecf50595e5fbe6edcb6  scripts/qa/playGrandPrixBossManagement.mjs' \
             'b008f7ece22c001e2b3fc639d9ba9c02a9feae0f651f65265852a3c1e955f158  scripts/qa/fixtures/grandPrixBoss.entry.tsx' \
-            '53a400b58a3fe36776ea54dab48961a1479bcbf3c326a3806b711467950d1f18  src/pages/GrandPrixBoss.tsx' \
+            'dc6ff548ac9a3fd98afd6c399473807edc6fbd3bc9b6b219a27b9cd647c0f7d2  scripts/simGrandPrixBossManagement.mjs' \
+            '1474ae6a5e7c5ca99cc56e43c53502af4a4639ec1345f78af51a1af5588c8fc1  src/pages/GrandPrixBoss.tsx' \
             'f0ec04a26c60db6c4a5b1e4b555a699979a2fdad464e404d0e906f2538b8c23b  src/hooks/useGrandPrixBoss.ts' \
             '9565fb9a17489ae21d0b0451cdadede08509ac5fd8d94fbf71ffd88802895af5  src/lib/grandPrixBoss.ts' | sha256sum --check -
           test "$(git rev-parse HEAD:scripts/sweepWeight.mjs)" = 5a92a68cc0225d5e633c19e041087e7c6c4254e8
@@ -89,7 +90,102 @@ jobs:
           export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
           unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
           capture driver-syntax node --check scripts/qa/playGrandPrixBossManagement.mjs
+          capture wrapper-syntax node --check scripts/simGrandPrixBossManagement.mjs
           capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: All fifty-seven ordinary F1 outcomes in the held seven suites
+        if: always() && steps.prepare.outcome == 'success' && steps.types.outcome == 'success'
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_BROWSER_OUT"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source "$out/capture.sh"
+          capture ordinary node node_modules/vitest/vitest.mjs run src/test/grandPrixBoss.test.ts src/test/grandPrixBossMarket.test.ts src/test/grandPrixBossRollover.test.ts src/test/grandPrixBossHistoryTies.test.ts src/test/grandPrixBossRolloverSave.test.tsx src/test/grandPrixBossPage.test.tsx src/test/grandPrixBossManagementPage.test.tsx --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/ordinary.vitest.json"
+          node --input-type=module <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const out = process.env.GP_BOSS_BROWSER_OUT;
+          const r = JSON.parse(fs.readFileSync(out + '/ordinary.vitest.json', 'utf8'));
+          const raw = fs.readFileSync(out + '/ordinary.stdout', 'utf8') + '\n' + fs.readFileSync(out + '/ordinary.stderr', 'utf8');
+          assert.equal(Number(fs.readFileSync(out + '/ordinary.exit', 'utf8')), 0);
+          assert.equal(r.success, true); assert.equal(r.numTotalTests, 57); assert.equal(r.numPassedTests, 57);
+          assert.equal(r.numFailedTests, 0); assert.equal(r.numPendingTests, 0); assert.equal(r.numTodoTests, 0);
+          const files = new Map([
+            ['src/test/grandPrixBoss.test.ts', 13], ['src/test/grandPrixBossMarket.test.ts', 12],
+            ['src/test/grandPrixBossRollover.test.ts', 13], ['src/test/grandPrixBossHistoryTies.test.ts', 2],
+            ['src/test/grandPrixBossRolloverSave.test.tsx', 2], ['src/test/grandPrixBossPage.test.tsx', 9],
+            ['src/test/grandPrixBossManagementPage.test.tsx', 6],
+          ]);
+          const pageIds = new Map([
+            ['src/test/grandPrixBossPage.test.tsx', ['GP_PAGE_AVAILABLE:', 'GP_PAGE_START:', 'GP_PAGE_HUB:', 'GP_PAGE_UPGRADE:', 'GP_PAGE_ORDERS:', 'GP_PAGE_STANDINGS:', 'GP_PAGE_BACK:', 'GP_PAGE_MOVED_EMPTY:', 'GP_PAGE_PROTECTED_SAVE:']],
+            ['src/test/grandPrixBossManagementPage.test.tsx', ['GP_MANAGEMENT_SIGN:', 'GP_MANAGEMENT_RENEW:', 'GP_MANAGEMENT_NEXT_YEAR:', 'GP_MANAGEMENT_GUARDS:', 'GP_MANAGEMENT_HISTORY:', 'GP_MANAGEMENT_REVIEW_CARDS:']],
+          ]);
+          assert.equal(r.testResults.length, 7);
+          const seenFiles = new Set(), cases = [];
+          for (const file of r.testResults) {
+            const normalized = file.name.replaceAll('\\', '/');
+            const names = [...files.keys()].filter(name => normalized.endsWith('/' + name));
+            assert.equal(names.length, 1); const name = names[0]; assert(!seenFiles.has(name)); seenFiles.add(name);
+            assert.equal(file.assertionResults.length, files.get(name));
+            const identities = pageIds.get(name), seen = new Set();
+            for (const row of file.assertionResults) {
+              assert.equal(row.status, 'passed'); assert.equal(row.failureMessages.length, 0);
+              if (identities) {
+                const ids = identities.filter(id => row.title.startsWith(id)); assert.equal(ids.length, 1);
+                assert(!seen.has(ids[0])); seen.add(ids[0]);
+              }
+              cases.push({ file: name, title: row.title, status: row.status, failureMessages: row.failureMessages });
+            }
+            if (identities) assert.equal(seen.size, identities.length);
+          }
+          assert.equal(seenFiles.size, 7); assert.equal(cases.length, 57);
+          const runtimeCounters = { numUnhandledErrors: r.numUnhandledErrors ?? null, numRuntimeErrorTestSuites: r.numRuntimeErrorTestSuites ?? null };
+          for (const value of Object.values(runtimeCounters)) if (value !== null) { assert.equal(typeof value, 'number'); assert.equal(value, 0); }
+          for (const errors of [r.errors, r.unhandledErrors]) if (errors != null) { assert(Array.isArray(errors)); assert.equal(errors.length, 0); }
+          const detectedRuntimeError = /(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw);
+          assert.equal(detectedRuntimeError, false);
+          fs.writeFileSync(out + '/ordinary-summary.json', JSON.stringify({
+            scope: 'Seven held F1 engine, rollover-save and page suites only. Original save and market-save suites are absent from this source; no full persistence, build, route or global chrome claim.',
+            parent: 'a323116cca3286dd191e0a8de571aefb37bd7e0b', rawExit: 0,
+            passed: 57, ownedAssertionFailures: 0, declaredSkips: 0, totalExecuted: 57,
+            runtimeCounters, runtimeCounterCompleteness: Object.values(runtimeCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED',
+            detectedRuntimeError, rawErrors: r.errors ?? null, rawUnhandledErrors: r.unhandledErrors ?? null, cases,
+            installNetwork: 'Locked dependency install precedes offline gate; no empty-transport claim for install.',
+          }, null, 2) + '\n');
+          console.log('GP_MANAGEMENT_UI_ORDINARY:57 passes in seven held suites,zero failures,zero skips.');
+          CHECK
+      - name: Actual page copies twelve owned faults and restoration
+        if: always() && steps.prepare.outcome == 'success' && steps.types.outcome == 'success'
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_BROWSER_OUT"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export GP_BOSS_MANAGEMENT_OUT="$out"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source "$out/capture.sh"
+          capture management-controls node scripts/simGrandPrixBossManagement.mjs
+          node --input-type=module <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out = process.env.GP_BOSS_BROWSER_OUT;
+          const dirs = fs.readdirSync(out).filter(name => name.startsWith('dukb-grand-prix-management-'));
+          assert.equal(dirs.length, 1);
+          const r = JSON.parse(fs.readFileSync(path.join(out, dirs[0], 'summary.json'), 'utf8'));
+          assert.equal(r.childRuns, 15); assert.equal(r.results.length, 15);
+          assert.deepEqual(r.totals, { passed: 45, ownedFailures: 12, declaredSkips: 60, totalExecuted: 57 });
+          const names = ['current', 'healthy-copy', 'original-entry', 'original-historical-cards', 'sign-revision', 'sign-price',
+            'missing-renewal', 'renewed-plan-fee', 'plan-cash', 'sign-moved-guard', 'next-year-affordability',
+            'archive-champion', 'legacy-coverage', 'archive-track', 'restored-copy'];
+          assert.deepEqual(r.results.map(row => row.name), names);
+          for (const row of r.results) {
+            assert.equal(row.transportBytes, 0);
+            assert.equal(fs.statSync(path.join(out, dirs[0], row.name + '.transport')).size, 0);
+          }
+          console.log('GP_MANAGEMENT_UI_CAUSAL:45healthy passes,12owned assertions,60declared unselected skips;57executed outcomes.');
+          CHECK
       - name: Reuse the previously qualified font artifact
         uses: actions/download-artifact@v4
         with:
