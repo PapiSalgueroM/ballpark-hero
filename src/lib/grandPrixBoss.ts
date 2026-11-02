@@ -251,12 +251,12 @@ function validSummary(raw: unknown, ownerId: string): boolean {
     || (row.constructorChampion.teamId === ownerId) !== (row.team.position === 1)) return false;
   if (row.constructorChampion.teamId === ownerId) {
     if (row.constructorChampion.name !== row.team.name || honorsOrder(row.constructorChampion, row.team) !== 0) return false;
-  } else if (honorsOrder(row.constructorChampion, row.team) > 0) return false;
+  } else if ((honorsOrder(row.constructorChampion, row.team) || row.constructorChampion.teamId.localeCompare(row.team.teamId)) > 0) return false;
   const ownChampion = row.team.drivers.find(driver => driver.driverId === row.driverChampion.driverId);
   if (row.driverChampion.teamId === ownerId) {
     if (!ownChampion || ownChampion.name !== row.driverChampion.name || honorsOrder(ownChampion, row.driverChampion) !== 0) return false;
   } else if (ownChampion) return false;
-  return !row.team.drivers.some(driver => honorsOrder(driver, row.driverChampion) < 0);
+  return !row.team.drivers.some(driver => (honorsOrder(driver, row.driverChampion) || driver.driverId.localeCompare(row.driverChampion.driverId)) < 0);
 }
 function normalizeHistory(state: GrandPrixCareer): boolean {
   if (state.history === undefined && state.careerTotals === undefined) {

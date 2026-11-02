@@ -1,0 +1,99 @@
+name: Grand Prix Boss atomic rollover and tracked history verification
+on:
+  push:
+    branches: [codex/grand-prix-boss-rollover-fixed-20261102]
+permissions:
+  contents: read
+jobs:
+  rollover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_BOSS_OUT: ${{ github.workspace }}/grand-prix-rollover-artifacts/engine
+      GP_BOSS_MARKET_OUT: ${{ github.workspace }}/grand-prix-rollover-artifacts/market
+      GP_BOSS_ROLLOVER_OUT: ${{ github.workspace }}/grand-prix-rollover-artifacts/rollover
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind admitted preflight and exactly four corrected paths
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-rollover-fixed-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = 4b8c84ea0daa86f41090febec39994db79849e2e
+          out="$PWD/grand-prix-rollover-artifacts"
+          mkdir "$out"
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-rollover-fixed.yml' 'scripts/qa/source-controls/grandPrixBoss.before-rollover.ts.txt' 'scripts/simGrandPrixBossRollover.mjs' 'src/lib/grandPrixBoss.ts' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          printf '%s\n' 'cae28d2852bfa6f23ffc5afca171486d017809327caded4cbf63f300f3fd8db0  src/lib/grandPrixBoss.ts' '5403ebaea1921d8cf85ff1a23d16862bbe398995c52be533434b4af9face11ec  scripts/simGrandPrixBossRollover.mjs' '6d0e754c28f631ea590472b9ea2a1647206db67ec7dc1580bcf054cede74364f  scripts/qa/source-controls/grandPrixBoss.before-rollover.ts.txt' '61a671d7bd676c82be16d238928e9413293c2656bdc1562228becc3df32d0516  src/test/grandPrixBossRollover.test.ts' 'a8b9ccdf1ac5f07fb4e87e35a56e3eca1071cee5346b21f604a814057da385c4  src/test/grandPrixBossHistoryTies.test.ts' '8822d2af417739a0164babc5b15d13cd2a5e5c5dd4e263a9e465602798765887  src/test/grandPrixBoss.test.ts' '59a01e6dc561c11013e9e9092b139dd5da5494ff1d1fee7b1976057a94a405c0  src/test/grandPrixBossMarket.test.ts' 'dd8b7f4fd26d0037be5b3be25d3ec9938429fae872bca94cec06124d6ae6bff5  scripts/simGrandPrixBoss.mjs' 'b045bf607b02578d10e2c2394f020abef529539be440d7403f363d571b33fe25  scripts/simGrandPrixBossMarket.mjs' 'ec793e9cacb47bf770d599b1677f76ac753d2cafde9c1f85e6bb0cf7dc7bc69b  scripts/qa/source-controls/grandPrixBoss.before-market.ts.txt' | sha256sum -c -
+          git diff --exit-code HEAD^ HEAD -- src/test/grandPrixBoss.test.ts src/test/grandPrixBossMarket.test.ts src/test/grandPrixBossRollover.test.ts src/test/grandPrixBossHistoryTies.test.ts scripts/simGrandPrixBoss.mjs scripts/simGrandPrixBossMarket.mjs scripts/qa/source-controls/grandPrixBoss.before-market.ts.txt src/lib/keyedRng.ts package.json package-lock.json vitest.config.ts src/test/setup.ts src/App.tsx src/data/gameRegistry.ts src/integrations/supabase/client.ts
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-rollover-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$out/$tag.exit"
+            tail -n 18 "$out/$tag.stdout"; tail -n 18 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types and preserved active race and market controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source grand-prix-rollover-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax-rollover node --check scripts/simGrandPrixBossRollover.mjs
+          capture engine-controls node scripts/simGrandPrixBoss.mjs
+          capture market-controls node scripts/simGrandPrixBossMarket.mjs
+      - name: Fifteen real rollover and tie outcomes with physical copy controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source grand-prix-rollover-artifacts/capture.sh
+          capture rollover-controls node scripts/simGrandPrixBossRollover.mjs
+      - name: Preserve all actual source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-rollover-artifacts"
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum -c "$out/dependency-files.sha256" > "$out/dependency-hold.log"; fi
+          git ls-files -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/working-source-hold.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"
+          test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-rollover-B-${{ github.run_id }}
+          path: grand-prix-rollover-artifacts/
+          retention-days: 14
