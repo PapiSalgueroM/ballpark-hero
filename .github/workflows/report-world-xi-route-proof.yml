@@ -1,7 +1,7 @@
 name: World XI archived roster actual route proof
 on:
   push:
-    branches: [codex/report-world-xi-route-proof-v3-20261102]
+    branches: [codex/report-world-xi-route-proof-v4-20261102]
 permissions:
   contents: read
   actions: read
@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 4
+          fetch-depth: 5
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -33,12 +33,12 @@ jobs:
         run: |
           set -euo pipefail
           out="$WORLD_XI_ROUTE_OUT"; mkdir "$out"
-          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-route-proof-v3-20261102
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-route-proof-v4-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = e704f70abbbf35514e4af0a4f15c041a0fd2425b
+          test "$(git rev-parse HEAD^)" = 75a5dd6ab36e3f82ddc43a004782007cf21eb1f7
           git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
           git diff --exit-code ebb19d19e9f6e2fa42561cd80845176093b59b26 -- src public scripts/data index.html package.json package-lock.json
-          printf '0d90fad86a05ea6761ff078550be643750a335cee43c47c57d6ac51eca97d69c  scripts/qa/captureWorldXiRoster.mjs\nf5fed87ebfe9a5f55d90f7fa30f3f1e8e4b7ac9c4d4d52b29d18989298c8983a  scripts/qa/playWorldXiRoute.mjs\n' | sha256sum --check -
+          printf '0d90fad86a05ea6761ff078550be643750a335cee43c47c57d6ac51eca97d69c  scripts/qa/captureWorldXiRoster.mjs\n0e5232059a0c59861c75a4db6d2e6153f7c13c49c527eb9a37f9ddd510f8ecdc  scripts/qa/playWorldXiRoute.mjs\n' | sha256sum --check -
           git ls-files -z > "$out/source-members.before"
           git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
           cat > "$out/capture.sh" <<'CAPTURE'

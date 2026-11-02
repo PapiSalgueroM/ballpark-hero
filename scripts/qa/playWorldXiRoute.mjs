@@ -348,7 +348,7 @@ try {
     const game = page.locator('main#dukb-main');
     const input = game.getByRole('textbox', { name: 'Name a player for this slot', exact: true });
     const instruction = game.getByText(/^Name a player from .+ who can play [A-Z]+\. Accepts .+\.$/);
-    const slotNumber = async () => Number((await game.getByText(/^Slot \d+ of 11 · /).innerText()).match(/^Slot (\d+)/)[1]);
+    const slotNumber = async () => Number((await game.getByText(/^Slot \d+ of 11 · /).innerText()).replace(/\s+/g, ' ').trim().match(/^Slot (\d+)/)[1]);
     const filled = async () => Number((await game.getByText(/^Filled \d+\/11$/).innerText()).match(/\d+/)[0]);
     const pitch = game.locator('div[style*="aspect-ratio"]');
     for (let index = 0; index < 2; index += 1) {
