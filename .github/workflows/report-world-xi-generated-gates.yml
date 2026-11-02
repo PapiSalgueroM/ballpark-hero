@@ -1,7 +1,7 @@
-name: World XI final generated outputs and held QA baselines
+name: World XI exact corpus replay and final held gates
 on:
   push:
-    branches: [codex/report-world-xi-generated-gates-repair-20261102]
+    branches: [codex/report-world-xi-generated-gates-replay-20261102]
 permissions:
   contents: read
 jobs:
@@ -28,11 +28,11 @@ jobs:
         run: |
           set -euo pipefail
           out="$WORLD_XI_OUT"; mkdir "$out"
-          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-generated-gates-repair-20261102
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-generated-gates-replay-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = 29eb4d966b0d06852dc0d57bc824cf3c65d38116
+          test "$(git rev-parse HEAD^)" = 4b13afc8efc8fc71b0ed53df06dc484841d4488a
           git diff --name-only HEAD^ HEAD > "$out/workflow-paths.txt"
-          printf '%s\n' '.github/workflows/report-world-xi-generated-gates.yml' 'scripts/qa/source-controls/worldXi.before-roster-depth.ts.txt' 'scripts/simWorldXiRosterDepth.mjs' > "$out/expected-workflow-paths.txt"
+          printf '%s\n' '.github/workflows/report-world-xi-generated-gates.yml' 'scripts/qa/source-controls/worldXi.before-nation-modes.soccer1.ts.txt' 'scripts/simWorldXiRosterDepth.mjs' > "$out/expected-workflow-paths.txt"
           cmp "$out/expected-workflow-paths.txt" "$out/workflow-paths.txt"
           test "$(git rev-parse HEAD:scripts/sweepWeight.mjs)" = 5a92a68cc0225d5e633c19e041087e7c6c4254e8
           test "$(git rev-parse HEAD:scripts/genSearchKeywords.mjs)" = d0a237a766215631a81d7cd6789f1fa632d3f9b7
@@ -41,7 +41,7 @@ jobs:
           git archive --format=tar HEAD > "$out/source.tar"
           git ls-files -z > "$out/source-members.before"
           git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
-          printf 'fa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe  src/lib/worldXi.ts\nb393eb0edeb096925eca9c578abeb973743dffabc0b47a462ec9c7a1a9f1bd6c  src/test/worldXiRosterDepth.test.ts\nbab11a7fa6551096595d9c6367ac0064dbcbcb44cea1359f63ed16e82f30461e  scripts/simWorldXiRosterDepth.mjs\n2f8d2bce7ca13ff998217005066e3c68e6c4bf7bf24e63da750378badba2fd23  scripts/qa/source-controls/worldXi.before-roster-depth.ts.txt\n' | sha256sum -c -
+          printf 'fa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe  src/lib/worldXi.ts\nb393eb0edeb096925eca9c578abeb973743dffabc0b47a462ec9c7a1a9f1bd6c  src/test/worldXiRosterDepth.test.ts\n776b33916df087188792e02c96d74c3902bcf62dc7ea180f1fe33b65fb059714  scripts/simWorldXiRosterDepth.mjs\n2f8d2bce7ca13ff998217005066e3c68e6c4bf7bf24e63da750378badba2fd23  scripts/qa/source-controls/worldXi.before-roster-depth.ts.txt\nbe9347c406bab6fbde8c7efe07f90e43b05cd801ca8dc9b9ba75496743fd63f2  scripts/qa/source-controls/worldXi.before-nation-modes.soccer1.ts.txt\n' | sha256sum -c -
           git diff --exit-code HEAD^ HEAD -- scripts/sweepWeight.mjs scripts/genSearchKeywords.mjs scripts/simGuideHeadings.mjs src/lib/positionFit.ts src/lib/squadShape.ts src/integrations/supabase/client.ts
           cat > "$out/capture.sh" <<'CAPTURE'
           capture() {
@@ -173,11 +173,11 @@ jobs:
         run: |
           set -euo pipefail
           out="$WORLD_XI_OUT"; mkdir "$out"
-          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-generated-gates-repair-20261102
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-generated-gates-replay-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = 29eb4d966b0d06852dc0d57bc824cf3c65d38116
+          test "$(git rev-parse HEAD^)" = 4b13afc8efc8fc71b0ed53df06dc484841d4488a
           git diff --name-only HEAD^ HEAD > "$out/workflow-paths.txt"
-          printf '%s\n' '.github/workflows/report-world-xi-generated-gates.yml' 'scripts/qa/source-controls/worldXi.before-roster-depth.ts.txt' 'scripts/simWorldXiRosterDepth.mjs' > "$out/expected-workflow-paths.txt"
+          printf '%s\n' '.github/workflows/report-world-xi-generated-gates.yml' 'scripts/qa/source-controls/worldXi.before-nation-modes.soccer1.ts.txt' 'scripts/simWorldXiRosterDepth.mjs' > "$out/expected-workflow-paths.txt"
           cmp "$out/expected-workflow-paths.txt" "$out/workflow-paths.txt"
           test "$(git rev-parse HEAD:scripts/sweepWeight.mjs)" = 5a92a68cc0225d5e633c19e041087e7c6c4254e8
           test "$(git rev-parse HEAD:scripts/genSearchKeywords.mjs)" = d0a237a766215631a81d7cd6789f1fa632d3f9b7
@@ -271,7 +271,7 @@ jobs:
           import fs from 'node:fs';
           import path from 'node:path';
           import { createHash } from 'node:crypto';
-          import { execFileSync } from 'node:child_process';
+          import { execFileSync, spawnSync } from 'node:child_process';
           import { pathToFileURL } from 'node:url';
           
           const root = process.cwd(), out = process.env.WORLD_XI_OUT, route = '/world-xi';
@@ -282,43 +282,151 @@ jobs:
           const changed = execFileSync('git', ['diff', '--name-only', '-z', 'HEAD']).toString().split('\0').filter(Boolean);
           const scopeGuard = files => assert(files.every(file => allowed.includes(file)), 'WORLD_GENERATED_PATH_BOUNDARY');
           scopeGuard(changed);
-          
-          // The real unchanged generator ran first. This diagnostic exposes its own model;
-          // only module location and output seams change, and its result must be identical.
           const generatorPath = path.join(root, 'scripts/genSearchKeywords.mjs');
           const sourceBytes = fs.readFileSync(generatorPath), source = sourceBytes.toString('utf8');
-          const diagnosticFile = path.join(out, 'search-diagnostic.mjs'), diagnosticOutput = path.join(out, 'search-diagnostic.json');
-          const seams = [
-            ["import { writeFileAtomic } from './lib/atomicWrite.mjs';", 'import { writeFileAtomic } from ' + JSON.stringify(pathToFileURL(path.join(root, 'scripts/lib/atomicWrite.mjs')).href) + ';'],
-            ["const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');", 'const ROOT = ' + JSON.stringify(root) + ';'],
-            ["const OUT = path.join(ROOT, 'src/data/searchKeywords.json');", 'const OUT = ' + JSON.stringify(diagnosticOutput) + ';'],
-          ];
-          let diagnostic = source;
-          const edits = [];
-          for (const [before, after] of seams) {
-            const code = diagnostic.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\n)\s*\/\/[^\n]*/g, '$1');
-            assert.equal(code.split(before).length - 1, 1, 'One executed diagnostic seam');
-            assert.equal(diagnostic.split(before).length - 1, 1, 'One complete diagnostic seam');
-            const offset = diagnostic.indexOf(before);
-            diagnostic = diagnostic.slice(0, offset) + after + diagnostic.slice(offset + before.length);
-            edits.push({ offset, before, after });
+          const fixturePath = 'scripts/qa/source-controls/worldXi.before-nation-modes.soccer1.ts.txt';
+          const fixtureBytes = fs.readFileSync(fixturePath);
+          const fixtureGuard = bytes => {
+            assert.equal(bytes.length, 75_249, 'WORLD_SEARCH_PRIOR_FIXTURE_BYTES');
+            assert.equal(sha(bytes), 'be9347c406bab6fbde8c7efe07f90e43b05cd801ca8dc9b9ba75496743fd63f2', 'WORLD_SEARCH_PRIOR_FIXTURE_BYTES');
+          };
+          fixtureGuard(fixtureBytes);
+          const contentDir = 'src/data/gameContent';
+          const contentNames = fs.readdirSync(contentDir).sort();
+          assert.equal(contentNames.length, 17);
+          const inputPaths = [generatorPath, fixturePath, 'scripts/lib/atomicWrite.mjs', 'src/data/gameRegistry.ts',
+            ...contentNames.map(name => path.join(contentDir, name))];
+          const held = new Map(inputPaths.map(file => [file, fs.readFileSync(file)]));
+          const corpusHash = dir => sha(fs.readdirSync(dir).sort().map(name => fs.readFileSync(path.join(dir, name), 'utf8').replace(/\r\n/g, '\n')).join('\n'));
+          const priorCorpusSha256 = 'c5f0b14775d876b9704c3ccd00ade29654636614ce68310777238018fe5f8594';
+          const currentCorpusSha256 = corpusHash(path.join(root, contentDir));
+          const priorRoot = path.join(out, 'prior-corpus');
+          fs.mkdirSync(priorRoot);
+          const copiedInputs = [];
+          for (const relative of ['scripts/genSearchKeywords.mjs', 'scripts/lib/atomicWrite.mjs', 'src/data/gameRegistry.ts',
+            ...contentNames.map(name => path.join(contentDir, name))]) {
+            const bytes = relative === contentDir + '/soccer1.ts' ? fixtureBytes : fs.readFileSync(path.join(root, relative));
+            const target = path.join(priorRoot, relative);
+            fs.mkdirSync(path.dirname(target), { recursive: true }); fs.writeFileSync(target, bytes, { flag: 'wx' });
+            assert.deepEqual(fs.readFileSync(target), bytes);
+            copiedInputs.push({ file: relative, bytes: bytes.length, sha256: sha(bytes), oldGuideFixture: relative === contentDir + '/soccer1.ts' });
           }
-          const exports = '\nexport { df, N, dfCap, GAME_CONTENT, flatGuide, MAX_PER_GAME, index };\n';
-          fs.writeFileSync(diagnosticFile, diagnostic + exports, { flag: 'wx' });
-          assert.notEqual(sha(fs.readFileSync(diagnosticFile)), sha(sourceBytes));
-          let inverse = diagnostic;
-          for (const { offset, before, after } of edits.slice().reverse()) inverse = inverse.slice(0, offset) + before + inverse.slice(offset + after.length);
-          assert.equal(inverse, source, 'Whole diagnostic inverse');
-          const model = await import(pathToFileURL(diagnosticFile).href);
-          assert.deepEqual(fs.readFileSync(generatorPath), sourceBytes, 'Real generator bytes stay held');
-          const actualSearchBytes = fs.readFileSync('src/data/searchKeywords.json'), diagnosticBytes = fs.readFileSync(diagnosticOutput);
+          assert.equal(corpusHash(path.join(priorRoot, contentDir)), priorCorpusSha256, 'WORLD_SEARCH_EXACT_PRIOR_CORPUS');
+          fs.writeFileSync(path.join(out, 'prior-corpus-inputs.json'), JSON.stringify({ originalQualifiedRun: 41394488957,
+            originalSourceHead: '89a392188b91655ed03941b6890b8c8042c51555', priorCorpusSha256, currentCorpusSha256, inputs: copiedInputs }, null, 2) + '\n');
+          const childReceipts = [];
+          function runChild(tag, file) {
+            const transport = path.join(out, tag + '.transport');
+            fs.writeFileSync(transport, '', { flag: 'wx' });
+            const args = [file];
+            fs.writeFileSync(path.join(out, tag + '.argv'), process.execPath + '\0' + args.join('\0'), { flag: 'wx' });
+            const child = spawnSync(process.execPath, args, { cwd: root, env: { ...process.env, SIM_OFFLINE_RECEIPT: transport },
+              encoding: 'utf8', timeout: 180000, maxBuffer: 16 * 1024 * 1024 });
+            fs.writeFileSync(path.join(out, tag + '.stdout'), child.stdout || '', { flag: 'wx' });
+            fs.writeFileSync(path.join(out, tag + '.stderr'), child.stderr || '', { flag: 'wx' });
+            fs.writeFileSync(path.join(out, tag + '.exit'), String(child.status) + '\n', { flag: 'wx' });
+            assert.ifError(child.error); assert.equal(child.signal, null); assert.equal(child.status, 0, tag + ': exact writer child');
+            assert.equal(fs.statSync(transport).size, 0, tag + ': empty transport');
+            assert(!/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException)/i.test((child.stdout || '') + '\n' + (child.stderr || '')));
+            childReceipts.push({ tag, rawExit: child.status, transportBytes: fs.statSync(transport).size });
+          }
+          const actualSearchBytes = fs.readFileSync('src/data/searchKeywords.json');
+          fs.writeFileSync(path.join(out, 'search-current-generator.json'), actualSearchBytes, { flag: 'wx' });
+          runChild('search-prior-generator', path.join(priorRoot, 'scripts/genSearchKeywords.mjs'));
+          const priorGeneratorBytes = fs.readFileSync(path.join(priorRoot, 'src/data/searchKeywords.json'));
+          fs.writeFileSync(path.join(out, 'search-prior-generator.json'), priorGeneratorBytes, { flag: 'wx' });
+          function diagnostic(label, inputRoot) {
+            const diagnosticFile = path.join(out, label + '-diagnostic.mjs'), diagnosticOutput = path.join(out, label + '-diagnostic.json');
+            const modelFile = path.join(out, label + '-model.json');
+            const seams = [
+              ["import { writeFileAtomic } from './lib/atomicWrite.mjs';", 'import { writeFileAtomic } from ' + JSON.stringify(pathToFileURL(path.join(inputRoot, 'scripts/lib/atomicWrite.mjs')).href) + ';'],
+              ["const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');", 'const ROOT = ' + JSON.stringify(inputRoot) + ';'],
+              ["const OUT = path.join(ROOT, 'src/data/searchKeywords.json');", 'const OUT = ' + JSON.stringify(diagnosticOutput) + ';'],
+              ['const index = {};', 'const diagnosticSelections = {};\nconst index = {};'],
+              ['  const kw = picked.map(([t]) => t).sort();',
+                "  if (g.path === '/world-xi' || g.path === '/build-your-xi') diagnosticSelections[g.path] = { tf: Object.fromEntries(tf), ranked: scored.map(([token, score], rank) => ({ token, tf: tf.get(token), df: df.get(token), score, rank: rank + 1 })), picked };\n  const kw = picked.map(([t]) => t).sort();"],
+            ];
+            let body = source; const edits = [];
+            for (const [before, after] of seams) {
+              const code = body.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\n)\s*\/\/[^\n]*/g, '$1');
+              assert.equal(code.split(before).length - 1, 1, 'One executed observational seam');
+              assert.equal(body.split(before).length - 1, 1, 'One complete observational seam');
+              const offset = body.indexOf(before); body = body.slice(0, offset) + after + body.slice(offset + before.length);
+              edits.push({ offset, before, after });
+            }
+            const append = '\nfs.writeFileSync(' + JSON.stringify(modelFile) + ', JSON.stringify({ N, dfCap, MAX_PER_GAME, content: GAME_CONTENT, registry: CATEGORIES, flatWorld: flatGuide(GAME_CONTENT["/world-xi"]), docs: Object.fromEntries([...docs].map(([key, tf]) => [key, Object.fromEntries(tf)])), df: Object.fromEntries(df), index, selections: diagnosticSelections }) + "\\n", { flag: "wx" });\n';
+            fs.writeFileSync(diagnosticFile, body + append, { flag: 'wx' });
+            assert.notEqual(sha(fs.readFileSync(diagnosticFile)), sha(sourceBytes));
+            let inverse = body;
+            for (const { offset, before, after } of edits.slice().reverse()) inverse = inverse.slice(0, offset) + before + inverse.slice(offset + after.length);
+            assert.equal(inverse, source, 'Whole observational source inverse');
+            runChild(label + '-diagnostic', diagnosticFile);
+            fs.writeFileSync(path.join(out, label + '-source.json'), JSON.stringify({ sourceSha256: sha(sourceBytes),
+              diagnosticSha256: sha(fs.readFileSync(diagnosticFile)), edits, appendedReport: append, wholeInverseSha256: sha(inverse),
+              outputSha256: sha(fs.readFileSync(diagnosticOutput)), modelSha256: sha(fs.readFileSync(modelFile)) }, null, 2) + '\n');
+            return { model: readJson(modelFile), bytes: fs.readFileSync(diagnosticOutput) };
+          }
+          const currentDiagnostic = diagnostic('search-current', root);
+          const priorDiagnostic = diagnostic('search-prior', priorRoot);
+          const model = currentDiagnostic.model, priorModel = priorDiagnostic.model, diagnosticBytes = currentDiagnostic.bytes;
+          const searchBeforeBytes = fs.readFileSync(path.join(out, 'search-before.json'));
+          const searchBefore = JSON.parse(searchBeforeBytes.toString('utf8')), searchAfter = JSON.parse(actualSearchBytes.toString('utf8'));
+          const words = value => value.trim().split(/\s+/).filter(Boolean);
+          const rawSearchChanges = Object.keys(searchBefore.k).flatMap(key => {
+            const before = words(searchBefore.k[key]), after = words(searchAfter.k[key]);
+            if (searchBefore.k[key] === searchAfter.k[key]) return [];
+            return [{ route: key, before: searchBefore.k[key], after: searchAfter.k[key],
+              removed: before.filter(word => !after.includes(word)), added: after.filter(word => !before.includes(word)) }];
+          });
+          const allTokens = [...new Set([...Object.keys(priorModel.df), ...Object.keys(model.df)])].sort();
+          const tokenChanges = allTokens.filter(word => priorModel.df[word] !== model.df[word]).map(word => ({
+            word, priorDf: priorModel.df[word] || 0, currentDf: model.df[word] || 0,
+            priorWorldTf: priorModel.docs[route][word] || 0, currentWorldTf: model.docs[route][word] || 0,
+          }));
+          fs.writeFileSync(path.join(out, 'search-model-before-guards.json'), JSON.stringify({
+            writerSha256: sha(sourceBytes), priorCorpusSha256, currentCorpusSha256, priorGeneratorSha256: sha(priorGeneratorBytes),
+            beforeIndexSha256: sha(searchBeforeBytes), currentGeneratorSha256: sha(actualSearchBytes),
+            priorDiagnosticSha256: sha(priorDiagnostic.bytes), currentDiagnosticSha256: sha(diagnosticBytes),
+            documents: { prior: priorModel.N, current: model.N }, cap: { prior: priorModel.dfCap, current: model.dfCap },
+            changes: rawSearchChanges, tokenChanges, selections: { prior: priorModel.selections, current: model.selections },
+          }, null, 2) + '\n');
           const generatorGuard = (actual, derived) => assert.deepEqual(actual, derived, 'WORLD_SEARCH_GENERATOR_BYTES');
           generatorGuard(actualSearchBytes, diagnosticBytes);
-          fs.writeFileSync(path.join(out, 'search-diagnostic-source.json'), JSON.stringify({ originalSha256: sha(sourceBytes), diagnosticSha256: sha(fs.readFileSync(diagnosticFile)), edits,
-            appendedExports: exports, wholeInverseSha256: sha(inverse), actualOutputSha256: sha(actualSearchBytes), diagnosticOutputSha256: sha(diagnosticBytes), documents: model.N, dfCap: model.dfCap }, null, 2) + '\n');
-          
+          generatorGuard(priorGeneratorBytes, priorDiagnostic.bytes);
+          assert.deepEqual(priorGeneratorBytes, searchBeforeBytes, 'WORLD_SEARCH_PRIOR_REPLAY_BYTES');
+          const causalData = { priorContent: priorModel.content, currentContent: model.content, priorRegistry: priorModel.registry, currentRegistry: model.registry,
+            priorDocs: priorModel.docs, currentDocs: model.docs, priorDf: priorModel.df, currentDf: model.df };
+          function causalityGuard(input) {
+            assert.deepEqual(input.currentRegistry, input.priorRegistry, 'WORLD_SEARCH_ONLY_WORLD_GUIDE_INPUT');
+            assert.deepEqual(Object.keys(input.currentContent).sort(), Object.keys(input.priorContent).sort(), 'WORLD_SEARCH_ONLY_WORLD_GUIDE_INPUT');
+            for (const key of Object.keys(input.priorContent)) if (key !== route)
+              assert.deepEqual(input.currentContent[key], input.priorContent[key], 'WORLD_SEARCH_ONLY_WORLD_GUIDE_INPUT');
+            assert.notDeepEqual(input.currentContent[route], input.priorContent[route], 'WORLD_SEARCH_REAL_WORLD_GUIDE_CHANGE');
+            assert.deepEqual(Object.keys(input.currentDocs).sort(), Object.keys(input.priorDocs).sort(), 'WORLD_SEARCH_NONWORLD_BAG_HOLD');
+            for (const key of Object.keys(input.priorDocs)) if (key !== route)
+              assert.deepEqual(input.currentDocs[key], input.priorDocs[key], 'WORLD_SEARCH_NONWORLD_BAG_HOLD');
+            const tokens = new Set([...Object.keys(input.priorDf), ...Object.keys(input.currentDf),
+              ...Object.keys(input.priorDocs[route]), ...Object.keys(input.currentDocs[route])]);
+            for (const word of tokens) {
+              const actual = (input.currentDf[word] || 0) - (input.priorDf[word] || 0);
+              const expected = Number(Object.hasOwn(input.currentDocs[route], word)) - Number(Object.hasOwn(input.priorDocs[route], word));
+              assert.equal(actual, expected, 'WORLD_SEARCH_DF_FROM_REAL_WORLD_DOCUMENT');
+            }
+          }
+          causalityGuard(causalData);
+          assert.equal(priorModel.N, model.N); assert.equal(model.N, 133);
+          assert.equal(priorModel.dfCap, model.dfCap); assert.equal(model.dfCap, 33);
+          assert.equal(priorModel.MAX_PER_GAME, model.MAX_PER_GAME); assert.equal(model.MAX_PER_GAME, 12);
+          function searchGuard(after, prior = priorModel.index) {
+            assert.deepEqual(Object.keys(after).sort(), Object.keys(searchBefore).sort(), 'WORLD_SEARCH_TOP_KEYS');
+            assert.equal(after.v, searchBefore.v, 'WORLD_SEARCH_VERSION');
+            assert.deepEqual(after, JSON.parse(diagnosticBytes.toString('utf8')), 'WORLD_SEARCH_CURRENT_DERIVATION');
+            assert.deepEqual(prior, searchBefore.k, 'WORLD_SEARCH_PRIOR_RECONSTRUCTION');
+            return rawSearchChanges;
+          }
+          const searchChanges = searchGuard(searchAfter);
           const guideBefore = readJson(path.join(out, 'guide-before.json')), guideAfter = readJson('scripts/data/guideHeadingsFrozen.json');
-          const flat = model.flatGuide(model.GAME_CONTENT[route]);
+          const flat = model.flatWorld;
           const parts = ['howToPlay', 'rules', 'example', 'tips'];
           const expectedWorld = Object.fromEntries(parts.map(part => { assert(Array.isArray(flat[part]) && flat[part].length); return [part, flat[part]]; }));
           function guideGuard(after) {
@@ -336,73 +444,6 @@ jobs:
             for (const key of Object.keys(ledgerBefore)) if (key !== route) assert.deepEqual(after[key], ledgerBefore[key], 'WORLD_LEDGER_OTHER_ROW');
           }
           ledgerGuard(ledgerAfter);
-          const searchBefore = readJson(path.join(out, 'search-before.json')), searchAfter = JSON.parse(actualSearchBytes.toString('utf8'));
-          const words = value => value.trim().split(/\s+/).filter(Boolean);
-          const rawSearchChanges = Object.keys(searchBefore.k).flatMap(key => {
-            const before = words(searchBefore.k[key]), current = words(searchAfter.k[key]);
-            if (searchBefore.k[key] === searchAfter.k[key]) return [];
-            return [{ route: key, before: searchBefore.k[key], after: searchAfter.k[key],
-              removed: before.filter(word => !current.includes(word)), added: current.filter(word => !before.includes(word)) }];
-          });
-          const nonWorldChanges = rawSearchChanges.filter(row => row.route !== route);
-          const removedCommon = [...new Set(nonWorldChanges.flatMap(row => row.removed))].sort();
-          fs.writeFileSync(path.join(out, 'search-model-before-guards.json'), JSON.stringify({ sourceSha256: sha(sourceBytes), documents: model.N,
-            dfCap: model.dfCap, maxPerGame: model.MAX_PER_GAME, changes: rawSearchChanges,
-            tokenDocumentFrequencies: Object.fromEntries([...new Set(nonWorldChanges.flatMap(row => [...row.removed, ...row.added]))].sort().map(word => [word, model.df.get(word) ?? null])) }, null, 2) + '\n');
-          assert.equal(model.MAX_PER_GAME, 12, 'Held actual generator top12 limit');
-          for (const word of removedCommon) assert.equal(model.df.get(word), model.dfCap + 1, 'WORLD_SEARCH_ONE_DOCUMENT_COMMON_CHANGE');
-          const priorDf = removedCommon.map(word => [word, model.df.get(word) - 1]);
-          const priorFile = path.join(out, 'search-prior-diagnostic.mjs'), priorOutput = path.join(out, 'search-prior-diagnostic.json');
-          let priorSource = source;
-          const priorEdits = [];
-          for (const [before, seamAfter] of seams) {
-            const after = before.startsWith('const OUT = ') ? 'const OUT = ' + JSON.stringify(priorOutput) + ';' : seamAfter;
-            const code = priorSource.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\n)\s*\/\/[^\n]*/g, '$1');
-            assert.equal(code.split(before).length - 1, 1); assert.equal(priorSource.split(before).length - 1, 1);
-            const offset = priorSource.indexOf(before); priorSource = priorSource.slice(0, offset) + after + priorSource.slice(offset + before.length);
-            priorEdits.push({ offset, before, after });
-          }
-          const beforeIndex = 'const index = {};';
-          const restoreDf = 'const diagnosticPriorDf = ' + JSON.stringify(priorDf) + ';\nfor (const [word, count] of diagnosticPriorDf) df.set(word, count);\n' + beforeIndex;
-          assert.equal(priorSource.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\n)\s*\/\/[^\n]*/g, '$1').split(beforeIndex).length - 1, 1);
-          assert.equal(priorSource.split(beforeIndex).length - 1, 1);
-          const indexOffset = priorSource.indexOf(beforeIndex);
-          priorSource = priorSource.slice(0, indexOffset) + restoreDf + priorSource.slice(indexOffset + beforeIndex.length);
-          priorEdits.push({ offset: indexOffset, before: beforeIndex, after: restoreDf });
-          let priorInverse = priorSource;
-          for (const { offset, before, after } of priorEdits.slice().reverse()) priorInverse = priorInverse.slice(0, offset) + before + priorInverse.slice(offset + after.length);
-          assert.equal(priorInverse, source, 'Whole prior-diagnostic inverse');
-          fs.writeFileSync(priorFile, priorSource + exports, { flag: 'wx' });
-          assert.notEqual(sha(fs.readFileSync(priorFile)), sha(sourceBytes));
-          const priorModel = await import(pathToFileURL(priorFile).href);
-          assert.deepEqual(fs.readFileSync(generatorPath), sourceBytes, 'Real generator bytes remain held after prior reconstruction');
-          assert.deepEqual(fs.readFileSync('src/data/searchKeywords.json'), actualSearchBytes, 'Actual generated index remains untouched');
-          fs.writeFileSync(path.join(out, 'search-prior-source.json'), JSON.stringify({ sourceSha256: sha(sourceBytes), diagnosticSha256: sha(fs.readFileSync(priorFile)),
-            edits: priorEdits, appendedExports: exports, restoredOnlyDocumentFrequencies: priorDf, wholeInverseSha256: sha(priorInverse),
-            outputSha256: sha(fs.readFileSync(priorOutput)), counterfactualOnly: true }, null, 2) + '\n');
-          function searchGuard(after, prior = priorModel.index) {
-            assert.deepEqual(Object.keys(after).sort(), Object.keys(searchBefore).sort(), 'WORLD_SEARCH_TOP_KEYS');
-            assert.equal(after.v, searchBefore.v, 'WORLD_SEARCH_VERSION');
-            assert.deepEqual(Object.keys(after.k).sort(), Object.keys(searchBefore.k).sort(), 'WORLD_SEARCH_ROUTE_KEYS');
-            const changes = [];
-            for (const key of Object.keys(searchBefore.k)) {
-              const before = words(searchBefore.k[key]), current = words(after.k[key]);
-              const removed = before.filter(word => !current.includes(word)), added = current.filter(word => !before.includes(word));
-              if (key !== route) {
-                for (const word of removed) assert.equal(model.df.get(word), model.dfCap + 1, 'WORLD_SEARCH_NONCOMMON_REMOVAL');
-                if (added.length) {
-                  assert(removed.length > 0 && before.length === model.MAX_PER_GAME && current.length === model.MAX_PER_GAME && added.length === removed.length, 'WORLD_SEARCH_ONLY_TOP12_REFILL');
-                  assert.equal(after.k[key], model.index[key], 'WORLD_SEARCH_NONDERIVED_REFILL');
-                }
-                assert.equal(prior[key], searchBefore.k[key], 'WORLD_SEARCH_PRIOR_RECONSTRUCTION');
-              }
-              if (searchBefore.k[key] !== after.k[key]) changes.push({ route: key, before: searchBefore.k[key], after: after.k[key], added, removed,
-                removedDocumentFrequencies: Object.fromEntries(removed.map(word => [word, model.df.get(word) ?? null])) });
-            }
-            return changes;
-          }
-          const searchChanges = searchGuard(searchAfter);
-          
           const controls = [];
           function caught(name, original, mutated, run, marker) {
             assert.notEqual(sha(JSON.stringify(mutated)), sha(JSON.stringify(original)), name + ': control changes copied data');
@@ -419,11 +460,11 @@ jobs:
           caught('ledger-other-row', ledgerAfter, foreignLedger, ledgerGuard, 'WORLD_LEDGER_OTHER_ROW');
           const otherSearch = Object.keys(searchBefore.k).find(key => key !== route); assert(otherSearch);
           const extraSearch = clone(searchAfter); extraSearch.k[otherSearch] += ' worldxiguardtokenzz';
-          caught('search-other-addition', searchAfter, extraSearch, searchGuard, 'WORLD_SEARCH_ONLY_TOP12_REFILL');
-          const rare = Object.keys(searchAfter.k).filter(key => key !== route).flatMap(key => words(searchAfter.k[key]).filter(word => words(searchBefore.k[key]).includes(word) && (model.df.get(word) ?? Infinity) <= model.dfCap).map(word => ({ key, word })))[0];
+          caught('search-other-addition', searchAfter, extraSearch, searchGuard, 'WORLD_SEARCH_CURRENT_DERIVATION');
+          const rare = Object.keys(searchAfter.k).filter(key => key !== route).flatMap(key => words(searchAfter.k[key]).filter(word => words(searchBefore.k[key]).includes(word) && (model.df[word] ?? Infinity) <= model.dfCap).map(word => ({ key, word })))[0];
           assert(rare, 'A real current rare keyword is required for the omission control');
           const missingRare = clone(searchAfter); missingRare.k[rare.key] = words(missingRare.k[rare.key]).filter(word => word !== rare.word).join(' ');
-          caught('search-rare-omission', searchAfter, missingRare, searchGuard, 'WORLD_SEARCH_NONCOMMON_REMOVAL');
+          caught('search-rare-omission', searchAfter, missingRare, searchGuard, 'WORLD_SEARCH_CURRENT_DERIVATION');
           caught('generated-path-scope', changed, [...changed, 'src/pages/WorldXi.tsx'], scopeGuard, 'WORLD_GENERATED_PATH_BOUNDARY');
           const extraBytes = Buffer.concat([diagnosticBytes, Buffer.from(' ')]);
           assert.notEqual(sha(extraBytes), sha(diagnosticBytes));
@@ -433,10 +474,27 @@ jobs:
           assert(refill, 'The actual observed top12 refill remains present in this pinned source');
           const wrongRefill = clone(searchAfter);
           wrongRefill.k[refill.route] = words(wrongRefill.k[refill.route]).map(word => word === refill.added[0] ? 'worldxifalserefillzz' : word).sort().join(' ');
-          caught('search-wrong-ranked-refill', searchAfter, wrongRefill, searchGuard, 'WORLD_SEARCH_NONDERIVED_REFILL');
+          caught('search-wrong-ranked-refill', searchAfter, wrongRefill, searchGuard, 'WORLD_SEARCH_CURRENT_DERIVATION');
           const wrongPrior = clone(priorModel.index); wrongPrior[refill.route] += ' worldxifalsepriorzz';
           caught('search-prior-row-reconstruction', priorModel.index, wrongPrior, value => searchGuard(searchAfter, value), 'WORLD_SEARCH_PRIOR_RECONSTRUCTION');
-          assert.equal(controls.length, 9);
+          const badFixture = Buffer.from(fixtureBytes); badFixture[badFixture.length - 1] ^= 1;
+          assert.notEqual(sha(badFixture), sha(fixtureBytes));
+          assert.throws(() => fixtureGuard(badFixture), error => error instanceof assert.AssertionError && error.message.includes('WORLD_SEARCH_PRIOR_FIXTURE_BYTES'));
+          controls.push({ name: 'prior-fixture-provenance', marker: 'WORLD_SEARCH_PRIOR_FIXTURE_BYTES', originalSha256: sha(fixtureBytes), changedSha256: sha(badFixture), ownedRefusal: true });
+          const nonWorldGuide = Object.keys(causalData.currentContent).find(key => key !== route && Array.isArray(causalData.currentContent[key].intro)); assert(nonWorldGuide);
+          const badGuideInput = clone(causalData); badGuideInput.currentContent[nonWorldGuide].intro.push('Copied causal guard change.');
+          caught('nonworld-guide-input', causalData, badGuideInput, causalityGuard, 'WORLD_SEARCH_ONLY_WORLD_GUIDE_INPUT');
+          const nonWorldBag = Object.keys(causalData.currentDocs).find(key => key !== route && Object.keys(causalData.currentDocs[key]).length); assert(nonWorldBag);
+          const bagWord = Object.keys(causalData.currentDocs[nonWorldBag])[0], badBag = clone(causalData);
+          badBag.currentDocs[nonWorldBag][bagWord] += 1;
+          caught('nonworld-token-bag', causalData, badBag, causalityGuard, 'WORLD_SEARCH_NONWORLD_BAG_HOLD');
+          const badDf = clone(causalData); badDf.currentDf.fit += 1;
+          caught('world-document-df-causality', causalData, badDf, causalityGuard, 'WORLD_SEARCH_DF_FROM_REAL_WORLD_DOCUMENT');
+          assert.equal(controls.length, 13);
+          for (const [file, bytes] of held) assert.deepEqual(fs.readFileSync(file), bytes, 'Actual generator input stayed held: ' + file);
+          assert.deepEqual(fs.readFileSync('src/data/searchKeywords.json'), actualSearchBytes, 'Actual generated current index stayed held');
+          for (const row of copiedInputs) assert.equal(sha(fs.readFileSync(path.join(priorRoot, row.file))), row.sha256, 'Copied prior corpus stayed held');
+          
           
           const records = allowed.map(file => {
             const bytes = fs.readFileSync(file), target = path.join(out, 'generated', file);
@@ -445,11 +503,11 @@ jobs:
           });
           fs.writeFileSync(path.join(out, 'generated-manifest.json'), JSON.stringify({ allowed, changed, records, guideChangedRoute: route,
             guideParts: Object.fromEntries(parts.map(part => [part, expectedWorld[part].length])), ledgerChangedRows: Object.keys(ledgerBefore).filter(key => JSON.stringify(ledgerBefore[key]) !== JSON.stringify(ledgerAfter[key])),
-            searchChanges, searchSourceBefore: searchBefore.source, searchSourceAfter: searchAfter.source, dfCap: model.dfCap, restoredOnlyDocumentFrequencies: priorDf, allNonWorldPriorRowsReconstructed: true, controls }, null, 2) + '\n');
+            searchChanges, searchSourceBefore: searchBefore.source, searchSourceAfter: searchAfter.source, dfCap: model.dfCap, priorCorpusSha256, currentCorpusSha256, bothCompleteWriterOutputsReplayed: true, childReceipts, controls }, null, 2) + '\n');
           fs.writeFileSync(path.join(out, 'generated.patch'), execFileSync('git', ['diff', '--binary', 'HEAD']));
           fs.writeFileSync(path.join(out, 'scope.json'), JSON.stringify({ scope: 'Generated outputs and full established gates on qualified World source only.',
             sourceWorldNationModesAndRecovery: true, rosterCapture: false, databaseWrites: false, productionTransport: false, routeSelection: false, mobileLayout: false, published: false }, null, 2) + '\n');
-          console.log('WORLD_GENERATED_GUARDS: only five derived paths, current actual World guide, World-only ledger, exact unchanged-generator search with ' + searchChanges.length + ' changed rows and derived top12 refills; nine effective copied-data refusals.');
+          console.log('WORLD_GENERATED_GUARDS: only five derived paths, current actual World guide, World-only ledger, exact unchanged-generator search with ' + searchChanges.length + ' changed rows, exact prior corpus replay and real document-frequency causality; thirteen effective copied-data refusals.');
           GENERATED
           capture generated-boundaries node "$out/guard-generated.mjs"
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"

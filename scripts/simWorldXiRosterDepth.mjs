@@ -149,7 +149,7 @@ try {
     await run(`control-${id}`, changed, failed);
   }
   await run('restored', restored);
-  await writeFile(path.join(out, 'verdict.json'), JSON.stringify({ status: 'passed', base, results,
+  await writeFile(path.join(out, 'verdict.json'), JSON.stringify({ status: 'passed', baseline: { file: originalFile, bytes: originalBytes.length, sha256: hash(originalBytes), acquiredQualifiedRun: 41394488957 }, results,
     scope: 'Actual loader on fictional rows; no production writes, current club claims, nation-mode adoption or live-fix credit.' }, null, 2));
 } finally {
   const after = await Promise.all(files.map(async file => { const bytes = await readFile(path.join(root, file)); return { file, bytes: bytes.length, sha256: hash(bytes) }; }));
