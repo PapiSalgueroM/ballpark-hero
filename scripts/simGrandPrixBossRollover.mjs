@@ -15,8 +15,12 @@ const TIES = 'src/test/grandPrixBossHistoryTies.test.ts';
 const BASELINE = 'scripts/qa/source-controls/grandPrixBoss.before-rollover.ts.txt';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const heldPaths = [ENGINE, TEST, TIES, BASELINE, 'src/test/grandPrixBoss.test.ts', 'src/test/grandPrixBossMarket.test.ts', 'scripts/simGrandPrixBoss.mjs', 'scripts/simGrandPrixBossMarket.mjs', 'src/lib/keyedRng.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'];
-const held = new Map(heldPaths.map(file => [file, fs.readFileSync(path.join(root, file))]));
-const original = held.get(ENGINE), source = original.toString('utf8');
+const held = new Map();
+for (const file of heldPaths) {
+  const bytes = fs.readFileSync(path.join(root, file));
+  held.set(file, Buffer.from(bytes));
+}
+const original = held.get(ENGINE), source = fs.readFileSync(path.join(root, ENGINE), 'utf8').replace(/\r\n?/g, '\n');
 assert.equal(sha(held.get(BASELINE)), '6d0e754c28f631ea590472b9ea2a1647206db67ec7dc1580bcf054cede74364f', 'Exact qualified market A control source');
 const outBase = path.resolve(process.env.GP_BOSS_ROLLOVER_OUT || path.join(root, 'tmp'));
 fs.mkdirSync(outBase, { recursive: true });
@@ -123,7 +127,10 @@ function run(name, mode = 'healthy', selectedId = null, file = null, marker = nu
     rawErrors: report.errors ?? null, rawUnhandledErrors: report.unhandledErrors ?? null };
   results.push(result);
   fs.writeFileSync(path.join(out, name + '.summary.json'), JSON.stringify(result, null, 2));
-  for (const [filePath, bytes] of held) assert.deepEqual(fs.readFileSync(path.join(root, filePath)), bytes, name + ': held input changed');
+  for (const [filePath, bytes] of held) {
+    const actualBytes = fs.readFileSync(path.join(root, filePath));
+    assert.deepEqual(actualBytes, bytes, name + ': held input changed');
+  }
   console.log(name + ': ' + passed + ' passes, ' + failures + ' owned assertions, ' + skipped + ' declared skips.');
 }
 try {
@@ -160,7 +167,11 @@ try {
   fs.writeFileSync(path.join(out, 'summary.json'), JSON.stringify({ scope: 'Atomic season rollover and bounded tracked history only. No lifecycle, hook integration or UI qualification.', childRuns: 33, executed: 87, totals, results }, null, 2));
   console.log('simGrandPrixBossRollover: 45 passes, 42 owned assertions, 326 declared unselected skips; 87 executed outcomes.');
 } finally {
-  const after = [...held].map(([file]) => { const bytes = fs.readFileSync(path.join(root, file)); return { file, bytes: bytes.length, sha256: sha(bytes) }; });
+  const after = [];
+  for (const [file] of held) {
+    const bytes = fs.readFileSync(path.join(root, file));
+    after.push({ file, bytes: bytes.length, sha256: sha(bytes) });
+  }
   fs.writeFileSync(path.join(out, 'source-after.json'), JSON.stringify(after, null, 2));
   assert.deepEqual(after, receipts());
   console.log('Grand Prix Boss rollover evidence: ' + out);

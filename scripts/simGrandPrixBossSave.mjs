@@ -13,8 +13,12 @@ const hook = 'src/hooks/useGrandPrixBoss.ts';
 const test = 'src/test/grandPrixBossSave.test.tsx';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const heldPaths = [hook, test, 'src/lib/grandPrixBoss.ts', 'src/lib/keyedRng.ts', 'src/lib/saveFence.ts', 'src/hooks/useSaveFenceWatch.ts', 'src/lib/completions.ts', 'vitest.config.ts', 'src/test/setup.ts', 'package.json', 'package-lock.json'];
-const held = new Map(heldPaths.map(file => [file, fs.readFileSync(path.join(root, file))]));
-const source = held.get(hook).toString('utf8');
+const held = new Map();
+for (const file of heldPaths) {
+  const bytes = fs.readFileSync(path.join(root, file));
+  held.set(file, Buffer.from(bytes));
+}
+const source = fs.readFileSync(path.join(root, hook), 'utf8').replace(/\r\n?/g, '\n');
 const base = path.resolve(process.env.GP_BOSS_SAVE_OUT || path.join(root, 'tmp'));
 fs.mkdirSync(base, { recursive: true });
 const out = fs.mkdtempSync(path.join(base, 'grand-prix-save-'));
@@ -91,7 +95,7 @@ function run(name, failedId = null, hookFile = null, marker = null) {
 let complete = false;
 try {
   run('current');
-  fs.writeFileSync(candidate, source); assert.equal(sha(fs.readFileSync(candidate)), sha(held.get(hook)));
+  fs.writeFileSync(candidate, held.get(hook)); assert.equal(sha(fs.readFileSync(candidate)), sha(held.get(hook)));
   run('healthy-copy', null, candidate);
   for (const [name, id, patches, marker] of controls) {
     let changed = source;
@@ -110,7 +114,13 @@ try {
     fs.writeFileSync(path.join(out, name + '-useGrandPrixBoss.ts'), changed);
     fs.writeFileSync(path.join(out, name + '.edits.json'), JSON.stringify({ edits, originalSha256: sha(Buffer.from(source)), changedSha256: sha(Buffer.from(changed)), inverseSha256: sha(Buffer.from(inverse)) }, null, 2));
     try { fs.writeFileSync(candidate, changed); run(name, id, candidate, marker); }
-    finally { fs.writeFileSync(candidate, source); assert.equal(sha(fs.readFileSync(candidate)), sha(held.get(hook))); assert.deepEqual(fs.readFileSync(path.join(root, hook)), held.get(hook)); }
+    finally {
+      fs.writeFileSync(candidate, held.get(hook)); assert.equal(sha(fs.readFileSync(candidate)), sha(held.get(hook)));
+      {
+        const actualBytes = fs.readFileSync(path.join(root, hook));
+        assert.deepEqual(actualBytes, held.get(hook));
+      }
+    }
   }
   const missing = path.join(out, 'missing-useGrandPrixBoss.ts'); assert.equal(fs.existsSync(missing), false);
   run('absence', 'GP_SAVE_AVAILABLE:', missing);
@@ -121,7 +131,11 @@ try {
   complete = true;
   console.log(`simGrandPrixBossSave: ${totals.passed} healthy passes, ${totals.ownedFailures} effective physical-copy faults, ${totals.declaredSkips} declared unselected skips.`);
 } finally {
-  const after = [...held].map(([file]) => { const bytes = fs.readFileSync(path.join(root, file)); return { file, bytes: bytes.length, sha256: sha(bytes) }; });
+  const after = [];
+  for (const [file] of held) {
+    const bytes = fs.readFileSync(path.join(root, file));
+    after.push({ file, bytes: bytes.length, sha256: sha(bytes) });
+  }
   fs.writeFileSync(path.join(out, 'source-after.json'), JSON.stringify(after, null, 2)); assert.deepEqual(after, receipts());
   console.log('Grand Prix Boss save evidence: ' + out);
   if (complete && !process.env.GP_BOSS_SAVE_OUT) fs.rmSync(out, { recursive: true, force: true });

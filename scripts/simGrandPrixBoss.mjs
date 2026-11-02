@@ -8,11 +8,18 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = path.join(ROOT, 'src/lib/grandPrixBoss.ts');
 const TEST = 'src/test/grandPrixBoss.test.ts';
 const SHA = bytes => createHash('sha256').update(bytes).digest('hex');
-const original = fs.readFileSync(ENGINE);
-const source = original.toString('utf8');
-const heldFiles = new Map([ENGINE, TEST, 'src/lib/keyedRng.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'].map(file => {
-  const absolute = path.resolve(ROOT, file); return [absolute, SHA(fs.readFileSync(absolute))];
-}));
+let original;
+{
+  const bytes = fs.readFileSync(ENGINE);
+  original = Buffer.from(bytes);
+}
+const source = fs.readFileSync(ENGINE, 'utf8').replace(/\r\n?/g, '\n');
+const heldFiles = new Map();
+for (const file of [ENGINE, TEST, 'src/lib/keyedRng.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts']) {
+  const absolute = path.resolve(ROOT, file);
+  const bytes = fs.readFileSync(absolute);
+  heldFiles.set(absolute, SHA(bytes));
+}
 const base = process.env.GP_BOSS_OUT || path.join(ROOT, 'tmp');
 fs.mkdirSync(base, { recursive: true });
 const OUT = fs.mkdtempSync(path.join(base, 'dukb-grand-prix-boss-'));
@@ -86,8 +93,14 @@ try {
     finally {
       fs.writeFileSync(candidate, original);
       requireThat(SHA(fs.readFileSync(candidate)) === SHA(original), name + ': whole physical copy restore failed');
-      requireThat(SHA(fs.readFileSync(ENGINE)) === SHA(original), name + ': actual engine bytes moved');
-      fs.writeFileSync(path.join(OUT, name + '-restore.json'), JSON.stringify({ copySha256: SHA(fs.readFileSync(candidate)), actualSha256: SHA(fs.readFileSync(ENGINE)) }) + '\n');
+      {
+        const actualBytes = fs.readFileSync(ENGINE);
+        requireThat(SHA(actualBytes) === SHA(original), name + ': actual engine bytes moved');
+      }
+      {
+        const actualBytes = fs.readFileSync(ENGINE);
+        fs.writeFileSync(path.join(OUT, name + '-restore.json'), JSON.stringify({ copySha256: SHA(fs.readFileSync(candidate)), actualSha256: SHA(actualBytes) }) + '\n');
+      }
     }
   }
   const missingCopy = path.join(OUT, 'missing-grandPrixBoss.ts');
@@ -98,7 +111,10 @@ try {
   complete = true;
   console.log('simGrandPrixBoss: current/healthy-copy/restored-copy 13 cases and all 15 effective copied-source controls passed');
 } finally {
-  for (const [file, hash] of heldFiles) requireThat(SHA(fs.readFileSync(file)) === hash, 'actual source/helper/test/package hold failed: ' + file);
+  for (const [file, hash] of heldFiles) {
+    const actualBytes = fs.readFileSync(file);
+    requireThat(SHA(actualBytes) === hash, 'actual source/helper/test/package hold failed: ' + file);
+  }
   console.log('  Grand Prix Boss evidence: ' + OUT);
   if (complete && !process.env.GP_BOSS_OUT) fs.rmSync(OUT, { recursive: true, force: true });
 }

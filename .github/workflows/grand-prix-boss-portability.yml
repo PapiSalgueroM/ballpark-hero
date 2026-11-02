@@ -1,0 +1,140 @@
+name: Grand Prix Boss harness portability
+on:
+  push:
+    branches: [codex/grand-prix-boss-portability-20261102]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the reviewed parent and ten harness-only edits
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/gp-harness-portability"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-portability-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = f44faf1055e7b8acf4cbb6605f2daa74d915189c
+          test "$(git rev-parse 'HEAD^^{tree}')" = 3bb3cd92a4707980316dc9082eb7c5e3c018ebaa
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\n' '.github/workflows/grand-prix-boss-portability.yml' > "$OUT/expected-paths.txt"
+          cat > "$OUT/changed-sims.txt" <<'CHANGED'
+          scripts/simGrandPrixBoss.mjs
+          scripts/simGrandPrixBossFocusSave.mjs
+          scripts/simGrandPrixBossLifecycle.mjs
+          scripts/simGrandPrixBossManagement.mjs
+          scripts/simGrandPrixBossMarket.mjs
+          scripts/simGrandPrixBossMarketSave.mjs
+          scripts/simGrandPrixBossRollover.mjs
+          scripts/simGrandPrixBossRolloverSave.mjs
+          scripts/simGrandPrixBossSave.mjs
+          scripts/simGrandPrixBossStarterBalance.mjs
+          CHANGED
+          while read -r path; do printf 'M\t%s\n' "$path" >> "$OUT/expected-paths.txt"; done < "$OUT/changed-sims.txt"
+          sort "$OUT/expected-paths.txt" > "$OUT/expected-paths.sorted"
+          sort "$OUT/changed-paths.txt" > "$OUT/changed-paths.sorted"
+          cmp "$OUT/expected-paths.sorted" "$OUT/changed-paths.sorted"
+          git diff --raw HEAD^ HEAD > "$OUT/tree-delta.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/sims.txt" <<'SIMS'
+          scripts/simGrandPrixBoss.mjs
+          scripts/simGrandPrixBossFocusSave.mjs
+          scripts/simGrandPrixBossLifecycle.mjs
+          scripts/simGrandPrixBossLifecycleOutcomes.mjs
+          scripts/simGrandPrixBossLifecyclePage.mjs
+          scripts/simGrandPrixBossManagement.mjs
+          scripts/simGrandPrixBossMarket.mjs
+          scripts/simGrandPrixBossMarketSave.mjs
+          scripts/simGrandPrixBossRollover.mjs
+          scripts/simGrandPrixBossRolloverSave.mjs
+          scripts/simGrandPrixBossSave.mjs
+          scripts/simGrandPrixBossStarterBalance.mjs
+          SIMS
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from guarded proof
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Whole source-anchor fence and its owned copied fault
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          capture anchors node scripts/simHarnessAnchors.mjs
+          capture anchor-control env ANCHOR_CONTROL=strip node scripts/simHarnessAnchors.mjs
+          grep -F 'simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.' "$OUT/anchors.stdout"
+          grep -F 'control "strip": the planted fault in simFightCareer.mjs was named and nothing else was, the check works' "$OUT/anchor-control.stdout"
+      - name: Types and all twelve permanent racing harnesses
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          export GP_BOSS_OUT="$PWD/tmp"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          while read -r file; do
+            tag="$(basename "$file" .mjs)"
+            capture "$tag" node "$file"
+          done < "$OUT/sims.txt"
+      - name: Always hold source dependency bytes and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - name: Always retain exact wrapper child reports
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -d tmp; then cp -a -- tmp "$OUT/results"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gp-harness-portability-${{ github.run_id }}
+          path: ${{ runner.temp }}/gp-harness-portability/
+          retention-days: 14

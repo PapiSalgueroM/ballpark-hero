@@ -13,8 +13,12 @@ const ENGINE = 'src/lib/grandPrixBoss.ts';
 const TEST = 'src/test/grandPrixBossStarterBalance.test.ts';
 const FIXTURE = 'src/test/fixtures/grandPrixBossV5Starter.json';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const held = new Map([ENGINE, TEST, FIXTURE, 'src/test/grandPrixBoss.test.ts', 'scripts/simGrandPrixBoss.mjs', 'src/lib/keyedRng.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'].map(file => [file, fs.readFileSync(path.join(root, file))]));
-const starterTestSource = held.get(TEST).toString('utf8');
+const held = new Map();
+for (const file of [ENGINE, TEST, FIXTURE, 'src/test/grandPrixBoss.test.ts', 'scripts/simGrandPrixBoss.mjs', 'src/lib/keyedRng.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts']) {
+  const bytes = fs.readFileSync(path.join(root, file));
+  held.set(file, Buffer.from(bytes));
+}
+const starterTestSource = fs.readFileSync(path.join(root, TEST), 'utf8').replace(/\r\n?/g, '\n');
 const currentLegacyAssertion = "    const oldShape = JSON.parse(JSON.stringify(loaded));\n    for (const key of ['marketOffers', 'nextSeasonPlan', 'history', 'careerTotals']) delete oldShape[key];\n    for (const driver of oldShape.drivers) {\n      delete driver.focus;\n      const original = raw.drivers.find(row => row.id === driver.id)!;\n      if (driver.contract && !Object.prototype.hasOwnProperty.call(original.contract, 'startsSeason')) delete driver.contract.startsSeason;\n    }\n    for (const team of oldShape.teams) delete team.baselineCar;\n    expect(JSON.stringify(oldShape), 'GP_STARTER_NEW_DEFAULT_MUST_NOT_MIGRATE_EXISTING_TEAMS').toBe(before);\n    expect(loaded.drivers.map(driver => driver.focus)).toEqual(Array(26).fill('balanced'));\n    expect(loaded.drivers.filter(driver => driver.contract).map(driver => driver.contract!.startsSeason)).toEqual(Array(20).fill(raw.season));\n    for (const team of loaded.teams) expect(team.baselineCar).toEqual(raw.teams.find(row => row.id === team.id)!.car);\n    expect(loaded.history).toEqual([]);\n    expect(loaded.careerTotals).toEqual({ archivedSeasons: 0, driverTitles: 0, constructorTitles: 0, sinceSeason: raw.season, earlierSeasonsUnknown: false });\n    expect(loaded.nextSeasonPlan).toBeNull();\n    expect(loaded.marketOffers.length).toBeGreaterThan(0);\n    expect(engine.validateSavedCareer(loaded)).toEqual({ ok: true, state: loaded });", priorLegacyAssertion = "    expect(JSON.stringify(loaded), 'GP_STARTER_NEW_DEFAULT_MUST_NOT_MIGRATE_EXISTING_TEAMS').toBe(before);";
 const executedTest = starterTestSource.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\n)\s*\/\/[^\n]*/g, '$1');
 assert.equal(executedTest.split(currentLegacyAssertion).length - 1, 1, 'One executed legacy-shape assertion compatibility span');
@@ -27,7 +31,7 @@ assert.equal(restoredTestCompatibility, starterTestSource, 'Whole test compatibi
 const testCompatibility = { actualSha256: sha(Buffer.from(starterTestSource)), qualifiedBeforeSha256: sha(Buffer.from(beforeTestCompatibility)),
   offset: testOffset, before: priorLegacyAssertion, after: currentLegacyAssertion, restoredSha256: sha(Buffer.from(restoredTestCompatibility)) };
 assert.equal(sha(held.get(FIXTURE)), 'cf3b484781dbff04df9033d0e1dfe239e6d9562f5cf026db2e4b1e233162a028');
-const original = held.get(ENGINE), source = original.toString('utf8');
+const original = held.get(ENGINE), source = fs.readFileSync(path.join(root, ENGINE), 'utf8').replace(/\r\n?/g, '\n');
 const base = path.resolve(process.env.GP_BOSS_STARTER_OUT || path.join(root, 'tmp'));
 fs.mkdirSync(base, { recursive: true });
 const out = fs.mkdtempSync(path.join(base, 'dukb-grand-prix-starter-controls-'));
@@ -101,7 +105,11 @@ function run(name, mode = 'healthy', file = null, marker = null) {
     const directories = fs.readdirSync(cohortDir).filter(name => name.startsWith('dukb-grand-prix-starter-'));
     assert.equal(directories.length, 1);
     cohort = JSON.parse(fs.readFileSync(path.join(cohortDir, directories[0], 'summary.json'), 'utf8'));
-    assert.equal(cohort.sourceSha256, sha(file === null ? original : fs.readFileSync(file)));
+    if (file === null) assert.equal(cohort.sourceSha256, sha(original));
+    else {
+      const actualBytes = fs.readFileSync(file);
+      assert.equal(cohort.sourceSha256, sha(actualBytes));
+    }
     assert.equal(cohort.fixtureSha256, sha(held.get(FIXTURE)));
     assert.deepEqual({ ...cohort.counts, admittedStates: 0 }, { naturalPairs: 256, seasons: 96, seasonRaces: 1152, totalRaces: 1664, admittedStates: 0 });
     assert(Number.isSafeInteger(cohort.counts.admittedStates) && cohort.counts.admittedStates > 0);
@@ -111,7 +119,10 @@ function run(name, mode = 'healthy', file = null, marker = null) {
     detectedRuntimeError, rawErrors: report.errors ?? null, rawUnhandledErrors: report.unhandledErrors ?? null, cohort };
   results.push(result);
   fs.writeFileSync(path.join(out, name + '.summary.json'), JSON.stringify(result, null, 2));
-  for (const [heldFile, bytes] of held) assert.equal(sha(fs.readFileSync(path.join(root, heldFile))), sha(bytes), name + ': actual input held');
+  for (const [heldFile, bytes] of held) {
+    const actualBytes = fs.readFileSync(path.join(root, heldFile));
+    assert.equal(sha(actualBytes), sha(bytes), name + ': actual input held');
+  }
   console.log(name + ': ' + expected.passed + ' passes, ' + expected.failed + ' owned assertions, ' + expected.skipped + ' declared skips.');
 }
 try {
@@ -136,7 +147,10 @@ try {
     try { fs.writeFileSync(candidate, control.changed); run(name, 'selected', candidate, marker); }
     finally {
       fs.writeFileSync(candidate, original); assert.equal(sha(fs.readFileSync(candidate)), sha(original));
-      fs.writeFileSync(path.join(out, name + '-restore.json'), JSON.stringify({ copySha256: sha(fs.readFileSync(candidate)), actualSha256: sha(fs.readFileSync(path.join(root, ENGINE))) }, null, 2));
+      {
+        const actualBytes = fs.readFileSync(path.join(root, ENGINE));
+        fs.writeFileSync(path.join(out, name + '-restore.json'), JSON.stringify({ copySha256: sha(fs.readFileSync(candidate)), actualSha256: sha(actualBytes) }, null, 2));
+      }
     }
   }
   run('restored-copy', 'healthy', candidate);
@@ -146,7 +160,11 @@ try {
   fs.writeFileSync(path.join(out, 'summary.json'), JSON.stringify({ scope: 'Measured starter opportunity and actual captured-save preservation only. No market, rollover, hook, route or full-game readiness claim.', childRuns: 7, executed: 31, totals, results }, null, 2));
   console.log('simGrandPrixBossStarterBalance: 22 passes, 9 owned assertions, 18 declared unselected skips; 31 executed outcomes.');
 } finally {
-  const after = [...held].map(([file]) => { const bytes = fs.readFileSync(path.join(root, file)); return { file, bytes: bytes.length, sha256: sha(bytes) }; });
+  const after = [];
+  for (const [file] of held) {
+    const bytes = fs.readFileSync(path.join(root, file));
+    after.push({ file, bytes: bytes.length, sha256: sha(bytes) });
+  }
   fs.writeFileSync(path.join(out, 'source-after.json'), JSON.stringify(after, null, 2));
   assert.deepEqual(after, receipts());
   console.log('Grand Prix Boss starter evidence: ' + out);

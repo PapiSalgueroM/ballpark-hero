@@ -12,10 +12,14 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOOK = 'src/hooks/useGrandPrixBoss.ts', TEST = 'src/test/grandPrixBossMarketSave.test.tsx';
 const OLD = 'scripts/qa/source-controls/useGrandPrixBoss.before-market.ts.txt';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
-const held = new Map([HOOK, TEST, OLD, 'src/test/grandPrixBossSave.test.tsx', 'src/lib/grandPrixBoss.ts', 'src/lib/saveFence.ts', 'src/hooks/useSaveFenceWatch.ts', 'src/lib/completions.ts', 'src/lib/keyedRng.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'].map(file => [file, fs.readFileSync(path.join(root, file))]));
+const held = new Map();
+for (const file of [HOOK, TEST, OLD, 'src/test/grandPrixBossSave.test.tsx', 'src/lib/grandPrixBoss.ts', 'src/lib/saveFence.ts', 'src/hooks/useSaveFenceWatch.ts', 'src/lib/completions.ts', 'src/lib/keyedRng.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts']) {
+  const bytes = fs.readFileSync(path.join(root, file));
+  held.set(file, Buffer.from(bytes));
+}
 assert.equal(sha(held.get(TEST)), 'c6a64b60b25770a3ab38bd7bb2749809fc266302ffcdd5cbe8661673991e83b9');
 assert.equal(sha(held.get(OLD)), 'b2024f84b91cec4d263772b906b8adeb6903c0a2e5eef5ab3bf878b5b9484298');
-const source = held.get(HOOK).toString('utf8');
+const source = fs.readFileSync(path.join(root, HOOK), 'utf8').replace(/\r\n?/g, '\n');
 const hookUndoSteps = [
   {
     "expectedAfter": null,
@@ -110,7 +114,10 @@ function run(name, mode = 'healthy', file = null, selected = null) {
   const row = { name, rawExit: child.status, passed: expected.passed, ownedFailures: expected.failed, declaredSkips: expected.skipped, runtimeCounters,
     runtimeCounterCompleteness: Object.values(runtimeCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED', detectedRuntimeError };
   results.push(row); fs.writeFileSync(path.join(out, name + '.summary.json'), JSON.stringify(row, null, 2));
-  for (const [file, bytes] of held) assert.equal(sha(fs.readFileSync(path.join(root, file))), sha(bytes), name + ': actual source held');
+  for (const [file, bytes] of held) {
+    const actualBytes = fs.readFileSync(path.join(root, file));
+    assert.equal(sha(actualBytes), sha(bytes), name + ': actual source held');
+  }
   console.log(name + ': ' + row.passed + ' passes, ' + row.ownedFailures + ' owned assertions, ' + row.declaredSkips + ' declared skips.');
 }
 function control(name, before, after, id) {
@@ -136,7 +143,11 @@ try {
   fs.writeFileSync(path.join(out, 'summary.json'), JSON.stringify({ scope: 'Contract save messages and real persistence boundaries only. No rollover, page, route or full-game readiness.', childRuns: 6, totalExecuted: 18, totals, results }, null, 2));
   console.log('simGrandPrixBossMarketSave: 12 passes, 6 owned assertions, 6 declared skips; 18 executed outcomes.');
 } finally {
-  const after = [...held].map(([file]) => { const bytes = fs.readFileSync(path.join(root, file)); return { file, bytes: bytes.length, sha256: sha(bytes) }; });
+  const after = [];
+  for (const [file] of held) {
+    const bytes = fs.readFileSync(path.join(root, file));
+    after.push({ file, bytes: bytes.length, sha256: sha(bytes) });
+  }
   fs.writeFileSync(path.join(out, 'source-after.json'), JSON.stringify(after, null, 2)); assert.deepEqual(after, receipts());
   console.log('Grand Prix Boss market save evidence: ' + out);
 }
