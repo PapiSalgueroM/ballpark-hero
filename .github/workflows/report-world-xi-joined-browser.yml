@@ -1,7 +1,7 @@
-name: World XI joined modes and isolated recovery browser proof
+name: World XI isolated recovery timer witness browser proof
 on:
   push:
-    branches: [codex/report-world-xi-joined-browser-20261102]
+    branches: [codex/report-world-xi-joined-browser-recovery-v2-20261102]
 permissions:
   contents: read
   actions: read
@@ -26,19 +26,19 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Bind the qualified product and exact six QA paths
+      - name: Bind the qualified product and exact two QA paths
         run: |
           set -euo pipefail
           out="$WORLD_XI_ROUTE_OUT"; mkdir "$out"
-          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-joined-browser-20261102
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-joined-browser-recovery-v2-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = d189a93ff13ab9daeeb67b4a6f16fae7d194d43d
+          test "$(git rev-parse HEAD^)" = 4ebb9c66d9f2d3e9f1d8fcdb05dc38f255022e83
           git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
           git diff --exit-code HEAD^ -- src public scripts/data index.html package.json package-lock.json
-          printf '%s\n' .github/workflows/report-world-xi-joined-browser.yml scripts/qa/fixtures/worldXiRecovery.entry.tsx scripts/qa/fixtures/worldXiRecovery938.ts scripts/qa/fixtures/worldXiRecoveryBoundary.ts scripts/qa/playWorldXiRecovery.mjs scripts/qa/playWorldXiRoute.mjs | sort > "$out/expected-paths.txt"
+          printf '%s\n' .github/workflows/report-world-xi-joined-browser.yml scripts/qa/playWorldXiRecovery.mjs | sort > "$out/expected-paths.txt"
           git diff --name-only HEAD^ HEAD | sort > "$out/changed-paths.txt"
           cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
-          printf 'ebd9d5924fd73fd1a4064350b7295e2f223bdad90cb1d6318f21d53590e6ec4a  scripts/qa/playWorldXiRoute.mjs\n1758ac5335629aff99c4954018d11229f45a2de189aa5677e44deabe2adf1476  scripts/qa/playWorldXiRecovery.mjs\n941f15666ca88444ff46d46e64bc3cf2900d4aae694067b3da1edc87c1045a63  scripts/qa/fixtures/worldXiRecovery938.ts\na2804960ff52b30534461dad3192c4d06a488d0ea07b65a0c499c8d9218b0e42  scripts/qa/fixtures/worldXiRecoveryBoundary.ts\n9e96f9c6b1c0edc77fadd285d642bfc8a1cf4d414553dc233929f71f42d0c490  scripts/qa/fixtures/worldXiRecovery.entry.tsx\n4569d859387827a09d1009e1ff2efa31a96fd47ad7c717e6f3dd747495d09f2e  src/pages/WorldXi.tsx\n69b1e153b0f6b52d58008847d5d4267b3a0e321437b2b77b892302834e4d47e2  src/lib/worldXiNationPools.ts\nfa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe  src/lib/worldXi.ts\nbe5f1f5be7bd0dfd031040427e7d42b113b8b72b438881864b72305e956b8640  src/data/gameContent/soccer1.ts\nc8bd6d5ebf2610a34eda085224ae087293162b1fda6d4b7d03ae51d77e369684  src/integrations/supabase/client.ts\n' | sha256sum --check -
+          printf 'ebd9d5924fd73fd1a4064350b7295e2f223bdad90cb1d6318f21d53590e6ec4a  scripts/qa/playWorldXiRoute.mjs\n9e4cdb5a4c3cbe0d12372a8a2988d31569d39866b8d1eae7773c57473b6af5c6  scripts/qa/playWorldXiRecovery.mjs\n941f15666ca88444ff46d46e64bc3cf2900d4aae694067b3da1edc87c1045a63  scripts/qa/fixtures/worldXiRecovery938.ts\na2804960ff52b30534461dad3192c4d06a488d0ea07b65a0c499c8d9218b0e42  scripts/qa/fixtures/worldXiRecoveryBoundary.ts\n9e96f9c6b1c0edc77fadd285d642bfc8a1cf4d414553dc233929f71f42d0c490  scripts/qa/fixtures/worldXiRecovery.entry.tsx\n4569d859387827a09d1009e1ff2efa31a96fd47ad7c717e6f3dd747495d09f2e  src/pages/WorldXi.tsx\n69b1e153b0f6b52d58008847d5d4267b3a0e321437b2b77b892302834e4d47e2  src/lib/worldXiNationPools.ts\nfa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe  src/lib/worldXi.ts\nbe5f1f5be7bd0dfd031040427e7d42b113b8b72b438881864b72305e956b8640  src/data/gameContent/soccer1.ts\nc8bd6d5ebf2610a34eda085224ae087293162b1fda6d4b7d03ae51d77e369684  src/integrations/supabase/client.ts\n' | sha256sum --check -
           git ls-files -z > "$out/source-members.before"
           git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
           cat > "$out/capture.sh" <<'CAPTURE'
@@ -136,17 +136,6 @@ jobs:
           capture build npm run build
           find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"
           test ! -s "$out/font-cache-misses.jsonl"
-      - name: Actual built route, three native archived mode contexts
-        if: ${{ !cancelled() && steps.types.outcome == 'success' && steps.archive.outcome == 'success' && steps.tools.outcome == 'success' && steps.build.outcome == 'success' }}
-        run: |
-          set -euo pipefail
-          out="$WORLD_XI_ROUTE_OUT"; source "$out/capture.sh"
-          export SIM_NETWORK=offline
-          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
-          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/route-server.log" 2>&1 &
-          host_pid=$!; trap 'kill "$host_pid" 2>/dev/null || true' EXIT
-          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
-          capture actual-route env BASE=http://127.0.0.1:4173 node scripts/qa/playWorldXiRoute.mjs
       - name: Separate actual-page fictional938 recovery component
         if: ${{ !cancelled() && steps.types.outcome == 'success' && steps.archive.outcome == 'success' && steps.tools.outcome == 'success' && steps.build.outcome == 'success' }}
         run: |
@@ -168,6 +157,6 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: world-xi-joined-browser-${{ github.run_id }}
+          name: world-xi-joined-browser-recovery-${{ github.run_id }}
           path: ${{ github.workspace }}/world-xi-route-artifacts/
           retention-days: 14

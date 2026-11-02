@@ -78,7 +78,7 @@ const fonts = new Map(JSON.parse(fs.readFileSync(path.join(fontRoot, 'manifest.j
 }));
 assert(fonts.has(href(fontTags[0])), 'The actual font stylesheet is held');
 const row = { scope: 'Compiled actual-page fictional938 component proof only. Exact unit RNG tape is confined here; no real roster, SDK, site-route or global chrome claim.',
-  reads: [], completions: [], picks: [], widths: [], screenshots: [], routeErrors: [], pageErrors: [], consoleErrors: [], unexpected: [], writes: [], served: [], recovery: null };
+  reads: [], completions: [], picks: [], widths: [], screenshots: [], routeErrors: [], pageErrors: [], consoleErrors: [], unexpected: [], writes: [], served: [], recovery: null, timerWitnesses: [] };
 const browser = await chromium.launch({ args: ['--no-sandbox'] }); let context, primary = null;
 const cleanupErrors = [];
 function validate(value) {
@@ -143,8 +143,20 @@ try {
   const input = page.getByRole('textbox', { name: 'Name a player for this slot', exact: true });
   const prompt = async () => { const text = (await page.getByText(/^Name a player from /).innerText()).replace(/\s+/g, ' '), match = text.match(/^Name a player from (.+) who can play ([A-Z]+)\./); assert(match); return { country: match[1], slot: match[2] }; };
   const filled = async () => Number((await page.getByText(/^Filled \d+\/11$/).innerText()).match(/\d+/)[0]);
+  const timerSelector = 'svg.lucide-timer';
+  const readTimer = async stage => {
+    const icons = page.locator(timerSelector), count = await icons.count();
+    const observed = count === 1 ? await icons.locator('..').evaluate(element => ({ tag: element.tagName,
+      textContent: element.textContent, innerText: element.innerText,
+      childTextNodes: [...element.childNodes].map(node => ({ type: node.nodeType, name: node.nodeName, text: node.textContent })),
+      observedAtMs: performance.now() })) : null;
+    row.timerWitnesses.push({ stage, count, observed });
+    assert.equal(count, 1, 'One actual playing countdown icon'); assert.equal(observed.tag, 'SPAN', 'Actual countdown parent is a span');
+    const match = observed.textContent.trim().match(/^(\d+)s$/);
+    assert(match, 'Actual countdown has exact numeric lowercase-s text'); return Number(match[1]);
+  };
   const board = async () => ({ ...await prompt(), filled: await filled(), paid: await page.getByRole('button', { name: 'Respin nation (0 left)', exact: true }).innerText(),
-    timer: Number((await page.getByText(/^\d+s$/).innerText()).match(/\d+/)[0]), ...await page.evaluate(() => {
+    timer: await readTimer('board'), ...await page.evaluate(() => {
       const pitches = [...document.querySelectorAll('div')].filter(node => [...node.children].filter(child => child instanceof HTMLElement && child.style.left && child.style.top).length === 11);
       if (pitches.length !== 1) throw new Error('One actual eleven-slot fixture pitch');
       return { slots: [...pitches[0].children].filter(child => child instanceof HTMLElement && child.style.left && child.style.top).map(child => ({ left: child.style.left, top: child.style.top, html: child.innerHTML })), scrollY: window.scrollY,
@@ -152,6 +164,8 @@ try {
     }) });
   const pick = async player => { const beforeFilled = await filled(); await input.fill(player.name); const name = `${player.position} ${player.name} ${player.club}`.replace(/\s+/g, ' ').trim(); await click(page.getByRole('button', { name, exact: true })); await page.waitForFunction(count => [...document.querySelectorAll('span')].some(node => node.textContent?.replace(/\s+/g, ' ').trim() === `Filled ${count}/11`) || !![...document.querySelectorAll('h2')].find(node => node.textContent === 'World XI complete!'), beforeFilled + 1); const completed = await page.getByText('World XI complete!', { exact: true }).isVisible(); row.picks.push({ name: player.name, club: player.club, country: player.country, beforeFilled, afterFilled: completed ? null : await filled(), completed }); };
   await page.goto(origin + '/world-xi-recovery', { waitUntil: 'domcontentloaded' }); await page.getByRole('button', { name: 'Draw my 11 nations', exact: true }).waitFor();
+  const bootObserved = await page.evaluate(() => window.__WORLD_XI_FICTIONAL_OBSERVATIONS__());
+  for (const key of ['reads', 'completions', 'originalRows', 'currentRows']) row[key] = bootObserved[key];
   await page.evaluate(() => document.fonts.ready); await width('setup'); await shot('setup');
   await click(page.getByRole('button', { name: 'How to play', exact: true })); const dialog = page.getByRole('dialog', { name: 'How to play', exact: true }); await dialog.waitFor(); assert((await dialog.innerText()).includes('Replace empty nation (free)')); await click(dialog.getByRole('button', { name: "Let's Play!", exact: true })); await dialog.waitFor({ state: 'hidden' });
   await click(page.getByRole('button', { name: 'Expanded', exact: true })); await click(page.getByRole('button', { name: formation.name, exact: true })); await click(page.getByRole('button', { name: 'None', exact: true })); await click(page.getByRole('button', { name: /^90 seconds/ }));
@@ -159,7 +173,12 @@ try {
   row.native = await page.evaluate(() => ({ date: /\[native code\]/.test(Date.now.toString()), performance: /\[native code\]/.test(performance.now.toString()), reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches, tape: Math.random.name === 'worldXiFixtureTape' && Math.random() === .999999 }));
   row.initialInputFocus = await input.evaluate(element => document.activeElement === element);
   for (let at = 0; at < 9; at++) { const current = await prompt(); assert.equal(current.country, expectedDraw[at]); assert.equal(current.slot, formation.slots[at].label); const player = pool.byCountry.get(current.country).find(player => fits(player, formation.slots[at]) && !row.picks.some(old => old.name === player.name)); assert(player); await pick(player); }
-  await input.fill(rules.SHARED); await page.waitForFunction(() => [...document.querySelectorAll('span')].some(node => /^([1-8]?\d)s$/.test(node.textContent?.trim() ?? '') && Number(node.textContent.trim().slice(0, -1)) <= 87));
+  await input.fill(rules.SHARED); await readTimer('before-countdown-wait');
+  await page.waitForFunction(selector => {
+    const icons = document.querySelectorAll(selector), span = icons.length === 1 ? icons[0].parentElement : null;
+    const match = span?.tagName === 'SPAN' ? span.textContent?.trim().match(/^(\d+)s$/) : null;
+    return !!match && Number(match[1]) <= 87;
+  }, timerSelector);
   const free = page.getByRole('button', { name: 'Replace empty nation (free)', exact: true }); await free.scrollIntoViewIfNeeded();
   const button = await free.evaluate(element => { const box = element.getBoundingClientRect(), hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2); return { height: box.height, width: box.width, hit: !!hit && (hit === element || element.contains(hit)) }; });
   await width('foundation'); await shot('foundation');
