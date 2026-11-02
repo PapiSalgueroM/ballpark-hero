@@ -1,0 +1,415 @@
+name: World XI final generated outputs and full gates
+on:
+  push:
+    branches: [codex/report-world-xi-generated-gates-20261102]
+permissions:
+  contents: read
+jobs:
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      WORLD_XI_OUT: ${{ github.workspace }}/world-xi-final-unit-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind source and locked dependencies
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"; mkdir "$out"
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-generated-gates-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = d189a93ff13ab9daeeb67b4a6f16fae7d194d43d
+          git diff --name-only HEAD^ HEAD > "$out/workflow-paths.txt"
+          printf '%s\n' '.github/workflows/report-world-xi-generated-gates.yml' > "$out/expected-workflow-paths.txt"
+          cmp "$out/expected-workflow-paths.txt" "$out/workflow-paths.txt"
+          test "$(git rev-parse HEAD:scripts/sweepWeight.mjs)" = 5a92a68cc0225d5e633c19e041087e7c6c4254e8
+          test "$(git rev-parse HEAD:scripts/genSearchKeywords.mjs)" = d0a237a766215631a81d7cd6789f1fa632d3f9b7
+          test "$(git rev-parse HEAD:scripts/simGuideHeadings.mjs)" = fa23f7e6ace62d8e71e3585ab6afbe4dbef0f674
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          printf 'fa46ab78100b777fd4ea834cb8c9ea673b9149edacdadc49f34918c1e58e0cbe  src/lib/worldXi.ts\nb393eb0edeb096925eca9c578abeb973743dffabc0b47a462ec9c7a1a9f1bd6c  src/test/worldXiRosterDepth.test.ts\n3d7d5d153cc21e8b62ae0582489c2151077851821289a244c0ada8e422253dfd  scripts/simWorldXiRosterDepth.mjs\n' | sha256sum -c -
+          git diff --exit-code HEAD^ HEAD -- scripts/sweepWeight.mjs scripts/genSearchKeywords.mjs scripts/simGuideHeadings.mjs src/lib/positionFit.ts src/lib/squadShape.ts src/integrations/supabase/client.ts
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$WORLD_XI_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$WORLD_XI_OUT/$tag.argv"
+            : > "$WORLD_XI_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$WORLD_XI_OUT/$tag.transport" "$@" > "$WORLD_XI_OUT/$tag.stdout" 2> "$WORLD_XI_OUT/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$WORLD_XI_OUT/$tag.exit"
+            tail -n 6 "$WORLD_XI_OUT/$tag.stdout"; tail -n 6 "$WORLD_XI_OUT/$tag.stderr"
+            test ! -s "$WORLD_XI_OUT/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types loader controls and existing offline World XI simulations
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$WORLD_XI_OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture loader env WORLD_XI_ROSTER_OUT="$WORLD_XI_OUT/loader-proof" node scripts/simWorldXiRosterDepth.mjs
+          capture season-report node scripts/simWorldXiReport.mjs
+          capture season-detail node scripts/simWorldXiSeasonReport.mjs
+          capture existing-pages node node_modules/vitest/vitest.mjs run src/test/worldXiRespins.test.tsx src/test/worldXiSummary.test.tsx --reporter=verbose --reporter=json --outputFile="$WORLD_XI_OUT/existing-pages.json" --maxWorkers=1 --no-file-parallelism
+      - name: Full ordinary unit suite
+        timeout-minutes: 60
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$WORLD_XI_OUT/capture.sh"
+          capture all-units node node_modules/vitest/vitest.mjs run --reporter=verbose --reporter=json --outputFile="$WORLD_XI_OUT/all-units.json" --maxWorkers=2 --no-file-parallelism
+          node --input-type=module <<'CHECK'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out=process.env.WORLD_XI_OUT,r=JSON.parse(fs.readFileSync(out+'/all-units.json','utf8'));
+          const raw=fs.readFileSync(out+'/all-units.stdout','utf8')+'\n'+fs.readFileSync(out+'/all-units.stderr','utf8');
+          assert.equal(Number(fs.readFileSync(out+'/all-units.exit','utf8')),0);assert.equal(r.success,true);assert.equal(r.numFailedTests,0);assert(r.numPassedTests>=34);
+          const expected=new Map([['src/test/worldXiNationPools.test.ts',8],['src/test/worldXiNations.test.tsx',2],['src/test/worldXiRespins.test.tsx',3],['src/test/worldXiSummary.test.tsx',4],['src/test/worldXiRosterDepth.test.ts',12],['src/test/worldXiRecovery.test.tsx',5]]);
+          const cases=[];
+          for(const [file,count] of expected){const suites=r.testResults.filter(suite=>suite.name.endsWith('/'+file));assert.equal(suites.length,1);assert.equal(suites[0].assertionResults.length,count);for(const row of suites[0].assertionResults){assert.equal(row.status,'passed');assert.equal(row.failureMessages.length,0);cases.push({file,title:row.title,status:row.status});}}
+          assert.equal(cases.length,34);
+          const counters={numUnhandledErrors:r.numUnhandledErrors??null,numRuntimeErrorTestSuites:r.numRuntimeErrorTestSuites??null};
+          for(const [key,count] of Object.entries(counters)){if(count===null)continue;assert.equal(typeof count,'number');assert.equal(count,0,key);}
+          for(const errors of[r.errors,r.unhandledErrors])if(Array.isArray(errors))assert.equal(errors.length,0);
+          const detectedRuntimeError=/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw);assert.equal(detectedRuntimeError,false);
+          fs.writeFileSync(out+'/ordinary-unit-summary.json',JSON.stringify({scope:'Full ordinary unit suite on held qualified World source. Existing declared skips are recorded, not assumed zero.',success:r.success,physicalFiles:r.testResults.length,total:r.numTotalTests,passed:r.numPassedTests,failed:r.numFailedTests,pending:r.numPendingTests??null,todo:r.numTodoTests??null,runtimeCounters:counters,runtimeCounterCompleteness:Object.values(counters).some(v=>v===null)?'UNKNOWN':'REPORTED',detectedRuntimeError,rawErrorFields:{errors:r.errors??null,unhandledErrors:r.unhandledErrors??null},ownedWorldCases:34,cases},null,2));
+          CHECK
+      - name: End source and dependency holds
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum -c "$out/dependency-files.sha256" > "$out/dependency-hold.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/working-source-hold.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world-xi-final-units-${{ github.run_id }}
+          path: world-xi-final-unit-artifacts/
+          retention-days: 14
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PRERENDER_ONLY: /world-xi
+      WORLD_XI_OUT: ${{ github.workspace }}/world-xi-final-build-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind source and generated boundaries
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"; mkdir "$out"
+          test "$GITHUB_REF" = refs/heads/codex/report-world-xi-generated-gates-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = d189a93ff13ab9daeeb67b4a6f16fae7d194d43d
+          git diff --name-only HEAD^ HEAD > "$out/workflow-paths.txt"
+          printf '%s\n' '.github/workflows/report-world-xi-generated-gates.yml' > "$out/expected-workflow-paths.txt"
+          cmp "$out/expected-workflow-paths.txt" "$out/workflow-paths.txt"
+          test "$(git rev-parse HEAD:scripts/sweepWeight.mjs)" = 5a92a68cc0225d5e633c19e041087e7c6c4254e8
+          test "$(git rev-parse HEAD:scripts/genSearchKeywords.mjs)" = d0a237a766215631a81d7cd6789f1fa632d3f9b7
+          test "$(git rev-parse HEAD:scripts/simGuideHeadings.mjs)" = fa23f7e6ace62d8e71e3585ab6afbe4dbef0f674
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          git ls-files -z > "$out/source-members.before"
+          while IFS= read -r -d '' file; do
+            case "$file" in public/world-xi/index.html|public/sitemap.xml|scripts/data/lastmod.json|src/data/searchKeywords.json|scripts/data/guideHeadingsFrozen.json) continue;; esac
+            sha256sum "$file"
+          done < "$out/source-members.before" > "$out/immutable-source.sha256"
+          cp scripts/data/guideHeadingsFrozen.json "$out/guide-before.json"
+          cp scripts/data/lastmod.json "$out/lastmod-before.json"
+          cp src/data/searchKeywords.json "$out/search-before.json"
+          git diff --exit-code HEAD^ HEAD -- scripts/sweepWeight.mjs scripts/genSearchKeywords.mjs scripts/simGuideHeadings.mjs src/lib/positionFit.ts src/lib/squadShape.ts src/integrations/supabase/client.ts
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$WORLD_XI_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$WORLD_XI_OUT/$tag.argv"
+            : > "$WORLD_XI_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$WORLD_XI_OUT/$tag.transport" "$@" > "$WORLD_XI_OUT/$tag.stdout" 2> "$WORLD_XI_OUT/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$WORLD_XI_OUT/$tag.exit"
+            tail -n 6 "$WORLD_XI_OUT/$tag.stdout"; tail -n 6 "$WORLD_XI_OUT/$tag.stderr"
+            test ! -s "$WORLD_XI_OUT/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+      - name: Locked app isolated pinned browser Python and held fonts
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"; source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+          browser_tools="$RUNNER_TEMP/world-xi-generated-tools"; test ! -e "$browser_tools"; mkdir "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          capture browser-install env NODE_OPTIONS='' npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$out/browser-package.json"; cp "$browser_tools/package-lock.json" "$out/browser-package-lock.json"
+          capture chromium env NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m venv "$browser_tools/python"
+          capture python-fonts "$browser_tools/python/bin/python" -m pip install fonttools==4.60.1 Pillow==11.3.0
+          "$browser_tools/python/bin/python" -m pip freeze > "$out/python-packages.txt"
+          echo "$browser_tools/python/bin" >> "$GITHUB_PATH"
+          capture font-prefetch env NODE_OPTIONS='' FREE_KICK_FONT_CACHE="$out/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-files.sha256"
+          cat > "$out/cached-fonts.cjs" <<'FONTS'
+          'use strict';
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const out=process.env.WORLD_XI_OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const manifest=JSON.parse(fs.readFileSync(path.join(out,'font-cache/manifest.json'),'utf8'));
+          const cache=new Map(manifest.map(row=>{const body=fs.readFileSync(path.join(out,'font-cache',row.file));assert.equal(sha(body),row.sha256);return[row.url,{body,contentType:row.contentType,sha256:row.sha256}];}));
+          const pw=require(path.join(process.cwd(),'node_modules/playwright'));
+          const launch=pw.chromium.launch.bind(pw.chromium);
+          pw.chromium.launch=async(...args)=>{
+            const browser=await launch(...args),newContext=browser.newContext.bind(browser);
+            browser.newContext=async(...options)=>{
+              const context=await newContext(...options);
+              await context.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//,async route=>{
+                const url=route.request().url(),row=cache.get(url);
+                if(!row){fs.appendFileSync(path.join(out,'font-cache-misses.jsonl'),JSON.stringify({url})+'\n');return route.abort();}
+                fs.appendFileSync(path.join(out,'font-cache-use.jsonl'),JSON.stringify({url,sha256:row.sha256})+'\n');
+                return route.fulfill({status:200,body:row.body,contentType:row.contentType});
+              });
+              await context.route(/^https:\/\/flagcdn\.com\//,route=>{fs.appendFileSync(path.join(out,'blocked-external.jsonl'),JSON.stringify({kind:'flag',url:route.request().url()})+'\n');return route.abort();});
+              await context.route(/^https:\/\/[^/]+\.supabase\.co\//,route=>{fs.appendFileSync(path.join(out,'blocked-external.jsonl'),JSON.stringify({kind:'database',url:route.request().url()})+'\n');return route.abort();});
+              return context;
+            };
+            return browser;
+          };
+          FONTS
+          sha256sum "$out/cached-fonts.cjs" > "$out/cached-fonts.sha256"
+      - name: Actual types current guide unchanged search generator and World-only snapshot outputs
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"; source "$out/capture.sh"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/cached-fonts.cjs"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture guide-refresh node scripts/simGuideHeadings.mjs --refresh /world-xi
+          capture search-refresh node scripts/genSearchKeywords.mjs
+          capture build-seo npm run build:seo
+          cat > "$out/guard-generated.mjs" <<'GENERATED'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          import { pathToFileURL } from 'node:url';
+          
+          const root = process.cwd(), out = process.env.WORLD_XI_OUT, route = '/world-xi';
+          const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+          const readJson = file => JSON.parse(fs.readFileSync(file, 'utf8'));
+          const clone = value => structuredClone(value);
+          const allowed = ['public/world-xi/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'src/data/searchKeywords.json', 'scripts/data/guideHeadingsFrozen.json'];
+          const changed = execFileSync('git', ['diff', '--name-only', '-z', 'HEAD']).toString().split('\0').filter(Boolean);
+          const scopeGuard = files => assert(files.every(file => allowed.includes(file)), 'WORLD_GENERATED_PATH_BOUNDARY');
+          scopeGuard(changed);
+          
+          // The real unchanged generator ran first. This diagnostic exposes its own model;
+          // only module location and output seams change, and its result must be identical.
+          const generatorPath = path.join(root, 'scripts/genSearchKeywords.mjs');
+          const sourceBytes = fs.readFileSync(generatorPath), source = sourceBytes.toString('utf8');
+          const diagnosticFile = path.join(out, 'search-diagnostic.mjs'), diagnosticOutput = path.join(out, 'search-diagnostic.json');
+          const seams = [
+            ["import { writeFileAtomic } from './lib/atomicWrite.mjs';", 'import { writeFileAtomic } from ' + JSON.stringify(pathToFileURL(path.join(root, 'scripts/lib/atomicWrite.mjs')).href) + ';'],
+            ["const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');", 'const ROOT = ' + JSON.stringify(root) + ';'],
+            ["const OUT = path.join(ROOT, 'src/data/searchKeywords.json');", 'const OUT = ' + JSON.stringify(diagnosticOutput) + ';'],
+          ];
+          let diagnostic = source;
+          const edits = [];
+          for (const [before, after] of seams) {
+            const code = diagnostic.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\n)\s*\/\/[^\n]*/g, '$1');
+            assert.equal(code.split(before).length - 1, 1, 'One executed diagnostic seam');
+            assert.equal(diagnostic.split(before).length - 1, 1, 'One complete diagnostic seam');
+            const offset = diagnostic.indexOf(before);
+            diagnostic = diagnostic.slice(0, offset) + after + diagnostic.slice(offset + before.length);
+            edits.push({ offset, before, after });
+          }
+          const exports = '\nexport { df, N, dfCap, GAME_CONTENT, flatGuide };\n';
+          fs.writeFileSync(diagnosticFile, diagnostic + exports, { flag: 'wx' });
+          assert.notEqual(sha(fs.readFileSync(diagnosticFile)), sha(sourceBytes));
+          let inverse = diagnostic;
+          for (const { offset, before, after } of edits.slice().reverse()) inverse = inverse.slice(0, offset) + before + inverse.slice(offset + after.length);
+          assert.equal(inverse, source, 'Whole diagnostic inverse');
+          const model = await import(pathToFileURL(diagnosticFile).href);
+          assert.deepEqual(fs.readFileSync(generatorPath), sourceBytes, 'Real generator bytes stay held');
+          const actualSearchBytes = fs.readFileSync('src/data/searchKeywords.json'), diagnosticBytes = fs.readFileSync(diagnosticOutput);
+          const generatorGuard = (actual, derived) => assert.deepEqual(actual, derived, 'WORLD_SEARCH_GENERATOR_BYTES');
+          generatorGuard(actualSearchBytes, diagnosticBytes);
+          fs.writeFileSync(path.join(out, 'search-diagnostic-source.json'), JSON.stringify({ originalSha256: sha(sourceBytes), diagnosticSha256: sha(fs.readFileSync(diagnosticFile)), edits,
+            appendedExports: exports, wholeInverseSha256: sha(inverse), actualOutputSha256: sha(actualSearchBytes), diagnosticOutputSha256: sha(diagnosticBytes), documents: model.N, dfCap: model.dfCap }, null, 2) + '\n');
+          
+          const guideBefore = readJson(path.join(out, 'guide-before.json')), guideAfter = readJson('scripts/data/guideHeadingsFrozen.json');
+          const flat = model.flatGuide(model.GAME_CONTENT[route]);
+          const parts = ['howToPlay', 'rules', 'example', 'tips'];
+          const expectedWorld = Object.fromEntries(parts.map(part => { assert(Array.isArray(flat[part]) && flat[part].length); return [part, flat[part]]; }));
+          function guideGuard(after) {
+            assert.deepEqual(Object.keys(after).sort(), Object.keys(guideBefore).sort(), 'WORLD_GUIDE_TOP_KEYS');
+            for (const key of Object.keys(guideBefore)) if (key !== 'routes') assert.deepEqual(after[key], guideBefore[key], 'WORLD_GUIDE_TOP_FIELD');
+            assert.deepEqual(Object.keys(after.routes).sort(), Object.keys(guideBefore.routes).sort(), 'WORLD_GUIDE_ROUTE_KEYS');
+            for (const key of Object.keys(guideBefore.routes)) if (key !== route) assert.deepEqual(after.routes[key], guideBefore.routes[key], 'WORLD_GUIDE_OTHER_ROW');
+            assert.deepEqual(after.routes[route], expectedWorld, 'WORLD_GUIDE_DERIVATION');
+          }
+          guideGuard(guideAfter);
+          assert.notDeepEqual(guideAfter.routes[route], guideBefore.routes[route], 'Actual current World guide differs from the old frozen row');
+          const ledgerBefore = readJson(path.join(out, 'lastmod-before.json')), ledgerAfter = readJson('scripts/data/lastmod.json');
+          function ledgerGuard(after) {
+            assert.deepEqual(Object.keys(after).sort(), Object.keys(ledgerBefore).sort(), 'WORLD_LEDGER_KEYS');
+            for (const key of Object.keys(ledgerBefore)) if (key !== route) assert.deepEqual(after[key], ledgerBefore[key], 'WORLD_LEDGER_OTHER_ROW');
+          }
+          ledgerGuard(ledgerAfter);
+          const searchBefore = readJson(path.join(out, 'search-before.json')), searchAfter = JSON.parse(actualSearchBytes.toString('utf8'));
+          const words = value => value.trim().split(/\s+/).filter(Boolean);
+          function searchGuard(after) {
+            assert.deepEqual(Object.keys(after).sort(), Object.keys(searchBefore).sort(), 'WORLD_SEARCH_TOP_KEYS');
+            assert.equal(after.v, searchBefore.v, 'WORLD_SEARCH_VERSION');
+            assert.deepEqual(Object.keys(after.k).sort(), Object.keys(searchBefore.k).sort(), 'WORLD_SEARCH_ROUTE_KEYS');
+            const changes = [];
+            for (const key of Object.keys(searchBefore.k)) {
+              const before = words(searchBefore.k[key]), current = words(after.k[key]);
+              const removed = before.filter(word => !current.includes(word)), added = current.filter(word => !before.includes(word));
+              if (key !== route) {
+                assert.equal(added.length, 0, 'WORLD_SEARCH_OTHER_ADDITION');
+                for (const word of removed) assert(model.df.get(word) > model.dfCap, 'WORLD_SEARCH_NONCOMMON_REMOVAL');
+              }
+              if (searchBefore.k[key] !== after.k[key]) changes.push({ route: key, before: searchBefore.k[key], after: after.k[key], added, removed,
+                removedDocumentFrequencies: Object.fromEntries(removed.map(word => [word, model.df.get(word) ?? null])) });
+            }
+            return changes;
+          }
+          const searchChanges = searchGuard(searchAfter);
+          
+          const controls = [];
+          function caught(name, original, mutated, run, marker) {
+            assert.notEqual(sha(JSON.stringify(mutated)), sha(JSON.stringify(original)), name + ': control changes copied data');
+            assert.throws(() => run(mutated), error => error instanceof assert.AssertionError && error.message.includes(marker), name + ': exact owned guard refusal');
+            controls.push({ name, marker, originalSha256: sha(JSON.stringify(original)), changedSha256: sha(JSON.stringify(mutated)), ownedRefusal: true });
+          }
+          const otherGuide = Object.keys(guideBefore.routes).find(key => key !== route); assert(otherGuide);
+          const foreignGuide = clone(guideAfter); foreignGuide.routes[otherGuide].howToPlay.push('World copied guard change.');
+          caught('guide-other-row', guideAfter, foreignGuide, guideGuard, 'WORLD_GUIDE_OTHER_ROW');
+          const incompleteWorld = clone(guideAfter); incompleteWorld.routes[route].howToPlay.pop();
+          caught('guide-actual-derivation', guideAfter, incompleteWorld, guideGuard, 'WORLD_GUIDE_DERIVATION');
+          const otherLedger = Object.keys(ledgerBefore).find(key => key !== route); assert(otherLedger);
+          const foreignLedger = clone(ledgerAfter); foreignLedger[otherLedger] = { ...foreignLedger[otherLedger], copiedGuardChange: true };
+          caught('ledger-other-row', ledgerAfter, foreignLedger, ledgerGuard, 'WORLD_LEDGER_OTHER_ROW');
+          const otherSearch = Object.keys(searchBefore.k).find(key => key !== route); assert(otherSearch);
+          const extraSearch = clone(searchAfter); extraSearch.k[otherSearch] += ' worldxiguardtokenzz';
+          caught('search-other-addition', searchAfter, extraSearch, searchGuard, 'WORLD_SEARCH_OTHER_ADDITION');
+          const rare = Object.keys(searchAfter.k).filter(key => key !== route).flatMap(key => words(searchAfter.k[key]).filter(word => words(searchBefore.k[key]).includes(word) && (model.df.get(word) ?? Infinity) <= model.dfCap).map(word => ({ key, word })))[0];
+          assert(rare, 'A real current rare keyword is required for the omission control');
+          const missingRare = clone(searchAfter); missingRare.k[rare.key] = words(missingRare.k[rare.key]).filter(word => word !== rare.word).join(' ');
+          caught('search-rare-omission', searchAfter, missingRare, searchGuard, 'WORLD_SEARCH_NONCOMMON_REMOVAL');
+          caught('generated-path-scope', changed, [...changed, 'src/pages/WorldXi.tsx'], scopeGuard, 'WORLD_GENERATED_PATH_BOUNDARY');
+          const extraBytes = Buffer.concat([diagnosticBytes, Buffer.from(' ')]);
+          assert.notEqual(sha(extraBytes), sha(diagnosticBytes));
+          assert.throws(() => generatorGuard(actualSearchBytes, extraBytes), error => error instanceof assert.AssertionError && error.message.includes('WORLD_SEARCH_GENERATOR_BYTES'));
+          controls.push({ name: 'generator-byte-derivation', marker: 'WORLD_SEARCH_GENERATOR_BYTES', originalSha256: sha(diagnosticBytes), changedSha256: sha(extraBytes), ownedRefusal: true });
+          assert.equal(controls.length, 7);
+          
+          const records = allowed.map(file => {
+            const bytes = fs.readFileSync(file), target = path.join(out, 'generated', file);
+            fs.mkdirSync(path.dirname(target), { recursive: true }); fs.writeFileSync(target, bytes, { flag: 'wx' });
+            return { file, changed: changed.includes(file), bytes: bytes.length, sha256: sha(bytes) };
+          });
+          fs.writeFileSync(path.join(out, 'generated-manifest.json'), JSON.stringify({ allowed, changed, records, guideChangedRoute: route,
+            guideParts: Object.fromEntries(parts.map(part => [part, expectedWorld[part].length])), ledgerChangedRows: Object.keys(ledgerBefore).filter(key => JSON.stringify(ledgerBefore[key]) !== JSON.stringify(ledgerAfter[key])),
+            searchChanges, searchSourceBefore: searchBefore.source, searchSourceAfter: searchAfter.source, dfCap: model.dfCap, controls }, null, 2) + '\n');
+          fs.writeFileSync(path.join(out, 'generated.patch'), execFileSync('git', ['diff', '--binary', 'HEAD']));
+          fs.writeFileSync(path.join(out, 'scope.json'), JSON.stringify({ scope: 'Generated outputs and full established gates on qualified World source only.',
+            sourceWorldNationModesAndRecovery: true, rosterCapture: false, databaseWrites: false, productionTransport: false, routeSelection: false, mobileLayout: false, published: false }, null, 2) + '\n');
+          console.log('WORLD_GENERATED_GUARDS: only five derived paths, current actual World guide, World-only ledger, exact unchanged-generator search with ' + searchChanges.length + ' changed rows; seven effective copied-data refusals.');
+          GENERATED
+          capture generated-boundaries node "$out/guard-generated.mjs"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"
+      - name: Every saved-output reader search guide and unchanged full page caps
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"; source "$out/capture.sh"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/cached-fonts.cjs"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for reader in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            status=0; capture "$reader" env BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$reader.mjs" || status=$?
+            printf '%s\t%s\n' "$reader" "$status" >> "$out/readers.tsv"; test "$status" -eq 0 || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 17
+          capture caps-count node --input-type=module <<'CAPS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+          const body=fs.readFileSync('scripts/sweepWeight.mjs','utf8'),code=body.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|\n)\s*\/\/[^\n]*/g,'$1');
+          const start=code.indexOf('const BUDGETS = [');assert(start>=0);const end=code.indexOf('];',start);assert(end>start);
+          const budgets=[...code.slice(start,end+2).matchAll(/\[\s*(['"])(\/[^'"]*)\1\s*,\s*(\d+)\s*\]/g)].map(match=>({route:match[2],cap:Number(match[3])}));
+          assert.equal(budgets.length,16);assert.equal(new Set(budgets.map(row=>row.route)).size,16);
+          fs.writeFileSync(process.env.WORLD_XI_OUT+'/caps16.json',JSON.stringify({sourceSha256:createHash('sha256').update(body).digest('hex'),budgetCount:16,budgets},null,2));
+          console.log('WORLD_CAPS: all16 unchanged executable budget rows required.');
+          CAPS
+          status=0; capture all-page-caps env BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs || status=$?
+          test "$status" -eq 0 || failed=1
+          test ! -s "$out/font-cache-misses.jsonl" || failed=1
+          test -s "$out/font-cache-use.jsonl" || failed=1
+          exit "$failed"
+      - name: Always retain generated differences and enforce all immutable sources
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$WORLD_XI_OUT"
+          git diff --binary HEAD > "$out/final-generated.patch"
+          git diff --name-status HEAD > "$out/final-changed-paths.txt"
+          for file in public/world-xi/index.html public/sitemap.xml scripts/data/lastmod.json src/data/searchKeywords.json scripts/data/guideHeadingsFrozen.json; do
+            if test -f "$file"; then mkdir -p "$out/final-generated/$(dirname "$file")"; cp "$file" "$out/final-generated/$file"; sha256sum "$file" >> "$out/final-generated.sha256"; fi
+          done
+          sha256sum -c "$out/immutable-source.sha256" > "$out/source-hold.log"
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+          for list in dependency-files browser-files font-files cached-fonts; do if test -f "$out/$list.sha256"; then sha256sum -c "$out/$list.sha256" > "$out/$list-hold.log"; fi; done
+          if test -f "$out/dist.sha256"; then sha256sum -c "$out/dist.sha256" > "$out/dist-hold.log"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world-xi-final-build-${{ github.run_id }}
+          path: world-xi-final-build-artifacts/
+          retention-days: 14
