@@ -1,7 +1,7 @@
 name: Grand Prix Boss management UI focused proof
 on:
   push:
-    branches: [codex/grand-prix-boss-management-ui-fixed-20261102]
+    branches: [codex/grand-prix-boss-management-ui-fixed-v2-20261102]
 permissions:
   contents: read
 jobs:
@@ -23,32 +23,35 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Bind four exact changes and the admitted UI baseline parent
+      - name: Bind five QA compatibility changes and the held UI product parent
         id: prepare
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/grand-prix-management-ui-fixed-artifacts"
           mkdir "$out"
-          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-management-ui-fixed-20261102
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-management-ui-fixed-v2-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = 6b7932f06f1615009faba4ef660be179c2605874
+          test "$(git rev-parse HEAD^)" = 13dc2ea1ae37afb82dbf6b6be61edf01a30e3cf1
           git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
           git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
-          printf '%s\n' '.github/workflows/grand-prix-boss-management-ui-fixed.yml' 'scripts/qa/source-controls/GrandPrixBoss.before-management.tsx.txt' 'scripts/simGrandPrixBossManagement.mjs' 'src/pages/GrandPrixBoss.tsx' > "$out/expected-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-management-ui-fixed.yml' 'scripts/simGrandPrixBossManagement.mjs' 'src/test/fixtures/grandPrixBossV5Starter.json' 'src/test/grandPrixBossHistoryTies.test.ts' 'src/test/grandPrixBossMarket.test.ts' > "$out/expected-paths.txt"
           cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
-          git diff --exit-code HEAD^ -- src/lib src/hooks src/test src/integrations src/App.tsx src/data/gameRegistry.ts package.json package-lock.json vitest.config.ts > "$out/held-parent-paths.log"
+          git diff --exit-code HEAD^ -- src/lib src/hooks src/pages src/integrations src/App.tsx src/data/gameRegistry.ts src/test/grandPrixBoss.test.ts src/test/grandPrixBossRollover.test.ts src/test/grandPrixBossRolloverSave.test.tsx src/test/grandPrixBossPage.test.tsx src/test/grandPrixBossManagementPage.test.tsx src/test/setup.ts package.json package-lock.json vitest.config.ts > "$out/held-parent-paths.log"
           printf '%s\n' \
             '53a400b58a3fe36776ea54dab48961a1479bcbf3c326a3806b711467950d1f18  src/pages/GrandPrixBoss.tsx' \
-            '49b910d4adfd651e2e1d817777b61d024792d2545e95661063c8004bed5b8a4c  scripts/simGrandPrixBossManagement.mjs' \
+            'fafe67e135a8a9dc7d3276f1c66022db8df9e512e4b6b8729c657dcf2f7b1e28  scripts/simGrandPrixBossManagement.mjs' \
             '75299ffcee86f41575e1b3f7769eb3706c81d83868c42eec305925f6171a9c1f  scripts/qa/source-controls/GrandPrixBoss.before-management.tsx.txt' \
             '9565fb9a17489ae21d0b0451cdadede08509ac5fd8d94fbf71ffd88802895af5  src/lib/grandPrixBoss.ts' \
             'f0ec04a26c60db6c4a5b1e4b555a699979a2fdad464e404d0e906f2538b8c23b  src/hooks/useGrandPrixBoss.ts' \
             'e8cc17bd6047a775557632e0984f59cfc385f922d9c80fee0638e6e94b98bb25  src/test/grandPrixBossPage.test.tsx' \
-            '77a3d05742e9621ab6146bfbfe3f5b33f1853b99a12008b66134f0387c351922  src/test/grandPrixBossManagementPage.test.tsx' | sha256sum --check -
+            '77a3d05742e9621ab6146bfbfe3f5b33f1853b99a12008b66134f0387c351922  src/test/grandPrixBossManagementPage.test.tsx' \
+            '72fe3feb2d606c8c4e611a9b33bcb3f9375be22c77537a3a1bdf352477c3d06e  src/test/grandPrixBossMarket.test.ts' \
+            '058dbcb356840517c7b4ef8f02d0c0414de1a8bcb611827061b16478a44a88c6  src/test/grandPrixBossHistoryTies.test.ts' \
+            'cf3b484781dbff04df9033d0e1dfe239e6d9562f5cf026db2e4b1e233162a028  src/test/fixtures/grandPrixBossV5Starter.json' | sha256sum --check -
           test "$(git rev-parse HEAD:scripts/qa/source-controls/GrandPrixBoss.before-management.tsx.txt)" = 96043202c31297b27343274508bc370110761407
           git ls-files -z > "$out/source-members.before"
           git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
-          for file in src/pages/GrandPrixBoss.tsx src/lib/grandPrixBoss.ts src/hooks/useGrandPrixBoss.ts src/test/grandPrixBossPage.test.tsx src/test/grandPrixBossManagementPage.test.tsx scripts/simGrandPrixBossManagement.mjs scripts/qa/source-controls/GrandPrixBoss.before-management.tsx.txt; do
+          for file in src/pages/GrandPrixBoss.tsx src/lib/grandPrixBoss.ts src/hooks/useGrandPrixBoss.ts src/test/grandPrixBossPage.test.tsx src/test/grandPrixBossManagementPage.test.tsx src/test/grandPrixBossMarket.test.ts src/test/grandPrixBossHistoryTies.test.ts src/test/fixtures/grandPrixBossV5Starter.json scripts/simGrandPrixBossManagement.mjs scripts/qa/source-controls/GrandPrixBoss.before-management.tsx.txt; do
             mkdir -p "$out/source/$(dirname "$file")"
             cp "$file" "$out/source/$file"
           done
@@ -146,7 +149,7 @@ jobs:
           assert.equal(detectedRuntimeError, false);
           fs.writeFileSync(out + '/ordinary-summary.json', JSON.stringify({
             scope: 'Seven held F1 engine, rollover-save and page suites only. Original save and market-save suites are absent from this source; no full persistence, build, route or global chrome claim.',
-            parent: '6b7932f06f1615009faba4ef660be179c2605874', rawExit: 0,
+            parent: '13dc2ea1ae37afb82dbf6b6be61edf01a30e3cf1', rawExit: 0,
             passed: 57, ownedAssertionFailures: 0, declaredSkips: 0, totalExecuted: 57,
             runtimeCounters, runtimeCounterCompleteness: Object.values(runtimeCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED',
             detectedRuntimeError, rawErrors: r.errors ?? null, rawUnhandledErrors: r.unhandledErrors ?? null, cases,

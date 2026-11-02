@@ -29,7 +29,12 @@ const base = path.resolve(process.env.GP_BOSS_MANAGEMENT_OUT || os.tmpdir());
 assert(base !== path.join(root, 'src') && !base.startsWith(path.join(root, 'src') + path.sep));
 fs.mkdirSync(base, { recursive: true });
 const out = fs.mkdtempSync(path.join(base, 'dukb-grand-prix-management-'));
-const candidate = path.join(out, 'GrandPrixBoss.tsx'), source = held.get(PAGE).toString('utf8');
+const copyBase = path.join(root, 'tmp');
+fs.mkdirSync(copyBase, { recursive: true });
+const copyDir = fs.mkdtempSync(path.join(copyBase, 'dukb-grand-prix-management-copy-'));
+assert.equal(path.dirname(copyDir), copyBase, 'Owned copied source stays inside the allowed workspace tmp folder');
+const candidate = path.join(copyDir, 'GrandPrixBoss.tsx'), source = held.get(PAGE).toString('utf8');
+fs.writeFileSync(path.join(out, 'copy-location.json'), JSON.stringify({ evidence: out, sourceCopy: candidate, allowedRoot: copyBase }, null, 2));
 const originalIds = ['GP_PAGE_AVAILABLE:', 'GP_PAGE_START:', 'GP_PAGE_HUB:', 'GP_PAGE_UPGRADE:', 'GP_PAGE_ORDERS:',
   'GP_PAGE_STANDINGS:', 'GP_PAGE_BACK:', 'GP_PAGE_MOVED_EMPTY:', 'GP_PAGE_PROTECTED_SAVE:'];
 const ids = ['GP_MANAGEMENT_SIGN:', 'GP_MANAGEMENT_RENEW:', 'GP_MANAGEMENT_NEXT_YEAR:', 'GP_MANAGEMENT_GUARDS:',
@@ -45,18 +50,25 @@ function run(name, selected = null, copied = false, marker = null) {
   const env = { ...process.env, NODE_OPTIONS: '--require=' + path.join(root, 'scripts/lib/offlineTransport.cjs'),
     SIM_OFFLINE_RECEIPT: transport, FORCE_COLOR: '0', NO_COLOR: '1' };
   for (const key of ['GP_BOSS_PAGE_FILE', 'GP_BOSS_HOOK_FILE', 'GP_BOSS_ENGINE_FILE', 'US_BOARD_CONTROL_ALIAS', 'US_BOARD_CONTROL_FILE', 'NO_DOUBLE_SWAP']) delete env[key];
-  if (copied) env.GP_BOSS_PAGE_FILE = candidate;
+  const copyBefore = copied ? fs.readFileSync(candidate) : null;
+  if (copied) {
+    assert.equal(path.dirname(candidate), copyDir);
+    assert(copyBefore.length > 0, name + ': physical source copy exists before import');
+    env.GP_BOSS_PAGE_FILE = candidate;
+  }
   const targets = selected ? [TEST] : [ORIGINAL, TEST];
   const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', ...targets, '--maxWorkers=1', '--minWorkers=1',
     '--no-file-parallelism', '--reporter=verbose', '--reporter=json', '--outputFile=' + reportFile];
   if (selected) args.push('--testNamePattern=' + selected);
   fs.writeFileSync(transport, '');
-  fs.writeFileSync(path.join(out, name + '.argv.json'), JSON.stringify({ command: process.execPath, args, pageCopy: copied ? candidate : null }, null, 2));
+  fs.writeFileSync(path.join(out, name + '.argv.json'), JSON.stringify({ command: process.execPath, args, pageCopy: copied ? candidate : null, pageCopyBytes: copyBefore?.length ?? null, pageCopySha256: copyBefore ? sha(copyBefore) : null }, null, 2));
   const child = spawnSync(process.execPath, args, { cwd: root, env, encoding: 'utf8', timeout: 240000, maxBuffer: 32 * 1024 * 1024 });
   fs.writeFileSync(path.join(out, name + '.stdout'), child.stdout || '');
   fs.writeFileSync(path.join(out, name + '.stderr'), child.stderr || '');
   fs.writeFileSync(path.join(out, name + '.exit.json'), JSON.stringify({ status: child.status, signal: child.signal, error: child.error ? { name: child.error.name, message: child.error.message } : null }, null, 2));
-  hold(); assert.ifError(child.error); assert.equal(child.signal, null); assert.equal(child.status, selected ? 1 : 0);
+  hold();
+  if (copyBefore) assert.deepEqual(fs.readFileSync(candidate), copyBefore, name + ': exact physical copy bytes held during child');
+  assert.ifError(child.error); assert.equal(child.signal, null); assert.equal(child.status, selected ? 1 : 0);
   assert.equal(fs.statSync(transport).size, 0, name + ': no attempted network');
   const r = JSON.parse(fs.readFileSync(reportFile, 'utf8'));
   const expected = selected ? { passed: 0, ownedFailures: 1, declaredSkips: 5, totalExecuted: 1 } : { passed: 15, ownedFailures: 0, declaredSkips: 0, totalExecuted: 15 };
@@ -111,7 +123,9 @@ function control(name, selected, before, after, marker = null) {
   finally { fs.writeFileSync(candidate, held.get(PAGE)); hold(); assert.equal(sha(fs.readFileSync(candidate)), sha(held.get(PAGE))); }
 }
 try {
-  run('current'); run('healthy-copy', null, true);
+  run('current');
+  assert.equal(sha(fs.readFileSync(candidate)), sha(held.get(PAGE)), 'Healthy physical source copy is exact before child');
+  run('healthy-copy', null, true);
   const oldPage = held.get(OLD);
   assert.equal(oldPage.length, 20391);
   assert.equal(createHash('sha1').update('blob ' + oldPage.length + '\0').update(oldPage).digest('hex'), '96043202c31297b27343274508bc370110761407');

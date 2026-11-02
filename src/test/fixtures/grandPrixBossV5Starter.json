@@ -1,0 +1,862 @@
+{
+        "version": 1,
+        "worldKind": "fictional",
+        "careerId": "grand-prix-1",
+        "seed": 1,
+        "revision": 0,
+        "season": 1,
+        "round": 0,
+        "phase": "preRace",
+        "teamId": "gp-team-6",
+        "cash": 12000000,
+        "reserved": 6600000,
+        "upgradeCosts": {
+          "power": 1106100,
+          "aero": 1106100,
+          "reliability": 1818900
+        },
+        "teams": [
+          {
+            "id": "gp-team-0",
+            "name": "Cobalt Crane",
+            "car": {
+              "power": 84,
+              "aero": 83,
+              "reliability": 91
+            }
+          },
+          {
+            "id": "gp-team-1",
+            "name": "Ember Vale",
+            "car": {
+              "power": 85,
+              "aero": 80,
+              "reliability": 89
+            }
+          },
+          {
+            "id": "gp-team-2",
+            "name": "Juniper Pulse",
+            "car": {
+              "power": 82,
+              "aero": 78,
+              "reliability": 87
+            }
+          },
+          {
+            "id": "gp-team-3",
+            "name": "Northstar Loom",
+            "car": {
+              "power": 79,
+              "aero": 77,
+              "reliability": 85
+            }
+          },
+          {
+            "id": "gp-team-4",
+            "name": "Copper Harbor",
+            "car": {
+              "power": 74,
+              "aero": 71,
+              "reliability": 83
+            }
+          },
+          {
+            "id": "gp-team-5",
+            "name": "Quartz Arrow",
+            "car": {
+              "power": 69,
+              "aero": 67,
+              "reliability": 81
+            }
+          },
+          {
+            "id": "gp-team-6",
+            "name": "Indigo Crest",
+            "car": {
+              "power": 67,
+              "aero": 67,
+              "reliability": 79
+            }
+          },
+          {
+            "id": "gp-team-7",
+            "name": "Silver Finch",
+            "car": {
+              "power": 67,
+              "aero": 61,
+              "reliability": 77
+            }
+          },
+          {
+            "id": "gp-team-8",
+            "name": "Redwood Rally",
+            "car": {
+              "power": 64,
+              "aero": 60,
+              "reliability": 75
+            }
+          },
+          {
+            "id": "gp-team-9",
+            "name": "Saffron Wing",
+            "car": {
+              "power": 60,
+              "aero": 57,
+              "reliability": 73
+            }
+          }
+        ],
+        "drivers": [
+          {
+            "id": "gp-driver-0",
+            "name": "Eli Vora",
+            "age": 33,
+            "potential": 99,
+            "skills": {
+              "pace": 87,
+              "consistency": 82,
+              "tyreCare": 60,
+              "wet": 79
+            },
+            "contract": {
+              "teamId": "gp-team-0",
+              "years": 3,
+              "wagePerRace": 201000
+            }
+          },
+          {
+            "id": "gp-driver-1",
+            "name": "Ravi Kova",
+            "age": 25,
+            "potential": 84,
+            "skills": {
+              "pace": 78,
+              "consistency": 66,
+              "tyreCare": 68,
+              "wet": 57
+            },
+            "contract": {
+              "teamId": "gp-team-0",
+              "years": 1,
+              "wagePerRace": 187000
+            }
+          },
+          {
+            "id": "gp-driver-2",
+            "name": "Kato Kern",
+            "age": 26,
+            "potential": 99,
+            "skills": {
+              "pace": 89,
+              "consistency": 90,
+              "tyreCare": 68,
+              "wet": 51
+            },
+            "contract": {
+              "teamId": "gp-team-1",
+              "years": 3,
+              "wagePerRace": 204000
+            }
+          },
+          {
+            "id": "gp-driver-3",
+            "name": "Davi Lorn",
+            "age": 22,
+            "potential": 85,
+            "skills": {
+              "pace": 80,
+              "consistency": 85,
+              "tyreCare": 90,
+              "wet": 53
+            },
+            "contract": {
+              "teamId": "gp-team-1",
+              "years": 2,
+              "wagePerRace": 190000
+            }
+          },
+          {
+            "id": "gp-driver-4",
+            "name": "Zeno Keld",
+            "age": 25,
+            "potential": 88,
+            "skills": {
+              "pace": 82,
+              "consistency": 94,
+              "tyreCare": 91,
+              "wet": 62
+            },
+            "contract": {
+              "teamId": "gp-team-2",
+              "years": 2,
+              "wagePerRace": 193000
+            }
+          },
+          {
+            "id": "gp-driver-5",
+            "name": "Tarin Fenn",
+            "age": 20,
+            "potential": 85,
+            "skills": {
+              "pace": 80,
+              "consistency": 67,
+              "tyreCare": 79,
+              "wet": 51
+            },
+            "contract": {
+              "teamId": "gp-team-2",
+              "years": 2,
+              "wagePerRace": 190000
+            }
+          },
+          {
+            "id": "gp-driver-6",
+            "name": "Avo Renn",
+            "age": 20,
+            "potential": 86,
+            "skills": {
+              "pace": 77,
+              "consistency": 68,
+              "tyreCare": 72,
+              "wet": 84
+            },
+            "contract": {
+              "teamId": "gp-team-3",
+              "years": 1,
+              "wagePerRace": 186000
+            }
+          },
+          {
+            "id": "gp-driver-7",
+            "name": "Ruen Rilo",
+            "age": 20,
+            "potential": 86,
+            "skills": {
+              "pace": 80,
+              "consistency": 79,
+              "tyreCare": 67,
+              "wet": 57
+            },
+            "contract": {
+              "teamId": "gp-team-3",
+              "years": 1,
+              "wagePerRace": 190000
+            }
+          },
+          {
+            "id": "gp-driver-8",
+            "name": "Kiro Vero",
+            "age": 22,
+            "potential": 77,
+            "skills": {
+              "pace": 69,
+              "consistency": 77,
+              "tyreCare": 91,
+              "wet": 85
+            },
+            "contract": {
+              "teamId": "gp-team-4",
+              "years": 1,
+              "wagePerRace": 174000
+            }
+          },
+          {
+            "id": "gp-driver-9",
+            "name": "Elan Leto",
+            "age": 24,
+            "potential": 75,
+            "skills": {
+              "pace": 70,
+              "consistency": 89,
+              "tyreCare": 70,
+              "wet": 65
+            },
+            "contract": {
+              "teamId": "gp-team-4",
+              "years": 2,
+              "wagePerRace": 175000
+            }
+          },
+          {
+            "id": "gp-driver-10",
+            "name": "Toma Selo",
+            "age": 25,
+            "potential": 80,
+            "skills": {
+              "pace": 71,
+              "consistency": 90,
+              "tyreCare": 72,
+              "wet": 66
+            },
+            "contract": {
+              "teamId": "gp-team-5",
+              "years": 1,
+              "wagePerRace": 177000
+            }
+          },
+          {
+            "id": "gp-driver-11",
+            "name": "Arin Mori",
+            "age": 30,
+            "potential": 79,
+            "skills": {
+              "pace": 67,
+              "consistency": 77,
+              "tyreCare": 88,
+              "wet": 72
+            },
+            "contract": {
+              "teamId": "gp-team-5",
+              "years": 2,
+              "wagePerRace": 171000
+            }
+          },
+          {
+            "id": "gp-driver-12",
+            "name": "Tavo Sava",
+            "age": 30,
+            "potential": 70,
+            "skills": {
+              "pace": 63,
+              "consistency": 94,
+              "tyreCare": 93,
+              "wet": 83
+            },
+            "contract": {
+              "teamId": "gp-team-6",
+              "years": 1,
+              "wagePerRace": 180000
+            }
+          },
+          {
+            "id": "gp-driver-13",
+            "name": "Esko Karo",
+            "age": 26,
+            "potential": 81,
+            "skills": {
+              "pace": 70,
+              "consistency": 70,
+              "tyreCare": 60,
+              "wet": 73
+            },
+            "contract": {
+              "teamId": "gp-team-6",
+              "years": 2,
+              "wagePerRace": 120000
+            }
+          },
+          {
+            "id": "gp-driver-14",
+            "name": "Lio Marr",
+            "age": 29,
+            "potential": 73,
+            "skills": {
+              "pace": 63,
+              "consistency": 93,
+              "tyreCare": 86,
+              "wet": 92
+            },
+            "contract": {
+              "teamId": "gp-team-7",
+              "years": 2,
+              "wagePerRace": 165000
+            }
+          },
+          {
+            "id": "gp-driver-15",
+            "name": "Bren Neri",
+            "age": 22,
+            "potential": 70,
+            "skills": {
+              "pace": 63,
+              "consistency": 67,
+              "tyreCare": 70,
+              "wet": 54
+            },
+            "contract": {
+              "teamId": "gp-team-7",
+              "years": 2,
+              "wagePerRace": 165000
+            }
+          },
+          {
+            "id": "gp-driver-16",
+            "name": "Ilan Vahl",
+            "age": 21,
+            "potential": 78,
+            "skills": {
+              "pace": 66,
+              "consistency": 84,
+              "tyreCare": 72,
+              "wet": 78
+            },
+            "contract": {
+              "teamId": "gp-team-8",
+              "years": 3,
+              "wagePerRace": 169000
+            }
+          },
+          {
+            "id": "gp-driver-17",
+            "name": "Soren Lenn",
+            "age": 22,
+            "potential": 72,
+            "skills": {
+              "pace": 61,
+              "consistency": 75,
+              "tyreCare": 70,
+              "wet": 81
+            },
+            "contract": {
+              "teamId": "gp-team-8",
+              "years": 2,
+              "wagePerRace": 162000
+            }
+          },
+          {
+            "id": "gp-driver-18",
+            "name": "Tevo Senn",
+            "age": 22,
+            "potential": 66,
+            "skills": {
+              "pace": 57,
+              "consistency": 68,
+              "tyreCare": 67,
+              "wet": 65
+            },
+            "contract": {
+              "teamId": "gp-team-9",
+              "years": 1,
+              "wagePerRace": 156000
+            }
+          },
+          {
+            "id": "gp-driver-19",
+            "name": "Ari Venn",
+            "age": 28,
+            "potential": 60,
+            "skills": {
+              "pace": 55,
+              "consistency": 66,
+              "tyreCare": 85,
+              "wet": 51
+            },
+            "contract": {
+              "teamId": "gp-team-9",
+              "years": 1,
+              "wagePerRace": 153000
+            }
+          },
+          {
+            "id": "gp-driver-20",
+            "name": "Miro Dalen",
+            "age": 21,
+            "potential": 74,
+            "skills": {
+              "pace": 70,
+              "consistency": 82,
+              "tyreCare": 76,
+              "wet": 90
+            },
+            "contract": null
+          },
+          {
+            "id": "gp-driver-21",
+            "name": "Eren Taren",
+            "age": 29,
+            "potential": 81,
+            "skills": {
+              "pace": 70,
+              "consistency": 80,
+              "tyreCare": 70,
+              "wet": 71
+            },
+            "contract": null
+          },
+          {
+            "id": "gp-driver-22",
+            "name": "Vico Daro",
+            "age": 24,
+            "potential": 83,
+            "skills": {
+              "pace": 76,
+              "consistency": 93,
+              "tyreCare": 88,
+              "wet": 81
+            },
+            "contract": null
+          },
+          {
+            "id": "gp-driver-23",
+            "name": "Jaro Navo",
+            "age": 32,
+            "potential": 79,
+            "skills": {
+              "pace": 71,
+              "consistency": 80,
+              "tyreCare": 62,
+              "wet": 53
+            },
+            "contract": null
+          },
+          {
+            "id": "gp-driver-24",
+            "name": "Nilo Daroa",
+            "age": 32,
+            "potential": 64,
+            "skills": {
+              "pace": 58,
+              "consistency": 94,
+              "tyreCare": 73,
+              "wet": 65
+            },
+            "contract": null
+          },
+          {
+            "id": "gp-driver-25",
+            "name": "Oren Roe",
+            "age": 27,
+            "potential": 63,
+            "skills": {
+              "pace": 59,
+              "consistency": 84,
+              "tyreCare": 65,
+              "wet": 88
+            },
+            "contract": null
+          }
+        ],
+        "calendar": [
+          {
+            "id": "gp-round-0",
+            "name": "Harbor Loop",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.8,
+            "aeroWeight": 0.19999999999999996,
+            "rainChance": 0.26446041733026504
+          },
+          {
+            "id": "gp-round-1",
+            "name": "Copper Ridge",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.25,
+            "aeroWeight": 0.75,
+            "rainChance": 0.33123610145878046
+          },
+          {
+            "id": "gp-round-2",
+            "name": "Juniper Ring",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.5,
+            "aeroWeight": 0.5,
+            "rainChance": 0.2265542823052965
+          },
+          {
+            "id": "gp-round-3",
+            "name": "Quartz Straight",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.7,
+            "aeroWeight": 0.30000000000000004,
+            "rainChance": 0.35269189067650586
+          },
+          {
+            "id": "gp-round-4",
+            "name": "Indigo Hills",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.3,
+            "aeroWeight": 0.7,
+            "rainChance": 0.27915439010132104
+          },
+          {
+            "id": "gp-round-5",
+            "name": "Redwood Turns",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.45,
+            "aeroWeight": 0.55,
+            "rainChance": 0.1792619605595246
+          },
+          {
+            "id": "gp-round-6",
+            "name": "Silver Coast",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.8,
+            "aeroWeight": 0.19999999999999996,
+            "rainChance": 0.19170900516211986
+          },
+          {
+            "id": "gp-round-7",
+            "name": "Ember Valley",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.25,
+            "aeroWeight": 0.75,
+            "rainChance": 0.29721723538124933
+          },
+          {
+            "id": "gp-round-8",
+            "name": "Cobalt Park",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.5,
+            "aeroWeight": 0.5,
+            "rainChance": 0.3698048100969754
+          },
+          {
+            "id": "gp-round-9",
+            "name": "Saffron Bend",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.7,
+            "aeroWeight": 0.30000000000000004,
+            "rainChance": 0.3302256800280884
+          },
+          {
+            "id": "gp-round-10",
+            "name": "Northstar Circuit",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.3,
+            "aeroWeight": 0.7,
+            "rainChance": 0.12103167939232662
+          },
+          {
+            "id": "gp-round-11",
+            "name": "Finch Bay",
+            "laps": 40,
+            "entryCost": 250000,
+            "powerWeight": 0.45,
+            "aeroWeight": 0.55,
+            "rainChance": 0.2541627814108506
+          }
+        ],
+        "race": null,
+        "results": [],
+        "driverStandings": [
+          {
+            "driverId": "gp-driver-0",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-1",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-2",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-3",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-4",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-5",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-6",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-7",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-8",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-9",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-10",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-11",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-12",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-13",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-14",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-15",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-16",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-17",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-18",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-19",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-20",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-21",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-22",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-23",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-24",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "driverId": "gp-driver-25",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          }
+        ],
+        "constructorStandings": [
+          {
+            "teamId": "gp-team-0",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "teamId": "gp-team-1",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "teamId": "gp-team-2",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "teamId": "gp-team-3",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "teamId": "gp-team-4",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "teamId": "gp-team-5",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "teamId": "gp-team-6",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "teamId": "gp-team-7",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "teamId": "gp-team-8",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          },
+          {
+            "teamId": "gp-team-9",
+            "points": 0,
+            "wins": 0,
+            "podiums": 0
+          }
+        ]
+      }
