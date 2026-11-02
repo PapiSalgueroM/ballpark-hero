@@ -14,8 +14,8 @@
  * THE RULE (see youthPadValue in src/lib/clubManager.ts): a pad carries, from
  * creation, what a real teenager of his rating and age is worth, 0.03 of the
  * raw curve, 0.3m to 1.3m; a save written before the round gets the same value
- * on load; an academy graduate or a scouted boy keeps no stored value and is
- * priced off the curve as before.
+ * on load. A new academy graduate or scouted boy receives the age-aware market
+ * value at promotion; an existing saved graduate and his wage stay as signed.
  *
  * SECTIONS, on the real engine bundled with esbuild, every era:
  *   1) no pad can be sold in his first season for more than the rule allows.
@@ -33,11 +33,10 @@
  *      And from below: every day one pad against the real players of 21 and
  *      under within two rating points of him in his era's rosters, so a pad is
  *      priced at the market's own teenagers and not at the floor.
- *   3) an academy graduate who developed keeps his earned value: promoted off a
- *      real intake, three summers of growth, no stored value on any graduate,
- *      and many times what a pad of his rating and age fetches. (The Round 640
- *      review removed the graduate over "the curve's price for him": a
- *      graduate carries no value, so that ratio read 1.00 by construction.)
+ *   3) a new academy graduate is priced on the era's age-aware market scale,
+ *      with the normal wage for that value. After three actual summers, those
+ *      who improved retain a growing stored value. No inflated premium over a
+ *      padding kid is required. The flatgrads control must break this section.
  *   4) a save written by the engine as it stood before the round (the in memory
  *      copy with the creation value and the load repair taken out) loads with
  *      the value applied to every pad in the squad, out on loan and in the free
@@ -60,8 +59,8 @@
  *              (1,285 to 1,344 pads a run with 5 or more real teenagers near their rating)
  *   section 2  pooled p90 gain        fixed 2.56 to 3.28m       novalue 31.4 to 38.4m    bound 5.0m
  *              (48 paired careers, 127 to 136 sales a run; the median gain is 1.5 to 1.8m)
- *   section 3  grad / pad median      fixed 32.0 to 32.5        flatgrads 1.4 to 1.5     floor 8
- *              (83 to 95 graduates promoted a run, every one grew 3 or more points)
+ *   section 3  now checks canonical promotion prices and actual value growth;
+ *              the obsolete 32x pad premium is intentionally no longer a rule.
  *   section 4  pads valued on load    fixed 106 of 106          noload 0 of 106
  *              seasons played alike   fixed 8 of 8, 0 wages moved
  *              old money figures      all moved onto the new price   padnoresale: none moved
@@ -113,7 +112,7 @@ const PRISTINE = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf
 
 const VALUE_LINE = '  kid.value = youthPadValue(kid.rating, kid.age);\n';
 const LOAD_LINE = '    ensureYouthPadValues(parsed);\n';
-const GRAD_LINE = '    academyGrad: true,\n    potential: pr.potential,';
+const GRAD_LINE = '    academyGrad: true,\n    value: customFounderValue(pr.rating, next.eraId, pr.age),\n    potential: pr.potential,';
 const PAD_VALUE_FN = '  return Math.max(JOURNEYMAN_VALUE, Math.round(baseValue(rating, age) * YOUTH_PAD_SCALE * 10) / 10);\n';
 const GRAD_GUARD = "  return !p.academyGrad && (p.isYouth === true || (p.name ?? '').endsWith(YOUTH_PAD_SUFFIX));\n";
 const PAD_RESCALE = '    rescaleSaleFigures(state, p.id, oldSell, sellValue(p), loan);\n  };\n  for (const p of state.squad ?? []) price(p);\n';
@@ -393,12 +392,13 @@ const GAIN_BOUND = 5.0;
 
 /* ================================================================== */
 section = 3;
-console.log('3) an academy graduate who developed keeps the value he earned');
+console.log('3) an academy graduate receives a market value that grows with development');
 {
-  const toCurve = [];
+  const valueGrowth = [];
   const toPad = [];
   let promoted = 0;
-  let valuedAtPromotion = 0;
+  let wrongTerms = 0;
+  let wrongGrowth = 0;
   for (const era of ERAS) {
     for (const club of clubsOf(era).slice(0, 4)) {
       for (let s = 0; s < 2; s++) {
@@ -411,36 +411,32 @@ console.log('3) an academy graduate who developed keeps the value he earned');
             st = next;
             const g = st.squad.find(p => p.name === pr.name);
             promoted += 1;
-            if (g.value !== undefined) valuedAtPromotion += 1;
-            start.set(g.id, g.rating);
+            const expectedValue = cm.customFounderValue(pr.rating, era, pr.age);
+            const expectedWage = cm.wageFor({ ...g, value: expectedValue });
+            if (g.value !== expectedValue || g.wage !== expectedWage) wrongTerms += 1;
+            start.set(g.id, { rating: g.rating, value: g.value });
           }
           for (let y = 0; y < 3; y++) st = cm.startNextSeason(st);
           for (const g of st.squad.filter(p => p.academyGrad && start.has(p.id))) {
-            if (g.rating - start.get(g.id) < 3) continue;
+            const began = start.get(g.id);
+            if (g.rating - began.rating < 3) continue;
             const padTwin = { ...g, isYouth: true, academyGrad: undefined, value: cm.youthPadValue(g.rating, g.age) };
-            toCurve.push(cm.sellValue(g) / curvePrice(g));
+            if (!Number.isFinite(g.value) || !Number.isFinite(began.value) || !(g.value > began.value)) wrongGrowth += 1;
+            valueGrowth.push(g.value / began.value);
             toPad.push(cm.sellValue(g) / cm.sellValue(padTwin));
           }
         });
       }
     }
   }
-  /* Round 640 review: the graduate's price over "the curve's price for him"
-     is gone. A graduate carries no value, so sellValue IS the curve's price,
-     and the ratio read 1.00 by construction: it could only ever fail if a
-     graduate were given a stored value, which the first check below already
-     asks directly. What stays measures something: whether a graduate carries
-     a stored value at all, and what he fetches against a pad of the same
-     rating and age (the pad's price being the market's, section 1). */
-  console.log(`   ${promoted} graduates promoted, ${toCurve.length} of them grew 3 or more points over three summers`);
-  console.log(`   developed graduate's price / a pad of his rating and age: median ${median(toPad).toFixed(1)}`);
-  if (toPad.length < 20) fail(`only ${toPad.length} developed graduates, too few to read a median`);
-  else {
-    if (valuedAtPromotion > 0) fail(`${valuedAtPromotion} of ${promoted} graduates came up carrying a stored value, so the curve no longer prices them`);
-    else ok(`none of the ${promoted} graduates carries a stored value, so the curve prices what he becomes`);
-    if (!(median(toPad) >= 8)) fail(`a developed graduate fetches only ${median(toPad).toFixed(1)} times a pad of his level at the median, under 8 (measured 32.0 to 32.5 on four seeds, 1.4 to 1.5 flattened)`);
-    else ok(`a developed graduate fetches ${median(toPad).toFixed(1)} times a pad of his rating and age at the median (floor 8)`);
-  }
+  console.log(`   ${promoted} graduates promoted, ${valueGrowth.length} grew 3 or more points over three summers`);
+  console.log(`   stored value growth median ${median(valueGrowth).toFixed(2)}x; graduate / padding kid sale median ${median(toPad).toFixed(2)}x (diagnostic only)`);
+  if (promoted < 20) fail(`only ${promoted} graduates promoted, too few to read the pricing outcome`);
+  else if (wrongTerms) fail(`${wrongTerms} of ${promoted} graduates signed with a value or wage outside their era's age-aware market scale`);
+  else ok(`all ${promoted} graduates signed at their era's age-aware market value and its normal wage`);
+  if (valueGrowth.length < 20) fail(`only ${valueGrowth.length} developed graduates, too few to read value growth`);
+  else if (wrongGrowth) fail(`${wrongGrowth} of ${valueGrowth.length} developed graduates lost their stored value growth`);
+  else ok(`all ${valueGrowth.length} graduates who grew 3 or more points retained an increased stored value`);
 }
 
 /* ================================================================== */

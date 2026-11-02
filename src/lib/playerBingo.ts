@@ -651,6 +651,16 @@ const UCL_WINNER_KEYS: Set<string> = new Set(
   UCL_WINNER_PAIRS.flatMap(p => p.keys.flatMap(k => p.years.map(y => `${k}|${y}`))),
 );
 
+// Verified second-yellow dismissal, 24 October 2026. Sources: docs/audits/player-bingo-palmer-red-2026-11-01.md.
+// This event does not rewrite the older snapshot's season statistics.
+function hasVerifiedDismissal(p: BingoPlayer): boolean {
+  return normalizeName(p.name) === 'cole palmer' &&
+    primaryNationality(p.nationality) === 'england' &&
+    normalizeName(p.position) === 'attacking midfield' &&
+    Number.isInteger(p.age) && p.age > 0 && Number.isInteger(p.year) && p.year > 0 &&
+    p.year - p.age >= 2002 && p.year - p.age <= 2003;
+}
+
 // Rodri won in 2023. Title and identity sources: docs/audits/player-bingo-rodri-ucl-2026-10-16.md.
 // A separately verified honour does not depend on complete market season rows.
 const VERIFIED_UCL_WINNERS = [
@@ -1026,7 +1036,7 @@ export function buildCriteria(data: BingoData): BingoCriterion[] {
       group: 'season-discipline',
       label: 'Sent off in a season',
       icon: '🟥',
-      test: (p, d) => anySeasonMatches(d, p, s => (s.redCards ?? 0) >= 1),
+      test: (p, d) => hasVerifiedDismissal(p) || anySeasonMatches(d, p, s => (s.redCards ?? 0) >= 1),
     }),
   );
   out.push(
