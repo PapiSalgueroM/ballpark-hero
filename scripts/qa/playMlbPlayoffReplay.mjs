@@ -34,13 +34,21 @@ const fonts = new Map(fontRows.map(row => {
   return [row.url, { body, contentType: row.contentType }];
 }));
 assert(fonts.has(href(fontTags[0])), 'Actual stylesheet is held');
-const bundle = await build({ absWorkingDir: root, entryPoints: [path.join(root, files[3])], bundle: true, write: false, format: 'iife', platform: 'browser', jsx: 'automatic', alias: { '@': path.join(root, 'src') }, define: { 'process.env.NODE_ENV': '"production"' }, metafile: true, logLevel: 'silent' });
+const scriptPath = path.join(output, 'fixture.js');
+const moduleCssPath = path.join(output, 'fixture.css');
+const bundle = await build({ absWorkingDir: root, entryPoints: [path.join(root, files[3])], outfile: scriptPath, bundle: true, write: false, format: 'iife', platform: 'browser', jsx: 'automatic', alias: { '@': path.join(root, 'src') }, define: { 'process.env.NODE_ENV': '"production"' }, metafile: true, logLevel: 'silent' });
 for (const file of files) assert(Object.keys(bundle.metafile.inputs).some(input => input.replaceAll('\\', '/').endsWith(file)), `Actual compiled input: ${file}`);
-const html = `<!doctype html><html class="dark"><head><meta name="viewport" content="width=device-width,initial-scale=1">${fontTags[0]}<link rel="stylesheet" href="/fixture.css"><title>MLB playoff component proof</title></head><body class="bg-background text-foreground"><div id="root"></div><script src="/fixture.js"></script></body></html>`;
-const assets = new Map([['/', [Buffer.from(html), 'text/html']], ['/fixture.js', [bundle.outputFiles[0].contents, 'text/javascript']], ['/fixture.css', [css, 'text/css']]]);
+const script = bundle.outputFiles.find(file => path.resolve(file.path) === scriptPath);
+const moduleCss = bundle.outputFiles.find(file => path.resolve(file.path) === moduleCssPath);
+assert(script && moduleCss, 'Actual JavaScript and CSS module bundles');
+assert.equal(bundle.outputFiles.length, 2, 'Every compiled output is served');
+const html = `<!doctype html><html class="dark"><head><meta name="viewport" content="width=device-width,initial-scale=1">${fontTags[0]}<link rel="stylesheet" href="/production.css"><link rel="stylesheet" href="/fixture.css"><title>MLB playoff component proof</title></head><body class="bg-background text-foreground"><div id="root"></div><script src="/fixture.js"></script></body></html>`;
+const assets = new Map([['/', [Buffer.from(html), 'text/html']], ['/fixture.js', [script.contents, 'text/javascript']], ['/fixture.css', [moduleCss.contents, 'text/css']], ['/production.css', [css, 'text/css']]]);
 fs.writeFileSync(path.join(output, 'fixture.html'), html);
-fs.writeFileSync(path.join(output, 'fixture.js'), bundle.outputFiles[0].contents);
-fs.writeFileSync(path.join(output, 'fixture.css'), css);
+fs.writeFileSync(scriptPath, script.contents);
+fs.writeFileSync(moduleCssPath, moduleCss.contents);
+fs.writeFileSync(path.join(output, 'production.css'), css);
+fs.writeFileSync(path.join(output, 'bundle-assets.json'), JSON.stringify([...assets].filter(([name]) => name !== '/').map(([name, [body, contentType]]) => ({ name, contentType, bytes: body.length, sha256: hash(body) })), null, 2));
 fs.writeFileSync(path.join(output, 'metafile.json'), JSON.stringify(bundle.metafile, null, 2));
 const server = http.createServer((request, response) => {
   const name = new URL(request.url, 'http://localhost').pathname;

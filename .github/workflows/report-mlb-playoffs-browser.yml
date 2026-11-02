@@ -1,0 +1,92 @@
+name: Report MLB playoff replay browser proof
+on:
+  push:
+    branches: [codex/report-mlb-playoffs-browser-v2-20261102]
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/evidence/font-cache
+      MLB_PLAYOFF_BROWSER_OUT: ${{ github.workspace }}/evidence/browser
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind unchanged product and source
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/report-mlb-playoffs-browser-v2-20261102
+          mkdir evidence
+          git rev-parse HEAD HEAD^{tree} > evidence/head-tree.txt
+          printf 'eaa7bfa64416343084b0cea9535af5149941998eb99253280e2395f9eae725a8  src/components/us-career/season/UsSeasonCentre.tsx\n18df6cb8abda99ffe36b588da13d0f8314622456e98fcd6df347df2540b6ba21  src/components/us-career/season/MlbPlayoffReplay.tsx\n3ea96c74c4ea5104c5d5b89d9b47626c99c67d5eed8672e2099618df3cc0c6b3  src/lib/season/mlbPlayoffReplay.ts\n29ea6dbe052e04a747fccff92d66c20493aed97b5f92d398ef957d2f0001ac77  scripts/qa/fixtures/mlbPlayoffReplay.entry.tsx\nb1b35fbc7df55b4c70d18bf97e54ff875d01236893fa37acf144276724825a3f  scripts/qa/playMlbPlayoffReplay.mjs\n' | sha256sum --check -
+          git ls-files -z > evidence/source-members.before
+          git ls-files -z | xargs -0 sha256sum > evidence/source.sha256
+          cat > evidence/capture.sh <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "evidence/$tag.exit"
+            printf '%s\0' "$@" > "evidence/$tag.argv"
+            set +e
+            "$@" > "evidence/$tag.stdout" 2> "evidence/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "evidence/$tag.exit"
+            cat "evidence/$tag.stdout"
+            cat "evidence/$tag.stderr" >&2
+            return "$status"
+          }
+          CAPTURE
+      - name: Locked app and isolated browser tools
+        run: |
+          set -euo pipefail
+          source evidence/capture.sh
+          capture install npm ci
+          capture browser-tools npm install --prefix "$RUNNER_TEMP/report-browser" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/report-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/report-browser/node_modules/playwright-core" node_modules/playwright-core
+          capture chromium node "$RUNNER_TEMP/report-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          capture python-fonts python -m pip install fonttools pillow
+          capture fonts node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Actual types and ordinary production stylesheet
+        run: |
+          set -euo pipefail
+          source evidence/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture browser-syntax node --check scripts/qa/playMlbPlayoffReplay.mjs
+          capture build env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > evidence/dist-sha256.txt
+      - name: Actual viewer and both actual compiled asset outputs
+        run: |
+          set -euo pipefail
+          source evidence/capture.sh
+          capture browser env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playMlbPlayoffReplay.mjs
+      - name: Hold source and built bytes
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check evidence/source.sha256 > evidence/source-held.log
+          git ls-files -z > evidence/source-members.after
+          cmp evidence/source-members.before evidence/source-members.after
+          git diff --exit-code HEAD > evidence/source-diff.log
+          if test -f evidence/dist-sha256.txt; then sha256sum --check evidence/dist-sha256.txt > evidence/dist-held.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mlb-playoffs-browser-v2-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
