@@ -1,0 +1,84 @@
+name: Grand Prix Boss focus save verification
+on:
+  push:
+    branches: [codex/grand-prix-boss-focus-hook-fixed-20261102]
+permissions:
+  contents: read
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_BOSS_FOCUS_SAVE_OUT: ${{ github.workspace }}/grand-prix-focus-save-artifacts/focus-save
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind admitted focus save RED and four scoped paths
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-focus-hook-fixed-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = c27fbebe92db163c787dee73c3e11832b057b5d0
+          out="$PWD/grand-prix-focus-save-artifacts"; mkdir "$out"
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-focus-hook-fixed.yml' 'scripts/qa/source-controls/useGrandPrixBoss.before-focus.ts.txt' 'scripts/simGrandPrixBossFocusSave.mjs' 'src/hooks/useGrandPrixBoss.ts' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          printf '%s\n' '3a3e5652fbf43bfe13e9802521821378cc3221f7942f05f15b7242c98b1fea92  src/lib/grandPrixBoss.ts' 'b06293c184ba51e002189973c0eb39c6f52616023bb9f17fb3a5b3f67e8d2260  src/hooks/useGrandPrixBoss.ts' '2bbb6ec266def6e4df1ffbf0b041673aee9564f11a924f734fb75ab8408fff47  src/test/grandPrixBossFocusSave.test.tsx' '8850496c54045698d14ef7fc8f9d4e83cc6f8498fb79dfc0d53dd3beba760636  scripts/simGrandPrixBossFocusSave.mjs' 'f0ec04a26c60db6c4a5b1e4b555a699979a2fdad464e404d0e906f2538b8c23b  scripts/qa/source-controls/useGrandPrixBoss.before-focus.ts.txt' | sha256sum --check -
+          git diff --exit-code HEAD^ -- src/lib src/hooks/useSaveFenceWatch.ts src/lib/saveFence.ts src/test package.json package-lock.json vitest.config.ts src/App.tsx src/data/gameRegistry.ts src/integrations/supabase/client.ts
+          git ls-files -z > "$out/source-members.before"; git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-focus-save-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$out/$tag.exit"
+            tail -n 20 "$out/$tag.stdout"; tail -n 20 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          source "$out/capture.sh"; capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types and two real focus-save outcomes with copied controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source grand-prix-focus-save-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture focus-save-syntax node --check scripts/simGrandPrixBossFocusSave.mjs
+          capture focus-save-controls node scripts/simGrandPrixBossFocusSave.mjs
+      - name: Preserve complete source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-focus-save-artifacts"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-focus-save-${{ github.run_id }}
+          path: grand-prix-focus-save-artifacts/
+          retention-days: 14
