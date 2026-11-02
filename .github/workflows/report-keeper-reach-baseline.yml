@@ -1,0 +1,45 @@
+name: Report keeper reach baseline
+on:
+  push:
+    branches: [codex/report-keeper-reach-baseline-20261101]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked dependencies and source
+        run: |
+          mkdir evidence
+          git rev-parse HEAD | tee evidence/head.txt
+          test "$(git hash-object src/components/soccer-career/DrillPlayers.tsx)" = f6ea8498941eacc062258833e2efcf191c4b2ba9
+          sha256sum package.json package-lock.json src/components/soccer-career/DrillPlayers.tsx src/test/drillKeeperReach.test.tsx > evidence/holds.txt
+          npm ci
+      - name: App types
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee evidence/types.log
+      - name: Original keeper rendered SVG outcomes
+        run: node_modules/.bin/vitest run src/test/drillKeeperReach.test.tsx --reporter=verbose --reporter=json --outputFile=evidence/keeper.json 2>&1 | tee evidence/keeper.log
+      - name: Source holds
+        if: always()
+        run: sha256sum --check evidence/holds.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: keeper-baseline-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
