@@ -5,7 +5,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGrandPrixBoss } from '@/hooks/useGrandPrixBoss';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
-import { seasonScore, type CarArea, type Compound, type GrandPrixAction, type GrandPrixCareer, type Pace } from '@/lib/grandPrixBoss';
+import { seasonScore, type CarArea, type Compound, type GrandPrixAction, type GrandPrixCareer, type GrandPrixFocus, type Pace } from '@/lib/grandPrixBoss';
 
 type Panel = 'Next race' | 'Drivers' | 'Car' | 'Finances' | 'Standings' | 'History';
 const PANELS: Panel[] = ['Next race', 'Drivers', 'Car', 'Finances', 'Standings', 'History'];
@@ -27,10 +27,14 @@ function Rules() {
       <li>At each later stop, stay out or pit for fresh tyres. A pit costs time, so change only when the fresh tyres can repay it.</li>
       <li>The finish pays the actual prize and race costs once. Both drivers contribute to your team championship.</li>
       <li>Driver changes open before the first qualifying session and after the season. Quotes show the fee paid now, the one-season term and reserved wages. A review signing starts next season.</li>
-      <li>Check the next season plan before you continue. It adds sponsor money, pays automatic renewals for expiring seats and protects the next year's entry fees and wages. A renewal paid during review leaves the automatic renewal bill.</li>
+      <li>Set development focus in Drivers before the first qualifying session or after the season. It costs nothing. Age and potential still shape growth when you start the next season.</li>
+      <li>A driver retires when they will be 40 or older next year and their term expires. Paid terms remain honored, including future starts and years left on a multi-year contract.</li>
+      <li>Check the next season plan before you continue. It adds sponsor money, lists automatic renewals and quoted retirement prospects, and protects the next year's entry fees and wages. Each replacement fee is paid when you start next season. A renewal paid during review leaves the automatic renewal bill.</li>
+      <li>At the new season, cars keep their starting levels plus 70% of improvements, rounded down. Other teams then add two to their weakest car area, up to 100.</li>
       <li>History keeps saved seasons, champions and your race results. Recorded totals stay saved when older details leave the latest twelve-season list. Older saves tell you when their records begin.</li>
     </ol>
     <div><h3 className="font-bold">A two-driver example</h3><p>One driver stays on worn tyres while the other pits for fresh hard tyres. Compare their positions and wear at the next decision. This is a game example, not a real race result.</p></div>
+    <div><h3 className="font-bold">A retirement replacement example</h3><p>A driver's term ends and retirement is listed in the plan. Compare the quoted prospect's age, skills and potential, then check the replacement fee and next season's reserve. Starting next season pays that saved quote and puts the prospect in the seat. A paid future term keeps its driver.</p></div>
     <p>The top ten score 25, 18, 15, 12, 10, 8, 6, 4, 2 and 1. Ties use wins, podiums, then a fixed driver or team order.</p>
     <p>Your local season score gives 80 points for championship points compared with a perfect two-car season, and 20 for bringing both cars home. Every action is saved before the screen advances. If saving is refused, your current team stays on screen.</p>
   </RulesGate>;
@@ -55,7 +59,10 @@ function Championship({ career }: { career: GrandPrixCareer }) {
 function Drivers({ career, dispatch, blocked }: { career: GrandPrixCareer; dispatch: (action: GrandPrixAction) => boolean; blocked: boolean }) {
   const [outgoingId, setOutgoingId] = useState('');
   const [incomingId, setIncomingId] = useState('');
+  const seatHeadings = useRef<Record<string, HTMLHeadingElement | null>>({});
   const seats = ownDrivers(career);
+  const canChangeFocus = career.phase === 'preRace' && career.round === 0 && career.results.length === 0
+    || career.phase === 'seasonReview' && career.results.length === career.calendar.length && career.round === career.calendar.length - 1;
   const outgoing = seats.find(driver => driver.id === outgoingId) ?? seats[0];
   const offers = career.marketOffers.filter(offer => offer.outgoingDriverId === outgoing.id && offer.incomingDriverId !== outgoing.id);
   const offer = offers.find(value => value.incomingDriverId === incomingId) ?? offers[0];
@@ -65,16 +72,21 @@ function Drivers({ career, dispatch, blocked }: { career: GrandPrixCareer; dispa
       const contract = driver.contract!;
       const renewal = career.marketOffers.find(value => value.outgoingDriverId === driver.id && value.incomingDriverId === driver.id);
       return <article key={driver.id} className="space-y-3 border-b border-border pb-3">
-        <h4 className="break-words font-bold">{driver.name}, {driver.age}</h4>
+        <h4 ref={element => { seatHeadings.current[driver.id] = element; }} tabIndex={-1} className="break-words font-bold">{driver.name}, {driver.age}</h4>
         <p className="text-sm text-muted-foreground">{money(contract.wagePerRace)} per race. Signed through year {Math.max(career.season, contract.startsSeason ?? career.season) + contract.years - 1}.{(contract.startsSeason ?? career.season) > career.season ? ' Starts year ' + contract.startsSeason + '.' : ''}</p>
         <p className="text-sm">Pace {driver.skills.pace}, consistency {driver.skills.consistency}, tyre care {driver.skills.tyreCare}, wet {driver.skills.wet}</p>
+        <label className="block space-y-1 text-xs"><span>Development focus</span><select aria-label={'Development focus for ' + driver.name} className={select} disabled={blocked || !canChangeFocus} value={driver.focus} onChange={event => {
+          const focus = event.target.value as GrandPrixFocus;
+          if (!blocked && canChangeFocus && focus !== driver.focus) dispatch({ type: 'setDriverFocus', driverId: driver.id, focus, expectedRevision: career.revision });
+        }}>{(['balanced', 'pace', 'consistency', 'tyreCare', 'wet'] as GrandPrixFocus[]).map(focus => <option key={focus} value={focus}>{focus === 'tyreCare' ? 'Tyre care' : label(focus)}</option>)}</select></label>
+        <p className="text-xs text-muted-foreground">Potential {driver.potential}. Focus guides development at the next season. Change it before the first qualifying session or after the season.</p>
         {renewal && <div data-testid={'gp-renewal-' + driver.id} className="space-y-3 rounded-lg border border-border bg-background p-3">
           <div className="grid grid-cols-2 gap-3">
             <Stat title="Renewal fee">{money(renewal.signingFee)}</Stat><Stat title="Wage per race">{money(renewal.wagePerRace)}</Stat>
             <Stat title="Term">{renewal.years} season</Stat><Stat title="Starts">Year {renewal.startsSeason}</Stat>
             <Stat title="Next season reserve">{money(renewal.reserveAfter)}</Stat>
           </div>
-          <button type="button" className={button + ' w-full'} disabled={blocked || !renewal.affordable} onClick={() => { if (!blocked && renewal.affordable) dispatch({ type: 'renewDriver', driverId: driver.id, expectedRevision: career.revision }); }}>Renew {driver.name}</button>
+          <button type="button" className={button + ' w-full'} disabled={blocked || !renewal.affordable} onClick={() => { if (!blocked && renewal.affordable && dispatch({ type: 'renewDriver', driverId: driver.id, expectedRevision: career.revision })) requestAnimationFrame(() => seatHeadings.current[driver.id]?.focus({ preventScroll: true })); }}>Renew {driver.name}</button>
         </div>}
       </article>;
     })}
@@ -207,11 +219,25 @@ function Race({ career, dispatch, blocked }: { career: GrandPrixCareer; dispatch
         <Stat title="End-of-season cash" testId="gp-season-end-cash">{money(career.cash)}</Stat>
         <Stat title="Sponsor payment" testId="gp-next-sponsor">{money(career.nextSeasonPlan.sponsor)}</Stat>
         <Stat title="Automatic renewal fees" testId="gp-next-renewal-fee">{money(career.nextSeasonPlan.totalRenewalFee)}</Stat>
+        <Stat title="Retirement replacement fees" testId="gp-next-replacement-fee">{money(career.nextSeasonPlan.totalReplacementFee)}</Stat>
         <Stat title="Next season reserve" testId="gp-next-reserved">{money(career.nextSeasonPlan.nextReserved)}</Stat>
-        <Stat title="Cash after sponsor and renewals" testId="gp-next-cash-after">{money(career.nextSeasonPlan.cashAfter)}</Stat>
+        <Stat title="Cash after sponsor and fees" testId="gp-next-cash-after">{money(career.nextSeasonPlan.cashAfter)}</Stat>
       </div>
       {career.nextSeasonPlan.automaticRenewals.map(renewal => <p key={renewal.driverId} className="text-xs text-muted-foreground">Automatic renewal: {career.drivers.find(driver => driver.id === renewal.driverId)!.name}, one season from year {career.nextSeasonPlan!.nextSeason}. Fee {money(renewal.signingFee)}, wage {money(renewal.wagePerRace)} per race.</p>)}
-      <p className="text-xs text-muted-foreground">The plan pays the listed renewal fees and keeps next season's entries and wages reserved. Renewals already paid during review leave this bill.</p>
+      {career.nextSeasonPlan.seatReplacements.length > 0 && <div data-testid="gp-seat-replacements" className="space-y-3">
+        <h4 className="font-bold">Retirement replacements</h4>
+        <div className="grid gap-3 sm:grid-cols-2">{career.nextSeasonPlan.seatReplacements.map(row => {
+          const departing = career.drivers.find(driver => driver.id === row.departingDriverId)!, rookie = row.rookie, contract = rookie.contract!;
+          return <article key={row.departingDriverId} data-testid={'gp-seat-replacement-' + row.departingDriverId} className="min-w-0 space-y-2 rounded-lg border border-border bg-background p-3 text-xs">
+            <p className="break-words text-muted-foreground">Replacing <span>{departing.name}</span></p>
+            <p className="break-words text-sm font-bold">{rookie.name}</p>
+            <div className="grid grid-cols-2 gap-2"><p>Age {rookie.age}</p><p>Potential {rookie.potential}</p><p>Pace {rookie.skills.pace}</p><p>Consistency {rookie.skills.consistency}</p><p>Tyre care {rookie.skills.tyreCare}</p><p>Wet {rookie.skills.wet}</p></div>
+            <p className="break-words">Fee {money(row.signingFee)}</p><p className="break-words">Wage {money(contract.wagePerRace)} per race</p>
+            <p>{contract.years} season from year {contract.startsSeason}</p>
+          </article>;
+        })}</div>
+      </div>}
+      <p className="text-xs text-muted-foreground">The plan pays the listed renewal and replacement fees and keeps next season's entries and wages reserved. Renewals already paid during review leave this bill.</p>
       {!career.nextSeasonPlan.affordable && <p className="text-sm">You need more cash to cover next season's reserve.</p>}
     </div>}
     <button type="button" className={button + ' w-full bg-primary text-primary-foreground'} disabled={blocked || career.phase === 'seasonReview' && !career.nextSeasonPlan?.affordable} onClick={run}>{action}</button>

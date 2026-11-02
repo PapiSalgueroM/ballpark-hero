@@ -1,0 +1,161 @@
+name: Grand Prix Boss lifecycle UI and held page controls
+on:
+  push:
+    branches: [codex/grand-prix-boss-lifecycle-ui-fixed-20261102]
+permissions:
+  contents: read
+jobs:
+  ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      GP_CUI_OUT: ${{ github.workspace }}/tmp/grand-prix-lifecycle-ui-fixed-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind four owned paths and the unchanged eighteen page cases
+        run: |
+          set -euo pipefail
+          out="$GP_CUI_OUT"; test ! -e "$out"; mkdir -p "$out"
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-lifecycle-ui-fixed-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = d1ef8bb0777693f90f64648ebbbbf61b1c65bd3d
+          test "$(git rev-parse 'HEAD^1^{tree}')" = 9e65b483531b1b559b2b98c0598b2119f24d790c
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-lifecycle-ui-fixed.yml' 'scripts/qa/source-controls/GrandPrixBoss.before-lifecycle.tsx.txt' 'scripts/simGrandPrixBossLifecyclePage.mjs' 'scripts/simGrandPrixBossManagement.mjs' 'src/pages/GrandPrixBoss.tsx' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          git diff --exit-code HEAD^ -- src/lib src/hooks src/components src/integrations src/App.tsx src/data src/test public scripts/data index.html package.json package-lock.json bun.lock vitest.config.ts tsconfig.app.json > "$out/held-foundations.log"
+          printf '%s\n' \
+            '3dcaa003a5f71b6d85db9b4fd4097c5f54bb97d90a863b78bc7604b3027d1911  src/lib/grandPrixBoss.ts' \
+            'b06293c184ba51e002189973c0eb39c6f52616023bb9f17fb3a5b3f67e8d2260  src/hooks/useGrandPrixBoss.ts' \
+            'e8cc17bd6047a775557632e0984f59cfc385f922d9c80fee0638e6e94b98bb25  src/test/grandPrixBossPage.test.tsx' \
+            'cb88dc315147e257531ce728f21a0e4a06c9e0870c509f20d984066a064be17f  src/test/grandPrixBossManagementPage.test.tsx' \
+            '4fb25845cdc79a71bd5d95a3f9cc663f67907ac4b0048a8c92f2f37b1bb246f7  src/test/grandPrixBossLifecyclePage.test.tsx' \
+            'cf3b484781dbff04df9033d0e1dfe239e6d9562f5cf026db2e4b1e233162a028  src/test/fixtures/grandPrixBossV5Starter.json' \
+            'd81e7182866ff7d6c40f44d3674e6ef5d3dddd1a43f337a0fbfb78eda7f2f9ba  src/pages/GrandPrixBoss.tsx' \
+            '7d463065bfacde38c379edc82ac9125823c7421482f4cddba177c6e4b60cedda  scripts/simGrandPrixBossLifecyclePage.mjs' \
+            '2c9ec059d8343bd33df850c3a2272687c47fb7515a8bfbe531c8e880f1a80b20  scripts/simGrandPrixBossManagement.mjs' \
+            '1474ae6a5e7c5ca99cc56e43c53502af4a4639ec1345f78af51a1af5588c8fc1  scripts/qa/source-controls/GrandPrixBoss.before-lifecycle.tsx.txt' | sha256sum --check -
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          for file in 'src/lib/grandPrixBoss.ts' 'src/hooks/useGrandPrixBoss.ts' 'src/test/grandPrixBossPage.test.tsx' 'src/test/grandPrixBossManagementPage.test.tsx' 'src/test/grandPrixBossLifecyclePage.test.tsx' 'src/test/fixtures/grandPrixBossV5Starter.json' 'src/pages/GrandPrixBoss.tsx' 'scripts/simGrandPrixBossLifecyclePage.mjs' 'scripts/simGrandPrixBossManagement.mjs' 'scripts/qa/source-controls/GrandPrixBoss.before-lifecycle.tsx.txt'; do
+            mkdir -p "$out/source/$(dirname "$file")"; cp "$file" "$out/source/$file"
+          done
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$GP_CUI_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$GP_CUI_OUT/$tag.argv"
+            : > "$GP_CUI_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$GP_CUI_OUT/$tag.transport" "$@" > "$GP_CUI_OUT/$tag.stdout" 2> "$GP_CUI_OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$GP_CUI_OUT/$tag.exit"
+            tail -n 18 "$GP_CUI_OUT/$tag.stdout"; tail -n 18 "$GP_CUI_OUT/$tag.stderr"
+            test ! -s "$GP_CUI_OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          cat > "$out/verify-ui.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out=process.env.GP_CUI_OUT,expected=new Map([["src/test/grandPrixBossPage.test.tsx",["GP_PAGE_AVAILABLE: the actual playable page module exists","GP_PAGE_START: shows a fictional-world start without silently creating a career","GP_PAGE_HUB: offers the six management screens and the next race","GP_PAGE_UPGRADE: sends the displayed revision and preserves the quoted engine price","GP_PAGE_ORDERS: sends one native strategy order for each contracted driver","GP_PAGE_STANDINGS: shows separate driver and team championships from held totals","GP_PAGE_BACK: returns focus to the management tile after closing a screen","GP_PAGE_MOVED_EMPTY: offers reload when another tab starts the previously empty team","GP_PAGE_PROTECTED_SAVE: preserves unsupported-save controls and offers reload"]],["src/test/grandPrixBossManagementPage.test.tsx",["GP_MANAGEMENT_SIGN: displays an actual offer and dispatches its IDs and current revision","GP_MANAGEMENT_RENEW: exposes a real next-year renewal without charging it again in the plan","GP_MANAGEMENT_NEXT_YEAR: shows the actual plan and advances only after the hook publishes it","GP_MANAGEMENT_GUARDS: refuses unfunded and protected decisions and holds a rejected transition","GP_MANAGEMENT_HISTORY: reads archived champions and races with honest legacy coverage","GP_MANAGEMENT_REVIEW_CARDS: preserves actual finished participants after a paid review signing"]],["src/test/grandPrixBossLifecyclePage.test.tsx",["GP_C_PAGE_FOCUS: dispatches free owned focus choices only in actual engine windows","GP_C_PAGE_REPLACEMENTS: displays canonical prospects and publishes the exact next-year transaction","GP_C_PAGE_RULES: explains lifecycle decisions in real first and reopened rules without changing the team"]]]);
+          const r=JSON.parse(fs.readFileSync(path.join(out,'ordinary.vitest.json'),'utf8'));
+          assert.equal(Number(fs.readFileSync(path.join(out,'ordinary.exit'),'utf8')),0);
+          assert.equal(fs.statSync(path.join(out,'ordinary.transport')).size,0);
+          assert.equal(r.success,true);assert.equal(r.numTotalTests,18);assert.equal(r.numPassedTests,18);
+          assert.equal(r.numFailedTests,0);assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);assert.equal(r.testResults.length,3);
+          const seenFiles=new Set(),cases=[];
+          for(const file of r.testResults){
+            const found=[...expected.keys()].filter(name=>file.name.replaceAll('\\','/').endsWith('/'+name));
+            assert.equal(found.length,1);const name=found[0];assert(!seenFiles.has(name));seenFiles.add(name);
+            assert.equal(file.assertionResults.length,expected.get(name).length);
+            const seen=new Set();
+            for(const row of file.assertionResults){
+              assert(expected.get(name).includes(row.title));assert(!seen.has(row.title));seen.add(row.title);
+              assert.equal(row.status,'passed');assert.equal(row.failureMessages.length,0);cases.push({file:name,title:row.title,status:row.status});
+            }
+            assert.equal(seen.size,expected.get(name).length);
+          }
+          assert.equal(seenFiles.size,3);assert.equal(cases.length,18);
+          const runtimeCounters={numUnhandledErrors:r.numUnhandledErrors??null,numRuntimeErrorTestSuites:r.numRuntimeErrorTestSuites??null};
+          for(const value of Object.values(runtimeCounters))if(value!==null){assert.equal(typeof value,'number');assert.equal(value,0);}
+          for(const errors of [r.errors,r.unhandledErrors])if(errors!=null){assert(Array.isArray(errors));assert.equal(errors.length,0);}
+          const raw=fs.readFileSync(path.join(out,'ordinary.stdout'),'utf8')+'\n'+fs.readFileSync(path.join(out,'ordinary.stderr'),'utf8');
+          assert(!/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw));
+          const controls=[];
+          for(const [scope,children,passed,ownedFailures,declaredSkips] of [['management',15,45,12,60],['lifecycle-page',4,9,3,0]]){
+            assert.equal(Number(fs.readFileSync(path.join(out,scope+'.exit'),'utf8')),0);
+            assert.equal(fs.statSync(path.join(out,scope+'.transport')).size,0);
+            const dirs=fs.readdirSync(path.join(out,scope),{withFileTypes:true}).filter(row=>row.isDirectory());
+            assert.equal(dirs.length,1);const summary=JSON.parse(fs.readFileSync(path.join(out,scope,dirs[0].name,'summary.json'),'utf8'));
+            assert.equal(summary.childRuns,children);assert.equal(summary.results.length,children);
+            assert.equal(summary.totals.passed,passed);assert.equal(summary.totals.ownedFailures,ownedFailures);assert.equal(summary.totals.declaredSkips,declaredSkips);
+            const actual=summary.results.reduce((sum,row)=>({passed:sum.passed+row.passed,ownedFailures:sum.ownedFailures+row.ownedFailures,declaredSkips:sum.declaredSkips+row.declaredSkips}),{passed:0,ownedFailures:0,declaredSkips:0});
+            assert.deepEqual(actual,{passed,ownedFailures,declaredSkips});
+            for(const child of summary.results){
+              for(const value of Object.values(child.runtimeCounters))if(value!==null){assert.equal(typeof value,'number');assert.equal(value,0);}
+            }
+            controls.push({scope,children,...actual,executed:actual.passed+actual.ownedFailures,childRuntimeCounters:summary.results.map(row=>({name:row.name,counters:row.runtimeCounters}))});
+          }
+          const total={ordinary:cases.length,children:controls.reduce((sum,row)=>sum+row.children,0),healthy:18+controls.reduce((sum,row)=>sum+row.passed,0),ownedFailures:controls.reduce((sum,row)=>sum+row.ownedFailures,0),declaredSkips:controls.reduce((sum,row)=>sum+row.declaredSkips,0)};
+          total.executed=total.healthy+total.ownedFailures;assert.deepEqual(total,{ordinary:18,children:19,healthy:72,ownedFailures:15,declaredSkips:60,executed:87});
+          fs.writeFileSync(path.join(out,'qualification-summary.json'),JSON.stringify({scope:'Eighteen ordinary actual-page cases plus nineteen copied-page control children. Mock public hook/chrome, real canonical C engine fixtures and RulesGate. No persistence/provider/native browser/App route/build/full ordinary suite or publication claim.',parent:'d1ef8bb0777693f90f64648ebbbbf61b1c65bd3d',cases,runtimeCounters,runtimeCounterCompleteness:Object.values(runtimeCounters).some(value=>value===null)||controls.some(row=>row.childRuntimeCounters.some(child=>Object.values(child.counters).some(value=>value===null)))?'UNKNOWN':'REPORTED',controls,total,repeatScope:'The fifteen prior page cases repeat in existing management children, with no extra distinct coverage claim.',installNetwork:'Locked online install precedes offline captures, with no empty install transport claim.'},null,2)+'\n');
+          console.log('GP_C_UI_FIXED:18 ordinary passes;19 copied children,54 healthy and15 owned assertions,60 unselected;87 total executed.');
+          VERIFY
+      - name: Locked install before offline execution
+        run: |
+          set -euo pipefail
+          out="$GP_CUI_OUT"
+          printf '%s\0' env NODE_OPTIONS= npm ci > "$out/install.argv"
+          set +e
+          env NODE_OPTIONS='' npm ci > "$out/install.stdout" 2> "$out/install.stderr"
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$out/install.exit"
+          tail -n 18 "$out/install.stdout"; tail -n 18 "$out/install.stderr"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types eighteen held cases and both complete page control families
+        run: |
+          set -euo pipefail
+          out="$GP_CUI_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture verifier-syntax node --check "$out/verify-ui.mjs"
+          capture management-syntax node --check scripts/simGrandPrixBossManagement.mjs
+          capture lifecycle-page-syntax node --check scripts/simGrandPrixBossLifecyclePage.mjs
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture ordinary node node_modules/vitest/vitest.mjs run src/test/grandPrixBossPage.test.tsx src/test/grandPrixBossManagementPage.test.tsx src/test/grandPrixBossLifecyclePage.test.tsx --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/ordinary.vitest.json"
+          capture management env GP_BOSS_MANAGEMENT_OUT="$out/management" node scripts/simGrandPrixBossManagement.mjs
+          capture lifecycle-page env GP_BOSS_LIFECYCLE_PAGE_OUT="$out/lifecycle-page" node scripts/simGrandPrixBossLifecyclePage.mjs
+          capture verify-ui node "$out/verify-ui.mjs"
+      - name: Complete source dependencies and membership stay held
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$GP_CUI_OUT"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-lifecycle-ui-fixed-${{ github.run_id }}
+          path: ${{ github.workspace }}/tmp/grand-prix-lifecycle-ui-fixed-artifacts/
+          retention-days: 14
