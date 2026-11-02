@@ -1,7 +1,7 @@
 name: Grand Prix Boss actual compiled page browser proof
 on:
   push:
-    branches: [codex/grand-prix-boss-page-browser-v2-20261102]
+    branches: [codex/grand-prix-boss-page-browser-v3-20261102]
 permissions:
   contents: read
 jobs:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 3
+          fetch-depth: 4
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -32,15 +32,15 @@ jobs:
         run: |
           set -euo pipefail
           out="$GP_BOSS_BROWSER_OUT"; mkdir -p "$out"
-          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-page-browser-v2-20261102
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-page-browser-v3-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = a682b749d6afef337a4f809224d7bb49fcb52f6a
+          test "$(git rev-parse HEAD^)" = 7db275506cb5a22e43ddb9c70b83e4b161e61d52
           git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
           printf '%s\n' '.github/workflows/grand-prix-boss-page-browser.yml' 'scripts/qa/fixtures/grandPrixBoss.entry.tsx' 'scripts/qa/playGrandPrixBossPage.mjs' | sort > "$out/expected-paths.txt"
           git diff --name-only 6fbc29bd5e707d0e5fdef5c623be80b22456b694 HEAD | sort > "$out/actual-paths.txt"
           cmp "$out/expected-paths.txt" "$out/actual-paths.txt"
           git diff --exit-code 6fbc29bd5e707d0e5fdef5c623be80b22456b694 -- src public scripts/data index.html package.json package-lock.json
-          printf 'aae8222cf6e60d9946dab90f7a152f32a5a8412433779a20921b9594ff9dda54  scripts/qa/playGrandPrixBossPage.mjs\nb008f7ece22c001e2b3fc639d9ba9c02a9feae0f651f65265852a3c1e955f158  scripts/qa/fixtures/grandPrixBoss.entry.tsx\n' | sha256sum --check -
+          printf 'd1fa6e1946991004786cb62b2deb80775ec96f74ad05ab2c75575def0b44da79  scripts/qa/playGrandPrixBossPage.mjs\nb008f7ece22c001e2b3fc639d9ba9c02a9feae0f651f65265852a3c1e955f158  scripts/qa/fixtures/grandPrixBoss.entry.tsx\n' | sha256sum --check -
           git ls-files -z > "$out/source-members.before"
           git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
           cat > "$out/capture.sh" <<'CAPTURE'

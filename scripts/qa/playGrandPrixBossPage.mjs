@@ -240,6 +240,7 @@ function validate(row) {
   assert.deepEqual(row.pageErrors, [], 'No page runtime error');
   assert.deepEqual(row.consoleErrors, [], 'No console error');
   assert.deepEqual(row.failed, [], 'No failed browser request');
+  assert.deepEqual(row.routeErrors, [], 'No fixture route handler error');
   assert.equal(row.screenshots.length, row.mode === 'race' ? 5 : row.mode === 'uncertain' ? 2 : 1, 'All original state images');
   for (const shot of row.screenshots) {
     const bytes = fs.readFileSync(path.join(output, shot.name));
@@ -254,18 +255,50 @@ let browser = null, pending = null;
 try {
   browser = await chromium.launch({ args: ['--no-sandbox'] });
   for (const size of [{ id: 'mini', width: 320, height: 664, mobile: true }, { id: 'phone', width: 392, height: 731, mobile: true }, { id: 'desktop', width: 1440, height: 900, mobile: false }]) for (const mode of ['race', 'quota', 'noop', 'uncertain']) {
-    const row = { size, mode, dpr: size.mobile ? 2 : 1, help: { bounds: [] }, quotes: [], trace: [], actions: [], widths: [], targets: [], backs: [], reloads: [], panels: [], races: [], orderControls: [], pageErrors: [], consoleErrors: [], failed: [], unexpected: [], writes: [], screenshots: [] };
+    const row = { size, mode, dpr: size.mobile ? 2 : 1, help: { bounds: [] }, quotes: [], trace: [], actions: [], widths: [], targets: [], backs: [], reloads: [], panels: [], races: [], orderControls: [], pageErrors: [], consoleErrors: [], failed: [], routeErrors: [], cleanupErrors: [], localAssets: [], unexpected: [], writes: [], screenshots: [] };
     pending = row;
     const context = await browser.newContext({ viewport: { width: size.width, height: size.height }, deviceScaleFactor: row.dpr, isMobile: size.mobile, hasTouch: size.mobile, locale: 'en-US', timezoneId: 'America/New_York' });
+    const inFlight = new Set();
+    let contextClosed = false, primaryError = null;
+    const closeContext = async () => {
+      if (contextClosed) return;
+      contextClosed = true;
+      try { await Promise.all([...inFlight]); await context.close(); }
+      finally { await Promise.all([...inFlight]); }
+    };
+    const savePrimary = error => {
+      fs.writeFileSync(path.join(output, size.id + '-' + mode + '-partial.json'), JSON.stringify(row, null, 2));
+      fs.writeFileSync(path.join(output, size.id + '-' + mode + '-failure.json'), JSON.stringify({ name: error.name, message: error.message, stack: error.stack }, null, 2));
+    };
     try {
       await context.addInitScript(installProbe);
       await context.route('**/*', route => {
-        const request = route.request(), address = request.url();
-        if (request.method() !== 'GET') { row.writes.push({ url: address, method: request.method() }); return route.abort(); }
-        if (address.startsWith(origin + '/')) return route.continue();
-        const font = fonts.get(address);
-        if (font) return route.fulfill({ status: 200, body: font.body, contentType: font.contentType });
-        row.unexpected.push({ url: address, method: request.method() }); return route.abort();
+        const task = (async () => {
+          let address = null, method = null;
+          try {
+            const request = route.request(); address = request.url(); method = request.method();
+            if (method !== 'GET') { row.writes.push({ url: address, method }); return await route.abort(); }
+            const parsed = new URL(address);
+            if (parsed.origin === origin) {
+              assert.equal(parsed.search, '', 'Fixture assets have no query variants');
+              const asset = assets.get(parsed.pathname);
+              if (!asset && parsed.pathname === '/favicon.ico') { row.localAssets.push({ path: parsed.pathname, status: 204, bytes: 0, sha256: null }); return await route.fulfill({ status: 204, body: '' }); }
+              assert(asset, 'Only declared immutable fixture assets are served');
+              const [body, contentType] = asset;
+              row.localAssets.push({ path: parsed.pathname, status: 200, bytes: body.length, sha256: sha(body) });
+              return await route.fulfill({ status: 200, body, contentType });
+            }
+            const font = fonts.get(address);
+            if (font) return await route.fulfill({ status: 200, body: font.body, contentType: font.contentType });
+            row.unexpected.push({ url: address, method }); return await route.abort();
+          } catch (error) {
+            row.routeErrors.push({ url: address, method, stage: 'handler', name: error.name, message: error.message, stack: error.stack });
+            try { await route.abort(); }
+            catch (abortError) { row.routeErrors.push({ url: address, method, stage: 'abort', name: abortError.name, message: abortError.message, stack: abortError.stack }); }
+          }
+        })();
+        inFlight.add(task); task.then(() => inFlight.delete(task));
+        return task;
       });
       const attach = page => {
         page.on('pageerror', error => row.pageErrors.push({ message: error.message, stack: error.stack }));
@@ -441,6 +474,7 @@ try {
         await commit(page, { type: 'upgrade', area: 'power' }, 'Improve power'); await quote(page);
       }
       row.final = await inspect(page); await measure(page);
+      await closeContext();
       validate(row);
       const controls = [
         ['quote', 'Displayed authoritative quote', value => { value.quotes[0].text = 'changed'; }],
@@ -462,6 +496,7 @@ try {
         ['runtime', 'No page runtime error', value => { value.pageErrors.push('changed'); }],
         ['console', 'No console error', value => { value.consoleErrors.push('changed'); }],
         ['failed-request', 'No failed browser request', value => { value.failed.push('changed'); }],
+        ['route-handler', 'No fixture route handler error', value => { value.routeErrors.push({ stage: 'changed copied observation' }); }],
       ];
       if (size.mobile) controls.push(['fold', 'First hub action phone fold', value => { value.hub.top = 431; }], ['before-scroll', 'First hub measured before page scroll', value => { value.hub.y = 1; }]);
       if (mode === 'race') controls.push(
@@ -495,7 +530,16 @@ try {
       fs.writeFileSync(path.join(output, size.id + '-' + mode + '.json'), JSON.stringify(row, null, 2));
       results.push(row); pending = null;
       console.log(`Grand Prix Boss ${size.id}/${mode}: ${row.trace.length} committed UI actions, ${row.reloads.length} native reloads, ${row.reveals.siteScrolls} measured site reveals, ${row.screenshots.length} original images, ${row.controls.length} effective copied-observation controls/restores.`);
-    } finally { await context.close(); }
+    } catch (error) {
+      primaryError = error; savePrimary(error); throw error;
+    } finally {
+      try { await closeContext(); }
+      catch (error) {
+        row.cleanupErrors.push({ name: error.name, message: error.message, stack: error.stack });
+        if (!primaryError) { savePrimary(error); throw error; }
+      }
+      if (primaryError) savePrimary(primaryError);
+    }
   }
   assert.equal(results.length, 12, 'Twelve finite compiled-page contexts');
   console.log(`playGrandPrixBossPage: 12 compiled actual-page contexts, ${results.reduce((sum, row) => sum + row.controls.length, 0)} effective controls/restores, ${results.reduce((sum, row) => sum + row.screenshots.length, 0)} original images. No App route or production-site claim.`);
