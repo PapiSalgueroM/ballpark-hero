@@ -1,0 +1,80 @@
+name: Grand Prix Boss page absence baseline
+on:
+  push:
+    branches: [codex/grand-prix-boss-ui-baseline-20261102]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold source and install the locked application
+        run: |
+          set -euo pipefail
+          mkdir -p grand-prix-ui-baseline-artifacts
+          git rev-parse HEAD HEAD^{tree} > grand-prix-ui-baseline-artifacts/head-tree.txt
+          git ls-files -z > grand-prix-ui-baseline-artifacts/members.before
+          git ls-files -z | xargs -0 sha256sum > grand-prix-ui-baseline-artifacts/source.sha256
+          test ! -e src/pages/GrandPrixBoss.tsx
+          npm ci > grand-prix-ui-baseline-artifacts/install.stdout 2> grand-prix-ui-baseline-artifacts/install.stderr
+      - name: Actual app types and explicit page absence outcome
+        run: |
+          set -euo pipefail
+          out=grand-prix-ui-baseline-artifacts
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$out/types.stdout" 2> "$out/types.stderr"
+          printf '0\n' > "$out/types.exit"
+          set +e
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/grandPrixBossPage.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/page.json" > "$out/page.stdout" 2> "$out/page.stderr"
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$out/page.exit"
+          tail -n 12 "$out/page.stdout"; tail -n 12 "$out/page.stderr"
+          test "$code" -eq 1
+          node --input-type=module <<'CHECK'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const out='grand-prix-ui-baseline-artifacts', r=JSON.parse(fs.readFileSync(out+'/page.json','utf8'));
+          const rows=r.testResults.flatMap(file=>file.assertionResults??[]);
+          const failed=rows.filter(row=>row.status==='failed');
+          assert.equal(r.testResults.length,1); assert.equal(rows.length,8);
+          assert.equal(r.numFailedTests,1); assert.equal(r.numPassedTests,0); assert.equal(r.numPendingTests,7);
+          assert.equal(failed.length,1); assert(failed[0].title.startsWith('GP_PAGE_AVAILABLE:'));
+          assert(failed[0].failureMessages.some(message=>message.includes('AssertionError')&&message.includes('GP_PAGE_MODULE_MISSING')));
+          const counters={numUnhandledErrors:r.numUnhandledErrors??null,numRuntimeErrorTestSuites:r.numRuntimeErrorTestSuites??null};
+          for(const count of Object.values(counters)){if(count!==null)assert.equal(count,0);}
+          const raw=fs.readFileSync(out+'/page.stdout','utf8')+fs.readFileSync(out+'/page.stderr','utf8');
+          assert(!/Unhandled (?:Errors?|Rejection)|Vitest caught \d+ unhandled/.test(raw));
+          const summary={purpose:'Absence only, no implemented page outcome credit',rawExit:1,ownedMissingModuleAssertions:1,declaredUnimplementedSkips:7,counters};
+          fs.writeFileSync(out+'/summary.json',JSON.stringify(summary,null,2)+'\n'); console.log(summary);
+          CHECK
+      - name: Whole source and membership held
+        if: always()
+        run: |
+          set -euo pipefail
+          out=grand-prix-ui-baseline-artifacts
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log"
+          git ls-files -z > "$out/members.after"
+          cmp "$out/members.before" "$out/members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"
+          test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-ui-baseline-${{ github.run_id }}
+          path: grand-prix-ui-baseline-artifacts/
+          retention-days: 14
