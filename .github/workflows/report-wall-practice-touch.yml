@@ -1,0 +1,183 @@
+name: Wall practice actual component touch measurement
+on:
+  push:
+    branches: [codex/report-wall-practice-touch-20261102]
+permissions:
+  contents: read
+jobs:
+  touch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      ENGINES: chromium
+      WALL_TOUCH_OUT: ${{ github.workspace }}/tmp/wall-touch-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind unchanged PR450 and exactly three QA paths
+        id: prepare
+        run: |
+          set -euo pipefail
+          out="$WALL_TOUCH_OUT"; test ! -e "$out"; mkdir -p "$out"
+          test "$GITHUB_REF" = refs/heads/codex/report-wall-practice-touch-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = d230682b593e0c6d4c87ea861bdb8b1ae2758176
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          printf '%s\n' '.github/workflows/report-wall-practice-touch.yml' 'scripts/qa/fixtures/wallPracticeTouchHeld.json' 'scripts/qa/playWallPracticeTouch.mjs' | sort > "$out/expected-paths.txt"
+          git diff --name-only HEAD^ HEAD | sort > "$out/changed-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          git diff --exit-code HEAD^ -- src public scripts/data index.html package.json package-lock.json bun.lock vitest.config.ts scripts/simCareerDrills.mjs scripts/simDrillMotion.mjs scripts/sweepWeight.mjs > "$out/held-parent-paths.log"
+          printf '%s\n' \
+            '7d496cdc7a569b3b02677f53e3bd7476bee5e7a038a5c8b1271815e0e18f0828  scripts/qa/playWallPracticeTouch.mjs' \
+            '7f40e8174712d6f35fe65e69e8ed61dcf75923e84717e99e268b33c58c013986  scripts/qa/fixtures/wallPracticeTouchHeld.json' | sha256sum --check -
+          for row in \
+            '6125570ccdf2f037a7debeaa7ad14815e9ed860e src/lib/careerDrills.ts' \
+            '7320c7d87029d6805d808eabb3d02b0f8e32cb4e src/lib/freeKick.ts' \
+            '218a3bf3b415164920411273923b094172999618 src/lib/arcade.ts' \
+            'c3c6500b976bce912d3626643269fb1b5388234b src/components/soccer-career/DrillBoard.tsx' \
+            '2556cfa8ce62cd09b36a99969e9ace515198c6b9 src/components/soccer-career/DrillPlayers.tsx'; do
+            read -r expected file <<< "$row"; test "$(git rev-parse "HEAD:$file")" = "$expected"
+          done
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$WALL_TOUCH_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$WALL_TOUCH_OUT/$tag.argv"
+            : > "$WALL_TOUCH_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$WALL_TOUCH_OUT/$tag.transport" "$@" > "$WALL_TOUCH_OUT/$tag.stdout" 2> "$WALL_TOUCH_OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$WALL_TOUCH_OUT/$tag.exit"
+            tail -n 12 "$WALL_TOUCH_OUT/$tag.stdout"; tail -n 12 "$WALL_TOUCH_OUT/$tag.stderr"
+            test ! -s "$WALL_TOUCH_OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked app and isolated browser install before offline boundary
+        id: install
+        run: |
+          set -euo pipefail
+          out="$WALL_TOUCH_OUT"
+          printf '%s\0' env NODE_OPTIONS= npm ci > "$out/install.argv"
+          set +e
+          env NODE_OPTIONS='' npm ci > "$out/install.stdout" 2> "$out/install.stderr"
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$out/install.exit"
+          tail -n 12 "$out/install.stdout"; tail -n 12 "$out/install.stderr"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+          browser_tools="$RUNNER_TEMP/wall-touch-browser-tools"; test ! -e "$browser_tools"; mkdir "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          set +e
+          env NODE_OPTIONS='' npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund > "$out/browser-install.stdout" 2> "$out/browser-install.stderr"
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$out/browser-install.exit"; test "$code" -eq 0
+          cp "$browser_tools/package.json" "$out/browser-package.json"; cp "$browser_tools/package-lock.json" "$out/browser-package-lock.json"
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          set +e
+          env NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium > "$out/chromium-install.stdout" 2> "$out/chromium-install.stderr"
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$out/chromium-install.exit"; test "$code" -eq 0
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-files.sha256"
+          env NODE_OPTIONS='' node --input-type=module <<'BROWSER'
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { chromium } from 'playwright';
+          const file=chromium.executablePath(),body=fs.readFileSync(file);
+          fs.writeFileSync(process.env.WALL_TOUCH_OUT+'/browser-executable.json',JSON.stringify({file,bytes:body.length,sha256:createHash('sha256').update(body).digest('hex')},null,2)+'\n');
+          BROWSER
+      - name: Real app types and driver syntax under offline boundary
+        id: types
+        run: |
+          set -euo pipefail
+          out="$WALL_TOUCH_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset SIM_CAREER_DRILLS_CONTROL GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture syntax node --check scripts/qa/playWallPracticeTouch.mjs
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Exact tape four-height replays and actual four phone touch contexts
+        if: always() && steps.prepare.outcome == 'success' && steps.install.outcome == 'success' && steps.types.outcome == 'success'
+        run: |
+          set -euo pipefail
+          out="$WALL_TOUCH_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset SIM_CAREER_DRILLS_CONTROL GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture touch node scripts/qa/playWallPracticeTouch.mjs
+          node --input-type=module <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const base=process.env.WALL_TOUCH_OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const children=fs.readdirSync(base).filter(name=>name.startsWith('wall-touch-')&&fs.statSync(path.join(base,name)).isDirectory());
+          assert.equal(children.length,1);
+          const dir=path.join(base,children[0]),read=name=>JSON.parse(fs.readFileSync(path.join(dir,name),'utf8'));
+          const summary=read('summary.json'),rows=read('actual-observations.json'),heights=read('engine-height-replays.json'),cleanup=read('cleanup.json');
+          assert.equal(summary.configuredContexts,4);assert.equal(summary.attemptedContexts,4);assert.equal(summary.completedContexts,4);
+          assert.equal(summary.nativeCommits,12);assert.equal(summary.nativeCancels,4);assert.equal(summary.screenshots,12);
+          assert.equal(rows.length,4);assert.equal(heights.length,4);assert.deepEqual(heights.map(row=>row.input.y),[0.95,1,1.05,1.1]);
+          assert(heights.every(row=>row.consumed===4));assert.deepEqual(cleanup,[]);
+          assert.equal(summary.observationSha256,sha(JSON.stringify(rows)));
+          const expected=['mini-full','mini-reduced','phone-full','phone-reduced'];
+          assert.deepEqual(rows.map(row=>row.size.id),expected);
+          let commits=0,cancels=0,images=0;
+          for(const row of rows){
+            assert.equal(row.completed,true);assert.deepEqual(row.cases.map(r=>r.id),['default','aimed','upper']);
+            for(const key of ['unexpected','writes','routeErrors','pageErrors','consoleErrors','failedRequests','errors'])assert.deepEqual(row[key],[],key);
+            for(const r of row.cases){assert.equal(r.after.results.length,1);commits++;if(r.cancelFirst){assert.equal(r.cancel.results.length,0);cancels++;}}
+            for(const image of row.screenshots){const body=fs.readFileSync(path.join(dir,image.file));assert.equal(sha(body),image.sha256);images++;}
+            assert(row.assets.every(r=>r.fulfilledBodyType==='Buffer'));
+          }
+          assert.equal(commits,12);assert.equal(cancels,4);assert.equal(images,12);
+          assert.deepEqual(summary.controls.map(row=>row.name),['mapping','parity','cancel','storage','native','transport']);
+          assert(summary.controls.every(row=>row.changed&&row.ownedRefusal&&row.restoredHealthy));
+          const raw=fs.readFileSync(path.join(base,'touch.stdout'),'utf8')+'\n'+fs.readFileSync(path.join(base,'touch.stderr'),'utf8');
+          assert(raw.includes('WALL_TOUCH:4 exact height replays;4 actual component contexts,12 native commits,4 native cancels,12 images,6 effective copied-observation controls and restorations.'));
+          const detectedRuntimeError=/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Failed to resolve|Cannot find (?:module|package)|SyntaxError|Transform failed|SIM_OFFLINE_BLOCK)/i.test(raw);
+          assert.equal(detectedRuntimeError,false);
+          fs.writeFileSync(path.join(base,'qualification-summary.json'),JSON.stringify({
+            completedContexts:4,nativeCommits:commits,nativeCancels:cancels,originalImages:images,engineHeightReplays:heights.map(row=>({input:row.input,won:row.result.won,verdict:row.result.verdict})),
+            effectiveCopiedObservationControls:summary.controls.length,restoredObservations:summary.controls.filter(row=>row.restoredHealthy).length,
+            browserPageErrors:rows.flatMap(row=>row.pageErrors),runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN',detectedRuntimeError,
+            scope:'Actual compiled one-round DrillMatch input fixture. Native Chromium touch backend and clocks, exact captured tape. Not original user practice, physical Android, full career route, human precision, build/readers/caps, continuous optimum or balance adoption.',
+            acquisition:'No archive or font acquisition. Selected exact admitted row and original held gzip font bodies are repository QA fixtures.',
+            installNetwork:'Locked app/browser installs are explicitly online before the guarded boundary. Only syntax/types/touch are guarded outer commands.',
+          },null,2)+'\n');
+          console.log('WALL_TOUCH_QUALIFIED:4 held-height replays;4 actual touch contexts;12 native callbacks;4 cancelled gestures;12 original images;6 effective observation controls and restorations.');
+          CHECK
+      - name: Always hold all source dependencies tools and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$WALL_TOUCH_OUT"
+          if test -f "$out/source.sha256"; then sha256sum --check "$out/source.sha256" > "$out/source-held.log"; fi
+          if test -f "$out/dependency-files.sha256"; then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log"; fi
+          if test -f "$out/browser-files.sha256"; then sha256sum --check "$out/browser-files.sha256" > "$out/browser-held.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wall-practice-touch-${{ github.run_id }}
+          path: ${{ github.workspace }}/tmp/wall-touch-artifacts/
+          retention-days: 14
