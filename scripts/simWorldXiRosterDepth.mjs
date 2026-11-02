@@ -2,7 +2,7 @@
 import './lib/offlineTransport.cjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { execFileSync, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 assert.equal(process.env.CI, '1', 'Remote CI only');
 assert.equal(process.env.SIM_NETWORK, 'offline', 'Offline transport required');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const base = 'cc9a55a2f35b6215d5e6e664cc401d10d7f76291';
+const originalFile = 'scripts/qa/source-controls/worldXi.before-roster-depth.ts.txt';
 const sourceFile = 'src/lib/worldXi.ts';
 const testFile = 'src/test/worldXiRosterDepth.test.ts';
 const titles = [
@@ -28,13 +28,16 @@ const titles = [
   'preserves source row fields and does not manufacture a later club or value',
 ];
 const oldFailures = [titles[0], titles[1], ...titles.slice(4, 10)];
-const files = [sourceFile, testFile, 'scripts/simWorldXiRosterDepth.mjs', 'src/lib/positionFit.ts',
+const files = [sourceFile, testFile, originalFile, 'scripts/simWorldXiRosterDepth.mjs', 'src/lib/positionFit.ts',
   'src/lib/squadShape.ts', 'src/lib/playerSearch.ts', 'vitest.config.ts', 'package.json', 'package-lock.json', 'bun.lock'];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const held = await Promise.all(files.map(async file => [file, await readFile(path.join(root, file))]));
 const receipts = () => held.map(([file, bytes]) => ({ file, bytes: bytes.length, sha256: hash(bytes) }));
 const source = held[0][1].toString('utf8').replaceAll('\r\n', '\n');
-const original = execFileSync('git', ['show', `${base}:${sourceFile}`], { cwd: root, encoding: 'utf8' }).replaceAll('\r\n', '\n');
+const originalBytes = held.find(([file]) => file === originalFile)[1];
+assert.equal(originalBytes.length, 67_740, 'Exact acquired original control size');
+assert.equal(hash(originalBytes), '2f8d2bce7ca13ff998217005066e3c68e6c4bf7bf24e63da750378badba2fd23', 'Exact original control from qualified artifact41394488957');
+const original = originalBytes.toString('utf8');
 assert.notEqual(source, original, 'Fixed proof requires an actual loader change');
 const previousPages = `    const prevRequests = Array.from({ length: PREV_PAGES }, (_, i) =>
       supabase
