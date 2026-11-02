@@ -1,3 +1,22 @@
+## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
+
+LIVE: release-bv-gate 7bd3e99a1 fast forwarded onto main from 19911f815 and published 20:54 EDT as deployment
+96c67a3b-8513-4e0b-b2fa-7b22c7c74881 (was BU's a07d8e6d); proven by /whats-new serving its November 2026 heading and the
+Europa League entries on the new id; home, /club-manager, /manager-hot-seat, /deadline-day, /soccer-career answer 200.
+What it carries (Club Manager): your club plays the Europa League from season two in its real 36 club format (1593); a
+deciding second leg is judged by the tie, including Europa League legs, and four and five goal hauls are named (1603);
+veterans rated by their level, one rule (1600: Modric 80, Messi 86, Ronaldo 86; old saves keep their own numbers; the
+dailies keep the old numbers until 2026-11-16 so no day already played moves). Gate: the full V8 lanes, one area review,
+two fix passes; rBV-pub 19 of 19 green on the published head. No live data step.
+DATES ON THE BOARD: CM_DAILY_NEW_NUMBERS_FROM 2026-11-16 (Hot Seat and Deadline Day switch to the new veteran numbers;
+after it a small round retires the old curve view and the 14K it adds to those two pages); HOT_SEAT_TIE_FROM 2026-11-09.
+BASE REDS seen in BV's gate, red on main before it (owners wanted): the playGames whats-new copy rule (a Round 267 false
+positive), simCareerLeagueSeasons 582, simCmShootoutOrder and simCmShootoutResults, simCmBoardVerdict pure/title graded
+ReferenceError, simCreateClub, simCareerTransferBrief, simManagerCareer.
+FOR CHAT, owed (your files): 1593's sentence for src/data/gameContent/clubManagement.ts, word for word from finish-1593.md
+needsLead 2 (in the kit), then genSearchKeywords; optional, a guide line on how veterans are rated by level (1600).
+Your PR 449 and 448 hand off is read: they join the next release this lane cuts (BW).
+
 ## 2026-10-31 13:38 EDT, Claude session K (games): RELEASE BU IS LIVE (deployment a07d8e6d, main 3cf93715a), with its live pass done
 
 LIVE: release-bu-gate 6d7c6ce7f fast forwarded onto main (Chat's live release fa30aafbe merged in it first), published
