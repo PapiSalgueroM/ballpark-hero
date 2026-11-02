@@ -1,0 +1,180 @@
+name: Report MLB playoff replay focus fix verification
+on:
+  push:
+    branches: [codex/report-mlb-playoffs-focus-fixed-20261102]
+permissions:
+  contents: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      SIM_MLB_PLAYOFF_ARTIFACTS: ${{ github.workspace }}/evidence/focused
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked source and dependencies
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD | tee evidence/head.txt
+          printf 'bc73ac4dc2d15c19996c10e16ca2223f61abc28a73c3104b8cebef4274743e8f  src/test/mlbPlayoffReplay.test.tsx\n888d706198f041ceef5881ffdbf00f5e8a9fdc54b8ca05c9bc09555f727b2939  scripts/simMlbPlayoffReplay.mjs\nb1b35fbc7df55b4c70d18bf97e54ff875d01236893fa37acf144276724825a3f  scripts/qa/playMlbPlayoffReplay.mjs\nafdd281ce2984ca34158194a0d6102bd053f2f8d242bc844c19f8f536b08d627  scripts/sweepWeight.mjs\n' | sha256sum --check -
+          test "$(git hash-object src/components/us-career/season/UsSeasonCentre.tsx)" = 85c3467602a6a151ffa71bb14ace7a8598b99f4a
+          test "$(git hash-object src/components/us-career/season/MlbPlayoffReplay.tsx)" = 8c57ce766f57ab86da768df0a839b4d16f2dfee4
+          test "$(git hash-object src/lib/season/mlbPlayoffReplay.ts)" = 8b82607cc37adb67b4703bb482ec115a7f4a30f0
+          sha256sum package.json package-lock.json src/components/us-career/season/UsSeasonCentre.tsx src/components/us-career/season/MlbPlayoffReplay.tsx src/lib/season/mlbPlayoffReplay.ts src/test/mlbPlayoffReplay.test.tsx src/test/mlbPlayoffReplayModel.test.ts scripts/simMlbPlayoffReplay.mjs scripts/sweepWeight.mjs > evidence/holds.txt
+          npm ci
+      - name: Actual types, syntax and healthy replay
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee evidence/types.log
+          node --check scripts/simMlbPlayoffReplay.mjs
+          node --check scripts/qa/playMlbPlayoffReplay.mjs
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simMlbPlayoffReplay.mjs 2>&1 | tee evidence/healthy.log
+      - name: Seven effective source faults and restored healthy outcomes
+        run: |
+          for fault in entry duplicate series result help back focus; do
+            set +e
+            MLB_PLAYOFF_REPLAY_CONTROL="$fault" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simMlbPlayoffReplay.mjs > "evidence/control-$fault.log" 2>&1
+            code=$?
+            set -e
+            cat "evidence/control-$fault.log"
+            test "$code" -eq 1
+            FAULT="$fault" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const rows = fs.readdirSync('evidence/focused').map(name => JSON.parse(fs.readFileSync('evidence/focused/' + name + '/summary.json')));
+          const selected = rows.filter(row => row.control === process.env.FAULT);
+          assert.equal(selected.length, 1);
+          assert.equal(selected[0].expected, true);
+          assert.equal(selected[0].rawExit, 1);
+          console.log('Admitted named source fault:', process.env.FAULT, selected[0].failed);
+          NODE
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simMlbPlayoffReplay.mjs 2>&1 | tee "evidence/restored-$fault.log"
+          done
+      - name: Existing season and playoff suites
+        run: node_modules/.bin/vitest run src/test/usPlayoffs.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreScreens.test.tsx --reporter=verbose --reporter=json --outputFile=evidence/existing-seasons.json 2>&1 | tee evidence/existing-seasons.log
+      - name: Source holds
+        if: always()
+        run: sha256sum --check evidence/holds.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mlb-playoffs-focused-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
+  build-and-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SWEEP_OFFLINE: '1'
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/evidence/font-cache
+      MLB_PLAYOFF_BROWSER_OUT: ${{ github.workspace }}/evidence/browser
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked source and isolated browser tools
+        run: |
+          mkdir -p evidence
+          git rev-parse HEAD | tee evidence/head.txt
+          printf 'bc73ac4dc2d15c19996c10e16ca2223f61abc28a73c3104b8cebef4274743e8f  src/test/mlbPlayoffReplay.test.tsx\n888d706198f041ceef5881ffdbf00f5e8a9fdc54b8ca05c9bc09555f727b2939  scripts/simMlbPlayoffReplay.mjs\nb1b35fbc7df55b4c70d18bf97e54ff875d01236893fa37acf144276724825a3f  scripts/qa/playMlbPlayoffReplay.mjs\nafdd281ce2984ca34158194a0d6102bd053f2f8d242bc844c19f8f536b08d627  scripts/sweepWeight.mjs\n' | sha256sum --check -
+          sha256sum package.json package-lock.json src/components/us-career/season/UsSeasonCentre.tsx src/components/us-career/season/MlbPlayoffReplay.tsx src/lib/season/mlbPlayoffReplay.ts scripts/qa/fixtures/mlbPlayoffReplay.entry.tsx scripts/qa/playMlbPlayoffReplay.mjs scripts/sweepWeight.mjs > evidence/holds.txt
+          npm ci
+          npm install --prefix "$RUNNER_TEMP/report-browser" --no-save --package-lock=false playwright@1.64.0
+          ln -s "$RUNNER_TEMP/report-browser/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/report-browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/report-browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee evidence/fonts.log
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+      - name: Ordinary production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee evidence/types.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build 2>&1 | tee evidence/build.log
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > evidence/dist-sha256.txt
+      - name: All fifteen saved-output readers
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "evidence/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Every unchanged page cap
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/lib/hostLikeServer.mjs dist 4173 > evidence/host.log 2>&1 &
+          host_pid=$!
+          trap 'kill "$host_pid"' EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+          node scripts/sweepWeight.mjs 2>&1 | tee evidence/weight.log
+      - name: Actual compiled viewer at mini, phone and desktop sizes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playMlbPlayoffReplay.mjs 2>&1 | tee evidence/browser.log
+      - name: Source and built bytes held
+        if: always()
+        run: |
+          sha256sum --check evidence/holds.txt
+          if test -f evidence/dist-sha256.txt; then sha256sum --check evidence/dist-sha256.txt > evidence/dist-held.log; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mlb-playoffs-build-browser-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14
+  full-units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Locked dependencies and source
+        run: |
+          mkdir evidence
+          git rev-parse HEAD > evidence/head.txt
+          sha256sum package.json package-lock.json src/components/us-career/season/UsSeasonCentre.tsx src/components/us-career/season/MlbPlayoffReplay.tsx src/lib/season/mlbPlayoffReplay.ts > evidence/holds.txt
+          npm ci
+      - name: Full ordinary unit suite
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm test -- --maxWorkers=2 --reporter=verbose --reporter=json --outputFile=evidence/all-units.json 2>&1 | tee evidence/all-units.log
+      - name: Source holds
+        if: always()
+        run: sha256sum --check evidence/holds.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mlb-playoffs-full-units-${{ github.run_id }}
+          path: evidence/
+          retention-days: 14

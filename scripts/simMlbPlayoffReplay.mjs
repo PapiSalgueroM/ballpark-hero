@@ -1,5 +1,5 @@
 /* Actual MLB replay cases. MLB_PLAYOFF_REPLAY_CONTROL=entry|duplicate|series|
-   result|help|back must fail at its named assertions. All source copies and
+   result|help|back|focus must fail at its named assertions. All source copies and
    raw reports stay under SIM_MLB_PLAYOFF_ARTIFACTS, or a unique temp folder. */
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -18,7 +18,7 @@ const model = 'src/lib/season/mlbPlayoffReplay.ts';
 const walk = 'steps through every game of the saved playoff run and returns to the same regular review';
 const reopen = 'reopens the same W/L replay, explains its limits and reopens its rules';
 const fleet = 'covers every modern finish and game count without duplicating a game or clinching early';
-const expectedFailures = { entry: [walk, reopen], duplicate: [walk, fleet], series: [walk, fleet], result: [walk, fleet], help: [reopen], back: [walk, reopen] };
+const expectedFailures = { entry: [walk, reopen], duplicate: [walk, fleet], series: [walk, fleet], result: [walk, fleet], help: [reopen], back: [walk, reopen], focus: [walk] };
 assert(!control || expectedFailures[control], 'Unknown MLB_PLAYOFF_REPLAY_CONTROL');
 const base = process.env.SIM_MLB_PLAYOFF_ARTIFACTS ? path.resolve(process.env.SIM_MLB_PLAYOFF_ARTIFACTS) : os.tmpdir();
 fs.mkdirSync(base, { recursive: true });
@@ -37,6 +37,13 @@ if (control) {
     assert.equal(old.status, 0, 'The exact original viewer blob is required, with full Git history');
     const identity = createHash('sha1').update(`blob ${old.stdout.length}\0`).update(old.stdout).digest('hex');
     assert.equal(identity, '5473657a332903ef9e2b5d349481e1242f6b66b4', 'Original viewer bytes must match their Git blob');
+    changed = old.stdout.toString('utf8');
+  } else if (control === 'focus') {
+    target = panel;
+    const old = spawnSync('git', ['cat-file', 'blob', 'e90554092f2f1d942eab7855147fd3e52841f825'], { cwd: root });
+    assert.equal(old.status, 0, 'The exact original panel blob is required, with full Git history');
+    const identity = createHash('sha1').update(`blob ${old.stdout.length}\0`).update(old.stdout).digest('hex');
+    assert.equal(identity, 'e90554092f2f1d942eab7855147fd3e52841f825', 'Original panel bytes must match their Git blob');
     changed = old.stdout.toString('utf8');
   } else {
     const push = 'games.push({ round: round.round, series, no: at + 1, won, mine, theirs, need: round.need });';
@@ -87,6 +94,7 @@ const expected = rows.length === 12 && !detectedRuntimeError && (control
   ? run.status === 1 && passed === 12 - expectedFailures[control].length
     && failed.map(row => row.title).sort().join('|') === expectedFailures[control].slice().sort().join('|')
     && failed.every(row => row.failureMessages.some(message => /AssertionError/.test(message)))
+    && (control !== 'focus' || failed[0].failureMessages.some(message => message.includes('Revealing a playoff result must keep native focus on the next action')))
   : run.status === 0 && passed === 12 && failed.length === 0);
 const summary = {
   control, rawExit: run.status, passed, failed: failed.map(row => row.title), expected, runtimeCounts, detectedRuntimeError,

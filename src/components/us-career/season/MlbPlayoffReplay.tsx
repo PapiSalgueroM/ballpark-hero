@@ -71,9 +71,10 @@ export default function MlbPlayoffReplay({ replay, club, year, onBack, onClose }
           )}
         </main>
         <footer className="flex flex-wrap gap-2 border-t border-border bg-card p-3">
-          {!revealed && <button type="button" className={`${button} flex-1 bg-primary text-primary-foreground`} onClick={() => setRevealed(true)}>Show game result</button>}
-          {revealed && !last && <button type="button" className={`${button} flex-1 bg-primary text-primary-foreground`} onClick={next}>Next playoff game</button>}
-          {revealed && last && <button type="button" className={`${button} flex-1`} onClick={() => { setIndex(0); setRevealed(false); }}>Replay again</button>}
+          <button type="button" className={`${button} flex-1${revealed && last ? '' : ' bg-primary text-primary-foreground'}`}
+            onClick={!revealed ? () => setRevealed(true) : !last ? next : () => { setIndex(0); setRevealed(false); }}>
+            {!revealed ? 'Show game result' : !last ? 'Next playoff game' : 'Replay again'}
+          </button>
           <button type="button" className={button} onClick={onBack}>Back to regular season</button>
         </footer>
         {helpOpen && <SeasonCentreHelp words={HELP} onClose={closeHelp} />}
