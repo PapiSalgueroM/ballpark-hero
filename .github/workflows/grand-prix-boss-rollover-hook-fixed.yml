@@ -1,0 +1,84 @@
+name: Grand Prix Boss season rollover save verification
+on:
+  push:
+    branches: [codex/grand-prix-boss-rollover-hook-fixed-20261102]
+permissions:
+  contents: read
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_BOSS_ROLLOVER_SAVE_OUT: ${{ github.workspace }}/grand-prix-rollover-save-artifacts/rollover-save
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind admitted rollover save RED and four scoped paths
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-rollover-hook-fixed-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = 1c895f2f08a9a28d38a99399868f5e717096fb8a
+          out="$PWD/grand-prix-rollover-save-artifacts"; mkdir "$out"
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-rollover-hook-fixed.yml' 'scripts/qa/source-controls/useGrandPrixBoss.before-rollover.ts.txt' 'scripts/simGrandPrixBossRolloverSave.mjs' 'src/hooks/useGrandPrixBoss.ts' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          printf '%s\n' 'cae28d2852bfa6f23ffc5afca171486d017809327caded4cbf63f300f3fd8db0  src/lib/grandPrixBoss.ts' 'f0ec04a26c60db6c4a5b1e4b555a699979a2fdad464e404d0e906f2538b8c23b  src/hooks/useGrandPrixBoss.ts' '37b5dc1988904f28694e909488c8bc9007dc6f14cf0bd0938aa08ce77e3f9f3f  src/test/grandPrixBossRolloverSave.test.tsx' 'c20cb78fbfc15a5e291026acf077a88c37451cf9644ad45fe5f0fdad1c520cd5  scripts/simGrandPrixBossRolloverSave.mjs' 'be8ac387c5b3158788d28b2186155c137c4a89d6fff30fd571df4d86965ec046  scripts/qa/source-controls/useGrandPrixBoss.before-rollover.ts.txt' | sha256sum --check -
+          git diff --exit-code HEAD^ -- src/lib src/hooks/useSaveFenceWatch.ts src/lib/saveFence.ts src/test package.json package-lock.json vitest.config.ts src/App.tsx src/data/gameRegistry.ts src/integrations/supabase/client.ts
+          git ls-files -z > "$out/source-members.before"; git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-rollover-save-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$out/$tag.exit"
+            tail -n 20 "$out/$tag.stdout"; tail -n 20 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          source "$out/capture.sh"; capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types and two real-season rollover save outcomes with copied controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source grand-prix-rollover-save-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture rollover-save-syntax node --check scripts/simGrandPrixBossRolloverSave.mjs
+          capture rollover-save-controls node scripts/simGrandPrixBossRolloverSave.mjs
+      - name: Preserve complete source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-rollover-save-artifacts"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-rollover-save-${{ github.run_id }}
+          path: grand-prix-rollover-save-artifacts/
+          retention-days: 14

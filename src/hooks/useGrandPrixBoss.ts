@@ -50,6 +50,7 @@ function savedMessage(career: GrandPrixCareer, action: GrandPrixAction): string 
   if (action.type === 'qualify') return 'Round ' + (career.round + 1) + ' grid saved. Choose tyres and pace.';
   if (action.type === 'startRace') return 'Race start saved. Make your first race call.';
   if (action.type === 'continue') return 'Round ' + (career.round + 1) + ' is ready. Team saved.';
+  if (action.type === 'startNextSeason') return 'Season ' + career.season + ' is ready. Team saved.';
   if (career.phase === 'seasonReview') return 'Season ' + career.season + ' saved.';
   if (career.phase === 'raceResult') return 'Round ' + (career.round + 1) + ' result saved.';
   return 'Lap ' + career.race!.lap + ' saved. Make your next race call.';
