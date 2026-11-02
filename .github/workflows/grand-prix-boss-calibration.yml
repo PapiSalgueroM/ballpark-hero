@@ -1,0 +1,118 @@
+name: Grand Prix Boss finite balance calibration
+on:
+  push:
+    branches: [codex/grand-prix-boss-calibration-20261102]
+permissions:
+  contents: read
+jobs:
+  calibration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_BOSS_CALIBRATION_OUT: ${{ github.workspace }}/grand-prix-calibration-artifacts/calibration
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind first engine and exact calibration source
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-calibration-artifacts"
+          mkdir -p "$out"
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --name-only 29bda1687957b226b5e91fb86807c3eec84f9d61 HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-calibration.yml' 'scripts/qa/calibrateGrandPrixBoss.mjs' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          printf '%s\n' '43db9a56a742ef6ee184efec11ce2229b1f5585bbad69a285bc8d5367bb9a7b0  scripts/qa/calibrateGrandPrixBoss.mjs' > "$out/calibration-script.sha256"
+          sha256sum -c "$out/calibration-script.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-calibration-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$out/$tag.exit"
+            tail -n 12 "$out/$tag.stdout"; tail -n 12 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Types and calibration syntax
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_ENGINE_FILE NO_DOUBLE_SWAP
+          source grand-prix-calibration-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax node --check scripts/qa/calibrateGrandPrixBoss.mjs
+      - name: Measure three physical source copies
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_ENGINE_FILE NO_DOUBLE_SWAP
+          source grand-prix-calibration-artifacts/capture.sh
+          capture calibration node scripts/qa/calibrateGrandPrixBoss.mjs
+          node --input-type=module <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const root = process.env.GP_BOSS_CALIBRATION_OUT;
+          const dirs = fs.readdirSync(root).filter(name => name.startsWith('dukb-grand-prix-calibration-'));
+          assert.equal(dirs.length, 1);
+          const dir = path.join(root, dirs[0]);
+          const summary = JSON.parse(fs.readFileSync(path.join(dir, 'summary.json'), 'utf8'));
+          const pairs = JSON.parse(fs.readFileSync(path.join(dir, 'all-pairs.json'), 'utf8'));
+          assert.equal(summary.naturalPairs, 768);
+          assert.equal(summary.completeSeasons, 288);
+          assert.equal(summary.seasonRaces, 3456);
+          assert(summary.admittedStates > 0);
+          assert.equal(pairs.natural.length, 768);
+          assert.equal(pairs.seasons.length, 288);
+          assert.deepEqual(summary.arms.map(arm => arm.id), ['baseline-team6', 'ownership-team4', 'narrower-field-team6']);
+          for (const [index, arm] of summary.arms.entries()) {
+            assert.equal(arm.mutations.length, [0, 3, 2][index]);
+            assert.equal(arm.wholeInverseSha256, 'ec793e9cacb47bf770d599b1677f76ac753d2cafde9c1f85e6bb0cf7dc7bc69b');
+            assert.equal(arm.natural.aware.points.n, 256);
+            assert.equal(arm.natural.unsuitable.points.n, 256);
+            for (const policy of ['aware-no-spend', 'unsuitable-no-spend', 'aware-quoted-upgrades']) assert.equal(arm.seasons[policy].points.n, 32);
+          }
+          console.log('Calibration evidence count PASS: 768 natural pairs, 288 full seasons, 3456 season races, exact 3 source-copy arms.');
+          VERIFY
+      - name: Preserve actual source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-calibration-artifacts"
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum -c "$out/dependency-files.sha256" > "$out/dependency-hold.log"; fi
+          git ls-files -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/working-source-hold.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"
+          test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-calibration-${{ github.run_id }}
+          path: grand-prix-calibration-artifacts/
+          retention-days: 14
