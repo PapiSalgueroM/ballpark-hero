@@ -1,0 +1,92 @@
+name: Grand Prix Boss first engine verification
+on:
+  push:
+    branches: [codex/grand-prix-boss-engine-fixed-20261102]
+permissions:
+  contents: read
+jobs:
+  engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_BOSS_OUT: ${{ github.workspace }}/grand-prix-engine-artifacts/focused
+      GP_BOSS_MEASURE_OUT: ${{ github.workspace }}/grand-prix-engine-artifacts/measurement
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind immutable source and locked dependencies
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-engine-artifacts"
+          mkdir -p "$out"
+          printf '%s\n' "$out" > "$RUNNER_TEMP/grand-prix-proof-output"
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --exit-code cc9a55a2f35b6215d5e6e664cc401d10d7f76291 -- src/App.tsx src/data/gameRegistry.ts src/integrations/supabase/client.ts src/lib/keyedRng.ts package.json package-lock.json scripts/sweepWeight.mjs
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-engine-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$out/$tag.exit"
+            tail -n 12 "$out/$tag.stdout"; tail -n 12 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types and copy-safe source controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_ENGINE_FILE NO_DOUBLE_SWAP
+          source grand-prix-engine-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax-controls node --check scripts/simGrandPrixBoss.mjs
+          capture syntax-measurement node --check scripts/qa/measureGrandPrixBoss.mjs
+          capture controls node scripts/simGrandPrixBoss.mjs
+      - name: First measurements from the real engine
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_ENGINE_FILE NO_DOUBLE_SWAP
+          source grand-prix-engine-artifacts/capture.sh
+          capture measurement node scripts/qa/measureGrandPrixBoss.mjs
+      - name: Preserve source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-engine-artifacts"
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum -c "$out/dependency-files.sha256" > "$out/dependency-hold.log"; fi
+          git ls-files -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/working-source-hold.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"
+          test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-engine-first-${{ github.run_id }}
+          path: grand-prix-engine-artifacts/
+          retention-days: 14
