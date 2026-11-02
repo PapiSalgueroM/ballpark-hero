@@ -1,0 +1,164 @@
+name: Grand Prix Boss actual compiled page browser proof
+on:
+  push:
+    branches: [codex/grand-prix-boss-page-browser-20261102]
+permissions:
+  contents: read
+jobs:
+  page-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      ENGINES: chromium
+      GP_BOSS_BROWSER_OUT: ${{ github.workspace }}/tmp/grand-prix-boss-page-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/tmp/grand-prix-boss-page-artifacts/font-cache
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind exact qualified source and finite QA files
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_BROWSER_OUT"; mkdir -p "$out"
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-page-browser-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = 6fbc29bd5e707d0e5fdef5c623be80b22456b694
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-page-browser.yml' 'scripts/qa/fixtures/grandPrixBoss.entry.tsx' 'scripts/qa/playGrandPrixBossPage.mjs' | sort > "$out/expected-paths.txt"
+          git diff --name-only 6fbc29bd5e707d0e5fdef5c623be80b22456b694 HEAD | sort > "$out/actual-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/actual-paths.txt"
+          git diff --exit-code 6fbc29bd5e707d0e5fdef5c623be80b22456b694 -- src public scripts/data index.html package.json package-lock.json
+          printf '0801bf002c486bb6649bce2d3a87af52740da3b37a55c57e12d3c8cd68380093  scripts/qa/playGrandPrixBossPage.mjs\nb008f7ece22c001e2b3fc639d9ba9c02a9feae0f651f65265852a3c1e955f158  scripts/qa/fixtures/grandPrixBoss.entry.tsx\n' | sha256sum --check -
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$GP_BOSS_BROWSER_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$GP_BOSS_BROWSER_OUT/$tag.argv"
+            : > "$GP_BOSS_BROWSER_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$GP_BOSS_BROWSER_OUT/$tag.transport" "$@" > "$GP_BOSS_BROWSER_OUT/$tag.stdout" 2> "$GP_BOSS_BROWSER_OUT/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$GP_BOSS_BROWSER_OUT/$tag.exit"
+            tail -n 8 "$GP_BOSS_BROWSER_OUT/$tag.stdout"; tail -n 8 "$GP_BOSS_BROWSER_OUT/$tag.stderr"
+            test ! -s "$GP_BOSS_BROWSER_OUT/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+      - name: Locked app types and browser driver syntax
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_BROWSER_OUT"; source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+          capture driver-syntax env NODE_OPTIONS='' node --check scripts/qa/playGrandPrixBossPage.mjs
+          capture types env NODE_OPTIONS='' node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Isolated browser Python and held font bodies
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_BROWSER_OUT"; source "$out/capture.sh"
+          browser_tools="$RUNNER_TEMP/grand-prix-boss-page-tools"; test ! -e "$browser_tools"; mkdir "$browser_tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$browser_tools/package.json"
+          capture browser-install env NODE_OPTIONS='' npm install --prefix "$browser_tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$browser_tools/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$browser_tools/package.json" "$out/browser-package.json"; cp "$browser_tools/package-lock.json" "$out/browser-package-lock.json"
+          capture chromium env NODE_OPTIONS='' node "$browser_tools/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m venv "$browser_tools/python"
+          capture python-fonts "$browser_tools/python/bin/python" -m pip install fonttools==4.60.1 Pillow==11.3.0
+          "$browser_tools/python/bin/python" -m pip freeze > "$out/python-packages.txt"
+          echo "$browser_tools/python/bin" >> "$GITHUB_PATH"
+          capture font-prefetch env NODE_OPTIONS='' node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+          find "$out/font-cache" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          find "$browser_tools/node_modules" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/browser-files.sha256"
+          cat > "$out/cached-fonts.cjs" <<'FONTS'
+          'use strict';
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const out=process.env.GP_BOSS_BROWSER_OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const manifest=JSON.parse(fs.readFileSync(path.join(out,'font-cache/manifest.json'),'utf8'));
+          const cache=new Map(manifest.map(row=>{const body=fs.readFileSync(path.join(out,'font-cache',row.file));assert.equal(sha(body),row.sha256);return[row.url,{body,contentType:row.contentType,sha256:row.sha256}];}));
+          const pw=require(path.join(process.cwd(),'node_modules/playwright'));
+          const launch=pw.chromium.launch.bind(pw.chromium);
+          pw.chromium.launch=async(...args)=>{
+            const browser=await launch(...args),newContext=browser.newContext.bind(browser);
+            browser.newContext=async(...options)=>{
+              const context=await newContext(...options);
+              await context.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//,async route=>{
+                const url=route.request().url(),row=cache.get(url);
+                if(!row){fs.appendFileSync(path.join(out,'font-cache-misses.jsonl'),JSON.stringify({url})+'\n');return route.abort();}
+                fs.appendFileSync(path.join(out,'font-cache-use.jsonl'),JSON.stringify({url,sha256:row.sha256})+'\n');
+                return route.fulfill({status:200,body:row.body,contentType:row.contentType});
+              });
+              await context.route(/^https:\/\/flagcdn\.com\//,route=>{fs.appendFileSync(path.join(out,'blocked-external.jsonl'),JSON.stringify({kind:'flag',url:route.request().url()})+'\n');return route.abort();});
+              await context.route(/^https:\/\/[^/]+\.supabase\.co\//,route=>{fs.appendFileSync(path.join(out,'blocked-external.jsonl'),JSON.stringify({kind:'database',url:route.request().url()})+'\n');return route.abort();});
+              return context;
+            };
+            return browser;
+          };
+          FONTS
+          sha256sum "$out/cached-fonts.cjs" > "$out/cached-fonts.sha256"
+      - name: Ordinary production build under the offline gate
+        id: build
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_BROWSER_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/cached-fonts.cjs"
+          capture build npm run build
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dist.sha256"
+      - name: All fifteen completed-build readers
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_BROWSER_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/cached-fonts.cjs"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/readers-server.log" 2>&1 &
+          host_pid=$!; trap 'kill "$host_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ > /dev/null && break; sleep 1; done
+          failed=0
+          for reader in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            status=0; capture "$reader" env BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$reader.mjs" || status=$?
+            printf '%s\t%s\n' "$reader" "$status" >> "$out/readers.tsv"; test "$status" -eq 0 || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15
+          test ! -s "$out/font-cache-misses.jsonl" || failed=1
+          exit "$failed"
+      - name: Actual compiled page across three sizes with real saves and native Reload
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_BROWSER_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          capture actual-page node scripts/qa/playGrandPrixBossPage.mjs
+      - name: Source packages tools fonts and completed build held
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_BROWSER_OUT"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+          for list in dependency-files browser-files font-files cached-fonts dist; do if test -f "$out/$list.sha256"; then sha256sum --check "$out/$list.sha256" > "$out/$list-held.log"; fi; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-boss-page-browser-${{ github.run_id }}
+          path: tmp/grand-prix-boss-page-artifacts/
+          retention-days: 14
