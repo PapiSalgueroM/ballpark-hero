@@ -1,0 +1,135 @@
+name: Grand Prix Boss measured lifecycle outcomes
+on:
+  push:
+    branches: [codex/grand-prix-boss-lifecycle-outcomes-20261102]
+permissions:
+  contents: read
+jobs:
+  outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_BOSS_LIFECYCLE_OUTCOMES_OUT: ${{ github.workspace }}/tmp/grand-prix-lifecycle-outcome-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind only the outcome producer and its qualification workflow
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_LIFECYCLE_OUTCOMES_OUT"; test ! -e "$out"; mkdir -p "$out"
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-lifecycle-outcomes-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = df06298b19645b936d09882ad99d47c23ba23bd3
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git archive --format=tar HEAD > "$out/source.tar"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-lifecycle-outcomes.yml' 'scripts/simGrandPrixBossLifecycleOutcomes.mjs' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          git diff --exit-code HEAD^ -- src public scripts/data index.html package.json package-lock.json vitest.config.ts scripts/lib scripts/simGrandPrixBossLifecycle.mjs
+          printf '%s\n' \
+            'ee6fab268e52e1f80d9f18b3ded0c78ec2128f5f56ef0184b50273c66ab4794c  scripts/simGrandPrixBossLifecycleOutcomes.mjs' \
+            '3dcaa003a5f71b6d85db9b4fd4097c5f54bb97d90a863b78bc7604b3027d1911  src/lib/grandPrixBoss.ts' \
+            'b255030d5aee772ee46b7e25122570e91be3afee7e1236f42c2b47a8fd19f6f3  src/test/grandPrixBossLifecycle.test.ts' | sha256sum --check -
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/$tag.argv"
+            : > "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/$tag.transport" "$@" > "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/$tag.stdout" 2> "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/$tag.exit"
+            tail -n 12 "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/$tag.stdout"; tail -n 12 "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/$tag.stderr"
+            test ! -s "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          printf '%s\0' env NODE_OPTIONS= npm ci > "$out/install.argv"
+          set +e
+          env NODE_OPTIONS='' npm ci > "$out/install.stdout" 2> "$out/install.stderr"
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$out/install.exit"
+          tail -n 8 "$out/install.stdout"; tail -n 8 "$out/install.stderr"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual app types and producer syntax
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture producer-syntax node --check scripts/simGrandPrixBossLifecycleOutcomes.mjs
+      - name: Real128 careers and five effective owned outcome controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$GP_BOSS_LIFECYCLE_OUTCOMES_OUT/capture.sh"
+          capture lifecycle-outcomes node scripts/simGrandPrixBossLifecycleOutcomes.mjs
+          node --input-type=module <<'CHECK'
+          import fs from 'node:fs'; import path from 'node:path'; import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const out=process.env.GP_BOSS_LIFECYCLE_OUTCOMES_OUT,sha=value=>createHash('sha256').update(value).digest('hex');
+          const dirs=fs.readdirSync(out).filter(name=>name.startsWith('dukb-grand-prix-lifecycle-outcomes-'));
+          assert.equal(dirs.length,1); const dir=path.join(out,dirs[0]);
+          const r=JSON.parse(fs.readFileSync(path.join(dir,'summary.json'),'utf8'));
+          assert.equal(r.careers,128);assert.equal(r.seasons,1280);assert.equal(r.races,15360);assert.equal(r.simulatedCohorts,4);
+          assert.equal(r.executedGuardOutcomes,10);assert(r.admittedStates>0);assert(r.transitions>0);
+          assert.deepEqual(r.seeds,Array.from({length:32},(_,i)=>10001+i));
+          const expected=['investment-benefit','ai-pressure','carry-curb','reachable-title','nonautomatic-title'];
+          assert.deepEqual(r.healthy.map(row=>row.id),expected);assert.deepEqual(r.controls.map(row=>row.id),expected);
+          for(const row of r.healthy){assert.equal(row.passed,true);assert(Number.isFinite(row.value));}
+          for(const row of r.controls){
+            assert.notEqual(row.originalSha256,row.changedSha256);
+            assert.equal(row.ownedError.name,'AssertionError');assert(row.ownedError.message.includes(row.marker));
+            assert(Number.isFinite(row.observedControlValue));
+          }
+          const arms=new Map(r.arms.map(arm=>[arm.id,arm]));assert.equal(arms.size,3);
+          assert.equal(arms.get('partial-ai').sourceSha256,'3dcaa003a5f71b6d85db9b4fd4097c5f54bb97d90a863b78bc7604b3027d1911');
+          assert.equal(arms.get('partial-ai').mutations.length,0);assert.equal(arms.get('partial-no-ai').mutations.length,1);assert.equal(arms.get('full-no-ai').mutations.length,2);
+          for(const arm of arms.values())assert.equal(arm.wholeInverseSha256,'3dcaa003a5f71b6d85db9b4fd4097c5f54bb97d90a863b78bc7604b3027d1911');
+          const raw=fs.readFileSync(out+'/lifecycle-outcomes.stdout','utf8')+'\n'+fs.readFileSync(out+'/lifecycle-outcomes.stderr','utf8');
+          assert.equal(/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException)/i.test(raw),false);
+          const data=fs.readFileSync(path.join(dir,'guard-data.json')),pairs=fs.readFileSync(path.join(dir,'all-pairs.json'));
+          fs.writeFileSync(out+'/qualification-summary.json',JSON.stringify({
+            scope:'Pure lifecycle long-run outcomes on the exact joined engine. No new core/A/B/C copied-control, hook, UI, route, build, full-unit or release credit.',
+            parent:'df06298b19645b936d09882ad99d47c23ba23bd3',careers:r.careers,seasons:r.seasons,races:r.races,admittedStates:r.admittedStates,transitions:r.transitions,
+            healthyOutcomes:5,ownedAssertionControls:5,executedGuardOutcomes:10,sourceArms:3,simulatedCohorts:4,
+            guardDataSha256:sha(data),allPairsSha256:sha(pairs),healthy:r.healthy,controls:r.controls,
+            requiredPriorEvidence:'Existing C33 source faults remain separately required. Their actual qualification on22f0 is not rerun or enlarged here. Full-unit history repair and management UI integration remain separate.',
+            installNetwork:'Locked install precedes the offline gate. No empty install transport receipt is claimed.'
+          },null,2)+'\n');
+          console.log('GP_LIFECYCLE_OUTCOMES_QUALIFIED:128careers,1280seasons,15360races;five healthy guards and five owned actual-cohort refusals.');
+          CHECK
+      - name: Complete tracked source dependencies and membership stay held
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$GP_BOSS_LIFECYCLE_OUTCOMES_OUT"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          if test -f "$out/dependency-files.sha256";then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log";fi
+          git ls-files -z > "$out/source-members.after";cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt";test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-lifecycle-outcomes-${{ github.run_id }}
+          path: ${{ github.workspace }}/tmp/grand-prix-lifecycle-outcome-artifacts/
+          retention-days: 14
