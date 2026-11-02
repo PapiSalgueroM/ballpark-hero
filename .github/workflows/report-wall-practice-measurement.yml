@@ -1,0 +1,192 @@
+name: Wall practice fixed-source engine measurement
+on:
+  push:
+    branches: [codex/report-wall-practice-measurement-20261102]
+permissions:
+  contents: read
+jobs:
+  measurement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      WALL_PRACTICE_OUT: ${{ github.workspace }}/tmp/wall-practice-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind exact PR450 source and two QA paths
+        id: prepare
+        run: |
+          set -euo pipefail
+          out="$WALL_PRACTICE_OUT"; test ! -e "$out"; mkdir -p "$out"
+          test "$GITHUB_REF" = refs/heads/codex/report-wall-practice-measurement-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = d230682b593e0c6d4c87ea861bdb8b1ae2758176
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/report-wall-practice-measurement.yml' 'scripts/qa/measureWallPractice.mjs' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          git diff --exit-code HEAD^ -- src public scripts/data index.html package.json package-lock.json bun.lock vitest.config.ts scripts/simCareerDrills.mjs scripts/simDrillMotion.mjs scripts/sweepWeight.mjs > "$out/held-parent-paths.log"
+          printf '%s\n' '3779924db8e76c5809537621b334c5b2eca4598452308e829e6a75d9605ac30a  scripts/qa/measureWallPractice.mjs' | sha256sum --check -
+          for row in \
+            '6125570ccdf2f037a7debeaa7ad14815e9ed860e src/lib/careerDrills.ts' \
+            '7320c7d87029d6805d808eabb3d02b0f8e32cb4e src/lib/freeKick.ts' \
+            '218a3bf3b415164920411273923b094172999618 src/lib/arcade.ts' \
+            'c3c6500b976bce912d3626643269fb1b5388234b src/components/soccer-career/DrillBoard.tsx' \
+            '2556cfa8ce62cd09b36a99969e9ace515198c6b9 src/components/soccer-career/DrillPlayers.tsx' \
+            '584f4b6d02219efcb9a745adcba2ba2eb50a91a7 scripts/simCareerDrills.mjs'; do
+            read -r blob file <<< "$row"; test "$(git rev-parse "HEAD:$file")" = "$blob"
+          done
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$WALL_PRACTICE_OUT/$tag.exit"
+            printf '%s\0' "$@" > "$WALL_PRACTICE_OUT/$tag.argv"
+            : > "$WALL_PRACTICE_OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$WALL_PRACTICE_OUT/$tag.transport" "$@" > "$WALL_PRACTICE_OUT/$tag.stdout" 2> "$WALL_PRACTICE_OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$WALL_PRACTICE_OUT/$tag.exit"
+            tail -n 16 "$WALL_PRACTICE_OUT/$tag.stdout"; tail -n 16 "$WALL_PRACTICE_OUT/$tag.stderr"
+            test ! -s "$WALL_PRACTICE_OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked install before the offline boundary
+        run: |
+          set -euo pipefail
+          out="$WALL_PRACTICE_OUT"
+          printf '%s\0' env NODE_OPTIONS= npm ci > "$out/install.argv"
+          set +e
+          env NODE_OPTIONS='' npm ci > "$out/install.stdout" 2> "$out/install.stderr"
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$out/install.exit"
+          tail -n 16 "$out/install.stdout"; tail -n 16 "$out/install.stderr"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual app types and measurement syntax
+        id: types
+        run: |
+          set -euo pipefail
+          out="$WALL_PRACTICE_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset SIM_CAREER_DRILLS_CONTROL GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture syntax node --check scripts/qa/measureWallPractice.mjs
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Paired fixed daily engine cohort and existing effective law controls
+        if: always() && steps.prepare.outcome == 'success' && steps.types.outcome == 'success'
+        run: |
+          set -euo pipefail
+          out="$WALL_PRACTICE_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset SIM_CAREER_DRILLS_CONTROL GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture measurement node scripts/qa/measureWallPractice.mjs
+          node --input-type=module <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const base=process.env.WALL_PRACTICE_OUT;
+          const children=fs.readdirSync(base).filter(name=>name.startsWith('wall-practice-')&&fs.statSync(path.join(base,name)).isDirectory());
+          assert.equal(children.length,1);
+          const out=path.join(base,children[0]),read=name=>JSON.parse(fs.readFileSync(path.join(out,name),'utf8'));
+          const lines=name=>fs.readFileSync(path.join(out,name),'utf8').trim().split('\n').map(line=>JSON.parse(line));
+          const r=read('summary.json'),tapes=lines('daily-tapes.jsonl'),outcomes=lines('policy-outcomes.jsonl');
+          const grid=lines('report-date-grid.jsonl'),restored=lines('restored-policy-replay.jsonl'),declaration=read('experiment-declaration.json');
+          assert.equal(r.status,'MEASURED, no balance decision or product adoption');
+          assert.equal(r.source,'d230682b593e0c6d4c87ea861bdb8b1ae2758176');
+          assert.equal(r.dailyDates,32);assert.equal(r.dailyRounds,320);assert.equal(r.dailyDraws,1280);assert.equal(r.engineDrawsPerRound,4);
+          assert.equal(tapes.length,320);assert.equal(new Set(tapes.map(row=>row.date)).size,32);
+          assert.equal(new Set(tapes.map(row=>row.date+':'+row.round)).size,320);
+          assert.equal(tapes[0].date,'2026-09-30');assert.equal(tapes.at(-1).date,'2026-10-31');
+          assert(tapes.every(row=>row.drawCount===4&&row.draws.length===4&&row.independentPolicyJitter.draws.length===5));
+          const tapeById=new Map(tapes.map(row=>[row.date+':'+row.round,row]));
+          const ids=['existing-gap-aware-policy-independent-jitter','visible-instruction-medium-high','default-aim-same-visible-window',
+            'instruction-timing-plus-minus40ms','instruction-timing-plus-minus125ms','instruction-normalized-aim-error','instruction125ms-and-normalized-aim-error'];
+          assert.deepEqual(declaration.policies.map(row=>row.id),ids);
+          assert.equal(r.policyEvaluations,2240);assert.equal(outcomes.length,2240);assert.equal(restored.length,2240);assert.equal(r.restoredExactReplays,2240);
+          assert.deepEqual(r.policies.map(row=>row.policy),ids);
+          const seen=new Set();
+          for(const row of outcomes){
+            const key=row.policy+':'+row.date+':'+row.round;assert(!seen.has(key));seen.add(key);
+            assert(ids.includes(row.policy));assert.equal(row.drawCount,4);
+            if(row.policy==='existing-gap-aware-policy-independent-jitter')assert([4,5].includes(row.historicalPolicyJitterConsumed));
+            else assert.equal(row.historicalPolicyJitterConsumed,null);
+            assert.equal(row.drawSha256,tapeById.get(row.date+':'+row.round).drawSha256);
+          }
+          assert(restored.every(row=>row.drawCount===4&&row.originalResultSha256===row.restoredResultSha256));
+          assert.deepEqual(new Set(restored.map(row=>row.policy+':'+row.date+':'+row.round)),seen);
+          const buckets=['wall','post','weak','off-target','keeper-save','goal'];
+          for(const policy of r.policies){
+            const rows=outcomes.filter(row=>row.policy===policy.policy),onTarget=rows.filter(row=>row.result.onTarget).length,saved=rows.filter(row=>row.result.saved).length;
+            assert.equal(rows.length,320);assert.equal(policy.attempts,320);
+            for(const bucket of buckets)assert.equal(policy.verdicts[bucket],rows.filter(row=>row.bucket===bucket).length);
+            assert.equal(Object.values(policy.verdicts).reduce((a,b)=>a+b,0),320);
+            assert.equal(policy.onTarget,onTarget);assert.equal(policy.keeperSaved,saved);
+            assert.equal(policy.keeperSaveGivenOnTarget,onTarget?saved/onTarget:null);
+            assert.equal(policy.byDay.length,32);assert.equal(policy.dailyGoalHistogram.reduce((sum,row)=>sum+row.days,0),32);
+          }
+          assert.equal(r.reportDate,'2026-10-31');assert.equal(r.reportDateGrid.length,10);
+          assert.equal(grid.length,r.reportDateGrid.reduce((sum,row)=>sum+row.inputs,0));
+          assert.equal(new Set(r.reportDateGrid.map(row=>row.round)).size,10);
+          assert(r.reportDateGrid.every(row=>row.inputs===5486));assert.equal(grid.length,54860);
+          assert(grid.every(row=>row.date==='2026-10-31'&&row.drawCount===4&&row.drawSha256===tapeById.get(row.date+':'+row.round).drawSha256));
+          assert.deepEqual(r.existingLaws.map(row=>row.name),['current','sighted','alwaysopen','restored']);
+          for(const row of r.existingLaws){
+            assert.equal(row.rawExit,0);assert.equal(row.transportBytes,0);
+            assert.equal(fs.statSync(path.join(out,'existing-laws',row.name,'transport.log')).size,0);
+            if(row.name==='current'||row.name==='restored')assert.equal(row.existingInternalFailures,0);
+            else{
+              assert(row.existingInternalFailures>0);
+              const required=row.name==='sighted'?[2,4,6]:[5];
+              for(const section of required)assert(row.failuresBySection.some(([number,count])=>number===section&&count>0));
+              const proof=read('existing-laws/'+row.name+'/control-inverse.json');
+              assert.notEqual(proof.changedSha256,proof.originalSha256);assert.equal(proof.inverseSha256,proof.originalSha256);
+            }
+          }
+          assert.deepEqual(read('existing-laws/current/law-results.json'),read('existing-laws/restored/law-results.json'));
+          assert.equal(r.balanceThresholdsAdopted,false);assert.equal(r.coefficientsChanged,false);
+          const raw=fs.readFileSync(path.join(base,'measurement.stdout'),'utf8')+'\n'+fs.readFileSync(path.join(base,'measurement.stderr'),'utf8');
+          assert(raw.includes('WALL_PRACTICE_MEASURED:32 dates,320 daily rounds,1280 held draws,7 policies,2240 outcomes'));
+          assert(!/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Failed to resolve|Cannot find (?:module|package)|SyntaxError|Transform failed|SIM_OFFLINE_BLOCK)/i.test(raw));
+          fs.writeFileSync(path.join(base,'qualification-summary.json'),JSON.stringify({
+            dailyDates:32,dailyRounds:320,heldDailyDraws:1280,independentJitterValuesPerRound:5,pairedPolicies:7,policyOutcomes:2240,exactRestoredPolicyOutcomes:2240,
+            historicalPolicyRetryRounds:outcomes.filter(row=>row.policy==='existing-gap-aware-policy-independent-jitter'&&row.historicalPolicyJitterConsumed===5).length,
+            reportDateGridAttempts:grid.length,reportDateGridRounds:10,existingLawRuns:4,effectiveExistingLawControls:2,
+            policyMeasurements:r.policies,runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN',detectedRuntimeError:false,
+            rawExitSemantics:'Existing sighted/alwaysopen controls self-validate their owned internal failures and exit0. Their raw failing sections are retained; they are not healthy product passes.',
+            scope:'Engine measurement only. No new balance threshold, coefficient adoption, original user reproduction, CSS-pixel precision, native touch, full career route, build, caps, finite-wall integration or publication claim.',
+            installNetwork:'Locked npm install is explicitly online before guarded execution. No empty-transport claim for install.',
+          },null,2)+'\n');
+          console.log('WALL_PRACTICE_QUALIFICATION:320 recorded rounds,2240 paired outcomes,2240 exact restores,10 finite grid witnesses;current/restored laws healthy and2 owned internal-failure controls.');
+          CHECK
+      - name: Always hold all source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$WALL_PRACTICE_OUT"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wall-practice-engine-measurement-${{ github.run_id }}
+          path: ${{ github.workspace }}/tmp/wall-practice-artifacts/
+          retention-days: 14
