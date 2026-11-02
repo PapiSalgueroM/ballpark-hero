@@ -1,0 +1,85 @@
+name: Grand Prix Boss first team screen verification
+on:
+  push:
+    branches: [codex/grand-prix-boss-ui-fixed-20261102]
+permissions:
+  contents: read
+jobs:
+  page:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_BOSS_PAGE_OUT: ${{ github.workspace }}/grand-prix-ui-artifacts/cases
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind page and preserved engine save helpers and packages
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-ui-artifacts"
+          mkdir -p "$out"
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --name-only e6e503becc0c41c9dd8a3b0e8aff84d61b1deecb HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-ui-fixed.yml' 'scripts/simGrandPrixBossPage.mjs' 'src/pages/GrandPrixBoss.tsx' 'src/test/grandPrixBossPage.test.tsx' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          git diff --exit-code e6e503becc0c41c9dd8a3b0e8aff84d61b1deecb -- src/hooks/useGrandPrixBoss.ts src/lib/grandPrixBoss.ts src/test/grandPrixBossSave.test.tsx src/lib/saveFence.ts src/hooks/useSaveFenceWatch.ts src/lib/completions.ts src/lib/keyedRng.ts package.json package-lock.json vitest.config.ts src/test/setup.ts src/App.tsx src/data/gameRegistry.ts
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-ui-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$out/$tag.exit"
+            tail -n 15 "$out/$tag.stdout"; tail -n 15 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types and copied page outcomes
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source grand-prix-ui-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax node --check scripts/simGrandPrixBossPage.mjs
+          capture page-controls node scripts/simGrandPrixBossPage.mjs
+      - name: Preserve all source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-ui-artifacts"
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum -c "$out/dependency-files.sha256" > "$out/dependency-hold.log"; fi
+          git ls-files -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"
+          test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-ui-first-${{ github.run_id }}
+          path: grand-prix-ui-artifacts/
+          retention-days: 14
