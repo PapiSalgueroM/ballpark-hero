@@ -1,0 +1,122 @@
+name: Grand Prix Boss rollover save integration baseline
+on:
+  push:
+    branches: [codex/grand-prix-boss-rollover-hook-baseline-20261102]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the held rollover engine and qualified market persistence hook
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-rollover-save-baseline-artifacts"
+          mkdir "$out"
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-rollover-hook-baseline-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = d3c74abeff07f99305cff285d0605686e4013f20
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-rollover-hook-baseline.yml' 'src/hooks/useGrandPrixBoss.ts' 'src/test/grandPrixBossRolloverSave.test.tsx' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          git diff --exit-code HEAD^ -- src/lib src/integrations src/App.tsx src/data/gameRegistry.ts package.json package-lock.json vitest.config.ts src/test/setup.ts
+          printf '%s\n' 'cae28d2852bfa6f23ffc5afca171486d017809327caded4cbf63f300f3fd8db0  src/lib/grandPrixBoss.ts' 'be8ac387c5b3158788d28b2186155c137c4a89d6fff30fd571df4d86965ec046  src/hooks/useGrandPrixBoss.ts' '37b5dc1988904f28694e909488c8bc9007dc6f14cf0bd0938aa08ce77e3f9f3f  src/test/grandPrixBossRolloverSave.test.tsx' | sha256sum --check -
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-rollover-save-baseline-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$out/$tag.exit"
+            tail -n 18 "$out/$tag.stdout"; tail -n 18 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types and two owned rollover save assertions
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-rollover-save-baseline-artifacts"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source "$out/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          code=0
+          capture baseline node node_modules/vitest/vitest.mjs run src/test/grandPrixBossRolloverSave.test.tsx --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/baseline.vitest.json" || code=$?
+          test "$code" -eq 1
+          test ! -s "$out/baseline.transport"
+          node --input-type=module <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const out = process.cwd() + '/grand-prix-rollover-save-baseline-artifacts';
+          const r = JSON.parse(fs.readFileSync(out + '/baseline.vitest.json', 'utf8'));
+          const raw = fs.readFileSync(out + '/baseline.stdout', 'utf8') + '\n' + fs.readFileSync(out + '/baseline.stderr', 'utf8');
+          assert.equal(Number(fs.readFileSync(out + '/baseline.exit', 'utf8')), 1);
+          assert.equal(r.success, false); assert.equal(r.numTotalTests, 2); assert.equal(r.numFailedTests, 2);
+          assert.equal(r.numPassedTests, 0); assert.equal(r.numPendingTests, 0); assert.equal(r.numTodoTests, 0);
+          assert.equal(r.testResults.length, 1);
+          assert(r.testResults[0].name.endsWith('/src/test/grandPrixBossRolloverSave.test.tsx'));
+          const expected = new Map([
+            ['GP_HOOK_ROLLOVER_SAVE:', 'GP_HOOK_ROLLOVER_SAVE_MUST_NOT_THROW'],
+            ['GP_HOOK_ROLLOVER_QUOTA:', 'GP_HOOK_ROLLOVER_QUOTA_MUST_NOT_THROW'],
+          ]);
+          const seen = new Set();
+          const cases = r.testResults[0].assertionResults; assert.equal(cases.length, 2);
+          for (const row of cases) {
+            const ids = [...expected.keys()].filter(id => row.title.startsWith(id)); assert.equal(ids.length, 1);
+            const id = ids[0]; assert(!seen.has(id)); seen.add(id);
+            assert.equal(row.status, 'failed'); assert.equal(row.failureMessages.length, 1);
+            assert.match(row.failureMessages[0], /AssertionError:/); assert(row.failureMessages[0].includes(expected.get(id)));
+          }
+          const runtimeCounters = { numUnhandledErrors: r.numUnhandledErrors ?? null, numRuntimeErrorTestSuites: r.numRuntimeErrorTestSuites ?? null };
+          for (const value of Object.values(runtimeCounters)) if (value !== null) { assert.equal(typeof value, 'number'); assert.equal(value, 0); }
+          for (const errors of [r.errors, r.unhandledErrors]) if (Array.isArray(errors)) assert.equal(errors.length, 0);
+          assert(!/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw));
+          fs.writeFileSync(out + '/summary.json', JSON.stringify({ scope: 'Rollover save integration absence only; qualified market hook unchanged.',
+            ownedAssertionFailures: 2, passed: 0, declaredSkips: 0, totalExecuted: 2, runtimeCounters,
+            runtimeCounterCompleteness: Object.values(runtimeCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED',
+            cases: cases.map(row => ({ title: row.title, status: row.status, failureMessages: row.failureMessages })) }, null, 2) + '\n');
+          console.log('GP_ROLLOVER_SAVE_BASELINE: two exact owned rollover-save assertions; market hook and exact rollover engine held.');
+          CHECK
+      - name: Hold all source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-rollover-save-baseline-artifacts"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-rollover-save-baseline-${{ github.run_id }}
+          path: grand-prix-rollover-save-baseline-artifacts/
+          retention-days: 14
