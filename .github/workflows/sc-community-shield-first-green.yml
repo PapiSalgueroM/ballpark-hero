@@ -1,0 +1,218 @@
+name: Soccer Career Community Shield first green
+on:
+  push:
+    branches: [codex/sc-community-shield-first-green-20261102]
+permissions:
+  contents: read
+jobs:
+  first-green:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind parent product paths and held acceptance cases
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-community-shield-first-green"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-first-green-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = a54c4b33791e8050a8de925d776b7bcc2af952d1
+          test "$(git rev-parse 'HEAD^^{tree}')" = 7d14a43e1a3e681e5e03129275f317bf67e26873
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\n' '.github/workflows/sc-community-shield-first-green.yml' 'src/lib/soccerCareerExtraCups.ts' > "$OUT/expected-paths.txt"
+          printf 'M\t%s\n' 'src/lib/soccerCareerEngine.ts' >> "$OUT/expected-paths.txt"
+          printf 'A\t%s\n' 'src/test/soccerCommunityShieldRules.test.ts' >> "$OUT/expected-paths.txt"
+          sort "$OUT/expected-paths.txt" > "$OUT/expected-paths.sorted"
+          sort "$OUT/changed-paths.txt" > "$OUT/changed-paths.sorted"
+          cmp "$OUT/expected-paths.sorted" "$OUT/changed-paths.sorted"
+          test "$(git rev-parse HEAD^:src/lib/soccerCareerEngine.ts)" = 722b2285628775dff77f8de0138cf44d7b104b49
+          test "$(git rev-parse HEAD:src/lib/soccerCareerEngine.ts)" = 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          test "$(git rev-parse HEAD:src/lib/soccerCareerExtraCups.ts)" = ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          test "$(git rev-parse HEAD:src/test/soccerCommunityShieldAcceptance.test.ts)" = 72cf4787781245c914ebc0b178de5d56b5991687
+          test "$(git rev-parse HEAD:src/test/soccerCommunityShieldRules.test.ts)" = aee086a743f4c0c261d805ee0d994b01323d092f
+          printf '%s\n' 'd8b018b3959b60040b0340668e308dba4524d3581f74935c4a8fcde8a677e3a5  src/test/soccerCommunityShieldRules.test.ts' | sha256sum --check -
+          printf '%s\n' '51971cc9645b051b5f2c3677f782acabcb3a9665d02d115794ce72425c3bc95b  src/test/soccerCommunityShieldAcceptance.test.ts' | sha256sum --check -
+          git diff --raw HEAD^ HEAD > "$OUT/tree-delta.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from offline proof
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Proper app types and scoped positive cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE
+          source "$OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture healthy node node_modules/vitest/vitest.mjs run src/test/soccerCommunityShieldAcceptance.test.ts src/test/soccerCommunityShieldRules.test.ts --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$OUT/healthy.vitest.json"
+          cat > "$OUT/positive.mjs" <<'POSITIVE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const dir=process.env.OUT, tag=process.argv[2], read=n=>fs.readFileSync(dir+'/'+n,'utf8');
+          const expectedFiles=[
+            {file:'src/test/soccerCommunityShieldAcceptance.test.ts',suite:'Soccer Career Community Shield first slice',titles:["SC_SHIELD_QUALIFIED_MATCH: automatically plays the next opening match from an actual prospective close","SC_SHIELD_PERSONAL_TITLE: counts a valid saved played win separately and never reapplies its recorded stats"]},
+            {file:'src/test/soccerCommunityShieldRules.test.ts',suite:'Soccer Career Community Shield saved rules',titles:["SC_SHIELD_RULES_VALID: reads complete saved wins and preserves nonwinning personal outcomes","SC_SHIELD_RULES_QUALIFICATION: refuses malformed year seed entrant and source proof","SC_SHIELD_RULES_BINDING: binds the stored result to its row and complete qualification","SC_SHIELD_RULES_DECIDER: keeps ninety-minute scores and actual shootout totals separate","SC_SHIELD_RULES_PERSONAL: refuses fabricated participation stats ratings and personal titles","SC_SHIELD_RULES_DUPLICATES: refuses ambiguous valid editions without changing old totals or row order","SC_SHIELD_RULES_CODEC: preserves complete recorded proofs in literal and genuinely packed saves","SC_SHIELD_RULES_OLD_SAVE: never backfills missing or partial qualification while reading older careers"]},
+          ];
+          const expected=tag==='healthy'?expectedFiles:expectedFiles.slice(0,1);
+          const r=JSON.parse(read(tag+'.vitest.json')), rows=r.testResults.flatMap(s=>s.assertionResults);
+          const total=expected.reduce((n,file)=>n+file.titles.length,0), seenFiles=new Set();
+          assert.equal(Number(read(tag+'.exit')),0); assert.equal(r.success,true);
+          assert.equal(r.numTotalTests,total); assert.equal(r.numPassedTests,total);
+          assert.equal(r.numFailedTests,0); assert.equal(r.numPendingTests,0); assert.equal(r.numTodoTests,0);
+          assert.equal(rows.length,total); assert.equal(r.testResults.length,expected.length);
+          for(const suite of r.testResults){
+            const matches=expected.filter(file=>suite.name.endsWith('/'+file.file));
+            assert.equal(matches.length,1);const file=matches[0];assert(!seenFiles.has(file.file));seenFiles.add(file.file);
+            assert.equal(suite.status,'passed');assert.equal(suite.message,'');assert.equal(suite.assertionResults.length,file.titles.length);
+            const seen=new Set();
+            for(const row of suite.assertionResults){
+              assert(file.titles.includes(row.title)&&!seen.has(row.title));seen.add(row.title);
+              assert.deepEqual(row.ancestorTitles,[file.suite]);assert.equal(row.fullName,file.suite+' '+row.title);
+              assert.equal(row.status,'passed');assert.equal(row.failureMessages.length,0);
+            }
+            assert.equal(seen.size,file.titles.length);
+          }
+          assert.equal(seenFiles.size,expected.length);
+          const raw=read(tag+'.stdout')+'\n'+read(tag+'.stderr');
+          assert(!/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled|ERR_MODULE_NOT_FOUND|Failed to load url|Cannot find module|SyntaxError:|ReferenceError:)/i.test(raw));
+          const counters={numUnhandledErrors:r.numUnhandledErrors??null,numRuntimeErrorTestSuites:r.numRuntimeErrorTestSuites??null};
+          for(const [k,v]of Object.entries(counters))if(r[k]!==undefined){assert.equal(typeof v,'number');assert.equal(v,0);}
+          for(const k of ['errors','unhandledErrors'])if(r[k]!==undefined){assert(Array.isArray(r[k]));assert.equal(r[k].length,0);}
+          fs.writeFileSync(dir+'/'+tag+'.summary.json',JSON.stringify({scope:tag==='healthy'?'Held acceptance and additional pure rules':'Held acceptance restored after old-engine control',executed:rows.length,passed:r.numPassedTests,failed:0,skipped:0,todo:0,runtimeCounters:counters,runtimeCounterCompleteness:Object.values(counters).some(v=>v===null)?'UNKNOWN':'REPORTED',identities:rows.map(row=>({fullName:row.fullName,status:row.status}))},null,2)+'\n');
+          POSITIVE
+          capture positive-classifier node "$OUT/positive.mjs" healthy
+      - name: Exact old engine owns both absence assertions then restore
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE
+          source "$OUT/capture.sh"
+          old="$PWD/src/lib/.sc-community-shield-old.control.ts"
+          test ! -e "$old"
+          trap 'rm -f -- "$old"' EXIT
+          git show HEAD^:src/lib/soccerCareerEngine.ts > "$OUT/old-engine.ts"
+          test "$(git hash-object "$OUT/old-engine.ts")" = 722b2285628775dff77f8de0138cf44d7b104b49
+          cp "$OUT/old-engine.ts" "$old"
+          sha256sum "$OUT/old-engine.ts" "$old" > "$OUT/old-engine.sha256"
+          code=0
+          capture baseline env SC_EXTRA_CUPS_ENGINE="$old" node node_modules/vitest/vitest.mjs run src/test/soccerCommunityShieldAcceptance.test.ts --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$OUT/baseline.vitest.json" || code=$?
+          test "$code" -eq 1
+          test ! -s "$OUT/baseline.transport"
+          cat > "$OUT/classify.mjs" <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          const dir=process.env.OUT, read=f=>fs.readFileSync(dir+'/'+f,'utf8');
+          const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const clean=s=>s.replace(/\x1b\[[0-9;]*m/g,'');
+          const original=read('baseline.vitest.json'), raw=read('baseline.stdout')+'\n'+read('baseline.stderr');
+          const suite='Soccer Career Community Shield first slice';
+          const expected=new Map([
+            ['SC_SHIELD_QUALIFIED_MATCH: automatically plays the next opening match from an actual prospective close','SC_SHIELD_QUALIFIED_MATCH_MISSING'],
+            ['SC_SHIELD_PERSONAL_TITLE: counts a valid saved played win separately and never reapplies its recorded stats','SC_SHIELD_PERSONAL_TITLE_MISSING'],
+          ]);
+          function classify(r) {
+            assert.equal(r.success,false);
+            for(const [k,n] of Object.entries({numTotalTests:2,numFailedTests:2,numPassedTests:0,numPendingTests:0,numTodoTests:0})) assert.equal(r[k],n);
+            assert.equal(r.testResults.length,1);
+            const s=r.testResults[0], seen=new Set();
+            assert(s.name.endsWith('/src/test/soccerCommunityShieldAcceptance.test.ts'));
+            assert.equal(s.status,'failed'); assert.equal(s.message,''); assert.equal(s.assertionResults.length,2);
+            for(const row of s.assertionResults) {
+              assert(expected.has(row.title)&&!seen.has(row.title)); seen.add(row.title);
+              assert.deepEqual(row.ancestorTitles,[suite]); assert.equal(row.fullName,suite+' '+row.title);
+              assert.equal(row.status,'failed'); assert.equal(row.failureMessages.length,1);
+              const first=clean(row.failureMessages[0]).split(/\r?\n/).find(x=>x.trim())?.trim();
+              assert.equal(first?.startsWith('AssertionError: '+expected.get(row.title)+':'),true,'SC_BASELINE_PRIMARY_OWNERSHIP: '+row.title);
+            }
+            const counts={numUnhandledErrors:r.numUnhandledErrors??null,numRuntimeErrorTestSuites:r.numRuntimeErrorTestSuites??null};
+            for(const [k,v] of Object.entries(counts)) if(r[k]!==undefined){assert.equal(typeof v,'number');assert.equal(v,0);}
+            for(const k of ['errors','unhandledErrors']) if(r[k]!==undefined){assert(Array.isArray(r[k]));assert.equal(r[k].length,0);}
+            return counts;
+          }
+          assert.equal(Number(read('baseline.exit')),1);
+          assert(!/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled|ERR_MODULE_NOT_FOUND|Failed to load url|Cannot find module|SyntaxError:|ReferenceError:)/i.test(raw));
+          const report=JSON.parse(original), runtimeCounters=classify(report), copy=structuredClone(report);
+          const row=copy.testResults[0].assertionResults[0], marker=expected.get(row.title);
+          const frame=clean(read('baseline.stderr')).split(/\r?\n/).filter(s=>/^\s*\d+\|/.test(s)&&s.includes(marker));
+          assert(frame.length>0,'SC_BASELINE_CODE_FRAME_REQUIRED');
+          copy.diagnosticCodeFrame=frame.join('\n');
+          const healthy=JSON.stringify(copy,null,2)+'\n', file=dir+'/classifier-control.json';
+          fs.writeFileSync(file,healthy,{flag:'wx'}); classify(JSON.parse(read('classifier-control.json')));
+          row.failureMessages[0]=row.failureMessages[0].replace(marker,'UNOWNED_SHIELD_ASSERTION');
+          const mutant=JSON.stringify(copy,null,2)+'\n';
+          assert.notEqual(hash(mutant),hash(healthy)); assert(copy.diagnosticCodeFrame.includes(marker));
+          fs.writeFileSync(dir+'/classifier-control.mutant.json',mutant,{flag:'wx'}); fs.writeFileSync(file,mutant);
+          let error;
+          try{classify(JSON.parse(read('classifier-control.json')));}catch(e){error=e;}finally{fs.writeFileSync(file,healthy);}
+          assert.equal(error?.name,'AssertionError'); assert(error.message.startsWith('SC_BASELINE_PRIMARY_OWNERSHIP:'));
+          assert.equal(read('classifier-control.json'),healthy); classify(JSON.parse(read('classifier-control.json')));
+          assert.equal(read('baseline.vitest.json'),original);
+          fs.writeFileSync(dir+'/classifier-negative.json',JSON.stringify({changed:true,beforeSha256:hash(healthy),mutantSha256:hash(mutant),restoredSha256:hash(read('classifier-control.json')),preservedActualCodeFrame:copy.diagnosticCodeFrame,refusal:{name:error.name,message:error.message}},null,2)+'\n');
+          fs.writeFileSync(dir+'/summary.json',JSON.stringify({scope:'Two acceptance absences only.',ownedAssertionFailures:2,passed:0,skipped:0,todo:0,executed:2,classifierControls:{ownedRefusals:1,restored:true},runtimeCounters,runtimeCounterCompleteness:Object.values(runtimeCounters).some(v=>v===null)?'UNKNOWN':'REPORTED'},null,2)+'\n');
+          console.log('SC_SHIELD_BASELINE: two primary-owned assertions; changed diagnostic-trap copy refused and restored.');
+          CHECK
+          capture classifier node "$OUT/classify.mjs"
+          cmp "$OUT/old-engine.ts" "$old"
+          rm -- "$old"
+          trap - EXIT
+          capture restored node node_modules/vitest/vitest.mjs run src/test/soccerCommunityShieldAcceptance.test.ts --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$OUT/restored.vitest.json"
+          capture restored-classifier node "$OUT/positive.mjs" restored
+      - name: Always hold all source dependency bytes and source membership
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-community-shield-first-green-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-community-shield-first-green/
+          retention-days: 14
