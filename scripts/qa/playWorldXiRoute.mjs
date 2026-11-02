@@ -117,7 +117,24 @@ const market = [...responses.entries()].filter(([name]) => expected.get(name).ye
   const aa = expected.get(a), bb = expected.get(b); return bb.year - aa.year || aa.offset - bb.offset;
 }).flatMap(([, record]) => record.data);
 const history = [...responses.values()].find(record => record.kind === 'history').data;
-for (const name of ['Gustavo Gomez', 'Ramon Sosa']) assert(market.some(row => row.player_name === name), 'Reported name is actually archived: ' + name);
+const reportedRecords = [
+  { player_name: 'Gustavo Gómez', nationality: 'Paraguay', position: 'Centre-Back', club: 'Sociedade Esportiva Palmeiras', market_value_usd: 5000000, year: 2025, age: 31 },
+  { player_name: 'Ramón Sosa', nationality: 'Paraguay', position: 'Second Striker', club: 'Nottingham Forest', market_value_usd: 13000000, year: 2025, age: 25 },
+];
+function matchReportedRecord(rows, expected) {
+  assert.deepEqual(rows.filter(row => row.player_name === expected.player_name), [expected], 'Exact archived reported record: ' + expected.player_name);
+}
+const reportedControls = [];
+for (const record of reportedRecords) {
+  matchReportedRecord(market, record);
+  const changed = { ...record, club: 'Deliberately invalid copied club' };
+  assert.notDeepEqual(changed, record, 'Reported record control must change');
+  assert.throws(() => matchReportedRecord([changed], record), error => error.name === 'AssertionError' && error.message.includes('Exact archived reported record: ' + record.player_name));
+  matchReportedRecord(market, record);
+  reportedControls.push({ name: record.player_name, rejected: true, restored: true });
+}
+fs.writeFileSync(path.join(output, 'reported-record-witnesses.json'), JSON.stringify({ records: reportedRecords, controls: reportedControls }, null, 2));
+console.log('World XI captured reported names: 2 exact seven-field records and 2 effective copied-record controls/restores.');
 
 const helperFile = path.join(output, 'position-helpers.mjs');
 const helper = await build({ stdin: { contents: `export { FORMATIONS, normalizePosition } from ${JSON.stringify(path.join(root, 'src/lib/squadShape.ts'))}; export { ALL_POSITIONS, fitsAllowed, slotAllowedPositions } from ${JSON.stringify(path.join(root, 'src/lib/positionFit.ts'))};`, resolveDir: root, sourcefile: 'world-xi-position-helpers.mjs' }, bundle: true, platform: 'node', format: 'esm', outfile: helperFile, write: false, metafile: true, alias: { '@': path.join(root, 'src') }, logLevel: 'silent' });
