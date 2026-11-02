@@ -37,6 +37,12 @@ function decode(raw: string | null): { saved: SavedTeam | null; status: Status; 
 }
 
 function savedMessage(career: GrandPrixCareer, action: GrandPrixAction): string {
+  if (action.type === 'signDriver' || action.type === 'renewDriver') {
+    const driverId = action.type === 'signDriver' ? action.incomingDriverId : action.driverId;
+    const driver = career.drivers.find(row => row.id === driverId)!;
+    return driver.name + (action.type === 'signDriver' ? ' signed for season ' : ' renewed for season ')
+      + driver.contract!.startsSeason + '. Team saved.';
+  }
   if (action.type === 'upgrade') {
     const value = career.teams.find(team => team.id === career.teamId)!.car[action.area];
     return action.area.charAt(0).toUpperCase() + action.area.slice(1) + ' upgraded to ' + value + '. Team saved.';

@@ -1,0 +1,87 @@
+name: Grand Prix Boss contract save integration verification
+on:
+  push:
+    branches: [codex/grand-prix-boss-market-hook-fixed-20261102]
+permissions:
+  contents: read
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_BOSS_SAVE_OUT: ${{ github.workspace }}/grand-prix-market-save-artifacts/original-save
+      GP_BOSS_MARKET_SAVE_OUT: ${{ github.workspace }}/grand-prix-market-save-artifacts/market-save
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind admitted contract save RED and six integration paths
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-market-hook-fixed-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = 7d8c376793d5663235aab7370f761cd75c1b447d
+          out="$PWD/grand-prix-market-save-artifacts"; mkdir "$out"
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-market-hook-fixed.yml' 'scripts/qa/source-controls/useGrandPrixBoss.before-market.ts.txt' 'scripts/simGrandPrixBossMarketSave.mjs' 'scripts/simGrandPrixBossSave.mjs' 'src/hooks/useGrandPrixBoss.ts' 'src/test/grandPrixBossSave.test.tsx' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          printf '%s\n' '6d0e754c28f631ea590472b9ea2a1647206db67ec7dc1580bcf054cede74364f  src/lib/grandPrixBoss.ts' 'be8ac387c5b3158788d28b2186155c137c4a89d6fff30fd571df4d86965ec046  src/hooks/useGrandPrixBoss.ts' 'f293e353ffa7fd19fe4e361c5cf44df3b856fe90e20bc388689f27b7c4de00fc  src/test/grandPrixBossSave.test.tsx' 'c6a64b60b25770a3ab38bd7bb2749809fc266302ffcdd5cbe8661673991e83b9  src/test/grandPrixBossMarketSave.test.tsx' 'ecbb186a01b277a69374a38e0db92c266ca1219fb7d671b416da4bcd28657939  scripts/simGrandPrixBossSave.mjs' '2f4ed50b70e0a0d22a643680ffcf1cbb237777c4441005a9f0d8fc9d94d39ae8  scripts/simGrandPrixBossMarketSave.mjs' 'b2024f84b91cec4d263772b906b8adeb6903c0a2e5eef5ab3bf878b5b9484298  scripts/qa/source-controls/useGrandPrixBoss.before-market.ts.txt' | sha256sum --check -
+          git diff --exit-code HEAD^ -- src/lib src/hooks/useSaveFenceWatch.ts src/test/grandPrixBossMarketSave.test.tsx package.json package-lock.json vitest.config.ts src/test/setup.ts src/App.tsx src/data/gameRegistry.ts src/integrations/supabase/client.ts
+          git ls-files -z > "$out/source-members.before"; git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-market-save-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$out/$tag.exit"
+            tail -n 20 "$out/$tag.stdout"; tail -n 20 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          source "$out/capture.sh"; capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types original save safeguards and contract save outcomes
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source grand-prix-market-save-artifacts/capture.sh
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture save-syntax node --check scripts/simGrandPrixBossSave.mjs
+          capture market-save-syntax node --check scripts/simGrandPrixBossMarketSave.mjs
+          capture original-save-controls node scripts/simGrandPrixBossSave.mjs
+          capture market-save-controls node scripts/simGrandPrixBossMarketSave.mjs
+      - name: Preserve complete source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-market-save-artifacts"
+          sha256sum --check "$out/source.sha256" > "$out/source-held.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum --check "$out/dependency-files.sha256" > "$out/dependency-held.log"; fi
+          git ls-files -z > "$out/source-members.after"; cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/source-diff.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"; test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-market-save-${{ github.run_id }}
+          path: grand-prix-market-save-artifacts/
+          retention-days: 14
