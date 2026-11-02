@@ -1,7 +1,7 @@
 name: Grand Prix Boss lifecycle UI and held page controls
 on:
   push:
-    branches: [codex/grand-prix-boss-lifecycle-ui-fixed-20261102]
+    branches: [codex/grand-prix-boss-lifecycle-ui-fixed-v2-20261102]
 permissions:
   contents: read
 jobs:
@@ -23,17 +23,17 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Bind four owned paths and the unchanged eighteen page cases
+      - name: Bind the missing reference fixture and unchanged qualified inputs
         run: |
           set -euo pipefail
           out="$GP_CUI_OUT"; test ! -e "$out"; mkdir -p "$out"
-          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-lifecycle-ui-fixed-20261102
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-lifecycle-ui-fixed-v2-20261102
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$(git rev-parse HEAD^)" = d1ef8bb0777693f90f64648ebbbbf61b1c65bd3d
-          test "$(git rev-parse 'HEAD^1^{tree}')" = 9e65b483531b1b559b2b98c0598b2119f24d790c
+          test "$(git rev-parse HEAD^)" = 7393687d75b44007ee94e65d9e9a6b6cab771593
+          test "$(git rev-parse 'HEAD^1^{tree}')" = 8e3a80b6979f7e496042f6d949ad3c5ac9cd610e
           git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
           git diff --name-only HEAD^ HEAD > "$out/changed-paths.txt"
-          printf '%s\n' '.github/workflows/grand-prix-boss-lifecycle-ui-fixed.yml' 'scripts/qa/source-controls/GrandPrixBoss.before-lifecycle.tsx.txt' 'scripts/simGrandPrixBossLifecyclePage.mjs' 'scripts/simGrandPrixBossManagement.mjs' 'src/pages/GrandPrixBoss.tsx' > "$out/expected-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-lifecycle-ui-fixed.yml' 'scripts/qa/source-controls/GrandPrixBoss.before-management.tsx.txt' > "$out/expected-paths.txt"
           cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
           git diff --exit-code HEAD^ -- src/lib src/hooks src/components src/integrations src/App.tsx src/data src/test public scripts/data index.html package.json package-lock.json bun.lock vitest.config.ts tsconfig.app.json > "$out/held-foundations.log"
           printf '%s\n' \
@@ -46,10 +46,11 @@ jobs:
             'd81e7182866ff7d6c40f44d3674e6ef5d3dddd1a43f337a0fbfb78eda7f2f9ba  src/pages/GrandPrixBoss.tsx' \
             '7d463065bfacde38c379edc82ac9125823c7421482f4cddba177c6e4b60cedda  scripts/simGrandPrixBossLifecyclePage.mjs' \
             '2c9ec059d8343bd33df850c3a2272687c47fb7515a8bfbe531c8e880f1a80b20  scripts/simGrandPrixBossManagement.mjs' \
-            '1474ae6a5e7c5ca99cc56e43c53502af4a4639ec1345f78af51a1af5588c8fc1  scripts/qa/source-controls/GrandPrixBoss.before-lifecycle.tsx.txt' | sha256sum --check -
+            '1474ae6a5e7c5ca99cc56e43c53502af4a4639ec1345f78af51a1af5588c8fc1  scripts/qa/source-controls/GrandPrixBoss.before-lifecycle.tsx.txt' \
+            '75299ffcee86f41575e1b3f7769eb3706c81d83868c42eec305925f6171a9c1f  scripts/qa/source-controls/GrandPrixBoss.before-management.tsx.txt' | sha256sum --check -
           git ls-files -z > "$out/source-members.before"
           git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
-          for file in 'src/lib/grandPrixBoss.ts' 'src/hooks/useGrandPrixBoss.ts' 'src/test/grandPrixBossPage.test.tsx' 'src/test/grandPrixBossManagementPage.test.tsx' 'src/test/grandPrixBossLifecyclePage.test.tsx' 'src/test/fixtures/grandPrixBossV5Starter.json' 'src/pages/GrandPrixBoss.tsx' 'scripts/simGrandPrixBossLifecyclePage.mjs' 'scripts/simGrandPrixBossManagement.mjs' 'scripts/qa/source-controls/GrandPrixBoss.before-lifecycle.tsx.txt'; do
+          for file in 'src/lib/grandPrixBoss.ts' 'src/hooks/useGrandPrixBoss.ts' 'src/test/grandPrixBossPage.test.tsx' 'src/test/grandPrixBossManagementPage.test.tsx' 'src/test/grandPrixBossLifecyclePage.test.tsx' 'src/test/fixtures/grandPrixBossV5Starter.json' 'src/pages/GrandPrixBoss.tsx' 'scripts/simGrandPrixBossLifecyclePage.mjs' 'scripts/simGrandPrixBossManagement.mjs' 'scripts/qa/source-controls/GrandPrixBoss.before-lifecycle.tsx.txt' 'scripts/qa/source-controls/GrandPrixBoss.before-management.tsx.txt'; do
             mkdir -p "$out/source/$(dirname "$file")"; cp "$file" "$out/source/$file"
           done
           cat > "$out/capture.sh" <<'CAPTURE'
@@ -113,7 +114,7 @@ jobs:
           }
           const total={ordinary:cases.length,children:controls.reduce((sum,row)=>sum+row.children,0),healthy:18+controls.reduce((sum,row)=>sum+row.passed,0),ownedFailures:controls.reduce((sum,row)=>sum+row.ownedFailures,0),declaredSkips:controls.reduce((sum,row)=>sum+row.declaredSkips,0)};
           total.executed=total.healthy+total.ownedFailures;assert.deepEqual(total,{ordinary:18,children:19,healthy:72,ownedFailures:15,declaredSkips:60,executed:87});
-          fs.writeFileSync(path.join(out,'qualification-summary.json'),JSON.stringify({scope:'Eighteen ordinary actual-page cases plus nineteen copied-page control children. Mock public hook/chrome, real canonical C engine fixtures and RulesGate. No persistence/provider/native browser/App route/build/full ordinary suite or publication claim.',parent:'d1ef8bb0777693f90f64648ebbbbf61b1c65bd3d',cases,runtimeCounters,runtimeCounterCompleteness:Object.values(runtimeCounters).some(value=>value===null)||controls.some(row=>row.childRuntimeCounters.some(child=>Object.values(child.counters).some(value=>value===null)))?'UNKNOWN':'REPORTED',controls,total,repeatScope:'The fifteen prior page cases repeat in existing management children, with no extra distinct coverage claim.',installNetwork:'Locked online install precedes offline captures, with no empty install transport claim.'},null,2)+'\n');
+          fs.writeFileSync(path.join(out,'qualification-summary.json'),JSON.stringify({scope:'Eighteen ordinary actual-page cases plus nineteen copied-page control children. Mock public hook/chrome, real canonical C engine fixtures and RulesGate. No persistence/provider/native browser/App route/build/full ordinary suite or publication claim.',parent:'7393687d75b44007ee94e65d9e9a6b6cab771593',cases,runtimeCounters,runtimeCounterCompleteness:Object.values(runtimeCounters).some(value=>value===null)||controls.some(row=>row.childRuntimeCounters.some(child=>Object.values(child.counters).some(value=>value===null)))?'UNKNOWN':'REPORTED',controls,total,repeatScope:'The fifteen prior page cases repeat in existing management children, with no extra distinct coverage claim.',installNetwork:'Locked online install precedes offline captures, with no empty install transport claim.'},null,2)+'\n');
           console.log('GP_C_UI_FIXED:18 ordinary passes;19 copied children,54 healthy and15 owned assertions,60 unselected;87 total executed.');
           VERIFY
       - name: Locked install before offline execution
