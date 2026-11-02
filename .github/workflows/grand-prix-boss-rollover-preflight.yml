@@ -1,0 +1,142 @@
+name: Grand Prix Boss B behavior and canonical tie preflight
+on:
+  push:
+    branches: [codex/grand-prix-boss-rollover-preflight-20261102]
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind unchanged B draft immutable cases and one new tie regression
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/codex/grand-prix-boss-rollover-preflight-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD^)" = 7723c1acdaf0a2e4686c854516ac0d75f15b970f
+          out="$PWD/grand-prix-rollover-preflight-artifacts"
+          mkdir "$out"
+          git rev-parse HEAD HEAD^{tree} > "$out/head-tree.txt"
+          git ls-files -z > "$out/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$out/source.sha256"
+          git diff --name-only 7723c1acdaf0a2e4686c854516ac0d75f15b970f HEAD > "$out/changed-paths.txt"
+          printf '%s\n' '.github/workflows/grand-prix-boss-rollover-preflight.yml' 'src/lib/grandPrixBoss.ts' 'src/test/grandPrixBossHistoryTies.test.ts' > "$out/expected-paths.txt"
+          cmp "$out/expected-paths.txt" "$out/changed-paths.txt"
+          printf '%s\n' '00edfcd406f9015d7e53558a3380df4a423198ba8d02cb40f3a7ac1b246a60c2  src/lib/grandPrixBoss.ts' '61a671d7bd676c82be16d238928e9413293c2656bdc1562228becc3df32d0516  src/test/grandPrixBossRollover.test.ts' 'a8b9ccdf1ac5f07fb4e87e35a56e3eca1071cee5346b21f604a814057da385c4  src/test/grandPrixBossHistoryTies.test.ts' '8822d2af417739a0164babc5b15d13cd2a5e5c5dd4e263a9e465602798765887  src/test/grandPrixBoss.test.ts' '59a01e6dc561c11013e9e9092b139dd5da5494ff1d1fee7b1976057a94a405c0  src/test/grandPrixBossMarket.test.ts' | sha256sum -c -
+          cat > "$out/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            local out="$PWD/grand-prix-rollover-preflight-artifacts"
+            test ! -e "$out/$tag.exit"
+            printf '%s\0' "$@" > "$out/$tag.argv"
+            : > "$out/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$out/$tag.transport" "$@" > "$out/$tag.stdout" 2> "$out/$tag.stderr"
+            local status=$?
+            set -e
+            printf '%s\n' "$status" > "$out/$tag.exit"
+            tail -n 18 "$out/$tag.stdout"; tail -n 18 "$out/$tag.stderr"
+            test ! -s "$out/$tag.transport" || return 1
+            return "$status"
+          }
+          CAPTURE
+          source "$out/capture.sh"
+          capture install env NODE_OPTIONS='' npm ci
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$out/dependency-files.sha256"
+      - name: Actual types and all thirty-eight existing behavior cases
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-rollover-preflight-artifacts"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source "$out/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture behavior node node_modules/vitest/vitest.mjs run src/test/grandPrixBoss.test.ts src/test/grandPrixBossMarket.test.ts src/test/grandPrixBossRollover.test.ts --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/behavior.vitest.json"
+      - name: Two owned canonical-history ID tie assertions on the unchanged draft
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-rollover-preflight-artifacts"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          source "$out/capture.sh"
+          code=0
+          capture tie-baseline node node_modules/vitest/vitest.mjs run src/test/grandPrixBossHistoryTies.test.ts --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$out/tie-baseline.vitest.json" || code=$?
+          test "$code" -eq 1
+          test ! -s "$out/tie-baseline.transport"
+          node --input-type=module <<'CHECK'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const out = process.cwd() + '/grand-prix-rollover-preflight-artifacts';
+          const ids = new Map([
+            ['src/test/grandPrixBoss.test.ts', ['GP_ENGINE_AVAILABLE:', 'GP_WORLD:', 'GP_SEED:', 'GP_UPGRADE:', 'GP_RESERVE:', 'GP_GRID:', 'GP_SETUPS:', 'GP_CLASSIFICATION:', 'GP_SETTLEMENT:', 'GP_DUPLICATE:', 'GP_RESUME:', 'GP_INVALID_SAVE:', 'GP_SCORE:']],
+            ['src/test/grandPrixBossMarket.test.ts', ['GP_MARKET_PUBLIC_QUOTES:', 'GP_MARKET_SIGN:', 'GP_MARKET_NEW_WAGES:', 'GP_MARKET_BUYOUT:', 'GP_MARKET_FUNDS:', 'GP_MARKET_REROUND:', 'GP_MARKET_RENEW:', 'GP_MARKET_EXCLUSIVITY:', 'GP_MARKET_WINDOWS:', 'GP_MARKET_REPLAY:', 'GP_MARKET_SAVE:', 'GP_MARKET_HOLDS:']],
+            ['src/test/grandPrixBossRollover.test.ts', ['GP_ROLLOVER_COMMIT:', 'GP_ROLLOVER_CONTRACTS:', 'GP_ROLLOVER_PREPAID:', 'GP_ROLLOVER_CHAMPIONS:', 'GP_ROLLOVER_CALENDAR:', 'GP_ROLLOVER_YEAR_TWO:', 'GP_ROLLOVER_TAIL:', 'GP_ROLLOVER_REPLAY:', 'GP_ROLLOVER_PHASE:', 'GP_ROLLOVER_FUNDS:', 'GP_ROLLOVER_LEGACY:', 'GP_ROLLOVER_BAD_LEDGER:', 'GP_ROLLOVER_ARCHIVED_IDENTITIES:']],
+            ['src/test/grandPrixBossHistoryTies.test.ts', ['GP_HISTORY_DRIVER_TIE:', 'GP_HISTORY_TEAM_TIE:']],
+          ]);
+          const evidence = [];
+          function inspect(tag, passed, failed, expectedFiles) {
+            const r = JSON.parse(fs.readFileSync(out + '/' + tag + '.vitest.json', 'utf8'));
+            const raw = fs.readFileSync(out + '/' + tag + '.stdout', 'utf8') + '\n' + fs.readFileSync(out + '/' + tag + '.stderr', 'utf8');
+            assert.equal(Number(fs.readFileSync(out + '/' + tag + '.exit', 'utf8')), failed ? 1 : 0);
+            assert.equal(r.success, failed === 0); assert.equal(r.numTotalTests, passed + failed);
+            assert.equal(r.numPassedTests, passed); assert.equal(r.numFailedTests, failed);
+            assert.equal(r.numPendingTests, 0); assert.equal(r.numTodoTests, 0); assert.equal(r.testResults.length, expectedFiles.length);
+            const filesSeen = new Set();
+            for (const file of r.testResults) {
+              const name = expectedFiles.find(expected => file.name.endsWith('/' + expected)); assert(name); assert(!filesSeen.has(name)); filesSeen.add(name);
+              const expectedIds = ids.get(name), seen = new Set(); assert.equal(file.assertionResults.length, expectedIds.length);
+              for (const row of file.assertionResults) {
+                const matching = expectedIds.filter(id => row.title.startsWith(id)); assert.equal(matching.length, 1);
+                const id = matching[0]; assert(!seen.has(id)); seen.add(id);
+                const red = failed > 0; assert.equal(row.status, red ? 'failed' : 'passed'); assert.equal(row.failureMessages.length, red ? 1 : 0);
+                if (red) { assert.match(row.failureMessages[0], /AssertionError:/); assert(row.failureMessages[0].includes(id === 'GP_HISTORY_DRIVER_TIE:' ? 'GP_HISTORY_DRIVER_ID_TIE_ACCEPTED' : 'GP_HISTORY_TEAM_ID_TIE_ACCEPTED')); }
+              }
+            }
+            const runtimeCounters = { numUnhandledErrors: r.numUnhandledErrors ?? null, numRuntimeErrorTestSuites: r.numRuntimeErrorTestSuites ?? null };
+            for (const [key, value] of Object.entries(runtimeCounters)) { if (value === null) continue; assert.equal(typeof value, 'number'); assert.equal(value, 0, key); }
+            for (const errors of [r.errors, r.unhandledErrors]) if (Array.isArray(errors)) assert.equal(errors.length, 0);
+            const detectedRuntimeError = /(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw);
+            assert.equal(detectedRuntimeError, false);
+            evidence.push({ tag, passed, ownedFailures: failed, declaredSkips: 0, runtimeCounters,
+              runtimeCounterCompleteness: Object.values(runtimeCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED', detectedRuntimeError,
+              rawErrors: r.errors ?? null, rawUnhandledErrors: r.unhandledErrors ?? null,
+              cases: r.testResults.flatMap(file => file.assertionResults.map(row => ({ file: file.name, title: row.title, status: row.status }))) });
+          }
+          inspect('behavior', 38, 0, ['src/test/grandPrixBoss.test.ts', 'src/test/grandPrixBossMarket.test.ts', 'src/test/grandPrixBossRollover.test.ts']);
+          inspect('tie-baseline', 0, 2, ['src/test/grandPrixBossHistoryTies.test.ts']);
+          fs.writeFileSync(out + '/summary.json', JSON.stringify({ scope: 'Unchanged B draft behavior preflight plus two owned ID-tie guard absences. Not final B readiness.', totalExecuted: 40, behaviorPasses: 38, ownedTieFailures: 2, declaredSkips: 0, evidence }, null, 2) + '\n');
+          console.log('GP_B_PREFLIGHT: original25 plus immutable13 B behaviors passed, two exact owned canonical-history tie assertions, zero skips.');
+          CHECK
+      - name: Preserve complete source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          out="$PWD/grand-prix-rollover-preflight-artifacts"
+          sha256sum -c "$out/source.sha256" > "$out/source-hold.log"
+          if test -f "$out/dependency-files.sha256"; then sha256sum -c "$out/dependency-files.sha256" > "$out/dependency-hold.log"; fi
+          git ls-files -z > "$out/source-members.after"
+          cmp "$out/source-members.before" "$out/source-members.after"
+          git diff --exit-code HEAD > "$out/working-source-hold.log"
+          git ls-files --others --exclude-standard > "$out/untracked.txt"
+          test ! -s "$out/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: grand-prix-rollover-preflight-${{ github.run_id }}
+          path: grand-prix-rollover-preflight-artifacts/
+          retention-days: 14

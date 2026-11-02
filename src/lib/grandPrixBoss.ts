@@ -17,6 +17,19 @@ export interface GrandPrixNextSeasonPlan {
   automaticRenewals: { driverId: string; wagePerRace: number; signingFee: number }[];
   totalRenewalFee: number; nextReserved: number; cashAfter: number; affordable: boolean;
 }
+export interface GrandPrixSeasonSummary {
+  season: number; rounds: number;
+  driverChampion: { driverId: string; name: string; teamId: string; points: number; wins: number; podiums: number };
+  constructorChampion: { teamId: string; name: string; points: number; wins: number; podiums: number };
+  team: { teamId: string; name: string; position: number; points: number; wins: number; podiums: number;
+    drivers: { driverId: string; name: string; points: number; wins: number; podiums: number; races: number; finishes: number }[] };
+  races: { roundId: string; trackName: string; points: number; teamPrize: number; operatingCost: number;
+    drivers: { driverId: string; name: string; position: number; status: 'finished' | 'retired'; points: number }[] }[];
+  roundsBothDriversFinished: number; endCash: number; finalCar: Record<CarArea, number>;
+}
+export interface GrandPrixCareerTotals {
+  archivedSeasons: number; driverTitles: number; constructorTitles: number; sinceSeason: number; earlierSeasonsUnknown: boolean;
+}
 export interface GrandPrixTeam { id: string; name: string; car: Record<CarArea, number> }
 export interface GrandPrixTrack {
   id: string; name: string; laps: number; entryCost: number;
@@ -43,6 +56,7 @@ export interface GrandPrixCareer {
   season: number; round: number; phase: 'preRace' | 'grid' | 'race' | 'raceResult' | 'seasonReview';
   teamId: string; cash: number; reserved: number; upgradeCosts: Record<CarArea, number | null>;
   marketOffers: GrandPrixMarketOffer[]; nextSeasonPlan: GrandPrixNextSeasonPlan | null;
+  history: GrandPrixSeasonSummary[]; careerTotals: GrandPrixCareerTotals;
   teams: GrandPrixTeam[]; drivers: GrandPrixDriver[]; calendar: GrandPrixTrack[];
   race: GrandPrixRace | null; results: GrandPrixRaceResult[];
   driverStandings: { driverId: string; points: number; wins: number; podiums: number }[];
@@ -54,11 +68,11 @@ export type GrandPrixAction = { expectedRevision: number } & (
   { type: 'upgrade'; area: CarArea } | { type: 'qualify' } |
   { type: 'startRace'; setups: GrandPrixSetup[] } | { type: 'raceInterval'; orders: GrandPrixOrder[] } |
   { type: 'continue' } | { type: 'signDriver'; outgoingDriverId: string; incomingDriverId: string } |
-  { type: 'renewDriver'; driverId: string }
+  { type: 'renewDriver'; driverId: string } | { type: 'startNextSeason' }
 );
 export type GrandPrixTransition = {
   ok: true; state: GrandPrixCareer;
-  receipt: { type: string; revision: number; cost?: number; teamPrize?: number; operatingCost?: number };
+  receipt: { type: string; revision: number; cost?: number; teamPrize?: number; operatingCost?: number; sponsor?: number; renewalFee?: number; cashDelta?: number };
 } | { ok: false; reason: 'stale' | 'phase' | 'funds' | 'invalid' };
 
 const AREAS: CarArea[] = ['power', 'aero', 'reliability'];
@@ -165,6 +179,104 @@ function safeMarket(state: GrandPrixCareer): boolean {
   return plan === null || [plan.nextSeason, plan.sponsor, plan.totalRenewalFee, plan.nextReserved, plan.cashAfter].every(value => integer(value))
     && plan.automaticRenewals.every(renewal => integer(renewal.wagePerRace, 1) && integer(renewal.signingFee, 1));
 }
+const honorsOrder = (a: { points: number; wins: number; podiums: number }, b: { points: number; wins: number; podiums: number }) => b.points - a.points || b.wins - a.wins || b.podiums - a.podiums;
+function summarizeSeason(state: GrandPrixCareer): GrandPrixSeasonSummary {
+  const participantIds = new Set(state.results.flatMap(result => result.classification.map(row => row.driverId)));
+  const drivers = state.driverStandings.filter(row => participantIds.has(row.driverId)).slice().sort((a, b) => honorsOrder(a, b) || a.driverId.localeCompare(b.driverId));
+  const teams = state.constructorStandings.slice().sort((a, b) => honorsOrder(a, b) || a.teamId.localeCompare(b.teamId));
+  const winner = drivers[0], constructor = teams[0], owner = teams.find(row => row.teamId === state.teamId)!;
+  const winnerTeam = state.results.flatMap(result => result.classification).find(row => row.driverId === winner.driverId)!.teamId;
+  const races = state.results.map(result => {
+    const owned = result.classification.filter(row => row.teamId === state.teamId);
+    return { roundId: result.roundId, trackName: state.calendar.find(track => track.id === result.roundId)!.name,
+      points: owned.reduce((sum, row) => sum + row.points, 0), teamPrize: result.teamPrize, operatingCost: result.operatingCost,
+      drivers: owned.map(row => ({ driverId: row.driverId, name: state.drivers.find(driver => driver.id === row.driverId)!.name,
+        position: row.position, status: row.status, points: row.points })) };
+  });
+  const ownerIds = [...new Set(races.flatMap(race => race.drivers.map(row => row.driverId)))];
+  const seasonDrivers = ownerIds.map(driverId => {
+    const standing = state.driverStandings.find(row => row.driverId === driverId)!;
+    const rows = races.flatMap(race => race.drivers).filter(row => row.driverId === driverId);
+    return { ...standing, name: state.drivers.find(driver => driver.id === driverId)!.name,
+      races: rows.length, finishes: rows.filter(row => row.status === 'finished').length };
+  });
+  return { season: state.season, rounds: state.calendar.length,
+    driverChampion: { ...winner, name: state.drivers.find(driver => driver.id === winner.driverId)!.name, teamId: winnerTeam },
+    constructorChampion: { ...constructor, name: state.teams.find(team => team.id === constructor.teamId)!.name },
+    team: { ...owner, name: state.teams.find(team => team.id === state.teamId)!.name, position: teams.findIndex(row => row.teamId === state.teamId) + 1, drivers: seasonDrivers },
+    races, roundsBothDriversFinished: races.filter(race => race.drivers.every(row => row.status === 'finished')).length,
+    endCash: state.cash, finalCar: { ...state.teams.find(team => team.id === state.teamId)!.car } };
+}
+function validHonors(value: unknown, rounds: number, team = false): boolean {
+  return record(value) && integer(value.points, 0, (team ? POINTS[0] + POINTS[1] : POINTS[0]) * rounds)
+    && integer(value.wins, 0, rounds) && integer(value.podiums, 0, (team ? 2 : 1) * rounds);
+}
+function validSummary(raw: unknown, ownerId: string): boolean {
+  if (!record(raw)) return false;
+  const row = raw as unknown as GrandPrixSeasonSummary;
+  if (!integer(row.season, 1) || row.rounds !== 12 || !integer(row.endCash)
+    || !record(row.finalCar) || !AREAS.every(area => integer(row.finalCar[area], 0, 100))
+    || !record(row.driverChampion) || !text(row.driverChampion.driverId) || !text(row.driverChampion.name) || !text(row.driverChampion.teamId)
+    || !validHonors(row.driverChampion, row.rounds)
+    || !record(row.constructorChampion) || !text(row.constructorChampion.teamId) || !text(row.constructorChampion.name)
+    || !validHonors(row.constructorChampion, row.rounds, true)
+    || !record(row.team) || row.team.teamId !== ownerId || !text(row.team.name) || !integer(row.team.position, 1, 10)
+    || !validHonors(row.team, row.rounds, true) || !Array.isArray(row.team.drivers) || row.team.drivers.length !== 2
+    || !row.team.drivers.every(driver => record(driver) && text(driver.driverId) && text(driver.name) && validHonors(driver, row.rounds)
+      && driver.races === row.rounds && integer(driver.finishes, 0, row.rounds))
+    || !unique(row.team.drivers.map(driver => driver.driverId)) || !Array.isArray(row.races) || row.races.length !== row.rounds
+    || !unique(row.races.map(race => race?.roundId)) || !integer(row.roundsBothDriversFinished, 0, row.rounds)) return false;
+  const ownIds = row.team.drivers.map(driver => driver.driverId);
+  for (const race of row.races) {
+    if (!record(race) || !text(race.roundId) || !text(race.trackName) || !integer(race.points, 0, POINTS[0] + POINTS[1])
+      || !integer(race.teamPrize) || !integer(race.operatingCost, 1) || !Array.isArray(race.drivers) || race.drivers.length !== 2
+      || !unique(race.drivers.map(driver => driver?.driverId)) || !unique(race.drivers.map(driver => String(driver?.position)))
+      || !race.drivers.every(driver => record(driver) && ownIds.includes(driver.driverId) && text(driver.name) && integer(driver.position, 1, 20)
+        && ['finished', 'retired'].includes(driver.status) && driver.points === (driver.status === 'finished' ? POINTS[driver.position - 1] ?? 0 : 0))) return false;
+    if (race.points !== race.drivers.reduce((sum, driver) => sum + driver.points, 0)
+      || race.teamPrize !== race.points * 30_000 + race.drivers.filter(driver => driver.status === 'finished').length * 50_000) return false;
+  }
+  for (const driver of row.team.drivers) {
+    const appearances = row.races.flatMap(race => race.drivers).filter(held => held.driverId === driver.driverId);
+    if (appearances.length !== row.rounds || appearances.some(held => held.name !== driver.name)
+      || driver.points !== appearances.reduce((sum, held) => sum + held.points, 0)
+      || driver.wins !== appearances.filter(held => held.status === 'finished' && held.position === 1).length
+      || driver.podiums !== appearances.filter(held => held.status === 'finished' && held.position <= 3).length
+      || driver.finishes !== appearances.filter(held => held.status === 'finished').length) return false;
+  }
+  if (row.team.points !== row.team.drivers.reduce((sum, driver) => sum + driver.points, 0)
+    || row.team.wins !== row.team.drivers.reduce((sum, driver) => sum + driver.wins, 0)
+    || row.team.podiums !== row.team.drivers.reduce((sum, driver) => sum + driver.podiums, 0)
+    || row.roundsBothDriversFinished !== row.races.filter(race => race.drivers.every(driver => driver.status === 'finished')).length
+    || (row.constructorChampion.teamId === ownerId) !== (row.team.position === 1)) return false;
+  if (row.constructorChampion.teamId === ownerId) {
+    if (row.constructorChampion.name !== row.team.name || honorsOrder(row.constructorChampion, row.team) !== 0) return false;
+  } else if (honorsOrder(row.constructorChampion, row.team) > 0) return false;
+  const ownChampion = row.team.drivers.find(driver => driver.driverId === row.driverChampion.driverId);
+  if (row.driverChampion.teamId === ownerId) {
+    if (!ownChampion || ownChampion.name !== row.driverChampion.name || honorsOrder(ownChampion, row.driverChampion) !== 0) return false;
+  } else if (ownChampion) return false;
+  return !row.team.drivers.some(driver => honorsOrder(driver, row.driverChampion) < 0);
+}
+function normalizeHistory(state: GrandPrixCareer): boolean {
+  if (state.history === undefined && state.careerTotals === undefined) {
+    state.history = [];
+    state.careerTotals = { archivedSeasons: 0, driverTitles: 0, constructorTitles: 0, sinceSeason: state.season, earlierSeasonsUnknown: state.season > 1 };
+    return true;
+  }
+  if (!Array.isArray(state.history) || !record(state.careerTotals)) return false;
+  const totals = state.careerTotals;
+  if (!integer(totals.sinceSeason, 1, state.season) || totals.earlierSeasonsUnknown !== (totals.sinceSeason > 1)
+    || totals.archivedSeasons !== state.season - totals.sinceSeason || !integer(totals.archivedSeasons)
+    || !integer(totals.driverTitles, 0, totals.archivedSeasons) || !integer(totals.constructorTitles, 0, totals.archivedSeasons)
+    || state.history.length !== Math.min(totals.archivedSeasons, 12)
+    || !state.history.every((row, index) => validSummary(row, state.teamId) && row.season === state.season - state.history.length + index)) return false;
+  const retainedDriverTitles = state.history.filter(row => row.driverChampion.teamId === state.teamId).length;
+  const retainedTeamTitles = state.history.filter(row => row.constructorChampion.teamId === state.teamId).length;
+  const omitted = totals.archivedSeasons - state.history.length;
+  return totals.driverTitles >= retainedDriverTitles && totals.driverTitles <= retainedDriverTitles + omitted
+    && totals.constructorTitles >= retainedTeamTitles && totals.constructorTitles <= retainedTeamTitles + omitted;
+}
 function committed(state: GrandPrixCareer, receipt: Omit<Extract<GrandPrixTransition, { ok: true }>['receipt'], 'revision'>): GrandPrixTransition {
   state.revision += 1;
   state.reserved = reserve(state);
@@ -202,7 +314,9 @@ export function createCareer(seed: number): GrandPrixCareer {
   const state: GrandPrixCareer = {
     version: 1, worldKind: 'fictional', careerId: `grand-prix-${seed}`, seed, revision: 0,
     season: 1, round: 0, phase: 'preRace', teamId, cash: 12_000_000, reserved: 0,
-    upgradeCosts: { power: null, aero: null, reliability: null }, marketOffers: [], nextSeasonPlan: null, teams, drivers, calendar, race: null, results: [],
+    upgradeCosts: { power: null, aero: null, reliability: null }, marketOffers: [], nextSeasonPlan: null,
+    history: [], careerTotals: { archivedSeasons: 0, driverTitles: 0, constructorTitles: 0, sinceSeason: 1, earlierSeasonsUnknown: false },
+    teams, drivers, calendar, race: null, results: [],
     driverStandings: drivers.map(driver => ({ driverId: driver.id, points: 0, wins: 0, podiums: 0 })),
     constructorStandings: teams.map(team => ({ teamId: team.id, points: 0, wins: 0, podiums: 0 })),
   };
@@ -317,6 +431,34 @@ export function applyAction(state: GrandPrixCareer, action: GrandPrixAction): Gr
   if (!record(action) || !integer(action.expectedRevision)) return { ok: false, reason: 'invalid' };
   if (action.expectedRevision !== state.revision) return { ok: false, reason: 'stale' };
   const a = action as unknown as Record<string, unknown>;
+  if (a.type === 'startNextSeason') {
+    if (state.phase !== 'seasonReview' || state.results.length !== state.calendar.length || state.round !== state.calendar.length - 1) return { ok: false, reason: 'phase' };
+    const plan = projectedSeason(state);
+    if (!plan.affordable) return { ok: false, reason: 'funds' };
+    const next = clone(state);
+    if (!normalizeHistory(next)) return { ok: false, reason: 'invalid' };
+    const summary = summarizeSeason(next);
+    next.history = [...next.history, summary].slice(-12);
+    next.careerTotals.archivedSeasons += 1;
+    if (summary.driverChampion.teamId === next.teamId) next.careerTotals.driverTitles += 1;
+    if (summary.constructorChampion.teamId === next.teamId) next.careerTotals.constructorTitles += 1;
+    for (const driver of next.drivers) {
+      const contract = driver.contract;
+      if (!contract || (contract.startsSeason ?? state.season) > state.season) continue;
+      if (contract.years > 1) { contract.years -= 1; continue; }
+      const renewal = plan.automaticRenewals.find(row => row.driverId === driver.id);
+      if (contract.teamId === next.teamId && !renewal) return { ok: false, reason: 'invalid' };
+      driver.contract = { teamId: contract.teamId, years: 1, startsSeason: plan.nextSeason,
+        wagePerRace: contract.teamId === next.teamId ? renewal!.wagePerRace : dealWage(driver) };
+    }
+    next.cash = plan.cashAfter;
+    next.season = plan.nextSeason; next.round = 0; next.phase = 'preRace'; next.race = null; next.results = [];
+    next.calendar = state.calendar.map((track, index) => ({ ...track, id: `gp-season-${next.season}-round-${index}`,
+      rainChance: 0.12 + keyedRng(`grand-prix-calendar|${next.seed}|${next.season}|${index}`)() * 0.25 }));
+    next.driverStandings = next.drivers.map(driver => ({ driverId: driver.id, points: 0, wins: 0, podiums: 0 }));
+    next.constructorStandings = next.teams.map(team => ({ teamId: team.id, points: 0, wins: 0, podiums: 0 }));
+    return committed(next, { type: 'startNextSeason', sponsor: plan.sponsor, renewalFee: plan.totalRenewalFee, cashDelta: plan.cashAfter - state.cash });
+  }
   if (a.type === 'signDriver' || a.type === 'renewDriver') {
     if (!marketOpen(state) || a.type === 'renewDriver' && state.phase !== 'seasonReview') return { ok: false, reason: 'phase' };
     const outgoingId = a.type === 'renewDriver' ? a.driverId : a.outgoingDriverId;
@@ -452,6 +594,7 @@ export function validateSavedCareer(raw: unknown): { ok: true; state: GrandPrixC
   if (!safeMarket(normalized)
     || s.marketOffers !== undefined && !rowsMatch(s.marketOffers, normalized.marketOffers, OFFER_KEYS)
     || s.nextSeasonPlan !== undefined && !planMatches(s.nextSeasonPlan, normalized.nextSeasonPlan)) return invalid;
+  if (!normalizeHistory(normalized)) return invalid;
   return { ok: true, state: normalized };
 }
 
