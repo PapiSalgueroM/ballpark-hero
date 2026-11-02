@@ -14,8 +14,12 @@ const TEST = 'src/test/grandPrixBossMarket.test.ts';
 const BASELINE = 'scripts/qa/source-controls/grandPrixBoss.before-market.ts.txt';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const heldPaths = [ENGINE, TEST, BASELINE, 'src/test/grandPrixBoss.test.ts', 'scripts/simGrandPrixBoss.mjs', 'src/lib/keyedRng.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'];
-const held = new Map(heldPaths.map(file => [file, fs.readFileSync(path.join(root, file))]));
-const original = held.get(ENGINE), source = original.toString('utf8');
+const held = new Map();
+for (const file of heldPaths) {
+  const bytes = fs.readFileSync(path.join(root, file));
+  held.set(file, Buffer.from(bytes));
+}
+const original = held.get(ENGINE), source = fs.readFileSync(path.join(root, ENGINE), 'utf8').replace(/\r\n?/g, '\n');
 assert.equal(sha(held.get(BASELINE)), 'ec793e9cacb47bf770d599b1677f76ac753d2cafde9c1f85e6bb0cf7dc7bc69b', 'Exact qualified v5 control source');
 const outBase = path.resolve(process.env.GP_BOSS_MARKET_OUT || path.join(root, 'tmp'));
 fs.mkdirSync(outBase, { recursive: true });
@@ -99,7 +103,10 @@ function run(name, mode = 'healthy', selectedId = null, file = null, marker = nu
     detectedRuntimeError, rawErrors: report.errors ?? null, rawUnhandledErrors: report.unhandledErrors ?? null };
   results.push(result);
   fs.writeFileSync(path.join(out, name + '.summary.json'), JSON.stringify(result, null, 2));
-  for (const [filePath, bytes] of held) assert.deepEqual(fs.readFileSync(path.join(root, filePath)), bytes, name + ': actual held input changed');
+  for (const [filePath, bytes] of held) {
+    const actualBytes = fs.readFileSync(path.join(root, filePath));
+    assert.deepEqual(actualBytes, bytes, name + ': actual held input changed');
+  }
   console.log(name + ': ' + expectedPasses + ' passes, ' + expectedFailures + ' owned assertions, ' + expectedSkips + ' declared skips.');
 }
 try {
@@ -131,7 +138,14 @@ try {
   fs.writeFileSync(path.join(out, 'summary.json'), JSON.stringify({ scope: 'Finite paid market A only. No rollover, world lifecycle, hook integration or UI qualification.', childRuns: 25, executed: 69, totals, results }, null, 2));
   console.log('simGrandPrixBossMarket: 37 passes, 32 owned assertions, 231 declared unselected skips; 69 executed outcomes.');
 } finally {
-  const after = [...held].map(([file]) => { const bytes = fs.readFileSync(path.join(root, file)); return { file, bytes: bytes.length, sha256: sha(bytes) }; });
+  const after = [];
+  for (const [file, expected] of held) {
+    {
+      const actualBytes = fs.readFileSync(path.join(root, file));
+      assert.deepEqual(actualBytes, expected, 'Final held input: ' + file);
+    }
+    after.push({ file, bytes: expected.length, sha256: sha(expected) });
+  }
   fs.writeFileSync(path.join(out, 'source-after.json'), JSON.stringify(after, null, 2));
   assert.deepEqual(after, sourceReceipts());
   console.log('Grand Prix Boss market evidence: ' + out);

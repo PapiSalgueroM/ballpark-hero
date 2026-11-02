@@ -16,7 +16,11 @@ const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const files = [PAGE, ORIGINAL, TEST, OLD, 'src/lib/grandPrixBoss.ts', 'src/hooks/useGrandPrixBoss.ts',
   'src/lib/saveFence.ts', 'src/hooks/useSaveFenceWatch.ts', 'src/hooks/useRevealScroll.ts',
   'src/components/game/RulesGate.tsx', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'];
-const held = new Map(files.map(file => [file, fs.readFileSync(path.join(root, file))]));
+const held = new Map();
+for (const file of files) {
+  const bytes = fs.readFileSync(path.join(root, file));
+  held.set(file, Buffer.from(bytes));
+}
 assert.equal(sha(held.get(ORIGINAL)), 'e8cc17bd6047a775557632e0984f59cfc385f922d9c80fee0638e6e94b98bb25', 'Held original nine page cases');
 const base = path.resolve(process.env.GP_BOSS_MANAGEMENT_OUT || path.join(root, 'tmp'));
 assert(base !== path.join(root, 'src') && !base.startsWith(path.join(root, 'src') + path.sep));
@@ -26,14 +30,19 @@ const copyBase = path.join(root, 'tmp');
 fs.mkdirSync(copyBase, { recursive: true });
 const copyDir = fs.mkdtempSync(path.join(copyBase, 'dukb-grand-prix-management-copy-'));
 assert.equal(path.dirname(copyDir), copyBase, 'Owned copied source stays inside the allowed workspace tmp folder');
-const candidate = path.join(copyDir, 'GrandPrixBoss.tsx'), source = held.get(PAGE).toString('utf8');
+const candidate = path.join(copyDir, 'GrandPrixBoss.tsx'), source = fs.readFileSync(path.join(root, PAGE), 'utf8').replace(/\r\n?/g, '\n');
 fs.writeFileSync(path.join(out, 'copy-location.json'), JSON.stringify({ evidence: out, sourceCopy: candidate, allowedRoot: copyBase }, null, 2));
 const originalIds = ['GP_PAGE_AVAILABLE:', 'GP_PAGE_START:', 'GP_PAGE_HUB:', 'GP_PAGE_UPGRADE:', 'GP_PAGE_ORDERS:',
   'GP_PAGE_STANDINGS:', 'GP_PAGE_BACK:', 'GP_PAGE_MOVED_EMPTY:', 'GP_PAGE_PROTECTED_SAVE:'];
 const ids = ['GP_MANAGEMENT_SIGN:', 'GP_MANAGEMENT_RENEW:', 'GP_MANAGEMENT_NEXT_YEAR:', 'GP_MANAGEMENT_GUARDS:',
   'GP_MANAGEMENT_HISTORY:', 'GP_MANAGEMENT_REVIEW_CARDS:'];
 const results = [];
-function hold() { for (const [file, bytes] of held) assert.equal(sha(fs.readFileSync(path.join(root, file))), sha(bytes), file + ': actual source held'); }
+function hold() {
+  for (const [file, bytes] of held) {
+    const actualBytes = fs.readFileSync(path.join(root, file));
+    assert.equal(sha(actualBytes), sha(bytes), file + ': actual source held');
+  }
+}
 const receipts = () => [...held].map(([file, bytes]) => ({ file, bytes: bytes.length, sha256: sha(bytes) }));
 fs.writeFileSync(path.join(out, 'source-before.json'), JSON.stringify(receipts(), null, 2));
 fs.writeFileSync(path.join(out, 'actual-page.tsx'), held.get(PAGE));
@@ -162,7 +171,7 @@ function compatibilityInverse(text, spans) {
 const pageCompatibility = compatibilityInverse(source, lifecycleSpans);
 assert.equal(pageCompatibility.edits.length, 8);
 assert.equal(pageCompatibility.inverseSha256, '1474ae6a5e7c5ca99cc56e43c53502af4a4639ec1345f78af51a1af5588c8fc1', 'Exact focus-fixed page before lifecycle UI');
-const testCompatibility = compatibilityInverse(held.get(TEST).toString('utf8'), [olderFixtureSpan]);
+const testCompatibility = compatibilityInverse(fs.readFileSync(path.join(root, TEST), 'utf8').replace(/\r\n?/g, '\n'), [olderFixtureSpan]);
 assert.equal(testCompatibility.inverseSha256, '77a3d05742e9621ab6146bfbfe3f5b33f1853b99a12008b66134f0387c351922', 'Exact six-case test before labelled older-fixture compatibility');
 fs.writeFileSync(path.join(out, 'compatibility-provenance.json'), JSON.stringify({
   scope: 'Only eight lifecycle UI spans above the qualified focus-fixed page and one labelled older-fixture test adaptation. No product or test mutation.',

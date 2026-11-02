@@ -13,11 +13,15 @@ const HOOK = 'src/hooks/useGrandPrixBoss.ts', TEST = 'src/test/grandPrixBossRoll
 const OLD = 'scripts/qa/source-controls/useGrandPrixBoss.before-rollover.ts.txt';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const paths = [HOOK, TEST, OLD, 'src/lib/grandPrixBoss.ts', 'src/lib/saveFence.ts', 'src/hooks/useSaveFenceWatch.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'];
-const held = new Map(paths.map(file => [file, fs.readFileSync(path.join(root, file))]));
-const original = held.get(HOOK), source = original.toString('utf8');
+const held = new Map();
+for (const file of paths) {
+  const bytes = fs.readFileSync(path.join(root, file));
+  held.set(file, Buffer.from(bytes));
+}
+const original = held.get(HOOK), source = fs.readFileSync(path.join(root, HOOK), 'utf8').replace(/\r\n?/g, '\n');
 assert.equal(sha(held.get(OLD)), 'be8ac387c5b3158788d28b2186155c137c4a89d6fff30fd571df4d86965ec046');
 assert.equal(sha(held.get(TEST)), '37b5dc1988904f28694e909488c8bc9007dc6f14cf0bd0938aa08ce77e3f9f3f');
-const startupSource = held.get('src/lib/grandPrixBoss.ts').toString('utf8');
+const startupSource = fs.readFileSync(path.join(root, 'src/lib/grandPrixBoss.ts'), 'utf8').replace(/\r\n?/g, '\n');
 let beforeStarter = startupSource;
 const startupProof = [];
 for (const [before, after] of [
@@ -83,7 +87,7 @@ for (const { offset, before, after } of hookProof.slice().reverse()) {
 assert.equal(hookRestored, source, 'Whole message-only provenance inverse holds persist and fence bytes');
 const hookCompatibility = { actualSha256: sha(Buffer.from(source)), steps: hookProof,
   recoveredSha256: sha(Buffer.from(hookPrior)), restoredSha256: sha(Buffer.from(hookRestored)) };
-assert.equal(hookPrior, held.get(OLD).toString('utf8'), 'Known message-only inverses recover exact market hook');
+assert.equal(hookPrior, fs.readFileSync(path.join(root, OLD), 'utf8').replace(/\r\n?/g, '\n'), 'Known message-only inverses recover exact market hook');
 const outBase = path.resolve(process.env.GP_BOSS_ROLLOVER_SAVE_OUT || path.join(root, 'tmp'));
 fs.mkdirSync(outBase, { recursive: true });
 const out = fs.mkdtempSync(path.join(outBase, 'dukb-grand-prix-rollover-save-'));
@@ -119,7 +123,10 @@ function run(name, file = null, failures = new Map()) {
   for (const errors of [report.errors, report.unhandledErrors]) if (Array.isArray(errors)) assert.equal(errors.length, 0);
   const raw = (child.stdout || '') + '\n' + (child.stderr || '');
   assert(!/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw));
-  for (const [filePath, bytes] of held) assert.deepEqual(fs.readFileSync(path.join(root, filePath)), bytes, 'Held source: ' + filePath);
+  for (const [filePath, bytes] of held) {
+    const actualBytes = fs.readFileSync(path.join(root, filePath));
+    assert.deepEqual(actualBytes, bytes, 'Held source: ' + filePath);
+  }
   const result = { name, passed: 2 - failures.size, ownedFailures: failures.size, declaredSkips: 0, rawExit: child.status, runtimeCounters,
     runtimeCounterCompleteness: Object.values(runtimeCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED' };
   results.push(result); console.log(name + ': ' + result.passed + ' passes, ' + result.ownedFailures + ' owned assertion failures, zero skips.');
@@ -140,6 +147,9 @@ try {
   fs.writeFileSync(path.join(out, 'summary.json'), JSON.stringify({ scope: 'Two real-season rollover save regressions only. No full persistence or UI integration credit.', children: 5, executed: 10, totals, results }, null, 2));
   console.log('simGrandPrixBossRolloverSave: 7 healthy passes, 3 owned copied-fault assertions, 10 executed outcomes.');
 } finally {
-  for (const [file, bytes] of held) assert.deepEqual(fs.readFileSync(path.join(root, file)), bytes, 'Final held source: ' + file);
+  for (const [file, bytes] of held) {
+    const actualBytes = fs.readFileSync(path.join(root, file));
+    assert.deepEqual(actualBytes, bytes, 'Final held source: ' + file);
+  }
   console.log('Grand Prix Boss rollover save evidence: ' + out);
 }

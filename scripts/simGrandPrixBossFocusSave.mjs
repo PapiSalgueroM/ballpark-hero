@@ -13,11 +13,15 @@ const HOOK = 'src/hooks/useGrandPrixBoss.ts', TEST = 'src/test/grandPrixBossFocu
 const OLD = 'scripts/qa/source-controls/useGrandPrixBoss.before-focus.ts.txt';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const paths = [HOOK, TEST, OLD, 'src/lib/grandPrixBoss.ts', 'src/lib/saveFence.ts', 'src/hooks/useSaveFenceWatch.ts', 'package.json', 'package-lock.json', 'vitest.config.ts', 'src/test/setup.ts'];
-const held = new Map(paths.map(file => [file, fs.readFileSync(path.join(root, file))]));
-const original = held.get(HOOK), source = original.toString('utf8');
+const held = new Map();
+for (const file of paths) {
+  const bytes = fs.readFileSync(path.join(root, file));
+  held.set(file, Buffer.from(bytes));
+}
+const original = held.get(HOOK), source = fs.readFileSync(path.join(root, HOOK), 'utf8').replace(/\r\n?/g, '\n');
 assert.equal(sha(held.get(OLD)), 'f0ec04a26c60db6c4a5b1e4b555a699979a2fdad464e404d0e906f2538b8c23b');
 assert.equal(sha(held.get(TEST)), '2bbb6ec266def6e4df1ffbf0b041673aee9564f11a924f734fb75ab8408fff47');
-const startupSource = held.get('src/lib/grandPrixBoss.ts').toString('utf8');
+const startupSource = fs.readFileSync(path.join(root, 'src/lib/grandPrixBoss.ts'), 'utf8').replace(/\r\n?/g, '\n');
 let beforeStarter = startupSource;
 const startupProof = [];
 for (const [before, after] of [
@@ -44,7 +48,7 @@ const engineCompatibility = { actualSha256: sha(Buffer.from(startupSource)), sam
 const addedFocus = "  if (action.type === 'setDriverFocus') {\n    const driver = career.drivers.find(row => row.id === action.driverId)!;\n    return driver.name + ' training focus saved.';\n  }\n";
 const beforeIntervals = "  if (career.phase === 'seasonReview') return 'Season ' + career.season + ' saved.';\n  if (career.phase === 'raceResult') return 'Round ' + (career.round + 1) + ' result saved.';\n  return 'Lap ' + career.race!.lap + ' saved. Make your next race call.';", afterIntervals = "  if (action.type === 'raceInterval') {\n    if (career.phase === 'seasonReview') return 'Season ' + career.season + ' saved.';\n    if (career.phase === 'raceResult') return 'Round ' + (career.round + 1) + ' result saved.';\n    return 'Lap ' + career.race!.lap + ' saved. Make your next race call.';\n  }\n  const exhaustive: never = action;\n  return exhaustive;";
 assert.equal(source.split(addedFocus).length, 2); assert.equal(source.split(afterIntervals).length, 2);
-assert.equal(source.replace(afterIntervals, beforeIntervals).replace(addedFocus, ''), held.get(OLD).toString('utf8'), 'Two message spans recover the exact qualified rollover hook');
+assert.equal(source.replace(afterIntervals, beforeIntervals).replace(addedFocus, ''), fs.readFileSync(path.join(root, OLD), 'utf8').replace(/\r\n?/g, '\n'), 'Two message spans recover the exact qualified rollover hook');
 const message = "return driver.name + ' training focus saved.';", changedMessage = "return driver.name + ' different focus feedback.';";
 assert.equal(source.split(message).length, 2);
 const outBase = path.resolve(process.env.GP_BOSS_FOCUS_SAVE_OUT || path.join(root, 'tmp'));
@@ -81,7 +85,10 @@ function run(name, file = null, failures = new Map()) {
   for (const errors of [report.errors, report.unhandledErrors]) if (Array.isArray(errors)) assert.equal(errors.length, 0);
   const raw = (child.stdout || '') + '\n' + (child.stderr || '');
   assert(!/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw));
-  for (const [filePath, bytes] of held) assert.deepEqual(fs.readFileSync(path.join(root, filePath)), bytes, 'Held source: ' + filePath);
+  for (const [filePath, bytes] of held) {
+    const actualBytes = fs.readFileSync(path.join(root, filePath));
+    assert.deepEqual(actualBytes, bytes, 'Held source: ' + filePath);
+  }
   const result = { name, passed: 2 - failures.size, ownedFailures: failures.size, declaredSkips: 0, rawExit: child.status, runtimeCounters,
     runtimeCounterCompleteness: Object.values(runtimeCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED' };
   results.push(result); console.log(name + ': ' + result.passed + ' passes, ' + result.ownedFailures + ' owned assertion failures, zero skips.');
@@ -102,6 +109,9 @@ try {
   fs.writeFileSync(path.join(out, 'summary.json'), JSON.stringify({ scope: 'Two real focus-save regressions only. No full persistence or UI integration credit.', children: 5, executed: 10, totals, results }, null, 2));
   console.log('simGrandPrixBossFocusSave: 7 healthy passes, 3 owned copied-fault assertions, 10 executed outcomes.');
 } finally {
-  for (const [file, bytes] of held) assert.deepEqual(fs.readFileSync(path.join(root, file)), bytes, 'Final held source: ' + file);
+  for (const [file, bytes] of held) {
+    const actualBytes = fs.readFileSync(path.join(root, file));
+    assert.deepEqual(actualBytes, bytes, 'Final held source: ' + file);
+  }
   console.log('Grand Prix Boss focus save evidence: ' + out);
 }
