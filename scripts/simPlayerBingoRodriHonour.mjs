@@ -91,6 +91,14 @@ try {
     assert.notEqual(source, original, 'Fixed phase must include a real application change');
     await run('normal', null, []);
     await run('original-control', original, [owned]);
+    const helperStart = 'function hasVerifiedUclHonour(p: BingoPlayer): boolean {';
+    const code = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\n)\s*\/\/[^\n]*/g, '$1');
+    assert.equal(code.split(helperStart).length - 1, 1, 'The executed honour helper exists once');
+    assert.equal(source.split(helperStart).length - 1, 1);
+    const helperFrom = source.indexOf(helperStart);
+    const helperTo = source.indexOf('\n}', helperFrom);
+    assert.ok(helperTo > helperFrom, 'The honour helper has its closing brace');
+    const helper = source.slice(helperFrom, helperTo + 2);
     const controls = [
       ['name', 'normalizeName(p.name) === fact.name', 'true', titles[1]],
       ['country', 'primaryNationality(p.nationality) === fact.nationality', 'true', titles[2]],
@@ -100,13 +108,15 @@ try {
     ];
     let restored;
     for (const [id, anchor, replacement, title] of controls) {
-      const executable = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\n)\s*\/\/[^\n]*/g, '$1');
-      assert.equal(executable.split(anchor).length - 1, 1, 'Control binds one executable guard');
-      assert.equal(source.split(anchor).length - 1, 1);
-      const changed = source.replace(anchor, replacement);
+      const executable = helper.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\n)\s*\/\/[^\n]*/g, '$1');
+      assert.equal(executable.split(anchor).length - 1, 1, 'Control binds one executable guard in the honour helper');
+      assert.equal(helper.split(anchor).length - 1, 1);
+      const altered = helper.replace(anchor, replacement);
+      const changed = source.replace(helper, altered);
       assert.notEqual(hash(Buffer.from(changed)), hash(Buffer.from(source)));
-      const offset = source.indexOf(anchor);
-      restored = changed.slice(0, offset) + anchor + changed.slice(offset + replacement.length);
+      const offset = helper.indexOf(anchor);
+      const undo = altered.slice(0, offset) + anchor + altered.slice(offset + replacement.length);
+      restored = changed.replace(altered, undo);
       assert.equal(restored, source, 'The complete mutation is reversible');
       await writeFile(path.join(out, `control-${id}.undo.ts`), restored);
       await writeFile(path.join(out, `control-${id}.json`), JSON.stringify({ anchor, replacement, originalSha256: hash(Buffer.from(source)), changedSha256: hash(Buffer.from(changed)) }, null, 2));
