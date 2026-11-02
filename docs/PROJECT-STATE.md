@@ -19904,3 +19904,18 @@ Published source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5
 Hosted-M run 41133839703 has independent scoped admission d3492ce71d7b9733addafe8b9a8bb2138ee0f838495fda9b7c3e84e6b520d8d5: 172/172 raw routes clean, exact 8 CM/SC plain/slash desktop/phone records mounted and settled without saved-text loss, 50 source fingerprints and 7 effective in-memory controls. Retained findings include denied live_scores reads, console resource errors and blocked telemetry writes. Hosted-P byte parity and gameplay are outside this observation.
 
 Broad 1022 default outcomes remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT, with raw failures retained. The Season Centre focus fix 51da27a2367cc84ca0c622def41029dbc2580b68 is separate and unshipped; its fixed/whole-old-Page/restored qualification remains pending.
+
+
+## Report continuation: World XI archive depth, 2026-11-02
+
+This entry records a qualified source packet based on main cc9a55a2f35b6215d5e6e664cc401d10d7f76291. It is not a live deployment. K retains integration and publication ownership.
+
+The forwarded Paraguay report is reproduced in the exact old boot query: neither Gustavo Gomez nor Ramon Sosa is returned. Finite read-only database checks find their stored positive-value rows in 2025, not 2026; the previous-year top1000 slice omits both. The fix loads all eight bounded positive-value pages for each stored season and refuses incomplete/error/null required results. It keeps latest-year/name and same-year club dedupe, verified position fit and the optional position fallback. No player, club, age, value or current affiliation is invented or written to the database. The guide explains older stored records.
+
+Fixed immutable source89a392188b91655ed03941b6890b8c8042c51555, remote run41394488957: both jobs passed. Actual loader current12/12; full original8 owned failures/4 preservation passes; four effective source controls2 owned failures/10 passes each; restored12/12. Full ordinary units10,274 passed58 optional skipped0 failed714 physical files. Missing runtime/unhandled counters stay UNKNOWN. Types, both existing report simulations and seven existing page cases pass.
+
+The route-scoped SEO build, all fifteen saved-output readers, search/guide readers and all sixteen unchanged page budgets pass. Five exact generated bodies are adopted from artifact13119215912, each independently hashed and reviewed. Only the World XI snapshot sentence, one frozen guide record, one lastmod ledger row and associated sitemap date change. Derived search changes its digest and removes the now-common token record from three keyword rows under the unchanged generator. All other source bodies and unrelated ledger rows are held.
+
+Remaining: actual route selection/phone/larger-pool boot checks, live position/defensive-midfield gates and integration with PR399 Expanded/Classic/2026 Nations. This packet does not replace those mode files wholesale or claim more nations have shipped. Loader/guide hunk joining and final generated ledger freshness belong to K. No merge or publication was performed.
+
+Related first report batch is draft PR450 for academy contract pricing, keeper proportions and Palmer Bingo eligibility. Its broad current/baseline simulation profiles ended canceled before individual verdicts, so it has no full-simulation comparison credit and remains draft. MLB playoff replay is undergoing separate fixed verification. Grand Prix Boss and extra Soccer Career trophies are still implementation work.
