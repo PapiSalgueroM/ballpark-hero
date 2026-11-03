@@ -199,7 +199,7 @@ describe('German Supercup saved screen adapters', () => {
     expect(view.container.querySelector('[data-calendar-cup-score]')).toBeNull();
     fireEvent.click(view.container.querySelector('[data-calendar-cup-reveal]')!);
     expect(view.container.querySelector('[data-calendar-cup-score]')).toHaveTextContent('1-1');
-    expect(screen.getByText(/4-3 on penalties/)).toBeVisible(); expect(screen.getByText('You scored 1')).toBeVisible();
+    expect(screen.getByText(/4-3 on penalties/)).toBeVisible(); expect(screen.getByText('You scored 1. Already included in your season totals.')).toBeVisible();
     expect(screen.getByRole('button', { name: 'Open German Supercup' })).toBeVisible();
     expect(screen.queryByRole('button', { name: 'Open German Supercup bracket' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Open German Supercup' }));

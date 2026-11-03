@@ -50,6 +50,26 @@ const ORIGINAL_EDITS = [
     "after": "        let annual = settled;\n        const shield = readCommunityShield(settled);\n        if (shield?.player.apps) {\n          const part = shield.player;\n          if (settled.apps <= part.apps || !rating(p.actualRating)) return null;\n          annual = { ...settled, apps: settled.apps - part.apps, goals: settled.goals - part.goals,\n            assists: settled.assists - part.assists, cleanSheets: settled.cleanSheets - part.cleanSheets, rating: p.actualRating };\n          if (communityShieldSeasonStats(annual, shield).rating !== settled.rating) return null;\n        }\n        if (p.outcome !== outcomeFor(p, annual) || p.actual !== (recorded(annual[p.metric]) ?? undefined) || p.actualRating !== (rating(annual.rating) ? annual.rating : undefined)) return null;"
   }
 ];
+const GERMAN_EDITS = [
+  {
+    "before": "import { readCommunityShield, communityShieldSeasonStats } from './soccerCareerExtraCups';",
+    "after": "import { readCommunityShield, communityShieldSeasonStats, careerOpeningAnnualStats } from './soccerCareerExtraCups';"
+  },
+  {
+    "before": "        let annual = settled;\n        const shield = readCommunityShield(settled);",
+    "after": "        let annual = settled;\n        const german = Object.prototype.hasOwnProperty.call(settled, 'germanSupercup');\n        if (german) {\n          const projected = careerOpeningAnnualStats(settled);\n          if (!projected) return null;\n          annual = { ...settled, ...projected };\n        }\n        const shield = german ? null : readCommunityShield(settled);"
+  }
+];
+const COMPOSED_OLD_EDITS = [
+  {
+    "before": "import { readCommunityShield, communityShieldSeasonStats, careerOpeningAnnualStats } from './soccerCareerExtraCups';",
+    "after": "import { careerOpeningAnnualStats } from './soccerCareerExtraCups';"
+  },
+  {
+    "before": "        let annual = settled;\n        const german = Object.prototype.hasOwnProperty.call(settled, 'germanSupercup');\n        if (german) {\n          const projected = careerOpeningAnnualStats(settled);\n          if (!projected) return null;\n          annual = { ...settled, ...projected };\n        }\n        const shield = german ? null : readCommunityShield(settled);\n        if (shield?.player.apps) {\n          const part = shield.player;\n          if (settled.apps <= part.apps || !rating(p.actualRating)) return null;\n          annual = { ...settled, apps: settled.apps - part.apps, goals: settled.goals - part.goals,\n            assists: settled.assists - part.assists, cleanSheets: settled.cleanSheets - part.cleanSheets, rating: p.actualRating };\n          if (communityShieldSeasonStats(annual, shield).rating !== settled.rating) return null;\n        }\n        if (p.outcome !== outcomeFor(p, annual) || p.actual !== (recorded(annual[p.metric]) ?? undefined) || p.actualRating !== (rating(annual.rating) ? annual.rating : undefined)) return null;",
+    "after": "        let annual = settled;\n        const german = Object.prototype.hasOwnProperty.call(settled, 'germanSupercup');\n        if (german) {\n          const projected = careerOpeningAnnualStats(settled);\n          if (!projected) return null;\n          annual = { ...settled, ...projected };\n        }\n        if (german) {\n          if (p.outcome !== outcomeFor(p, annual) || p.actual !== (recorded(annual[p.metric]) ?? undefined) || p.actualRating !== (rating(annual.rating) ? annual.rating : undefined)) return null;\n        } else {\n          if (p.outcome !== outcomeFor(p, settled) || p.actual !== (recorded(settled[p.metric]) ?? undefined) || p.actualRating !== (rating(settled.rating) ? settled.rating : undefined)) return null;\n        }"
+  }
+];
 const CLEAN = ['US_BOARD_CONTROL_ALIAS', 'US_BOARD_CONTROL_FILE', 'NO_DOUBLE_SWAP', 'SC_EXTRA_CUPS_ENGINE',
   'COMPLETION_HOOK', 'OWNED_TIMEOUTS_HOOK', 'TYCOON_AWAY_CONTROL', 'CONQUEST_NBA_HOOK', 'CONQUEST_NBA_BOARD',
   'POLL_FIXTURES', 'DAILY_RECORD_CONTROL', 'TYCOON_ROOMS_PAGE', 'TYCOON_LOADS_STADIUM_HOOK', 'TYCOON_LOADS_ACADEMY_HOOK',
@@ -61,8 +81,8 @@ const faults = [
   { id: 'omit-forward-grade', pattern: 'SC_SHIELD_PRESS_REJECT:', marker: 'SC_SHIELD_PRESS_REJECT',
     before: '          if (communityShieldSeasonStats(annual, shield).rating !== settled.rating) return null;\n', after: '' },
   { id: 'trust-unverified-result', pattern: 'SC_SHIELD_PRESS_REJECT:', marker: 'SC_SHIELD_PRESS_REJECT',
-    before: '        const shield = readCommunityShield(settled);',
-    after: '        const shield = settled.extraCups?.[0] ?? null;' },
+    before: '        const shield = german ? null : readCommunityShield(settled);',
+    after: '        const shield = german ? null : (settled.extraCups?.[0] ?? null);' },
   { id: 'omit-positive-annual-apps', pattern: 'SC_SHIELD_PRESS_REJECT:', marker: 'SC_SHIELD_PRESS_REJECT',
     before: '          if (settled.apps <= part.apps || !rating(p.actualRating)) return null;',
     after: '          if (!rating(p.actualRating)) return null;' },
@@ -102,6 +122,13 @@ async function main() {
   const encode = value => Buffer.from(ending === '\r\n' ? value.replace(/\n/g, '\r\n') : value);
   let old = text;
   const oldEdits = [];
+  for (const edit of [...GERMAN_EDITS].reverse()) {
+    const offset = old.indexOf(edit.after); assert.ok(offset >= 0 && old.indexOf(edit.after, offset + 1) < 0, 'Unique German provenance inverse anchor');
+    old = old.slice(0, offset) + edit.before + old.slice(offset + edit.after.length);
+    oldEdits.push({ offset, before: edit.after, after: edit.before });
+  }
+  assert.equal(sha(Buffer.from(old)), '9cefc68c7cdea6f3f94e383f199cf46bdecdc0152fc7a199d260aa99f794a352', 'Exact qualified English Press source');
+  assert.equal(git(Buffer.from(old)), '08b91f6cae1d239ee2ac52ecaf80fd81a66cda8b');
   for (const edit of [...ORIGINAL_EDITS].reverse()) {
     const offset = old.indexOf(edit.after); assert.ok(offset >= 0 && old.indexOf(edit.after, offset + 1) < 0, 'Unique old-source inverse anchor');
     old = old.slice(0, offset) + edit.before + old.slice(offset + edit.after.length);
@@ -115,6 +142,22 @@ async function main() {
     inverse = inverse.slice(0, edit.offset) + edit.before + inverse.slice(edit.offset + edit.after.length);
   }
   assert.deepEqual(encode(inverse), original, 'Complete old-source inverse restores actual bytes');
+  const canonicalOld = old, compositionEdits = [];
+  old = text;
+  for (const edit of COMPOSED_OLD_EDITS) {
+    const offset = old.indexOf(edit.before);
+    assert.ok(offset >= 0 && old.indexOf(edit.before, offset + 1) < 0, 'Unique German-preserving old-English composition anchor');
+    old = old.slice(0, offset) + edit.after + old.slice(offset + edit.before.length);
+    compositionEdits.push({ offset, before: edit.before, after: edit.after });
+  }
+  let compositionInverse = old;
+  for (const edit of [...compositionEdits].reverse()) {
+    assert.equal(compositionInverse.slice(edit.offset, edit.offset + edit.after.length), edit.after);
+    compositionInverse = compositionInverse.slice(0, edit.offset) + edit.before + compositionInverse.slice(edit.offset + edit.after.length);
+  }
+  assert.deepEqual(encode(compositionInverse), original, 'Whole German-preserving old-English source inverse');
+  assert.equal(old.includes("import { careerOpeningAnnualStats } from './soccerCareerExtraCups';"), true, 'Controlled German helper is declared');
+  assert.equal(old.includes(GERMAN_EDITS[1].after.slice(0, GERMAN_EDITS[1].after.lastIndexOf('\n'))), true, 'Controlled German own-property projection remains exact');
   const copy = path.join(root, 'src/lib/__control_shield_press_promise_' + process.pid + '.ts');
   assert.equal(fs.existsSync(copy), false, 'Owned source copy must be absent');
   const results = [], controls = [];
@@ -189,9 +232,10 @@ async function main() {
     const oldBytes = encode(old); assert.notEqual(sha(oldBytes), sha(original)); put(oldBytes);
     fs.writeFileSync(path.join(out, 'old-source.ts'), oldBytes, { flag: 'wx' });
     run('old-source', 'old'); put(original);
-    write(path.join(out, 'old-source.edit.json'), { kind: 'two-span exact old source', edits: oldEdits, originalSha256: sha(original),
-      changedSha256: sha(oldBytes), canonicalOldSha256: sha(Buffer.from(old)), canonicalOldGit: git(Buffer.from(old)),
-      inverseSha256: sha(encode(inverse)), physicalRestoreSha256: sha(fs.readFileSync(copy)), lineEnding: ending === '\r\n' ? 'CRLF' : 'LF' });
+    write(path.join(out, 'old-source.edit.json'), { kind: 'old-English counterfactual with strict German branch retained', provenanceEdits: oldEdits, compositionEdits, originalSha256: sha(original),
+      changedSha256: sha(oldBytes), canonicalOldSha256: sha(Buffer.from(canonicalOld)), canonicalOldGit: git(Buffer.from(canonicalOld)),
+      provenanceInverseSha256: sha(encode(inverse)), inverseSha256: sha(encode(compositionInverse)),
+      physicalRestoreSha256: sha(fs.readFileSync(copy)), lineEnding: ending === '\r\n' ? 'CRLF' : 'LF' });
     controls.push('old-source');
     for (const fault of faults) {
       const offset = text.indexOf(fault.before); assert.ok(offset >= 0 && text.indexOf(fault.before, offset + 1) < 0, 'Unique source control: ' + fault.id);

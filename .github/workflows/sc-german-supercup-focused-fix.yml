@@ -1,0 +1,286 @@
+name: German Supercup focused assertion and existing harness compatibility
+on:
+  push:
+    branches: [codex/sc-german-supercup-focused-fix-20261103]
+permissions:
+  contents: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      NO_COLOR: '1'
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Bind the exact owned baseline and joined German source
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-german-supercup-focused-fix"
+          test ! -e "$OUT"; mkdir "$OUT"
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          printf 'SC_GERMAN_SUPERCUP_EVIDENCE=%s\n' "$OUT/inputs" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/sc-german-supercup-focused-fix-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = 715d1a7298dec75a7753bbf728110ac50f11e68e
+          test "$(git rev-parse 'HEAD^^{tree}')" = 5f276c20e57fa4ebed2e4a5a6da63f865e2808b3
+          test "$(git rev-parse --is-shallow-repository)" = false
+          git rev-parse HEAD 'HEAD^{tree}' > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t.github/workflows/sc-german-supercup-focused-fix.yml\nM\tscripts/simSoccerCommunityShieldMatch.mjs\nM\tscripts/simSoccerShieldPress.mjs\nM\tscripts/simSoccerShieldReplay.mjs\nM\tsrc/test/soccerGermanSupercupScreens.test.tsx\n' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/pins.txt" <<'PINS'
+          src/lib/soccerSeasonCompetitions.ts 0bbb0abfc395ac2b412056c7ab15d71c7c3d680c
+          src/lib/soccerSeasonCalendar.ts 51ced17522fb64e78686705f8e2c4dfc0ff8e9d9
+          src/components/soccer-career/SeasonCompetitionPanel.tsx 4c4aefca774e51e3453947efd91bfbb70f615dd9
+          src/components/soccer-career/TrophyCabinet.tsx b88596ab0ebdf7abae55e8c59512280bbb66a6f7
+          src/components/soccer-career/SoccerSeasonCentre.tsx 6bdc18c9a6b942bcef0d7147215168626bebd34b
+          src/pages/SoccerCareer.tsx 09ad9c5827de9271cc4e0ac33dbbfdf030c1aa40
+          src/components/season-centre/SeasonCentre.tsx 63d843863cede4f6d2f397053dc70a629ea4325f
+          scripts/simSeasonCentreMotion.mjs 9de1614896c12abcddc81194d9801f60bd54263a
+          src/test/careerRecordedStats.test.tsx eeba1d7db1671541995177fae66e056cac12ebb4
+          src/lib/soccerCareerEngine.ts 7ab833904768c34cdba6ed49656eba95647d9379
+          src/lib/soccerCareerExtraCups.ts 369ded47ea71cfe6f98441e09817450c3f2ebcca
+          src/lib/season/soccer.ts 1b7958da501755adcc95879da3e8d65c4d593845
+          src/lib/soccerCareerPress.ts 8491f89ac463342cc2acb85e91a2e77b7a8aa04e
+          src/components/soccer-career/SeasonResumeChip.tsx 34256e795a464b7dff8c139e7fe16cbfdec662d5
+          src/test/careerStory.test.tsx 41a638727d7c29e862648efe562a03df858dc0f2
+          scripts/simCareerStory.mjs 2b43be244e7f1c327d519594563d67aab63c574f
+          src/lib/soccerCareerGermanSupercup.test.ts 621e2cdfb539f56ed8b2e64bb761f896c03d1a24
+          src/test/soccerGermanSupercupConsumers.test.ts a45b5bc68184d6ffb0b118e68e709075789a15b1
+          src/test/soccerGermanSupercupScreens.test.tsx 0aa1a01133bf2303cf374d0e2ed38102b26e3dd5
+          src/test/soccerGermanSupercupAcceptance.test.ts e5f4cdaee20715379ac72410484b0ce2b00d7539
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          scripts/simSoccerCommunityShieldMatch.mjs 7564cdf0f119325e6af8dcbfb654ed2bd74ac8d1
+          scripts/simSoccerShieldReplay.mjs f574ccd140453390faa926e1273ff6024fa793e2
+          scripts/simSoccerShieldPress.mjs 340110272e304e0022200bb51c1e053c5621cc3d
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/pins.txt"
+          test "$(git rev-parse 'HEAD^:scripts/simSoccerCommunityShieldMatch.mjs')" = e708d3ec427e612bb9bfeb6c442130b2ade713f1
+          test "$(git rev-parse 'HEAD^:scripts/simSoccerShieldReplay.mjs')" = 975b427f5b01f4e26b0dc6f43643ba4ae1a13a9f
+          test "$(git rev-parse 'HEAD^:scripts/simSoccerShieldPress.mjs')" = 967de754af1c8e1118257255695cc5fdc7ecb95e
+          test "$(git rev-parse 'HEAD^:src/test/soccerGermanSupercupScreens.test.tsx')" = 0a8d6d5b852529659cae28194d75200591c9001d
+          test "$(git ls-files | wc -l)" -eq 5671
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          git ls-files --others --exclude-standard -z > "$OUT/untracked.before"; test ! -s "$OUT/untracked.before"
+      - name: Locked online install before guarded original owner calls
+        run: |
+          set -euo pipefail
+          code=0; NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.before"
+          xargs -0 sha256sum < "$OUT/dependency-members.before" > "$OUT/dependency.sha256"
+      - name: Proper types and exact115 focused old and new cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP FORCE_COLOR
+          capture(){
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"; : > "$OUT/$tag.transport"
+            local code=0; SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr" || code=$?
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 16 "$OUT/$tag.stdout"; tail -n 16 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          capture types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax-match node --check scripts/simSoccerCommunityShieldMatch.mjs
+          capture syntax-replay node --check scripts/simSoccerShieldReplay.mjs
+          capture syntax-press node --check scripts/simSoccerShieldPress.mjs
+          code=0
+          capture focused node node_modules/vitest/vitest.mjs run src/lib/soccerCareerGermanSupercup.test.ts src/test/careerRecordedStats.test.tsx src/test/careerStory.test.tsx src/test/soccerCommunityShieldAcceptance.test.ts src/test/soccerCommunityShieldAnnualRating.test.ts src/test/soccerCommunityShieldLegacyReplay.test.tsx src/test/soccerCommunityShieldMatch.test.ts src/test/soccerCommunityShieldReplay.test.ts src/test/soccerCommunityShieldRules.test.ts src/test/soccerCommunityShieldScreens.test.tsx src/test/soccerCommunityShieldSevere.test.ts src/test/soccerCommunityShieldUiAcceptance.test.tsx src/test/soccerGermanSupercupAcceptance.test.ts src/test/soccerGermanSupercupConsumers.test.ts src/test/soccerGermanSupercupScreens.test.tsx src/test/soccerPressRoomReadAsAbsent.test.tsx src/test/soccerSeasonCentreFocus.test.tsx src/test/soccerShieldPress.test.ts --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile="$OUT/focused.json" || code=$?
+          capture focused-admission node --input-type=module <<'FOCUSED'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          const out=process.env.OUT,raw=fs.readFileSync(path.join(out,'focused.json')),report=JSON.parse(raw),expected=[{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_ANNUAL: forward-verifies the one cup contribution and fails missing proof closed","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_CAPTURE: binds18 actual-order inputs, the double runner-up and a lower-division cup winner","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_COEXIST: accepts English world-only evidence and rejects represented or malformed English","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_GLOBAL: consumes no mainstream random draws during actual match generation","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_IDENTITY: binds Germany and canonical entrant identity without granting nonentrants","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_PARTIAL: refuses incomplete, mismatched, duplicate and pre-world qualification","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_PLAY: keeps team outcome independent of player selection and preserves all inputs","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_READER: refuses malformed proof, score, contribution, grade and invented venue","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_TITLES: counts only unambiguous played wins in input order without mutation","status":"passed"},{"file":"src/test/careerRecordedStats.test.tsx","fullName":"recorded Soccer career stats keeps an incomplete old defender clean sheet history unknown instead of claiming a lifetime zero or partial total","status":"passed"},{"file":"src/test/careerRecordedStats.test.tsx","fullName":"recorded Soccer career stats preserves recorded zero positive legacy and no appearance clean sheets under the existing reader convention","status":"passed"},{"file":"src/test/careerRecordedStats.test.tsx","fullName":"recorded Soccer career stats retains the independent saved totals and unknown season baseline without the career card","status":"passed"},{"file":"src/test/careerRecordedStats.test.tsx","fullName":"recorded Soccer career stats shows forwards saved goals and assists without inferring hat tricks from total goals","status":"passed"},{"file":"src/test/careerRecordedStats.test.tsx","fullName":"recorded Soccer career stats shows midfielders saved goals and assists without estimating key passes","status":"passed"},{"file":"src/test/careerRecordedStats.test.tsx","fullName":"recorded Soccer career stats shows only the keepers saved appearances clean sheets and actual trophies","status":"passed"},{"file":"src/test/careerRecordedStats.test.tsx","fullName":"recorded Soccer career stats shows the defenders saved appearances goals clean sheets and trophies without invented defensive actions","status":"passed"},{"file":"src/test/careerRecordedStats.test.tsx","fullName":"recorded Soccer career stats updates the actual card from new saved rows without changing its earned derby record or writing a save","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: old and damaged stories a damaged story resets alone","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: old and damaged stories a save with no story loads empty, shows this season only, and starts its story here","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: old and damaged stories a season longer than the cap keeps the cap and counts the rest","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: the story keeps every season a signing and a loan add to the season log instead of writing over it","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: the story keeps every season the story draws nothing: the same seed without it plays the same career","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: the story keeps every season twelve seasons on seed 9741: every line kept, in order, once","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: the story keeps every season twelve seasons on seed 9742: every line kept, in order, once","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: the story keeps every season twelve seasons on seed 9743: every line kept, in order, once","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: the story keeps the save small the longest career on seed 9748 plus ten dugout seasons stays under the bound","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: the story keeps the save small the longest career on seed 9749 plus ten dugout seasons stays under the bound","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: the story keeps the save small the longest career on seed 9750 plus ten dugout seasons stays under the bound","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: the story on the real page Latest Events opens the story, a season opens, Back returns, Close shuts it","status":"passed"},{"file":"src/test/careerStory.test.tsx","fullName":"Soccer Career: the story on the real page the retired screen carries the same story, the last chapter included","status":"passed"},{"file":"src/test/soccerCommunityShieldAcceptance.test.ts","fullName":"Soccer Career Community Shield first slice SC_SHIELD_PERSONAL_TITLE: counts a valid saved played win separately and never reapplies its recorded stats","status":"passed"},{"file":"src/test/soccerCommunityShieldAcceptance.test.ts","fullName":"Soccer Career Community Shield first slice SC_SHIELD_QUALIFIED_MATCH: automatically plays the next opening match from an actual prospective close","status":"passed"},{"file":"src/test/soccerCommunityShieldAnnualRating.test.ts","fullName":"Soccer Career Community Shield annual rating capture SC_SHIELD_ANNUAL_RATING_NORMAL: records the exact annual grade before the normal opening merge","status":"passed"},{"file":"src/test/soccerCommunityShieldAnnualRating.test.ts","fullName":"Soccer Career Community Shield annual rating capture SC_SHIELD_ANNUAL_RATING_SEVERE: records the exact annual grade before the severe opening merge","status":"passed"},{"file":"src/test/soccerCommunityShieldLegacyReplay.test.tsx","fullName":"Community Shield legacy league replay boundary SC_SHIELD_LEGACY_VISIBLE: keeps the old saved cup inspectable while refusing unproved league games","status":"passed"},{"file":"src/test/soccerCommunityShieldMatch.test.ts","fullName":"Community Shield actual pure match SC_SHIELD_MATCH_AVAILABILITY: records unknown availability bench and nonentrant outcomes without appearances","status":"passed"},{"file":"src/test/soccerCommunityShieldMatch.test.ts","fullName":"Community Shield actual pure match SC_SHIELD_MATCH_GLOBAL: leaves the global random stream and all actual input fields untouched","status":"passed"},{"file":"src/test/soccerCommunityShieldMatch.test.ts","fullName":"Community Shield actual pure match SC_SHIELD_MATCH_INDEPENDENCE: keeps the same team outcome when player context changes","status":"passed"},{"file":"src/test/soccerCommunityShieldMatch.test.ts","fullName":"Community Shield actual pure match SC_SHIELD_MATCH_KEEPER: gives a selected goalkeeper no goals and no clean sheet after conceding","status":"passed"},{"file":"src/test/soccerCommunityShieldMatch.test.ts","fullName":"Community Shield actual pure match SC_SHIELD_MATCH_NORMAL: retains the observed normal result and merges the played contribution once","status":"passed"},{"file":"src/test/soccerCommunityShieldMatch.test.ts","fullName":"Community Shield actual pure match SC_SHIELD_MATCH_PENS: retains actual sudden-death kicks separately from match goals and contribution","status":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_ANNUAL: keeps the exact annual key and complete league reconstruction","status":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_GRADE: uses the recorded annual grade when the opener changes the rounded mean","status":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_LEGACY: keeps a valid selected legacy cup readable without inventing league proof","status":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_PROOF: refuses malformed proof and keeps a selected zero-annual-app opener separate","status":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_UNSELECTED: preserves no-opener and unselected season keys and whole plans","status":"passed"},{"file":"src/test/soccerCommunityShieldRules.test.ts","fullName":"Soccer Career Community Shield saved rules SC_SHIELD_RULES_BINDING: binds the stored result to its row and complete qualification","status":"passed"},{"file":"src/test/soccerCommunityShieldRules.test.ts","fullName":"Soccer Career Community Shield saved rules SC_SHIELD_RULES_CODEC: preserves complete recorded proofs in literal and genuinely packed saves","status":"passed"},{"file":"src/test/soccerCommunityShieldRules.test.ts","fullName":"Soccer Career Community Shield saved rules SC_SHIELD_RULES_DECIDER: keeps ninety-minute scores and actual shootout totals separate","status":"passed"},{"file":"src/test/soccerCommunityShieldRules.test.ts","fullName":"Soccer Career Community Shield saved rules SC_SHIELD_RULES_DUPLICATES: refuses ambiguous valid editions without changing old totals or row order","status":"passed"},{"file":"src/test/soccerCommunityShieldRules.test.ts","fullName":"Soccer Career Community Shield saved rules SC_SHIELD_RULES_OLD_SAVE: never backfills missing or partial qualification while reading older careers","status":"passed"},{"file":"src/test/soccerCommunityShieldRules.test.ts","fullName":"Soccer Career Community Shield saved rules SC_SHIELD_RULES_PERSONAL: refuses fabricated participation stats ratings and personal titles","status":"passed"},{"file":"src/test/soccerCommunityShieldRules.test.ts","fullName":"Soccer Career Community Shield saved rules SC_SHIELD_RULES_QUALIFICATION: refuses malformed year seed entrant and source proof","status":"passed"},{"file":"src/test/soccerCommunityShieldRules.test.ts","fullName":"Soccer Career Community Shield saved rules SC_SHIELD_RULES_VALID: reads complete saved wins and preserves nonwinning personal outcomes","status":"passed"},{"file":"src/test/soccerCommunityShieldScreens.test.tsx","fullName":"Community Shield saved screen adapters SC_SHIELD_UI_CABINET_DETAIL: keeps the original win row and shows the same saved match separately from season totals","status":"passed"},{"file":"src/test/soccerCommunityShieldScreens.test.tsx","fullName":"Community Shield saved screen adapters SC_SHIELD_UI_CALENDAR: reveals the saved opening before game one then continues without changing the season","status":"passed"},{"file":"src/test/soccerCommunityShieldScreens.test.tsx","fullName":"Community Shield saved screen adapters SC_SHIELD_UI_PANEL: shows an unused club win with its score, neutral venue and reopenable worked help","status":"passed"},{"file":"src/test/soccerCommunityShieldScreens.test.tsx","fullName":"Community Shield saved screen adapters SC_SHIELD_UI_REFUSAL: reaches a represented zero-app match while refusing nonentrant invalid and duplicate titles","status":"passed"},{"file":"src/test/soccerCommunityShieldScreens.test.tsx","fullName":"Community Shield saved screen adapters SC_SHIELD_UI_RESULTS: keeps selected, bench and losing club results on their saved sides","status":"passed"},{"file":"src/test/soccerCommunityShieldScreens.test.tsx","fullName":"Community Shield saved screen adapters SC_SHIELD_UI_TOTALS: shows the separate personal title in career and legacy totals without changing other counters","status":"passed"},{"file":"src/test/soccerCommunityShieldSevere.test.ts","fullName":"Soccer Career Community Shield severe opening SC_SHIELD_SEVERE_CONTRIBUTION: retains the selected opening before a controlled later severe injury","status":"passed"},{"file":"src/test/soccerCommunityShieldUiAcceptance.test.tsx","fullName":"Soccer Career Community Shield screens SC_SHIELD_UI_CABINET: lists the same valid played Shield win as its own trophy category","status":"passed"},{"file":"src/test/soccerCommunityShieldUiAcceptance.test.tsx","fullName":"Soccer Career Community Shield screens SC_SHIELD_UI_NAV: projects the recorded represented-club opening match into existing competitions","status":"passed"},{"file":"src/test/soccerCommunityShieldUiAcceptance.test.tsx","fullName":"Soccer Career Community Shield screens SC_SHIELD_UI_OPENING: places a saved neutral opening before league game one","status":"passed"},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","fullName":"Soccer Career German Supercup first slice SC_GERMAN_AUTOMATIC_OPENER: plays one saved German match for the current represented club","status":"passed"},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","fullName":"Soccer Career German Supercup first slice SC_GERMAN_ENGLISH_PRESERVED: keeps the existing full English result counter and neutral opening readable","status":"passed"},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","fullName":"Soccer Career German Supercup first slice SC_GERMAN_PROSPECTIVE_CAPTURE: captures Germany globally from the same actual closed world","status":"passed"},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","fullName":"Soccer Career German Supercup first slice SC_GERMAN_SAVED_CABINET: counts a saved played German win once in its own cabinet category","status":"passed"},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","fullName":"Soccer Career German Supercup first slice SC_GERMAN_SAVED_CALENDAR: reveals its distinct saved opener before league one without inventing a venue","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_ANNUAL_LEAGUE: keeps the exact annual key and complete league plan","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_ANNUAL_PROOF: uses captured grade and refuses corrupt evidence before any league key","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_CODEC history: preserves complete German fields and pending mirror","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_CODEC literal: preserves complete German fields and pending mirror","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_CODEC whole: preserves complete German fields and pending mirror","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_CODEC_UNKNOWN: stores malformed optional evidence without validating or backfilling it","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_PRESS_ANNUAL: preserves the annual promise and strict final answer source","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_PRESS_LEGACY: keeps the English actualRating fallback and blocks German fallthrough","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_PRESS_ZERO: keeps a proven zero-annual-app promise excused","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_CABINET_DETAIL: shows saved penalties and contribution separately and restores the winning tile after Back","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_CALENDAR: reveals one distinct unknown-venue opener before league one then continues","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_PANEL: shows the saved match with unknown venue and keeps Help and Back functional","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_REFUSAL: omits invalid and nonentrant records and shares duplicate-edition trophy decisions","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_RESULTS: preserves saved sides participation and the separate English world result","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_TOTALS: adds the German title to existing career and legacy displays while retaining English counts","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_ZERO_APPS: reaches a represented bench match through the real replay picker without league games","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent THE ROAD natural play has, on the real engine: the Golden Boot Arithmetic deal rewrites a season that settled a promise","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent a pending promise in an unreadable part ends with no verdict, on the real engine too","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent a row whose season no longer matches: a played year never throws on it, pays nothing and leaves it as it lies","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent a row whose season no longer matches: it reads as no press room, the room is offered again and the next answer writes a fresh part","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent a row whose season no longer matches: the tile is on the page again","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent a settled promise whose settled row no longer matches (four goals added to it, as the one natural road does): a played year never throws on it, pays nothing and leaves it as it lies","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent a settled promise whose settled row no longer matches (four goals added to it, as the one natural road does): it reads as no press room, the room is offered again and the next answer writes a fresh part","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent a settled promise whose settled row no longer matches (four goals added to it, as the one natural road does): the tile is on the page again","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent a wrong shape: a played year never throws on it, pays nothing and leaves it as it lies","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent a wrong shape: it reads as no press room, the room is offered again and the next answer writes a fresh part","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent a wrong shape: the tile is on the page again","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent another version: a played year never throws on it, pays nothing and leaves it as it lies","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent another version: it reads as no press room, the room is offered again and the next answer writes a fresh part","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent another version: the tile is on the page again","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent null: a played year never throws on it, pays nothing and leaves it as it lies","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent null: it reads as no press room, the room is offered again and the next answer writes a fresh part","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent null: the tile is on the page again","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"pressRoom: a part that cannot be verified is read as absent the fixtures are honest: each undamaged part is readable and its season is answered","status":"passed"},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","fullName":"the journey of ruling C3 for the Press room: can natural play make the part unreadable every unreadable part on the fleet is the one known road, and the room is open again on the next playing screen","status":"passed"},{"file":"src/test/soccerSeasonCentreFocus.test.tsx","fullName":"Soccer Career Season Centre return focus SC_CENTRE_FOCUS_RESUME: restores the connected Resume opener after a positive-app saved season","status":"passed"},{"file":"src/test/soccerSeasonCentreFocus.test.tsx","fullName":"Soccer Career Season Centre return focus SC_CENTRE_FOCUS_ZERO_SHIELD: restores Season replays after a represented zero-app Shield result","status":"passed"},{"file":"src/test/soccerShieldPress.test.ts","fullName":"Shield contribution and strict annual Press promises SC_SHIELD_PRESS_ACTUAL a-ban-warning-31-2032: keeps the recorded annual promise readable","status":"passed"},{"file":"src/test/soccerShieldPress.test.ts","fullName":"Shield contribution and strict annual Press promises SC_SHIELD_PRESS_ACTUAL a-ban-year-34-2027: keeps the recorded annual promise readable","status":"passed"},{"file":"src/test/soccerShieldPress.test.ts","fullName":"Shield contribution and strict annual Press promises SC_SHIELD_PRESS_ACTUAL a-ban-year-35-2027: keeps the recorded annual promise readable","status":"passed"},{"file":"src/test/soccerShieldPress.test.ts","fullName":"Shield contribution and strict annual Press promises SC_SHIELD_PRESS_ACTUAL a-ban-year-36-2028: keeps the recorded annual promise readable","status":"passed"},{"file":"src/test/soccerShieldPress.test.ts","fullName":"Shield contribution and strict annual Press promises SC_SHIELD_PRESS_ACTUAL a-ban-year-36-2036: keeps the recorded annual promise readable","status":"passed"},{"file":"src/test/soccerShieldPress.test.ts","fullName":"Shield contribution and strict annual Press promises SC_SHIELD_PRESS_GRADE: validates a changed final grade by the actual forward merge","status":"passed"},{"file":"src/test/soccerShieldPress.test.ts","fullName":"Shield contribution and strict annual Press promises SC_SHIELD_PRESS_LEGACY: retains exact old and zero-contribution result validation","status":"passed"},{"file":"src/test/soccerShieldPress.test.ts","fullName":"Shield contribution and strict annual Press promises SC_SHIELD_PRESS_REJECT: refuses wrong annual claims and unknown or invalid opening records","status":"passed"},{"file":"src/test/soccerShieldPress.test.ts","fullName":"Shield contribution and strict annual Press promises SC_SHIELD_PRESS_SOURCE: keeps new answer snapshots bound to the complete final row","status":"passed"}];
+          const sort=rows=>rows.slice().sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:a.fullName<b.fullName?-1:a.fullName>b.fullName?1:0);
+          const actual=sort(report.testResults.flatMap(suite=>suite.assertionResults.map(row=>({file:suite.name.slice(suite.name.lastIndexOf('/src/')+1),fullName:row.fullName,status:row.status}))));
+          const observe=report.testResults.flatMap(suite=>suite.assertionResults.map(row=>({file:suite.name,fullName:row.fullName,status:row.status,failureMessages:row.failureMessages})));
+          fs.writeFileSync(path.join(out,'focused-observations-before-admission.json'),JSON.stringify({rows:actual.length,observations:observe},null,2)+'\n');
+          function admit(rows){assert.deepEqual(sort(rows),expected,'All115 exact old and new identities/statuses');}
+          admit(actual);
+          assert.equal(report.testResults.length,18);assert.equal(report.numTotalTests,115);assert.equal(report.numPassedTests,115);assert.equal(report.numFailedTests,0);
+          assert.equal(Number(fs.readFileSync(path.join(out,'focused.exit'),'utf8')),0);
+          const runtime=fs.readFileSync(path.join(out,'focused.stdout'),'utf8')+'\n'+fs.readFileSync(path.join(out,'focused.stderr'),'utf8');
+          function admitRuntime(value){assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Failed to load url|Cannot find (?:module|package)|SyntaxError:|ReferenceError:|TypeError:/i.test(value),false,'No unexpected focused runtime diagnostics');}
+          admitRuntime(runtime);
+          const controls=[];
+          for(const kind of ['missing','pending','renamed']){
+           const changed=structuredClone(actual);
+           if(kind==='missing')changed.pop();else if(kind==='pending')changed[0].status='pending';else changed[0].fullName+=' changed control';
+           assert.notDeepEqual(changed,actual);
+           let observed=null;assert.throws(()=>admit(changed),error=>{observed={name:error.name,message:error.message};return error.name==='AssertionError'&&error.message.startsWith('All115 exact');});
+           admit(actual);controls.push({id:kind,changed:true,observed,restoredHealthy:true});
+          }
+          const brokenRuntime=runtime+'\nTypeError: explicit copied runtime control';assert.notEqual(brokenRuntime,runtime);
+          let observed=null;assert.throws(()=>admitRuntime(brokenRuntime),error=>{observed={name:error.name,message:error.message};return error.name==='AssertionError'&&error.message.startsWith('No unexpected focused runtime diagnostics');});
+          admitRuntime(runtime);controls.push({id:'runtime',changed:true,observed,restoredHealthy:true});
+          const inputs=fs.readdirSync(process.env.SC_GERMAN_SUPERCUP_EVIDENCE).filter(name=>name.endsWith('.json')).sort().map(name=>{const data=fs.readFileSync(path.join(process.env.SC_GERMAN_SUPERCUP_EVIDENCE,name));return{name,bytes:data.length,sha256:createHash('sha256').update(data).digest('hex')};});
+          assert.equal(inputs.length,9,'Frozen five acceptance cases retain nine complete input/state/tape receipts');
+          fs.writeFileSync(path.join(out,'focused-admission.json'),JSON.stringify({schemaVersion:1,focusedPassed:true,files:18,cases:115,oldPassed:85,newPassed:30,identities:actual,rawSha256:createHash('sha256').update(raw).digest('hex'),controls,inputs,runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN'},null,2)+'\n');
+          console.log('GERMAN_FOCUSED: actual115 cases,85 held plus30 new,18 files; four changed admission controls/restores');
+          FOCUSED
+          test "$code" -eq 0
+      - name: Retain every affected normal permanent check without hiding failures
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP FORCE_COLOR ANCHOR_CONTROL
+          capture(){
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"; : > "$OUT/$tag.transport"
+            local code=0; SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr" || code=$?
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 16 "$OUT/$tag.stdout"; tail -n 16 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          mkdir "$OUT/permanent"
+          export SC_SHIELD_REPLAY_OUT="$OUT/permanent/replay"
+          export SC_SHIELD_MATCH_OUT="$OUT/permanent/match"
+          export SC_SHIELD_SEVERE_OUT="$OUT/permanent/severe"
+          export SC_SHIELD_PRESS_OUT="$OUT/permanent/press"
+          export SC_CENTRE_FOCUS_OUT="$OUT/permanent/focus"
+          failed=0
+          for name in simSoccerShieldReplay simSoccerCommunityShieldMatch simSoccerCommunityShieldSevere simSoccerShieldPress simSoccerSeasonCentreFocus simCareerStory simSeasonCentreMotion simSeasonCentreAgreement simCareerDerbies simHarnessAnchors; do
+            tag="normal-$name"; : > "$OUT/$tag.transport"
+            printf '%s\0' node "scripts/$name.mjs" > "$OUT/$tag.argv"
+            code=0; SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" node "scripts/$name.mjs" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr" || code=$?
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            if test "$code" -ne 0 || test -s "$OUT/$tag.transport"; then failed=1; fi
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+          done
+          capture three-wrapper-admission node --input-type=module <<'WRAPPERS' || failed=1
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          const out=process.env.OUT, sha=b=>createHash('sha256').update(b).digest('hex');
+          const specs=[
+            {id:'match',owner:'simSoccerCommunityShieldMatch',children:9,passed:18,ownedFailures:6,declaredUnselectedSkips:30,executed:24,controls:6,complete:'complete',childField:'completedChildren',removed:'removedSourceCopy',restored:'restored-copy'},
+            {id:'replay',owner:'simSoccerShieldReplay',children:6,passed:24,ownedFailures:3,declaredUnselectedSkips:21,executed:27,controls:3,complete:'complete',childField:'completedChildren',removed:'removedSourceCopies',restored:'restored-copies'},
+            {id:'press',owner:'simSoccerShieldPress',children:9,passed:47,ownedFailures:13,declaredUnselectedSkips:40,executed:60,controls:6,complete:'completed',childField:'children',removed:'removedSourceCopy',restored:'restored-copy'}
+          ];
+          const observed=[];
+          for(const s of specs){
+            const dir=path.join(out,'permanent',s.id), read=name=>fs.readFileSync(path.join(dir,name)), json=name=>JSON.parse(read(name));
+            assert.equal(Number(fs.readFileSync(path.join(out,'normal-'+s.owner+'.exit'),'utf8')),0,s.owner+' actual normal exit');
+            const summary=json('summary.json'),receipt=json('receipt.json');
+            observed.push({id:s.id,summary,receipt});
+            fs.writeFileSync(path.join(out,'three-wrapper-observations-before-admission.json'),JSON.stringify(observed,null,2)+'\n');
+            assert.equal(summary.children,s.children);assert.equal(summary.physicalControls,s.controls);assert.equal(summary.results.length,s.children);
+            const wanted={passed:s.passed,ownedFailures:s.ownedFailures,declaredUnselectedSkips:s.declaredUnselectedSkips,executed:s.executed};
+            assert.deepEqual(summary.totals,wanted);
+            assert.equal(receipt[s.complete],true);assert.equal(receipt[s.childField],s.children);assert.equal(receipt[s.removed],true);
+            assert.equal(receipt.primary,null);assert.deepEqual(receipt.secondary,[]);
+            assert.deepEqual(json('source-after.json'),json('source-before.json'),'Actual whole input source remains held');
+            let passed=0,owned=0,skips=0;
+            for(const r of summary.results){
+              const bytes=read(r.name+'.vitest.json'),report=JSON.parse(bytes),processRecord=json(r.name+'.process.json');
+              assert.equal(sha(bytes),r.rawReportSha256);
+              assert.equal(Number(read(r.name+'.exit').toString()),r.rawExit);assert.equal(processRecord.status,r.rawExit);
+              assert.equal(processRecord.signal,null);assert.equal(processRecord.error,null);assert.equal(read(r.name+'.transport').length,0);
+              const rows=report.testResults.flatMap(suite=>suite.assertionResults);
+              const p=rows.filter(row=>row.status==='passed').length,f=rows.filter(row=>row.status==='failed').length,k=rows.filter(row=>['pending','skipped'].includes(row.status)).length;
+              assert.equal(rows.length,p+f+k);assert.equal(p,r.passed);assert.equal(f,r.ownedFailures);assert.equal(k,r.declaredUnselectedSkips);
+              assert.equal(r.executed,p+f);assert.equal(r.detectedRuntimeError,false);
+              assert.equal(r.rawExit,f?1:0);
+              for(const value of Object.values(r.counters))if(value!==null)assert.equal(value,0);
+              for(const value of Object.values(r.rawErrors))if(value!==null)assert.deepEqual(value,[]);
+              passed+=p;owned+=f;skips+=k;
+            }
+            assert.deepEqual({passed,ownedFailures:owned,declaredUnselectedSkips:skips,executed:passed+owned},wanted);
+            assert.equal(summary.results.at(-1).name,s.restored);assert.equal(summary.results.at(-1).ownedFailures,0);
+            const edits=fs.readdirSync(dir).filter(name=>name.endsWith('.edit.json')).sort();assert.equal(edits.length,s.controls);
+            for(const name of edits){
+              const e=json(name),original=e.original?.sha256??e.originalSha256,changed=e.changed?.sha256??e.changedSha256,inverse=e.inverse?.sha256??e.inverseSha256;
+              assert.equal(inverse,original);assert.equal(e.physicalRestoreSha256,original);assert.notEqual(changed,original);
+              const leaf=name.slice(0,-'.edit.json'.length),source=leaf==='old-source'?'old-source.ts':leaf+'.source.ts';
+              assert.equal(sha(read(source)),changed,'Actual changed physical control source held');
+              if(s.id==='press'&&leaf==='old-source'){
+                assert.equal(e.kind,'old-English counterfactual with strict German branch retained');
+                assert.equal(e.canonicalOldSha256,'196441a89d900140c05aeb9671f72e6b454cfd75eafd0264eb81083765b0fcff');
+                assert.equal(e.canonicalOldGit,'6a1b88e7797e79835dcfb9195051898dcb4444f5');
+                assert.equal(e.provenanceInverseSha256,original);assert.equal(e.provenanceEdits.length,4);assert.equal(e.compositionEdits.length,2);
+              }
+            }
+          }
+          fs.writeFileSync(path.join(out,'three-wrapper-admission.json'),JSON.stringify({schemaVersion:1,children:24,healthy:89,ownedFailures:22,declaredUnselectedSkips:91,executed:111,physicalControls:15,observed,runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN'},null,2)+'\n');
+          console.log('GERMAN_EXISTING_WRAPPERS: actual24 children,89 healthy,22 owned,91 unselected,111 executed');
+          WRAPPERS
+          capture anchor-strip env ANCHOR_CONTROL=strip node scripts/simHarnessAnchors.mjs || failed=1
+          capture anchor-classify node --input-type=module <<'ANCHORS' || failed=1
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          const dir=process.env.OUT,sha=body=>crypto.createHash('sha256').update(body).digest('hex'),records=[];
+          for(const name of ['normal-simHarnessAnchors','anchor-strip']){
+            assert.equal(Number(fs.readFileSync(dir+'/'+name+'.exit','utf8')),0);
+            assert.equal(fs.statSync(dir+'/'+name+'.transport').size,0);
+            const stdout=fs.readFileSync(dir+'/'+name+'.stdout','utf8'),stderr=fs.readFileSync(dir+'/'+name+'.stderr','utf8'),raw=stdout+'\n'+stderr;
+            assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Failed to load url|Cannot find (?:module|package)|SyntaxError:|ReferenceError:|TypeError:/i.test(raw),false);
+            const failures=raw.split(/\r?\n/).map(line=>line.trim()).filter(line=>line.startsWith('FAIL '));
+            if(name==='normal-simHarnessAnchors'){
+              assert.deepEqual(failures,[]);
+              assert.equal(stdout.split(/\r?\n/).filter(line=>line==='simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.').length,1);
+            }else{
+              assert.equal(failures.length,1);assert.equal(failures[0].startsWith('FAIL simFightCareer.mjs reads '),true);
+              assert.equal(stdout.includes('[control strip applied to a copy of simFightCareer.mjs]'),true);
+              assert.equal(stdout.split(/\r?\n/).filter(line=>line==='control "strip": the planted fault in simFightCareer.mjs was named and nothing else was, the check works').length,1);
+            }
+            records.push({name,rawExit:0,stdoutSha256:sha(Buffer.from(stdout)),stderrSha256:sha(Buffer.from(stderr)),failures,runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN'});
+          }
+          fs.writeFileSync(dir+'/anchor-summary.json',JSON.stringify({scope:'Existing actual source-anchor admission and real stripped-normalizer control, no exemption',healthy:true,records},null,2)+'\n');
+          ANCHORS
+          printf '%s\n' "$failed" > "$OUT/permanent-aggregate.exit"
+          exit "$failed"
+      - name: Retain complete immutable source and dependency holds
+        if: always()
+        run: |
+          set -euo pipefail
+          code=0
+          if test -d "$OUT"; then
+            if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log" 2>&1 || code=1; fi
+            if test -f "$OUT/dependency.sha256"; then sha256sum --check "$OUT/dependency.sha256" > "$OUT/dependency-held.log" 2>&1 || code=1; fi
+            git ls-files -z > "$OUT/source-members.after"
+            if test -f "$OUT/source-members.before"; then cmp "$OUT/source-members.before" "$OUT/source-members.after" > "$OUT/source-members.log" 2>&1 || code=1; fi
+            if test -d node_modules; then
+              find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.after"
+              if test -f "$OUT/dependency-members.before"; then cmp "$OUT/dependency-members.before" "$OUT/dependency-members.after" > "$OUT/dependency-members.log" 2>&1 || code=1; fi
+            fi
+            git diff --exit-code > "$OUT/source-diff.log" 2>&1 || code=1
+            git ls-files --others --exclude-standard -z > "$OUT/untracked.after"; test ! -s "$OUT/untracked.after" || code=1
+            if find "$OUT" -name '*.transport' -type f ! -size 0 | grep -q .; then code=1; fi
+            printf '%s\n' "$code" > "$OUT/holds.exit"
+          else code=1; fi
+          exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-german-supercup-focused-fix
+          path: |
+            ${{ runner.temp }}/sc-german-supercup-focused-fix
+            ${{ github.workspace }}/tmp
+          if-no-files-found: error
+          retention-days: 14
