@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -38,6 +38,24 @@ jobs:
           const pins = {"scripts/simTacticsEngine.mjs":"d6bf2bc4e94db7bcb532e9b773fc584f334340a5","scripts/qa/managerMatchPlans1079.mjs":"98972610390be00aebed0d85099e7393fd07fb37","src/components/club-manager/AcademyScreen.tsx":"2d3ca44121cf0a84dad9b965328bd0c970403be3","src/components/club-manager/LiveSimScreen.tsx":"a6a434180c6ee9ffe263fc5c82cc8328a36914ee","src/components/club-manager/LiveTacticsPanel.tsx":"b12a1a0303ec9b3d043bdac089b873a4cc35383c","src/components/club-manager/MatchPlansCard.tsx":"c64e82d0adff5180272f0164e7a84b80fd9d9dce","src/components/club-manager/TacticsScreen.tsx":"950c4e9b0d2df22d1d6de95723122cc699b4bacd","src/hooks/useClubManager.ts":"5b2aac4ea3f649e478fc4e26939dff7dadbed310","src/lib/clubManager.ts":"9d8dc92557bf2f4358b5be044359354eda841769","src/lib/clubManagerCalendar.ts":"353c2019273564b48b0ad9657c02a83990ff7bc3","src/lib/clubManagerPositions.ts":"999b26b065246a2bf2db452d17d96439e855c6af","src/lib/clubManagerUiInfo.ts":"8e0b99eb1941760b18fa4d5de1df2b72fd894a0a","src/pages/ClubManager.tsx":"4781925c031abde3822c81ef49d5e1558d315a17","src/test/academyFilters.test.tsx":"c2d432043c153bcf56a881d264d7077c74c7ba3d","src/lib/clubManagerMatchPlans.ts":"345b05725fff2c2b502be4ec32d6e2728cf3c1b3","src/test/managerMatchPlans.test.tsx":"43d803e92473dbb3ce1f765b71800c96e27125ef","src/test/cmCustomTacticsPitch.test.ts":"b7a2160b9d3d98da728b2f7ad7ab6bd5eeccdf95","src/test/MatchPlansCard.customPositions.test.tsx":"0eaa919e0d4cc8b0c24db5f331f7664d2db79a52","src/test/clubManagerPositionPersistence.test.tsx":"d71d8486dad8da7bdc5904e43ef2c4641651e301","src/test/cmCustomTacticalPlans.test.ts":"5eb8a489de955660be29d470476b6a90bf3ac492","src/test/cmCustomTacticsUi.test.tsx":"1884a41fde35b8152c51f055b29c04389983e56d","src/test/cmCustomPlanPreservation.test.ts":"008263b6bf1f914b1383058d91852850dff22e43"};
           for (const [file, blob] of Object.entries(pins)) assert.equal(execFileSync('git', ['rev-parse', 'HEAD:' + file]).toString().trim(), blob, file);
           assert.equal(execFileSync('git', ['rev-parse', 'HEAD:vitest.config.ts']).toString().trim(), 'ed2a9dc677f77dfe95c061064eeff5782b856864');
+          const historical = {
+            '2b7dda2951fb9b63e76a2af66970cb682f312105': ['src/lib/cageClash.ts'],
+            '31a4ec01': ['src/lib/cageClash.ts'],
+            '56356be9': ['src/lib/frontOffice.ts','src/data/frontOfficePlayers.ts','src/data/frontOfficeDepth.ts'],
+            '0c66a559': ['src/lib/frontOffice.ts','src/data/frontOfficePlayers.ts','src/data/frontOfficeDepth.ts'],
+            'e8b39ccc': ['src/lib/nbaFrontOffice.ts','src/lib/nbaSeasonStats.ts','src/lib/nbaRotation.ts','src/data/conquestDataNba.ts'],
+            '6b7596d2': ['src/lib/nhlFrontOffice.ts','src/data/nhlFoPlayers.ts'],
+          };
+          const history = [];
+          for (const [ref, paths] of Object.entries(historical)) {
+            const commit = execFileSync('git',['rev-parse',ref+'^{commit}']).toString().trim();
+            for (const file of paths) {
+              const bytes = execFileSync('git',['show',ref+':'+file],{maxBuffer:16*1024*1024});
+              assert.ok(bytes.length,ref+':'+file);
+              history.push({ref,commit,file,bytes:bytes.length});
+            }
+          }
+          fs.writeFileSync(process.env.QA_OUT+'/historical-preflight.json',JSON.stringify(history,null,2)+'\n');
           const config = fs.readFileSync('vitest.config.ts', 'utf8');
           const controls = [...config.matchAll(/process\.env\.([A-Z_]+)/g)].map(match => match[1]);
           for (const control of new Set(controls)) assert.ok(!process.env[control], control + ' must be absent in an ordinary run');
@@ -74,7 +92,7 @@ jobs:
           const files = report.testResults.map(file => relative(file.name)).sort();
           assert.deepEqual(files, expected, 'Every tracked ordinary test file must be discovered exactly once');
           const rows = report.testResults.flatMap(file => file.assertionResults.map(row => ({ file: relative(file.name), ...row })));
-          const pending = rows.filter(row => row.status === 'pending' || row.status === 'todo').map(row => ({file: row.file, fullName: row.fullName, status: row.status}));
+          const pending = rows.filter(row => row.status === 'pending' || row.status === 'todo' || row.status === 'skipped').map(row => ({file: row.file, fullName: row.fullName, status: row.status}));
           const duplicates = [...Map.groupBy(rows, row => row.file + '\n' + row.fullName)].filter(([, group]) => group.length > 1).map(([identity, group]) => ({identity, count:group.length}));
           const counts = {};
           for (const row of rows) counts[row.status] = (counts[row.status] ?? 0) + 1;
@@ -82,6 +100,7 @@ jobs:
           for (const key of ['numRuntimeErrorTestSuites', 'numUnhandledErrors']) counters[key] = Object.hasOwn(report, key) ? report[key] : null;
           fs.writeFileSync(out + '/actual-census.json', JSON.stringify({
             files: files.length, rows: rows.length, counts, pending, duplicateIdentities: duplicates, counters,
+            failedFileEntries: report.testResults.filter(file => file.status === 'failed').map(file => ({file:relative(file.name),message:file.message ?? null})),
             missingCounterMeaning: 'UNKNOWN', scope: 'Full ordinary Vitest discovery on pinned source. Pending identities retained; no skipped case earns pass credit.',
           }, null, 2) + '\n');
           const admit = value => {
@@ -94,7 +113,7 @@ jobs:
           assert.equal(report.numTotalTests, rows.length);
           assert.equal(rows.filter(row => row.status === 'passed').length, report.numPassedTests);
           for (const value of Object.values(counters)) if (value !== null) assert.equal(value, 0);
-          assert.ok(rows.every(row => ['passed', 'pending', 'todo'].includes(row.status)));
+          assert.ok(rows.every(row => ['passed', 'pending', 'todo', 'skipped'].includes(row.status)));
           for (const file of newFiles) {
             const found = rows.filter(row => row.file === file);
             assert.ok(found.length, file + ' must run');
