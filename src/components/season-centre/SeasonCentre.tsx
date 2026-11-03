@@ -617,7 +617,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
       const match = cup.match;
       return <div className="space-y-3" data-centre-calendar-cup={cup.id} data-cup-revealed={stage.revealed ? 'true' : 'false'}>
         <h3 className="text-sm font-black">{cup.name} · {match.round}</h3>
-        <p className="text-xs text-muted-foreground">{cup.afterLeague === 0 ? "Before league game 1." : `After league game ${cup.afterLeague}.`} {model.calendar?.note}</p>
+        <p className="text-xs text-muted-foreground">{cup.afterLeague === 0 ? "Before league game 1." : `After league game ${cup.afterLeague}.`} {cup.afterLeague === 0 && match.neutral ? "Your saved neutral opener." : model.calendar?.note}</p>
         <div className="rounded-xl bg-muted/30 p-4 text-center">
           <p className="font-bold" data-calendar-cup-opponent>{model.header.club} vs {match.opponent ?? 'Opponents not recorded'}</p>
           <p className="mt-1 text-xs">{match.neutral ? 'Neutral ground' : match.home === undefined ? 'Venue not recorded' : match.home ? 'Home' : 'Away'}</p>
