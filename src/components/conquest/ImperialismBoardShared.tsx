@@ -58,6 +58,18 @@ import { cn } from '@/lib/utils';
  * the recap directly rather than replaying the scenes.
  */
 
+export type ConquestReportProgress = {
+  phase: 'pick' | ConquestRun['phase'];
+  mode: 'daily' | 'free';
+  puzzleDate: string | null;
+  roundsCompleted: number;
+  featuredAvailable: boolean;
+  callSelected: boolean;
+  sceneActive: boolean;
+  playState: 'not-rendered' | 'prediction-required' | 'ready';
+  continueState: 'not-rendered' | 'scene-playing' | 'ready';
+};
+
 interface Props {
   sport: ImperialismSport;
   map: ConquestMapSport;
@@ -65,6 +77,7 @@ interface Props {
   /** The page's "?" opens the imperialism help; the board opens it once, before the first run on the route. */
   helpOpen?: boolean;
   onHelpOpenChange?: (open: boolean) => void;
+  onReportProgressChange?: (progress: ConquestReportProgress | null) => void;
 }
 
 /** The run plus the rng that dealt it. They move together or the replay lies. */
@@ -112,7 +125,7 @@ function deriveHomeRegions(sport: ImperialismSport, map: ConquestMapSport): Reco
   return out;
 }
 
-export default function ImperialismBoardShared({ sport, map, game, helpOpen = false, onHelpOpenChange }: Props) {
+export default function ImperialismBoardShared({ sport, map, game, helpOpen = false, onHelpOpenChange, onReportProgressChange }: Props) {
   /* Round 428 part two: TODAY IS PINNED AT MOUNT and threaded into every
      conquestDaily call, so the rng that deals the map, the record read on
      mount and the record written at the end all name the same day. */
@@ -194,6 +207,23 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
     playScenes();
   }, [scenes, playScenes]);
   const sceneActive = scenes.length > 0 && !scenesDone;
+  const roundsCompleted = run?.rounds.length ?? 0;
+  const featuredAvailable = !!featured;
+  const callSelected = !!prediction;
+  const playState: ConquestReportProgress['playState'] = phase === 'preview' && featuredAvailable
+    ? callSelected ? 'ready' : 'prediction-required'
+    : 'not-rendered';
+  const continueState: ConquestReportProgress['continueState'] = phase !== 'recap'
+    ? 'not-rendered'
+    : sceneActive ? 'scene-playing' : run?.lastRound ? 'ready' : 'not-rendered';
+
+  useEffect(() => {
+    onReportProgressChange?.({
+      phase, mode, puzzleDate: mode === 'daily' ? todayStr : null,
+      roundsCompleted, featuredAvailable, callSelected, sceneActive, playState, continueState,
+    });
+  }, [onReportProgressChange, phase, mode, todayStr, roundsCompleted, featuredAvailable, callSelected, sceneActive, playState, continueState]);
+  useEffect(() => () => { onReportProgressChange?.(null); }, [onReportProgressChange]);
   const featuredScene = useMemo(() => scenes.find(s => s.featured) ?? null, [scenes]);
   const wheel = useMemo(() => (featuredScene ? wheelSpec(sport, map, featuredScene.game.home) : null), [sport, map, featuredScene]);
   /* The needle points from the label point of the attacker's largest region
