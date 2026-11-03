@@ -9377,6 +9377,6 @@ export function endOwnerCareer(prev: CareerState): CareerState {
 export function generateShareText(state: CareerState): string {
   const totals = getCareerTotals(state.seasons);
   const tier = state.legacy?.tier || "JOURNEYMAN";
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.clubCups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
   return `I finished my Soccer Career as a ${tier}: ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
 }

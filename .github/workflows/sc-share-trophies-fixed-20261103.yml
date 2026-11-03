@@ -1,0 +1,491 @@
+name: Soccer Career share trophy total fixed qualification
+on:
+  push:
+    branches: [codex/sc-share-trophies-fixed-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: sc-share-trophies-fixed-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  BASELINE_PARENT: a42977f1f9f506fd5f80274d12a403f7e7d3f666
+  BASELINE_PARENT_TREE: 94f399543d3de3182fca6fc37ac9c46455239ad6
+  FIXED_ENGINE_SHA256: 9d0f7b5856c7db44a061e71baf77caf8ed7c969ed1df72533339c064a55c0c9a
+  FROZEN_TEST_SHA256: 2e67ed52784246f9a862dd06202c588f96c6e9b0dc00c744f9199948dfe39464
+jobs:
+  focused-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the admitted baseline and fixed helper
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-share-trophies-focused"
+          mkdir -p "$OUT/logs" "$OUT/units" "$OUT/raw" "$OUT/transport" "$OUT/original"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          for (const name of ['BASELINE_PARENT','BASELINE_PARENT_TREE']) assert.match(process.env[name] ?? '', /^[a-f0-9]{40}$/, name + ' must be bound');
+          for (const name of ['FIXED_ENGINE_SHA256','FROZEN_TEST_SHA256']) assert.match(process.env[name] ?? '', /^[a-f0-9]{64}$/, name + ' must be bound');
+          NODE
+          if ! git cat-file -e "$BASELINE_PARENT^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$BASELINE_PARENT"
+          fi
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status "$BASELINE_PARENT" HEAD > "$OUT/changed-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.QA_OUT;
+          const engine = 'src/lib/soccerCareerEngine.ts', test = 'src/test/soccerCareerShareTrophies.test.ts';
+          const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+          assert.equal(process.env.GITHUB_REPOSITORY, 'PapiSalgueroM/ballpark-hero');
+          assert.equal(execFileSync('git',['rev-parse','HEAD']).toString().trim(),process.env.GITHUB_SHA);
+          assert.equal(execFileSync('git',['rev-parse',process.env.BASELINE_PARENT+'^{tree}']).toString().trim(),process.env.BASELINE_PARENT_TREE);
+          assert.deepEqual(fs.readFileSync(out+'/changed-paths.txt','utf8').trim().split('\n').sort(),
+            ['A\t.github/workflows/sc-share-trophies-fixed-20261103.yml','M\t'+engine].sort());
+          assert.equal(sha(fs.readFileSync(engine)),process.env.FIXED_ENGINE_SHA256);
+          assert.equal(sha(fs.readFileSync(test)),process.env.FROZEN_TEST_SHA256);
+          const baselineTest=execFileSync('git',['show',process.env.BASELINE_PARENT+':'+test],{maxBuffer:16*1024*1024});
+          assert.equal(sha(baselineTest),process.env.FROZEN_TEST_SHA256,'The admitted test must remain frozen');
+          assert.equal(execFileSync('git',['rev-parse',process.env.BASELINE_PARENT+':'+engine]).toString().trim(),'722b2285628775dff77f8de0138cf44d7b104b49');
+          const config=fs.readFileSync('vitest.config.ts','utf8');
+          for(const match of config.matchAll(/process\.env\.([A-Z_]+)/g)) assert.ok(!process.env[match[1]],'No inherited alias: '+match[1]);
+          fs.writeFileSync(out+'/association.json',JSON.stringify({
+            source:process.env.GITHUB_SHA,parent:process.env.BASELINE_PARENT,parentTree:process.env.BASELINE_PARENT_TREE,
+            fixedEngineSha256:process.env.FIXED_ENGINE_SHA256,testSha256:process.env.FROZEN_TEST_SHA256,
+            originalEngineBlob:'722b2285628775dff77f8de0138cf44d7b104b49',
+            scope:'Soccer Career share sum only. No sporting data, simulation, legacy, save, dependency or cap change.'
+          },null,2)+'\n');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          cp .github/workflows/sc-share-trophies-fixed-20261103.yml "$OUT/workflow.yml"
+      - name: Install held application and existing QA tools
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          git diff --exit-code -- package.json package-lock.json
+          npm install --prefix "$RUNNER_TEMP/sc-share-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/sc-share-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/sc-share-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/sc-share-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+          python3 -m pip install --target "$RUNNER_TEMP/sc-share-python" fonttools pillow 2>&1 | tee "$QA_OUT/logs/python-install.log"
+          echo "PYTHONPATH=$RUNNER_TEMP/sc-share-python" >> "$GITHUB_ENV"
+      - name: Proper types, five fixed cases and effective whole-original control
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+          engine=src/lib/soccerCareerEngine.ts
+          cp "$engine" "$QA_OUT/original/fixed-engine.ts"
+          git show "$BASELINE_PARENT:$engine" > "$QA_OUT/original/baseline-engine.ts"
+          test "$(git hash-object "$QA_OUT/original/baseline-engine.ts")" = 722b2285628775dff77f8de0138cf44d7b104b49
+          restore_engine() { cp "$QA_OUT/original/fixed-engine.ts" "$engine"; }
+          trap restore_engine EXIT
+          run_share() {
+            UNIT_ARM="$1" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { spawnSync } from 'node:child_process';
+          const out=process.env.QA_OUT, arm=process.env.UNIT_ARM, old=arm==='original';
+          assert.ok(['fixed','original','restored'].includes(arm));
+          const test='src/test/soccerCareerShareTrophies.test.ts', raw=out+'/raw/'+arm;
+          fs.mkdirSync(raw,{recursive:true});
+          const receipt=out+'/transport/'+arm+'.log';fs.writeFileSync(receipt,'');
+          const reportPath=out+'/units/'+arm+'.json';
+          const run=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',test,
+            '--maxWorkers=1','--minWorkers=1','--reporter=verbose','--reporter=json','--outputFile='+reportPath],
+            {env:{...process.env,SC_SHARE_TROPHIES_RAW:raw,SIM_OFFLINE_RECEIPT:receipt},encoding:'utf8',timeout:300000,maxBuffer:32*1024*1024});
+          const log=(run.stdout??'')+'\n'+(run.stderr??'');
+          fs.writeFileSync(out+'/logs/'+arm+'.log',log);process.stdout.write(log);
+          fs.writeFileSync(out+'/units/'+arm+'.exit.json',JSON.stringify({status:run.status,signal:run.signal,error:run.error?String(run.error):null})+'\n');
+          assert.ok(!run.error&&!run.signal,'Native unit process must complete');
+          assert.equal(run.status,old?1:0);
+          assert.ok(fs.existsSync(reportPath),'The actual unit report is required');
+          const r=JSON.parse(fs.readFileSync(reportPath,'utf8'));
+          assert.equal(r.success,!old);assert.equal(r.numTotalTests,5);assert.equal(r.numPassedTests,old?3:5);assert.equal(r.numFailedTests,old?2:0);
+          assert.equal(r.testResults.length,1);
+          const suite=r.testResults[0];
+          assert.equal(path.resolve(suite.name),path.resolve(test));assert.equal(suite.status,old?'failed':'passed');
+          if(Object.hasOwn(suite,'message'))assert.equal(suite.message,'');
+          const cases=[
+            ['includes a continental international title in the shared trophy count','continental-only','SC_SHARE_TROPHY_CONTINENTAL_ONLY',1,0],
+            ['adds continental titles to every other trophy family across career seasons','mixed','SC_SHARE_TROPHY_MIXED_FAMILIES',8,6],
+            ['keeps an empty career share at zero with the existing fallback tier','zero',null,0,0],
+            ['retains all five existing trophy families when continental receipts are absent','other-families',null,5,5],
+            ['keeps personal awards separate from team trophies and preserves the earned legacy tier','personal-awards',null,0,0],
+          ];
+          assert.equal(suite.assertionResults.length,5);
+          assert.deepEqual(suite.assertionResults.map(row=>row.title).sort(),cases.map(row=>row[0]).sort());
+          const observations=[];
+          for(const [title,file,marker,fixedCount,oldCount] of cases){
+            const row=suite.assertionResults.find(row=>row.title===title),failed=old&&marker!==null;
+            assert.equal(row.fullName,'Soccer Career shared trophy totals '+title);
+            assert.equal(row.status,failed?'failed':'passed');
+            if(failed)assert.ok(row.failureMessages.length&&row.failureMessages.every(message=>message.includes(marker)));
+            else assert.deepEqual(row.failureMessages,[]);
+            const value=JSON.parse(fs.readFileSync(raw+'/'+file+'.json','utf8'));
+            assert.equal(value.case,file);assert.equal(value.inputUnchanged,true);assert.equal(value.randomDraws,0);assert.equal(value.repeated,value.share);
+            assert.equal(typeof value.share,'string');
+            const trophy=/, ([0-9]+) trophies,/.exec(value.share);assert.ok(trophy);
+            assert.equal(Number(trophy[1]),old?oldCount:fixedCount);
+            if(old){
+              const fixed=JSON.parse(fs.readFileSync(out+'/raw/fixed/'+file+'.json','utf8'));
+              assert.deepEqual(value.totals,fixed.totals,'Sharing must not change the complete existing totals, including additive fields');
+              if(marker)assert.notEqual(value.share,fixed.share);else assert.deepEqual(value,fixed);
+            }
+            observations.push({case:file,trophies:Number(trophy[1]),inputHeld:value.inputUnchanged,randomDraws:value.randomDraws});
+          }
+          assert.deepEqual(fs.readdirSync(raw).sort(),cases.map(row=>row[1]+'.json').sort());
+          const counters={};
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors','numPendingTests','numTodoTests']){
+            counters[key]=Object.hasOwn(r,key)?r[key]:null;if(counters[key]!==null)assert.equal(counters[key],0,key);
+          }
+          if(Object.hasOwn(r,'unhandledErrors'))assert.deepEqual(r.unhandledErrors,[]);
+          assert.equal(fs.readFileSync(receipt,'utf8'),'');
+          fs.writeFileSync(out+'/units/'+arm+'-admission.json',JSON.stringify({
+            arm,actualPassed:r.numPassedTests,actualOwnedFailures:r.numFailedTests,cases:observations,counters,
+            missingCounterMeaning:'UNKNOWN',scope:'Five frozen share-helper cases. Original and restored runs repeat those cases; no extra unique-case credit.'
+          },null,2)+'\n');
+          NODE
+          }
+          run_share fixed
+          cp "$QA_OUT/original/baseline-engine.ts" "$engine"
+          run_share original
+          restore_engine
+          cmp "$QA_OUT/original/fixed-engine.ts" "$engine"
+          run_share restored
+          for file in continental-only mixed zero other-families personal-awards; do
+            cmp "$QA_OUT/raw/fixed/$file.json" "$QA_OUT/raw/restored/$file.json"
+          done
+          git diff --exit-code HEAD > "$QA_OUT/after-controls.diff"
+          trap - EXIT
+      - name: Normal Vite build, twenty existing readers and all unchanged page caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate build npm run build
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career node scripts/simSeoMetaSplit.mjs
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Retain full source holds and transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          if [[ -f "$QA_OUT/source-before.sha256" ]]; then
+            cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+            sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          else
+            echo "No qualified before inventory was produced." > "$QA_OUT/source-hold-unknown.txt"
+            exit 1
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const out=process.env.QA_OUT;
+          const rows=fs.existsSync(out+'/transport')?fs.readdirSync(out+'/transport').sort().map(file=>{
+            const text=fs.readFileSync(out+'/transport/'+file,'utf8'),lines=text.split('\n').filter(Boolean);
+            return {file,blockedAttempts:lines.length,
+              fontBlockedAttempts:lines.filter(line=>/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts:lines.filter(line=>line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length};
+          }):[];
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({
+            receipts:rows,meaning:'Blocked attempts are retained. Empty Node receipts are not a browser or provider availability claim.'
+          },null,2)+'\n');
+          NODE
+      - name: Bound retained focused evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: sc-share-trophies-focused-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sc-share-trophies-focused
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+  full-ordinary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the same source and preflight historical ordinary inputs
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-share-trophies-full"
+          mkdir -p "$OUT/logs" "$OUT/units" "$OUT/raw" "$OUT/transport" "$OUT/original"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          for (const name of ['BASELINE_PARENT','BASELINE_PARENT_TREE']) assert.match(process.env[name] ?? '', /^[a-f0-9]{40}$/, name + ' must be bound');
+          for (const name of ['FIXED_ENGINE_SHA256','FROZEN_TEST_SHA256']) assert.match(process.env[name] ?? '', /^[a-f0-9]{64}$/, name + ' must be bound');
+          NODE
+          if ! git cat-file -e "$BASELINE_PARENT^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$BASELINE_PARENT"
+          fi
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status "$BASELINE_PARENT" HEAD > "$OUT/changed-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.QA_OUT;
+          const engine = 'src/lib/soccerCareerEngine.ts', test = 'src/test/soccerCareerShareTrophies.test.ts';
+          const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+          assert.equal(process.env.GITHUB_REPOSITORY, 'PapiSalgueroM/ballpark-hero');
+          assert.equal(execFileSync('git',['rev-parse','HEAD']).toString().trim(),process.env.GITHUB_SHA);
+          assert.equal(execFileSync('git',['rev-parse',process.env.BASELINE_PARENT+'^{tree}']).toString().trim(),process.env.BASELINE_PARENT_TREE);
+          assert.deepEqual(fs.readFileSync(out+'/changed-paths.txt','utf8').trim().split('\n').sort(),
+            ['A\t.github/workflows/sc-share-trophies-fixed-20261103.yml','M\t'+engine].sort());
+          assert.equal(sha(fs.readFileSync(engine)),process.env.FIXED_ENGINE_SHA256);
+          assert.equal(sha(fs.readFileSync(test)),process.env.FROZEN_TEST_SHA256);
+          const baselineTest=execFileSync('git',['show',process.env.BASELINE_PARENT+':'+test],{maxBuffer:16*1024*1024});
+          assert.equal(sha(baselineTest),process.env.FROZEN_TEST_SHA256,'The admitted test must remain frozen');
+          assert.equal(execFileSync('git',['rev-parse',process.env.BASELINE_PARENT+':'+engine]).toString().trim(),'722b2285628775dff77f8de0138cf44d7b104b49');
+          const config=fs.readFileSync('vitest.config.ts','utf8');
+          for(const match of config.matchAll(/process\.env\.([A-Z_]+)/g)) assert.ok(!process.env[match[1]],'No inherited alias: '+match[1]);
+          fs.writeFileSync(out+'/association.json',JSON.stringify({
+            source:process.env.GITHUB_SHA,parent:process.env.BASELINE_PARENT,parentTree:process.env.BASELINE_PARENT_TREE,
+            fixedEngineSha256:process.env.FIXED_ENGINE_SHA256,testSha256:process.env.FROZEN_TEST_SHA256,
+            originalEngineBlob:'722b2285628775dff77f8de0138cf44d7b104b49',
+            scope:'Soccer Career share sum only. No sporting data, simulation, legacy, save, dependency or cap change.'
+          },null,2)+'\n');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          cp .github/workflows/sc-share-trophies-fixed-20261103.yml "$OUT/workflow.yml"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          const historical = {
+            '2b7dda2951fb9b63e76a2af66970cb682f312105': ['src/lib/cageClash.ts'],
+            '31a4ec01': ['src/lib/cageClash.ts'],
+            '56356be9': ['src/lib/frontOffice.ts','src/data/frontOfficePlayers.ts','src/data/frontOfficeDepth.ts'],
+            '0c66a559': ['src/lib/frontOffice.ts','src/data/frontOfficePlayers.ts','src/data/frontOfficeDepth.ts'],
+            'e8b39ccc': ['src/lib/nbaFrontOffice.ts','src/lib/nbaSeasonStats.ts','src/lib/nbaRotation.ts','src/data/conquestDataNba.ts'],
+            '6b7596d2': ['src/lib/nhlFrontOffice.ts','src/data/nhlFoPlayers.ts'],
+          };
+          const history = [];
+          for (const [ref, paths] of Object.entries(historical)) {
+            const commit = execFileSync('git',['rev-parse',ref+'^{commit}']).toString().trim();
+            for (const file of paths) {
+              const bytes = execFileSync('git',['show',ref+':'+file],{maxBuffer:16*1024*1024});
+              assert.ok(bytes.length,ref+':'+file);
+              history.push({ref,commit,file,bytes:bytes.length});
+            }
+          }
+          fs.writeFileSync(process.env.QA_OUT+'/historical-preflight.json',JSON.stringify(history,null,2)+'\n');
+          const files=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(file=>/^src\/.*\.(?:test|spec)\.tsx?$/.test(file)).sort();
+          assert.ok(files.length);
+          fs.writeFileSync(process.env.QA_OUT+'/expected-files.json',JSON.stringify(files,null,2)+'\n');
+          NODE
+      - name: Install held ordinary dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Run every ordinary unit file without a name filter
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/units.transport.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/units.transport.log" node node_modules/vitest/vitest.mjs run --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units.json" 2>&1 | tee "$QA_OUT/units.log"
+          codes=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/units.exit"
+          test "${codes[1]}" -eq 0
+      - name: Admit the actual census and retain pending identities
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = process.env.QA_OUT;
+          const report = JSON.parse(fs.readFileSync(out + '/units.json', 'utf8'));
+          const expected = JSON.parse(fs.readFileSync(out + '/expected-files.json', 'utf8'));
+          const newFiles = ['src/test/soccerCareerShareTrophies.test.ts'];
+          const relative = file => file.replaceAll('\\', '/').slice(file.replaceAll('\\', '/').indexOf('/src/') + 1);
+          const files = report.testResults.map(file => relative(file.name)).sort();
+          assert.deepEqual(files, expected, 'Every tracked ordinary test file must be discovered exactly once');
+          const rows = report.testResults.flatMap(file => file.assertionResults.map(row => ({ file: relative(file.name), ...row })));
+          const pending = rows.filter(row => row.status === 'pending' || row.status === 'todo' || row.status === 'skipped').map(row => ({file: row.file, fullName: row.fullName, status: row.status}));
+          const duplicates = [...Map.groupBy(rows, row => row.file + '\n' + row.fullName)].filter(([, group]) => group.length > 1).map(([identity, group]) => ({identity, count:group.length}));
+          const counts = {};
+          for (const row of rows) counts[row.status] = (counts[row.status] ?? 0) + 1;
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numUnhandledErrors']) counters[key] = Object.hasOwn(report, key) ? report[key] : null;
+          fs.writeFileSync(out + '/actual-census.json', JSON.stringify({
+            files: files.length, rows: rows.length, counts, pending, duplicateIdentities: duplicates, counters,
+            failedFileEntries: report.testResults.filter(file => file.status === 'failed').map(file => ({file:relative(file.name),message:file.message ?? null})),
+            missingCounterMeaning: 'UNKNOWN', scope: 'Full ordinary Vitest discovery on pinned source. Pending identities retained; no skipped case earns pass credit.',
+          }, null, 2) + '\n');
+          const admit = value => {
+            assert.equal(value.success, true);
+            assert.equal(value.numFailedTests, 0);
+            assert.ok(value.numPassedTests > 0);
+          };
+          admit(report);
+          assert.equal(Number(fs.readFileSync(out + '/units.exit', 'utf8')), 0);
+          assert.equal(report.numTotalTests, rows.length);
+          assert.equal(rows.filter(row => row.status === 'passed').length, report.numPassedTests);
+          for (const value of Object.values(counters)) if (value !== null) assert.equal(value, 0);
+          assert.ok(rows.every(row => ['passed', 'pending', 'todo', 'skipped'].includes(row.status)));
+          for (const file of newFiles) {
+            const found = rows.filter(row => row.file === file);
+            assert.ok(found.length, file + ' must run');
+            assert.ok(found.every(row => row.status === 'passed'), file + ' earns no skipped-case credit');
+          }
+          const changed = {...report, success:false, numFailedTests:report.numFailedTests + 1};
+          assert.notEqual(changed.numFailedTests, report.numFailedTests);
+          assert.throws(() => admit(changed));
+          fs.writeFileSync(out + '/metadata-control.json', JSON.stringify({changed:true, rejected:true, scope:'Admission metadata parser only; actual feature fault controls run in the focused qualification.'}, null, 2) + '\n');
+          NODE
+          test ! -s "$QA_OUT/units.transport.log"
+      - name: Retain full source holds and transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          if [[ -f "$QA_OUT/source-before.sha256" ]]; then
+            cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+            sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          else
+            echo "No qualified before inventory was produced." > "$QA_OUT/source-hold-unknown.txt"
+            exit 1
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const out=process.env.QA_OUT;
+          const rows=fs.existsSync(out+'/transport')?fs.readdirSync(out+'/transport').sort().map(file=>{
+            const text=fs.readFileSync(out+'/transport/'+file,'utf8'),lines=text.split('\n').filter(Boolean);
+            return {file,blockedAttempts:lines.length,
+              fontBlockedAttempts:lines.filter(line=>/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts:lines.filter(line=>line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length};
+          }):[];
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({
+            receipts:rows,meaning:'Blocked attempts are retained. Empty Node receipts are not a browser or provider availability claim.'
+          },null,2)+'\n');
+          NODE
+      - name: Bound retained ordinary evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: sc-share-trophies-full-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sc-share-trophies-full
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
