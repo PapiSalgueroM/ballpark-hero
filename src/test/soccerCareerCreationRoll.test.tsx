@@ -310,7 +310,7 @@ describe('Soccer Career rating98 diagnostic', () => {
     // Warm the real lazy module, then enter it through its actual page button.
     await import('@/components/soccer-career/SoccerCareerBuildEditor');
     await act(async () => { fireEvent.click(view.getByRole('button', { name: /Customize your build/i })); });
-    const input = view.getByRole('textbox', { name: 'Starting overall', exact: true });
+    const input = view.getByRole('textbox', { name: /^Starting overall$/ });
     fireEvent.change(input, { target: { value: '98' } }); fireEvent.blur(input);
     expect(input).toHaveValue('98');
     expect(Number(view.getByText('Starting overall', { exact: true }).parentElement!.lastElementChild!.textContent)).toBe(98);

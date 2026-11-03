@@ -157,4 +157,32 @@ describe('Fantasy Draft forms both starting XIs before settlement', () => {
     expect(settleSeason).not.toHaveBeenCalled();
     expect(recordCompletion).not.toHaveBeenCalled();
   });
+
+  it('relaxes exhausted daily criteria only inside the remaining formation slots', async () => {
+    remote.criteria = 'Under 25s: Every player must be 25 or younger';
+    remote.players = remote.players.map(p => p.position === 'DEF' ? { ...p, age: 30 } : p);
+    const view = await openDraft();
+    for (const position of ['FWD', 'FWD', 'FWD', 'MID', 'MID', 'MID', 'GK']) {
+      await pickPosition(view, position);
+    }
+    await userTurn(view);
+    expect(shape(roster(view, 'Your XI'))).toEqual({ GK: 1, DEF: 0, MID: 3, FWD: 3 });
+    expect(settleSeason).not.toHaveBeenCalled();
+    const defender = available(view, 'DEF');
+    expect(searchPlayer(view, defender), 'FD_FORMATION_NEEDED_POSITION_CRITERIA_RELAXED').toBeEnabled();
+    expect(view.getByRole('status', { name: 'Daily rule' })).toHaveTextContent(/relaxed/i);
+    const before = roster(view, 'Your XI').map(p => p.id);
+    const extraForward = searchPlayer(view, available(view, 'FWD'));
+    expect(extraForward, 'FD_FORMATION_RELAXATION_CANNOT_ADD_FOURTH_FORWARD').toBeDisabled();
+    fireEvent.click(extraForward);
+    expect(roster(view, 'Your XI').map(p => p.id)).toEqual(before);
+    for (let i = 0; i < 4; i += 1) await pickPosition(view, 'DEF');
+    await finishAiTurn(view);
+    expect(settleSeason).toHaveBeenCalledTimes(1);
+    const [you, ai] = vi.mocked(settleSeason).mock.calls[0];
+    expect(shape(you)).toEqual({ GK: 1, DEF: 4, MID: 3, FWD: 3 });
+    expect(shape(ai)).toEqual({ GK: 1, DEF: 4, MID: 3, FWD: 3 });
+    expect(roster(view, 'Your XI').filter(p => p.position === 'DEF').every(p => p.age === 30)).toBe(true);
+  });
+
 });

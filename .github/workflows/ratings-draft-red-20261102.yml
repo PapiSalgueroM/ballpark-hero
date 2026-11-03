@@ -1,7 +1,7 @@
 name: Rating and draft report baseline
 on:
   push:
-    branches: [codex/ratings-draft-red-20261102]
+    branches: [codex/ratings-draft-red-fixed-20261102]
 permissions:
   contents: read
 jobs:
