@@ -84,6 +84,7 @@ const DIAGNOSTICS = process.env.AGREEMENT_DIAGNOSTICS === '1';
 const SELF_OFF = { file: 'src/lib/season/core.ts', from: 'const bad = disagreements(sport, row, ctx, s);', to: 'const bad: string[] = [];' };
 const DROP_GOAL = { file: 'src/lib/season/core.ts', from: 'for (let u = 0; u < rem; u += 1) {', to: "for (let u = 0; u < rem - (t.key === 'goals' && rem > 0 ? 1 : 0); u += 1) {" };
 const CONTROLS = {
+  annualkey: [{ file: 'src/lib/season/soccer.ts', from: "  const annual = communityShieldAnnualStats(row);\n  return row.type === 'playing' && annual && annual.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`\n    : null;", to: "  return row.type === 'playing' && row.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${row.apps}|${row.goals}|${row.assists}|${row.rating}|centre`\n    : null;" }],
   goals: [DROP_GOAL, SELF_OFF],
   selfcheck: [DROP_GOAL],
   position: [{ file: 'src/lib/season/core.ts', from: '  const f = target.finish;\n  const pos = rows.findIndex(x => x.slot === 0) + 1;\n  if (pos > f)', to: '  const f = target.finish;\n  const pos = rows.findIndex(x => x.slot === 0) + 1;\n  if (f > 0) return null;\n  if (pos > f)' }, SELF_OFF],
@@ -91,7 +92,7 @@ const CONTROLS = {
   derby: [{ file: 'src/lib/season/soccer.ts', from: 'const g: FixedGame = { key: d.rival, home: m.home,', to: 'const g: FixedGame = { key: d.rival, home: !m.home,' }],
   cleansheet: [{ file: 'src/lib/season/core.ts', from: "marks[i] = s ? 'shutout' : 'concede';", to: 'marks[i] = undefined;' }, SELF_OFF],
   points: [{ file: 'src/data/leagueFormat.ts', from: '"Serie A": [{ from: 1995 }],', to: '"Serie A": [{ from: 1990 }],' }],
-  leagueapps: [{ file: 'src/lib/season/soccer.ts', from: 'const want = Math.min(row.leagueApps ?? row.apps, room, row.apps);', to: 'const want = Math.min((row.leagueApps ?? row.apps) + 1, room, row.apps);' }],
+  leagueapps: [{ file: 'src/lib/season/soccer.ts', from: 'const want = Math.min(row.leagueApps ?? annual.apps, room, annual.apps);', to: 'const want = Math.min((row.leagueApps ?? annual.apps) + 1, room, annual.apps);' }],
   offtime: [{ file: 'src/lib/season/soccerEvents.ts', from: 'Math.max(1, offAt - lastMine)', to: 'Math.max(1, SOCCER_FULL_TIME + 1 - lastMine)' }, SELF_OFF],
   ladder: [{ file: 'src/lib/season/soccer.ts', from: "const tier = fromFinish ?? (target.kind === 'band' ? 1 : byTier);", to: "const tier = target.kind === 'band' ? 1 : fromFinish ?? byTier;" }],
   resultstitle: [{ file: 'src/lib/season/core.ts', from: "    return ppg < target.ppgMin ? { slot: 0, dir: 1 } : ppg > target.ppgMax ? { slot: 0, dir: -1 } : null;", to: '    return null;' }, SELF_OFF],
@@ -102,9 +103,9 @@ if (CONTROL) console.log(`CONTROL ${CONTROL}: ${CONTROLS[CONTROL].map(p => p.fil
 const t0 = Date.now();
 const B = await bundleAwardsNight(ROOT, {
   patches: CONTROL ? CONTROLS[CONTROL] : [],
-  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', league: 'src/lib/soccerCareerLeague.ts', derby: 'src/lib/soccerCareerDerby.ts', leagueWorld: 'src/lib/soccerCareerLeagueWorld.ts' },
+  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', league: 'src/lib/soccerCareerLeague.ts', derby: 'src/lib/soccerCareerDerby.ts', leagueWorld: 'src/lib/soccerCareerLeagueWorld.ts', extraCups: 'src/lib/soccerCareerExtraCups.ts' },
 });
-const { soccer, season: S, core: C, league: LG, derby: DB, leagueWorld: LW } = B;
+const { soccer, season: S, core: C, league: LG, derby: DB, leagueWorld: LW, extraCups: EC } = B;
 const CLUBS = soccer.FALLBACK_CLUBS;
 console.log(`bundled in ${Date.now() - t0} ms; ${CAREERS} careers, seed set ${SEEDSET}`);
 
@@ -395,6 +396,24 @@ function unconditioned(row, ctx, s, seed) {
   return rounds;
 }
 
+function annualForChecks(row) {
+  if (row.extraCups === undefined) return row;
+  const match = EC.readCommunityShield(row);
+  if (!match) throw new Error('A recorded opener must pass its strict saved-result reader');
+  if (match.player.apps === 0) return row;
+  const p = match.player, rating = match.annualRating;
+  if (!Number.isFinite(rating)) throw new Error('A selected opener needs its recorded annual grade for league checks');
+  const annual = { ...row, apps: row.apps - p.apps, goals: row.goals - p.goals, assists: row.assists - p.assists,
+    cleanSheets: row.cleanSheets - p.cleanSheets, rating };
+  const forward = { apps: annual.apps + p.apps, goals: annual.goals + p.goals, assists: annual.assists + p.assists,
+    cleanSheets: annual.cleanSheets + p.cleanSheets,
+    rating: Math.round((annual.rating * annual.apps + p.rating) / (annual.apps + p.apps) * 10) / 10 };
+  for (const key of ['apps', 'goals', 'assists', 'cleanSheets', 'rating']) {
+    if (forward[key] !== row[key]) throw new Error('Independent annual plus opener must reproduce the saved ' + key);
+  }
+  return annual;
+}
+
 function onSeason(career, row, c) {
   stats.seasons += 1;
   const ctx = S.buildSoccerSeasonCtx(career, CLUBS, row);
@@ -412,7 +431,10 @@ function onSeason(career, row, c) {
   stats.ok[r.mode] += 1;
   bump(stats.attempts, r.attempt < 3 ? r.attempt : r.attempt < 10 ? '3-9' : '10+');
   bump(stats.repairs, r.repairs === 0 ? '0' : r.repairs <= 5 ? '1-5' : r.repairs <= 15 ? '6-15' : '16-40');
-  checkSeason(career, row, ctx, r, tag);
+  const annual = annualForChecks(row);
+  const expectedKey = `${career.playerName}|${row.club}|${row.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`;
+  if (r.key !== expectedKey) fail('16 annual replay key', `${tag}: derived key differs from the recorded annual inputs`);
+  checkSeason(career, annual, ctx, r, tag);
   /* 14 determinism: again, and from a JSON round trip of the row */
   const again = C.deriveSeason(S.SOCCER, row, ctx);
   const trip = C.deriveSeason(S.SOCCER, JSON.parse(JSON.stringify(row)), S.buildSoccerSeasonCtx(career, CLUBS, JSON.parse(JSON.stringify(row))));
@@ -425,8 +447,8 @@ function onSeason(career, row, c) {
     const simulationOnly = snapshot && ['Ligue 2', 'Serie B', 'Segunda Division'].includes(snapshot.league);
     const drawn = simulationOnly ? { leagueFinish: LW.drawLeagueWorldFinish(row, career.playerName, snapshot.members.length) } : LG.drawLeagueFinish({
       league: snapshot?.league ?? LG.leagueKeyInYear({ name: row.club, league: career.currentLeague }, row.year), year: row.year, tier: row.clubTier,
-      elite: LG.eliteInYear(soccer.ELITE_CLUBS, row.club, row.year), rating: row.rating, leagueTitle: false,
-      seedKey: `${career.playerName}|${row.club}|${row.year}|${row.apps}|${row.goals}|${row.assists}|${row.rating}`,
+      elite: LG.eliteInYear(soccer.ELITE_CLUBS, row.club, row.year), rating: annual.rating, leagueTitle: false,
+      seedKey: `${career.playerName}|${row.club}|${row.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}`,
     });
     if (drawn.leagueFinish === row.leagueFinish) stats.keyOk += 1; else { stats.keyBad += 1; fail('14 key', `${tag}: drew ${drawn.leagueFinish} for ${row.leagueFinish}`); }
   }

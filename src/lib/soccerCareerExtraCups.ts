@@ -25,6 +25,7 @@ export type ExtraCupQualification = CommunityShieldQualification | {
 export interface CommunityShieldResult {
   version: 1; competition: 'community-shield'; qualifyingYear: number; eventYear: number; seed: number;
   qualification: CommunityShieldQualification;
+  annualRating?: number;
   entrants: [CommunityShieldEntrant, CommunityShieldEntrant];
   minutes: 90; score: [number, number];
   decidedBy: 'normal-time' | 'penalties'; penalties?: [number, number]; winner: string;
@@ -195,7 +196,9 @@ export function readCommunityShield(row: unknown): CommunityShieldResult | null 
     if (!integer(total) || !integer(part) || total < part) return null;
   }
   if (typeof row.rating !== 'number' || !Number.isFinite(row.rating) || row.rating < 0 || row.rating > 10) return null;
-  return r as unknown as CommunityShieldResult;
+  const result = r as unknown as CommunityShieldResult;
+  if (Object.prototype.hasOwnProperty.call(r, 'annualRating') && !recordedAnnualStats(row, result)) return null;
+  return result;
 }
 export function communityShieldWinningSeasons(rows: readonly SeasonRecord[]): SeasonRecord[] {
   const held = rows.map(row => ({ row, match: readCommunityShield(row) }));
@@ -205,6 +208,25 @@ export function communityShieldWinningSeasons(rows: readonly SeasonRecord[]): Se
 }
 export function countCommunityShields(rows: readonly SeasonRecord[]): number {
   return communityShieldWinningSeasons(rows).length;
+}
+function recordedAnnualStats(row: Raw, result: CommunityShieldResult): CommunityShieldStats | null {
+  const p = result.player, rating = result.annualRating;
+  const apps = (row.apps as number) - p.apps;
+  if (typeof rating !== 'number' || !Number.isFinite(rating) || Math.abs(rating * 10 - Math.round(rating * 10)) > 1e-8
+    || (apps > 0 ? rating < 3 || rating > 10 : rating !== 0)) return null;
+  const annual = { apps, goals: (row.goals as number) - p.goals, assists: (row.assists as number) - p.assists,
+    cleanSheets: (row.cleanSheets as number) - p.cleanSheets, rating };
+  if (apps === 0 && (annual.goals !== 0 || annual.assists !== 0 || annual.cleanSheets !== 0)) return null;
+  const merged = communityShieldSeasonStats(annual, result);
+  return (['apps', 'goals', 'assists', 'cleanSheets', 'rating'] as const).every(key => merged[key] === row[key]) ? annual : null;
+}
+export function communityShieldAnnualStats(row: SeasonRecord): CommunityShieldStats | null {
+  const stats = { apps: row.apps, goals: row.goals, assists: row.assists, cleanSheets: row.cleanSheets, rating: row.rating };
+  if (row.extraCups === undefined) return stats;
+  const result = readCommunityShield(row);
+  if (!result) return null;
+  if (result.player.apps === 0) return stats;
+  return recordedAnnualStats(row as unknown as Raw, result);
 }
 export interface CommunityShieldStats {
   apps: number; goals: number; assists: number; cleanSheets: number; rating: number;
