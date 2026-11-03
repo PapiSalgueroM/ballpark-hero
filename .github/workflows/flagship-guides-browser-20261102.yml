@@ -1,0 +1,170 @@
+name: Flagship browser proof on the retained completed build
+
+on:
+  push:
+    branches: [codex/flagship-guides-browser-20261102]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Download and verify the one declared completed-build artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-browser"
+          PRIOR="$RUNNER_TEMP/flagship-built-proof"
+          ZIP="$RUNNER_TEMP/flagship-built-proof.zip"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$PRIOR"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "PRIOR_PROOF=$PRIOR" >> "$GITHUB_ENV"
+          curl --fail --location --silent --show-error --retry 0 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13196616570/zip \
+            --output "$ZIP"
+          echo "0cce91cfada95773ff6fa100c095fb7a00cc5b545e8dd68f422e1f53ad63cf61  $ZIP" | sha256sum --check
+          unzip -q "$ZIP" -d "$PRIOR"
+          test "$(cut -d' ' -f1 "$PRIOR/completed-dist.tar.gz.sha256")" = 48fe54de4d39df4c2eaf4846504be76e455cbcbeb952b3a32659f4f32b0ee862
+          echo "48fe54de4d39df4c2eaf4846504be76e455cbcbeb952b3a32659f4f32b0ee862  $PRIOR/completed-dist.tar.gz" | sha256sum --check
+          test ! -e dist
+          tar -xzf "$PRIOR/completed-dist.tar.gz" -C "$GITHUB_WORKSPACE"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-before.sha256"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/current-source.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.RUNNER_TEMP + '/flagship-browser';
+          const prior = process.env.RUNNER_TEMP + '/flagship-built-proof';
+          const builtSource = ['1d03cb27e3ff69b9b76d455aef55204e84ee9198', 'f2635be2408095cadf339a1e536ff3c4fac2e9bb'];
+          assert.deepEqual(fs.readFileSync(prior + '/source.txt', 'utf8').trim().split(/\s+/), builtSource);
+          const original = JSON.parse(fs.readFileSync(prior + '/source-before.json', 'utf8'));
+          assert.deepEqual(JSON.parse(fs.readFileSync(prior + '/source-after.json', 'utf8')), original);
+          const generated = JSON.parse(fs.readFileSync(prior + '/generated-paths.json', 'utf8'));
+          const driver = 'scripts/qa/flagshipGuidesBrowser20261102.mjs';
+          const workflow = '.github/workflows/flagship-guides-browser-20261102.yml';
+          const sha = p => crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          assert.deepEqual(tracked, [...Object.keys(original), ...generated, workflow].sort(), 'Only the declared workflow may be added');
+          for (const [p, hash] of Object.entries(original)) if (p !== driver) assert.equal(sha(p), hash, p);
+          assert.equal(sha(driver), 'cc724f1eee6b7428fa9afd6c7e4fffb65b3e4b5cc31f070ce0342c86e44a3a45');
+          for (const p of generated) assert.deepEqual(fs.readFileSync(p), fs.readFileSync(path.join(prior, 'original', p)), p);
+          const current = Object.fromEntries(tracked.map(p => [p, sha(p)]));
+          fs.writeFileSync(out + '/source-before.json', JSON.stringify(current, null, 2) + '\n');
+          fs.copyFileSync(prior + '/source.txt', out + '/built-source.txt');
+          fs.copyFileSync(prior + '/completed-dist.tar.gz.sha256', out + '/original-dist-record.txt');
+          fs.writeFileSync(out + '/association.json', JSON.stringify({
+            originalRun: 41558371315, originalJob: 125662719049, artifact: 13196616570,
+            zipSha256: '0cce91cfada95773ff6fa100c095fb7a00cc5b545e8dd68f422e1f53ad63cf61',
+            completedDistTarSha256: '48fe54de4d39df4c2eaf4846504be76e455cbcbeb952b3a32659f4f32b0ee862',
+            builtSource, originalSourceEntriesHeld: Object.keys(original).length - 1,
+            modifiedSourceException: driver, addedSourceException: workflow,
+            buildRepeated: false, readersRepeated: false, capsRepeated: false,
+            oldFailedRunsRemainFailed: [41556288444, 41558371315],
+          }, null, 2) + '\n');
+          NODE
+      - name: Install locked application and isolated browser dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          npm install --prefix "$RUNNER_TEMP/flagship-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/flagship-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Play only the corrected browser path on the same completed dist
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require $GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export BASE=http://127.0.0.1:4173
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          : > "$QA_OUT/transport/browser.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser.log" node scripts/qa/flagshipGuidesBrowser20261102.mjs 2>&1 | tee "$QA_OUT/logs/browser.log"
+          test ! -s "$QA_OUT/transport/browser.log"
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Retain association and verify unchanged source and completed dist
+        if: always()
+        run: |
+          set -euo pipefail
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+          cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.QA_OUT;
+          const before = JSON.parse(fs.readFileSync(out + '/source-before.json', 'utf8'));
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const after = Object.fromEntries(tracked.map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-after.json', JSON.stringify(after, null, 2) + '\n');
+          fs.writeFileSync(out + '/working-tree.txt', execFileSync('git', ['status', '--short']));
+          assert.deepEqual(after, before, 'Source or dependencies changed');
+          const report = JSON.parse(fs.readFileSync(out + '/browser/report.json', 'utf8'));
+          fs.writeFileSync(out + '/transport-summary.json', JSON.stringify({
+            nodeGuardReceipts: ['browser', 'server'].map(name => ({
+              name, blockedAttempts: fs.readFileSync(out + '/transport/' + name + '.log', 'utf8').split('\n').filter(Boolean).length,
+            })),
+            browserAbortedRequests: report.contexts.map(r => ({
+              viewport: r.viewport, actualAbortedRequests: r.blockedRequests.length,
+              origins: [...new Set(r.blockedRequests.map(x => x.origin))].sort(),
+              pageErrors: r.pageErrors,
+            })),
+            meaning: 'Node guard receipts and explicit browser aborts are separate observations; aborted requests are not zero transport attempts.',
+          }, null, 2) + '\n');
+          NODE
+      - name: Bound the retained artifact
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: flagship-browser-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-browser
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6

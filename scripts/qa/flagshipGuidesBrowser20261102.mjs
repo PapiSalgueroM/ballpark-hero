@@ -11,7 +11,7 @@ const report = { status: 'incomplete', sameCompletedDist: true, fontRendering: '
 const browser = await pw.chromium.launch({ headless: true });
 try {
   for (const viewport of [{ width: 320, height: 800 }, { width: 1280, height: 900 }]) {
-    const result = { viewport, status: 'incomplete', blockedRequests: [], pageErrors: [], panels: [] };
+    const result = { viewport, status: 'incomplete', blockedRequests: [], pageErrors: [], signings: [], panels: [] };
     report.contexts.push(result);
     const context = await browser.newContext({ viewport, serviceWorkers: 'block' });
     await context.route('**/*', async route => {
@@ -37,6 +37,24 @@ try {
       }
       await page.getByRole('tab', { name: 'Market', exact: true }).click();
       await page.getByRole('button', { name: /^Free agents \(/ }).click();
+      const initialPool = page.locator('section[aria-label="Free agents"]');
+      await initialPool.waitFor({ state: 'visible' });
+      result.initialEligible = await initialPool.locator('button[data-sign-index]:not(:disabled)').count() > 0;
+      assert.equal(result.initialEligible, true, 'INCOMPLETE: natural initial pool has no eligible signing action');
+      for (let attempt = 0; attempt < 30; attempt++) {
+        if (await initialPool.locator('button[data-sign-index]:disabled[aria-describedby]').count()) break;
+        const action = initialPool.locator('button[data-sign-index]:not(:disabled)').first();
+        if (!await action.count()) break;
+        const beforePoolCount = await initialPool.locator('button[data-sign-index]').count();
+        const name = await action.locator('..').locator('span[title]').first().getAttribute('title');
+        assert.ok(name);
+        await action.scrollIntoViewIfNeeded();
+        await action.click();
+        await page.waitForFunction(n => document.querySelectorAll('section[aria-label="Free agents"] button[data-sign-index]').length === n - 1, beforePoolCount);
+        const afterPoolCount = await initialPool.locator('button[data-sign-index]').count();
+        assert.equal(afterPoolCount, beforePoolCount - 1, 'A native signing must remove exactly its pool row');
+        result.signings.push({ name, beforePoolCount, afterPoolCount });
+      }
       let disabledIndex = null;
       let playerName = null;
       let blockReason = null;
@@ -47,7 +65,7 @@ try {
         const disabled = disabledIndex === null
           ? section.locator('button[data-sign-index]:disabled[aria-describedby]').first()
           : section.locator('button[data-sign-index="' + disabledIndex + '"]');
-        assert.ok(await disabled.count(), 'INCOMPLETE: natural initial pool has no disabled row with an associated reason');
+        assert.ok(await disabled.count(), 'INCOMPLETE: no disabled row after bounded native signings or pool exhaustion');
         assert.equal(await disabled.isDisabled(), true);
         const index = await disabled.getAttribute('data-sign-index');
         const id = await disabled.getAttribute('aria-describedby');
@@ -70,12 +88,9 @@ try {
         const reasonBounds = await reason.boundingBox();
         assert.ok(reasonBounds && reasonBounds.width > 0 && reasonBounds.height > 0);
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), true, 'Page has horizontal overflow');
-        const enabled = section.locator('button[data-sign-index]:not(:disabled)').first();
-        assert.ok(await enabled.count(), 'INCOMPLETE: natural initial pool has no eligible signing action');
-        assert.equal(await enabled.isEnabled(), true);
         const screenshot = viewport.width + '-' + panel + '.png';
         await page.screenshot({ path: path.join(OUT, screenshot) });
-        result.panels.push({ panel, playerName, reason: text, disabledIndex, bounds, screenshot, eligibleActionEnabled: true, boughtAnyone: false });
+        result.panels.push({ panel, playerName, reason: text, disabledIndex, bounds, screenshot, initialEligible: result.initialEligible, actualSignings: result.signings.length });
       }
       assert.deepEqual(result.pageErrors, []);
       assert.equal(result.panels.length, 2);
