@@ -1,0 +1,163 @@
+name: German Supercup ordinary Vite bundle diagnostic
+on:
+  push:
+    branches: [codex/sc-german-supercup-bundle-probe-20261103]
+permissions:
+  contents: read
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Bind one diagnostic workflow and the held focused-fix source
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-german-supercup-bundle-probe"
+          test ! -e "$OUT"; mkdir "$OUT"
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/sc-german-supercup-bundle-probe-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = e46b39130a56bea4b0cf0e4091a281356f52b854
+          test "$(git rev-parse 'HEAD^^{tree}')" = b37f80c4d2602bcd08679e7432a6276cef31dd07
+          git rev-parse HEAD 'HEAD^{tree}' > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t.github/workflows/sc-german-supercup-bundle-probe.yml\n' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          test "$(git ls-tree -r --name-only HEAD^ | wc -l)" -eq 5671
+          test "$(git ls-files | wc -l)" -eq 5672
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          git ls-files --others --exclude-standard -z > "$OUT/untracked.before"
+          test ! -s "$OUT/untracked.before"
+          test ! -e dist
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            local code=0
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr" || code=$?
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 16 "$OUT/$tag.stdout"; tail -n 16 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from guarded execution
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.before"
+          xargs -0 sha256sum < "$OUT/dependency-members.before" > "$OUT/dependency.sha256"
+      - name: Proper app types then ordinary Vite build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          capture build-script node --input-type=module <<'PACKAGE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const script=JSON.parse(fs.readFileSync('package.json','utf8')).scripts.build;
+          fs.writeFileSync(process.env.OUT+'/build-script.json',JSON.stringify({script,scope:'Ordinary Vite build only, no SEO generation or browser qualification.'},null,2)+'\n');
+          assert.equal(script,'vite build');
+          PACKAGE
+          capture types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          capture build npm run build
+          capture inventory node --input-type=module <<'INVENTORY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {gzipSync} from 'node:zlib';
+          const out=process.env.OUT, root=path.resolve('dist'), sha=b=>createHash('sha256').update(b).digest('hex');
+          const rows=[];
+          function walk(dir) {
+            for(const entry of fs.readdirSync(dir,{withFileTypes:true}).sort((a,b)=>a.name<b.name?-1:a.name>b.name?1:0)) {
+              const file=path.join(dir,entry.name);
+              assert.equal(entry.isSymbolicLink(),false,'Generated output must be an actual regular file or directory');
+              if(entry.isDirectory())walk(file);
+              else {
+                assert.equal(entry.isFile(),true);
+                const body=fs.readFileSync(file),relative=path.relative(root,file).split(path.sep).join('/');
+                rows.push({path:relative,bytes:body.length,sha256:sha(body),gzipBytes:/\.(?:m?js|css)$/.test(relative)?gzipSync(body).length:null});
+              }
+            }
+          }
+          walk(root);
+          assert(rows.length>0);
+          const assets=rows.filter(row=>row.path.startsWith('assets/'));
+          const manifests=rows.filter(row=>row.path==='.vite/manifest.json'||row.path==='manifest.json');
+          const metadata={schemaVersion:1,scope:'Diagnostic ordinary Vite output only. Per-file gzip is measured independently and is not a cold-route metric or cap result.',
+            parent:'e46b39130a56bea4b0cf0e4091a281356f52b854',files:rows.length,assets:assets.length,manifestPresent:manifests.length>0,
+            manifests,rows,baselineComparison:{status:'UNRUN',reason:'No old filename mapping or route closure is assumed. Prior qualified836.6KiB and840KiB cap are context only, not a measurement of this build.'},
+            fullSEOAndReaders:'UNRUN',unchanged16Caps:'UNRUN',appBrowser:'UNRUN',runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN'};
+          fs.writeFileSync(out+'/dist-inventory.json',JSON.stringify(metadata,null,2)+'\n');
+          fs.mkdirSync(out+'/built-manifests');
+          for(let i=0;i<manifests.length;i++)fs.copyFileSync(path.join(root,manifests[i].path),path.join(out,'built-manifests',i+'-manifest.json'));
+          for(const row of rows) {
+            const body=fs.readFileSync(path.join(root,row.path));
+            assert.equal(body.length,row.bytes);assert.equal(sha(body),row.sha256,'Generated output remains stable after measurement');
+          }
+          fs.writeFileSync(out+'/dist.sha256',rows.map(row=>row.sha256+'  dist/'+row.path).join('\n')+'\n');
+          fs.writeFileSync(out+'/inventory-held.json',JSON.stringify({files:rows.length,assets:assets.length,actualBytesRechecked:true,scope:'No game readiness or route-cap admission.'},null,2)+'\n');
+          console.log('GERMAN_BUNDLE_DIAGNOSTIC: '+rows.length+' output files and '+assets.length+' assets measured, manifests '+manifests.length+'. No cold-route cap or App credit.');
+          INVENTORY
+      - name: Always retain source dependency output and membership custody
+        if: always()
+        run: |
+          set -euo pipefail
+          code=0
+          if test -d "$OUT"; then
+            if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log" 2>&1 || code=1; fi
+            if test -f "$OUT/dependency.sha256"; then sha256sum --check "$OUT/dependency.sha256" > "$OUT/dependency-held.log" 2>&1 || code=1; fi
+            git ls-files -z > "$OUT/source-members.after"
+            if test -f "$OUT/source-members.before"; then cmp "$OUT/source-members.before" "$OUT/source-members.after" > "$OUT/source-members.log" 2>&1 || code=1; fi
+            test "$(git ls-files | wc -l)" -eq 5672 || code=1
+            if test -d node_modules; then
+              find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.after"
+              if test -f "$OUT/dependency-members.before"; then cmp "$OUT/dependency-members.before" "$OUT/dependency-members.after" > "$OUT/dependency-members.log" 2>&1 || code=1; fi
+            fi
+            if test -f "$OUT/dist.sha256"; then sha256sum --check "$OUT/dist.sha256" > "$OUT/dist-held.log" 2>&1 || code=1; fi
+            git diff --exit-code HEAD > "$OUT/source-diff.log" 2>&1 || code=1
+            git ls-files --others --exclude-standard -z > "$OUT/untracked.after"
+            test ! -s "$OUT/untracked.after" || code=1
+            if find "$OUT" -name '*.transport' -type f ! -size 0 | grep -q .; then code=1; fi
+            printf '%s\n' "$code" > "$OUT/holds.exit"
+          else code=1; fi
+          exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-german-supercup-bundle-probe-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/sc-german-supercup-bundle-probe
+            ${{ github.workspace }}/dist/assets
+          if-no-files-found: error
+          retention-days: 14
