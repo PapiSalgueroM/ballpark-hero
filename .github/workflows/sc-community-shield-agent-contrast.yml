@@ -1,0 +1,227 @@
+name: Community Shield four-call historical career diagnostic
+on:
+  push:
+    branches: [codex/sc-community-shield-agent-contrast-20261103]
+permissions:
+  contents: read
+jobs:
+  contrast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Bind the exact failed owner graph and three QA-only additions
+        run: |
+          set -euo pipefail
+          BINDMETA="$RUNNER_TEMP/sc-agent-baseline-binding"
+          test ! -e "$BINDMETA"; mkdir "$BINDMETA"
+          printf 'BINDMETA=%s\n' "$BINDMETA" >> "$GITHUB_ENV"
+          printf 'SC_AGENT_BASELINE_META=%s\n' "$RUNNER_TEMP/sc-agent-baseline-caller" >> "$GITHUB_ENV"
+          printf 'SC_AGENT_BASELINE_OUT=%s\n' "$GITHUB_WORKSPACE/tmp/sc-agent-baseline-$GITHUB_RUN_ID" >> "$GITHUB_ENV"
+          printf 'SC_AGENT_BASELINE_EVIDENCE=%s\n' "$RUNNER_TEMP/sc-agent-baseline-original197" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-agent-contrast-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = 3dcb4b897b58a4731b2b2ab10b622213b0f071e7
+          test "$(git rev-parse 'HEAD^^{tree}')" = 499807432461712c8cd73572fe013a62d9a726a7
+          test "$(git rev-parse --is-shallow-repository)" = false
+          git rev-parse HEAD 'HEAD^{tree}' > "$BINDMETA/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$BINDMETA/changed-paths.txt"
+          cat > "$BINDMETA/expected-paths.txt" <<'PATHS'
+          A	.github/workflows/sc-community-shield-agent-contrast.yml
+          A	scripts/data/scAgentBaseline197.json.gz
+          A	scripts/qa/probeSoccerAgentReviewBaseline.mjs
+          PATHS
+          cmp "$BINDMETA/expected-paths.txt" "$BINDMETA/changed-paths.txt"
+          cat > "$BINDMETA/pins.txt" <<'PINS'
+          scripts/qa/probeSoccerAgentReviewBaseline.mjs 39aeffe8f586b28f310561448a152773e40ffd22
+          scripts/data/scAgentBaseline197.json.gz 7d657016e3a7c87b23e117d92fc11cb07dcc1ea3
+          scripts/qa/soccerAgentReviewKit.mjs d6ca063fb64f3b556ed9c484af22574d5974fb63
+          scripts/lib/communityShieldOracleCompat.mjs 1ed3b4103bc3805ccd08f72eeb181558fa892d23
+          src/lib/soccerCareerEngine.ts a65c8353d6e4660c1d6cec6471e17095eed35805
+          src/lib/soccerCareerExtraCups.ts f96d2442942db57eb89d3d73d7dc18bba02ec165
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          scripts/data/careerLeagueWorldSaves1100.json 81425f731297f0ff72fc4e163dfe1a4cb86814ab
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$BINDMETA/pins.txt"
+          test "$(git ls-files | wc -l)" -eq 5678
+          git ls-files -z > "$BINDMETA/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$BINDMETA/source.sha256"
+          git ls-files --others --exclude-standard -z > "$BINDMETA/untracked.before"
+          test ! -s "$BINDMETA/untracked.before"
+      - name: Locked online install before guarded diagnostic execution
+        run: |
+          set -euo pipefail
+          code=0; NODE_OPTIONS='' npm ci > "$BINDMETA/install.stdout" 2> "$BINDMETA/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$BINDMETA/install.exit"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$BINDMETA/dependency-members.before"
+          xargs -0 sha256sum < "$BINDMETA/dependency-members.before" > "$BINDMETA/dependency.sha256"
+      - name: Restore five exact already-acquired original artifact members
+        run: |
+          set -euo pipefail
+          printf '%s  %s\n' 7ce0a8a02f72330358b4c0a036eef92cf74b3ff645a935e9b9ad1fac38f12906 scripts/data/scAgentBaseline197.json.gz | sha256sum --check > "$BINDMETA/carrier-pin.log"
+          : > "$BINDMETA/carrier.transport"
+          code=0
+          NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" SIM_OFFLINE_RECEIPT="$BINDMETA/carrier.transport" node --input-type=module > "$BINDMETA/carrier.stdout" 2> "$BINDMETA/carrier.stderr" <<'RESTORE' || code=$?
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { gunzipSync } from 'node:zlib';
+          const sha = value => createHash('sha256').update(value).digest('hex');
+          const raw = fs.readFileSync('scripts/data/scAgentBaseline197.json.gz');
+          assert.equal(raw.length, 1269134); assert.equal(sha(raw), '7ce0a8a02f72330358b4c0a036eef92cf74b3ff645a935e9b9ad1fac38f12906');
+          const decoded = gunzipSync(raw, { maxOutputLength: 3748525 });
+          assert.equal(decoded.length, 3748525); assert.equal(sha(decoded), '74e0964ccdbf24cc8f6cb3febec7dd93af3520e837884cd274a4ef5b5105bd45');
+          const carrier = JSON.parse(decoded.toString('utf8'));
+          assert.equal(carrier.schemaVersion, 1); assert.equal(carrier.sourceRun, 41597116619); assert.equal(carrier.sourceArtifact, 13212464099);
+          const expected = [{"path":"dependency.sha256","bytes":2921411,"sha256":"0bb6d0967ebc301dbc5bc370d7c866fe844e22b80849e3e1761709ad51685c63"},{"path":"evidence/owner-agent-review.stderr","bytes":87378,"sha256":"2c8863a64c22e90185db164ad9f2f137fc87c0464475194f8b76970f0a7bd55b"},{"path":"evidence/owners/agent-review/outcomes.json","bytes":113604,"sha256":"b829052d359853d5dcad6a1f372cd80aa0be5cd2e3c7791ff9986f7250bf9ef4"},{"path":"head-tree.txt","bytes":82,"sha256":"55a4054a6d46e65440d54eafbcbe612fcd65cb6c8f2a02940966249a76a55977"},{"path":"source.sha256","bytes":582823,"sha256":"88761da0d35fa75dc8dbfeb38e692bced9d1f288413b2e7bcc8d5ef7d6fc4484"}];
+          assert.equal(carrier.members.length, expected.length);
+          assert.deepEqual(carrier.members.map(row => ({ path: row.path, bytes: row.bytes, sha256: row.sha256 })), expected);
+          const root = process.env.SC_AGENT_BASELINE_EVIDENCE;
+          assert(root && path.isAbsolute(root)); assert.equal(fs.existsSync(root), false);
+          fs.mkdirSync(root);
+          for (const row of carrier.members) {
+            assert(!path.isAbsolute(row.path) && !row.path.split('/').includes('..'));
+            const value = Buffer.from(row.text, 'utf8'); assert.equal(value.length, row.bytes); assert.equal(sha(value), row.sha256);
+            const file = path.join(root, row.path); fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, value, { flag: 'wx' });
+            assert.deepEqual(fs.readFileSync(file), value);
+          }
+          fs.writeFileSync(path.join(process.env.BINDMETA, 'carrier-receipt.json'), JSON.stringify({ rawBytes: raw.length, rawSha256: sha(raw), decodedBytes: decoded.length, decodedSha256: sha(decoded), members: expected, originalArtifactReacquired: false }) + '\n');
+          console.log('BASELINE_CARRIER: five exact original members restored, no artifact reacquisition');
+          RESTORE
+          printf '%s\n' "$code" > "$BINDMETA/carrier.exit"
+          test ! -s "$BINDMETA/carrier.transport"
+          test "$code" -eq 0
+      - name: Four actual whole-state advances with retained closed source graphs
+        run: |
+          set -euo pipefail
+          cat > "$BINDMETA/REMOTE-CALLER.sh" <<'CALLER'
+          #!/usr/bin/env bash
+          # Remote-only caller. Root binds a fresh QA branch and installs the locked package graph online first.
+          set -euo pipefail
+          test "$CI" = 1; test "$SIM_NETWORK" = offline
+          ROOT="$PWD"; META="$SC_AGENT_BASELINE_META"
+          test ! -e "$META"; mkdir -p "$META"
+          test "$SC_AGENT_BASELINE_OUT" = "$(realpath -m -- "$SC_AGENT_BASELINE_OUT")"
+          case "$SC_AGENT_BASELINE_OUT" in "$ROOT"/tmp/*) ;; *) echo 'Output must be canonical workspace/tmp' >&2; exit 1;; esac
+          test ! -e "$SC_AGENT_BASELINE_OUT"; mkdir -p "$(dirname "$SC_AGENT_BASELINE_OUT")"
+          export META
+          test "$(git rev-parse --is-shallow-repository)" = false
+          test "$(git rev-parse HEAD:package.json)" = 2ff64986fb76ebc51b706f2fd24765768874008a
+          test "$(git rev-parse HEAD:package-lock.json)" = 97d6f12a052f25f400462938c241789a083f0bfe
+          printf '%s  %s\n' 'ec0c363be4f0d172846257674fc76d975274225078d516148ec67ecb8e32eaf1' scripts/qa/probeSoccerAgentReviewBaseline.mjs | sha256sum --check > "$META/producer-pin.log"
+          git ls-files -z > "$META/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$META/source.sha256"
+          git ls-files --others --exclude-standard -z > "$META/untracked.before"; test ! -s "$META/untracked.before"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$META/dependency-members.before"
+          xargs -0 sha256sum < "$META/dependency-members.before" > "$META/dependency.sha256"
+          finish() {
+            local primary=$? secondary=0
+            trap - EXIT
+            sha256sum --check "$META/source.sha256" > "$META/source-held.log" 2>&1 || secondary=1
+            sha256sum --check "$META/dependency.sha256" > "$META/dependency-held.log" 2>&1 || secondary=1
+            git ls-files -z > "$META/source-members.after"
+            cmp "$META/source-members.before" "$META/source-members.after" > "$META/source-members.log" 2>&1 || secondary=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$META/dependency-members.after"
+            cmp "$META/dependency-members.before" "$META/dependency-members.after" > "$META/dependency-members.log" 2>&1 || secondary=1
+            git diff --exit-code > "$META/source-diff.log" 2>&1 || secondary=1
+            git ls-files --others --exclude-standard -z > "$META/untracked.after"; test ! -s "$META/untracked.after" || secondary=1
+            if find "$META" -maxdepth 1 -name '*.transport' -type f ! -size 0 | grep -q .; then secondary=1; fi
+            if test -d "$SC_AGENT_BASELINE_OUT"; then cp -a "$SC_AGENT_BASELINE_OUT" "$META/evidence" || secondary=1; fi
+            printf '{"schemaVersion":1,"primaryExit":%s,"secondaryHoldExit":%s,"runtimeCounters":null,"runtimeCounterCompleteness":"UNKNOWN"}\n' "$primary" "$secondary" > "$META/caller-receipt.json"
+            if test "$primary" -ne 0; then exit "$primary"; fi
+            exit "$secondary"
+          }
+          trap finish EXIT
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$META/$tag.exit"
+            printf '%s\0' "$@" > "$META/$tag.argv"; : > "$META/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$META/$tag.transport" "$@" > "$META/$tag.stdout" 2> "$META/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$META/$tag.exit"
+            tail -n 12 "$META/$tag.stdout"; tail -n 12 "$META/$tag.stderr"
+            test ! -s "$META/$tag.transport" || return 1
+            return "$code"
+          }
+          export NODE_OPTIONS="--require=$ROOT/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          unset SOCCER_AGENT_REVIEW_IMPORT_ONLY
+          capture types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          capture producer-syntax node --check scripts/qa/probeSoccerAgentReviewBaseline.mjs
+          capture diagnostic node scripts/qa/probeSoccerAgentReviewBaseline.mjs
+          capture raw-verifier node --input-type=module <<'VERIFY'
+          import assert from 'node:assert/strict'; import fs from 'node:fs'; import path from 'node:path';
+          const out=process.env.SC_AGENT_BASELINE_OUT,meta=process.env.META,read=file=>JSON.parse(fs.readFileSync(path.join(out,file),'utf8'));
+          const summary=read('summary.json'),receipt=read('receipt.json');
+          assert.equal(summary.diagnosticCompleted,true);assert.equal(summary.qualification,false);assert.equal(summary.actualAdvanceCalls,4);assert.equal(summary.actualReadCalls,2);
+          assert.equal(summary.builds.length,4);assert.equal(summary.comparisons.length,2);
+          assert.equal(summary.comparisons[0].id,'reproduction');assert.equal(summary.comparisons[0].wholeValueAndDraws.equal,false);
+          assert.equal(summary.comparisons[0].currentLeague,'Ligue 1');assert.equal(summary.comparisons[0].originalLeague,'Ligue 2');
+          assert.equal(summary.comparisons[1].id,'pre-shield');assert.equal(typeof summary.comparisons[1].wholeValueAndDraws.equal,'boolean');
+          assert.equal(receipt.diagnosticCompleted,true);assert.equal(receipt.actualAdvanceCalls,4);assert.equal(receipt.actualReadCalls,2);assert.equal(receipt.primary,null);assert.deepEqual(receipt.secondary,[]);assert.equal(receipt.removedKitCopy,true);
+          assert.equal(receipt.runtimeCounters,null);assert.equal(receipt.runtimeCounterCompleteness,'UNKNOWN');
+          for(const mode of ['reproduce-current','reproduce-original','pre-shield-current','raw-original']){
+            for(const file of ['engine.cjs','metafile.json','source-records.json','closure.json','kit-loaded.json','advance.json','complete-return.v8'])assert(fs.statSync(path.join(out,mode,file)).size>0);
+          }
+          for(const tag of ['types','producer-syntax','diagnostic']){
+            assert.equal(Number(fs.readFileSync(path.join(meta,tag+'.exit'),'utf8')),0);assert.equal(fs.statSync(path.join(meta,tag+'.transport')).size,0);
+            const raw=fs.readFileSync(path.join(meta,tag+'.stdout'),'utf8')+'\n'+fs.readFileSync(path.join(meta,tag+'.stderr'),'utf8');
+            assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Failed to load url|Cannot find (?:module|package)|SyntaxError:|ReferenceError:|TypeError:/i.test(raw),false);
+          }
+          console.log('AGENT_BASELINE_RAW: completed four-call diagnostic only; pre-Shield agreement or disagreement retained without adoption');
+          VERIFY
+          CALLER
+          printf '%s  %s\n' 3f12e2f37be04ff798d8a04693d51d8ec009ce03a25df5c3fa01d25c6ffb2bad "$BINDMETA/REMOTE-CALLER.sh" | sha256sum --check > "$BINDMETA/caller-pin.log"
+          code=0; bash "$BINDMETA/REMOTE-CALLER.sh" > "$BINDMETA/caller.stdout" 2> "$BINDMETA/caller.stderr" || code=$?
+          printf '%s\n' "$code" > "$BINDMETA/caller.exit"
+          tail -n 16 "$BINDMETA/caller.stdout"; tail -n 16 "$BINDMETA/caller.stderr"
+          test "$code" -eq 0
+      - name: Retain complete source and dependency holds
+        if: always()
+        run: |
+          set -euo pipefail
+          code=0
+          if test -d "$BINDMETA"; then
+            if test -f "$BINDMETA/source.sha256"; then sha256sum --check "$BINDMETA/source.sha256" > "$BINDMETA/source-held.log" 2>&1 || code=1; fi
+            if test -f "$BINDMETA/dependency.sha256"; then sha256sum --check "$BINDMETA/dependency.sha256" > "$BINDMETA/dependency-held.log" 2>&1 || code=1; fi
+            git ls-files -z > "$BINDMETA/source-members.after"
+            if test -f "$BINDMETA/source-members.before"; then cmp "$BINDMETA/source-members.before" "$BINDMETA/source-members.after" > "$BINDMETA/source-members.log" 2>&1 || code=1; fi
+            if test -d node_modules; then
+              find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$BINDMETA/dependency-members.after"
+              if test -f "$BINDMETA/dependency-members.before"; then cmp "$BINDMETA/dependency-members.before" "$BINDMETA/dependency-members.after" > "$BINDMETA/dependency-members.log" 2>&1 || code=1; fi
+            fi
+            git diff --exit-code > "$BINDMETA/source-diff.log" 2>&1 || code=1
+            git ls-files --others --exclude-standard -z > "$BINDMETA/untracked.after"; test ! -s "$BINDMETA/untracked.after" || code=1
+            if find "$BINDMETA" -maxdepth 1 -name '*.transport' -type f ! -size 0 | grep -q .; then code=1; fi
+            printf '%s\n' "$code" > "$BINDMETA/holds.exit"
+          else code=1; fi
+          exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-agent-baseline-contrast
+          path: |
+            ${{ runner.temp }}/sc-agent-baseline-binding
+            ${{ runner.temp }}/sc-agent-baseline-caller
+          if-no-files-found: error
+          retention-days: 14
