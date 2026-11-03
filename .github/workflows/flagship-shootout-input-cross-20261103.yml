@@ -1,0 +1,175 @@
+name: Requested release identical-input Shootout cross-over
+on:
+  push:
+    branches: [codex/flagship-shootout-cross-20261103]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: flagship-shootout-cross-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  crossover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the exact trace parent and two new QA files
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-shootout-cross"
+          mkdir -p "$OUT/transport" "$OUT/reference"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = b8752befa860442e3ac2ad7c4d569d5ef0723704
+          test "$(git rev-parse HEAD^^{tree})" = 239734a817856a2aa09b416a8e4935d98596106b
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 9d8dc92557bf2f4358b5be044359354eda841769
+          test "$(git hash-object src/lib/clubManager.ts)" = 9d8dc92557bf2f4358b5be044359354eda841769
+          test "$(git hash-object scripts/simCmShootoutOrder.mjs)" = 8d348809a1cb6556d6628fa6571e0c38b3005bf1
+          printf '%s  %s\n' 1c6ca97d5fc6a4086d1da9a266cac009edeb9cf3f2c5318c6f5ef788b608291a scripts/qa/cmShootoutInputCrossover.mjs | sha256sum --check
+          git diff --name-status HEAD^ HEAD > "$OUT/candidate-diff.txt"
+          printf 'A\t.github/workflows/flagship-shootout-input-cross-20261103.yml\nA\tscripts/qa/cmShootoutInputCrossover.mjs\n' > "$OUT/expected-diff.txt"
+          cmp "$OUT/expected-diff.txt" "$OUT/candidate-diff.txt"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/outer-source-before.sha256"
+          test "$(wc -l < "$OUT/outer-source-before.sha256")" -eq 5674
+          git status --porcelain=v1 --untracked-files=all > "$OUT/outer-status-before.txt"
+          test ! -s "$OUT/outer-status-before.txt"
+          cp scripts/qa/cmShootoutInputCrossover.mjs "$OUT/caller-source.mjs"
+      - name: Read the exact once-qualified trace carrier
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          API="https://api.github.com/repos/PapiSalgueroM/ballpark-hero"
+          curl --fail --silent --show-error -H "Authorization: Bearer $GH_TOKEN" "$API/actions/runs/41700778928" > "$QA_OUT/carrier-run.json"
+          curl --fail --silent --show-error -H "Authorization: Bearer $GH_TOKEN" "$API/actions/jobs/126143173058" > "$QA_OUT/carrier-job.json"
+          curl --fail --silent --show-error -H "Authorization: Bearer $GH_TOKEN" "$API/actions/artifacts/13263322201" > "$QA_OUT/carrier-artifact.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const p=process.env.QA_OUT,read=n=>JSON.parse(fs.readFileSync(p+'/'+n,'utf8'));
+          const run=read('carrier-run.json'),job=read('carrier-job.json'),a=read('carrier-artifact.json');
+          assert.equal(run.id,41700778928);assert.equal(run.head_sha,'b8752befa860442e3ac2ad7c4d569d5ef0723704');
+          assert.equal(run.status,'completed');assert.equal(run.conclusion,'failure');
+          assert.equal(job.id,126143173058);assert.equal(job.run_id,run.id);assert.equal(job.head_sha,run.head_sha);
+          assert.equal(job.status,'completed');assert.equal(job.conclusion,'failure');
+          assert.equal(a.id,13263322201);assert.equal(a.expired,false);assert.equal(a.size_in_bytes,4543153);
+          assert.equal(a.workflow_run.id,run.id);assert.equal(a.workflow_run.head_sha,run.head_sha);
+          NODE
+          curl --fail --silent --show-error --location -H "Authorization: Bearer $GH_TOKEN" "$API/actions/artifacts/13263322201/zip" > "$QA_OUT/original-trace.zip"
+          test "$(wc -c < "$QA_OUT/original-trace.zip")" -eq 4543153
+          printf '%s  %s\n' f9613edda881528022631869b82a3b663ac600d86b831e9fc2c77909025f028f "$QA_OUT/original-trace.zip" | sha256sum --check
+          unzip -q "$QA_OUT/original-trace.zip" -d "$QA_OUT/reference"
+          test "$(sed -n '1p' "$QA_OUT/reference/source.txt")" = b8752befa860442e3ac2ad7c4d569d5ef0723704
+          test "$(sed -n '2p' "$QA_OUT/reference/source.txt")" = 239734a817856a2aa09b416a8e4935d98596106b
+          test "$(cat "$QA_OUT/reference/vanilla/native.exit")" = 1
+          test "$(cat "$QA_OUT/reference/observed/native.exit")" = 1
+          cmp "$QA_OUT/reference/source-before.json" "$QA_OUT/reference/source-after.json"
+          cmp "$QA_OUT/reference/outer-source-before.sha256" "$QA_OUT/reference/outer-source-after.sha256"
+          test ! -s "$QA_OUT/reference/outer-source-diff.txt"
+          test ! -s "$QA_OUT/reference/outer-status-after.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const p=process.env.QA_OUT+'/reference',read=n=>JSON.parse(fs.readFileSync(p+'/'+n,'utf8'));
+          const r=read('trace-admission.json');assert.equal(r.traceEligible,true);assert.equal(r.sourceHeld,true);assert.equal(r.cleanAfter,true);
+          assert.deepEqual(r.nativeExits,{vanilla:1,observed:1});assert.equal(r.originalAssertionsWaived,false);assert.equal(r.fixtureRows,150);
+          const a=read('vanilla/normal-baseline.json'),b=read('observed/normal-baseline.json');
+          for(const key of r.outcomeFieldsExact)assert.deepEqual(a[key],b[key],key);
+          assert.equal(a.rows.length,150);assert.equal(a.namedBase.rows,300);assert.equal(a.firstDifference.seed,782100);
+          assert.equal(a.runtimeErrors.length,0);assert.equal(b.runtimeErrors.length,0);
+          assert.equal(Object.values(a.failedSections).flat().length,4);
+          NODE
+          find "$QA_OUT/reference" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/reference-before.sha256"
+      - name: Install unchanged locked dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper unchanged application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/types.exit"
+          test "$code" -eq 0
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Four actual one-match cells with strict diagonal reproduction
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          unset SIM_SEED CM_SHOOTOUT_CONTROL CM_SHOOTOUT_WRITE_FIXTURE ONLY BROWSER
+          set +e
+          node scripts/qa/cmShootoutInputCrossover.mjs --out "$QA_OUT/cross" --evidence "$QA_OUT/reference" > "$QA_OUT/caller.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/caller.exit"
+          tail -n 12 "$QA_OUT/caller.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const p=process.env.QA_OUT,r=JSON.parse(fs.readFileSync(p+'/cross/crossover-admission.json','utf8'));
+          assert.equal(r.comparisonEligible,true);assert.equal(r.sourceHeld,true);assert.equal(r.cleanAfter,true);
+          assert.equal(r.originalFailuresWaived,false);assert.deepEqual(r.originalNativeExits,{vanilla:1,observed:1});
+          assert.equal(r.matrix.length,4);assert(r.matrix.every(c=>c.eligible&&c.nativeExit===0&&!c.signal&&!c.error));
+          assert.equal(r.diagonals.length,2);assert(r.diagonals.every(c=>c.fullOriginalReportAndStateEqual));
+          assert.equal(r.comparisons.length,2);assert(r.comparisons.every(c=>typeof c.paired==='boolean'));
+          for(const key of ['changedActualNextDraw','diagonalIdentityRejected','exactOriginalComparatorRejected'])assert.equal(r.checkerControls[key],true);
+          console.log('Cross-over evidence eligible, not gameplay PASS. All original four failures remain unwaived.');
+          NODE
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          test "$code" -eq 1
+          # This diagnostic deliberately keeps the original native failure.
+          exit "$code"
+      - name: Retain all current and original evidence unchanged
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/outer-source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/outer-source-after.sha256"
+          cmp "$QA_OUT/outer-source-before.sha256" "$QA_OUT/outer-source-after.sha256"
+          sha256sum --check "$QA_OUT/outer-source-before.sha256" > "$QA_OUT/outer-source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/outer-status-after.txt"
+          cmp "$QA_OUT/outer-status-before.txt" "$QA_OUT/outer-status-after.txt"
+          if test -f "$QA_OUT/reference-before.sha256"; then
+            find "$QA_OUT/reference" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/reference-after.sha256"
+            cmp "$QA_OUT/reference-before.sha256" "$QA_OUT/reference-after.sha256"
+            sha256sum --check "$QA_OUT/reference-before.sha256" > "$QA_OUT/reference-held.log"
+          fi
+          find "$QA_OUT" \( -name '*transport.log' -o -path "$QA_OUT/transport/*.log" \) -type f | sort > "$QA_OUT/transport-files.txt"
+          while IFS= read -r receipt; do test ! -s "$receipt"; done < "$QA_OUT/transport-files.txt"
+      - name: Bound all retained evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.artifact.outputs.ready == 'true'
+        with:
+          name: flagship-shootout-input-cross-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-shootout-cross
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
