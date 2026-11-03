@@ -1,0 +1,236 @@
+name: German annual reconstruction oracle compatibility
+on:
+  push:
+    branches: [codex/sc-german-supercup-annual-oracles-20261103]
+permissions:
+  contents: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      NO_COLOR: '1'
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Bind the exact script-only source correction
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-german-supercup-annual-oracles"
+          test ! -e "$OUT"; mkdir "$OUT"
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/sc-german-supercup-annual-oracles-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = e46b39130a56bea4b0cf0e4091a281356f52b854
+          test "$(git rev-parse 'HEAD^^{tree}')" = b37f80c4d2602bcd08679e7432a6276cef31dd07
+          test "$(git rev-parse --is-shallow-repository)" = false
+          git rev-parse HEAD 'HEAD^{tree}' > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t.github/workflows/sc-german-supercup-annual-oracles.yml\nM\tscripts/simCareerDerbies.mjs\nM\tscripts/simSeasonCentreAgreement.mjs\n' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          test "$(git rev-parse 'HEAD^:scripts/simSeasonCentreAgreement.mjs')" = 3fbcd99a4936a13eaec7eb6eb4055b7b568452cf
+          test "$(git rev-parse 'HEAD^:scripts/simCareerDerbies.mjs')" = 2b6c96cdb99b67d8d3001a0b3a014edb8ce52fb4
+          cat > "$OUT/pins.txt" <<'PINS'
+          scripts/simSeasonCentreAgreement.mjs c45c8a1d9e678810a6607de443e0afcddfbaf6bc
+          scripts/simCareerDerbies.mjs 35aa9d024ed69aa3f64defbb3086d11da1e1a039
+          src/lib/soccerCareerEngine.ts 7ab833904768c34cdba6ed49656eba95647d9379
+          src/lib/soccerCareerExtraCups.ts 369ded47ea71cfe6f98441e09817450c3f2ebcca
+          src/lib/season/soccer.ts 1b7958da501755adcc95879da3e8d65c4d593845
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/pins.txt"
+          test "$(git ls-files | wc -l)" -eq 5672
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          git ls-files --others --exclude-standard -z > "$OUT/untracked.before"; test ! -s "$OUT/untracked.before"
+      - name: Locked online install
+        run: |
+          set -euo pipefail
+          code=0; NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.before"
+          xargs -0 sha256sum < "$OUT/dependency-members.before" > "$OUT/dependency.sha256"
+      - name: Proper types, source proofs and all seven actual owner calls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP CAREERS SEEDSET ANCHOR_CONTROL FORCE_COLOR
+          while IFS='=' read -r name rest; do
+            case "$name" in AGREEMENT_*|SIM_DERBY_*) unset "$name";; esac
+          done < <(env)
+          mkdir "$OUT/tool-tmp"
+          export TMP="$OUT/tool-tmp" TEMP="$OUT/tool-tmp"
+          capture(){
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"; : > "$OUT/$tag.transport"
+            local code=0; SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr" || code=$?
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            return 0
+          }
+          capture types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          test "$(cat "$OUT/types.exit")" -eq 0; test ! -s "$OUT/types.transport"
+          capture syntax-agreement node --check scripts/simSeasonCentreAgreement.mjs
+          capture syntax-derbies node --check scripts/simCareerDerbies.mjs
+          test "$(cat "$OUT/syntax-agreement.exit")" -eq 0; test ! -s "$OUT/syntax-agreement.transport"
+          test "$(cat "$OUT/syntax-derbies.exit")" -eq 0; test ! -s "$OUT/syntax-derbies.transport"
+          capture control-source-proof node --input-type=module <<'PROOF'
+          import assert from 'node:assert/strict';import fs from 'node:fs';import {createHash} from 'node:crypto';
+          const raw=fs.readFileSync('src/lib/season/soccer.ts'),body=raw.toString('utf8'),text=body.replace(/\r\n/g,'\n'),sha=b=>createHash('sha256').update(b).digest('hex');
+          assert.deepEqual(Buffer.from(body),raw);
+          const ending=body.includes('\r\n')?'\r\n':'\n',without=body.replace(/\r\n/g,'');
+          assert(!without.includes('\r'));if(ending==='\r\n')assert(!without.includes('\n'));
+          const encode=value=>Buffer.from(ending==='\r\n'?value.replace(/\n/g,'\r\n'):value),edits=[{"id":"annualkey","from":"  const annual = careerOpeningAnnualStats(row);\n  return row.type === 'playing' && annual && annual.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`\n    : null;","to":"  return row.type === 'playing' && row.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${row.apps}|${row.goals}|${row.assists}|${row.rating}|centre`\n    : null;"},{"id":"leagueapps","from":"const want = Math.min(row.leagueApps ?? annual.apps, room, annual.apps);","to":"const want = Math.min((row.leagueApps ?? annual.apps) + 1, room, annual.apps);"}],records=[];
+          const harness=fs.readFileSync('scripts/simSeasonCentreAgreement.mjs','utf8').replace(/\r\n/g,'\n');
+          for(const e of edits){
+            const at=text.indexOf(e.from);assert(at>=0&&text.indexOf(e.from,at+e.from.length)<0);
+            assert(text.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'').includes(e.from));
+            const quote=v=>e.id==='annualkey'?JSON.stringify(v):"'"+v+"'";
+            assert(harness.includes('from: '+quote(e.from)+', to: '+quote(e.to)),'Exact declared source mutation');
+            const changed=encode(text.slice(0,at)+e.to+text.slice(at+e.from.length)),inverse=encode((text.slice(0,at)+e.to+text.slice(at+e.from.length)).replace(e.to,e.from));
+            assert.notDeepEqual(changed,raw);assert.deepEqual(inverse,raw);
+            fs.writeFileSync(process.env.OUT+'/'+e.id+'-changed-source.ts.txt',changed);
+            records.push({id:e.id,offset:at,from:e.from,to:e.to,beforeSha256:sha(raw),changedSha256:sha(changed),inverseSha256:sha(inverse),changed:true,uniqueExecutedAnchor:true});
+          }
+          fs.writeFileSync(process.env.OUT+'/control-source-proof.json',JSON.stringify(records,null,2)+'\n');
+          PROOF
+          test "$(cat "$OUT/control-source-proof.exit")" -eq 0; test ! -s "$OUT/control-source-proof.transport"
+          git show 'HEAD^:scripts/simCareerDerbies.mjs' > "$OUT/derbies-old-exact.mjs"
+          test "$(sha256sum "$OUT/derbies-old-exact.mjs" | cut -d' ' -f1)" = 832012ca967826a2261e55dd0967c737685b515a1b3cadfe8bb45f9fe2a56c65
+          test "$(git hash-object "$OUT/derbies-old-exact.mjs")" = 2b6c96cdb99b67d8d3001a0b3a014edb8ce52fb4
+          export DERBY_OLD_FILE="$GITHUB_WORKSPACE/scripts/__control_german_derbies_$$_old.mjs"
+          test ! -e "$DERBY_OLD_FILE"; cp "$OUT/derbies-old-exact.mjs" "$DERBY_OLD_FILE"
+          cleanup_owned(){
+            if test -e "$DERBY_OLD_FILE"; then
+              cmp "$OUT/derbies-old-exact.mjs" "$DERBY_OLD_FILE" || return 1
+              rm -- "$DERBY_OLD_FILE"
+            fi
+          }
+          trap cleanup_owned EXIT
+          capture agreement-current timeout --signal=TERM --kill-after=15s 5m node scripts/simSeasonCentreAgreement.mjs
+          capture agreement-annualkey timeout --signal=TERM --kill-after=15s 5m env AGREEMENT_CONTROL=annualkey node scripts/simSeasonCentreAgreement.mjs
+          capture agreement-leagueapps timeout --signal=TERM --kill-after=15s 5m env AGREEMENT_CONTROL=leagueapps node scripts/simSeasonCentreAgreement.mjs
+          capture agreement-restored timeout --signal=TERM --kill-after=15s 5m node scripts/simSeasonCentreAgreement.mjs
+          capture derbies-current timeout --signal=TERM --kill-after=15s 5m node scripts/simCareerDerbies.mjs
+          cmp "$OUT/derbies-old-exact.mjs" "$DERBY_OLD_FILE"
+          capture derbies-old timeout --signal=TERM --kill-after=15s 5m node "$DERBY_OLD_FILE"
+          cmp "$OUT/derbies-old-exact.mjs" "$DERBY_OLD_FILE"
+          capture derbies-restored timeout --signal=TERM --kill-after=15s 5m node scripts/simCareerDerbies.mjs
+          cleanup_owned; trap - EXIT
+          capture owner-admission node --input-type=module <<'ADMIT'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          const dir=process.env.OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const specs=[['agreement-current',0],['agreement-annualkey',1],['agreement-leagueapps',1],['agreement-restored',0],['derbies-current',0],['derbies-old',1],['derbies-restored',0]];
+          const observations=specs.map(([name,wanted])=>({name,wanted,rawExit:Number(fs.readFileSync(dir+'/'+name+'.exit','utf8')),stdout:fs.readFileSync(dir+'/'+name+'.stdout','utf8'),stderr:fs.readFileSync(dir+'/'+name+'.stderr','utf8'),transportBytes:fs.statSync(dir+'/'+name+'.transport').size}));
+          fs.writeFileSync(dir+'/observations-before-admission.json',JSON.stringify(observations,null,2)+'\n');
+          for(const o of observations){
+            assert.equal(o.rawExit,o.wanted,'Actual raw exit '+o.name);assert.equal(o.transportBytes,0);
+            const raw=o.stdout+'\n'+o.stderr;
+            assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Failed to load url|Cannot find (?:module|package)|SyntaxError:|ReferenceError:|TypeError:/i.test(raw),false,'No setup/runtime owner');
+            const fails=raw.split(/\r?\n/).map(line=>line.trim()).filter(line=>/^FAIL(?::| )/.test(line));
+            if(o.name.startsWith('agreement-')){
+              assert.equal(o.stderr,'','Agreement raw stderr remains readable and empty');
+              assert(/120 careers, seed set 0/.test(o.stdout));
+              for(let i=1;i<=13;i++)assert(new RegExp('^ok   T'+i+' ','m').test(o.stdout),'Existing adversarial fixture '+i);
+              const control=o.name==='agreement-annualkey'?'annualkey':o.name==='agreement-leagueapps'?'leagueapps':null;
+              if(control){
+                const owner=control==='annualkey'?'16 annual replay key':'1 apps';
+                assert(o.stdout.includes('CONTROL '+control+': src/lib/season/soccer.ts patched in the bundle only'));
+                assert.equal(fails.length,2);assert(fails.some(line=>line.startsWith('FAIL item '+owner+':')));
+                assert(fails.includes('FAIL independent checker: '+owner));
+                assert(new RegExp('^simSeasonCentreAgreement: 24 checks, [1-9]\\d* failed \\(control '+control+'\\)$','m').test(o.stdout));
+              }else{
+                assert.deepEqual(fails,[]);
+                assert.equal(o.stdout.split(/\r?\n/).filter(line=>line==='simSeasonCentreAgreement: 24 checks, 0 failed').length,1);
+              }
+            }else{
+              assert(/pool: 200 careers, 2000 playing seasons/.test(o.stdout));
+              for(let i=1;i<=8;i++)assert(new RegExp('^'+i+'\\) ','m').test(o.stdout),'Existing Derby section '+i);
+              if(o.name==='derbies-old'){
+                assert.equal(fails.length,1);
+                assert(/^FAIL: [1-9]\d* seasons store derbies the module would not draw from their own inputs and the engine's elite list$/.test(fails[0]));
+                assert.equal(o.stdout.split(/\r?\n/).filter(line=>line==='simCareerDerbies: 1 failures, sections 4 red').length,1);
+              }else{
+                assert.deepEqual(fails,[]);
+                assert.equal(o.stdout.split(/\r?\n/).filter(line=>line==='simCareerDerbies: all 8 sections green').length,1);
+              }
+            }
+          }
+          assert.equal(fs.existsSync(process.env.DERBY_OLD_FILE),false,'Owned whole-old sibling removed');
+          const old=fs.readFileSync(dir+'/derbies-old-exact.mjs');assert.equal(old.length,70905);assert.equal(sha(old),'832012ca967826a2261e55dd0967c737685b515a1b3cadfe8bb45f9fe2a56c65');
+          const records=observations.map(o=>({name:o.name,rawExit:o.rawExit,stdoutSha256:sha(Buffer.from(o.stdout)),stderrSha256:sha(Buffer.from(o.stderr)),transportBytes:o.transportBytes,runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN'}));
+          fs.writeFileSync(dir+'/admission.json',JSON.stringify({schemaVersion:1,actualOwnerCalls:7,healthy:4,ownedNegative:3,removedOldSibling:true,records,scope:'Only two independent annual-oracle script corrections on held product; no new fleet,115 repeat,build or browser credit'},null,2)+'\n');
+          console.log('GERMAN_ORACLES: seven actual owner calls, four healthy and three owned negative, original populations and assertions held');
+          ADMIT
+          failed=0
+          if test "$(cat "$OUT/owner-admission.exit")" -ne 0 || test -s "$OUT/owner-admission.transport"; then failed=1; fi
+          capture anchor-healthy node scripts/simHarnessAnchors.mjs
+          capture anchor-strip env ANCHOR_CONTROL=strip node scripts/simHarnessAnchors.mjs
+          capture anchor-admission node --input-type=module <<'ANCHORS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';
+          const records=[];
+          for(const name of ['anchor-healthy','anchor-strip']){
+            const base=process.env.OUT+'/'+name,code=Number(fs.readFileSync(base+'.exit','utf8')),stdout=fs.readFileSync(base+'.stdout','utf8'),stderr=fs.readFileSync(base+'.stderr','utf8'),raw=stdout+'\n'+stderr;
+            assert.equal(code,0);assert.equal(fs.statSync(base+'.transport').size,0);
+            assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Failed to load url|Cannot find (?:module|package)|SyntaxError:|ReferenceError:|TypeError:/i.test(raw),false);
+            const failures=raw.split(/\r?\n/).map(x=>x.trim()).filter(x=>x.startsWith('FAIL '));
+            if(name==='anchor-healthy'){
+              assert.deepEqual(failures,[]);assert.equal(stdout.split(/\r?\n/).filter(x=>x==='simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.').length,1);
+            }else{
+              assert.equal(failures.length,1);assert(failures[0].startsWith('FAIL simFightCareer.mjs reads '));assert(stdout.includes('[control strip applied to a copy of simFightCareer.mjs]'));
+              assert.equal(stdout.split(/\r?\n/).filter(x=>x==='control "strip": the planted fault in simFightCareer.mjs was named and nothing else was, the check works').length,1);
+            }
+            records.push({name,rawExit:code,failures,runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN'});
+          }
+          fs.writeFileSync(process.env.OUT+'/anchor-admission.json',JSON.stringify(records,null,2)+'\n');
+          ANCHORS
+          if test "$(cat "$OUT/anchor-admission.exit")" -ne 0 || test -s "$OUT/anchor-admission.transport"; then failed=1; fi
+          printf '%s\n' "$failed" > "$OUT/qualification.exit"
+          exit "$failed"
+      - name: Always retain complete immutable custody
+        if: always()
+        run: |
+          set -euo pipefail
+          code=0
+          if test -d "$OUT"; then
+            if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log" 2>&1 || code=1; fi
+            if test -f "$OUT/dependency.sha256"; then sha256sum --check "$OUT/dependency.sha256" > "$OUT/dependency-held.log" 2>&1 || code=1; fi
+            git ls-files -z > "$OUT/source-members.after"
+            if test -f "$OUT/source-members.before"; then cmp "$OUT/source-members.before" "$OUT/source-members.after" > "$OUT/source-members.log" 2>&1 || code=1; fi
+            if test -d node_modules; then
+              find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.after"
+              if test -f "$OUT/dependency-members.before"; then cmp "$OUT/dependency-members.before" "$OUT/dependency-members.after" > "$OUT/dependency-members.log" 2>&1 || code=1; fi
+            fi
+            git diff --exit-code > "$OUT/source-diff.log" 2>&1 || code=1
+            git ls-files --others --exclude-standard -z > "$OUT/untracked.after"; test ! -s "$OUT/untracked.after" || code=1
+            if find "$OUT" -name '*.transport' -type f ! -size 0 | grep -q .; then code=1; fi
+            printf '%s\n' "$code" > "$OUT/holds.exit"
+          else code=1; fi
+          exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-german-supercup-annual-oracles
+          path: |
+            ${{ runner.temp }}/sc-german-supercup-annual-oracles
+            ${{ github.workspace }}/tmp
+          if-no-files-found: error
+          retention-days: 14
