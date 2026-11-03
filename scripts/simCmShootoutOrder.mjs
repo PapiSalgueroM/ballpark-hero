@@ -415,6 +415,8 @@ if (CONTROL) {
 
 /* Keep the frozen pre-coaching fixture on its unmanaged path. Current
    coached matches are checked separately against the men who finished. */
+const BASELINE_REF = 'c176be815dc4af57dfd7185a485e28357aa0d41e';
+const BASELINE_GIT = 'cf378e002c1f253a4cd48a147af66117f982f6b2';
 const historicalPath = `${TMP}/${TAG}.historical.engine.ts`;
 const baselinePath = `${TMP}/${TAG}.baseline428.engine.ts`;
 let historicalEnginePath = enginePath;
@@ -454,8 +456,8 @@ function withRound1326WordsBack(text) {
   }
   return text;
 }
-if (!WRITE_FIXTURE) {
-  const source = withRound1326WordsBack(readLF(enginePath));
+function unmanagedSource(text) {
+  const source = withRound1326WordsBack(text);
   const header = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
   if (source.split(header).length - 1 !== 1) abort('Historical no-coach arm needs one executable coach header');
   /* Round 1146: and with no own goals. Since that round the engine now and
@@ -479,9 +481,16 @@ if (!WRITE_FIXTURE) {
   let coachless = '';
   try { coachless = withoutWorldSeed(source.replace(header, header + '  return career;\n').replace(ownGoalCall, '')); }
   catch (e) { abort(`Historical arm needs the world seed block to take out: ${e.message}`); }
+  return coachless;
+}
+if (!WRITE_FIXTURE) {
+  const coachless = unmanagedSource(readLF(enginePath));
   fs.writeFileSync(historicalPath, coachless);
   historicalEnginePath = historicalPath;
-  const baselineSource = execFileSync('git', ['show', '5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f:src/lib/clubManager.ts'], { cwd: ROOT, encoding: 'utf8' });
+  const baselineRaw = execFileSync('git', ['show', `${BASELINE_REF}:src/lib/clubManager.ts`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+  const baselineGit = createHash('sha1').update(`blob ${Buffer.byteLength(baselineRaw)}\0`).update(baselineRaw).digest('hex');
+  if (baselineGit !== BASELINE_GIT) abort('Pinned pre-feature main source does not match its exact Git blob');
+  const baselineSource = unmanagedSource(baselineRaw.split('\r\n').join('\n'));
   fs.writeFileSync(baselinePath, baselineSource);
   baselineSourceHash = createHash('sha256').update(baselineSource).digest('hex');
   baselineEnginePath = baselinePath;
@@ -644,7 +653,7 @@ const pct = x => `${(x * 100).toFixed(1)}%`;
    (historical, and the league out arm made from it) play with matchRules 'base', which is the old engine for
    subs and press by construction (scripts/simCmSubs.mjs section legacy proves it byte for byte), set again
    after a loadCareer (which drops it), and the key is taken off every state before it is hashed or compared. */
-const oldRules = engine => !WRITE_FIXTURE && (engine === historical || (!!leagueOut && engine === leagueOut)
+const oldRules = engine => !WRITE_FIXTURE && (engine === historical || engine === baseline || (!!leagueOut && engine === leagueOut)
   || (!!curve1 && (engine === curve1.historical || engine === curve1.arm)));
 const reachCup = (engine, baseSeed = BASE_SEED) => withSeed(baseSeed, () => {
   const start = engine.startCareer(CLUB);
@@ -1008,11 +1017,11 @@ section = 3;
 }
 
 /* ================================================================== */
-console.log('4) Historical unmanaged play equals actual pre-1072 main, with ancient golden drift recorded');
+console.log('4) Historical unmanaged play equals pinned pre-feature main, with ancient golden drift recorded');
 section = 4;
 /* ================================================================== */
 let fixture = null;
-const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: [], oldLoad: null };
+const baselineEvidence = { baselineRef: BASELINE_REF, baselineSourceGit: BASELINE_GIT, baselineNeutralizer: 'same current-compatible unmanaged source', baselineSourceHash, rows: [], oldLoad: null };
 {
   if (!fs.existsSync(FIXTURE)) abort(`the fixture ${path.relative(ROOT, FIXTURE)} is missing; see the header for how it is written`);
   fixture = JSON.parse(readLF(FIXTURE));
@@ -1057,16 +1066,16 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
     baselineEvidence.rows.push({ seed: want.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, ...content });
     if (rawPaired) sameRaw += 1;
     if (content.paired) sameBaseline += 1;
-    else if (shown++ < 3) console.error(`  differs from actual pre-1072 main, seed ${want.seed}: got ${JSON.stringify(got)}, baseline ${JSON.stringify(base)}`);
+    else if (shown++ < 3) console.error(`  differs from pinned pre-feature main, seed ${want.seed}: got ${JSON.stringify(got)}, baseline ${JSON.stringify(base)}`);
     if (goldenBaseline) baselineGolden += 1;
-    if (goldenCandidate !== goldenBaseline) fail(`ancient golden mismatch differs from actual pre-1072 main at seed ${want.seed}`);
+    if (goldenCandidate !== goldenBaseline) fail(`ancient golden mismatch differs from pinned pre-feature main at seed ${want.seed}`);
     if (out.report.shootout) withKicks += 1;
     if (out.report.decidedBy === 'pens') defaultPens += 1;
     if (want.decidedBy === 'pens') pens += 1;
     if (goldenCandidate) same += 1;
   }
   console.log(`   ${same} of ${fixture.rows.length} rows reproduced (${pens} of them shootouts, written from ${fixture.writtenFrom} on ${fixture.writtenOn}); ${withKicks} carried kicks`);
-  console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal actual pre-1072 main in result, next draw and full content after the default-detail allowance (${sameRaw} raw hashes); ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
+  console.log(`   ${sameBaseline} of ${fixture.rows.length} rows equal pinned pre-feature main in result, next draw and full content after the default-detail allowance (${sameRaw} raw hashes); ancient golden mismatches candidate ${fixture.rows.length - same}, baseline ${fixture.rows.length - baselineGolden}`);
   baselineEvidence.summary = { rows: fixture.rows.length, paired: sameBaseline, rawPaired: sameRaw,
     goldenCandidateMismatches: fixture.rows.length - same, goldenBaselineMismatches: fixture.rows.length - baselineGolden,
     defaultPens, withKicks };
@@ -1074,8 +1083,8 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
   baselineEvidence.summary.by1052 = by1052;
   if (by1600) console.log(`   ${by1600} of those rows equal it only with both engines on the world before Round 1600's flip (the curve 1 files rebuilt from this tree's own; the move is that round's)${ARM_ALSO_1600}`);
   baselineEvidence.summary.by1600 = by1600;
-  if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the actual pre-1072 engine with no order set`);
-  if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, actual pre-1072 main ${baselineGolden}`);
+  if (sameBaseline !== fixture.rows.length) fail(`${fixture.rows.length - sameBaseline} rows differ from the pinned pre-feature engine with no order set`);
+  if (same !== baselineGolden) fail(`ancient golden matching counts differ: candidate ${same}, pinned pre-feature main ${baselineGolden}`);
   if (withKicks !== defaultPens) fail(`${withKicks} default-order reports carried kicks for ${defaultPens} actual shootouts`);
   if (pens < 12) fail(`the fixture holds only ${pens} shootouts, under the floor of 12`);
 
@@ -1115,16 +1124,16 @@ const baselineEvidence = { baselineRef: '5b70b05f', baselineSourceHash, rows: []
       if (altContent.paired) { out = alt; baselineOut = altBase; content = altContent; namedBy1600 += 1; }
     }
     if (content.paired) namedSame += 1;
-    else if (shown++ < 3) console.error(`  differs from actual pre-1072 main on section 1's base, seed ${seed}: got ${JSON.stringify(row(out))}, baseline ${JSON.stringify(row(baselineOut))}`);
+    else if (shown++ < 3) console.error(`  differs from pinned pre-feature main on section 1's base, seed ${seed}: got ${JSON.stringify(row(out))}, baseline ${JSON.stringify(row(baselineOut))}`);
     if (baselineOut.decidedBy === 'pens') namedPens += 1;
     if (out.report.shootout) namedKicks += 1;
   }
   const livePens = baselineEvidence.rows.filter(r => r.baseline.decidedBy === 'pens').length;
-  console.log(`   on section 1's base: ${namedSame} of ${NAMED_SEEDS.length} rows equal actual pre-1072 main in result, next draw and full content after the default-detail allowance, ${namedPens} of them settled on penalties by main (${livePens} on the fixture's base)`);
+  console.log(`   on section 1's base: ${namedSame} of ${NAMED_SEEDS.length} rows equal pinned pre-feature main in result, next draw and full content after the default-detail allowance, ${namedPens} of them settled on penalties by main (${livePens} on the fixture's base)`);
   if (namedBy1052) console.log(`   ${namedBy1052} of those rows equal it only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
   if (namedBy1600) console.log(`   ${namedBy1600} of those rows equal it only with both engines on the world before Round 1600's flip${ARM_ALSO_1600}`);
   baselineEvidence.namedBase = { seed: NAMED_BASE_SEED, rows: NAMED_SEEDS.length, paired: namedSame, pens: namedPens, by1052: namedBy1052, by1600: namedBy1600 };
-  if (namedSame !== NAMED_SEEDS.length) fail(`${NAMED_SEEDS.length - namedSame} rows on section 1's base differ from the actual pre-1072 engine with no order set`);
+  if (namedSame !== NAMED_SEEDS.length) fail(`${NAMED_SEEDS.length - namedSame} rows on section 1's base differ from the pinned pre-feature engine with no order set`);
   if (namedKicks !== namedPens) fail(`${namedKicks} default-order reports on section 1's base carried kicks for ${namedPens} actual shootouts`);
   if (namedPens < 12) fail(`main settles only ${namedPens} of the rows on section 1's base on penalties, under the floor of 12, so the one draw path is barely walked`);
 }
@@ -1155,9 +1164,10 @@ section = 5;
     let out = playCup(back, probe.seed, historical);
     const baselineOld = JSON.parse(JSON.stringify(baselineCup));
     delete baselineOld.shootoutOrder;
-    if (!baseline.saveCareer(baselineOld)) abort('Actual pre-1072 main refused its old save');
+    if (!baseline.saveCareer(baselineOld)) abort('Pinned pre-feature main refused its old save');
     const baselineBack = baseline.loadCareer();
-    if (!baselineBack) abort('Actual pre-1072 main could not open its old save');
+    if (!baselineBack) abort('Pinned pre-feature main could not open its old save');
+    if (oldRules(baseline)) baselineBack.matchRules = 'base';
     let baselineOut = playCup(baselineBack, probe.seed, baseline);
     let content = compareContent(out, baselineOut);
     let oldBy1052 = false;
@@ -1189,9 +1199,9 @@ section = 5;
       const alt = playCup(backArm, probe.seed, curve1.arm);
       const oldBase = JSON.parse(JSON.stringify(curve1BaselineCup));
       delete oldBase.shootoutOrder;
-      if (!curve1.baseline.saveCareer(oldBase)) abort('Actual pre-1072 main on the curve 1 world refused its old save');
+      if (!curve1.baseline.saveCareer(oldBase)) abort('Pinned pre-feature main on the curve 1 world refused its old save');
       const baseBack = curve1.baseline.loadCareer();
-      if (!baseBack) abort('Actual pre-1072 main on the curve 1 world could not open its old save');
+      if (!baseBack) abort('Pinned pre-feature main on the curve 1 world could not open its old save');
       const altBase = playCup(baseBack, probe.seed, curve1.baseline);
       const altContent = compareContent(alt, altBase);
       if (altContent.paired) { out = alt; baselineOut = altBase; content = altContent; oldBy1600 = true; }
@@ -1202,11 +1212,11 @@ section = 5;
     const goldenBaseline = JSON.stringify(legacyRow(baselineOut)) === JSON.stringify(probe);
     const rawPaired = JSON.stringify(got) === JSON.stringify(base);
     baselineEvidence.oldLoad = { seed: probe.seed, candidate: got, baseline: base, goldenCandidate, goldenBaseline, rawPaired, by1052: oldBy1052, by1600: oldBy1600, ...content };
-    if (oldBy1052) console.log(`   the old save equals actual pre-1072 main only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
-    if (oldBy1600) console.log(`   the old save equals actual pre-1072 main only with both engines on the world before Round 1600's flip${ARM_ALSO_1600}`);
-    if (!content.paired) fail(`the loaded old save differs from actual pre-1072 main at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
-    if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from actual pre-1072 main');
-    console.log(`   loaded old save, seed ${probe.seed} (one of ${pensNow.size} rows main settles on penalties, decided ${base.decidedBy}): equal actual pre-1072 main ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
+    if (oldBy1052) console.log(`   the old save equals pinned pre-feature main only with Round 1052's league and Round 1520's made up countries taken out of this tree's world in memory`);
+    if (oldBy1600) console.log(`   the old save equals pinned pre-feature main only with both engines on the world before Round 1600's flip${ARM_ALSO_1600}`);
+    if (!content.paired) fail(`the loaded old save differs from pinned pre-feature main at seed ${probe.seed}: ${JSON.stringify(got)} vs ${JSON.stringify(base)}`);
+    if (goldenCandidate !== goldenBaseline) fail('The loaded old save has a different ancient golden mismatch from pinned pre-feature main');
+    console.log(`   loaded old save, seed ${probe.seed} (one of ${pensNow.size} rows main settles on penalties, decided ${base.decidedBy}): equal pinned pre-feature main ${content.paired}; ancient golden matches candidate ${goldenCandidate}, baseline ${goldenBaseline}`);
   }
   const ids = back.squad.filter(p => !p.onLoan).slice(0, 4).map(p => p.id);
   const set = setShootoutOrder(back, ids);
