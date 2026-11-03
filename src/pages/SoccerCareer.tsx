@@ -2,6 +2,7 @@ import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWhee
 import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';
 import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useLayoutEffect, useMemo, type ComponentType, type ComponentProps, type ReactNode, type CSSProperties } from "react";
 import { formatNumber } from '@/lib/formatNumber';
+import { completedRecordCandidate, readCompletedRecords, retainCompletedRecord, recordRetentionStatus, type CompletedRecordCandidate, type CompletedRecordsRead, type RetainResult } from '@/lib/soccerCareerCompletedRecords';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
 import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";
@@ -98,6 +99,7 @@ import PotentialProgress from '@/components/soccer-career/PotentialProgress';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 const PhonePanel = lazy(() => import("@/components/soccer-career/PhonePanel"));
+const PastCareersSheet = lazy(() => import("@/components/soccer-career/PastCareersSheet"));
 const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => new Promise<never>(() => undefined)));
 import { BAND_CLASS } from "@/lib/careerRatingBand";
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
@@ -925,6 +927,11 @@ function useFooterLift(enabled: boolean): number {
 
 /* ─── Main Component ─── */
 const SAVE_KEY = "soccerCareerSave";
+type CareerSaveAcknowledgement = { career: CareerState; raw: string; candidate: CompletedRecordCandidate | null };
+const completedRecordsStorage = {
+  getItem: (key: string) => localStorage.getItem(key),
+  setItem: (key: string, value: string) => localStorage.setItem(key, value),
+};
 /* Round 1330: the page's own toasts sit at the top centre, clear of the bar,
    the Training and Phone buttons and the choices a card reveals under them.
    Round 1568: on a phone (the toast library's own 600 px line) they start 44 px lower, under the site's bar
@@ -1016,6 +1023,13 @@ export default function SoccerCareer() {
     queueMicrotask(() => trainingTriggerRef.current?.focus({ preventScroll: true }));
   };
   const [showNewCareerConfirm, setShowNewCareerConfirm] = useState(false);
+  const acknowledgedCareer = useRef<CareerSaveAcknowledgement | null>(null);
+  const discardRecordAcknowledgement = useRef<CareerSaveAcknowledgement | null>(null);
+  const [recordOutcome, setRecordOutcome] = useState<RetainResult | null>(null);
+  const [showRecordDiscard, setShowRecordDiscard] = useState(false);
+  const [pastCareersOpen, setPastCareersOpen] = useState(false);
+  const [pastCareersRead, setPastCareersRead] = useState<CompletedRecordsRead | null>(null);
+  const pastCareersTrigger = useRef<HTMLButtonElement>(null);
   /* Round 530: the slip that lands under the toast when a deal is done. It
      remembers the career object it was written for, and every action in this
      game produces a new career object, so the next action of any kind
@@ -1107,19 +1121,77 @@ export default function SoccerCareer() {
      asks for a reload. Never saveFailed for it: the browser is fine, the
      career is just newer somewhere else. */
   const { moved: saveMoved, check: checkSaveMoved } = useSaveFenceWatch(SAVE_KEY);
-  const saveCurrentCareer = useCallback(() => {
-    if (!career) { setSaveFailed(false); return; }
+  const sourceIsCurrent = useCallback((ack: CareerSaveAcknowledgement) => {
+    try {
+      return !!career && ack.career === career && !saveFence.moved(SAVE_KEY)
+        && serializeSoccerCareerSave(career) === ack.raw
+        && localStorage.getItem(SAVE_KEY) === ack.raw;
+    } catch { return false; }
+  }, [career]);
+  const saveCurrentCareer = useCallback((): CareerSaveAcknowledgement | null => {
+    acknowledgedCareer.current = null;
+    discardRecordAcknowledgement.current = null;
+    setShowRecordDiscard(false);
+    if (!career) { setSaveFailed(false); setRecordOutcome(null); return null; }
+    let writtenRaw: string | null = null;
     const saved = saveFence.write(SAVE_KEY, function saveCareer() {
       try {
-        localStorage.setItem(SAVE_KEY, serializeSoccerCareerSave(career));
+        localStorage.setItem(SAVE_KEY, (writtenRaw = serializeSoccerCareerSave(career)));
         return true;
       } catch { return false; }
     });
-    if (saved === 'moved') { checkSaveMoved(); return; }
-    if (saved === 'failed') { setSaveFailed(true); return; }
+    if (saved === 'moved') { checkSaveMoved(); return null; }
+    if (saved === 'failed') { setSaveFailed(true); setRecordOutcome(null); return null; }
+    const ack: CareerSaveAcknowledgement = { career, raw: writtenRaw ?? '', candidate: null };
+    if (writtenRaw === null || !sourceIsCurrent(ack)) {
+      if (saveFence.moved(SAVE_KEY)) checkSaveMoved();
+      else setSaveFailed(true);
+      setRecordOutcome(null);
+      return null;
+    }
     setSaveFailed(false);
-  }, [career]);
+    if (career.retired === true && career.phase === 'retired') {
+      const totals = getCareerTotals(career.seasons);
+      ack.candidate = completedRecordCandidate(career, {
+        goals: totals.goals,
+        trophies: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups,
+        ballonDors: totals.ballonDors,
+        caps: career.intStats.caps,
+      });
+    }
+    acknowledgedCareer.current = ack;
+    if (career.retired === true && career.phase === 'retired') {
+      setRecordOutcome(ack.candidate
+        ? retainCompletedRecord(ack.candidate, completedRecordsStorage, () => sourceIsCurrent(ack))
+        : { status: 'blocked', reason: 'unsupported-record' });
+    } else setRecordOutcome(null);
+    return ack;
+  }, [career, sourceIsCurrent]);
   useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);
+
+  const retryRecord = () => {
+    discardRecordAcknowledgement.current = null;
+    setShowRecordDiscard(false);
+    const ack = acknowledgedCareer.current;
+    if (!ack || !sourceIsCurrent(ack)) {
+      if (saveFence.moved(SAVE_KEY)) checkSaveMoved();
+      else setSaveFailed(true);
+      return;
+    }
+    setRecordOutcome(ack.candidate
+      ? retainCompletedRecord(ack.candidate, completedRecordsStorage, () => sourceIsCurrent(ack))
+      : { status: 'blocked', reason: 'unsupported-record' });
+  };
+  const openPastCareers = () => {
+    setPastCareersRead(readCompletedRecords(completedRecordsStorage));
+    setPastCareersOpen(true);
+  };
+  const closePastCareers = () => {
+    setPastCareersOpen(false);
+    queueMicrotask(() => {
+      if (pastCareersTrigger.current?.isConnected) pastCareersTrigger.current.focus({ preventScroll: true });
+    });
+  };
   useEffect(() => {
     if (saveFailed) toast.error("Your latest progress could not be saved. Keep this tab open, then try again.", PAGE_TOAST);
   }, [saveFailed]);
@@ -1552,6 +1624,8 @@ export default function SoccerCareer() {
   };
 
   const handleNewCareer = () => {
+    discardRecordAcknowledgement.current = null;
+    setShowRecordDiscard(false);
     setShowNewCareerConfirm(true);
   };
 
@@ -1577,14 +1651,75 @@ export default function SoccerCareer() {
     setCareer(prev => (prev ? fn(prev) : prev));
   }, []);
 
-  const handleConfirmNewCareer = () => {
-    /* Round 1330: through the fence, so a tab another tab has moved on clears
-       nothing; a refusal keeps everything as it is, like Delete unusable save. */
+  const confirmNewCareer = (discardRecord: boolean) => {
+    const needsRecord = career?.retired === true && career.phase === 'retired';
+    let ack = acknowledgedCareer.current;
+    if (needsRecord) {
+      if (ack && ack.career === career && !sourceIsCurrent(ack)) {
+        discardRecordAcknowledgement.current = null;
+        setShowRecordDiscard(false);
+        if (saveFence.moved(SAVE_KEY)) checkSaveMoved();
+        else setSaveFailed(true);
+        return;
+      }
+      if (!ack || ack.career !== career) ack = saveCurrentCareer();
+      if (!ack || !sourceIsCurrent(ack)) {
+        discardRecordAcknowledgement.current = null;
+        setShowRecordDiscard(false);
+        if (saveFence.moved(SAVE_KEY)) checkSaveMoved();
+        else setSaveFailed(true);
+        return;
+      }
+      if (discardRecord) {
+        const refused = discardRecordAcknowledgement.current;
+        if (!refused || refused.career !== ack.career || refused.raw !== ack.raw) return;
+      } else {
+        const outcome: RetainResult = ack.candidate
+          ? retainCompletedRecord(ack.candidate, completedRecordsStorage, () => sourceIsCurrent(ack!))
+          : { status: 'blocked', reason: 'unsupported-record' };
+        setRecordOutcome(outcome);
+        if (outcome.status === 'blocked') {
+          const canDiscard = outcome.reason !== 'source-changed' && sourceIsCurrent(ack);
+          discardRecordAcknowledgement.current = canDiscard ? ack : null;
+          setShowRecordDiscard(canDiscard);
+          return;
+        }
+      }
+    }
+    let recordBarrierRefused = false;
+    /* The fence checks staleness before this synchronous callback. Its own new
+       generation is in storage here, so do not call moved() or nest a write. */
     const cleared = saveFence.write(SAVE_KEY, function clearCareer() {
-      try { localStorage.removeItem(SAVE_KEY); return true; } catch { return false; }
+      try {
+        if (needsRecord) {
+          if (!ack || !career || ack.career !== career || serializeSoccerCareerSave(career) !== ack.raw
+            || localStorage.getItem(SAVE_KEY) !== ack.raw) return false;
+          if (!discardRecord && (!ack.candidate
+            || recordRetentionStatus(ack.candidate, readCompletedRecords(completedRecordsStorage)) === null)) {
+            recordBarrierRefused = true;
+            return false;
+          }
+          if (localStorage.getItem(SAVE_KEY) !== ack.raw) return false;
+        }
+        localStorage.removeItem(SAVE_KEY);
+        return localStorage.getItem(SAVE_KEY) === null;
+      } catch { return false; }
     });
     if (cleared === 'moved') { checkSaveMoved(); return; }
-    if (cleared === 'failed') { toast.error('Could not delete the save. Try again.', PAGE_TOAST); return; }
+    if (cleared === 'failed') {
+      if (recordBarrierRefused) {
+        setRecordOutcome({ status: 'blocked', reason: 'unsupported-store' });
+        const canDiscard = !!ack && sourceIsCurrent(ack);
+        discardRecordAcknowledgement.current = canDiscard ? ack : null;
+        setShowRecordDiscard(canDiscard);
+      }
+      toast.error('Could not delete the save. Try again.', PAGE_TOAST);
+      return;
+    }
+    acknowledgedCareer.current = null;
+    discardRecordAcknowledgement.current = null;
+    setRecordOutcome(null);
+    setShowRecordDiscard(false);
     setSaveError(false);
     setCareer(null);
     setPreviewStats(null);
@@ -1597,6 +1732,7 @@ export default function SoccerCareer() {
     setAppearance(defaultAppearance());
     setShowNewCareerConfirm(false);
   };
+  const handleConfirmNewCareer = () => confirmNewCareer(false);
 
   return (
     <>
@@ -1672,6 +1808,21 @@ export default function SoccerCareer() {
                 )}
               </button>
             </div>
+          )}
+          {isRetired && recordOutcome && (
+            <div role={recordOutcome.status === 'blocked' ? 'alert' : 'status'} data-soccer-record-status={recordOutcome.status} className="mb-3 rounded-xl border border-border bg-card p-3 text-sm space-y-2">
+              <p>{recordOutcome.status === 'kept'
+                ? 'This completed record is kept in Past careers on this browser.'
+                : recordOutcome.status === 'below-cutoff'
+                  ? 'This record is outside the best 12 kept here. Starting over will not add a card for it.'
+                  : 'This record could not be kept. Your current career has not been deleted.'}</p>
+              {recordOutcome.status === 'blocked' && !showNewCareerConfirm && (
+                <Button variant="outline" className="min-h-11" onClick={retryRecord}>Retry record</Button>
+              )}
+            </div>
+          )}
+          {(!career || isRetired) && (
+            <Button ref={pastCareersTrigger} variant="outline" className="mb-3 min-h-11 w-full whitespace-normal" onClick={openPastCareers}>Past careers</Button>
           )}
           {!career ? (
             <CreationScreen
@@ -1803,16 +1954,51 @@ export default function SoccerCareer() {
         />
       </div>
       <AuthModal isOpen={showAuth} onClose={() => setShowAuth(false)} />
+      {pastCareersOpen && !saveMoved && (
+        <CentreMountBoundary what="record book" onClose={closePastCareers}>
+          <Suspense fallback={
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+              <div role="dialog" aria-modal="true" aria-label="Opening past careers" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={event => { if (!keepTabInside(event)) escapeCloses(closePastCareers)(event); }} className="w-full max-w-sm rounded-xl border border-border bg-card p-4">
+                <p role="status">Opening past careers...</p>
+                <Button variant="outline" className="mt-3 min-h-11 w-full" onClick={closePastCareers}>Back</Button>
+              </div>
+            </div>
+          }>
+            <PastCareersSheet
+              records={pastCareersRead?.status === 'known' ? pastCareersRead.records : []}
+              notice={saveFailed
+                ? 'Your latest progress could not be saved. Close Past careers and use Retry save before starting over.'
+                : pastCareersRead?.status === 'blocked'
+                  ? 'This record book could not be opened. Its saved data is unchanged.'
+                  : undefined}
+              onClose={closePastCareers}
+            />
+          </Suspense>
+        </CentreMountBoundary>
+      )}
       {/* New Career Confirmation Dialog */}
       {showNewCareerConfirm && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setShowNewCareerConfirm(false)}>
           <div role="dialog" aria-modal="true" aria-label="Start a new career?" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowNewCareerConfirm(false))} className="bg-card border-2 border-border rounded-xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
             <h3 className="text-lg font-black text-center">⚠️ Start New Career?</h3>
-            <p className="text-sm text-muted-foreground text-center">Are you sure? This will delete your current career. All progress will be lost forever.</p>
+            <p className="text-sm text-muted-foreground text-center">{!isRetired
+              ? 'Are you sure? This will delete your current career. All progress will be lost forever.'
+              : saveFailed
+                ? 'Your latest progress is not confirmed saved. Retry save before starting over.'
+                : recordOutcome?.status === 'kept'
+                  ? 'Your completed record is kept in Past careers on this browser. Starting over deletes the playable career.'
+                  : recordOutcome?.status === 'below-cutoff'
+                    ? 'This record is outside the best 12 kept here. Starting over deletes the playable career without adding a card.'
+                    : 'Your completed record has not been kept. Retry record or cancel before starting over.'}</p>
+            {isRetired && saveFailed && <Button variant="outline" className="min-h-11 w-full" onClick={saveCurrentCareer}>Retry save</Button>}
+            {isRetired && !saveFailed && recordOutcome?.status === 'blocked' && <Button variant="outline" className="min-h-11 w-full" onClick={retryRecord}>Retry record</Button>}
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button onClick={() => setShowNewCareerConfirm(false)} variant="outline" className="flex-none sm:flex-1 h-10 font-bold">Cancel</Button>
               <Button onClick={handleConfirmNewCareer} className="flex-none sm:flex-1 h-10 font-bold bg-red-600 hover:bg-red-500 text-black">Delete & Start Over</Button>
             </div>
+            {isRetired && showRecordDiscard && !saveFailed && (
+              <Button variant="outline" className="min-h-11 w-full whitespace-normal text-red-400" onClick={() => confirmNewCareer(true)}>Delete without keeping this record</Button>
+            )}
           </div>
         </div>
       )}
