@@ -56,7 +56,7 @@ const controls = {
   stale: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    const now = careerRef.current;\n    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.retired) return false;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    const now = careerRef.current;\n    if (phase !== 'hub' || !now || now.retired) return false;", test: cases.guards },
   focus: { file: card, from: 'triggerRef.current?.focus({ preventScroll: true });', to: 'void 0;', test: cases.controls },
   selection: { file: tactics, from: 'setSelSlot(null); setBenchPick(null); setOpenSlot(null); setDutySlot(null);', to: 'setOpenSlot(null); setDutySlot(null);', test: cases.controls },
-  rules: { file: card, from: 'For example, save your first XI, rotate on the pitch, then save a second plan.', to: 'Save a setup.', test: cases.controls },
+  rules: { file: card, from: 'For example, save your first XI, rotate on the pitch, then save a second plan. Custom positions and all four team instructions are saved too. Start from a preset, use Move players, choose your own instruction mix and give the plan a name. For example, pick High press and Patient and save it as My pressure philosophy.', to: 'Save a setup.', test: cases.controls },
   reveal: { file: card, from: '<div ref={actionRef} data-cm-plan-actions', to: '<div data-cm-plan-actions', test: cases.reveal },
   refusedNotice: { file: card, from: 'setNotice(accepted ? success : REFUSED_MATCH_PLAN);', to: 'setNotice(success);', test: cases.refused },
   refusedSelection: { file: tactics, from: 'if (!onApplyMatchPlan(slot)) return false;', to: 'onApplyMatchPlan(slot);', test: cases.refused },
