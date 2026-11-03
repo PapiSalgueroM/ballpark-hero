@@ -362,31 +362,36 @@ const mod = await import('${enginePath}');
 const fit = await import('${ROOT_URL}/src/lib/positionFit.ts');
 const sd = await import('${ROOT_URL}/src/lib/squadDeal.ts');
 const fac = await import('${ROOT_URL}/src/lib/clubManagerFacilities.ts');
+const info = await import('${ROOT_URL}/src/lib/clubManagerUiInfo.ts');
 export const engine = mod;
 export const positionFit = fit;
 export const squadDeal = sd;
 export const facilities = fac;
+export const uiInfo = info;
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 const bundle = await import(pathToFileURL(BUNDLE).href);
 const cm = bundle.engine;
+if (bundle.uiInfo?.SET_PIECE_INFO === undefined) { console.error('the UI info module does not export SET_PIECE_INFO'); process.exit(1); }
+if (bundle.uiInfo?.DUTY_INFO === undefined) { console.error('the UI info module does not export DUTY_INFO'); process.exit(1); }
+const { SET_PIECE_INFO, DUTY_INFO } = bundle.uiInfo;
 for (const name of ['startCareer', 'playNextEntry', 'resumeMatch', 'startSecondHalf', 'changeLive', 'makeHalftimeSub', 'liveGoneIds',
   'myOnPitchAt', 'effectiveXIWithSlots', 'autoPickXI', 'resolveXI', 'isAvailable', 'heldPositions',
   'fitGrade', 'FIT_PENALTY', 'xiFitReport', 'xiAverageRating', 'benchFor', 'benchForHalftime', 'CM_FORMATIONS', 'FORMATIONS', 'pitchLineOf',
-  'SET_PIECE_KEYS', 'SET_PIECE_INFO', 'SHOOTOUT_TAKER_EDGE_CAP', 'setPieceCandidates', 'ensureSetPieces', 'setSetPiece', 'autoSetPieces', 'shootoutTakerEdge',
+  'SET_PIECE_KEYS', 'SHOOTOUT_TAKER_EDGE_CAP', 'setPieceCandidates', 'ensureSetPieces', 'setSetPiece', 'autoSetPieces', 'shootoutTakerEdge',
   'acceptBid', 'loanOutPlayer',
   'MAX_SECONDARY_POSITIONS', 'RETRAIN_MIN_WEEKS', 'retrainWeeks', 'retrainRefusal', 'startRetraining', 'stopRetraining',
-  'DUTIES_BY_LINE', 'DUTY_INFO', 'DUTY_EFFECT', 'DUTY_BOOST_CAP', 'DUTY_SCORING', 'dutyOptions', 'setDuty', 'slotDuty', 'dutyBoost']) {
+  'DUTIES_BY_LINE', 'DUTY_EFFECT', 'DUTY_BOOST_CAP', 'DUTY_SCORING', 'dutyOptions', 'setDuty', 'slotDuty', 'dutyBoost']) {
   if (cm[name] === undefined) { console.error(`the engine does not export ${name}`); process.exit(1); }
 }
 const {
   startCareer, playNextEntry, resumeMatch, startSecondHalf, makeHalftimeSub, liveGoneIds,
   effectiveXIWithSlots, autoPickXI, resolveXI, isAvailable,
   fitGrade, FIT_PENALTY, xiFitReport, xiAverageRating, benchFor, CM_FORMATIONS, FORMATIONS, pitchLineOf,
-  SET_PIECE_KEYS, SET_PIECE_INFO, SHOOTOUT_TAKER_EDGE_CAP, ensureSetPieces, setSetPiece, autoSetPieces, shootoutTakerEdge,
+  SET_PIECE_KEYS, SHOOTOUT_TAKER_EDGE_CAP, ensureSetPieces, setSetPiece, autoSetPieces, shootoutTakerEdge,
   acceptBid, loanOutPlayer,
   MAX_SECONDARY_POSITIONS, RETRAIN_MIN_WEEKS, retrainWeeks, retrainRefusal, startRetraining, stopRetraining,
-  DUTIES_BY_LINE, DUTY_INFO, DUTY_EFFECT, DUTY_BOOST_CAP, DUTY_SCORING, dutyOptions, setDuty, slotDuty, dutyBoost,
+  DUTIES_BY_LINE, DUTY_EFFECT, DUTY_BOOST_CAP, DUTY_SCORING, dutyOptions, setDuty, slotDuty, dutyBoost,
 } = cm;
 const { ALT_POSITIONS, ALL_POSITIONS } = bundle.positionFit;
 const SHARED = bundle.squadDeal.FORMATIONS;

@@ -3,8 +3,9 @@ import { cn } from '@/lib/utils';
 import { GraduationCap, Search, ArrowUpCircle } from 'lucide-react';
 import {
   SCOUT_REGIONS, SCOUT_TRIPS, MAX_SCOUTS, MAX_PROSPECTS,
-  FACILITY_INFO, academyUpgradeCost, tripCost, money, moneyIn,
+  academyUpgradeCost, tripCost, money, moneyIn,
 } from '@/lib/clubManager';
+import { FACILITY_INFO } from '@/lib/clubManagerUiInfo';
 import type { CareerState, FacilityKind, Prospect, Scout } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
