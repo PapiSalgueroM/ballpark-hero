@@ -365,7 +365,7 @@ const WorldXi = () => {
         description="Pick a formation, draw 11 random countries, and name a real footballer from each nation who fits the position. Optional 90 or 60 second timer. Free, no sign-up."
         path="/world-xi"
       />
-      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
+      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10" style={{ overflowAnchor: 'none' }}>
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1">
             WORLD XI
