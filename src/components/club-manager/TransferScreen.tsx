@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { loanPlanRecordOf } from '@/lib/clubManagerLoanPlan';
 import type { RecruitmentCommit, RecruitmentPick } from '@/lib/clubManagerRecruitment';
 import { cn } from '@/lib/utils';
@@ -120,6 +120,7 @@ export function TransferScreen({
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
+  const loanReasonBaseId = useId();
   const [filter, setFilter] = useState<PosFilter>('ALL');
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'buy' | 'sell' | 'news' | 'free'>('buy');
@@ -1250,10 +1251,14 @@ export function TransferScreen({
                       {(() => {
                         const outWhy = loanOutRefusal(career, p.id);
                         const usedUp = p.loanOutSeason === career.season;
+                        const showReason = !!outWhy && windowOpen && !usedUp && career.squad.length > 14;
+                        const reasonId = `${loanReasonBaseId}-${p.id}`;
                         return (
+                          <>
                           <button
                             onClick={() => onLoanOut(p.id)}
                             disabled={!!outWhy}
+                            aria-describedby={showReason ? reasonId : undefined}
                             title={outWhy ?? 'Send him out on loan for the rest of the season'}
                             data-cm-loan-out={usedUp ? 'used' : outWhy ? 'blocked' : 'open'}
                             className={cn('px-2 py-1 rounded-md text-[9px] font-bold border transition-all',
@@ -1262,6 +1267,8 @@ export function TransferScreen({
                           >
                             {usedUp ? 'Loaned out once this season' : <>Loan out now +{money(loanOutFee(p))}</>}
                           </button>
+                          {showReason && <p id={reasonId} className="basis-full min-w-0 break-words text-[10px] text-muted-foreground">{outWhy}</p>}
+                          </>
                         );
                       })()}
                         </>
