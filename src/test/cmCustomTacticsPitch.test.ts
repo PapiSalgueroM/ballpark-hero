@@ -3,8 +3,8 @@ import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { stagePitchInput } from '@/components/club-manager/LiveSimScreen';
 import {
-  FORMATIONS, engineRegistrations, pitchLineOf, playNextEntry,
-  restoreEngineRegistrations, slotPosition, startCareer,
+  FORMATIONS, engineRegistrations, mentalityShift, pitchLineOf, playNextEntry,
+  restoreEngineRegistrations, startCareer,
 } from '@/lib/clubManager';
 import type { CareerState, LiveMatch, Mentality } from '@/lib/clubManager';
 
@@ -42,8 +42,14 @@ function expected(input: Input, value: Shape, mentality: Mentality) {
     expect(figure.key, 'CM_CUSTOM_STAGE_CANONICAL_KEY').toMatch(/^m\d+$/);
     const i = Number(figure.key.slice(1)), slot = FORMATIONS[value.formationIndex].slots[i];
     expect(slot, 'CM_CUSTOM_STAGE_ORIGINAL_SLOT_INDEX').toBeDefined();
-    // Reuse the current public two-argument projection with the same canonical role and chosen coordinates.
-    return { key: figure.key, line: pitchLineOf(slot), slot: slotPosition({ ...slot, ...value.points[i] }, mentality) };
+    const base = value.points[i];
+    // Keep the canonical height: it determines the role used by mentalityShift.
+    const shift = mentalityShift({ ...slot, x: base.x }, mentality);
+    expect(figure.line, 'CM_CUSTOM_STAGE_CANONICAL_ROLE').toBe(pitchLineOf(slot));
+    return { key: figure.key, line: pitchLineOf(slot), slot: {
+      x: Math.max(6, Math.min(94, base.x + shift.dx)),
+      y: Math.max(6, Math.min(94, base.y + shift.dy)),
+    } };
   });
 }
 const withoutMineCoordinates = (input: Input) => ({ ...input, mine: input.mine.map(({ slot, ...figure }) => figure) });
