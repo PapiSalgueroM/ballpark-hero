@@ -1,0 +1,146 @@
+name: Requested release World Editor causal pair
+on:
+  push:
+    branches: [codex/flagship-world-causal-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: flagship-world-causal-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  world-pair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arm: main
+            source: c176be815dc4af57dfd7185a485e28357aa0d41e
+            core: cf378e002c1f253a4cd48a147af66117f982f6b2
+          - arm: joined
+            source: 00c85815cac64d72014594e6b38515d4d6ce2e45
+            core: 9d8dc92557bf2f4358b5be044359354eda841769
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.source }}
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the exact paired source
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-world-${{ matrix.arm }}"
+          mkdir -p "$OUT/vanilla" "$OUT/observed" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD)" = '${{ matrix.source }}'
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = '${{ matrix.core }}'
+          test "$(git rev-parse HEAD:scripts/simWorldEditor.mjs)" = 39b2a920e1e56b7a01e33a72d227a840785b08b2
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import {execFileSync} from 'node:child_process';
+          fs.writeFileSync(process.env.QA_OUT+'/association.json',JSON.stringify({
+            arm:'${{ matrix.arm }}',source:execFileSync('git',['rev-parse','HEAD']).toString().trim(),
+            core:'${{ matrix.core }}',worldHarness:'39b2a920e1e56b7a01e33a72d227a840785b08b2',
+            scope:'Diagnostic original World Editor plus a copied observer with both existing qualification assertions retained. No engine, fixture, clock or RNG override.'
+          },null,2)+'\n');
+          NODE
+      - name: Install unchanged dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Make the copied observer without changing either original assertion
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,file='scripts/.release-world-editor-diagnostic.mjs';
+          assert.equal(fs.existsSync(file),false);
+          const original=fs.readFileSync('scripts/simWorldEditor.mjs','utf8');
+          const edits=[
+            {before:"  const earned = cm.uclFieldFromTables(played, cm.uclHolderOf(end), undefined, undefined, cm.uelHolderOf ? cm.uelHolderOf(end) : null);",
+             after:"  const diagnosticUclHolder = cm.uclHolderOf(end);\n  const diagnosticUelHolder = cm.uelHolderOf ? cm.uelHolderOf(end) : null;\n  const earned = cm.uclFieldFromTables(played, diagnosticUclHolder, undefined, undefined, diagnosticUelHolder);"},
+            {before:'  const field = next.uclField ?? [];',
+             after:"  const field = next.uclField ?? [];\n  fs.writeFileSync(path.join(ARTIFACTS, traceId + '-qualification.json'), JSON.stringify({ label, club, league: L, played, field, earned, uclHolder: diagnosticUclHolder, uelHolder: diagnosticUelHolder, outsiders: field.filter(c => !new Set(played.flatMap(t => t.clubs)).has(c)) }, null, 2));"},
+          ];
+          let changed=original;
+          for(const edit of edits){assert.equal(changed.split(edit.before).length,2);changed=changed.replace(edit.before,edit.after);}
+          let inverse=changed;
+          for(const edit of edits.slice().reverse()){assert.equal(inverse.split(edit.after).length,2);inverse=inverse.replace(edit.after,edit.before);}
+          assert.equal(inverse,original);assert.notEqual(changed,original);
+          for(const needle of [
+            "ok(field.length > 0 && JSON.stringify(field) === JSON.stringify(earned)",
+            'ok(outsiders.length === 0,',
+          ])assert.equal(changed.split(needle).length,original.split(needle).length);
+          fs.writeFileSync(out+'/world-original.mjs',original);fs.writeFileSync(out+'/world-observed.mjs',changed);
+          fs.writeFileSync(out+'/observer-edits.json',JSON.stringify(edits,null,2)+'\n');
+          const hash=s=>crypto.createHash('sha256').update(s).digest('hex');
+          fs.writeFileSync(out+'/observer-association.json',JSON.stringify({original:hash(original),observed:hash(changed),wholeInverse:true,existingAssertionsUnchanged:true,engineHolderCalls:'Existing holder evaluations retain their order and conditional call counts.',declaredSeedIdentity:'simWorldEditor.mjs, preserved before importing seedRandom; SIM_SEED remains unset and the internal SEED remains964.'},null,2)+'\n');
+          fs.writeFileSync(file,changed,{flag:'wx'});
+          fs.writeFileSync(out+'/observer-launch.mjs',"import path from 'node:path';\nimport {pathToFileURL} from 'node:url';\nprocess.argv[1]=path.resolve('scripts/simWorldEditor.mjs');\nawait import(pathToFileURL(path.resolve('scripts/.release-world-editor-diagnostic.mjs')).href);\n",{flag:'wx'});
+          NODE
+      - name: Run vanilla and observed World Editor with actual exits retained
+        run: |
+          set -euo pipefail
+          trap 'rm -f -- scripts/.release-world-editor-diagnostic.mjs' EXIT
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset SIM_SEED SIM_WORLD_EDITOR_CONTROL CM_SHOOTOUT_CONTROL ONLY BROWSER
+          : > "$QA_OUT/transport/vanilla.log"
+          : > "$QA_OUT/transport/observed.log"
+          set +e
+          CM_WORLD_EDITOR_ARTIFACTS="$QA_OUT/vanilla" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/vanilla.log" timeout --kill-after=15s 8m node scripts/simWorldEditor.mjs > "$QA_OUT/vanilla.stdout.log" 2> "$QA_OUT/vanilla.stderr.log"
+          vanilla_exit=$?
+          CM_WORLD_EDITOR_ARTIFACTS="$QA_OUT/observed" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/observed.log" timeout --kill-after=15s 8m node "$QA_OUT/observer-launch.mjs" > "$QA_OUT/observed.stdout.log" 2> "$QA_OUT/observed.stderr.log"
+          observed_exit=$?
+          set -e
+          printf '%s\n' "$vanilla_exit" > "$QA_OUT/vanilla.exit"
+          printf '%s\n' "$observed_exit" > "$QA_OUT/observed.exit"
+          tail -n 12 "$QA_OUT/vanilla.stdout.log" "$QA_OUT/vanilla.stderr.log" "$QA_OUT/observed.stdout.log" "$QA_OUT/observed.stderr.log"
+          test ! -s "$QA_OUT/transport/vanilla.log"
+          test ! -s "$QA_OUT/transport/observed.log"
+          # A diagnostic that exposes a real assertion failure remains failed.
+          test "$vanilla_exit" -eq 0
+          test "$observed_exit" -eq 0
+      - name: Preserve every original source byte
+        if: always()
+        run: |
+          set -euo pipefail
+          rm -f -- scripts/.release-world-editor-diagnostic.mjs
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+      - name: Bound retained diagnostic evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: flagship-world-${{ matrix.arm }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-world-${{ matrix.arm }}
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
