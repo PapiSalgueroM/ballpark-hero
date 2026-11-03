@@ -23,8 +23,9 @@
  *      rendered rows are exactly what the exported poolShortlist returns, so
  *      the fix cannot pass by showing anyone, and the component cannot drift
  *      from the function a future harness reads.
- *   3. EVERY DRAFT COMPLETES LEGALLY. 22 picks, both XIs at eleven, and no
- *      user pick broke the rule while a legal pick existed.
+ *   3. EVERY DRAFT COMPLETES LEGALLY. Both XIs have 1 GK, 4 DEF, 3 MID and
+ *      3 FWD. Both sides share the page's candidate policy; daily criteria
+ *      relax only inside positions that still need a player.
  *
  * THE POOL: scripts/data/fantasyDraftPool.json, the seven columns the page
  * selects, in the order the page receives them. `--refresh` re-pulls it
@@ -36,6 +37,10 @@
  * chosen blind, greyed afterwards), refuses to run if that line is not in the
  * source, and section 1 must go red under Bargain Hunt and Wonderkids. A
  * control that fires nothing is itself a failure.
+ *
+ * SIM_FDPOOL_CONTROL=noformation removes the shared position gate in a
+ * bundled criteria copy. The independent XI counts must fail (exit 1 and
+ * CONTROL noformation FIRED); an unchanged control fails closed.
  *
  * Run: node scripts/simFantasyDraftPool.mjs
  */
@@ -49,8 +54,9 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').replace(/\\/g, '/');
 const POOL_FILE = `${ROOT}/scripts/data/fantasyDraftPool.json`;
 const POOL_SRC = `${ROOT}/src/components/fantasy-draft/PlayerPool.tsx`;
+const CRITERIA_SRC = `${ROOT}/src/lib/fantasyCriteria.ts`;
 const CONTROL = process.env.SIM_FDPOOL_CONTROL || '';
-if (CONTROL && CONTROL !== 'unfiltered') { console.error(`SIM_FDPOOL_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && !['unfiltered', 'noformation'].includes(CONTROL)) { console.error(`SIM_FDPOOL_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 const REFRESH = process.argv.includes('--refresh');
 const SEEDS = 100;
 let failures = 0;
@@ -70,6 +76,16 @@ if (CONTROL === 'unfiltered') {
   console.log('NEGATIVE CONTROL ON: the pre-sort drafted and eligibility filter removed from a bundled copy of PlayerPool.tsx, section 1 must now find user picks with nothing to draft');
 }
 
+let criteriaSrcPath = CRITERIA_SRC;
+if (CONTROL === 'noformation') {
+  const src = fs.readFileSync(CRITERIA_SRC, 'utf8');
+  const needle = '  const available = pool.filter(p => !draftedIds.has(p.id) && fantasySlotOpen(team, p));';
+  if (src.split(needle).length !== 2) { console.error('control run: shared formation gate is not unique, refusing a dead control'); process.exit(2); }
+  criteriaSrcPath = `${TMP}/fantasyCriteria.noformation.ts`;
+  fs.writeFileSync(criteriaSrcPath, src.replace(needle, '  const available = pool.filter(p => !draftedIds.has(p.id));'));
+  console.log('NEGATIVE CONTROL ON: shared candidate formation gate removed; independent XI counts must fail');
+}
+
 /* The real component, the real rule functions and the app's own Supabase
    constants, bundled once. react-dom/server is CommonJS and requires node
    builtins, so the bundle is CommonJS too (the simWc2026Results recipe). The
@@ -77,7 +93,7 @@ if (CONTROL === 'unfiltered') {
    bare imports (react, lucide-react) live. */
 fs.writeFileSync(ENTRY, `
 export * as pool from '${poolSrcPath}';
-export * as rules from '${ROOT}/src/lib/fantasyCriteria.ts';
+export * as rules from '${criteriaSrcPath}';
 export { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '${ROOT}/src/integrations/supabase/client.ts';
 import React from '${ROOT}/node_modules/react/index.js';
 import { renderToStaticMarkup } from '${ROOT}/node_modules/react-dom/server.node.js';
@@ -92,7 +108,7 @@ const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
 const { pool, rules, render, SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } = createRequire(import.meta.url)(BUNDLE);
 const { PlayerPool, draftRating, poolShortlist } = pool;
-const { CRITERIA_RULES, ruleForCriteria, pickIsLegal, anyLegalPick } = rules;
+const { CRITERIA_RULES, ruleForCriteria, pickIsLegal, fantasyDraftCandidates } = rules;
 
 /* ---------- the pool, the seven columns the page selects, ordered by name ---------- */
 const COLUMNS = ['id', 'name', 'position', 'nationality', 'market_value_millions', 'dominant_foot', 'age'];
@@ -145,9 +161,6 @@ function renderedRows(draftedIds, isEligible, reason) {
     return { name: m ? decode(m[1]) : null, enabled: !/\sdisabled(=""|\s|$)/.test(tag) };
   });
 }
-const legalUndrafted = (draftedIds, rule, team, mustFollow) =>
-  players.filter(p => !draftedIds.has(p.id) && (!mustFollow || pickIsLegal(rule, team, p)));
-
 function runDraft(label, seed, stats) {
   const rng = mulberry32(seed);
   const rule = ruleForCriteria(label);
@@ -159,10 +172,9 @@ function runDraft(label, seed, stats) {
   for (let pickIndex = 0; pickIndex < TOTAL_PICKS; pickIndex += 1) {
     if (getPickOwner(pickIndex, userFirst) === 'ai') {
       /* FantasyDraft.tsx, the AI pick, the seeded generator in place of Math.random */
-      const available = players.filter(p => !draftedIds.has(p.id));
-      if (available.length === 0) break;
-      const legal = available.filter(p => pickIsLegal(rule, aiTeam, p));
-      const aiPool = legal.length > 0 ? legal : available;
+      const options = fantasyDraftCandidates(rule, aiTeam, players, draftedIds);
+      const aiPool = options.players;
+      if (aiPool.length === 0) break;
       const aiHasGk = aiTeam.some(p => p.position === 'GK');
       const gksLeft = aiPool.filter(p => p.position === 'GK');
       const slotsLeft = TEAM_SIZE - aiTeam.length;
@@ -171,15 +183,17 @@ function runDraft(label, seed, stats) {
       const sorted = [...candidates].sort((a, b) => (b.market_value_millions || 0) - (a.market_value_millions || 0));
       const topN = sorted.slice(0, Math.min(6, sorted.length));
       const pick = topN[Math.floor(rng() * topN.length)];
+      if (!options.relaxed && !pickIsLegal(rule, aiTeam, pick)) illegal += 1;
       aiTeam.push(pick); draftedIds.add(pick.id);
       continue;
     }
     /* FantasyDraft.tsx, the isEligible wiring with its exhaustion valve */
-    const mustFollow = !!rule && anyLegalPick(rule, userTeam, players, draftedIds);
-    const isEligible = mustFollow ? p => pickIsLegal(rule, userTeam, p) : undefined;
+    const options = fantasyDraftCandidates(rule, userTeam, players, draftedIds);
+    const allowedIds = new Set(options.players.map(p => p.id));
+    const isEligible = p => allowedIds.has(p.id);
     const rows = renderedRows(draftedIds, isEligible, rule?.blockedReason);
     const enabled = rows.filter(r => r.enabled);
-    const legal = legalUndrafted(draftedIds, rule, userTeam, mustFollow);
+    const legal = options.players;
     const slot = stats.perPick[userTeam.length];
     slot.n += 1;
     slot.enabledSum += enabled.length;
@@ -202,26 +216,30 @@ function runDraft(label, seed, stats) {
       pick = [...legal].sort((a, b) => draftRating(b) - draftRating(a))[0];
     }
     if (!pick) break;
-    if (mustFollow && !pickIsLegal(rule, userTeam, pick)) illegal += 1;
+    if (!options.relaxed && !pickIsLegal(rule, userTeam, pick)) illegal += 1;
     userTeam.push(pick); draftedIds.add(pick.id);
   }
-  return { completed: userTeam.length === TEAM_SIZE && aiTeam.length === TEAM_SIZE, illegal };
+  const required = { GK: 1, DEF: 4, MID: 3, FWD: 3 };
+  const badShapes = [userTeam, aiTeam].filter(team => team.length !== 11 || Object.entries(required)
+    .some(([position, count]) => team.filter(p => p.position === position).length !== count)).length;
+  return { completed: userTeam.length === TEAM_SIZE && aiTeam.length === TEAM_SIZE, illegal, badShapes };
 }
 
 const LABELS = [...CRITERIA_RULES.map(r => r.label), 'Golden Era (legacy, unenforced)'];
 const results = [];
 for (const label of LABELS) {
-  const stats = { perPick: Array.from({ length: TEAM_SIZE }, () => ({ n: 0, zero: 0, enabledSum: 0, notBest: 0, drift: 0, search: 0 })), completed: 0, illegal: 0 };
+  const stats = { perPick: Array.from({ length: TEAM_SIZE }, () => ({ n: 0, zero: 0, enabledSum: 0, notBest: 0, drift: 0, search: 0 })), completed: 0, illegal: 0, badShapes: 0 };
   for (let seed = 1; seed <= SEEDS; seed += 1) {
     const r = runDraft(label, seed, stats);
     if (r.completed) stats.completed += 1;
     stats.illegal += r.illegal;
+    stats.badShapes += r.badShapes;
   }
   const sum = k => stats.perPick.reduce((s, x) => s + x[k], 0);
   results.push({
     label, key: ruleForCriteria(label)?.key ?? 'none', perPick: stats.perPick,
     picks: sum('n'), zero: sum('zero'), meanEnabled: sum('enabledSum') / sum('n'), notBest: sum('notBest'), drift: sum('drift'), search: sum('search'),
-    completed: stats.completed, illegal: stats.illegal,
+    completed: stats.completed, illegal: stats.illegal, badShapes: stats.badShapes,
   });
 }
 const totalPicks = results.reduce((s, r) => s + r.picks, 0);
@@ -255,11 +273,19 @@ if (results.every(r => r.notBest === 0 && r.drift === 0) && typeof poolShortlist
 console.log('3) every draft completes legally');
 for (const r of results) {
   if (r.completed !== SEEDS) fail(`${r.label}: ${r.completed} of ${SEEDS} drafts reached two full XIs`);
-  if (r.illegal > 0) fail(`${r.label}: ${r.illegal} user picks broke the rule while a legal pick existed`);
+  if (r.illegal > 0) fail(`${r.label}: ${r.illegal} picks broke the daily rule while an eligible positional choice existed`);
+  if (r.badShapes > 0) fail(`${r.label}: ${r.badShapes} XIs do not have 1 GK, 4 DEF, 3 MID and 3 FWD`);
+  console.log(`   ${r.key}: invalid XIs ${r.badShapes}/${SEEDS * 2}`);
 }
 const searched = results.reduce((s, r) => s + r.search, 0);
 console.log(`   ${results.reduce((s, r) => s + r.completed, 0)} of ${LABELS.length * SEEDS} drafts complete with both XIs at eleven, ${results.reduce((s, r) => s + r.illegal, 0)} illegal user picks, ${searched} of ${totalPicks} user picks needed the search box`);
 
+if (CONTROL === 'noformation') {
+  const badShapes = results.reduce((s, r) => s + r.badShapes, 0);
+  if (badShapes > 0) { console.error(`simFantasyDraftPool: CONTROL noformation FIRED: ${badShapes} invalid XIs`); process.exit(1); }
+  console.error('simFantasyDraftPool: CONTROL noformation DID NOT FIRE'); process.exit(3);
+}
+
 console.log('');
 if (failures > 0) { console.error(`simFantasyDraftPool: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
-console.log('simFantasyDraftPool: green. Every user pick has something to draft on the view the player lands on, and it is the best available.');
+console.log('simFantasyDraftPool: green. Every user pick offers the best available choice, and both XIs have 1 GK, 4 DEF, 3 MID and 3 FWD.');

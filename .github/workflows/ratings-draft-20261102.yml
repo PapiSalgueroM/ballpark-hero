@@ -1,0 +1,426 @@
+name: Rating consistency and Fantasy Draft formation QA
+
+on:
+  push:
+    branches: [codex/ratings-draft-fixed-20261102]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ratings-draft-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PRERENDER_ONLY: /fantasy-draft
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Record source and hold dependency and budget inputs
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/ratings-draft"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/original" "$OUT/generated" "$OUT/units" "$OUT/raw" "$OUT/controls"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git merge-base --is-ancestor cc9a55a2f35b6215d5e6e664cc401d10d7f76291 HEAD
+          git merge-base --is-ancestor a663ac4f5a2ac5d552cb58bc8bf9edd31d518261 HEAD
+          git diff --exit-code cc9a55a2f35b6215d5e6e664cc401d10d7f76291 HEAD -- package.json package-lock.json scripts/sweepWeight.mjs scripts/lib/offlineTransport.cjs src/lib/searchDiscard.ts
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status cc9a55a2f35b6215d5e6e664cc401d10d7f76291 HEAD > "$OUT/candidate-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.RUNNER_TEMP + '/ratings-draft';
+          const generated = [
+            'scripts/data/guideHeadingsFrozen.json', 'src/data/searchKeywords.json',
+            'public/fantasy-draft/index.html',
+            'public/sitemap.xml', 'scripts/data/lastmod.json',
+          ];
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const hashes = Object.fromEntries(tracked.filter(p => !generated.includes(p))
+            .map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-before.json', JSON.stringify(hashes, null, 2) + '\n');
+          fs.writeFileSync(out + '/generated-paths.json', JSON.stringify(generated, null, 2) + '\n');
+          for (const p of generated) {
+            const dst = path.join(out, 'original', p);
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(p, dst);
+          }
+          NODE
+      - name: Install held application and isolated QA dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          npm install --prefix "$RUNNER_TEMP/flagship-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/flagship-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+          python3 -m pip install --target "$RUNNER_TEMP/flagship-python" fonttools pillow 2>&1 | tee "$QA_OUT/logs/python-install.log"
+          echo "PYTHONPATH=$RUNNER_TEMP/flagship-python" >> "$GITHUB_ENV"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Focused units, normal generators, build, readers and unchanged budgets
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require $GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          # One exact raw line from failed run41556288444, artifact13194319059.
+          flag_line='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com'
+          printf '%s\n' "$flag_line" > "$QA_OUT/classifier-actual-line.log"
+          classify_receipt sweep-weight "$QA_OUT/classifier-actual-line.log"
+          printf '%s\n' "${flag_line%https://flagcdn.com}https://reservedfixture.invalid" > "$QA_OUT/classifier-changed-line.log"
+          if cmp -s "$QA_OUT/classifier-actual-line.log" "$QA_OUT/classifier-changed-line.log"; then
+            echo "Classifier control did not change the actual line" >&2
+            exit 1
+          fi
+          if classify_receipt sweep-weight "$QA_OUT/classifier-changed-line.log" > "$QA_OUT/classifier-rejection.log"; then
+            echo "Classifier accepted the changed origin" >&2
+            exit 1
+          fi
+          cmp "$QA_OUT/classifier-changed-line.log" "$QA_OUT/classifier-rejection.log"
+          if classify_receipt build "$QA_OUT/classifier-actual-line.log" > "$QA_OUT/classifier-build-rejection.log"; then
+            echo "Build classification accepted a flag refusal" >&2
+            exit 1
+          fi
+          cmp "$QA_OUT/classifier-actual-line.log" "$QA_OUT/classifier-build-rejection.log"
+          echo "Classifier control passed: actual flag refusal accepted only for sweep, changed origin refused exactly"
+
+          run_gate types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          run_spec() {
+            local name="$1" spec="$2" mode="$3"
+            local receipt="$QA_OUT/transport/$name.log"
+            mkdir -p "$QA_OUT/units" "$QA_OUT/raw" "$QA_OUT/controls"
+            : > "$receipt"
+            set +e
+            SIM_OFFLINE_RECEIPT="$receipt" SC_CREATION_ROLL_RAW="$QA_OUT/raw/$name.json" \
+              node node_modules/vitest/vitest.mjs run "$spec" --maxWorkers=1 --minWorkers=1 \
+              --reporter=default --reporter=json --outputFile="$QA_OUT/units/$name.json" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            local codes=("${PIPESTATUS[@]}")
+            set -e
+            printf '%s\n' "${codes[0]}" > "$QA_OUT/units/$name.exit"
+            test "${codes[1]}" = 0
+            test ! -s "$receipt"
+            node --input-type=module - "$name" "$spec" "$mode" <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const [name, spec, mode] = process.argv.slice(2);
+          const out = process.env.QA_OUT;
+          const r = JSON.parse(fs.readFileSync(out + '/units/' + name + '.json', 'utf8'));
+          const exit = Number(fs.readFileSync(out + '/units/' + name + '.exit', 'utf8'));
+          const sc = spec.endsWith('/soccerCareerCreationRoll.test.tsx');
+          const expectedTitles = sc ? ["Soccer Career creation roll belongs to its selected position creation roll preservation: a fresh settled roll starts and saves the displayed player","Soccer Career creation roll belongs to its selected position creation roll stale settled: changing position requires a new roll before Begin Career","Soccer Career creation roll belongs to its selected position creation roll stale in-flight: a previous position roll cannot publish after the switch","Soccer Career creation roll belongs to its selected position creation roll preservation: a new position reroll starts with its displayed stats","Soccer Career creation: the academy shown is the academy joined academy kept: a settled roll starts the career at the club under Academy Placement","Soccer Career creation: the academy shown is the academy joined academy kept: a nationality change after the roll re-reads the placement and starts there","Soccer Career creation: the academy shown is the academy joined academy kept: an era change after the roll re-reads the placement for the new year and starts there","Soccer Career creation: the academy shown is the academy joined academy kept: Begin Career waits while Roll again is rolling, then starts at the new placement","Soccer Career rating98 diagnostic rating98 diagnostic actual ST editor, save, neutral choice and first healthy year agree","Soccer Career rating98 diagnostic rating98 diagnostic actual GK editor, save, neutral choice and first healthy year agree","Soccer Career rating98 diagnostic rating98 diagnostic legitimate old-age skill loss stays in stored and displayed overall","Soccer Career rating98 diagnostic rating98 diagnostic legitimate prison skill loss stays in stored and displayed overall","Soccer Career rating98 diagnostic rating98 diagnostic PED removal updates stored and displayed overall after its five-point skill cost"] : ["Fantasy Draft forms both starting XIs before settlement settles a balanced human draft against an AI with the same complete formation","Fantasy Draft forms both starting XIs before settlement rejects a fourth human forward while other formation slots remain open","Fantasy Draft forms both starting XIs before settlement relaxes exhausted daily criteria only inside the remaining formation slots"];
+          const owned = mode === 'sc-old' ? new Map([[expectedTitles[12], /SC_RATING98_PED_STORED_OVR/]])
+            : mode === 'fd-old' ? new Map([
+              [expectedTitles[0], /FD_FORMATION_AI_SETTLE_INPUT/],
+              [expectedTitles[1], /toBeDisabled/], [expectedTitles[2], /toBeEnabled/],
+            ]) : new Map();
+          assert.ok(['healthy', 'sc-old', 'fd-old'].includes(mode));
+          if (mode === 'sc-old') assert.equal(sc, true);
+          if (mode === 'fd-old') assert.equal(sc, false);
+          assert.equal(exit, owned.size ? 1 : 0);
+          assert.equal(r.success, owned.size === 0);
+          assert.equal(r.numTotalTests, expectedTitles.length);
+          assert.equal(r.numFailedTests, owned.size);
+          assert.equal(r.numPassedTests, expectedTitles.length - owned.size);
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(r, key) ? r[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          assert.equal(r.testResults.length, 1);
+          const suite = r.testResults[0];
+          assert.equal(suite.status, owned.size ? 'failed' : 'passed');
+          if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+          if (Object.hasOwn(suite, 'failureMessages')) assert.deepEqual(suite.failureMessages, []);
+          assert.equal(suite.assertionResults.length, expectedTitles.length);
+          assert.deepEqual(suite.assertionResults.map(x => x.fullName).sort(), [...expectedTitles].sort());
+          for (const result of suite.assertionResults) {
+            const pattern = owned.get(result.fullName);
+            assert.equal(result.status, pattern ? 'failed' : 'passed', result.fullName);
+            assert.equal(result.failureMessages.length, pattern ? 1 : 0, result.fullName);
+            if (pattern) assert.match(result.failureMessages[0], pattern);
+          }
+          fs.writeFileSync(out + '/units/' + name + '-admission.json', JSON.stringify({
+            name, spec, mode, exit, passed: r.numPassedTests, ownedFailures: r.numFailedTests,
+            counters, absentCounterMeaning: 'UNKNOWN', exactTitles: expectedTitles,
+          }, null, 2) + '\n');
+          NODE
+          }
+          sc_spec=src/test/soccerCareerCreationRoll.test.tsx
+          fd_spec=src/test/fantasyDraftFormation.test.tsx
+          run_spec sc-fixed "$sc_spec" healthy
+          run_spec fantasy-fixed "$fd_spec" healthy
+
+          cp src/lib/soccerCareerEngine.ts "$QA_OUT/controls/sc-fixed.ts"
+          cp src/pages/FantasyDraft.tsx "$QA_OUT/controls/fantasy-fixed.tsx"
+          cp src/lib/fantasyCriteria.ts "$QA_OUT/controls/criteria-fixed.ts"
+          server_pid=''
+          restore_owned() {
+            cp "$QA_OUT/controls/sc-fixed.ts" src/lib/soccerCareerEngine.ts
+            cp "$QA_OUT/controls/fantasy-fixed.tsx" src/pages/FantasyDraft.tsx
+            cp "$QA_OUT/controls/criteria-fixed.ts" src/lib/fantasyCriteria.ts
+            if [[ -n "$server_pid" ]]; then kill "$server_pid" 2>/dev/null || true; fi
+          }
+          trap restore_owned EXIT
+          git show cc9a55a2f35b6215d5e6e664cc401d10d7f76291:src/lib/soccerCareerEngine.ts > "$QA_OUT/controls/sc-old.ts"
+          echo "a62262813f12c1c2a002e1abf0cd825ac2395a2ef16b74869040f2cde83d2211  $QA_OUT/controls/sc-old.ts" | sha256sum --check
+          if cmp -s "$QA_OUT/controls/sc-fixed.ts" "$QA_OUT/controls/sc-old.ts"; then echo "SC control changed nothing" >&2; exit 1; fi
+          cp "$QA_OUT/controls/sc-old.ts" src/lib/soccerCareerEngine.ts
+          run_spec sc-old "$sc_spec" sc-old
+          cp "$QA_OUT/controls/sc-fixed.ts" src/lib/soccerCareerEngine.ts
+          cmp src/lib/soccerCareerEngine.ts "$QA_OUT/controls/sc-fixed.ts"
+          run_spec sc-restored "$sc_spec" healthy
+
+          git show cc9a55a2f35b6215d5e6e664cc401d10d7f76291:src/pages/FantasyDraft.tsx > "$QA_OUT/controls/fantasy-old.tsx"
+          git show cc9a55a2f35b6215d5e6e664cc401d10d7f76291:src/lib/fantasyCriteria.ts > "$QA_OUT/controls/criteria-old.ts"
+          if cmp -s "$QA_OUT/controls/fantasy-fixed.tsx" "$QA_OUT/controls/fantasy-old.tsx"; then echo "Fantasy control changed nothing" >&2; exit 1; fi
+          if cmp -s "$QA_OUT/controls/criteria-fixed.ts" "$QA_OUT/controls/criteria-old.ts"; then echo "Criteria control changed nothing" >&2; exit 1; fi
+          cp "$QA_OUT/controls/fantasy-old.tsx" src/pages/FantasyDraft.tsx
+          cp "$QA_OUT/controls/criteria-old.ts" src/lib/fantasyCriteria.ts
+          run_spec fantasy-old "$fd_spec" fd-old
+          cp "$QA_OUT/controls/fantasy-fixed.tsx" src/pages/FantasyDraft.tsx
+          cp "$QA_OUT/controls/criteria-fixed.ts" src/lib/fantasyCriteria.ts
+          cmp src/pages/FantasyDraft.tsx "$QA_OUT/controls/fantasy-fixed.tsx"
+          cmp src/lib/fantasyCriteria.ts "$QA_OUT/controls/criteria-fixed.ts"
+          run_spec fantasy-restored "$fd_spec" healthy
+
+          run_gate simSoccerCareer node scripts/simSoccerCareer.mjs
+          run_gate simCareerKeepPlaying node scripts/simCareerKeepPlaying.mjs
+          run_gate simCareerNoDeadEnd node scripts/simCareerNoDeadEnd.mjs
+          # The original pool checks and the new independent formation control stay separate.
+          run_gate draftPoolFilters node node_modules/vitest/vitest.mjs run src/test/draftPoolFilters.test.tsx \
+            --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units/draftPoolFilters.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = process.env.QA_OUT;
+          const r = JSON.parse(fs.readFileSync(out + '/units/draftPoolFilters.json', 'utf8'));
+          assert.equal(r.success, true); assert.equal(r.numFailedTests, 0);
+          assert.equal(r.testResults.length, 1);
+          const results = r.testResults.flatMap(suite => {
+            assert.equal(suite.status, 'passed');
+            if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+            return suite.assertionResults;
+          });
+          assert.ok(results.length > 0);
+          assert.equal(r.numPassedTests, results.length);
+          for (const result of results) {
+            assert.equal(result.status, 'passed'); assert.deepEqual(result.failureMessages, []);
+          }
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(r, key) ? r[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          fs.writeFileSync(out + '/units/extra-admission.json', JSON.stringify({
+            spec: 'src/test/draftPoolFilters.test.tsx', passed: r.numPassedTests,
+            fixedReportCases: 16, withReportCases: 16 + r.numPassedTests,
+            counters, absentCounterMeaning: 'UNKNOWN',
+          }, null, 2) + '\n');
+          NODE
+          run_gate scoreShown-fantasy node node_modules/vitest/vitest.mjs run src/test/scoreShown.test.tsx \
+            -t fantasy-draft --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units/scoreShown-fantasy.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = process.env.QA_OUT;
+          const r = JSON.parse(fs.readFileSync(out + '/units/scoreShown-fantasy.json', 'utf8'));
+          const selectedTitle = 'fantasy-draft fantasy-draft: the verdict card and the share carry the season score the draft records, and the share tells the result as it was';
+          assert.equal(r.success, true); assert.equal(r.numPassedTests, 1); assert.equal(r.numFailedTests, 0);
+          assert.equal(r.testResults.length, 1);
+          const results = r.testResults[0].assertionResults;
+          const selected = results.filter(x => x.status === 'passed');
+          assert.equal(selected.length, 1); assert.equal(selected[0].fullName, selectedTitle);
+          const unselected = results.filter(x => x !== selected[0]);
+          for (const result of results) assert.deepEqual(result.failureMessages, []);
+          for (const result of unselected) assert.ok(['pending', 'skipped'].includes(result.status));
+          if (Object.hasOwn(r.testResults[0], 'message')) assert.equal(r.testResults[0].message, '');
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(r, key) ? r[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          const extra = JSON.parse(fs.readFileSync(out + '/units/extra-admission.json', 'utf8'));
+          assert.equal(extra.passed, 7);
+          fs.writeFileSync(out + '/units/fixed-case-summary.json', JSON.stringify({
+            fixedReportCases: 16, poolFilterCases: extra.passed, selectedScoreCases: 1,
+            combinedFixedCases: 16 + extra.passed + 1, selectedTitle,
+            unselectedRows: unselected.map(x => ({ fullName: x.fullName, status: x.status })),
+            unselectedCount: unselected.length, unselectedMeaning: 'Not executed and not credited as passes',
+            numPendingTests: Object.hasOwn(r, 'numPendingTests') ? r.numPendingTests : null,
+            counters, absentCounterMeaning: 'UNKNOWN',
+          }, null, 2) + '\n');
+          NODE
+          run_gate simFantasyDraftPool node scripts/simFantasyDraftPool.mjs
+          grep -F 'simFantasyDraftPool: green.' "$QA_OUT/logs/simFantasyDraftPool.log"
+          run_gate simFantasyDraftPool-unfiltered env SIM_FDPOOL_CONTROL=unfiltered node scripts/simFantasyDraftPool.mjs
+          grep -F 'simFantasyDraftPool control: green.' "$QA_OUT/logs/simFantasyDraftPool-unfiltered.log"
+          : > "$QA_OUT/transport/simFantasyDraftPool-noformation.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/simFantasyDraftPool-noformation.log" SIM_FDPOOL_CONTROL=noformation \
+            node scripts/simFantasyDraftPool.mjs 2>&1 | tee "$QA_OUT/logs/simFantasyDraftPool-noformation.log"
+          formation_codes=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${formation_codes[0]}" > "$QA_OUT/units/simFantasyDraftPool-noformation.exit"
+          test "${formation_codes[0]}" = 1
+          test "${formation_codes[1]}" = 0
+          test ! -s "$QA_OUT/transport/simFantasyDraftPool-noformation.log"
+          grep -E '^simFantasyDraftPool: CONTROL noformation FIRED: [1-9][0-9]* invalid XIs$' "$QA_OUT/logs/simFantasyDraftPool-noformation.log"
+
+          run_gate guide-fantasy node scripts/simGuideHeadings.mjs --refresh /fantasy-draft
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const before = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/original/scripts/data/guideHeadingsFrozen.json', 'utf8'));
+          const after = JSON.parse(fs.readFileSync('scripts/data/guideHeadingsFrozen.json', 'utf8'));
+          for (const route of ['/fantasy-draft']) {
+            assert.ok(before.routes[route]);
+            assert.ok(after.routes[route]);
+            delete before.routes[route];
+            delete after.routes[route];
+          }
+          assert.deepEqual(after, before, 'Guide refresh changed an unrelated route or fixture metadata');
+          NODE
+          run_gate keywords-first node scripts/genSearchKeywords.mjs
+          cp src/data/searchKeywords.json "$QA_OUT/searchKeywords-first.json"
+          run_gate keywords-second node scripts/genSearchKeywords.mjs
+          cmp "$QA_OUT/searchKeywords-first.json" src/data/searchKeywords.json
+          run_gate build npm run build:seo
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap restore_owned EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then
+              ready=1
+              break
+            fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Retain generated bodies, actual diff and source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.QA_OUT;
+          const before = JSON.parse(fs.readFileSync(out + '/source-before.json', 'utf8'));
+          const generated = JSON.parse(fs.readFileSync(out + '/generated-paths.json', 'utf8'));
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const after = Object.fromEntries(tracked.filter(p => !generated.includes(p))
+            .map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-after.json', JSON.stringify(after, null, 2) + '\n');
+          for (const p of generated) {
+            if (!fs.existsSync(p)) continue;
+            const dst = path.join(out, 'generated', p);
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(p, dst);
+          }
+          const changed = execFileSync('git', ['diff', '--name-only']).toString().trim().split('\n').filter(Boolean);
+          fs.writeFileSync(out + '/actual-generated-paths.json', JSON.stringify(changed, null, 2) + '\n');
+          fs.writeFileSync(out + '/generated.patch', execFileSync('git', ['diff', '--binary', '--', ...generated], { maxBuffer: 32 * 1024 * 1024 }));
+          fs.writeFileSync(out + '/working-tree.txt', execFileSync('git', ['status', '--short'], { maxBuffer: 8 * 1024 * 1024 }));
+          fs.writeFileSync(out + '/transport-inventory.json', JSON.stringify(fs.readdirSync(out + '/transport').sort().map(name => {
+            const text = fs.readFileSync(path.join(out, 'transport', name), 'utf8');
+            const lines = text.split('\n').filter(Boolean);
+            return { name, blockedAttempts: lines.length,
+              fontBlockedAttempts: lines.filter(line => /^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts: lines.filter(line => line === '[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length,
+              rawLogRetained: true };
+          }), null, 2) + '\n');
+          assert.deepEqual(after, before, 'Tracked source changed outside five generated paths');
+          assert.ok(changed.every(p => generated.includes(p)), 'Unexpected tracked generated path');
+          NODE
+      - name: Bound the retained artifact
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: ratings-draft-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ratings-draft
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
