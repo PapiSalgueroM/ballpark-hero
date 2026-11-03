@@ -1,0 +1,295 @@
+name: Focused Soccer Hub consent fixture
+
+on:
+  push:
+    branches: [codex/sc-hub-consent-fixture-compat-20261103]
+
+permissions:
+  contents: read
+concurrency:
+  group: sc-hub-consent-fixture-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      TZ: UTC
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      BEFORE_SHA: ${{ github.event.before }}
+      PARENT_COMMIT: 1a4f0f121c255dbba98356d74c9eef0b4b301c1c
+      PARENT_TREE: 9928043b828f7f6d2adb5b087c8c3cbbc855bb9b
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind the one fixture edit and complete source membership
+        run: |
+          set -euo pipefail
+          export OUT="$RUNNER_TEMP/sc-hub-consent-fixture"
+          test ! -e "$OUT"; mkdir -p "$OUT"
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/sc-hub-consent-fixture-compat-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE_SHA" = 0000000000000000000000000000000000000000
+          test "$PARENT_COMMIT" != UNBOUND_PARENT_COMMIT
+          test "$PARENT_TREE" != UNBOUND_PARENT_TREE
+          test "$(git rev-parse HEAD^)" = "$PARENT_COMMIT"
+          test "$(git rev-parse "$PARENT_COMMIT^{tree}")" = "$PARENT_TREE"
+          test "$(git ls-tree -r "$PARENT_COMMIT" | wc -l)" -eq 5669
+          test "$(git ls-tree -r HEAD | wc -l)" -eq 5670
+          git rev-parse HEAD 'HEAD^{tree}' > "$OUT/head-tree.txt"
+          git diff --name-status "$PARENT_COMMIT" HEAD | LC_ALL=C sort > "$OUT/changed-paths.txt"
+          cat > "$OUT/expected-paths.txt" <<'PATHS'
+          A	.github/workflows/sc-hub-consent-fixture.yml
+          M	scripts/playSoccerHubGrid1089.mjs
+          PATHS
+          LC_ALL=C sort -o "$OUT/expected-paths.txt" "$OUT/expected-paths.txt"
+          diff -u "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          test -z "$(git status --porcelain)"
+          test "$(git rev-parse "$PARENT_COMMIT:scripts/playSoccerHubGrid1089.mjs")" = b4120e22451f2e65f8ecebcd37a07c1cde992f28
+          test "$(git rev-parse HEAD:scripts/playSoccerHubGrid1089.mjs)" = a94775540e47afe7c15842f4ffa6b79be6afb782
+          test "$(git rev-parse HEAD:src/lib/consentPreferences.ts)" = 4f5dc114bf7f9775524d0adbc1be7e52f4f56001
+          test "$(git rev-parse HEAD:src/components/CookieConsent.tsx)" = 7ffba7ff4099c051d949cd20fe31bc75332f215b
+          test "$(git rev-parse HEAD:.github/workflows/soccer-hub-grid.yml)" = 8e94982dffc4ab69fde6c5241c342cfce8b5d0bf
+          git show "$PARENT_COMMIT:scripts/playSoccerHubGrid1089.mjs" > "$OUT/before-hub.mjs"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local name="$1" mode="$2"; shift 2
+            printf '%s\0' "$@" > "$OUT/$name.argv"
+            printf '%s\n' "$mode" > "$OUT/$name.mode"
+            local code=0
+            if [ "$mode" = OFFLINE ]; then
+              SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$OUT/$name.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" "$@" > "$OUT/$name.stdout" 2> "$OUT/$name.stderr" || code=$?
+              test -e "$OUT/$name.transport" || : > "$OUT/$name.transport"
+            elif [ "$mode" = ONLINE ]; then
+              SIM_NETWORK=online NODE_OPTIONS='' "$@" > "$OUT/$name.stdout" 2> "$OUT/$name.stderr" || code=$?
+            else
+              printf 'Unknown capture mode\n' >&2; return 1
+            fi
+            printf '%s\n' "$code" > "$OUT/$name.exit"
+            return "$code"
+          }
+          CAPTURE
+          node --input-type=module <<'SOURCE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const sha=b=>createHash('sha256').update(b).digest('hex'),out=process.env.OUT;
+          const before=fs.readFileSync(out+'/before-hub.mjs','utf8'),after=fs.readFileSync('scripts/playSoccerHubGrid1089.mjs','utf8');
+          const old="'cookie-consent': 'essential'",next="'cookie-consent-v2': JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: NOW })";
+          assert.equal(before.split(old).length,2);assert.equal(after.split(next).length,2);
+          assert.equal(before.replace(old,next),after);assert.equal(after.replace(next,old),before);
+          assert.equal(Buffer.byteLength(after),30163);assert.equal(sha(Buffer.from(after)),'4cb679ff675b1fac205c117e1ae71a13c344f4c80935e11cc04aa22457864467');
+          fs.writeFileSync(out+'/fixture-delta.json',JSON.stringify({beforeSha256:sha(Buffer.from(before)),afterSha256:sha(Buffer.from(after)),before:old,after:next,forwardChanged:true,wholeInverse:true,policyChanged:false},null,2));
+          SOURCE
+      - name: Locked app and isolated verification tools online
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture install ONLINE npm ci
+          tools="$RUNNER_TEMP/sc-hub-consent-tools"; test ! -e "$tools"; mkdir "$tools"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.1"}}\n' > "$tools/package.json"
+          capture browser-install ONLINE npm install --prefix "$tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          cp "$tools/package.json" "$OUT/browser-package.json"
+          cp "$tools/package-lock.json" "$OUT/browser-package-lock.json"
+          capture chromium-install ONLINE node "$tools/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m venv "$tools/python"
+          capture python-install ONLINE "$tools/python/bin/python" -m pip install fonttools==4.60.1 Pillow==11.3.0
+          "$tools/python/bin/python" -m pip freeze > "$OUT/python-packages.before"
+          printf '%s\n' "$tools/python/bin" >> "$GITHUB_PATH"
+          printf '%s\n' "$tools" > "$OUT/tools-root.txt"
+          find node_modules -type f -print0 | LC_ALL=C sort -z | tee "$OUT/dependency-members.before" | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+          find "$tools/node_modules" -type f -print0 | LC_ALL=C sort -z | tee "$OUT/browser-members.before" | xargs -0 sha256sum > "$OUT/browser-files.sha256"
+          find "$tools/python" -name __pycache__ -prune -o -type f -print0 | LC_ALL=C sort -z | tee "$OUT/python-members.before" | xargs -0 sha256sum > "$OUT/python-files.sha256"
+          node --input-type=module <<'TOOLS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createRequire} from 'node:module';import path from 'node:path';
+          const req=createRequire(import.meta.url),out=process.env.OUT;
+          assert.equal(process.version,'v24.22.1');
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),rows=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [dir,x] of Object.entries(lock.packages)){if(!dir.startsWith('node_modules/')||!x.version)continue;
+            const file=dir+'/package.json';if(!fs.existsSync(file)){assert.equal(x.optional,true);assert((x.os&&!fits(x.os,process.platform))||(x.cpu&&!fits(x.cpu,process.arch)));omitted.push({dir,version:x.version,os:x.os??null,cpu:x.cpu??null});continue;}
+            assert.equal(JSON.parse(fs.readFileSync(file,'utf8')).version,x.version,dir);rows.push({dir,version:x.version});}
+          for(const name of ['playwright','playwright-core']){const file=req.resolve(name+'/package.json');assert.equal(JSON.parse(fs.readFileSync(file,'utf8')).version,'1.64.1');fs.copyFileSync(file,out+'/'+name+'-package.json');}
+          fs.copyFileSync(path.join(path.dirname(req.resolve('playwright-core/package.json')),'browsers.json'),out+'/browsers.json');
+          fs.writeFileSync(out+'/tool-and-dependency-versions.json',JSON.stringify({node:process.versions,installed:rows,optionalAbsent:omitted,onlineInstall:true},null,2));
+          TOOLS
+      - name: Actual proper types syntax and normal Vite build offline
+        id: build
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture types OFFLINE node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax OFFLINE node --check scripts/playSoccerHubGrid1089.mjs
+          capture build OFFLINE npm run build
+          find dist -type f -print0 | LC_ALL=C sort -z | tee "$OUT/dist-members.before" | xargs -0 sha256sum > "$OUT/dist.sha256"
+      - name: Actual unchanged fixture and declared font flag preparation online
+        id: assets
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          test ! -e soccer-hub-grid-artifacts
+          source "$OUT/capture.sh"
+          capture prepare-assets ONLINE node scripts/playSoccerHubGrid1089.mjs --prepare-assets-only
+          node --input-type=module <<'ASSETS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const root='soccer-hub-grid-artifacts',out=process.env.OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const manifest=JSON.parse(fs.readFileSync(root+'/asset-cache/manifest.json','utf8'));assert(manifest.length>0);
+          const seen=new Set();for(const row of manifest){assert(!seen.has(row.url));seen.add(row.url);const u=new URL(row.url);
+            assert.equal(u.protocol,'https:');assert.equal(u.username,'');assert.equal(u.password,'');
+            if(u.hostname==='fonts.googleapis.com')assert.equal(u.pathname,'/css2');
+            else if(u.hostname==='fonts.gstatic.com')assert(u.pathname.startsWith('/s/'));
+            else {assert.equal(u.hostname,'flagcdn.com');assert(/^\/w(?:20|40|80)\/[a-z0-9-]+\.png$/.test(u.pathname));assert.equal(u.search,'');}
+            assert(/^[0-9a-f]{64}$/.test(row.file));const b=fs.readFileSync(root+'/asset-cache/'+row.file);assert.equal(b.length,row.bytes);assert.equal(sha(b),row.sha256);assert.equal(row.file,row.sha256);
+          }
+          const p=JSON.parse(fs.readFileSync(root+'/preparation.json','utf8'));assert.deepEqual(p.sourceAfter,p.sourceBefore);
+          fs.writeFileSync(out+'/asset-network-boundary.json',JSON.stringify({mode:'ONLINE',sourceCommand:'node scripts/playSoccerHubGrid1089.mjs --prepare-assets-only',requests:'Existing source uses GET with redirect:error and20second timeout, no retries, only declared font/flag hosts',payloads:manifest.length,urls:[...seen],genericTransportReceiptAvailable:false,limitation:'Actual cache manifest/body custody, not a socket census or empty offline-guard credit'},null,2));
+          ASSETS
+          find soccer-hub-grid-artifacts/asset-cache -type f -print0 | LC_ALL=C sort -z | tee "$OUT/cache-members.before" | xargs -0 sha256sum > "$OUT/cache.sha256"
+          printf '%s\0' soccer-hub-grid-artifacts/fixtures.json soccer-hub-grid-artifacts/fixture-origins.json soccer-hub-grid-artifacts/independent-engine.mjs soccer-hub-grid-artifacts/independent-engine-metafile.json soccer-hub-grid-artifacts/preparation.json | xargs -0 sha256sum > "$OUT/fixtures.sha256"
+      - name: Actual eight native journeys and four effective old nesting comparisons offline
+        id: native
+        if: ${{ !cancelled() && steps.assets.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture native OFFLINE timeout --signal=TERM --kill-after=15s 12m node scripts/playSoccerHubGrid1089.mjs
+      - name: Independently verify every retained raw journey and copied control
+        if: ${{ !cancelled() && steps.native.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture verify OFFLINE node --input-type=module <<'VERIFY'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const root='soccer-hub-grid-artifacts',out=process.env.OUT,sha=b=>createHash('sha256').update(b).digest('hex'),load=n=>JSON.parse(fs.readFileSync(root+'/'+n,'utf8'));
+          const r=load('native/report.json'),f=load('fixtures.json'),origins=load('fixture-origins.json'),prep=load('preparation.json'),cache=load('asset-cache/manifest.json');
+          assert.equal(r.complete,true);assert.equal(r.error,undefined);assert.equal(r.cleanupError,undefined);assert.equal(r.holdError,undefined);
+          assert.equal(r.sourceHead,process.env.GITHUB_SHA);assert.deepEqual(r.sourceAfter,r.sourceBefore);assert.deepEqual(r.buildAfter,r.buildBefore);assert.deepEqual(r.cacheAfter,r.cacheBefore);assert.deepEqual(prep.sourceBefore,prep.sourceAfter);assert.deepEqual(prep.sourceAfter,r.sourceBefore);
+          assert.equal(sha(fs.readFileSync(root+'/independent-engine.mjs')),f.engineSha256);assert.equal(f.engineSha256,prep.engineSha256);
+          assert.equal(sha(fs.readFileSync(root+'/asset-cache/manifest.json')),prep.assetManifestSha256);
+          assert.deepEqual(origins.writes,[]);assert(Number.isInteger(f.selectedAttempt)&&f.selectedAttempt>=0&&f.selectedAttempt<24);assert.equal(origins.attempts.length,f.selectedAttempt+1);
+          const chosen=origins.attempts.at(-1);assert.equal(chosen.attempt,f.selectedAttempt);
+          for(const attempt of origins.attempts){let state=attempt.before.seed>>>0;assert(Number.isInteger(attempt.after.draws)&&attempt.after.draws>=0);
+            for(let i=0;i<attempt.after.draws;i++)state=(Math.imul(state,1664525)+1013904223)>>>0;assert.equal(state,attempt.after.seed);}
+          assert.deepEqual(chosen.playing,f.playing);assert.deepEqual(chosen.newspaper,f.newspaper);assert.equal(f.playing.phase,'playing');assert.equal(f.newspaper.phase,'newspaper');assert.equal(f.summary.phase,'season_summary');
+          assert.deepEqual(f.dismissalRngBefore,f.dismissalRngAfter);
+          const canonical=JSON.stringify({version:2,advertising:false,analytics:false,updatedAt:1791374400000});
+          const baseline={'cookie-consent-v2':canonical,'dukb-theme':'dark','dukb-soccer-currency':'EUR','rules-gate-seen:/soccer-career':'1','nbaCareerSave':'1089 opaque NBA bytes','nflCareerSave':'1089 opaque NFL bytes','stadiumTycoonV1':'1089 opaque Tycoon bytes'};
+          const expected=[];for(const arm of ['healthy','old-nesting'])for(const profile of ['390-touch','1280-keyboard'])for(const scene of ['playing','newspaper'])expected.push(arm+'|'+profile+'|'+scene);
+          const names=r.cases.map(x=>x.arm+'|'+x.profile.name+'|'+x.scene);assert.equal(new Set(names).size,8);assert.deepEqual([...names].sort(),expected.sort());
+          const parsed=[];let transitions=0;
+          const omitted=(object,key)=>Object.fromEntries(Object.entries(object).filter(([name])=>name!==key));
+          for(const row of r.cases){
+            assert.equal(row.complete,true);assert.deepEqual(row.errors,[]);assert.deepEqual(row.sockets,[]);
+            assert.equal(row.profile.width,row.profile.name==='390-touch'?390:1280);assert.equal(row.profile.height,row.profile.name==='390-touch'?844:900);assert.equal(row.profile.touch,row.profile.name==='390-touch');
+            assert.equal(row.fonts.length,8);assert(row.fonts.every(font=>font.faces.length>0&&font.faces.every(face=>face.family.replace(/^["']|["']$/g,'')===font.family&&face.weight===String(font.weight)&&face.status==='loaded')));
+            assert.equal(row.observations.length,row.scene==='newspaper'?2:1);assert.equal(row.observations[0].label,row.scene);
+            assert.deepEqual(JSON.parse(row.observations[0].state.storage.soccerCareerSave),f[row.scene]);
+            for(const observation of row.observations){for(const [key,value] of Object.entries(baseline))assert.equal(observation.state.storage[key],value);assert.equal(observation.state.storage['cookie-consent'],undefined);}
+            for(const req of row.requests){assert(['GET','HEAD'].includes(req.method));assert(!req.blocked);if(req.cached){const asset=cache.find(x=>x.url===req.url);assert(asset);assert.equal(req.sha256,asset.sha256);assert.equal(req.bytes,asset.bytes);}else if(req.localRead){assert.equal(req.localRead,'empty live score feed');assert.equal(req.method,'GET');}else{assert(req.status>=200&&req.status<300);assert.equal(new URL(req.url).hostname,'127.0.0.1');assert(/^[a-f0-9]{64}$/.test(req.sha256));assert(Number.isInteger(req.bytes)&&req.bytes>=0);}}
+            const failures=row.checks.filter(x=>!x.passed);assert(row.checks.length>=6);
+            if(row.arm==='healthy')assert.deepEqual(failures,[]);else{assert(failures.length>0);assert(failures.every(x=>x.structure&&x.failure.name==='AssertionError'));assert(failures.some(x=>x.name.includes('timeline header')));assert(failures.some(x=>x.name.includes('two intended')));}
+            assert.equal(row.transitions.length,row.scene==='newspaper'?1:0);
+            if(row.scene==='newspaper'){transitions++;const t=row.transitions[0];assert.equal(t.driverScrollAfterActivation,false);assert.deepEqual(t.expected,f.summary);assert.deepEqual(JSON.parse(t.after.storage.soccerCareerSave),f.summary);assert.equal(t.after.storage.soccerCareerSave,JSON.stringify(f.summary));assert.deepEqual(t.before.rng,t.after.rng);assert.deepEqual(t.before.session,t.after.session);assert.deepEqual(omitted(t.before.storage,'soccerCareerSave'),omitted(t.after.storage,'soccerCareerSave'));assert.deepEqual(t.after.writes.slice(t.before.writes.length),[{scope:'local',method:'setItem',args:['soccerCareerSave',JSON.stringify(f.summary)]}]);assert.equal(t.after.now-t.before.now,256);const clicks=t.after.inputs.slice(t.before.inputs.length).filter(x=>x.type==='click');assert.equal(clicks.length,1);assert.equal(clicks[0].trusted,true);assert.match(clicks[0].text,/Continue to Season Summary/);assert(row.summaryReveal.top>=0&&row.summaryReveal.bottom<=row.profile.height);}
+            parsed.push({arm:row.arm,profile:row.profile,scene:row.scene,checks:row.checks.length,ownedStructureRefusals:failures.map(x=>x.name),complete:true});
+          }
+          assert.equal(transitions,4);assert.equal(r.comparisons.length,4);
+          const fields=row=>row.observations.map(x=>({label:x.label,storage:x.state.storage,session:x.state.session,rng:x.state.rng,writes:x.state.writes,now:x.state.now,text:x.data.text}));
+          const comparisonNames=[];
+          for(const old of r.cases.filter(x=>x.arm==='old-nesting')){const current=r.cases.find(x=>x.arm==='healthy'&&x.profile.name===old.profile.name&&x.scene===old.scene);assert(current);assert.deepEqual(fields(old),fields(current));const comparison=r.comparisons.find(x=>x.profile===old.profile.name&&x.scene===old.scene);assert(comparison);assert.equal(comparison.effective,true);assert.equal(comparison.baselineEqual,true);assert(comparison.failures.length>0);assert.deepEqual(comparison.failures,old.checks.filter(x=>!x.passed).map(x=>x.name));comparisonNames.push(comparison.profile+'|'+comparison.scene);}
+          assert.equal(new Set(comparisonNames).size,4);
+          const current=fs.readFileSync(root+'/native/SoccerCareer.current.tsx','utf8').replace(/\r\n/g,'\n'),old=fs.readFileSync(root+'/native/SoccerCareer.old.tsx','utf8');
+          const top='            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Timeline</span>\n          </div>\n';
+          const bottom='            <RivalrySummaryCard summary={career.rivalrySummary} career={career} />\n          )}\n';
+          assert.equal(current.split(top).length,2);assert.equal(current.split(bottom+'          </div>\n').length,2);
+          assert.equal(current.replace(top,top+'          </div>\n').replace(bottom+'          </div>\n',bottom),old);
+          assert.equal(old.replace(top+'          </div>\n',top).replace(bottom,bottom+'          </div>\n'),current);
+          assert.equal(r.control.originalSha256,sha(fs.readFileSync('src/pages/SoccerCareer.tsx')));assert.equal(r.control.copySha256,sha(Buffer.from(old)));assert.notEqual(r.control.copySha256,r.control.originalSha256);assert.equal(r.control.roundTripExact,true);assert.equal(r.control.forwardChanges,2);assert.equal(r.control.normalizedRoundTripSha256,sha(Buffer.from(current)));
+          assert.equal(r.control.transforms.length,1);assert.equal(r.control.transforms[0].copied,true);assert.equal(r.control.transforms[0].sha256,r.control.copySha256);
+          const images=fs.readdirSync(root+'/native').filter(x=>x.endsWith('.png')).map(file=>{const b=fs.readFileSync(root+'/native/'+file);assert(b.length>0);return {file,bytes:b.length,sha256:sha(b)};});assert.equal(images.length,24);
+          fs.writeFileSync(out+'/summary.json',JSON.stringify({completed:true,sourceCommit:r.sourceHead,cases:parsed,healthyJourneys:4,copiedOldNestingJourneys:4,comparisons:4,continuedSummaries:4,images,rngEvidence:'Existing seeded-browser RNG seed/draw counters and fixture action LCG end-state witnesses. No individual full draw-value tape is emitted by this unchanged harness.',clock:'Existing paused Oct7 clock and reduced-motion profiles, not native clocks/random or physical-device coverage',runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN',scope:'Focused canonical-consent fixture compatibility for unchanged Hub layout/Continue proof. No full App/Reveal/full-unit/readers/caps or release claim.'},null,2));
+          VERIFY
+      - name: Always retain source dependencies tools fixtures cache and healthy dist custody
+        if: always()
+        run: |
+          set -u
+          failed=0
+          if [ -z "${OUT:-}" ]; then OUT="$RUNNER_TEMP/sc-hub-consent-fixture"; mkdir -p "$OUT"; fi
+          for pair in 'source:source' 'dependency-files:dependencies' 'browser-files:browser' 'python-files:python' 'fixtures:fixtures' 'cache:cache' 'dist:dist'; do
+            manifest="${pair%%:*}"; label="${pair#*:}"
+            if [ -f "$OUT/$manifest.sha256" ]; then sha256sum -c "$OUT/$manifest.sha256" > "$OUT/$label-held.log" 2>&1 || failed=1
+            else printf 'UNAVAILABLE\n' > "$OUT/$label-held.log"; failed=1; fi
+          done
+          if [ -d node_modules ]; then
+            find node_modules -type f -print0 | LC_ALL=C sort -z > "$OUT/dependency-members.after"
+          else failed=1; fi
+          if [ -f "$OUT/tools-root.txt" ]; then
+            tools="$(cat "$OUT/tools-root.txt")"
+            if [ -d "$tools/node_modules" ]; then
+              find "$tools/node_modules" -type f -print0 | LC_ALL=C sort -z > "$OUT/browser-members.after"
+            else failed=1; fi
+            if [ -d "$tools/python" ]; then
+              find "$tools/python" -name __pycache__ -prune -o -type f -print0 | LC_ALL=C sort -z > "$OUT/python-members.after"
+            else failed=1; fi
+          else failed=1; fi
+          if [ -d dist ]; then
+            find dist -type f -print0 | LC_ALL=C sort -z > "$OUT/dist-members.after"
+          else failed=1; fi
+          if [ -d soccer-hub-grid-artifacts/asset-cache ]; then
+            find soccer-hub-grid-artifacts/asset-cache -type f -print0 | LC_ALL=C sort -z > "$OUT/cache-members.after"
+          else failed=1; fi
+          for member in dependency browser python dist cache; do
+            if [ -f "$OUT/$member-members.before" ] && [ -f "$OUT/$member-members.after" ]; then
+              cmp "$OUT/$member-members.before" "$OUT/$member-members.after" > "$OUT/$member-members-held.log" 2>&1 || failed=1
+            else printf 'UNAVAILABLE\n' > "$OUT/$member-members-held.log"; failed=1; fi
+          done
+          if [ -f "$OUT/source-members.before" ]; then
+            git ls-files -z > "$OUT/source-members.after"
+            cmp "$OUT/source-members.before" "$OUT/source-members.after" || failed=1
+          else failed=1; fi
+          git diff --exit-code HEAD > "$OUT/final-source.diff" || failed=1
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt" || failed=1
+          if [ -f "$OUT/tools-root.txt" ]; then
+            tools="$(cat "$OUT/tools-root.txt")"
+            "$tools/python/bin/python" -m pip freeze > "$OUT/python-packages.after"
+            cmp "$OUT/python-packages.before" "$OUT/python-packages.after" || failed=1
+            for name in playwright playwright-core; do
+              if [ -L "node_modules/$name" ] && [ "$(readlink "node_modules/$name")" = "$tools/node_modules/$name" ]; then unlink "node_modules/$name"; else failed=1; fi
+            done
+          fi
+          for receipt in "$OUT"/*.transport; do
+            test -e "$receipt" || continue
+            test ! -s "$receipt" || failed=1
+          done
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          exit "$failed"
+      - name: Original focused evidence including partial first failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sc-hub-consent-fixture-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/sc-hub-consent-fixture
+            soccer-hub-grid-artifacts
+          if-no-files-found: error
+          retention-days: 14
