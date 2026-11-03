@@ -26,6 +26,11 @@ const same = (left, right) => { try { assert.deepEqual(left, right); return { eq
 const normalized = raw => raw.toString('utf8').replaceAll('\r\n', '\n');
 const previouslyHandled = relative => relative.startsWith('src/') && /\.(ts|tsx|json)$/.test(relative);
 const safeRelative = relative => { assert(relative && !path.isAbsolute(relative) && !relative.split('/').includes('..'), 'Actual repository input has a closed relative path'); return relative; };
+function compilerVirtual(input, metadata) {
+  if (input !== '<define:import.meta.env>') return null;
+  assert.deepEqual(metadata, { bytes: 0, imports: [] }, 'Exact generated import.meta.env definition metadata');
+  return { input, definition: '{"PROD":true,"DEV":false}', metadata };
+}
 const nativeRandom = Math.random, nativeNow = Date.now;
 const held = new Map(), baselineBytes = new Map();
 const phases = [], builds = [], advances = [], reads = [], failures = [], secondary = [];
@@ -165,9 +170,20 @@ try {
       retainBuilt(metafile, executable, kitLoaded) {
         // Preserve all actual compiler evidence before aggregate closure or comparison assertions.
         writeBytes(mode.id + '/engine.cjs', fs.readFileSync(executable)); write(mode.id + '/metafile.json', metafile); write(mode.id + '/kit-loaded.json', kitLoaded); save();
-        const metadataRepo = [];
+        const metadataRepo = [], compilerVirtualInputs = [];
         for (const input of Object.keys(metafile.inputs)) {
           if (input === '<stdin>') continue;
+          const virtual = compilerVirtual(input, metafile.inputs[input]);
+          if (virtual) {
+            const malformed = copy(metafile.inputs[input]); malformed.bytes = 1;
+            assert.notDeepEqual(malformed, metafile.inputs[input], 'Virtual metadata control actually changes bytes');
+            let observed = null;
+            try { compilerVirtual(input, malformed); } catch (error) { observed = { name: error.name, message: error.message }; }
+            assert(observed && observed.name === 'AssertionError', 'The same virtual admission rejects altered metadata');
+            compilerVirtualInputs.push({ ...virtual, negativeControl: { malformed, observed } });
+            write(mode.id + '/compiler-virtual.json', compilerVirtualInputs);
+            continue;
+          }
           const absolute = path.resolve(ROOT, input), relative = path.relative(ROOT, absolute).replaceAll('\\', '/');
           assert(!relative.startsWith('../') && !path.isAbsolute(relative), 'No default code loader outside locked workspace');
           if (relative.startsWith('node_modules/')) { assert.equal(sha(fs.readFileSync(absolute)), dependencyHashes.get(relative)); continue; }
@@ -193,7 +209,7 @@ try {
           assert.equal(records.has('src/lib/soccerCareerExtraCups.ts'), false, 'No Shield helper enters either pre-Shield/raw original graph');
           assert.equal(records.get(enginePath).rawSha256, mode.original ? sha(oldEngine) : sha(preEngine));
         }
-        const result = { mode, repositoryInputs: records.size, thirdPartyInputs: Object.keys(metafile.inputs).length - metadataRepo.length - 1, actual197SourceAndTransformationClosure: mode.shield, nonSrcHistoricalRawMatchesActual197: true, executable: pin(fs.readFileSync(executable)), metadataFile: mode.id + '/metafile.json' };
+        const result = { mode, repositoryInputs: records.size, thirdPartyInputs: Object.keys(metafile.inputs).length - metadataRepo.length - compilerVirtualInputs.length - 1, compilerVirtualInputs, actual197SourceAndTransformationClosure: mode.shield, nonSrcHistoricalRawMatchesActual197: true, executable: pin(fs.readFileSync(executable)), metadataFile: mode.id + '/metafile.json' };
         write(mode.id + '/closure.json', result); builds.push(result);
       }
     };

@@ -1,7 +1,7 @@
 name: Community Shield four-call historical career diagnostic
 on:
   push:
-    branches: [codex/sc-community-shield-agent-contrast-20261103]
+    branches: [codex/sc-community-shield-agent-virtual-20261103]
 permissions:
   contents: read
 jobs:
@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: '24.22.1'
           cache: npm
-      - name: Bind the exact failed owner graph and three QA-only additions
+      - name: Bind the failed virtual-input attempt and two QA-only corrections
         run: |
           set -euo pipefail
           BINDMETA="$RUNNER_TEMP/sc-agent-baseline-binding"
@@ -33,22 +33,21 @@ jobs:
           printf 'SC_AGENT_BASELINE_META=%s\n' "$RUNNER_TEMP/sc-agent-baseline-caller" >> "$GITHUB_ENV"
           printf 'SC_AGENT_BASELINE_OUT=%s\n' "$GITHUB_WORKSPACE/tmp/sc-agent-baseline-$GITHUB_RUN_ID" >> "$GITHUB_ENV"
           printf 'SC_AGENT_BASELINE_EVIDENCE=%s\n' "$RUNNER_TEMP/sc-agent-baseline-original197" >> "$GITHUB_ENV"
-          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-agent-contrast-20261103
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-agent-virtual-20261103
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$BEFORE" = 0000000000000000000000000000000000000000
-          test "$(git rev-parse HEAD^)" = 3dcb4b897b58a4731b2b2ab10b622213b0f071e7
-          test "$(git rev-parse 'HEAD^^{tree}')" = 499807432461712c8cd73572fe013a62d9a726a7
+          test "$(git rev-parse HEAD^)" = 9c6c573d3a8acc6f30fe7668dfa27a6e953553fc
+          test "$(git rev-parse 'HEAD^^{tree}')" = 1dab6b67e0032cc0d1a5579432182696166578d7
           test "$(git rev-parse --is-shallow-repository)" = false
           git rev-parse HEAD 'HEAD^{tree}' > "$BINDMETA/head-tree.txt"
           git diff --name-status HEAD^ HEAD > "$BINDMETA/changed-paths.txt"
           cat > "$BINDMETA/expected-paths.txt" <<'PATHS'
-          A	.github/workflows/sc-community-shield-agent-contrast.yml
-          A	scripts/data/scAgentBaseline197.json.gz
-          A	scripts/qa/probeSoccerAgentReviewBaseline.mjs
+          M	.github/workflows/sc-community-shield-agent-contrast.yml
+          M	scripts/qa/probeSoccerAgentReviewBaseline.mjs
           PATHS
           cmp "$BINDMETA/expected-paths.txt" "$BINDMETA/changed-paths.txt"
           cat > "$BINDMETA/pins.txt" <<'PINS'
-          scripts/qa/probeSoccerAgentReviewBaseline.mjs 39aeffe8f586b28f310561448a152773e40ffd22
+          scripts/qa/probeSoccerAgentReviewBaseline.mjs 1b4ecc5267d698e4ecd8e708b4eb89d5788f7be1
           scripts/data/scAgentBaseline197.json.gz 7d657016e3a7c87b23e117d92fc11cb07dcc1ea3
           scripts/qa/soccerAgentReviewKit.mjs d6ca063fb64f3b556ed9c484af22574d5974fb63
           scripts/lib/communityShieldOracleCompat.mjs 1ed3b4103bc3805ccd08f72eeb181558fa892d23
@@ -126,7 +125,7 @@ jobs:
           test "$(git rev-parse --is-shallow-repository)" = false
           test "$(git rev-parse HEAD:package.json)" = 2ff64986fb76ebc51b706f2fd24765768874008a
           test "$(git rev-parse HEAD:package-lock.json)" = 97d6f12a052f25f400462938c241789a083f0bfe
-          printf '%s  %s\n' 'ec0c363be4f0d172846257674fc76d975274225078d516148ec67ecb8e32eaf1' scripts/qa/probeSoccerAgentReviewBaseline.mjs | sha256sum --check > "$META/producer-pin.log"
+          printf '%s  %s\n' '62ace23bffc0c7842227df14514a1f6ac7612ecbb687973fcde482b260db5cf4' scripts/qa/probeSoccerAgentReviewBaseline.mjs | sha256sum --check > "$META/producer-pin.log"
           git ls-files -z > "$META/source-members.before"
           git ls-files -z | xargs -0 sha256sum > "$META/source.sha256"
           git ls-files --others --exclude-standard -z > "$META/untracked.before"; test ! -s "$META/untracked.before"
@@ -191,7 +190,7 @@ jobs:
           console.log('AGENT_BASELINE_RAW: completed four-call diagnostic only; pre-Shield agreement or disagreement retained without adoption');
           VERIFY
           CALLER
-          printf '%s  %s\n' 3f12e2f37be04ff798d8a04693d51d8ec009ce03a25df5c3fa01d25c6ffb2bad "$BINDMETA/REMOTE-CALLER.sh" | sha256sum --check > "$BINDMETA/caller-pin.log"
+          printf '%s  %s\n' 3e3ac8a1eb8b07dbe10ede92acccbb7b782714142d2b89d004d85edc6732ccdb "$BINDMETA/REMOTE-CALLER.sh" | sha256sum --check > "$BINDMETA/caller-pin.log"
           code=0; bash "$BINDMETA/REMOTE-CALLER.sh" > "$BINDMETA/caller.stdout" 2> "$BINDMETA/caller.stderr" || code=$?
           printf '%s\n' "$code" > "$BINDMETA/caller.exit"
           tail -n 16 "$BINDMETA/caller.stdout"; tail -n 16 "$BINDMETA/caller.stderr"
