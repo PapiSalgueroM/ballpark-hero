@@ -1,0 +1,374 @@
+name: Soccer Career safe rating report context fixed qualification
+
+on:
+  push:
+    branches: [codex/sc-rating-report-context-fixed-20261103]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sc-rating-report-context-fixed-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PRERENDER_ONLY: /soccer-career
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the test-first parent and the approved Page
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-rating-report-context-fixed"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/original" "$OUT/generated" "$OUT/units" "$OUT/raw"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git fetch --no-tags --depth=1 origin c4a7e81373ae6a69e89a018ef03ea3004805e8fb
+          test "$(git rev-parse c4a7e81373ae6a69e89a018ef03ea3004805e8fb^{tree})" = a3081a4f9fb04bd65620ecb826c9021b8b988928
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status c4a7e81373ae6a69e89a018ef03ea3004805e8fb HEAD > "$OUT/candidate-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.RUNNER_TEMP + '/sc-rating-report-context-fixed';
+          const base = 'c4a7e81373ae6a69e89a018ef03ea3004805e8fb';
+          const allowedCandidate = [
+            '.github/workflows/sc-rating-report-context-fixed-20261103.yml',
+            'src/pages/SoccerCareer.tsx',
+          ].sort();
+          const candidate = execFileSync('git', ['diff', '--name-only', base, 'HEAD'])
+            .toString().trim().split('\n').filter(Boolean).sort();
+          assert.deepEqual(candidate, allowedCandidate, 'Candidate changed more than the approved Page and QA workflow');
+          const component = 'src/pages/SoccerCareer.tsx';
+          const fixedSha256 = '9ff4ce5a7a4f2eb1565c4a7e19ad328ac291e8075b860ef9b03e4945a9b1d46a';
+          assert.match(fixedSha256, /^[0-9a-f]{64}$/, 'Unbound fixed Page hash');
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync(component)).digest('hex'), fixedSha256);
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/soccerCareerRatingReport.test.tsx')).digest('hex'), '0d640e20eb76c3ce19c47f94a8fe172b1d8d36b1ec766a434755186fb3524fc6');
+          fs.writeFileSync(out + '/source-association.json', JSON.stringify({
+            parent: base, parentTree: 'a3081a4f9fb04bd65620ecb826c9021b8b988928',
+            originalComponentBlob: 'c6b270bf74c5b97fd21e07900c327ac7ccba24e0', component, fixedSha256,
+            testBlob: '796b6f88b9635d938caede4fc421200cfa3249b1',
+            scope: 'One read-only allowlisted GameSeoContent reportGameContext prop. Engine, codec, save behavior, shared reporter, footer, data and existing guards are held. The crafted stored98/derived75 fixture does not reproduce the reported loss. Prior optional diagnostics failed caps; all sixteen current caps remain unchanged.',
+          }, null, 2) + '\n');
+          const generated = [
+            'scripts/data/guideHeadingsFrozen.json', 'src/data/searchKeywords.json',
+            'public/soccer-career/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json',
+          ];
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const hashes = Object.fromEntries(tracked.filter(p => !generated.includes(p))
+            .map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-before.json', JSON.stringify(hashes, null, 2) + '\n');
+          fs.writeFileSync(out + '/generated-paths.json', JSON.stringify(generated, null, 2) + '\n');
+          for (const p of generated) {
+            const dst = path.join(out, 'original', p);
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(p, dst);
+          }
+          NODE
+      - name: Install held application and isolated QA dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          npm install --prefix "$RUNNER_TEMP/flagship-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/flagship-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+          python3 -m pip install --target "$RUNNER_TEMP/flagship-python" fonttools pillow 2>&1 | tee "$QA_OUT/logs/python-install.log"
+          echo "PYTHONPATH=$RUNNER_TEMP/flagship-python" >> "$GITHUB_ENV"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Fixed and whole-original controls, existing reporting and save regressions, generators, build, readers and budgets
+        timeout-minutes: 32
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require $GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          component=src/pages/SoccerCareer.tsx
+          cp "$component" "$QA_OUT/fixed-SoccerCareer.tsx"
+          trap 'cp "$QA_OUT/fixed-SoccerCareer.tsx" "$component"' EXIT
+          run_rating() {
+            local name="$1" mode="$2"
+            mkdir -p "$QA_OUT/raw/$name"
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            set +e
+            SC_RATING_REPORT_RAW="$QA_OUT/raw/$name" SIM_OFFLINE_RECEIPT="$receipt" \
+              node node_modules/vitest/vitest.mjs run src/test/soccerCareerRatingReport.test.tsx \
+              --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units/$name.json" \
+              2>&1 | tee "$QA_OUT/logs/$name.log"
+            local codes=("${PIPESTATUS[@]}")
+            set -e
+            printf '%s\n' "${codes[0]}" > "$QA_OUT/units/$name.exit"
+            test "${codes[1]}" -eq 0
+            test ! -s "$receipt"
+            UNIT_NAME="$name" UNIT_MODE="$mode" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = process.env.QA_OUT, name = process.env.UNIT_NAME, red = process.env.UNIT_MODE === 'old';
+          const r = JSON.parse(fs.readFileSync(out + '/units/' + name + '.json', 'utf8'));
+          assert.equal(Number(fs.readFileSync(out + '/units/' + name + '.exit', 'utf8')), red ? 1 : 0);
+          assert.equal(r.success, !red); assert.equal(r.numPassedTests, red ? 0 : 7); assert.equal(r.numFailedTests, red ? 7 : 0);
+          assert.equal(r.testResults.length, 1);
+          const suite = r.testResults[0];
+          assert.equal(suite.status, red ? 'failed' : 'passed');
+          if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+          const expected = {"Soccer Career safe rating report context describes creation without inventing a player or writing a career":"SC_RATING_REPORT_CONTEXT_CREATION","Soccer Career safe rating report context keeps stored and derived ratings distinct, omits personal data and never substitutes match rating for missing historical overall":"SC_RATING_REPORT_CONTEXT_MISMATCH","Soccer Career safe rating report context reports the current state after one real academy season without replaying progress":"SC_RATING_REPORT_CONTEXT_ADVANCE_BEFORE","Soccer Career safe rating report context keeps rating diagnostics safe on the real retirement ceremony phase":"SC_RATING_REPORT_CONTEXT_RETIREMENT","Soccer Career safe rating report context reports a real refused save and clears the flag after Retry without advancing the career":"SC_RATING_REPORT_CONTEXT_SAVE_FAILED","Soccer Career safe rating report context reports a real cross-tab move while preserving the newer tab save":"SC_RATING_REPORT_CONTEXT_SAVE_MOVED","Soccer Career safe rating report context reports an unreadable save without exposing or deleting its bytes":"SC_RATING_REPORT_CONTEXT_SAVE_ERROR"};
+          assert.equal(suite.assertionResults.length, 7);
+          for (const row of suite.assertionResults) {
+            assert.ok(Object.hasOwn(expected, row.fullName), row.fullName);
+            assert.equal(row.status, red ? 'failed' : 'passed');
+            if (red) assert.ok(row.failureMessages.length > 0 && row.failureMessages.every(message => message.includes(expected[row.fullName])), row.fullName);
+            else assert.deepEqual(row.failureMessages, []);
+          }
+          assert.equal(new Set(suite.assertionResults.map(row => row.fullName)).size, 7);
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(r, key) ? r[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          const counts = { creation: 1, mismatch: 1, advance: 2, retirement: 1, 'save-failed': 2, 'save-moved': 1, 'save-error': 1 };
+          const files = fs.readdirSync(out + '/raw/' + name).filter(file => file.endsWith('.json')).sort();
+          assert.deepEqual(files, Object.keys(counts).map(key => key + '.json').sort());
+          const rawSummary = [];
+          for (const file of files) {
+            const text = fs.readFileSync(out + '/raw/' + name + '/' + file, 'utf8'), receipt = JSON.parse(text);
+            assert.equal(file, receipt.case + '.json');
+            for (const secret of ['PRIVATE_PLAYER_SENTINEL', 'PRIVATE_NEWS_SENTINEL', 'PRIVATE_EVENT_SENTINEL', 'PRIVATE_QUERY_SENTINEL', '9876543.21', '87654321']) assert.ok(!text.includes(secret), 'Private fixture content in raw receipt');
+            const observations = [];
+            const collect = value => {
+              if (!value || typeof value !== 'object') return;
+              if (Object.hasOwn(value, 'context') && Object.hasOwn(value, 'envelope')) observations.push(value);
+              for (const item of Object.values(value)) collect(item);
+            };
+            collect(receipt.observations);
+            assert.equal(observations.length, counts[receipt.case]);
+            for (const observation of observations) {
+              assert.equal(observation.envelope.path, '/soccer-career');
+              assert.equal(observation.envelope.source, 'game-report-button');
+              assert.equal(observation.envelope.contextTruncated, false);
+              assert.ok(JSON.stringify(observation.envelope).length < 1500);
+              if (red) {
+                assert.equal(observation.context, null);
+                assert.ok(!Object.hasOwn(observation.envelope, 'careerRating'));
+              } else {
+                assert.deepEqual(Object.keys(observation.context), ['careerRating']);
+                const rating = observation.context.careerRating;
+                assert.deepEqual(Object.keys(rating).sort(), ['phase', 'age', 'position', 'overall', 'derivedOverall', 'skills', 'seasonCount', 'lastSeason', 'saveFailed', 'saveMoved', 'saveError'].sort());
+                if (rating.skills !== null) assert.deepEqual(Object.keys(rating.skills).sort(), ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'].sort());
+                if (rating.lastSeason !== null) assert.deepEqual(Object.keys(rating.lastSeason).sort(), ['ovr', 'year']);
+                assert.deepEqual(observation.envelope.careerRating, rating, 'Bounded report must retain the complete allowlisted snapshot');
+              }
+            }
+            rawSummary.push({ case: receipt.case, observations: observations.length });
+          }
+          assert.equal(rawSummary.reduce((n, row) => n + row.observations, 0), 9);
+          fs.writeFileSync(out + '/units/' + name + '-admission.json', JSON.stringify({
+            name, mode: red ? 'whole original Page' : 'fixed Page', passes: r.numPassedTests,
+            ownedFailures: r.numFailedTests, expected, rawSummary, counters, absentCounterMeaning: 'UNKNOWN',
+            scope: 'Actual Page and bounded report projection, real engine/codec/save/fence preservation. No report submission. Crafted 98/75 fixture is not the original report reproduction.',
+          }, null, 2) + '\n');
+          NODE
+          }
+          run_rating fixed green
+          git show c4a7e81373ae6a69e89a018ef03ea3004805e8fb:"$component" > "$component"
+          test "$(git hash-object "$component")" = c6b270bf74c5b97fd21e07900c327ac7ccba24e0
+          cp "$component" "$QA_OUT/whole-old-SoccerCareer.tsx"
+          run_rating whole-old old
+          cp "$QA_OUT/fixed-SoccerCareer.tsx" "$component"
+          cmp "$QA_OUT/fixed-SoccerCareer.tsx" "$component"
+          run_rating restored green
+          trap - EXIT
+          run_gate related-report-save node node_modules/vitest/vitest.mjs run \
+            src/test/reportContext.test.ts src/test/soccerCareerSaveRetry.test.tsx src/test/soccerCareerSaveFence.test.tsx \
+            --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units/related-report-save.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/units/related-report-save.json', 'utf8'));
+          assert.equal(r.success, true); assert.equal(r.numPassedTests, 21); assert.equal(r.numFailedTests, 0);
+          const files = { 'src/test/reportContext.test.ts': 5, 'src/test/soccerCareerSaveRetry.test.tsx': 8, 'src/test/soccerCareerSaveFence.test.tsx': 8 };
+          assert.equal(r.testResults.length, 3);
+          const seen = new Set(), titles = [];
+          for (const suite of r.testResults) {
+            const file = Object.keys(files).find(file => suite.name.replaceAll('\\', '/').endsWith('/' + file));
+            assert.ok(file && !seen.has(file), suite.name); seen.add(file);
+            assert.equal(suite.status, 'passed');
+            if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+            assert.equal(suite.assertionResults.length, files[file]);
+            for (const row of suite.assertionResults) {
+              assert.equal(row.status, 'passed'); assert.deepEqual(row.failureMessages, []); titles.push(row.fullName);
+            }
+          }
+          assert.equal(new Set(titles).size, 21);
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(r, key) ? r[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          fs.writeFileSync(process.env.QA_OUT + '/units/related-admission.json', JSON.stringify({
+            actualPasses: 21, cases: titles, perFile: files, counters, absentCounterMeaning: 'UNKNOWN',
+            scope: 'Seven new plus twenty-one held related cases are twenty-eight unique healthy tests; restored seven are repeats. Actual report-submission tests and full browser journeys are unselected and uncredited.',
+          }, null, 2) + '\n');
+          NODE
+          run_gate simReportContext node scripts/simReportContext.mjs
+          run_gate seo-meta-parts node scripts/genSeoMetaParts.mjs
+          git diff --exit-code -- src/data/seoMetaParts > "$QA_OUT/logs/seo-parts-held.log"
+          run_gate guide-soccer-career node scripts/simGuideHeadings.mjs --refresh /soccer-career
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const before = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/original/scripts/data/guideHeadingsFrozen.json', 'utf8'));
+          const after = JSON.parse(fs.readFileSync('scripts/data/guideHeadingsFrozen.json', 'utf8'));
+          for (const route of ['/soccer-career']) {
+            assert.ok(before.routes[route]);
+            assert.ok(after.routes[route]);
+            delete before.routes[route];
+            delete after.routes[route];
+          }
+          assert.deepEqual(after, before, 'Guide refresh changed an unrelated route or fixture metadata');
+          NODE
+          run_gate keywords-first node scripts/genSearchKeywords.mjs
+          cp src/data/searchKeywords.json "$QA_OUT/searchKeywords-first.json"
+          run_gate keywords-second node scripts/genSearchKeywords.mjs
+          cmp "$QA_OUT/searchKeywords-first.json" src/data/searchKeywords.json
+          run_gate build npm run build:seo
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then
+              ready=1
+              break
+            fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career node scripts/simSeoMetaSplit.mjs
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Retain generated bodies, actual diff and source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.QA_OUT;
+          const before = JSON.parse(fs.readFileSync(out + '/source-before.json', 'utf8'));
+          const generated = JSON.parse(fs.readFileSync(out + '/generated-paths.json', 'utf8'));
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const after = Object.fromEntries(tracked.filter(p => !generated.includes(p))
+            .map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-after.json', JSON.stringify(after, null, 2) + '\n');
+          for (const p of generated) {
+            if (!fs.existsSync(p)) continue;
+            const dst = path.join(out, 'generated', p);
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(p, dst);
+          }
+          const changed = execFileSync('git', ['diff', '--name-only']).toString().trim().split('\n').filter(Boolean);
+          fs.writeFileSync(out + '/actual-generated-paths.json', JSON.stringify(changed, null, 2) + '\n');
+          fs.writeFileSync(out + '/generated.patch', execFileSync('git', ['diff', '--binary', '--', ...generated], { maxBuffer: 32 * 1024 * 1024 }));
+          fs.writeFileSync(out + '/working-tree.txt', execFileSync('git', ['status', '--short'], { maxBuffer: 8 * 1024 * 1024 }));
+          fs.writeFileSync(out + '/transport-inventory.json', JSON.stringify(fs.readdirSync(out + '/transport').sort().map(name => {
+            const text = fs.readFileSync(path.join(out, 'transport', name), 'utf8');
+            const lines = text.split('\n').filter(Boolean);
+            return { name, blockedAttempts: lines.length,
+              fontBlockedAttempts: lines.filter(line => /^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts: lines.filter(line => line === '[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length,
+              rawLogRetained: true };
+          }), null, 2) + '\n');
+          assert.deepEqual(after, before, 'Tracked source changed outside the five declared generated paths');
+          assert.ok(changed.every(p => generated.includes(p)), 'Unexpected tracked generated path');
+          NODE
+      - name: Bound the retained artifact
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: sc-rating-report-context-fixed-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sc-rating-report-context-fixed
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
