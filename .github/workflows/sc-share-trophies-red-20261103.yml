@@ -1,0 +1,110 @@
+name: Soccer Career share trophy total owned baseline
+on:
+  push:
+    branches: [codex/sc-share-trophies-red-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: sc-share-trophies-red-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact baseline source
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/sc-share-trophies-red"
+          mkdir -p "$QA_OUT"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          git rev-parse HEAD HEAD^{tree} > "$QA_OUT/source.txt"
+          test "$(git rev-parse HEAD^)" = cc9a55a2f35b6215d5e6e664cc401d10d7f76291
+          test "$(git rev-parse HEAD:src/lib/soccerCareerEngine.ts)" = 722b2285628775dff77f8de0138cf44d7b104b49
+          test "$(git rev-parse HEAD:src/test/soccerCareerShareTrophies.test.ts)" = a52cfb9de4d7101187890ed3087507e45176e19b
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/changed-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const actual = fs.readFileSync(process.env.QA_OUT + '/changed-paths.txt', 'utf8').trim().split('\n').sort();
+          assert.deepEqual(actual, ['A\t.github/workflows/sc-share-trophies-red-20261103.yml', 'A\tsrc/test/soccerCareerShareTrophies.test.ts']);
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          cp .github/workflows/sc-share-trophies-red-20261103.yml "$QA_OUT/workflow.yml"
+      - name: Install unchanged dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/install.log"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper types and actual owned baseline
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/types.transport.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$QA_OUT/types.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          export SC_SHARE_TROPHIES_RAW="$QA_OUT/raw"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/units.transport.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node_modules/.bin/vitest run src/test/soccerCareerShareTrophies.test.ts --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile="$QA_OUT/units.json" 2>&1 | tee "$QA_OUT/units.log"
+          unit_exit=${PIPESTATUS[0]}
+          set -e
+          echo "$unit_exit" > "$QA_OUT/units.exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const root = process.env.QA_OUT, report = JSON.parse(fs.readFileSync(root + '/units.json', 'utf8'));
+          const files = report.testResults;
+          assert.equal(files.length, 1);
+          assert.ok(files[0].name.endsWith('/src/test/soccerCareerShareTrophies.test.ts'));
+          const rows = files[0].assertionResults;
+          assert.equal(rows.length, 5);
+          const failed = rows.filter(r => r.status === 'failed'), passed = rows.filter(r => r.status === 'passed');
+          assert.equal(failed.length, 2); assert.equal(passed.length, 3);
+          assert.equal(new Set(rows.map(r => r.fullName)).size, 5);
+          assert.deepEqual(failed.map(r => r.title).sort(), ["adds continental titles to every other trophy family across career seasons","includes a continental international title in the shared trophy count"]);
+          assert.ok(failed.every(r => (r.failureMessages ?? []).join('\n').includes('SC_SHARE_TROPHY_')));
+          assert.ok(rows.every(r => r.status === 'passed' || r.status === 'failed'));
+          assert.equal(report.success, false);
+          assert.equal(Number(fs.readFileSync(root + '/units.exit', 'utf8').trim()), 1);
+          const raw = ['continental-only','mixed','zero','other-families','personal-awards'].map(name => JSON.parse(fs.readFileSync(root + '/raw/' + name + '.json','utf8')));
+          assert.equal(raw.length,5);
+          assert.ok(raw.every(r => r.inputUnchanged && r.randomDraws === 0 && r.share === r.repeated));
+          assert.deepEqual(raw.map(r => [r.totals.continentalCups,r.share.split(', ')[1]]), [[1,'0 trophies'],[2,'6 trophies'],[0,'0 trophies'],[0,'5 trophies'],[0,'0 trophies']]);
+          const counters = Object.fromEntries(['numRuntimeErrorTestSuites','numUnhandledErrors'].map(k => [k, report[k] ?? null]));
+          assert.ok(Object.values(counters).every(v => v === null || v === 0));
+          fs.writeFileSync(root + '/admission.json', JSON.stringify({ status:'ACTUAL_OWNED_BASELINE_2_RED_3_PRESERVED', rows:5, failed:failed.map(r=>r.fullName), passed:passed.map(r=>r.fullName), counters, absentCounterMeaning:'UNKNOWN' }, null, 2) + '\n');
+          NODE
+          exit "$unit_exit"
+      - name: Retain every tracked source byte
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-share-trophies-red-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sc-share-trophies-red
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
