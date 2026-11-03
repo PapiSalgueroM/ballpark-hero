@@ -1,0 +1,346 @@
+name: Historical career prefix contrast
+on:
+  push:
+    branches: [codex/sc-historical-prefixes-20261103]
+permissions:
+  contents: read
+jobs:
+  contrast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Bind exact clean source and four temporary QA additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-historical-prefixes"
+          test ! -e "$OUT"; mkdir "$OUT"
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/sc-historical-prefixes-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = 7510fc3ed387187094f3e0f2337416c458e0e1a2
+          test "$(git rev-parse 'HEAD^^{tree}')" = 7ca634f9ed3bf6531632389542b0ef5275022150
+          test "$(git rev-parse --is-shallow-repository)" = false
+          git rev-parse HEAD 'HEAD^{tree}' > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          cat > "$OUT/expected-paths.txt" <<'PATHS'
+          A	.github/workflows/sc-historical-prefixes.yml
+          A	scripts/data/soccerHistoricalPrefixFarewell.json
+          A	scripts/data/soccerHistoricalPrefixInternationalReturn.json
+          A	scripts/qa/probeSoccerHistoricalPrefixes.mjs
+          PATHS
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          test "$(git ls-tree -r --name-only HEAD^ | wc -l)" -eq 5664
+          test "$(git ls-files | wc -l)" -eq 5668
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          src/lib/soccerCareerEngine.ts a65c8353d6e4660c1d6cec6471e17095eed35805
+          src/lib/soccerCareerExtraCups.ts f96d2442942db57eb89d3d73d7dc18bba02ec165
+          scripts/qa/probeSoccerHistoricalPrefixes.mjs e5b9cf790f49e21e7fed782a43b0cbec5ca48513
+          scripts/data/soccerHistoricalPrefixFarewell.json a6b84354d77ce59e781faddcf0e56ba984419afd
+          scripts/data/soccerHistoricalPrefixInternationalReturn.json c4d4744b0c95e0e9be559048face8c00b3c279cb
+          scripts/data/careerLeagueWorldSaves1100.json 81425f731297f0ff72fc4e163dfe1a4cb86814ab
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          scripts/simHarnessAnchors.mjs 1cb32d353c317aacd32fd51f25f7ba000ac24e8d
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          cat > "$OUT/history-refs.txt" <<'REFS'
+          7510fc3ed387187094f3e0f2337416c458e0e1a2
+          cc9a55a2f35b6215d5e6e664cc401d10d7f76291
+          4268ee47045badab8e4ceb863508c851f23beafa
+          552ee88761731b9a341ae644f69ac3386e53c149
+          9d73ce5f261d93b73bf0993469c4fb330afa202b
+          934c29d949fceb8ed29e30f11cfd26d5e48bec57
+          4778507d5612c3c871bc9ac99347fa8029375def
+          REFS
+          while read -r ref; do git cat-file -e "$ref^{commit}"; done < "$OUT/history-refs.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          git ls-files --others --exclude-standard > "$OUT/untracked.before"
+          test ! -s "$OUT/untracked.before"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from offline source proof
+        id: install
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.before"
+          xargs -0 sha256sum < "$OUT/dependency-members.before" > "$OUT/dependency.sha256"
+          test "$(tr -cd '\0' < "$OUT/dependency-members.before" | wc -c)" -eq 24466
+          test "$(wc -c < "$OUT/dependency.sha256")" -eq 2921411
+          printf '%s  %s\n' 0bb6d0967ebc301dbc5bc370d7c866fe844e22b80849e3e1761709ad51685c63 "$OUT/dependency.sha256" | sha256sum --check > "$OUT/dependency-manifest-pin.before"
+          printf 'SC_HISTORICAL_PREFIX_DEPENDENCIES=%s\n' "$OUT/dependency.sha256" >> "$GITHUB_ENV"
+      - name: Proper app types and producer syntax
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax node --check scripts/qa/probeSoccerHistoricalPrefixes.mjs
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          import { deserialize, serialize } from 'node:v8';
+          import { isDeepStrictEqual } from 'node:util';
+          import { gunzipSync } from 'node:zlib';
+          const root=process.cwd(),out=process.env.OUT,dir=process.env.SC_HISTORICAL_PREFIX_OUT;
+          const sha=x=>createHash('sha256').update(x).digest('hex');
+          const pin=x=>({bytes:x.length,sha256:sha(x),gitBlob:createHash('sha1').update(Buffer.from('blob '+x.length+'\0')).update(x).digest('hex')});
+          const read=(base,file)=>JSON.parse(fs.readFileSync(path.join(base,file),'utf8'));
+          const samePin=(raw,want)=>{for(const key of ['bytes','sha256','gitBlob'])if(want[key]!==undefined)assert.equal(pin(raw)[key],want[key]);};
+          const gitRead=(ref,file)=>execFileSync('git',['show',ref+':'+file],{maxBuffer:40*1024*1024});
+          const source=fs.readFileSync('scripts/qa/probeSoccerHistoricalPrefixes.mjs','utf8');
+          assert.equal(sha(Buffer.from(source)),'c52a144d336ce7cab5b8254f1026fb51adc4441222e68786ac4d46ff137c6ccc');
+          const match=source.match(/^const CONFIG = (.+);$/m);assert(match);
+          const config=JSON.parse(match[1]);
+          assert.equal(config.currentRef,'7510fc3ed387187094f3e0f2337416c458e0e1a2');
+          assert.equal(config.preShieldRef,'cc9a55a2f35b6215d5e6e664cc401d10d7f76291');
+          assert.equal(config.actualRef,'4268ee47045badab8e4ceb863508c851f23beafa');
+          assert.equal(config.clock,1791658800000);assert.equal(config.agentClock,1791676800000);
+          const expected=[
+           {id:'farewell',pairs:49,prior:48,line:193,marker:'Entire original inactive career and random vector: neutral-nan-101-absent.json',advances:98,reads:0,requests:0,groups:0},
+           {id:'international-return',pairs:73,prior:72,line:64,marker:'Entire original inactive state and exact draw vector',advances:146,reads:73,requests:0,groups:0},
+           {id:'press-market',pairs:13,prior:12,line:22,marker:'No active Press retains entire original season and RNG',advances:26,reads:0,requests:0,groups:6},
+           {id:'transfer-brief',pairs:13,prior:12,line:12,marker:'Absent brief keeps the full original season and every RNG draw',advances:26,reads:0,requests:72,groups:0}
+          ];
+          assert.deepEqual(config.owners.map(x=>x.id),expected.map(x=>x.id));
+          const dependencyRaw=fs.readFileSync(process.env.SC_HISTORICAL_PREFIX_DEPENDENCIES);assert.equal(dependencyRaw.length,2921411);assert.equal(sha(dependencyRaw),'0bb6d0967ebc301dbc5bc370d7c866fe844e22b80849e3e1761709ad51685c63');const dependencies=new Map(dependencyRaw.toString('utf8').trimEnd().split('\n').map(line=>{const match=line.match(/^([a-f0-9]{64})  (node_modules\/.+)$/);assert(match);return [match[2],match[1]];}));assert.equal(dependencies.size,24466);
+          const summary=read(dir,'summary.json');
+          assert.equal(summary.schemaVersion,1);assert.equal(summary.collectionCompleted,true);assert.equal(summary.qualification,false);
+          assert.equal(summary.isolated16ScopeSelected,false);assert.equal(summary.expectedOwnerProcesses,8);assert.equal(summary.expectedAdvanceCalls,592);
+          assert.equal(summary.clock,config.clock);assert.equal(summary.currentGermanOrPr464Qualification,false);assert.equal(summary.adoption,false);
+          assert.deepEqual(summary.primary,null);assert.deepEqual(summary.failures,[]);assert.deepEqual(summary.secondary,[]);
+          assert.equal(summary.runtimeCounters,null);assert.equal(summary.runtimeCounterCompleteness,'UNKNOWN');assert.equal(summary.sourceHolds.allHeld,true);
+          assert.equal(summary.children.length,8);assert.equal(summary.comparisons.length,4);
+          assert.deepEqual(summary.children.map(x=>x.owner+'/'+x.pair),expected.flatMap(x=>[x.id+'/reproduce',x.id+'/pre-shield']));
+          assert.deepEqual(read(dir,'source-before.json').files,execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean).sort());
+          for(const row of read(dir,'source-before.json').rows)samePin(fs.readFileSync(row.path),row);
+          function tape(draws){assert(Array.isArray(draws));let state=101;for(const draw of draws){state+=0x6D2B79F5;let value=state;value=Math.imul(value^value>>>15,value|1);value^=value+Math.imul(value^value>>>7,value|61);assert.equal(draw,((value^value>>>14)>>>0)/4294967296);}}
+          function noUnexpectedRuntime(raw){assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|\bunhandledRejection\b|\buncaughtException\b|ERR_MODULE_NOT_FOUND|Failed to load url|Cannot find (?:module|package)|SyntaxError:|ReferenceError:|TypeError:/i.test(raw),false);}
+          function metadata(value,spec){assert.equal(value.owner,spec.id);assert.equal(value.clock,config.clock);assert.equal(value.sourceDerivedActualAdvanceCalls,spec.advances);assert.equal(value.sourceDerivedActualReadCalls,spec.reads);assert.equal(value.sourceDerivedActualRequestCalls,spec.requests);assert.equal(value.prefixPreparationGroups,spec.groups);}
+          function apply(raw,map){
+           samePin(raw,map.before);let text=raw.toString('utf8');assert.deepEqual(Buffer.from(text),raw);
+           for(const stage of map.stages){assert.equal(sha(Buffer.from(text)),stage.beforeStageSha256);assert.equal(text.indexOf(stage.before),stage.offset);assert.equal(text.lastIndexOf(stage.before),stage.offset);text=text.slice(0,stage.offset)+stage.after+text.slice(stage.offset+stage.before.length);assert.equal(sha(Buffer.from(text)),stage.afterStageSha256);}
+           samePin(Buffer.from(text),map.after);const final=text;
+           for(const stage of [...map.stages].reverse()){assert.equal(text.slice(stage.offset,stage.offset+stage.after.length),stage.after);text=text.slice(0,stage.offset)+stage.before+text.slice(stage.offset+stage.after.length);}
+           assert.deepEqual(Buffer.from(text),raw);return final;
+          }
+          const controls=[];
+          function guard(id,original,change,check){const before=serialize(original),value=deserialize(before);check(original);change(value);assert.notEqual(sha(serialize(value)),sha(before));let error=null;try{check(value);}catch(e){error=e;}assert(error instanceof assert.AssertionError);assert.deepEqual(serialize(original),before);controls.push({id,before:pin(before),changed:pin(serialize(value)),originalRestored:true,ownedNativeAssertion:true,message:error.message.split('\n')[0]});}
+          const targets=new Map(),rawChildren=[],totals={advances:0,reads:0,requests:0,groups:0};
+          for(const spec of expected){
+           const declared=config.owners.find(x=>x.id===spec.id);
+           assert.equal(declared.pairs,spec.pairs);assert.equal(declared.prior,spec.prior);assert.equal(declared.assertionTemplateLine,spec.line);assert.equal(declared.marker,spec.marker);
+           for(const pair of ['reproduce','pre-shield']){
+            const base=path.join(dir,spec.id,pair),child=read(base,'child-result.json'),admit=read(base,'admission.json'),proc=read(base,'process.json'),argv=read(base,'argv.json');
+            assert.deepEqual(proc,{status:1,signal:null,error:null});assert.equal(argv.command,'timeout');assert.deepEqual(argv.argv.slice(0,3),['--signal=TERM','--kill-after=15s','12m']);assert.deepEqual(argv.argv.slice(-3),['--child',spec.id,pair]);assert.equal(argv.owner,declared.ownerPath);assert.equal(argv.noOwnerFixtureOverrides,true);
+            assert.equal(admit.owner,spec.id);assert.equal(admit.pair,pair);assert.equal(admit.admitted,true);assert.equal(admit.expectedOriginalPrimaryOwned,true);assert.equal(admit.processExit,1);assert.equal(admit.failure,null);assert.equal(admit.copiesRemoved,true);
+            metadata(child,spec);assert.equal(child.pair,pair);assert.equal(child.targetCaptured,true);assert.deepEqual(child.secondary,[]);assert.equal(child.runtimeCounters,null);assert.equal(child.runtimeCounterCompleteness,'UNKNOWN');
+            assert.equal(child.primary.name,'AssertionError');assert.equal(child.primary.code,'ERR_ASSERTION');assert.equal(child.primary.nativeAssertion,true);assert.equal(child.primary.message.split('\n')[0],spec.marker);
+            const stderr=fs.readFileSync(path.join(base,'stderr.txt'),'utf8'),stdout=fs.readFileSync(path.join(base,'stdout.txt'),'utf8');
+            assert.equal(stderr.split('\n').find(line=>line.startsWith('AssertionError ')),'AssertionError [ERR_ASSERTION]: '+spec.marker);
+            noUnexpectedRuntime(stdout+'\n'+stderr);
+            assert.equal(fs.statSync(path.join(base,'transport.jsonl')).size,0);
+            const copies=read(base,'copies/source-edits.json'),cleanup=read(base,'copies/cleanup.json');
+            assert.equal(copies.paths.owner,path.join(root,'scripts',path.basename(copies.paths.owner)));assert.equal(copies.paths.kit,path.join(root,'scripts/qa',path.basename(copies.paths.kit)));
+            const originalOwner=fs.readFileSync(path.join(base,'copies/owner-original.mjs.txt')),physicalOwner=fs.readFileSync(path.join(base,'copies/owner-physical.mjs.txt'));
+            const originalKit=fs.readFileSync(path.join(base,'copies/kit-original.mjs.txt')),physicalKit=fs.readFileSync(path.join(base,'copies/kit-physical.mjs.txt'));
+            assert.deepEqual(originalOwner,gitRead(config.actualRef,declared.ownerPath));assert.deepEqual(originalOwner,gitRead(config.currentRef,declared.ownerPath));assert.deepEqual(originalKit,gitRead(config.actualRef,declared.kitPath));
+            const template=apply(originalOwner,declared.ownerMap),kitTemplate=apply(originalKit,declared.kitMap),binding=copies.runtimeFilenameBinding;
+            assert.equal(binding.token,'__SC_PREFIX_KIT__');assert.equal(template.split(binding.token).length,2);assert.equal(binding.filename,path.basename(copies.paths.kit,'.mjs'));
+            assert.equal(template.replace(binding.token,binding.filename),physicalOwner.toString('utf8'));assert.equal(kitTemplate,physicalKit.toString('utf8'));samePin(Buffer.from(template),binding.ownerTemplate);samePin(physicalOwner,binding.ownerPhysical);assert.equal(binding.wholeInverse,true);
+            assert.deepEqual(copies.owner,declared.ownerMap);assert.deepEqual(copies.kit,declared.kitMap);assert.equal(copies.originalsWritten,false);
+            const nativeFrame=child.primary.stack.split('\n').find(line=>/^\s+at /.test(line));assert(nativeFrame.includes('file://'+copies.paths.owner+':'+spec.line+':'));
+            assert.equal(cleanup.complete,true);assert.equal(cleanup.rows.length,pair==='reproduce'?3:2);
+            const physical=new Map([[copies.paths.owner,physicalOwner],[copies.paths.kit,physicalKit]]);
+            if(pair==='reproduce'){assert.equal(copies.paths.helper,path.join(root,'scripts/lib',path.basename(copies.paths.helper)));const helper=fs.readFileSync(path.join(base,'copies/helper-original.mjs.txt'));assert.deepEqual(helper,gitRead(config.actualRef,config.helper.path));samePin(helper,config.helper);physical.set(copies.paths.helper,helper);}else assert.equal(copies.paths.helper,null);
+            for(const row of cleanup.rows){const absolute=path.join(root,row.path);assert(physical.has(absolute));samePin(physical.get(absolute),row);assert.equal(row.removed,true);assert.equal(fs.existsSync(absolute),false);}
+            const raw=fs.readFileSync(path.join(base,'target.v8')),target=deserialize(raw),json=read(base,'target.json'),targetAdmission=read(base,'target-admission.json');
+            assert.deepEqual(JSON.parse(JSON.stringify(target)),json);assert.equal(target.id,'nan');assert.equal(target.age,19);assert.equal(target.seed,101);assert.equal(target.kind,'absent');assert.equal(target.successfulPairs,spec.prior);assert.equal(sha(Buffer.from(JSON.stringify(target.input))),config.inputSha);assert.equal(target.input.seasons.at(-1).year,2028);
+            for(const arm of ['original','current']){assert(target[arm]&&typeof target[arm].value==='object');tape(target[arm].draws);assert(target[arm+'InputAfter']);}
+            assert.equal(targetAdmission.fullV8Retained,true);assert.equal(targetAdmission.fullInputAfterRetained,true);assert.equal(targetAdmission.laterGroupsForbidden,true);assert.equal(targetAdmission.priorPairs,spec.prior);assert.equal(targetAdmission.inputSha256,config.inputSha);
+            if(spec.id==='international-return')assert.deepEqual(target.read.draws,[]);
+            if(spec.id==='press-market'){assert.equal(target.preparations.length,6);assert(target.preparations.every(x=>x.ok));}
+            if(spec.id==='transfer-brief')assert.equal(target.successfulRequests,36);
+            const carrier=config.carriers.find(x=>x.owner===spec.id);
+            let prior=null;
+            if(carrier){const carrierRaw=fs.readFileSync(carrier.path);samePin(carrierRaw,carrier.pin);const doc=JSON.parse(carrierRaw);assert.equal(doc.source,config.actualRef);assert.equal(doc.owner,spec.id);assert.equal(doc.members.length,2);const old={};
+             for(const row of doc.members){const body=gunzipSync(Buffer.from(row.gzipBase64,'base64'));samePin(body,row);old[path.basename(row.path)]=JSON.parse(body);}
+             prior=old['outcomes.json'];
+             if(pair==='reproduce'){const oldTarget=Object.entries(old).find(([name])=>name!=='outcomes.json')[1];assert.deepEqual(json.input,oldTarget.input);assert.deepEqual(json.original,oldTarget.original);assert.deepEqual(json.current,oldTarget.current);if(spec.id==='international-return')assert.deepEqual(json.read,oldTarget.read);assert.equal(targetAdmission.exact4268TargetJSONCompared,true);}
+            }
+            assert.equal(child.builds.length,2);
+            for(const arm of ['current','original']){
+             const graph=path.join(base,'graphs',arm),records=read(graph,'source-records.json'),closure=read(graph,'closure.json'),meta=read(graph,'metafile.json'),loaded=read(graph,'kit-loaded.json'),compiler=read(graph,'compiler-inputs.json'),executable=fs.readFileSync(path.join(graph,'engine.cjs'));
+             assert.equal(closure.mode.id,arm);assert.equal(closure.mode.original,arm==='original');assert.equal(closure.mode.shield,pair==='reproduce');assert.equal(closure.mode.ref,arm==='original'?declared.base:pair==='reproduce'?config.currentRef:config.preShieldRef);assert.equal(closure.allRepositoryInputsStrict,true);samePin(executable,closure.executable);
+             assert.deepEqual(records.rejections,[]);assert.equal(records.records.length,closure.repositoryInputs);assert.equal(loaded.length,records.records.length);
+             const keys=new Set(),repoInputs=[];
+             for(const row of records.records){assert(!keys.has(row.relative));keys.add(row.relative);const rawSource=fs.readFileSync(path.join(graph,row.retainedRaw.file)),compiled=fs.readFileSync(path.join(graph,row.retainedCompiled.file));samePin(rawSource,row.retainedRaw);samePin(compiled,row.retainedCompiled);assert.equal(sha(rawSource),row.rawSha256);assert.equal(sha(compiled),row.compiledSha256);assert.equal(compiled.length,row.compiledBytes);assert.deepEqual(rawSource,gitRead(row.sourceRef,row.relative));
+              const wantedRef=pair==='reproduce'&&arm==='original'&&row.relative==='src/lib/soccerCareerExtraCups.ts'?config.currentRef:closure.mode.ref;assert.equal(row.sourceRef,wantedRef);
+              const reached=loaded.find(x=>x.file===row.relative);assert(reached);assert.equal(reached.rawSha256,row.rawSha256);assert.equal(reached.compiledSha256,row.compiledSha256);
+              if(!row.relative.startsWith('src/')||!/\.(ts|tsx|json)$/.test(row.relative)){assert.deepEqual(rawSource,gitRead(config.actualRef,row.relative));assert.deepEqual(compiled,rawSource);}
+             }
+             const entry=arm==='original'?declared.entryOriginal:declared.entryCurrent;assert.equal(compiler.stdin.entry,entry);assert.equal(compiler.stdin.entrySha256,sha(Buffer.from(entry)));assert.deepEqual(compiler.stdin.metadata,meta.inputs['<stdin>']);assert.equal(meta.inputs['<stdin>'].bytes,Buffer.byteLength(entry));
+             let dependencyInputs=0,virtualInputs=0;
+             for(const [input,value]of Object.entries(meta.inputs)){if(input==='<stdin>')continue;
+              if(input==='<define:import.meta.env>'){virtualInputs++;assert.deepEqual(value,{bytes:0,imports:[]});const control=compiler.virtuals.find(x=>x.input===input);assert(control);assert.deepEqual(control.metadata,value);assert.deepEqual(control.negative.changed,{bytes:1,imports:[]});assert.equal(control.negative.observed.nativeAssertion,true);assert.equal(control.negative.observed.code,'ERR_ASSERTION');continue;}
+              const relative=path.relative(root,path.resolve(root,input)).split(path.sep).join('/');assert(!relative.startsWith('../'));
+              if(relative.startsWith('node_modules/')){assert(dependencies.has(relative));assert.equal(sha(fs.readFileSync(path.join(root,relative))),dependencies.get(relative));dependencyInputs++;continue;}assert(keys.has(relative));repoInputs.push(relative);
+             }
+             assert.deepEqual(repoInputs.sort(),[...keys].sort());assert.equal(compiler.virtuals.length,virtualInputs);assert.equal(closure.compilerVirtualInputs,virtualInputs);assert.equal(closure.effectiveVirtualControls,virtualInputs);assert.equal(closure.thirdPartyInputs,dependencyInputs);
+             if(pair==='pre-shield')assert.equal(keys.has('src/lib/soccerCareerExtraCups.ts'),false);
+             if(pair==='reproduce'&&prior){const projection=rows=>rows.filter(x=>x.file.startsWith('src/')&&/\.(ts|tsx|json)$/.test(x.file)).map(x=>({file:x.file,rawSha256:x.rawSha256,compiledSha256:x.compiledSha256,original:x.original})).sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert.deepEqual(projection(loaded),projection(prior.loaded[arm]));assert.equal(closure.priorGraphCompared,true);}
+            }
+            const row=summary.children.find(x=>x.owner===spec.id&&x.pair===pair);assert.deepEqual(row,admit);
+            totals.advances+=child.sourceDerivedActualAdvanceCalls;totals.reads+=child.sourceDerivedActualReadCalls;totals.requests+=child.sourceDerivedActualRequestCalls;totals.groups+=child.prefixPreparationGroups;
+            targets.set(spec.id+'/'+pair,target);rawChildren.push({owner:spec.id,pair,processExit:1,expectedOriginalPrimaryOwned:true,target:pin(raw),draws:{original:target.original.draws.length,current:target.current.draws.length},sourceGraphs:2,copiesRemoved:true});
+            if(rawChildren.length===1){guard('copied-runtime-message',{raw:stdout+'\n'+stderr},x=>x.raw+='\nuncaughtException: planted runtime failure\n',x=>noUnexpectedRuntime(x.raw));guard('copied-clock',child,x=>x.clock++,x=>metadata(x,spec));guard('copied-draw',{draws:target.current.draws},x=>x.draws[0]+=1/4294967296,x=>tape(x.draws));const originalPin=pin(physicalOwner);guard('copied-source-byte',{hex:physicalOwner.toString('hex')},x=>x.hex=(x.hex[0]==='0'?'1':'0')+x.hex.slice(1),x=>samePin(Buffer.from(x.hex,'hex'),originalPin));}
+           }
+          }
+          assert.deepEqual(totals,{advances:592,reads:146,requests:144,groups:12});assert.equal(controls.length,4);
+          const comparisons=[];
+          for(const spec of expected){const a=targets.get(spec.id+'/reproduce'),b=targets.get(spec.id+'/pre-shield'),actual=read(dir,'comparisons/'+spec.id+'.json');assert.deepEqual(a.input,b.input);assert.equal(actual.owner,spec.id);assert.equal(actual.clock,config.clock);assert.equal(actual.classification,'DESCRIPTIVE_FULL_PREFIX_EVIDENCE_REVIEW_REQUIRED');assert.equal(actual.ownershipRelease,false);assert.equal(actual.newQualificationFieldsKeptVisible,true);
+           assert.equal(actual.reproductionPairWholeEqual,isDeepStrictEqual(a.original,a.current));assert.equal(actual.preShieldPairWholeEqual,isDeepStrictEqual(b.original,b.current));assert.equal(actual.fullCrossCurrentWholeEqual,isDeepStrictEqual(b.current,a.current));assert.equal(actual.fullCrossOriginalWholeEqual,isDeepStrictEqual(b.original,a.original));
+           assert.equal(actual.allFourDrawTapesEqual,[a.current.draws,b.original.draws,b.current.draws].every(x=>isDeepStrictEqual(x,a.original.draws)));
+           for(const [name,left,right]of [['withinReproduction',a.original,a.current],['withinPreShield',b.original,b.current],['crossPreShieldToReproductionCurrent',b.current,a.current],['crossRawBaseToComposedBase',b.original,a.original]]){
+            const rows=actual[name];assert(Array.isArray(rows));const seen=new WeakMap(),paths=[];
+            function walk(x,y,at=''){if(isDeepStrictEqual(x,y))return;if(x&&y&&typeof x==='object'&&typeof y==='object'){let partners=seen.get(x);if(!partners){partners=new WeakSet();seen.set(x,partners);}if(partners.has(y))return;partners.add(y);for(const key of [...new Set([...Object.keys(x),...Object.keys(y)])].sort()){const next=at+'/'+key.replaceAll('~','~0').replaceAll('/','~1');if(!Object.hasOwn(x,key)||!Object.hasOwn(y,key))paths.push(next);else walk(x[key],y[key],next);}if(Array.isArray(x)&&Array.isArray(y)&&x.length!==y.length)paths.push(at+'/length');}else paths.push(at);}
+            walk(left,right);assert.deepEqual(rows.map(x=>x.path),paths);
+            const resolve=(value,pointer)=>pointer===''?value:pointer.slice(1).split('/').map(x=>x.replaceAll('~1','/').replaceAll('~0','~')).reduce((current,key)=>current?.[key],value);
+            const present=(value,pointer)=>{if(pointer==='')return true;const segments=pointer.slice(1).split('/').map(x=>x.replaceAll('~1','/').replaceAll('~0','~'));const key=segments.pop();const parent=segments.reduce((current,item)=>current?.[item],value);return parent!==null&&parent!==undefined&&Object.hasOwn(parent,key);};
+            for(const row of rows){const originalPresent=present(left,row.path),currentPresent=present(right,row.path);if(!originalPresent||!currentPresent){assert.equal(row.originalPresent,originalPresent);assert.equal(row.currentPresent,currentPresent);}else{assert.equal(Object.hasOwn(row,'originalPresent'),false);assert.equal(Object.hasOwn(row,'currentPresent'),false);}for(const [key,value]of [['original',resolve(left,row.path)],['current',resolve(right,row.path)]]){assert.deepEqual(deserialize(Buffer.from(row[key].v8Base64,'base64')),value);assert.equal(row[key].type,value===null?'null':typeof value);assert.deepEqual(row[key].json,value===undefined?null:JSON.parse(JSON.stringify(value)));}}
+           }
+           assert.equal(actual.withinDifferenceRecordsEqual,isDeepStrictEqual(actual.withinReproduction,actual.withinPreShield));comparisons.push({owner:spec.id,withinEqual:actual.withinDifferenceRecordsEqual,crossCurrentPaths:actual.crossPreShieldToReproductionCurrent.map(x=>x.path),crossOriginalPaths:actual.crossRawBaseToComposedBase.map(x=>x.path),allFourDrawTapesEqual:actual.allFourDrawTapesEqual,classification:actual.classification});
+          }
+          for(const row of summary.hostInputs){const raw=row.relative==='scripts/lib/offlineTransport.cjs'?fs.readFileSync(row.relative):fs.readFileSync(path.join(dir,'host-tools/source',row.relative+'.raw.txt'));samePin(raw,row);for(const ref of [config.actualRef,config.currentRef,config.preShieldRef])assert.deepEqual(raw,gitRead(ref,row.relative));}
+          for(const tag of ['types','syntax','verifier-syntax','prefixes']){assert.equal(Number(fs.readFileSync(path.join(out,tag+'.exit'),'utf8')),0);assert.equal(fs.statSync(path.join(out,tag+'.transport')).size,0);}
+          fs.writeFileSync(path.join(out,'raw-qualification-summary.json'),JSON.stringify({scope:'Eight original-prefix historical diagnostic collections only. No inherited or original-owner qualification verdict, PR464 clearance or source adoption.',collectionCompleted:true,qualification:false,processes:8,sourceDerivedTotals:totals,ownedOriginalPrimaries:8,rawChildren,comparisons,copiedGuardControls:controls,runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN'},null,2)+'\n');
+          console.log('HISTORICAL_PREFIX_RAW: 8 native first assertions, source-derived592 advances/146 reads/144 requests/12 preparation groups, exact physical inverses and four effective copied guards. Descriptive evidence only.');
+          VERIFY
+          capture verifier-syntax node --check "$OUT/verify.mjs"
+      - name: Eight original prefixes through their first original assertion
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SC_HISTORICAL_PREFIX_OUT="$PWD/tmp/sc-historical-prefixes-$GITHUB_RUN_ID"
+          printf 'SC_HISTORICAL_PREFIX_OUT=%s\n' "$SC_HISTORICAL_PREFIX_OUT" >> "$GITHUB_ENV"
+          test ! -e "$SC_HISTORICAL_PREFIX_OUT"
+          source "$OUT/capture.sh"
+          capture prefixes node scripts/qa/probeSoccerHistoricalPrefixes.mjs
+      - name: Independently admit raw owner processes targets source graphs and scope
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          printf '%s  %s\n' a0682b0bc255ec4b4f0e66cf63ebf6f6d3cd14993a0715027776498d9e039541 "$OUT/verify.mjs" | sha256sum --check > "$OUT/raw-verifier-pin.log"
+          capture verify node "$OUT/verify.mjs"
+      - name: Existing source anchor fence
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          unset ANCHOR_CONTROL
+          capture anchor-fence node scripts/simHarnessAnchors.mjs
+      - name: Actual stripped-normalizer negative and exact owner classification
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          capture anchor-strip env ANCHOR_CONTROL=strip node scripts/simHarnessAnchors.mjs
+          cat > "$OUT/verify-anchors.mjs" <<'ANCHORS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const out=process.env.OUT;
+          const records=[];
+          for(const name of ['anchor-fence','anchor-strip']){
+            assert.equal(Number(fs.readFileSync(out+'/'+name+'.exit','utf8')),0);
+            assert.equal(fs.statSync(out+'/'+name+'.transport').size,0);
+            const stdout=fs.readFileSync(out+'/'+name+'.stdout','utf8'),stderr=fs.readFileSync(out+'/'+name+'.stderr','utf8');
+            const raw=stdout+'\n'+stderr;
+            assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|SyntaxError:|ReferenceError:|TypeError:/i.test(raw),false);
+            const failures=raw.split(/\r?\n/).map(line=>line.trim()).filter(line=>line.startsWith('FAIL '));
+            if(name==='anchor-fence'){
+              assert.deepEqual(failures,[]);
+              assert.equal(stdout.split(/\r?\n/).filter(line=>line==='simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.').length,1);
+            }else{
+              assert.equal(failures.length,1);
+              assert(failures[0].startsWith('FAIL simFightCareer.mjs reads '));
+              assert(stdout.includes('[control strip applied to a copy of simFightCareer.mjs]'));
+              assert.equal(stdout.split(/\r?\n/).filter(line=>line==='control "strip": the planted fault in simFightCareer.mjs was named and nothing else was, the check works').length,1);
+            }
+            records.push({name,failures,runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN'});
+          }
+          fs.writeFileSync(out+'/anchor-summary.json',JSON.stringify({healthy:true,actualStripNegative:true,records},null,2)+'\n');
+          ANCHORS
+          capture anchor-classify node "$OUT/verify-anchors.mjs"
+      - name: Always hold original sources dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          code=0
+          if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log" 2>&1 || code=1; else code=1; fi
+          if test -f "$OUT/dependency.sha256"; then
+            printf '%s  %s\n' 0bb6d0967ebc301dbc5bc370d7c866fe844e22b80849e3e1761709ad51685c63 "$OUT/dependency.sha256" | sha256sum --check > "$OUT/dependency-manifest-pin.after" || code=1
+            sha256sum --check "$OUT/dependency.sha256" > "$OUT/dependency-held.log" 2>&1 || code=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.after"
+            cmp "$OUT/dependency-members.before" "$OUT/dependency-members.after" > "$OUT/dependency-members.log" 2>&1 || code=1
+          else code=1; fi
+          git ls-files -z > "$OUT/source-members.after"
+          if test -f "$OUT/source-members.before"; then cmp "$OUT/source-members.before" "$OUT/source-members.after" > "$OUT/source-members.log" 2>&1 || code=1; else code=1; fi
+          test "$(git ls-files | wc -l)" -eq 5668 || code=1
+          git diff --exit-code HEAD > "$OUT/source-diff.log" 2>&1 || code=1
+          git ls-files --others --exclude-standard > "$OUT/untracked.after"
+          test ! -s "$OUT/untracked.after" || code=1
+          if find "$OUT" "${SC_HISTORICAL_PREFIX_OUT:-$OUT}" -name '*.transport' -type f ! -size 0 | grep -q .; then code=1; fi
+          printf '%s\n' "$code" > "$OUT/holds.exit"
+          exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-historical-prefixes-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/sc-historical-prefixes/
+            ${{ github.workspace }}/tmp/sc-historical-prefixes-${{ github.run_id }}/
+          if-no-files-found: error
+          retention-days: 14
