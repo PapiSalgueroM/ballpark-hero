@@ -77,8 +77,8 @@ const tactics = (career: CareerState) => ({
 function payload(plan: object) {
   const raw = fields(plan);
   return {
-    version: raw.version, hasInstructions: Object.hasOwn(raw, 'instructions'),
-    instructions: raw.instructions ?? null, hasCustomShape: Object.hasOwn(raw, 'customShape'),
+    version: raw.version, hasInstructions: Object.prototype.hasOwnProperty.call(raw, 'instructions'),
+    instructions: raw.instructions ?? null, hasCustomShape: Object.prototype.hasOwnProperty.call(raw, 'customShape'),
     customShape: raw.customShape ?? null,
   };
 }
@@ -178,7 +178,7 @@ describe('Club Manager complete custom tactical plans', () => {
     expect(current).toEqual(before); expect(unrelated(applied)).toEqual(unrelated(current));
     expect(random).not.toHaveBeenCalled();
     const actual = { payload: payload(plan), applied: tactics(applied),
-      ownsInstructions: Object.hasOwn(applied, 'instructions'), ownsCustomShape: Object.hasOwn(applied, 'customShape') };
+      ownsInstructions: Object.prototype.hasOwnProperty.call(applied, 'instructions'), ownsCustomShape: Object.prototype.hasOwnProperty.call(applied, 'customShape') };
     const expected = { payload: { version: 2, hasInstructions: true, instructions: BALANCED, hasCustomShape: true, customShape: null },
       applied: expectedTactics, ownsInstructions: false, ownsCustomShape: false };
     retain('reset', { actual, expected, inputUnchanged: true, unrelatedStateHeld: true, randomDraws: random.mock.calls.length });

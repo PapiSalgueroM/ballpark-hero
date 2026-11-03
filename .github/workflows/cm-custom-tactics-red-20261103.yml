@@ -40,7 +40,7 @@ jobs:
           import { execFileSync } from 'node:child_process';
           const paths = execFileSync('git', ['diff', '--name-status', 'cc9a55a2f35b6215d5e6e664cc401d10d7f76291', 'HEAD']).toString().trim().split('\n').sort();
           assert.deepEqual(paths, ['A\t.github/workflows/cm-custom-tactics-red-20261103.yml', 'A\tsrc/test/cmCustomTacticalPlans.test.ts', 'A\tsrc/test/cmCustomTacticsUi.test.tsx'].sort(), 'Only the two new tests and baseline workflow may differ from pinned main');
-          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/cmCustomTacticalPlans.test.ts')).digest('hex'), '4970de0674675e15401283ffeac81342dd96a35da6d202d3ae1810392f60b0c9');
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/cmCustomTacticalPlans.test.ts')).digest('hex'), '6271745f0b2ac937f95c9390c6849e6cbc1afa75b4a2db1c61bad6fd6050d52f');
           assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/cmCustomTacticsUi.test.tsx')).digest('hex'), '1096a18e4c35234771d2b3cce23d3c0f35bfbdc62cb4af5a5aa09f8e2e831333');
           const source = {
             'src/lib/clubManager.ts': 'cf378e002c1f253a4cd48a147af66117f982f6b2',
