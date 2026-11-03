@@ -1,0 +1,397 @@
+name: Eight-minute observational node-fleet diagnostic on a qualified completed build
+on:
+  push:
+    branches: [codex/popular-node-diagnostic-20261103]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: popular-node-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+      CORE_SHA: '8d21ecf157933a20b8e2c3a5eed3afda30cde444'
+      CORE_TREE: 'c8c3bad9b2f4e2bdfcba6f4cb04f8d56181e370a'
+      BUILT_SOURCE_SHA: '9759760b59d3a86c11bf18e092e39e7dd00b276b'
+      BUILT_TREE_SHA: '1a8dd1c1a69033b722cfe53d367082e1d146d7de'
+      SOURCE_ARTIFACT_ID: '13279378398'
+      SOURCE_RUN_ID: '41738299764'
+      SOURCE_JOB_ID: '126273090473'
+      SOURCE_ZIP_BYTES: '7746935'
+      SOURCE_ZIP_SHA256: 'e61c7f44d8cd6d4c848b13a44b007cc4999176402215734a30ec0fbb4f83da05'
+      DIST_TAR_BYTES: '6959357'
+      DIST_TAR_SHA256: 'dee01039ff45af691d899eb69bfcfbe9097048c0818aa5b36aa9353795b24cac'
+      DIST_MANIFEST_SHA256: 'd7a092d63d8df65aa71e7dcebeb115f0e245b69bd3e0349c9f862d33ba9cd9ca'
+      DIST_DIGEST: 'e074c21d88613570523f0c3eba292096058cbc8311fd73f663599a1b71b0cb94'
+      DIST_FILE_COUNT: '845'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the isolated source and the actual qualified carrier
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/popular-node-diagnostic"
+          export QA_PRIOR="$RUNNER_TEMP/popular-node-diagnostic-built"
+          ZIP="$RUNNER_TEMP/popular-node-diagnostic-built.zip"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/raw" "$QA_OUT/transport" "$QA_OUT/carrier" "$QA_PRIOR"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          echo "QA_PRIOR=$QA_PRIOR" >> "$GITHUB_ENV"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+          for(const key of ['CORE_SHA','CORE_TREE','BUILT_SOURCE_SHA','BUILT_TREE_SHA'])assert.match(process.env[key],/^[a-f0-9]{40}$/,key+' must be bound');
+          for(const key of ['SOURCE_ARTIFACT_ID','SOURCE_RUN_ID','SOURCE_JOB_ID','SOURCE_ZIP_BYTES','DIST_TAR_BYTES','DIST_FILE_COUNT'])assert.match(process.env[key],/^[1-9][0-9]*$/,key+' must be bound');
+          for(const key of ['SOURCE_ZIP_SHA256','DIST_TAR_SHA256','DIST_MANIFEST_SHA256','DIST_DIGEST'])assert.match(process.env[key],/^[a-f0-9]{64}$/,key+' must be bound');
+          NODE
+          test "$(git rev-parse HEAD^)" = "$CORE_SHA"
+          test "$(git rev-parse HEAD^^{tree})" = "$CORE_TREE"
+          printf 'A\t.github/workflows/popular-node-diagnostic-20261103.yml\n' > "$QA_OUT/expected-paths.txt"
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/changed-paths.txt"
+          cmp "$QA_OUT/expected-paths.txt" "$QA_OUT/changed-paths.txt"
+          git rev-parse HEAD HEAD^{tree} > "$QA_OUT/source.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          git diff --exit-code HEAD > "$QA_OUT/source-initial-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          test "$(wc -l < "$QA_OUT/source-before.sha256")" -eq 5674
+          test ! -e .tmp-fx/career-records-tests.json
+          test ! -L .tmp-fx/career-records-tests.json
+          cp .github/workflows/popular-node-diagnostic-20261103.yml "$QA_OUT/workflow.yml"
+          for pair in "artifacts/$SOURCE_ARTIFACT_ID artifact" "jobs/$SOURCE_JOB_ID job"; do
+            read -r endpoint name <<< "$pair"
+            curl --fail --location --silent --show-error --retry 0 \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/$endpoint" --output "$QA_OUT/carrier/$name.json"
+          done
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,meta=JSON.parse(fs.readFileSync(out+'/carrier/artifact.json','utf8')),job=JSON.parse(fs.readFileSync(out+'/carrier/job.json','utf8'));
+          assert.equal(meta.id,Number(process.env.SOURCE_ARTIFACT_ID));assert.equal(meta.expired,false);assert.equal(meta.size_in_bytes,Number(process.env.SOURCE_ZIP_BYTES));
+          assert.equal(meta.workflow_run.id,Number(process.env.SOURCE_RUN_ID));assert.equal(meta.workflow_run.head_sha,process.env.BUILT_SOURCE_SHA);
+          assert.equal(job.id,Number(process.env.SOURCE_JOB_ID));assert.equal(job.run_id,Number(process.env.SOURCE_RUN_ID));assert.equal(job.head_sha,process.env.BUILT_SOURCE_SHA);
+          assert.equal(job.status,'completed');assert.equal(job.conclusion,'success','A failed size/build carrier is ineligible');
+          for(const name of ['Proper joined application types','Existing save and home guards, normal build, twenty readers and all unchanged page caps','Retain full source holds and transport evidence']){
+            const rows=job.steps.filter(step=>step.name===name);assert.equal(rows.length,1,name);assert.equal(rows[0].conclusion,'success',name);
+          }
+          NODE
+          curl --fail --location --silent --show-error --retry 0 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$SOURCE_ARTIFACT_ID/zip" --output "$ZIP"
+          test "$(stat -c%s "$ZIP")" = "$SOURCE_ZIP_BYTES"
+          echo "$SOURCE_ZIP_SHA256  $ZIP" | sha256sum --check
+          unzip -q "$ZIP" -d "$QA_PRIOR"
+          test "$(stat -c%s "$QA_PRIOR/completed-dist.tar.gz")" = "$DIST_TAR_BYTES"
+          echo "$DIST_TAR_SHA256  $QA_PRIOR/completed-dist.tar.gz" | sha256sum --check
+          echo "$DIST_MANIFEST_SHA256  $QA_PRIOR/dist-manifest.json" | sha256sum --check
+          git fetch --no-tags --depth=2 origin "$BUILT_SOURCE_SHA"
+          test "$(git rev-parse "$BUILT_SOURCE_SHA^{tree}")" = "$BUILT_TREE_SHA"
+          test "$(git rev-parse "$BUILT_SOURCE_SHA^")" = "$CORE_SHA"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,prior=process.env.QA_PRIOR,read=p=>JSON.parse(fs.readFileSync(p,'utf8')),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          assert.deepEqual(fs.readFileSync(prior+'/source.txt','utf8').trim().split(/\s+/),[process.env.BUILT_SOURCE_SHA,process.env.BUILT_TREE_SHA]);
+          const association=read(prior+'/association.json'),payload=read(prior+'/completed-dist-association.json'),manifest=read(prior+'/dist-manifest.json');
+          assert.equal(association.source,process.env.BUILT_SOURCE_SHA);assert.equal(association.releaseCore,process.env.CORE_SHA);
+          assert.equal(payload.source,process.env.BUILT_SOURCE_SHA);assert.equal(payload.tree,process.env.BUILT_TREE_SHA);assert.equal(payload.applicationCore,process.env.CORE_SHA);
+          assert.equal(payload.fileCount,Number(process.env.DIST_FILE_COUNT));assert.equal(manifest.length,payload.fileCount);assert(payload.fileCount>100);
+          assert.equal(payload.tarBytes,Number(process.env.DIST_TAR_BYTES));assert.equal(payload.tarSHA256,process.env.DIST_TAR_SHA256);
+          assert.equal(payload.distDigest,process.env.DIST_DIGEST);assert.equal(sha(JSON.stringify(manifest)),process.env.DIST_DIGEST);
+          const sums=file=>{const rows=fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^([a-f0-9]{64})  (.+)$/.exec(line);assert(m);return[m[2],m[1]];});assert.equal(new Set(rows.map(r=>r[0])).size,rows.length);return Object.fromEntries(rows);};
+          const old=sums(prior+'/source-before.sha256'),current=sums(out+'/source-before.sha256');
+          assert.deepEqual(sums(prior+'/source-after.sha256'),old);assert.equal(Object.keys(old).length,5674);assert.equal(Object.keys(current).length,5674);
+          const oldWF='.github/workflows/popular-pages-build-20261103.yml',newWF='.github/workflows/popular-node-diagnostic-20261103.yml';
+          assert(old[oldWF]&&!current[oldWF]&&current[newWF]&&!old[newWF]);
+          assert.deepEqual(Object.keys(old).filter(p=>p!==oldWF).sort(),Object.keys(current).filter(p=>p!==newWF).sort());
+          for(const[p,digest]of Object.entries(old))if(p!==oldWF)assert.equal(current[p],digest,p+' actual qualified source');
+          for(const p of ['source-diff.txt','status-before.txt','status-after.txt'])assert.equal(fs.statSync(prior+'/'+p).size,0,p);
+          assert.equal(fs.readFileSync(prior+'/dist-before.sha256','utf8'),fs.readFileSync(prior+'/dist-after.sha256','utf8'));
+          assert.deepEqual(fs.readFileSync(prior+'/workflow.yml'),execFileSync('git',['show',process.env.BUILT_SOURCE_SHA+':'+oldWF]));
+          fs.copyFileSync(prior+'/completed-dist.tar.gz',out+'/completed-dist.tar.gz');
+          for(const p of ['association.json','completed-dist-association.json','source-before.sha256','source-after.sha256','source-diff.txt','status-before.txt','status-after.txt','dist-before.sha256','dist-after.sha256','dist-manifest.json','workflow.yml'])fs.copyFileSync(prior+'/'+p,out+'/carrier/'+p);
+          fs.writeFileSync(out+'/association.json',JSON.stringify({source:process.env.GITHUB_SHA,core:process.env.CORE_SHA,coreTree:process.env.CORE_TREE,build:process.env.BUILT_SOURCE_SHA,buildTree:process.env.BUILT_TREE_SHA,artifact:Number(process.env.SOURCE_ARTIFACT_ID),zipSHA256:process.env.SOURCE_ZIP_SHA256,distTarSHA256:process.env.DIST_TAR_SHA256,sourceBodiesHeld:5673,onlyWorkflowDiff:true,stepTimeoutMinutes:8,jobTimeoutMinutes:40,pool:3,scope:'Observational diagnostic only. Exact full unfiltered node command, original native-zero gate, same capabilities and frozen sampler. A timeout stays failed; partial process activity earns no aggregate or per-harness pass credit. No active qualification run is changed or cancelled.'},null,2)+'\n');
+          NODE
+          test ! -e dist
+          tar -tzf "$QA_PRIOR/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const rows=fs.readFileSync(process.env.QA_OUT+'/completed-dist-members.txt','utf8').trim().split('\n');assert(rows.length>100);assert(rows.every(p=>(p==='dist/'||p.startsWith('dist/'))&&!p.split('/').includes('..')));
+          NODE
+          tar --no-same-owner -xzf "$QA_PRIOR/completed-dist.tar.gz" -C "$GITHUB_WORKSPACE"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          cmp "$QA_PRIOR/dist-before.sha256" "$QA_OUT/dist-before.sha256"
+          sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-input-held.log"
+      - name: Install held application and existing QA tools
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          git diff --exit-code -- package.json package-lock.json
+          npm install --prefix "$RUNNER_TEMP/flagship-release-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/flagship-release-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/flagship-release-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/flagship-release-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+          python3 -m pip install --target "$RUNNER_TEMP/flagship-release-python" fonttools pillow 2>&1 | tee "$QA_OUT/logs/python-install.log"
+          echo "PYTHONPATH=$RUNNER_TEMP/flagship-release-python" >> "$GITHUB_ENV"
+      - name: Observe the unchanged full node fleet for at most eight minutes
+        timeout-minutes: 8
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_NETWORK=offline
+          unset ONLY BROWSER DB_PROBE SIM_SUITE_NET_GUARD SIM_SUITE_NET_FORCE
+          : > "$QA_OUT/transport/all-sims.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/all-sims.log"
+          test ! -e .tmp-fx/career-records-tests.json
+          test ! -L .tmp-fx/career-records-tests.json
+          printf 'fleet\n' > "$QA_OUT/records-leaf-owner.txt"
+          node scripts/runAllSims.mjs --plan-json > "$QA_OUT/sim-plan.json"
+          # BEGIN observational-only runner descendant telemetry
+          telemetry_dir="$QA_OUT/telemetry"
+          mkdir -p "$telemetry_dir"
+          cat > "$telemetry_dir/sampleRunnerTree.py" <<'SAMPLER_PY'
+          #!/usr/bin/env python3
+          """Observe only one runner's Linux descendant tree. Never changes runner outcomes."""
+          import argparse
+          import json
+          import os
+          from pathlib import Path
+          import signal
+          import time
+          from datetime import datetime, timezone
+          
+          parser = argparse.ArgumentParser()
+          parser.add_argument("--pid", type=int, required=True)
+          parser.add_argument("--workspace", type=Path, required=True)
+          parser.add_argument("--out", type=Path, required=True)
+          parser.add_argument("--stop-file", type=Path, required=True)
+          args = parser.parse_args()
+          if args.pid <= 1:
+              parser.error("A specific owned runner PID is required")
+          workspace = args.workspace.resolve(strict=True)
+          scripts = (workspace / "scripts").resolve(strict=True)
+          args.out.parent.mkdir(parents=True, exist_ok=True)
+          HZ, INTERVAL, MAX_PROCESSES, MAX_BYTES = os.sysconf("SC_CLK_TCK"), 30, 256, 8_000_000
+          stopping = False
+          def stop_signal(_signum, _frame):
+              global stopping
+              stopping = True
+          
+          for signum in (signal.SIGINT, signal.SIGTERM):
+              signal.signal(signum, stop_signal)
+          
+          def stat(pid):
+              try:
+                  fields = (Path("/proc") / str(pid) / "stat").read_text().rsplit(")", 1)[1].split()
+                  return {"pid": pid, "ppid": int(fields[1]), "state": fields[0],
+                          "cpu": (int(fields[11]) + int(fields[12])) / HZ, "start": int(fields[19])}
+              except (OSError, ValueError, IndexError):
+                  return None
+          
+          def children(pid):
+              result = set()
+              try:
+                  # Read only threads of the currently observed descendant, never all host PIDs.
+                  for thread in (Path("/proc") / str(pid) / "task").iterdir():
+                      try:
+                          result.update(int(p) for p in (thread / "children").read_text().split())
+                      except (OSError, ValueError):
+                          continue
+              except OSError:
+                  pass
+              return sorted(result)
+          
+          def script_paths(pid):
+              result = set()
+              try:
+                  with (Path("/proc") / str(pid) / "cmdline").open("rb") as stream:
+                      argv = stream.read(65536).split(b"\0")
+                  cwd = (Path("/proc") / str(pid) / "cwd").resolve(strict=True)
+                  for token in argv[1:]:
+                      value = token.decode("utf-8", errors="replace")
+                      if not value or value.startswith("-") or "\n" in value or "\r" in value:
+                          continue
+                      candidate = Path(value)
+                      if candidate.suffix not in {".mjs", ".cjs", ".js", ".tsx", ".ts", ".py", ".sh"}:
+                          continue
+                      candidate = (candidate if candidate.is_absolute() else cwd / candidate).resolve()
+                      if candidate.is_relative_to(scripts) and candidate.is_file():
+                          result.add(candidate.relative_to(workspace).as_posix())
+                  return sorted(result)[:4]
+              except OSError:
+                  return []
+          
+          root = stat(args.pid)
+          root_start = root["start"] if root else None
+          previous = {}
+          samples, written = 0, 0
+          reason = "runner-ended"
+          with args.out.open("xb") as output:
+              def emit(row, final=False):
+                  global written
+                  data = (json.dumps(row, separators=(",", ":"), ensure_ascii=True) + "\n").encode()
+                  ceiling = MAX_BYTES if final else MAX_BYTES - 1024
+                  if written + len(data) > ceiling:
+                      return False
+                  output.write(data)
+                  output.flush()
+                  written += len(data)
+                  return True
+          
+              while True:
+                  if stopping or args.stop_file.exists():
+                      reason = "requested-stop"
+                      break
+                  current = stat(args.pid)
+                  if not current or current["start"] != root_start or current["state"] == "Z":
+                      break
+                  uptime = float(Path("/proc/uptime").read_text().split()[0])
+                  queue, seen, rows = [args.pid], set(), []
+                  while queue and len(seen) < MAX_PROCESSES:
+                      pid = queue.pop(0)
+                      if pid in seen:
+                          continue
+                      seen.add(pid)
+                      info = stat(pid)
+                      if info:
+                          identity = (pid, info["start"])
+                          prior = previous.get(identity)
+                          rows.append({"pid": pid, "ppid": info["ppid"], "state": info["state"],
+                                       "cpuSeconds": round(info["cpu"], 3),
+                                       "elapsedSeconds": round(max(0, uptime - info["start"] / HZ), 3),
+                                       "cpuDeltaSeconds": None if prior is None else round(info["cpu"] - prior, 3),
+                                       "scriptPaths": script_paths(pid)})
+                          previous[identity] = info["cpu"]
+                          queue.extend(children(pid))
+                  samples += 1
+                  row = {"type": "sample", "utc": datetime.now(timezone.utc).isoformat(),
+                         "sample": samples, "rootPID": args.pid, "processes": rows,
+                         "treeTruncated": bool(queue), "unvisitedQueuedPIDs": len(set(queue) - seen)}
+                  if not emit(row):
+                      reason = "log-cap-reached"
+                      break
+                  deadline = time.monotonic() + INTERVAL
+                  while not stopping and not args.stop_file.exists() and time.monotonic() < deadline:
+                      time.sleep(min(1, max(0, deadline - time.monotonic())))
+              emit({"type": "sampler-end", "utc": datetime.now(timezone.utc).isoformat(),
+                    "reason": reason, "samples": samples, "bytesBeforeClosing": written,
+                    "limits": {"intervalSeconds": INTERVAL, "processesPerSample": MAX_PROCESSES,
+                               "logBytes": MAX_BYTES},
+                    "meaning": "Activity only. No harness pass/fail or semantic progress inferred."}, final=True)
+          SAMPLER_PY
+          printf '%s  %s\n' c41354fd8eb003114534e3171a2f0f391635a18382dd5e276190c80ff79ad8dd "$telemetry_dir/sampleRunnerTree.py" | sha256sum --check
+          test ! -e "$telemetry_dir/stop"
+          sampler_pid=''
+          stop_sampler() {
+            if [[ -n "$sampler_pid" ]]; then
+              : > "$telemetry_dir/stop"
+              local sampler_status=0
+              wait "$sampler_pid" || sampler_status=$?
+              printf '%s\n' "$sampler_status" > "$telemetry_dir/sampler.exit"
+              sampler_pid=''
+            fi
+          }
+          trap stop_sampler EXIT
+          (
+            set +e
+            SIM_FULL_OUTPUT=1 node scripts/runAllSims.mjs 2>&1 | tee "$QA_OUT/logs/all-sims.log"
+            codes=("${PIPESTATUS[@]}")
+            printf '%s\n' "${codes[0]}" > "$QA_OUT/all-sims.exit"
+            printf '%s\n' "${codes[1]}" > "$telemetry_dir/tee.exit"
+            exit "${codes[0]}"
+          ) &
+          runner_group_pid=$!
+          python3 "$telemetry_dir/sampleRunnerTree.py" --pid "$runner_group_pid" --workspace "$GITHUB_WORKSPACE" --out "$telemetry_dir/process-tree.jsonl" --stop-file "$telemetry_dir/stop" > "$telemetry_dir/sampler.stdout" 2> "$telemetry_dir/sampler.stderr" &
+          sampler_pid=$!
+          set +e
+          wait "$runner_group_pid"
+          runner_status=$?
+          set -e
+          stop_sampler
+          test "$runner_status" -eq "$(cat "$QA_OUT/all-sims.exit")"
+          test "$(cat "$telemetry_dir/tee.exit")" -eq 0
+          test "$(cat "$QA_OUT/all-sims.exit")" -eq 0
+          # END observational-only runner descendant telemetry
+      - name: Always retain partial activity and strict source and payload closures
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,hash=b=>crypto.createHash('sha256').update(b).digest('hex'),errors=[];
+          const check=(name,fn)=>{try{fn();return true;}catch(error){errors.push({name,error:String(error.stack||error)});return false;}};
+          const nativePath=out+'/all-sims.exit',nativeText=fs.existsSync(nativePath)?fs.readFileSync(nativePath,'utf8').trim():null;
+          const telemetry=out+'/telemetry',samplesPath=telemetry+'/process-tree.jsonl';
+          fs.writeFileSync(out+'/diagnostic-scope.json',JSON.stringify({scope:'Eight-minute observational diagnostic only',core:process.env.CORE_SHA,build:process.env.BUILT_SOURCE_SHA,originalFullArgv:'SIM_FULL_OUTPUT=1 node scripts/runAllSims.mjs',pool:3,stepTimeoutMinutes:8,nativeExitObserved:nativeText===null?null:Number(nativeText),nativeExitMeaning:nativeText===null?'UNKNOWN, missing after interruption is not a fabricated exit code':'Observed original child exit; this diagnostic grants no aggregate or per-harness pass credit',processSamplesPresent:fs.existsSync(samplesPath),processSamplesBytes:fs.existsSync(samplesPath)?fs.statSync(samplesPath).size:null,samplerExit:fs.existsSync(telemetry+'/sampler.exit')?fs.readFileSync(telemetry+'/sampler.exit','utf8').trim():null,qualificationCredit:false,perHarnessPassCredit:false,meaning:'Source and activity only. A timed-out step stays failed. CPU, elapsed time, script paths and partial logs do not establish semantic progress, hang causality or passing cases. Active qualification runs are neither changed nor cancelled.'},null,2)+'\n');
+          const receipts=fs.existsSync(out+'/transport')?fs.readdirSync(out+'/transport').sort().map(file=>{const text=fs.readFileSync(out+'/transport/'+file,'utf8'),lines=text.split('\n').filter(Boolean);return{file,bytes:Buffer.byteLength(text),blockedAttempts:lines.length,lines};}):[];
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({receipts,meaning:'Every actual Node refusal is retained. Empty Node receipts are not zero browser traffic or provider availability.'},null,2)+'\n');
+          const leaf='.tmp-fx/career-records-tests.json',file=path.resolve(leaf),ownerFile=out+'/records-leaf-owner.txt';
+          check('Retain only the exact owned report leaf',()=>{
+            assert.equal(file,path.join(process.cwd(),'.tmp-fx','career-records-tests.json'));
+            let stat;try{stat=fs.lstatSync(file);}catch(error){if(error.code!=='ENOENT')throw error;}
+            if(!stat){fs.writeFileSync(out+'/records-report-retention.json',JSON.stringify({leaf,status:'absent',meaning:'No report or case result is inferred from absence.'},null,2)+'\n');return;}
+            assert.equal(fs.readFileSync(ownerFile,'utf8').trim(),'fleet');assert(stat.isFile()&&!stat.isSymbolicLink());
+            const bytes=fs.readFileSync(file),digest=hash(bytes),retained=out+'/raw/interrupted-last-career-records-report.bin';assert(!fs.existsSync(retained));fs.writeFileSync(retained,bytes,{flag:'wx'});assert(fs.readFileSync(retained).equals(bytes));assert.equal(hash(fs.readFileSync(retained)),digest);
+            let validJSON=true;try{JSON.parse(bytes.toString('utf8'));}catch{validJSON=false;}
+            if(validJSON){assert(fs.readFileSync(file).equals(bytes));fs.unlinkSync(file);assert(!fs.existsSync(file));}
+            fs.writeFileSync(out+'/records-report-retention.json',JSON.stringify({leaf,status:'retained',bytes:bytes.length,sha256:digest,validJSON,ordinaryLeafRemoved:validJSON,meaning:'Exact potentially interrupted producer bytes. Invalid partial JSON is retained without deleting the source leaf; neither valid nor partial bytes earn case or aggregate credit.'},null,2)+'\n');
+          });
+          let sourceHeld=false;
+          check('All tracked source bodies and original tree',()=>{
+            const before=fs.readFileSync(out+'/source-before.sha256','utf8').trim().split('\n').map(line=>{const m=/^([a-f0-9]{64})  (.+)$/.exec(line);assert(m);return {file:m[2],sha256:m[1]};});
+            assert.equal(before.length,5674);const tracked=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean).sort();assert.deepEqual(tracked,before.map(r=>r.file).sort());
+            const after=before.map(row=>{try{return{file:row.file,sha256:hash(fs.readFileSync(row.file))};}catch(error){return{file:row.file,sha256:null,error:String(error)};}});
+            fs.writeFileSync(out+'/source-after.json',JSON.stringify(after,null,2)+'\n');fs.writeFileSync(out+'/source-after.sha256',after.map(r=>(r.sha256??'MISSING')+'  '+r.file).join('\n')+'\n');
+            fs.writeFileSync(out+'/source-held.log',after.map((r,i)=>r.file+': '+(r.sha256===before[i].sha256?'OK':'CHANGED_OR_MISSING')).join('\n')+'\n');
+            fs.writeFileSync(out+'/source-diff.txt',execFileSync('git',['diff','--binary','HEAD']));fs.writeFileSync(out+'/status-after.txt',execFileSync('git',['status','--porcelain=v1','--untracked-files=all']));
+            assert.deepEqual(after,before);assert.equal(fs.statSync(out+'/source-diff.txt').size,0);sourceHeld=true;
+          });
+          let payloadHeld=false;
+          check('All exact completed payloads',()=>{
+            const before=JSON.parse(fs.readFileSync(out+'/carrier/dist-manifest.json','utf8')),rows=[];
+            function walk(rel=''){for(const e of fs.readdirSync(path.join('dist',rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walk(file);else{assert(e.isFile());const bytes=fs.readFileSync(path.join('dist',file));rows.push({file,bytes:bytes.length,sha256:hash(bytes)});}}}walk();rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+            fs.writeFileSync(out+'/dist-after.json',JSON.stringify(rows,null,2)+'\n');assert.deepEqual(rows,before);payloadHeld=true;
+          });
+          const tarHeld=check('Original complete tar',()=>{const bytes=fs.readFileSync(out+'/completed-dist.tar.gz');assert.equal(bytes.length,Number(process.env.DIST_TAR_BYTES));assert.equal(hash(bytes),process.env.DIST_TAR_SHA256);});
+          fs.writeFileSync(out+'/closure.json',JSON.stringify({sourceHeld,payloadHeld,tarHeld,errors,qualificationCredit:false,untrackedStatus:'Retained for interruption analysis. Only a valid owned report leaf can be removed; no other path or parent is deleted.'},null,2)+'\n');
+          assert.deepEqual(errors,[],'Interrupted source/payload drift is a failed hold, never hidden or restored by the diagnostic');
+          NODE
+      - name: Independently bound retained diagnostic evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: popular-node-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/popular-node-diagnostic
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
