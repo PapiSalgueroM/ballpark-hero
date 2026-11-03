@@ -1,0 +1,266 @@
+name: Front Office real title selector test-first baseline
+on:
+  push:
+    branches: [codex/popular-pages-red-20261103-fo-selector]
+permissions:
+  contents: read
+concurrency:
+  group: popular-pages-red-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  baseline:
+    name: ${{ matrix.suite }} actual baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [frontoffice]
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+      QA_SUITE: ${{ matrix.suite }}
+      JOINED: 00c85815cac64d72014594e6b38515d4d6ce2e45
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold joined applications and exactly four tests plus this workflow
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/popular-pages-red-${{ matrix.suite }}"
+          mkdir -p "$QA_OUT/sources" "$QA_OUT/transport"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          git rev-parse HEAD HEAD^{tree} > "$QA_OUT/source.txt"
+          git diff --name-status "$JOINED" HEAD > "$QA_OUT/changed-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out=process.env.QA_OUT, suite=process.env.QA_SUITE;
+          const profiles={"careers":{"test":"src/test/usCareerLastSeasonReload.test.tsx","git":"9b56dda941819b91dc0d75de3597958e507f3516","sha":"9e94abc96f4f1c786ace61e7790799da96d450da289b5f7f7f63caa702e12839","rawEnv":"POPULAR_CAREER_RELOAD_RAW","cases":[["Popular careers saved last season continuity NBA restores the real saved stat line and team result on repeated cold mounts","POPULAR_CAREER_SAVED_LAST_SEASON_NBA","nba-recorded.json"],["Popular careers saved last season continuity NFL restores the real saved stat line and team result on repeated cold mounts","POPULAR_CAREER_SAVED_LAST_SEASON_NFL","nfl-recorded.json"],["Popular careers saved last season continuity NBA keeps an unplayed career free of an invented last season",null,"nba-empty.json"],["Popular careers saved last season continuity NFL keeps an unplayed career free of an invented last season",null,"nfl-empty.json"]]},"stadium":{"test":"src/test/tycoonSaveNotice.test.tsx","git":"8a66440a51484f7483b7069088d169f06883bbc6","sha":"5515005b8654f546e0374000a8e7189fb3d5e41009572d2f55acc92051dcee5a","rawEnv":"POPULAR_TYCOON_SAVE_RAW","cases":[["Stadium Tycoon save visibility a refused autosave can be retried from the stadium room","ST_SAVE_NOTICE_PITCH","stadium.json"],["Stadium Tycoon save visibility a refused autosave can be retried from the league room","ST_SAVE_NOTICE_LEAGUE","league.json"],["Stadium Tycoon save visibility a healthy autosave banks real progress without a failure notice",null,"healthy.json"],["Stadium Tycoon save visibility Tickets keeps one recovery message and the real failed status",null,"tickets.json"]]},"frontoffice":{"test":"src/test/frontOfficeCutReasons.test.tsx","git":"2637d6190d09627f65fe076b2db4640606e631b3","sha":"ffaf89867add0dd8141c5e1e13c036fe037f2a90183ce064ed72993c4d5afc2e","rawEnv":"POPULAR_FO_CUT_RAW","cases":[["NFL Front Office cut explanations the roster floor explains why every Cut is unavailable on touch and keyboard","FO_CUT_REFUSAL_VISIBLE","floor.json"],["NFL Front Office cut explanations a roster above the floor keeps every Cut available without a false refusal",null,"eligible.json"],["NFL Front Office cut explanations the existing two tap Cut still moves the man once and keeps the exact dead money",null,"cut.json"]]},"hubs":{"test":"src/test/hubReturnNavigation.test.tsx","git":"51a145157130dace6c0765f28dadd4a80459a3be","sha":"1260ed816fbcaf18a60d6d648918070bba6ca98be1d431de35de3b7e1067287d","rawEnv":"HUB_LIBRARY_RAW","cases":[["Sport hub discovery return state opens the selected library from a shared URL on /soccer","HUB_URL_DIRECT_SOCCER","direct-soccer.json"],["Sport hub discovery return state returns from a game to the chosen library on /soccer","HUB_URL_RETURN_SOCCER","return-soccer.json"],["Sport hub discovery return state opens the selected library from a shared URL on /pro-basketball","HUB_URL_DIRECT_BASKETBALL","direct-pro-basketball.json"],["Sport hub discovery return state returns from a game to the chosen library on /pro-basketball","HUB_URL_RETURN_BASKETBALL","return-pro-basketball.json"],["Sport hub discovery return state opens the selected library from a shared URL on /pro-football","HUB_URL_DIRECT_FOOTBALL","direct-pro-football.json"],["Sport hub discovery return state returns from a game to the chosen library on /pro-football","HUB_URL_RETURN_FOOTBALL","return-pro-football.json"],["Sport hub discovery return state keeps every plain hub catalog and unrelated storage unchanged",null,"plain.json"],["Sport hub discovery return state treats an unknown filter as all games without rewriting unrelated URL values",null,"invalid.json"]]}};
+          const appPins={"src/components/us-career/UsCareerBoard.tsx":"95a3507fa27b05bf6e426b8b9e0c82736b92dc35","src/pages/StadiumTycoon.tsx":"9e59833d43ea944d0c66d795b728b5591f58941f","src/hooks/useStadiumTycoon.ts":"4e02c4812afd4bdf1c2a42dff857a1c276ad7f6d","src/components/tycoon/TicketPolicyCard.tsx":"fa18508f4fc62b569be4347fc8e9e3b4376bfb99","src/components/front-office/FrontOfficeBoard.tsx":"e1bf0924f9d900ba63646efa32bf78cf36d381c5","src/components/hub/HubExperience.tsx":"d002e000706b70fa88023ca5f8f3bcd99fefdbc8"};
+          assert(Object.hasOwn(profiles,suite));
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          const sha=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+          assert.equal(git('rev-parse','HEAD^'),process.env.JOINED);
+          const workflow='.github/workflows/popular-pages-red-20261103.yml';
+          const expected=[workflow,...Object.values(profiles).map(p=>p.test)].map(p=>'A\t'+p).sort();
+          const actual=fs.readFileSync(path.join(out,'changed-paths.txt'),'utf8').trim().split('\n').sort();
+          assert.deepEqual(actual,expected,'Only four new ordinary test files and this workflow');
+          for(const [file,blob] of Object.entries(appPins)) assert.equal(git('rev-parse','HEAD:'+file),blob,file);
+          for(const profile of Object.values(profiles)){
+            assert.equal(git('rev-parse','HEAD:'+profile.test),profile.git,profile.test);
+            assert.equal(sha(profile.test),profile.sha,profile.test);
+          }
+          const tracked=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+          assert.equal(tracked.length,5674,'Joined 5669 tracked files plus exactly five additions');
+          for(const file of [workflow,...Object.keys(appPins),...Object.values(profiles).map(p=>p.test)]){
+            const target=path.join(out,'sources',file);fs.mkdirSync(path.dirname(target),{recursive:true});
+            fs.copyFileSync(file,target);
+          }
+          fs.writeFileSync(path.join(out,'profile.json'),JSON.stringify(profiles[suite],null,2)+'\n');
+          fs.writeFileSync(path.join(out,'association.json'),JSON.stringify({
+           source:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),parent:process.env.JOINED,
+           suite,trackedFiles:tracked.length,appPins,tests:profiles,
+           scope:'Actual isolated test-first baseline. No product edits, builds, browser journey or full ordinary suite qualification.'
+          },null,2)+'\n');
+          
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          test "$(wc -l < "$QA_OUT/source-before.sha256")" -eq 5674
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+      - name: Install unchanged locked dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper application types under the offline guard
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/types.exit"
+          cat "$QA_OUT/types.log"
+          test "$code" -eq 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Exact actual owned assertions and held cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/units.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          cat > "$QA_OUT/qualify.mjs" <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { spawnSync } from 'node:child_process';
+          const out=process.env.QA_OUT, suite=process.env.QA_SUITE;
+          const p=JSON.parse(fs.readFileSync(path.join(out,'profile.json'),'utf8'));
+          const rawDir=path.join(out,'raw');fs.mkdirSync(rawDir,{recursive:true});
+          const child=spawnSync('node_modules/.bin/vitest',[
+           'run',p.test,'--maxWorkers=1','--minWorkers=1','--reporter=verbose','--reporter=json',
+           '--outputFile='+path.join(out,'units.json')
+          ],{encoding:'utf8',timeout:900000,maxBuffer:12*1024*1024,
+           env:{...process.env,[p.rawEnv]:rawDir}});
+          fs.writeFileSync(path.join(out,'units.log'),(child.stdout??'')+'\n'+(child.stderr??''));
+          fs.writeFileSync(path.join(out,'units.exit'),String(child.status)+'\n');
+          fs.writeFileSync(path.join(out,'process.json'),JSON.stringify({
+           status:child.status,signal:child.signal,error:child.error?{name:child.error.name,message:child.error.message,code:child.error.code}:null
+          },null,2)+'\n');
+          assert(!child.error&&!child.signal,'The actual bounded test process completed');
+          assert.doesNotMatch((child.stdout??'')+'\n'+(child.stderr??''),/Unhandled (?:Error|Rejection)|Vitest caught \d+ unhandled|uncaughtException|unhandledRejection/,'No explicit unhandled runtime error');
+          assert.equal(child.status,1,'The native expected baseline exit remains failed');
+          assert.equal(fs.statSync(process.env.SIM_OFFLINE_RECEIPT).size,0,'No offline transport attempts');
+          const r=JSON.parse(fs.readFileSync(path.join(out,'units.json'),'utf8'));
+          assert.equal(r.testResults.length,1);
+          const file=r.testResults[0];
+          assert(file.name.replaceAll('\\','/').endsWith('/'+p.test),'Only the selected ordinary test file ran');
+          assert(!file.error&&!file.failureMessage&&!file.message,'No suite-level collection or setup error');
+          const rows=file.assertionResults, declared=new Map(p.cases.map(([name,marker,raw])=>[name,{marker,raw}]));
+          assert.equal(rows.length,p.cases.length);
+          assert.equal(new Set(rows.map(x=>x.fullName)).size,p.cases.length);
+          assert.deepEqual(rows.map(x=>x.fullName).sort(),[...declared.keys()].sort(),'Exact declared identities');
+          const strip=value=>String(value).replace(/\u001b\[[0-9;]*m/g,'');
+          const counters={};
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors']){
+           counters[key]=Object.hasOwn(r,key)?r[key]:null;
+           if(counters[key]!==null){assert.equal(typeof counters[key],'number');assert.equal(counters[key],0,key);}
+          }
+          for(const key of ['numPendingTests','numTodoTests','numPendingTestSuites']){
+           if(Object.hasOwn(r,key))assert.equal(r[key],0,key);
+          }
+          const failed=rows.filter(x=>x.status==='failed'), passed=rows.filter(x=>x.status==='passed');
+          assert.equal(failed.length,p.cases.filter(x=>x[1]).length);
+          assert.equal(passed.length,p.cases.filter(x=>!x[1]).length);
+          assert.equal(r.numTotalTests,p.cases.length);assert.equal(r.numFailedTests,failed.length);
+          assert.equal(r.numPassedTests,passed.length);assert.equal(r.success,false);
+          for(const row of rows){
+           const expected=declared.get(row.fullName), messages=(row.failureMessages??[]).map(strip);
+           assert.equal(row.status,expected.marker?'failed':'passed',row.fullName);
+           if(expected.marker){
+            assert(messages.length>0,'Owned failure contains an actual assertion message');
+            assert(messages.every(m=>m.includes(expected.marker)&&/(?:AssertionError|Error:\s*expect\()/.test(m)),'Only the exact owned assertion is admitted');
+            assert(messages.every(m=>!/(?:SyntaxError|TypeError|ReferenceError|RangeError|Cannot find module|Failed to load|Unhandled (?:Error|Rejection))/.test(m)),'No setup or runtime failure credit');
+           }else assert.deepEqual(messages,[],'Held cases have no failures');
+          }
+          assert.deepEqual(fs.readdirSync(rawDir).sort(),p.cases.map(x=>x[2]).sort(),'Every declared RAW file, no substitutes');
+          const raw=Object.fromEntries(p.cases.map(([, ,name])=>[name,JSON.parse(fs.readFileSync(path.join(rawDir,name),'utf8'))]));
+          if(suite==='careers'){
+           for(const name of ['nba-recorded.json','nfl-recorded.json']){
+            const v=raw[name].value;assert(v.savedBytesHeld&&v.inputHeld);assert(v.storedRows>0);
+            assert.equal(v.first.playEnabled,true);assert.equal(v.reloaded.playEnabled,true);
+            assert.equal(v.first.summary,null);assert.equal(v.reloaded.summary,null);
+            assert.equal(typeof v.expected,'string');assert(v.expected.startsWith('Last season: '));
+            for(const key of ['writes','removals','completions','activity'])assert.deepEqual(v[key],[]);
+           }
+           for(const name of ['nba-empty.json','nfl-empty.json']){
+            const v=raw[name].value;assert(v.savedBytesHeld);
+            assert.deepEqual(v.first,{summary:null,playEnabled:true});assert.deepEqual(v.reloaded,v.first);
+            assert.deepEqual(v.writes,[]);assert.deepEqual(v.removals,[]);
+           }
+          }
+          if(suite==='stadium'){
+           for(const name of ['stadium.json','league.json']){
+            const v=raw[name];assert(v.oldBytesHeld&&v.unrelatedHeld);assert(v.attempts>=2);
+            assert(v.latestMoney>v.initialMoney);assert.equal(v.notice,null);
+           }
+           const healthy=raw['healthy.json'];assert(healthy.attempts>0&&healthy.rawChanged&&healthy.unrelatedHeld);
+           assert(healthy.money>healthy.initialMoney);assert.equal(healthy.notice,null);
+           const tickets=raw['tickets.json'];assert.equal(tickets.status,'failed');
+           assert(tickets.oldBytesHeld&&tickets.attempts>=2);assert.equal(tickets.alerts.length,1);
+           assert(tickets.alerts[0].includes('not saved on this device'));
+          }
+          if(suite==='frontoffice'){
+           const floor=raw['floor.json'], eligible=raw['eligible.json'], cut=raw['cut.json'];
+           assert.equal(floor.floor,6);assert.equal(floor.roster,6);
+           assert.deepEqual(floor.disabled,Array(6).fill(true));
+           assert.deepEqual(floor.titles,Array(6).fill('Your roster is at the minimum of 6, so nobody else can go.'));
+           assert.deepEqual(floor.descriptions,Array(6).fill(null));assert.equal(floor.visibleReason,null);
+           assert(floor.rawHeld&&floor.unrelatedHeld);assert.equal(eligible.roster,7);assert.equal(eligible.helper,null);
+           assert.deepEqual(eligible.disabled,Array(7).fill(false));assert(eligible.rawHeld);
+           assert.equal(cut.roster,6);assert.equal(cut.cap,13);assert(cut.unrelatedHeld);
+           assert.deepEqual(cut.disabled,Array(6).fill(true));
+           assert.deepEqual(cut.pool,[{id:'cut-reason-fixture-6',years:1,salary:2}]);
+           assert.deepEqual(cut.released,['cut-reason-fixture-6']);
+           assert.deepEqual(cut.deadCap,[{playerId:'cut-reason-fixture-6',name:'Cut reason fixture 7',amount:1,seasonsLeft:2}]);
+          }
+          if(suite==='hubs'){
+           const storage={'hub-fixture-unrelated':'{"unchanged":true}'};
+           for(const [name,v] of Object.entries(raw)){
+            if(name==='plain.json'||name==='invalid.json'){
+             assert.equal(v.observations.length,3);
+             for(const item of v.observations){assert.deepEqual(item.observed.storage,storage);assert.equal(item.observed.query,'');}
+            }else{
+             assert.deepEqual(v.observed.storage,storage);assert.equal(v.observed.query,'');
+             assert(v.observed.selectedFilter.startsWith('All games'));assert(v.observed.visiblePaths.length>0);
+             if(name.startsWith('direct-')){assert(v.expected.query.length>0);assert(v.expected.paths.length>0);}
+             else assert(v.expectedQuery.length>0);
+            }
+           }
+          }
+          fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({
+           status:'ACTUAL_EXACT_OWNED_RED_WITH_HELD_PASSES',suite,rows:rows.length,
+           owned:failed.map(x=>x.fullName),held:passed.map(x=>x.fullName),rawFiles:Object.keys(raw),
+           counters,absentCounterMeaning:'UNKNOWN',nativeExit:child.status,
+           limits:'Source-only consumer baseline, not fixed-product, full-suite, browser, layout or production-transport qualification.'
+          },null,2)+'\n');
+          console.log(suite+': '+failed.length+' exact owned failures, '+passed.length+' held passes, '+Object.keys(raw).length+' RAW files. Native exit remains 1.');
+          
+          NODE
+          set +e
+          node "$QA_OUT/qualify.mjs" > "$QA_OUT/classifier.log" 2>&1
+          code=$?
+          set -e
+          cat "$QA_OUT/classifier.log"
+          printf '%s\n' "$code" > "$QA_OUT/classifier.exit"
+          test "$code" -eq 0
+          exit "$(cat "$QA_OUT/units.exit")"
+      - name: Retain all source bytes, actual failure evidence and finite archive
+        id: retain
+        if: always()
+        run: |
+          set -uo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          diff_exit=$?
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          map_exit=$?
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256" > "$QA_OUT/source-compare.log" 2>&1
+          compare_exit=$?
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log" 2>&1
+          held_exit=$?
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          status_exit=$?
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt" > "$QA_OUT/status-compare.log" 2>&1
+          status_compare_exit=$?
+          printf '{"diff":%s,"map":%s,"compare":%s,"held":%s,"status":%s,"statusCompare":%s}\n' "$diff_exit" "$map_exit" "$compare_exit" "$held_exit" "$status_exit" "$status_compare_exit" > "$QA_OUT/closure.json"
+          bytes=$(du -sb "$QA_OUT" | cut -f1)
+          printf '%s\n' "$bytes" > "$QA_OUT/artifact-bytes.txt"
+          test "$bytes" -lt 150000000 || exit 1
+          echo "artifact_ok=true" >> "$GITHUB_OUTPUT"
+          test "$diff_exit" -eq 0 && test "$map_exit" -eq 0 && test "$compare_exit" -eq 0 && test "$held_exit" -eq 0 && test "$status_exit" -eq 0 && test "$status_compare_exit" -eq 0
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.retain.outputs.artifact_ok == 'true'
+        with:
+          name: popular-pages-red-${{ matrix.suite }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/popular-pages-red-${{ matrix.suite }}
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
