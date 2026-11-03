@@ -54,7 +54,7 @@ const idle = page => page.evaluate(() => new Promise(resolve => requestAnimation
 const customPoints = state => state.customShape?.points ?? cm.FORMATIONS[state.formationIndex].slots.map(({ x, y }) => ({ x, y }));
 const picked = state => ({
   formationIndex: state.formationIndex, mentality: state.mentality, xiIds: state.xiIds,
-  xiDuties: state.xiDuties ?? null, setPieces: state.setPieces ?? null, shootoutOrder: state.shootoutOrder ?? null,
+  xiDuties: state.xiDuties ?? null, setPieces: state.setPieces ?? null, shootoutOrder: state.shootoutOrder ?? [],
   instructions: cm.instructionsOf(state), customShape: state.customShape ?? null,
 });
 async function waitSaved(page, before) {
@@ -140,16 +140,64 @@ async function setMix(page, mix) {
 async function slotMap(page) {
   return page.locator('[data-cm-slot]').evaluateAll(nodes => nodes.map(node => ({ index: Number(node.dataset.cmSlot), id: node.dataset.cmPid, role: node.dataset.cmSlotLabel, fit: node.dataset.cmFit })));
 }
+async function pointerSample(page, index, a, b) {
+  return page.evaluate(({ index, a, b }) => {
+    const rect = node => {
+      if (!node) return null;
+      const value = node.getBoundingClientRect();
+      return { x: value.x, y: value.y, width: value.width, height: value.height, right: value.right, bottom: value.bottom };
+    };
+    const brief = node => {
+      const slot = node.closest('[data-cm-slot]');
+      return { tag: node.tagName, slot: slot?.getAttribute('data-cm-slot') ?? null, id: node.id,
+        role: node.getAttribute('role'), label: node.getAttribute('aria-label'), text: node.textContent?.trim().slice(0, 100),
+        className: node.getAttribute('class'), rect: rect(node), markup: node.outerHTML.slice(0, 1800) };
+    };
+    const hits = point => point ? document.elementsFromPoint(point.x, point.y).slice(0, 8).map(brief) : [];
+    const token = document.querySelector('[data-cm-slot="' + index + '"]');
+    const style = token ? getComputedStyle(token) : null;
+    const move = Array.from(document.querySelectorAll('button')).find(node => node.textContent?.trim() === 'Move players');
+    return {
+      viewport: { width: innerWidth, height: innerHeight }, scroll: { x: scrollX, y: scrollY },
+      tokenRect: rect(token), pitchRect: rect(document.querySelector('[data-cm-pitch]')),
+      tokenMarkup: token?.outerHTML ?? null, selectedSlot: document.querySelector('[data-cm-slot][data-cm-selected="1"]')?.getAttribute('data-cm-slot') ?? null,
+      moveMode: move?.getAttribute('aria-pressed') ?? null,
+      style: style ? { pointerEvents: style.pointerEvents, touchAction: style.touchAction, transform: style.transform,
+        visibility: style.visibility, display: style.display, zIndex: style.zIndex, transition: style.transition } : null,
+      startHits: hits(a), endHits: hits(b),
+    };
+  }, { index, a, b });
+}
 async function pointerMove(page, row, index, cancel = false) {
   const token = page.locator('[data-cm-slot="' + index + '"]');
-  await token.scrollIntoViewIfNeeded(); await idle(page);
-  const beforeRaw = await raw(page), before = JSON.parse(beforeRaw), point = customPoints(before)[index];
-  const box = await token.boundingBox(); assert.ok(box);
-  const a = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-  const b = { x: a.x + (point.x >= 50 ? -12 : 12), y: a.y + (point.y >= 50 ? -12 : 12) };
-  assert.ok(a.x > 0 && a.x < row.width && a.y > 0 && a.y < row.height && b.x > 0 && b.x < row.width && b.y > 0 && b.y < row.height);
-  const beforeBox = await token.boundingBox(), scrollBefore = await page.evaluate(() => ({ x: scrollX, y: scrollY })); let cdp;
+  const attempt = { index, cancel, status: 'incomplete' };
+  (row.pointerAttempts ??= []).push(attempt);
+  let cdp, a, b, beforeRaw, before, point, beforeBox, scrollBefore;
   try {
+    await token.scrollIntoViewIfNeeded(); await idle(page);
+    beforeRaw = await raw(page); before = JSON.parse(beforeRaw); point = customPoints(before)[index];
+    const box = await token.boundingBox(); assert.ok(box);
+    a = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+    b = { x: a.x + (point.x >= 50 ? -12 : 12), y: a.y + (point.y >= 50 ? -12 : 12) };
+    Object.assign(attempt, { a, b, beforeRawSha256: hash(beforeRaw), beforePoint: point, initialBox: box });
+    attempt.before = await pointerSample(page, index, a, b);
+    assert.ok(a.x > 0 && a.x < row.width && a.y > 0 && a.y < row.height && b.x > 0 && b.x < row.width && b.y > 0 && b.y < row.height);
+    beforeBox = await token.boundingBox(); scrollBefore = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
+    await page.evaluate(() => {
+      const types = ['pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'gotpointercapture', 'lostpointercapture'];
+      const events = [];
+      const listener = event => {
+        if (events.length >= 64) return;
+        const target = event.target instanceof Element ? event.target : null;
+        const slot = target?.closest('[data-cm-slot]');
+        events.push({ type: event.type, trusted: event.isTrusted, pointerType: event.pointerType, pointerId: event.pointerId,
+          x: event.clientX, y: event.clientY, button: event.button, primary: event.isPrimary,
+          targetTag: target?.tagName ?? null, targetLabel: target?.getAttribute('aria-label') ?? null,
+          slot: slot?.getAttribute('data-cm-slot') ?? null, captured: slot?.hasPointerCapture(event.pointerId) ?? false });
+      };
+      window.__cmPointerProbe = { types, events, listener };
+      for (const type of types) document.addEventListener(type, listener, { capture: true, passive: true });
+    });
     if (row.input === 'touch' || cancel) {
       cdp = await page.context().newCDPSession(page);
       const touch = { ...a, id: 1, radiusX: 1, radiusY: 1, force: 1 };
@@ -157,8 +205,11 @@ async function pointerMove(page, row, index, cancel = false) {
       await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ ...touch, ...b }] });
     } else { await page.mouse.move(a.x, a.y); await page.mouse.down(); await page.mouse.move(b.x, b.y, { steps: 3 }); }
     await idle(page);
-    assert.equal(await raw(page), beforeRaw, 'A native drag preview cannot write the save');
     const previewBox = await token.boundingBox();
+    attempt.preview = await pointerSample(page, index, a, b);
+    Object.assign(attempt, { beforeBox, previewBox, previewRawSha256: hash(await raw(page)) });
+    attempt.eventsAtPreview = await page.evaluate(() => window.__cmPointerProbe.events);
+    assert.equal(await raw(page), beforeRaw, 'A native drag preview cannot write the save');
     assert.ok(previewBox && Math.hypot(previewBox.x - beforeBox.x, previewBox.y - beforeBox.y) > 1, 'Native preview must actually move');
     if (cdp) await cdp.send('Input.dispatchTouchEvent', { type: cancel ? 'touchCancel' : 'touchEnd', touchPoints: [] });
     else await page.mouse.up();
@@ -173,6 +224,7 @@ async function pointerMove(page, row, index, cancel = false) {
       assert.ok(restored && Math.hypot(restored.x - beforeBox.x, restored.y - beforeBox.y) <= 1);
       const scrollAfter = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
       assert.deepEqual(scrollAfter, scrollBefore, 'Cancelling the native preview must not scroll');
+      attempt.status = 'passed';
       return { index, cancel: true, before: point, previewBox, restored, rawHeld: true, scrollBefore, scrollAfter };
     }
     const after = await waitSaved(page, beforeRaw);
@@ -180,8 +232,27 @@ async function pointerMove(page, row, index, cancel = false) {
     assert.deepEqual(after.xiIds, before.xiIds); assert.deepEqual(after.xiDuties, before.xiDuties);
     const scrollAfter = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
     assert.deepEqual(scrollAfter, scrollBefore, 'Releasing the native move must not scroll');
+    attempt.status = 'passed';
     return { index, cancel: false, before: point, after: customPoints(after)[index], previewBox, scrollBefore, scrollAfter };
-  } finally { if (cdp) await cdp.detach(); }
+  } catch (error) {
+    attempt.status = 'failed'; attempt.error = String(error.stack || error);
+    try {
+      attempt.failure = await pointerSample(page, index, a, b);
+      attempt.failureRawSha256 = hash(await raw(page));
+      attempt.failureScreenshot = row.width + '-pointer-' + index + (cancel ? '-cancel' : '-move') + '-failed.png';
+      await page.screenshot({ path: path.join(OUT, attempt.failureScreenshot) });
+    } catch (captureError) { attempt.captureError = String(captureError.stack || captureError); }
+    throw error;
+  } finally {
+    try {
+      attempt.events = await page.evaluate(() => {
+        const probe = window.__cmPointerProbe;
+        if (!probe) return [];
+        for (const type of probe.types) document.removeEventListener(type, probe.listener, true);
+        delete window.__cmPointerProbe; return probe.events;
+      });
+    } finally { if (cdp) await cdp.detach(); }
+  }
 }
 async function keyMove(page, row, index) {
   await page.getByRole('combobox', { name: 'Position slot', exact: true }).selectOption(String(index));
@@ -417,7 +488,18 @@ try {
       if (row.width === 1440) { page = await boot(context, row, 'unsupported'); await unsupported(page, row); }
       assert.deepEqual(row.pageErrors, []);
       row.status = 'passed';
-    } catch (error) { row.status = 'failed'; row.error = String(error.stack || error); process.exitCode = 1; }
+    } catch (error) {
+      row.status = 'failed'; row.error = String(error.stack || error); process.exitCode = 1;
+      if (page) {
+        try {
+          const pointerFailure = row.pointerAttempts?.findLast(attempt => attempt.status === 'failed');
+          row.failureScreenshot = pointerFailure?.failureScreenshot ?? row.width + '-context-failed.png';
+          if (!pointerFailure?.failureScreenshot) await page.screenshot({ path: path.join(OUT, row.failureScreenshot) });
+          row.failurePitchMarkup = await page.locator('[data-cm-pitch]').evaluateAll(nodes => nodes.map(node => node.outerHTML));
+          row.failureBodyText = await page.locator('body').innerText();
+        } catch (captureError) { row.failureCaptureError = String(captureError.stack || captureError); }
+      }
+    }
     finally { if (page) await page.close(); await context.close(); }
   }
 } catch (error) { report.error = String(error.stack || error); process.exitCode = 1; }
