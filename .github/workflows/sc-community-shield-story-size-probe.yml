@@ -1,0 +1,197 @@
+name: Soccer Career Story save-size diagnostic
+on:
+  push:
+    branches: [codex/sc-community-shield-story-size-probe-20261102]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the unchanged product and exactly two diagnostic additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-story-size"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-story-size-probe-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = bb1fc63549bf9f4e4d5d5f12ee6acfedbd987d8e
+          test "$(git rev-parse 'HEAD^^{tree}')" = 26c394c0adb44af470ce918b84b89a6e3b3f6355
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\n' '.github/workflows/sc-community-shield-story-size-probe.yml' 'scripts/qa/measureSoccerCareerStorySize.mjs' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          scripts/qa/measureSoccerCareerStorySize.mjs df8ef8ad70e403bbee53b2d0366e201362b21643
+          src/test/careerStory.test.tsx 13c15973b7ae243a6b7ed27dd18028abd4017a32
+          src/lib/soccerCareerEngine.ts 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          src/lib/soccerCareerExtraCups.ts ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          src/lib/soccerCareerSave.ts 86ec011693fd5bc702b5e8ccec05d27775a72a76
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          printf '%s  %s\n' 5f11137d7cae4b3f59389b4b61a05fa68f12c780f306946097d17b10b6d2d3ca scripts/qa/measureSoccerCareerStorySize.mjs | sha256sum --check > "$OUT/helper-pin.log"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from offline diagnosis
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Actual copied Story with proper types and its two retained size failures
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SC_STORY_SIZE_OUT="$PWD/tmp/sc-story-size-$GITHUB_RUN_ID"
+          printf 'SC_STORY_SIZE_OUT=%s\n' "$SC_STORY_SIZE_OUT" >> "$GITHUB_ENV"
+          test ! -e "$SC_STORY_SIZE_OUT"
+          source "$OUT/capture.sh"
+          capture syntax node --check scripts/qa/measureSoccerCareerStorySize.mjs
+          capture story-size node scripts/qa/measureSoccerCareerStorySize.mjs
+          test ! -s "$OUT/story-size.transport"
+      - name: Verify exact original identities raw size failures and diagnostic-only codec evidence
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          const dir = process.env.SC_STORY_SIZE_OUT, outer = process.env.OUT;
+          const read = file => JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+          const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+          const names = ["Soccer Career: the story keeps every season twelve seasons on seed 9741: every line kept, in order, once","Soccer Career: the story keeps every season twelve seasons on seed 9742: every line kept, in order, once","Soccer Career: the story keeps every season twelve seasons on seed 9743: every line kept, in order, once","Soccer Career: the story keeps every season the story draws nothing: the same seed without it plays the same career","Soccer Career: the story keeps every season a signing and a loan add to the season log instead of writing over it","Soccer Career: old and damaged stories a save with no story loads empty, shows this season only, and starts its story here","Soccer Career: old and damaged stories a damaged story resets alone","Soccer Career: old and damaged stories a season longer than the cap keeps the cap and counts the rest","Soccer Career: the story keeps the save small the longest career on seed 9748 plus ten dugout seasons stays under the bound","Soccer Career: the story keeps the save small the longest career on seed 9749 plus ten dugout seasons stays under the bound","Soccer Career: the story keeps the save small the longest career on seed 9750 plus ten dugout seasons stays under the bound","Soccer Career: the story on the real page Latest Events opens the story, a season opens, Back returns, Close shuts it","Soccer Career: the story on the real page the retired screen carries the same story, the last chapter included"];
+          const summary = read('summary.json'), receipt = read('receipt.json');
+          assert.equal(summary.schema, 1); assert.equal(summary.diagnosticCompleted, true);
+          for (const [key, value] of Object.entries({ vitestChildren: 1, selectedExecuted: 2, originalRestFailuresRetained: 2, declaredUnselected: 11, actualCodecRoundTrips: 2 })) assert.equal(summary[key], value, key);
+          assert.equal(receipt.diagnosticCompleted, true); assert.equal(receipt.primary, null); assert.deepEqual(receipt.secondary, []);
+          assert.equal(receipt.removedCopy, true); assert.equal(receipt.originalRestFailuresRetained, 2);
+          for (const [tag, code] of [['types', 0], ['current', 1]]) {
+            assert.equal(Number(fs.readFileSync(path.join(dir, tag + '.exit'), 'utf8')), code);
+            assert.equal(fs.statSync(path.join(dir, tag + '.transport')).size, 0);
+            const processReceipt = read(tag + '.process.json');
+            assert.equal(processReceipt.status, code); assert.equal(processReceipt.signal, null); assert.equal(processReceipt.error, null);
+          }
+          for (const tag of ['syntax', 'story-size']) {
+            assert.equal(Number(fs.readFileSync(path.join(outer, tag + '.exit'), 'utf8')), 0);
+            assert.equal(fs.statSync(path.join(outer, tag + '.transport')).size, 0);
+          }
+          const reportBody = fs.readFileSync(path.join(dir, 'current.vitest.json')), report = JSON.parse(reportBody);
+          assert.equal(sha(reportBody), summary.rawReportSha256); assert.equal(report.success, false);
+          for (const [key, value] of Object.entries({ numTotalTests: 13, numPassedTests: 0, numFailedTests: 2, numPendingTests: 11, numTodoTests: 0 })) assert.equal(report[key], value, key);
+          assert.equal(report.testResults.length, 1);
+          const suite = report.testResults[0]; assert.equal(suite.status, 'failed'); assert.equal(suite.message, '');
+          assert.equal(suite.assertionResults.length, 13);
+          assert.deepEqual(suite.assertionResults.map(row => row.fullName).sort(), names.slice().sort());
+          assert.deepEqual(summary.records.map(row => row.seed).sort(), [9749, 9750]);
+          for (const record of summary.records) {
+            const measurementFile = path.join(dir, 'cases', record.seed + '.measurement.json');
+            const measurement = JSON.parse(fs.readFileSync(measurementFile, 'utf8'));
+            assert.deepEqual(record.measurement, measurement);
+            const row = suite.assertionResults.find(value => value.fullName === 'Soccer Career: the story keeps the save small the longest career on seed ' + record.seed + ' plus ten dugout seasons stays under the bound');
+            assert.ok(row); assert.equal(row.status, 'failed'); assert.equal(row.failureMessages.length, 1);
+            const first = row.failureMessages[0].replace(/\x1b\[[0-9;]*m/g, '').split(/\r?\n/).find(line => line.trim())?.trim();
+            assert.equal(first, 'AssertionError: what the save held before the train still fits the bound it had then: expected ' + measurement.parts.rest + ' to be less than 80000');
+            assert.equal(record.primary, first); assert.equal(measurement.seed, record.seed);
+            assert.equal(measurement.limits.REST_BOUND, 80000); assert.equal(measurement.limits.SIZE_BOUND, 195000);
+            assert.equal(measurement.codec.roundTripEqual, true); assert.equal(measurement.codec.coreAdmitted, true);
+            const state = fs.readFileSync(path.join(dir, 'cases', record.seed + '.state.json'));
+            const serialized = fs.readFileSync(path.join(dir, 'cases', record.seed + '.serialized.txt'));
+            const decoded = fs.readFileSync(path.join(dir, 'cases', record.seed + '.decoded.json'));
+            assert.equal(sha(state), measurement.raw.sha256); assert.equal(state.length, measurement.raw.utf8Bytes);
+            assert.equal(sha(serialized), measurement.codec.sha256); assert.equal(serialized.length, measurement.codec.utf8Bytes);
+            assert.equal(sha(decoded), measurement.codec.decodedSha256);
+            assert.deepEqual(JSON.parse(decoded), JSON.parse(state));
+            assert.equal(measurement.comparisonControl.omissionChanged, true); assert.equal(measurement.comparisonControl.restoredEqual, true);
+            assert.equal(measurement.oldTotalsHeldByAttribution, true); assert.equal(measurement.allTotalsHeldWhenOnlyNonentrantsRemoved, true);
+            for (const part of Object.values(measurement.detachedAttributionOnly).filter(value => value && typeof value === 'object')) {
+              const bytes = fs.readFileSync(path.join(dir, 'cases', part.inputFile)); assert.equal(sha(bytes), part.inputSha256);
+            }
+          }
+          for (const row of suite.assertionResults) if (row.status !== 'failed') { assert.ok(['skipped', 'pending'].includes(row.status)); assert.deepEqual(row.failureMessages, []); }
+          const counters = Object.fromEntries(['numUnhandledErrors', 'numRuntimeErrorTestSuites', 'numRuntimeErrorTests'].map(key => [key, report[key] ?? null]));
+          assert.deepEqual(summary.counters, counters);
+          for (const value of Object.values(counters)) if (value !== null) { assert.equal(typeof value, 'number'); assert.equal(value, 0); }
+          for (const key of ['errors', 'unhandledErrors']) if (report[key] != null) { assert.ok(Array.isArray(report[key])); assert.equal(report[key].length, 0); }
+          assert.equal(summary.runtimeCounterCompleteness, Object.values(counters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED');
+          assert.equal(summary.detectedRuntimeError, false);
+          assert.deepEqual(read('source-after.json'), read('source-before.json'));
+          const transform = read('test-transform.json');
+          assert.equal(transform.allOriginalAssertionsAndLimitsHeld, true); assert.equal(transform.inverseSha256, transform.originalNormalizedSha256);
+          assert.equal(sha(fs.readFileSync(path.join(dir, 'instrumented-story.test.tsx'))), transform.copiedSha256);
+          fs.writeFileSync(path.join(outer, 'qualification-summary.json'), JSON.stringify({
+            scope: 'Diagnostic success retains both original REST failures. No size threshold, story content, engine result, history or codec fix.',
+            diagnosticCompleted: true, vitestChildren: 1, selectedExecuted: 2, originalRestFailuresRetained: 2,
+            declaredUnselected: 11, actualCodecRoundTrips: 2, counters,
+            runtimeCounterCompleteness: summary.runtimeCounterCompleteness,
+            rawReportSha256: sha(reportBody), seeds: summary.records.map(row => row.seed)
+          }, null, 2) + '\n');
+          console.log('SC_STORY_SIZE_DIAGNOSED: 2 original REST failures retained, 11 declared unselected, 2 actual codec round trips.');
+          VERIFY
+          capture verify node "$OUT/verify.mjs"
+      - name: Always retain complete diagnostic states and raw child evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${SC_STORY_SIZE_OUT:-}" && test -d "$SC_STORY_SIZE_OUT"; then cp -a -- "$SC_STORY_SIZE_OUT" "$OUT/diagnostic"; fi
+      - name: Always hold source dependencies and complete tracked membership
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-story-size-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-story-size/
+          retention-days: 14
