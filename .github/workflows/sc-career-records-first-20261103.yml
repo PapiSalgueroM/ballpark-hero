@@ -1,0 +1,223 @@
+name: Soccer Career completed records first consumer proof
+on:
+  push:
+    branches: [codex/sc-career-records-first-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: sc-career-records-first-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  BASELINE_PARENT: 8b31d8bcef31f1796ebacbfd35465c4125a1471a
+  BASELINE_PARENT_TREE: 03965020eeefa9615da38e8b804fed842c33b40c
+  FROZEN_TEST_SHA256: 72fa1be95875819ac44d948039a4c2379799d2913bb5d8b55d9f45ec6180f45d
+jobs:
+  consumers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact product, frozen consumer and admitted baseline
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-career-records-first"
+          mkdir -p "$OUT/logs" "$OUT/units" "$OUT/raw" "$OUT/transport" "$OUT/original"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          if ! git cat-file -e "$BASELINE_PARENT^{commit}" 2>/dev/null; then
+            git fetch --no-tags --depth=1 origin "$BASELINE_PARENT"
+          fi
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status "$BASELINE_PARENT" HEAD > "$OUT/changed-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT, sha=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+          const pins={"src/pages/SoccerCareer.tsx":{"git":"3fedb64360b001ee88343a24581ccb960bfae948","sha256":"c999898871c2a7b19067d1f93cd94f599e9345aed0b83e2cb3e5f48d32110b73"},"src/lib/soccerCareerCompletedRecords.ts":{"git":"d000db49957004591231cf1912a0dc8ea3ced083","sha256":"d4ebc565ab914dd34efca706aa9d3fc95c7c18cf71b6136ec95020a29f35e4e3"},"src/components/soccer-career/PastCareersSheet.tsx":{"git":"515d3ce1a2fc89a49da3f9fda10902db59292ddc","sha256":"f24c438e35eb4584866a53ea957c065bf31a01a869dbe2b306ef092a896948d3"},"src/test/soccerCareerCompletedRecords.test.tsx":{"git":"e1c382f8d5d682637f64955f8133a08379c4a2f8","sha256":"72fa1be95875819ac44d948039a4c2379799d2913bb5d8b55d9f45ec6180f45d"}}, expectedChanges=["A\t.github/workflows/sc-career-records-first-20261103.yml","A\tsrc/lib/soccerCareerCompletedRecords.ts","A\tsrc/components/soccer-career/PastCareersSheet.tsx","M\tsrc/pages/SoccerCareer.tsx"];
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+          assert.equal(execFileSync('git',['rev-parse','HEAD']).toString().trim(),process.env.GITHUB_SHA);
+          assert.equal(execFileSync('git',['rev-parse',process.env.BASELINE_PARENT+'^{tree}']).toString().trim(),process.env.BASELINE_PARENT_TREE);
+          assert.deepEqual(fs.readFileSync(out+'/changed-paths.txt','utf8').trim().split('\n').sort(),expectedChanges.slice().sort());
+          for(const [file,expected] of Object.entries(pins)){
+            assert.match(expected.git,/^[a-f0-9]{40}$/);assert.match(expected.sha256,/^[a-f0-9]{64}$/);
+            assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString().trim(),expected.git,file+' Git pin');
+            assert.equal(sha(fs.readFileSync(file)),expected.sha256,file+' SHA pin');
+          }
+          const held={
+            'src/lib/soccerCareerEngine.ts':'722b2285628775dff77f8de0138cf44d7b104b49',
+            'src/lib/soccerCareerSave.ts':'86ec011693fd5bc702b5e8ccec05d27775a72a76',
+            'src/lib/saveFence.ts':'1de45b573fd866433eb0982495af927a5427e8f4',
+            'src/test/soccerCareerRecords.test.tsx':'4e2475839cf7daf227f6e14ad1e9513d8bc53f57',
+            'src/lib/soccerCareerRecords.ts':'c5c09509f5b607c2993c01b5da7f64e3b71a265e'
+          };
+          for(const [file,git] of Object.entries(held))assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString().trim(),git,file+' held');
+          const test='src/test/soccerCareerCompletedRecords.test.tsx';
+          assert.equal(sha(fs.readFileSync(test)),process.env.FROZEN_TEST_SHA256);
+          assert.equal(sha(execFileSync('git',['show',process.env.BASELINE_PARENT+':'+test])),process.env.FROZEN_TEST_SHA256);
+          assert.equal(execFileSync('git',['rev-parse',process.env.BASELINE_PARENT+':src/pages/SoccerCareer.tsx']).toString().trim(),'c6b270bf74c5b97fd21e07900c327ac7ccba24e0');
+          const config=fs.readFileSync('vitest.config.ts','utf8');
+          for(const match of config.matchAll(/process\.env\.([A-Z_]+)/g))assert.ok(!process.env[match[1]],'No inherited alias:'+match[1]);
+          fs.writeFileSync(out+'/association.json',JSON.stringify({source:process.env.GITHUB_SHA,parent:process.env.BASELINE_PARENT,parentTree:process.env.BASELINE_PARENT_TREE,pins,held,
+            frozenTestSha256:process.env.FROZEN_TEST_SHA256,scope:'Completed local record retention only. No engine, codec, creation, growth, simulation, database, dependency or cap change.'},null,2)+'\n');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          cp .github/workflows/sc-career-records-first-20261103.yml "$OUT/workflow.yml"
+      - name: Install unchanged application dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper types, frozen seven consumers and effective whole-original Page control
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+          page=src/pages/SoccerCareer.tsx
+          cp "$page" "$QA_OUT/original/fixed-page.tsx"
+          git show "$BASELINE_PARENT:$page" > "$QA_OUT/original/baseline-page.tsx"
+          test "$(git hash-object "$QA_OUT/original/baseline-page.tsx")" = c6b270bf74c5b97fd21e07900c327ac7ccba24e0
+          restore_page() { cp "$QA_OUT/original/fixed-page.tsx" "$page"; }
+          trap restore_page EXIT
+          run_records() {
+            UNIT_ARM="$1" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {spawnSync} from 'node:child_process';
+          const out=process.env.QA_OUT,arm=process.env.UNIT_ARM,old=arm==='original';
+          assert.ok(['fixed','original','restored'].includes(arm));
+          const test='src/test/soccerCareerCompletedRecords.test.tsx',rawDir=out+'/raw/'+arm;
+          fs.mkdirSync(rawDir,{recursive:true});
+          const receipt=out+'/transport/'+arm+'.log';fs.writeFileSync(receipt,'');
+          const reportPath=out+'/units/'+arm+'.json';
+          const run=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',test,'--maxWorkers=1','--minWorkers=1',
+            '--reporter=verbose','--reporter=json','--outputFile='+reportPath],
+            {env:{...process.env,SC_CAREER_RECORDS_RAW:rawDir,SIM_OFFLINE_RECEIPT:receipt},encoding:'utf8',timeout:300000,maxBuffer:32*1024*1024});
+          const log=(run.stdout??'')+'\n'+(run.stderr??'');
+          fs.writeFileSync(out+'/logs/'+arm+'.log',log);process.stdout.write(log);
+          fs.writeFileSync(out+'/units/'+arm+'.exit.json',JSON.stringify({status:run.status,signal:run.signal,error:run.error?String(run.error):null})+'\n');
+          assert.ok(!run.error&&!run.signal);assert.equal(run.status,old?1:0);
+          const report=JSON.parse(fs.readFileSync(reportPath,'utf8'));
+          assert.equal(report.success,!old);assert.equal(report.numTotalTests,7);
+          assert.equal(report.numPassedTests,old?2:7);assert.equal(report.numFailedTests,old?5:0);
+          assert.equal(report.testResults.length,1);
+          const suite=report.testResults[0];assert.equal(path.resolve(suite.name),path.resolve(test));
+          assert.equal(suite.status,old?'failed':'passed');if(Object.hasOwn(suite,'message'))assert.equal(suite.message,'');
+          const cases=[{"title":"keeps an acknowledged completed record before New Career removes the source save","raw":"keep-before-restart","marker":"SC_RECORDS_KEEP_BEFORE_RESTART"},{"title":"dedupes the same playing record and replaces it with the latest lower saved legacy","raw":"latest-lower","marker":"SC_RECORDS_LATEST_ACK_REPLACES"},{"title":"creates no ghost record and refuses New Career when the current save was not acknowledged","raw":"current-save-failed","marker":"SC_RECORDS_MAIN_FAILURE_BLOCKS_CLEAR"},{"title":"keeps a saved career after record-book quota refusal and recovers through Retry","raw":"archive-quota","marker":"SC_RECORDS_QUOTA_BLOCKS_CLEAR"},{"title":"preserves a future record book and refuses ordinary destructive confirmation","raw":"future-store","marker":"SC_RECORDS_FUTURE_STORE_BLOCKS_CLEAR"},{"title":"leaves unfinished phases unarchived and preserves the record book during an active restart","raw":"unfinished","marker":null},{"title":"keeps both storage keys when the real save fence refuses a stale confirmation","raw":"moved","marker":null}];
+          const originalRaw={"moved":{"case":"moved","fixture":"Real initCareer/retirement/Page/codec/fence with explicit fictional playing receipts; controlled failure inputs are not natural gameplay claims","observations":{"sourceHeld":true,"archiveHeld":true,"newerSource":{"name":"Newer Record Keeper","phase":"retired","retired":true,"score":0,"tier":"JOURNEYMAN","seasons":2},"fenceOutcome":"written"}},"latest-lower":{"case":"latest-lower","fixture":"Real initCareer/retirement/Page/codec/fence with explicit fictional playing receipts; controlled failure inputs are not natural gameplay claims","observations":{"firstLegacy":{"score":84,"tier":"LEGEND","breakdown":[{"label":"Controlled saved legacy","points":84}]},"laterLegacy":{"score":55,"tier":"JOURNEYMAN","breakdown":[{"label":"Controlled later saved legacy","points":55}]},"firstRecords":[],"records":[],"mainAcknowledged":true,"samePlayingRows":true}},"future-store":{"case":"future-store","fixture":"Real initCareer/retirement/Page/codec/fence with explicit fictional playing receipts; controlled failure inputs are not natural gameplay claims","observations":{"sourceAfter":null,"sourceHeld":false,"recordsRaw":"{\"version\":99,\"records\":[{\"opaque\":\"KEEP_FUTURE_RECORD\"}],\"extra\":\"KEEP_FUTURE_FIELD\"}","recordsAttempts":0}},"unfinished":{"case":"unfinished","fixture":"Real initCareer/retirement/Page/codec/fence with explicit fictional playing receipts; controlled failure inputs are not natural gameplay claims","observations":{"ceremonyPhase":"retirement_ceremony","afterCeremony":"{\"version\":1,\"nextSequence\":1,\"records\":[]}","afterActiveRestart":"{\"version\":1,\"nextSequence\":1,\"records\":[]}","sourceRemoved":true,"recordsAttempts":0}},"archive-quota":{"case":"archive-quota","fixture":"Real initCareer/retirement/Page/codec/fence with explicit fictional playing receipts; controlled failure inputs are not natural gameplay claims","observations":{"sourceAfter":null,"recordsAttempts":0,"recordsFailures":0,"sourceHeld":false,"recordsRaw":null}},"keep-before-restart":{"case":"keep-before-restart","fixture":"Real initCareer/retirement/Page/codec/fence with explicit fictional playing receipts; controlled failure inputs are not natural gameplay claims","observations":{"sourceAfter":null,"records":[],"mainAcknowledged":true,"sourceRemoved":true,"otherHeld":true}},"current-save-failed":{"case":"current-save-failed","fixture":"Real initCareer/retirement/Page/codec/fence with explicit fictional playing receipts; controlled failure inputs are not natural gameplay claims","observations":{"sourceAfter":null,"mainFailures":1,"successfulMainWrites":0,"sourceHeld":false,"recordsRaw":null}}};
+          const rows=suite.assertionResults;assert.equal(rows.length,7);
+          assert.equal(new Set(rows.map(r=>r.fullName)).size,7);
+          assert.deepEqual(rows.map(r=>r.title).sort(),cases.map(r=>r.title).sort());
+          const raw={};
+          for(const c of cases){
+            const row=rows.find(r=>r.title===c.title),failed=old&&c.marker!==null;
+            assert.equal(row.fullName,'Soccer Career completed record retention '+c.title);
+            assert.equal(row.status,failed?'failed':'passed');
+            if(failed)assert.ok(row.failureMessages.length&&row.failureMessages.every(m=>m.includes('AssertionError')&&m.includes(c.marker)));
+            else assert.deepEqual(row.failureMessages,[]);
+            const value=JSON.parse(fs.readFileSync(rawDir+'/'+c.raw+'.json','utf8'));
+            assert.equal(value.case,c.raw);assert.equal(value.fixture,originalRaw[c.raw].fixture);
+            if(old)assert.deepEqual(value,originalRaw[c.raw],'Physical original must reproduce the admitted actual RAW');
+            raw[c.raw]=value.observations;
+          }
+          assert.deepEqual(fs.readdirSync(rawDir).sort(),cases.map(c=>c.raw+'.json').sort());
+          if(!old){
+            assert.equal(raw['keep-before-restart'].sourceAfter,null);assert.equal(raw['keep-before-restart'].sourceRemoved,true);
+            assert.equal(raw['keep-before-restart'].otherHeld,true);assert.equal(raw['keep-before-restart'].records.length,1);
+            const first=raw['latest-lower'].firstRecords,later=raw['latest-lower'].records;
+            assert.equal(first.length,1);assert.equal(later.length,1);assert.equal(first[0].key,later[0].key);
+            assert.deepEqual(first[0].legacy,raw['latest-lower'].firstLegacy);assert.deepEqual(later[0].legacy,raw['latest-lower'].laterLegacy);
+            assert.equal(first[0].legacy.score,84);assert.equal(later[0].legacy.score,55);assert.equal(raw['latest-lower'].samePlayingRows,true);
+            assert.ok(raw['current-save-failed'].mainFailures>0);assert.equal(raw['current-save-failed'].successfulMainWrites,0);
+            assert.equal(raw['current-save-failed'].sourceHeld,true);assert.notEqual(raw['current-save-failed'].sourceAfter,null);
+            assert.equal(raw['current-save-failed'].recordsRaw,null);
+            assert.equal(raw['archive-quota'].sourceHeld,true);assert.ok(raw['archive-quota'].recordsAttempts>0);
+            assert.ok(raw['archive-quota'].recordsFailures>0);assert.equal(raw['archive-quota'].recordsRaw,null);
+            assert.equal(raw['future-store'].sourceHeld,true);assert.equal(raw['future-store'].recordsAttempts,0);
+            assert.equal(raw['future-store'].recordsRaw,originalRaw['future-store'].observations.recordsRaw);
+            assert.deepEqual(raw['unfinished'],originalRaw.unfinished.observations);
+            assert.equal(raw.moved.sourceHeld,true);assert.equal(raw.moved.archiveHeld,true);assert.equal(raw.moved.fenceOutcome,'written');
+            assert.deepEqual(raw.moved.newerSource,originalRaw.moved.observations.newerSource);
+          }
+          const counters={};
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors','numPendingTests','numTodoTests']){
+            counters[key]=Object.hasOwn(report,key)?report[key]:null;if(counters[key]!==null)assert.equal(counters[key],0,key);
+          }
+          if(Object.hasOwn(report,'unhandledErrors'))assert.deepEqual(report.unhandledErrors,[]);
+          assert.equal(fs.readFileSync(receipt,'utf8'),'');
+          fs.writeFileSync(out+'/units/'+arm+'-admission.json',JSON.stringify({arm,actualPassed:report.numPassedTests,actualOwnedFailures:report.numFailedTests,
+            cases:rows.map(r=>({fullName:r.fullName,status:r.status})),rawFiles:cases.map(c=>c.raw),counters,missingCounterMeaning:'UNKNOWN',
+            scope:'Seven frozen actual Page consumers. Original and restored arms repeat those cases, not extra unique coverage.'},null,2)+'\n');
+          NODE
+          }
+          run_records fixed
+          cp "$QA_OUT/original/baseline-page.tsx" "$page"
+          run_records original
+          restore_page
+          cmp "$QA_OUT/original/fixed-page.tsx" "$page"
+          run_records restored
+          for file in keep-before-restart latest-lower current-save-failed archive-quota future-store unfinished moved; do
+            cmp "$QA_OUT/raw/fixed/$file.json" "$QA_OUT/raw/restored/$file.json"
+          done
+          git diff --exit-code HEAD > "$QA_OUT/after-controls.diff"
+          trap - EXIT
+      - name: Retain full source holds and transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          if [[ -f "$QA_OUT/source-before.sha256" ]]; then
+            cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+            sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          else
+            echo "No qualified before inventory was produced." > "$QA_OUT/source-hold-unknown.txt"
+            exit 1
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const out=process.env.QA_OUT;
+          const rows=fs.existsSync(out+'/transport')?fs.readdirSync(out+'/transport').sort().map(file=>{
+            const text=fs.readFileSync(out+'/transport/'+file,'utf8'),lines=text.split('\n').filter(Boolean);
+            return {file,blockedAttempts:lines.length,
+              fontBlockedAttempts:lines.filter(line=>/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts:lines.filter(line=>line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length};
+          }):[];
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({
+            receipts:rows,meaning:'Blocked attempts are retained. Empty Node receipts are not a browser or provider availability claim.'
+          },null,2)+'\n');
+          NODE
+      - name: Bound first consumer evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: sc-career-records-first-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sc-career-records-first
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
