@@ -1,0 +1,673 @@
+name: Popular pages App and three separate physical controls on the qualified completed build
+on:
+  push:
+    branches: [codex/popular-pages-browser-20261103]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: popular-pages-browser-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  actual-app:
+    runs-on: ubuntu-latest
+    timeout-minutes: 95
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+      BUILT_SOURCE_SHA: '9759760b59d3a86c11bf18e092e39e7dd00b276b'
+      BUILT_TREE_SHA: '1a8dd1c1a69033b722cfe53d367082e1d146d7de'
+      FINAL_CORE_SHA: '8d21ecf157933a20b8e2c3a5eed3afda30cde444'
+      FINAL_CORE_TREE: 'c8c3bad9b2f4e2bdfcba6f4cb04f8d56181e370a'
+      SOURCE_WORKFLOW_PATH: '.github/workflows/popular-pages-build-20261103.yml'
+      SOURCE_ARTIFACT_ID: '13279378398'
+      SOURCE_RUN_ID: '41738299764'
+      SOURCE_JOB_ID: '126273090473'
+      SOURCE_ZIP_BYTES: '7746935'
+      SOURCE_ZIP_SHA256: 'e61c7f44d8cd6d4c848b13a44b007cc4999176402215734a30ec0fbb4f83da05'
+      DIST_TAR_BYTES: '6959357'
+      DIST_TAR_SHA256: 'dee01039ff45af691d899eb69bfcfbe9097048c0818aa5b36aa9353795b24cac'
+      DIST_MANIFEST_SHA256: 'd7a092d63d8df65aa71e7dcebeb115f0e245b69bd3e0349c9f862d33ba9cd9ca'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind the actual qualified carrier and exact completed payload
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/popular-pages-browser"
+          PRIOR="$RUNNER_TEMP/popular-pages-built"
+          ZIP="$RUNNER_TEMP/popular-pages-built.zip"
+          CONTROL="$RUNNER_TEMP/popular-pages-old-app-source"
+          CONTROL_DIST="$RUNNER_TEMP/popular-pages-old-app-dist"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/carrier" "$PRIOR"
+          for item in QA_OUT QA_PRIOR CONTROL CONTROL_DIST; do
+            case "$item" in QA_OUT) value="$OUT";; QA_PRIOR) value="$PRIOR";; CONTROL) value="$CONTROL";; CONTROL_DIST) value="$CONTROL_DIST";; esac
+            echo "$item=$value" >> "$GITHUB_ENV"
+            export "$item=$value"
+          done
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          for(const key of ['SOURCE_ARTIFACT_ID','SOURCE_RUN_ID','SOURCE_JOB_ID','SOURCE_ZIP_BYTES','DIST_TAR_BYTES'])assert.match(process.env[key],/^[1-9][0-9]*$/,key+' must be bound');
+          for(const key of ['SOURCE_ZIP_SHA256','DIST_TAR_SHA256','DIST_MANIFEST_SHA256'])assert.match(process.env[key],/^[a-f0-9]{64}$/,key+' must be bound');
+          for(const key of ['BUILT_SOURCE_SHA','BUILT_TREE_SHA','FINAL_CORE_SHA','FINAL_CORE_TREE'])assert.match(process.env[key],/^[a-f0-9]{40}$/,key+' must be bound');
+          assert.match(process.env.SOURCE_WORKFLOW_PATH,/^\.github\/workflows\/[a-z0-9-]+\.yml$/);
+          NODE
+          for pair in "artifacts/$SOURCE_ARTIFACT_ID artifact" "jobs/$SOURCE_JOB_ID job"; do
+            read -r endpoint name <<< "$pair"
+            curl --fail --location --silent --show-error --retry 0 \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/$endpoint" --output "$OUT/carrier/$name.json"
+          done
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,meta=JSON.parse(fs.readFileSync(out+'/carrier/artifact.json','utf8')),job=JSON.parse(fs.readFileSync(out+'/carrier/job.json','utf8'));
+          assert.equal(meta.id,Number(process.env.SOURCE_ARTIFACT_ID));assert.equal(meta.expired,false);
+          assert.equal(meta.size_in_bytes,Number(process.env.SOURCE_ZIP_BYTES));assert.equal(meta.workflow_run.id,Number(process.env.SOURCE_RUN_ID));assert.equal(meta.workflow_run.head_sha,process.env.BUILT_SOURCE_SHA);
+          assert.equal(job.id,Number(process.env.SOURCE_JOB_ID));assert.equal(job.run_id,Number(process.env.SOURCE_RUN_ID));assert.equal(job.head_sha,process.env.BUILT_SOURCE_SHA);
+          assert.equal(job.status,'completed');assert.equal(job.conclusion,'success','The normal build carrier must be admitted successfully');
+          for(const name of ['Proper joined application types','Existing save and home guards, normal build, twenty readers and all unchanged page caps','Retain full source holds and transport evidence']){
+            const rows=job.steps.filter(step=>step.name===name);assert.equal(rows.length,1,name);assert.equal(rows[0].conclusion,'success',name);
+          }
+          NODE
+          curl --fail --location --silent --show-error --retry 0 \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$SOURCE_ARTIFACT_ID/zip" --output "$ZIP"
+          test "$(stat -c%s "$ZIP")" = "$SOURCE_ZIP_BYTES"
+          echo "$SOURCE_ZIP_SHA256  $ZIP" | sha256sum --check
+          unzip -q "$ZIP" -d "$PRIOR"
+          test "$(stat -c%s "$PRIOR/completed-dist.tar.gz")" = "$DIST_TAR_BYTES"
+          echo "$DIST_TAR_SHA256  $PRIOR/completed-dist.tar.gz" | sha256sum --check
+          echo "$DIST_MANIFEST_SHA256  $PRIOR/dist-manifest.json" | sha256sum --check
+          git fetch --no-tags --depth=2 origin "$BUILT_SOURCE_SHA"
+          git fetch --no-tags --depth=1 origin c176be815dc4af57dfd7185a485e28357aa0d41e
+          test "$(git rev-parse "$BUILT_SOURCE_SHA^{tree}")" = "$BUILT_TREE_SHA"
+          git cat-file blob 79da1b8cf2de7870ea216703d0a1a56fceb69673 > "$OUT/control-original-App.tsx"
+          test "$(git hash-object "$OUT/control-original-App.tsx")" = 79da1b8cf2de7870ea216703d0a1a56fceb69673
+          git fetch --no-tags --depth=1 origin 5160b26a423e7502c296770e821a995320aa1a32
+          git cat-file blob c72effc5697ec0d2812569479a9d465247855720 > "$OUT/control-original-HubExperience.tsx"
+          test "$(git hash-object "$OUT/control-original-HubExperience.tsx")" = c72effc5697ec0d2812569479a9d465247855720
+          test "$(git rev-parse "$BUILT_SOURCE_SHA^")" = "$FINAL_CORE_SHA"
+          test "$(git rev-parse "$FINAL_CORE_SHA^{tree}")" = "$FINAL_CORE_TREE"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status "$BUILT_SOURCE_SHA" HEAD > "$OUT/candidate-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,prior=process.env.QA_PRIOR,pins={"docs/PROJECT-STATE.md":"f4d98aa84b06234837cf5be9e0df856fb2cf214e","docs/TRAFFIC-PRIORITIES-2026-11-03.md":"44b6a5f95dac71d4d0db467b6756cfe359920669","scripts/qa/hubs994.outcomes.tsx":"c3f4d1e392f04bda69e7a8cbed7809884254b89a","scripts/qa/managerMatchPlans1079.mjs":"98972610390be00aebed0d85099e7393fd07fb37","scripts/simHubExperience.mjs":"8df3c38e9ba3b634ac9047db5b4d0d0c1ec91926","scripts/simManagerAppealIsolation.mjs":"cb5110245b9c86d3690adb1f6dc7463391f88a9f","scripts/simManagerMatchPlans.mjs":"7add578315189e3032a2bdb9c3a0ecafd669dea1","scripts/simSoccerCareerSaveRetry.mjs":"474c8676a2c7f8ff3b01536bfedaf7ab333bf5c0","scripts/simTacticsEngine.mjs":"d6bf2bc4e94db7bcb532e9b773fc584f334340a5","scripts/simUsCareerPractice.mjs":"f25fa2325ac9196824e12dc81c57ea95b4784380","scripts/simWorldEditor.mjs":"328fdb6b13b13196d76c882efdf94e4a4f1f2407","src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/components/club-manager/AcademyScreen.tsx":"2d3ca44121cf0a84dad9b965328bd0c970403be3","src/components/club-manager/LiveSimScreen.tsx":"a6a434180c6ee9ffe263fc5c82cc8328a36914ee","src/components/club-manager/LiveTacticsPanel.tsx":"b12a1a0303ec9b3d043bdac089b873a4cc35383c","src/components/club-manager/MatchPlansCard.tsx":"c64e82d0adff5180272f0164e7a84b80fd9d9dce","src/components/club-manager/TacticsScreen.tsx":"950c4e9b0d2df22d1d6de95723122cc699b4bacd","src/components/front-office/FrontOfficeBoard.tsx":"6016c7c42eed81af36d3cab2e1eb4c1b3e9990f2","src/components/hub/HubExperience.tsx":"2fd20d58798ef438fa0566841121db855822f755","src/components/soccer-career/PastCareersSheet.tsx":"515d3ce1a2fc89a49da3f9fda10902db59292ddc","src/components/tycoon/TicketPolicyCard.tsx":"1e54f08a33e0b40624c8ecc73cd423701aee5f2a","src/components/us-career/UsCareerBoard.tsx":"b2f81114f357b4edd17dd3a94c560a213412c817","src/hooks/useClubManager.ts":"5b2aac4ea3f649e478fc4e26939dff7dadbed310","src/lib/clubManager.ts":"9d8dc92557bf2f4358b5be044359354eda841769","src/lib/clubManagerCalendar.ts":"353c2019273564b48b0ad9657c02a83990ff7bc3","src/lib/clubManagerMatchPlans.ts":"345b05725fff2c2b502be4ec32d6e2728cf3c1b3","src/lib/clubManagerPositions.ts":"999b26b065246a2bf2db452d17d96439e855c6af","src/lib/clubManagerUiInfo.ts":"8e0b99eb1941760b18fa4d5de1df2b72fd894a0a","src/lib/soccerCareerCompletedRecords.ts":"d000db49957004591231cf1912a0dc8ea3ced083","src/lib/soccerCareerEngine.ts":"a60fab359f45dda9b125dbf118474170cdcc9417","src/pages/ClubManager.tsx":"4781925c031abde3822c81ef49d5e1558d315a17","src/pages/Index.tsx":"fe43f115b5def2e2192b04f47fe6bd28a85c9863","src/pages/SoccerCareer.tsx":"3fedb64360b001ee88343a24581ccb960bfae948","src/pages/StadiumTycoon.tsx":"d1b78bdd5d5c98c5fae237f590d48d19954eb536","src/test/LiveSimScreen.positionNotice.test.tsx":"86c18f8813278f105aefd2305fe338f1d5d83096","src/test/MatchPlansCard.customPositions.test.tsx":"0eaa919e0d4cc8b0c24db5f331f7664d2db79a52","src/test/TacticsScreen.freePositions.test.tsx":"85f4bed196a46bb77cd1793058981ecbd523b3f4","src/test/academyFilters.test.tsx":"c2d432043c153bcf56a881d264d7077c74c7ba3d","src/test/clubManagerPositionBlocked.test.tsx":"0f9c4de7514f0a7515d21e3abc37f9a4764309ec","src/test/clubManagerPositionIntegration.test.ts":"c1eabe3e33ffc37aafbb4f34d4a3435d47fdf9b0","src/test/clubManagerPositionLive.test.ts":"b8174f45778f49e59cccfe0428daf4c4b5d7ec3d","src/test/clubManagerPositionPersistence.test.tsx":"d71d8486dad8da7bdc5904e43ef2c4641651e301","src/test/clubManagerPositions.test.ts":"a075328b1967a6aebb2bddf30014eb308f682084","src/test/cmCustomPlanPreservation.test.ts":"008263b6bf1f914b1383058d91852850dff22e43","src/test/cmCustomTacticalPlans.test.ts":"5eb8a489de955660be29d470476b6a90bf3ac492","src/test/cmCustomTacticsPitch.test.ts":"b7a2160b9d3d98da728b2f7ad7ab6bd5eeccdf95","src/test/cmCustomTacticsPitchMissingPlayer.test.ts":"194a0fcb5d32863c61f8370175e6e95bc83ee788","src/test/cmCustomTacticsUi.test.tsx":"1884a41fde35b8152c51f055b29c04389983e56d","src/test/frontOfficeWriteRetry.test.tsx":"f01d080ceae3c70e0ada3e4f1d21c0dff994be1c","src/test/hubReturnNavigation.test.tsx":"51a145157130dace6c0765f28dadd4a80459a3be","src/test/managerMatchPlans.test.tsx":"43d803e92473dbb3ce1f765b71800c96e27125ef","src/test/soccerCareerCompletedRecords.test.tsx":"e1c382f8d5d682637f64955f8133a08379c4a2f8","src/test/soccerCareerCompletedRecordsBoundary.test.tsx":"c6eee20614d71f693dd84338dc495fd617961cef","src/test/soccerCareerCompletedRecordsHelper.test.ts":"16c105033671446343c91ef683ee5faa5dd870f5","src/test/soccerCareerShareTrophies.test.ts":"a52cfb9de4d7101187890ed3087507e45176e19b","src/test/tycoonSaveNotice.test.tsx":"8a66440a51484f7483b7069088d169f06883bbc6","src/test/usCareerLastSeasonReload.test.tsx":"9b56dda941819b91dc0d75de3597958e507f3516","scripts/simCmShootoutOrder.mjs":"9e131c325e1436c5c681e461d19becdcaba5a0ce","scripts/runAllSims.mjs":"5988827caabcc07a1e643494fa2610f559c779f6","scripts/simBrowserHarnessDiscovery.mjs":"82df8e0bf2c78b0a0ceba9c5158995b3f141935e","src/components/front-office-shared/GmEarnedDraftScreen.tsx":"e534fdb00b9e265bed0f8a28ff9885205e4307d9","src/components/front-office-shared/GmLotteryCard.tsx":"fbce8ed7e888d42d1b54708c759437de5b95bf55"},qa={"scripts/qa/popularPagesFixtures.mjs":{"bytes":6293,"sha256":"e3f9ddad2fb957b984074787ef254b58c5446a09ea8cdcd44aa0b85ea23ff89e","git":"f37f995d60f19835f83770c2a318c5efe10d4519"},"scripts/qa/popularPagesBrowser.mjs":{"bytes":32026,"sha256":"0859bb1cf101ab275818a2715c7e57ff3caff740bea1b0870a51e2d291003eae","git":"9a695b41b9ee57c85c40a526f0908603847f6e65"},"scripts/qa/frontOfficeSaveFixtures.mjs":{"bytes":9910,"sha256":"3100f52824724280ac67a905fe2ee30884543527a8726f46d312e6d7602ba99a","git":"1cf21fdb3f648d64e341b51c2663bef2d06211da"},"scripts/qa/frontOfficeSaveBrowser.mjs":{"bytes":24591,"sha256":"8aecc647fcfe8c2a5e7dabd2c89534998dc15fd85bb4f829ceb0bb635ef242b0","git":"6d03cddc6fb0e66b3ea9af4ea7f4b57a85f669f5"}};
+          const workflow='.github/workflows/popular-pages-browser-20261103.yml',sha=p=>crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+          assert.equal(execFileSync('git',['rev-parse','HEAD^']).toString().trim(),process.env.BUILT_SOURCE_SHA);
+          const added=[workflow,...Object.keys(qa)].sort();
+          assert.deepEqual(fs.readFileSync(out+'/candidate-paths.txt','utf8').trim().split('\n').sort(),added.map(p=>'A\t'+p));
+          assert.equal(Object.keys(pins).length,62);
+          for(const [p,blob]of Object.entries({...pins,...Object.fromEntries(Object.entries(qa).map(([p,row])=>[p,row.git]))})){
+            assert.match(blob,/^[a-f0-9]{40}$/,p+' final pin must be bound');
+            assert.equal(execFileSync('git',['rev-parse','HEAD:'+p]).toString().trim(),blob,p+' tracked');
+            assert.equal(execFileSync('git',['hash-object',p]).toString().trim(),blob,p+' actual');
+          }
+          for(const[p,row]of Object.entries(qa)){assert.equal(sha(p),row.sha256,p+' SHA');assert.equal(fs.statSync(p).size,row.bytes,p+' bytes');}
+          assert.deepEqual(fs.readFileSync(prior+'/source.txt','utf8').trim().split(/\s+/),[process.env.BUILT_SOURCE_SHA,process.env.BUILT_TREE_SHA]);
+          const association=JSON.parse(fs.readFileSync(prior+'/association.json','utf8')),payload=JSON.parse(fs.readFileSync(prior+'/completed-dist-association.json','utf8'));
+          assert.equal(association.source,process.env.BUILT_SOURCE_SHA);assert.equal(association.releaseCore,process.env.FINAL_CORE_SHA);
+          for(const[p,blob]of Object.entries(association.pins))assert.equal(pins[p],blob,p+' carrier pin');assert.equal(Object.keys(association.pins).length,62);
+          assert.deepEqual(fs.readFileSync(prior+'/workflow.yml'),execFileSync('git',['show',process.env.BUILT_SOURCE_SHA+':'+process.env.SOURCE_WORKFLOW_PATH]),'Executed carrier workflow exact');
+          assert.equal(payload.source,process.env.BUILT_SOURCE_SHA);assert.equal(payload.tree,process.env.BUILT_TREE_SHA);assert.equal(payload.applicationCore,process.env.FINAL_CORE_SHA);
+          assert.equal(payload.tarBytes,Number(process.env.DIST_TAR_BYTES));assert.equal(payload.tarSHA256,process.env.DIST_TAR_SHA256);
+          const readSums=file=>{const rows=fs.readFileSync(file,'utf8').trim().split('\n').map(line=>{const m=/^([a-f0-9]{64})  (.+)$/.exec(line);assert.ok(m);return[m[2],m[1]];});assert.equal(new Set(rows.map(r=>r[0])).size,rows.length);return Object.fromEntries(rows);};
+          const original=readSums(prior+'/source-before.sha256');assert.deepEqual(readSums(prior+'/source-after.sha256'),original);assert.equal(Object.keys(original).length,5674);
+          const tracked=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean).sort();assert.deepEqual(tracked,[...Object.keys(original),...added].sort());assert.equal(tracked.length,5679);
+          for(const[p,digest]of Object.entries(original))assert.equal(sha(p),digest,p+' original source');
+          assert.equal(fs.statSync(prior+'/source-diff.txt').size,0);assert.equal(fs.statSync(prior+'/status-before.txt').size,0);assert.equal(fs.statSync(prior+'/status-after.txt').size,0);
+          assert.deepEqual(readSums(prior+'/dist-after.sha256'),readSums(prior+'/dist-before.sha256'));
+          const manifest=JSON.parse(fs.readFileSync(prior+'/dist-manifest.json','utf8'));assert.equal(manifest.length,payload.fileCount);assert.ok(manifest.length>100);
+          assert.equal(crypto.createHash('sha256').update(JSON.stringify(manifest)).digest('hex'),payload.distDigest);
+          fs.writeFileSync(out+'/source-before.json',JSON.stringify(Object.fromEntries(tracked.map(p=>[p,sha(p)])),null,2)+'\n');
+          fs.copyFileSync(workflow,out+'/workflow.yml');for(const p of Object.keys(qa)){fs.mkdirSync(out+'/executed-qa',{recursive:true});fs.copyFileSync(p,out+'/executed-qa/'+p.split('/').at(-1));}
+          fs.writeFileSync(out+'/binding.json',JSON.stringify({source:process.env.GITHUB_SHA,build:process.env.BUILT_SOURCE_SHA,tree:process.env.BUILT_TREE_SHA,core:process.env.FINAL_CORE_SHA,pins,qa,originalCount:5674,totalCount:5679,scope:'Normal completed-build reuse without rebuild, plus three separate physical control builds: old App, whole old Hub and InputEvent fragment. No production, natural progression, actual-font, provider availability or full-suite credit.'},null,2)+'\n');
+          for(const file of ['source-before.sha256','source-after.sha256','source-held.log','source-diff.txt','status-before.txt','status-after.txt','dist-before.sha256','dist-after.sha256','dist-held.log','association.json','dist-manifest.json','completed-dist-association.json','workflow.yml'])fs.copyFileSync(prior+'/'+file,out+'/carrier/'+file);
+          fs.copyFileSync(prior+'/completed-dist.tar.gz',out+'/completed-dist.tar.gz');
+          NODE
+          test ! -e dist
+          tar -tzf "$PRIOR/completed-dist.tar.gz" > "$OUT/completed-dist-members.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const rows=fs.readFileSync(process.env.QA_OUT+'/completed-dist-members.txt','utf8').trim().split('\n');assert(rows.length>100);assert(rows.every(p=>(p==='dist/'||p.startsWith('dist/'))&&!p.split('/').includes('..')));
+          NODE
+          tar --no-same-owner -xzf "$PRIOR/completed-dist.tar.gz" -C "$GITHUB_WORKSPACE"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-before.sha256"
+          cmp "$PRIOR/dist-before.sha256" "$OUT/dist-before.sha256"
+          sha256sum --check "$OUT/dist-before.sha256" > "$OUT/dist-input-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+      - name: Install held application and isolated browser tools
+        id: tools
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          git diff --exit-code -- package.json package-lock.json
+          npm install --prefix "$RUNNER_TEMP/popular-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/popular-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/popular-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/popular-browser-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+      - name: Run all held Hub component outcomes and eight effective static controls
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          test ! -e sport-hubs-artifacts/behavior
+          test ! -L sport-hubs-artifacts/behavior
+          test ! -e "$QA_OUT/hub-static"
+          git check-ignore --quiet sport-hubs-artifacts/behavior/normal.json
+          : > "$QA_OUT/transport/hub-static.log"
+          set +e
+          HUB_EXPERIENCE_CONTROL=all SIM_OFFLINE_RECEIPT="$QA_OUT/transport/hub-static.log" node scripts/simHubExperience.mjs > "$QA_OUT/logs/hub-static.log" 2>&1
+          status=$?
+          printf '%s\n' "$status" > "$QA_OUT/hub-static.exit"
+          set -e
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,source=path.resolve('sport-hubs-artifacts/behavior'),target=path.join(out,'hub-static'),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          assert.equal(source,path.join(process.cwd(),'sport-hubs-artifacts','behavior'));assert(!fs.existsSync(target));
+          const inventory=dir=>{const rows=[];function walk(rel=''){for(const e of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walk(file);else{assert(e.isFile());const bytes=fs.readFileSync(path.join(dir,file));rows.push({file,bytes:bytes.length,sha256:sha(bytes)});}}}walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);};
+          let original=[],retained=[];const present=fs.existsSync(source);
+          if(present){original=inventory(source);fs.cpSync(source,target,{recursive:true,errorOnExist:true,force:false});retained=inventory(target);assert.deepEqual(retained,original);}
+          fs.writeFileSync(out+'/hub-static-retention.json',JSON.stringify({present,nativeExit:Number(fs.readFileSync(out+'/hub-static.exit','utf8')),original,retained,rawRetainedBeforeAdmission:true,meaning:'Every fresh raw mode report and log is copied byte-for-byte before checking native outcome or summary. The ignored original directory is not deleted or rewritten.'},null,2)+'\n');
+          NODE
+          tail -n 30 "$QA_OUT/logs/hub-static.log"
+          test "$(cat "$QA_OUT/hub-static.exit")" -eq 0
+          test ! -s "$QA_OUT/transport/hub-static.log"
+          grep -F 'Hub experience: 9 modes completed, all exact outcome targets verified.' "$QA_OUT/logs/hub-static.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,dir=out+'/hub-static',read=p=>JSON.parse(fs.readFileSync(p,'utf8')),sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const expected={normal:[],catalog:[0],daily:[1],sim:[2],search:[3,4,5],reset:[4],random:[5],saves:[6],focus:[3,4]},summary=read(dir+'/verified-summary.json');
+          assert.deepEqual(summary.outcomes.map(row=>row.mode),Object.keys(expected));assert.equal(summary.outcomes.length,9);
+          assert.equal(summary.sourceSha256,sha(fs.readFileSync('src/components/hub/HubExperience.tsx')));assert.equal(summary.sourceSha256,'8a391b2a44c7958f73688526d3b7000e5e527bfe8a74263d27870f7cc9662e08');
+          for(const[mode,targets]of Object.entries(expected)){
+            const outcome=summary.outcomes.find(row=>row.mode===mode),report=read(dir+'/'+mode+'.json');assert.equal(outcome.total,7);assert.equal(outcome.passed,7-targets.length);assert.deepEqual(outcome.expected,targets);assert.deepEqual(outcome.rejected,targets);
+            assert.equal(report.total,7);assert.equal(report.rows.length,7);assert.equal(report.passed,7-targets.length);assert.equal(report.failed,targets.length);assert(report.rows.every(row=>['PASS','FAIL'].includes(row.status)));
+            assert.deepEqual(report.rows.flatMap((row,i)=>row.status==='FAIL'?[i]:[]),targets);for(const row of report.rows.filter(row=>row.status==='FAIL'))assert.equal(row.error.name,'AssertionError');
+            assert(fs.statSync(dir+'/'+mode+'.log').isFile());
+          }
+          assert.deepEqual(fs.readdirSync(dir).sort(),[...Object.keys(expected).flatMap(mode=>[mode+'.json',mode+'.log']),'verified-summary.json'].sort());
+          fs.writeFileSync(out+'/hub-static-admission.json',JSON.stringify({status:'passed',nativeExit:0,modes:9,uniqueContracts:7,rowExecutions:63,normalPassed:7,effectiveControls:8,expectedRejectedRows:expected,sourceHeld:true,limit:'Copied-source DOM outcomes, not native browser, natural progression or63unique cases. Existing harness assertions and fault recipes are unchanged.'},null,2)+'\n');
+          NODE
+      - name: Create real fictional fixtures against the held normal payload
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for pair in popular fo; do test ! -e "$QA_OUT/fixtures-$pair"; done
+          : > "$QA_OUT/transport/fixtures-popular.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/fixtures-popular.log" node scripts/qa/popularPagesFixtures.mjs --out "$QA_OUT/fixtures-popular" --dist dist --app-mode fixed 2>&1 | tee "$QA_OUT/logs/fixtures-popular.log"
+          : > "$QA_OUT/transport/fixtures-fo.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/fixtures-fo.log" node scripts/qa/frontOfficeSaveFixtures.mjs --out "$QA_OUT/fixtures-fo" --dist dist 2>&1 | tee "$QA_OUT/logs/fixtures-fo.log"
+          test ! -s "$QA_OUT/transport/fixtures-popular.log"
+          test ! -s "$QA_OUT/transport/fixtures-fo.log"
+          find "$QA_OUT/fixtures-popular" "$QA_OUT/fixtures-fo" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/fixtures-before.sha256"
+      - name: Run thirty-two popular and four Front Office native App contexts
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export BASE=http://127.0.0.1:4173
+          sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-before-browser-held.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          set +e
+          : > "$QA_OUT/transport/browser-popular.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser-popular.log" node scripts/qa/popularPagesBrowser.mjs --base-url "$BASE" --out "$QA_OUT/popular" --fixtures "$QA_OUT/fixtures-popular" --dist dist --scope all 2>&1 | tee "$QA_OUT/logs/browser-popular.log"
+          codes=("${PIPESTATUS[@]}")
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/popular.exit"
+          test "${codes[1]}" -eq 0 || exit 1
+          : > "$QA_OUT/transport/browser-fo.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser-fo.log" node scripts/qa/frontOfficeSaveBrowser.mjs --base-url "$BASE" --out "$QA_OUT/fo" --fixtures "$QA_OUT/fixtures-fo" --dist dist 2>&1 | tee "$QA_OUT/logs/browser-fo.log"
+          codes=("${PIPESTATUS[@]}")
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/fo.exit"
+          test "${codes[1]}" -eq 0 || exit 1
+          set -e
+          test ! -s "$QA_OUT/transport/browser-popular.log"
+          test ! -s "$QA_OUT/transport/browser-fo.log"
+          test ! -s "$QA_OUT/transport/server.log"
+          test "$(cat "$QA_OUT/popular.exit")" = 0
+          test "$(cat "$QA_OUT/fo.exit")" = 0
+      - name: Admit thirty-six normal contexts and forty-four normal photographs
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,popular=JSON.parse(fs.readFileSync(out+'/popular/report.json','utf8')),fo=JSON.parse(fs.readFileSync(out+'/fo/report.json','utf8'));
+          assert.equal(popular.status,'pass');assert.equal(popular.scope,'all');assert.equal(popular.expectedContexts,32);assert.equal(popular.sourceHeld,true);assert.equal(popular.distHeld,true);
+          const widths=[320,390,430,1440],ids=[],popularPhotos=[];
+          for(const width of widths){
+            for(const route of ['soccer','pro-basketball','pro-football']){ids.push('hub-'+route+'-'+width);popularPhotos.push('hub-'+route+'-'+width+'-returned.png');}
+            ids.push('home-'+width);popularPhotos.push('home-'+width+'-fold.png','home-'+width+'-home-return.png');
+            for(const game of ['nba','nfl']){ids.push(game+'-'+width);popularPhotos.push(game+'-'+width+'-reloaded.png');}
+            for(const room of ['stadium','league']){ids.push('stadium-'+room+'-'+width);popularPhotos.push('stadium-'+room+'-'+width+'-refused.png');}
+          }
+          assert.deepEqual(popular.contexts.map(r=>r.id).sort(),ids.sort());assert.equal(popular.contexts.length,32);
+          for(const row of popular.contexts){assert.equal(row.status,'pass');for(const field of ['pageErrors','unexpectedConsoleErrors','undeclaredOrigins','undeclaredWebSockets'])assert.deepEqual(row[field],[],row.id+' '+field);}
+          const rapid=popular.contexts.find(r=>r.id==='hub-soccer-320').rapidHub;assert.equal(rapid.settled,true);assert.equal(rapid.typing.settled,true);
+          const daily=JSON.parse(fs.readFileSync(out+'/fixtures-popular/manifest.json','utf8')).hubs[0].daily;
+          assert.equal(rapid.after.filter,'daily');assert.equal(rapid.after.query,daily.label);assert.deepEqual(rapid.after.paths,daily.paths);
+          const inputs=rapid.typing.events.filter(e=>e.type==='input');assert(inputs.every(e=>e.trusted));assert.deepEqual(inputs.map(e=>e.value),[...daily.label].map((_,i)=>daily.label.slice(0,i+1)));
+          assert.deepEqual([...popular.screenshots].sort(),popularPhotos.sort());assert.equal(popularPhotos.length,36);
+          assert.equal(fo.status,'passed');for(const field of ['sourceHeld','sourceStatusHeld','distHeld','fixturesHeld'])assert.equal(fo[field],true,field);
+          assert.deepEqual(fo.inputOverrides,{storage:false,rng:false,clock:false});assert.deepEqual(fo.profiles.map(r=>r.width),widths);assert.equal(fo.normalPhotos,8);
+          for(const row of fo.profiles){
+            assert.equal(row.status,'passed');assert.deepEqual(row.pageErrors,[]);assert.deepEqual(row.cleanupErrors,[]);
+            assert.equal(row.refused.oldBytesHeld,true);assert.equal(row.refused.targetGoneFromLiveRoster,true);assert.ok(row.refused.quotaEvents.length>0);
+            assert.equal(row.failedRetry.oldBytesHeld,true);assert.equal(row.failedRetry.warningHeld,true);assert.ok(row.failedRetry.quotaEvents.length>0);
+            assert.equal(row.accepted.exactExpectedLeague,true);assert.equal(row.accepted.otherStorageHeld,true);assert.equal(row.accepted.noticeGone,true);assert.equal(row.accepted.globalsHeld,true);
+            assert.equal(row.reloaded.exactSavedBytesHeld,true);assert.equal(row.reloaded.targetStillAbsent,true);assert.equal(row.reloaded.otherStorageHeld,true);assert.equal(row.reloaded.nativeGlobalsHeld,true);
+            assert.equal(row.clipControl.effective,true);assert.equal(row.clipControl.exactInlineStyleRestored,true);assert.equal(row.clipControl.allStorageHeld,true);
+          }
+          const foPhotos=widths.flatMap(w=>[w+'-warning.png',w+'-reloaded.png']).sort();assert.deepEqual(fo.screenshots.map(r=>r.file).sort(),foPhotos);assert.ok(fo.screenshots.every(r=>r.kind==='normal'));
+          const photos=[];for(const[family,names]of[['popular',popularPhotos],['fo',foPhotos]])for(const file of names){const b=fs.readFileSync(out+'/'+family+'/'+file);assert(b.length>1000);assert.equal(b.subarray(0,8).toString('hex'),'89504e470d0a1a0a');photos.push({family,file,bytes:b.length,sha256:crypto.createHash('sha256').update(b).digest('hex')});}
+          assert.equal(photos.length,44);
+          fs.writeFileSync(out+'/normal-admission.json',JSON.stringify({status:'passed',contexts:36,popularContexts:32,frontOfficeContexts:4,normalPhotographs:44,frontOfficeEffectiveClipControls:4,photos,limits:'Source-bound fictional real-engine saves and native guest actions on one completed build. Every original image and raw console/transport event still requires Root review. No natural progression, original stat-loss reproduction, actual-font, all-protocol/provider availability, full-suite or public release credit.'},null,2)+'\n');
+          NODE
+      - name: Build and run the isolated whole-original App scroll control
+        if: ${{ !cancelled() && steps.tools.outcome == 'success' }}
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          test ! -e "$CONTROL"
+          test ! -e "$CONTROL_DIST"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,root=process.env.CONTROL,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          const before=JSON.parse(fs.readFileSync(out+'/source-before.json','utf8')),binding=JSON.parse(fs.readFileSync(out+'/binding.json','utf8'));
+          const tracked=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean).sort();assert.equal(tracked.length,5679);
+          assert.deepEqual(tracked,Object.keys(before).sort());fs.mkdirSync(root,{recursive:true});
+          for(const p of tracked){const b=fs.readFileSync(p);assert.equal(sha(b),before[p],p+' before physical copy');fs.mkdirSync(path.dirname(path.join(root,p)),{recursive:true});fs.writeFileSync(path.join(root,p),b);}
+          const original=fs.readFileSync(out+'/control-original-App.tsx');assert.equal(blob(original),'79da1b8cf2de7870ea216703d0a1a56fceb69673');
+          fs.writeFileSync(path.join(root,'src/App.tsx'),original);
+          const map=Object.fromEntries(tracked.map(p=>[p,sha(fs.readFileSync(path.join(root,p)))]));
+          assert.deepEqual(tracked.filter(p=>map[p]!==before[p]),['src/App.tsx']);
+          for(const[p,expected]of Object.entries(binding.pins))assert.equal(blob(fs.readFileSync(path.join(root,p))),p==='src/App.tsx'?'79da1b8cf2de7870ea216703d0a1a56fceb69673':expected,p+' whole 62-pin bridge');
+          fs.symlinkSync(path.resolve('node_modules'),path.join(root,'node_modules'),'dir');
+          fs.writeFileSync(out+'/control-source-before.json',JSON.stringify(map,null,2)+'\n');
+          fs.writeFileSync(out+'/control-source-association.json',JSON.stringify({normalSource:process.env.GITHUB_SHA,normalBuild:process.env.BUILT_SOURCE_SHA,normalApp:binding.pins['src/App.tsx'],physicalOriginalApp:'79da1b8cf2de7870ea216703d0a1a56fceb69673',allTrackedCopied:tracked.length,changedPaths:['src/App.tsx'],heldFeaturePins:61,build:'Separate Vite output only, not the normal completed dist. No minified patch or altered product callback.'},null,2)+'\n');
+          NODE
+          : > "$QA_OUT/transport/control-build.log"
+          (
+            cd "$CONTROL"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/control-build.log" node node_modules/vite/bin/vite.js build --outDir "$CONTROL_DIST" --emptyOutDir
+          ) 2>&1 | tee "$QA_OUT/logs/control-build.log"
+          test ! -s "$QA_OUT/transport/control-build.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,root=process.env.CONTROL,dist=process.env.CONTROL_DIST,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const before=JSON.parse(fs.readFileSync(out+'/control-source-before.json','utf8')),after=Object.fromEntries(Object.keys(before).map(p=>[p,sha(fs.readFileSync(path.join(root,p)))]));
+          fs.writeFileSync(out+'/control-source-after-build.json',JSON.stringify(after,null,2)+'\n');assert.deepEqual(after,before,'Control build must preserve all copied source');
+          const rows=[];function walk(rel=''){for(const e of fs.readdirSync(path.join(dist,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walk(file);else{assert(e.isFile());const b=fs.readFileSync(path.join(dist,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert(rows.length>100);
+          fs.writeFileSync(out+'/control-dist-before.json',JSON.stringify(rows,null,2)+'\n');
+          NODE
+          tar -C "$CONTROL_DIST" -czf "$QA_OUT/control-completed-dist.tar.gz" .
+          sha256sum "$QA_OUT/control-completed-dist.tar.gz" > "$QA_OUT/control-completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/control-completed-dist.tar.gz" > "$QA_OUT/control-completed-dist-members.txt"
+          : > "$QA_OUT/transport/control-fixtures.log"
+          (
+            cd "$CONTROL"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/control-fixtures.log" node scripts/qa/popularPagesFixtures.mjs --out "$QA_OUT/fixtures-control" --dist "$CONTROL_DIST" --app-mode original-control
+          ) 2>&1 | tee "$QA_OUT/logs/control-fixtures.log"
+          test ! -s "$QA_OUT/transport/control-fixtures.log"
+          find "$QA_OUT/fixtures-control" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/control-fixtures-before.sha256"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/control-server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs "$CONTROL_DIST" 4174 > "$QA_OUT/logs/control-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4174/ > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          set +e
+          : > "$QA_OUT/transport/control-browser.log"
+          (
+            cd "$CONTROL"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/control-browser.log" node scripts/qa/popularPagesBrowser.mjs --base-url http://127.0.0.1:4174 --out "$QA_OUT/control-browser" --fixtures "$QA_OUT/fixtures-control" --dist "$CONTROL_DIST" --scope app-scroll-control
+          ) 2>&1 | tee "$QA_OUT/logs/control-browser.log"
+          codes=("${PIPESTATUS[@]}")
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/control.exit"
+          test "${codes[1]}" -eq 0 || exit 1
+          set -e
+          test ! -s "$QA_OUT/transport/control-browser.log"
+          test ! -s "$QA_OUT/transport/control-server.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,report=JSON.parse(fs.readFileSync(out+'/control-browser/report.json','utf8'));
+          assert.equal(Number(fs.readFileSync(out+'/control.exit','utf8').trim()),1,'The actual old-App driver must fail natively');
+          assert.equal(report.status,'failed');assert.equal(report.scope,'app-scroll-control');assert.equal(report.expectedContexts,1);assert.equal(report.sourceHeld,true);assert.equal(report.distHeld,true);assert.equal(report.contexts.length,1);
+          const row=report.contexts[0];assert.equal(row.id,'hub-soccer-320');assert.equal(row.width,320);assert.equal(row.status,'failed');
+          assert.match(row.error,/AssertionError.*POPULAR_APP_HUB_FIRST_REPLACE_SCROLL:/s);
+          assert.equal(row.validationError,undefined,'No unrelated console/transport validation fault');
+          for(const key of ['pageErrors','unexpectedConsoleErrors','undeclaredOrigins','undeclaredWebSockets'])assert.deepEqual(row[key],[]);
+          assert.ok(row.firstReplace);assert.ok(row.firstReplace.before.y>80);assert.equal(row.firstReplace.before.height,row.firstReplace.after.height);
+          assert.ok(Math.abs(row.firstReplace.after.y-row.firstReplace.before.y)>1,'The physical original App must actually change scroll');
+          const url=new URL(row.firstReplace.url);assert.equal(url.pathname,'/soccer');assert.equal(url.searchParams.get('q'),' ');assert.deepEqual(url.searchParams.getAll('from'),['menu','second']);
+          assert.deepEqual(report.screenshots,['hub-soccer-320-failure.png']);
+          fs.writeFileSync(out+'/control-admission.json',JSON.stringify({status:'owned-control-rejected',nativeExit:1,marker:'POPULAR_APP_HUB_FIRST_REPLACE_SCROLL',context:row.id,firstReplace:row.firstReplace,otherFaults:0,normalPassCredit:false,scope:'Whole old App on separate fresh compiled output. Same catalog and document height assertions passed before the owned scroll assertion. The normal completed build is untouched.'},null,2)+'\n');
+          NODE
+      - name: Build and run the isolated whole-original Hub control
+        if: ${{ !cancelled() && steps.tools.outcome == 'success' }}
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export HUB_MODE=old-hub
+          export HUB_SOURCE="$RUNNER_TEMP/popular-hub-controls/$HUB_MODE/source"
+          export HUB_DIST="$RUNNER_TEMP/popular-hub-controls/$HUB_MODE/dist"
+          test ! -e "$HUB_SOURCE"
+          test ! -e "$HUB_DIST"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,mode=process.env.HUB_MODE,root=process.env.HUB_SOURCE,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          assert(['old-hub','input-fragment'].includes(mode));assert.equal(root,path.join(process.env.RUNNER_TEMP,'popular-hub-controls',mode,'source'));
+          const hub='src/components/hub/HubExperience.tsx',producer='scripts/qa/popularPagesFixtures.mjs',normal=JSON.parse(fs.readFileSync(out+'/source-before.json','utf8')),binding=JSON.parse(fs.readFileSync(out+'/binding.json','utf8'));
+          const tracked=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean).sort();assert.equal(tracked.length,5679);assert.deepEqual(tracked,Object.keys(normal).sort());
+          fs.mkdirSync(root,{recursive:true});for(const p of tracked){const bytes=fs.readFileSync(p);assert.equal(sha(bytes),normal[p],p+' normal source held');fs.mkdirSync(path.dirname(path.join(root,p)),{recursive:true});fs.writeFileSync(path.join(root,p),bytes);}
+          const fixed=fs.readFileSync(hub);assert.equal(blob(fixed),'2fd20d58798ef438fa0566841121db855822f755');
+          let altered;
+          if(mode==='old-hub'){altered=fs.readFileSync(out+'/control-original-HubExperience.tsx');assert.equal(blob(altered),'c72effc5697ec0d2812569479a9d465247855720');}
+          else{const before='onChange={event => setQuery(event.target.value)}',after='onChange={event => setQuery((event.nativeEvent as InputEvent).data ?? event.target.value)}',source=fixed.toString('utf8');assert.equal(source.split(before).length-1,1);altered=Buffer.from(source.replace(before,after));assert.equal(altered.toString('utf8').split(after).length-1,1);assert.equal(altered.toString('utf8').replace(after,before),source);assert.equal(blob(altered),'4b9659f4e3ba48fa95a308cf2e1c37114ed5ffce');}
+          assert(!altered.equals(fixed));const hubBlob=blob(altered);fs.writeFileSync(path.join(root,hub),altered);
+          const originalProducer=fs.readFileSync(producer,'utf8'),pin='2fd20d58798ef438fa0566841121db855822f755';assert.equal(originalProducer.split(pin).length-1,1);
+          const changedProducer=originalProducer.replace(pin,hubBlob);assert.notEqual(changedProducer,originalProducer);assert.equal(changedProducer.replace(hubBlob,pin),originalProducer);
+          if(mode==='old-hub')assert.equal(blob(Buffer.from(changedProducer)),'5ad41cda8b64b2f77408779a9cf35aae9fc994f6');
+          fs.writeFileSync(path.join(root,producer),changedProducer);
+          fs.mkdirSync(out+'/'+mode+'-sources',{recursive:true});fs.copyFileSync(path.join(root,hub),out+'/'+mode+'-sources/HubExperience.tsx');fs.copyFileSync(path.join(root,producer),out+'/'+mode+'-sources/popularPagesFixtures.mjs');
+          const map=Object.fromEntries(tracked.map(p=>[p,sha(fs.readFileSync(path.join(root,p)))]));assert.deepEqual(tracked.filter(p=>map[p]!==normal[p]).sort(),[hub,producer].sort());
+          for(const[p,expected]of Object.entries(binding.pins))assert.equal(blob(fs.readFileSync(path.join(root,p))),p===hub?hubBlob:expected,p+' feature source');
+          for(const[p,row]of Object.entries(binding.qa))assert.equal(blob(fs.readFileSync(path.join(root,p))),p===producer?blob(Buffer.from(changedProducer)):row.git,p+' QA body');
+          fs.symlinkSync(path.resolve('node_modules'),path.join(root,'node_modules'),'dir');
+          fs.writeFileSync(out+'/'+mode+'-source-before.json',JSON.stringify(map,null,2)+'\n');
+          fs.writeFileSync(out+'/'+mode+'-source-association.json',JSON.stringify({normalSource:process.env.GITHUB_SHA,normalBuild:process.env.BUILT_SOURCE_SHA,mode,root,dist:process.env.HUB_DIST,normalHub:blob(fixed),controlHub:hubBlob,normalProducer:blob(Buffer.from(originalProducer)),controlProducer:blob(Buffer.from(changedProducer)),allTrackedCopied:tracked.length,changedPaths:[hub,producer],heldFeaturePins:61,producerChange:'One exact source-pin metadata substitution only',driver:binding.qa['scripts/qa/popularPagesBrowser.mjs'],normalDistAltered:false},null,2)+'\n');
+          NODE
+          : > "$QA_OUT/transport/old-hub-build.log"
+          (
+            cd "$HUB_SOURCE"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/old-hub-build.log" node node_modules/vite/bin/vite.js build --outDir "$HUB_DIST" --emptyOutDir
+          ) 2>&1 | tee "$QA_OUT/logs/old-hub-build.log"
+          test ! -s "$QA_OUT/transport/old-hub-build.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,mode=process.env.HUB_MODE,root=process.env.HUB_SOURCE,dist=process.env.HUB_DIST,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const before=JSON.parse(fs.readFileSync(out+'/'+mode+'-source-before.json','utf8')),after=Object.fromEntries(Object.keys(before).map(p=>[p,sha(fs.readFileSync(path.join(root,p)))]));assert.deepEqual(after,before);fs.writeFileSync(out+'/'+mode+'-source-after-build.json',JSON.stringify(after,null,2)+'\n');
+          const rows=[];function walk(rel=''){for(const e of fs.readdirSync(path.join(dist,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walk(file);else{assert(e.isFile());const b=fs.readFileSync(path.join(dist,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert(rows.length>100);
+          fs.writeFileSync(out+'/'+mode+'-dist-before.json',JSON.stringify(rows,null,2)+'\n');
+          NODE
+          tar -C "$HUB_DIST" -czf "$QA_OUT/old-hub-completed-dist.tar.gz" .
+          sha256sum "$QA_OUT/old-hub-completed-dist.tar.gz" > "$QA_OUT/old-hub-completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/old-hub-completed-dist.tar.gz" > "$QA_OUT/old-hub-completed-dist-members.txt"
+          : > "$QA_OUT/transport/old-hub-fixtures.log"
+          (
+            cd "$HUB_SOURCE"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/old-hub-fixtures.log" node scripts/qa/popularPagesFixtures.mjs --out "$QA_OUT/fixtures-old-hub" --dist "$HUB_DIST" --app-mode fixed
+          ) 2>&1 | tee "$QA_OUT/logs/old-hub-fixtures.log"
+          test ! -s "$QA_OUT/transport/old-hub-fixtures.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,mode=process.env.HUB_MODE,read=p=>JSON.parse(fs.readFileSync(p,'utf8')),normal=read(out+'/fixtures-popular/manifest.json'),control=read(out+'/fixtures-'+mode+'/manifest.json');
+          assert.equal(control.appMode,'fixed');for(const field of ['hubs','careers','stadium'])assert.deepEqual(control[field],normal[field],field+' independent fixture outcomes');
+          for(const file of ['nba.json','nfl.json'])assert.deepEqual(fs.readFileSync(out+'/fixtures-'+mode+'/'+file),fs.readFileSync(out+'/fixtures-popular/'+file),file+' exact normal seed');
+          fs.writeFileSync(out+'/'+mode+'-fixture-bridge.json',JSON.stringify({mode,normalSeedBytesHeld:true,hubCatalogAndExpectedVectorsHeld:true,sourceAndDistAssociationChangedOnlyForPhysicalControl:true,fixtureProducerBodyChangedOnlyByOneHubSourcePin:true},null,2)+'\n');
+          NODE
+          find "$QA_OUT/fixtures-old-hub" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/old-hub-fixtures-before.sha256"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/old-hub-server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs "$HUB_DIST" 4175 > "$QA_OUT/logs/old-hub-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4175/ > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          : > "$QA_OUT/transport/old-hub-browser.log"
+          set +e
+          (
+            cd "$HUB_SOURCE"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/old-hub-browser.log" node scripts/qa/popularPagesBrowser.mjs --base-url http://127.0.0.1:4175 --out "$QA_OUT/old-hub-browser" --fixtures "$QA_OUT/fixtures-old-hub" --dist "$HUB_DIST" --scope hub-rapid-control
+          ) > "$QA_OUT/logs/old-hub-browser.log" 2>&1
+          status=$?
+          printf '%s\n' "$status" > "$QA_OUT/old-hub.exit"
+          set -e
+          tail -n 40 "$QA_OUT/logs/old-hub-browser.log"
+          test ! -s "$QA_OUT/transport/old-hub-browser.log"
+          test ! -s "$QA_OUT/transport/old-hub-server.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,mode=process.env.HUB_MODE,read=p=>JSON.parse(fs.readFileSync(p,'utf8')),report=read(out+'/'+mode+'-browser/report.json'),normal=read(out+'/popular/report.json').contexts.find(r=>r.id==='hub-soccer-320'),expected=read(out+'/fixtures-'+mode+'/manifest.json').hubs[0].daily;
+          assert.equal(Number(fs.readFileSync(out+'/'+mode+'.exit','utf8')),1);assert.equal(report.status,'failed');assert.equal(report.scope,'hub-rapid-control');assert.equal(report.expectedContexts,1);assert.equal(report.contexts.length,1);assert.equal(report.sourceHeld,true);assert.equal(report.distHeld,true);
+          const row=report.contexts[0];assert.equal(row.id,'hub-soccer-320');assert.equal(row.width,320);assert.equal(row.status,'failed');assert.equal(row.validationError,undefined);
+          for(const field of ['pageErrors','unexpectedConsoleErrors','undeclaredOrigins','undeclaredWebSockets'])assert.deepEqual(row[field],[],field+' no other fault');
+          assert.equal(row.firstReplace.before.height,row.firstReplace.after.height);assert(Math.abs(row.firstReplace.before.y-row.firstReplace.after.y)<=1);assert(row.firstReplace.before.y>80);
+          assert(normal?.rapidHub?.settled===true);assert(normal.rapidHub.typing?.settled===true,'Normal full prefix probe must qualify independently');
+          const rapid=row.rapidHub;assert(rapid);assert(rapid.events.some(e=>e.type==='click'&&e.trusted&&e.label==='Clear game search'));assert(rapid.events.some(e=>e.type==='click'&&e.trusted&&e.label.startsWith('Daily puzzles')));assert(rapid.events.some(e=>e.type==='input'&&e.trusted&&e.value===expected.label));
+          let marker;
+          if(mode==='old-hub'){
+            marker='POPULAR_APP_HUB_RAPID_FILTER_QUERY';assert.match(row.error,/AssertionError.*POPULAR_APP_HUB_RAPID_FILTER_QUERY:/s);assert.equal(rapid.settled,false);assert.equal(rapid.typing,undefined);const actualState=({filter,query,input,pressed,paths})=>({filter,query,input,pressed,paths});assert.notDeepEqual(actualState(rapid.after),actualState(normal.rapidHub.after));
+          }else{
+            marker='POPULAR_APP_HUB_SEQUENTIAL_QUERY';assert.match(row.error,/AssertionError.*POPULAR_APP_HUB_SEQUENTIAL_QUERY:/s);assert.equal(rapid.settled,true);assert.equal(rapid.after.filter,'daily');assert.equal(rapid.after.query,expected.label);assert.equal(rapid.after.input,expected.label);assert.deepEqual(rapid.after.paths,expected.paths);
+            assert(rapid.typing);assert.equal(rapid.typing.settled,false);const inputs=rapid.typing.events.filter(e=>e.type==='input');assert(inputs.length>0&&inputs.every(e=>e.trusted));assert.notDeepEqual(inputs.map(e=>e.value),normal.rapidHub.typing.events.filter(e=>e.type==='input').map(e=>e.value),'Physical input-fragment fault changes cumulative native prefixes');
+          }
+          assert.deepEqual(report.screenshots,['hub-soccer-320-failure.png']);
+          fs.writeFileSync(out+'/'+mode+'-admission.json',JSON.stringify({status:'owned-control-rejected',mode,nativeExit:1,marker,context:row.id,firstRapidPassed:rapid.settled,sequenceReached:!!rapid.typing,otherFaults:0,normalPassCredit:false,normalCompletedDistAltered:false,meaning:'One physical copied Hub source and its producer source-pin metadata differ. All normal code, independent expected fixtures and the driver remain held.'},null,2)+'\n');
+          NODE
+      - name: Build and run the isolated InputEvent fragment Hub control
+        if: ${{ !cancelled() && steps.tools.outcome == 'success' }}
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export HUB_MODE=input-fragment
+          export HUB_SOURCE="$RUNNER_TEMP/popular-hub-controls/$HUB_MODE/source"
+          export HUB_DIST="$RUNNER_TEMP/popular-hub-controls/$HUB_MODE/dist"
+          test ! -e "$HUB_SOURCE"
+          test ! -e "$HUB_DIST"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,mode=process.env.HUB_MODE,root=process.env.HUB_SOURCE,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          assert(['old-hub','input-fragment'].includes(mode));assert.equal(root,path.join(process.env.RUNNER_TEMP,'popular-hub-controls',mode,'source'));
+          const hub='src/components/hub/HubExperience.tsx',producer='scripts/qa/popularPagesFixtures.mjs',normal=JSON.parse(fs.readFileSync(out+'/source-before.json','utf8')),binding=JSON.parse(fs.readFileSync(out+'/binding.json','utf8'));
+          const tracked=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean).sort();assert.equal(tracked.length,5679);assert.deepEqual(tracked,Object.keys(normal).sort());
+          fs.mkdirSync(root,{recursive:true});for(const p of tracked){const bytes=fs.readFileSync(p);assert.equal(sha(bytes),normal[p],p+' normal source held');fs.mkdirSync(path.dirname(path.join(root,p)),{recursive:true});fs.writeFileSync(path.join(root,p),bytes);}
+          const fixed=fs.readFileSync(hub);assert.equal(blob(fixed),'2fd20d58798ef438fa0566841121db855822f755');
+          let altered;
+          if(mode==='old-hub'){altered=fs.readFileSync(out+'/control-original-HubExperience.tsx');assert.equal(blob(altered),'c72effc5697ec0d2812569479a9d465247855720');}
+          else{const before='onChange={event => setQuery(event.target.value)}',after='onChange={event => setQuery((event.nativeEvent as InputEvent).data ?? event.target.value)}',source=fixed.toString('utf8');assert.equal(source.split(before).length-1,1);altered=Buffer.from(source.replace(before,after));assert.equal(altered.toString('utf8').split(after).length-1,1);assert.equal(altered.toString('utf8').replace(after,before),source);assert.equal(blob(altered),'4b9659f4e3ba48fa95a308cf2e1c37114ed5ffce');}
+          assert(!altered.equals(fixed));const hubBlob=blob(altered);fs.writeFileSync(path.join(root,hub),altered);
+          const originalProducer=fs.readFileSync(producer,'utf8'),pin='2fd20d58798ef438fa0566841121db855822f755';assert.equal(originalProducer.split(pin).length-1,1);
+          const changedProducer=originalProducer.replace(pin,hubBlob);assert.notEqual(changedProducer,originalProducer);assert.equal(changedProducer.replace(hubBlob,pin),originalProducer);
+          if(mode==='old-hub')assert.equal(blob(Buffer.from(changedProducer)),'5ad41cda8b64b2f77408779a9cf35aae9fc994f6');
+          fs.writeFileSync(path.join(root,producer),changedProducer);
+          fs.mkdirSync(out+'/'+mode+'-sources',{recursive:true});fs.copyFileSync(path.join(root,hub),out+'/'+mode+'-sources/HubExperience.tsx');fs.copyFileSync(path.join(root,producer),out+'/'+mode+'-sources/popularPagesFixtures.mjs');
+          const map=Object.fromEntries(tracked.map(p=>[p,sha(fs.readFileSync(path.join(root,p)))]));assert.deepEqual(tracked.filter(p=>map[p]!==normal[p]).sort(),[hub,producer].sort());
+          for(const[p,expected]of Object.entries(binding.pins))assert.equal(blob(fs.readFileSync(path.join(root,p))),p===hub?hubBlob:expected,p+' feature source');
+          for(const[p,row]of Object.entries(binding.qa))assert.equal(blob(fs.readFileSync(path.join(root,p))),p===producer?blob(Buffer.from(changedProducer)):row.git,p+' QA body');
+          fs.symlinkSync(path.resolve('node_modules'),path.join(root,'node_modules'),'dir');
+          fs.writeFileSync(out+'/'+mode+'-source-before.json',JSON.stringify(map,null,2)+'\n');
+          fs.writeFileSync(out+'/'+mode+'-source-association.json',JSON.stringify({normalSource:process.env.GITHUB_SHA,normalBuild:process.env.BUILT_SOURCE_SHA,mode,root,dist:process.env.HUB_DIST,normalHub:blob(fixed),controlHub:hubBlob,normalProducer:blob(Buffer.from(originalProducer)),controlProducer:blob(Buffer.from(changedProducer)),allTrackedCopied:tracked.length,changedPaths:[hub,producer],heldFeaturePins:61,producerChange:'One exact source-pin metadata substitution only',driver:binding.qa['scripts/qa/popularPagesBrowser.mjs'],normalDistAltered:false},null,2)+'\n');
+          NODE
+          : > "$QA_OUT/transport/input-fragment-build.log"
+          (
+            cd "$HUB_SOURCE"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/input-fragment-build.log" node node_modules/vite/bin/vite.js build --outDir "$HUB_DIST" --emptyOutDir
+          ) 2>&1 | tee "$QA_OUT/logs/input-fragment-build.log"
+          test ! -s "$QA_OUT/transport/input-fragment-build.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,mode=process.env.HUB_MODE,root=process.env.HUB_SOURCE,dist=process.env.HUB_DIST,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const before=JSON.parse(fs.readFileSync(out+'/'+mode+'-source-before.json','utf8')),after=Object.fromEntries(Object.keys(before).map(p=>[p,sha(fs.readFileSync(path.join(root,p)))]));assert.deepEqual(after,before);fs.writeFileSync(out+'/'+mode+'-source-after-build.json',JSON.stringify(after,null,2)+'\n');
+          const rows=[];function walk(rel=''){for(const e of fs.readdirSync(path.join(dist,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walk(file);else{assert(e.isFile());const b=fs.readFileSync(path.join(dist,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}walk();rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert(rows.length>100);
+          fs.writeFileSync(out+'/'+mode+'-dist-before.json',JSON.stringify(rows,null,2)+'\n');
+          NODE
+          tar -C "$HUB_DIST" -czf "$QA_OUT/input-fragment-completed-dist.tar.gz" .
+          sha256sum "$QA_OUT/input-fragment-completed-dist.tar.gz" > "$QA_OUT/input-fragment-completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/input-fragment-completed-dist.tar.gz" > "$QA_OUT/input-fragment-completed-dist-members.txt"
+          : > "$QA_OUT/transport/input-fragment-fixtures.log"
+          (
+            cd "$HUB_SOURCE"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/input-fragment-fixtures.log" node scripts/qa/popularPagesFixtures.mjs --out "$QA_OUT/fixtures-input-fragment" --dist "$HUB_DIST" --app-mode fixed
+          ) 2>&1 | tee "$QA_OUT/logs/input-fragment-fixtures.log"
+          test ! -s "$QA_OUT/transport/input-fragment-fixtures.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,mode=process.env.HUB_MODE,read=p=>JSON.parse(fs.readFileSync(p,'utf8')),normal=read(out+'/fixtures-popular/manifest.json'),control=read(out+'/fixtures-'+mode+'/manifest.json');
+          assert.equal(control.appMode,'fixed');for(const field of ['hubs','careers','stadium'])assert.deepEqual(control[field],normal[field],field+' independent fixture outcomes');
+          for(const file of ['nba.json','nfl.json'])assert.deepEqual(fs.readFileSync(out+'/fixtures-'+mode+'/'+file),fs.readFileSync(out+'/fixtures-popular/'+file),file+' exact normal seed');
+          fs.writeFileSync(out+'/'+mode+'-fixture-bridge.json',JSON.stringify({mode,normalSeedBytesHeld:true,hubCatalogAndExpectedVectorsHeld:true,sourceAndDistAssociationChangedOnlyForPhysicalControl:true,fixtureProducerBodyChangedOnlyByOneHubSourcePin:true},null,2)+'\n');
+          NODE
+          find "$QA_OUT/fixtures-input-fragment" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/input-fragment-fixtures-before.sha256"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/input-fragment-server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs "$HUB_DIST" 4176 > "$QA_OUT/logs/input-fragment-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent http://127.0.0.1:4176/ > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          : > "$QA_OUT/transport/input-fragment-browser.log"
+          set +e
+          (
+            cd "$HUB_SOURCE"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/input-fragment-browser.log" node scripts/qa/popularPagesBrowser.mjs --base-url http://127.0.0.1:4176 --out "$QA_OUT/input-fragment-browser" --fixtures "$QA_OUT/fixtures-input-fragment" --dist "$HUB_DIST" --scope hub-rapid-control
+          ) > "$QA_OUT/logs/input-fragment-browser.log" 2>&1
+          status=$?
+          printf '%s\n' "$status" > "$QA_OUT/input-fragment.exit"
+          set -e
+          tail -n 40 "$QA_OUT/logs/input-fragment-browser.log"
+          test ! -s "$QA_OUT/transport/input-fragment-browser.log"
+          test ! -s "$QA_OUT/transport/input-fragment-server.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,mode=process.env.HUB_MODE,read=p=>JSON.parse(fs.readFileSync(p,'utf8')),report=read(out+'/'+mode+'-browser/report.json'),normal=read(out+'/popular/report.json').contexts.find(r=>r.id==='hub-soccer-320'),expected=read(out+'/fixtures-'+mode+'/manifest.json').hubs[0].daily;
+          assert.equal(Number(fs.readFileSync(out+'/'+mode+'.exit','utf8')),1);assert.equal(report.status,'failed');assert.equal(report.scope,'hub-rapid-control');assert.equal(report.expectedContexts,1);assert.equal(report.contexts.length,1);assert.equal(report.sourceHeld,true);assert.equal(report.distHeld,true);
+          const row=report.contexts[0];assert.equal(row.id,'hub-soccer-320');assert.equal(row.width,320);assert.equal(row.status,'failed');assert.equal(row.validationError,undefined);
+          for(const field of ['pageErrors','unexpectedConsoleErrors','undeclaredOrigins','undeclaredWebSockets'])assert.deepEqual(row[field],[],field+' no other fault');
+          assert.equal(row.firstReplace.before.height,row.firstReplace.after.height);assert(Math.abs(row.firstReplace.before.y-row.firstReplace.after.y)<=1);assert(row.firstReplace.before.y>80);
+          assert(normal?.rapidHub?.settled===true);assert(normal.rapidHub.typing?.settled===true,'Normal full prefix probe must qualify independently');
+          const rapid=row.rapidHub;assert(rapid);assert(rapid.events.some(e=>e.type==='click'&&e.trusted&&e.label==='Clear game search'));assert(rapid.events.some(e=>e.type==='click'&&e.trusted&&e.label.startsWith('Daily puzzles')));assert(rapid.events.some(e=>e.type==='input'&&e.trusted&&e.value===expected.label));
+          let marker;
+          if(mode==='old-hub'){
+            marker='POPULAR_APP_HUB_RAPID_FILTER_QUERY';assert.match(row.error,/AssertionError.*POPULAR_APP_HUB_RAPID_FILTER_QUERY:/s);assert.equal(rapid.settled,false);assert.equal(rapid.typing,undefined);const actualState=({filter,query,input,pressed,paths})=>({filter,query,input,pressed,paths});assert.notDeepEqual(actualState(rapid.after),actualState(normal.rapidHub.after));
+          }else{
+            marker='POPULAR_APP_HUB_SEQUENTIAL_QUERY';assert.match(row.error,/AssertionError.*POPULAR_APP_HUB_SEQUENTIAL_QUERY:/s);assert.equal(rapid.settled,true);assert.equal(rapid.after.filter,'daily');assert.equal(rapid.after.query,expected.label);assert.equal(rapid.after.input,expected.label);assert.deepEqual(rapid.after.paths,expected.paths);
+            assert(rapid.typing);assert.equal(rapid.typing.settled,false);const inputs=rapid.typing.events.filter(e=>e.type==='input');assert(inputs.length>0&&inputs.every(e=>e.trusted));assert.notDeepEqual(inputs.map(e=>e.value),normal.rapidHub.typing.events.filter(e=>e.type==='input').map(e=>e.value),'Physical input-fragment fault changes cumulative native prefixes');
+          }
+          assert.deepEqual(report.screenshots,['hub-soccer-320-failure.png']);
+          fs.writeFileSync(out+'/'+mode+'-admission.json',JSON.stringify({status:'owned-control-rejected',mode,nativeExit:1,marker,context:row.id,firstRapidPassed:rapid.settled,sequenceReached:!!rapid.typing,otherFaults:0,normalPassCredit:false,normalCompletedDistAltered:false,meaning:'One physical copied Hub source and its producer source-pin metadata differ. All normal code, independent expected fixtures and the driver remain held.'},null,2)+'\n');
+          NODE
+      - name: Retain every actual event and close source, payload and fixture holds
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex'),read=p=>fs.existsSync(p)?JSON.parse(fs.readFileSync(p,'utf8')):null,errors=[];
+          function check(name,fn){try{fn();return true;}catch(e){errors.push({name,error:String(e.stack||e)});return false;}}
+          const reports={popular:read(out+'/popular/report.json'),fo:read(out+'/fo/report.json'),control:read(out+'/control-browser/report.json'),oldHub:read(out+'/old-hub-browser/report.json'),inputFragment:read(out+'/input-fragment-browser/report.json')};
+          const traffic={popular:reports.popular?.contexts??[],frontOffice:reports.fo?.profiles??[],oldAppControl:reports.control?.contexts??[],oldHubControl:reports.oldHub?.contexts??[],inputFragmentControl:reports.inputFragment?.contexts??[],nodeReceipts:fs.existsSync(out+'/transport')?fs.readdirSync(out+'/transport').sort().map(file=>({file,bytes:fs.statSync(out+'/transport/'+file).size,blockedAttempts:fs.readFileSync(out+'/transport/'+file,'utf8').split('\n').filter(Boolean).length})):[],meaning:'Every browser request/response/refusal/console/pageerror remains in these raw rows and original reports. Empty Node receipts do not mean zero browser traffic. No provider, actual-font or all-protocol availability claim. Root must classify all actual FO console and request events.'};
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify(traffic,null,2)+'\n');
+          const photos=[];for(const family of ['popular','fo','control-browser','old-hub-browser','input-fragment-browser'])if(fs.existsSync(out+'/'+family))for(const file of fs.readdirSync(out+'/'+family).filter(p=>p.endsWith('.png')).sort()){const b=fs.readFileSync(out+'/'+family+'/'+file);photos.push({family,file,bytes:b.length,sha256:sha(b),diagnostic:file.includes('failure'),oldAppControl:family==='control-browser'});}
+          fs.writeFileSync(out+'/photo-inventory.json',JSON.stringify(photos,null,2)+'\n');
+          const compare=(a,b)=>a<b?-1:a>b?1:0;
+          function rows(dir){const found=[];function walk(rel=''){for(const e of fs.readdirSync(path.join(dir,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())walk(file);else{assert(e.isFile(),'Only ordinary payload files');const b=fs.readFileSync(path.join(dir,file));found.push({file,bytes:b.length,sha256:sha(b)});}}}walk();return found.sort((a,b)=>compare(a.file,b.file));}
+          const tracked=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(Boolean).sort(),after=Object.fromEntries(tracked.map(p=>[p,sha(fs.readFileSync(p))]));
+          fs.writeFileSync(out+'/source-after.json',JSON.stringify(after,null,2)+'\n');
+          fs.writeFileSync(out+'/source-diff.txt',execFileSync('git',['diff','HEAD']));
+          fs.writeFileSync(out+'/status-after.txt',execFileSync('git',['status','--porcelain=v1','--untracked-files=all']));
+          const sourceHeld=check('All original and temporary source',()=>{const before=read(out+'/source-before.json');assert(before);assert.equal(tracked.length,5679);assert.deepEqual(after,before);assert.equal(fs.statSync(out+'/source-diff.txt').size,0);assert.equal(fs.statSync(out+'/status-after.txt').size,0);});
+          const completedTarHeld=check('Original completed tar',()=>{assert.equal(sha(fs.readFileSync(out+'/completed-dist.tar.gz')),process.env.DIST_TAR_SHA256);assert.equal(fs.statSync(out+'/completed-dist.tar.gz').size,Number(process.env.DIST_TAR_BYTES));});
+          const distHeld=check('Every normal completed payload',()=>{const before=read(out+'/carrier/dist-manifest.json');assert(before);const actual=rows('dist');fs.writeFileSync(out+'/dist-after.json',JSON.stringify(actual,null,2)+'\n');assert.deepEqual(actual,before);});
+          const fixtureHolds={};for(const family of ['popular','fo','control','old-hub','input-fragment']){
+            fixtureHolds[family]=check(family+' fixture bytes',()=>{const dir=out+'/fixtures-'+family;assert(fs.existsSync(dir));const actual=rows(dir);fs.writeFileSync(out+'/fixtures-'+family+'-after.json',JSON.stringify(actual,null,2)+'\n');
+              const manifest=read(dir+'/manifest.json');assert(manifest);const bundle=fs.readFileSync(path.join(dir,manifest.bundle));assert.equal(sha(bundle),manifest.bundleSHA);
+              const checksum=family==='control'?out+'/control-fixtures-before.sha256':['old-hub','input-fragment'].includes(family)?out+'/'+family+'-fixtures-before.sha256':out+'/fixtures-before.sha256';assert(fs.existsSync(checksum));const entries=fs.readFileSync(checksum,'utf8').trim().split('\n').map(line=>{const m=/^([a-f0-9]{64})  (.+)$/.exec(line);assert(m);return {file:m[2],digest:m[1]};}).filter(r=>r.file.startsWith(dir+'/'));
+              assert.equal(entries.length,actual.length);for(const row of entries)assert.equal(sha(fs.readFileSync(row.file)),row.digest,row.file);
+            });
+          }
+          const controlSourceHeld=check('Physical old-App source',()=>{const before=read(out+'/control-source-before.json');assert(before);const current=Object.fromEntries(Object.keys(before).map(p=>[p,sha(fs.readFileSync(path.join(process.env.CONTROL,p)))]));fs.writeFileSync(out+'/control-source-after.json',JSON.stringify(current,null,2)+'\n');assert.deepEqual(current,before);assert.deepEqual(read(out+'/control-source-after-build.json'),before);});
+          const controlPayloadHeld=check('Control completed payload and retained tar',()=>{const before=read(out+'/control-dist-before.json');assert(before);const actual=rows(process.env.CONTROL_DIST);fs.writeFileSync(out+'/control-dist-after.json',JSON.stringify(actual,null,2)+'\n');assert.deepEqual(actual,before);
+            const tar=fs.readFileSync(out+'/control-completed-dist.tar.gz'),record=fs.readFileSync(out+'/control-completed-dist.tar.gz.sha256','utf8').trim().split(/\s+/)[0];assert.equal(sha(tar),record);
+            fs.writeFileSync(out+'/control-completed-dist-association.json',JSON.stringify({source:process.env.GITHUB_SHA,originalApp:'79da1b8cf2de7870ea216703d0a1a56fceb69673',fileCount:actual.length,distDigest:sha(JSON.stringify(actual)),tarBytes:tar.length,tarSHA256:sha(tar),normalDistAltered:false},null,2)+'\n');
+          });
+          check('All nine unchanged Hub static modes',()=>{
+            const admission=read(out+'/hub-static-admission.json'),retention=read(out+'/hub-static-retention.json');assert(admission&&retention);assert.equal(admission.status,'passed');assert.equal(admission.modes,9);assert.equal(admission.effectiveControls,8);assert.equal(retention.present,true);
+            assert.equal(Number(fs.readFileSync(out+'/hub-static.exit','utf8')),0);assert.deepEqual(rows(out+'/hub-static'),retention.retained);assert.deepEqual(retention.retained,retention.original);assert.deepEqual(rows(path.resolve('sport-hubs-artifacts/behavior')),retention.original);
+          });
+          const hubControlHolds={};
+          for(const mode of ['old-hub','input-fragment']){
+            const sourceHeld=check(mode+' physical source',()=>{
+              const association=read(out+'/'+mode+'-source-association.json'),before=read(out+'/'+mode+'-source-before.json');assert(association&&before);assert.equal(association.mode,mode);
+              const root=path.join(process.env.RUNNER_TEMP,'popular-hub-controls',mode,'source');assert.equal(association.root,root);
+              const actual=Object.fromEntries(Object.keys(before).map(p=>[p,sha(fs.readFileSync(path.join(root,p)))]));fs.writeFileSync(out+'/'+mode+'-source-after.json',JSON.stringify(actual,null,2)+'\n');assert.deepEqual(actual,before);assert.deepEqual(read(out+'/'+mode+'-source-after-build.json'),before);
+              assert.equal(sha(fs.readFileSync(out+'/'+mode+'-sources/HubExperience.tsx')),before['src/components/hub/HubExperience.tsx']);assert.equal(sha(fs.readFileSync(out+'/'+mode+'-sources/popularPagesFixtures.mjs')),before['scripts/qa/popularPagesFixtures.mjs']);
+              const normal=read(out+'/source-before.json');assert.deepEqual(Object.keys(before).filter(p=>before[p]!==normal[p]).sort(),['src/components/hub/HubExperience.tsx','scripts/qa/popularPagesFixtures.mjs'].sort());
+            });
+            const payloadHeld=check(mode+' payload and tar',()=>{
+              const dist=path.join(process.env.RUNNER_TEMP,'popular-hub-controls',mode,'dist'),before=read(out+'/'+mode+'-dist-before.json');assert(before);const actual=rows(dist);fs.writeFileSync(out+'/'+mode+'-dist-after.json',JSON.stringify(actual,null,2)+'\n');assert.deepEqual(actual,before);
+              const tar=fs.readFileSync(out+'/'+mode+'-completed-dist.tar.gz'),record=fs.readFileSync(out+'/'+mode+'-completed-dist.tar.gz.sha256','utf8').trim().split(/\s+/)[0];assert.equal(sha(tar),record);
+              fs.writeFileSync(out+'/'+mode+'-completed-dist-association.json',JSON.stringify({mode,source:process.env.GITHUB_SHA,fileCount:actual.length,distDigest:sha(JSON.stringify(actual)),tarBytes:tar.length,tarSHA256:sha(tar),normalDistAltered:false},null,2)+'\n');
+            });
+            check(mode+' independent fixture bridge',()=>{const bridge=read(out+'/'+mode+'-fixture-bridge.json');assert(bridge);assert.equal(bridge.normalSeedBytesHeld,true);assert.equal(bridge.hubCatalogAndExpectedVectorsHeld,true);});
+            hubControlHolds[mode]={sourceHeld,payloadHeld};
+          }
+          for(const[file,prefix]of[['normal-admission.json','Normal36'],['control-admission.json','Physical old-App'],['old-hub-admission.json','Physical whole old-Hub'],['input-fragment-admission.json','Physical InputEvent fragment']])check(prefix+' actual admission',()=>{assert(read(out+'/'+file));});
+          for(const file of fs.existsSync(out+'/transport')?fs.readdirSync(out+'/transport'):[])check('Node receipt '+file,()=>assert.equal(fs.statSync(out+'/transport/'+file).size,0));
+          fs.writeFileSync(out+'/closure.json',JSON.stringify({sourceHeld,completedTarHeld,distHeld,fixtureHolds,controlSourceHeld,controlPayloadHeld,hubControlHolds,errors,sourceEntries:tracked.length,normalRebuild:false,controlBuildSeparate:true,separateControlBuilds:3,temporaryControlWorkspaceArchived:false},null,2)+'\n');
+          assert.deepEqual(errors,[],'Every source, fixture, compiled-payload and actual-result closure must hold');
+          NODE
+      - name: Bound retained native App evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: popular-pages-browser-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/popular-pages-browser
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
