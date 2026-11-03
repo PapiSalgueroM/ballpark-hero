@@ -1,0 +1,133 @@
+name: Requested release bounded Shootout RNG observation
+on:
+  push:
+    branches: [codex/flagship-shootout-rng-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: flagship-shootout-rng-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the joined app and exactly three QA additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-shootout-rng"
+          mkdir -p "$OUT/transport" "$OUT/history"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = 00c85815cac64d72014594e6b38515d4d6ce2e45
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 9d8dc92557bf2f4358b5be044359354eda841769
+          test "$(git hash-object src/lib/clubManager.ts)" = 9d8dc92557bf2f4358b5be044359354eda841769
+          test "$(git rev-parse HEAD:scripts/simCmShootoutOrder.mjs)" = 8d348809a1cb6556d6628fa6571e0c38b3005bf1
+          test "$(git hash-object scripts/simCmShootoutOrder.mjs)" = 8d348809a1cb6556d6628fa6571e0c38b3005bf1
+          printf '%s  %s\n' 0b880e1e3771b6c1ad23e53a2d1e0c8754c383ae13766c60f1fc1c2aa4c29cd7 scripts/qa/cmShootoutRngTrace.mjs 880bdeacd1a7aaf162831544a277b412be5c1eedc312922af27c75e68b24647a scripts/qa/cmShootoutRngObserverHunks.json | sha256sum --check
+          git diff --name-status 00c85815cac64d72014594e6b38515d4d6ce2e45 HEAD > "$OUT/candidate-diff.txt"
+          printf 'A\t.github/workflows/flagship-shootout-rng-20261103.yml\nA\tscripts/qa/cmShootoutRngObserverHunks.json\nA\tscripts/qa/cmShootoutRngTrace.mjs\n' > "$OUT/expected-diff.txt"
+          cmp "$OUT/expected-diff.txt" "$OUT/candidate-diff.txt"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/outer-source-before.sha256"
+          test "$(wc -l < "$OUT/outer-source-before.sha256")" -eq 5672
+          git status --porcelain=v1 --untracked-files=all > "$OUT/outer-status-before.txt"
+          test ! -s "$OUT/outer-status-before.txt"
+          test ! -e scripts/.release-shootout-rng-observed.mjs
+          # Materialize the existing historical source before guarded Node runtime.
+          git cat-file -e 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f^{commit}
+          git show 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f:src/lib/clubManager.ts > "$OUT/history/5b70-clubManager.ts"
+          sha256sum "$OUT/history/5b70-clubManager.ts" > "$OUT/history/source.sha256"
+          cp scripts/qa/cmShootoutRngTrace.mjs "$OUT/caller-source.mjs"
+          cp scripts/qa/cmShootoutRngObserverHunks.json "$OUT/pinned-hunks.json"
+      - name: Install unchanged locked dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper unchanged application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/types.exit"
+          test "$code" -eq 0
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Preserve vanilla failures and require exact observer identity
+        timeout-minutes: 34
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          unset SIM_SEED CM_SHOOTOUT_CONTROL CM_SHOOTOUT_WRITE_FIXTURE ONLY BROWSER
+          set +e
+          node scripts/qa/cmShootoutRngTrace.mjs --out "$QA_OUT" --hunks scripts/qa/cmShootoutRngObserverHunks.json > "$QA_OUT/caller.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/caller.exit"
+          tail -n 14 "$QA_OUT/caller.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,r=JSON.parse(fs.readFileSync(out+'/trace-admission.json','utf8'));
+          assert.equal(r.traceEligible,true);assert.equal(r.sourceHeld,true);assert.equal(r.cleanAfter,true);
+          assert.deepEqual(r.nativeExits,{vanilla:1,observed:1});assert.equal(r.fixtureRows,150);
+          assert.equal(r.originalAssertionsWaived,false);assert.equal(r.traceCalls.length,2);
+          assert(r.traceCalls.every(call=>call.seed===782100&&call.draws>0&&call.draws<=20000));
+          const controls=JSON.parse(fs.readFileSync(out+'/checker-controls.json','utf8'));
+          for(const key of ['changedActualRetainedOutcome','outcomeParityRejected','changedActualCapturedCount','incompleteCaptureRejected'])assert.equal(controls[key],true);
+          console.log('Observer identity eligible. The original four Shootout failures remain failed; no game or release correctness is admitted.');
+          NODE
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          test "$code" -eq 1
+          # Deliberately retain the original native failure as the job outcome.
+          exit "$code"
+      - name: Retain source closure and remove only the temporary observer
+        if: always()
+        run: |
+          set -euo pipefail
+          rm -f -- scripts/.release-shootout-rng-observed.mjs
+          git diff --exit-code HEAD > "$QA_OUT/outer-source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/outer-source-after.sha256"
+          cmp "$QA_OUT/outer-source-before.sha256" "$QA_OUT/outer-source-after.sha256"
+          sha256sum --check "$QA_OUT/outer-source-before.sha256" > "$QA_OUT/outer-source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/outer-status-after.txt"
+          cmp "$QA_OUT/outer-status-before.txt" "$QA_OUT/outer-status-after.txt"
+          find "$QA_OUT" -name '*transport.log' -o -path "$QA_OUT/transport/*.log" | sort > "$QA_OUT/transport-files.txt"
+          while IFS= read -r receipt; do test ! -s "$receipt"; done < "$QA_OUT/transport-files.txt"
+      - name: Bound all retained diagnostic evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.artifact.outputs.ready == 'true'
+        with:
+          name: flagship-shootout-rng-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-shootout-rng
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
