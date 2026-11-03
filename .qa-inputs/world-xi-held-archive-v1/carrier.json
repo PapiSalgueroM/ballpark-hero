@@ -1,0 +1,382 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Temporary QA carrier, exact prior archived bytes and fonts. No new data acquisition or sports field update.",
+  "origin": {
+    "run": 41424730828,
+    "artifact": 13132710070,
+    "zipBytes": 3221822,
+    "zipSHA256": "372ecf1d5f64d25f41f36010d94cc4154f44e66b2370df67c29f7de807f8dd6f"
+  },
+  "archive": {
+    "bytes": 1440813,
+    "sha256": "0b7be9cdaaf631ee3b76cef6eed3e9f74c51a9b1a1b4b70f797f71dd7a66acac",
+    "members": 61,
+    "rawBytes": 5729392
+  },
+  "parts": [
+    {
+      "path": ".qa-inputs/world-xi-held-archive-v1/part-00.b64",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97ffbce852e1fd6d0e708203618f2f30c6b3f805",
+      "chars": 262144
+    },
+    {
+      "path": ".qa-inputs/world-xi-held-archive-v1/part-01.b64",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11f5c28ec3e83a9b76b67419b726f0e524264429",
+      "chars": 262144
+    },
+    {
+      "path": ".qa-inputs/world-xi-held-archive-v1/part-02.b64",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3fea9190f2168bb3a99a3c6f6591765a26d402e",
+      "chars": 262144
+    },
+    {
+      "path": ".qa-inputs/world-xi-held-archive-v1/part-03.b64",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72b1e3d7babf0fcc85d3e59c4e1ca2f2a64bb31c",
+      "chars": 262144
+    },
+    {
+      "path": ".qa-inputs/world-xi-held-archive-v1/part-04.b64",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b7907fb2234a3b89a8c0a28a656e02861dd7bddc",
+      "chars": 262144
+    },
+    {
+      "path": ".qa-inputs/world-xi-held-archive-v1/part-05.b64",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75b50f8e2dc563de654c0702f45b385eb58ddd41",
+      "chars": 262144
+    },
+    {
+      "path": ".qa-inputs/world-xi-held-archive-v1/part-06.b64",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "772d4462f212e5e9b895b80713eeaf677b26caf0",
+      "chars": 262144
+    },
+    {
+      "path": ".qa-inputs/world-xi-held-archive-v1/part-07.b64",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "33245b99cbd0235c479b43f89ac034bb2849107c",
+      "chars": 86076
+    }
+  ],
+  "members": [
+    {
+      "path": "font-cache/0dfc29fde7d95ca65fe2a51c3649883a423d0d3fd86bfe63e2a35e38a0a995b5",
+      "bytes": 69360,
+      "sha256": "ec926d5065eaca49a48f96e312bbae0bbc5733c24215cf5dfabbdccee926fef7"
+    },
+    {
+      "path": "font-cache/56632cca6632f379925bba8326ffd04478b42d23ec4f5c22d194c9a440c93eae",
+      "bytes": 69416,
+      "sha256": "3e699ead1876244fa392243054ddefe7cf631b488438828a8a100731a22ab995"
+    },
+    {
+      "path": "font-cache/6f49e1b28bce7339f4846ecd070af9e4eb927e5b7b543fde5f0cf8e6a7730736",
+      "bytes": 326468,
+      "sha256": "b37284b5701b6b168dfc770aa1a4ac492106422fd3ba76bc7641e37434e8019c"
+    },
+    {
+      "path": "font-cache/87e867b52640b3b397a977c3046d1cc543ecde56ff4d0fd14bc53b812bc940ed",
+      "bytes": 326048,
+      "sha256": "e7a1aaf7eda9f2fad4131725fa556265ec75ca7b2d756260173a040363e8d4f7"
+    },
+    {
+      "path": "font-cache/a699af1dea30b799318e058c03ae61680de787476d635909fbb0354740971bab",
+      "bytes": 324820,
+      "sha256": "1b08e7fc267a5c7e1d614100f604b83e7e8a0be241f0f288faa2b3ac93a683ba"
+    },
+    {
+      "path": "font-cache/aaf352f017a5007bcd6888e3ff12196b1ebd868d5769eac83cec687f5678c909",
+      "bytes": 69308,
+      "sha256": "3e756954468ff1cb302dae0414262e72f76a67d87bef3fa1f3226cd0fb9b2d85"
+    },
+    {
+      "path": "font-cache/d03f1389be8c7cea7e4f4546b5715c72a75444a877838be6f0a2dc347c1c840d",
+      "bytes": 69356,
+      "sha256": "6c0346b8d297ebdc225832833e03e884a26ad99d265ecd3924d46e1ba285ea87"
+    },
+    {
+      "path": "font-cache/d31cf2fc57ff806591439de3aa2749d4e191acf5005a85c68556dddd009d1141",
+      "bytes": 1864,
+      "sha256": "f867cc05f0d31bbbdad175a4301931100be7a1316ead1b8f83bf492d38ba6b3b"
+    },
+    {
+      "path": "font-cache/e45972c7e9f24dc390848eb598daf023bc4e4284384ba7bb6696dc53c9e90a67",
+      "bytes": 325304,
+      "sha256": "8c883f63b2c4157d997319f2c8bc6995ed4357ef371940d31ca159004a4aae63"
+    },
+    {
+      "path": "font-cache/manifest.json",
+      "bytes": 2827,
+      "sha256": "3171c3241bbb489c22f51489f8b2cd94c880f071dfe9760a5c9aabdf48363d82"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 27119,
+      "sha256": "93075e1a52b07446145b459987ba51f636adb9078265442d8e3049447ba14ebf"
+    },
+    {
+      "path": "responses/00-market-2026-0.body.json",
+      "bytes": 153786,
+      "sha256": "a1e35666b92463fbf7f5e18a9f5acee47df42e5831868a628fe036ddfab136af"
+    },
+    {
+      "path": "responses/00-market-2026-0.ids.json",
+      "bytes": 4906,
+      "sha256": "133b21596d2fd7b91205be5ee0bf5f70a3280efc7e3fa5f1b05c3021b7592845"
+    },
+    {
+      "path": "responses/00-market-2026-0.raw.json",
+      "bytes": 166686,
+      "sha256": "44c59dafacfea365fc9aaf4d43f08fb91cff6cc3ffb1090cbf346a86a831002f"
+    },
+    {
+      "path": "responses/01-market-2026-1000.body.json",
+      "bytes": 152987,
+      "sha256": "c7774e144425fbaa1fa48818af0afeafd075087201635d98296ce8315404befe"
+    },
+    {
+      "path": "responses/01-market-2026-1000.ids.json",
+      "bytes": 6002,
+      "sha256": "aeb316b49995c3ef9a4c5559eef6ca4a9738c2a7881ef52759aeb3fcab1e1ed0"
+    },
+    {
+      "path": "responses/01-market-2026-1000.raw.json",
+      "bytes": 166983,
+      "sha256": "80434697044650c1dbad3fc997be152a99722d644d952dbd7f375b8833088aba"
+    },
+    {
+      "path": "responses/02-market-2026-2000.body.json",
+      "bytes": 157912,
+      "sha256": "e84dba01009733894fb14896603a6f73a74480f4c666a37b7f4e648819af3ecc"
+    },
+    {
+      "path": "responses/02-market-2026-2000.ids.json",
+      "bytes": 6002,
+      "sha256": "2b9b340c05b05d392a1e2d309de31fdac2d98eebf9cd9b1e1434334c8ca43bab"
+    },
+    {
+      "path": "responses/02-market-2026-2000.raw.json",
+      "bytes": 171908,
+      "sha256": "e67f4ef630eab86709c76abf67d7b2fe3c2cc41ad0f2fd61f5043d20db1a1bbc"
+    },
+    {
+      "path": "responses/03-market-2026-3000.body.json",
+      "bytes": 156097,
+      "sha256": "9005f4bc5692a6d7ff85f93d255c718a72dc967c173e9bfa497feb9ce11caa40"
+    },
+    {
+      "path": "responses/03-market-2026-3000.ids.json",
+      "bytes": 6734,
+      "sha256": "9c0d2621037d0e4c20c013517ccb8d10cb64d901e774c9612c6d8a53743b1de9"
+    },
+    {
+      "path": "responses/03-market-2026-3000.raw.json",
+      "bytes": 170825,
+      "sha256": "705d508d8ff6bf53c2bda7e2fef12d8949f67459095104ea8bb62440be3bd6d9"
+    },
+    {
+      "path": "responses/04-market-2026-4000.body.json",
+      "bytes": 158719,
+      "sha256": "5a2c178d233110d34531d664d53dc9109f352c50d7428e0cf028070a9a089324"
+    },
+    {
+      "path": "responses/04-market-2026-4000.ids.json",
+      "bytes": 7002,
+      "sha256": "35b5963a3c55c099a0f516a1b48874affe893c9ff9cb747d7368e32b21eecfb9"
+    },
+    {
+      "path": "responses/04-market-2026-4000.raw.json",
+      "bytes": 173715,
+      "sha256": "866bc6df2f899b1a500ca1cb71205f408eb0f8332a02b1a4c61e5b2a8d444a94"
+    },
+    {
+      "path": "responses/05-market-2026-5000.body.json",
+      "bytes": 137654,
+      "sha256": "00a3fd7f1aaf13ea25e365ceff271c595f7f9d9ccbcaa509928fb11f35a516d8"
+    },
+    {
+      "path": "responses/05-market-2026-5000.ids.json",
+      "bytes": 6057,
+      "sha256": "2552e9d9fde0a66d1d4e8463285a8d99402246e8d4510d231aa797d5f81f5ba1"
+    },
+    {
+      "path": "responses/05-market-2026-5000.raw.json",
+      "bytes": 150625,
+      "sha256": "42d8e8777b3f23b3f9f35ba7d5b49a88f4e630174ae6c2ab6c1922f6766189f5"
+    },
+    {
+      "path": "responses/06-market-2026-6000.body.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "responses/06-market-2026-6000.ids.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "responses/06-market-2026-6000.raw.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "responses/07-market-2026-7000.body.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "responses/07-market-2026-7000.ids.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "responses/07-market-2026-7000.raw.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "responses/08-market-2025-0.body.json",
+      "bytes": 154054,
+      "sha256": "fdcc1bb707e7b6b663b89306f995ef13b8d00469a6aac8d70c23ba9013b7cb0e"
+    },
+    {
+      "path": "responses/08-market-2025-0.ids.json",
+      "bytes": 5502,
+      "sha256": "63aeb1c16e0de5fd6e1b3faf1903266b1ba76ac1ba6a65ce3a43d0c5b1a7bee1"
+    },
+    {
+      "path": "responses/08-market-2025-0.raw.json",
+      "bytes": 167550,
+      "sha256": "2154c3db89c9a9d3db774617bec3dbdb5e87d3c98021db9e11999252524111b3"
+    },
+    {
+      "path": "responses/09-market-2025-1000.body.json",
+      "bytes": 152717,
+      "sha256": "e1d9f8573d1eeb4bcd22ec316e2dd20dec23d5b0963a320e927788fec8a22ce7"
+    },
+    {
+      "path": "responses/09-market-2025-1000.ids.json",
+      "bytes": 6002,
+      "sha256": "d68be909d30adac2dd6e708fb8b9a47d9cbeba0d4882b646ecad449678a83e7f"
+    },
+    {
+      "path": "responses/09-market-2025-1000.raw.json",
+      "bytes": 166713,
+      "sha256": "6709e995377dc4710a52e3308676d572e12686d29388ea53dd0e53788fee9373"
+    },
+    {
+      "path": "responses/10-market-2025-2000.body.json",
+      "bytes": 158220,
+      "sha256": "dee46933293aa0ad7c3ab804c2cd958281265edd172465c33624ae2d0dc7a6d7"
+    },
+    {
+      "path": "responses/10-market-2025-2000.ids.json",
+      "bytes": 6002,
+      "sha256": "090096944e3b10df03a5977a311d020a72664de4ea40aab37b202991e5de2a01"
+    },
+    {
+      "path": "responses/10-market-2025-2000.raw.json",
+      "bytes": 172216,
+      "sha256": "c46ec2648484471722586007b5264fbb3d1002542198a834a6d9030a543d1cc2"
+    },
+    {
+      "path": "responses/11-market-2025-3000.body.json",
+      "bytes": 155511,
+      "sha256": "4ecee94e52e6a07c5625004c7d90ef6b36ccdeacfcc7fd8179de07fa185a5945"
+    },
+    {
+      "path": "responses/11-market-2025-3000.ids.json",
+      "bytes": 6600,
+      "sha256": "c8a453906ea697f22358188fd17e4e26b87ed3f9d724a9239f5ada9c5f309395"
+    },
+    {
+      "path": "responses/11-market-2025-3000.raw.json",
+      "bytes": 170105,
+      "sha256": "9417563b7a7d4462eb1215cda9c9d38b6a4a429ed6e30aef311179aff5ea1465"
+    },
+    {
+      "path": "responses/12-market-2025-4000.body.json",
+      "bytes": 157822,
+      "sha256": "f760c545f9756127b7d02d5fd0df906b492be1b00648927c57b24dc4d48d66c4"
+    },
+    {
+      "path": "responses/12-market-2025-4000.ids.json",
+      "bytes": 7002,
+      "sha256": "f39da292f34e920a941a7ef4e8d4c0506f2364f5b4f9de403df5c513455f3157"
+    },
+    {
+      "path": "responses/12-market-2025-4000.raw.json",
+      "bytes": 172818,
+      "sha256": "2fe4c2afe14e7f45ac626995162e5d7457112ff00f6a598d73264e03fcffab70"
+    },
+    {
+      "path": "responses/13-market-2025-5000.body.json",
+      "bytes": 158432,
+      "sha256": "af10ff2b03de26f991ebd81704a2c513836913ef293dbfda5cb055c88fe52c27"
+    },
+    {
+      "path": "responses/13-market-2025-5000.ids.json",
+      "bytes": 7002,
+      "sha256": "2460af7b1d023d1d7558d5bb00652bc1dc58d33e2cc0a2f52ee06e1e12c6bbb4"
+    },
+    {
+      "path": "responses/13-market-2025-5000.raw.json",
+      "bytes": 173428,
+      "sha256": "c5f64fa223c4d7fc857431658ec5ba40efc4d01021516cc8829d8b1d673f3c99"
+    },
+    {
+      "path": "responses/14-market-2025-6000.body.json",
+      "bytes": 65084,
+      "sha256": "0ad0a705da58db512f73ec4c7c14a8587dc44143071277ba602ac35eb5583603"
+    },
+    {
+      "path": "responses/14-market-2025-6000.ids.json",
+      "bytes": 2900,
+      "sha256": "ed098f780bae7931e9d3d7d6e11a454bcfa20616994b6fb9aa2f1ae995aa06fa"
+    },
+    {
+      "path": "responses/14-market-2025-6000.raw.json",
+      "bytes": 71290,
+      "sha256": "fc23eab62caf7ba49cf96a3b893c15eb67fde8872dbcae44321e1292249ca321"
+    },
+    {
+      "path": "responses/15-market-2025-7000.body.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "responses/15-market-2025-7000.ids.json",
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "path": "responses/15-market-2025-7000.raw.json",
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "path": "responses/16-history.body.json",
+      "bytes": 12755,
+      "sha256": "eae0fc25ace1101c50059ce379268ab9a165d4223788d762888d23425373788b"
+    },
+    {
+      "path": "responses/16-history.raw.json",
+      "bytes": 13153,
+      "sha256": "92399bda207a1cfb6b68e8adfff486d93b40a3992550c9a082d73b93d3f43585"
+    }
+  ],
+  "scope": "Archive response projections and raw ID witnesses remain byte-for-byte as originally acquired. Browser body files preserve exact selected columns. Fonts are the existing captured cache. No live production currency, club or age claim."
+}
