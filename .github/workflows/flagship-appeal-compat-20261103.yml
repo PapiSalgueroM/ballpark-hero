@@ -1,0 +1,220 @@
+name: Requested release Appeal joined source compatibility buffer
+on:
+  push:
+    branches: [codex/flagship-appeal-compat-20261103-buffer]
+permissions:
+  contents: read
+concurrency:
+  group: flagship-appeal-compat-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  appeal-pair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arm: joined
+            source: 00c85815cac64d72014594e6b38515d4d6ce2e45
+            core: 9d8dc92557bf2f4358b5be044359354eda841769
+            coreHash: 1ca9560d8658ad88c96a4a085f676b51623a2c9134e665a872993564b95cf2a1
+            faultHash: 4502e2b25474bade82cd056484bc6ba3a298e45c1465d640ece151a3c1fea416
+            sourceRows: 5669
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+      QA_ARM: ${{ matrix.arm }}
+      CORE_HASH: ${{ matrix.coreHash }}
+      FAULT_HASH: ${{ matrix.faultHash }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.source }}
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Pin exact paired source and the two-hunk candidate
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-appeal-${{ matrix.arm }}"
+          mkdir -p "$OUT/runs" "$OUT/reports" "$OUT/transport" "$OUT/sources"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD)" = '${{ matrix.source }}'
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = '${{ matrix.core }}'
+          test "$(git rev-parse HEAD:scripts/simManagerAppealIsolation.mjs)" = 244254168b3992e6d227a897357ab8e5d5fd49e6
+          test "$(git rev-parse HEAD:scripts/fixtures/managerAppealIsolation1081/manifest.json)" = 3b1b404b1a0a85010361ea08fadab3cd73e62842
+          test "$(git rev-parse HEAD:scripts/fixtures/managerAppealIsolation1081/clubManagerDecisions.historical.ts)" = 8a7f08bc543854c9da601fe6ba9b11d0f7ee545d
+          test "$(git rev-parse HEAD:scripts/qa/managerAppealIsolation1081.mjs)" = 87ecddfb0b7f6e7935b5bedd75116ca00c8a177f
+          test "$(git rev-parse HEAD:scripts/qa/managerAppealCompatibility1081.mjs)" = ea7ce1549805a619e42a90cb3f0dddf2a416d262
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq ${{ matrix.sourceRows }}
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp src/lib/clubManager.ts "$OUT/sources/core-original.ts"
+          cp scripts/simManagerAppealIsolation.mjs "$OUT/sources/script-original.mjs"
+          # Fetch and materialize only source evidence before guarded Node runtime.
+          git fetch --no-tags --depth=1 origin "$GITHUB_SHA"
+          test "$(git rev-parse "$GITHUB_SHA":scripts/simManagerAppealIsolation.mjs)" = cb5110245b9c86d3690adb1f6dc7463391f88a9f
+          git diff --name-status 00c85815cac64d72014594e6b38515d4d6ce2e45 "$GITHUB_SHA" > "$OUT/controller-diff.txt"
+          printf 'A\t.github/workflows/flagship-appeal-compat-20261103.yml\nM\tscripts/simManagerAppealIsolation.mjs\n' > "$OUT/controller-expected.txt"
+          cmp "$OUT/controller-expected.txt" "$OUT/controller-diff.txt"
+          git show "$GITHUB_SHA":scripts/simManagerAppealIsolation.mjs > "$OUT/sources/script-candidate.mjs"
+          echo "a56b071abf505830dce66652656e5311a4850eb5705f99ff7111ad86a0707ddb  $OUT/sources/script-candidate.mjs" | sha256sum --check
+          git cat-file blob cf378e002c1f253a4cd48a147af66117f982f6b2 > "$OUT/sources/main-reference.ts"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,hash=s=>crypto.createHash('sha256').update(s).digest('hex');
+          const original=fs.readFileSync(out+'/sources/script-original.mjs','utf8'),candidate=fs.readFileSync(out+'/sources/script-candidate.mjs','utf8'),edits=[{"before":"import { spawnSync } from 'node:child_process';","after":"import { spawnSync, execFileSync } from 'node:child_process';"},{"before":"    for (const [file, sha256] of Object.entries(manifest.unchangedSource)) assert.equal(textHash(path.join(ROOT, file)), sha256, `Historical engine and original assertion hold: ${file}`);","after":"    for (const [file, sha256] of Object.entries(manifest.unchangedSource)) {\n      const actual = textHash(path.join(ROOT, file));\n      if (file === 'src/lib/clubManager.ts' && actual === '1ca9560d8658ad88c96a4a085f676b51623a2c9134e665a872993564b95cf2a1') {\n        assert.equal(execFileSync('git', ['rev-parse', 'HEAD:' + file], { cwd: ROOT, encoding: 'utf8' }).trim(),\n          '9d8dc92557bf2f4358b5be044359354eda841769', 'Exact qualified Club Manager Git blob');\n        const originalMain = execFileSync('git', ['cat-file', 'blob', 'cf378e002c1f253a4cd48a147af66117f982f6b2'], { cwd: ROOT, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });\n        assert.equal(hash(originalMain.replaceAll('\\r\\n', '\\n')), sha256, 'Original main engine matches the frozen manifest');\n      } else {\n        assert.equal(actual, sha256, `Historical engine and original assertion hold: ${file}`);\n      }\n    }"}];
+          let forward=original;for(const edit of edits){assert.equal(forward.split(edit.before).length,2);forward=forward.replace(edit.before,edit.after);}assert.equal(forward,candidate);
+          let inverse=candidate;for(const edit of edits.slice().reverse()){assert.equal(inverse.split(edit.after).length,2);inverse=inverse.replace(edit.after,edit.before);}assert.equal(inverse,original);
+          const manifest=JSON.parse(fs.readFileSync('scripts/fixtures/managerAppealIsolation1081/manifest.json','utf8'));
+          assert.equal(hash(fs.readFileSync(out+'/sources/main-reference.ts','utf8').replaceAll('\r\n','\n')),manifest.unchangedSource['src/lib/clubManager.ts']);
+          assert.equal(hash(fs.readFileSync(out+'/sources/core-original.ts')),process.env.CORE_HASH);
+          fs.writeFileSync(out+'/candidate-inverse.json',JSON.stringify({edits,wholeInverse:true,source: '${{ matrix.source }}',core:'${{ matrix.core }}',coreHash:process.env.CORE_HASH,candidateHash:hash(candidate),originalMain:'cf378e002c1f253a4cd48a147af66117f982f6b2',originalMainManifestHash:manifest.unchangedSource['src/lib/clubManager.ts'],scope:'Only the two-hunk candidate temporarily replaces the exact original QA file. All application, fixture and worker bytes are original paired sources.'},null,2)+'\n');
+          fs.writeFileSync('scripts/simManagerAppealIsolation.mjs',candidate);
+          NODE
+      - name: Install unchanged locked dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Normal parity, physical source-LF fault and exact restored parity
+        timeout-minutes: 52
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          unset SIM_SEED ONLY BROWSER NO_DOUBLE_SWAP
+          cat > "$QA_OUT/qualify.mjs" <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {spawnSync} from 'node:child_process';
+          const out=process.env.QA_OUT,core='src/lib/clubManager.ts',script='scripts/simManagerAppealIsolation.mjs',canonical=fs.readFileSync(out+'/sources/core-original.ts'),hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          assert.equal(hash(canonical),process.env.CORE_HASH);assert.equal(canonical.at(-1),10);
+          const fault=Buffer.concat([canonical,Buffer.from('\n')]);assert.notDeepEqual(fault,canonical);assert.equal(hash(fault),process.env.FAULT_HASH);assert.deepEqual(fault.subarray(0,-1),canonical);
+          fs.writeFileSync(out+'/sources/core-LF-fault.ts',fault);
+          const outcomes=[],problems=[];
+          const read=file=>JSON.parse(fs.readFileSync(file,'utf8'));
+          function execute(label,mode){
+            const dir=path.join(out,'runs',label);fs.mkdirSync(dir,{recursive:true});
+            const phase=mode.slice(2),receipt=path.join(out,'transport',label+'-'+phase+'.log');fs.writeFileSync(receipt,'');
+            const result=spawnSync('timeout',['--kill-after=15s','15m',process.execPath,script,mode],{env:{...process.env,MANAGER_APPEAL_ISOLATION_ARTIFACTS:dir,SIM_OFFLINE_RECEIPT:receipt},encoding:'utf8',maxBuffer:64*1024*1024,timeout:930000});
+            fs.writeFileSync(path.join(dir,phase+'.stdout.log'),result.stdout||'');fs.writeFileSync(path.join(dir,phase+'.stderr.log'),result.stderr||'');fs.writeFileSync(path.join(dir,phase+'.exit'),String(result.status)+'\n');
+            assert(!result.error&&!result.signal,'Completed native command: '+label+' '+mode);assert.equal(fs.statSync(receipt).size,0);
+            return {dir,result};
+          }
+          function currentPairs(report){
+            assert.equal(report.samples,24);assert.equal(report.pairs.length,24);assert.equal(report.additionalPositions.pairs.length,3);
+            assert.deepEqual(report.parityFailures,[]);assert.deepEqual(report.additionalPositions.parityFailures,[]);
+            assert(report.pairs.every(pair=>pair.productCorrectness===true));assert(report.additionalPositions.pairs.every(pair=>pair.productCorrectness===true));
+            assert.equal(report.issuedCardCompatibility.cases,6);assert.equal(report.issuedCardCompatibility.passed,true);
+          }
+          function run(label,isFault){
+            const {dir,result}=execute(label,'--characterize'),report=read(path.join(dir,'report.json'));
+            fs.copyFileSync(path.join(dir,'report.json'),path.join(out,'reports',label+'.json'));
+            currentPairs(report);
+            assert.deepEqual(read(path.join(dir,'source-before.json')),read(path.join(dir,'source-after.json')),'All observed source bytes held within the arm');
+            if(isFault){
+              assert.equal(result.status,1);assert.equal(report.failure?.name,'AssertionError');
+              assert(report.failure.message.startsWith('Historical engine and original assertion hold: src/lib/clubManager.ts\n'));
+              assert(report.failure.message.includes(process.env.FAULT_HASH));assert.equal(report.integrityPassed,false);
+              assert.deepEqual(Object.keys(report.raw),['normal/alone','normal/interleaved']);
+              outcomes.push({label,characterizeExit:1,currentPairs:27,sourceHashFaultRejected:true});
+            }else{
+              assert.equal(result.status,0);assert.equal(report.integrityPassed,true);assert.equal(report.productCorrectness,true);assert.equal(report.failure,undefined);
+              const parity=execute(label,'--verify-parity');assert.equal(parity.result.status,0);
+              outcomes.push({label,characterizeExit:0,verifyParityExit:0,currentPairs:27,integrityPassed:true,productCorrectness:true});
+            }
+          }
+          try{run('normal',false);}catch(error){problems.push({phase:'normal',error:String(error.stack)});}
+          try{
+            fs.writeFileSync(core,fault);assert.equal(hash(fs.readFileSync(core)),process.env.FAULT_HASH);
+            run('source-LF-fault',true);
+          }catch(error){problems.push({phase:'source-LF-fault',error:String(error.stack)});}
+          finally{fs.writeFileSync(core,canonical);assert.deepEqual(fs.readFileSync(core),canonical);}
+          try{run('restored',false);}catch(error){problems.push({phase:'restored',error:String(error.stack)});}
+          const restoreRaw=[];
+          for(const arm of ['alone','interleaved']){
+            const a=path.join(out,'runs','normal','normal',arm,'observations.json'),b=path.join(out,'runs','restored','normal',arm,'observations.json');
+            const held=fs.existsSync(a)&&fs.existsSync(b)&&fs.readFileSync(a).equals(fs.readFileSync(b));restoreRaw.push({arm,byteEqual:held});
+            if(!held)problems.push({phase:'restore-raw',arm,error:'Actual normal worker observations did not restore byte-identically'});
+          }
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({status:problems.length?'failed':'passed',arm:process.env.QA_ARM,source:'${{ matrix.source }}',outcomes,restoreRaw,problems,coreOriginalSHA256:hash(canonical),coreFaultSHA256:hash(fault),coreRestoredSHA256:hash(fs.readFileSync(core)),scope:'Exact existing characterization and verify-parity, plus one physical source-hash fault. Historical manifest, actual parity cases and every pre-existing control remain unchanged. Repeated restored outcomes earn no new unique-case credit.'},null,2)+'\n');
+          assert.deepEqual(problems,[]);assert.equal(outcomes.length,3);
+          console.log('Appeal source compatibility: both normal/parity runs passed, 27 current pairs agree before the physical source-LF rejection, and exact source/raw restoration passed.');
+          NODE
+          set +e
+          node "$QA_OUT/qualify.mjs" > "$QA_OUT/caller.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/caller.exit"
+          tail -n 18 "$QA_OUT/caller.log"
+          test "$code" -eq 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Restore exact original paired sources after every outcome
+        if: always()
+        run: |
+          set -euo pipefail
+          test -f "$QA_OUT/sources/core-original.ts"
+          test -f "$QA_OUT/sources/script-original.mjs"
+          cp "$QA_OUT/sources/core-original.ts" src/lib/clubManager.ts
+          cp "$QA_OUT/sources/script-original.mjs" scripts/simManagerAppealIsolation.mjs
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          find "$QA_OUT/transport" -type f -print | sort > "$QA_OUT/transport-files.txt"
+          while IFS= read -r receipt; do test ! -s "$receipt"; done < "$QA_OUT/transport-files.txt"
+      - name: Retain every raw run losslessly below the unchanged artifact bound
+        if: always()
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs/promises';import {createReadStream} from 'node:fs';import path from 'node:path';import os from 'node:os';import crypto from 'node:crypto';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=path.resolve(process.env.QA_OUT),runner=path.resolve(process.env.RUNNER_TEMP);assert(out.startsWith(runner+path.sep));assert.equal(path.basename(out),'flagship-appeal-'+process.env.QA_ARM);
+          const digest=async file=>{const h=crypto.createHash('sha256');for await(const chunk of createReadStream(file))h.update(chunk);return h.digest('hex');};
+          async function inventory(base,relative='runs'){
+            const file=path.join(base,relative),stat=await fs.lstat(file);assert(!stat.isSymbolicLink());
+            if(stat.isDirectory()){const rows=[{type:'directory',file:relative}];for(const name of(await fs.readdir(file)).sort())rows.push(...await inventory(base,path.posix.join(relative,name)));return rows;}
+            assert(stat.isFile());return [{type:'file',file:relative,bytes:stat.size,sha256:await digest(file)}];
+          }
+          const before=await inventory(out),archive=path.join(out,'appeal-runs.tar.gz');
+          await fs.writeFile(out+'/raw-manifest.json',JSON.stringify(before,null,2)+'\n');
+          execFileSync('tar',['-czf',archive,'-C',out,'runs'],{maxBuffer:64*1024*1024});
+          const members=execFileSync('tar',['-tzf',archive],{encoding:'utf8',maxBuffer:64*1024*1024}).trimEnd().split('\n').map(p=>p.replace(/\/$/,''));
+          assert.equal(new Set(members).size,members.length);for(const member of members){assert(!path.posix.isAbsolute(member));assert(!member.split('/').includes('..'));assert(member==='runs'||member.startsWith('runs/'));}
+          assert.deepEqual(members.slice().sort(),before.map(row=>row.file).sort());
+          const temp=await fs.mkdtemp(path.join(os.tmpdir(),'appeal-compat-roundtrip-'));
+          try{execFileSync('tar',['-xzf',archive,'-C',temp],{maxBuffer:64*1024*1024});assert.deepEqual(await inventory(temp),before);}
+          finally{await fs.rm(temp,{recursive:true,force:true});}
+          await fs.writeFile(out+'/raw-roundtrip.json',JSON.stringify({entries:before.length,files:before.filter(row=>row.type==='file').length,expandedBytes:before.filter(row=>row.type==='file').reduce((sum,row)=>sum+row.bytes,0),archive:'appeal-runs.tar.gz',archiveBytes:(await fs.stat(archive)).size,archiveSHA256:await digest(archive),roundTripExact:true,scope:'Only expanded QA_OUT/runs is removed after exact every-member and SHA roundtrip verification. Full reports, summaries, native exits and worker observations remain in the lossless archive.'},null,2)+'\n');
+          await fs.rm(path.join(out,'runs'),{recursive:true,force:false});
+          NODE
+      - name: Bound retained paired evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.artifact.outputs.ready == 'true'
+        with:
+          name: flagship-appeal-compat-${{ matrix.arm }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-appeal-${{ matrix.arm }}
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
