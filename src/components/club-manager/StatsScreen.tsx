@@ -258,7 +258,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
       {/* Team record in this view */}
       <div className="bg-card border border-border rounded-2xl p-3">
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">
-          📊 {career.clubName} · {view === 'all' ? 'all competitions' : view === 'ucl' ? 'Champions League' : view === 'cup' ? cupName : view === 'other' ? 'super cups' : 'league'}
+          📊 {career.clubName} · {view === 'all' ? 'all competitions' : view === 'ucl' ? 'Champions League' : view === 'cup' ? cupName : view === 'other' ? 'super cups' : view === 'uel' ? 'Europa League' : 'league'}
         </div>
         {teamLine.p === 0 ? (
           <p className="text-xs text-muted-foreground">No matches in this competition yet this season.</p>
