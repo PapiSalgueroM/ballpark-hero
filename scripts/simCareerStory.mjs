@@ -327,6 +327,9 @@ const PART_BANDS = {
 /* Seasons a career that must stand behind a part's mean (measured 4.8 to 7.2
    with cup games, 5.6 to 7.3 with a division). */
 const PART_FLOORS = { cupRows: 2, divisionRows: 3 };
+/* Complete Shield field envelopes, measured separately from the old remainder. */
+const SHIELD_BYTES_PER_FIELD = 1800;
+const SHIELD_QUALIFICATION_BYTES = 900;
 
 /* Check 5: the save in the parts the Soccer Career train made of it. The two
    things it keeps on a season row, the career's ten divisions, and the rest,
@@ -335,17 +338,22 @@ const bytesOf = v => (v === undefined ? 0 : JSON.stringify(v).length);
 function saveParts(s) {
   const cupRows = s.seasons.filter(r => r.clubCupRun);
   const divisionRows = s.seasons.filter(r => r.leagueWorld);
+  const shield = [...s.seasons, ...(s.pendingSummary ? [s.pendingSummary] : [])]
+    .map(r => bytesOf(r) - bytesOf({ ...r, extraCups: undefined })).filter(n => n > 0);
+  const shieldQualification = bytesOf(s) - bytesOf({ ...s, extraCupQualification: undefined });
   return {
     cup: cupRows.reduce((n, r) => n + bytesOf(r.clubCupRun), 0), cupRows: cupRows.length,
     division: divisionRows.reduce((n, r) => n + bytesOf(r.leagueWorld), 0), divisionRows: divisionRows.length,
     ten: bytesOf(s.leagueWorld),
     pool: bytesOf(s.generatedBallonPool),
-    rest: bytesOf({ ...s, leagueWorld: undefined, generatedBallonPool: undefined, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined })) }),
+    shield: shield.reduce((n, value) => n + value, 0), shieldFields: shield.length,
+    shieldQualification, shieldQualificationFields: shieldQualification > 0 ? 1 : 0,
+    rest: bytesOf({ ...s, leagueWorld: undefined, generatedBallonPool: undefined, extraCupQualification: undefined, pendingSummary: s.pendingSummary ? { ...s.pendingSummary, extraCups: undefined } : s.pendingSummary, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined, extraCups: undefined })) }),
   };
 }
 
 const fails = { completeness: [], draws: [], size: [], log: [], parts: [] };
-const part = { cup: 0, cupRows: 0, division: 0, divisionRows: 0, ten: 0, pool: 0, rest: 0 };
+const part = { cup: 0, cupRows: 0, division: 0, divisionRows: 0, ten: 0, pool: 0, rest: 0, shield: 0, shieldFields: 0, shieldQualification: 0, shieldQualificationFields: 0 };
 const partBySeed = { ...part };
 let loans = 0, transfers = 0;
 let careers = 0, seasonsKept = 0, linesKept = 0, linesWritten = 0, liveLines = 0, cut = 0;
@@ -385,6 +393,7 @@ for (const seed of SEEDS) {
   console.log(`seed ${seed}: ${n} careers, story ${(sb / Math.max(1, ss)).toFixed(0)} bytes a season, ${(ss / Math.max(1, n)).toFixed(1)} seasons a career, save mean ${(vb / Math.max(1, n)).toFixed(0)} bytes`);
   const d = Object.fromEntries(Object.keys(part).map(k => [k, part[k] - partBySeed[k]]));
   console.log(`seed ${seed} parts: rest mean ${(d.rest / Math.max(1, n)).toFixed(0)} bytes, cup games ${(d.cup / Math.max(1, d.cupRows)).toFixed(0)} bytes a season over ${d.cupRows} seasons, division ${(d.division / Math.max(1, d.divisionRows)).toFixed(0)} bytes a season over ${d.divisionRows} seasons, ten divisions mean ${(d.ten / Math.max(1, n)).toFixed(0)} bytes, award pool mean ${(d.pool / Math.max(1, n)).toFixed(0)} bytes`);
+  console.log(`seed ${seed} Shield fields: result envelopes ${d.shield} code units over ${d.shieldFields} physical fields, mean ${(d.shield / Math.max(1, d.shieldFields)).toFixed(1)}; root qualification envelopes ${d.shieldQualification} over ${d.shieldQualificationFields} fields, mean ${(d.shieldQualification / Math.max(1, d.shieldQualificationFields)).toFixed(1)}`);
   Object.assign(bySeed, { careers, storyBytes, seasons: seasonsKept, saveBytes });
   Object.assign(partBySeed, part);
 }
@@ -409,12 +418,18 @@ for (const [name, value] of Object.entries(partMeans)) {
 if (part.cupRows < careers * PART_FLOORS.cupRows) fails.parts.push(`only ${part.cupRows} seasons with continental cup games over ${careers} careers: too few to measure`);
 if (part.divisionRows < careers * PART_FLOORS.divisionRows) fails.parts.push(`only ${part.divisionRows} seasons with a division over ${careers} careers: too few to measure`);
 
+const shieldMean = part.shield / Math.max(1, part.shieldFields);
+const shieldQualificationMean = part.shieldQualification / Math.max(1, part.shieldQualificationFields);
+if (shieldMean > SHIELD_BYTES_PER_FIELD) fails.parts.push(`mean Shield result field envelope ${shieldMean.toFixed(1)} above ${SHIELD_BYTES_PER_FIELD}`);
+if (shieldQualificationMean > SHIELD_QUALIFICATION_BYTES) fails.parts.push(`mean Shield root qualification field envelope ${shieldQualificationMean.toFixed(1)} above ${SHIELD_QUALIFICATION_BYTES}`);
+
 saves.sort((x, y) => x - y);
 console.log(`moves the log check saw: ${transfers} signings, ${loans} loans`);
 console.log(`careers ${careers} (${SEEDS.length} seeds x ${PER_SEED}), story seasons ${seasonsKept}, lines written ${linesWritten}, kept in the story ${linesKept} plus ${liveLines} live`);
 console.log(`baseline before Round 974: a finished career could read ${liveLines} of ${linesWritten} lines (${(100 * liveLines / Math.max(1, linesWritten)).toFixed(1)}%); now ${linesKept + liveLines} (${(100 * (linesKept + liveLines) / Math.max(1, linesWritten)).toFixed(1)}%)`);
 console.log(`size: story ${perSeason.toFixed(0)} bytes a season, save mean ${meanSave.toFixed(0)} bytes, median ${saves[Math.floor(saves.length / 2)]}`);
 console.log(`parts: rest mean ${partMeans.restBytesMean.toFixed(0)} bytes (the save before the train's parts), cup games ${partMeans.cupBytesPerSeason.toFixed(0)} bytes a season over ${part.cupRows} seasons, division ${partMeans.divisionBytesPerSeason.toFixed(0)} bytes a season over ${part.divisionRows} seasons, ten divisions mean ${partMeans.tenDivisionsBytesMean.toFixed(0)} bytes, award pool mean ${partMeans.poolBytesMean.toFixed(0)} bytes`);
+console.log(`Shield fields: result envelopes ${part.shield} code units over ${part.shieldFields} physical fields, mean ${shieldMean.toFixed(1)} (budget ${SHIELD_BYTES_PER_FIELD}); root qualification envelopes ${part.shieldQualification} over ${part.shieldQualificationFields} fields, mean ${shieldQualificationMean.toFixed(1)} (budget ${SHIELD_QUALIFICATION_BYTES})`);
 for (const [name, list] of Object.entries(fails)) {
   console.log(`check ${name}: ${list.length === 0 ? "ok" : `FAIL (${list.length})`}`);
   for (const f of list.slice(0, 5)) console.log(`  ${f}`);
