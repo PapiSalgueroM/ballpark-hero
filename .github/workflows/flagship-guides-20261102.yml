@@ -1,0 +1,245 @@
+name: Flagship guides and free-agent display QA
+
+on:
+  push:
+    branches: [codex/flagship-guides-20261102]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: flagship-guides-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PRERENDER_ONLY: /club-manager,/soccer-career
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Record source and hold dependency and budget inputs
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-guides"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/original" "$OUT/generated"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git merge-base --is-ancestor cc9a55a2f35b6215d5e6e664cc401d10d7f76291 HEAD
+          git diff --exit-code cc9a55a2f35b6215d5e6e664cc401d10d7f76291 HEAD -- package.json package-lock.json scripts/sweepWeight.mjs scripts/lib/offlineTransport.cjs
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status cc9a55a2f35b6215d5e6e664cc401d10d7f76291 HEAD > "$OUT/candidate-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.RUNNER_TEMP + '/flagship-guides';
+          const generated = [
+            'scripts/data/guideHeadingsFrozen.json', 'src/data/searchKeywords.json',
+            'public/club-manager/index.html', 'public/soccer-career/index.html',
+            'public/sitemap.xml', 'scripts/data/lastmod.json',
+          ];
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const hashes = Object.fromEntries(tracked.filter(p => !generated.includes(p))
+            .map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-before.json', JSON.stringify(hashes, null, 2) + '\n');
+          fs.writeFileSync(out + '/generated-paths.json', JSON.stringify(generated, null, 2) + '\n');
+          for (const p of generated) {
+            const dst = path.join(out, 'original', p);
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(p, dst);
+          }
+          NODE
+      - name: Install held application and isolated QA dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          npm install --prefix "$RUNNER_TEMP/flagship-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/flagship-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+          python3 -m pip install --target "$RUNNER_TEMP/flagship-python" fonttools pillow 2>&1 | tee "$QA_OUT/logs/python-install.log"
+          echo "PYTHONPATH=$RUNNER_TEMP/flagship-python" >> "$GITHUB_ENV"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Focused units, normal generators, build, readers and unchanged budgets
+        timeout-minutes: 35
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require $GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if [[ -s "$receipt" ]]; then
+              # These remain blocked attempts in the artifact, never zero transport.
+              if [[ "$name" != build && "$name" != sweep-weight ]]; then
+                echo "Unexpected blocked transport in $name" >&2
+                return 1
+              fi
+              if grep -Ev '^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$' "$receipt"; then
+                echo "A non-font transport attempt was refused in $name" >&2
+                return 1
+              fi
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-font-denials.txt"
+            fi
+          }
+          run_gate types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          run_gate units node node_modules/vitest/vitest.mjs run \
+            src/test/cmFreeAgentDiscovery.test.tsx \
+            src/test/cmMarketMaxPrice.test.tsx \
+            src/test/cmFreeAgentContinuity.test.ts \
+            src/test/cmFreeAgentLegacyIdentity.test.ts \
+            --maxWorkers=1 --minWorkers=1 \
+            --reporter=default --reporter=json --outputFile="$QA_OUT/units.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/units.json', 'utf8'));
+          assert.equal(r.success, true);
+          assert.equal(r.numFailedTests, 0);
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(r, key) ? r[key] : null;
+            if (counters[key] !== null) {
+              assert.equal(typeof counters[key], 'number', key);
+              assert.equal(counters[key], 0, key);
+            }
+          }
+          fs.writeFileSync(process.env.QA_OUT + '/unit-counters.json', JSON.stringify({
+            counters, absentCounterMeaning: 'UNKNOWN',
+          }, null, 2) + '\n');
+          assert.ok(r.numPassedTests > 0);
+          assert.equal(r.testResults.length, 4);
+          for (const suite of r.testResults) {
+            assert.equal(suite.status, 'passed');
+            if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+            if (Object.hasOwn(suite, 'failureMessages')) assert.deepEqual(suite.failureMessages, []);
+            assert.ok(suite.assertionResults.length > 0);
+            for (const result of suite.assertionResults) {
+              assert.equal(result.status, 'passed');
+              assert.deepEqual(result.failureMessages, []);
+            }
+          }
+          NODE
+          run_gate guide-club node scripts/simGuideHeadings.mjs --refresh /club-manager
+          run_gate guide-career node scripts/simGuideHeadings.mjs --refresh /soccer-career
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const before = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/original/scripts/data/guideHeadingsFrozen.json', 'utf8'));
+          const after = JSON.parse(fs.readFileSync('scripts/data/guideHeadingsFrozen.json', 'utf8'));
+          for (const route of ['/club-manager', '/soccer-career']) {
+            assert.ok(before.routes[route]);
+            assert.ok(after.routes[route]);
+            delete before.routes[route];
+            delete after.routes[route];
+          }
+          assert.deepEqual(after, before, 'Guide refresh changed an unrelated route or fixture metadata');
+          NODE
+          run_gate keywords-first node scripts/genSearchKeywords.mjs
+          cp src/data/searchKeywords.json "$QA_OUT/searchKeywords-first.json"
+          run_gate keywords-second node scripts/genSearchKeywords.mjs
+          cmp "$QA_OUT/searchKeywords-first.json" src/data/searchKeywords.json
+          run_gate build npm run build:seo
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then
+              ready=1
+              break
+            fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          run_gate browser node scripts/qa/flagshipGuidesBrowser20261102.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Retain generated bodies, actual diff and source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.QA_OUT;
+          const before = JSON.parse(fs.readFileSync(out + '/source-before.json', 'utf8'));
+          const generated = JSON.parse(fs.readFileSync(out + '/generated-paths.json', 'utf8'));
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const after = Object.fromEntries(tracked.filter(p => !generated.includes(p))
+            .map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-after.json', JSON.stringify(after, null, 2) + '\n');
+          for (const p of generated) {
+            if (!fs.existsSync(p)) continue;
+            const dst = path.join(out, 'generated', p);
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(p, dst);
+          }
+          const changed = execFileSync('git', ['diff', '--name-only']).toString().trim().split('\n').filter(Boolean);
+          fs.writeFileSync(out + '/actual-generated-paths.json', JSON.stringify(changed, null, 2) + '\n');
+          fs.writeFileSync(out + '/generated.patch', execFileSync('git', ['diff', '--binary', '--', ...generated], { maxBuffer: 32 * 1024 * 1024 }));
+          fs.writeFileSync(out + '/working-tree.txt', execFileSync('git', ['status', '--short'], { maxBuffer: 8 * 1024 * 1024 }));
+          fs.writeFileSync(out + '/transport-inventory.json', JSON.stringify(fs.readdirSync(out + '/transport').sort().map(name => {
+            const text = fs.readFileSync(path.join(out, 'transport', name), 'utf8');
+            return { name, blockedAttempts: text.split('\n').filter(Boolean).length, rawLogRetained: true };
+          }), null, 2) + '\n');
+          assert.deepEqual(after, before, 'Tracked source changed outside six generated paths');
+          assert.ok(changed.every(p => generated.includes(p)), 'Unexpected tracked generated path');
+          NODE
+      - name: Bound the retained artifact
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: flagship-guides-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-guides
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
