@@ -1,0 +1,249 @@
+name: Soccer Career Season Centre focus raw copy custody
+on:
+  push:
+    branches: [codex/sc-season-centre-focus-custody-20261103]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the actual partial parent and two QA paths
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-season-centre-focus-custody"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/sc-season-centre-focus-custody-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = 98ad7eb026705f9a48994584ff11595aaa47b798
+          test "$(git rev-parse 'HEAD^^{tree}')" = 791ae1d94fa38594fe161995d1e8ec6985d659a8
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          cat > "$OUT/expected-paths.txt" <<'PATHS'
+          A	.github/workflows/sc-season-centre-focus-custody.yml
+          M	scripts/simSoccerSeasonCentreFocus.mjs
+          PATHS
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          src/pages/SoccerCareer.tsx 76b6780a0ea2dfce80fa9846731dd26bde763e61
+          src/components/soccer-career/SeasonResumeChip.tsx 2ba957977bfb1e80bf3a179f36564f5706bd2fb2
+          src/components/season-centre/SeasonCentre.tsx 42fe7d090f403ac165886a0a49dff596bb346b8a
+          src/components/soccer-career/SoccerSeasonCentre.tsx b3839c18814e6350fdcb4e3a2de6f789eea99df8
+          src/test/soccerSeasonCentreFocus.test.tsx 9cab74d0f4d0160c2e53648d4145aaa30127a099
+          scripts/simSoccerSeasonCentreFocus.mjs bdcaa282e2ef6b2f6fa676afa11fee5057b61f7c
+          src/lib/soccerCareerEngine.ts 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          src/lib/soccerCareerExtraCups.ts ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          src/lib/season/resume.ts 0919edf181e4b5fe9fd875472c7d22cc55e54dbb
+          src/lib/season/soccer.ts 819e2d97d0435c4ef29a4c1ed441511a6906e986
+          src/components/season-centre/resumeStore.ts 72329d16cc33ec659a89c5b1519186ad381f24ae
+          src/lib/soccerCareerSave.ts 86ec011693fd5bc702b5e8ccec05d27775a72a76
+          src/test/fixtures/soccerSeasonCompetitions1173.ts a9d674dc7a830856dbeed148a65438626745303c
+          src/lib/soccerSeasonCompetitions.ts e00266f57feb0bd0b4a60d4a4c5407e55074d2c1
+          src/test/setup.ts df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          scripts/simHarnessAnchors.mjs 1cb32d353c317aacd32fd51f25f7ba000ac24e8d
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"; : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from offline proof
+        id: install
+        run: |
+          set -euo pipefail
+          code=0; NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Proper app types and wrapper syntax
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture app-types node --require "$PWD/scripts/lib/offlineTransport.cjs" node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          capture wrapper-syntax node --require "$PWD/scripts/lib/offlineTransport.cjs" --check scripts/simSoccerSeasonCentreFocus.mjs
+      - name: Two mounted focus cases and exact copied-source controls
+        run: |
+          set -euo pipefail
+          export SC_CENTRE_FOCUS_OUT="$OUT/focus-proof"
+          printf 'SC_CENTRE_FOCUS_OUT=%s\n' "$SC_CENTRE_FOCUS_OUT" >> "$GITHUB_ENV"
+          source "$OUT/capture.sh"
+          capture focus node --require "$PWD/scripts/lib/offlineTransport.cjs" scripts/simSoccerSeasonCentreFocus.mjs
+      - name: Verify actual seven-child reports and source inverses
+        run: |
+          set -euo pipefail
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const out = process.env.OUT, dir = path.join(out, 'focus-proof');
+          const sha = value => createHash('sha256').update(value).digest('hex');
+          const read = file => JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+          const suiteName = 'Soccer Career Season Centre return focus', titles = ["SC_CENTRE_FOCUS_RESUME: restores the connected Resume opener after a positive-app saved season","SC_CENTRE_FOCUS_ZERO_SHIELD: restores Season replays after a represented zero-app Shield result"];
+          const markers = ['SC_CENTRE_FOCUS_RESUME_MISSING', 'SC_CENTRE_FOCUS_ZERO_SHIELD_MISSING'];
+          const test = 'src/test/soccerSeasonCentreFocus.test.tsx';
+          const arms = [
+            ['current', 2, 0, 0], ['healthy-page-copy', 2, 0, 0], ['healthy-chip-copy', 1, 0, 1],
+            ['old-page', 0, 2, 0], ['old-chip', 0, 1, 1], ['restored-page-copy', 2, 0, 0], ['restored-chip-copy', 1, 0, 1],
+          ];
+          const receipt = read('receipt.json'); assert.equal(receipt.complete, true); assert.equal(receipt.completedChildren, 7);
+          assert.equal(receipt.primary, null); assert.deepEqual(receipt.secondary, []); assert.equal(receipt.removedSourceCopies, true);
+          const summary = read('summary.json'); assert.equal(summary.children, 7); assert.equal(summary.rows, 14);
+          assert.deepEqual(summary.totals, { passed: 8, ownedFailures: 3, declaredUnselectedSkips: 3, executed: 11 });
+          assert.equal(summary.results.length, 7); assert.equal(summary.sourceControls.length, 2);
+          let executed = 0, passed = 0, owned = 0, skipped = 0;
+          for (const [name, pass, fail, pending] of arms) {
+            assert.equal(Number(fs.readFileSync(path.join(dir, name + '.exit'), 'utf8')), fail ? 1 : 0);
+            assert.equal(fs.statSync(path.join(dir, name + '.transport')).size, 0);
+            const processInfo = read(name + '.process.json'); assert.equal(processInfo.status, fail ? 1 : 0);
+            assert.equal(processInfo.signal, null); assert.equal(processInfo.error, null);
+            const raw = fs.readFileSync(path.join(dir, name + '.vitest.json')), report = JSON.parse(raw);
+            const rowSummary = read(name + '.summary.json'); assert.equal(rowSummary.reportSha256, sha(raw));
+            const stdout = fs.readFileSync(path.join(dir, name + '.stdout'), 'utf8'), stderr = fs.readFileSync(path.join(dir, name + '.stderr'), 'utf8');
+            assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|Failed to load url|Cannot find module|SyntaxError:|ReferenceError:|TypeError:/i.test(stdout + '\n' + stderr), false);
+            for (const key of ['numUnhandledErrors', 'numRuntimeErrorTestSuites', 'numRuntimeErrorTests']) {
+              assert.equal(rowSummary.counters[key], report[key] ?? null);
+              if (report[key] !== undefined) { assert.equal(typeof report[key], 'number'); assert.equal(report[key], 0); }
+            }
+            for (const key of ['errors', 'unhandledErrors']) {
+              assert.deepEqual(rowSummary.rawErrors[key], report[key] ?? null);
+              if (report[key] !== undefined) { assert.ok(Array.isArray(report[key])); assert.equal(report[key].length, 0); }
+            }
+            for (const [key, value] of Object.entries({ numTotalTests: 2, numPassedTests: pass, numFailedTests: fail, numPendingTests: pending, numTodoTests: 0 })) assert.equal(report[key], value, name + '/' + key);
+            assert.equal(report.success, fail === 0); assert.equal(report.testResults.length, 1);
+            const suite = report.testResults[0]; assert.equal(path.relative(process.cwd(), suite.name).split(path.sep).join('/'), test);
+            assert.equal(suite.message, ''); assert.equal(suite.status, fail ? 'failed' : 'passed');
+            assert.deepEqual(suite.assertionResults.map(row => row.fullName).sort(), titles.map(title => suiteName + ' ' + title).sort());
+            for (const row of suite.assertionResults) {
+              assert.deepEqual(row.ancestorTitles, [suiteName]); assert.equal(row.fullName, suiteName + ' ' + row.title);
+              const selected = !pending || row.title === titles[0];
+              if (!selected) { assert.ok(['pending', 'skipped'].includes(row.status)); assert.equal(row.failureMessages.length, 0); }
+              else if (fail) {
+                assert.equal(row.status, 'failed'); assert.equal(row.failureMessages.length, 1);
+                const first = row.failureMessages[0].replace(/\x1b\[[0-9;]*m/g, '').split(/\r?\n/).find(line => line.trim())?.trim();
+                assert.equal(first?.startsWith('AssertionError: ' + markers[titles.indexOf(row.title)] + ':'), true);
+              } else { assert.equal(row.status, 'passed'); assert.equal(row.failureMessages.length, 0); }
+            }
+            assert.equal(rowSummary.passed, pass); assert.equal(rowSummary.ownedFailures, fail); assert.equal(rowSummary.declaredUnselectedSkips, pending);
+            assert.equal(rowSummary.executed, pass + fail); assert.equal(rowSummary.detectedRuntimeError, false);
+            executed += pass + fail; passed += pass; owned += fail; skipped += pending;
+          }
+          assert.deepEqual({ executed, passed, owned, skipped }, { executed: 11, passed: 8, owned: 3, skipped: 3 });
+          const sourcePins = {
+            page: { current: '47f141b5490079516ad40fbdab9d72300967964e4bb4920327ec3b297ae4e892', old: '95b3982bed6e38338f534a29ed798557b0b29d24dd73d114051b4b9fbe359f8c', edits: 10 },
+            chip: { current: '81876bdad5c4d01396c9843a81fac191ef1acf5244baf52166e79860dee1f56c', old: '10325d038fed0695b722f382bd5a2fc97996e0cf935a2640133cc93cf37ccd60', edits: 2 },
+          };
+          for (const [label, pins] of Object.entries(sourcePins)) {
+            const edit = read(label + '.edit.json'), original = fs.readFileSync(path.join(dir, label + '.original.tsx'));
+            const changed = fs.readFileSync(path.join(dir, label + '.omitted.tsx')), restored = fs.readFileSync(path.join(dir, label + '.restored.tsx'));
+            assert.equal(edit.lineEnding, 'LF'); assert.equal(edit.steps.length, pins.edits);
+            assert.equal(sha(original), pins.current); assert.equal(sha(changed), pins.old); assert.deepEqual(restored, original);
+            assert.equal(edit.original.sha256, pins.current); assert.equal(edit.changed.sha256, pins.old);
+            assert.equal(edit.inverse.sha256, pins.current); assert.equal(edit.physicalRestoreSha256, pins.current);
+            assert.notEqual(edit.changed.sha256, edit.original.sha256);
+          }
+          const control = read('primary-trap.control.json'); assert.equal(control.changed, true);
+          assert.equal(control.ownedRefusal, 'SC_FOCUS_PRIMARY_OWNERSHIP'); assert.notEqual(control.originalSha256, control.changedSha256);
+          assert.equal(control.originalSha256, sha(fs.readFileSync(path.join(dir, 'old-page.vitest.json'))));
+          assert.equal(control.changedSha256, sha(fs.readFileSync(path.join(dir, 'primary-trap.json'))));
+          assert.equal(control.restoredSha256, control.originalSha256);
+          assert.deepEqual(read('source-before.json'), read('source-after.json'));
+          for (const name of ['app-types', 'wrapper-syntax', 'focus']) {
+            assert.equal(Number(fs.readFileSync(path.join(out, name + '.exit'), 'utf8')), 0);
+            assert.equal(fs.statSync(path.join(out, name + '.transport')).size, 0);
+          }
+          fs.writeFileSync(path.join(out, 'qualification-summary.json'), JSON.stringify({ scope: 'Two mounted focus cases and separate exact-old Page/Chip controls only.',
+            children: 7, rows: 14, passed, owned, declaredUnselectedSkips: skipped, executed, sourceInverses: sourcePins,
+            runtimeCounterCompleteness: summary.results.some(item => item.runtimeCounterCompleteness === 'UNKNOWN') ? 'UNKNOWN' : 'REPORTED' }, null, 2) + '\n');
+          VERIFY
+          source "$OUT/capture.sh"
+          capture verify node --require "$PWD/scripts/lib/offlineTransport.cjs" "$OUT/verify.mjs"
+      - name: Admit actual permanent wrapper to source-anchor fence
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset ANCHOR_CONTROL
+          source "$OUT/capture.sh"
+          capture anchor-fence node scripts/simHarnessAnchors.mjs
+      - name: Real stripped-normalizer control and sole-owner classification
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          capture anchor-strip env ANCHOR_CONTROL=strip node scripts/simHarnessAnchors.mjs
+          cat > "$OUT/verify-anchors.mjs" <<'ANCHORS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const dir = process.env.OUT, records = [];
+          for (const name of ['anchor-fence', 'anchor-strip']) {
+            assert.equal(Number(fs.readFileSync(dir + '/' + name + '.exit', 'utf8')), 0);
+            assert.equal(fs.statSync(dir + '/' + name + '.transport').size, 0);
+            const stdout = fs.readFileSync(dir + '/' + name + '.stdout', 'utf8'), stderr = fs.readFileSync(dir + '/' + name + '.stderr', 'utf8');
+            assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|SyntaxError:|ReferenceError:|TypeError:/i.test(stdout + '\n' + stderr), false);
+            const failures = (stdout + '\n' + stderr).split(/\r?\n/).map(line => line.trim()).filter(line => line.startsWith('FAIL '));
+            if (name === 'anchor-fence') {
+              assert.deepEqual(failures, []);
+              assert.equal(stdout.split(/\r?\n/).filter(line => line === 'simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.').length, 1);
+            } else {
+              assert.equal(failures.length, 1); assert.equal(failures[0].startsWith('FAIL simFightCareer.mjs reads '), true);
+              assert.equal(stdout.includes('[control strip applied to a copy of simFightCareer.mjs]'), true);
+              assert.equal(stdout.split(/\r?\n/).filter(line => line === 'control "strip": the planted fault in simFightCareer.mjs was named and nothing else was, the check works').length, 1);
+            }
+            records.push({ name, failures, runtimeCounters: null, runtimeCounterCompleteness: 'UNKNOWN' });
+          }
+          fs.writeFileSync(dir + '/anchor-summary.json', JSON.stringify({ scope: 'Actual permanent script source admission plus unchanged sole-owner copied negative.', records }, null, 2) + '\n');
+          ANCHORS
+          capture anchor-classify node "$OUT/verify-anchors.mjs"
+      - name: Always hold source dependencies membership and clean copy removal
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"; cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"; test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-season-centre-focus-custody-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-season-centre-focus-custody/
+          retention-days: 14

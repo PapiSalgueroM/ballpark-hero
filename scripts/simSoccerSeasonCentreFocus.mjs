@@ -165,7 +165,11 @@ async function main() {
   const secondary = [];
   function put(source, body) {
     fs.writeFileSync(source.copy, body, source.written === null ? { flag: 'wx' } : undefined);
-    source.written = Buffer.from(body); assert.deepEqual(fs.readFileSync(source.copy), body);
+    source.written = Buffer.from(body);
+    {
+      const rawCopyBytes = fs.readFileSync(source.copy);
+      assert.deepEqual(Buffer.from(rawCopyBytes), body);
+    }
   }
   function omission(source) {
     let changedText = source.text; const steps = [];
@@ -204,14 +208,22 @@ async function main() {
     if (arm.chip) args.push('--testNamePattern=^' + escaped(SUITE + ' ' + TITLES[0]) + '$');
     write(path.join(out, arm.name + '.argv.json'), [process.execPath, ...args]);
     write(path.join(out, arm.name + '.alias.json'), source ? { alias: source.alias, path: source.copy } : null);
-    const copyBefore = source ? fs.readFileSync(source.copy) : null;
+    let copyBefore = null;
+    if (source) {
+      const rawCopyBytes = fs.readFileSync(source.copy);
+      copyBefore = Buffer.from(rawCopyBytes);
+    }
     const child = spawnSync(process.execPath, args, { cwd: root, env, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 240000 });
     fs.writeFileSync(path.join(out, arm.name + '.stdout'), child.stdout || ''); fs.writeFileSync(path.join(out, arm.name + '.stderr'), child.stderr || '');
     fs.writeFileSync(path.join(out, arm.name + '.exit'), String(child.status) + '\n');
     write(path.join(out, arm.name + '.process.json'), { status: child.status, signal: child.signal, error: child.error ? { name: child.error.name, message: child.error.message } : null });
     assert.ifError(child.error); assert.equal(child.signal, null); assert.equal(child.status, arm.fault ? 1 : 0);
     assert.equal(fs.statSync(env.SIM_OFFLINE_RECEIPT).size, 0, 'Focus child offline receipt must be empty');
-    holds(); if (source) assert.deepEqual(fs.readFileSync(source.copy), copyBefore, 'Physical focus child source held');
+    holds();
+    if (source) {
+      const rawCopyBytes = fs.readFileSync(source.copy);
+      assert.deepEqual(Buffer.from(rawCopyBytes), copyBefore, 'Physical focus child source held');
+    }
     const reportBytes = fs.readFileSync(reportFile), report = JSON.parse(reportBytes);
     const detail = classify(report, child.stdout || '', child.stderr || '', arm);
     assert.equal(sha(fs.readFileSync(reportFile)), sha(reportBytes), 'Actual focus JSON held');
@@ -247,8 +259,19 @@ async function main() {
           ownedRefusal: 'SC_FOCUS_PRIMARY_OWNERSHIP', restoredSha256: sha(actual.reportBytes) };
         write(path.join(out, 'primary-trap.control.json'), classifierControl);
       }
-      put(source, source.original); fs.writeFileSync(path.join(out, source.label + '.restored.tsx'), fs.readFileSync(source.copy), { flag: 'wx' });
-      changed.receipt.physicalRestoreSha256 = sha(fs.readFileSync(source.copy));
+      put(source, source.original);
+      let restoredBody;
+      {
+        const rawCopyBytes = fs.readFileSync(source.copy);
+        restoredBody = Buffer.from(rawCopyBytes);
+      }
+      fs.writeFileSync(path.join(out, source.label + '.restored.tsx'), restoredBody, { flag: 'wx' });
+      let physicalRestoreSha256;
+      {
+        const rawCopyBytes = fs.readFileSync(source.copy);
+        physicalRestoreSha256 = sha(Buffer.from(rawCopyBytes));
+      }
+      changed.receipt.physicalRestoreSha256 = physicalRestoreSha256;
       assert.equal(changed.receipt.physicalRestoreSha256, sha(source.original));
       write(path.join(out, source.label + '.edit.json'), changed.receipt); controls.push(changed.receipt);
     }
@@ -266,8 +289,19 @@ async function main() {
     for (const source of sources) {
       try {
         if (fs.existsSync(source.copy)) {
-          assert.deepEqual(fs.readFileSync(source.copy), source.written, 'Only owned unchanged focus copy may be restored/removed');
-          put(source, source.original); assert.deepEqual(fs.readFileSync(source.copy), source.original);
+          let cleanupOwnedBytes;
+          {
+            const rawCopyBytes = fs.readFileSync(source.copy);
+            cleanupOwnedBytes = Buffer.from(rawCopyBytes);
+          }
+          assert.deepEqual(cleanupOwnedBytes, source.written, 'Only owned unchanged focus copy may be restored/removed');
+          put(source, source.original);
+          let cleanupRestoredBytes;
+          {
+            const rawCopyBytes = fs.readFileSync(source.copy);
+            cleanupRestoredBytes = Buffer.from(rawCopyBytes);
+          }
+          assert.deepEqual(cleanupRestoredBytes, source.original);
           fs.unlinkSync(source.copy);
         }
       } catch (error) { secondary.push({ stage: source.label + '-cleanup', name: error.name, message: error.message }); }
