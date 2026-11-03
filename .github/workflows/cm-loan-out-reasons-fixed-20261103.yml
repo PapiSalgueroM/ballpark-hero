@@ -1,0 +1,404 @@
+name: Club Manager loan-out reasons fixed qualification
+
+on:
+  push:
+    branches: [codex/cm-loan-out-reasons-fixed-20261103]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cm-loan-out-reasons-fixed-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PRERENDER_ONLY: /club-manager
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the test-first parent and the approved component
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/cm-loan-out-reasons-fixed"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/original" "$OUT/generated" "$OUT/units" "$OUT/raw"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git fetch --no-tags --depth=1 origin 413b35e14f422df3df58d3d3cdaee7740ae3e57b
+          test "$(git rev-parse 413b35e14f422df3df58d3d3cdaee7740ae3e57b^{tree})" = 9305f9630590056d771360fd513531d90c066cbd
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status 413b35e14f422df3df58d3d3cdaee7740ae3e57b HEAD > "$OUT/candidate-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.RUNNER_TEMP + '/cm-loan-out-reasons-fixed';
+          const base = '413b35e14f422df3df58d3d3cdaee7740ae3e57b';
+          const allowedCandidate = [
+            '.github/workflows/cm-loan-out-reasons-fixed-20261103.yml',
+            'src/components/club-manager/TransferScreen.tsx',
+            'scripts/qa/cmLoanReasonsFixtures.mjs',
+            'scripts/qa/cmLoanReasonsBrowser.mjs',
+          ].sort();
+          const candidate = execFileSync('git', ['diff', '--name-only', base, 'HEAD'])
+            .toString().trim().split('\n').filter(Boolean).sort();
+          assert.deepEqual(candidate, allowedCandidate, 'Candidate changed more than the approved component and QA workflow');
+          const component = 'src/components/club-manager/TransferScreen.tsx';
+          const fixedSha256 = 'd2a34e2282217947abc2de3e15b4995aa7a6cde7cc2a7b5626152aa49ebff4e2';
+          assert.match(fixedSha256, /^[0-9a-f]{64}$/, 'Unbound fixed component hash');
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync(component)).digest('hex'), fixedSha256);
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/cmLoanOutReasons.test.tsx')).digest('hex'), 'd125c2711e65d95643a204d1493e2ffd3f5d9f5179963955a39af7d750fc4c00');
+          const qaHashes = {
+            'scripts/qa/cmLoanReasonsFixtures.mjs': '276d6b1005748011b2cef2f7ea5c5d93ac58d8eba8971829ebad049cccc36310',
+            'scripts/qa/cmLoanReasonsBrowser.mjs': 'ba47a4f91b83a1f47b30c7415eec5fff30089916989244d1d278bf952c2ac1c8',
+          };
+          for (const [file, expected] of Object.entries(qaHashes)) {
+            assert.match(expected, /^[0-9a-f]{64}$/, 'Unbound QA source hash: ' + file);
+            assert.equal(crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex'), expected);
+          }
+          fs.writeFileSync(out + '/source-association.json', JSON.stringify({
+            parent: base, parentTree: '9305f9630590056d771360fd513531d90c066cbd',
+            originalComponentBlob: '1157975509a11dc6ce7d75d1d02221787716ad1b', component, fixedSha256, qaHashes,
+            testBlob: 'a919aedccefe722f64b384eb8b23fff6657fc104',
+            scope: 'Player-specific loan-out refusal text and accessible description only. Existing button classes, fees, callback, generic captions, loan plans, engine and data are held from the test-first parent.',
+          }, null, 2) + '\n');
+          const generated = [
+            'scripts/data/guideHeadingsFrozen.json', 'src/data/searchKeywords.json',
+            'public/club-manager/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json',
+          ];
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const hashes = Object.fromEntries(tracked.filter(p => !generated.includes(p))
+            .map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-before.json', JSON.stringify(hashes, null, 2) + '\n');
+          fs.writeFileSync(out + '/generated-paths.json', JSON.stringify(generated, null, 2) + '\n');
+          for (const p of generated) {
+            const dst = path.join(out, 'original', p);
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(p, dst);
+          }
+          NODE
+      - name: Install held application and isolated QA dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          npm install --prefix "$RUNNER_TEMP/flagship-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/flagship-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+          python3 -m pip install --target "$RUNNER_TEMP/flagship-python" fonttools pillow 2>&1 | tee "$QA_OUT/logs/python-install.log"
+          echo "PYTHONPATH=$RUNNER_TEMP/flagship-python" >> "$GITHUB_ENV"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Fixed and whole-original loan controls, related regressions, build, readers, budgets and App
+        timeout-minutes: 32
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require $GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          component=src/components/club-manager/TransferScreen.tsx
+          cp "$component" "$QA_OUT/fixed-TransferScreen.tsx"
+          trap 'cp "$QA_OUT/fixed-TransferScreen.tsx" "$component"' EXIT
+          run_loan_reasons() {
+            local name="$1" mode="$2"
+            mkdir -p "$QA_OUT/raw/$name"
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            set +e
+            CM_LOAN_REASONS_RAW="$QA_OUT/raw/$name" SIM_OFFLINE_RECEIPT="$receipt" \
+              node node_modules/vitest/vitest.mjs run src/test/cmLoanOutReasons.test.tsx \
+              --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units/$name.json" \
+              2>&1 | tee "$QA_OUT/logs/$name.log"
+            local codes=("${PIPESTATUS[@]}")
+            set -e
+            printf '%s\n' "${codes[0]}" > "$QA_OUT/units/$name.exit"
+            test "${codes[1]}" -eq 0
+            test ! -s "$receipt"
+            UNIT_NAME="$name" UNIT_MODE="$mode" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = process.env.QA_OUT, name = process.env.UNIT_NAME, red = process.env.UNIT_MODE === 'old';
+          const report = JSON.parse(fs.readFileSync(out + '/units/' + name + '.json', 'utf8'));
+          assert.equal(Number(fs.readFileSync(out + '/units/' + name + '.exit', 'utf8')), red ? 1 : 0);
+          assert.equal(report.success, !red); assert.equal(report.numPassedTests, red ? 4 : 6); assert.equal(report.numFailedTests, red ? 2 : 0);
+          assert.equal(report.testResults.length, 1);
+          const suite = report.testResults[0];
+          assert.equal(suite.status, red ? 'failed' : 'passed');
+          if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+          const expected = {
+            'shows the only-keeper refusal beside his disabled loan action': 'CM_LOAN_REASON_VISIBLE_ONLY_KEEPER',
+            'shows the agreed-deal refusal beside his disabled loan action': 'CM_LOAN_REASON_VISIBLE_PROMISED',
+            'keeps an eligible loan action and its quoted fee working': null,
+            'keeps the existing minimum-squad explanation and refusal': null,
+            'keeps the existing closed-window explanation and refusal': null,
+            'keeps the existing once-a-season explanation and refusal': null,
+          };
+          const fullNames = Object.fromEntries(Object.entries(expected).map(([title, marker]) => ['Club Manager loan-out refusal visibility ' + title, red ? marker : null]));
+          assert.equal(suite.assertionResults.length, 6);
+          for (const row of suite.assertionResults) {
+            assert.ok(Object.hasOwn(fullNames, row.fullName), row.fullName);
+            const marker = fullNames[row.fullName];
+            assert.equal(row.status, marker === null ? 'passed' : 'failed', row.fullName);
+            if (marker === null) assert.deepEqual(row.failureMessages, []);
+            else { assert.ok(row.failureMessages.length > 0); assert.ok(row.failureMessages.every(message => message.includes(marker)), row.fullName); }
+          }
+          assert.equal(new Set(suite.assertionResults.map(row => row.fullName)).size, 6);
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(report, key) ? report[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          const keys = ['only_keeper', 'promised', 'eligible', 'minimum', 'closed', 'used'];
+          const rawFiles = fs.readdirSync(out + '/raw/' + name).filter(name => name.endsWith('.json')).sort();
+          assert.deepEqual(rawFiles, keys.map(key => key + '.json').sort());
+          const vectors = [];
+          for (const file of rawFiles) {
+            const r = JSON.parse(fs.readFileSync(out + '/raw/' + name + '/' + file, 'utf8'));
+            assert.equal(file, r.key + '.json');
+            assert.ok(keys.includes(r.key));
+            assert.equal(r.inputUnchanged, true); assert.deepEqual(r.otherCalls, []);
+            assert.equal(r.engineReason, r.expectedReason); assert.equal(r.label, r.expectedLabel);
+            assert.ok(Number.isFinite(r.fee) && r.fee >= 0.2);
+            assert.equal(r.callbackMatchesEngine, true);
+            assert.equal(r.engineAllowed, r.key === 'eligible'); assert.equal(r.disabled, r.key !== 'eligible');
+            assert.equal(r.title, r.expectedReason ?? 'Send him out on loan for the rest of the season');
+            const callbacks = r.key === 'eligible' ? [r.playerId] : [];
+            assert.deepEqual(r.callbackIds, callbacks); assert.deepEqual(r.expectedCallbacks, callbacks);
+            if (r.key === 'eligible') {
+              assert.equal(r.expectedReason, null); assert.equal(r.nextLoanFee, r.fee); assert.equal(r.budgetDelta, r.fee);
+            } else {
+              assert.equal(r.nextLoanFee, null); assert.equal(r.budgetDelta, null);
+              assert.ok(typeof r.expectedReason === 'string' && r.expectedReason.length > 0);
+            }
+            if (r.key === 'only_keeper' || r.key === 'promised') {
+              assert.ok(r.squadSize > 14); assert.equal(r.visibleReason, !red); assert.equal(r.descriptionMatches, !red);
+              assert.equal(r.rowText.includes(r.expectedReason), !red);
+            } else {
+              assert.equal(r.visibleReason, false); assert.equal(r.descriptionId, null);
+            }
+            if (r.key === 'minimum') { assert.equal(r.squadSize, 14); assert.equal(r.minimumCaption, true); }
+            if (r.key === 'closed') assert.equal(r.closedCaption, true);
+            if (r.key === 'used') assert.equal(r.label, 'Loaned out once this season');
+            vectors.push({key: r.key, engineReason: r.engineReason, disabled: r.disabled, visibleReason: r.visibleReason, fee: r.fee, callbackIds: r.callbackIds});
+          }
+          fs.writeFileSync(out + '/units/' + name + '-admission.json', JSON.stringify({
+            name, mode: red ? 'whole original component' : 'fixed component', actualPasses: report.numPassedTests, actualOwnedFailures: report.numFailedTests, fullNames, counters, absentCounterMeaning: 'UNKNOWN', vectors,
+            scope: 'Actual mounted TransferScreen loan-out explanations and existing engine refusal/callback/fee preservation. Component fixed/whole-original/restored arms. Engine and data are held; broader checks are reported separately.',
+          }, null, 2) + '\n');
+          NODE
+          }
+          run_loan_reasons fixed green
+          git show 413b35e14f422df3df58d3d3cdaee7740ae3e57b:"$component" > "$component"
+          test "$(git hash-object "$component")" = 1157975509a11dc6ce7d75d1d02221787716ad1b
+          cp "$component" "$QA_OUT/whole-old-TransferScreen.tsx"
+          run_loan_reasons whole-old old
+          cp "$QA_OUT/fixed-TransferScreen.tsx" "$component"
+          cmp "$QA_OUT/fixed-TransferScreen.tsx" "$component"
+          run_loan_reasons restored green
+          for key in only_keeper promised eligible minimum closed used; do
+            cmp "$QA_OUT/raw/fixed/$key.json" "$QA_OUT/raw/restored/$key.json"
+          done
+          trap - EXIT
+          run_gate related-loans node node_modules/vitest/vitest.mjs run \
+            src/test/clubManagerLoanPlanMounted.test.tsx src/test/clubManagerLoanPlanIntegration.test.ts src/test/clubManagerLoanDevelopment.test.ts \
+            --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units/related-loans.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const r = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/units/related-loans.json', 'utf8'));
+          assert.equal(r.success, true); assert.equal(r.numPassedTests, 34); assert.equal(r.numFailedTests, 0);
+          const counts = { 'clubManagerLoanPlanMounted.test.tsx': 15, 'clubManagerLoanPlanIntegration.test.ts': 7, 'clubManagerLoanDevelopment.test.ts': 12 };
+          assert.equal(r.testResults.length, 3);
+          const cases = [], suites = [];
+          for (const suite of r.testResults) {
+            const file = suite.name.split('/').pop();
+            assert.ok(Object.hasOwn(counts, file)); suites.push(file);
+            assert.equal(suite.status, 'passed');
+            if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+            assert.equal(suite.assertionResults.length, counts[file]);
+            for (const row of suite.assertionResults) { assert.equal(row.status, 'passed'); assert.deepEqual(row.failureMessages, []); cases.push(row.fullName); }
+          }
+          assert.equal(new Set(suites).size, 3); assert.equal(new Set(cases).size, 34);
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(r, key) ? r[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          fs.writeFileSync(process.env.QA_OUT + '/units/related-admission.json', JSON.stringify({
+            actualPasses: 34, uniqueCasesWithNewSix: 40, counts, cases, counters, absentCounterMeaning: 'UNKNOWN',
+          }, null, 2) + '\n');
+          NODE
+          run_gate simClubManagerDeals node scripts/simClubManagerDeals.mjs
+          run_gate seo-meta-parts node scripts/genSeoMetaParts.mjs
+          git diff --exit-code -- src/data/seoMetaParts > "$QA_OUT/logs/seo-parts-held.log"
+          run_gate guide-club-manager node scripts/simGuideHeadings.mjs --refresh /club-manager
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const before = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/original/scripts/data/guideHeadingsFrozen.json', 'utf8'));
+          const after = JSON.parse(fs.readFileSync('scripts/data/guideHeadingsFrozen.json', 'utf8'));
+          for (const route of ['/club-manager']) {
+            assert.ok(before.routes[route]);
+            assert.ok(after.routes[route]);
+            delete before.routes[route];
+            delete after.routes[route];
+          }
+          assert.deepEqual(after, before, 'Guide refresh changed an unrelated route or fixture metadata');
+          NODE
+          run_gate keywords-first node scripts/genSearchKeywords.mjs
+          cp src/data/searchKeywords.json "$QA_OUT/searchKeywords-first.json"
+          run_gate keywords-second node scripts/genSearchKeywords.mjs
+          cmp "$QA_OUT/searchKeywords-first.json" src/data/searchKeywords.json
+          run_gate build npm run build:seo
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then
+              ready=1
+              break
+            fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/club-manager node scripts/simSeoMetaSplit.mjs
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          const before = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/source-before.json', 'utf8'));
+          const current = Object.fromEntries(Object.keys(before).map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(process.env.QA_OUT + '/source-before-browser.json', JSON.stringify(current, null, 2) + '\n');
+          assert.deepEqual(current, before, 'Application or QA source changed before the actual App browser checks');
+          NODE
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before-browser.sha256"
+          run_gate browser-fixtures node scripts/qa/cmLoanReasonsFixtures.mjs --out "$QA_OUT/fixtures"
+          run_gate browser node scripts/qa/cmLoanReasonsBrowser.mjs --base-url "$BASE" --out "$QA_OUT/browser" --fixtures "$QA_OUT/fixtures"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after-browser.sha256"
+          cmp "$QA_OUT/dist-before-browser.sha256" "$QA_OUT/dist-after-browser.sha256"
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Retain generated bodies, actual diff and source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.QA_OUT;
+          const before = JSON.parse(fs.readFileSync(out + '/source-before.json', 'utf8'));
+          const generated = JSON.parse(fs.readFileSync(out + '/generated-paths.json', 'utf8'));
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const after = Object.fromEntries(tracked.filter(p => !generated.includes(p))
+            .map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-after.json', JSON.stringify(after, null, 2) + '\n');
+          for (const p of generated) {
+            if (!fs.existsSync(p)) continue;
+            const dst = path.join(out, 'generated', p);
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(p, dst);
+          }
+          const changed = execFileSync('git', ['diff', '--name-only']).toString().trim().split('\n').filter(Boolean);
+          fs.writeFileSync(out + '/actual-generated-paths.json', JSON.stringify(changed, null, 2) + '\n');
+          fs.writeFileSync(out + '/generated.patch', execFileSync('git', ['diff', '--binary', '--', ...generated], { maxBuffer: 32 * 1024 * 1024 }));
+          fs.writeFileSync(out + '/working-tree.txt', execFileSync('git', ['status', '--short'], { maxBuffer: 8 * 1024 * 1024 }));
+          fs.writeFileSync(out + '/transport-inventory.json', JSON.stringify(fs.readdirSync(out + '/transport').sort().map(name => {
+            const text = fs.readFileSync(path.join(out, 'transport', name), 'utf8');
+            const lines = text.split('\n').filter(Boolean);
+            return { name, blockedAttempts: lines.length,
+              fontBlockedAttempts: lines.filter(line => /^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts: lines.filter(line => line === '[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length,
+              rawLogRetained: true };
+          }), null, 2) + '\n');
+          assert.deepEqual(after, before, 'Tracked source changed outside the five declared generated paths');
+          assert.ok(changed.every(p => generated.includes(p)), 'Unexpected tracked generated path');
+          NODE
+      - name: Bound the retained artifact
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: cm-loan-out-reasons-fixed-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-loan-out-reasons-fixed
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
