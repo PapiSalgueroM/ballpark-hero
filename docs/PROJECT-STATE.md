@@ -19904,3 +19904,24 @@ Published source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5
 Hosted-M run 41133839703 has independent scoped admission d3492ce71d7b9733addafe8b9a8bb2138ee0f838495fda9b7c3e84e6b520d8d5: 172/172 raw routes clean, exact 8 CM/SC plain/slash desktop/phone records mounted and settled without saved-text loss, 50 source fingerprints and 7 effective in-memory controls. Retained findings include denied live_scores reads, console resource errors and blocked telemetry writes. Hosted-P byte parity and gameplay are outside this observation.
 
 Broad 1022 default outcomes remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT, with raw failures retained. The Season Centre focus fix 51da27a2367cc84ca0c622def41029dbc2580b68 is separate and unshipped; its fixed/whole-old-Page/restored qualification remains pending.
+
+
+## 2026-11-02 Root: academy contracts, keeper proportions and Bingo dismissal
+
+This draft addresses Anthony's submitted reports on Main cc9a55a2f35b6215d5e6e664cc401d10d7f76291. Claude K retains integration and production publication. Root has not merged or published these changes.
+
+New academy and scouting promotions receive the existing era/age-aware market value before their first wage. The tested 17-year-old rated 76 changes from the observed 104k weekly legacy wage to 30k, with 18.9m value and 17m sale value. Existing signed wages, clauses and saved graduates remain intact. Fees, capacity refusal, duplicate callbacks and gameplay draws are preserved. The obsolete graduate price-premium assertion now checks market pricing and earned value growth; other padding guards remain.
+
+The keeper's chest follows the same catch contact as its gloves, keeping the arms proportional. Collision, scoring and saved outcomes are unchanged. Scoring difficulty remains separate work in draft PR379.
+
+Player Bingo accepts Cole Palmer's verified 24 October 2026 second-yellow dismissal through a narrow identity-checked fact alongside historical red-card evidence. No aggregate stats, club histories or production rows were fabricated. Both official match reports are recorded in the audit.
+
+Actual baselines: keeper run 41379847016 produced three owned failures and three preservation passes; academy run 41379956334 produced five economics failures and four preservation passes; Palmer's same run produced one owned rejection and nine preservation passes. Their types and input holds passed. All original failed sources and artifacts remain retained.
+
+Joined source a3efb6bdea26126448fae28e5043fb7227483ee2 ran in 41382661541. Types, build, all 15 saved-output readers, all 16 unchanged caps, full drill motion and ordinary full units passed. Academy's 48 observations include 14 owned negative failures plus restored save/growth checks. Palmer's 80 observations include six effective source faults and restoration. Existing boards, drill logic, all 12 padding checks, simAcademy and the full honours proof passed. Root reviewed five original keeper PNGs from the separate b2aa498b run 41380837223, whose ordinary units recorded 10,268 passes, 58 optional skips and no failures across 714 files.
+
+The joined focused job then refused an old Rodri control's global integer-guard anchor because the new dismissal helper contains the same legitimate predicate. The correction scopes each mutation to the executed honour helper, preserving all tests, expected failures, changed-copy checks and full restoration. Follow-up ded72105f0140268cbd4a62167e53f98d4b39d7b, run 41385667807, passed types, all four Bingo proof families and source holds. Application bodies are identical to a3efb6bd. This is composed scoped evidence, not execution credit for the clean documentation delivery tree.
+
+The complete baseline/current offline profiles from 41382661541 were still running when this note was written. Report their actual failures, skips or timeouts. The delivery remains draft pending that comparison and release-owner integration. No source guard, dependency, cap or historical baseline was weakened.
+
+World XI depth, MLB playoff replay and the fictional racing manager continue separately. Existing Conquest PR449 and family PR448 remain K's acknowledged BW inputs. Shared root drafts and index were preserved. Evidence: C:/Users/antho/dukb-handoff/2026-11-01/reports-continuation-v1.

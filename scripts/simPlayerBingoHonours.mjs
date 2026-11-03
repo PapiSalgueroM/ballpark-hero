@@ -33,7 +33,8 @@ const source = heldLib.toString('utf8').replaceAll('\r\n', '\n');
    identity rules and the executable controls are held. */
 /* Round 1571 review fix: retaken once more for comment only edits in playerBingo.ts (the re-measured club
    support counts and the clubHistory note); E77BB4BB... before it. No code line moved. */
-assert.equal(hash(Buffer.from(source)), '2AB9C85E99ED843E9C986CFA1997A04A0DA475F1FFC4668EF4B6A2C18712B58B');
+/* Verified dismissal addition: bind the complete library with its unchanged honour predicates and controls. */
+assert.equal(hash(Buffer.from(source)), 'C76308320DE6D3FD60E72FBF5A89E24CB58BABB196F13D8DD7FBF0E1C0B39979');
 assert.equal(hash(heldTest), '0AE18AE01A012509200926DB6F66BA115C81AF718FD07B308299DFE21EB4EB72');
 writeFileSync(path.join(out, 'source.raw.ts'), heldLib);
 writeFileSync(path.join(out, 'source.LF.ts'), source);
