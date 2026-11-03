@@ -223,6 +223,7 @@ export default function ConquestScenePlayer({
       data-scene-total={scenes.length}
       className="space-y-2"
     >
+      <div className="overflow-x-clip">
       <div
         key={scene.index}
         data-scene-card
@@ -281,6 +282,7 @@ export default function ConquestScenePlayer({
             )}
           </p>
         )}
+      </div>
       </div>
       <button
         type="button"
