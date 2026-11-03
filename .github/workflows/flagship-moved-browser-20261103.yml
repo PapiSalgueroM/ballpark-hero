@@ -1,0 +1,200 @@
+name: Requested moved browser drivers on the qualified retained build
+on:
+  push:
+    branches: [codex/flagship-moved-browser-20261103]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: flagship-moved-browser-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      ENGINES: chromium
+      SIM_NETWORK: offline
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the exact core and download the one declared qualified artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/flagship-moved-browser"
+          mkdir -p "$QA_OUT/prior" "$QA_OUT/logs" "$QA_OUT/raw" "$QA_OUT/transport"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = 5160b26a423e7502c296770e821a995320aa1a32
+          test "$(git rev-parse HEAD^^{tree})" = e3c12a15eeeacf42577740eeabf46add18bbdea4
+          printf 'A\t.github/workflows/flagship-moved-browser-20261103.yml\n' > "$QA_OUT/expected-paths.txt"
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/changed-paths.txt"
+          cmp "$QA_OUT/expected-paths.txt" "$QA_OUT/changed-paths.txt"
+          git rev-parse HEAD HEAD^{tree} > "$QA_OUT/source.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          test "$(wc -l < "$QA_OUT/source-before.sha256")" -eq 5674
+          cp .github/workflows/flagship-moved-browser-20261103.yml "$QA_OUT/workflow.yml"
+          curl --fail --location --silent --show-error --header "Authorization: Bearer $GH_TOKEN" --header "Accept: application/vnd.github+json" --output "$QA_OUT/prior-original.zip" "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/13269798191/zip"
+          printf '%s  %s\n' 686435922cee99053723acc46f082a084d5a54de7debb09d746be2d841956296 "$QA_OUT/prior-original.zip" | sha256sum --check
+          test "$(stat -c '%s' "$QA_OUT/prior-original.zip")" -eq 7747896
+          python3 - <<'PY'
+          import os, pathlib, zipfile
+          root=pathlib.Path(os.environ["QA_OUT"])/"prior"
+          with zipfile.ZipFile(root.parent/"prior-original.zip") as archive:
+              files=[r for r in archive.infolist() if not r.is_dir()]
+              assert len(files)==80 and sum(r.file_size for r in files)==8946109
+              for row in archive.infolist():
+                  name=pathlib.PurePosixPath(row.filename)
+                  assert not name.is_absolute() and ".." not in name.parts
+              archive.extractall(root)
+          PY
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,prior=out+'/prior',read=p=>JSON.parse(fs.readFileSync(p,'utf8')),hash=b=>crypto.createHash('sha256').update(b).digest('hex'),git=args=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+          const assoc=read(prior+'/completed-dist-association.json');
+          assert.equal(assoc.source,'9134e27a9ba4e22566f7408553cba827c9c06350');assert.equal(assoc.tree,'f6a0ba266b8f45975598a65407a82c516e114780');assert.equal(assoc.applicationCore,'505fe4fa2ff9ce2bee5fe69c2497b33c5299050c');
+          assert.equal(assoc.fileCount,845);assert.equal(assoc.tarBytes,6964266);assert.equal(assoc.tarSHA256,'f2f7f0cc6f36de5fa102f010ac9bc18734f85902df5e8dd7cb4e4ee98b39ab76');assert.equal(assoc.distDigest,'2c129055b4f75ea45bf76ce27c0ee23fdf204be8c111408fddcc35447ec3a6a4');
+          assert.equal(hash(fs.readFileSync(prior+'/completed-dist.tar.gz')),assoc.tarSHA256);
+          const map=file=>Object.fromEntries(fs.readFileSync(file,'utf8').trim().split('\n').map(l=>[l.slice(66),l.slice(0,64)])),old=map(prior+'/source-before.sha256'),current=map(out+'/source-before.sha256');
+          assert.equal(Object.keys(old).length,5674);assert.equal(Object.keys(current).length,5674);
+          assert.equal(fs.readFileSync(prior+'/source-before.sha256','utf8'),fs.readFileSync(prior+'/source-after.sha256','utf8'));
+          const oldWF='.github/workflows/popular-pages-build-20261103.yml',newWF='.github/workflows/flagship-moved-browser-20261103.yml';
+          assert(old[oldWF]&&!current[oldWF]&&current[newWF]&&!old[newWF]);
+          assert.deepEqual(Object.keys(old).filter(f=>f!==oldWF).sort(),Object.keys(current).filter(f=>f!==newWF).sort());
+          const allowed=new Set(['scripts/runAllSims.mjs','scripts/simBrowserHarnessDiscovery.mjs']);
+          for(const[file,sha]of Object.entries(old))if(file!==oldWF&&!allowed.has(file))assert.equal(current[file],sha,file+' qualified source held');
+          const pins={'scripts/runAllSims.mjs':'5988827caabcc07a1e643494fa2610f559c779f6','scripts/simBrowserHarnessDiscovery.mjs':'82df8e0bf2c78b0a0ceba9c5158995b3f141935e','scripts/playNbaLotteryNight.mjs':'d95d9516a03b4acc931456808000217c1d8fb367','scripts/playTycoonScorelines.mjs':'a526ae3ddd3089d79517fecafa5b08022a0de214','scripts/lib/answerConsent.mjs':'c6d16997e4c06e8b35dcfd0bab5efcad3069d899'};
+          for(const[file,pin]of Object.entries(pins))assert.equal(git(['hash-object',file]),pin,file);
+          for(const file of ['scripts/playNbaLotteryNight.mjs','scripts/playTycoonScorelines.mjs'])fs.copyFileSync(file,out+'/'+file.split('/').at(-1));
+          fs.writeFileSync(out+'/association.json',JSON.stringify({core:'5160b26a423e7502c296770e821a995320aa1a32',prior:assoc,artifact:13269798191,artifactZIP_SHA256:'686435922cee99053723acc46f082a084d5a54de7debb09d746be2d841956296',pins,onlyQualifiedSourceExceptions:[...allowed],meaning:'The two admitted discovery QA leaves differ. Every application, dependency, data, fixture and original browser-driver body is held from the selected qualified build. No rebuild.'},null,2)+'\n');
+          NODE
+          test ! -e dist
+          tar -xzf "$QA_OUT/prior/completed-dist.tar.gz"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=[],hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          function walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,e.name);if(e.isDirectory())walk(f);else{assert(e.isFile());const b=fs.readFileSync(f);rows.push({file:path.relative('dist',f).replaceAll('\\','/'),bytes:b.length,sha256:hash(b)});}}}
+          walk('dist');rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          assert.equal(rows.length,845);assert.equal(hash(JSON.stringify(rows)),'2c129055b4f75ea45bf76ce27c0ee23fdf204be8c111408fddcc35447ec3a6a4');
+          assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/prior/dist-manifest.json','utf8')));
+          fs.writeFileSync(out+'/dist-before.json',JSON.stringify(rows,null,2)+'\n');
+          NODE
+      - name: Install held dependencies and isolated original browser tools
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+          npm install --prefix "$RUNNER_TEMP/moved-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/moved-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/moved-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/moved-browser-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+      - name: Same-build original healthy drivers and every existing effective control
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_one() {
+            local name="$1" variable="$2" value="$3" script="$4" code=0
+            mkdir -p "$QA_OUT/raw/$name"
+            : > "$QA_OUT/transport/$name.log"
+            env -u PLAY_NBA_LOTTERY_CONTROL -u PLAY_SCORELINES_CONTROL RC_OUT="$QA_OUT/raw/$name" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/$name.log" "$variable=$value" node "$script" > "$QA_OUT/logs/$name.log" 2>&1 || code=$?
+            printf '%s\n' "$code" > "$QA_OUT/raw/$name/native.exit"
+            tail -n 14 "$QA_OUT/logs/$name.log"
+          }
+          run_one nba-normal PLAY_NBA_LOTTERY_CONTROL '' scripts/playNbaLotteryNight.mjs
+          run_one tycoon-normal PLAY_SCORELINES_CONTROL '' scripts/playTycoonScorelines.mjs
+          for control in nocard spoil jump fold backfold; do
+            run_one "nba-$control" PLAY_NBA_LOTTERY_CONTROL "$control" scripts/playNbaLotteryNight.mjs
+          done
+          run_one tycoon-crowd PLAY_SCORELINES_CONTROL crowd scripts/playTycoonScorelines.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,arms=['nba-normal','tycoon-normal','nba-nocard','nba-spoil','nba-jump','nba-fold','nba-backfold','tycoon-crowd'],rows=[];
+          const allowed=/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/(?:fonts\.(?:googleapis|gstatic)\.com|flagcdn\.com)$/;
+          for(const name of arms){
+            const text=fs.readFileSync(out+'/logs/'+name+'.log','utf8').replace(/\x1b\[[0-?]*[ -\/]*[@-~]/g,''),code=Number(fs.readFileSync(out+'/raw/'+name+'/native.exit','utf8')),receipt=fs.readFileSync(out+'/transport/'+name+'.log','utf8').trim().split('\n').filter(Boolean);
+            assert(receipt.every(line=>allowed.test(line)),name+' unexpected transport');assert.doesNotMatch(text,/SyntaxError|ReferenceError|TypeError|Cannot find module|ERR_MODULE_NOT_FOUND|unhandledRejection|uncaughtException/);
+            const images=fs.readdirSync(out+'/raw/'+name).filter(f=>/\.(?:png|jpg)$/.test(f));assert(images.length>0,name+' actual images');
+            if(name.startsWith('nba-')){
+              const sections=[...text.matchAll(/^\s+section ([A-Z]): (\d+) passed, (\d+) failed$/gm)].map(m=>({section:m[1],pass:Number(m[2]),fail:Number(m[3])}));assert.equal(new Set(sections.map(s=>s.section)).size,sections.length);
+              assert(sections.every(s=>'ABCDEFGHIJN'.includes(s.section)&&s.pass+s.fail>0));const red=sections.filter(s=>s.fail>0).map(s=>s.section).sort();
+              if(name==='nba-normal'){assert.equal(code,0);assert.deepEqual(sections.map(s=>s.section).sort(),['A','B','C','D','E','F','G','H','I','J','N']);assert.deepEqual(red,[]);assert.match(text,/^playNbaLotteryNight: green\.$/m);}
+              else{const control=name.slice(4),wanted={nocard:'A',spoil:'A',jump:'J',fold:'N',backfold:'H'}[control];assert.equal(code,1);assert.deepEqual(red,[wanted]);assert(sections.filter(s=>s.section!==wanted).every(s=>s.pass>0&&s.fail===0));assert(text.split('\n').includes('playNbaLotteryNight control '+control+': FIRED, section '+wanted+' red, the others green.'));assert.doesNotMatch(text,/MISFIRED|DID NOT FIRE/);}
+              rows.push({name,code,sections,images,blockedAttempts:receipt.length,meaning:name==='nba-normal'?'All eleven original sections qualify.':'Original scoped control only; unselected sections earn no pass credit.'});
+            }else{
+              const facts=JSON.parse(fs.readFileSync(out+'/raw/'+name+'/playTycoonScorelines.json','utf8'));assert.equal(Object.keys(facts).length,10);
+              const failures=text.split('\n').filter(l=>/^\s+FAIL:/.test(l));
+              if(name==='tycoon-normal'){assert.equal(code,0);assert.equal(failures.length,0);assert.match(text,/^playTycoonScorelines: green$/m);for(const tag of ['390x844','1280x900'])assert.equal(facts['win-'+tag].seen,facts['win-'+tag].want);}
+              else{assert.equal(code,1);assert.equal(failures.length,2);assert.match(text,/^playTycoonScorelines \(control crowd\): 2 failures$/m);for(const tag of ['390x844','1280x900']){const f=facts['win-'+tag];assert.notEqual(f.seen,f.want);assert.equal(failures.filter(l=>l.startsWith('  FAIL: '+tag+': the win floater read "')).length,1);}}
+              for(const tag of ['390x844','1280x900'])assert.equal(facts['draw-'+tag].seen,facts['draw-'+tag].want);
+              rows.push({name,code,factKeys:Object.keys(facts),failures,images,blockedAttempts:receipt.length,meaning:name==='tycoon-normal'?'All ten original fact profiles qualify.':'Exactly two expected win mismatches; six rule and two draw profiles remain quiet.'});
+            }
+          }
+          fs.writeFileSync(out+'/browser-admission.json',JSON.stringify({status:'ACTUAL_ORIGINAL_BROWSER_NORMALS_AND_SIX_CONTROLS_PASS',rows,limits:'Original browser harnesses and their available error capture only. No blanket zero-console, native-randomness, natural-career or new browser coverage claim; Root must inspect retained images.'},null,2)+'\n');
+          NODE
+      - name: Always close source, same-build and raw transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import crypto from 'node:crypto';
+          const out=process.env.QA_OUT,rows=[],hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          function walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){const f=path.join(dir,e.name);if(e.isDirectory())walk(f);else{assert(e.isFile());const b=fs.readFileSync(f);rows.push({file:path.relative('dist',f).replaceAll('\\','/'),bytes:b.length,sha256:hash(b)});}}}
+          if(fs.existsSync(out+'/dist-before.json')){walk('dist');rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/dist-before.json','utf8')));fs.writeFileSync(out+'/dist-after.json',JSON.stringify(rows,null,2)+'\n');}
+          const receipts=fs.readdirSync(out+'/transport').sort().map(file=>{const lines=fs.readFileSync(out+'/transport/'+file,'utf8').split('\n').filter(Boolean);return{file,blockedAttempts:lines.length,lines};});
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({receipts,meaning:'Actual refusals retained. No zero transport claim.'},null,2)+'\n');
+          NODE
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+      - name: Independently bound retained original browser evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: flagship-moved-browser-${{ github.run_id }}
+          path: ${{ env.QA_OUT }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
