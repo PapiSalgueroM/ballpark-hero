@@ -1,4 +1,5 @@
 import type { CareerState, SeasonRecord } from './soccerCareerEngine';
+import { readCommunityShield, communityShieldSeasonStats } from './soccerCareerExtraCups';
 
 export type SoccerPressChoice = 'calm' | 'accountable' | 'ambitious';
 export type SoccerPressTopic = 'league_champion' | 'injury' | 'benched' | 'move' | 'strong_form' | 'discipline' | 'contract' | 'normal';
@@ -93,7 +94,16 @@ function stateOf(career: CareerState): SoccerPressState | null {
       } else {
         const settled = count(p.settledIndex) ? career.seasons[p.settledIndex] : null;
         if (!settled || settled.type !== 'playing' || settled.year !== p.settledYear || settled.year <= row.source.year || p.settledIndex! <= row.source.index) return null;
-        if (p.outcome !== outcomeFor(p, settled) || p.actual !== (recorded(settled[p.metric]) ?? undefined) || p.actualRating !== (rating(settled.rating) ? settled.rating : undefined)) return null;
+        let annual = settled;
+        const shield = readCommunityShield(settled);
+        if (shield?.player.apps) {
+          const part = shield.player;
+          if (settled.apps <= part.apps || !rating(p.actualRating)) return null;
+          annual = { ...settled, apps: settled.apps - part.apps, goals: settled.goals - part.goals,
+            assists: settled.assists - part.assists, cleanSheets: settled.cleanSheets - part.cleanSheets, rating: p.actualRating };
+          if (communityShieldSeasonStats(annual, shield).rating !== settled.rating) return null;
+        }
+        if (p.outcome !== outcomeFor(p, annual) || p.actual !== (recorded(annual[p.metric]) ?? undefined) || p.actualRating !== (rating(annual.rating) ? annual.rating : undefined)) return null;
       }
     } else if (row.promise !== undefined) return null;
   }
