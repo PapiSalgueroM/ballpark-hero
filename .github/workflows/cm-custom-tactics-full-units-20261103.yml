@@ -29,6 +29,7 @@ jobs:
           OUT="$RUNNER_TEMP/cm-custom-tactics-full"
           mkdir -p "$OUT"
           echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
           git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
