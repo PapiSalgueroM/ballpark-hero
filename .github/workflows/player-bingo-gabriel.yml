@@ -1,0 +1,210 @@
+name: Player Bingo Gabriel World Cup identity
+
+on:
+  push:
+    branches: [codex/player-bingo-gabriel-fixed-20261103]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PLAYER_BINGO_GABRIEL_PHASE: fixed
+      PLAYER_BINGO_GABRIEL_OUT: ${{ github.workspace }}/gabriel-bingo-artifacts
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/gabriel-bingo-artifacts/font-cache
+      PLAYER_BINGO_WC_OUT: ${{ github.workspace }}/gabriel-bingo-artifacts/existing-wc
+      PLAYER_BINGO_PALMER_OUT: ${{ github.workspace }}/gabriel-bingo-artifacts/existing-palmer
+      PLAYER_BINGO_RODRI_OUT: ${{ github.workspace }}/gabriel-bingo-artifacts/existing-rodri
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact parent and source fence
+        run: |
+          mkdir -p "$PLAYER_BINGO_GABRIEL_OUT"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trimEnd(), parent='d230682b593e0c6d4c87ea861bdb8b1ae2758176';
+          assert.equal(git('rev-parse','HEAD^'),parent);
+          assert.equal(git('rev-parse','HEAD^^{tree}'),'d82f57fd02316b89454b27f98c75d93efcec5b3a');
+          assert.equal(git('status','--porcelain','--untracked-files=no'),'');
+          const changes=git('diff','--name-status',parent,'HEAD').split('\n').filter(Boolean).sort();
+          const expected=['A\t.github/workflows/player-bingo-gabriel.yml','A\tscripts/simPlayerBingoGabrielWorldCup.mjs','A\tsrc/test/playerBingoGabrielWorldCup.test.ts'];
+          if(process.env.PLAYER_BINGO_GABRIEL_PHASE==='fixed') expected.push('M\tsrc/lib/playerBingo.ts');
+          assert.deepEqual(changes,expected.sort());
+          fs.writeFileSync(process.env.PLAYER_BINGO_GABRIEL_OUT+'/source-fence.json',JSON.stringify({head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),parent,changes,phase:process.env.PLAYER_BINGO_GABRIEL_PHASE},null,2));
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$PLAYER_BINGO_GABRIEL_OUT/source-before.sha256"
+          cat > "$PLAYER_BINGO_GABRIEL_OUT/capture.sh" <<'SH'
+          capture() {
+            local label="$1"
+            shift
+            set +e
+            "$@" > "$PLAYER_BINGO_GABRIEL_OUT/$label.stdout.log" 2> "$PLAYER_BINGO_GABRIEL_OUT/$label.stderr.log"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$PLAYER_BINGO_GABRIEL_OUT/$label.exit.txt"
+            cat "$PLAYER_BINGO_GABRIEL_OUT/$label.stdout.log"
+            cat "$PLAYER_BINGO_GABRIEL_OUT/$label.stderr.log" >&2
+            return "$code"
+          }
+          SH
+          mkdir -p "$PLAYER_BINGO_GABRIEL_OUT/selected-source"
+          cp src/lib/playerBingo.ts src/test/playerBingoGabrielWorldCup.test.ts scripts/simPlayerBingoGabrielWorldCup.mjs .github/workflows/player-bingo-gabriel.yml "$PLAYER_BINGO_GABRIEL_OUT/selected-source/"
+      - name: Exact historical inputs for unchanged regressions
+        if: env.PLAYER_BINGO_GABRIEL_PHASE == 'fixed'
+        run: |
+          git fetch --no-tags --depth=1 origin 5b630266d261b39128e4fb4544783d8e22214ce3 d1032ac3df4b1bf9699049390d56d8477687a8e2
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          import {createHash} from 'node:crypto';
+          const out=process.env.PLAYER_BINGO_GABRIEL_OUT+'/historical-inputs';fs.mkdirSync(out);
+          const rows=[
+            {commit:'5b630266d261b39128e4fb4544783d8e22214ce3',path:'src/lib/playerBingo.ts',git:'e87814804bd2511115dbf6725d955c37bbdf4514',bytes:47755,file:'playerBingo-before-rodri.ts'},
+            {commit:'d1032ac3df4b1bf9699049390d56d8477687a8e2',path:'src/lib/sportsBingo.ts',git:'ef1ecf84b05741182aa47fd0c753c7f9aaa96560',bytes:12630,file:'sportsBingo-before-seats.ts'},
+          ];
+          for(const row of rows){
+            const ref=row.commit+':'+row.path;
+            assert.equal(execFileSync('git',['rev-parse',ref],{encoding:'utf8'}).trim(),row.git);
+            const body=execFileSync('git',['show',ref]);assert.equal(body.length,row.bytes);
+            assert.equal(createHash('sha1').update('blob '+body.length+'\0').update(body).digest('hex'),row.git);
+            fs.writeFileSync(out+'/'+row.file,body);row.sha256=createHash('sha256').update(body).digest('hex');
+          }
+          fs.writeFileSync(out+'/manifest.json',JSON.stringify({rows,scope:'Exact pre-existing harness inputs only. No harness, assertion, baseline or application change.'},null,2));
+          NODE
+      - name: Locked application install
+        run: |
+          source "$PLAYER_BINGO_GABRIEL_OUT/capture.sh"
+          capture install npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')), installed=[];
+          for(const [p,entry] of Object.entries(lock.packages)){
+            if(!p.startsWith('node_modules/')||!fs.existsSync(p+'/package.json'))continue;
+            const version=JSON.parse(fs.readFileSync(p+'/package.json')).version;
+            assert.equal(version,entry.version,p); installed.push({path:p,version});
+          }
+          assert(installed.length>0);
+          fs.writeFileSync(process.env.PLAYER_BINGO_GABRIEL_OUT+'/installed.json',JSON.stringify({node:process.versions,installed,scope:'Installed package version receipts only, not complete independent binary custody.'},null,2));
+          NODE
+      - name: Proper application types and controller syntax
+        run: |
+          source "$PLAYER_BINGO_GABRIEL_OUT/capture.sh"
+          capture types env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --check scripts/simPlayerBingoGabrielWorldCup.mjs
+      - name: Actual loader and criterion outcomes
+        run: |
+          source "$PLAYER_BINGO_GABRIEL_OUT/capture.sh"
+          capture focused env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simPlayerBingoGabrielWorldCup.mjs
+      - name: Exact executable controls and healthy restores
+        if: env.PLAYER_BINGO_GABRIEL_PHASE == 'fixed'
+        run: |
+          source "$PLAYER_BINGO_GABRIEL_OUT/capture.sh"
+          for control in alias country; do
+            capture "control-$control" env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" PLAYER_BINGO_GABRIEL_CONTROL="$control" node scripts/simPlayerBingoGabrielWorldCup.mjs
+          done
+      - name: Existing Bingo regressions
+        if: env.PLAYER_BINGO_GABRIEL_PHASE == 'fixed'
+        run: |
+          source "$PLAYER_BINGO_GABRIEL_OUT/capture.sh"
+          for harness in simPlayerBingoWorldCupAlias simPlayerBingoPalmerRed simPlayerBingoRodriHonour simPlayerBingoLoad simPlayerBingoLineFeedback simSportsBingo simBingoSeats; do
+            capture "$harness" env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs"
+          done
+      - uses: actions/setup-python@v5
+        if: env.PLAYER_BINGO_GABRIEL_PHASE == 'fixed'
+        with:
+          python-version: '3.12'
+      - name: Isolated reader and build tools
+        if: env.PLAYER_BINGO_GABRIEL_PHASE == 'fixed'
+        run: |
+          source "$PLAYER_BINGO_GABRIEL_OUT/capture.sh"
+          capture playwright-install npm install --prefix "$RUNNER_TEMP/gabriel-reader" --no-save --package-lock=false playwright@1.64.1
+          ln -s "$RUNNER_TEMP/gabriel-reader/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/gabriel-reader/node_modules/playwright-core" node_modules/playwright-core
+          capture chromium-install node "$RUNNER_TEMP/gabriel-reader/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m venv "$RUNNER_TEMP/gabriel-python"
+          capture python-install "$RUNNER_TEMP/gabriel-python/bin/python" -m pip install fonttools==4.60.1 pillow==11.3.0
+          echo "$RUNNER_TEMP/gabriel-python/bin" >> "$GITHUB_PATH"
+          capture fonts node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+      - name: Normal production build
+        if: env.PLAYER_BINGO_GABRIEL_PHASE == 'fixed'
+        run: |
+          source "$PLAYER_BINGO_GABRIEL_OUT/capture.sh"
+          capture build env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build
+      - name: All fifteen required built-site readers
+        if: env.PLAYER_BINGO_GABRIEL_PHASE == 'fixed'
+        run: |
+          source "$PLAYER_BINGO_GABRIEL_OUT/capture.sh"
+          failed=0
+          for reader in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            capture "$reader" env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$reader.mjs" || failed=1
+          done
+          exit "$failed"
+      - name: Final source versions and explicit framework cache
+        if: always()
+        run: |
+          sha256sum --check "$PLAYER_BINGO_GABRIEL_OUT/source-before.sha256" > "$PLAYER_BINGO_GABRIEL_OUT/source-hold.log"
+          git diff --exit-code > "$PLAYER_BINGO_GABRIEL_OUT/tracked.diff"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.PLAYER_BINGO_GABRIEL_OUT, receipt=JSON.parse(fs.readFileSync(out+'/installed.json'));
+          for(const row of receipt.installed)assert.equal(JSON.parse(fs.readFileSync(row.path+'/package.json')).version,row.version,row.path);
+          const root='node_modules/.vite', rows=[];
+          if(fs.existsSync(root)){
+            const walk=p=>{
+              const stat=fs.lstatSync(p); assert(!stat.isSymbolicLink(),'Framework cache must not be a symlink');
+              if(stat.isDirectory()){for(const leaf of fs.readdirSync(p))walk(path.join(p,leaf));return;}
+              assert(stat.isFile()); const body=fs.readFileSync(p),rel=path.relative(root,p),target=path.join(out,'framework-cache',rel);
+              fs.mkdirSync(path.dirname(target),{recursive:true}); fs.writeFileSync(target,body);
+              rows.push({path:rel,bytes:body.length,sha256:createHash('sha256').update(body).digest('hex')});
+            };walk(root);
+          }
+          fs.writeFileSync(out+'/final-holds.json',JSON.stringify({installedVersions:receipt.installed.length,sourceHashesHeld:true,trackedDiffEmpty:true,frameworkCache:rows,runtimeCounters:'UNKNOWN when not supplied by the actual unit report',scope:'No production data mutation, full-suite or browser-gameplay credit.'},null,2));
+          NODE
+      - name: Bound retained evidence
+        id: evidence
+        if: always()
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.PLAYER_BINGO_GABRIEL_OUT,rows=[];
+          const walk=p=>{const stat=fs.lstatSync(p);assert(!stat.isSymbolicLink());if(stat.isDirectory()){for(const n of fs.readdirSync(p))walk(path.join(p,n));return;}assert(stat.isFile());const b=fs.readFileSync(p);rows.push({path:path.relative(out,p),bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')});};
+          walk(out);assert(rows.length>0&&rows.length<1000);const bytes=rows.reduce((s,r)=>s+r.bytes,0);assert(bytes<30000000);
+          const manifest=Buffer.from(JSON.stringify({rows,bytes,scope:'Owned raw evidence only, fixed 30MB and 1000-member pre-upload ceilings.'},null,2));
+          assert(bytes+manifest.length<30000000);assert(rows.length+1<1000);
+          fs.writeFileSync(out+'/artifact-members.json',manifest);
+          NODE
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.ready == 'true'
+        with:
+          name: gabriel-bingo-${{ github.run_id }}
+          path: gabriel-bingo-artifacts/
+          include-hidden-files: true
+          retention-days: 14
