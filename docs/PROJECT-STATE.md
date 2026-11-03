@@ -19904,3 +19904,38 @@ Published source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5
 Hosted-M run 41133839703 has independent scoped admission d3492ce71d7b9733addafe8b9a8bb2138ee0f838495fda9b7c3e84e6b520d8d5: 172/172 raw routes clean, exact 8 CM/SC plain/slash desktop/phone records mounted and settled without saved-text loss, 50 source fingerprints and 7 effective in-memory controls. Retained findings include denied live_scores reads, console resource errors and blocked telemetry writes. Hosted-P byte parity and gameplay are outside this observation.
 
 Broad 1022 default outcomes remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT, with raw failures retained. The Season Centre focus fix 51da27a2367cc84ca0c622def41029dbc2580b68 is separate and unshipped; its fixed/whole-old-Page/restored qualification remains pending.
+
+
+## 2026-11-02, Root: Grand Prix Boss draft ready for K integration
+
+Adds the requested fictional racing team manager at `/grand-prix-boss`, including twelve-race seasons, two-driver race orders, car development, contracts, renewals, retirement replacements, history and durable local saves. This is a draft source handoff, not a live-site release.
+
+Qualified product source 511cba1194f4113b248b683dfdcea63de909b6e5 remained unchanged through final QA. Full units on fcbdf3a9bce5b74d0681974d3bc6ac99b603635b, run 41500946381, passed 10,366 cases with zero failures and 58 existing pending, including all 104 Grand Prix cases across 13 files. The original run's separate build job failed and retains that status.
+
+Final build and actual App qualification on 1507e0b47cdb4f13dd602fe71cd227819bc771b4, run 41516313330, passed proper app types, ordinary build:seo, all 17 generated-file readers, all 16 unchanged route budgets and seven source guards. Eight generated-output controls, nine existing controls and 16 browser-observation controls caught their owned faults and restored. Five actual App contexts covered three UI-played races, an engine-prepared retirement review and a byte-exact old-save load: 20 canonical saved transitions, five native reloads and 40 original screenshots. All 14 generated output bodies were retained from the ordinary writers. Temporary qualification workflows, font carrier and App driver are excluded from the clean draft. Permanent simulations and their required source-control fixtures are included.
+
+Runtime counters absent from reports remain unknown. Public reads were blocked locally before delivery. Optional live completion-slug audit is unrun. No physical Android, full UI-played season, global harness pass, integration or production publication is claimed. Earlier failed build iterations remain failed, with their original evidence retained.
+
+K owns integration, main and publication. Pending on the clean and joined source: `CI=1 SIM_NETWORK=offline node scripts/runAllSims.mjs`, normal joint regeneration of search, frozen headings, lastmod, sitemap and the actual related-page graph, then the established release gates. World XI PR 451 has its own guide/search corpus, so generated files must come from the joined source rather than a manual merge of the two baselines. Existing size budgets were not raised.
+
+
+## 2026-11-02, Root: Grand Prix Boss permanent harness source anchors qualified
+
+PR 453 remains a draft for K integration. Its ten flagged permanent source-anchor readers now normalize text separately from raw byte custody. Healthy and restored physical copies still use the exact original buffers, and final manifests first assert fresh actual bytes before recording their verified held metadata. The game engine, hook, page, 13 ordinary test files, literal old-save fixture, generated outputs and existing size budgets are unchanged from the previously qualified draft.
+
+Ordinary remote source f417aa30107a749b46cce2d4a25b4996326fcf42, run 41528636412, passed proper app types, all twelve permanent Grand Prix harnesses, the whole simHarnessAnchors fence and its effective strip copied-fault control. All 1,054 scripts parsed, 296 harnesses carried source anchors and 385 normalized reads guarded them. Source/dependency/membership/diff/untracked holds passed. The preceding portability attempt 41527696185 remains failed on six final byte-manifest reads, with types and wrappers skipped there.
+
+The successful twelve-harness run retained eleven raw result scopes; Save's successful self-checks were present in stdout, but its default cleanup deleted that scope's raw child reports. The unchanged Save wrapper alone was rerun with retention in run 41532265203, source 5b22a068c3c7b40e0b2d8f94f0ec2349c68defce. Its 22 raw reports contain 48 healthy passes, 19 owned copied-fault assertions and 285 declared unselected skips. Both report sets and their complete source holds were acquired once. Across the eleven current Vitest reports from those sets, all 104 ordinary cases across 13 files match the earlier full-unit file/name/status inventory exactly, with no duplicates. This is scoped validation, not a new global suite or production release.
+
+K still owns integration, main and publish. The global CI=1 SIM_NETWORK=offline runAllSims and joint normal regeneration with World XI PR 451 remain pending. The inherited MMA historical-preservation check is separate; no owner workflow or historical baseline was changed. No QA workflow, collector or font carrier is included in the clean PR.
+
+
+## Reports continuation, 2026-11-02: complete fictional racing name-bank guard
+
+Grand Prix Boss draft PR 453 adds one actual GENERATORS row to scripts/simInventedNames.mjs for its existing FIRST_NAMES/LAST_NAMES banks. This registers all 676 combinations used by initial and replacement drivers. No game code, name data, scanner exception or harvest rule changed.
+
+Qualification source b39a1e3fa4ac4ccf59031fbb89f2702fa3141d2d, tree 906f737f95e355e7d0e8790d64a0df8f087b51da, run 41543625147 / job 125613638043 success. Actual scanner 0, physical whole-original scanner 1 with the sole unregistered Grand Prix bank finding, then physical whole-fixed restore 0. Healthy and restored scans enumerate 19,276 names across 20 generators; original enumerates 18,600 across 19. The actual additional 676 combinations produce no collision against the scanner's existing real-player corpus. Four guarded transports are empty. All 5,687 source and 24,466 dependency files, memberships, source diff and untracked paths hold. Root and Conquest independently admitted the raw evidence. Optional runtime counters are absent and remain UNKNOWN.
+
+Original artifact 13187935992 acquired once: 1,514,210 B, SHA256 0bd7ee5a339726b6b354d958283c137b272fcce186c9dd9f454e6eba50b27de4, 46 members. No type, unit, build or browser rerun was needed for this registry row. Earlier full-unit/build/browser and portability evidence remains scoped as previously recorded.
+
+Automatic prior-head Career entry guide and Sport hub checks passed. Prior-head Cage failed this owned registration omission, repaired and independently qualified here; updated-head automatic CI is still pending. MMA's unchanged historical engine-diff baseline failure remains separate. K still owns the global suite, joint generated corpus/ledger/sitemap regeneration, integration, main and live publication. The QA-only workflow is excluded from the clean draft update.

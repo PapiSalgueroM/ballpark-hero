@@ -242,6 +242,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Formula 1',
     emoji: '🏎️',
     games: [
+      { path: '/grand-prix-boss', label: 'Grand Prix Boss', emoji: '🏎️', description: 'Run a fictional racing team, manage two drivers and build your car across seasons', daily: false, addedOn: '2026-11-02' },
       { path: '/f1-driver', label: 'Guess The F1 Driver', emoji: '🏎️', description: 'Guess the mystery F1 driver from clues', daily: true, addedOn: '2026-03-09' },
       { path: '/f1-higher-lower', label: 'F1 Higher or Lower', emoji: '📊', description: 'Which driver won more Grands Prix?', daily: true, addedOn: '2026-03-08' },
       { path: '/f1-constructor', label: 'Guess The Constructor', emoji: '🏗️', description: 'Guess the mystery F1 team from clues', daily: true, addedOn: '2026-03-09' },
