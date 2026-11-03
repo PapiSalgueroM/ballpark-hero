@@ -1,0 +1,299 @@
+name: Popular careers and Stadium fixed consumer verification
+on:
+  push:
+    branches: [codex/popular-pages-fixed-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: popular-pages-fixed-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  consumers:
+    name: ${{ matrix.suite }} fixed, original and restored
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [careers, stadium]
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+      QA_SUITE: ${{ matrix.suite }}
+      PARENT: 76db0f60de12ee7bc81a05f3c9034c5cf3526186
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact three product bodies and all other parent source
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/popular-pages-fixed-${{ matrix.suite }}"
+          mkdir -p "$QA_OUT/sources" "$QA_OUT/transport" "$QA_OUT/arms"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          git rev-parse HEAD HEAD^{tree} > "$QA_OUT/source.txt"
+          git diff --name-status "$PARENT" HEAD > "$QA_OUT/changed-paths.txt"
+          git diff "$PARENT" HEAD -- src/components/us-career/UsCareerBoard.tsx src/pages/StadiumTycoon.tsx src/components/tycoon/TicketPolicyCard.tsx > "$QA_OUT/product.diff"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out=process.env.QA_OUT, suite=process.env.QA_SUITE;
+          const profiles={"careers":{"test":"src/test/usCareerLastSeasonReload.test.tsx","git":"9b56dda941819b91dc0d75de3597958e507f3516","sha":"9e94abc96f4f1c786ace61e7790799da96d450da289b5f7f7f63caa702e12839","rawEnv":"POPULAR_CAREER_RELOAD_RAW","cases":[["Popular careers saved last season continuity NBA restores the real saved stat line and team result on repeated cold mounts","POPULAR_CAREER_SAVED_LAST_SEASON_NBA","nba-recorded.json"],["Popular careers saved last season continuity NFL restores the real saved stat line and team result on repeated cold mounts","POPULAR_CAREER_SAVED_LAST_SEASON_NFL","nfl-recorded.json"],["Popular careers saved last season continuity NBA keeps an unplayed career free of an invented last season",null,"nba-empty.json"],["Popular careers saved last season continuity NFL keeps an unplayed career free of an invented last season",null,"nfl-empty.json"]],"target":"src/components/us-career/UsCareerBoard.tsx","alias":"@/components/us-career/UsCareerBoard","copy":"src/components/us-career/__qa_popular_original_UsCareerBoard.tsx","originalGit":"95a3507fa27b05bf6e426b8b9e0c82736b92dc35","productGit":"b2f81114f357b4edd17dd3a94c560a213412c817","productSHA":"ab3a04c1dee08351781d02b3b86cf7b06b6ab40c2ada27c82e2bdea584f39210","related":{"test":"src/test/usCareerPractice.test.tsx","git":"d18d51399632ec45362e7cdb91586a574aef6a6f","rows":32},"baseline":{"artifact":"13262615711","source":"7eda5d9c98b78988e9b10729b34e9ef8ebdc56bb","zipSHA":"7f3ee28045feb493827723e3c7bad32003ec8194804851f2058714f4be538322","rows":4,"ownedFailed":2,"heldPassed":2,"rawFiles":4}},"stadium":{"test":"src/test/tycoonSaveNotice.test.tsx","git":"8a66440a51484f7483b7069088d169f06883bbc6","sha":"5515005b8654f546e0374000a8e7189fb3d5e41009572d2f55acc92051dcee5a","rawEnv":"POPULAR_TYCOON_SAVE_RAW","cases":[["Stadium Tycoon save visibility a refused autosave can be retried from the stadium room","ST_SAVE_NOTICE_PITCH","stadium.json"],["Stadium Tycoon save visibility a refused autosave can be retried from the league room","ST_SAVE_NOTICE_LEAGUE","league.json"],["Stadium Tycoon save visibility a healthy autosave banks real progress without a failure notice",null,"healthy.json"],["Stadium Tycoon save visibility Tickets keeps one recovery message and the real failed status",null,"tickets.json"]],"target":"src/pages/StadiumTycoon.tsx","alias":"@/pages/StadiumTycoon","copy":"src/pages/__qa_popular_original_StadiumTycoon.tsx","originalGit":"9e59833d43ea944d0c66d795b728b5591f58941f","productGit":"d1b78bdd5d5c98c5fae237f590d48d19954eb536","productSHA":"c856e0f354760a9d2fe72d9aac4693ff16988521e83f301066f010db92e7823a","related":{"test":"src/test/tycoonTicketPolicy.test.tsx","git":"06949e96c7a10c18cdb90c06832c7bfadf6627e5","rows":21},"baseline":{"artifact":"13263180075","source":"7eda5d9c98b78988e9b10729b34e9ef8ebdc56bb","zipSHA":"73c4d366ed28e60c9cd5481e3af62d7bd6469cbda737ca25b00c51aebb5e76ac","rows":4,"ownedFailed":2,"heldPassed":2,"rawFiles":4}}};
+          const appPins={"src/components/us-career/UsCareerBoard.tsx":"b2f81114f357b4edd17dd3a94c560a213412c817","src/pages/StadiumTycoon.tsx":"d1b78bdd5d5c98c5fae237f590d48d19954eb536","src/hooks/useStadiumTycoon.ts":"4e02c4812afd4bdf1c2a42dff857a1c276ad7f6d","src/components/tycoon/TicketPolicyCard.tsx":"1e54f08a33e0b40624c8ecc73cd423701aee5f2a","src/components/front-office/FrontOfficeBoard.tsx":"e1bf0924f9d900ba63646efa32bf78cf36d381c5","src/components/hub/HubExperience.tsx":"d002e000706b70fa88023ca5f8f3bcd99fefdbc8"};
+          const tests={"careers":{"test":"src/test/usCareerLastSeasonReload.test.tsx","git":"9b56dda941819b91dc0d75de3597958e507f3516","sha":"9e94abc96f4f1c786ace61e7790799da96d450da289b5f7f7f63caa702e12839"},"stadium":{"test":"src/test/tycoonSaveNotice.test.tsx","git":"8a66440a51484f7483b7069088d169f06883bbc6","sha":"5515005b8654f546e0374000a8e7189fb3d5e41009572d2f55acc92051dcee5a"},"frontoffice":{"test":"src/test/frontOfficeCutReasons.test.tsx","git":"2637d6190d09627f65fe076b2db4640606e631b3","sha":"ffaf89867add0dd8141c5e1e13c036fe037f2a90183ce064ed72993c4d5afc2e"},"hubs":{"test":"src/test/hubReturnNavigation.test.tsx","git":"51a145157130dace6c0765f28dadd4a80459a3be","sha":"1260ed816fbcaf18a60d6d648918070bba6ca98be1d431de35de3b7e1067287d"}};
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          const sha=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+          assert(Object.hasOwn(profiles,suite));const p=profiles[suite];
+          assert.equal(git('rev-parse','HEAD^'),process.env.PARENT);
+          assert.equal(git('rev-parse',process.env.PARENT+'^{tree}'),'712c72d8938a4f2676866aec8cb25fdcb8c48409');
+          const workflow='.github/workflows/popular-pages-fixed-20261103.yml';
+          const changed=fs.readFileSync(path.join(out,'changed-paths.txt'),'utf8').trim().split('\n').sort();
+          assert.deepEqual(changed,['A\t'+workflow,
+           'M\tsrc/components/us-career/UsCareerBoard.tsx',
+           'M\tsrc/pages/StadiumTycoon.tsx',
+           'M\tsrc/components/tycoon/TicketPolicyCard.tsx'].sort());
+          for(const [file,blob] of Object.entries(appPins))assert.equal(git('rev-parse','HEAD:'+file),blob,file);
+          for(const item of Object.values(tests)){
+           assert.equal(git('rev-parse','HEAD:'+item.test),item.git,item.test);
+           assert.equal(sha(item.test),item.sha,item.test);
+          }
+          for(const item of Object.values(profiles)){
+           assert.equal(git('rev-parse',process.env.PARENT+':'+item.target),item.originalGit);
+           assert.equal(sha(item.target),item.productSHA);
+           assert.equal(git('rev-parse','HEAD:'+item.related.test),item.related.git);
+           assert(!fs.existsSync(item.copy),'No preexisting copied-source path may be replaced');
+          }
+          assert.equal(git('rev-parse','HEAD:vitest.config.ts'),'ed2a9dc677f77dfe95c061064eeff5782b856864','Existing NO_DOUBLE_SWAP config held');
+          assert.equal(git('rev-parse',process.env.PARENT+':src/components/tycoon/TicketPolicyCard.tsx'),'fa18508f4fc62b569be4347fc8e9e3b4376bfb99');
+          assert.equal(sha('src/components/tycoon/TicketPolicyCard.tsx'),'e35d9f384b44a01e1b44e17f66d94f3d5b333a1a60f774769aa741d1bb7cc349');
+          const tracked=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
+          assert.equal(tracked.length,5675);
+          for(const file of [workflow,'vitest.config.ts',...Object.keys(appPins),...Object.values(tests).map(v=>v.test),...Object.values(profiles).map(v=>v.related.test)]){
+           const target=path.join(out,'sources',file);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(file,target);
+          }
+          fs.writeFileSync(path.join(out,'profile.json'),JSON.stringify(p,null,2)+'\n');
+          fs.writeFileSync(path.join(out,'association.json'),JSON.stringify({
+           source:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),parent:process.env.PARENT,
+           releaseCore:'00c85815cac64d72014594e6b38515d4d6ce2e45',suite,appPins,tests,profiles,trackedFiles:tracked.length,
+           scope:'Only careers and Stadium fixed consumer cases, whole-original leaf controls, restores and existing relevant normal tests. No build, browser or full-suite qualification.'
+          },null,2)+'\n');
+          
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          test "$(wc -l < "$QA_OUT/source-before.sha256")" -eq 5675
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+      - name: Install unchanged locked dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper application types under the offline guard
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/types.exit"
+          cat "$QA_OUT/types.log"
+          test "$code" -eq 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Fixed consumers, effective whole-original leaf, restored consumers and normal guard
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          cat > "$QA_OUT/qualify.mjs" <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import { spawnSync,execFileSync } from 'node:child_process';
+          const out=process.env.QA_OUT,suite=process.env.QA_SUITE;
+          const p=JSON.parse(fs.readFileSync(path.join(out,'profile.json'),'utf8'));
+          const fixed=fs.readFileSync(p.target),hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          assert.equal(hash(fixed),p.productSHA);
+          const original=execFileSync('git',['show',process.env.PARENT+':'+p.target]);
+          const blob=b=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+b.length+'\0'),b])).digest('hex');
+          assert.equal(blob(original),p.originalGit);assert.notDeepEqual(original,fixed,'Actual whole original differs');
+          fs.writeFileSync(path.join(out,'whole-original.tsx'),original);
+          fs.writeFileSync(path.join(out,'fixed.tsx'),fixed);
+          const phases=[],receipts=[];
+          const strip=v=>String(v).replace(/\u001b\[[0-9;]*m/g,'');
+          const write=(file,value)=>fs.writeFileSync(file,JSON.stringify(value,null,2)+'\n');
+          function cleanEnv(){
+           const env={...process.env};
+           for(const key of ['NO_DOUBLE_SWAP','US_BOARD_CONTROL_ALIAS','US_BOARD_CONTROL_FILE','TYCOON_ROOMS_PAGE',
+            'TYCOON_AWAY_CONTROL','TYCOON_LOADS_STADIUM_HOOK','TYCOON_LOADS_ACADEMY_HOOK',
+            'TYCOON_LOADS_STADIUM_LIB','TYCOON_LOADS_ACADEMY_LIB'])delete env[key];
+           return env;
+          }
+          function run(phase,test,old=false,related=false){
+           const folder=path.join(out,'arms',phase);fs.mkdirSync(folder,{recursive:true});
+           const env=cleanEnv(),receipt=path.join(out,'transport',phase+'.log');
+           env.SIM_OFFLINE_RECEIPT=receipt;fs.writeFileSync(receipt,'');
+           if(!related){env[p.rawEnv]=path.join(folder,'raw');fs.mkdirSync(env[p.rawEnv]);}
+           if(old)env.NO_DOUBLE_SWAP=JSON.stringify({[p.alias]:path.resolve(p.copy)});
+           write(path.join(folder,'source-association.json'),{
+            phase,target:p.target,fixedSHA:hash(fs.readFileSync(p.target)),effectiveLeaf:old?p.copy:p.target,
+            effectiveSHA:hash(fs.readFileSync(old?p.copy:p.target)),alias:old?JSON.parse(env.NO_DOUBLE_SWAP):null,
+            test,related,baseline:p.baseline
+           });
+           const child=spawnSync('node_modules/.bin/vitest',['run',test,'--maxWorkers=1','--minWorkers=1',
+            '--reporter=verbose','--reporter=json','--outputFile='+path.join(folder,'units.json')],
+            {encoding:'utf8',env,timeout:600000,maxBuffer:16*1024*1024});
+           const log=(child.stdout??'')+'\n'+(child.stderr??'');
+           fs.writeFileSync(path.join(folder,'units.log'),log);
+           fs.writeFileSync(path.join(folder,'units.exit'),String(child.status)+'\n');
+           write(path.join(folder,'process.json'),{status:child.status,signal:child.signal,error:child.error?{name:child.error.name,message:child.error.message,code:child.error.code}:null});
+           assert(!child.error&&!child.signal,'Bounded actual '+phase+' process completed');
+           assert.doesNotMatch(log,/Unhandled (?:Error|Rejection)|Vitest caught \d+ unhandled|uncaughtException|unhandledRejection/,'No explicit unhandled error');
+           assert.equal(fs.statSync(receipt).size,0,'Guarded '+phase+' has no transport attempts');receipts.push({phase,bytes:0});
+           const r=JSON.parse(fs.readFileSync(path.join(folder,'units.json'),'utf8'));
+           assert.equal(r.testResults.length,1);const file=r.testResults[0];
+           assert(file.name.replaceAll('\\','/').endsWith('/'+test));
+           assert(!file.error&&!file.failureMessage&&!file.message,'No suite-level collection/setup error');
+           const rows=file.assertionResults,expected=related?p.related.rows:p.cases.length;
+           assert.equal(rows.length,expected);assert.equal(new Set(rows.map(x=>x.fullName)).size,expected);
+           if(!related)assert.deepEqual(rows.map(x=>x.fullName).sort(),p.cases.map(x=>x[0]).sort());
+           const counters={};
+           for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors']){
+            counters[key]=Object.hasOwn(r,key)?r[key]:null;
+            if(counters[key]!==null){assert.equal(typeof counters[key],'number');assert.equal(counters[key],0,key);}
+           }
+           for(const key of ['numPendingTests','numTodoTests','numPendingTestSuites'])if(Object.hasOwn(r,key))assert.equal(r[key],0,key);
+           const failed=rows.filter(x=>x.status==='failed'),passed=rows.filter(x=>x.status==='passed');
+           assert.equal(failed.length,old?2:0);assert.equal(passed.length,expected-(old?2:0));
+           assert.equal(r.numTotalTests,expected);assert.equal(r.numFailedTests,failed.length);assert.equal(r.numPassedTests,passed.length);
+           assert.equal(r.success,!old);assert.equal(child.status,old?1:0);assert.equal(file.status,old?'failed':'passed');
+           for(const row of rows){
+            const declaration=related?null:p.cases.find(x=>x[0]===row.fullName);
+            const marker=old&&declaration?.[1],messages=(row.failureMessages??[]).map(strip);
+            assert.equal(row.status,marker?'failed':'passed',row.fullName);
+            if(marker){
+             assert(messages.length>0);
+             assert(messages.every(m=>m.includes(marker)&&/(?:AssertionError|Error:\s*expect\()/.test(m)),'Only exact owned assertions count');
+             assert(messages.every(m=>!/(?:SyntaxError|TypeError|ReferenceError|RangeError|Cannot find module|Failed to load|Unhandled (?:Error|Rejection))/.test(m)));
+            }else assert.deepEqual(messages,[]);
+           }
+           assert.deepEqual(fs.readFileSync(p.target),fixed,'Tracked fixed product held during '+phase);
+           if(old)assert.deepEqual(fs.readFileSync(p.copy),original,'Actual copied whole-original source held');
+           if(!related)verifyRaw(folder,old);
+           const result={phase,test,rows:rows.length,nativeExit:child.status,failed:failed.map(x=>x.fullName),passed:passed.map(x=>x.fullName),counters,absentCounterMeaning:'UNKNOWN'};
+           write(path.join(folder,'admission.json'),result);phases.push(result);
+          }
+          function verifyRaw(folder,old){
+           const dir=path.join(folder,'raw');assert.deepEqual(fs.readdirSync(dir).sort(),p.cases.map(x=>x[2]).sort());
+           const raw=Object.fromEntries(p.cases.map(([, ,name])=>[name,JSON.parse(fs.readFileSync(path.join(dir,name),'utf8'))]));
+           if(suite==='careers'){
+            for(const name of ['nba-recorded.json','nfl-recorded.json']){
+             const v=raw[name].value;assert(v.savedBytesHeld&&v.inputHeld);assert(v.storedRows>0);
+             assert.equal(v.first.playEnabled,true);assert.equal(v.reloaded.playEnabled,true);
+             assert.equal(typeof v.expected,'string');assert(v.expected.startsWith('Last season: '));
+             assert.equal(v.first.summary,old?null:v.expected);assert.equal(v.reloaded.summary,old?null:v.expected);
+             for(const key of ['writes','removals','completions','activity'])assert.deepEqual(v[key],[]);
+            }
+            for(const name of ['nba-empty.json','nfl-empty.json']){
+             const v=raw[name].value;assert(v.savedBytesHeld);assert.deepEqual(v.first,{summary:null,playEnabled:true});
+             assert.deepEqual(v.reloaded,v.first);assert.deepEqual(v.writes,[]);assert.deepEqual(v.removals,[]);
+            }
+           }else{
+            for(const name of ['stadium.json','league.json']){
+             const v=raw[name];assert(v.oldBytesHeld&&v.unrelatedHeld);assert(v.attempts>=2);assert(v.latestMoney>v.initialMoney);
+             if(old)assert.equal(v.notice,null);else assert(v.notice.includes('not saved on this device'));
+            }
+            const healthy=raw['healthy.json'];assert(healthy.attempts>0&&healthy.rawChanged&&healthy.unrelatedHeld);
+            assert(healthy.money>healthy.initialMoney);assert.equal(healthy.notice,null);
+            const tickets=raw['tickets.json'];assert.equal(tickets.status,'failed');
+            assert(tickets.oldBytesHeld&&tickets.attempts>=2);assert.equal(tickets.alerts.length,1);
+            assert(tickets.alerts[0].includes('not saved on this device'));
+           }
+          }
+          run('fixed',p.test);
+          assert(!fs.existsSync(p.copy));
+          let copied=false;
+          try{
+           fs.writeFileSync(p.copy,original,{flag:'wx'});copied=true;
+           assert.equal(blob(fs.readFileSync(p.copy)),p.originalGit);
+           run('whole-original',p.test,true);
+          }finally{
+           if(copied){
+            assert.deepEqual(fs.readFileSync(p.copy),original,'Cleanup may remove only the exact owned copy');
+            fs.unlinkSync(p.copy);
+           }
+           assert.deepEqual(fs.readFileSync(p.target),fixed,'Tracked product exact after copied-source cleanup');
+           write(path.join(out,'source-restoration.json'),{
+            target:p.target,fixedSHA:hash(fs.readFileSync(p.target)),exactFixed:fs.readFileSync(p.target).equals(fixed),
+            copy:p.copy,copyAbsent:!fs.existsSync(p.copy),originalGit:p.originalGit
+           });
+          }
+          assert(!fs.existsSync(p.copy));run('restored',p.test);
+          for(const [, ,name] of p.cases)assert.deepEqual(
+           fs.readFileSync(path.join(out,'arms/fixed/raw',name)),fs.readFileSync(path.join(out,'arms/restored/raw',name)),
+           'Fixed/restored RAW byte equality: '+name);
+          run('related-normal',p.related.test,false,true);
+          write(path.join(out,'admission.json'),{
+           status:'ACTUAL_FIXED_WHOLE_ORIGINAL_AND_RESTORED_WITH_RELATED_NORMAL_PASS',suite,phases,receipts,
+           sourceRestored:true,currentRawFiles:12,priorBaseline:p.baseline,
+           associatedRawMeaning:'12 current separate fixed/original/restored RAW files plus 4 already retained original-baseline RAW files. These are 16 associated receipts, not 16 ordinary tests.',
+           limits:'No full ordinary suite, build, browser, layout, sporting-data or production transport qualification.'
+          });
+          console.log(suite+': fixed4PASS, whole-original2owned/2held, restored4PASS, related'+p.related.rows+'PASS; all source and RAW restoration checks passed.');
+          
+          NODE
+          set +e
+          node "$QA_OUT/qualify.mjs" > "$QA_OUT/caller.log" 2>&1
+          code=$?
+          set -e
+          cat "$QA_OUT/caller.log"
+          printf '%s\n' "$code" > "$QA_OUT/caller.exit"
+          test "$code" -eq 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Retain all source bytes, actual reports and finite evidence
+        id: retain
+        if: always()
+        run: |
+          set -uo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          diff_exit=$?
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          map_exit=$?
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256" > "$QA_OUT/source-compare.log" 2>&1
+          compare_exit=$?
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log" 2>&1
+          held_exit=$?
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          status_exit=$?
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt" > "$QA_OUT/status-compare.log" 2>&1
+          status_compare_exit=$?
+          printf '{"diff":%s,"map":%s,"compare":%s,"held":%s,"status":%s,"statusCompare":%s}\n' "$diff_exit" "$map_exit" "$compare_exit" "$held_exit" "$status_exit" "$status_compare_exit" > "$QA_OUT/closure.json"
+          bytes=$(du -sb "$QA_OUT" | cut -f1)
+          printf '%s\n' "$bytes" > "$QA_OUT/artifact-bytes.txt"
+          test "$bytes" -lt 150000000 || exit 1
+          echo "artifact_ok=true" >> "$GITHUB_OUTPUT"
+          test "$diff_exit" -eq 0 && test "$map_exit" -eq 0 && test "$compare_exit" -eq 0 && test "$held_exit" -eq 0 && test "$status_exit" -eq 0 && test "$status_compare_exit" -eq 0
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.retain.outputs.artifact_ok == 'true'
+        with:
+          name: popular-pages-fixed-${{ matrix.suite }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/popular-pages-fixed-${{ matrix.suite }}
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
