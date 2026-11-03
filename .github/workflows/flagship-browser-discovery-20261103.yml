@@ -1,0 +1,129 @@
+name: Requested executable browser discovery proof
+on:
+  push:
+    branches: [codex/flagship-browser-discovery-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: flagship-browser-discovery-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  discovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the exact application and four QA changes
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-browser-discovery"
+          mkdir -p "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = 00c85815cac64d72014594e6b38515d4d6ce2e45
+          test "$(git rev-parse HEAD^^{tree})" = 997362813be8c3c35bfc590e63687f12b3ad38d0
+          test "$(git hash-object src/lib/clubManager.ts)" = 9d8dc92557bf2f4358b5be044359354eda841769
+          test "$(git rev-parse HEAD^:scripts/runAllSims.mjs)" = a7d56d224a472b8eacfe1c4fd2f672f962259d28
+          test "$(git rev-parse HEAD^:scripts/simBrowserHarnessDiscovery.mjs)" = d0280dfa46a1d11355f68a799d7183cfce2f1e71
+          test "$(git hash-object scripts/playNbaLotteryNight.mjs)" = d95d9516a03b4acc931456808000217c1d8fb367
+          test "$(git hash-object scripts/playTycoonScorelines.mjs)" = a526ae3ddd3089d79517fecafa5b08022a0de214
+          test "$(git hash-object scripts/lib/answerConsent.mjs)" = c6d16997e4c06e8b35dcfd0bab5efcad3069d899
+          printf '%s  %s\n' 9ee9714c98a600e92599beaf26d0c97c52587e55d71bd9d8f5bc88afc4dde738 scripts/runAllSims.mjs b6a35e26f499623b00d187829179611eaa2c9e6a9a166e5bd17a7f76d8539257 scripts/simBrowserHarnessDiscovery.mjs d3a32e61c5a1cbd8dbc749cc963fed21fc06336bda6c2ba3b4e99e8b031dd831 scripts/qa/cmBrowserDiscoveryQualification.mjs | sha256sum --check
+          git diff --name-status HEAD^ HEAD > "$OUT/candidate-diff.txt"
+          printf 'A\t.github/workflows/flagship-browser-discovery-20261103.yml\nA\tscripts/qa/cmBrowserDiscoveryQualification.mjs\nM\tscripts/runAllSims.mjs\nM\tscripts/simBrowserHarnessDiscovery.mjs\n' > "$OUT/expected-diff.txt"
+          cmp "$OUT/expected-diff.txt" "$OUT/candidate-diff.txt"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq 5671
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp scripts/runAllSims.mjs "$OUT/candidate-runner.mjs"
+          cp scripts/simBrowserHarnessDiscovery.mjs "$OUT/candidate-discovery.mjs"
+          cp scripts/qa/cmBrowserDiscoveryQualification.mjs "$OUT/caller-source.mjs"
+          git show HEAD^:scripts/runAllSims.mjs > "$OUT/original-runner.mjs"
+      - name: Install unchanged locked dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/types.exit"
+          test "$code" -eq 0
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Healthy, whole-old owned failure, restored selection and complete actual census
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          unset ONLY BROWSER DB_PROBE SIM_SUITE_NET_GUARD SIM_SUITE_NET_FORCE
+          set +e
+          node scripts/qa/cmBrowserDiscoveryQualification.mjs --out "$QA_OUT/proof" > "$QA_OUT/caller.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/caller.exit"
+          tail -n 14 "$QA_OUT/caller.log"
+          test "$code" -eq 0
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,r=JSON.parse(fs.readFileSync(out+'/proof/discovery-admission.json','utf8')),c=JSON.parse(fs.readFileSync(out+'/proof/actual-census.json','utf8'));
+          assert.equal(r.eligible,true);assert.equal(r.problem,null);assert.equal(r.sourceHeld,true);assert.equal(r.cleanAfter,true);
+          assert.equal(r.phases.length,3);assert.deepEqual(r.phases.map(p=>p.nativeExit),[0,1,0]);
+          assert.deepEqual(r.phases.map(p=>p.sentinelChildren),[102,19,102]);
+          assert.deepEqual(r.phases[0].signature,r.phases[2].signature);
+          assert.equal(c.discovered,1042);assert.equal(c.allIdentitiesHeld,true);assert.equal(c.optionalHybridsHeld,true);assert.deepEqual(c.movedToNode,[]);
+          for(const file of ['playNbaLotteryNight.mjs','playTycoonScorelines.mjs'])assert(c.movedToBrowser.includes(file));
+          console.log('Actual old and fixed group counts: '+JSON.stringify(c)+'. Classification only, no gameplay credit.');
+          NODE
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always retain source and offline closure
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          find "$QA_OUT" \( -name '*transport.log' -o -path "$QA_OUT/transport/*.log" \) -type f | sort > "$QA_OUT/transport-files.txt"
+          while IFS= read -r receipt; do test ! -s "$receipt"; done < "$QA_OUT/transport-files.txt"
+      - name: Bound retained discovery evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.artifact.outputs.ready == 'true'
+        with:
+          name: flagship-browser-discovery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-browser-discovery
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
