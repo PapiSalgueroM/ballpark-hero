@@ -3,13 +3,14 @@ import path from 'node:path';
 import { act, cleanup, fireEvent, render, waitFor, within, type RenderResult } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ContractsCard } from '@/components/club-manager/ContractsCard';
+import { FreeAgentPool } from '@/components/club-manager/FreeAgentPool';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
 import { useClubManager, type ClubManagerGame } from '@/hooks/useClubManager';
 import {
   SAVE_KEY, freeAgentBlock, freeAgentTerms, loadCareer, marketForScreen, moneyIn,
   signFreeAgent, startCareer, startNextSeason, wageBill, type CareerState, type FreeAgent,
 } from '@/lib/clubManager';
-import { readWorldRoster } from '@/lib/clubManagerWorldRoster';
+import { readWorldRoster, recordWorldRosterTransfer } from '@/lib/clubManagerWorldRoster';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), recordStreakDay: vi.fn() }));
 
@@ -191,6 +192,43 @@ describe('Club Manager free-agent discovery on Transfers', () => {
     expect(JSON.stringify(career)).toBe(before);
   });
 
+  it('explains a same-season refusal even when the trimmed player has a verified contract', () => {
+    const { career } = fixture();
+    const player = career.squad.find(p => !p.onLoan && !p.isYouth && (p.contractYears ?? 0) > 1);
+    expect(player, 'CM_FA_REASON_SETUP_EXISTING_CONTRACT').toBeDefined();
+    // Crafted trim state, using the existing canonical writer and an unchanged squad profile.
+    const released = recordWorldRosterTransfer({
+      ...career, squad: career.squad.filter(p => p.id !== player!.id),
+    }, { player: player!, from: career.clubName, to: null, kind: 'release' });
+    const records = readWorldRoster(released)?.records.filter(r => r.player.id === player!.id) ?? [];
+    expect(records, 'CM_FA_REASON_SETUP_VERIFIED_RELEASE').toHaveLength(1);
+    expect(records[0]).toMatchObject({ status: 'released', owner: null });
+    expect(records[0].player.contractYears, 'CM_FA_REASON_SETUP_VERIFIED_CONTRACT').toBeGreaterThan(1);
+    const agent: FreeAgent = {
+      name: player!.name, position: player!.position, age: player!.age, rating: player!.rating,
+      value: player!.value, generated: player!.generated, worldRosterKey: records[0].key,
+      since: career.season, reason: 'released', fromMyClub: true, trimmed: true,
+    };
+    const blocked: CareerState = { ...released, freeAgents: [agent], transferWindow: null };
+    expect(freeAgentBlock(blocked, agent), 'CM_FA_REASON_SETUP_REAL_SAME_SEASON_REFUSAL').toBe('justLeft');
+    const before = JSON.stringify(blocked), sign = vi.fn();
+    const view = render(<FreeAgentPool career={blocked} />);
+    expect(view.queryByRole('region', { name: 'Free agents' })).toBeNull();
+    view.rerender(<FreeAgentPool career={blocked} onSignFreeAgent={sign} />);
+    const button = buttonFor(view.container, blocked, agent);
+    const explanation = 'He left your club this season, and this free-agent record does not allow an immediate return.';
+    const reason = within(button.parentElement!).getByText(explanation, { exact: true });
+    expect(reason).toBeVisible();
+    expect(reason.id).not.toBe('');
+    expect(button).toHaveAttribute('aria-describedby', reason.id);
+    expect(button).toHaveAccessibleDescription(explanation);
+    expect(button).toBeDisabled();
+    expect(button).toHaveTextContent('Not this season');
+    fireEvent.click(button);
+    expect(sign).not.toHaveBeenCalled();
+    expect(JSON.stringify(blocked)).toBe(before);
+  });
+
   it('keeps engine refusals disabled and a refused callback leaves the pool unchanged', () => {
     const { career, agent } = fixture();
     const capped: CareerState = { ...career, wageCap: wageBill(career), transferWindow: null };
@@ -201,12 +239,21 @@ describe('Club Manager free-agent discovery on Transfers', () => {
     let pool = region(view, 'CM_FA_TRANSFER_REFUSAL_DISCOVERY_MISSING');
     let button = buttonFor(pool, capped, agent);
     expect(button).toBeDisabled(); expect(button).toHaveTextContent('Over the cap');
+    const explanation = 'His wage would take you over the wage cap.';
+    const reason = within(button.parentElement!).getByText(explanation, { exact: true });
+    expect(reason).toBeVisible();
+    expect(reason.id).not.toBe('');
+    expect(button).toHaveAttribute('aria-describedby', reason.id);
+    expect(button).toHaveAccessibleDescription(explanation);
     fireEvent.click(button); expect(sign).not.toHaveBeenCalled();
     const before = JSON.stringify(career);
     view.rerender(<TransferScreen {...transferProps(career, sign)} />);
     pool = region(view, 'CM_FA_TRANSFER_REFUSAL_DISCOVERY_MISSING');
     button = buttonFor(pool, career, agent);
-    expect(button).toBeEnabled(); fireEvent.click(button);
+    expect(button).toBeEnabled();
+    expect(button).not.toHaveAttribute('aria-describedby');
+    expect(within(button.parentElement!).queryByText(explanation, { exact: true })).toBeNull();
+    fireEvent.click(button);
     expect(sign.mock.calls).toEqual([[agent.name]]);
     expect(JSON.stringify(career)).toBe(before);
     expect(buttonFor(pool, career, agent)).toBeVisible();

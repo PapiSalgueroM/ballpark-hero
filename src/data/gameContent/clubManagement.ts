@@ -42,6 +42,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
           "Before each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.",
           "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.",
           "A live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or skip to the whistle, and tap one of your players at any minute to make a sub or change shape.",
+          "In Squad, open a player and tap Seasons: this one and the ones the game kept, or tap a name on a league leaders board to open his card. Your players show this season across all competitions and up to ten past seasons kept while they stay at your club. Players at other clubs in your league show the figures the save has counted, with a note when the count is incomplete. Only seasons this save played appear, and missing earlier seasons are not rebuilt.",
         ],
         subsections: [
           {
@@ -56,6 +57,8 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "Transfer windows and the staff room",
         items: [
           "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
+          "Open Free agents in Transfers or on the contracts desk in Squad. Both show the same pool, and you can sign from it while the window is shut. The button shows the wage, contract length and signing on fee, or why the player cannot sign.",
+          "In Transfers, Buy, use Maximum asking price in your chosen currency, in millions. For example, in a pounds save enter 12.5 to keep public asking prices of £12.5m or less, including exactly £12.5m. The ceiling applies before the first 50 results are shown. It filters the selling club's ask, not your scout's estimate or the full cost of a deal. Clear it to remove the custom ceiling.",
           "New Manager careers remember other clubs' transfers too. Older careers, including Hot Seat jobs carried on here, join at their next summer and keep their existing world. Missing earlier deals between other clubs aren't rebuilt. If that era's squads aren't ready, joining waits for a later summer.",
           "Run the staff room: hire an attack, defence or goalkeeping coach and a lead scout, promote one of your own academy staff for nothing, pay somebody off, and decide whether to match a rival's offer when they come calling.",
         ],
@@ -89,6 +92,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         items: [
           "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
           "Open the Cups panel to follow the whole Champions League, even when your club is not in it: table or groups, matchdays, knockouts and final. Tap a club to read its run. These are your game's simulated results.",
+          "Earn a Europa League place (your league position, your cup, or your cup's place passed down to you) and from your second season in charge you play it: eight league phase nights on Thursdays, then two legged knockouts and a one match final, and the winner goes into next season's Champions League.",
           "In England every season opens with the FA Community Shield, the league champions against the FA Cup winners (the league runners up when one club wins both): you play it from your second summer in charge if your club earns a place, and follow it from the Cups panel if not. Germany's Supercup and France's Trophée des Champions open the season the same way, Italy's Supercoppa is in for 2026-27, and the UEFA Super Cup has its own tile in Cups from the start (a new career follows the 2026 one, PSG against Aston Villa): win the Champions League or the Europa League and you play it.",
           "Serie B (20 clubs), Ligue 2 (18) and the Segunda División (20) sit under Serie A, Ligue 1 and La Liga, so the bottom three of Serie A and La Liga and the bottom two of Ligue 1 really go down and swap with the top of the division below every summer. The Segunda plays 20 of its real 22 clubs: Real Sociedad B and Celta Fortuna are reserve sides that don't play the Copa del Rey, so they're left out. The promotion playoffs, Serie B's playout and the French barrages aren't played, so it's a straight swap. Most second division squads are thin in the game's data (only Pisa and Verona in Serie B, Nantes, Saint-Étienne and Reims in Ligue 2, and Girona and Mallorca in the Segunda have eight or more real players), so the rest get topped up with made up youth players, marked as made up. These squads are last season's players that each club's 2026-27 squad list still names, so summer signings at these clubs aren't in yet.",
           "Brazil's Serie A is 20 clubs over 38 rounds with four going down and the Copa do Brasil as its cup. Three simplifications: it plays on the game's August to May calendar like MLS does rather than Brazil's own January to December one, the Copa Libertadores is not modelled, so a Brazilian club's season is the league and the cup, and clubs level on points are split by goal difference then goals scored, where the real table looks at wins first.",
@@ -206,6 +210,10 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       {
         q: "When do the transfer windows close?",
         a: "The calendar marks both. The summer window is open from kickoff and shuts at the final whistle of your fourth match (in 2020-21, which really kicked off late, it stays open until your last match before the real deadline of 5 October, a few matches longer); the January window opens in January and shuts after your third match from there, on the first Saturday of the new year in most leagues and a little later in a long one like the 24 club Championship, whose fixture list reaches January on its own. Deadline day wears a padlock on the grid, and every fast forward is a tap on a day that goes through the same rule.",
+      },
+      {
+        q: "Can I sign a free agent after the transfer window shuts?",
+        a: "Yes. Open Free agents in Transfers or on the contracts desk in Squad. There is no transfer fee, but the signing on fee comes from your budget and the wage must fit your cap. You also need a squad place and a player interested in joining. A player you manually released will not come back; a verified player whose contract expired can return on renewal terms. Some records still block a return in the same season. The disabled button tells you why, so being on the list does not guarantee he can sign.",
       },
       {
         q: "Do wages come out of my transfer budget?",
