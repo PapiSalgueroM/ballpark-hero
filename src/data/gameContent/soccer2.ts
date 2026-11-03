@@ -1921,6 +1921,12 @@ export const SOCCER_CONTENT_2: GameContentMap = {
           "The revenge arc peaks at 26: a Champions League, a World Cup semifinal carrying Nigeria, then the Ballon d'Or, where he thanks the rival from the stage. An extended prime runs to 36, the fortune buys his boyhood club, and he retires at 38 with a legacy of 84, LEGEND tier, one Champions League short of GOAT talk.",
         ],
       },
+      {
+        heading: "Picking up the newer save in another tab",
+        paragraphs: [
+          "You leave your career open in two tabs and accept a contract in the second. The first tab says the career moved on. Press Reload there to load the saved contract, then keep playing in one tab.",
+        ],
+      },
     ],
     tipSections: [
       {
@@ -1954,7 +1960,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     faqs: [
       {
         q: "How do I save my career?",
-        a: "Automatically, in your browser, after every decision. There is one career per browser, and starting fresh permanently deletes the old save. An optional account adds site stats and leaderboards, but the career lives on your device.",
+        a: "Automatically, in your browser, after every decision. There is one career per browser, and starting fresh permanently deletes the old save. An optional account adds site stats and leaderboards, but the career lives on your device. If another tab plays this career on, the older tab pauses and asks you to Reload before you carry on.",
       },
       {
         q: "How do I win the Ballon d'Or?",

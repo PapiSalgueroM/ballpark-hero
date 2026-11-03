@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { cn } from '@/lib/utils';
 import { freeAgentBlock, freeAgentTerms, moneyIn } from '@/lib/clubManager';
 import type { CareerState, FreeAgent, FreeAgentBlock } from '@/lib/clubManager';
@@ -7,7 +8,7 @@ const FREE_AGENT_BLOCK_COPY: Record<FreeAgentBlock, { face: string; title: strin
   notInPool: { face: 'Gone', title: 'He is not on the free agent list any more.' },
   inSquad: { face: 'In your squad', title: 'He is already in your squad.' },
   releasedByYou: { face: 'You let him go', title: 'You released him, so he will not sign for you again.' },
-  justLeft: { face: 'No old deal', title: 'This older free-agent record has no verified past contract, so the same-season return is unavailable.' },
+  justLeft: { face: 'Not this season', title: 'He left your club this season, and this free-agent record does not allow an immediate return.' },
   notInterested: { face: 'Not interested', title: 'Too good to sign for your club as a free agent.' },
   squadFull: { face: 'Squad full', title: 'You already have 30 players.' },
   overCap: { face: 'Over the cap', title: 'His wage would take you over the wage cap.' },
@@ -27,6 +28,7 @@ interface FreeAgentPoolProps {
 
 /** The existing pool and engine quote, shared by the contracts and transfer desks. */
 export function FreeAgentPool({ career, onSignFreeAgent }: FreeAgentPoolProps) {
+  const poolId = useId();
   if (!onSignFreeAgent) return null;
   const money = moneyIn(career);
   const pool = career.freeAgents ?? [];
@@ -40,6 +42,7 @@ export function FreeAgentPool({ career, onSignFreeAgent }: FreeAgentPoolProps) {
         {pool.map((f, i) => {
           const block = freeAgentBlock(career, f);
           const t = freeAgentTerms(f, career);
+          const reasonId = `${poolId}-${i}`;
           return (
             <div key={f.name} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
               <div className="flex-1 min-w-0">
@@ -53,11 +56,13 @@ export function FreeAgentPool({ career, onSignFreeAgent }: FreeAgentPoolProps) {
                 <div className="text-[9px] text-muted-foreground">
                   {t.wage}k a week for {t.years} years, {money(t.fee)} to sign, no transfer fee
                 </div>
+                {block && <p id={reasonId} className="mt-1 text-[10px] text-muted-foreground">{FREE_AGENT_BLOCK_COPY[block].title}</p>}
               </div>
               <button
                 data-sign-index={i}
                 onClick={() => onSignFreeAgent(f.name)}
                 disabled={!!block}
+                aria-describedby={block ? reasonId : undefined}
                 title={block ? FREE_AGENT_BLOCK_COPY[block].title : `${t.years} years at ${t.wage}k a week and ${money(t.fee)} to sign. No transfer fee, and the window being shut does not matter.`}
                 className={cn('shrink-0 max-w-[55%] min-h-11 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all',
                   block ? 'bg-secondary text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:opacity-90')}
