@@ -19904,3 +19904,16 @@ Published source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5
 Hosted-M run 41133839703 has independent scoped admission d3492ce71d7b9733addafe8b9a8bb2138ee0f838495fda9b7c3e84e6b520d8d5: 172/172 raw routes clean, exact 8 CM/SC plain/slash desktop/phone records mounted and settled without saved-text loss, 50 source fingerprints and 7 effective in-memory controls. Retained findings include denied live_scores reads, console resource errors and blocked telemetry writes. Hosted-P byte parity and gameplay are outside this observation.
 
 Broad 1022 default outcomes remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT, with raw failures retained. The Season Centre focus fix 51da27a2367cc84ca0c622def41029dbc2580b68 is separate and unshipped; its fixed/whole-old-Page/restored qualification remains pending.
+
+
+## November 3: Club Manager currency labels qualified
+
+The finance desk now uses the save's existing currencySymbol(c) for its ticket, food and drink, and combined per-fan quotes. Three display prefixes changed. The raw prices, callbacks, totals, styles, save behavior, engine and data are held. Currency remains a symbol-only setting with the existing GBP default for older saves.
+
+The corrected test-first baseline d6d9228e, run 41586310327, produced two GBP/default passes and four owned non-GBP symbol failures. All six raw observations preserved the correct amounts and callbacks. The earlier selector setup failure remains in the evidence packet and supplies no reproduction credit.
+
+Qualification source ae2b83d06bfbbf51da25d4b84ff8a7ad4e49345c, tree89317d24e481bb0243575c5536a7e1df4b197286, run 41586982713/job 125754673199 passed. Six new mounted currency cases passed; restoring the entire old component reproduced exactly two passes and four owned failures; restoring the fixed bytes passed the same six again. Fourteen existing shirt-sales screen cases passed, giving 20 unique healthy cases. Proper app types and the four normal finance sims passed, including all 15 shirt-sales cases, six charged prefixes and 72 charged weeks. Absent runtime-error counters remain unknown.
+
+The normal generators and CM-only SEO build passed, followed by 20 rebuilt reader scopes and all 16 unchanged download caps. The 5645-entry qualification source manifests match. Generated output changed only the sitemap comment's generation date; the clean delivery keeps the original comment and every route/date ledger entry. The completed dist is 6977417 bytes, SHA256 12069ef98dec9e1c5adb4a5d466994442e064e97c8fe71b5a35c1f87e5bc3a9b. Three build-font and 20 weight-sweep font/flag refusals are retained; other guarded receipts are empty. Coverage is the actual mounted screen and scoped checks, without a new full browser journey or full-suite claim.
+
+Original artifact 13209220400 was acquired once, 8544824 bytes, SHA256 69d3a926fec63334ccca67ba3d722ec91650dc3cc742dd11687258a5de4feae8, under C:/Users/antho/dukb-handoff/2026-11-03/cm-currency-labels-v1. Clean branch codex/cm-currency-labels-ready-20261103 contains only FinancesScreen 232ac786, new regression b47bc159 and this additive state entry. K retains main integration and publication; this qualification is not a live deployment.
