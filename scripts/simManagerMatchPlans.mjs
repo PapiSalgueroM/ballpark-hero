@@ -32,8 +32,8 @@ const controls = {
   captureShootout: { file: helper, from: 'shootoutOrder: [...new Set(shootoutOrderOf(career) ?? [])].slice(0, SHOOTOUT_MAX_ORDER),', to: 'shootoutOrder: [],', test: cases.capture },
   alias: { file: helper, from: 'xiIds: formation.slots.map((_, i) => career.xiIds[i] ?? null),', to: 'xiIds: career.xiIds,', test: cases.capture },
   random: { file: helper, from: 'const label = name.trim().replace', to: 'Math.random();\n  const label = name.trim().replace', test: cases.capture },
-  hookSave: { file: hook, from: 'setCareer(prev => prev ? savePlan(prev, slot, name) : prev);', to: 'setCareer(prev => prev);', test: cases.mounted },
-  hookApply: { file: hook, from: 'setCareer(prev => prev ? applyPlan(prev, slot) : prev);', to: 'setCareer(prev => prev);', test: cases.mounted },
+  hookSave: { file: hook, from: "const next = savePlan(now, slot, name);", to: "const next = now;", test: cases.mounted },
+  hookApply: { file: hook, from: "const next = applyPlan(now, slot);", to: "const next = now;", test: cases.mounted },
   persistence: { file: hook, from: 'const ok = saveCareer(c);', to: 'const ok = true;', test: cases.mounted },
   applyFormation: { file: helper, from: '...career, formationIndex: plan.formationIndex, mentality: plan.mentality,', to: '...career, formationIndex: career.formationIndex, mentality: plan.mentality,', test: cases.mounted },
   applyMentality: { file: helper, from: '...career, formationIndex: plan.formationIndex, mentality: plan.mentality,', to: '...career, formationIndex: plan.formationIndex, mentality: career.mentality,', test: cases.mounted },
@@ -44,19 +44,19 @@ const controls = {
   kickoffDuty: { file: helper, from: 'xiIds: [...plan.xiIds], xiDuties: [...plan.xiDuties],', to: 'xiIds: [...plan.xiIds], xiDuties: [],', test: cases.kickoff },
   kickoffXi: { file: helper, from: 'xiIds: [...plan.xiIds], xiDuties: [...plan.xiDuties],', to: 'xiIds: [...career.xiIds], xiDuties: [...plan.xiDuties],', test: cases.kickoff },
   overwrite: { file: helper, from: 'matchPlans: [...matchPlansOf(career).filter(p => p.slot !== slot), plan]', to: 'matchPlans: [plan]', test: cases.slots },
-  delete: { file: hook, from: 'setCareer(prev => prev ? deletePlan(prev, slot) : prev);', to: 'setCareer(prev => prev);', test: cases.slots },
+  delete: { file: hook, from: "const next = deletePlan(now, slot);", to: "const next = now;", test: cases.slots },
   limit: { file: helper, from: 'export const MATCH_PLAN_LIMIT = 3;', to: 'export const MATCH_PLAN_LIMIT = 4;', test: cases.slots },
-  version: { file: helper, from: 'p.version !== 1 || !validSlot(p.slot)', to: '!validSlot(p.slot)', test: cases.invalid },
+  version: { file: helper, from: "(p.version !== 1 && p.version !== 2) || !validSlot(p.slot)", to: "!validSlot(p.slot)", test: cases.invalid },
   club: { file: helper, from: 'p.clubName !== career.clubName || p.eraId !== (career.eraId ?? DEFAULT_ERA_ID)', to: 'p.eraId !== (career.eraId ?? DEFAULT_ERA_ID)', test: cases.club },
   era: { file: helper, from: 'p.clubName !== career.clubName || p.eraId !== (career.eraId ?? DEFAULT_ERA_ID)', to: 'p.clubName !== career.clubName', test: cases.club },
   takers: { file: helper, from: 'setPieces: currentSetPieces(career, plan.setPieces),', to: 'setPieces: { ...plan.setPieces },', test: cases.takers },
   removedShootout: { file: helper, from: 'shootoutOrder: plan.shootoutOrder.filter(id => career.squad.some(p => p.id === id)),', to: 'shootoutOrder: [...plan.shootoutOrder],', test: cases.takers },
-  live: { file: helper, from: 'return !career.live && !career.sacked && !career.wilderness;', to: 'return !career.sacked && !career.wilderness;', test: cases.guards },
-  phase: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (phase !== 'hub' || !holdsActiveSlot()) return false;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (!holdsActiveSlot()) return false;", test: cases.guards },
-  stale: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (phase !== 'hub' || !holdsActiveSlot()) return false;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    if (phase !== 'hub') return false;", test: cases.guards },
+  live: { file: helper, from: "if (career.live || career.sacked || career.wilderness || !currentTactics(career)) return false;", to: "if (career.sacked || career.wilderness || !currentTactics(career)) return false;", test: cases.guards },
+  phase: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    const now = careerRef.current;\n    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.retired) return false;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    const now = careerRef.current;\n    if (!holdsActiveSlot() || !now || now.retired) return false;", test: cases.guards },
+  stale: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    const now = careerRef.current;\n    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.retired) return false;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    const now = careerRef.current;\n    if (phase !== 'hub' || !now || now.retired) return false;", test: cases.guards },
   focus: { file: card, from: 'triggerRef.current?.focus({ preventScroll: true });', to: 'void 0;', test: cases.controls },
   selection: { file: tactics, from: 'setSelSlot(null); setBenchPick(null); setOpenSlot(null); setDutySlot(null);', to: 'setOpenSlot(null); setDutySlot(null);', test: cases.controls },
-  rules: { file: card, from: 'For example, save your first XI, rotate on the pitch, then save a second plan.', to: 'Save a setup.', test: cases.controls },
+  rules: { file: card, from: 'For example, save your first XI, rotate on the pitch, then save a second plan. Custom positions and all four team instructions are saved too. Start from a preset, use Move players, choose your own instruction mix and give the plan a name. For example, pick High press and Patient and save it as My pressure philosophy.', to: 'Save a setup.', test: cases.controls },
   reveal: { file: card, from: '<div ref={actionRef} data-cm-plan-actions', to: '<div data-cm-plan-actions', test: cases.reveal },
   refusedNotice: { file: card, from: 'setNotice(accepted ? success : REFUSED_MATCH_PLAN);', to: 'setNotice(success);', test: cases.refused },
   refusedSelection: { file: tactics, from: 'if (!onApplyMatchPlan(slot)) return false;', to: 'onApplyMatchPlan(slot);', test: cases.refused },
@@ -100,14 +100,22 @@ try {
     await writeFile(path.join(out, `${control}-mutation.json`), JSON.stringify({ control, file: spec.file, from: spec.from, to: spec.to, anchorCount: 1, originalSha256: digest(original), changedSha256: digest(changed), test: spec.test }, null, 2));
     env.NO_DOUBLE_SWAP = JSON.stringify({ [spec.file.replace(/^src\//, '@/').replace(/\.tsx?$/, '')]: copy });
   }
-  const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', testFile, '--maxWorkers=1', '--no-file-parallelism', '--reporter=verbose', '--reporter=json', `--outputFile.json=${reportFile}`];
+  const args = [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', testFile, '--maxWorkers=1', '--minWorkers=1', '--no-file-parallelism', '--reporter=verbose', '--reporter=json', `--outputFile.json=${reportFile}`];
   if (control) args.push('--testNamePattern', [controls[control].test, cases.independent].map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'));
   const run = spawnSync(process.execPath, args, { cwd: root, env, encoding: 'utf8', timeout: 180000, maxBuffer: 32 * 1024 * 1024 });
   const output = (run.stdout || '') + '\n' + (run.stderr || ''); await writeFile(path.join(out, `${control || 'normal'}-vitest.log`), output); process.stdout.write(output);
   assert(!run.error && !run.signal, 'Actual match-plan runner completed');
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Failed to (?:resolve import|load)|Cannot find module|No test files found|SyntaxError|Transform failed/, 'Runtime failures earn no fault credit');
   const report = JSON.parse(await readFile(reportFile, 'utf8')), rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, count); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
+  assert.equal(rows.length, count);
+  const runtimeCounters = {};
+  for (const key of ['numUnhandledErrors', 'numRuntimeErrorTestSuites', 'numTodoTests']) {
+    runtimeCounters[key] = Object.hasOwn(report, key) ? report[key] : null;
+    if (runtimeCounters[key] !== null) assert.equal(runtimeCounters[key], 0, key);
+  }
+  await writeFile(path.join(out, (control || 'normal') + '-runtime-counters.json'), JSON.stringify({
+    counters: runtimeCounters, absentCounterMeaning: 'UNKNOWN',
+  }, null, 2));
   if (control) {
     assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, count - 2);
     const intended = rows.find(row => row.title === controls[control].test); assert.equal(intended?.status, 'failed');
