@@ -1,0 +1,157 @@
+name: Soccer Career recorded totals expectation
+on:
+  push:
+    branches: [codex/sc-community-shield-recorded-stats-20261102]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the qualified product and exact two-path expectation repair
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-recorded-stats"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-recorded-stats-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = 1b0e7543c58372ab36b5dbc4bde3f7597ece5bd5
+          test "$(git rev-parse 'HEAD^^{tree}')" = 3041fcea83599279d19a991a61aaecaacf6ff872
+          test "$(git rev-parse HEAD^:src/test/careerRecordedStats.test.tsx)" = c326b025abc632a1a7dcca4e8deb6af05268640f
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\n' '.github/workflows/sc-community-shield-recorded-stats.yml' > "$OUT/expected-paths.txt"
+          printf 'M\t%s\n' 'src/test/careerRecordedStats.test.tsx' >> "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          src/test/careerRecordedStats.test.tsx c27cbf7c523fc46e0e43b2df5c68d1ad1cf5bcbf
+          src/lib/soccerCareerEngine.ts 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          src/lib/soccerCareerExtraCups.ts ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          printf '%s  %s\n' 69deafaa6e42d3c70e75abfc783c3eaa96497c5613dfbc16a78c362e89c1272b src/test/careerRecordedStats.test.tsx | sha256sum --check > "$OUT/test-pin.log"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from offline qualification
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Proper app types then the existing eight-case recorded-stats file
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP SC_EXTRA_CUPS_ENGINE COMPLETION_HOOK OWNED_TIMEOUTS_HOOK TYCOON_AWAY_CONTROL CONQUEST_NBA_HOOK CONQUEST_NBA_BOARD POLL_FIXTURES DAILY_RECORD_CONTROL TYCOON_ROOMS_PAGE TYCOON_LOADS_STADIUM_HOOK TYCOON_LOADS_ACADEMY_HOOK TYCOON_LOADS_STADIUM_LIB TYCOON_LOADS_ACADEMY_LIB TYCOON_PITCH_COMPONENT TYCOON_PACKS_REWARDS TYCOON_PACKS_PANEL
+          source "$OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture recorded-stats node node_modules/vitest/vitest.mjs run src/test/careerRecordedStats.test.tsx --maxWorkers=1 --minWorkers=1 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$OUT/recorded-stats.json"
+      - name: Verify the acquired eight identities all pass without setup or runtime failures
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          const out = process.env.OUT;
+          const expected = ["recorded Soccer career stats shows only the keepers saved appearances clean sheets and actual trophies","recorded Soccer career stats shows the defenders saved appearances goals clean sheets and trophies without invented defensive actions","recorded Soccer career stats shows midfielders saved goals and assists without estimating key passes","recorded Soccer career stats shows forwards saved goals and assists without inferring hat tricks from total goals","recorded Soccer career stats keeps an incomplete old defender clean sheet history unknown instead of claiming a lifetime zero or partial total","recorded Soccer career stats preserves recorded zero positive legacy and no appearance clean sheets under the existing reader convention","recorded Soccer career stats updates the actual card from new saved rows without changing its earned derby record or writing a save","recorded Soccer career stats retains the independent saved totals and unknown season baseline without the career card"];
+          for (const tag of ['types', 'recorded-stats']) {
+            assert.equal(Number(fs.readFileSync(path.join(out, tag + '.exit'), 'utf8')), 0);
+            assert.equal(fs.statSync(path.join(out, tag + '.transport')).size, 0);
+          }
+          const bytes = fs.readFileSync(path.join(out, 'recorded-stats.json')), report = JSON.parse(bytes);
+          assert.equal(report.success, true);
+          for (const [key, value] of Object.entries({ numTotalTests: 8, numPassedTests: 8, numFailedTests: 0, numPendingTests: 0, numTodoTests: 0 })) assert.equal(report[key], value, key);
+          assert.equal(report.testResults.length, 1);
+          const suite = report.testResults[0];
+          assert.equal(path.relative(process.cwd(), suite.name).split(path.sep).join('/'), 'src/test/careerRecordedStats.test.tsx');
+          assert.equal(suite.status, 'passed'); assert.equal(suite.message, '');
+          assert.equal(suite.assertionResults.length, 8);
+          assert.deepEqual(suite.assertionResults.map(row => row.fullName).sort(), expected.slice().sort());
+          for (const row of suite.assertionResults) {
+            assert.deepEqual(row.ancestorTitles, ['recorded Soccer career stats']);
+            assert.equal(row.fullName, 'recorded Soccer career stats ' + row.title);
+            assert.equal(row.status, 'passed'); assert.deepEqual(row.failureMessages, []);
+          }
+          const counters = Object.fromEntries(['numUnhandledErrors', 'numRuntimeErrorTestSuites', 'numRuntimeErrorTests'].map(key => [key, report[key] ?? null]));
+          for (const value of Object.values(counters)) if (value !== null) { assert.equal(typeof value, 'number'); assert.equal(value, 0); }
+          const rawErrors = Object.fromEntries(['errors', 'unhandledErrors'].map(key => [key, report[key] ?? null]));
+          for (const value of Object.values(rawErrors)) if (value !== null) { assert.ok(Array.isArray(value)); assert.equal(value.length, 0); }
+          const raw = fs.readFileSync(path.join(out, 'recorded-stats.stdout'), 'utf8') + '\n' + fs.readFileSync(path.join(out, 'recorded-stats.stderr'), 'utf8');
+          const detectedRuntimeError = /(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled|ERR_MODULE_NOT_FOUND|Failed to load url|Cannot find module|SyntaxError:|ReferenceError:|TypeError:)/i.test(raw);
+          assert.equal(detectedRuntimeError, false);
+          fs.writeFileSync(path.join(out, 'qualification-summary.json'), JSON.stringify({
+            scope: 'Existing recorded stats eight-case file. One additive expected zero counter, with all old counters and unknown-season assertions held.',
+            sourceBaseline: { run: 41549351451, oldPassed: 7, oldOwnedTotalsFailure: 1 },
+            children: 1, executed: 8, passed: 8, failed: 0, skipped: 0,
+            identities: suite.assertionResults.map(row => ({ fullName: row.fullName, status: row.status })),
+            reportSha256: crypto.createHash('sha256').update(bytes).digest('hex'),
+            counters, rawErrors, detectedRuntimeError,
+            runtimeCounterCompleteness: Object.values(counters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED',
+            limits: 'No new fault, full-unit repeat, build or browser proof. Original old expectation failure is retained in the acquired full-unit artifact.'
+          }, null, 2) + '\n');
+          console.log('SC_RECORDED_STATS_QUALIFIED: 8 existing cases passed, 0 failures, 0 skips.');
+          VERIFY
+          capture verify node "$OUT/verify.mjs"
+      - name: Always hold source dependencies and complete tracked membership
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-recorded-stats-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-recorded-stats/
+          retention-days: 14
