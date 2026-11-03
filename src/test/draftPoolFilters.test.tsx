@@ -91,7 +91,7 @@ describe('Fantasy Draft pool targeting', () => {
       expect(row).toHaveClass(player === drafted ? 'opacity-35' : 'opacity-45');
       if (player === blocked) {
         expect(row).toHaveAttribute('title', props.ineligibleReason);
-        expect(row).toHaveTextContent("Blocked by today's rule");
+        expect(row).toHaveTextContent("Pick blocked");
       }
       fireEvent.click(row);
     }

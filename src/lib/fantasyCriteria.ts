@@ -10,11 +10,9 @@ import type { DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
  * and age gates where noted, because the 200-player pool only carries 4
  * keepers and a draft that cannot legally field a keeper would brick.
  *
- * Safety valve: pickIsLegal() callers should fall back to "anything goes"
- * if a side has NO legal pick left (pool exhaustion), so the draft can
- * always finish. enforceable() tells the UI whether the active criteria
- * text mapped to a real rule (unknown/legacy strings degrade to unenforced
- * rather than blocking play).
+ * Daily criteria relax only when no eligible player fits an open formation
+ * slot. Position limits stay on. Unknown or legacy criteria strings remain
+ * unenforced rather than blocking play.
  */
 
 export interface CriteriaRule {
@@ -114,4 +112,24 @@ export function anyLegalPick(
 ): boolean {
   if (!rule) return true;
   return pool.some((p) => !draftedIds.has(p.id) && pickIsLegal(rule, team, p));
+}
+
+/** Both sides fill the same starting XI. Daily criteria never open an extra position. */
+export const FANTASY_FORMATION: Record<string, number> = { GK: 1, DEF: 4, MID: 3, FWD: 3 };
+
+export function fantasySlotOpen(team: DraftPlayer[], candidate: DraftPlayer): boolean {
+  return team.filter(p => p.position === candidate.position).length < (FANTASY_FORMATION[candidate.position] ?? 0);
+}
+
+export function fantasyXiComplete(team: DraftPlayer[]): boolean {
+  return team.length === 11 && Object.entries(FANTASY_FORMATION)
+    .every(([position, count]) => team.filter(p => p.position === position).length === count);
+}
+
+export function fantasyDraftCandidates(
+  rule: CriteriaRule | null, team: DraftPlayer[], pool: DraftPlayer[], draftedIds: Set<string>,
+): { players: DraftPlayer[]; relaxed: boolean } {
+  const available = pool.filter(p => !draftedIds.has(p.id) && fantasySlotOpen(team, p));
+  const legal = available.filter(p => pickIsLegal(rule, team, p));
+  return { players: legal.length ? legal : available, relaxed: !!rule && available.length > 0 && legal.length === 0 };
 }
