@@ -82,7 +82,7 @@ jobs:
           const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
           assert.deepEqual(tracked, [...Object.keys(original), ...generated, driver, workflow].sort(), 'Only the two declared QA paths may be added');
           for (const [p, hash] of Object.entries(original)) assert.equal(sha(p), hash, p);
-          assert.equal(sha(driver), 'c85d6bb0f68d346f73ef174ff48182dfdfc8e777d01c51b60b7d436c937a0045');
+          assert.equal(sha(driver), '29fbde55fb82762892802f02e9a3f98d4a83fd89be4f10050d4039a4022bdf16');
           for (const p of generated) assert.deepEqual(fs.readFileSync(p), fs.readFileSync(path.join(prior, 'original', p)), p);
           fs.writeFileSync(out + '/source-before.json', JSON.stringify(Object.fromEntries(tracked.map(p => [p, sha(p)])), null, 2) + '\n');
           fs.copyFileSync(prior + '/source.txt', out + '/built-source.txt');

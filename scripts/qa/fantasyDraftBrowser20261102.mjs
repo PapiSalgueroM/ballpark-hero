@@ -17,6 +17,22 @@ assert.equal(byName.size, players.length);
 for (const [position, count] of Object.entries(formation)) assert.ok(players.filter(p => p.position === position && p.market_value_millions <= 60).length >= count * 2);
 await fs.mkdir(OUT, { recursive: true });
 const report = { status: 'incomplete', fixture: { source: 'scripts/data/fantasyDraftPool.json', sha256: crypto.createHash('sha256').update(poolBytes).digest('hex'), players: players.length, criteria }, fontRendering: 'Fallback fonts; no actual-font pixel claim', contexts: [] };
+function expectedRefusal(error, abortedOrigins) {
+  return /^Failed to load resource: net::ERR_(?:BLOCKED_BY_CLIENT(?:\.Inspector)?|FAILED)$/.test(error.text) && abortedOrigins.has(error.origin);
+}
+// Copied observed console entry from failed run41571523736, not a new request.
+const refusalWitness = { text: 'Failed to load resource: net::ERR_BLOCKED_BY_CLIENT.Inspector', origin: 'https://fonts.googleapis.com' };
+const witnessOrigins = new Set([refusalWitness.origin]);
+const changedText = { ...refusalWitness, text: refusalWitness.text.replace('.Inspector', '.Unexpected') };
+const changedOrigin = { ...refusalWitness, origin: 'https://reservedfixture.invalid' };
+assert.notEqual(changedText.text, refusalWitness.text); assert.notEqual(changedOrigin.origin, refusalWitness.origin);
+assert.equal(expectedRefusal(refusalWitness, witnessOrigins), true);
+assert.equal(expectedRefusal(changedText, witnessOrigins), false);
+assert.equal(expectedRefusal(changedOrigin, witnessOrigins), false);
+await fs.writeFile(path.join(OUT, 'console-classifier-control.json'), JSON.stringify({
+  sourceRun: 41571523736, sourceArtifact: 13201293224, refusalWitness, changedText, changedOrigin,
+  witnessedAccepted: true, changedTextRefused: true, changedOriginRefused: true,
+}, null, 2) + '\n');
 const browser = await pw.chromium.launch({ headless: true });
 try {
   for (const viewport of [{ width: 320, height: 800 }, { width: 1280, height: 900 }]) {
@@ -137,7 +153,7 @@ try {
       assert.ok(result.fixtures.some(r => r.path.endsWith('fantasy-draft-daily') && r.method === 'POST'));
       assert.ok(result.fixtures.some(r => r.path.endsWith('fantasy_draft_players') && r.method === 'GET'));
       const abortedOrigins = new Set(result.aborted.map(r => r.origin));
-      result.unexpectedConsoleErrors = result.consoleErrors.filter(e => !(/^Failed to load resource: net::ERR_(BLOCKED_BY_CLIENT|FAILED)$/.test(e.text) && abortedOrigins.has(e.origin)));
+      result.unexpectedConsoleErrors = result.consoleErrors.filter(e => !expectedRefusal(e, abortedOrigins));
       assert.deepEqual(result.unexpectedConsoleErrors, []); assert.deepEqual(result.pageErrors, []);
       result.status = 'passed';
     } catch (error) {
