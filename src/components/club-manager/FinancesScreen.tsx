@@ -197,7 +197,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
             </button>
           ))}
         </div>
-        <p className="text-xs text-muted-foreground mt-1">Tickets about £{ticketPerFan(c)} a head. {tReact.fans} {tReact.board}</p>
+        <p className="text-xs text-muted-foreground mt-1">Tickets about {currencySymbol(c)}{ticketPerFan(c)} a head. {tReact.fans} {tReact.board}</p>
         <div className="grid grid-cols-3 gap-1.5 mt-1.5">
           {CONCESSION_TIERS.map((ct, i) => (
             <button
@@ -214,7 +214,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
             </button>
           ))}
         </div>
-        <p className="text-xs text-muted-foreground mt-1">Food and drink about £{concessionPerFan(c)} a head, lifted by the stadium level. {cReact.fans} {cReact.board} The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.</p>
+        <p className="text-xs text-muted-foreground mt-1">Food and drink about {currencySymbol(c)}{concessionPerFan(c)} a head, lifted by the stadium level. {cReact.fans} {cReact.board} The mood also follows the last five results, and it moves your home crowd: 0.9x furious, 1.1x singing.</p>
       </div>
 
       {/* Round 200: the commercial desk. Round 467: reach, a push, and a bad brand. */}
@@ -320,7 +320,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onSponsor,
             <div className="text-xs text-muted-foreground">Last home gate</div>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground mt-1.5">Every home crowd pays the kitty: attendance times about £{gatePricePerFan(c)} a head, tickets plus food and drink at your prices. Scouts, the academy, the facilities and the staff desk spend from the same kitty in their own tabs. What you have left in August rolls into next season on top of the board's new cheque, up to one more season's worth of it.</p>
+        <p className="text-xs text-muted-foreground mt-1.5">Every home crowd pays the kitty: attendance times about {currencySymbol(c)}{gatePricePerFan(c)} a head, tickets plus food and drink at your prices. Scouts, the academy, the facilities and the staff desk spend from the same kitty in their own tabs. What you have left in August rolls into next season on top of the board's new cheque, up to one more season's worth of it.</p>
       </div>
     </div>
   );
