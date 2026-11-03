@@ -1,0 +1,453 @@
+name: Soccer Career annual replay compatibility template
+on:
+  push:
+    branches: [codex/sc-community-shield-annual-replay-20261103]
+permissions:
+  contents: read
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+      ANNUAL_REPLAY_ENGINE_GIT: 'a65c8353d6e4660c1d6cec6471e17095eed35805'
+      ANNUAL_REPLAY_HELPER_GIT: 'f96d2442942db57eb89d3d73d7dc18bba02ec165'
+      ANNUAL_REPLAY_BINDING_GIT: '2a797be25739ebd030e5caf197273accf82d0258'
+      ANNUAL_REPLAY_WRAPPER_GIT: '975b427f5b01f4e26b0dc6f43643ba4ae1a13a9f'
+      ANNUAL_REPLAY_EXPECTED_PATH_COUNT: '11'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the qualified parent and exact frozen repair paths
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-annual-replay-$GITHUB_RUN_ID"
+          test ! -e "$OUT"; mkdir "$OUT"
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-annual-replay-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = d035818af734d06d517603dfaeb8946d1509d597
+          test "$(git rev-parse 'HEAD^^{tree}')" = d9d318f7c4170b28c158af144653bed232841bd4
+          for pin in "$ANNUAL_REPLAY_ENGINE_GIT" "$ANNUAL_REPLAY_HELPER_GIT" "$ANNUAL_REPLAY_BINDING_GIT" "$ANNUAL_REPLAY_WRAPPER_GIT"; do [[ "$pin" =~ ^[a-f0-9]{40}$ ]]; done
+          [[ "$ANNUAL_REPLAY_EXPECTED_PATH_COUNT" =~ ^[1-9][0-9]*$ ]]
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          cat > "$OUT/expected-paths.txt" <<'PATHS'
+          A	.github/workflows/sc-community-shield-annual-replay.yml
+          M	scripts/simCareerDerbies.mjs
+          M	scripts/simSeasonCentreAgreement.mjs
+          A	scripts/simSoccerShieldReplay.mjs
+          M	src/lib/season/soccer.ts
+          M	src/lib/soccerCareerEngine.ts
+          M	src/lib/soccerCareerExtraCups.ts
+          A	src/test/soccerCommunityShieldAnnualRating.test.ts
+          A	src/test/soccerCommunityShieldLegacyReplay.test.tsx
+          A	src/test/soccerCommunityShieldReplay.test.ts
+          M	src/test/soccerSeasonCentreFocus.test.tsx
+          PATHS
+          cmp "$OUT/changed-paths.txt" "$OUT/expected-paths.txt"
+          test "$(wc -l < "$OUT/changed-paths.txt")" -eq "$ANNUAL_REPLAY_EXPECTED_PATH_COUNT"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          src/test/soccerCommunityShieldAnnualRating.test.ts bf4a086302e324ddae02a26d9736d5cd78e11f2c
+          src/test/soccerPressRoomReadAsAbsent.test.tsx 9b00b67863c3c730146382307abe1b354482dd11
+          scripts/data/careerLeagueWorldSaves1100.json 81425f731297f0ff72fc4e163dfe1a4cb86814ab
+          scripts/simCareerDerbies.mjs 2b6c96cdb99b67d8d3001a0b3a014edb8ce52fb4
+          scripts/simFightCareer.mjs b7140ec543966c9fdcbcd62d6dba73785ce29d1e
+          scripts/simHarnessAnchors.mjs 1cb32d353c317aacd32fd51f25f7ba000ac24e8d
+          scripts/simSoccerCommunityShieldMatch.mjs e708d3ec427e612bb9bfeb6c442130b2ade713f1
+          scripts/simSoccerCommunityShieldSevere.mjs 2d871e8e8e6c2a486a36b2fe55899dea7e70129c
+          scripts/simSoccerShieldPress.mjs 967de754af1c8e1118257255695cc5fdc7ecb95e
+          scripts/simSoccerSeasonCentreFocus.mjs bdcaa282e2ef6b2f6fa676afa11fee5057b61f7c
+          scripts/simCareerStory.mjs 6eb77ba60f330e8213ea7192d39b54a8075c118b
+          scripts/simSeasonCentreAgreement.mjs 3fbcd99a4936a13eaec7eb6eb4055b7b568452cf
+          scripts/simSoccerShieldReplay.mjs 975b427f5b01f4e26b0dc6f43643ba4ae1a13a9f
+          src/lib/season/soccer.ts 2a797be25739ebd030e5caf197273accf82d0258
+          src/lib/soccerCareerEngine.ts a65c8353d6e4660c1d6cec6471e17095eed35805
+          src/lib/soccerCareerExtraCups.ts f96d2442942db57eb89d3d73d7dc18bba02ec165
+          src/test/careerRecordedStats.test.tsx c27cbf7c523fc46e0e43b2df5c68d1ad1cf5bcbf
+          src/test/careerStory.test.tsx c56e00ebaf17c54fb241466f49a5959327e0fe3b
+          src/test/fixtures/soccerSeasonCompetitions1173.ts a9d674dc7a830856dbeed148a65438626745303c
+          src/test/setup.ts df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d
+          src/test/soccerCommunityShieldAcceptance.test.ts 72cf4787781245c914ebc0b178de5d56b5991687
+          src/test/soccerCommunityShieldLegacyReplay.test.tsx fa575325981ef8851eafa1f55bcee89742c29e20
+          src/test/soccerCommunityShieldMatch.test.ts 0f337b3f65fe9d7d506ff387956ff025c75e8944
+          src/test/soccerCommunityShieldReplay.test.ts f1242b3a3b350a4e01bf9dafb3b24da180d8189e
+          src/test/soccerCommunityShieldRules.test.ts aee086a743f4c0c261d805ee0d994b01323d092f
+          src/test/soccerCommunityShieldScreens.test.tsx 70e9a4a688d611f838f7960cc7231e1ae0b89df4
+          src/test/soccerCommunityShieldSevere.test.ts 1c8e9b1908d7e2268e4ec1bbff9438611e4bb118
+          src/test/soccerCommunityShieldUiAcceptance.test.tsx 52cc2d31bcf186cb1193068940bd70d45a4c5a2e
+          src/test/soccerSeasonCentreFocus.test.tsx 1fa2099cb71ab36a5a1667833c304841a8e931a4
+          src/test/soccerShieldPress.test.ts 60faec8ee37a88ed4ecfafc53172b0212907014b
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          test "$(git rev-parse HEAD:src/lib/soccerCareerEngine.ts)" = "$ANNUAL_REPLAY_ENGINE_GIT"
+          test "$(git rev-parse HEAD:src/lib/soccerCareerExtraCups.ts)" = "$ANNUAL_REPLAY_HELPER_GIT"
+          test "$(git rev-parse HEAD:src/lib/season/soccer.ts)" = "$ANNUAL_REPLAY_BINDING_GIT"
+          test "$(git rev-parse HEAD:scripts/simSoccerShieldReplay.mjs)" = "$ANNUAL_REPLAY_WRAPPER_GIT"
+          cat > "$OUT/before-pins.txt" <<'BEFOREPINS'
+          scripts/simCareerDerbies.mjs ac7f8c6e73f6cea44d0b2a67888682b1c6445b93
+          scripts/simSeasonCentreAgreement.mjs 906bbacecc4a002b9879092b3c5705e3ce57d1d5
+          src/lib/season/soccer.ts 819e2d97d0435c4ef29a4c1ed441511a6906e986
+          src/lib/soccerCareerEngine.ts 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          src/lib/soccerCareerExtraCups.ts ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          src/test/soccerSeasonCentreFocus.test.tsx 9cab74d0f4d0160c2e53648d4145aaa30127a099
+          BEFOREPINS
+          while read -r file blob; do test "$(git rev-parse "HEAD^:$file")" = "$blob"; done < "$OUT/before-pins.txt"
+          cat > "$OUT/selected-body-pins.sha256" <<'BODYPINS'
+          bc3c8b79f2e910a2ff730f216e1aaa7fb532139d663b45e956d43c9a92539934  src/lib/soccerCareerExtraCups.ts
+          2ca1ff73bc5f93b623205554d70e5fa01ed6cdbfb1b379e7475ed4969921f4ee  src/lib/season/soccer.ts
+          f009782c9f7a384881692239c47af266a834eaa1104ce86662ab53ec67756788  src/lib/soccerCareerEngine.ts
+          a22fafb72397e86ed17f4f04405537575267ffd06c9ba84eb94b808d6b2b03fc  src/test/soccerSeasonCentreFocus.test.tsx
+          7196c5b81d3960e41d88f9e6d8e77756ab683676bd0a218d86de4fae93ab4031  scripts/simSeasonCentreAgreement.mjs
+          832012ca967826a2261e55dd0967c737685b515a1b3cadfe8bb45f9fe2a56c65  scripts/simCareerDerbies.mjs
+          186deb6fae9ed48793a8e6ffd0a89a31e0253ee41291147ba9db9df7ce21e1f6  src/test/soccerCommunityShieldReplay.test.ts
+          4830b2e6cf4f74ad2df1e809390dfb6fc67fac136a8297eb06740ce42e42afec  src/test/soccerCommunityShieldAnnualRating.test.ts
+          762ffb1e2aa95d04dd2a534bee93000e6a182708ef17391858f7471f272f6aab  src/test/soccerCommunityShieldLegacyReplay.test.tsx
+          c89bca0c6c9f4d26d8631573491789014aded8c1fb6b45145698a151003345c3  scripts/simSoccerShieldReplay.mjs
+          BODYPINS
+          sha256sum --check "$OUT/selected-body-pins.sha256" > "$OUT/selected-body-pins.log"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          git ls-files --others --exclude-standard -z > "$OUT/untracked.before"; test ! -s "$OUT/untracked.before"
+          WORK="$GITHUB_WORKSPACE/tmp/sc-annual-replay-$GITHUB_RUN_ID"
+          test ! -e "$WORK"; mkdir -p "$WORK"
+          printf 'ANNUAL_REPLAY_WORK=%s\n' "$WORK" >> "$GITHUB_ENV"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"; : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install before guarded execution
+        run: |
+          set -euo pipefail
+          code=0; NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.before"
+          xargs -0 sha256sum < "$OUT/dependency-members.before" > "$OUT/dependency.sha256"
+      - name: Proper app types and actual permanent source syntax
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture actual-types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          capture wrapper-syntax node --check scripts/simSoccerShieldReplay.mjs
+          capture agreement-syntax node --check scripts/simSeasonCentreAgreement.mjs
+          capture derbies-syntax node --check scripts/simCareerDerbies.mjs
+      - name: One ordinary current 14-file corpus with exact acquired identities
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture ordinary node node_modules/vitest/vitest.mjs run \
+            src/test/careerRecordedStats.test.tsx src/test/careerStory.test.tsx \
+            src/test/soccerCommunityShieldAcceptance.test.ts src/test/soccerCommunityShieldMatch.test.ts \
+            src/test/soccerCommunityShieldRules.test.ts src/test/soccerCommunityShieldScreens.test.tsx \
+            src/test/soccerCommunityShieldSevere.test.ts src/test/soccerCommunityShieldUiAcceptance.test.tsx \
+            src/test/soccerSeasonCentreFocus.test.tsx src/test/soccerShieldPress.test.ts \
+            src/test/soccerPressRoomReadAsAbsent.test.tsx \
+            src/test/soccerCommunityShieldReplay.test.ts src/test/soccerCommunityShieldAnnualRating.test.ts \
+            src/test/soccerCommunityShieldLegacyReplay.test.tsx \
+            --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile="$OUT/ordinary.json"
+          capture ordinary-verifier node --input-type=module <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const out = process.env.OUT, report = JSON.parse(fs.readFileSync(out + '/ordinary.json', 'utf8'));
+          const suffix = file => file.replaceAll('\\', '/').split('/src/').slice(-1).map(value => 'src/' + value)[0];
+          const suites = report.testResults.map(suite => ({ file: suffix(suite.name), rows: suite.assertionResults }));
+          const rows = suites.flatMap(suite => suite.rows.map(row => ({ file: suite.file, fullName: row.fullName, status: row.status, failureMessages: row.failureMessages })));
+          assert.equal(report.success, true); assert.equal(suites.length, 14); assert.equal(rows.length, 85);
+          assert.equal(report.numTotalTests, 85); assert.equal(report.numPassedTests, 85); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0); assert.equal(report.numTodoTests, 0);
+          for (const row of rows) { assert.equal(row.status, 'passed'); assert.deepEqual(row.failureMessages, []); }
+          const identitySha256 = createHash('sha256').update(rows.map(row => row.file + '\0' + row.fullName + '\0' + row.status).sort().join('\n')).digest('hex');
+          assert.equal(identitySha256, '764707d47f9dd7eaa652bf5f6e7c17f29d10771720e53a536d2e1a02d5ac32cc');
+          const byFile = (a, b) => a.file < b.file ? -1 : a.file > b.file ? 1 : 0;
+          assert.deepEqual(suites.map(suite => ({ file: suite.file, cases: suite.rows.length })).sort(byFile), [{"file":"src/test/careerRecordedStats.test.tsx","cases":8},{"file":"src/test/careerStory.test.tsx","cases":13},{"file":"src/test/soccerCommunityShieldAcceptance.test.ts","cases":2},{"file":"src/test/soccerCommunityShieldMatch.test.ts","cases":6},{"file":"src/test/soccerCommunityShieldRules.test.ts","cases":8},{"file":"src/test/soccerCommunityShieldScreens.test.tsx","cases":6},{"file":"src/test/soccerCommunityShieldSevere.test.ts","cases":1},{"file":"src/test/soccerCommunityShieldUiAcceptance.test.tsx","cases":3},{"file":"src/test/soccerPressRoomReadAsAbsent.test.tsx","cases":19},{"file":"src/test/soccerSeasonCentreFocus.test.tsx","cases":2},{"file":"src/test/soccerShieldPress.test.ts","cases":9},{"file":"src/test/soccerCommunityShieldReplay.test.ts","cases":5},{"file":"src/test/soccerCommunityShieldAnnualRating.test.ts","cases":2},{"file":"src/test/soccerCommunityShieldLegacyReplay.test.tsx","cases":1}].sort(byFile));
+          const newExpected = [{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_ANNUAL: keeps the exact annual key and complete league reconstruction","status":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_GRADE: uses the recorded annual grade when the opener changes the rounded mean","status":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_LEGACY: keeps a valid selected legacy cup readable without inventing league proof","status":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_UNSELECTED: preserves no-opener and unselected season keys and whole plans","status":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_PROOF: refuses malformed proof and keeps a selected zero-annual-app opener separate","status":"passed"},{"file":"src/test/soccerCommunityShieldAnnualRating.test.ts","fullName":"Soccer Career Community Shield annual rating capture SC_SHIELD_ANNUAL_RATING_NORMAL: records the exact annual grade before the normal opening merge","status":"passed"},{"file":"src/test/soccerCommunityShieldAnnualRating.test.ts","fullName":"Soccer Career Community Shield annual rating capture SC_SHIELD_ANNUAL_RATING_SEVERE: records the exact annual grade before the severe opening merge","status":"passed"},{"file":"src/test/soccerCommunityShieldLegacyReplay.test.tsx","fullName":"Community Shield legacy league replay boundary SC_SHIELD_LEGACY_VISIBLE: keeps the old saved cup inspectable while refusing unproved league games","status":"passed"}], newFiles = new Set(newExpected.map(row => row.file));
+          assert.deepEqual(rows.filter(row => newFiles.has(row.file)).map(row => row.file + '\0' + row.fullName + '\0' + row.status).sort(), newExpected.map(row => row.file + '\0' + row.fullName + '\0' + row.status).sort());
+          const runtimeCounters = Object.fromEntries(['numUnhandledErrors', 'numRuntimeErrorTestSuites', 'numRuntimeErrorTests'].map(key => [key, report[key] ?? null]));
+          for (const value of Object.values(runtimeCounters)) if (value !== null) assert.equal(value, 0);
+          for (const key of ['errors', 'unhandledErrors']) if (report[key] !== undefined) assert.deepEqual(report[key], []);
+          const raw = fs.readFileSync(out + '/ordinary.stdout', 'utf8') + '\n' + fs.readFileSync(out + '/ordinary.stderr', 'utf8');
+          const detectedRuntimeError = /(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Failed to load url|Cannot find (?:module|package)|SyntaxError:|ReferenceError:|TypeError:)/i.test(raw);
+          assert.equal(detectedRuntimeError, false);
+          fs.writeFileSync(out + '/ordinary-summary.json', JSON.stringify({ scope: 'Focused ordinary annual replay corpus only', files: suites.length, executed: rows.length, passed: report.numPassedTests, failed: report.numFailedTests, skipped: report.numPendingTests, identitySha256, runtimeCounters, runtimeCounterCompleteness: Object.values(runtimeCounters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED', detectedRuntimeError }, null, 2) + '\n');
+          console.log('ANNUAL_REPLAY_ORDINARY: 85 exact passed identities across 14 files, no new skips');
+          VERIFY
+      - name: Physical engine and binding source controls with raw inverse custody
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SC_SHIELD_REPLAY_OUT="$ANNUAL_REPLAY_WORK/wrapper"
+          test ! -e "$SC_SHIELD_REPLAY_OUT"
+          capture annual-replay-controls node scripts/simSoccerShieldReplay.mjs
+          capture replay-verifier node --input-type=module <<'REPLAY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const out = process.env.SC_SHIELD_REPLAY_OUT, read = name => JSON.parse(fs.readFileSync(path.join(out, name), 'utf8'));
+          const summary = read('summary.json'), receipt = read('receipt.json');
+          assert.equal(summary.schemaVersion, 1); assert.equal(summary.children, 6); assert.equal(summary.physicalControls, 3);
+          assert.deepEqual(summary.totals, { passed: 24, ownedFailures: 3, declaredUnselectedSkips: 21, executed: 27 });
+          assert.equal(receipt.complete, true); assert.equal(receipt.completedChildren, 6); assert.equal(receipt.removedSourceCopies, true);
+          assert.equal(receipt.primary, null); assert.deepEqual(receipt.secondary, []);
+          const names = ['current', 'healthy-copies', 'old-replay-binding', 'omit-normal-grade', 'omit-severe-grade', 'restored-copies'];
+          const markers = { 'old-replay-binding': 'SC_SHIELD_REPLAY_ANNUAL_KEY', 'omit-normal-grade': 'SC_SHIELD_ANNUAL_RATING_NORMAL_MISSING', 'omit-severe-grade': 'SC_SHIELD_ANNUAL_RATING_SEVERE_MISSING' };
+          assert.deepEqual(summary.results.map(row => row.name), names);
+          for (const result of summary.results) {
+            const name = result.name, fault = markers[name], reportBody = fs.readFileSync(path.join(out, name + '.vitest.json')), report = JSON.parse(reportBody);
+            assert.equal(createHash('sha256').update(reportBody).digest('hex'), result.rawReportSha256);
+            const process = read(name + '.process.json'); assert.equal(process.signal, null); assert.equal(process.error, null);
+            assert.equal(process.status, fault ? 1 : 0); assert.equal(Number(fs.readFileSync(path.join(out, name + '.exit'), 'utf8')), fault ? 1 : 0);
+            assert.equal(fs.statSync(path.join(out, name + '.transport')).size, 0);
+            const rows = report.testResults.flatMap(suite => suite.assertionResults);
+            assert.equal(rows.length, 8); assert.equal(report.testResults.length, 3);
+            assert.equal(report.numPassedTests, fault ? 0 : 8); assert.equal(report.numFailedTests, fault ? 1 : 0); assert.equal(report.numPendingTests, fault ? 7 : 0);
+            assert.equal(result.detectedRuntimeError, false);
+            if (fault) {
+              const failed = rows.filter(row => row.status === 'failed'); assert.equal(failed.length, 1);
+              const first = failed[0].failureMessages[0].replace(/\x1b\[[0-9;]*m/g, '').split(/\r?\n/).find(line => line.trim()).trim();
+              assert(first.startsWith('AssertionError: ' + fault + ':'));
+              const edit = read(name + '.edit.json'); assert.notEqual(edit.changed.sha256, edit.original.sha256);
+              assert.deepEqual(edit.inverse, edit.original); assert.equal(edit.physicalRestoreSha256, edit.original.sha256);
+            } else for (const row of rows) { assert.equal(row.status, 'passed'); assert.deepEqual(row.failureMessages, []); }
+          }
+          assert.deepEqual(read('source-before.json'), read('source-after.json'));
+          console.log('ANNUAL_REPLAY_CONTROL: 6 raw children, 24 healthy, 3 primary-owned, 21 unselected, 27 executed; source and copies held');
+          REPLAY
+      - name: Existing clean Shield permanent simulations once each
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP CAREER_STORY_CONTROL CAREER_STORY_SEEDS
+          export SC_SHIELD_MATCH_OUT="$ANNUAL_REPLAY_WORK/regression-match"
+          export SC_SHIELD_SEVERE_OUT="$ANNUAL_REPLAY_WORK/regression-severe"
+          export SC_SHIELD_PRESS_OUT="$ANNUAL_REPLAY_WORK/regression-press"
+          export SC_CENTRE_FOCUS_OUT="$ANNUAL_REPLAY_WORK/regression-focus"
+          test ! -e "$SC_SHIELD_MATCH_OUT"; test ! -e "$SC_SHIELD_SEVERE_OUT"; test ! -e "$SC_SHIELD_PRESS_OUT"; test ! -e "$SC_CENTRE_FOCUS_OUT"
+          capture regression-match node scripts/simSoccerCommunityShieldMatch.mjs
+          capture regression-severe node scripts/simSoccerCommunityShieldSevere.mjs
+          capture regression-press node scripts/simSoccerShieldPress.mjs
+          capture regression-focus node scripts/simSoccerSeasonCentreFocus.mjs
+          capture regression-story node scripts/simCareerStory.mjs
+          capture permanent-verifier node --input-type=module <<'PERMANENT'
+          import assert from 'node:assert/strict'; import fs from 'node:fs'; import path from 'node:path';
+          const root = process.env.ANNUAL_REPLAY_WORK, out = process.env.OUT;
+          const expected = [
+            { tag: 'regression-match', children: 9, physicalControls: 6, totals: { passed: 18, ownedFailures: 6, declaredUnselectedSkips: 30, executed: 24 }, completeKey: 'complete', childrenKey: 'completedChildren', removed: 'removedSourceCopy' },
+            { tag: 'regression-severe', children: 4, physicalControls: 1, totals: { passed: 3, ownedFailures: 1, declaredUnselectedSkips: 0, executed: 4 }, completeKey: 'complete', childrenKey: 'completedChildren', removed: 'removedSourceCopy' },
+            { tag: 'regression-press', children: 9, physicalControls: 6, totals: { passed: 47, ownedFailures: 13, declaredUnselectedSkips: 40, executed: 60 }, completeKey: 'completed', childrenKey: 'children', removed: 'removedSourceCopy' },
+            { tag: 'regression-focus', children: 7, totals: { passed: 8, ownedFailures: 3, declaredUnselectedSkips: 3, executed: 11 }, completeKey: 'complete', childrenKey: 'completedChildren', removed: 'removedSourceCopies' },
+          ];
+          const rows = [];
+          for (const spec of expected) {
+            assert.equal(Number(fs.readFileSync(path.join(out, spec.tag + '.exit'), 'utf8')), 0); assert.equal(fs.statSync(path.join(out, spec.tag + '.transport')).size, 0);
+            const dir = path.join(root, spec.tag), summary = JSON.parse(fs.readFileSync(path.join(dir, 'summary.json'), 'utf8')), receipt = JSON.parse(fs.readFileSync(path.join(dir, 'receipt.json'), 'utf8'));
+            assert.equal(summary.children, spec.children); assert.equal(summary.results.length, spec.children); assert.deepEqual(summary.totals, spec.totals);
+            if (spec.physicalControls !== undefined) assert.equal(summary.physicalControls, spec.physicalControls);
+            assert.equal(receipt[spec.completeKey], true); assert.equal(receipt[spec.childrenKey], spec.children); assert.equal(receipt[spec.removed], true);
+            assert.equal(receipt.primary, null); assert.deepEqual(receipt.secondary, []);
+            assert.deepEqual(JSON.parse(fs.readFileSync(path.join(dir, 'source-before.json'), 'utf8')), JSON.parse(fs.readFileSync(path.join(dir, 'source-after.json'), 'utf8')));
+            rows.push({ name: spec.tag, children: spec.children, totals: spec.totals });
+          }
+          const story = fs.readFileSync(path.join(out, 'regression-story.stdout'), 'utf8');
+          assert.equal(Number(fs.readFileSync(path.join(out, 'regression-story.exit'), 'utf8')), 0); assert.equal(fs.statSync(path.join(out, 'regression-story.transport')).size, 0);
+          assert.equal(story.split(/\r?\n/).filter(line => /^simCareerStory: GREEN, 96 careers /.test(line)).length, 1);
+          assert.equal(/^check .+: FAIL/m.test(story), false); assert.equal(story.includes('simCareerStory control '), false);
+          for (const tag of [...expected.map(row => row.tag), 'regression-story']) {
+            const raw = fs.readFileSync(path.join(out, tag + '.stdout'), 'utf8') + '\n' + fs.readFileSync(path.join(out, tag + '.stderr'), 'utf8');
+            assert.equal(/Unhandled (?:Error|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Failed to load url|Cannot find module|SyntaxError:|ReferenceError:|TypeError:/i.test(raw), false);
+          }
+          fs.writeFileSync(path.join(out, 'permanent-regression-summary.json'), JSON.stringify({ simulations: rows, story: { reportedCareers: 96, optionalControlModes: 'UNRUN, existing code held' }, runtimeCounters: null, runtimeCounterCompleteness: 'UNKNOWN' }, null, 2) + '\n');
+          PERMANENT
+      - name: Actual agreement current, old-binding refusal and complete restore
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset AGREEMENT_CONTROL CAREERS SEEDSET SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          capture agreement-leagueapps-source-proof node --input-type=module <<'SOURCEPROOF'
+          import assert from 'node:assert/strict'; import fs from 'node:fs'; import { createHash } from 'node:crypto';
+          const file = 'src/lib/season/soccer.ts', raw = fs.readFileSync(file), text = raw.toString('utf8');
+          const from = 'const want = Math.min(row.leagueApps ?? annual.apps, room, annual.apps);';
+          const to = 'const want = Math.min((row.leagueApps ?? annual.apps) + 1, room, annual.apps);';
+          assert.deepEqual(Buffer.from(text), raw); assert.equal(text.split(from).length - 1, 1);
+          assert.equal(text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '').split(from).length - 1, 1);
+          const changed = Buffer.from(text.replace(from, to)); assert.notDeepEqual(changed, raw);
+          assert.deepEqual(Buffer.from(changed.toString('utf8').replace(to, from)), raw);
+          const harness = fs.readFileSync('scripts/simSeasonCentreAgreement.mjs', 'utf8');
+          const declaration = "leagueapps: [{ file: 'src/lib/season/soccer.ts', from: '" + from + "', to: '" + to + "' }]";
+          assert.equal(harness.split(declaration).length - 1, 1);
+          const sha = body => createHash('sha256').update(body).digest('hex');
+          fs.writeFileSync(process.env.OUT + '/leagueapps-changed-source.ts.txt', changed);
+          fs.writeFileSync(process.env.OUT + '/leagueapps-source-proof.json', JSON.stringify({ source: file, from, to, changed: true, beforeSha256: sha(raw), afterSha256: sha(changed), inverseSha256: sha(raw), uniqueExecutableSource: true, exactPinnedControlDeclaration: true }, null, 2) + '\n');
+          SOURCEPROOF
+          capture agreement-current node scripts/simSeasonCentreAgreement.mjs
+          code=0; capture agreement-annualkey env AGREEMENT_CONTROL=annualkey node scripts/simSeasonCentreAgreement.mjs || code=$?
+          test "$code" -eq 1; test ! -s "$OUT/agreement-annualkey.transport"
+          code=0; capture agreement-leagueapps env AGREEMENT_CONTROL=leagueapps node scripts/simSeasonCentreAgreement.mjs || code=$?
+          test "$code" -eq 1; test ! -s "$OUT/agreement-leagueapps.transport"
+          capture agreement-restored node scripts/simSeasonCentreAgreement.mjs
+          capture agreement-verifier node --input-type=module <<'AGREEMENT'
+          import assert from 'node:assert/strict'; import fs from 'node:fs';
+          const dir = process.env.OUT, rows = [];
+          for (const name of ['agreement-current', 'agreement-annualkey', 'agreement-leagueapps', 'agreement-restored']) {
+            const control = name === 'agreement-annualkey' ? 'annualkey' : name === 'agreement-leagueapps' ? 'leagueapps' : null, fault = control !== null, code = Number(fs.readFileSync(dir + '/' + name + '.exit', 'utf8'));
+            assert.equal(code, fault ? 1 : 0); assert.equal(fs.statSync(dir + '/' + name + '.transport').size, 0);
+            const raw = fs.readFileSync(dir + '/' + name + '.stdout', 'utf8') + '\n' + fs.readFileSync(dir + '/' + name + '.stderr', 'utf8');
+            assert.equal(/Unhandled (?:Error|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Cannot find module|Failed to load url|SyntaxError:|ReferenceError:|TypeError:/i.test(raw), false);
+            const failures = raw.split(/\r?\n/).filter(line => line.startsWith('FAIL '));
+            if (control === 'annualkey') {
+              assert(raw.includes('CONTROL annualkey: src/lib/season/soccer.ts patched in the bundle only'));
+              assert(failures.some(line => line.startsWith('FAIL item 16 annual replay key:')));
+              assert(failures.some(line => line === 'FAIL independent checker: 16 annual replay key'));
+              assert(failures.every(line => line.startsWith('FAIL item 16 annual replay key:') || line === 'FAIL independent checker: 16 annual replay key'));
+              assert(/simSeasonCentreAgreement: \d+ checks, [1-9]\d* failed \(control annualkey\)/.test(raw));
+            } else if (control === 'leagueapps') {
+              assert(raw.includes('CONTROL leagueapps: src/lib/season/soccer.ts patched in the bundle only'));
+              assert(failures.some(line => line.startsWith('FAIL item 1 apps:')));
+              assert(failures.some(line => line === 'FAIL independent checker: 1 apps'));
+              assert(failures.every(line => line.startsWith('FAIL item 1 apps:') || line === 'FAIL independent checker: 1 apps'));
+              assert(/simSeasonCentreAgreement: \d+ checks, [1-9]\d* failed \(control leagueapps\)/.test(raw));
+            } else { assert.deepEqual(failures, []); assert(/simSeasonCentreAgreement: \d+ checks, 0 failed/.test(raw)); }
+            rows.push({ name, rawExit: code, failures, runtimeCounters: null, runtimeCounterCompleteness: 'UNKNOWN' });
+          }
+          fs.writeFileSync(dir + '/agreement-summary.json', JSON.stringify(rows, null, 2) + '\n');
+          AGREEMENT
+      - name: Actual Derbies current, exact old-source reconstruction refusal and restore
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for key in $(compgen -e SIM_DERBY_); do unset "$key"; done
+          capture derbies-current node scripts/simCareerDerbies.mjs
+          copy="$GITHUB_WORKSPACE/scripts/__control_shield_derbies_${GITHUB_RUN_ID}_$.mjs"
+          test ! -e "$copy"
+          cleanup_derby() {
+            local primary=$? cleanup=0
+            trap - EXIT
+            if test -f "$copy"; then
+              printf '%s  %s\n' bee1e8c06dfb0e18446dc8f7c55f47600f4465be5a969c8f8fdc2762d699ad53 "$copy" | sha256sum --check > "$OUT/derbies-old-copy-after.log" 2>&1 || cleanup=1
+              rm -- "$copy" || cleanup=1
+            fi
+            printf '%s\n' "$cleanup" > "$OUT/derbies-copy-cleanup.exit"
+            if test "$primary" -ne 0; then exit "$primary"; fi
+            exit "$cleanup"
+          }
+          trap cleanup_derby EXIT
+          test "$(git rev-parse HEAD^:scripts/simCareerDerbies.mjs)" = ac7f8c6e73f6cea44d0b2a67888682b1c6445b93
+          git cat-file blob HEAD^:scripts/simCareerDerbies.mjs > "$copy"
+          printf '%s  %s\n' bee1e8c06dfb0e18446dc8f7c55f47600f4465be5a969c8f8fdc2762d699ad53 "$copy" | sha256sum --check > "$OUT/derbies-old-copy-before.log"
+          cp "$copy" "$OUT/Derbies.before-annual-replay.mjs.txt"
+          code=0; capture derbies-old node "$copy" || code=$?
+          test "$code" -eq 1; test ! -s "$OUT/derbies-old.transport"
+          capture derbies-restored node scripts/simCareerDerbies.mjs
+          capture derbies-verifier node --input-type=module <<'DERBIES'
+          import assert from 'node:assert/strict'; import fs from 'node:fs';
+          const dir = process.env.OUT, rows = [];
+          for (const name of ['derbies-current', 'derbies-old', 'derbies-restored']) {
+            const fault = name === 'derbies-old', code = Number(fs.readFileSync(dir + '/' + name + '.exit', 'utf8'));
+            assert.equal(code, fault ? 1 : 0); assert.equal(fs.statSync(dir + '/' + name + '.transport').size, 0);
+            const raw = fs.readFileSync(dir + '/' + name + '.stdout', 'utf8') + '\n' + fs.readFileSync(dir + '/' + name + '.stderr', 'utf8');
+            assert.equal(/Unhandled (?:Error|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Cannot find module|Failed to load url|SyntaxError:|ReferenceError:|TypeError:/i.test(raw), false);
+            const lines = raw.split(/\r?\n/).map(line => line.trim()), failures = lines.filter(line => line.startsWith('FAIL: '));
+            if (fault) {
+              assert.equal(failures.length, 1);
+              assert.match(failures[0], /^FAIL: [1-9]\d* seasons store derbies the module would not draw from their own inputs and the engine's elite list$/);
+              assert.equal(lines.filter(line => line === 'simCareerDerbies: 1 failures, sections 4 red').length, 1);
+            } else {
+              assert.deepEqual(failures, []);
+              assert.equal(lines.filter(line => line === 'simCareerDerbies: all 8 sections green').length, 1);
+            }
+            rows.push({ name, rawExit: code, runtimeCounters: null, runtimeCounterCompleteness: 'UNKNOWN' });
+          }
+          fs.writeFileSync(dir + '/derbies-summary.json', JSON.stringify(rows, null, 2) + '\n');
+          DERBIES
+      - name: Existing executable harness anchor admission
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset ANCHOR_CONTROL
+          capture anchors-current node scripts/simHarnessAnchors.mjs
+          capture anchors-strip env ANCHOR_CONTROL=strip node scripts/simHarnessAnchors.mjs
+          capture anchors-verifier node --input-type=module <<'ANCHORS'
+          import assert from 'node:assert/strict'; import fs from 'node:fs';
+          const dir = process.env.OUT;
+          for (const name of ['anchors-current', 'anchors-strip']) {
+            assert.equal(Number(fs.readFileSync(dir + '/' + name + '.exit', 'utf8')), 0);
+            assert.equal(fs.statSync(dir + '/' + name + '.transport').size, 0);
+            const raw = fs.readFileSync(dir + '/' + name + '.stdout', 'utf8') + '\n' + fs.readFileSync(dir + '/' + name + '.stderr', 'utf8');
+            assert.equal(/Unhandled (?:Error|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|SyntaxError:|ReferenceError:|TypeError:/i.test(raw), false);
+            const failures = raw.split(/\r?\n/).map(line => line.trim()).filter(line => line.startsWith('FAIL '));
+            if (name === 'anchors-current') {
+              assert.deepEqual(failures, []); assert(raw.includes('simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.'));
+            } else {
+              assert.equal(failures.length, 1); assert(failures[0].startsWith('FAIL simFightCareer.mjs reads '));
+              assert(raw.includes('[control strip applied to a copy of simFightCareer.mjs]'));
+              assert(raw.includes('control "strip": the planted fault in simFightCareer.mjs was named and nothing else was, the check works'));
+            }
+          }
+          console.log('ANNUAL_REPLAY_ANCHORS: actual healthy source fence and sole real strip control');
+          ANCHORS
+      - name: Always retain exact current source and dependency custody
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -z "${OUT:-}" || test ! -d "$OUT"; then exit 1; fi
+          status=0
+          if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log" 2>&1 || status=1; else status=1; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after" > "$OUT/source-members.log" 2>&1 || status=1
+          git diff --exit-code > "$OUT/source-diff.log" 2>&1 || status=1
+          git ls-files --others --exclude-standard -z > "$OUT/untracked.after"; test ! -s "$OUT/untracked.after" || status=1
+          if test -f "$OUT/dependency.sha256"; then
+            sha256sum --check "$OUT/dependency.sha256" > "$OUT/dependency-held.log" 2>&1 || status=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.after"
+            cmp "$OUT/dependency-members.before" "$OUT/dependency-members.after" > "$OUT/dependency-members.log" 2>&1 || status=1
+          else status=1; fi
+          if test -n "${ANNUAL_REPLAY_WORK:-}" && test -d "$ANNUAL_REPLAY_WORK"; then cp -a "$ANNUAL_REPLAY_WORK" "$OUT/controlled-work"; fi
+          find "$OUT" -maxdepth 1 -name '*.transport' -type f -printf '%f %s\n' | sort > "$OUT/outer-transports.txt"
+          if find "$OUT" -maxdepth 1 -name '*.transport' -type f ! -size 0 | grep -q .; then status=1; fi
+          # Full successful execution has 27 guarded outer commands. Partial runs retain only actual receipts.
+          if test -f "$OUT/anchors-verifier.exit"; then test "$(wc -l < "$OUT/outer-transports.txt")" -eq 27 || status=1; fi
+          printf '%s\n' "$status" > "$OUT/always-holds.exit"
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-annual-replay-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-annual-replay-${{ github.run_id }}/
+          retention-days: 14

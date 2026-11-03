@@ -5689,6 +5689,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
         if (movement) s.events.push(`${movement.kind === 'promoted' ? '⬆️' : '⬇️'} ${movement.club} ${movement.kind} to ${movement.to} in your simulated league world.`);
       }
       prepareLeagueWorld(s, clubs, injuryRow.year + 1);
+      if (shieldMatch?.player.apps === 1) shieldMatch.annualRating = injuryRow.apps > 0 ? injuryRow.rating : 0;
       Object.assign(injuryRow, communityShieldSeasonStats(injuryRow, shieldMatch));
       return s;
     }
@@ -6133,6 +6134,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     }
   }
   prepareLeagueWorld(s, clubs, season.year + 1);
+  if (shieldMatch?.player.apps === 1) shieldMatch.annualRating = season.apps > 0 ? season.rating : 0;
   Object.assign(season, communityShieldSeasonStats(season, shieldMatch));
   return s;
 }

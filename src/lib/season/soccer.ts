@@ -34,6 +34,7 @@
      plus keyed noise, never by a ledger's order. */
 import type { CareerState, ClubData, SeasonRecord } from '../soccerCareerEngine';
 import type { WorldSeason } from '../soccerPhone';
+import { communityShieldAnnualStats } from '../soccerCareerExtraCups';
 import { LAW, goalLambda, poissonDraw } from './law';
 import {
   ownRowRounds, roundRobinRounds,
@@ -232,8 +233,9 @@ const RULE3 = { win: 3, draw: 1, loss: 0 };
 
 /** The season key of a row: saved fields only, so any device rebuilds the same season. */
 export function soccerSeasonKey(playerName: string, row: SeasonRecord): string | null {
-  return row.type === 'playing' && row.apps > 0
-    ? `${playerName}|${row.club}|${row.year}|${row.apps}|${row.goals}|${row.assists}|${row.rating}|centre`
+  const annual = communityShieldAnnualStats(row);
+  return row.type === 'playing' && annual && annual.apps > 0
+    ? `${playerName}|${row.club}|${row.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`
     : null;
 }
 
@@ -294,26 +296,31 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
   },
   fixed: (row, ctx) => fixedOf(row, ctx),
   availability: (row, ctx) => {
+    const annual = communityShieldAnnualStats(row);
+    if (!annual) return { played: 0, block: 0, severe: false };
     const M = ctx.games;
     const block = injuryBlock(row, M);
     const severe = !!row.injurySevere && block > 0;
     const fixedPlayed = fixedOf(row, ctx).filter(f => f.played).length;
     const fixedMissed = fixedOf(row, ctx).filter(f => !f.played).length;
     const room = Math.min(severe ? M : M - block, M - fixedMissed);
-    const want = Math.min(row.leagueApps ?? row.apps, room, row.apps);
-    const played = Math.min(Math.max(want, fixedPlayed), room, row.apps);
+    const want = Math.min(row.leagueApps ?? annual.apps, room, annual.apps);
+    const played = Math.min(Math.max(want, fixedPlayed), room, annual.apps);
     const suspended = Math.min(row.suspensionMatches ?? 0, Math.max(0, M - played - (severe ? 0 : block)));
     return { played, block, severe, ...(suspended > 0 ? { suspended } : {}) };
   },
-  totals: (row, ctx): StatTotal[] => [
-    { key: 'goals', kind: 'sum', total: row.goals, perGameCap: ctx.position === 'GK' ? 0 : 4, teamFor: true, ...(ctx.goldenBoot ? { noBucket: true } : {}) },
-    { key: 'assists', kind: 'sum', total: row.assists, perGameCap: 3, teamFor: true },
-    { key: 'rating', kind: 'mean', mean: row.rating, dp: 1, perGame: 0.1, min: 3, max: 10 },
-    ...(ctx.keepsSheets ? [{ key: 'cs', kind: 'count-of' as const, total: row.cleanSheets, when: 'shutout' as const }] : []),
-    { key: 'yellow', kind: 'sum', total: row.yellowCards, perGameCap: 1, distinct: 'card' },
-    { key: 'red', kind: 'sum', total: row.redCards, perGameCap: 1, distinct: 'card', suspends: true },
-  ],
-  apps: row => row.apps,
+  totals: (row, ctx): StatTotal[] => {
+    const annual = communityShieldAnnualStats(row);
+    return annual ? [
+      { key: 'goals', kind: 'sum', total: annual.goals, perGameCap: ctx.position === 'GK' ? 0 : 4, teamFor: true, ...(ctx.goldenBoot ? { noBucket: true } : {}) },
+      { key: 'assists', kind: 'sum', total: annual.assists, perGameCap: 3, teamFor: true },
+      { key: 'rating', kind: 'mean', mean: annual.rating, dp: 1, perGame: 0.1, min: 3, max: 10 },
+      ...(ctx.keepsSheets ? [{ key: 'cs', kind: 'count-of' as const, total: annual.cleanSheets, when: 'shutout' as const }] : []),
+      { key: 'yellow', kind: 'sum', total: row.yellowCards, perGameCap: 1, distinct: 'card' },
+      { key: 'red', kind: 'sum', total: row.redCards, perGameCap: 1, distinct: 'card', suspends: true },
+    ] : [];
+  },
+  apps: row => communityShieldAnnualStats(row)?.apps ?? 0,
   score: (edge, home, rng) => [
     poissonDraw(goalLambda(edge, home ? LAW.home : LAW.away), rng),
     poissonDraw(goalLambda(-edge, home ? LAW.away : LAW.home), rng),

@@ -52,7 +52,7 @@ function fixture(zeroApps: boolean): CareerState {
   };
   const result: CommunityShieldResult = {
     version: 1, competition: 'community-shield', qualifyingYear: 2026, eventYear: 2027, seed: 1141312389,
-    qualification, entrants: copy(qualification.entrants), minutes: 90, score: [1, 1], decidedBy: 'penalties', penalties: [5, 4], winner: 'Arsenal',
+    qualification, annualRating: zeroApps ? 0 : row.rating, entrants: copy(qualification.entrants), minutes: 90, score: [1, 1], decidedBy: 'penalties', penalties: [5, 4], winner: 'Arsenal',
     player: { club: 'Arsenal', availability: 'available', selected: !zeroApps, apps: zeroApps ? 0 : 1, goals: zeroApps ? 0 : 1, assists: 0, cleanSheets: 0, rating: zeroApps ? null : 8, title: !zeroApps },
   };
   if (zeroApps) Object.assign(row, { apps: 0, leagueApps: 0, goals: 0, assists: 0, cleanSheets: 0, rating: 0, yellowCards: 0, redCards: 0,
