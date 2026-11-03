@@ -1,5 +1,5 @@
 import type { CareerState, SeasonRecord } from './soccerCareerEngine';
-import { readCommunityShield, communityShieldSeasonStats } from './soccerCareerExtraCups';
+import { readCommunityShield, communityShieldSeasonStats, careerOpeningAnnualStats } from './soccerCareerExtraCups';
 
 export type SoccerPressChoice = 'calm' | 'accountable' | 'ambitious';
 export type SoccerPressTopic = 'league_champion' | 'injury' | 'benched' | 'move' | 'strong_form' | 'discipline' | 'contract' | 'normal';
@@ -95,7 +95,13 @@ function stateOf(career: CareerState): SoccerPressState | null {
         const settled = count(p.settledIndex) ? career.seasons[p.settledIndex] : null;
         if (!settled || settled.type !== 'playing' || settled.year !== p.settledYear || settled.year <= row.source.year || p.settledIndex! <= row.source.index) return null;
         let annual = settled;
-        const shield = readCommunityShield(settled);
+        const german = Object.prototype.hasOwnProperty.call(settled, 'germanSupercup');
+        if (german) {
+          const projected = careerOpeningAnnualStats(settled);
+          if (!projected) return null;
+          annual = { ...settled, ...projected };
+        }
+        const shield = german ? null : readCommunityShield(settled);
         if (shield?.player.apps) {
           const part = shield.player;
           if (settled.apps <= part.apps || !rating(p.actualRating)) return null;

@@ -38,17 +38,17 @@ const BINDING_EDITS = [
   {
     "label": "shared strict annual reader",
     "before": "import type { WorldSeason } from '../soccerPhone';",
-    "after": "import type { WorldSeason } from '../soccerPhone';\nimport { communityShieldAnnualStats } from '../soccerCareerExtraCups';"
+    "after": "import type { WorldSeason } from '../soccerPhone';\nimport { careerOpeningAnnualStats } from '../soccerCareerExtraCups';"
   },
   {
     "label": "exact old annual replay key",
     "before": "  return row.type === 'playing' && row.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${row.apps}|${row.goals}|${row.assists}|${row.rating}|centre`\n    : null;",
-    "after": "  const annual = communityShieldAnnualStats(row);\n  return row.type === 'playing' && annual && annual.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`\n    : null;"
+    "after": "  const annual = careerOpeningAnnualStats(row);\n  return row.type === 'playing' && annual && annual.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`\n    : null;"
   },
   {
     "label": "missing proof cannot derive league",
     "before": "  availability: (row, ctx) => {",
-    "after": "  availability: (row, ctx) => {\n    const annual = communityShieldAnnualStats(row);\n    if (!annual) return { played: 0, block: 0, severe: false };"
+    "after": "  availability: (row, ctx) => {\n    const annual = careerOpeningAnnualStats(row);\n    if (!annual) return { played: 0, block: 0, severe: false };"
   },
   {
     "label": "annual appearance capacity",
@@ -58,7 +58,7 @@ const BINDING_EDITS = [
   {
     "label": "annual league and generic cup totals",
     "before": "  totals: (row, ctx): StatTotal[] => [\n    { key: 'goals', kind: 'sum', total: row.goals, perGameCap: ctx.position === 'GK' ? 0 : 4, teamFor: true, ...(ctx.goldenBoot ? { noBucket: true } : {}) },\n    { key: 'assists', kind: 'sum', total: row.assists, perGameCap: 3, teamFor: true },\n    { key: 'rating', kind: 'mean', mean: row.rating, dp: 1, perGame: 0.1, min: 3, max: 10 },\n    ...(ctx.keepsSheets ? [{ key: 'cs', kind: 'count-of' as const, total: row.cleanSheets, when: 'shutout' as const }] : []),\n    { key: 'yellow', kind: 'sum', total: row.yellowCards, perGameCap: 1, distinct: 'card' },\n    { key: 'red', kind: 'sum', total: row.redCards, perGameCap: 1, distinct: 'card', suspends: true },\n  ],\n  apps: row => row.apps,",
-    "after": "  totals: (row, ctx): StatTotal[] => {\n    const annual = communityShieldAnnualStats(row);\n    return annual ? [\n      { key: 'goals', kind: 'sum', total: annual.goals, perGameCap: ctx.position === 'GK' ? 0 : 4, teamFor: true, ...(ctx.goldenBoot ? { noBucket: true } : {}) },\n      { key: 'assists', kind: 'sum', total: annual.assists, perGameCap: 3, teamFor: true },\n      { key: 'rating', kind: 'mean', mean: annual.rating, dp: 1, perGame: 0.1, min: 3, max: 10 },\n      ...(ctx.keepsSheets ? [{ key: 'cs', kind: 'count-of' as const, total: annual.cleanSheets, when: 'shutout' as const }] : []),\n      { key: 'yellow', kind: 'sum', total: row.yellowCards, perGameCap: 1, distinct: 'card' },\n      { key: 'red', kind: 'sum', total: row.redCards, perGameCap: 1, distinct: 'card', suspends: true },\n    ] : [];\n  },\n  apps: row => communityShieldAnnualStats(row)?.apps ?? 0,"
+    "after": "  totals: (row, ctx): StatTotal[] => {\n    const annual = careerOpeningAnnualStats(row);\n    return annual ? [\n      { key: 'goals', kind: 'sum', total: annual.goals, perGameCap: ctx.position === 'GK' ? 0 : 4, teamFor: true, ...(ctx.goldenBoot ? { noBucket: true } : {}) },\n      { key: 'assists', kind: 'sum', total: annual.assists, perGameCap: 3, teamFor: true },\n      { key: 'rating', kind: 'mean', mean: annual.rating, dp: 1, perGame: 0.1, min: 3, max: 10 },\n      ...(ctx.keepsSheets ? [{ key: 'cs', kind: 'count-of' as const, total: annual.cleanSheets, when: 'shutout' as const }] : []),\n      { key: 'yellow', kind: 'sum', total: row.yellowCards, perGameCap: 1, distinct: 'card' },\n      { key: 'red', kind: 'sum', total: row.redCards, perGameCap: 1, distinct: 'card', suspends: true },\n    ] : [];\n  },\n  apps: row => careerOpeningAnnualStats(row)?.apps ?? 0,"
   }
 ];
 const CLEAN = ['US_BOARD_CONTROL_ALIAS', 'US_BOARD_CONTROL_FILE', 'NO_DOUBLE_SWAP', 'SC_EXTRA_CUPS_ENGINE',

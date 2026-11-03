@@ -3,16 +3,16 @@ import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { readMatchRating } from '@/lib/careerSeasonRatings';
 import { cupChipLabel, readCupRun } from '@/lib/soccerCareerCup';
 import { savedClubCampaign, savedSeasonCompetitions } from '@/lib/soccerSeasonCompetitions';
-import { readCommunityShield, communityShieldWinningSeasons } from '@/lib/soccerCareerExtraCups';
+import { readCommunityShield, communityShieldWinningSeasons, germanSupercupWinningSeasons } from '@/lib/soccerCareerExtraCups';
 import { escapeCloses, focusDialogOnMount } from '@/lib/dialogA11y';
 import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { SeasonCupWinBlock } from './CupRunLines';
 
-export type TrophyCategory = 'league' | 'domestic' | 'ucl' | 'club' | 'world' | 'continental' | 'ballon' | 'shield';
+export type TrophyCategory = 'league' | 'domestic' | 'ucl' | 'club' | 'world' | 'continental' | 'ballon' | 'shield' | 'german-supercup';
 
 export const TROPHY_LABELS: Record<TrophyCategory, string> = {
   league: 'League titles', domestic: 'Domestic cups', ucl: 'European club titles',
-  club: 'Club cups', world: 'World Cups', continental: 'Continental titles', ballon: "Ballon d'Or", shield: 'Community Shield',
+  club: 'Club cups', world: 'World Cups', continental: 'Continental titles', ballon: "Ballon d'Or", shield: 'Community Shield', 'german-supercup': 'German Supercup',
 };
 
 const TROPHY_FIELDS = {
@@ -22,6 +22,7 @@ const TROPHY_FIELDS = {
 
 /** One win per recorded season, just like the career's cabinet counts. */
 export function trophyWins(career: Pick<CareerState, 'seasons'>, category: TrophyCategory): SeasonRecord[] {
+  if (category === 'german-supercup') return germanSupercupWinningSeasons(career.seasons ?? []).slice().sort((a, b) => b.year - a.year);
   if (category === 'shield') {
     const years = new Set(communityShieldWinningSeasons(career.seasons ?? []).map(row => row.year));
     return (career.seasons ?? []).filter(row => years.has(row.year) && readCommunityShield(row)?.player.title === true).sort((a, b) => b.year - a.year);
@@ -33,6 +34,7 @@ export function trophyWins(career: Pick<CareerState, 'seasons'>, category: Troph
 }
 
 function trophyName(row: SeasonRecord, category: TrophyCategory): string {
+  if (category === 'german-supercup') return 'German Supercup';
   if (category === 'shield') return 'Community Shield';
   if (category === 'domestic') return cupChipLabel(row) === 'Cup' ? 'Domestic cup' : cupChipLabel(row);
   if (category === 'club') return row.clubCupTitle!;
@@ -109,16 +111,17 @@ export function TrophyClubCampaign({ career, row }: { career: CareerState; row: 
   </section>;
 }
 
-function TrophyShieldMatch({ career, row }: { career: CareerState; row: SeasonRecord }) {
-  const match = savedSeasonCompetitions(career, row).find(item => item.id === 'shield')?.matches[0];
+function TrophyShieldMatch({ career, row, competition = 'shield' }: { career: CareerState; row: SeasonRecord; competition?: 'shield' | 'german-supercup' }) {
+  const match = savedSeasonCompetitions(career, row).find(item => item.id === competition)?.matches[0];
+  const german = competition === 'german-supercup';
   if (!match) return null;
-  return <section aria-label="Saved Community Shield match" className="space-y-2 rounded-xl border border-border bg-muted/20 p-3" data-trophy-shield>
-    <h4 className="text-sm font-bold">Community Shield opening match</h4>
+  return <section aria-label={german ? 'Saved German Supercup match' : 'Saved Community Shield match'} className="space-y-2 rounded-xl border border-border bg-muted/20 p-3" data-trophy-shield={german ? undefined : true} data-trophy-german-supercup={german ? true : undefined}>
+    <h4 className="text-sm font-bold">{german ? 'German Supercup opening match' : 'Community Shield opening match'}</h4>
     <p className="break-words text-xs">{row.club} vs {match.opponent}</p>
-    <p className="text-lg font-black tabular-nums" data-trophy-shield-score>{match.goalsFor}-{match.goalsAgainst}</p>
-    <p className="text-xs text-muted-foreground">Neutral ground</p>
+    <p className="text-lg font-black tabular-nums" data-trophy-shield-score={german ? undefined : true} data-trophy-german-supercup-score={german ? true : undefined}>{match.goalsFor}-{match.goalsAgainst}</p>
+    <p className="text-xs text-muted-foreground">{german ? 'Venue not recorded' : 'Neutral ground'}</p>
     <p className="text-xs font-bold">{match.result}</p>
-    <p className="text-xs" data-trophy-shield-note>{match.note}</p>
+    <p className="text-xs" data-trophy-shield-note={german ? undefined : true} data-trophy-german-supercup-note={german ? true : undefined}>{match.note}</p>
     <p className="text-xs">Your goals in this game: {match.playerGoals}</p>
   </section>;
 }
@@ -200,6 +203,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
               <SeasonTotals row={picked} />
               <p className="text-[10px] text-muted-foreground">These are the saved season totals, across all competitions.</p>
               {category === 'shield' && <TrophyShieldMatch career={career} row={picked} />}
+              {category === 'german-supercup' && <TrophyShieldMatch career={career} row={picked} competition="german-supercup" />}
               {(category === 'ucl' || category === 'club') && <TrophyClubCampaign career={career} row={picked} />}
               {category === 'domestic' && (readCupRun(picked)
                 ? <SeasonCupWinBlock season={picked} />

@@ -2,7 +2,7 @@ import type { SavedCompetitionMatch, SavedSeasonCompetition } from './soccerSeas
 
 export interface CalendarCupGame {
   id: string;
-  competition: 'domestic' | 'club' | 'shield';
+  competition: 'domestic' | 'club' | 'shield' | 'german-supercup';
   name: string;
   matchIndex: number;
   afterLeague: number;
@@ -22,10 +22,15 @@ export function cupCalendar(competitions: readonly SavedSeasonCompetition[], lea
   if (!number(leagueGames) || leagueGames < 1) return [];
   const calendar: CalendarCupGame[] = [];
   for (const competition of competitions) {
-    if (!['domestic', 'club', 'shield'].includes(competition.id) || !Array.isArray(competition.matches) || !competition.matches.every(recordedMatch)) continue;
+    if (!['domestic', 'club', 'shield', 'german-supercup'].includes(competition.id) || !Array.isArray(competition.matches) || !competition.matches.every(recordedMatch)) continue;
     if (competition.id === 'shield') {
       if (competition.matches.length !== 1 || competition.matches[0].neutral !== true) continue;
       calendar.push({ id: 'shield:0', competition: 'shield', name: competition.name, matchIndex: 0, afterLeague: 0, previous: null, match: { ...competition.matches[0] } });
+      continue;
+    }
+    if (competition.id === 'german-supercup') {
+      if (competition.matches.length !== 1 || competition.matches[0].home !== undefined || competition.matches[0].neutral !== undefined) continue;
+      calendar.push({ id: 'german-supercup:0', competition: 'german-supercup', name: competition.name, matchIndex: 0, afterLeague: 0, previous: null, match: { ...competition.matches[0] } });
       continue;
     }
     let previous: string | null = null;
