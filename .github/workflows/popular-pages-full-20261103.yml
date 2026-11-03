@@ -1,0 +1,200 @@
+name: Popular pages final complete ordinary qualification
+on:
+  push:
+    branches: [codex/popular-pages-full-final-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: popular-pages-full-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  full-ordinary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the exact joined application and source scope
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/popular-pages-full"
+          mkdir -p "$OUT/logs" "$OUT/units" "$OUT/raw" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status c176be815dc4af57dfd7185a485e28357aa0d41e HEAD > "$OUT/changed-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,pins={"docs/PROJECT-STATE.md":"f4d98aa84b06234837cf5be9e0df856fb2cf214e","docs/TRAFFIC-PRIORITIES-2026-11-03.md":"44b6a5f95dac71d4d0db467b6756cfe359920669","scripts/qa/managerMatchPlans1079.mjs":"98972610390be00aebed0d85099e7393fd07fb37","scripts/simManagerMatchPlans.mjs":"7add578315189e3032a2bdb9c3a0ecafd669dea1","scripts/simTacticsEngine.mjs":"d6bf2bc4e94db7bcb532e9b773fc584f334340a5","src/components/club-manager/AcademyScreen.tsx":"2d3ca44121cf0a84dad9b965328bd0c970403be3","src/components/club-manager/LiveSimScreen.tsx":"a6a434180c6ee9ffe263fc5c82cc8328a36914ee","src/components/club-manager/LiveTacticsPanel.tsx":"b12a1a0303ec9b3d043bdac089b873a4cc35383c","src/components/club-manager/MatchPlansCard.tsx":"c64e82d0adff5180272f0164e7a84b80fd9d9dce","src/components/club-manager/TacticsScreen.tsx":"950c4e9b0d2df22d1d6de95723122cc699b4bacd","src/components/soccer-career/PastCareersSheet.tsx":"515d3ce1a2fc89a49da3f9fda10902db59292ddc","src/hooks/useClubManager.ts":"5b2aac4ea3f649e478fc4e26939dff7dadbed310","src/lib/clubManager.ts":"9d8dc92557bf2f4358b5be044359354eda841769","src/lib/clubManagerCalendar.ts":"353c2019273564b48b0ad9657c02a83990ff7bc3","src/lib/clubManagerMatchPlans.ts":"345b05725fff2c2b502be4ec32d6e2728cf3c1b3","src/lib/clubManagerPositions.ts":"999b26b065246a2bf2db452d17d96439e855c6af","src/lib/clubManagerUiInfo.ts":"8e0b99eb1941760b18fa4d5de1df2b72fd894a0a","src/lib/soccerCareerCompletedRecords.ts":"d000db49957004591231cf1912a0dc8ea3ced083","src/lib/soccerCareerEngine.ts":"a60fab359f45dda9b125dbf118474170cdcc9417","src/pages/ClubManager.tsx":"4781925c031abde3822c81ef49d5e1558d315a17","src/pages/SoccerCareer.tsx":"3fedb64360b001ee88343a24581ccb960bfae948","src/test/LiveSimScreen.positionNotice.test.tsx":"86c18f8813278f105aefd2305fe338f1d5d83096","src/test/MatchPlansCard.customPositions.test.tsx":"0eaa919e0d4cc8b0c24db5f331f7664d2db79a52","src/test/TacticsScreen.freePositions.test.tsx":"85f4bed196a46bb77cd1793058981ecbd523b3f4","src/test/academyFilters.test.tsx":"c2d432043c153bcf56a881d264d7077c74c7ba3d","src/test/clubManagerPositionBlocked.test.tsx":"0f9c4de7514f0a7515d21e3abc37f9a4764309ec","src/test/clubManagerPositionIntegration.test.ts":"c1eabe3e33ffc37aafbb4f34d4a3435d47fdf9b0","src/test/clubManagerPositionLive.test.ts":"b8174f45778f49e59cccfe0428daf4c4b5d7ec3d","src/test/clubManagerPositionPersistence.test.tsx":"d71d8486dad8da7bdc5904e43ef2c4641651e301","src/test/clubManagerPositions.test.ts":"a075328b1967a6aebb2bddf30014eb308f682084","src/test/cmCustomPlanPreservation.test.ts":"008263b6bf1f914b1383058d91852850dff22e43","src/test/cmCustomTacticalPlans.test.ts":"5eb8a489de955660be29d470476b6a90bf3ac492","src/test/cmCustomTacticsPitch.test.ts":"b7a2160b9d3d98da728b2f7ad7ab6bd5eeccdf95","src/test/cmCustomTacticsPitchMissingPlayer.test.ts":"194a0fcb5d32863c61f8370175e6e95bc83ee788","src/test/cmCustomTacticsUi.test.tsx":"1884a41fde35b8152c51f055b29c04389983e56d","src/test/managerMatchPlans.test.tsx":"43d803e92473dbb3ce1f765b71800c96e27125ef","src/test/soccerCareerCompletedRecords.test.tsx":"e1c382f8d5d682637f64955f8133a08379c4a2f8","src/test/soccerCareerCompletedRecordsBoundary.test.tsx":"c6eee20614d71f693dd84338dc495fd617961cef","src/test/soccerCareerCompletedRecordsHelper.test.ts":"16c105033671446343c91ef683ee5faa5dd870f5","src/test/soccerCareerShareTrophies.test.ts":"a52cfb9de4d7101187890ed3087507e45176e19b","scripts/simWorldEditor.mjs":"328fdb6b13b13196d76c882efdf94e4a4f1f2407","scripts/simSoccerCareerSaveRetry.mjs":"474c8676a2c7f8ff3b01536bfedaf7ab333bf5c0","scripts/simUsCareerPractice.mjs":"f25fa2325ac9196824e12dc81c57ea95b4784380","scripts/simManagerAppealIsolation.mjs":"cb5110245b9c86d3690adb1f6dc7463391f88a9f","src/App.tsx":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","src/components/us-career/UsCareerBoard.tsx":"b2f81114f357b4edd17dd3a94c560a213412c817","src/pages/StadiumTycoon.tsx":"d1b78bdd5d5c98c5fae237f590d48d19954eb536","src/components/tycoon/TicketPolicyCard.tsx":"1e54f08a33e0b40624c8ecc73cd423701aee5f2a","src/components/front-office/FrontOfficeBoard.tsx":"6016c7c42eed81af36d3cab2e1eb4c1b3e9990f2","src/components/hub/HubExperience.tsx":"c72effc5697ec0d2812569479a9d465247855720","src/pages/Index.tsx":"17a3818c455b1dacb07ae0e2f3f3fa6adf25bd6d","scripts/simHubExperience.mjs":"8df3c38e9ba3b634ac9047db5b4d0d0c1ec91926","scripts/qa/hubs994.outcomes.tsx":"c3f4d1e392f04bda69e7a8cbed7809884254b89a","src/test/usCareerLastSeasonReload.test.tsx":"9b56dda941819b91dc0d75de3597958e507f3516","src/test/tycoonSaveNotice.test.tsx":"8a66440a51484f7483b7069088d169f06883bbc6","src/test/hubReturnNavigation.test.tsx":"51a145157130dace6c0765f28dadd4a80459a3be","src/test/frontOfficeWriteRetry.test.tsx":"f01d080ceae3c70e0ada3e4f1d21c0dff994be1c","scripts/simCmShootoutOrder.mjs":"9e131c325e1436c5c681e461d19becdcaba5a0ce","scripts/runAllSims.mjs":"5988827caabcc07a1e643494fa2610f559c779f6","scripts/simBrowserHarnessDiscovery.mjs":"82df8e0bf2c78b0a0ceba9c5158995b3f141935e"},expected=["A\t.github/workflows/popular-pages-full-20261103.yml","A\tdocs/TRAFFIC-PRIORITIES-2026-11-03.md","A\tsrc/components/soccer-career/PastCareersSheet.tsx","A\tsrc/lib/clubManagerPositions.ts","A\tsrc/lib/clubManagerUiInfo.ts","A\tsrc/lib/soccerCareerCompletedRecords.ts","A\tsrc/test/LiveSimScreen.positionNotice.test.tsx","A\tsrc/test/MatchPlansCard.customPositions.test.tsx","A\tsrc/test/TacticsScreen.freePositions.test.tsx","A\tsrc/test/clubManagerPositionBlocked.test.tsx","A\tsrc/test/clubManagerPositionIntegration.test.ts","A\tsrc/test/clubManagerPositionLive.test.ts","A\tsrc/test/clubManagerPositionPersistence.test.tsx","A\tsrc/test/clubManagerPositions.test.ts","A\tsrc/test/cmCustomPlanPreservation.test.ts","A\tsrc/test/cmCustomTacticalPlans.test.ts","A\tsrc/test/cmCustomTacticsPitch.test.ts","A\tsrc/test/cmCustomTacticsPitchMissingPlayer.test.ts","A\tsrc/test/cmCustomTacticsUi.test.tsx","A\tsrc/test/frontOfficeWriteRetry.test.tsx","A\tsrc/test/hubReturnNavigation.test.tsx","A\tsrc/test/soccerCareerCompletedRecords.test.tsx","A\tsrc/test/soccerCareerCompletedRecordsBoundary.test.tsx","A\tsrc/test/soccerCareerCompletedRecordsHelper.test.ts","A\tsrc/test/soccerCareerShareTrophies.test.ts","A\tsrc/test/tycoonSaveNotice.test.tsx","A\tsrc/test/usCareerLastSeasonReload.test.tsx","M\tdocs/PROJECT-STATE.md","M\tscripts/qa/hubs994.outcomes.tsx","M\tscripts/qa/managerMatchPlans1079.mjs","M\tscripts/runAllSims.mjs","M\tscripts/simBrowserHarnessDiscovery.mjs","M\tscripts/simCmShootoutOrder.mjs","M\tscripts/simHubExperience.mjs","M\tscripts/simManagerAppealIsolation.mjs","M\tscripts/simManagerMatchPlans.mjs","M\tscripts/simSoccerCareerSaveRetry.mjs","M\tscripts/simTacticsEngine.mjs","M\tscripts/simUsCareerPractice.mjs","M\tscripts/simWorldEditor.mjs","M\tsrc/App.tsx","M\tsrc/components/club-manager/AcademyScreen.tsx","M\tsrc/components/club-manager/LiveSimScreen.tsx","M\tsrc/components/club-manager/LiveTacticsPanel.tsx","M\tsrc/components/club-manager/MatchPlansCard.tsx","M\tsrc/components/club-manager/TacticsScreen.tsx","M\tsrc/components/front-office/FrontOfficeBoard.tsx","M\tsrc/components/hub/HubExperience.tsx","M\tsrc/components/tycoon/TicketPolicyCard.tsx","M\tsrc/components/us-career/UsCareerBoard.tsx","M\tsrc/hooks/useClubManager.ts","M\tsrc/lib/clubManager.ts","M\tsrc/lib/clubManagerCalendar.ts","M\tsrc/lib/clubManagerMatchPlans.ts","M\tsrc/lib/soccerCareerEngine.ts","M\tsrc/pages/ClubManager.tsx","M\tsrc/pages/Index.tsx","M\tsrc/pages/SoccerCareer.tsx","M\tsrc/pages/StadiumTycoon.tsx","M\tsrc/test/academyFilters.test.tsx","M\tsrc/test/managerMatchPlans.test.tsx"];
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+          assert.equal(execFileSync('git',['rev-parse','HEAD']).toString().trim(),process.env.GITHUB_SHA);
+          assert.equal(execFileSync('git',['rev-parse','HEAD^']).toString().trim(),'5160b26a423e7502c296770e821a995320aa1a32');
+          assert.equal(execFileSync('git',['rev-parse','HEAD^^{tree}']).toString().trim(),'e3c12a15eeeacf42577740eeabf46add18bbdea4');
+          assert.deepEqual(fs.readFileSync(out+'/changed-paths.txt','utf8').trim().split('\n').sort(),expected);
+          for(const [file,git]of Object.entries(pins)){
+            assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString().trim(),git,file+' tracked');
+            assert.equal(execFileSync('git',['hash-object',file]).toString().trim(),git,file+' actual');
+          }
+          const config=fs.readFileSync('vitest.config.ts','utf8');
+          for(const match of config.matchAll(/process\.env\.([A-Z_]+)/g))assert.ok(!process.env[match[1]],'No inherited alias:'+match[1]);
+          fs.writeFileSync(out+'/association.json',JSON.stringify({source:process.env.GITHUB_SHA,releaseCore:'5160b26a423e7502c296770e821a995320aa1a32',base:'c176be815dc4af57dfd7185a485e28357aa0d41e',pins,scope:'Qualified flagship and popular-game bodies, selected compact App, and seven qualified QA compatibility/discovery repairs. All sixty permanent source paths pinned. Unfiltered ordinary suite on the final joined source; pending identities remain uncredited.'},null,2)+'\n');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          cp .github/workflows/popular-pages-full-20261103.yml "$OUT/workflow.yml"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          const historical = {
+            '2b7dda2951fb9b63e76a2af66970cb682f312105': ['src/lib/cageClash.ts'],
+            '31a4ec01': ['src/lib/cageClash.ts'],
+            '56356be9': ['src/lib/frontOffice.ts','src/data/frontOfficePlayers.ts','src/data/frontOfficeDepth.ts'],
+            '0c66a559': ['src/lib/frontOffice.ts','src/data/frontOfficePlayers.ts','src/data/frontOfficeDepth.ts'],
+            'e8b39ccc': ['src/lib/nbaFrontOffice.ts','src/lib/nbaSeasonStats.ts','src/lib/nbaRotation.ts','src/data/conquestDataNba.ts'],
+            '6b7596d2': ['src/lib/nhlFrontOffice.ts','src/data/nhlFoPlayers.ts'],
+          };
+          const history = [];
+          for (const [ref, paths] of Object.entries(historical)) {
+            const commit = execFileSync('git',['rev-parse',ref+'^{commit}']).toString().trim();
+            for (const file of paths) {
+              const bytes = execFileSync('git',['show',ref+':'+file],{maxBuffer:16*1024*1024});
+              assert.ok(bytes.length,ref+':'+file);
+              history.push({ref,commit,file,bytes:bytes.length});
+            }
+          }
+          fs.writeFileSync(process.env.QA_OUT+'/historical-preflight.json',JSON.stringify(history,null,2)+'\n');
+          const files=execFileSync('git',['ls-files','-z']).toString().split('\0').filter(file=>/^src\/.*\.(?:test|spec)\.tsx?$/.test(file)).sort();
+          assert.ok(files.length);
+          fs.writeFileSync(process.env.QA_OUT+'/expected-files.json',JSON.stringify(files,null,2)+'\n');
+          NODE
+      - name: Install held ordinary dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper joined application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/types.transport.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/types.transport.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/types.transport.log"
+      - name: Run every ordinary unit file without a name filter
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/units.transport.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/units.transport.log" node node_modules/vitest/vitest.mjs run --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units.json" 2>&1 | tee "$QA_OUT/units.log"
+          codes=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/units.exit"
+          test "${codes[1]}" -eq 0
+      - name: Admit the actual census and retain pending identities
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = process.env.QA_OUT;
+          const report = JSON.parse(fs.readFileSync(out + '/units.json', 'utf8'));
+          const expected = JSON.parse(fs.readFileSync(out + '/expected-files.json', 'utf8'));
+          const newFiles = ["src/test/LiveSimScreen.positionNotice.test.tsx","src/test/MatchPlansCard.customPositions.test.tsx","src/test/TacticsScreen.freePositions.test.tsx","src/test/clubManagerPositionBlocked.test.tsx","src/test/clubManagerPositionIntegration.test.ts","src/test/clubManagerPositionLive.test.ts","src/test/clubManagerPositionPersistence.test.tsx","src/test/clubManagerPositions.test.ts","src/test/cmCustomPlanPreservation.test.ts","src/test/cmCustomTacticalPlans.test.ts","src/test/cmCustomTacticsPitch.test.ts","src/test/cmCustomTacticsPitchMissingPlayer.test.ts","src/test/cmCustomTacticsUi.test.tsx","src/test/soccerCareerCompletedRecords.test.tsx","src/test/soccerCareerCompletedRecordsBoundary.test.tsx","src/test/soccerCareerCompletedRecordsHelper.test.ts","src/test/soccerCareerShareTrophies.test.ts","src/test/usCareerLastSeasonReload.test.tsx","src/test/tycoonSaveNotice.test.tsx","src/test/hubReturnNavigation.test.tsx","src/test/frontOfficeWriteRetry.test.tsx"];
+          const relative = file => file.replaceAll('\\', '/').slice(file.replaceAll('\\', '/').indexOf('/src/') + 1);
+          const files = report.testResults.map(file => relative(file.name)).sort();
+          assert.deepEqual(files, expected, 'Every tracked ordinary test file must be discovered exactly once');
+          const rows = report.testResults.flatMap(file => file.assertionResults.map(row => ({ file: relative(file.name), ...row })));
+          const pending = rows.filter(row => row.status === 'pending' || row.status === 'todo' || row.status === 'skipped').map(row => ({file: row.file, fullName: row.fullName, status: row.status}));
+          const duplicates = [...Map.groupBy(rows, row => row.file + '\n' + row.fullName)].filter(([, group]) => group.length > 1).map(([identity, group]) => ({identity, count:group.length}));
+          const counts = {};
+          for (const row of rows) counts[row.status] = (counts[row.status] ?? 0) + 1;
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numUnhandledErrors']) counters[key] = Object.hasOwn(report, key) ? report[key] : null;
+          fs.writeFileSync(out + '/actual-census.json', JSON.stringify({
+            files: files.length, rows: rows.length, counts, pending, duplicateIdentities: duplicates, counters,
+            failedFileEntries: report.testResults.filter(file => file.status === 'failed').map(file => ({file:relative(file.name),message:file.message ?? null})),
+            missingCounterMeaning: 'UNKNOWN', scope: 'Full ordinary Vitest discovery on pinned source. Pending identities retained; no skipped case earns pass credit.',
+          }, null, 2) + '\n');
+          const admit = value => {
+            assert.equal(value.success, true);
+            assert.equal(value.numFailedTests, 0);
+            assert.ok(value.numPassedTests > 0);
+          };
+          admit(report);
+          assert.equal(Number(fs.readFileSync(out + '/units.exit', 'utf8')), 0);
+          assert.equal(report.numTotalTests, rows.length);
+          assert.equal(files.length,713+newFiles.length,'Held main census plus only the declared new files');
+          assert.equal(rows.length,10320+140+19,'Held main census plus exact frozen new cases');
+          const heldPending=[{"file":"src/test/clubManagerVarLive.test.tsx","fullName":"Club Manager: VAR with the switch off (the dark rule) a live kick off through the hook asks for no review","status":"skipped"},{"file":"src/test/clubManagerVarLive.test.tsx","fullName":"Club Manager: VAR with the switch off (the dark rule) a Quick Sim through the hook is the match the engine plays without reviews","status":"skipped"},{"file":"src/test/clubManagerVarLive.test.tsx","fullName":"Club Manager: VAR with the switch off (the dark rule) the fast forward is the engine run without reviews","status":"skipped"},{"file":"src/test/dailySaveHardening.test.tsx","fullName":"5) saves written before this round load unchanged captures saves from the hook under test (the harness points it at the pre 848 code)","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 afl-higher-lower","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 cfb-higher-lower","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 f1-higher-lower","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 golf-higher-lower","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 hockey-higher-lower","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 mlb-higher-lower","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 nba-higher-lower","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 nfl-higher-lower","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 tennis-higher-lower","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 baseball-career","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 hockey-career","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 nba-career","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 olympics","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 world-cup","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 guess-the-college","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 career","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 connections","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 baseball-connections","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 nba-connections","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 nfl-connections","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 nhl-connections","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 football-grid","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 college-grid","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 soccer-grid","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 football-connect-4","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 footle","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 ufc","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 shirt-number","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 transfer-path","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 football-draft","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 guess-transfer-value","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 missing-five","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 missing-nine","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 missing-eleven","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 missing-xi","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 rank-em","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 guess-the-golfer","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 puck-detective","status":"skipped"},{"file":"src/test/dailySaveParity.test.tsx","fullName":"one tab plays and restores exactly as before Round 848 career-ladder","status":"skipped"},{"file":"src/test/homeSearchRecovery.test.tsx","fullName":"unchanged search engine retains complete catalog and exact ranked results","status":"skipped"},{"file":"src/test/homeSearchRecovery.test.tsx","fullName":"pending import keeps honest busy state without false empty results or writes","status":"skipped"},{"file":"src/test/homeSearchRecovery.test.tsx","fullName":"resolved import renders the latest query in unchanged engine rank order","status":"skipped"},{"file":"src/test/homeSearchRecovery.test.tsx","fullName":"rejected import clears busy and offers recovery without pretending no games exist","status":"skipped"},{"file":"src/test/homeSearchRecovery.test.tsx","fullName":"Back clears the query and restores browse and input focus without scrolling","status":"skipped"},{"file":"src/test/homeSearchRecovery.test.tsx","fullName":"failed search remains terminal through Back reentry focus and hover","status":"skipped"},{"file":"src/test/homeSearchRecovery.test.tsx","fullName":"only explicit Reload invokes the existing reload boundary once","status":"skipped"},{"file":"src/test/homeSearchRecovery.test.tsx","fullName":"clearing a pending query keeps browse after late resolution and reuses the engine","status":"skipped"},{"file":"src/test/homeSearchRecovery.test.tsx","fullName":"a real zero-result query shows existing fallback games only after resolution","status":"skipped"},{"file":"src/test/homeSearchRecovery.test.tsx","fullName":"a failed focus prewarm keeps browsing until a query asks for recovery","status":"skipped"},{"file":"src/test/nhlContributors.test.ts","fullName":"NHL simulation contributor outcomes matches physical original rounds, AI, roster moves, playoffs and offseason","status":"skipped"},{"file":"src/test/usBoardFixture.test.tsx","fullName":"the four US career boards against the recorded fixture nfl","status":"skipped"},{"file":"src/test/usBoardFixture.test.tsx","fullName":"the four US career boards against the recorded fixture nba","status":"skipped"},{"file":"src/test/usBoardFixture.test.tsx","fullName":"the four US career boards against the recorded fixture mlb","status":"skipped"},{"file":"src/test/usBoardFixture.test.tsx","fullName":"the four US career boards against the recorded fixture nhl","status":"skipped"}];
+          const pendingId=r=>r.file+'\n'+r.fullName+'\n'+r.status;
+          assert.deepEqual(pending.map(pendingId).sort(),heldPending.map(pendingId).sort(),'All58 inherited pending identities must stay exact');
+          assert.equal(rows.filter(row => row.status === 'passed').length, report.numPassedTests);
+          for (const value of Object.values(counters)) if (value !== null) assert.equal(value, 0);
+          assert.ok(rows.every(row => ['passed', 'pending', 'todo', 'skipped'].includes(row.status)));
+          for (const file of newFiles) {
+            const found = rows.filter(row => row.file === file);
+            assert.ok(found.length, file + ' must run');
+            assert.ok(found.every(row => row.status === 'passed'), file + ' earns no skipped-case credit');
+          }
+          const changed = {...report, success:false, numFailedTests:report.numFailedTests + 1};
+          assert.notEqual(changed.numFailedTests, report.numFailedTests);
+          assert.throws(() => admit(changed));
+          fs.writeFileSync(out + '/metadata-control.json', JSON.stringify({changed:true, rejected:true, scope:'Admission metadata parser only; actual feature fault controls run in the focused qualification.'}, null, 2) + '\n');
+          NODE
+          test ! -s "$QA_OUT/units.transport.log"
+      - name: Retain full source holds and transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          if [[ -f "$QA_OUT/source-before.sha256" ]]; then
+            cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+            sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          else
+            echo "No qualified before inventory was produced." > "$QA_OUT/source-hold-unknown.txt"
+            exit 1
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const out=process.env.QA_OUT;
+          const rows=fs.existsSync(out+'/transport')?fs.readdirSync(out+'/transport').sort().map(file=>{
+            const text=fs.readFileSync(out+'/transport/'+file,'utf8'),lines=text.split('\n').filter(Boolean);
+            return {file,blockedAttempts:lines.length,
+              fontBlockedAttempts:lines.filter(line=>/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts:lines.filter(line=>line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length};
+          }):[];
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({
+            receipts:rows,meaning:'Blocked attempts are retained. Empty Node receipts are not a browser or provider availability claim.'
+          },null,2)+'\n');
+          NODE
+      - name: Bound retained ordinary evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: popular-pages-full-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/popular-pages-full
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
