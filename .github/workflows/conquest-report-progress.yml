@@ -1,0 +1,410 @@
+name: Conquest guide report progress qualification
+
+on:
+  push:
+    branches: [codex/conquest-report-progress-evidence-20261103]
+
+permissions:
+  contents: read
+concurrency:
+  group: conquest-report-progress-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      TZ: UTC
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      GIT_NO_LAZY_FETCH: '1'
+      BEFORE_SHA: ${{ github.event.before }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          fetch-tags: false
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind exact parent five paths and all held source
+        run: |
+          set -euo pipefail
+          export OUT="$RUNNER_TEMP/conquest-report-progress"
+          test ! -e "$OUT"; mkdir "$OUT"
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/conquest-report-progress-evidence-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE_SHA" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = aa3331cf33486f474af367824300384b4ef6f391
+          test "$(git rev-parse 'HEAD^1^{tree}')" = e9a4d2003ee690bbcefb20ebe3339355c079d88c
+          git rev-parse HEAD 'HEAD^{tree}' HEAD^ 'HEAD^1^{tree}' > "$OUT/source-identities.txt"
+          git show HEAD:.github/workflows/conquest-report-progress.yml > "$OUT/workflow.executed.yml"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local name="$1" mode="$2"; shift 2
+            printf '%s\0' "$@" > "$OUT/$name.argv"
+            printf '%s\n' "$mode" > "$OUT/$name.mode"
+            local code=0
+            if [ "$mode" = OFFLINE ]; then
+              SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$OUT/$name.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" "$@" > "$OUT/$name.stdout" 2> "$OUT/$name.stderr" || code=$?
+              test -e "$OUT/$name.transport" || : > "$OUT/$name.transport"
+            elif [ "$mode" = ONLINE ]; then
+              SIM_NETWORK=online NODE_OPTIONS='' "$@" > "$OUT/$name.stdout" 2> "$OUT/$name.stderr" || code=$?
+            else printf 'Unknown capture mode\n' >&2; return 1; fi
+            printf '%s\n' "$code" > "$OUT/$name.exit"
+            return "$code"
+          }
+          CAPTURE
+          cat > "$OUT/custody.sh" <<'CUSTODY'
+          framework_cache_leaf() {
+            if [ -L node_modules/.vite ]; then printf 'Refuse symlink node_modules/.vite\n' >&2; return 1; fi
+            if [ -e node_modules/.vite ] && [ ! -d node_modules/.vite ]; then printf 'Refuse non-directory node_modules/.vite\n' >&2; return 1; fi
+            return 0
+          }
+          framework_cache_snapshot() {
+            local phase="$1" cache=node_modules/.vite destination="$OUT/framework-cache/$1"
+            case "$phase" in before|after) ;; *) printf 'Invalid cache phase\n' >&2; return 1 ;; esac
+            test ! -e "$destination" && test ! -L "$destination" || return 1
+            mkdir -p "$destination/bodies" || return 1
+            if [ -L "$cache" ]; then printf 'REFUSED_SYMLINK\n' > "$destination/presence"; return 1; fi
+            if [ -e "$cache" ] && [ ! -d "$cache" ]; then printf 'REFUSED_NON_DIRECTORY\n' > "$destination/presence"; return 1; fi
+            framework_cache_leaf || return 1
+            if [ -d "$cache" ]; then
+              printf 'DIRECTORY\n' > "$destination/presence"
+              find "$cache" -type f -print0 | LC_ALL=C sort -z > "$destination/files.members" || return 1
+              find "$cache" -type l -printf '%p\t%l\0' | LC_ALL=C sort -z > "$destination/links.members" || return 1
+              xargs -r -0 sha256sum < "$destination/files.members" > "$destination/files.sha256" || return 1
+              while IFS= read -r -d '' file; do cp --parents -- "$file" "$destination/bodies" || return 1; done < "$destination/files.members"
+              if [ -s "$destination/files.sha256" ]; then
+                (cd "$destination/bodies" && sha256sum -c ../files.sha256) > "$destination/copied-bodies-held.log" 2>&1 || return 1
+              else printf 'NO_REGULAR_FILES\n' > "$destination/copied-bodies-held.log"; fi
+            else
+              printf 'ABSENT\n' > "$destination/presence"
+              : > "$destination/files.members"; : > "$destination/links.members"; : > "$destination/files.sha256"
+              printf 'ABSENT\n' > "$destination/copied-bodies-held.log"
+            fi
+            printf 'MUTABLE_FRAMEWORK_CACHE_SNAPSHOT_NO_BEFORE_AFTER_EQUALITY_CLAIM\n' > "$destination/scope"
+          }
+          members() {
+            local directory="$1" label="$2" phase="$3"
+            if [ "$label" = dependencies ]; then
+              test "$directory" = node_modules || return 1
+              framework_cache_leaf || return 1
+            fi
+            if [ "$label" = dependencies ]; then
+              find "$directory" -path node_modules/.vite -prune -o -type f -print0
+            elif [ "$label" = python ]; then
+              find "$directory" -name __pycache__ -prune -o -type f -print0
+            else find "$directory" -type f -print0; fi | LC_ALL=C sort -z > "$OUT/$label.members.$phase" || return 1
+            if [ "$label" = dependencies ]; then
+              find "$directory" -path node_modules/.vite -prune -o -type l -printf '%p\t%l\0'
+            else find "$directory" -type l -printf '%p\t%l\0'; fi | LC_ALL=C sort -z > "$OUT/$label.links.$phase" || return 1
+          }
+          hold_before() {
+            local directory="$1" label="$2"
+            members "$directory" "$label" before
+            xargs -0 sha256sum < "$OUT/$label.members.before" > "$OUT/$label.sha256"
+          }
+          CUSTODY
+          sha256sum "$OUT/capture.sh" "$OUT/custody.sh" > "$OUT/helper.sha256"
+          source "$OUT/capture.sh"
+          capture binding OFFLINE node --input-type=module <<'BIND'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
+          const git=(...args)=>execFileSync('git',args),out=process.env.OUT;
+          assert.equal(process.version,'v24.22.1');
+          const tree=ref=>new Map(git('ls-tree','-rz','--full-tree',ref).toString('utf8').split('\0').filter(Boolean).map(row=>{const tab=row.indexOf('\t'),[mode,type,sha]=row.slice(0,tab).split(' ');return [row.slice(tab+1),{mode,type,sha}];}));
+          const parent=tree('HEAD^'),current=tree('HEAD');assert.equal(parent.size,5629);assert.equal(current.size,5632);
+          const expected={
+            'src/components/conquest/ImperialismBoardShared.tsx':{status:'M',before:'478b2d778d7da659f050053c7cb51a193efc9622',after:'52091f9b52d226f4907969f8ec82c85832f8cbab',sha256:'95f9bc6416085aa9da3a0f31d41363e1fdf94168de9f4cf5282c318a0f12308b'},
+            'src/pages/SoccerConquest.tsx':{status:'M',before:'661ab723cc81b6484d5298bd62c5bfc2c9ab0820',after:'7f417cb376d7e7cb6e0ed264ab9e0b6e49b0d576',sha256:'ed441c188dcf6d1f2d4b7036170d45bd316073c64a5bbeff51bb635d7cecb344'},
+            'src/test/conquestReportProgress.test.tsx':{status:'A',after:'300045ff5e0570238b6c7fcf0d00ff6a4cd5cab9',sha256:'19d73c176b34cf2e42ce1b95401f807d8106dbb9b6d096214d7f79947c25affc'},
+            'scripts/qa/qualifyConquestReportProgress.mjs':{status:'A',after:'9ef4fc3c692c9e105d79ad7d1d6cc4982aafb8fb',sha256:'365dde86b2ee162e90ec7caed33c05bb765840c578ca543c786ad69174b2f0f8'},
+            '.github/workflows/conquest-report-progress.yml':{status:'A'},
+          },changed=[],held=[];
+          for(const [file,row] of parent){const next=current.get(file);assert(next,file+' retained');if(!expected[file]){assert.deepEqual(next,row,file+' complete original blob/mode held');held.push(file);}else{assert.equal(expected[file].status,'M');assert.equal(row.sha,expected[file].before);}}
+          for(const [file,row] of current){
+            if(expected[file]){assert.equal(row.type,'blob');assert.equal(row.mode,'100644');if(expected[file].after)assert.equal(row.sha,expected[file].after,file);if(expected[file].status==='A')assert(!parent.has(file));if(expected[file].sha256)assert.equal(createHash('sha256').update(fs.readFileSync(file)).digest('hex'),expected[file].sha256,file);changed.push({file,status:expected[file].status,...row});}
+            else assert(parent.has(file),file+' unexpected addition');
+          }
+          assert.equal(held.length,5627);assert.equal(changed.length,5);assert.equal(changed.filter(row=>row.status==='M').length,2);assert.equal(changed.filter(row=>row.status==='A').length,3);
+          assert.equal(git('status','--porcelain').toString(),'');
+          fs.writeFileSync(out+'/source-fence.json',JSON.stringify({parent:'aa3331cf33486f474af367824300384b4ef6f391',parentTree:'e9a4d2003ee690bbcefb20ebe3339355c079d88c',head:process.env.GITHUB_SHA,parentBlobs:parent.size,currentBlobs:current.size,changed,allOtherParentHeld:held.length,node:process.versions},null,2));
+          BIND
+          git ls-files -z > "$OUT/source.members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+      - name: Locked app and isolated reader tools explicitly online
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"; source "$OUT/custody.sh"
+          capture install ONLINE npm ci
+          tools="$RUNNER_TEMP/conquest-report-tools"
+          test ! -e "$tools"; mkdir "$tools"
+          printf '%s\n' "$tools" > "$OUT/tools-root.txt"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.1"}}\n' > "$tools/package.json"
+          capture reader-package-install ONLINE npm install --prefix "$tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/conquest-report-chromium"
+          test ! -e "$PLAYWRIGHT_BROWSERS_PATH"
+          printf 'PLAYWRIGHT_BROWSERS_PATH=%s\n' "$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          printf '%s\n' "$PLAYWRIGHT_BROWSERS_PATH" > "$OUT/chromium-root.txt"
+          capture reader-chromium-install ONLINE node "$tools/node_modules/playwright/cli.js" install --with-deps chromium
+          capture venv-create ONLINE python -m venv "$tools/python"
+          capture python-install ONLINE "$tools/python/bin/python" -m pip install fonttools==4.60.1 Pillow==11.3.0
+          "$tools/python/bin/python" -m pip freeze > "$OUT/python-packages.before"
+          "$tools/python/bin/python" --version > "$OUT/python-version.txt" 2>&1
+          printf '%s\n' "$tools/python/bin" >> "$GITHUB_PATH"
+          sha256sum "$tools/package.json" "$tools/package-lock.json" "$(readlink -f "$tools/python/bin/python")" > "$OUT/tool-roots.sha256"
+          framework_cache_snapshot before
+          hold_before node_modules dependencies
+          hold_before "$tools/node_modules" reader-packages
+          hold_before "$tools/python" python
+          hold_before "$PLAYWRIGHT_BROWSERS_PATH" chromium
+          capture versions OFFLINE node --input-type=module <<'VERSIONS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {createHash} from 'node:crypto';
+          const req=createRequire(import.meta.url),out=process.env.OUT,lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],absent=[];
+          const fits=(rules,value)=>!rules||(!rules.some(item=>item==='!'+value)&&(rules.every(item=>item.startsWith('!'))||rules.includes(value)));
+          for(const [dir,row] of Object.entries(lock.packages)){if(!dir.startsWith('node_modules/')||!row.version)continue;const file=dir+'/package.json';if(!fs.existsSync(file)){assert.equal(row.optional,true);assert((row.os&&!fits(row.os,process.platform))||(row.cpu&&!fits(row.cpu,process.arch)));absent.push({dir,version:row.version,os:row.os??null,cpu:row.cpu??null});continue;}assert.equal(JSON.parse(fs.readFileSync(file,'utf8')).version,row.version,dir);installed.push({dir,version:row.version});}
+          for(const name of ['playwright','playwright-core']){const file=req.resolve(name+'/package.json');assert.equal(JSON.parse(fs.readFileSync(file,'utf8')).version,'1.64.1');fs.copyFileSync(file,out+'/'+name+'-package.json');}
+          fs.copyFileSync(path.join(path.dirname(req.resolve('playwright-core/package.json')),'browsers.json'),out+'/reader-browsers.json');
+          const pw=req('playwright'),executable=pw.chromium.executablePath();assert(fs.existsSync(executable));const bytes=fs.readFileSync(executable);
+          fs.writeFileSync(out+'/tools.json',JSON.stringify({node:process.versions,installed,optionalAbsent:absent,readerPackage:'1.64.1',chromium:{executable,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')},scope:'Isolated Chromium solely for unchanged simPrerenderBoot. No new Conquest browser scenario or public-font download.'},null,2));
+          VERSIONS
+      - name: Proper app types and controller syntax offline
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture types OFFLINE node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax OFFLINE node --check scripts/qa/qualifyConquestReportProgress.mjs
+      - name: Actual mounted cases existing regressions and six source fault restore pairs offline
+        id: controlled
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture controller OFFLINE env CQ_REPORT_OUT="$OUT/controller" node scripts/qa/qualifyConquestReportProgress.mjs
+      - name: Independently inspect every raw child and physical source control offline
+        if: ${{ !cancelled() && steps.controlled.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture raw-check OFFLINE node --input-type=module <<'RAW'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const root=process.cwd(),out=process.env.OUT,base=path.join(out,'controller');
+          const read=file=>fs.readFileSync(file),json=file=>JSON.parse(read(file).toString('utf8')),sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const nativeGit=bytes=>createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex');
+          const test='src/test/conquestReportProgress.test.tsx',page='src/pages/SoccerConquest.tsx',board='src/components/conquest/ImperialismBoardShared.tsx';
+          const names=[
+          'Conquest guide report progress CQ_REPORT_CURRENT_AND_CONTROLS uses actual mounted progress and control states',
+          'Conquest guide report progress CQ_REPORT_PRIVACY_AND_GAME_HOLDS preserves paired game and report boundaries',
+          'Conquest guide report progress CQ_REPORT_MOUNT_CLEANUP clears a removed Board and replaced subscriber',
+          ];
+          const vitestVersion=json(path.join(root,'node_modules/vitest/package.json')).version;assert.equal(vitestVersion,'3.2.7');
+          const observationNames=new Map([
+           [names[0],'Conquest guide report progress > CQ_REPORT_CURRENT_AND_CONTROLS uses actual mounted progress and control states'],
+           [names[1],'Conquest guide report progress > CQ_REPORT_PRIVACY_AND_GAME_HOLDS preserves paired game and report boundaries'],
+           [names[2],'Conquest guide report progress > CQ_REPORT_MOUNT_CLEANUP clears a removed Board and replaced subscriber'],
+          ]);
+          const observationIdentities=[...observationNames.values()];assert.equal(observationNames.size,3);assert.equal(new Set(observationIdentities).size,3);
+          const old=['src/test/reportContext.test.ts','src/test/gameReportPlacement.test.tsx','src/test/reportDetails.test.tsx','src/test/reportDraftLifecycle.test.tsx'];
+          const unexpectedRuntime=/\bUnhandled (?:Errors?|Rejections?|Exceptions?)\b|\bUnhandledPromiseRejection(?:Warning)?\b|\bunhandledRejection\b|\buncaughtException\b|\bUncaught[ \t]+(?:Error|Exception|TypeError|ReferenceError|SyntaxError|\[)|\bVitest caught \d+ unhandled\b|\b(?:ERR_MODULE_NOT_FOUND|MODULE_NOT_FOUND)\b|\bFailed to load url\b|\bCannot find (?:module|package)\b|^[ \t]*(?:SyntaxError|ReferenceError|TypeError)(?: \[[A-Z][A-Z0-9_]*\])?:/im;
+          function noUnexpectedLogs(stdout,stderr,label){
+           const normalized=Buffer.concat([stdout,Buffer.from('\n'),stderr]).toString('utf8').replace(/\u001b\[[0-9;]*m/g,'');
+           const match=unexpectedRuntime.exec(normalized);
+           assert.equal(match,null,'CQ_REPORT_UNEXPECTED_RUNTIME '+label+(match?': '+match[0]:''));
+          }
+          const controls=[
+          {name:'missing-page-callback',file:page,selected:names[0],owner:'CQ_REPORT_CURRENT',before:' onReportProgressChange={setReportProgress}',after:''},
+          {name:'forbidden-club-field',file:board,selected:names[1],owner:'CQ_REPORT_PRIVACY',before:"      phase, mode, puzzleDate: mode === 'daily' ? todayStr : null,",after:"      phase, mode, puzzleDate: mode === 'daily' ? todayStr : null,\n      privateClub: run?.favorite,"},
+          {name:'missing-unmount-cleanup',file:board,selected:names[2],owner:'CQ_REPORT_CLEANUP',before:'  useEffect(() => () => { onReportProgressChange?.(null); }, [onReportProgressChange]);',after:'  useEffect(() => () => {}, [onReportProgressChange]);'},
+          {name:'premature-continue-ready',file:board,selected:names[0],owner:'CQ_REPORT_CONTROL_SEMANTICS',before:"    : sceneActive ? 'scene-playing' : run?.lastRound ? 'ready' : 'not-rendered';",after:"    : sceneActive ? 'ready' : run?.lastRound ? 'ready' : 'not-rendered';"},
+          {name:'publication-extra-rng',file:board,selected:names[1],owner:'CQ_REPORT_RNG_PUBLICATION',before:'    onReportProgressChange?.({',after:'    if (onReportProgressChange) session?.rng();\n    onReportProgressChange?.({'},
+          {name:'publication-storage-write',file:board,selected:names[1],owner:'CQ_REPORT_STORE_PUBLICATION',before:'    onReportProgressChange?.({',after:"    if (onReportProgressChange) localStorage.setItem('cq-report-control-write', 'FICTIONAL CONTROL WRITE');\n    onReportProgressChange?.({"},
+          ];
+          const body={ [page]:read(path.join(base,'Page.held.tsx')),[board]:read(path.join(base,'Board.held.tsx')) };
+          for(const [file,bytes] of Object.entries(body))assert(bytes.equals(read(file)),file+' full held body');
+          assert.equal(sha(body[page]),'ed441c188dcf6d1f2d4b7036170d45bd316073c64a5bbeff51bb635d7cecb344');
+          assert.equal(sha(body[board]),'95f9bc6416085aa9da3a0f31d41363e1fdf94168de9f4cf5282c318a0f12308b');
+          const physical=json(path.join(base,'physical-controls.json'));assert.equal(physical.length,6);
+          for(const c of controls){
+           const source=body[c.file].toString('utf8'),offset=source.indexOf(c.before);
+           assert(offset>=0&&offset===source.lastIndexOf(c.before),c.name+' executable source operand');
+           const expected=source.slice(0,offset)+c.after+source.slice(offset+c.before.length),actual=read(path.join(base,c.name+'.mutated.tsx'));
+           assert(actual.equals(Buffer.from(expected)),c.name+' actual whole changed source');
+           assert.notEqual(sha(actual),sha(body[c.file]));
+           assert.equal(expected.slice(0,offset)+c.before+expected.slice(offset+c.after.length),source,c.name+' full inverse');
+           const row=physical.find(row=>row.name===c.name);assert(row);assert.equal(row.file,c.file);assert.equal(row.owner,c.owner);assert.equal(row.selected,c.selected);assert.equal(row.offset,offset);
+           assert.equal(row.before,c.before);assert.equal(row.after,c.after);assert.equal(row.beforeSha256,sha(body[c.file]));assert.equal(row.changedSha256,sha(actual));assert.equal(row.beforeBytes,body[c.file].length);assert.equal(row.afterBytes,actual.length);assert.equal(row.changed,true);assert.equal(row.wholeInverse,true);
+          }
+          const children=[{name:'current-with-existing-regressions',ordinary:true},{name:'healthy-copy'},...controls.flatMap(control=>[{name:control.name,control,selected:control.selected},{name:control.name+'-restored',selected:control.selected}]),{name:'restored'}];
+          assert.equal(children.length,15);
+          const actualChildren=[];let newPassed=0,newFailed=0,newUnselected=0,oldPassed=0,evidenceFiles=0;const copyDirectories=new Set();
+          for(const child of children){
+           const directory=path.join(base,child.name),receipt=json(path.join(directory,'receipt.json')),argv=json(path.join(directory,'argv.json')),report=json(path.join(directory,'vitest.json'));
+           assert.equal(receipt.name,child.name);assert.equal(receipt.status,child.control?1:0);assert.equal(receipt.signal,null);assert.equal(receipt.spawnError,null);assert.equal(receipt.parseError,null);
+           assert.equal(receipt.selected,child.selected??null);assert.equal(receipt.ordinary,!!child.ordinary);assert.equal(receipt.copied,!child.ordinary);
+           assert.equal(fs.statSync(path.join(directory,'transport.log')).size,0);
+           const stdout=read(path.join(directory,'stdout.log')),stderr=read(path.join(directory,'stderr.log'));noUnexpectedLogs(stdout,stderr,child.name);
+           if(typeof report.numRuntimeErrorTestSuites==='number')assert.equal(report.numRuntimeErrorTestSuites,0);
+           if(Array.isArray(report.unhandledErrors))assert.equal(report.unhandledErrors.length,0);
+           const expectedArgs=['node_modules/vitest/vitest.mjs','run',test,...(child.ordinary?old:[]),'--reporter=json','--outputFile='+path.join(directory,'vitest.json'),...(child.selected?['-t',child.selected]:[])];
+           assert.deepEqual(argv.argv,expectedArgs);assert.equal(argv.timeoutMs,180000);assert.equal(argv.selected,child.selected??null);
+           if(child.ordinary)assert.equal(argv.aliases,null);
+           else{
+            const alias=argv.aliases;assert.deepEqual(Object.keys(alias).sort(),['@/components/conquest/ImperialismBoardShared','@/pages/SoccerConquest']);
+            const pageCopy=alias['@/pages/SoccerConquest'],boardCopy=alias['@/components/conquest/ImperialismBoardShared'];assert.equal(path.dirname(pageCopy),path.dirname(boardCopy));const copyDir=path.dirname(pageCopy);assert.equal(path.dirname(copyDir),path.join(root,'tmp'));assert(path.basename(copyDir).startsWith('conquest-report-copy-'));assert(!fs.existsSync(copyDir));copyDirectories.add(copyDir);
+           }
+           const rows=report.testResults.flatMap(file=>file.assertionResults.map(row=>({...row,file:path.relative(root,file.name).replace(/\\/g,'/')})));
+           const ours=rows.filter(row=>row.file===test);assert.deepEqual(ours.map(row=>row.fullName).sort(),[...names].sort());
+           const files=[...new Set(rows.map(row=>row.file))].sort();assert.deepEqual(files,(child.ordinary?[test,...old]:[test]).sort());
+           const failed=rows.filter(row=>row.status==='failed');
+           if(child.control){
+            assert.equal(failed.length,1);assert.equal(failed[0].fullName,child.selected);
+            const primary=String(failed[0].failureMessages[0]).replace(/\u001b\[[0-9;]*m/g,'').split(/\r?\n/)[0].trim();
+            assert(primary.startsWith('AssertionError: '+child.control.owner+' ')||primary.startsWith('AssertionError: '+child.control.owner+':'),child.name+' native primary ownership: '+primary);
+           }else{assert.equal(report.success,true);assert.equal(failed.length,0);}
+           for(const row of ours){
+            const expected=row.fullName===child.selected?(child.control?'failed':'passed'):child.selected?'unselected':'passed';
+            if(expected==='unselected'){assert(['pending','skipped'].includes(row.status));newUnselected++;}
+            else{assert.equal(row.status,expected);if(expected==='passed')newPassed++;else newFailed++;}
+           }
+           if(child.ordinary){for(const file of old){const original=rows.filter(row=>row.file===file);assert(original.length>0);assert(original.every(row=>row.status==='passed'));oldPassed+=original.length;}}
+           const observations=fs.readdirSync(path.join(directory,'observations')).filter(file=>file.endsWith('.json')).map(file=>json(path.join(directory,'observations',file)));
+           const selectedNames=child.selected?[child.selected]:names,expectedObservationNames=selectedNames.map(name=>{assert(observationNames.has(name));return observationNames.get(name);});assert.deepEqual(observations.map(row=>row.name).sort(),expectedObservationNames.sort());evidenceFiles+=observations.length;
+           for(const observation of observations){assert(observationIdentities.includes(observation.name));assert(Array.isArray(observation.evidence)&&observation.evidence.length>0);}
+           actualChildren.push({name:child.name,rows:rows.map(row=>({file:row.file,fullName:row.fullName,status:row.status})),status:receipt.status,stdout:{bytes:stdout.length,sha256:sha(stdout)},stderr:{bytes:stderr.length,sha256:sha(stderr)},knownRuntimeDiagnosticDetected:false,optionalRuntimeCounters:receipt.runtimeCounters??null});
+          }
+          assert.equal(copyDirectories.size,1);assert.equal(newPassed,15);assert.equal(newFailed,6);assert.equal(newUnselected,24);assert.equal(evidenceFiles,21);
+          const before=json(path.join(base,'inputs.json')),after=json(path.join(base,'held-after.json'));assert.equal(before.length,16);assert.equal(after.length,16);
+          for(const row of before){const current=read(row.file),last=after.find(item=>item.file===row.file);assert(last);assert.equal(current.length,row.actualBytes);assert.equal(sha(current),row.actualSha256);assert.equal(nativeGit(current),row.actualGit);assert.equal(last.sha256,row.actualSha256);assert.equal(last.git,row.actualGit);assert.equal(last.bytes,row.actualBytes);}
+          const runtimeDirectory=path.join(out,'runtime-log-control');fs.mkdirSync(runtimeDirectory);
+          const origin=path.join(base,'missing-page-callback'),originalOut=read(path.join(origin,'stdout.log')),originalErr=read(path.join(origin,'stderr.log'));
+          const outCopy=path.join(runtimeDirectory,'stdout.log'),errCopy=path.join(runtimeDirectory,'stderr.log');
+          fs.writeFileSync(outCopy,originalOut);fs.writeFileSync(errCopy,originalErr);
+          noUnexpectedLogs(read(outCopy),read(errCopy),'actual owned copied-log baseline');
+          const allowed=Buffer.concat([originalErr,Buffer.from('\nnode:internal/process/promises:394\n    triggerUncaughtException(err, true /* fromPromise */);\nAssertionError: CQ_REPORT_CURRENT expected owned assertion\n')]);
+          fs.writeFileSync(path.join(runtimeDirectory,'allowed-preamble.stderr.log'),allowed);
+          assert(!allowed.equals(originalErr));
+          noUnexpectedLogs(originalOut,allowed,'declared allowed AssertionError and trigger preamble');
+          const runtimeLogControls=[];
+          for(const probe of [
+           {name:'unhandled-rejection',line:'\nUnhandled Rejection: CQ_REPORT_PLANTED_REJECTION\n'},
+           {name:'type-error',line:'\nTypeError: CQ_REPORT_PLANTED_TYPE\n'},
+          ]){
+           const changed=Buffer.concat([originalErr,Buffer.from(probe.line)]);assert(!changed.equals(originalErr));assert.notEqual(sha(changed),sha(originalErr));
+           fs.writeFileSync(errCopy,changed);fs.writeFileSync(path.join(runtimeDirectory,probe.name+'.planted.stderr.log'),changed);
+           assert(read(errCopy).equals(changed));
+           let refusal=null,expectedNativeAssertion=false;
+           try{noUnexpectedLogs(read(outCopy),read(errCopy),'planted '+probe.name);}
+           catch(error){refusal={name:error.name,code:error.code??null,message:error.message,stack:error.stack};expectedNativeAssertion=error instanceof assert.AssertionError&&error.message.startsWith('CQ_REPORT_UNEXPECTED_RUNTIME');}
+           finally{fs.writeFileSync(outCopy,originalOut);fs.writeFileSync(errCopy,originalErr);}
+           const restored=read(outCopy).equals(originalOut)&&read(errCopy).equals(originalErr);
+           const row={name:probe.name,changed:true,originalStdoutBytes:originalOut.length,originalStdoutSha256:sha(originalOut),originalStderrBytes:originalErr.length,originalStderrSha256:sha(originalErr),plantedStderrBytes:changed.length,plantedStderrSha256:sha(changed),refusal,expectedNativeAssertion,restoredExactBytes:restored,restoredHealthy:false};
+           fs.writeFileSync(path.join(runtimeDirectory,probe.name+'.json'),JSON.stringify(row,null,2));
+           assert.equal(expectedNativeAssertion,true,probe.name+' must be refused by the native runtime guard');assert.equal(restored,true);
+           noUnexpectedLogs(read(outCopy),read(errCopy),'restored '+probe.name);
+           row.restoredHealthy=true;runtimeLogControls.push(row);fs.writeFileSync(path.join(runtimeDirectory,probe.name+'.json'),JSON.stringify(row,null,2));
+          }
+          assert.equal(runtimeLogControls.length,2);
+          const runtimeAdmission={actualChildLogPairsChecked:15,knownShapesOnly:true,allowedAssertionAndTriggerPreambleHealthy:true,allowedPreambleBytes:allowed.length,allowedPreambleSha256:sha(allowed),copiedLogProbes:runtimeLogControls,gameControlCountUnchanged:6,scope:'Two detached copied-log diagnostics, no additional game/test/controller execution or broad claim that every logged Error is a runtime failure.'};
+          fs.writeFileSync(path.join(out,'runtime-log-admission.json'),JSON.stringify(runtimeAdmission,null,2));
+          const summary=json(path.join(base,'summary.json'));assert.equal(summary.completed,true);assert.equal(summary.primary,null);assert.equal(summary.cleanupError,null);assert.equal(summary.validations.length,15);assert.equal(summary.physicalControls.length,6);assert.equal(summary.existingRegressionExecutions,oldPassed);
+          fs.writeFileSync(path.join(out,'raw-verification.json'),JSON.stringify({completed:true,observationIdentityBinding:{vitestVersion,reportToObservation:[...observationNames.entries()]},actualChildren,newPassed,newFailed,newUnselected,actualOriginalReportPasses:oldPassed,evidenceFiles,physicalControls:6,selectedHealthyRestores:6,copyDirectoriesRemoved:[...copyDirectories],runtimeAdmission,runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN',scope:'Guide-origin scalar report diagnostics only. Original first-match blocker remains UNREPRODUCED.'},null,2));
+          console.log('Independent raw verification: all15 child JSON reports, native owners, six physical controls and selected restores,21 actual new-case observations and complete held bodies passed.');
+          RAW
+      - name: Actual normal Vite build offline
+        id: build
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"; source "$OUT/custody.sh"
+          capture build OFFLINE npm run build
+          hold_before dist dist
+      - name: All fifteen unchanged dist and public readers offline
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -uo pipefail
+          source "$OUT/capture.sh"
+          failed=0
+          for reader in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            capture "$reader" OFFLINE node "scripts/$reader.mjs" || failed=1
+          done
+          printf '%s\n' "$failed" > "$OUT/readers.exit"
+          exit "$failed"
+      - name: Always retain full source dependency tool browser cache and dist custody
+        if: always()
+        run: |
+          set -uo pipefail
+          failed=0
+          OUT="$RUNNER_TEMP/conquest-report-progress"; export OUT
+          mkdir -p "$OUT"
+          if [ -f "$OUT/helper.sha256" ]; then sha256sum -c "$OUT/helper.sha256" > "$OUT/helpers-held.log" 2>&1 || failed=1; else printf 'UNAVAILABLE\n' > "$OUT/helpers-held.log"; failed=1; fi
+          if [ -f "$OUT/source.sha256" ]; then sha256sum -c "$OUT/source.sha256" > "$OUT/source-held.log" 2>&1 || failed=1; else printf 'UNAVAILABLE\n' > "$OUT/source-held.log"; failed=1; fi
+          if [ -f "$OUT/source.members.before" ]; then
+            git ls-files -z > "$OUT/source.members.after"
+            cmp "$OUT/source.members.before" "$OUT/source.members.after" > "$OUT/source-members-held.log" 2>&1 || failed=1
+          else printf 'UNAVAILABLE\n' > "$OUT/source-members-held.log"; failed=1; fi
+          if [ -f "$OUT/custody.sh" ]; then
+            source "$OUT/custody.sh"
+            framework_cache_snapshot after || failed=1
+            if [ -d node_modules ]; then members node_modules dependencies after || failed=1; else failed=1; fi
+            if [ -f "$OUT/tools-root.txt" ]; then
+              tools="$(cat "$OUT/tools-root.txt")"
+              if [ -d "$tools/node_modules" ]; then members "$tools/node_modules" reader-packages after; else failed=1; fi
+              if [ -d "$tools/python" ]; then
+                members "$tools/python" python after
+                "$tools/python/bin/python" -m pip freeze > "$OUT/python-packages.after"
+                cmp "$OUT/python-packages.before" "$OUT/python-packages.after" > "$OUT/python-packages-held.log" 2>&1 || failed=1
+              else failed=1; fi
+            else failed=1; fi
+            if [ -f "$OUT/chromium-root.txt" ]; then
+              chromium="$(cat "$OUT/chromium-root.txt")"
+              if [ -d "$chromium" ]; then members "$chromium" chromium after; else failed=1; fi
+            else failed=1; fi
+            if [ -d dist ]; then members dist dist after; else failed=1; fi
+          else failed=1; fi
+          for label in dependencies reader-packages python chromium dist; do
+            if [ -f "$OUT/$label.sha256" ]; then sha256sum -c "$OUT/$label.sha256" > "$OUT/$label-held.log" 2>&1 || failed=1; else printf 'UNAVAILABLE\n' > "$OUT/$label-held.log"; failed=1; fi
+            for kind in members links; do
+              if [ -f "$OUT/$label.$kind.before" ] && [ -f "$OUT/$label.$kind.after" ]; then
+                cmp "$OUT/$label.$kind.before" "$OUT/$label.$kind.after" > "$OUT/$label-$kind-held.log" 2>&1 || failed=1
+              else printf 'UNAVAILABLE\n' > "$OUT/$label-$kind-held.log"; failed=1; fi
+            done
+          done
+          if [ -f "$OUT/tool-roots.sha256" ]; then sha256sum -c "$OUT/tool-roots.sha256" > "$OUT/tool-roots-held.log" 2>&1 || failed=1; else printf 'UNAVAILABLE\n' > "$OUT/tool-roots-held.log"; failed=1; fi
+          if [ -f "$OUT/tools-root.txt" ]; then
+            tools="$(cat "$OUT/tools-root.txt")"
+            for name in playwright playwright-core; do
+              if [ -L "node_modules/$name" ] && [ "$(readlink "node_modules/$name")" = "$tools/node_modules/$name" ]; then unlink "node_modules/$name"; else failed=1; fi
+            done
+          fi
+          git diff --exit-code HEAD > "$OUT/final-source.diff" || failed=1
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt" || failed=1
+          while IFS= read -r -d '' receipt; do test ! -s "$receipt" || failed=1; done < <(find "$OUT" -type f \( -name '*.transport' -o -name transport.log \) -print0)
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          exit "$failed"
+      - name: Always retain original raw and partial evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: conquest-report-progress-${{ github.run_id }}
+          path: ${{ runner.temp }}/conquest-report-progress
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14
