@@ -1,0 +1,260 @@
+name: Club Manager custom tactics site and App qualification
+
+on:
+  push:
+    branches: [codex/cm-custom-tactics-site-20261103]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cm-custom-tactics-site-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      PRERENDER_ONLY: /club-manager
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the approved source and QA inputs
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/cm-custom-tactics-site"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/original" "$OUT/generated" "$OUT/units" "$OUT/raw"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          git fetch --no-tags --depth=1 origin 453e01d6ab1d6d755bf4dedbefdead0d0b8cc679
+          test "$(git rev-parse 453e01d6ab1d6d755bf4dedbefdead0d0b8cc679^{tree})" = b02488cd7e071745b3013c5e7fa0a8951cc5d00e
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status 453e01d6ab1d6d755bf4dedbefdead0d0b8cc679 HEAD > "$OUT/candidate-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.RUNNER_TEMP + '/cm-custom-tactics-site';
+          const base = '453e01d6ab1d6d755bf4dedbefdead0d0b8cc679';
+          const allowedCandidate = [".github/workflows/cm-custom-tactics-site-20261103.yml","scripts/qa/cmCustomTacticsFixtures.mjs","scripts/qa/cmCustomTacticsBrowser.mjs","scripts/simManagerMatchPlans.mjs"];
+          const candidate = execFileSync('git', ['diff', '--name-only', base, 'HEAD'])
+            .toString().trim().split('\n').filter(Boolean).sort();
+          assert.deepEqual(candidate, allowedCandidate.sort(), 'Candidate source contract differs');
+          const pins = {"scripts/simTacticsEngine.mjs":"d6bf2bc4e94db7bcb532e9b773fc584f334340a5","scripts/qa/managerMatchPlans1079.mjs":"98972610390be00aebed0d85099e7393fd07fb37","src/components/club-manager/AcademyScreen.tsx":"2d3ca44121cf0a84dad9b965328bd0c970403be3","src/components/club-manager/LiveSimScreen.tsx":"a6a434180c6ee9ffe263fc5c82cc8328a36914ee","src/components/club-manager/LiveTacticsPanel.tsx":"b12a1a0303ec9b3d043bdac089b873a4cc35383c","src/components/club-manager/MatchPlansCard.tsx":"c64e82d0adff5180272f0164e7a84b80fd9d9dce","src/components/club-manager/TacticsScreen.tsx":"950c4e9b0d2df22d1d6de95723122cc699b4bacd","src/hooks/useClubManager.ts":"5b2aac4ea3f649e478fc4e26939dff7dadbed310","src/lib/clubManager.ts":"9d8dc92557bf2f4358b5be044359354eda841769","src/lib/clubManagerCalendar.ts":"353c2019273564b48b0ad9657c02a83990ff7bc3","src/lib/clubManagerPositions.ts":"999b26b065246a2bf2db452d17d96439e855c6af","src/lib/clubManagerUiInfo.ts":"8e0b99eb1941760b18fa4d5de1df2b72fd894a0a","src/pages/ClubManager.tsx":"4781925c031abde3822c81ef49d5e1558d315a17","src/test/academyFilters.test.tsx":"c2d432043c153bcf56a881d264d7077c74c7ba3d","src/lib/clubManagerMatchPlans.ts":"345b05725fff2c2b502be4ec32d6e2728cf3c1b3","src/test/managerMatchPlans.test.tsx":"43d803e92473dbb3ce1f765b71800c96e27125ef","src/test/cmCustomTacticsPitch.test.ts":"b7a2160b9d3d98da728b2f7ad7ab6bd5eeccdf95","src/test/MatchPlansCard.customPositions.test.tsx":"0eaa919e0d4cc8b0c24db5f331f7664d2db79a52","src/test/clubManagerPositionPersistence.test.tsx":"d71d8486dad8da7bdc5904e43ef2c4641651e301","src/test/cmCustomTacticalPlans.test.ts":"5eb8a489de955660be29d470476b6a90bf3ac492","src/test/cmCustomTacticsUi.test.tsx":"1884a41fde35b8152c51f055b29c04389983e56d","src/test/cmCustomPlanPreservation.test.ts":"008263b6bf1f914b1383058d91852850dff22e43","scripts/simManagerMatchPlans.mjs":"7d6eb5ffe213b115eb506d2711fdacfe0950d978","scripts/qa/cmCustomTacticsFixtures.mjs":"6ee1de7e4e4faef1802859a065ffbb38c9eafbf8","scripts/qa/cmCustomTacticsBrowser.mjs":"ccda3af5c7e5972d0b406f5a2557e088250f2b64"};
+          for (const [file, blob] of Object.entries(pins)) {
+            assert.match(blob, /^[0-9a-f]{40}$/);
+            assert.equal(execFileSync('git', ['rev-parse', 'HEAD:' + file]).toString().trim(), blob, file);
+          }
+          fs.writeFileSync(out + '/source-association.json', JSON.stringify({
+            parent: base, parentTree: 'b02488cd7e071745b3013c5e7fa0a8951cc5d00e', pins,
+            scope: 'Site/App qualification only. Existing product bodies held; focused engine, parity and effective source controls are separate and uncredited here.',
+          }, null, 2) + '\n');
+          const generated = [
+            'scripts/data/guideHeadingsFrozen.json', 'src/data/searchKeywords.json',
+            'public/club-manager/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json',
+          ];
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const hashes = Object.fromEntries(tracked.filter(p => !generated.includes(p))
+            .map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-before.json', JSON.stringify(hashes, null, 2) + '\n');
+          fs.writeFileSync(out + '/generated-paths.json', JSON.stringify(generated, null, 2) + '\n');
+          for (const p of generated) {
+            const dst = path.join(out, 'original', p);
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(p, dst);
+          }
+          NODE
+      - name: Install held application and isolated QA dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          npm install --prefix "$RUNNER_TEMP/flagship-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/flagship-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/flagship-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+          python3 -m pip install --target "$RUNNER_TEMP/flagship-python" fonttools pillow 2>&1 | tee "$QA_OUT/logs/python-install.log"
+          echo "PYTHONPATH=$RUNNER_TEMP/flagship-python" >> "$GITHUB_ENV"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Actual app types, normal generators, site build, readers, unchanged budgets and App
+        timeout-minutes: 32
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          run_gate seo-meta-parts node scripts/genSeoMetaParts.mjs
+          git diff --exit-code -- src/data/seoMetaParts > "$QA_OUT/logs/seo-parts-held.log"
+          run_gate guide-club-manager node scripts/simGuideHeadings.mjs --refresh /club-manager
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const before = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/original/scripts/data/guideHeadingsFrozen.json', 'utf8'));
+          const after = JSON.parse(fs.readFileSync('scripts/data/guideHeadingsFrozen.json', 'utf8'));
+          for (const route of ['/club-manager']) {
+            assert.ok(before.routes[route]);
+            assert.ok(after.routes[route]);
+            delete before.routes[route];
+            delete after.routes[route];
+          }
+          assert.deepEqual(after, before, 'Guide refresh changed an unrelated route or fixture metadata');
+          NODE
+          run_gate keywords-first node scripts/genSearchKeywords.mjs
+          cp src/data/searchKeywords.json "$QA_OUT/searchKeywords-first.json"
+          run_gate keywords-second node scripts/genSearchKeywords.mjs
+          cmp "$QA_OUT/searchKeywords-first.json" src/data/searchKeywords.json
+          run_gate build npm run build:seo
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then
+              ready=1
+              break
+            fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/club-manager node scripts/simSeoMetaSplit.mjs
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          const before = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/source-before.json', 'utf8'));
+          const current = Object.fromEntries(Object.keys(before).map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(process.env.QA_OUT + '/source-before-browser.json', JSON.stringify(current, null, 2) + '\n');
+          assert.deepEqual(current, before, 'Application or QA source changed before the actual App browser checks');
+          NODE
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before-browser.sha256"
+          run_gate browser-fixtures node scripts/qa/cmCustomTacticsFixtures.mjs --out "$QA_OUT/fixtures"
+          run_gate browser node scripts/qa/cmCustomTacticsBrowser.mjs --base-url "$BASE" --out "$QA_OUT/browser" --fixtures "$QA_OUT/fixtures"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after-browser.sha256"
+          cmp "$QA_OUT/dist-before-browser.sha256" "$QA_OUT/dist-after-browser.sha256"
+          test ! -s "$QA_OUT/transport/server.log"
+          # Console/resource and deliberate external HTTP abort events remain raw evidence for source review.
+          # The driver directly enforces page errors and its declared geometry, storage and UI contracts.
+
+      - name: Retain generated bodies, actual diff and source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const out = process.env.QA_OUT;
+          const before = JSON.parse(fs.readFileSync(out + '/source-before.json', 'utf8'));
+          const generated = JSON.parse(fs.readFileSync(out + '/generated-paths.json', 'utf8'));
+          const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
+          const after = Object.fromEntries(tracked.filter(p => !generated.includes(p))
+            .map(p => [p, crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex')]));
+          fs.writeFileSync(out + '/source-after.json', JSON.stringify(after, null, 2) + '\n');
+          for (const p of generated) {
+            if (!fs.existsSync(p)) continue;
+            const dst = path.join(out, 'generated', p);
+            fs.mkdirSync(path.dirname(dst), { recursive: true });
+            fs.copyFileSync(p, dst);
+          }
+          const changed = execFileSync('git', ['diff', '--name-only']).toString().trim().split('\n').filter(Boolean);
+          fs.writeFileSync(out + '/actual-generated-paths.json', JSON.stringify(changed, null, 2) + '\n');
+          fs.writeFileSync(out + '/generated.patch', execFileSync('git', ['diff', '--binary', '--', ...generated], { maxBuffer: 32 * 1024 * 1024 }));
+          fs.writeFileSync(out + '/working-tree.txt', execFileSync('git', ['status', '--short'], { maxBuffer: 8 * 1024 * 1024 }));
+          fs.writeFileSync(out + '/transport-inventory.json', JSON.stringify(fs.readdirSync(out + '/transport').sort().map(name => {
+            const text = fs.readFileSync(path.join(out, 'transport', name), 'utf8');
+            const lines = text.split('\n').filter(Boolean);
+            return { name, blockedAttempts: lines.length,
+              fontBlockedAttempts: lines.filter(line => /^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts: lines.filter(line => line === '[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length,
+              rawLogRetained: true };
+          }), null, 2) + '\n');
+          assert.deepEqual(after, before, 'Tracked source changed outside the five declared generated paths');
+          assert.ok(changed.every(p => generated.includes(p)), 'Unexpected tracked generated path');
+          NODE
+      - name: Bound the retained artifact
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: cm-custom-tactics-site-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-custom-tactics-site
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
