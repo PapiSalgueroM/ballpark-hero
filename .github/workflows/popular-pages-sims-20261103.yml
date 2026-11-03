@@ -1,0 +1,422 @@
+name: Requested final popular pages all simulations and build
+on:
+  push:
+    branches: [codex/popular-pages-sims-lazy-home-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: popular-pages-sims-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  all-sims:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the exact joined application and source scope
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/popular-pages-sims"
+          mkdir -p "$OUT/logs" "$OUT/units" "$OUT/raw" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status c176be815dc4af57dfd7185a485e28357aa0d41e HEAD > "$OUT/changed-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,pins={"docs/PROJECT-STATE.md":"f4d98aa84b06234837cf5be9e0df856fb2cf214e","docs/TRAFFIC-PRIORITIES-2026-11-03.md":"44b6a5f95dac71d4d0db467b6756cfe359920669","scripts/qa/managerMatchPlans1079.mjs":"98972610390be00aebed0d85099e7393fd07fb37","scripts/simManagerMatchPlans.mjs":"7add578315189e3032a2bdb9c3a0ecafd669dea1","scripts/simTacticsEngine.mjs":"d6bf2bc4e94db7bcb532e9b773fc584f334340a5","src/components/club-manager/AcademyScreen.tsx":"2d3ca44121cf0a84dad9b965328bd0c970403be3","src/components/club-manager/LiveSimScreen.tsx":"a6a434180c6ee9ffe263fc5c82cc8328a36914ee","src/components/club-manager/LiveTacticsPanel.tsx":"b12a1a0303ec9b3d043bdac089b873a4cc35383c","src/components/club-manager/MatchPlansCard.tsx":"c64e82d0adff5180272f0164e7a84b80fd9d9dce","src/components/club-manager/TacticsScreen.tsx":"950c4e9b0d2df22d1d6de95723122cc699b4bacd","src/components/soccer-career/PastCareersSheet.tsx":"515d3ce1a2fc89a49da3f9fda10902db59292ddc","src/hooks/useClubManager.ts":"5b2aac4ea3f649e478fc4e26939dff7dadbed310","src/lib/clubManager.ts":"9d8dc92557bf2f4358b5be044359354eda841769","src/lib/clubManagerCalendar.ts":"353c2019273564b48b0ad9657c02a83990ff7bc3","src/lib/clubManagerMatchPlans.ts":"345b05725fff2c2b502be4ec32d6e2728cf3c1b3","src/lib/clubManagerPositions.ts":"999b26b065246a2bf2db452d17d96439e855c6af","src/lib/clubManagerUiInfo.ts":"8e0b99eb1941760b18fa4d5de1df2b72fd894a0a","src/lib/soccerCareerCompletedRecords.ts":"d000db49957004591231cf1912a0dc8ea3ced083","src/lib/soccerCareerEngine.ts":"a60fab359f45dda9b125dbf118474170cdcc9417","src/pages/ClubManager.tsx":"4781925c031abde3822c81ef49d5e1558d315a17","src/pages/SoccerCareer.tsx":"3fedb64360b001ee88343a24581ccb960bfae948","src/test/LiveSimScreen.positionNotice.test.tsx":"86c18f8813278f105aefd2305fe338f1d5d83096","src/test/MatchPlansCard.customPositions.test.tsx":"0eaa919e0d4cc8b0c24db5f331f7664d2db79a52","src/test/TacticsScreen.freePositions.test.tsx":"85f4bed196a46bb77cd1793058981ecbd523b3f4","src/test/academyFilters.test.tsx":"c2d432043c153bcf56a881d264d7077c74c7ba3d","src/test/clubManagerPositionBlocked.test.tsx":"0f9c4de7514f0a7515d21e3abc37f9a4764309ec","src/test/clubManagerPositionIntegration.test.ts":"c1eabe3e33ffc37aafbb4f34d4a3435d47fdf9b0","src/test/clubManagerPositionLive.test.ts":"b8174f45778f49e59cccfe0428daf4c4b5d7ec3d","src/test/clubManagerPositionPersistence.test.tsx":"d71d8486dad8da7bdc5904e43ef2c4641651e301","src/test/clubManagerPositions.test.ts":"a075328b1967a6aebb2bddf30014eb308f682084","src/test/cmCustomPlanPreservation.test.ts":"008263b6bf1f914b1383058d91852850dff22e43","src/test/cmCustomTacticalPlans.test.ts":"5eb8a489de955660be29d470476b6a90bf3ac492","src/test/cmCustomTacticsPitch.test.ts":"b7a2160b9d3d98da728b2f7ad7ab6bd5eeccdf95","src/test/cmCustomTacticsPitchMissingPlayer.test.ts":"194a0fcb5d32863c61f8370175e6e95bc83ee788","src/test/cmCustomTacticsUi.test.tsx":"1884a41fde35b8152c51f055b29c04389983e56d","src/test/managerMatchPlans.test.tsx":"43d803e92473dbb3ce1f765b71800c96e27125ef","src/test/soccerCareerCompletedRecords.test.tsx":"e1c382f8d5d682637f64955f8133a08379c4a2f8","src/test/soccerCareerCompletedRecordsBoundary.test.tsx":"c6eee20614d71f693dd84338dc495fd617961cef","src/test/soccerCareerCompletedRecordsHelper.test.ts":"16c105033671446343c91ef683ee5faa5dd870f5","src/test/soccerCareerShareTrophies.test.ts":"a52cfb9de4d7101187890ed3087507e45176e19b","scripts/simWorldEditor.mjs":"328fdb6b13b13196d76c882efdf94e4a4f1f2407","scripts/simSoccerCareerSaveRetry.mjs":"474c8676a2c7f8ff3b01536bfedaf7ab333bf5c0","scripts/simUsCareerPractice.mjs":"f25fa2325ac9196824e12dc81c57ea95b4784380","scripts/simManagerAppealIsolation.mjs":"cb5110245b9c86d3690adb1f6dc7463391f88a9f","src/App.tsx":"211d50d87c1060a3bc459349f9091a0d7698f562","src/components/us-career/UsCareerBoard.tsx":"b2f81114f357b4edd17dd3a94c560a213412c817","src/pages/StadiumTycoon.tsx":"d1b78bdd5d5c98c5fae237f590d48d19954eb536","src/components/tycoon/TicketPolicyCard.tsx":"1e54f08a33e0b40624c8ecc73cd423701aee5f2a","src/components/front-office/FrontOfficeBoard.tsx":"6016c7c42eed81af36d3cab2e1eb4c1b3e9990f2","src/components/hub/HubExperience.tsx":"2fd20d58798ef438fa0566841121db855822f755","src/pages/Index.tsx":"fe43f115b5def2e2192b04f47fe6bd28a85c9863","scripts/simHubExperience.mjs":"8df3c38e9ba3b634ac9047db5b4d0d0c1ec91926","scripts/qa/hubs994.outcomes.tsx":"c3f4d1e392f04bda69e7a8cbed7809884254b89a","src/test/usCareerLastSeasonReload.test.tsx":"9b56dda941819b91dc0d75de3597958e507f3516","src/test/tycoonSaveNotice.test.tsx":"8a66440a51484f7483b7069088d169f06883bbc6","src/test/hubReturnNavigation.test.tsx":"51a145157130dace6c0765f28dadd4a80459a3be","src/test/frontOfficeWriteRetry.test.tsx":"f01d080ceae3c70e0ada3e4f1d21c0dff994be1c","scripts/simCmShootoutOrder.mjs":"9e131c325e1436c5c681e461d19becdcaba5a0ce","scripts/runAllSims.mjs":"5988827caabcc07a1e643494fa2610f559c779f6","scripts/simBrowserHarnessDiscovery.mjs":"82df8e0bf2c78b0a0ceba9c5158995b3f141935e","src/components/front-office-shared/GmEarnedDraftScreen.tsx":"e534fdb00b9e265bed0f8a28ff9885205e4307d9","src/components/front-office-shared/GmLotteryCard.tsx":"fbce8ed7e888d42d1b54708c759437de5b95bf55"},expected=["A\t.github/workflows/popular-pages-sims-20261103.yml","A\tdocs/TRAFFIC-PRIORITIES-2026-11-03.md","A\tsrc/components/soccer-career/PastCareersSheet.tsx","A\tsrc/lib/clubManagerPositions.ts","A\tsrc/lib/clubManagerUiInfo.ts","A\tsrc/lib/soccerCareerCompletedRecords.ts","A\tsrc/test/LiveSimScreen.positionNotice.test.tsx","A\tsrc/test/MatchPlansCard.customPositions.test.tsx","A\tsrc/test/TacticsScreen.freePositions.test.tsx","A\tsrc/test/clubManagerPositionBlocked.test.tsx","A\tsrc/test/clubManagerPositionIntegration.test.ts","A\tsrc/test/clubManagerPositionLive.test.ts","A\tsrc/test/clubManagerPositionPersistence.test.tsx","A\tsrc/test/clubManagerPositions.test.ts","A\tsrc/test/cmCustomPlanPreservation.test.ts","A\tsrc/test/cmCustomTacticalPlans.test.ts","A\tsrc/test/cmCustomTacticsPitch.test.ts","A\tsrc/test/cmCustomTacticsPitchMissingPlayer.test.ts","A\tsrc/test/cmCustomTacticsUi.test.tsx","A\tsrc/test/frontOfficeWriteRetry.test.tsx","A\tsrc/test/hubReturnNavigation.test.tsx","A\tsrc/test/soccerCareerCompletedRecords.test.tsx","A\tsrc/test/soccerCareerCompletedRecordsBoundary.test.tsx","A\tsrc/test/soccerCareerCompletedRecordsHelper.test.ts","A\tsrc/test/soccerCareerShareTrophies.test.ts","A\tsrc/test/tycoonSaveNotice.test.tsx","A\tsrc/test/usCareerLastSeasonReload.test.tsx","M\tdocs/PROJECT-STATE.md","M\tscripts/qa/hubs994.outcomes.tsx","M\tscripts/qa/managerMatchPlans1079.mjs","M\tscripts/runAllSims.mjs","M\tscripts/simBrowserHarnessDiscovery.mjs","M\tscripts/simCmShootoutOrder.mjs","M\tscripts/simHubExperience.mjs","M\tscripts/simManagerAppealIsolation.mjs","M\tscripts/simManagerMatchPlans.mjs","M\tscripts/simSoccerCareerSaveRetry.mjs","M\tscripts/simTacticsEngine.mjs","M\tscripts/simUsCareerPractice.mjs","M\tscripts/simWorldEditor.mjs","M\tsrc/App.tsx","M\tsrc/components/club-manager/AcademyScreen.tsx","M\tsrc/components/club-manager/LiveSimScreen.tsx","M\tsrc/components/club-manager/LiveTacticsPanel.tsx","M\tsrc/components/club-manager/MatchPlansCard.tsx","M\tsrc/components/club-manager/TacticsScreen.tsx","M\tsrc/components/front-office-shared/GmEarnedDraftScreen.tsx","M\tsrc/components/front-office-shared/GmLotteryCard.tsx","M\tsrc/components/front-office/FrontOfficeBoard.tsx","M\tsrc/components/hub/HubExperience.tsx","M\tsrc/components/tycoon/TicketPolicyCard.tsx","M\tsrc/components/us-career/UsCareerBoard.tsx","M\tsrc/hooks/useClubManager.ts","M\tsrc/lib/clubManager.ts","M\tsrc/lib/clubManagerCalendar.ts","M\tsrc/lib/clubManagerMatchPlans.ts","M\tsrc/lib/soccerCareerEngine.ts","M\tsrc/pages/ClubManager.tsx","M\tsrc/pages/Index.tsx","M\tsrc/pages/SoccerCareer.tsx","M\tsrc/pages/StadiumTycoon.tsx","M\tsrc/test/academyFilters.test.tsx","M\tsrc/test/managerMatchPlans.test.tsx"];
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+          assert.equal(Object.keys(pins).length,62);assert.equal(expected.length,63);
+          assert.equal(execFileSync('git',['rev-parse','HEAD']).toString().trim(),process.env.GITHUB_SHA);
+          assert.equal(execFileSync('git',['rev-parse','HEAD^']).toString().trim(),'515850c2d309cb1379e709a3fc54acfbd3800aa5');
+          assert.equal(execFileSync('git',['rev-parse','HEAD^^{tree}']).toString().trim(),'f65079a7b87c7803934b6f26a6eef0205762793f');
+          assert.deepEqual(fs.readFileSync(out+'/changed-paths.txt','utf8').trim().split('\n').sort(),expected);
+          for(const [file,git]of Object.entries(pins)){
+            assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString().trim(),git,file+' tracked');
+            assert.equal(execFileSync('git',['hash-object',file]).toString().trim(),git,file+' actual');
+          }
+          const config=fs.readFileSync('vitest.config.ts','utf8');
+          for(const match of config.matchAll(/process\.env\.([A-Z_]+)/g))assert.ok(!process.env[match[1]],'No inherited alias:'+match[1]);
+          fs.writeFileSync(out+'/association.json',JSON.stringify({source:process.env.GITHUB_SHA,releaseCore:'515850c2d309cb1379e709a3fc54acfbd3800aa5',base:'c176be815dc4af57dfd7185a485e28357aa0d41e',pins,qaCore:execFileSync('git',['rev-parse','HEAD^']).toString().trim(),qaCompatibilityPaths:["scripts/simSoccerCareerSaveRetry.mjs","scripts/simUsCareerPractice.mjs","scripts/simWorldEditor.mjs","scripts/simManagerAppealIsolation.mjs","scripts/simCmShootoutOrder.mjs","scripts/runAllSims.mjs","scripts/simBrowserHarnessDiscovery.mjs"],expectedSourceEntries:5674,previousAllSimsRun:41689428961,previousOutcome:'Prior attempts are retained separately; no native outcome is assumed before actual completion and evidence admission.',qualificationRequirement:'Bind the final core only after the selected tuple App, exact Shootout candidate and executable browser-discovery pair qualify. No old failure is waived by this source template.',scope:'Qualified SC/CM core, seven QA compatibility paths and the popular-game round, including native Hub input repair and two NBA lottery presentation paths. All 62 permanent paths are pinned. Normal build, twenty readers, sixteen unchanged caps and the unfiltered original node fleet must qualify together. No browser, full ordinary suite or public release credit is inferred.'},null,2)+'\n');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq 5674
+          cp .github/workflows/popular-pages-sims-20261103.yml "$OUT/workflow.yml"
+      - name: Install held application and existing QA tools
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          git diff --exit-code -- package.json package-lock.json
+          npm install --prefix "$RUNNER_TEMP/flagship-release-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/flagship-release-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/flagship-release-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/flagship-release-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+          python3 -m pip install --target "$RUNNER_TEMP/flagship-release-python" fonttools pillow 2>&1 | tee "$QA_OUT/logs/python-install.log"
+          echo "PYTHONPATH=$RUNNER_TEMP/flagship-release-python" >> "$GITHUB_ENV"
+      - name: Proper joined application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Existing save and home guards, normal build, twenty readers and all unchanged page caps
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          run_gate simSaveKeeper node scripts/simSaveKeeper.mjs
+          run_gate simHomeFront node scripts/simHomeFront.mjs
+          grep -F '7) Continue playing:' "$QA_OUT/logs/simHomeFront.log"
+          test ! -e .tmp-fx/career-records-tests.json
+          test ! -L .tmp-fx/career-records-tests.json
+          printf 'prebuild\n' > "$QA_OUT/records-leaf-owner.txt"
+          run_gate simSoccerCareerRecords node scripts/simSoccerCareerRecords.mjs
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const leaf='.tmp-fx/career-records-tests.json',file=path.resolve(leaf),out=process.env.QA_OUT;
+          assert.equal(file,path.join(process.cwd(),'.tmp-fx','career-records-tests.json'));
+          assert(fs.lstatSync(file).isFile()&&!fs.lstatSync(file).isSymbolicLink(),'Only the exact ordinary file created by the qualified producer is owned');
+          const bytes=fs.readFileSync(file),sha=crypto.createHash('sha256').update(bytes).digest('hex');
+          JSON.parse(bytes.toString('utf8'));
+          const retained=path.join(out,'raw','prebuild-simSoccerCareerRecords-last-control-report.json');
+          assert(!fs.existsSync(retained));fs.writeFileSync(retained,bytes,{flag:'wx'});
+          assert(fs.readFileSync(retained).equals(bytes));assert.equal(crypto.createHash('sha256').update(fs.readFileSync(retained)).digest('hex'),sha);
+          fs.writeFileSync(out+'/records-prebuild-report-retention.json',JSON.stringify({producer:'simSoccerCareerRecords',leaf,retained:'raw/prebuild-simSoccerCareerRecords-last-control-report.json',bytes:bytes.length,sha256:sha,meaning:'Exact last report left by the qualified harness, which also runs its own fault controls. This retained leaf can contain an expected control failure; it is not labeled as an all-pass report.',cleanup:'Only this absent-before ordinary leaf is removed; its parent and every other path stay untouched.'},null,2)+'\n');
+          fs.unlinkSync(file);assert(!fs.existsSync(file));assert(fs.readFileSync(retained).equals(bytes));
+          NODE
+          rm -- "$QA_OUT/records-leaf-owner.txt"
+          run_gate build npm run build
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          export BASE=http://127.0.0.1:4173
+          export SWEEP_BASE="$BASE"
+          export SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          readers=(
+            simAdsense simBrand simHeadTags simHiddenPages simHubs
+            simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender
+            simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets
+            simSiteSearch simGuideHeadings simHarnessAnchors
+          )
+          for reader in "${readers[@]}"; do
+            run_gate "$reader" node "scripts/$reader.mjs"
+          done
+          run_gate simSeoTitles node scripts/simSeoTitles.mjs
+          run_gate simSeoMetaSplit env SEO_SPLIT_ONLY=/soccer-career node scripts/simSeoMetaSplit.mjs
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+      - name: Run every discovered node simulation without a selection filter
+        timeout-minutes: 145
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_NETWORK=offline
+          unset ONLY BROWSER DB_PROBE SIM_SUITE_NET_GUARD SIM_SUITE_NET_FORCE
+          : > "$QA_OUT/transport/all-sims.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/all-sims.log"
+          test ! -e .tmp-fx/career-records-tests.json
+          test ! -L .tmp-fx/career-records-tests.json
+          printf 'fleet\n' > "$QA_OUT/records-leaf-owner.txt"
+          node scripts/runAllSims.mjs --plan-json > "$QA_OUT/sim-plan.json"
+          # BEGIN observational-only runner descendant telemetry
+          telemetry_dir="$QA_OUT/telemetry"
+          mkdir -p "$telemetry_dir"
+          cat > "$telemetry_dir/sampleRunnerTree.py" <<'SAMPLER_PY'
+          #!/usr/bin/env python3
+          """Observe only one runner's Linux descendant tree. Never changes runner outcomes."""
+          import argparse
+          import json
+          import os
+          from pathlib import Path
+          import signal
+          import time
+          from datetime import datetime, timezone
+          
+          parser = argparse.ArgumentParser()
+          parser.add_argument("--pid", type=int, required=True)
+          parser.add_argument("--workspace", type=Path, required=True)
+          parser.add_argument("--out", type=Path, required=True)
+          parser.add_argument("--stop-file", type=Path, required=True)
+          args = parser.parse_args()
+          if args.pid <= 1:
+              parser.error("A specific owned runner PID is required")
+          workspace = args.workspace.resolve(strict=True)
+          scripts = (workspace / "scripts").resolve(strict=True)
+          args.out.parent.mkdir(parents=True, exist_ok=True)
+          HZ, INTERVAL, MAX_PROCESSES, MAX_BYTES = os.sysconf("SC_CLK_TCK"), 30, 256, 8_000_000
+          stopping = False
+          def stop_signal(_signum, _frame):
+              global stopping
+              stopping = True
+          
+          for signum in (signal.SIGINT, signal.SIGTERM):
+              signal.signal(signum, stop_signal)
+          
+          def stat(pid):
+              try:
+                  fields = (Path("/proc") / str(pid) / "stat").read_text().rsplit(")", 1)[1].split()
+                  return {"pid": pid, "ppid": int(fields[1]), "state": fields[0],
+                          "cpu": (int(fields[11]) + int(fields[12])) / HZ, "start": int(fields[19])}
+              except (OSError, ValueError, IndexError):
+                  return None
+          
+          def children(pid):
+              result = set()
+              try:
+                  # Read only threads of the currently observed descendant, never all host PIDs.
+                  for thread in (Path("/proc") / str(pid) / "task").iterdir():
+                      try:
+                          result.update(int(p) for p in (thread / "children").read_text().split())
+                      except (OSError, ValueError):
+                          continue
+              except OSError:
+                  pass
+              return sorted(result)
+          
+          def script_paths(pid):
+              result = set()
+              try:
+                  with (Path("/proc") / str(pid) / "cmdline").open("rb") as stream:
+                      argv = stream.read(65536).split(b"\0")
+                  cwd = (Path("/proc") / str(pid) / "cwd").resolve(strict=True)
+                  for token in argv[1:]:
+                      value = token.decode("utf-8", errors="replace")
+                      if not value or value.startswith("-") or "\n" in value or "\r" in value:
+                          continue
+                      candidate = Path(value)
+                      if candidate.suffix not in {".mjs", ".cjs", ".js", ".tsx", ".ts", ".py", ".sh"}:
+                          continue
+                      candidate = (candidate if candidate.is_absolute() else cwd / candidate).resolve()
+                      if candidate.is_relative_to(scripts) and candidate.is_file():
+                          result.add(candidate.relative_to(workspace).as_posix())
+                  return sorted(result)[:4]
+              except OSError:
+                  return []
+          
+          root = stat(args.pid)
+          root_start = root["start"] if root else None
+          previous = {}
+          samples, written = 0, 0
+          reason = "runner-ended"
+          with args.out.open("xb") as output:
+              def emit(row, final=False):
+                  global written
+                  data = (json.dumps(row, separators=(",", ":"), ensure_ascii=True) + "\n").encode()
+                  ceiling = MAX_BYTES if final else MAX_BYTES - 1024
+                  if written + len(data) > ceiling:
+                      return False
+                  output.write(data)
+                  output.flush()
+                  written += len(data)
+                  return True
+          
+              while True:
+                  if stopping or args.stop_file.exists():
+                      reason = "requested-stop"
+                      break
+                  current = stat(args.pid)
+                  if not current or current["start"] != root_start or current["state"] == "Z":
+                      break
+                  uptime = float(Path("/proc/uptime").read_text().split()[0])
+                  queue, seen, rows = [args.pid], set(), []
+                  while queue and len(seen) < MAX_PROCESSES:
+                      pid = queue.pop(0)
+                      if pid in seen:
+                          continue
+                      seen.add(pid)
+                      info = stat(pid)
+                      if info:
+                          identity = (pid, info["start"])
+                          prior = previous.get(identity)
+                          rows.append({"pid": pid, "ppid": info["ppid"], "state": info["state"],
+                                       "cpuSeconds": round(info["cpu"], 3),
+                                       "elapsedSeconds": round(max(0, uptime - info["start"] / HZ), 3),
+                                       "cpuDeltaSeconds": None if prior is None else round(info["cpu"] - prior, 3),
+                                       "scriptPaths": script_paths(pid)})
+                          previous[identity] = info["cpu"]
+                          queue.extend(children(pid))
+                  samples += 1
+                  row = {"type": "sample", "utc": datetime.now(timezone.utc).isoformat(),
+                         "sample": samples, "rootPID": args.pid, "processes": rows,
+                         "treeTruncated": bool(queue), "unvisitedQueuedPIDs": len(set(queue) - seen)}
+                  if not emit(row):
+                      reason = "log-cap-reached"
+                      break
+                  deadline = time.monotonic() + INTERVAL
+                  while not stopping and not args.stop_file.exists() and time.monotonic() < deadline:
+                      time.sleep(min(1, max(0, deadline - time.monotonic())))
+              emit({"type": "sampler-end", "utc": datetime.now(timezone.utc).isoformat(),
+                    "reason": reason, "samples": samples, "bytesBeforeClosing": written,
+                    "limits": {"intervalSeconds": INTERVAL, "processesPerSample": MAX_PROCESSES,
+                               "logBytes": MAX_BYTES},
+                    "meaning": "Activity only. No harness pass/fail or semantic progress inferred."}, final=True)
+          SAMPLER_PY
+          printf '%s  %s\n' c41354fd8eb003114534e3171a2f0f391635a18382dd5e276190c80ff79ad8dd "$telemetry_dir/sampleRunnerTree.py" | sha256sum --check
+          test ! -e "$telemetry_dir/stop"
+          sampler_pid=''
+          stop_sampler() {
+            if [[ -n "$sampler_pid" ]]; then
+              : > "$telemetry_dir/stop"
+              local sampler_status=0
+              wait "$sampler_pid" || sampler_status=$?
+              printf '%s\n' "$sampler_status" > "$telemetry_dir/sampler.exit"
+              sampler_pid=''
+            fi
+          }
+          trap stop_sampler EXIT
+          (
+            set +e
+            SIM_FULL_OUTPUT=1 node scripts/runAllSims.mjs 2>&1 | tee "$QA_OUT/logs/all-sims.log"
+            codes=("${PIPESTATUS[@]}")
+            printf '%s\n' "${codes[0]}" > "$QA_OUT/all-sims.exit"
+            printf '%s\n' "${codes[1]}" > "$telemetry_dir/tee.exit"
+            exit "${codes[0]}"
+          ) &
+          runner_group_pid=$!
+          python3 "$telemetry_dir/sampleRunnerTree.py" --pid "$runner_group_pid" --workspace "$GITHUB_WORKSPACE" --out "$telemetry_dir/process-tree.jsonl" --stop-file "$telemetry_dir/stop" > "$telemetry_dir/sampler.stdout" 2> "$telemetry_dir/sampler.stderr" &
+          sampler_pid=$!
+          set +e
+          wait "$runner_group_pid"
+          runner_status=$?
+          set -e
+          stop_sampler
+          test "$runner_status" -eq "$(cat "$QA_OUT/all-sims.exit")"
+          test "$(cat "$telemetry_dir/tee.exit")" -eq 0
+          test "$(cat "$QA_OUT/all-sims.exit")" -eq 0
+          # END observational-only runner descendant telemetry
+      - name: Retain full source holds and transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          dist_hold=0
+          if [[ -f "$QA_OUT/dist-before.sha256" ]]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+            cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256" || dist_hold=$?
+            sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-held.log" || dist_hold=$?
+          else
+            echo "No completed-build inventory exists. No dist hold credit." > "$QA_OUT/dist-hold-unknown.txt"
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const leaf='.tmp-fx/career-records-tests.json',file=path.resolve(leaf),out=process.env.QA_OUT;
+          assert.equal(file,path.join(process.cwd(),'.tmp-fx','career-records-tests.json'));
+          const ownerFile=path.join(out,'records-leaf-owner.txt'),owner=fs.existsSync(ownerFile)?fs.readFileSync(ownerFile,'utf8').trim():null;
+          const phase=owner==='fleet'?'fleet-last-report':owner==='prebuild'?'prebuild-interrupted-last-report':'no-owned-producer-active';
+          let stat;try{stat=fs.lstatSync(file);}catch(error){if(error.code!=='ENOENT')throw error;}
+          if(!stat){
+            fs.writeFileSync(out+'/records-final-report-retention.json',JSON.stringify({producer:'simSoccerCareerRecords',leaf,phase,status:'missing',meaning:'No final report leaf exists. An interrupted or unstarted fleet is not credited with a report or aggregate outcome.'},null,2)+'\n');
+          }else{
+            assert(['prebuild','fleet'].includes(owner),'Absent-before producer ownership must be established before any report is removed');
+            assert(stat.isFile()&&!stat.isSymbolicLink(),'Only the exact ordinary report leaf is owned');
+            const bytes=fs.readFileSync(file),sha=crypto.createHash('sha256').update(bytes).digest('hex');JSON.parse(bytes.toString('utf8'));
+            const relative='raw/'+phase+'.json',retained=path.join(out,relative);
+            assert(!fs.existsSync(retained));fs.writeFileSync(retained,bytes,{flag:'wx'});
+            assert(fs.readFileSync(retained).equals(bytes));assert.equal(crypto.createHash('sha256').update(fs.readFileSync(retained)).digest('hex'),sha);
+            fs.writeFileSync(out+'/records-final-report-retention.json',JSON.stringify({producer:'simSoccerCareerRecords',leaf,phase,status:'retained',retained:relative,bytes:bytes.length,sha256:sha,meaning:'Exact last producer report, potentially an expected copied-control failure. This is not an aggregate fleet or all-pass report.'},null,2)+'\n');
+            assert(fs.readFileSync(file).equals(bytes));fs.unlinkSync(file);assert(!fs.existsSync(file));assert(fs.readFileSync(retained).equals(bytes));
+          }
+          NODE
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          if [[ -f "$QA_OUT/source-before.sha256" ]]; then
+            cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+            sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          else
+            echo "No qualified before inventory was produced." > "$QA_OUT/source-hold-unknown.txt"
+            exit 1
+          fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const out=process.env.QA_OUT;
+          const rows=fs.existsSync(out+'/transport')?fs.readdirSync(out+'/transport').sort().map(file=>{
+            const text=fs.readFileSync(out+'/transport/'+file,'utf8'),lines=text.split('\n').filter(Boolean);
+            return {file,blockedAttempts:lines.length,
+              fontBlockedAttempts:lines.filter(line=>/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts:lines.filter(line=>line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length};
+          }):[];
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({
+            receipts:rows,meaning:'Blocked attempts are retained. Empty Node receipts are not a browser or provider availability claim.'
+          },null,2)+'\n');
+          NODE
+          test "$dist_hold" -eq 0
+      - name: Bound retained focused evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: popular-pages-sims-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/popular-pages-sims
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
