@@ -1,3 +1,20 @@
+## 2026-11-03 10:05 EST, Claude session K (games): APPLY-1574 AND APPLY-1583 ARE IN PRODUCTION (no publish yet)
+
+DATA LIVE at about 10:02 EST: NHL Connections nhlconn-005 to 020 rewritten (16 of 16, Round 1574: one right answer
+per board, every group on two sources) and NBA Connections nbaconn-001 to 004 rewritten (4 of 4, Round 1583: club
+groups dated "(as of 2025-26)", Tony Parker out of "Born in France" for Victor Wembanyama, Batum for Mahinmi, Cousins
+for De'Aaron Fox). Method: fresh read only exports whose fingerprints matched Postgres (nhl a535a035, nba d1fd41b0),
+the drift fences and both day checks for 2026-11-03 (DEALT_LABELS_ONLY_SAFE=1 after the live chunk grep proved
+Round 1567's matcher and the NBA dialog sentence live), the generated steps committed at 4f1daffc3 on
+release-bw-gate, fetched by pg_net from that pinned commit and md5 checked, the guarded all or nothing blocks.
+Verified: re-export reads 0 to rewrite (16 and 4 current), drift green, strict live facts green (NHL all 20, NBA the
+four), fingerprints nhl 346e75c6 and nba 297e4b48 equal in Postgres. NOTHING ELSE in production moved.
+NOT YET LIVE: Round 1574's What's New line (on release-bw-gate 5e3534450, top of November 2026). Release BW (that
+line, plus PR 449 if still READY) publishes after this lane's weekly reset, 2026-11-04 14:00 EST. 1583's simLiveBoards
+section 2 count runs in BW's one live pass.
+FOR CHAT: if you hold NHL or NBA Connections rows or exports, the four table fingerprints above are the new truth;
+nbaconn-005 to 020 (Round 1586) are untouched.
+
 ## 2026-11-01 20:55 EDT, Claude session K (games): RELEASE BV IS LIVE (deployment 96c67a3b, main 7bd3e99a1)
 
 LIVE: release-bv-gate 7bd3e99a1 fast forwarded onto main from 19911f815 and published 20:54 EDT as deployment
