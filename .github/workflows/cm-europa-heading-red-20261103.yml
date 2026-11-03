@@ -1,0 +1,150 @@
+name: Club Manager Europa team heading baseline
+on:
+  push:
+    branches: [codex/cm-europa-heading-red-20261103]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the parent application and exact new test
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/cm-europa-heading-red"
+          mkdir -p "$OUT/raw"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git fetch --no-tags --depth=1 origin cc9a55a2f35b6215d5e6e664cc401d10d7f76291
+          test "$(git rev-parse cc9a55a2f35b6215d5e6e664cc401d10d7f76291^{tree})" = 90d580e7007917a4959187bd449d054d63191b08
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status cc9a55a2f35b6215d5e6e664cc401d10d7f76291 HEAD > "$OUT/candidate-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const paths = execFileSync('git', ['diff', '--name-status', 'cc9a55a2f35b6215d5e6e664cc401d10d7f76291', 'HEAD']).toString().trim().split('\n').sort();
+          assert.deepEqual(paths, ['A\t.github/workflows/cm-europa-heading-red-20261103.yml', 'A\tsrc/test/cmStatsCompetitionLabels.test.tsx'].sort(), 'Only the new test and baseline workflow may differ from pinned main');
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/cmStatsCompetitionLabels.test.tsx')).digest('hex'), 'd033c716084fab0577f736d54deabd75ae06f3572dd5dbd989b64b2a9c971150');
+          assert.equal(execFileSync('git', ['rev-parse', 'HEAD:src/components/club-manager/StatsScreen.tsx']).toString().trim(), '304d6910e4a8c3b826efee660052a92dd5d3b7d2');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          cp src/test/cmStatsCompetitionLabels.test.tsx "$OUT/test-source.tsx"
+          npm ci --no-audit --no-fund > "$OUT/install.log" 2>&1
+      - name: Actual application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/types.transport.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/types.transport.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$QA_OUT/types.log"
+          codes=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/types.exit"
+          test "${codes[1]}" -eq 0
+          test "${codes[0]}" -eq 0
+          test ! -s "$QA_OUT/types.transport.log"
+      - name: Observe six actual mounted competition cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export CM_STATS_LABELS_RAW="$QA_OUT/raw"
+          : > "$QA_OUT/units.transport.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/units.transport.log" node node_modules/vitest/vitest.mjs run src/test/cmStatsCompetitionLabels.test.tsx \
+            --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units.json" 2>&1 | tee "$QA_OUT/units.log"
+          codes=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/units.exit"
+          test "${codes[1]}" -eq 0
+          test ! -s "$QA_OUT/units.transport.log"
+      - name: Admit only the owned Europa heading failure and preserve the RED outcome
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = process.env.QA_OUT;
+          const report = JSON.parse(fs.readFileSync(out + '/units.json', 'utf8'));
+          assert.equal(Number(fs.readFileSync(out + '/units.exit', 'utf8')), 1);
+          assert.equal(report.success, false); assert.equal(report.numPassedTests, 5); assert.equal(report.numFailedTests, 1);
+          assert.equal(report.testResults.length, 1);
+          const suite = report.testResults[0];
+          assert.equal(suite.status, 'failed');
+          if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+          const labels = ['All comps', 'League', 'Domestic cup', 'Europe', 'Super cups', 'Europa League'];
+          const expected = Object.fromEntries(labels.map(label => [
+            'Club Manager competition record labels names the selected ' + label + ' record and keeps its own team and player figures',
+            label === 'Europa League' ? 'CM_STATS_COMPETITION_HEADING_UEL' : null,
+          ]));
+          assert.equal(suite.assertionResults.length, 6);
+          for (const row of suite.assertionResults) {
+            assert.ok(Object.hasOwn(expected, row.fullName), row.fullName);
+            const marker = expected[row.fullName];
+            assert.equal(row.status, marker === null ? 'passed' : 'failed', row.fullName);
+            if (marker === null) assert.deepEqual(row.failureMessages, []);
+            else { assert.ok(row.failureMessages.length > 0); assert.ok(row.failureMessages.every(message => message.includes(marker)), row.fullName); }
+          }
+          assert.equal(new Set(suite.assertionResults.map(row => row.fullName)).size, 6);
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(report, key) ? report[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          const rawFiles = fs.readdirSync(out + '/raw').filter(name => name.endsWith('.json')).sort();
+          assert.deepEqual(rawFiles, ['all.json', 'league.json', 'cup.json', 'ucl.json', 'other.json', 'uel.json'].sort());
+          for (const file of rawFiles) {
+            const receipt = JSON.parse(fs.readFileSync(out + '/raw/' + file, 'utf8'));
+            assert.equal(file, receipt.key + '.json');
+            assert.equal(receipt.selectorLabels.length, 6);
+            assert.ok(receipt.selectorLabels.includes('Europa League'));
+            assert.equal(receipt.teamValues.length, 5); assert.equal(receipt.playerValues.length, 7);
+            assert.deepEqual(receipt.teamValues, receipt.expectedTeamValues);
+            assert.deepEqual(receipt.playerValues, receipt.expectedPlayerValues);
+            assert.equal(receipt.inputUnchanged, true);
+          }
+          fs.writeFileSync(out + '/owned-red-admission.json', JSON.stringify({
+            actualPasses: 5, actualOwnedFailures: 1, expected, counters, absentCounterMeaning: 'UNKNOWN',
+            scope: 'Mounted competition headings and team/player display only. No product, engine or data change, build or simulation.',
+          }, null, 2) + '\n');
+          NODE
+          # Actual focused failure remains a failed baseline job.
+          test "$(cat "$QA_OUT/units.exit")" -eq 0
+      - name: Retain whole source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: cm-europa-heading-baseline-${{ github.run_id }}
+          path: ${{ runner.temp }}/cm-europa-heading-red
+          retention-days: 14
+          if-no-files-found: error
