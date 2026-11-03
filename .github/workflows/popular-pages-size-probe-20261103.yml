@@ -1,0 +1,186 @@
+name: Popular pages unchanged-cap size probe
+on:
+  push:
+    branches: [codex/popular-pages-size-probe-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: popular-pages-size-probe-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [tuple, tuple-clear, short-clear]
+    env:
+      VARIANT: ${{ matrix.variant }}
+      ENGINES: chromium
+      SIM_NETWORK: offline
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold clean source and apply one exact reversible candidate
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/popular-pages-size-$VARIANT"
+          mkdir -p "$QA_OUT/logs" "$QA_OUT/transport" "$QA_OUT/source-original/src/pages" "$QA_OUT/source-candidate/src/pages"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          git rev-parse HEAD HEAD^{tree} > "$QA_OUT/source.txt"
+          git diff --name-status 3b071cae1ea1ff16717002d2a91327c361d97913 HEAD > "$QA_OUT/changed-paths.txt"
+          printf 'A\t.github/workflows/popular-pages-size-probe-20261103.yml\n' > "$QA_OUT/expected-paths.txt"
+          cmp "$QA_OUT/expected-paths.txt" "$QA_OUT/changed-paths.txt"
+          test "$(git rev-parse HEAD^)" = 3b071cae1ea1ff16717002d2a91327c361d97913
+          test "$(git rev-parse HEAD^^{tree})" = 7f825a3b046973fb88da021bf853e5c34fb0679c
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          test "$(wc -l < "$QA_OUT/source-before.sha256")" -eq 5674
+          cp .github/workflows/popular-pages-size-probe-20261103.yml "$QA_OUT/workflow.yml"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const variants={"tuple":{"appGit":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","appSHA":"b53c764756e6724b797d847cc79594ea789aa062882c8754383e02e5afc5c41a","homeGit":"17a3818c455b1dacb07ae0e2f3f3fa6adf25bd6d","homeSHA":"b3450b38e3c8c305c24017202d131d12fe746cb825a2dfa7b0e9ec9633727ee1","kind":"tuple","clear":false},"tuple-clear":{"appGit":"8bfedf7aaa1d076e0f0c8e2216c7e46632cd8a33","appSHA":"b53c764756e6724b797d847cc79594ea789aa062882c8754383e02e5afc5c41a","homeGit":"fe43f115b5def2e2192b04f47fe6bd28a85c9863","homeSHA":"c8a87041a210753bbe1c0086fca0a8b7daab2d2c59cfc98a1ba3698dc569bca6","kind":"tuple","clear":true},"short-clear":{"appGit":"55f56c1f05eee3d1888a7c4e86cf6112eada78e2","appSHA":"e78c0632ce9d2959dd4cc1bc0a77f8449436a26bca7ae802f8097a960d96fe32","homeGit":"fe43f115b5def2e2192b04f47fe6bd28a85c9863","homeSHA":"c8a87041a210753bbe1c0086fca0a8b7daab2d2c59cfc98a1ba3698dc569bca6","kind":"short","clear":true}},choice=variants[process.env.VARIANT],out=process.env.QA_OUT;
+          assert(choice);assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+          const hash=b=>crypto.createHash('sha256').update(b).digest('hex'),blob=b=>crypto.createHash('sha1').update(Buffer.from('blob '+b.length+'\0')).update(b).digest('hex');
+          const appPath='src/App.tsx',homePath='src/pages/Index.tsx',app=fs.readFileSync(appPath,'utf8'),home=fs.readFileSync(homePath,'utf8');
+          assert.equal(blob(Buffer.from(app)),'fe15993fafb4b6cdfa9efa359d47e80600634c08');assert.equal(blob(Buffer.from(home)),'17a3818c455b1dacb07ae0e2f3f3fa6adf25bd6d');
+          const edits={};
+          edits[appPath]=[
+          ['  const previousNavigation = useRef({ pathname, navigationType });',choice.kind==='tuple'?'  const previousNavigation = useRef([pathname, navigationType]);':'  const previousNavigation = useRef({ p: pathname, n: navigationType });'],
+          ['    previousNavigation.current = { pathname, navigationType };\n    if (previous.pathname === pathname && previous.navigationType !== navigationType) return;',choice.kind==='tuple'?'    previousNavigation.current = [pathname, navigationType];\n    if (previous[0] === pathname && previous[1] !== navigationType) return;':'    previousNavigation.current = { p: pathname, n: navigationType };\n    if (previous.p === pathname && previous.n !== navigationType) return;']
+          ];
+          const clear="() => { setSearchQuery(''); searchInputRef.current?.focus({ preventScroll: true }); }";
+          edits[homePath]=choice.clear?[
+          ['  const searchInputRef = useRef<HTMLInputElement>(null);','  const searchInputRef = useRef<HTMLInputElement>(null);\n  const clearSearch = '+clear+';'],
+          ['                  onClick={'+clear+'}','                  onClick={clearSearch}'],
+          ['              <HomeSearchUnavailable onBack={'+clear+'} />','              <HomeSearchUnavailable onBack={clearSearch} />']
+          ]:[];
+          for(const [file,original,expectedGit,expectedSHA]of [[appPath,app,choice.appGit,choice.appSHA],[homePath,home,choice.homeGit,choice.homeSHA]]){
+            let result=original;for(const [before,after]of edits[file]){assert.equal(result.split(before).length-1,1,file+' unique before');result=result.replace(before,after);}
+            let inverse=result;for(const [before,after]of [...edits[file]].reverse()){assert.equal(inverse.split(after).length-1,1,file+' unique inverse');inverse=inverse.replace(after,before);}
+            assert.equal(inverse,original);assert.equal(blob(Buffer.from(result)),expectedGit);assert.equal(hash(Buffer.from(result)),expectedSHA);
+            fs.writeFileSync(path.join(out,'source-original',file),original);fs.writeFileSync(path.join(out,'source-candidate',file),result);fs.writeFileSync(file,result);
+          }
+          fs.writeFileSync(out+'/candidate.json',JSON.stringify({variant:process.env.VARIANT,parent:'3b071cae1ea1ff16717002d2a91327c361d97913',choice,edits,wholeInverse:true,meaning:'Temporary exact own-hunk representations only. All application source is restored after the actual build and unchanged sweep.'},null,2)+'\n');
+          const originals=fs.readFileSync(out+'/source-before.sha256','utf8').trim().split('\n').map(l=>[l.slice(66),l.slice(0,64)]),allowed=new Set([appPath,homePath]);
+          for(const[file,sha]of originals)if(!allowed.has(file))assert.equal(hash(fs.readFileSync(file)),sha,file+' held');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-candidate.sha256"
+      - name: Install held locked dependencies and isolated Chromium
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/logs/npm-ci.log"
+          git diff --exit-code -- package.json package-lock.json
+          npm install --prefix "$RUNNER_TEMP/popular-size-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 2>&1 | tee "$QA_OUT/logs/playwright-install.log"
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/popular-size-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/popular-size-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/popular-size-tools/node_modules/.bin/playwright" install --with-deps chromium 2>&1 | tee "$QA_OUT/logs/chromium-install.log"
+      - name: Proper candidate types, normal Vite build and all sixteen unchanged caps
+        timeout-minutes: 20
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2" status=0
+            if [[ "$name" == types ]]; then test ! -s "$receipt"; return; fi
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            fi
+            grep -Ev "$allowed" "$receipt" || status=$?
+            test "$status" -eq 1
+          }
+          run_gate() {
+            local name="$1" status=0
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" > "$QA_OUT/logs/$name.log" 2>&1 || status=$?
+            cat "$QA_OUT/logs/$name.log"
+            printf '%s\n' "$status" > "$QA_OUT/$name-exit.txt"
+            classify_receipt "$name" "$receipt"
+            wc -l "$receipt" > "$QA_OUT/$name-blocked-attempt-count.txt"
+            return "$status"
+          }
+          run_gate types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          test ! -e dist
+          run_gate build npm run build -- --outDir "$QA_OUT/completed-dist" --emptyOutDir
+          test -d "$QA_OUT/completed-dist/assets"
+          find "$QA_OUT/completed-dist" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          ln -s "$QA_OUT/completed-dist" dist
+          export BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/lib/hostLikeServer.mjs "$QA_OUT/completed-dist" 4173 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true; if [[ -L dist ]]; then rm -- dist; fi' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do
+            if curl --fail --silent "$BASE/" > /dev/null; then ready=1; break; fi
+            kill -0 "$server_pid"
+            sleep 1
+          done
+          test "$ready" = 1
+          run_gate sweep-weight node scripts/sweepWeight.mjs
+          test ! -s "$QA_OUT/transport/server.log"
+          grep -Fx 'sweepWeight: green. Every page is inside its budget, and the budgets came down this round.' "$QA_OUT/logs/sweep-weight.log"
+      - name: Always verify candidate source, restore exact original source and retain evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          if [[ -L dist ]]; then test "$(readlink dist)" = "$QA_OUT/completed-dist"; rm -- dist; fi
+          if [[ -f "$QA_OUT/candidate.json" ]]; then
+            git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after-probe.sha256"
+            cmp "$QA_OUT/source-candidate.sha256" "$QA_OUT/source-after-probe.sha256"
+            node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,{edits}=JSON.parse(fs.readFileSync(out+'/candidate.json','utf8'));
+          for(const [file,list]of Object.entries(edits)){
+            const candidate=fs.readFileSync(file,'utf8');let inverse=candidate;
+            for(const [before,after]of [...list].reverse()){assert.equal(inverse.split(after).length-1,1);inverse=inverse.replace(after,before);}
+            const original=fs.readFileSync(path.join(out,'source-original',file),'utf8');assert.equal(inverse,original);
+            assert.equal(candidate,fs.readFileSync(path.join(out,'source-candidate',file),'utf8'));
+            fs.writeFileSync(file,inverse);assert.equal(fs.readFileSync(file,'utf8'),original);
+          }
+          fs.writeFileSync(out+'/restoration.json',JSON.stringify({variant:process.env.VARIANT,wholeInverse:true,originalSourceRestored:true,sourceOnlyProbe:true},null,2)+'\n');
+          NODE
+          fi
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          if [[ -f "$QA_OUT/dist-before.sha256" ]]; then
+            find "$QA_OUT/completed-dist" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+            cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+            tar -czf "$QA_OUT/completed-dist.tar.gz" -C "$QA_OUT" completed-dist
+            sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+            rm -r -- "$QA_OUT/completed-dist"
+          fi
+          bytes=$(du -sb "$QA_OUT" | cut -f1)
+          test "$bytes" -lt 150000000
+          printf '%s\n' "$bytes" > "$QA_OUT/artifact-bytes.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: popular-pages-size-${{ matrix.variant }}-${{ github.run_id }}
+          path: ${{ env.QA_OUT }}
+          if-no-files-found: error
+          retention-days: 7
