@@ -1,0 +1,175 @@
+name: Shield Press Room causal diagnostic
+on:
+  push:
+    branches: [codex/sc-shield-press-diagnostic-20261102]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the qualified product and exactly two diagnostic additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-shield-press-diagnostic"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/sc-shield-press-diagnostic-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = 1b0e7543c58372ab36b5dbc4bde3f7597ece5bd5
+          test "$(git rev-parse 'HEAD^^{tree}')" = 3041fcea83599279d19a991a61aaecaacf6ff872
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\n' '.github/workflows/sc-shield-press-diagnostic.yml' 'scripts/qa/probeSoccerShieldPress.mjs' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          src/lib/soccerCareerEngine.ts 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          src/lib/soccerCareerExtraCups.ts ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          src/lib/soccerCareerPress.ts 6a1b88e7797e79835dcfb9195051898dcb4444f5
+          src/test/soccerPressRoomReadAsAbsent.test.tsx 9b00b67863c3c730146382307abe1b354482dd11
+          scripts/qa/probeSoccerShieldPress.mjs a03977091fb667fec751c2337dc44337e0b22410
+          src/test/setup.ts df00cdf5c54e8c8efc71e46d7585ae76acb4fc8d
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"; : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from offline diagnostics
+        run: |
+          set -euo pipefail
+          code=0; NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Actual app types and producer syntax before narrow reproduction
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          capture syntax node --check scripts/qa/probeSoccerShieldPress.mjs
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Four source conditions on only the existing natural journey
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SC_PRESS_DIAGNOSTIC_OUT="$PWD/tmp/sc-press-diagnostic-$GITHUB_RUN_ID"
+          printf 'SC_PRESS_DIAGNOSTIC_OUT=%s\n' "$SC_PRESS_DIAGNOSTIC_OUT" >> "$GITHUB_ENV"
+          test ! -e "$SC_PRESS_DIAGNOSTIC_OUT"
+          source "$OUT/capture.sh"
+          capture diagnostic node scripts/qa/probeSoccerShieldPress.mjs
+      - name: Bind raw original assertions sources and observations
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const dir = process.env.SC_PRESS_DIAGNOSTIC_OUT, out = process.env.OUT;
+          const sha = body => createHash('sha256').update(body).digest('hex');
+          const read = file => JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+          const summary = read('summary.json'), receipt = read('receipt.json'), sources = read('source-manifest.json'), edits = read('source-edits.json');
+          assert.equal(receipt.completed, true); assert.equal(receipt.primary, null); assert.deepEqual(receipt.secondary, []);
+          assert.equal(receipt.children, 4); assert.equal(receipt.copiesRemoved, true);
+          assert.equal(summary.causalPatternObserved, true); assert.equal(summary.children, 4);
+          assert.equal(summary.selectedExecutions, 4); assert.equal(summary.totalRows, 76); assert.equal(summary.declaredUnselected, 72);
+          const names = ['current', 'old-722', 'without-late-merges', 'restored-current'];
+          assert.deepEqual(summary.results.map(row => row.name), names); assert.deepEqual(sources.map(row => row.name), names);
+          const inverse = (body, rows) => {
+            for (const edit of [...rows].reverse()) {
+              assert.equal(body.slice(edit.offset, edit.offset + edit.after.length), edit.after);
+              body = body.slice(0, edit.offset) + edit.before + body.slice(edit.offset + edit.after.length);
+            } return body;
+          };
+          const current = fs.readFileSync(path.join(dir, 'current.engine.ts'));
+          assert.equal(sha(current), '8d4f9285901d86225954a9e7e2c86abde1649da6a511d0eac9a06dd81eabdc4c');
+          const old = fs.readFileSync(path.join(dir, 'old-722.engine.ts')), omitted = fs.readFileSync(path.join(dir, 'without-late-merges.engine.ts'));
+          assert.equal(sha(old), 'a62262813f12c1c2a002e1abf0cd825ac2395a2ef16b74869040f2cde83d2211');
+          assert.equal(inverse(old.toString('utf8'), edits.oldEdits), current.toString('utf8'));
+          assert.equal(edits.omissionEdits.length, 2); assert.notEqual(sha(omitted), sha(current));
+          assert.equal(inverse(omitted.toString('utf8'), edits.omissionEdits), current.toString('utf8'));
+          const originalTest = fs.readFileSync(path.join(dir, 'original.test.tsx')), diagnosticTest = fs.readFileSync(path.join(dir, 'diagnostic.test.tsx'));
+          assert.equal(edits.testEdits.length, 2); assert.notEqual(sha(diagnosticTest), sha(originalTest));
+          assert.equal(sha(originalTest), 'bde9d553ff4e634ba782a7242d997f33d5136873e3339bdaf1754e7ce585abeb');
+          assert.equal(inverse(diagnosticTest.toString('utf8'), edits.testEdits), originalTest.toString('utf8'));
+          assert.deepEqual(fs.readFileSync(path.join(dir, 'restored-current.engine.ts')), current);
+          for (let i = 0; i < names.length; i++) {
+            const name = names[i], result = summary.results[i], failed = i === 0 || i === 3;
+            const body = fs.readFileSync(path.join(dir, name + '.vitest.json')), report = JSON.parse(body);
+            assert.equal(sha(body), result.rawReportSha256); assert.equal(result.failed, failed); assert.equal(result.passed, !failed);
+            assert.equal(Number(fs.readFileSync(path.join(dir, name + '.exit'), 'utf8')), failed ? 1 : 0);
+            assert.equal(fs.statSync(path.join(dir, name + '.transport')).size, 0);
+            const child = read(name + '.process.json'); assert.equal(child.signal, null); assert.equal(child.error, null); assert.equal(child.status, failed ? 1 : 0);
+            assert.equal(report.testResults.length, 1); assert.equal(report.numTotalTests, 19);
+            assert.equal(report.numPassedTests, failed ? 0 : 1); assert.equal(report.numFailedTests, failed ? 1 : 0); assert.equal(report.numPendingTests, 18); assert.equal(report.numTodoTests, 0);
+            const counters = Object.fromEntries(['numUnhandledErrors', 'numRuntimeErrorTestSuites', 'numRuntimeErrorTests'].map(key => [key, report[key] ?? null]));
+            assert.deepEqual(result.counters, counters); for (const value of Object.values(counters)) if (value !== null) assert.equal(value, 0);
+            assert.equal(result.runtimeCounterCompleteness, Object.values(counters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED');
+            if (failed) assert.ok(result.primaryHeadline.startsWith('AssertionError: expected [') && result.primaryHeadline.includes('to deeply equal []'));
+            assert.equal(sha(fs.readFileSync(path.join(dir, name + '.breaks.jsonl'))), result.breaksSha256);
+            const source = fs.readFileSync(path.join(dir, name + '.engine.ts'));
+            assert.equal(source.length, sources[i].bytes); assert.equal(sha(source), sources[i].sha256);
+          }
+          assert.deepEqual(read('source-after.json'), read('source-before.json'));
+          fs.writeFileSync(path.join(out, 'qualification-summary.json'), JSON.stringify({ scope: 'Four diagnostic selected executions, no reader fix or repeated full-unit credit.', summary }, null, 2) + '\n');
+          VERIFY
+          capture verify node "$OUT/verify.mjs"
+      - name: Always retain sources first divergences and raw original reports
+        if: always()
+        run: |
+          set -euo pipefail
+          probe_dir="$(printenv SC_PRESS_DIAGNOSTIC_OUT || true)"
+          if test -n "$probe_dir" && test -d "$probe_dir"; then cp -a -- "$probe_dir" "$OUT/diagnostic"; fi
+      - name: Always hold source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"; cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"; test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-shield-press-diagnostic-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-shield-press-diagnostic/
+          retention-days: 14
