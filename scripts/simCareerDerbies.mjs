@@ -168,6 +168,7 @@ ${withUi ? `
 export * as data from '${ROOT_URL}/src/data/clubRivalries.ts';
 export * as league from '${ROOT_URL}/src/lib/soccerCareerLeague.ts';
 export * as world from '${ROOT_URL}/src/lib/soccerCareerLeagueWorld.ts';
+export * as extraCups from '${ROOT_URL}/src/lib/soccerCareerExtraCups.ts';
 export * as save from '${ROOT_URL}/src/lib/soccerCareerSave.ts';
 export * as social from '${ROOT_URL}/src/lib/careerSocial.ts';
 export * as cm from '${ROOT_URL}/src/lib/clubManager.ts';
@@ -199,7 +200,7 @@ const MAIN = await bundle('main', mainDerby, true, mainOverrides);
 const A = await bundle('a', aDerby, false);
 const B = await bundle('b', bDerby, false);
 try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* temp only */ }
-const { engine, derby, data, league, world, save, social, cm, ui, render } = MAIN;
+const { engine, derby, data, league, world, save, social, cm, ui, render, extraCups } = MAIN;
 const clubs = engine.FALLBACK_CLUBS;
 for (const [k, v] of Object.entries({ seasonDerbies: derby.seasonDerbies, resolveSeasonDerbies: derby.resolveSeasonDerbies, applySeasonDerbies: derby.applySeasonDerbies, CLUB_RIVALRIES: data.CLUB_RIVALRIES, REAL_LEAGUES: cm.REAL_LEAGUES, buildBoardObjectives: cm.buildBoardObjectives, isSoccerCareerSave: save.isSoccerCareerSave, DerbyChip: ui.DerbyChip, clubs })) {
   if (!v) { console.error(`missing export ${k}, so nothing below measures anything`); process.exit(2); }
@@ -692,6 +693,24 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
   }
 }
 
+function annualForReplay(row) {
+  if (row.extraCups === undefined) return row;
+  const match = extraCups.readCommunityShield(row);
+  if (!match) throw new Error('A recorded opener must pass its strict saved-result reader');
+  if (match.player.apps === 0) return row;
+  const p = match.player, rating = match.annualRating;
+  if (!Number.isFinite(rating)) throw new Error('A selected opener needs its recorded annual grade for derby replay');
+  const annual = { ...row, apps: row.apps - p.apps, goals: row.goals - p.goals, assists: row.assists - p.assists,
+    cleanSheets: row.cleanSheets - p.cleanSheets, rating };
+  const forward = { apps: annual.apps + p.apps, goals: annual.goals + p.goals, assists: annual.assists + p.assists,
+    cleanSheets: annual.cleanSheets + p.cleanSheets,
+    rating: Math.round((annual.rating * annual.apps + p.rating) / (annual.apps + p.apps) * 10) / 10 };
+  for (const key of ['apps', 'goals', 'assists', 'cleanSheets', 'rating']) {
+    if (forward[key] !== row[key]) throw new Error('Independent derby annual plus opener must reproduce the saved ' + key);
+  }
+  return annual;
+}
+
 section = 4;
 console.log('4) derby goals are a subset, keepers never score one, Derby Hero is derived and never stored');
 {
@@ -709,11 +728,11 @@ console.log('4) derby goals are a subset, keepers never score one, Derby Hero is
     seasonsChecked += 1;
     /* A double round robin is one home and one away against each rival. */
     for (const d of ds) if (d.meetings.length === 2) { pairsOfTwo += 1; if (d.meetings.filter(m => m.home).length !== 1) sameGround += 1; }
-    const field = seasonField(r);
+    const field = seasonField(r), annual = annualForReplay(r);
     const again = derby.resolveSeasonDerbies({
       club: r.club, league: field.league, year: r.year, clubs: field.clubs, elite: engine.ELITE_CLUBS || [], position,
-      apps: r.apps, leagueApps: r.leagueApps, goals: r.goals, leagueTitle: r.leagueTitle,
-      seedKey: `${state.playerName}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|derby`,
+      apps: annual.apps, leagueApps: r.leagueApps, goals: annual.goals, leagueTitle: r.leagueTitle,
+      seedKey: `${state.playerName}|${r.club}|${r.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|derby`,
     });
     replayed += 1;
     if (JSON.stringify(again) !== JSON.stringify(r.derbies)) {
@@ -722,8 +741,8 @@ console.log('4) derby goals are a subset, keepers never score one, Derby Hero is
     }
     const ms = ds.flatMap(d => d.meetings);
     const goals = ms.reduce((n, m) => n + m.goals, 0);
-    if (goals > r.goals) overGoals += 1;
-    if (ms.filter(m => m.played).length > (r.leagueApps ?? r.apps)) overApps += 1;
+    if (goals > annual.goals) overGoals += 1;
+    if (ms.filter(m => m.played).length > (r.leagueApps ?? annual.apps)) overApps += 1;
     if (position === 'GK' && goals > 0) gkGoals += 1;
     for (const m of ms) {
       if (m.won && !(m.gf > m.ga && m.goals > 0 && m.played)) badWon += 1;

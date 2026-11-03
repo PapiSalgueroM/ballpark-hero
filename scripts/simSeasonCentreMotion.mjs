@@ -26,9 +26,9 @@
  *     career share a key, and the same record finds NOTHING in any other
  *     career that played that year; a record that is not stable finds its
  *     row only while the save's league year is that row's year. And the
- *     key the career page builds for its Resume chip (one template line,
- *     read out of the page's source and run) is soccerSeasonKey's on every
- *     played row.
+ *     key the career page builds for its Resume chip (the actual callback,
+ *     run with the strict saved-opening projection) is soccerSeasonKey's on
+ *     every played row.
  *  3. SOURCE FENCES, comments and strings stripped (a guard reads code, never
  *     prose): src/lib/motion/* and src/lib/season/resume.ts import nothing; src/components/motion/*
  *     imports only react and src/lib/motion; neither folder has "season" or
@@ -69,7 +69,7 @@ const BUNDLE_CONTROLS = {
   shift: [{ file: 'src/lib/motion/rankShift.ts', from: SHIFT_NEEDLE, to: '  return after.map((club, to) => ({ club, from: to, to: was.get(club) ?? -1 }));' }],
   resumetag: [{ file: 'src/lib/season/resume.ts', from: RESUME_NEEDLE, to: '  return rows.findIndex(row => row.year === r.year && (r.stable || liveYear === row.year));' }],
 };
-const PAGEKEY_NEEDLE = '|${r.assists}';
+const PAGEKEY_NEEDLE = '|${annual.assists}';
 if (CONTROL && !['shift', 'resumetag', 'pagekey', 'fence'].includes(CONTROL)) throw new Error(`unknown SEASON_MOTION_SIM_CONTROL ${CONTROL}`);
 if (CONTROL) console.log(`CONTROL ${CONTROL}: applied to the bundled copy or the text the fence reads, never a file on disk`);
 
@@ -80,9 +80,9 @@ if (CONTROL === 'resumetag') once(read('src/lib/season/resume.ts'), RESUME_NEEDL
 
 const B = await bundleAwardsNight(ROOT, {
   patches: BUNDLE_CONTROLS[CONTROL] ?? [],
-  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', motion: 'src/lib/motion/rankShift.ts', resume: 'src/lib/season/resume.ts', store: 'src/components/season-centre/resumeStore.ts' },
+  extra: { season: 'src/lib/season/soccer.ts', core: 'src/lib/season/core.ts', motion: 'src/lib/motion/rankShift.ts', resume: 'src/lib/season/resume.ts', store: 'src/components/season-centre/resumeStore.ts', extraCups: 'src/lib/soccerCareerExtraCups.ts' },
 });
-const { soccer, season: S, core: C, motion: MO, resume: RS, store: ST } = B;
+const { soccer, season: S, core: C, motion: MO, resume: RS, store: ST, extraCups: EC } = B;
 const CLUBS = soccer.FALLBACK_CLUBS;
 
 let checks = 0, failed = 0;
@@ -206,17 +206,17 @@ check(!fails.has('1 keys') && !fails.has('1 shift'), `1. every club's from and t
   check(own === rows && shared === 0, `2. every record finds its own row (${own} of ${rows}); rows of one career sharing a key: ${shared}`);
   check(foreign >= 5000 && foreignHit === 0, `2. a record finds nothing in another career (${foreignHit} of ${foreign} did; floor 5000 checks)`);
   check(heldBack === rows && heldBad === 0, `2. a record that is not stable is held to the league year of the save (${heldBad} of ${heldBack} were not)`);
-  /* the Resume chip may not import the season code (it must stay a few hundred bytes), so it builds the season's key
-     with one template line of its own. Read that line out of its file and hold it to soccerSeasonKey on every played row. */
-  const pageLines = read('src/components/soccer-career/SeasonResumeChip.tsx').split('\n').filter(l => l.includes('resumeRowIndex(resume, career.seasons, r => `'));
-  const tplMatch = pageLines.length === 1 ? /r => `([^`]+)`, career/.exec(pageLines[0]) : null;
-  check(!!tplMatch, `2. the career page holds its key template on one line (${pageLines.length} lines found)`);
-  if (tplMatch) {
-    let tpl = tplMatch[1];
-    if (CONTROL === 'pagekey') { once(tpl, PAGEKEY_NEEDLE, 'the page key template'); tpl = tpl.replace(PAGEKEY_NEEDLE, ''); }
-    const pageKey = new Function('career', 'r', `return \`${tpl}\`;`);
+  /* Run the chip's actual saved-row key callback with the real strict annual projection,
+     then hold it to soccerSeasonKey on every played row. The planner is not imported by the chip. */
+  const chipCode = strip(read('src/components/soccer-career/SeasonResumeChip.tsx')).code;
+  const callbackMatch = /resumeRowIndex\(resume, career\.seasons, r => \{([\s\S]+?)\}, career\.phone/.exec(chipCode);
+  check(!!callbackMatch, '2. the career page exposes its actual saved-row key callback');
+  if (callbackMatch) {
+    let callback = callbackMatch[1];
+    if (CONTROL === 'pagekey') { once(callback, PAGEKEY_NEEDLE, 'the actual page key callback'); callback = callback.replace(PAGEKEY_NEEDLE, ''); }
+    const pageKey = new Function('career', 'r', 'communityShieldAnnualStats', callback);
     let drift = 0;
-    for (const A of list) for (const row of A.seasons) if (played(row) && pageKey({ playerName: A.name }, row) !== S.soccerSeasonKey(A.name, row)) { drift += 1; fail('2 pagekey', `${A.name} ${row.year}: the page says ${pageKey({ playerName: A.name }, row)}, the season says ${S.soccerSeasonKey(A.name, row)}`); }
+    for (const A of list) for (const row of A.seasons) if (played(row) && pageKey({ playerName: A.name }, row, EC.communityShieldAnnualStats) !== S.soccerSeasonKey(A.name, row)) { drift += 1; fail('2 pagekey', `${A.name} ${row.year}: the page says ${pageKey({ playerName: A.name }, row, EC.communityShieldAnnualStats)}, the season says ${S.soccerSeasonKey(A.name, row)}`); }
     check(drift === 0, `2. the page's key for a season is the Season Centre's own key on every played row (${drift} of ${rows} differ)`);
   }
   for (const [item, f] of fails) if (item.startsWith('2 ')) console.log(`FAIL item ${item}: ${f.n} times, first: ${f.first.join(' | ')}`);
@@ -262,7 +262,7 @@ const IMPORTS_NOTHING = [...LIB_MOTION, 'src/lib/season/resume.ts'];
 
 const MINI_PITCH = 'src/components/season-centre/MiniPitch.tsx';
 /* the chip is loaded on the career page for anybody with a place kept: it may carry the record's reader and nothing else of the Season Centre */
-const CHIP_MAY_IMPORT = ['react', '@/components/ui/button', '@/lib/season/resume'];
+const CHIP_MAY_IMPORT = ['react', '@/components/ui/button', '@/lib/season/resume', '@/lib/soccerCareerExtraCups'];
 const CENTRE_FILES = [...listDir('src/components/season-centre'), 'src/components/soccer-career/SoccerSeasonCentre.tsx'];
 function fenceFindings(textOf) {
   const out = [];
@@ -283,7 +283,7 @@ function fenceFindings(textOf) {
     if (im.spec.startsWith('@/components/pitch-motion') && f !== MINI_PITCH) out.push(`${f} imports the pitch part (${im.spec}): MiniPitch.tsx is the one file that may`);
     if (/clubManager|club-manager\/LiveSim/.test(im.spec) && !im.typeOnly && f === MINI_PITCH) out.push(`${f} imports ${im.spec} for more than its types`);
   }
-  for (const im of importsOf(strip(textOf(CHIP)).code)) if (!im.typeOnly && !CHIP_MAY_IMPORT.includes(im.spec)) out.push(`${CHIP} imports ${im.spec}: it may carry react, the button and the record's reader only`);
+  for (const im of importsOf(strip(textOf(CHIP)).code)) if (!im.typeOnly && !CHIP_MAY_IMPORT.includes(im.spec)) out.push(`${CHIP} imports ${im.spec}: it may carry react, the button, the record reader and the strict opening projection only`);
   return out;
 }
 
