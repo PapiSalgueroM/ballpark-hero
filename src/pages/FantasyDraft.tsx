@@ -370,7 +370,13 @@ const FantasyDraft = () => {
                   {([['Your formation', userTeam], ['AI formation', aiTeam]] as const).map(([label, team]) => (
                     <p key={label} role="status" aria-label={label}>
                       <span className="block">{label === 'Your formation' ? 'You' : 'AI'}</span>
-                      {Object.entries(FANTASY_FORMATION).map(([position, count]) => `${position} ${team.filter(p => p.position === position).length}/${count}`).join(' · ')}
+                      <span className="mt-0.5 grid grid-cols-2 gap-x-1">
+                        {Object.entries(FANTASY_FORMATION).map(([position, count]) => (
+                          <span key={position} className="whitespace-nowrap">
+                            {position} {team.filter(p => p.position === position).length}/{count}{' '}
+                          </span>
+                        ))}
+                      </span>
                     </p>
                   ))}
                 </div>
