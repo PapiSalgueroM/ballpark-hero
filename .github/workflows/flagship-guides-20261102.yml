@@ -2,7 +2,7 @@ name: Flagship guides and free-agent display QA
 
 on:
   push:
-    branches: [codex/flagship-guides-20261102]
+    branches: [codex/flagship-guides-fixed-20261102]
 
 permissions:
   contents: read
@@ -85,25 +85,56 @@ jobs:
         run: |
           set -euo pipefail
           export NODE_OPTIONS="--require $GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
           run_gate() {
             local name="$1"
             shift
             local receipt="$QA_OUT/transport/$name.log"
             : > "$receipt"
             SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
             if [[ -s "$receipt" ]]; then
-              # These remain blocked attempts in the artifact, never zero transport.
-              if [[ "$name" != build && "$name" != sweep-weight ]]; then
-                echo "Unexpected blocked transport in $name" >&2
-                return 1
-              fi
-              if grep -Ev '^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$' "$receipt"; then
-                echo "A non-font transport attempt was refused in $name" >&2
-                return 1
-              fi
-              wc -l "$receipt" | tee "$QA_OUT/logs/$name-font-denials.txt"
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
             fi
           }
+          # One exact raw line from failed run41556288444, artifact13194319059.
+          flag_line='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com'
+          printf '%s\n' "$flag_line" > "$QA_OUT/classifier-actual-line.log"
+          classify_receipt sweep-weight "$QA_OUT/classifier-actual-line.log"
+          printf '%s\n' "${flag_line%https://flagcdn.com}https://reservedfixture.invalid" > "$QA_OUT/classifier-changed-line.log"
+          if cmp -s "$QA_OUT/classifier-actual-line.log" "$QA_OUT/classifier-changed-line.log"; then
+            echo "Classifier control did not change the actual line" >&2
+            exit 1
+          fi
+          if classify_receipt sweep-weight "$QA_OUT/classifier-changed-line.log" > "$QA_OUT/classifier-rejection.log"; then
+            echo "Classifier accepted the changed origin" >&2
+            exit 1
+          fi
+          cmp "$QA_OUT/classifier-changed-line.log" "$QA_OUT/classifier-rejection.log"
+          if classify_receipt build "$QA_OUT/classifier-actual-line.log" > "$QA_OUT/classifier-build-rejection.log"; then
+            echo "Build classification accepted a flag refusal" >&2
+            exit 1
+          fi
+          cmp "$QA_OUT/classifier-actual-line.log" "$QA_OUT/classifier-build-rejection.log"
+          echo "Classifier control passed: actual flag refusal accepted only for sweep, changed origin refused exactly"
+
           run_gate types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
           run_gate units node node_modules/vitest/vitest.mjs run \
             src/test/cmFreeAgentDiscovery.test.tsx \
@@ -162,6 +193,9 @@ jobs:
           run_gate keywords-second node scripts/genSearchKeywords.mjs
           cmp "$QA_OUT/searchKeywords-first.json" src/data/searchKeywords.json
           run_gate build npm run build:seo
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
           export BASE=http://127.0.0.1:4173
           export SWEEP_BASE="$BASE"
           export SWEEP_OFFLINE=1
@@ -222,7 +256,11 @@ jobs:
           fs.writeFileSync(out + '/working-tree.txt', execFileSync('git', ['status', '--short'], { maxBuffer: 8 * 1024 * 1024 }));
           fs.writeFileSync(out + '/transport-inventory.json', JSON.stringify(fs.readdirSync(out + '/transport').sort().map(name => {
             const text = fs.readFileSync(path.join(out, 'transport', name), 'utf8');
-            return { name, blockedAttempts: text.split('\n').filter(Boolean).length, rawLogRetained: true };
+            const lines = text.split('\n').filter(Boolean);
+            return { name, blockedAttempts: lines.length,
+              fontBlockedAttempts: lines.filter(line => /^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts: lines.filter(line => line === '[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length,
+              rawLogRetained: true };
           }), null, 2) + '\n');
           assert.deepEqual(after, before, 'Tracked source changed outside six generated paths');
           assert.ok(changed.every(p => generated.includes(p)), 'Unexpected tracked generated path');
