@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "status": "ACTUAL_PRIOR_IDENTITIES_CURRENT_SOURCE_IDENTICAL_RUNTIME_OWED",
+  "sourceReport": {
+    "path": "C:\\Users\\antho\\dukb-handoff\\2026-11-01\\world-xi-generated-gates-v1\\repair-v3\\remote-qualified-41486886664-units\\extracted\\all-units.json",
+    "bytes": 3665214,
+    "sha256": "b2f45cc2f84ab7f0531c673565b5aac0ce83434c9efbaf91c1dbd44f40110069"
+  },
+  "sourceManifest": {
+    "path": "C:\\Users\\antho\\dukb-handoff\\2026-11-01\\world-xi-generated-gates-v1\\repair-v3\\remote-qualified-41486886664-units\\extracted\\source.sha256",
+    "sha256": "00c9ec8e4eb27b82f51f11d4be717c96123833ae1736a907eb0bf0e73ec45e14"
+  },
+  "allSixCurrentGitSHAAndBytePins": [
+    {
+      "path": "src/test/worldXiNationPools.test.ts",
+      "pin": {
+        "bytes": 11122,
+        "sha256": "567a13816df92d3176b4cd6a2439563234002c66fc67dd0d678a6a3da7a43090",
+        "gitBlob": "ffb0dfb1e9b227aca253ffe014dd618ff7e6f325"
+      }
+    },
+    {
+      "path": "src/test/worldXiNations.test.tsx",
+      "pin": {
+        "bytes": 12022,
+        "sha256": "7f945518353818a4bd7cedf0d9854232ce554103673bbc57e561c4d4ffb1cb59",
+        "gitBlob": "51e2c0ec6cd2cd647a4d85edbf89c4637e9edb12"
+      }
+    },
+    {
+      "path": "src/test/worldXiRecovery.test.tsx",
+      "pin": {
+        "bytes": 15510,
+        "sha256": "3d81b2186be9c13e2e4beac2991e78b99dd54ef3ad9b66bc759264d0539d9b8b",
+        "gitBlob": "23b670e7a1aaa73d4fc1681276d917f661f2737a"
+      }
+    },
+    {
+      "path": "src/test/worldXiRespins.test.tsx",
+      "pin": {
+        "bytes": 6239,
+        "sha256": "f35c4c77c26cb534da56ad9ceca121799d30a2faf9bf234ab40af7b337300c04",
+        "gitBlob": "c24155ca3220823587d5ab5fe7d3e76d098547d8"
+      }
+    },
+    {
+      "path": "src/test/worldXiRosterDepth.test.ts",
+      "pin": {
+        "bytes": 9506,
+        "sha256": "b393eb0edeb096925eca9c578abeb973743dffabc0b47a462ec9c7a1a9f1bd6c",
+        "gitBlob": "ad928f0098697f946bc986309dbed8a4b8cdc156"
+      }
+    },
+    {
+      "path": "src/test/worldXiSummary.test.tsx",
+      "pin": {
+        "bytes": 8903,
+        "sha256": "67be9b4c2a4abd2750760e8c3276aaa67beef42aacc03292f3e3cda0589b5726",
+        "gitBlob": "5c5af750d3f81258d0d69fcdeef12322b903edda"
+      }
+    }
+  ],
+  "allSixCurrentShaEqualsActualSource": true,
+  "files": 6,
+  "rows": 34,
+  "passed": 34,
+  "failed": 0,
+  "pending": 0,
+  "fileCounts": [
+    {
+      "file": "src/test/worldXiNationPools.test.ts",
+      "count": 8
+    },
+    {
+      "file": "src/test/worldXiNations.test.tsx",
+      "count": 2
+    },
+    {
+      "file": "src/test/worldXiRecovery.test.tsx",
+      "count": 5
+    },
+    {
+      "file": "src/test/worldXiRespins.test.tsx",
+      "count": 3
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "count": 12
+    },
+    {
+      "file": "src/test/worldXiSummary.test.tsx",
+      "count": 4
+    }
+  ],
+  "cases": [
+    {
+      "file": "src/test/worldXiNationPools.test.ts",
+      "fullName": "World XI nation pools adds a one-keeper nation in Expanded and excludes empty buckets",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiNationPools.test.ts",
+      "fullName": "World XI nation pools clones new-mode buckets without changing source rows and preserves namesakes and value ranking",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiNationPools.test.ts",
+      "fullName": "World XI nation pools derives the 2026 field from existing groups and returns the 48 canonical available keys",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiNationPools.test.ts",
+      "fullName": "World XI nation pools draws and respins distinct fitting nations across all nine actual formations in both new modes",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiNationPools.test.ts",
+      "fullName": "World XI nation pools keeps Classic identity and the original draw RNG tape without drawing during selection",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiNationPools.test.ts",
+      "fullName": "World XI nation pools merges only the five known aliases and keeps North Korea and Congo separate",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiNationPools.test.ts",
+      "fullName": "World XI nation pools refuses empty, under-eleven and uncovered pools without inventing a respin alternative",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiNationPools.test.ts",
+      "fullName": "World XI nation pools retains exact secondary-position coverage without turning wing-backs or keepers into front-line wings",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiNations.test.tsx",
+      "fullName": "World XI nation pools on the real page expands the default deck and completes a real draw with a goalkeeper-only nation",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiNations.test.tsx",
+      "fullName": "World XI nation pools on the real page keeps the 2026 nation pool through respin, result, share and replay",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRecovery.test.tsx",
+      "fullName": "World XI stored spelling and unused-answer recovery WX_CURACAO: includes the literal stored spelling without rewriting players or identities",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRecovery.test.tsx",
+      "fullName": "World XI stored spelling and unused-answer recovery WX_FOCUS: actual input focus prevents page movement after draw and the next pick",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRecovery.test.tsx",
+      "fullName": "World XI stored spelling and unused-answer recovery WX_FREE_RECOVERY: replaces only an exhausted active nation with no paid respins left",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRecovery.test.tsx",
+      "fullName": "World XI stored spelling and unused-answer recovery WX_NO_ALTERNATIVE: explains a fully exhausted pool while holding squad budget and timer",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRecovery.test.tsx",
+      "fullName": "World XI stored spelling and unused-answer recovery WX_UNUSED_COUNT: counts distinct fitting unused names independently of query and its result limit",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRespins.test.tsx",
+      "fullName": "World XI respin budget (Round 743) a pick of 10 on the setup screen starts the game with 10 respins",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRespins.test.tsx",
+      "fullName": "World XI respin budget (Round 743) a pick of None starts the game with no respins",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRespins.test.tsx",
+      "fullName": "World XI respin budget (Round 743) three stays the default when nothing is picked",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth finds a prior-year country player below the old top-1000 value cutoff",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth keeps a tied-value prior-year player outside the first thousand returned rows",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth keeps optional verified-position failure from blocking primary position play",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth keeps the newer snapshot even when its prior-year value is higher",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth preserves same-year namesakes at different clubs",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth preserves source row fields and does not manufacture a later club or value",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth rejects a failed current-snapshot page instead of silently using the other pages",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth rejects a failed prior-snapshot page even when the current pool clears its floor",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth rejects a null current-snapshot page without a transport error",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth rejects a null prior-snapshot page without a transport error",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth rejects an unproven complete current snapshot when its last supported page is full",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiRosterDepth.test.ts",
+      "fullName": "World XI recent snapshot depth rejects an unproven complete prior snapshot when its last supported page is full",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiSummary.test.tsx",
+      "fullName": "World XI ratings and club chemistry display keeps the real season inputs and match average distinct from card overall",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiSummary.test.tsx",
+      "fullName": "World XI ratings and club chemistry display shows the actual shared-club pairs behind the chemistry count",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiSummary.test.tsx",
+      "fullName": "World XI ratings and club chemistry display shows the exact card overall for every player after simulation",
+      "status": "passed"
+    },
+    {
+      "file": "src/test/worldXiSummary.test.tsx",
+      "fullName": "World XI ratings and club chemistry display shows zero shared clubs and clears the old detail on replay",
+      "status": "passed"
+    }
+  ]
+}

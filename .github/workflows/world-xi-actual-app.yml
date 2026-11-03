@@ -1,0 +1,383 @@
+name: World XI mobile viewport counterfactual
+
+on:
+  push:
+    branches: [codex/world-xi-mobile-anchor-evidence-20261103]
+
+permissions:
+  contents: read
+concurrency:
+  group: world-xi-actual-app-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      CI: '1'
+      TZ: UTC
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      GIT_NO_LAZY_FETCH: '1'
+      BEFORE_SHA: ${{ github.event.before }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+          fetch-tags: false
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind exact PR451 parent one viewport style and explicit QA additions
+        run: |
+          set -euo pipefail
+          export OUT="$RUNNER_TEMP/world-xi-actual-app"
+          test ! -e "$OUT"; mkdir "$OUT"
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/world-xi-mobile-anchor-evidence-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE_SHA" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = db7cf173f2561377aa75ffa6b338420e61002680
+          test "$(git rev-parse 'HEAD^1^{tree}')" = cee76c347caaf69a3684f562e93f1b043a60f574
+          git rev-parse HEAD 'HEAD^{tree}' HEAD^ 'HEAD^1^{tree}' > "$OUT/source-identities.txt"
+          git show HEAD:.github/workflows/world-xi-actual-app.yml > "$OUT/workflow.executed.yml"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local name="$1" mode="$2"; shift 2
+            printf '%s\0' "$@" > "$OUT/$name.argv"
+            printf '%s\n' "$mode" > "$OUT/$name.mode"
+            local code=0
+            if [ "$mode" = OFFLINE ]; then
+              SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$OUT/$name.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" "$@" > "$OUT/$name.stdout" 2> "$OUT/$name.stderr" || code=$?
+              test -e "$OUT/$name.transport" || : > "$OUT/$name.transport"
+            elif [ "$mode" = ONLINE ]; then
+              SIM_NETWORK=online NODE_OPTIONS='' "$@" > "$OUT/$name.stdout" 2> "$OUT/$name.stderr" || code=$?
+            else printf 'Unknown capture mode\n' >&2; return 1; fi
+            printf '%s\n' "$code" > "$OUT/$name.exit"
+            return "$code"
+          }
+          CAPTURE
+          cat > "$OUT/custody.sh" <<'CUSTODY'
+          framework_cache_leaf() {
+            if [ -L node_modules/.vite ]; then printf 'Refuse symlink node_modules/.vite\n' >&2; return 1; fi
+            if [ -e node_modules/.vite ] && [ ! -d node_modules/.vite ]; then printf 'Refuse non-directory node_modules/.vite\n' >&2; return 1; fi
+            return 0
+          }
+          framework_cache_snapshot() {
+            local phase="$1" cache=node_modules/.vite destination="$OUT/framework-cache/$1"
+            case "$phase" in before|after) ;; *) printf 'Invalid cache phase\n' >&2; return 1 ;; esac
+            test ! -e "$destination" && test ! -L "$destination" || return 1
+            mkdir -p "$destination/bodies" || return 1
+            if [ -L "$cache" ]; then printf 'REFUSED_SYMLINK\n' > "$destination/presence"; return 1; fi
+            if [ -e "$cache" ] && [ ! -d "$cache" ]; then printf 'REFUSED_NON_DIRECTORY\n' > "$destination/presence"; return 1; fi
+            framework_cache_leaf || return 1
+            if [ -d "$cache" ]; then
+              printf 'DIRECTORY\n' > "$destination/presence"
+              find "$cache" -type f -print0 | LC_ALL=C sort -z > "$destination/files.members" || return 1
+              find "$cache" -type l -printf '%p\t%l\0' | LC_ALL=C sort -z > "$destination/links.members" || return 1
+              xargs -r -0 sha256sum < "$destination/files.members" > "$destination/files.sha256" || return 1
+              while IFS= read -r -d '' file; do cp --parents -- "$file" "$destination/bodies" || return 1; done < "$destination/files.members"
+              if [ -s "$destination/files.sha256" ]; then
+                (cd "$destination/bodies" && sha256sum -c ../files.sha256) > "$destination/copied-bodies-held.log" 2>&1 || return 1
+              else printf 'NO_REGULAR_FILES\n' > "$destination/copied-bodies-held.log"; fi
+            else
+              printf 'ABSENT\n' > "$destination/presence"
+              : > "$destination/files.members"; : > "$destination/links.members"; : > "$destination/files.sha256"
+              printf 'ABSENT\n' > "$destination/copied-bodies-held.log"
+            fi
+            printf 'MUTABLE_FRAMEWORK_CACHE_SNAPSHOT_NO_BEFORE_AFTER_EQUALITY_CLAIM\n' > "$destination/scope"
+          }
+          members() {
+            local directory="$1" label="$2" phase="$3"
+            if [ "$label" = dependencies ]; then
+              test "$directory" = node_modules || return 1
+              framework_cache_leaf || return 1
+            fi
+            if [ "$label" = dependencies ]; then
+              find "$directory" -path node_modules/.vite -prune -o -type f -print0
+            elif [ "$label" = python ]; then
+              find "$directory" -name __pycache__ -prune -o -type f -print0
+            else find "$directory" -type f -print0; fi | LC_ALL=C sort -z > "$OUT/$label.members.$phase" || return 1
+            if [ "$label" = dependencies ]; then
+              find "$directory" -path node_modules/.vite -prune -o -type l -printf '%p\t%l\0'
+            else find "$directory" -type l -printf '%p\t%l\0'; fi | LC_ALL=C sort -z > "$OUT/$label.links.$phase" || return 1
+          }
+          hold_before() {
+            local directory="$1" label="$2"
+            members "$directory" "$label" before
+            xargs -0 sha256sum < "$OUT/$label.members.before" > "$OUT/$label.sha256"
+          }
+          CUSTODY
+          sha256sum "$OUT/capture.sh" "$OUT/custody.sh" > "$OUT/helper.sha256"
+          source "$OUT/capture.sh"
+          capture binding OFFLINE node --input-type=module <<'BIND'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
+          const git=(...args)=>execFileSync('git',args),out=process.env.OUT;
+          assert.equal(process.version,'v24.22.1');
+          const tree=ref=>new Map(git('ls-tree','-rz','--full-tree',ref).toString('utf8').split('\0').filter(Boolean).map(row=>{const tab=row.indexOf('\t'),[mode,type,sha]=row.slice(0,tab).split(' ');return [row.slice(tab+1),{mode,type,sha}];}));
+          const parent=tree('HEAD^'),current=tree('HEAD'),expected={".qa-inputs/world-xi-held-archive-v1/part-00.b64":{"git":"97ffbce852e1fd6d0e708203618f2f30c6b3f805"},".qa-inputs/world-xi-held-archive-v1/part-01.b64":{"git":"11f5c28ec3e83a9b76b67419b726f0e524264429"},".qa-inputs/world-xi-held-archive-v1/part-02.b64":{"git":"c3fea9190f2168bb3a99a3c6f6591765a26d402e"},".qa-inputs/world-xi-held-archive-v1/part-03.b64":{"git":"72b1e3d7babf0fcc85d3e59c4e1ca2f2a64bb31c"},".qa-inputs/world-xi-held-archive-v1/part-04.b64":{"git":"b7907fb2234a3b89a8c0a28a656e02861dd7bddc"},".qa-inputs/world-xi-held-archive-v1/part-05.b64":{"git":"75b50f8e2dc563de654c0702f45b385eb58ddd41"},".qa-inputs/world-xi-held-archive-v1/part-06.b64":{"git":"772d4462f212e5e9b895b80713eeaf677b26caf0"},".qa-inputs/world-xi-held-archive-v1/part-07.b64":{"git":"33245b99cbd0235c479b43f89ac034bb2849107c"},".qa-inputs/world-xi-held-archive-v1/carrier.json":{"git":"60d9e843eb9a9f7215aa74047eb0cad5bbf03bcc","sha256":"e13ce518fb7f2d59b0a2c4732d625f79f0ff57c851c1149b92d61e194ca41d24"},"scripts/qa/materializeWorldXiArchive.py":{"git":"c3cd105c001a62dd3ff1456a80d18707285fdc7f","sha256":"6e14e947e667921ab0e3f84b6940765a3b636e0b5704a807951479cce17c7b6f"},".qa-inputs/world-xi-held-archive-v1/cached-fonts.cjs":{"git":"b7190ee2a80e65cd3ee5b099b8fd091d22d31cce","sha256":"9fd974c704e9f719758243b263b0e66cec3e19bc7d49bb6ca724c7ef861f7b70"},".qa-inputs/world-xi-expected-units.json":{"git":"193cf5db14e064f620c12db22f5aceba13b3c550","sha256":"92552bbec53bf67db752e3f3ce77501f0769d05d229454de35968cf417885971"},"scripts/qa/verifyWorldXiUnits.mjs":{"git":"96af0a327ce5bf2dac707dfdaa1a27faa6ac5cdd","sha256":"1db41f4aa253e5ea375b00e2320533de53dca8309da3eb1130d83f15acd9fb71"},"scripts/qa/probeWorldXiMaterializer.py":{"git":"4a2fc76028bf727f902fea587c74a217dd0810bf","sha256":"1f7a69a38919d9eff7cd968c1fec91250c4ad690ada936764694fb536ab9ccec"},"scripts/qa/playWorldXiApp.mjs":{"git":"5e262de33ef31e15705469620efec69e9bebc9c9","sha256":"4a48dd516c18e462534e89ddbfcbbeace39db13ba70a737e130e0ee2f4aa8f23"},"scripts/qa/verifyWorldXiApp.mjs":{"git":"7eb33b418910b71d03e7b09b8f188b6bcb64e77f","sha256":"d6afa820793a255447c81c686ee92a07a087497ec1199ea5bf651650b1601aaf"},"src/pages/WorldXi.tsx":{"git":"0d4616afd4074c05e7da8c53017165f8e19fae44","sha256":"328cdbd9678773be4f2722e4ad18ead650eddebdcdea8fc07250d24d214d2075","before":"0ab9c83d47ae454e5043c441cdb4cfbac1160877"},".github/workflows/world-xi-actual-app.yml":{}};
+          const additions=Object.values(expected).filter(value=>!value.before).length;
+          assert.equal(parent.size,5657);assert.equal(additions,17);assert.equal(current.size,5674);
+          const changed=[],held=[];
+          for(const [file,row] of parent){
+            if(expected[file]?.before){assert.equal(row.sha,expected[file].before,file+' original product body');assert.equal(row.mode,'100644');}
+            else{assert.deepEqual(current.get(file),row,file+' complete original parent blob/mode held');held.push(file);}
+          }
+          for(const [file,row] of current){
+            if(expected[file]){const status=expected[file].before?'M':'A';if(status==='A')assert(!parent.has(file),file+' absent QA path');assert.equal(row.type,'blob');assert.equal(row.mode,'100644');if(expected[file].git)assert.equal(row.sha,expected[file].git,file);if(expected[file].sha256)assert.equal(createHash('sha256').update(fs.readFileSync(file)).digest('hex'),expected[file].sha256,file);changed.push({file,status,...row});}
+            else assert(parent.has(file),file+' unexpected addition');
+          }
+          assert.equal(held.length,5656);assert.equal(changed.length,18);assert.equal(changed.filter(row=>row.status==='M').length,1);assert.equal(changed.filter(row=>row.status==='A').length,17);
+          assert.equal(git('status','--porcelain').toString(),'');
+          fs.writeFileSync(out+'/source-fence.json',JSON.stringify({parent:'db7cf173f2561377aa75ffa6b338420e61002680',parentTree:'cee76c347caaf69a3684f562e93f1b043a60f574',head:process.env.GITHUB_SHA,parentBlobs:parent.size,currentBlobs:current.size,changed,all5656OtherParentBlobsHeld:held.length,productScope:'One World XI column overflow-anchor:none style only, no game data logic focus hook RNG clock or limit change',node:process.versions},null,2));
+          BIND
+          git ls-files -z > "$OUT/source.members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+      - name: Locked app and isolated reader tools explicitly online
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"; source "$OUT/custody.sh"
+          capture install ONLINE npm ci
+          tools="$RUNNER_TEMP/world-xi-app-tools"
+          test ! -e "$tools"; mkdir "$tools"
+          printf '%s\n' "$tools" > "$OUT/tools-root.txt"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.1"}}\n' > "$tools/package.json"
+          capture reader-package-install ONLINE npm install --prefix "$tools" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          export PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/world-xi-app-chromium"
+          test ! -e "$PLAYWRIGHT_BROWSERS_PATH"
+          printf 'PLAYWRIGHT_BROWSERS_PATH=%s\n' "$PLAYWRIGHT_BROWSERS_PATH" >> "$GITHUB_ENV"
+          printf '%s\n' "$PLAYWRIGHT_BROWSERS_PATH" > "$OUT/chromium-root.txt"
+          capture reader-chromium-install ONLINE node "$tools/node_modules/playwright/cli.js" install --with-deps chromium
+          capture venv-create ONLINE python -m venv "$tools/python"
+          capture python-install ONLINE "$tools/python/bin/python" -m pip install fonttools==4.60.1 Pillow==11.3.0
+          "$tools/python/bin/python" -m pip freeze > "$OUT/python-packages.before"
+          "$tools/python/bin/python" --version > "$OUT/python-version.txt" 2>&1
+          printf '%s\n' "$tools/python/bin" >> "$GITHUB_PATH"
+          sha256sum "$tools/package.json" "$tools/package-lock.json" "$(readlink -f "$tools/python/bin/python")" > "$OUT/tool-roots.sha256"
+          framework_cache_snapshot before
+          hold_before node_modules dependencies
+          hold_before "$tools/node_modules" reader-packages
+          hold_before "$tools/python" python
+          hold_before "$PLAYWRIGHT_BROWSERS_PATH" chromium
+          capture versions OFFLINE node --input-type=module <<'VERSIONS'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {createHash} from 'node:crypto';
+          const req=createRequire(import.meta.url),out=process.env.OUT,lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],absent=[];
+          const fits=(rules,value)=>!rules||(!rules.some(item=>item==='!'+value)&&(rules.every(item=>item.startsWith('!'))||rules.includes(value)));
+          for(const [dir,row] of Object.entries(lock.packages)){if(!dir.startsWith('node_modules/')||!row.version)continue;const file=dir+'/package.json';if(!fs.existsSync(file)){assert.equal(row.optional,true);assert((row.os&&!fits(row.os,process.platform))||(row.cpu&&!fits(row.cpu,process.arch)));absent.push({dir,version:row.version,os:row.os??null,cpu:row.cpu??null});continue;}assert.equal(JSON.parse(fs.readFileSync(file,'utf8')).version,row.version,dir);installed.push({dir,version:row.version});}
+          for(const name of ['playwright','playwright-core']){const file=req.resolve(name+'/package.json');assert.equal(JSON.parse(fs.readFileSync(file,'utf8')).version,'1.64.1');fs.copyFileSync(file,out+'/'+name+'-package.json');}
+          fs.copyFileSync(path.join(path.dirname(req.resolve('playwright-core/package.json')),'browsers.json'),out+'/reader-browsers.json');
+          const pw=req('playwright'),executable=pw.chromium.executablePath();assert(fs.existsSync(executable));const bytes=fs.readFileSync(executable);
+          fs.writeFileSync(out+'/tools.json',JSON.stringify({node:process.versions,installed,optionalAbsent:absent,readerPackage:'1.64.1',chromium:{executable,bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')},scope:'Isolated Chromium for actual World XI App, unchanged readers and original16 weight routes. Fonts are held archive bytes, no font acquisition.'},null,2));
+          VERSIONS
+      - name: Materialize exact prior archive and generic font copy offline
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"; source "$OUT/custody.sh"
+          export WORLD_XI_INPUT_ROOT="$OUT/input-archive"
+          printf 'WORLD_XI_INPUT_ROOT=%s\n' "$WORLD_XI_INPUT_ROOT" >> "$GITHUB_ENV"
+          capture materialize OFFLINE python scripts/qa/materializeWorldXiArchive.py --carrier .qa-inputs/world-xi-held-archive-v1/carrier.json --dest "$WORLD_XI_INPUT_ROOT" --receipt "$OUT/input-materialization.json"
+          hold_before "$WORLD_XI_INPUT_ROOT" archive-inputs
+          mkdir "$OUT/generic"
+          cp -a -- "$WORLD_XI_INPUT_ROOT/font-cache" "$OUT/generic/font-cache"
+          cp -- .qa-inputs/world-xi-held-archive-v1/cached-fonts.cjs "$OUT/cached-fonts.cjs"
+          sha256sum "$OUT/cached-fonts.cjs" >> "$OUT/helper.sha256"
+          hold_before "$OUT/generic/font-cache" generic-fonts
+      - name: Two actual materializer input faults and whole healthy restoration offline
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture materializer-probes OFFLINE python scripts/qa/probeWorldXiMaterializer.py --source-root "$GITHUB_WORKSPACE" --materializer "$GITHUB_WORKSPACE/scripts/qa/materializeWorldXiArchive.py" --out "$OUT/materializer-probes"
+      - name: Proper app types and new script syntax offline
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture types OFFLINE node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture driver-syntax OFFLINE node --check scripts/qa/playWorldXiApp.mjs
+          capture reader-syntax OFFLINE node --check scripts/qa/verifyWorldXiApp.mjs
+          capture unit-reader-syntax OFFLINE node --check scripts/qa/verifyWorldXiUnits.mjs
+          capture input-syntax OFFLINE python -c "import ast,pathlib; [ast.parse(pathlib.Path(p).read_text()) for p in ['scripts/qa/materializeWorldXiArchive.py','scripts/qa/probeWorldXiMaterializer.py']]"
+      - name: Bind all sixteen executable budget rows without changing the source
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture cap-source OFFLINE node --input-type=module <<'CAPROWS'
+          import ts from 'typescript';import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          const out=process.env.OUT,file='scripts/sweepWeight.mjs',body=fs.readFileSync(file),hash=(algorithm,bytes)=>createHash(algorithm).update(bytes).digest('hex');
+          assert.equal(body.length,104848);
+          assert.equal(hash('sha1',Buffer.concat([Buffer.from('blob '+body.length+'\0'),body])),'5a92a68cc0225d5e633c19e041087e7c6c4254e8');
+          const source=ts.createSourceFile(file,body.toString('utf8'),ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);assert.equal(source.parseDiagnostics.length,0);
+          const declarations=source.statements.filter(ts.isVariableStatement).flatMap(statement=>[...statement.declarationList.declarations]).filter(declaration=>ts.isIdentifier(declaration.name)&&declaration.name.text==='BUDGETS');
+          assert.equal(declarations.length,1);const array=declarations[0].initializer;assert(ts.isArrayLiteralExpression(array));
+          const rows=array.elements.map(row=>{assert(ts.isArrayLiteralExpression(row)&&row.elements.length===2);const [route,cap]=row.elements;assert(ts.isStringLiteral(route)&&ts.isNumericLiteral(cap));return[route.text,Number(cap.text)];});
+          const expected=[["/",245],["/club-manager",648],["/soccer-career",840],["/stadium-tycoon",305],["/wonderkid-factory",278],["/minefield",295],["/footle",354],["/nfl-my-career",499],["/front-office",390],["/soccer-grid",320],["/leaderboard",266],["/manager-hot-seat",672],["/deadline-day",680],["/transfer-path",381],["/nba-front-office",397],["/nhl-front-office",379]];
+          const admit=actual=>assert.deepEqual(actual,expected,'WORLD_XI_CAP_ROWS');
+          admit(rows);assert.equal(new Set(rows.map(row=>row[0])).size,16);assert(!rows.some(row=>row[0]==='/world-xi'));
+          const before=Buffer.from(JSON.stringify(rows)),changed=structuredClone(rows);changed[0][1]+=1;const mutant=Buffer.from(JSON.stringify(changed));assert(!before.equals(mutant));
+          const directory=out+'/cap-row-control';fs.mkdirSync(directory);fs.writeFileSync(directory+'/before.json',before);fs.writeFileSync(directory+'/changed.json',mutant);
+          let primary=null;try{admit(JSON.parse(fs.readFileSync(directory+'/changed.json')));}catch(error){primary={name:error.name,message:error.message,stack:error.stack};assert(error instanceof assert.AssertionError);assert.equal(error.message.split('\n')[0],'WORLD_XI_CAP_ROWS');}assert(primary);
+          fs.writeFileSync(directory+'/primary.json',JSON.stringify(primary,null,2));fs.writeFileSync(directory+'/restored.json',before);assert(fs.readFileSync(directory+'/restored.json').equals(before));admit(JSON.parse(fs.readFileSync(directory+'/restored.json')));
+          fs.writeFileSync(out+'/weight-budget-admission.json',JSON.stringify({status:'PASS',source:{file,bytes:body.length,sha256:hash('sha256',body),git:'5a92a68cc0225d5e633c19e041087e7c6c4254e8'},rows,worldXiHasNoBudget:true,control:{kind:'detached-row-copy',changed:true,beforeSHA256:hash('sha256',before),changedSHA256:hash('sha256',mutant),restoredSHA256:hash('sha256',before),ownedFirstAssertion:'WORLD_XI_CAP_ROWS',fullInverse:true,healthyRestore:true,primary},scope:'Executable AST and exact current parent budget table. No budget, source, threshold, timing or profile change.'},null,2));
+          console.log('WORLD_XI_CAP_SOURCE PASS: all16 original AST rows, changed copied row refused and restored');
+          CAPROWS
+      - name: All thirty-four existing World XI cases offline
+        id: units
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture units OFFLINE node node_modules/vitest/vitest.mjs run src/test/worldXiNationPools.test.ts src/test/worldXiNations.test.tsx src/test/worldXiRecovery.test.tsx src/test/worldXiRespins.test.tsx src/test/worldXiRosterDepth.test.ts src/test/worldXiSummary.test.tsx --reporter=json --outputFile="$OUT/world-xi-units.json" --maxWorkers=1 --minWorkers=1
+      - name: Exact unit identity and changed copied-reader controls offline
+        if: ${{ !cancelled() && steps.units.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture units-raw OFFLINE node scripts/qa/verifyWorldXiUnits.mjs
+      - name: Actual normal Vite build offline
+        id: build
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"; source "$OUT/custody.sh"
+          capture build OFFLINE npm run build
+          hold_before dist dist
+      - name: Actual World XI App phone retry recovery and archival mode contexts offline
+        id: browser
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          tools="$(cat "$OUT/tools-root.txt")"
+          capture browser OFFLINE env WORLD_XI_APP_OUT="$OUT/browser" WORLD_XI_PLAYWRIGHT_MODULE="$tools/node_modules/playwright/index.mjs" WORLD_XI_DIST="$PWD/dist" node scripts/qa/playWorldXiApp.mjs
+      - name: Inspect actual browser observations and detached copied controls offline
+        if: ${{ !cancelled() && steps.browser.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          capture browser-raw OFFLINE node scripts/qa/verifyWorldXiApp.mjs "$OUT/browser"
+      - name: All sixteen original weight rows and fifteen unchanged readers offline
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set -uo pipefail
+          source "$OUT/capture.sh"
+          failed=0
+          host_pid=''
+          stop_host() {
+            if [ -z "$host_pid" ]; then return; fi
+            local requested=0 code=0
+            if kill -0 "$host_pid" 2>/dev/null; then
+              kill -TERM "$host_pid" || failed=1
+              requested=1
+            else failed=1; fi
+            wait "$host_pid" || code=$?
+            printf '%s\n' "$code" > "$OUT/host.exit"
+            printf '{"pid":%s,"termRequested":%s,"actualExit":%s}\n' "$host_pid" "$requested" "$code" > "$OUT/host-cleanup.json"
+            if [ "$requested" -ne 1 ] || [ "$code" -ne 143 ]; then failed=1; fi
+            host_pid=''
+          }
+          trap stop_host EXIT
+          : > "$OUT/host.transport"
+          printf '%s\0' node scripts/lib/hostLikeServer.mjs dist 4173 > "$OUT/host.argv"
+          SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$OUT/host.transport" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/lib/hostLikeServer.mjs dist 4173 > "$OUT/host.stdout" 2> "$OUT/host.stderr" &
+          host_pid="$!"
+          printf '%s\n' "$host_pid" > "$OUT/host.pid"
+          capture readiness OFFLINE node --input-type=module <<'READY'
+          import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';
+          let last=null;
+          for(let attempt=0;attempt<100;attempt++){
+            try{const response=await fetch('http://127.0.0.1:4173/world-xi');assert.equal(response.status,200);const body=Buffer.from(await response.arrayBuffer());assert(body.equals(fs.readFileSync('dist/world-xi/index.html')));last=null;break;}
+            catch(error){last=error;await new Promise(resolve=>setTimeout(resolve,100));}
+          }
+          if(last)throw last;
+          const out=process.env.OUT;assert.equal(fs.readFileSync(out+'/host.stderr').length,0);
+          assert.equal(fs.readFileSync(out+'/host.stdout','utf8').trim(),'host-like server: '+path.resolve('dist')+' on http://127.0.0.1:4173');
+          console.log('WORLD_XI_HOST PASS exact owned server and held route document');
+          READY
+          readiness_code="$?"
+          if [ "$readiness_code" -ne 0 ]; then failed=1; stop_host; trap - EXIT; exit "$failed"; fi
+          if [ -n "${SWEEP_WEIGHT_CONTROL-}" ]; then failed=1; stop_host; trap - EXIT; exit "$failed"; fi
+          capture caps OFFLINE env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$OUT/cached-fonts.cjs" WORLD_XI_ROUTE_OUT="$OUT/generic" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs || failed=1
+          for reader in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            capture "$reader" OFFLINE env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$OUT/cached-fonts.cjs" WORLD_XI_ROUTE_OUT="$OUT/generic" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$reader.mjs" || failed=1
+          done
+          test ! -s "$OUT/generic/font-cache-misses.jsonl" || failed=1
+          printf '%s\n' "$failed" > "$OUT/readers.exit"
+          stop_host
+          trap - EXIT
+          printf '%s\n' "$failed" > "$OUT/caps-readers-cleanup.exit"
+          exit "$failed"
+      - name: Always retain full source dependency tool browser cache and dist custody
+        if: always()
+        run: |
+          set -uo pipefail
+          failed=0
+          OUT="$RUNNER_TEMP/world-xi-actual-app"; export OUT
+          mkdir -p "$OUT"
+          if [ -f "$OUT/helper.sha256" ]; then sha256sum -c "$OUT/helper.sha256" > "$OUT/helpers-held.log" 2>&1 || failed=1; else printf 'UNAVAILABLE\n' > "$OUT/helpers-held.log"; failed=1; fi
+          if [ -f "$OUT/source.sha256" ]; then sha256sum -c "$OUT/source.sha256" > "$OUT/source-held.log" 2>&1 || failed=1; else printf 'UNAVAILABLE\n' > "$OUT/source-held.log"; failed=1; fi
+          if [ -f "$OUT/source.members.before" ]; then
+            git ls-files -z > "$OUT/source.members.after" || failed=1
+            cmp "$OUT/source.members.before" "$OUT/source.members.after" > "$OUT/source-members-held.log" 2>&1 || failed=1
+          else printf 'UNAVAILABLE\n' > "$OUT/source-members-held.log"; failed=1; fi
+          if [ -f "$OUT/custody.sh" ]; then
+            source "$OUT/custody.sh"
+            framework_cache_snapshot after || failed=1
+            if [ -d node_modules ]; then members node_modules dependencies after || failed=1; else failed=1; fi
+            if [ -f "$OUT/tools-root.txt" ]; then
+              tools="$(cat "$OUT/tools-root.txt")"
+              if [ -d "$tools/node_modules" ]; then members "$tools/node_modules" reader-packages after || failed=1; else failed=1; fi
+              if [ -d "$tools/python" ]; then
+                members "$tools/python" python after || failed=1
+                "$tools/python/bin/python" -m pip freeze > "$OUT/python-packages.after" || failed=1
+                cmp "$OUT/python-packages.before" "$OUT/python-packages.after" > "$OUT/python-packages-held.log" 2>&1 || failed=1
+              else failed=1; fi
+            else failed=1; fi
+            if [ -f "$OUT/chromium-root.txt" ]; then
+              chromium="$(cat "$OUT/chromium-root.txt")"
+              if [ -d "$chromium" ]; then members "$chromium" chromium after || failed=1; else failed=1; fi
+            else failed=1; fi
+            if [ -d dist ]; then members dist dist after || failed=1; else failed=1; fi
+            if [ -d "$OUT/input-archive" ]; then members "$OUT/input-archive" archive-inputs after || failed=1; else failed=1; fi
+            if [ -d "$OUT/generic/font-cache" ]; then members "$OUT/generic/font-cache" generic-fonts after || failed=1; else failed=1; fi
+          else failed=1; fi
+          for label in dependencies reader-packages python chromium dist archive-inputs generic-fonts; do
+            if [ -f "$OUT/$label.sha256" ]; then sha256sum -c "$OUT/$label.sha256" > "$OUT/$label-held.log" 2>&1 || failed=1; else printf 'UNAVAILABLE\n' > "$OUT/$label-held.log"; failed=1; fi
+            for kind in members links; do
+              if [ -f "$OUT/$label.$kind.before" ] && [ -f "$OUT/$label.$kind.after" ]; then
+                cmp "$OUT/$label.$kind.before" "$OUT/$label.$kind.after" > "$OUT/$label-$kind-held.log" 2>&1 || failed=1
+              else printf 'UNAVAILABLE\n' > "$OUT/$label-$kind-held.log"; failed=1; fi
+            done
+          done
+          if [ -f "$OUT/tool-roots.sha256" ]; then sha256sum -c "$OUT/tool-roots.sha256" > "$OUT/tool-roots-held.log" 2>&1 || failed=1; else printf 'UNAVAILABLE\n' > "$OUT/tool-roots-held.log"; failed=1; fi
+          if [ -f "$OUT/tools-root.txt" ]; then
+            tools="$(cat "$OUT/tools-root.txt")"
+            for name in playwright playwright-core; do
+              if [ -L "node_modules/$name" ] && [ "$(readlink "node_modules/$name")" = "$tools/node_modules/$name" ]; then unlink "node_modules/$name"; else failed=1; fi
+            done
+          fi
+          git diff --exit-code HEAD > "$OUT/final-source.diff" || failed=1
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt" || failed=1
+          test ! -s "$OUT/untracked.txt" || failed=1
+          find "$OUT" -type f \( -name '*.transport' -o -name transport.log \) -print0 > "$OUT/transport.members" || failed=1
+          while IFS= read -r -d '' receipt; do test ! -s "$receipt" || failed=1; done < "$OUT/transport.members"
+          printf '%s\n' "$failed" > "$OUT/final-holds.exit"
+          exit "$failed"
+      - name: Always retain original raw and partial evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-xi-actual-app-${{ github.run_id }}
+          path: ${{ runner.temp }}/world-xi-actual-app
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 14
