@@ -1,0 +1,90 @@
+name: Club Manager custom tactics implementation smoke
+on:
+  push:
+    branches: [codex/cm-custom-tactics-smoke-20261103]
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact product and test bodies
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/cm-custom-tactics-smoke"
+          mkdir -p "$OUT/raw/helper" "$OUT/raw/ui" "$OUT/raw/pitch"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          const pins = {"scripts/simTacticsEngine.mjs":"d6bf2bc4e94db7bcb532e9b773fc584f334340a5","scripts/qa/managerMatchPlans1079.mjs":"98972610390be00aebed0d85099e7393fd07fb37","src/components/club-manager/AcademyScreen.tsx":"2d3ca44121cf0a84dad9b965328bd0c970403be3","src/components/club-manager/LiveSimScreen.tsx":"a6a434180c6ee9ffe263fc5c82cc8328a36914ee","src/components/club-manager/LiveTacticsPanel.tsx":"b12a1a0303ec9b3d043bdac089b873a4cc35383c","src/components/club-manager/MatchPlansCard.tsx":"c64e82d0adff5180272f0164e7a84b80fd9d9dce","src/components/club-manager/TacticsScreen.tsx":"950c4e9b0d2df22d1d6de95723122cc699b4bacd","src/hooks/useClubManager.ts":"5b2aac4ea3f649e478fc4e26939dff7dadbed310","src/lib/clubManager.ts":"9d8dc92557bf2f4358b5be044359354eda841769","src/lib/clubManagerCalendar.ts":"353c2019273564b48b0ad9657c02a83990ff7bc3","src/lib/clubManagerPositions.ts":"999b26b065246a2bf2db452d17d96439e855c6af","src/lib/clubManagerUiInfo.ts":"8e0b99eb1941760b18fa4d5de1df2b72fd894a0a","src/pages/ClubManager.tsx":"4781925c031abde3822c81ef49d5e1558d315a17","src/test/academyFilters.test.tsx":"c2d432043c153bcf56a881d264d7077c74c7ba3d","src/lib/clubManagerMatchPlans.ts":"345b05725fff2c2b502be4ec32d6e2728cf3c1b3","src/test/managerMatchPlans.test.tsx":"43d803e92473dbb3ce1f765b71800c96e27125ef","src/test/cmCustomTacticsPitch.test.ts":"b370d990dcf8ba10fb61331c983cb7b11d3abbee"};
+          for(const [file,sha] of Object.entries(pins)) assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString().trim(),sha,file);
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          npm ci --no-audit --no-fund > "$OUT/install.log" 2>&1
+      - name: Actual types and twenty-six focused cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/types.transport.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/types.transport.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          test ! -s "$QA_OUT/types.transport.log"
+          : > "$QA_OUT/units.transport.log"
+          export CM_CUSTOM_PLAN_HELPER_RAW="$QA_OUT/raw/helper"
+          export CM_CUSTOM_TACTICS_UI_RAW="$QA_OUT/raw/ui"
+          export CM_CUSTOM_STAGE_RAW="$QA_OUT/raw/pitch"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/units.transport.log" node node_modules/vitest/vitest.mjs run src/test/cmCustomTacticalPlans.test.ts src/test/cmCustomTacticsUi.test.tsx src/test/cmCustomTacticsPitch.test.ts src/test/managerMatchPlans.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units.json" 2>&1 | tee "$QA_OUT/units.log"
+          codes=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/units.exit"
+          test "${codes[1]}" -eq 0
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT, report=JSON.parse(fs.readFileSync(out+'/units.json','utf8'));
+          const counts={'cmCustomTacticalPlans.test.ts':7,'cmCustomTacticsUi.test.tsx':3,'cmCustomTacticsPitch.test.ts':3,'managerMatchPlans.test.tsx':13};
+          assert.equal(report.testResults.length,4);
+          const seen=[];
+          for(const suite of report.testResults) {
+            const file=suite.name.replaceAll('\\','/').split('/').pop();seen.push(file);
+            assert.ok(Object.hasOwn(counts,file));assert.equal(suite.assertionResults.length,counts[file]);
+            assert.ok(suite.assertionResults.every(row=>row.status==='passed' && row.failureMessages.length===0));
+          }
+          assert.equal(new Set(seen).size,4);assert.equal(report.success,true);assert.equal(report.numPassedTests,26);assert.equal(report.numFailedTests,0);assert.equal(report.numPendingTests,0);
+          for(const [group,count] of [['helper',7],['ui',3],['pitch',3]]) assert.equal(fs.readdirSync(out+'/raw/'+group).length,count);
+          fs.writeFileSync(out+'/admission.json',JSON.stringify({passed:26,scope:'Early implementation smoke only. No geometry balance, old-state parity, effective fault, build, weight or browser credit.'},null,2)+'\n');
+          NODE
+          test "$(cat "$QA_OUT/units.exit")" -eq 0
+          test ! -s "$QA_OUT/units.transport.log"
+      - name: Retain source holds and bounded evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cm-custom-tactics-smoke-${{ github.run_id }}
+          path: ${{ runner.temp }}/cm-custom-tactics-smoke
+          retention-days: 14
+          if-no-files-found: error

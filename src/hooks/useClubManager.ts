@@ -779,8 +779,6 @@ export function useClubManager() {
   const saveMatchPlan = useCallback((slot: number, name: string) => {
     const now = careerRef.current;
     if (phase !== 'hub' || !holdsActiveSlot() || !now || now.retired) return false;
-    // Version one plans do not store custom points, so they must not claim to save them.
-    if (Object.prototype.hasOwnProperty.call(now, 'customShape')) return false;
     const next = savePlan(now, slot, name);
     if (next === now || !persist(next)) return false;
     careerRef.current = next;
@@ -798,7 +796,6 @@ export function useClubManager() {
     }
     const next = applyPlan(now, slot);
     if (next === now) return false;
-    if (hasShape) delete next.customShape;
     if (!persist(next)) return false;
     careerRef.current = next;
     setCareer(next);

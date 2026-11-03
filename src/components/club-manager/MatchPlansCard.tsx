@@ -5,7 +5,7 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { FORMATIONS, MENTALITIES, SET_PIECE_KEYS } from '@/lib/clubManager';
 import { SET_PIECE_INFO, DUTY_INFO } from '@/lib/clubManagerUiInfo';
 import type { CareerState } from '@/lib/clubManager';
-import { readCustomShape } from '@/lib/clubManagerPositions';
+import { INSTRUCTION_INFO, INSTRUCTION_KEYS, settingLabel } from '@/lib/clubManagerTactics';
 import { MATCH_PLAN_LIMIT, MATCH_PLAN_NAME_LIMIT, canEditMatchPlans, matchPlansOf, previewMatchPlan } from '@/lib/clubManagerMatchPlans';
 
 interface MatchPlansCardProps {
@@ -31,11 +31,10 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
   const plan = plans.find(p => p.slot === selected);
   const preview = previewMatchPlan(career, selected);
   const editable = canEditMatchPlans(career);
-  const customPointsPresent = Object.prototype.hasOwnProperty.call(career, 'customShape');
-  const customShape = customPointsPresent
-    ? readCustomShape(career.customShape, career.formationIndex, FORMATIONS[career.formationIndex]?.slots ?? [])
-    : null;
-  const unsupportedCustomPoints = customPointsPresent && !customShape;
+  const needsReview = !career.live && !career.sacked && !career.wilderness && !editable;
+  const recorded = plan?.version === 2 ? plan : null;
+  const savedInstructions = recorded ? INSTRUCTION_KEYS.map(key => `${INSTRUCTION_INFO[key].label}: ${settingLabel(key, recorded.instructions[key])}`).join(' · ')
+    : 'Instructions were not saved in this older plan. Your current choices stay. Applying uses preset positions.';
   const actionRef = useRevealScroll<HTMLDivElement>(`${open}:${selected}:${!!plan}:${saveReveal}`, { enabled: open, skipFirst: false, block: 'end' });
   const detailsRef = useRevealScroll<HTMLDivElement>(details, { enabled: open && details, skipFirst: false });
   const refused = notice === REFUSED_MATCH_PLAN;
@@ -59,8 +58,8 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
         <button type="button" onClick={close} className={button}><ArrowLeft className="inline w-4 h-4 mr-1" />Back</button>
         <button type="button" aria-label="Match plan rules" aria-expanded={help} onClick={() => setHelp(!help)} className={button}><HelpCircle className="w-4 h-4" /></button>
       </div>
-      <p className="text-muted-foreground">Keep up to three setups for this club. Preview uses your squad as it stands today.</p>
-      {help && <p data-cm-plan-rules className="rounded-lg bg-muted p-3 leading-relaxed">Save your formation, mentality, XI, duties, captain, set piece takers and shootout order together. For example, save your first XI, rotate on the pitch, then save a second plan. Preview shows who would start now, including injury or suspension replacements. Apply restores the saved picks; it does not heal players or lock in a result. Plans use preset positions. Reset custom positions before saving a plan; applying a plan clears supported custom positions. A new club needs its own plans.</p>}
+      <p className="text-muted-foreground">Build and name your own setup. Choose a starting shape, use Move players, then pick a mentality and team instructions. Keep up to three plans for this club. Preview uses your squad as it stands today.</p>
+      {help && <p data-cm-plan-rules className="rounded-lg bg-muted p-3 leading-relaxed">Save your formation, mentality, XI, duties, captain, set piece takers and shootout order together. For example, save your first XI, rotate on the pitch, then save a second plan. Custom positions and all four team instructions are saved too. Start from a preset, use Move players, choose your own instruction mix and give the plan a name. For example, pick High press and Patient and save it as My pressure philosophy. Apply restores those choices and the saved picks; it does not heal players or lock in a result. Preview shows who would start now, including injury or suspension replacements. Back closes this panel. A new club needs its own plans.</p>}
       <div className="grid grid-cols-3 gap-1.5" aria-label="Plan slots">
         {Array.from({ length: MATCH_PLAN_LIMIT }, (_, slot) => {
           const saved = plans.find(p => p.slot === slot);
@@ -77,24 +76,25 @@ export function MatchPlansCard({ career, open, onToggle, onSave, onApply, onDele
             onChange={event => setName(event.target.value)} placeholder={`Plan ${selected + 1}`} disabled={!editable}
             className="mt-1 w-full min-h-[44px] rounded-lg border bg-background px-2 text-xs" />
         </label>
-        <button type="button" data-cm-plan-save disabled={!editable || customPointsPresent || !name.trim()}
+        <button type="button" data-cm-plan-save disabled={!editable || !name.trim()}
           onClick={() => { if (showResult(onSave(selected, name), `Saved ${name.trim().slice(0, MATCH_PLAN_NAME_LIMIT)}.`)) setSaveReveal(n => n + 1); }}
           className={cn(button, 'self-end border-primary text-primary')}>{plan ? 'Replace plan' : 'Save setup'}</button>
       </div>
-      {!editable && <p role="status">Plans can be changed between matches while you manage this club.</p>}
-      {customPointsPresent && <p role="status" data-cm-plan-custom-positions>{unsupportedCustomPoints
-        ? 'These saved positions are not supported here. Match plans cannot be saved or applied. Your saved data has been kept.'
-        : 'Match plans use preset positions. Reset your custom positions before saving a plan. Applying a plan clears your custom positions.'}</p>}
+      {!editable && <p role="status" data-cm-plan-readonly={needsReview ? 'review' : 'phase'} data-cm-plan-custom-positions={needsReview ? '' : undefined}>{needsReview
+        ? 'Some saved tactics are not supported here. Match plans are read-only. Your saved data has been kept.'
+        : 'Plans can be changed between matches while you manage this club.'}</p>}
       {preview && <div className="space-y-3" data-cm-plan-preview={selected}>
         <p className="font-semibold">{FORMATIONS[plan!.formationIndex].name} · {MENTALITIES.find(m => m.id === plan!.mentality)?.label}</p>
+        <p className="text-muted-foreground break-words"><span className="font-semibold text-foreground" data-cm-plan-title>{plan!.name}</span> · <span data-cm-plan-geometry>{recorded?.customShape ? 'Custom positions' : 'Preset positions'}</span></p>
+        <p className="text-muted-foreground leading-relaxed break-words" data-cm-plan-instructions>{savedInstructions}</p>
         <div className="grid grid-cols-2 gap-2 rounded-lg bg-muted p-2">
           <p>Match strength <strong className="block" data-cm-plan-strength>{preview.currentStrength.toFixed(1)} now / {preview.strength.toFixed(1)} with plan</strong></p>
           <p>Kickoff XI fitness <strong className="block" data-cm-plan-fitness>{preview.fitness === null ? 'No available players' : `${Math.round(preview.fitness)}% average`}</strong></p>
         </div>
-        <p data-cm-plan-replacements>{preview.replacements ? `${preview.replacements} saved spot${preview.replacements === 1 ? '' : 's'} need a replacement.` : 'All saved picks can start.'} Strength includes current fitness, morale, form and position fit. Mentality and duties affect the match separately.</p>
+        <p data-cm-plan-replacements>{preview.replacements ? `${preview.replacements} saved spot${preview.replacements === 1 ? '' : 's'} need a replacement.` : 'All saved picks can start.'} Strength includes current fitness, morale, form and position fit. Mentality and duties affect the match separately. The four instructions have their own match effects and costs.</p>
         <div ref={detailsRef} className="space-y-3">
           <div ref={actionRef} data-cm-plan-actions className="grid grid-cols-2 gap-2 scroll-mb-3">
-            <button type="button" data-cm-plan-apply disabled={!editable || unsupportedCustomPoints} className={cn(button, 'bg-primary text-primary-foreground')}
+            <button type="button" data-cm-plan-apply disabled={!editable} className={cn(button, 'bg-primary text-primary-foreground')}
               onClick={() => showResult(onApply(selected), `Applied ${plan!.name}.`)}>Apply plan</button>
             <button type="button" aria-expanded={details} data-cm-plan-details onClick={() => setDetails(!details)} className={button}>{details ? 'Hide kickoff XI' : 'View kickoff XI'}</button>
           </div>

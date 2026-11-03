@@ -502,6 +502,7 @@ export function TacticsScreen({
       {/* Formation, grouped by the back line */}
       <div>
         <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1.5">Formation</div>
+        {onCustomShape && <p className="text-[10px] text-muted-foreground mb-1.5" data-cm-custom-setup-intro>Choose a starting shape, then use Move players to make it yours. Save it with your instructions in Match plans.</p>}
         <div className="space-y-1.5">
           {BACK_LINES.map(bl => {
             const entries = FORMATIONS.map((f, i) => ({ f, i })).filter(x => x.f.name.startsWith(bl.digit));
@@ -598,6 +599,7 @@ export function TacticsScreen({
         {positionHelp && <div role="region" aria-label="Position rules" className="rounded-lg bg-secondary/40 p-2 text-xs space-y-1">
           <p>Swap players keeps the existing XI swaps. Move players edits base positions, including the keeper. Overlapping spots are allowed; use Position slot to reach each one.</p>
           <p>Mentality still shifts your saved base positions at kickoff. Slot roles and duties stay with their numbered spots.</p>
+          <p>Pushing players forward or spreading them wider adds threat and leaves more space. Crowding cuts your attacking room. Moving your keeper away from goal exposes it.</p>
           <p>Buttons and arrow keys move two points. For example, moving right from X40 puts that spot at X42. Coordinates stay between 6 and 94.</p>
           <p>A drag is a preview until release. Cancel, lost capture or leaving the window discards it. A refused save keeps the committed shape. Reset to preset only clears a supported saved shape.</p>
         </div>}
