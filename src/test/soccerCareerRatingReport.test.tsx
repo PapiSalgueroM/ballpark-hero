@@ -195,8 +195,7 @@ describe('Soccer Career safe rating report context', () => {
   });
 
   it('reports a real cross-tab move while preserving the newer tab save', async () => {
-    mount(serializeSoccerCareerSave(nativeCareer()));
-    const before = read();
+    const view = mount(serializeSoccerCareerSave(nativeCareer())), before = read();
     const theirs = E.advanceYouthYear(copy(before), E.FALLBACK_CLUBS), bytes = serializeSoccerCareerSave(theirs);
     const fence = String(Number(localStorage.getItem(FENCE) ?? '0') + 1);
     localStorage.setItem(FENCE, fence); localStorage.setItem(KEY, bytes);
