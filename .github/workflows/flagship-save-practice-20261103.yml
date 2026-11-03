@@ -1,0 +1,305 @@
+name: Requested release save and practice source controls
+on:
+  push:
+    branches: [codex/flagship-save-practice-20261103-ansi]
+permissions:
+  contents: read
+concurrency:
+  group: flagship-save-practice-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-controls:
+    name: ${{ matrix.suite }} controls and restorations
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [save]
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+      QA_SUITE: ${{ matrix.suite }}
+      JOINED: 00c85815cac64d72014594e6b38515d4d6ce2e45
+      HISTORY: a0ba8344aea0ce32853ff4f05b3c8175a819f304
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the joined source and exactly two QA script replacements
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-source-controls-${{ matrix.suite }}"
+          mkdir -p "$OUT/arms" "$OUT/sources" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = "$JOINED"
+          git diff --name-status "$JOINED" HEAD > "$OUT/candidate-diff.txt"
+          printf 'A\t.github/workflows/flagship-save-practice-20261103.yml\nM\tscripts/simSoccerCareerSaveRetry.mjs\nM\tscripts/simUsCareerPractice.mjs\n' > "$OUT/expected-diff.txt"
+          cmp "$OUT/expected-diff.txt" "$OUT/candidate-diff.txt"
+          printf '%s  %s\n' 94f2fd0b15c3c0d6572ec08a5ab2870ec9f7f8775be24cbdcee1ebdeac6d67c2 scripts/simSoccerCareerSaveRetry.mjs 21f97497e8c416fc27fc1ed5d95cca738c27fde40272ee818f9eb73f8ce96cc0 scripts/simUsCareerPractice.mjs | sha256sum --check
+          test "$(git rev-parse "$JOINED":scripts/simSoccerCareerSaveRetry.mjs)" = 4e8a5a0824feb328e9f0c0deb5c8460e900aa763
+          test "$(git rev-parse "$JOINED":scripts/simUsCareerPractice.mjs)" = e551b29035b61235908f49340262b1b87bd884bb
+          git rev-parse HEAD HEAD^{tree} "$JOINED" > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          git diff "$JOINED" HEAD -- scripts/simSoccerCareerSaveRetry.mjs scripts/simUsCareerPractice.mjs > "$OUT/qa-only-source.diff"
+          git show "$JOINED":scripts/simSoccerCareerSaveRetry.mjs > "$OUT/sources/SaveRetry-original.mjs"
+          git show "$JOINED":scripts/simUsCareerPractice.mjs > "$OUT/sources/Practice-original.mjs"
+          cp scripts/simSoccerCareerSaveRetry.mjs "$OUT/sources/SaveRetry-candidate.mjs"
+          cp scripts/simUsCareerPractice.mjs "$OUT/sources/Practice-candidate.mjs"
+      - name: Hydrate the sole historical control commit and all seven required paths
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin "$HISTORY"
+          test "$(git rev-parse a0ba8344^{commit})" = "$HISTORY"
+          : > "$QA_OUT/history-preflight.tsv"
+          for file in src/components/nfl-my-career/NflMyCareerBoard.tsx src/components/nba-my-career/NbaMyCareerBoard.tsx src/components/mlb-my-career/MlbMyCareerBoard.tsx src/components/nhl-my-career/NhlMyCareerBoard.tsx src/lib/nflMyCareer.ts src/lib/mlbMyCareer.ts src/lib/nhlMyCareer.ts; do
+            git cat-file -e "$HISTORY:$file"
+            bytes=$(git cat-file -s "$HISTORY:$file")
+            test "$bytes" -gt 0
+            printf '%s\t%s\t%s\n' "$HISTORY" "$file" "$bytes" >> "$QA_OUT/history-preflight.tsv"
+          done
+      - name: Install unchanged locked dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper application types under the existing offline guard
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/types.exit"
+          test "$code" -eq 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Ordinary before and after with mapped copied faults and independent restores
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          unset SIM_SEED NO_DOUBLE_SWAP US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE
+          cat > "$QA_OUT/qualify.mjs" <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import { spawnSync, execFileSync } from 'node:child_process';
+          import { createRequire } from 'node:module';
+          
+          const root=process.cwd(), out=process.env.QA_OUT, suite=process.env.QA_SUITE;
+          assert(['save','practice'].includes(suite));
+          const save=suite==='save', script=save?'scripts/simSoccerCareerSaveRetry.mjs':'scripts/simUsCareerPractice.mjs';
+          const testPath=save?'src/test/soccerCareerSaveRetry.test.tsx':'src/test/usCareerPractice.test.tsx';
+          const sha=s=>crypto.createHash('sha256').update(s).digest('hex');
+          const write=(file,value)=>fs.writeFileSync(path.join(out,file),JSON.stringify(value,null,2)+'\n');
+          const source=fs.readFileSync(script,'utf8'), ts=createRequire(path.join(root,'package.json'))('typescript');
+          const tree=ts.createSourceFile(script,source,ts.ScriptTarget.Latest,true,ts.ScriptKind.JS);
+          assert.equal(tree.parseDiagnostics.length,0);
+          const declarations=new Map();
+          for(const statement of tree.statements)if(ts.isVariableStatement(statement))for(const declaration of statement.declarationList.declarations)
+            if(ts.isIdentifier(declaration.name))declarations.set(declaration.name.text,declaration.initializer);
+          let cases={};
+          const scalar=node=>{
+            assert(node,'Static QA value exists');
+            if(ts.isStringLiteralLike(node))return node.text;
+            if(ts.isIdentifier(node)){const value=declarations.get(node.text);assert(value&&ts.isStringLiteralLike(value),'Known static QA constant: '+node.text);return value.text;}
+            if(ts.isPropertyAccessExpression(node)&&ts.isIdentifier(node.expression)&&node.expression.text==='cases'){
+              assert.equal(typeof cases[node.name.text],'string');return cases[node.name.text];
+            }
+            assert.fail('Unsupported QA table value');
+          };
+          const table=name=>{
+            const node=declarations.get(name);assert(node&&ts.isObjectLiteralExpression(node),'Static QA table: '+name);
+            const entries=node.properties.map(property=>{
+              assert(ts.isPropertyAssignment(property)&&!property.questionToken,'Simple named QA property');
+              assert(ts.isIdentifier(property.name)||ts.isStringLiteral(property.name));
+              return [property.name.text,property.initializer];
+            });
+            assert.equal(new Set(entries.map(([name])=>name)).size,entries.length);
+            return entries;
+          };
+          if(save)cases=Object.fromEntries(table('cases').map(([name,node])=>[name,scalar(node)]));
+          const controls=Object.fromEntries(table('controls').map(([name,node])=>{
+            assert(ts.isObjectLiteralExpression(node));
+            const values={};
+            for(const property of node.properties){assert(ts.isPropertyAssignment(property)&&ts.isIdentifier(property.name));values[property.name.text]=scalar(property.initializer);}
+            assert.deepEqual(Object.keys(values).sort(),(save?['from','test','to']:['file','from','test','to']).sort());
+            return [name,values];
+          }));
+          const names=save
+            ?['warning','memory','disk','toast','repeatedToast','stale','staleCallback','automatic','retry','retryRng','retryReplay','retryCompletion','clear','reset','notice','role']
+            :['gain','cap','once','save','receipt','renew','rules','abort','pending','reset','carry'];
+          assert.deepEqual(Object.keys(controls),names);
+          if(save)assert.deepEqual(Object.keys(cases),['initial','repeat','training','latest','automatic','reset','retirement','independent']);
+          const practiceTitles=save?[]:[
+            scalar(declarations.get('QUIET')),scalar(declarations.get('GAIN')),
+            'zero and solid scores bank only the rating earned','ceiling pays only the available headroom',
+            'old above-ceiling rating is never reduced','abort leaves no save changes and rules reopen during play',
+            'earned rating reaches the next real season and practice renews afterwards',
+            'keeps pending rivalry ahead of practice and resets a finished career cleanly',
+          ];
+          const labels=['NFL','NBA','MLB','NHL'], quiet=save?cases.independent:practiceTitles[0];
+          const normalTitles=save?Object.values(cases):labels.flatMap(label=>practiceTitles.map(title=>label+' '+title));
+          const normalized=row=>save?row.title:row.title.replace(/^'(NFL|NBA|MLB|NHL)' /,'$1 ');
+          const count=(text,needle)=>text.split(needle).length-1;
+          const canonical=new Map();
+          for(const spec of Object.values(controls)){
+            const file=save?'src/pages/SoccerCareer.tsx':spec.file;
+            if(!canonical.has(file))canonical.set(file,fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n'));
+            assert(spec.from&&spec.to&&spec.from!==spec.to);
+            assert.equal(count(canonical.get(file),spec.from),1,'Actual executable control anchor: '+file);
+          }
+          write('resolved-qa-tables.json',{suite,script,testPath,cases,controls,normalTitles,scope:'Static AST reads only. No application code is evaluated by this metadata reader.'});
+          fs.mkdirSync(path.join(out,'sources'),{recursive:true});
+          for(const[file,text]of canonical)fs.writeFileSync(path.join(out,'sources',path.basename(file)+'.txt'),text);
+          const summaries=[], problems=[];
+          function counter(report,name,expected,record){
+            if(!Object.hasOwn(report,name)){record[name]=null;return;}
+            assert.equal(typeof report[name],'number',name+' is a known numeric counter');
+            assert(Number.isFinite(report[name]));record[name]=report[name];assert.equal(report[name],expected,name);
+          }
+          function classify(report,control){
+            const rows=report.testResults.flatMap(file=>file.assertionResults||[]);
+            assert.equal(report.testResults.length,1);assert.equal(rows.length,normalTitles.length);
+            assert.deepEqual(rows.map(normalized).sort(),normalTitles.slice().sort(),'Exact complete outcome roster');
+            const wanted=control?(save?[controls[control].test]:labels.map(label=>label+' '+(control==='before'?practiceTitles[1]:controls[control].test))):[];
+            const independent=control?(save?[quiet]:labels.map(label=>label+' '+quiet)):[];
+            const expected={passed:control?independent.length:normalTitles.length,failed:wanted.length,pending:control?normalTitles.length-wanted.length-independent.length:0};
+            assert.equal(rows.filter(row=>row.status==='passed').length,expected.passed);
+            assert.equal(rows.filter(row=>row.status==='failed').length,expected.failed);
+            assert.equal(rows.filter(row=>row.status==='skipped'||row.status==='pending').length,expected.pending);
+            for(const row of rows){
+              const name=normalized(row), failed=wanted.includes(name), passed=!control||independent.includes(name);
+              assert.equal(row.status,failed?'failed':passed?'passed':'skipped','Mapped status: '+name);
+              const messages=(row.failureMessages||[]).join('\n').replace(/\u001b\[[0-9;]*m/g,'');
+              if(failed){
+                assert.match(messages,/AssertionError|TestingLibraryElementError|Error: expect\(/,'Owned assertion failure');
+                assert.doesNotMatch(messages,/TypeError|ReferenceError|SyntaxError|Cannot find module|Failed to resolve|timed out|Transform failed|Unhandled/i);
+              }else assert.equal(messages,'');
+            }
+            for(const file of report.testResults){
+              assert(!file.testExecError,'No file setup error');
+              if(typeof file.message==='string')assert.equal(file.message,'','No file-level error');
+            }
+            const counters={};
+            for(const[name,value]of Object.entries({numTotalTests:normalTitles.length,numPassedTests:expected.passed,numFailedTests:expected.failed,numPendingTests:expected.pending,numTodoTests:0,numRuntimeErrorTestSuites:0,numUnhandledErrors:0}))
+              counter(report,name,value,counters);
+            return {rows:rows.map(row=>({fullName:row.fullName,title:row.title,status:row.status})),counts:expected,counters,missingCounterMeaning:'UNKNOWN',unselectedMeaning:control?'Unselected rows receive no healthy-pass credit':'All ordinary rows selected'};
+          }
+          function inverseProof(arm,work,control){
+            if(!control)return;
+            if(save){
+              const mutation=JSON.parse(fs.readFileSync(path.join(arm,control+'-mutation.json'),'utf8'));
+              const changed=fs.readFileSync(path.join(arm,control+'-SoccerCareer.tsx.txt'),'utf8'), original=canonical.get('src/pages/SoccerCareer.tsx'), spec=controls[control];
+              assert.equal(mutation.from,spec.from);assert.equal(mutation.to,spec.to);
+              assert.equal(changed,original.replace(spec.from,spec.to));assert.notEqual(changed,original);
+              assert.equal(count(changed,spec.to),1);assert.equal(changed.replace(spec.to,spec.from),original);
+              assert.equal(mutation.originalSha256,sha(original));assert.equal(mutation.changedSha256,sha(changed));
+            }else if(control==='before'){
+              for(const[slug,name]of [['nfl','Nfl'],['nba','Nba'],['mlb','Mlb'],['nhl','Nhl']]){
+                const file='src/components/'+slug+'-my-career/'+name+'MyCareerBoard.tsx';
+                const original=execFileSync('git',['show',process.env.HISTORY+':'+file],{encoding:'utf8'});
+                const copy=fs.readFileSync(path.join(work,name+'Before.tsx'),'utf8');
+                if(slug==='nba')assert.equal(copy,original);
+                else{
+                  const binding=JSON.parse(fs.readFileSync(path.join(work,name+'Before-repair-binding.json'),'utf8'));
+                  assert.equal(fs.readFileSync(path.join(work,name+'Before-unbound.tsx.txt'),'utf8'),original);
+                  assert.equal(count(original,binding.from),1);assert.equal(count(copy,binding.to),1);
+                  assert.equal(copy,original.replace(binding.from,binding.to));assert.notEqual(copy,original);
+                  assert.equal(copy.replace(binding.to,binding.from),original);assert.equal(binding.repair.takeHome,'0.45');
+                }
+              }
+            }else{
+              const spec=controls[control], original=canonical.get(spec.file), copy=fs.readFileSync(path.join(work,path.basename(spec.file)),'utf8');
+              assert.equal(copy,original.replace(spec.from,spec.to));assert.notEqual(copy,original);
+              assert.equal(count(copy,spec.to),1);assert.equal(copy.replace(spec.to,spec.from),original);
+            }
+          }
+          function run(name,control){
+            const arm=path.join(out,'arms',name), temp=path.join(arm,'temp');
+            fs.mkdirSync(temp,{recursive:true});
+            const receipt=path.join(arm,'transport.log');fs.writeFileSync(receipt,'');
+            const env={...process.env,TMPDIR:temp,SIM_OFFLINE_RECEIPT:receipt,SOCCER_CAREER_SAVE_RETRY_CONTROL:save?control:'',US_CAREER_PRACTICE_CONTROL:save?'':control,SOCCER_CAREER_SAVE_RETRY_ARTIFACTS:arm};
+            delete env.NO_DOUBLE_SWAP;delete env.US_BOARD_CONTROL_ALIAS;delete env.US_BOARD_CONTROL_FILE;
+            const result=spawnSync('timeout',['--kill-after=15s','240s',process.execPath,script],{cwd:root,env,encoding:'utf8',maxBuffer:64*1024*1024,timeout:270000});
+            fs.writeFileSync(path.join(arm,'caller.stdout.log'),result.stdout||'');fs.writeFileSync(path.join(arm,'caller.stderr.log'),result.stderr||'');
+            fs.writeFileSync(path.join(arm,'caller.exit'),String(result.status)+'\n');
+            assert(!result.error&&!result.signal,'Caller completed: '+name);assert.equal(result.status,0,'Strict child harness accepted '+name);
+            assert.equal(fs.statSync(receipt).size,0,'No guarded Node transport attempt: '+name);
+            let reportPath,work;
+            if(save){
+              reportPath=path.join(arm,(control||'normal')+'-report.json');
+              const integrity=JSON.parse(fs.readFileSync(path.join(arm,(control||'normal')+'-integrity.json'),'utf8'));
+              assert.equal(integrity.held,true);assert.deepEqual(integrity.after,integrity.before);
+            }else{
+              const folders=fs.readdirSync(temp,{withFileTypes:true}).filter(entry=>entry.isDirectory()&&entry.name.startsWith('dukb-practice992-'));
+              assert.equal(folders.length,1);work=path.join(temp,folders[0].name);reportPath=path.join(work,'report.json');
+            }
+            const report=JSON.parse(fs.readFileSync(reportPath,'utf8'));
+            const admission=classify(report,control);inverseProof(arm,work,control);
+            write(path.relative(out,path.join(arm,'admission.json')),{name,control:control||null,...admission,sourceInverse:control?true:null,harnessExit:result.status});
+            summaries.push({name,control:control||null,status:'PASS',counts:admission.counts});
+            console.log(suite+' '+name+': PASS '+JSON.stringify(admission.counts));
+          }
+          run('healthy-before','');
+          for(const control of save?names:['before',...names]){
+            try{run('fault-'+control,control);}catch(error){problems.push({arm:'fault-'+control,error:String(error.stack)});console.error(suite+' fault-'+control+': FAIL '+error.message);}
+          }
+          try{run('healthy-after','');}catch(error){problems.push({arm:'healthy-after',error:String(error.stack)});console.error(suite+' healthy-after: FAIL '+error.message);}
+          write('admission.json',{suite,source:execFileSync('git',['rev-parse','HEAD']).toString().trim(),joined:process.env.JOINED,normalUniqueCases:normalTitles.length,controls:save?16:12,summaries,problems,scope:'Each copied fault includes its independent restore outcomes. Complete ordinary suites also run before and after all controls. Repeated passes are restoration proof, not new unique cases. No build, browser or full-suite credit.'});
+          assert.equal(summaries.length,save?18:14);assert.deepEqual(problems,[]);
+          console.log(suite+': complete ordinary before/after, mapped effective controls, independent restores and source inverses passed.');
+          NODE
+          set +e
+          node "$QA_OUT/qualify.mjs" > "$QA_OUT/caller.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/caller.exit"
+          tail -n 36 "$QA_OUT/caller.log"
+          test "$code" -eq 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Preserve all original tracked source and status
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          find "$QA_OUT" -name transport.log -o -path "$QA_OUT/transport/*.log" | sort > "$QA_OUT/transport-files.txt"
+          while IFS= read -r receipt; do test ! -s "$receipt"; done < "$QA_OUT/transport-files.txt"
+      - name: Bound complete finite evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.artifact.outputs.ready == 'true'
+        with:
+          name: flagship-source-controls-${{ matrix.suite }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-source-controls-${{ matrix.suite }}
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
