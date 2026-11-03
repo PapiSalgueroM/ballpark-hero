@@ -1,0 +1,174 @@
+name: Requested release prescribed Shootout baseline maintenance qualification
+on:
+  push:
+    branches: [codex/flagship-shootout-pin-20261103]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: flagship-shootout-pin-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold joined app, exact QA candidate and two additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-shootout-pin"
+          mkdir -p "$OUT/history" "$OUT/transport" "$OUT/reference"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = 00c85815cac64d72014594e6b38515d4d6ce2e45
+          test "$(git rev-parse HEAD^^{tree})" = 997362813be8c3c35bfc590e63687f12b3ad38d0
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 9d8dc92557bf2f4358b5be044359354eda841769
+          test "$(git hash-object src/lib/clubManager.ts)" = 9d8dc92557bf2f4358b5be044359354eda841769
+          test "$(git rev-parse HEAD^:scripts/simCmShootoutOrder.mjs)" = 8d348809a1cb6556d6628fa6571e0c38b3005bf1
+          test "$(git hash-object scripts/simCmShootoutOrder.mjs)" = 9e131c325e1436c5c681e461d19becdcaba5a0ce
+          printf '%s  %s\n' 20efe1ae6177474aa23f85d3f9d4e2097ed14d6ee6bb00dfe41b90e0e33cc8f7 scripts/simCmShootoutOrder.mjs ea8b58d75adfe66b20b708f0bc4424fb04af63f261ee2c90d9b462d271ffee4e scripts/qa/cmShootoutPinQualification.mjs | sha256sum --check
+          git diff --name-status HEAD^ HEAD > "$OUT/candidate-diff.txt"
+          printf 'A\t.github/workflows/flagship-shootout-pin-20261103.yml\nA\tscripts/qa/cmShootoutPinQualification.mjs\nM\tscripts/simCmShootoutOrder.mjs\n' > "$OUT/expected-diff.txt"
+          cmp "$OUT/expected-diff.txt" "$OUT/candidate-diff.txt"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq 5671
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          test ! -e scripts/.release-shootout-pin-observation.mjs
+          cp scripts/qa/cmShootoutPinQualification.mjs "$OUT/caller-source.mjs"
+          cp scripts/simCmShootoutOrder.mjs "$OUT/candidate-source.mjs"
+          git show HEAD^:scripts/simCmShootoutOrder.mjs > "$OUT/original-source.mjs"
+          # These are the only historical sources either actual harness reads.
+          # Fetch exact commits shallowly, then materialize both blobs before offline Node.
+          for ref in 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f c176be815dc4af57dfd7185a485e28357aa0d41e; do
+            git -c protocol.version=2 fetch --filter=blob:none --no-tags --depth=1 origin "$ref"
+            git cat-file -e "$ref^{commit}"
+            git show "$ref:src/lib/clubManager.ts" > "$OUT/history/$ref-clubManager.ts"
+          done
+          test "$(git rev-parse c176be815dc4af57dfd7185a485e28357aa0d41e:src/lib/clubManager.ts)" = cf378e002c1f253a4cd48a147af66117f982f6b2
+          printf '%s  %s\n' 5e80eee0e4194bccc44c30a18477569ef5411981688d0d8662525cb2e33176b5 "$OUT/history/5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f-clubManager.ts" | sha256sum --check
+          sha256sum "$OUT"/history/*.ts > "$OUT/history/source.sha256"
+      - name: Bind unchanged old failed diagnostic to its admitted original
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          API="https://api.github.com/repos/PapiSalgueroM/ballpark-hero"
+          curl --fail --silent --show-error -H "Authorization: Bearer $GH_TOKEN" "$API/actions/artifacts/13263322201" > "$QA_OUT/reference-artifact.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const a=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/reference-artifact.json','utf8'));
+          assert.equal(a.id,13263322201);assert.equal(a.expired,false);assert.equal(a.size_in_bytes,4543153);
+          assert.equal(a.workflow_run.id,41700778928);assert.equal(a.workflow_run.head_sha,'b8752befa860442e3ac2ad7c4d569d5ef0723704');
+          NODE
+          curl --fail --silent --show-error --location -H "Authorization: Bearer $GH_TOKEN" "$API/actions/artifacts/13263322201/zip" > "$QA_OUT/original-trace.zip"
+          test "$(wc -c < "$QA_OUT/original-trace.zip")" -eq 4543153
+          printf '%s  %s\n' f9613edda881528022631869b82a3b663ac600d86b831e9fc2c77909025f028f "$QA_OUT/original-trace.zip" | sha256sum --check
+          unzip -q "$QA_OUT/original-trace.zip" -d "$QA_OUT/reference"
+          test "$(sed -n '1p' "$QA_OUT/reference/source.txt")" = b8752befa860442e3ac2ad7c4d569d5ef0723704
+          test "$(sed -n '2p' "$QA_OUT/reference/source.txt")" = 239734a817856a2aa09b416a8e4935d98596106b
+          test "$(cat "$QA_OUT/reference/vanilla/native.exit")" = 1
+          test "$(cat "$QA_OUT/reference/observed/native.exit")" = 1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/reference/trace-admission.json','utf8'));
+          assert.equal(r.traceEligible,true);assert.equal(r.sourceHeld,true);assert.equal(r.cleanAfter,true);
+          assert.deepEqual(r.nativeExits,{vanilla:1,observed:1});assert.equal(r.originalAssertionsWaived,false);
+          NODE
+          find "$QA_OUT/reference" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/reference-before.sha256"
+      - name: Install unchanged locked dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/types.exit"
+          test "$code" -eq 0
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Strict full450 and old-load normal, fourteen effective controls and exact restore
+        timeout-minutes: 105
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          unset SIM_SEED CM_SHOOTOUT_CONTROL CM_SHOOTOUT_WRITE_FIXTURE ONLY BROWSER
+          set +e
+          node scripts/qa/cmShootoutPinQualification.mjs --out "$QA_OUT/qualification" --reference "$QA_OUT/reference" > "$QA_OUT/caller.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/caller.exit"
+          tail -n 16 "$QA_OUT/caller.log"
+          test "$code" -eq 0
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const r=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/qualification/pin-qualification.json','utf8'));
+          assert.equal(r.eligible,true);assert.equal(r.problem,null);assert.equal(r.sourceHeld,true);assert.equal(r.cleanAfter,true);
+          assert.equal(r.oldFailuresWaived,false);assert.equal(r.phases.length,19);assert.equal(r.effectiveControls,14);assert.equal(r.inapplicableObservations,2);
+          assert.equal(r.phases.filter(p=>p.kind==='old-diagnostic'&&p.nativeExit===1).length,1);
+          assert.equal(r.phases.filter(p=>p.kind==='normal'&&p.nativeExit===0).length,1);
+          assert.equal(r.phases.filter(p=>p.kind==='restored'&&p.nativeExit===0).length,1);
+          assert.equal(r.phases.filter(p=>p.kind==='engine-control'&&p.nativeExit===1&&p.effectiveControlCredit).length,12);
+          assert.equal(r.phases.filter(p=>p.kind==='setup-control'&&p.nativeExit===1&&p.effectiveControlCredit).length,2);
+          assert.equal(r.phases.filter(p=>p.kind==='inapplicable'&&p.nativeExit===2&&!p.effectiveControlCredit).length,2);
+          console.log('Candidate qualification passed. The separate old 5b70 diagnostic still has its four original failures. No application change or public release is admitted.');
+          NODE
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Retain all source, original diagnostic and guarded evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          if test -f "$QA_OUT/reference-before.sha256"; then
+            find "$QA_OUT/reference" -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/reference-after.sha256"
+            cmp "$QA_OUT/reference-before.sha256" "$QA_OUT/reference-after.sha256"
+            sha256sum --check "$QA_OUT/reference-before.sha256" > "$QA_OUT/reference-held.log"
+          fi
+          find "$QA_OUT" \( -name '*transport.log' -o -path "$QA_OUT/transport/*.log" \) -type f | sort > "$QA_OUT/transport-files.txt"
+          while IFS= read -r receipt; do test ! -s "$receipt"; done < "$QA_OUT/transport-files.txt"
+      - name: Bound all retained raw evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.artifact.outputs.ready == 'true'
+        with:
+          name: flagship-shootout-pin-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-shootout-pin
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
