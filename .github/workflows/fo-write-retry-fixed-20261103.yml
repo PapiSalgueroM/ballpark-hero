@@ -1,0 +1,245 @@
+name: Front Office refused-save fixed consumer verification
+on:
+  push:
+    branches: [codex/fo-write-retry-fixed-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: fo-write-retry-fixed-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  consumers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+      PARENT: 3b380397cc14b15a9c84ddbf801a7a03696ca128
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact one product body and all other parent source
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/fo-write-retry-fixed"
+          mkdir -p "$QA_OUT/sources" "$QA_OUT/transport" "$QA_OUT/arms"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          git rev-parse HEAD HEAD^{tree} > "$QA_OUT/source.txt"
+          git diff --name-status "$PARENT" HEAD > "$QA_OUT/changed-paths.txt"
+          git diff "$PARENT" HEAD -- src/components/front-office/FrontOfficeBoard.tsx > "$QA_OUT/product.diff"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import { execFileSync } from 'node:child_process';
+          const out=process.env.QA_OUT,p={"test":"src/test/frontOfficeWriteRetry.test.tsx","testGit":"f01d080ceae3c70e0ada3e4f1d21c0dff994be1c","testSHA":"7a994aba3f93a38cdfa551b1d9b24bd2eb8fa3caa44376b60617773c1f368bd2","target":"src/components/front-office/FrontOfficeBoard.tsx","copy":"src/components/front-office/__qa_write_retry_original_FrontOfficeBoard.tsx","alias":"@/components/front-office/FrontOfficeBoard","originalGit":"e1bf0924f9d900ba63646efa32bf78cf36d381c5","productGit":"6016c7c42eed81af36d3cab2e1eb4c1b3e9990f2","productSHA":"b1a5dc92d28f50609d4e9a42ef6a7acd2231502a9ea62ea9912a18a8925836ad","cases":[["NFL Front Office refused save recovery a real Cut reports its refused write and retries the exact pending snapshot until storage accepts it","FO_SAVE_REFUSAL_NOTICE"],["NFL Front Office refused save recovery two real refused Cuts retry the latest complete state rather than overwriting it with the earlier attempt","FO_SAVE_LATEST_NOTICE"],["NFL Front Office refused save recovery a healthy real Cut still writes once with the existing cap cost and no refused-save warning",null]],"oldRaw":{"healthy.json":"a88faa781398a365cc0436a27a7c3969365d736ab8f916c249b704cb05c5cb0d","latest.json":"b242fca533d65a5bf260bbcbc988d4e6d48347b1c219f57ed09ac5bb6473a8ca","refused.json":"cfbaae811a54c5b3c5e9d0bf46d8e8b7b55b3f3c2ab148b2bcef2c277f715d11"},"normal":[{"path":"src/test/frontOfficeSaveRecovery.test.tsx","names":["NFL actual save recovery restores current progress, contracts and counters without rewriting storage","NFL actual save recovery loads supported older saves and advances the same league once","NFL actual save recovery keeps the existing duplicate and missing entity ID repair","NFL actual save recovery restores an in-progress draft with its remaining choices","NFL actual save recovery keeps the older recap-to-draft migration without replaying a closed season","NFL actual save recovery restores the saved postseason recap without replaying or replacing it","NFL actual save recovery restores a save in its playoffs with its bracket, without rewriting storage","NFL actual save recovery rejects zero period before render and deletes only this save on request","NFL actual save recovery rejects fractional period before render and deletes only this save on request","NFL actual save recovery rejects missing free agent pool before render and deletes only this save on request","NFL actual save recovery rejects null team roster before render and deletes only this save on request","NFL actual save recovery rejects missing selected club before render and deletes only this save on request","NFL actual save recovery rejects null draft entity before render and deletes only this save on request","NFL actual save recovery rejects object cut ledger before render and deletes only this save on request","NFL actual save recovery rejects unknown phase before render and deletes only this save on request","NFL actual save recovery rejects missing schedule before render and deletes only this save on request","NFL actual save recovery rejects missing schedule week before render and deletes only this save on request","NFL actual save recovery rejects unplayable eighteenth hub week before render and deletes only this save on request","NFL actual save recovery rejects an eighteenth hub week with a bracket whose season already has a champion before render and deletes only this save on request","NFL actual save recovery allows a fresh club to replace the unusable save without clearing another game","NFL actual save recovery offers the same recovery for malformed JSON","NHL actual save recovery restores current progress, contracts and counters without rewriting storage","NHL actual save recovery loads supported older saves and advances the same league once","NHL actual save recovery keeps the existing duplicate and missing entity ID repair","NHL actual save recovery restores an in-progress draft with its remaining choices","NHL actual save recovery keeps the older recap-to-draft migration without replaying a closed season","NHL actual save recovery restores the saved postseason recap without replaying or replacing it","NHL actual save recovery rejects zero period before render and deletes only this save on request","NHL actual save recovery rejects fractional period before render and deletes only this save on request","NHL actual save recovery rejects missing free agent pool before render and deletes only this save on request","NHL actual save recovery rejects null team roster before render and deletes only this save on request","NHL actual save recovery rejects missing selected club before render and deletes only this save on request","NHL actual save recovery rejects null draft entity before render and deletes only this save on request","NHL actual save recovery rejects object cut ledger before render and deletes only this save on request","NHL actual save recovery rejects unknown phase before render and deletes only this save on request","NHL actual save recovery rejects out of range round before render and deletes only this save on request","NHL actual save recovery allows a fresh club to replace the unusable save without clearing another game","NHL actual save recovery offers the same recovery for malformed JSON"],"git":"5d508b78cde2080911658770e0f89e1162b85162"},{"path":"src/components/front-office/FrontOfficeCuts.test.tsx","names":["NFL Front Office: a cut costs dead money on the board quotes the dead money before the tap, asks twice, and only then charges it","NFL Front Office: a cut costs dead money on the board shows why the man you cut cannot be signed back and greys his button","NFL Front Office: a cut costs dead money on the board at the roster floor every cut is disabled with the reason","NFL Front Office: a cut costs dead money on the board a man you cut this season cannot come back by trade, and the trade screen says why","NBA Front Office: a cut costs dead money on the board quotes the dead money before the tap, asks twice, and only then charges it","NBA Front Office: a cut costs dead money on the board shows why the man you cut cannot be signed back and greys his button","NBA Front Office: a cut costs dead money on the board at the roster floor every cut is disabled with the reason","NBA Front Office: a cut costs dead money on the board at the roster ceiling every Sign is disabled with the reason","NBA Front Office: a cut costs dead money on the board a man you cut this season cannot come back by trade, and the trade screen says why","MLB Front Office: a cut costs dead money on the board quotes the dead money before the tap, asks twice, and only then charges it","MLB Front Office: a cut costs dead money on the board shows why the man you cut cannot be signed back and greys his button","MLB Front Office: a cut costs dead money on the board at the roster floor every cut is disabled with the reason","MLB Front Office: a cut costs dead money on the board at the roster ceiling every Sign is disabled with the reason","MLB Front Office: a cut costs dead money on the board a man you cut this season cannot come back by trade, and the trade screen says why","NHL Front Office: a cut costs dead money on the board quotes the dead money before the tap, asks twice, and only then charges it","NHL Front Office: a cut costs dead money on the board shows why the man you cut cannot be signed back and greys his button","NHL Front Office: a cut costs dead money on the board at the roster floor every cut is disabled with the reason","NHL Front Office: a cut costs dead money on the board at the roster ceiling every Sign is disabled with the reason","NHL Front Office: a cut costs dead money on the board a man you cut this season cannot come back by trade, and the trade screen says why"],"git":"52ba415fdbb23a36f2b38041c6d86e131afec251"}]};
+          const git=(...args)=>execFileSync('git',args,{encoding:'utf8'}).trim();
+          const sha=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+          const workflow='.github/workflows/fo-write-retry-fixed-20261103.yml';
+          assert.equal(git('rev-parse','HEAD^'),process.env.PARENT);
+          assert.equal(git('rev-parse',process.env.PARENT+'^{tree}'),'b1513b249dd1846f0ddb42d8dcfb4c4829eaaf98');
+          assert.deepEqual(fs.readFileSync(path.join(out,'changed-paths.txt'),'utf8').trim().split('\n').sort(),['A\t'+workflow,'M\t'+p.target].sort());
+          assert.equal(git('rev-parse','HEAD:'+p.target),p.productGit);assert.equal(sha(p.target),p.productSHA);
+          assert.equal(git('rev-parse',process.env.PARENT+':'+p.target),p.originalGit);
+          assert.equal(git('rev-parse','HEAD:'+p.test),p.testGit);assert.equal(sha(p.test),p.testSHA);
+          const heldPins={
+            'src/lib/frontOffice.ts':'bd4991efd3a9f70f38e5c34fd931de5c33ee793c',
+            'src/lib/frontOfficeCuts.ts':'d835672cb11b2283270ffdfadf35d17abe78b228',
+            'src/lib/frontOfficeSave.ts':'b7f681efaa1526f1c44f757b9e4d5495ce0859aa',
+            'scripts/simFrontOfficeSaveRecovery.mjs':'0e76605d599ede0de22a02176e367fb5fe59ec0b',
+            'scripts/simFrontOfficeCuts.mjs':'86a5616da3bb9f81ef12145c412e4da6ddaab122',
+            'src/App.tsx':'fe15993fafb4b6cdfa9efa359d47e80600634c08',
+            'src/components/hub/HubExperience.tsx':'c72effc5697ec0d2812569479a9d465247855720',
+            'vitest.config.ts':'ed2a9dc677f77dfe95c061064eeff5782b856864'
+          };
+          for(const [file,pin]of Object.entries(heldPins))assert.equal(git('rev-parse','HEAD:'+file),pin,file);
+          for(const normal of p.normal)assert.equal(git('rev-parse','HEAD:'+normal.path),normal.git,normal.path);
+          assert(!fs.existsSync(p.copy),'No preexisting copied source may be replaced');
+          const tracked=execFileSync('git',['ls-files','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);assert.equal(tracked.length,5679);
+          for(const file of [workflow,p.target,p.test,...Object.keys(heldPins),...p.normal.map(row=>row.path)]){
+            const dest=path.join(out,'sources',file);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.copyFileSync(file,dest);
+          }
+          fs.writeFileSync(path.join(out,'profile.json'),JSON.stringify(p,null,2)+'\n');
+          fs.writeFileSync(path.join(out,'association.json'),JSON.stringify({
+            source:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),parent:process.env.PARENT,profile:p,heldPins,trackedFiles:tracked.length,
+            scope:'Front Office current-writer refused-save consumers3, effective whole-original2owned/1held, restored3 and all57 existing load-recovery/Cut normal rows. No engine, save-reader, test or harness edits. No build, browser or full-suite credit.',
+            baseline:{run:41704144927,artifact:13265217256,zipSHA:'e64276134e3233c9e2ec31b3a3dfe5456eb1a291e1acc34ce7bdf0c584507d0b',owned:2,held:1},
+            normalIdentitySource:'Already acquired immutable flagship release full-owned actual reports:38 load-recovery and19 Cut rows, with current source blobs held.'
+          },null,2)+'\n');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          test "$(wc -l < "$QA_OUT/source-before.sha256")" -eq 5679
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-before.txt"
+          test ! -s "$QA_OUT/status-before.txt"
+      - name: Install unchanged locked dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/types.exit"
+          cat "$QA_OUT/types.log"
+          test "$code" -eq 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Actual fixed, whole-original, restored and existing normal consumers
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          cat > "$QA_OUT/qualify.mjs" <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import { spawnSync,execFileSync } from 'node:child_process';
+          const out=process.env.QA_OUT,p=JSON.parse(fs.readFileSync(path.join(out,'profile.json'),'utf8'));
+          const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+          const blob=bytes=>crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob '+bytes.length+'\0'),bytes])).digest('hex');
+          const fixed=fs.readFileSync(p.target),original=execFileSync('git',['show',process.env.PARENT+':'+p.target]);
+          assert.equal(hash(fixed),p.productSHA);assert.equal(blob(original),p.originalGit);assert.notDeepEqual(fixed,original);
+          fs.writeFileSync(path.join(out,'fixed.tsx'),fixed);fs.writeFileSync(path.join(out,'whole-original.tsx'),original);
+          const phases=[];
+          function verifyRaw(folder,old){
+            const dir=path.join(folder,'raw');assert.deepEqual(fs.readdirSync(dir).sort(),Object.keys(p.oldRaw).sort());
+            const raw=Object.fromEntries(Object.keys(p.oldRaw).map(name=>[name,JSON.parse(fs.readFileSync(path.join(dir,name),'utf8'))]));
+            if(old){for(const [name,sha]of Object.entries(p.oldRaw))assert.equal(hash(fs.readFileSync(path.join(dir,name))),sha,'Exact admitted original RAW '+name);return;}
+            assert.deepEqual(raw['refused.json'],{
+              initialRoster:7,currentRoster:6,diskRoster:7,attempts:1,pendingRoster:6,pendingCap:13,
+              diskBytesHeld:true,unrelatedHeld:true,noticeCount:1,
+              afterRetry:{attempts:3,exactPendingWritten:true,currentRoster:6,savedRoster:6,noticeCount:0,unrelatedHeld:true}
+            });
+            assert.deepEqual(raw['latest.json'],{
+              initialRoster:8,currentRoster:6,diskRoster:8,attempts:2,attemptedRosters:[7,6],pendingCap:14,
+              diskBytesHeld:true,unrelatedHeld:true,noticeCount:1,
+              afterRetry:{attempts:3,exactLatestWritten:true,savedRoster:6,noticeCount:0,unrelatedHeld:true}
+            });
+            assert.equal(hash(fs.readFileSync(path.join(dir,'healthy.json'))),p.oldRaw['healthy.json'],'Healthy write remains identical');
+          }
+          function run(phase,old=false,normal=null){
+            const folder=path.join(out,'arms',phase);fs.mkdirSync(folder,{recursive:true});
+            const receipt=path.join(out,'transport',phase+'.log');fs.writeFileSync(receipt,'');
+            const env={...process.env,SIM_OFFLINE_RECEIPT:receipt};
+            for(const key of ['NO_DOUBLE_SWAP','FRONT_OFFICE_SAVE_CONTROL','FO_CUTS_CONTROL','FO_CUTS_BOARD_NFL','FO_CUTS_BOARD_NBA','FO_CUTS_BOARD_MLB','FO_CUTS_BOARD_NHL'])delete env[key];
+            if(!normal){env.POPULAR_FO_SAVE_RAW=path.join(folder,'raw');fs.mkdirSync(env.POPULAR_FO_SAVE_RAW);}
+            else delete env.POPULAR_FO_SAVE_RAW;
+            if(old)env.NO_DOUBLE_SWAP=JSON.stringify({[p.alias]:path.resolve(p.copy)});
+            const test=normal?normal.path:p.test,expectedNames=normal?normal.names:p.cases.map(([name])=>name);
+            fs.writeFileSync(path.join(folder,'source-association.json'),JSON.stringify({
+              phase,target:p.target,fixedSHA:hash(fs.readFileSync(p.target)),effectiveLeaf:old?p.copy:p.target,
+              effectiveSHA:hash(fs.readFileSync(old?p.copy:p.target)),alias:old?JSON.parse(env.NO_DOUBLE_SWAP):null,
+              test,expectedNames,normal:!!normal
+            },null,2)+'\n');
+            const child=spawnSync('node_modules/.bin/vitest',['run',test,'--maxWorkers=1','--minWorkers=1','--reporter=verbose','--reporter=json','--outputFile='+path.join(folder,'units.json')],
+              {env,encoding:'utf8',timeout:600000,maxBuffer:32*1024*1024});
+            const log=(child.stdout??'')+'\n'+(child.stderr??'');
+            fs.writeFileSync(path.join(folder,'units.log'),log);fs.writeFileSync(path.join(folder,'units.exit'),String(child.status)+'\n');
+            fs.writeFileSync(path.join(folder,'process.json'),JSON.stringify({status:child.status,signal:child.signal,error:child.error?{name:child.error.name,message:child.error.message}:null},null,2)+'\n');
+            assert(!child.error&&!child.signal);assert.equal(fs.statSync(receipt).size,0);
+            assert.doesNotMatch(log,/Unhandled (?:Error|Rejection)|Vitest caught \d+ unhandled|uncaughtException|unhandledRejection/);
+            const r=JSON.parse(fs.readFileSync(path.join(folder,'units.json'),'utf8'));
+            assert.equal(r.testResults.length,1);const file=r.testResults[0],rows=file.assertionResults;
+            assert(file.name.replaceAll('\\','/').endsWith('/'+test));assert(!file.error&&!file.failureMessage&&!file.message);
+            assert.equal(rows.length,expectedNames.length);assert.equal(new Set(rows.map(row=>row.fullName)).size,expectedNames.length);
+            assert.deepEqual(rows.map(row=>row.fullName).sort(),expectedNames.slice().sort());
+            const strip=value=>String(value).replace(/\u001b\[[0-9;]*m/g,'');
+            for(const row of rows){
+              const marker=old&&p.cases.find(([name])=>name===row.fullName)[1],messages=(row.failureMessages??[]).map(strip);
+              assert.equal(row.status,marker?'failed':'passed',row.fullName);
+              if(marker){assert(messages.length>0);assert(messages.every(message=>message.includes(marker)&&message.includes('AssertionError')));
+                assert(messages.every(message=>!/(?:SyntaxError|TypeError|ReferenceError|RangeError|Cannot find module|Failed to load)/.test(message)));}
+              else assert.deepEqual(messages,[]);
+            }
+            assert.equal(r.numTotalTests,expectedNames.length);assert.equal(r.numFailedTests,old?2:0);
+            assert.equal(r.numPassedTests,expectedNames.length-(old?2:0));assert.equal(r.success,!old);
+            assert.equal(child.status,old?1:0);assert.equal(file.status,old?'failed':'passed');
+            const counters={};for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors']){
+              counters[key]=Object.hasOwn(r,key)?r[key]:null;if(counters[key]!==null){assert.equal(typeof counters[key],'number');assert.equal(counters[key],0);}}
+            for(const key of ['numPendingTests','numTodoTests','numPendingTestSuites'])if(Object.hasOwn(r,key))assert.equal(r[key],0);
+            if(!normal)verifyRaw(folder,old);
+            assert.deepEqual(fs.readFileSync(p.target),fixed);if(old)assert.deepEqual(fs.readFileSync(p.copy),original);
+            const result={phase,test,rows:rows.length,nativeExit:child.status,passed:rows.filter(row=>row.status==='passed').map(row=>row.fullName),
+              failed:rows.filter(row=>row.status==='failed').map(row=>row.fullName),counters,absentCounterMeaning:'UNKNOWN'};
+            fs.writeFileSync(path.join(folder,'admission.json'),JSON.stringify(result,null,2)+'\n');phases.push(result);
+          }
+          run('fixed');assert(!fs.existsSync(p.copy));
+          let copied=false;
+          try{fs.writeFileSync(p.copy,original,{flag:'wx'});copied=true;assert.equal(blob(fs.readFileSync(p.copy)),p.originalGit);run('whole-original',true);}
+          finally{
+            if(copied){assert.deepEqual(fs.readFileSync(p.copy),original);fs.unlinkSync(p.copy);}
+            assert.deepEqual(fs.readFileSync(p.target),fixed);
+            fs.writeFileSync(path.join(out,'source-restoration.json'),JSON.stringify({exactFixed:fs.readFileSync(p.target).equals(fixed),fixedSHA:hash(fs.readFileSync(p.target)),copyAbsent:!fs.existsSync(p.copy)},null,2)+'\n');
+          }
+          run('restored');
+          for(const name of Object.keys(p.oldRaw))assert.deepEqual(fs.readFileSync(path.join(out,'arms/fixed/raw',name)),fs.readFileSync(path.join(out,'arms/restored/raw',name)),'Restored RAW byte equality '+name);
+          for(let i=0;i<p.normal.length;i++)run('related-normal-'+i,false,p.normal[i]);
+          fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({
+            status:'ACTUAL_FIXED3_ORIGINAL2OWNED1HELD_RESTORED3_WITH_ALL57_RELATED_NORMAL',
+            phases,rawFiles:9,uniqueCurrentCases:60,
+            scope:'Actual assertions include a failed Retry preserving old bytes and notice, accepted Retry of exact latest bytes, healthy write, existing load recovery and all sport Cut normal rows.',
+            limits:'No build, browser, full ordinary suite, natural progression or production transport qualification.'
+          },null,2)+'\n');
+          console.log('Front Office: fixed3PASS, whole-original2owned/1held, restored3PASS and normal38+19PASS; RAW/source restoration held.');
+          NODE
+          set +e
+          node "$QA_OUT/qualify.mjs" > "$QA_OUT/caller.log" 2>&1
+          code=$?
+          set -e
+          printf '%s\n' "$code" > "$QA_OUT/caller.exit"
+          cat "$QA_OUT/caller.log"
+          test "$code" -eq 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Preserve source closure, cleanup and finite evidence
+        id: retain
+        if: always()
+        run: |
+          set -uo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          diff_exit=$?
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          map_exit=$?
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256" > "$QA_OUT/source-compare.log" 2>&1
+          compare_exit=$?
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log" 2>&1
+          held_exit=$?
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          status_exit=$?
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt" > "$QA_OUT/status-compare.log" 2>&1
+          status_compare_exit=$?
+          transport_exit=0
+          for receipt in "$QA_OUT"/transport/*.log; do test -f "$receipt" && test ! -s "$receipt" || transport_exit=1; done
+          printf '{"diff":%s,"map":%s,"compare":%s,"held":%s,"status":%s,"statusCompare":%s,"transport":%s}\n' "$diff_exit" "$map_exit" "$compare_exit" "$held_exit" "$status_exit" "$status_compare_exit" "$transport_exit" > "$QA_OUT/closure.json"
+          bytes=$(du -sb "$QA_OUT" | cut -f1)
+          printf '%s\n' "$bytes" > "$QA_OUT/artifact-bytes.txt"
+          test "$bytes" -lt 150000000 || exit 1
+          echo 'artifact_ok=true' >> "$GITHUB_OUTPUT"
+          test "$diff_exit" -eq 0 && test "$map_exit" -eq 0 && test "$compare_exit" -eq 0 && test "$held_exit" -eq 0 && test "$status_exit" -eq 0 && test "$status_compare_exit" -eq 0 && test "$transport_exit" -eq 0
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.retain.outputs.artifact_ok == 'true'
+        with:
+          name: fo-write-retry-fixed-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/fo-write-retry-fixed
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
