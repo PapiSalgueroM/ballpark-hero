@@ -194,6 +194,8 @@ interface SaveShape {
 export default function FrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
   const [saveError, setSaveError] = useState(false);
+  const [saveWriteFailed, setSaveWriteFailed] = useState(false);
+  const pendingSave = useRef<string | null>(null);
   /* Round 204: the hub is tiles now, so null means the hub itself and a
      tab key means you have opened that box. Club Manager's Round 74 rule,
      brought to the four GM games. */
@@ -483,9 +485,22 @@ export default function FrontOfficeBoard() {
       if (!gameLogLive.current) delete base.gameLog;
       /* Round 1309: the same for the bracket: the key is the ref's, or absent */
       if (!playoffsLive.current) delete base.playoffs;
-      localStorage.setItem(SAVE_KEY, JSON.stringify(base));
-    } catch { /* storage full: play on */ }
+      pendingSave.current = JSON.stringify(base);
+      localStorage.setItem(SAVE_KEY, pendingSave.current);
+      pendingSave.current = null;
+      setSaveWriteFailed(false);
+    } catch { setSaveWriteFailed(true); }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
+
+  const retrySave = () => {
+    const bytes = pendingSave.current;
+    if (bytes === null) return;
+    try {
+      localStorage.setItem(SAVE_KEY, bytes);
+      pendingSave.current = null;
+      setSaveWriteFailed(false);
+    } catch { setSaveWriteFailed(true); }
+  };
 
   /* Round 828: a new league carries every club's whole roster and practice
      squad. That data is its own chunk, fetched here on the tap rather than
@@ -1225,6 +1240,8 @@ export default function FrontOfficeBoard() {
 
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
+    pendingSave.current = null;
+    setSaveWriteFailed(false);
     setPhase('pick');
     setLeague(null);
     setMyTeam('');
@@ -1372,10 +1389,18 @@ export default function FrontOfficeBoard() {
     career: careerOf(league),
   } : null;
 
+  const saveNotice = saveWriteFailed && (
+    <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
+      <p>Franchise progress is not saved on this device. Keep this page open and retry.</p>
+      <button type="button" onClick={retrySave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
+    </div>
+  );
+
   /* ------------------------------ pick screen ------------------------------ */
   if (phase === 'pick' || !league || !my) {
     return (
       <div className="space-y-4">
+        {saveNotice}
         {saveError && (
           <div role="alert" className="rounded-xl border border-destructive/40 bg-card p-4 text-sm">
             <p>We couldn&apos;t open this save. Pick a team to start a new franchise. Your old save stays here until you pick a team or delete it.</p>
@@ -1480,12 +1505,13 @@ export default function FrontOfficeBoard() {
   if (phase === 'fired') {
     /* Round 1550: the out of work screen is the career kit's. A save that loads straight into it waits for the kit
        in a holding box, then draws (useGmCareerKit asks for it). */
-    if (!kit) return <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} />;
+    if (!kit) return <>{saveNotice}<GmCareerKitHolding failed={kitFailed} onRetry={retryKit} /></>;
     const { GmOutOfWork, hostOutOfWorkCard, nflDeskHost } = kit;
     const outFacts = deskFacts(hubFacts)!; /* the league is set past the pick screen */
     const market = outFacts.career.market;
     return (
       <div ref={careerRevealRef}>
+        {saveNotice}
         <GmOutOfWork<NflDeskFacts>
           sport="nfl"
           card={market ? hostOutOfWorkCard(nflDeskHost, league, outFacts.career.seat, market, label) : { title: `Let go by the ${label(myTeam)}`, lines: [] }}
@@ -1506,7 +1532,7 @@ export default function FrontOfficeBoard() {
     /* Round 1550: the recap reads his record through the kit (the arrival line, the market line). A season closed
        in this tab already has it (the last week's buttons waited for it); a save that loads on the recap waits in a
        holding box, then draws. */
-    if (!kit) return <GmCareerKitHolding failed={kitFailed} onRetry={retryKit} />;
+    if (!kit) return <>{saveNotice}<GmCareerKitHolding failed={kitFailed} onRetry={retryKit} /></>;
     const { hostArrivalLine, hostArriving, nflDeskHost, Phone } = kit;
     const table = standings(league.teams);
     const myRank = table.findIndex(t => t.abbr === myTeam) + 1;
@@ -1529,12 +1555,14 @@ export default function FrontOfficeBoard() {
     if (gm && recapDesk && gmPanelFor(NFL_RECAP_PANELS, gmOpen)) {
       return (
         <div className="space-y-4">
+          {saveNotice}
           <GmDeskMount sport="nfl" desk={gm} facts={recapDesk} panels={NFL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         </div>
       );
     }
     return (
       <div className="space-y-4">
+        {saveNotice}
         <div
           ref={careerRevealRef}
           data-verdict-reveal
@@ -1630,6 +1658,7 @@ export default function FrontOfficeBoard() {
     const draftDone = picksLeft <= 0 && draftBatchesLeft === 0;
     return (
       <div className="space-y-4">
+        {saveNotice}
         <CelebrationStyles />
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">The {draftDone ? league.season : league.season + 1} Draft</p>
@@ -1965,6 +1994,7 @@ export default function FrontOfficeBoard() {
 
   return (
     <div className="space-y-4">
+      {saveNotice}
       <CelebrationStyles />
       {/* Round 1550: the last week's buttons wait for the career kit; a fetch that failed says so here and asks again */}
       {kitFailed && closeWaits && <GmCareerKitHolding failed onRetry={retryKit} minHeight={0} />}

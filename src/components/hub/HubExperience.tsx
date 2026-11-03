@@ -1,5 +1,5 @@
 import { useRef, useState, type CSSProperties } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowUpRight, CalendarDays, Gamepad2, Search, Shuffle, X } from 'lucide-react';
 import type { GameDef } from '@/data/gameRegistry';
 import { describeSave, savedGames } from '@/data/continueSaves';
@@ -35,8 +35,20 @@ function readContinuations(games: GameDef[]) {
 
 export default function HubExperience({ hub, games }: { hub: SportHub; games: GameDef[] }) {
   const navigate = useNavigate();
-  const [filter, setFilter] = useState<HubFilter>('all');
-  const [query, setQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedFilter = searchParams.get('filter');
+  const filter: HubFilter = requestedFilter === 'daily' || requestedFilter === 'sim' ? requestedFilter : 'all';
+  const query = searchParams.get('q') ?? '';
+  const setLibrary = (nextFilter: HubFilter, nextQuery: string) => {
+    setSearchParams(current => {
+      const next = new URLSearchParams(current);
+      if (nextFilter === 'all') next.delete('filter'); else next.set('filter', nextFilter);
+      if (nextQuery) next.set('q', nextQuery); else next.delete('q');
+      return next;
+    }, { replace: true, preventScrollReset: true });
+  };
+  const setFilter = (nextFilter: HubFilter) => setLibrary(nextFilter, query);
+  const setQuery = (nextQuery: string) => setLibrary(filter, nextQuery);
   const searchRef = useRef<HTMLInputElement>(null);
   const [continuations] = useState<Record<string, string>>(() => readContinuations(games));
   const arena = arenas[hub.route as keyof typeof arenas] ?? arenas['/soccer'];
@@ -123,7 +135,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
           <p className={styles.sectionNote}>{hub.quick.blurb}</p>
           <div className={styles.gameGrid}>{quick.map(game => card(game))}</div>
         </section>}
-        {visible.length === 0 && <div className={styles.empty}><Search aria-hidden="true" /><h3>No games match that search.</h3><p>Try a shorter name, or see the full collection.</p><button onClick={() => { setQuery(''); setFilter('all'); searchRef.current?.focus({ preventScroll: true }); }}>Show all {hub.navLabel} games</button></div>}
+        {visible.length === 0 && <div className={styles.empty}><Search aria-hidden="true" /><h3>No games match that search.</h3><p>Try a shorter name, or see the full collection.</p><button onClick={() => { setLibrary('all', ''); searchRef.current?.focus({ preventScroll: true }); }}>Show all {hub.navLabel} games</button></div>}
       </section>
     </div>
   );

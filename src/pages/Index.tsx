@@ -296,6 +296,12 @@ export default function Index() {
                 value={searchQuery}
                 onChange={e => { warmSearch(); setSearchQuery(e.target.value); }}
                 onFocus={warmSearch}
+                onKeyDown={e => {
+                  if (e.key === 'Escape' && isSearching && !e.nativeEvent.isComposing && e.nativeEvent.keyCode !== 229) {
+                    e.preventDefault();
+                    setSearchQuery('');
+                  }
+                }}
                 onPointerEnter={warmSearch}
                 aria-label="Search games"
                 placeholder='Search games... e.g. soccer, grid, NBA'
@@ -303,7 +309,7 @@ export default function Index() {
               />
               {isSearching && (
                 <button
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => { setSearchQuery(''); searchInputRef.current?.focus({ preventScroll: true }); }}
                   className="absolute right-1.5 top-1/2 -translate-y-1/2 grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:text-foreground transition-colors"
                   aria-label="Clear search"
                 >

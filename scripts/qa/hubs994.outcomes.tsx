@@ -77,16 +77,17 @@ const cases: [string, () => void][] = [
     const random = Math.random;
     try {
       for (const item of hubFixtures()) {
-        const view = open(item), query = item.games.at(-1)!.label;
-        enter(view, query);
+        const query = item.games.at(-1)!.label;
         const visible = item.games.filter(game => `${game.label} ${game.description}`.toLowerCase().includes(query.toLowerCase()));
         assert.ok(visible.length && !visible.some(game => game.path === item.games[0].path), 'The directed subset excludes the first unfiltered game');
         for (const value of [0, 0.499, 0.999999]) {
+          const view = open(item);
+          enter(view, query);
           Math.random = () => value;
           fireEvent.click(view.getByRole('button', { name: 'Pick a game for me' }));
           assert.ok(visible.some(game => game.path === view.container.querySelector('[data-current-route]')?.textContent));
+          cleanup();
         }
-        cleanup();
       }
     } finally { Math.random = random; }
   }],
