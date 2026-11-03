@@ -1,0 +1,776 @@
+import { FlagImg } from '@/components/FlagImg';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { cn } from '@/lib/utils';
+import { Loader2, Play, RotateCcw, Timer, Trophy, Shuffle, Sparkles } from 'lucide-react';
+import ShareButtons from '@/components/game/ShareButtons';
+import { GameNav } from '@/components/game/GameNav';
+import { GameNavbar } from '@/components/game/GameNavbar';
+import { GameHelp } from '@/components/game/GameHelp';
+import AdBanner from '@/components/ads/AdBanner';
+import ReportQuestion from '@/components/game/ReportQuestion';
+import PageSeo from '@/components/seo/PageSeo';
+import GameSeoContent from '@/components/seo/GameSeoContent';
+import { StatTile } from '@/components/game/StatTile';
+import { FORMATIONS, Formation } from '@/lib/squadDeal';
+import { flagFor, shortName, fmtCompactUsd } from '@/lib/dealPlayers';
+import {
+  WxPlayer,
+  WorldXiData,
+  TimerMode,
+  TIMER_MODES,
+  fetchWorldXiPool,
+  drawCountries,
+  suggestCountryPlayers,
+  fitsSlot,
+  allowedLabel,
+  wrongPositionMessage,
+  displayCountry,
+  shuffle,
+  respinSlotCountry,
+  simulateWorldXiSeason,
+  ratingsFor,
+  SeasonReport,
+  ordinal,
+} from '@/lib/worldXi';
+import { selectWorldXiNationPool, type WorldXiNationMode } from '@/lib/worldXiNationPools';
+import { computeChemistry } from '@/lib/chemistry';
+import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { SlotReel } from '@/components/world-xi/SlotReel';
+import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
+
+type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
+
+// Slot-machine reel durations. The reel decelerates like a real machine, so it
+// needs enough runway to read as a spin; timed modes get a shorter one so the
+// clock is not eaten by animation (11 reveals per run).
+const SPIN_MS = 1500;
+const SPIN_MS_TIMED = 1000;
+
+const NATION_MODES: { key: WorldXiNationMode; label: string; hint: string }[] = [
+  { key: 'expanded', label: 'Expanded', hint: 'More nations from the player pool. Each draw still checks the position.' },
+  { key: 'classic', label: 'Classic', hint: 'The original draw, using nations with deeper player pools.' },
+  { key: '2026', label: '2026 Nations', hint: "Tournament nations, using players from the game's existing pool." },
+];
+
+const WorldXi = () => {
+  const [phase, setPhase] = useState<Phase>('boot');
+  const [data, setData] = useState<WorldXiData | null>(null);
+  const [nationMode, setNationMode] = useState<WorldXiNationMode>('expanded');
+  const [formation, setFormation] = useState<Formation>(FORMATIONS[0]);
+  const [timerMode, setTimerMode] = useState<TimerMode>(TIMER_MODES[0]);
+  const [countries, setCountries] = useState<string[]>([]); // country per slot index
+  const [playOrder, setPlayOrder] = useState<number[]>([]); // shuffled slot indices
+  const [step, setStep] = useState(0);
+  const [filled, setFilled] = useState<(WxPlayer | null)[]>([]);
+  const [query, setQuery] = useState('');
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [spinning, setSpinning] = useState(false);
+  /* Owner 2026-08-05: limited respins so a bad draw costs a decision.
+     Round 319, owner review: the COUNT is the player's call now, picked on
+     the setup screen before the draw. 3 stays the default. */
+  const [respinBudget, setRespinBudget] = useState(3);
+  const [respinsLeft, setRespinsLeft] = useState(3);
+  const [spinKey, setSpinKey] = useState(0); // bumping this starts a SlotReel spin
+  const [reelGlimpse, setReelGlimpse] = useState<string>(''); // country under the payline mid-spin
+  const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
+  const [showClubChemistry, setShowClubChemistry] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const prevStepRef = useRef<number>(-1);
+  const reducedMotionRef = useRef<boolean>(
+    typeof window !== 'undefined' && window.matchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false,
+  );
+
+  const selectedData = useMemo(
+    () => data ? selectWorldXiNationPool(data, nationMode) : null,
+    [data, nationMode],
+  );
+  const selectedMode = NATION_MODES.find(mode => mode.key === nationMode)!;
+
+  const boot = useCallback(async () => {
+    setPhase('boot');
+    try {
+      const pool = await fetchWorldXiPool();
+      if (!pool) {
+        setPhase('error');
+        return;
+      }
+      setData(pool);
+      setPhase('setup');
+    } catch {
+      setPhase('error');
+    }
+  }, []);
+
+  useEffect(() => {
+    boot();
+  }, [boot]);
+
+  const start = useCallback(() => {
+    if (!selectedData) return;
+    if (selectedData.countries.length < formation.slots.length) {
+      setFeedback('This pool has fewer than 11 nations available. Choose another nation pool.');
+      return;
+    }
+    const drawn = drawCountries(formation, selectedData);
+    if (!drawn) {
+      setFeedback('Could not build a fair draw for that formation. Try another formation or nation pool.');
+      return;
+    }
+    setCountries(drawn);
+    setPlayOrder(shuffle(formation.slots.map((_, i) => i)));
+    setFilled(new Array<WxPlayer | null>(formation.slots.length).fill(null));
+    setStep(0);
+    setQuery('');
+    setFeedback(null);
+    setTimeLeft(timerMode.seconds);
+    setRespinsLeft(respinBudget);
+    prevStepRef.current = -1; // so the first slot of a replay spins too
+    setPhase('playing');
+  }, [selectedData, formation, timerMode, respinBudget]);
+
+  // Countdown tick (only in timed modes while playing).
+  useEffect(() => {
+    if (phase !== 'playing' || timerMode.seconds === 0) return;
+    const id = setInterval(() => setTimeLeft(t => t - 1), 1000);
+    return () => clearInterval(id);
+  }, [phase, timerMode]);
+
+  // Out of time ends the run.
+  useEffect(() => {
+    if (phase === 'playing' && timerMode.seconds > 0 && timeLeft <= 0) setPhase('lost');
+  }, [phase, timerMode, timeLeft]);
+
+  // Keep the input focused as slots advance.
+  useEffect(() => {
+    if (phase === 'playing') inputRef.current?.focus();
+  }, [phase, step]);
+
+  // Slot-machine reveal: whenever a new slot comes up during play, run the
+  // SlotReel (a real decelerating reel, not a flicker) before the nation
+  // locks in. Skipped entirely under prefers-reduced-motion: the spin never
+  // starts and the slot just shows its landed values immediately.
+  useEffect(() => {
+    if (phase !== 'playing' || step === prevStepRef.current) return;
+    prevStepRef.current = step;
+    if (reducedMotionRef.current) {
+      setSpinning(false);
+      return;
+    }
+    setSpinning(true);
+    setSpinKey(k => k + 1);
+  }, [phase, step]);
+
+  // Reset the season report whenever a new run starts.
+  useEffect(() => {
+    if (phase === 'playing') setSeasonReport(null);
+  }, [phase]);
+
+  const slotIndex = phase === 'playing' && step < playOrder.length ? playOrder[step] : -1;
+  const slot = slotIndex >= 0 ? formation.slots[slotIndex] : null;
+  const country = slotIndex >= 0 ? countries[slotIndex] : '';
+
+  const usedNames = useMemo(
+    () => new Set(filled.filter((p): p is WxPlayer => p !== null).map(p => p.name)),
+    [filled],
+  );
+  const suggestions = useMemo(
+    () => (selectedData && slot && country ? suggestCountryPlayers(selectedData, country, query, usedNames) : []),
+    [selectedData, slot, country, query, usedNames],
+  );
+
+  const filledCount = filled.filter(Boolean).length;
+  const timedOut = timerMode.seconds > 0 && timeLeft <= 0;
+
+  /* Round 299, the scoring audit: this page never recorded a play, so a
+     finished run earned no streak day and no played-today credit. The end
+     moment is the phase landing on 'won' or 'lost' (timeout and Give Up both
+     end on 'lost'). Once per run: the ref re-arms only when a new run enters
+     'playing', so mount, the setup screen and the season sim never record.
+     Score is filledCount, the slots-covered count the result screen and the
+     share line both show as N/11. Placed below filledCount on purpose, the
+     TDZ rule from tonight. */
+  const recordedRef = useRef(false);
+  useEffect(() => {
+    if (phase === 'playing') {
+      recordedRef.current = false;
+      return;
+    }
+    if ((phase !== 'won' && phase !== 'lost') || recordedRef.current) return;
+    recordedRef.current = true;
+    recordCompletion('/world-xi', filledCount, getCurrentPlayerName());
+  }, [phase, filledCount]);
+
+  const pick = (p: WxPlayer) => {
+    if (phase !== 'playing' || !slot || slotIndex < 0) return;
+    if (!fitsSlot(p, slot)) {
+      setFeedback(wrongPositionMessage(p, slot));
+      return;
+    }
+    const next = [...filled];
+    next[slotIndex] = p;
+    setFilled(next);
+    setQuery('');
+    setFeedback(null);
+    if (step + 1 >= playOrder.length) setPhase('won');
+    else setStep(s => s + 1);
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && suggestions.length > 0) {
+      e.preventDefault();
+      pick(suggestions[0]);
+    }
+  };
+
+  const playAgain = () => {
+    setCountries([]);
+    setPlayOrder([]);
+    setFilled([]);
+    setStep(0);
+    setQuery('');
+    setFeedback(null);
+    setSeasonReport(null);
+    setShowClubChemistry(false);
+    setPhase('setup');
+  };
+
+  // Owner 2026-08-05: respins are LIMITED now (3 per game, shared across all
+  // slots), so a bad draw costs a decision instead of being reroll-until-easy.
+  // Every respin runs the same slot-machine reel as the initial reveal.
+  const respin = () => {
+    if (phase !== 'playing' || !selectedData || slotIndex < 0 || spinning) return;
+    if (respinsLeft <= 0) return;
+    setRespinsLeft(n => n - 1);
+    const next = respinSlotCountry(formation, selectedData, slotIndex, countries);
+    if (next === countries[slotIndex]) return;
+    const updated = [...countries];
+    updated[slotIndex] = next;
+    setCountries(updated);
+    setQuery('');
+    setFeedback(null);
+    if (reducedMotionRef.current) return;
+    setSpinning(true);
+    setSpinKey(k => k + 1);
+  };
+
+  const simulateSeason = () => {
+    const players = filled.filter((p): p is WxPlayer => p !== null);
+    if (players.length === 0) return;
+    setSeasonReport(simulateWorldXiSeason(players, formation.name));
+  };
+
+  const squadValue = filled.reduce((sum, p) => sum + (p ? p.value : 0), 0);
+  const chemistry = useMemo(
+    () =>
+      computeChemistry(
+        filled
+          .filter((p): p is WxPlayer => p !== null)
+          .map(p => ({ name: p.name, club: p.club, nationality: p.country })),
+      ),
+    [filled],
+  );
+  const clubLinks = chemistry.links.filter(link => link.type === 'club');
+  const playerOveralls = useMemo(() => {
+    const players = filled.filter((p): p is WxPlayer => p !== null);
+    const ratings = ratingsFor(players);
+    return new Map(players.map((p, i) => [p.name, ratings[i]]));
+  }, [filled]);
+  const flagRow = countries.map(c => flagFor(c)).join('');
+  const emojiGrid = [
+    `🌍 World XI ${formation.name}${timerMode.seconds > 0 ? ' ⏱️ ' + timerMode.label : ''}`,
+    `${selectedMode.label} pool`,
+    flagRow,
+    `${filledCount}/11 nations covered`,
+  ].join('\n');
+
+  const pitchView = (
+    <div
+      className="relative w-full max-w-md mx-auto rounded-2xl border border-border overflow-hidden"
+      style={{ aspectRatio: '3 / 4', background: 'linear-gradient(to top, hsl(var(--secondary)) 0%, hsl(var(--card)) 100%)' }}
+    >
+      <div className="absolute inset-x-0 top-1/2 h-px bg-border/40" />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-border/40" />
+      {formation.slots.map((s, i) => {
+        const p = filled[i] ?? null;
+        const isActive = phase === 'playing' && i === slotIndex;
+        return (
+          <div
+            key={i}
+            className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
+            style={{ left: s.x + '%', top: s.y + '%' }}
+          >
+            <div
+              className={cn(
+                'w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center border-2 transition-all',
+                p || isActive ? 'text-base' : 'text-[9px] font-bold',
+                p
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : isActive
+                  ? 'bg-accent border-primary animate-pulse'
+                  : 'bg-card border-border text-muted-foreground',
+                isActive && spinning && 'animate-slot-spin',
+              )}
+            >
+              {p
+                ? <FlagImg name={p.country} size={20} />
+                : isActive
+                ? <FlagImg name={spinning && reelGlimpse ? reelGlimpse : country} size={20} />
+                : s.label}
+            </div>
+            <span className="mt-0.5 text-[9px] font-semibold text-foreground/80 max-w-[64px] truncate text-center">
+              {p ? shortName(p.name) : isActive ? '?' : ''}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <main id="dukb-main" className="min-h-screen bg-background">
+      <GameNavbar />
+      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <PageSeo
+        title="World XI: Build a Squad From 11 Random Nations | DoUKnowBall"
+        description="Pick a formation, draw 11 random countries, and name a real footballer from each nation who fits the position. Optional 90 or 60 second timer. Free, no sign-up."
+        path="/world-xi"
+      />
+      <div className="max-w-2xl mx-auto px-4 py-6 md:py-10">
+        <header className="text-center mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1">
+            WORLD XI
+          </h1>
+          <p className="text-muted-foreground text-sm md:text-base">
+            Eleven random nations, one squad. Name a player from each country who fits the slot.
+          </p>
+        </header>
+
+        {phase === 'boot' && (
+          <div className="flex justify-center py-16">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        )}
+
+        {phase === 'error' && (
+          <div className="text-center py-12">
+            <p className="text-destructive font-semibold mb-3">Couldn't load the player database right now.</p>
+            <button onClick={boot} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+              Try again
+            </button>
+          </div>
+        )}
+
+        {phase === 'setup' && selectedData && (
+          <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
+            <h2 id="world-xi-nation-pool" className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-2">Nation pool</h2>
+            <div role="group" aria-labelledby="world-xi-nation-pool" className="grid grid-cols-3 gap-2 mb-2">
+              {NATION_MODES.map(mode => (
+                <button
+                  key={mode.key}
+                  type="button"
+                  aria-pressed={nationMode === mode.key}
+                  onClick={() => { setNationMode(mode.key); setFeedback(null); }}
+                  className={cn(
+                    'min-h-11 px-2 py-2 rounded-xl border font-bold text-xs sm:text-sm transition-all',
+                    nationMode === mode.key
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-secondary/40 text-foreground border-border hover:border-primary/40',
+                  )}
+                >
+                  {mode.label}
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground mb-5">{selectedMode.hint}</p>
+
+            <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-2">Formation</h2>
+            <div className="grid grid-cols-3 gap-2 mb-5">
+              {FORMATIONS.map(f => (
+                <button
+                  key={f.name}
+                  onClick={() => setFormation(f)}
+                  className={cn(
+                    'px-2 py-2.5 rounded-xl border font-bold text-sm transition-all',
+                    formation.name === f.name
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-secondary/40 text-foreground border-border hover:border-primary/40',
+                  )}
+                >
+                  {f.name}
+                </button>
+              ))}
+            </div>
+
+            <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-2">Timer</h2>
+            <div className="grid grid-cols-3 gap-2 mb-5">
+              {TIMER_MODES.map(m => (
+                <button
+                  key={m.key}
+                  onClick={() => setTimerMode(m)}
+                  className={cn(
+                    'px-2 py-2.5 rounded-xl border transition-all',
+                    timerMode.key === m.key
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-secondary/40 text-foreground border-border hover:border-primary/40',
+                  )}
+                >
+                  <span className="block font-bold text-sm">{m.label}</span>
+                  <span className={cn('block text-[10px]', timerMode.key === m.key ? 'text-primary-foreground/80' : 'text-muted-foreground')}>
+                    {m.hint}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground mb-2">Respins</h2>
+            <div className="grid grid-cols-4 gap-2 mb-5">
+              {[0, 3, 5, 10].map(n => (
+                <button
+                  key={n}
+                  onClick={() => setRespinBudget(n)}
+                  className={cn(
+                    'px-2 py-2.5 rounded-xl border font-bold text-sm transition-all',
+                    respinBudget === n
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-secondary/40 text-foreground border-border hover:border-primary/40',
+                  )}
+                >
+                  {n === 0 ? 'None' : n}
+                </button>
+              ))}
+            </div>
+
+            <p className="text-xs text-muted-foreground text-center mb-4">
+              {selectedData.countries.length} nations are in the draw. Each of your 11 slots gets a different one.
+            </p>
+            {feedback && <p className="text-destructive text-sm text-center mb-3">{feedback}</p>}
+            <button
+              onClick={start}
+              className="w-full inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground rounded-full font-bold hover:opacity-90 transition-opacity"
+            >
+              <Play className="w-4 h-4" /> Draw my 11 nations
+            </button>
+          </div>
+        )}
+
+        {phase === 'playing' && slot && country && (
+          <>
+            <p className="text-xs font-semibold text-primary mb-2">{selectedMode.label} pool</p>
+            <div className="flex items-center justify-between mb-3 text-sm">
+              <span className="text-muted-foreground">
+                Filled <span className="text-primary font-bold">{filledCount}</span>/11
+              </span>
+              {timerMode.seconds > 0 && (
+                <span
+                  className={cn(
+                    'inline-flex items-center gap-1 font-bold',
+                    timeLeft <= 10 ? 'text-destructive' : 'text-primary',
+                  )}
+                >
+                  <Timer className="w-4 h-4" /> {Math.max(0, timeLeft)}s
+                </span>
+              )}
+              <button onClick={() => setPhase('lost')} className="text-xs text-muted-foreground underline hover:text-foreground">
+                Give up
+              </button>
+            </div>
+
+            {pitchView}
+
+            <div className="bg-card border border-border rounded-2xl p-5 mt-4">
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">
+                Slot {step + 1} of 11 · {slot.label}
+              </div>
+              <SlotReel
+                spinKey={spinKey}
+                target={country}
+                pool={selectedData?.countries ?? []}
+                rowHeight={40}
+                durationMs={timerMode.seconds > 0 ? SPIN_MS_TIMED : SPIN_MS}
+                instant={reducedMotionRef.current}
+                onSettled={() => setSpinning(false)}
+                onTick={c => setReelGlimpse(c)}
+                renderItem={c => (
+                  <span className="text-xl font-bold text-foreground whitespace-nowrap">
+                    <FlagImg name={c} size={20} /> {displayCountry(c)}
+                  </span>
+                )}
+                className="mb-2"
+              />
+              <p className="text-xs text-muted-foreground mb-3">
+                {spinning
+                  ? 'Spinning the nations...'
+                  : `Name a player from ${displayCountry(country)} who can play ${slot.label}. Accepts ${allowedLabel(slot)}.`}
+              </p>
+
+              <button
+                type="button"
+                onClick={respin}
+                disabled={spinning || respinsLeft <= 0}
+                className="mb-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-secondary/40 text-xs font-semibold text-foreground hover:border-primary/40 hover:bg-accent transition-all disabled:opacity-50"
+                title={respinsLeft > 0 ? `Reroll this slot's nation. ${respinsLeft} respin${respinsLeft === 1 ? '' : 's'} left for the whole game.` : 'No respins left this game'}
+              >
+                <Shuffle className="w-3.5 h-3.5" /> Respin nation ({respinsLeft} left)
+              </button>
+
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={e => {
+                  setQuery(e.target.value);
+                  setFeedback(null);
+                }}
+                onKeyDown={onKeyDown}
+                placeholder="Type a player's name..."
+                aria-label="Name a player for this slot"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                disabled={spinning}
+                className="w-full px-4 py-3 rounded-xl bg-background border border-border text-foreground focus:border-primary disabled:opacity-60"
+              />
+
+              {suggestions.length > 0 && (
+                <div className="mt-2 rounded-xl border border-border overflow-hidden max-h-64 overflow-y-auto">
+                  {suggestions.map(p => {
+                    const fits = fitsSlot(p, slot);
+                    return (
+                      <button
+                        key={`${p.name}|${p.club}`}
+                        onClick={() => pick(p)}
+                        className="w-full flex items-center gap-2 px-3 py-2.5 text-left bg-background hover:bg-accent transition-colors border-b border-border/50 last:border-b-0"
+                      >
+                        <span
+                          className={cn(
+                            'text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 w-11 text-center',
+                            fits ? 'bg-primary/15 text-primary' : 'bg-secondary text-muted-foreground',
+                          )}
+                        >
+                          {p.position}
+                        </span>
+                        <span className="font-semibold text-sm text-foreground truncate min-w-0 flex-1">{p.name}</span>
+                        <span className="text-xs text-muted-foreground truncate shrink-0 max-w-[35%] ml-auto">{p.club}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              {feedback && <p className="text-destructive text-sm mt-2">{feedback}</p>}
+              {!feedback && query.trim().length >= 2 && suggestions.length === 0 && (
+                <p className="text-muted-foreground text-sm mt-2">
+                  Nobody from {displayCountry(country)} matches that. Only players from {displayCountry(country)} can
+                  fill this slot, so try another name.
+                </p>
+              )}
+              {!feedback && query.trim().length < 2 && (
+                <p className="text-muted-foreground/70 text-xs mt-2">Type 2 or more letters to search. Picks lock in, so choose well.</p>
+              )}
+            </div>
+          </>
+        )}
+
+        {(phase === 'won' || phase === 'lost') && (
+          <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
+            <div className="text-center mb-4">
+              <div className="text-4xl mb-2">{phase === 'won' ? '🏆' : timedOut ? '⏱️' : '🏳️'}</div>
+              <h2 className="text-2xl font-bold text-primary font-display mb-1 inline-flex items-center gap-2">
+                {phase === 'won' && <Trophy className="w-6 h-6" />}
+                {phase === 'won' ? 'World XI complete!' : timedOut ? 'Full time!' : 'Squad abandoned'}
+              </h2>
+              <p className="text-xs font-semibold text-primary mb-2">{selectedMode.label} pool</p>
+              <p className="text-sm text-muted-foreground">
+                {phase === 'won'
+                  ? `All 11 nations covered in a ${formation.name}. Squad value ${fmtCompactUsd(squadValue)}.`
+                  : `You filled ${filledCount} of 11 slots. ${timedOut ? 'The clock won this one.' : 'The draw lives to fight another day.'}`}
+              </p>
+            </div>
+
+            {pitchView}
+
+            <div className="mt-4 rounded-xl border border-border/50 bg-background/60 p-3">
+              {showClubChemistry ? (
+                <section aria-label="Club chemistry details">
+                  <button
+                    type="button"
+                    onClick={() => setShowClubChemistry(false)}
+                    className="mb-2 text-xs font-semibold text-muted-foreground hover:text-foreground"
+                  >
+                    Back
+                  </button>
+                  {clubLinks.length > 0 ? (
+                    <ul className="grid gap-1.5 max-h-60 overflow-y-auto">
+                      {clubLinks.map((link, i) => (
+                        <li key={i} className="rounded-lg border border-border/50 px-3 py-2 text-xs">
+                          <span className="block font-semibold text-foreground break-words">{link.a} + {link.b}</span>
+                          <span className="block text-muted-foreground break-words">{filled.find(p => p?.name === link.a)?.club}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-muted-foreground">No shared clubs in this XI.</p>
+                  )}
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    Players at the same club on our list. These links do not change the season sim.
+                  </p>
+                </section>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setShowClubChemistry(true)}
+                  className="w-full text-center text-gold text-sm font-semibold hover:text-foreground"
+                >
+                  Club chemistry: {clubLinks.length} link{clubLinks.length === 1 ? '' : 's'}
+                  <span className="block text-[11px] font-normal text-muted-foreground">See which players share a club</span>
+                </button>
+              )}
+            </div>
+
+            <div className="mt-4 grid gap-1.5">
+              {formation.slots.map((s, i) => {
+                const p = filled[i];
+                return (
+                  <div key={i} className="flex items-center gap-2 text-sm bg-background/60 border border-border/50 rounded-lg px-3 py-1.5">
+                    <span className="text-[10px] font-bold text-muted-foreground w-8 shrink-0">{s.label}</span>
+                    <span className="shrink-0">{countries[i] ? <FlagImg name={countries[i]} size={16} /> : '🌍'}</span>
+                    {p ? (
+                      <>
+                        <span className="min-w-0 flex-1">
+                          <span className="block font-semibold text-foreground break-words">{p.name}</span>
+                          <span className="block text-xs text-muted-foreground break-words">{p.club}</span>
+                        </span>
+                        {seasonReport && (
+                          <span aria-label={`Overall for ${p.name}`} className="text-[11px] font-bold text-gold shrink-0 tabular-nums whitespace-nowrap">
+                            {playerOveralls.get(p.name)} OVR
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <span className="text-muted-foreground italic truncate min-w-0">Unfilled ({displayCountry(countries[i] ?? '')})</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {seasonReport && (
+              <p className="mt-2 text-[11px] text-muted-foreground text-center">
+                OVR is the card rating used for this simulation, out of 100. Player stats shows the season's average match rating out of 10.
+              </p>
+            )}
+
+            {phase === 'won' && !seasonReport && (
+              <div className="text-center mt-4">
+                <button
+                  onClick={simulateSeason}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary hover:text-primary-foreground transition-all"
+                >
+                  <Sparkles className="w-4 h-4" /> Simulate Season
+                </button>
+                <p className="text-xs text-muted-foreground mt-2">
+                  See how far this XI would go over a full league season.
+                </p>
+              </div>
+            )}
+
+            {phase === 'won' && seasonReport && (
+              <div className="mt-5 rounded-2xl border border-primary/30 bg-surface-1 p-5">
+                <div className="text-center mb-4">
+                  <div className="text-3xl mb-1">📋</div>
+                  <h3 className="text-lg font-bold text-primary font-display">Season Report</h3>
+                  <p className="text-xs text-muted-foreground">
+                    A simulated season for your {formation.name} World XI.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
+                  <StatTile label="Squad Rating" value={`${seasonReport.squadRating}/100`} state="correct" />
+                  <StatTile
+                    label="League Finish"
+                    value={`${ordinal(seasonReport.tablePosition)} / 20`}
+                    state={seasonReport.tablePosition <= 4 ? 'correct' : seasonReport.tablePosition <= 10 ? 'close' : 'incorrect'}
+                  />
+                  <StatTile label="Points" value={seasonReport.points} state="pending" />
+                  <StatTile
+                    label="Trophies"
+                    value={seasonReport.trophies.length > 0 ? seasonReport.trophies.length : '0'}
+                    state={seasonReport.trophies.length > 0 ? 'correct' : 'incorrect'}
+                  />
+                </div>
+
+                <div className="grid gap-1.5 text-sm">
+                  {seasonReport.narrative.map((line, i) => (
+                    <p key={i} className="bg-background/60 border border-border/50 rounded-lg px-3 py-2 text-foreground/90">
+                      {line}
+                    </p>
+                  ))}
+                </div>
+
+                <SeasonReportTabs report={seasonReport} />
+              </div>
+            )}
+
+            <div className="text-center mt-4">
+              <pre className="text-sm tracking-wide whitespace-pre-wrap mb-2">{emojiGrid}</pre>
+              <ShareButtons
+                score={
+                  seasonReport
+                    ? `${seasonReport.squadRating}/100, ${ordinal(seasonReport.tablePosition)} place`
+                    : `${filledCount}/11`
+                }
+                gameName="World XI"
+                gamePath="/world-xi"
+                emojiGrid={
+                  seasonReport
+                    ? [
+                        emojiGrid,
+                        `Season sim: rated ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points`,
+                        /* Round 726: the share card carries the finish, the top
+                           scorer and the player of the season, as text. */
+                        ...(seasonReport.topScorer ? [`Top scorer: ${seasonReport.topScorer.name} (${seasonReport.topScorer.goals})`] : []),
+                        ...(seasonReport.playerOfSeason ? [`Player of the season: ${seasonReport.playerOfSeason.name}`] : []),
+                      ].join('\n')
+                    : emojiGrid
+                }
+              />
+              <button
+                onClick={playAgain}
+                className="mt-4 inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+              >
+                <RotateCcw className="w-4 h-4" /> Play again
+              </button>
+            </div>
+          </div>
+        )}
+
+        <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
+
+
+
+        <GameSeoContent
+          reportControl={<ReportQuestion gameType="world-xi" />}
+          pageHasOwnH1
+          title="World XI: The Build-a-XI Football Trivia Game"
+          description="A formation, 11 random nations, and your football knowledge. For every country drawn you must name a real player of that nationality who fits the position, from goalkeepers to strikers. Fill all 11 slots to complete your World XI, with optional 90 and 60 second timer modes."
+          howToPlay={[
+            'Choose Expanded, Classic or 2026 Nations, then a formation, optional timer and respin budget (none up to ten, three is the default).',
+            'Eleven countries are drawn at random, one per slot, revealed in random order.',
+            'For each country, type and select a real player of that nationality who can play the slot.',
+            'Wrong position or wrong country picks are rejected. A respin rerolls the current slot\'s nation. Fill all 11 to win.',
+          ]}
+          examples={[
+            'A nation lands in goal? Choose a goalkeeper from that country. An outfield player will be rejected.',
+            'Wingers count on both flanks: Raphinha fits a right-wing or a left-wing slot.',
+          ]}
+        />
+        <GameNav />
+      </div>
+    </main>
+  );
+};
+
+export default WorldXi;

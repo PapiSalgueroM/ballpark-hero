@@ -12,21 +12,18 @@ import type { XiFitAdjust } from '@/lib/xiFit';
  * Pick a formation, get 11 random countries (one per slot, revealed in random
  * order), and name a real footballer of that nationality who can play the slot.
  *
- * POOL DESIGN (verified in SQL on flawuiqbvjobmkfkauhw, 2026-07-02):
- *   - Every row from the current season snapshot (year = 2026, 5393 rows, all
- *     positions down to about $1M value), paged 1000 at a time by id.
- *   - Plus the top 1000 rows of 2025 by market value, so recently faded or
- *     transferred stars stay guessable.
+ * POOL DESIGN:
+ *   - Every positive-value row from the 2026 and 2025 snapshots, paged 1000
+ *     at a time by id. Both snapshots must load completely within their bounds.
  *   - Deduped by player name keeping the newest year (value breaks ties),
- *     positions mapped through normalizePosition, primary nationality only.
- *   - Result: about 5,405 unique players.
+ *     with same-year rows at different clubs kept apart as namesakes.
+ *   - Positions mapped through normalizePosition, primary nationality only.
+ *     Club, age and value stay those of the stored row, including older rows.
  *
- * COUNTRY ELIGIBILITY (same thresholds as the verification SQL):
+ * COUNTRY ELIGIBILITY:
  *   at least 2 GK, 2 CB, 3 defenders, 3 central or wide midfielders and
- *   2 out-and-out forwards (ST or CF). 39 countries qualified on the live
- *   data, e.g. Brazil (31 GK), England (26 ST or CF), Japan (5 CB),
- *   Morocco (4 GK). The list is recomputed from the fetched pool at runtime,
- *   so it heals itself as the data grows.
+ *   2 out-and-out forwards (ST or CF). The list is recomputed from the fetched
+ *   pool at runtime, so it follows the available data.
  *
  * DRAW: 11 distinct countries, one per formation slot. Slots are matched in
  * scarcity order and a country is only assigned to a slot it can actually
@@ -75,7 +72,7 @@ const CURRENT_YEAR = 2026; // full season snapshot (same convention as squadDeal
 const PREV_YEAR = 2025; // top-value extras only
 const PAGE = 1000; // PostgREST per-request row cap
 const CURRENT_PAGES = 8; // 8000-row capacity for the current-year snapshot
-const PREV_STARS = 1000;
+const PREV_PAGES = 8; // 8000-row capacity for the previous-year snapshot
 const MIN_POOL = 800; // sanity floor before we trust the pool
 const MIN_COUNTRIES = 12;
 
@@ -191,13 +188,15 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
         .order('id', { ascending: true })
         .range(i * PAGE, i * PAGE + PAGE - 1),
     );
-    const prevRequest = supabase
-      .from('player_market_values')
-      .select(cols)
-      .eq('year', PREV_YEAR)
-      .gt('market_value_usd', 0)
-      .order('market_value_usd', { ascending: false })
-      .limit(PREV_STARS);
+    const prevRequests = Array.from({ length: PREV_PAGES }, (_, i) =>
+      supabase
+        .from('player_market_values')
+        .select(cols)
+        .eq('year', PREV_YEAR)
+        .gt('market_value_usd', 0)
+        .order('id', { ascending: true })
+        .range(i * PAGE, i * PAGE + PAGE - 1),
+    );
 
     /* Round 345: verified position history, curated only. Each row is a
        human-verified claim (two sources, stored with provenance) about ONE
@@ -211,7 +210,7 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
       .select('player_name, secondary_positions, primary_position')
       .limit(1000);
 
-    const [verifiedRes, ...results] = await Promise.all([verifiedRequest, ...pageRequests, prevRequest]);
+    const [verifiedRes, ...results] = await Promise.all([verifiedRequest, ...pageRequests, ...prevRequests]);
     const playedByName = new Map<string, { primary: Position | ''; secs: Position[] }>();
     const verRows = (verifiedRes as { error: unknown; data: { player_name: string; secondary_positions: string[]; primary_position: string | null }[] | null });
     if (!verRows.error && verRows.data) {
@@ -226,8 +225,10 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
       }
     }
     const rows: PoolRow[] = [];
-    for (const r of results) {
-      if (!r.error && r.data) rows.push(...(r.data as PoolRow[]));
+    for (const [i, r] of results.entries()) {
+      if (r.error || !Array.isArray(r.data)) return null;
+      if ((i === CURRENT_PAGES - 1 || i === results.length - 1) && r.data.length === PAGE) return null;
+      rows.push(...(r.data as PoolRow[]));
     }
     if (rows.length === 0) return null;
 
