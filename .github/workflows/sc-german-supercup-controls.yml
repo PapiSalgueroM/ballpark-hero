@@ -1,0 +1,295 @@
+name: German Supercup permanent source controls
+on:
+  push:
+    branches: [codex/sc-german-supercup-controls-20261103]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the exact German parent and two additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-german-supercup-controls"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/sc-german-supercup-controls-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = e46b39130a56bea4b0cf0e4091a281356f52b854
+          test "$(git rev-parse 'HEAD^^{tree}')" = b37f80c4d2602bcd08679e7432a6276cef31dd07
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\nA\t%s\n' '.github/workflows/sc-german-supercup-controls.yml' 'scripts/simSoccerGermanSupercup.mjs' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          test "$(git ls-tree -r --name-only HEAD^ | wc -l)" -eq 5671
+          test "$(git ls-files | wc -l)" -eq 5673
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          src/lib/soccerCareerEngine.ts 7ab833904768c34cdba6ed49656eba95647d9379
+          src/lib/soccerCareerExtraCups.ts 369ded47ea71cfe6f98441e09817450c3f2ebcca
+          src/lib/season/soccer.ts 1b7958da501755adcc95879da3e8d65c4d593845
+          src/lib/soccerCareerPress.ts 8491f89ac463342cc2acb85e91a2e77b7a8aa04e
+          src/lib/soccerCareerGermanSupercup.test.ts 621e2cdfb539f56ed8b2e64bb761f896c03d1a24
+          src/test/soccerGermanSupercupAcceptance.test.ts e5f4cdaee20715379ac72410484b0ce2b00d7539
+          src/test/soccerGermanSupercupConsumers.test.ts a45b5bc68184d6ffb0b118e68e709075789a15b1
+          src/test/soccerGermanSupercupScreens.test.tsx 0aa1a01133bf2303cf374d0e2ed38102b26e3dd5
+          scripts/simSoccerGermanSupercup.mjs ca09e40124f53a8b80e80460e61e5d00f86aa452
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          scripts/simHarnessAnchors.mjs 1cb32d353c317aacd32fd51f25f7ba000ac24e8d
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from guarded proof
+        id: install
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.before"
+          xargs -0 sha256sum < "$OUT/dependency-members.before" > "$OUT/dependency-files.sha256"
+      - name: Proper joined app types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP SC_GERMAN_SUPERCUP_EVIDENCE FORCE_COLOR
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax node --check scripts/simSoccerGermanSupercup.mjs
+      - name: Actual thirty-case eight-control wrapper once
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SC_GERMAN_SUPERCUP_OUT="$PWD/tmp/sc-german-supercup-controls-$GITHUB_RUN_ID"
+          printf 'SC_GERMAN_SUPERCUP_OUT=%s\n' "$SC_GERMAN_SUPERCUP_OUT" >> "$GITHUB_ENV"
+          test ! -e "$SC_GERMAN_SUPERCUP_OUT"
+          source "$OUT/capture.sh"
+          capture controls node scripts/simSoccerGermanSupercup.mjs
+          test ! -s "$OUT/controls.transport"
+      - name: Bind raw children and the actual scope totals
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const out=process.env.OUT,dir=process.env.SC_GERMAN_SUPERCUP_OUT,root=process.cwd();
+          const sha=b=>createHash('sha256').update(b).digest('hex'),pin=b=>({bytes:b.length,sha256:sha(b)});
+          const read=name=>JSON.parse(fs.readFileSync(path.join(dir,name),'utf8'));
+          const source=fs.readFileSync('scripts/simSoccerGermanSupercup.mjs','utf8');
+          assert.equal(sha(Buffer.from(source)),'97191dcc1dd6377949ea4b0f98d67e3449db4e905c5dc1521d732a2f0989c414');
+          const literal=name=>{const match=source.match(new RegExp('(?:^|\\n)const '+name+' = (\\[[\\s\\S]*?\\n\\]);'));assert(match);return JSON.parse(match[1]);};
+          const expected=literal('EXPECTED'),faults=literal('FAULTS');
+          const ids=['omit-global-capture','omit-opener-row','team-player-coupling','global-team-draw','accept-version-two','project-full-total','count-ambiguous-edition','foreign-country-grant'];
+          assert.equal(expected.length,30);assert.deepEqual(faults.map(row=>row.id),ids);
+          const files=[...new Set(expected.map(row=>row.file))].sort();assert.equal(files.length,4);
+          const identity=rows=>sha(Buffer.from(rows.map(row=>row.file+'\0'+row.fullName+'\0'+row.status).sort().join('\n')));
+          assert.equal(identity(expected.map(row=>({...row,status:'passed'}))),'359820fc2266d499971254024bb5664651cdf30feed58534c645bd7635874a44');
+          const summary=read('summary.json'),receipt=read('receipt.json');
+          assert.equal(receipt.complete,true);assert.equal(receipt.primary,null);assert.deepEqual(receipt.secondary,[]);
+          assert.equal(receipt.completedChildren,11);assert.equal(receipt.completedControls,8);
+          assert.deepEqual(receipt.removedCopies,{engine:true,helper:true});
+          assert.equal(summary.children,11);assert.equal(summary.actualFiles,4);assert.equal(summary.physicalControls,8);
+          assert.deepEqual(summary.results.map(row=>row.name),['current','healthy-copy',...ids,'restored-copy']);
+          assert.deepEqual(summary.totals,{passed:90,ownedFailures:8,declaredUnselectedSkips:232,executed:98});
+          const originals={engine:fs.readFileSync(path.join(dir,'engine.original.ts')),helper:fs.readFileSync(path.join(dir,'helper.original.ts'))};
+          assert.deepEqual(originals.engine,fs.readFileSync('src/lib/soccerCareerEngine.ts'));
+          assert.deepEqual(originals.helper,fs.readFileSync('src/lib/soccerCareerExtraCups.ts'));
+          const aliases=read('alias-map.json');
+          assert.deepEqual(Object.keys(aliases),['@/lib/soccerCareerExtraCups','./soccerCareerExtraCups','../soccerCareerExtraCups','@/lib/soccerCareerEngine','./soccerCareerEngine']);
+          for(const value of Object.values(aliases)){assert(value.startsWith(path.join(root,'src/lib')+path.sep));assert.equal(fs.existsSync(value),false);}
+          const copiedPins={engine:pin(originals.engine),helper:pin(originals.helper)};
+          const observed=[],totals={passed:0,ownedFailures:0,declaredUnselectedSkips:0,executed:0};
+          for(const result of summary.results){
+            const fault=faults.find(row=>row.id===result.name),good=!fault;
+            const reportBody=fs.readFileSync(path.join(dir,result.name+'.vitest.json')),report=JSON.parse(reportBody);
+            const processRecord=read(result.name+'.process.json');
+            assert.equal(Number(fs.readFileSync(path.join(dir,result.name+'.exit'),'utf8')),good?0:1);
+            assert.deepEqual(processRecord,{status:good?0:1,signal:null,error:null});
+            assert.equal(result.rawExit,good?0:1);assert.deepEqual(result.rawReport,pin(reportBody));
+            assert.equal(fs.statSync(path.join(dir,result.name+'.transport')).size,0);
+            const argv=read(result.name+'.argv.json');
+            assert(argv.includes('--require'));assert(argv.includes(path.join(root,'scripts/lib/offlineTransport.cjs')));
+            for(const file of files)assert(argv.includes(file));
+            assert.equal(argv.includes('--testNamePattern='+fault?.case+':'),!good);
+            const raw=fs.readFileSync(path.join(dir,result.name+'.stdout'),'utf8')+'\n'+fs.readFileSync(path.join(dir,result.name+'.stderr'),'utf8');
+            assert.equal(/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled|ERR_MODULE_NOT_FOUND|Failed to load url|Cannot find module|SyntaxError:|ReferenceError:|TypeError:)/i.test(raw),false);
+            const counters={};
+            for(const key of ['numUnhandledErrors','numRuntimeErrorTestSuites','numRuntimeErrorTests']){counters[key]=report[key]??null;if(report[key]!==undefined){assert.equal(typeof report[key],'number');assert.equal(report[key],0);}}
+            for(const key of ['errors','unhandledErrors'])if(report[key]!==undefined){assert(Array.isArray(report[key]));assert.deepEqual(report[key],[]);}
+            assert.deepEqual(result.counters,counters);
+            assert.equal(result.counterCompleteness,Object.values(counters).some(value=>value===null)?'UNKNOWN':'REPORTED');
+            assert.equal(result.detectedRuntimeError,false);assert.equal(report.success,good);
+            for(const [key,value]of Object.entries({numTotalTests:30,numPassedTests:good?30:0,numFailedTests:good?0:1,numPendingTests:good?0:29,numTodoTests:0}))assert.equal(report[key],value);
+            assert.equal(report.testResults.length,4);
+            const rows=report.testResults.flatMap(suite=>{assert.equal(suite.message,'');const file=path.relative(root,suite.name).split(path.sep).join('/');assert(files.includes(file));assert.equal(suite.status,!good&&file===fault.file?'failed':'passed');return suite.assertionResults.map(row=>({file,...row}));});
+            assert.deepEqual(rows.map(row=>row.file+'\0'+row.fullName).sort(),expected.map(row=>row.file+'\0'+row.fullName).sort());
+            let primary=null;
+            for(const row of rows){
+              if(fault&&row.file===fault.file&&row.fullName.includes(' '+fault.case+':')){
+                assert.equal(row.status,'failed');assert.equal(row.failureMessages.length,1);
+                const lines=row.failureMessages[0].replace(/\x1b\[[0-9;]*m/g,'').split(/\r?\n/),first=lines.find(line=>line.trim())?.trim();
+                assert(first?.startsWith('AssertionError: '));
+                if(fault.marker)assert(first.startsWith('AssertionError: '+fault.marker+':'));
+                else {const frame=lines.find(line=>/^\s*(?:❯\s+|at\s+).*(?:src\/(?:test|lib)\/[^\s]+\.test\.[tj]sx?):\d+:\d+/.test(line));assert(frame);const escaped=fault.file.replace(/[.*+?^{}$()|[\]\\]/g,'\\$&');assert(new RegExp(escaped+':'+fault.line+':\\d+').test(frame));}
+                primary={first,assertionSite:fault.marker?null:{file:fault.file,line:fault.line}};
+              }else if(fault){assert(['pending','skipped'].includes(row.status));assert.deepEqual(row.failureMessages,[]);}
+              else{assert.equal(row.status,'passed');assert.deepEqual(row.failureMessages,[]);}
+            }
+            assert.deepEqual(result.primary,primary);assert.equal(Boolean(primary),!good);
+            assert.equal(result.passed,good?30:0);assert.equal(result.ownedFailures,good?0:1);
+            assert.equal(result.declaredUnselectedSkips,good?0:29);assert.equal(result.executed,good?30:1);
+            const expectedCopies=result.name==='current'?null:{...copiedPins};
+            if(fault){const changed=fs.readFileSync(path.join(dir,fault.id+'.source.ts'));expectedCopies[fault.target]=pin(changed);}
+            assert.deepEqual(result.sourceCopies,expectedCopies);
+            for(const key of Object.keys(totals))totals[key]+=result[key];
+            observed.push({name:result.name,passed:result.passed,ownedFailures:result.ownedFailures,unselected:result.declaredUnselectedSkips,executed:result.executed,primary,counters,counterCompleteness:result.counterCompleteness,rawReport:pin(reportBody)});
+          }
+          assert.deepEqual(totals,summary.totals);
+          const controlRecords=[];
+          for(const fault of faults){
+            const construction=read(fault.id+'.construction.json'),edit=read(fault.id+'.edit.json'),original=originals[fault.target],changed=fs.readFileSync(path.join(dir,fault.id+'.source.ts'));
+            assert.equal(edit.id,fault.id);assert.equal(edit.target,fault.target);assert.equal(edit.before,fault.before);assert.equal(edit.after,fault.after);
+            const raw=original.toString('utf8');assert.deepEqual(Buffer.from(raw),original);
+            const rest=raw.replace(/\r\n/g,''),crlf=raw.includes('\r\n');assert(!rest.includes('\r'));if(crlf)assert(!rest.includes('\n'));
+            const text=raw.replace(/\r\n/g,'\n'),encode=value=>Buffer.from(crlf?value.replace(/\n/g,'\r\n'):value);
+            assert.equal(text.slice(edit.offset,edit.offset+fault.before.length),fault.before);
+            const changedText=text.slice(0,edit.offset)+fault.after+text.slice(edit.offset+fault.before.length);
+            assert.deepEqual(encode(changedText),changed);assert.notEqual(sha(changed),sha(original));
+            const inverse=encode(changedText.slice(0,edit.offset)+fault.before+changedText.slice(edit.offset+fault.after.length));
+            assert.deepEqual(inverse,original);assert.deepEqual(edit.original,pin(original));assert.deepEqual(edit.changed,pin(changed));
+            assert.deepEqual(edit.inverse,pin(inverse));assert.deepEqual(edit.physicalRestore,pin(original));assert.equal(edit.fullInverse,true);
+            assert.deepEqual({...edit,primary:undefined,physicalRestore:undefined,fullInverse:undefined},{...construction,primary:undefined,physicalRestore:undefined,fullInverse:undefined});
+            if(fault.target==='helper'){assert(edit.offset>=16110);assert.equal(sha(Buffer.from(text.slice(0,16110))),'bc3c8b79f2e910a2ff730f216e1aaa7fb532139d663b45e956d43c9a92539934');assert.deepEqual(encode(changedText.slice(0,16110)),encode(text.slice(0,16110)));}
+            controlRecords.push({id:fault.id,changed:true,original:pin(original),changedBody:pin(changed),inverse:pin(inverse),physicalRestore:edit.physicalRestore});
+          }
+          assert.deepEqual(read('source-after.json'),read('source-before.json'));
+          assert.deepEqual(read('dependency-after.json'),read('dependency-before.json'));
+          assert.deepEqual(read('members-after.json'),read('members-before.json'));
+          assert.equal(read('source-after.json').length,5673);assert.equal(read('dependency-after.json').length,24466);
+          for(const file of ['source-after.json','dependency-after.json'])for(const row of read(file)){const body=fs.readFileSync(path.join(root,row.file));assert.deepEqual(pin(body),{bytes:row.bytes,sha256:row.sha256});}
+          assert.equal(Number(fs.readFileSync(path.join(out,'controls.exit'),'utf8')),0);
+          fs.writeFileSync(path.join(out,'qualification-summary.json'),JSON.stringify({scope:'Existing30 German cases, eight effective physical source controls, no new public-boundary/full-suite/build/App credit.',children:11,totals,actualFiles:4,physicalControls:8,rawChildren:observed,controls:controlRecords,fullInputHolds:true,removedCopies:true,runtimeCounterPolicy:'Absent null/UNKNOWN, supplied actual errors refused'},null,2)+'\n');
+          console.log('SC_GERMAN_CONTROLS_QUALIFIED: 11 children, 90 healthy, 8 owned, 232 unselected, 98 executed.');
+          VERIFY
+          capture verify node "$OUT/verify.mjs"
+      - name: Separately admit the new permanent harness to the existing anchor fence
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset ANCHOR_CONTROL
+          source "$OUT/capture.sh"
+          capture anchor-fence node scripts/simHarnessAnchors.mjs
+      - name: Real stripped-normalizer negative control and source-fence classification
+        if: ${{ always() && steps.install.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          capture anchor-strip env ANCHOR_CONTROL=strip node scripts/simHarnessAnchors.mjs
+          cat > "$OUT/verify-anchors.mjs" <<'ANCHORS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          const dir = process.env.OUT, sha = body => crypto.createHash('sha256').update(body).digest('hex');
+          const records = [];
+          for (const name of ['anchor-fence', 'anchor-strip']) {
+            assert.equal(Number(fs.readFileSync(dir + '/' + name + '.exit', 'utf8')), 0);
+            assert.equal(fs.statSync(dir + '/' + name + '.transport').size, 0);
+            const stdout = fs.readFileSync(dir + '/' + name + '.stdout', 'utf8'), stderr = fs.readFileSync(dir + '/' + name + '.stderr', 'utf8');
+            const raw = stdout + '\n' + stderr;
+            assert.equal(/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|SyntaxError:|ReferenceError:|TypeError:)/i.test(raw), false);
+            const failures = raw.split(/\r?\n/).map(line => line.trim()).filter(line => line.startsWith('FAIL '));
+            if (name === 'anchor-fence') {
+              assert.deepEqual(failures, []);
+              assert.equal(stdout.split(/\r?\n/).filter(line => line === 'simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.').length, 1);
+            } else {
+              assert.equal(failures.length, 1);
+              assert.equal(failures[0].startsWith('FAIL simFightCareer.mjs reads '), true);
+              assert.equal(stdout.includes('[control strip applied to a copy of simFightCareer.mjs]'), true);
+              assert.equal(stdout.split(/\r?\n/).filter(line => line === 'control "strip": the planted fault in simFightCareer.mjs was named and nothing else was, the check works').length, 1);
+            }
+            records.push({ name, rawExit: 0, stdoutSha256: sha(Buffer.from(stdout)), stderrSha256: sha(Buffer.from(stderr)), failures, runtimeCounters: null, runtimeCounterCompleteness: 'UNKNOWN' });
+          }
+          fs.writeFileSync(dir + '/anchor-summary.json', JSON.stringify({ scope: 'Actual existing source-anchor admission plus its real stripped-normalizer control, no new checker exemption.', healthy: true, stripControl: 'changed copied simFightCareer normalizer, sole owner refused', records }, null, 2) + '\n');
+          ANCHORS
+          capture anchor-classify node "$OUT/verify-anchors.mjs"
+      - name: Always preserve original child and control evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${SC_GERMAN_SUPERCUP_OUT:-}" && test -d "$SC_GERMAN_SUPERCUP_OUT"; then printf '%s\n' "$SC_GERMAN_SUPERCUP_OUT" > "$OUT/harness-output-path.txt"; fi
+      - name: Always hold all source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          code=0
+          if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log" 2>&1 || code=1; else code=1; fi
+          if test -f "$OUT/dependency-files.sha256"; then
+            sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log" 2>&1 || code=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.after"
+            cmp "$OUT/dependency-members.before" "$OUT/dependency-members.after" > "$OUT/dependency-members.log" 2>&1 || code=1
+          else code=1; fi
+          git ls-files -z > "$OUT/source-members.after"
+          if test -f "$OUT/source-members.before"; then cmp "$OUT/source-members.before" "$OUT/source-members.after" > "$OUT/source-members.log" 2>&1 || code=1; else code=1; fi
+          test "$(git ls-files | wc -l)" -eq 5673 || code=1
+          git diff --exit-code HEAD > "$OUT/source-diff.log" 2>&1 || code=1
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt" || code=1
+          find src/lib -maxdepth 1 -name '__control_german_supercup_*.ts' -print > "$OUT/remaining-copies.txt"
+          test ! -s "$OUT/remaining-copies.txt" || code=1
+          if find "$OUT" "${SC_GERMAN_SUPERCUP_OUT:-$OUT}" -name '*.transport' -type f ! -size 0 | grep -q .; then code=1; fi
+          printf '%s\n' "$code" > "$OUT/holds.exit"
+          exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-german-supercup-controls-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/sc-german-supercup-controls/
+            ${{ github.workspace }}/tmp/sc-german-supercup-controls-${{ github.run_id }}/
+          retention-days: 14
