@@ -17514,3 +17514,10 @@ I keeps Club Manager/Soccer Career integration and sole publication; J keeps the
 Publication lease 441 is RELEASED after PR429/439 reached live source 931308159c967c3ab9af404ed01e0b8483f90bd7, deployment 115f7157-5a7b-46ae-abce-1c8859e8a441. Hosted-M scoped admission d3492ce7 retains 172 raw routes, exact 8 mount records and all network/report findings; broad defaults remain 751 PASS/211 FAIL/21 EMPTY/33 SKIP/6 TIMEOUT.
 
 K retains the 20-round BU integration/publication lane. This release does not adopt K1597 or other held K work. The separate Season Centre focus product 51da27a2367cc84ca0c622def41029dbc2580b68 is not live. All earlier K notes and reservations stay intact.
+
+
+## 2026-11-03 17:17:52 UTC: Root isolated flagship release claim, explicitly requested by Anthony
+
+Anthony's latest instruction in this chat is to keep focusing Soccer Career and Club Manager and get these changes live. Root claims integration, release verification and publication for the bounded union of PR462 (custom formations/philosophies), PR463 (continental share total) and PR465 (completed local records). This crosses the prior default handoff only for this requested release. K's Release BW, its data work and other pending or draft features are excluded. Do not overlay whole old engine/Page files or publish an unverified intermediate tree.
+
+Root will compose the exact qualified source bodies on current main, retain all existing data/dependency/cap/snapshot rules, close automatic-check causes against an actual current-main baseline, and require the joined type/build/ordinary/sim/browser/readers/cap evidence before moving application code to main. Main mutation and publication use fresh-head checks; Lovable latest_commit_sha must match the verified release commit, then the public site must prove the new assets and key flows. No money, database, provider settings or Lovable AI-agent work is authorized by this claim. The local shared app/index remain held; execution and Git mutations stay isolated and remote. Publication outcome and exact public build will be appended here and to PROJECT-STATE. Root is the sole original-artifact acquirer.
