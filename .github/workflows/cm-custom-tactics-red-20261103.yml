@@ -1,0 +1,214 @@
+name: Club Manager custom formation and philosophy baseline
+on:
+  push:
+    branches: [codex/cm-custom-tactics-red-20261103]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the parent application and exact new test
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/cm-custom-tactics-red"
+          mkdir -p "$OUT/raw/helper" "$OUT/raw/ui"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git fetch --no-tags --depth=1 origin cc9a55a2f35b6215d5e6e664cc401d10d7f76291
+          test "$(git rev-parse cc9a55a2f35b6215d5e6e664cc401d10d7f76291^{tree})" = 90d580e7007917a4959187bd449d054d63191b08
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status cc9a55a2f35b6215d5e6e664cc401d10d7f76291 HEAD > "$OUT/candidate-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const paths = execFileSync('git', ['diff', '--name-status', 'cc9a55a2f35b6215d5e6e664cc401d10d7f76291', 'HEAD']).toString().trim().split('\n').sort();
+          assert.deepEqual(paths, ['A\t.github/workflows/cm-custom-tactics-red-20261103.yml', 'A\tsrc/test/cmCustomTacticalPlans.test.ts', 'A\tsrc/test/cmCustomTacticsUi.test.tsx'].sort(), 'Only the two new tests and baseline workflow may differ from pinned main');
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/cmCustomTacticalPlans.test.ts')).digest('hex'), '4970de0674675e15401283ffeac81342dd96a35da6d202d3ae1810392f60b0c9');
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/cmCustomTacticsUi.test.tsx')).digest('hex'), '1096a18e4c35234771d2b3cce23d3c0f35bfbdc62cb4af5a5aa09f8e2e831333');
+          const source = {
+            'src/lib/clubManager.ts': 'cf378e002c1f253a4cd48a147af66117f982f6b2',
+            'src/lib/clubManagerMatchPlans.ts': 'b942fc0e71c40aa61862e22f5ccd0a774bfe27ed',
+            'src/components/club-manager/TacticsScreen.tsx': 'e7a8ded65f7a4fc7214eb2e4a0a81f2c6812a11e',
+            'src/components/club-manager/MatchPlansCard.tsx': '855e3fa9b33b60186b4d489dd144e712072d20fe',
+            'src/hooks/useClubManager.ts': '7297073ea60b93501df48ea9b7dfc74edd2217de',
+          };
+          for (const [file, blob] of Object.entries(source)) assert.equal(execFileSync('git', ['rev-parse', 'HEAD:' + file]).toString().trim(), blob);
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          cp src/test/cmCustomTacticalPlans.test.ts "$OUT/helper-test-source.ts"
+          cp src/test/cmCustomTacticsUi.test.tsx "$OUT/ui-test-source.tsx"
+          npm ci --no-audit --no-fund > "$OUT/install.log" 2>&1
+      - name: Actual application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/types.transport.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/types.transport.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$QA_OUT/types.log"
+          codes=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/types.exit"
+          test "${codes[1]}" -eq 0
+          test "${codes[0]}" -eq 0
+          test ! -s "$QA_OUT/types.transport.log"
+      - name: Observe ten actual plan helper and mounted control cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export CM_CUSTOM_PLAN_HELPER_RAW="$QA_OUT/raw/helper"
+          export CM_CUSTOM_TACTICS_UI_RAW="$QA_OUT/raw/ui"
+          : > "$QA_OUT/units.transport.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/units.transport.log" node node_modules/vitest/vitest.mjs run src/test/cmCustomTacticalPlans.test.ts src/test/cmCustomTacticsUi.test.tsx \
+            --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units.json" 2>&1 | tee "$QA_OUT/units.log"
+          codes=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/units.exit"
+          test "${codes[1]}" -eq 0
+          test ! -s "$QA_OUT/units.transport.log"
+      - name: Admit only the six owned feature-absence failures and preserve the RED outcome
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = process.env.QA_OUT;
+          const report = JSON.parse(fs.readFileSync(out + '/units.json', 'utf8'));
+          assert.equal(Number(fs.readFileSync(out + '/units.exit', 'utf8')), 1);
+          assert.equal(report.success, false); assert.equal(report.numPassedTests, 4); assert.equal(report.numFailedTests, 6);
+          assert.equal(report.testResults.length, 2);
+          const expected = {"Club Manager complete custom tactical plans captures a detached version two snapshot of the full custom plan":"CM_CUSTOM_PLAN_V2_CAPTURE","Club Manager complete custom tactical plans reapplies two distinct named custom mixes without leaving the previous instructions or shape behind":"CM_CUSTOM_PLAN_V2_APPLY_MIX","Club Manager complete custom tactical plans previews the saved custom mix without changing the active career or plan":"CM_CUSTOM_PLAN_V2_PREVIEW_MIX","Club Manager complete custom tactical plans records balanced instructions and a preset shape explicitly and removes both optional career fields on apply":"CM_CUSTOM_PLAN_V2_EXPLICIT_RESET","Club Manager complete custom tactical plans keeps version one plans readable and leaves unrecorded current instructions unchanged":null,"Club Manager complete custom tactical plans refuses unsupported saved payloads without repairing or applying any part of them":null,"Club Manager complete custom tactical plans keeps the three-slot limit and refuses plan changes during a real live match":null,"Club Manager custom tactics UI keeps preset controls and all eleven roles before offering a separate keyboard-reachable Move mode":"CM_CUSTOM_UI_MOVE_MODE_AVAILABLE","Club Manager custom tactics UI saves the named philosophy selected on the real screen with its actual instruction mix and custom points":"CM_CUSTOM_UI_COMPLETE_PLAN_CAPTURE","Club Manager custom tactics UI applies a legacy named preset without changing current instructions and keeps a refused save honest":null};
+          const counts = { 'cmCustomTacticalPlans.test.ts': 7, 'cmCustomTacticsUi.test.tsx': 3 };
+          const titles = [], suites = [];
+          for (const suite of report.testResults) {
+            const file = suite.name.replaceAll('\\', '/').split('/').pop();
+            assert.ok(Object.hasOwn(counts, file)); suites.push(file);
+            assert.equal(suite.status, 'failed');
+            if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+            assert.equal(suite.assertionResults.length, counts[file]);
+            for (const row of suite.assertionResults) {
+              assert.ok(Object.hasOwn(expected, row.fullName), row.fullName);
+              titles.push(row.fullName);
+              const marker = expected[row.fullName];
+              assert.equal(row.status, marker === null ? 'passed' : 'failed', row.fullName);
+              if (marker === null) assert.deepEqual(row.failureMessages, []);
+              else assert.ok(row.failureMessages.length > 0 && row.failureMessages.every(message => message.includes(marker)), row.fullName);
+            }
+          }
+          assert.equal(new Set(suites).size, 2); assert.equal(new Set(titles).size, 10);
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(report, key) ? report[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          const readRaw = (group, names) => {
+            const directory = out + '/raw/' + group;
+            assert.deepEqual(fs.readdirSync(directory).sort(), names.map(name => name + '.json').sort());
+            return Object.fromEntries(names.map(name => {
+              const receipt = JSON.parse(fs.readFileSync(directory + '/' + name + '.json', 'utf8'));
+              assert.equal(receipt.case, name);
+              assert.ok(receipt.fixture.includes('Fictional'));
+              return [name, receipt];
+            }));
+          };
+          const helper = readRaw('helper', ['capture', 'switch', 'preview', 'reset', 'legacy', 'unsupported-plan', 'limits-live']);
+          for (const receipt of Object.values(helper)) assert.equal(receipt.observations.randomDraws, 0);
+          const capture = helper.capture.observations;
+          assert.deepEqual(capture.actual, { version: 1, hasInstructions: false, instructions: null, hasCustomShape: false, customShape: null });
+          assert.equal(capture.inputHeldBeforeAliasProbe, true); assert.deepEqual(capture.refusedCaptures, [false, false, false]);
+          const withoutMix = ({ instructions, customShape, ...assignments }) => assignments;
+          const switched = helper.switch.observations;
+          assert.equal(switched.inputUnchanged, true); assert.equal(switched.unrelatedStateHeld, true);
+          for (const key of ['first', 'second']) {
+            assert.deepEqual(withoutMix(switched.actual[key]), withoutMix(switched.expected[key]));
+            assert.notDeepEqual(switched.actual[key].instructions, switched.expected[key].instructions);
+            assert.notDeepEqual(switched.actual[key].customShape, switched.expected[key].customShape);
+          }
+          const preview = helper.preview.observations;
+          assert.equal(preview.inputUnchanged, true);
+          assert.deepEqual(withoutMix(preview.actual), withoutMix(preview.expected));
+          assert.deepEqual(preview.actual.instructions, preview.active.instructions);
+          assert.deepEqual(preview.actual.customShape, preview.active.customShape);
+          assert.notDeepEqual(preview.actual.instructions, preview.expected.instructions);
+          const reset = helper.reset.observations;
+          assert.equal(reset.inputUnchanged, true); assert.equal(reset.unrelatedStateHeld, true);
+          assert.equal(reset.actual.payload.version, 1);
+          assert.equal(reset.actual.payload.hasInstructions, false); assert.equal(reset.actual.payload.hasCustomShape, false);
+          assert.equal(reset.actual.ownsInstructions, true); assert.equal(reset.actual.ownsCustomShape, true);
+          assert.deepEqual(withoutMix(reset.actual.applied), withoutMix(reset.expected.applied));
+          const legacy = helper.legacy.observations;
+          assert.equal(legacy.readable, 1); assert.equal(legacy.preview, true); assert.equal(legacy.inputUnchanged, true);
+          assert.deepEqual(legacy.actualAssignments, legacy.expectedAssignments);
+          assert.deepEqual(legacy.actualInstructions, legacy.expectedInstructions);
+          assert.ok(!legacy.rawLegacyFields.includes('instructions') && !legacy.rawLegacyFields.includes('customShape'));
+          assert.deepEqual(helper['unsupported-plan'].observations.observations, Array.from({ length: 4 }, () => ({
+            readable: 0, preview: false, sameCareer: true, inputUnchanged: true,
+          })));
+          const limits = helper['limits-live'].observations;
+          assert.deepEqual(limits.slots, [0, 1, 2]);
+          for (const key of ['fourthRefused', 'liveSaveRefused', 'liveApplyRefused', 'liveDeleteRefused', 'savedInputHeld', 'liveInputHeld']) assert.equal(limits[key], true, key);
+          const ui = readRaw('ui', ['move-mode', 'complete-plan', 'legacy-refusal']);
+          const move = ui['move-mode'].value;
+          assert.equal(move.movePresent, false); assert.equal(move.unchangedInput, true);
+          assert.equal(move.tokenLabels.length, 11); assert.equal(move.shownFit, String(move.fit.rating));
+          assert.deepEqual(move.presetCalls, [move.formation]);
+          const complete = ui['complete-plan'].value;
+          assert.equal(complete.inputUnchanged, true); assert.equal(complete.mentality, 'attacking');
+          assert.deepEqual(complete.mix, { press: 1, tempo: -1, width: 1, line: 1 });
+          assert.equal(complete.name.length, 24); assert.equal(complete.saveDisabled, false);
+          assert.deepEqual(complete.calls, [[0, complete.name]]); assert.equal(complete.notice, 'Saved ' + complete.name + '.');
+          assert.deepEqual(complete.captured, [null, null]);
+          const held = ui['legacy-refusal'].value;
+          assert.equal(held.appliedFormation, held.originalFormation); assert.equal(held.appliedMentality, held.originalMentality);
+          assert.deepEqual(held.instructions, complete.mix); assert.deepEqual(held.applyCalls, [0]);
+          assert.deepEqual(held.saveCalls, [[0, 'Refused replacement']]); assert.equal(held.unchangedAfterRefusal, true);
+          assert.equal(held.noticeRole, 'alert');
+          assert.equal(held.notice, 'This setup could not be changed. Reopen your active manager save and try again.');
+          fs.writeFileSync(out + '/owned-red-admission.json', JSON.stringify({
+            actualPasses: 4, actualOwnedFailures: 6, expected, counts, counters, absentCounterMeaning: 'UNKNOWN',
+            rawFiles: { helper: Object.keys(helper), ui: Object.keys(ui) },
+            scope: 'Current-main feature absence through real existing plan helpers and mounted tactics controls. Synthetic PR382 geometry payloads only. No geometry engine, atomic hook-storage, balance, browser or product qualification is credited.',
+          }, null, 2) + '\n');
+          NODE
+          # Actual focused failure remains a failed baseline job.
+          test "$(cat "$QA_OUT/units.exit")" -eq 0
+      - name: Retain whole source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: cm-custom-tactics-baseline-${{ github.run_id }}
+          path: ${{ runner.temp }}/cm-custom-tactics-red
+          retention-days: 14
+          if-no-files-found: error
