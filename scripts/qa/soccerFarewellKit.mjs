@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { build } from 'esbuild';
+import { loadCommunityShieldOracleSource } from '../lib/communityShieldOracleCompat.mjs';
 /* Release BB: Rounds 1280 to 1282 and 1318 keep the made up Ballon d'Or rivals in a saved pool on purpose, which this
    base pinned comparison cannot know about. Every copy compared with the base takes them out, as the history
    harnesses do: scripts/lib/careerAwardGenerations1318.mjs. The browser oracle of the native walk is
@@ -71,8 +72,9 @@ export async function bundleFarewell({ original = false, patches = [], browser =
         builder.onLoad({ filter: /\.(ts|tsx|json)$/ }, args => {
           const relative = path.relative(ROOT, args.path).replaceAll('\\', '/');
           if (!relative.startsWith('src/')) return;
-          const raw = original ? execFileSync('git', ['show', BASE + ':' + relative], { maxBuffer: 30 * 1024 * 1024 }) : fs.readFileSync(args.path);
-          let contents = raw.toString('utf8').replaceAll('\r\n', '\n');
+          const shieldSource = loadCommunityShieldOracleSource({ original, base: BASE, relative, readOriginal: () => execFileSync('git', ['show', BASE + ':' + relative], { maxBuffer: 30 * 1024 * 1024 }), readCurrent: () => { let currentBytes; { const sourceBytes = fs.readFileSync(args.path); currentBytes = Buffer.from(sourceBytes); } return currentBytes; } });
+          const raw = shieldSource.raw;
+          let contents = shieldSource.contents.replaceAll('\r\n', '\n');
           if (!original && !browser) contents = inverseDeckFair(relative, inverseWorldTruth(relative, inverseSoccerDeck(relative, contents, soccerDeck), worldTruth), deckFair);
           if (!original && !browser && relative === 'src/lib/soccerCareerEngine.ts') {
             const rows = [];
@@ -86,7 +88,7 @@ export async function bundleFarewell({ original = false, patches = [], browser =
             assert.notEqual(sha(contents), before, 'Copied fault must change actual source');
             faults.push({ id: patch.id, file: relative, before, after: sha(contents), targetCount: 1 });
           }
-          loaded.push({ file: relative, rawSha256: sha(raw), compiledSha256: sha(contents), original });
+          loaded.push({ file: relative, rawSha256: sha(raw), compiledSha256: sha(contents), original, shieldCompatibility: shieldSource.receipt });
           return { contents, loader: relative.endsWith('.json') ? 'json' : relative.endsWith('.tsx') ? 'tsx' : 'ts' };
         });
       } }],

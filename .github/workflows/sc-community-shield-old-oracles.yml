@@ -1,0 +1,261 @@
+name: Community Shield exact old career oracle compatibility
+on:
+  push:
+    branches: [codex/sc-community-shield-old-oracles-20261103]
+permissions:
+  contents: read
+jobs:
+  oracles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the exact annual Resume parent and eight script adapters
+        run: |
+          set -euo pipefail
+          META="$RUNNER_TEMP/sc-shield-old-oracles"
+          test ! -e "$META"; mkdir "$META"
+          printf 'META=%s\n' "$META" >> "$GITHUB_ENV"
+          printf 'SC_SHIELD_ORACLE_OUT=%s\n' "$GITHUB_WORKSPACE/tmp/sc-shield-old-oracles-$GITHUB_RUN_ID" >> "$GITHUB_ENV"
+          parent='c37f9b8462f229ca8ab03de8866a544f36b0537b'
+          tree='c85a7dc9d4febc0e1673d6809528030013718059'
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-old-oracles-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = "$parent"
+          test "$(git rev-parse 'HEAD^^{tree}')" = "$tree"
+          git rev-parse HEAD 'HEAD^{tree}' > "$META/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$META/changed-paths.txt"
+          cat > "$META/expected-paths.txt" <<'PATHS'
+          A	.github/workflows/sc-community-shield-old-oracles.yml
+          A	scripts/lib/communityShieldOracleCompat.mjs
+          M	scripts/playSoccerResultsLayout.mjs
+          M	scripts/qa/careerPressMarketKit.mjs
+          M	scripts/qa/careerTransferBriefKit.mjs
+          M	scripts/qa/soccerAgentReviewKit.mjs
+          M	scripts/qa/soccerFarewellKit.mjs
+          M	scripts/qa/soccerInternationalReturnKit.mjs
+          M	scripts/simCareerProgramme.mjs
+          PATHS
+          cmp "$META/expected-paths.txt" "$META/changed-paths.txt"
+          cat > "$META/before-pins.txt" <<'PINS'
+          scripts/qa/soccerAgentReviewKit.mjs 0aded897814562c86c18eddbfba10646fa849fd7
+          scripts/qa/soccerFarewellKit.mjs 20ab1024be2b4fa9ec35e196e19da5ef86199129
+          scripts/qa/careerPressMarketKit.mjs 78b6a507717026ef79d2d18525417c0f61783eb3
+          scripts/qa/soccerInternationalReturnKit.mjs 6c2f431929fb70e831d7bd68e164d3719f869b59
+          scripts/qa/careerTransferBriefKit.mjs 961c7b6a29a1b3b8912ae77bb1a7dc2473879afc
+          scripts/simCareerProgramme.mjs 8fc310dc1fb18fb1a5ab8c75c45b59bee36895c1
+          scripts/playSoccerResultsLayout.mjs a72482698dc53f744ed21a1962752071389e5b68
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD^:$file")" = "$blob"; done < "$META/before-pins.txt"
+          cat > "$META/after-pins.txt" <<'PINS'
+          scripts/qa/soccerAgentReviewKit.mjs d6ca063fb64f3b556ed9c484af22574d5974fb63
+          scripts/qa/soccerFarewellKit.mjs 38d67fdcba49f18fdd051deb68e86ed4262771ec
+          scripts/qa/careerPressMarketKit.mjs b5fdf343cc3861b1772040bfa8a62ebe6e7012cc
+          scripts/qa/soccerInternationalReturnKit.mjs 2fa355466785445db71d446b39aa93c5be897585
+          scripts/qa/careerTransferBriefKit.mjs fbe2f99e831402540f4c22f1039d8c7fe26558d5
+          scripts/simCareerProgramme.mjs 1769172d638807cec9e3ac3f4e563c5041e2cd1a
+          scripts/playSoccerResultsLayout.mjs dee69d3181672afdf1ba173b231b48e3d91bf5cd
+          scripts/lib/communityShieldOracleCompat.mjs 1ed3b4103bc3805ccd08f72eeb181558fa892d23
+          src/lib/soccerCareerEngine.ts a65c8353d6e4660c1d6cec6471e17095eed35805
+          src/lib/soccerCareerExtraCups.ts f96d2442942db57eb89d3d73d7dc18bba02ec165
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$META/after-pins.txt"
+          git ls-files -z > "$META/source-members.before"
+          test "$(git ls-files | wc -l)" -eq 5675
+          git ls-files -z | xargs -0 sha256sum > "$META/source.sha256"
+          test "$(git rev-parse --is-shallow-repository)" = false
+      - name: Locked online install before guarded application execution
+        run: |
+          set -euo pipefail
+          code=0; NODE_OPTIONS='' npm ci > "$META/install.stdout" 2> "$META/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$META/install.exit"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$META/dependency.sha256"
+      - name: Actual six original oracles, exact controls, restores and current inverse
+        run: |
+          set -euo pipefail
+          cat > "$META/REMOTE-CALLER.sh" <<'CALLER'
+          #!/usr/bin/env bash
+          # Root runs this only after locked install, exact source binding and a full-history checkout.
+          set -euo pipefail
+          test "$CI" = 1; test "$SIM_NETWORK" = offline
+          ROOT="$PWD"; OUT="$SC_SHIELD_ORACLE_OUT"
+          case "$OUT" in "$ROOT"/tmp/*) ;; *) echo 'Expected fresh workspace/tmp output' >&2; exit 1;; esac
+          test "$OUT" = "$(realpath -m -- "$OUT")"
+          test ! -e "$OUT"; mkdir -p "$OUT"; export ROOT OUT
+          cat > "$OUT/expected-inputs.sha256" <<'INPUTS'
+          439700e40e9823b5b2cfe153fc419f22c3f5bbda9b3184ac5431fb0bbb9d1395  scripts/qa/soccerAgentReviewKit.mjs
+          d631ab6f3dced2c5689e29212bb93ea7e778c82afc4f0ef796e0fb28ea359492  scripts/qa/soccerFarewellKit.mjs
+          b68148afa0eca9a6e29a9466e18ce47d2d453058c07daf1cb328d874e5c0ee35  scripts/qa/careerPressMarketKit.mjs
+          d16e1eb955d60bd27758070e3e7f910502e65ec11f2293868129c2ba91fe5827  scripts/qa/soccerInternationalReturnKit.mjs
+          f2b4ac4c932d0481ca644ff2e2b0d7228a310e224a21d1756a7e00bfacc3f64b  scripts/qa/careerTransferBriefKit.mjs
+          d145c6aabbdd8555915ed6ff12ba92cdb3da3de9b4c8c2ced9a6d90cc8a72df8  scripts/simCareerProgramme.mjs
+          34aae64f848a20ad0c803e943b0f0161f13fbd66dd7e13dc25f2a41c4ed9b0bb  scripts/playSoccerResultsLayout.mjs
+          6c992bc254d3716b2b7bdea17b194c0340b4957a4f44ca4bc7ea7ee7412e806b  scripts/lib/communityShieldOracleCompat.mjs
+          f009782c9f7a384881692239c47af266a834eaa1104ce86662ab53ec67756788  src/lib/soccerCareerEngine.ts
+          bc3c8b79f2e910a2ff730f216e1aaa7fb532139d663b45e956d43c9a92539934  src/lib/soccerCareerExtraCups.ts
+          INPUTS
+          sha256sum --check "$OUT/expected-inputs.sha256" > "$OUT/input-pins.log"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.before"
+          xargs -0 sha256sum < "$OUT/dependency-members.before" > "$OUT/dependency.sha256"
+          finish() {
+            local primary=$? secondary=0 completed=false
+            trap - EXIT
+            sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log" 2>&1 || secondary=1
+            sha256sum --check "$OUT/dependency.sha256" > "$OUT/dependency-held.log" 2>&1 || secondary=1
+            git ls-files -z > "$OUT/source-members.after"
+            cmp "$OUT/source-members.before" "$OUT/source-members.after" > "$OUT/source-members.log" 2>&1 || secondary=1
+            git diff --exit-code > "$OUT/source-diff.log" 2>&1 || secondary=1
+            git ls-files --others --exclude-standard -z > "$OUT/untracked.after"; test ! -s "$OUT/untracked.after" || secondary=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.after"
+            cmp "$OUT/dependency-members.before" "$OUT/dependency-members.after" > "$OUT/dependency-members.log" 2>&1 || secondary=1
+            if find "$OUT" -maxdepth 1 -name '*.transport' -type f ! -size 0 | grep -q .; then secondary=1; fi
+            if test "$primary" -eq 0 && test "$secondary" -eq 0 && test -f "$OUT/summary.json"; then completed=true; fi
+            printf '{"schemaVersion":1,"qualificationCompleted":%s,"primaryExit":%s,"secondaryHoldExit":%s,"runtimeCounters":null,"runtimeCounterCompleteness":"UNKNOWN"}\n' "$completed" "$primary" "$secondary" > "$OUT/receipt.json"
+            if test "$primary" -ne 0; then exit "$primary"; fi
+            exit "$secondary"
+          }
+          trap finish EXIT
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"; : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 8 "$OUT/$tag.stdout"; tail -n 8 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          export NODE_OPTIONS="--require=$ROOT/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP
+          unset SOCCER_AGENT_REVIEW_IMPORT_ONLY SOCCER_FAREWELL_IMPORT_ONLY SOCCER_INTERNATIONAL_RETURN_IMPORT_ONLY PROGRAMME_REWARD_CONTROL PROGRAMME_ATTRIBUTION_CONTROL
+          capture types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          for file in scripts/lib/communityShieldOracleCompat.mjs scripts/qa/soccerAgentReviewKit.mjs scripts/qa/soccerFarewellKit.mjs scripts/qa/careerPressMarketKit.mjs scripts/qa/soccerInternationalReturnKit.mjs scripts/qa/careerTransferBriefKit.mjs scripts/simCareerProgramme.mjs scripts/playSoccerResultsLayout.mjs; do capture "syntax-$(basename "$file" .mjs)" node --check "$file"; done
+          capture helper node --input-type=module <<'HELPER'
+          import assert from 'node:assert/strict'; import fs from 'node:fs'; import path from 'node:path'; import { createHash } from 'node:crypto'; import { execFileSync } from 'node:child_process'; import { pathToFileURL } from 'node:url';
+          const root=process.env.ROOT,out=process.env.OUT,engine='src/lib/soccerCareerEngine.ts',extra='src/lib/soccerCareerExtraCups.ts';
+          const helperFile=path.join(root,'scripts/lib/communityShieldOracleCompat.mjs'),helperRaw=fs.readFileSync(helperFile);
+          const sha=value=>createHash('sha256').update(value).digest('hex');
+          assert.equal(sha(helperRaw),'6c992bc254d3716b2b7bdea17b194c0340b4957a4f44ca4bc7ea7ee7412e806b');
+          const H=await import(pathToFileURL(helperFile).href),specs=[{"id":"agent-review","base":"d69a448ce830f8312af1eea252a3ae84b13bde9c","original":{"bytes":522603,"sha256":"0c631e6e3f38c40374eff9d885db7583913bb2cfaa5752d2a71713bca818d089","gitBlob":"6e0986aa54a2775752b4737078ffbaaf2ae3dc45"},"composed":{"bytes":526250,"sha256":"067b155df8d9d0f9c01464696d423ee2de768a8640be265813e3adcf33e58bee","gitBlob":"59ad8fb8002d73249cde4416a8a59380765b5d2d"}},{"id":"farewell","base":"552ee88761731b9a341ae644f69ac3386e53c149","original":{"bytes":522829,"sha256":"020eefeb6dfdd8afc34820c1a2f652f1ffefc570e2417d523c3341fb08f1c237","gitBlob":"fbba61d39c707db8972f552a5f79a9761eb2c383"},"composed":{"bytes":526476,"sha256":"b6b1d380e473fecf0a17f973660667307f6c87c3bc02a88d6a4da6c7f3ab66db","gitBlob":"db2c51a7c59dd0beca058ef570d5c9587637eb13"}},{"id":"press-market","base":"934c29d9","original":{"bytes":527642,"sha256":"8ca918ca04d7a5f2c4cadb845434c11fd7d485ee7c2e7d51c1713cc3079f561e","gitBlob":"185e25df98b8299ebc1132facf1998908e9198bd"},"composed":{"bytes":531278,"sha256":"60eeedd29e811392abf68f4de8e0b616370517ff18885b8e2560c29ede2168d3","gitBlob":"284d8e517105cd6676ef1f58e0c17832832a664d"}},{"id":"programme","base":"2f1919478db9e3a0f13b8f8b34373756944459c1","original":{"bytes":519647,"sha256":"2db99df804dfdaad27b0a33ecf34324ba2fd78e4420d171a4c5dfa91a3246221","gitBlob":"8af178a395674ba50d5ce918d4c6a34572dec8d6"},"composed":{"bytes":523294,"sha256":"7c2459aeb626464c61e86ab109f14a66ad053b21ea8c6daffe7339b17cea756a","gitBlob":"544aef02373111bcc09737a4a93a5aad05399b5e"}},{"id":"international-return","base":"9d73ce5f261d93b73bf0993469c4fb330afa202b","original":{"bytes":522700,"sha256":"169551429a6d47bee0b0ec673c613115fb434bdb648afc6c7d8c95f2219cccb9","gitBlob":"ab26506c16e3f803700aff10eff40ee3084e3d66"},"composed":{"bytes":526347,"sha256":"c480a424dd11d5abe04707ea1cb021bcbfa780b8fe6d3f8656ef88d720edbe6a","gitBlob":"ec115f5413f89d434d46eb9f48a1e61a904c57d0"}},{"id":"transfer-brief","base":"4778507d5612c3c871bc9ac99347fa8029375def","original":{"bytes":524681,"sha256":"5d699660113e2e213e36c899b0f012564dcc5fee5f0e4e340f226bc9b60f423f","gitBlob":"3d23435a883e02e2d6e250e47600ce0330d65440"},"composed":{"bytes":528328,"sha256":"66f332deee8a3df48f62e2d933c1bf36b53656d49ebff83bc6e78c047d2a59f0","gitBlob":"44e0099b5acdff2e2166c8d378a2b8fdcc6132f4"}}],graph=['src/lib/soccerCareerLeagueWorld.ts','src/lib/keyedRng.ts','src/lib/soccerCareerContinental.ts'];
+          const extraRaw=fs.readFileSync(path.join(root,extra)),currentRaw=fs.readFileSync(path.join(root,engine)),readBase=(base,file)=>execFileSync('git',['show',base+':'+file],{cwd:root,maxBuffer:30*1024*1024});
+          const admissions=[],rawEngines=new Map();
+          for(const spec of specs){
+            const reads=[],rows=[];
+            for(const relative of [engine,...graph,extra]){
+              const value=H.loadCommunityShieldOracleSource({original:true,base:spec.base,relative,
+                readOriginal:()=>{const raw=readBase(spec.base,relative);reads.push({origin:'actual-old-BASE',relative,sha256:sha(raw)});return raw;},
+                readCurrent:()=>{assert.equal(relative,extra,'No existing module may read current in an old oracle');reads.push({origin:'current-new-file',relative,sha256:sha(extraRaw)});return Buffer.from(extraRaw);}});
+              if(relative===engine){assert.deepEqual(value.receipt.raw,spec.original);assert.deepEqual(value.receipt.composed,spec.composed);assert.equal(value.receipt.forward.length,11);assert.equal(value.receipt.inverse.length,11);assert.equal(value.receipt.wholeRawInverse,true);rawEngines.set(spec.id,value.raw);}
+              rows.push({relative,rawSha256:sha(value.raw),compiledSourceSha256:sha(value.contents),receipt:value.receipt});
+            }
+            assert.equal(reads.filter(row=>row.origin==='actual-old-BASE').length,4);assert.equal(reads.filter(row=>row.origin==='current-new-file').length,1);
+            admissions.push({id:spec.id,base:spec.base,reads,rows});
+          }
+          fs.writeFileSync(path.join(out,'six-original-source-admissions.json'),JSON.stringify(admissions,null,2)+'\n');
+          const fence=H.verifyCommunityShieldEngineSource(currentRaw,extraRaw);assert.equal(fence.wholeRawInverse,true);assert.equal(fence.original.gitBlob,'722b2285628775dff77f8de0138cf44d7b104b49');
+          fs.writeFileSync(path.join(out,'results-layout-current-engine-inverse.json'),JSON.stringify(fence,null,2)+'\n');
+          const first=specs[0],firstRaw=rawEngines.get(first.id),controls=[],invoke=(mod,raw=firstRaw)=>mod.loadCommunityShieldOracleSource({original:true,base:first.base,relative:engine,readOriginal:()=>Buffer.from(raw),readCurrent:()=>{throw Error('Engine must read its old BASE');}});
+          function refusal(id,kind,before,changed,marker,action,restore){assert.notEqual(sha(changed),sha(before));let owned=null;assert.throws(action,error=>{owned={name:error.name,message:error.message};return error.name==='AssertionError'&&error.message.startsWith(marker);});restore();controls.push({id,kind,changed:true,originalSha256:sha(before),changedSha256:sha(changed),ownedRefusal:owned,restoredHealthy:true});}
+          const badEngine=Buffer.from(firstRaw);badEngine[badEngine.length-2]^=1;
+          refusal('immutable-original','copied-data',firstRaw,badEngine,'Exact immutable original engine bytes',()=>invoke(H,badEngine),()=>invoke(H));
+          const badExtra=Buffer.concat([extraRaw,Buffer.from('\n')]);
+          refusal('new-helper','copied-data',extraRaw,badExtra,'Only the pinned new Shield module enters the old graph',()=>H.loadCommunityShieldOracleSource({original:true,base:first.base,relative:extra,readCurrent:()=>badExtra}),()=>H.loadCommunityShieldOracleSource({original:true,base:first.base,relative:extra,readCurrent:()=>Buffer.from(extraRaw)}));
+          const world=readBase(first.base,graph[0]),badWorld=Buffer.from(world);badWorld[badWorld.length-2]^=1;
+          refusal('old-graph','copied-data',world,badWorld,'Existing Shield dependency remains the exact original BASE module',()=>H.loadCommunityShieldOracleSource({original:true,base:first.base,relative:graph[0],readOriginal:()=>badWorld}),()=>H.loadCommunityShieldOracleSource({original:true,base:first.base,relative:graph[0],readOriginal:()=>Buffer.from(world)}));
+          const badCurrent=Buffer.concat([currentRaw,Buffer.from('\n')]);
+          refusal('current-engine','copied-data',currentRaw,badCurrent,'Results layout holds the admitted current engine',()=>H.verifyCommunityShieldEngineSource(badCurrent,extraRaw),()=>H.verifyCommunityShieldEngineSource(currentRaw,extraRaw));
+          const text=helperRaw.toString('utf8'),from='return SPANS.map(',to='return SPANS.slice(0, -1).map(',copy=path.join(out,'physical-helper-control.mjs');
+          assert.equal(text.split(from).length-1,1);
+          const changed=Buffer.from(text.replace(from,to));let primary=null,cleanupError=null;
+          try{
+            fs.writeFileSync(copy,changed,{flag:'wx'});assert.deepEqual(fs.readFileSync(copy),changed);
+            const altered=await import(pathToFileURL(copy).href+'?arm=omitted');let owned=null;
+            assert.throws(()=>invoke(altered),error=>{owned={name:error.name,message:error.message};return error.name==='AssertionError'&&error.message.startsWith('Exact eleven-span composed original engine');});
+            assert.notEqual(sha(changed),sha(helperRaw));fs.writeFileSync(path.join(out,'helper-omission.source.txt'),changed);
+            fs.writeFileSync(copy,helperRaw);assert.deepEqual(fs.readFileSync(copy),helperRaw);const restored=await import(pathToFileURL(copy).href+'?arm=restored');invoke(restored);
+            controls.push({id:'eleventh-span-omission',kind:'physical-helper-source',changed:true,originalSha256:sha(helperRaw),changedSha256:sha(changed),ownedRefusal:owned,restoredHealthy:true,physicalRestoreSha256:sha(fs.readFileSync(copy))});
+          }catch(error){primary=error;}finally{try{if(fs.existsSync(copy))fs.unlinkSync(copy);}catch(error){cleanupError={name:error.name,message:error.message};}}
+          fs.writeFileSync(path.join(out,'helper-controls.json'),JSON.stringify({controls,removedCopy:!fs.existsSync(copy),primary:primary?{name:primary.name,message:primary.message,stack:primary.stack}:null,cleanupError},null,2)+'\n');
+          if(primary)throw primary;assert.equal(cleanupError,null);assert.equal(controls.length,5);assert.equal(fs.existsSync(copy),false);assert.deepEqual(fs.readFileSync(helperFile),helperRaw);
+          console.log('ORACLE_HELPER: six immutable old BASE graphs, five changed controls/restores and current full inverse; browser unrun');
+          HELPER
+          mkdir "$OUT/owners"
+          run_owner(){ local id="$1" file="$2" generated="$3" code=0; test ! -e "$generated"; capture "owner-$id" node "$file" || code=$?; if test -d "$generated"; then cp -a "$generated" "$OUT/owners/$id"; fi; test "$code" -eq 0; }
+          run_owner agent-review scripts/simSoccerAgentReview.mjs "$ROOT/soccer-agent-review-artifacts"
+          run_owner farewell scripts/simSoccerFarewell.mjs "$ROOT/soccer-farewell-artifacts"
+          run_owner press-market scripts/simCareerPressMarket.mjs "$ROOT/career-press-market-artifacts"
+          export CAREER_PROGRAMME_OUT="$ROOT/career-programme-artifacts"
+          run_owner programme scripts/simCareerProgramme.mjs "$CAREER_PROGRAMME_OUT"
+          unset CAREER_PROGRAMME_OUT
+          run_owner international-return scripts/simSoccerInternationalReturn.mjs "$ROOT/soccer-international-return-artifacts"
+          run_owner transfer-brief scripts/simCareerTransferBrief.mjs "$ROOT/career-transfer-brief-artifacts"
+          capture owner-verifier node --input-type=module <<'OWNERS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+          const out=process.env.OUT,ids=['agent-review','farewell','press-market','programme','international-return','transfer-brief'],rows=[];
+          function loadedRows(value,result=[]){if(!value||typeof value!=='object')return result;if(value.shieldCompatibility?.origin)result.push(value);for(const child of Object.values(value))if(child&&typeof child==='object')loadedRows(child,result);return result;}
+          for(const id of ids){
+            const tag='owner-'+id;assert.equal(Number(fs.readFileSync(path.join(out,tag+'.exit'),'utf8')),0);assert.equal(fs.statSync(path.join(out,tag+'.transport')).size,0);
+            const raw=fs.readFileSync(path.join(out,tag+'.stdout'),'utf8')+'\n'+fs.readFileSync(path.join(out,tag+'.stderr'),'utf8');
+            assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Failed to load url|Cannot find (?:module|package)|SyntaxError:|ReferenceError:|TypeError:/i.test(raw),false);
+            const file=path.join(out,'owners',id,'outcomes.json'),bytes=fs.readFileSync(file),report=JSON.parse(bytes),loaded=loadedRows(report);
+            assert(report.neutral.length>0);assert(report.controls.length>0);
+            const original=loaded.filter(row=>row.shieldCompatibility.origin==='original-base-plus-exact-shield'),extra=loaded.filter(row=>row.shieldCompatibility.origin==='current-new-extra-cups');
+            assert.equal(original.length,1);assert.equal(extra.length,1);assert.equal(original[0].shieldCompatibility.id,id);assert.equal(original[0].shieldCompatibility.wholeRawInverse,true);
+            assert.equal(original[0].shieldCompatibility.forward.length,11);assert.equal(original[0].shieldCompatibility.inverse.length,11);
+            assert.equal(original[0].rawSha256??original[0].sha256,original[0].shieldCompatibility.raw.sha256);assert.equal(extra[0].shieldCompatibility.canonical.gitBlob,'f96d2442942db57eb89d3d73d7dc18bba02ec165');
+            rows.push({id,rawExit:0,rawReportSha256:createHash('sha256').update(bytes).digest('hex'),neutralPairs:report.neutral.length,existingControls:report.controls.length,original:original[0],newFileException:extra[0]});
+          }
+          fs.writeFileSync(path.join(out,'summary.json'),JSON.stringify({schemaVersion:1,qualificationCompleted:true,actualOldOracleOwners:rows.length,owners:rows,helperControls:'helper-controls.json',currentEngineInverse:'results-layout-current-engine-inverse.json',resultsLayoutBrowser:'UNRUN; original browser assertions and layout BASE held',runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN'},null,2)+'\n');
+          OWNERS
+          CALLER
+          printf '%s  %s\n' '9686e6745c1c77c966734e6d05f4dc027c9423352e4be8776dc1d801a763470b' "$META/REMOTE-CALLER.sh" | sha256sum --check > "$META/caller-pin.log"
+          code=0; bash -n "$META/REMOTE-CALLER.sh" > "$META/caller-syntax.stdout" 2> "$META/caller-syntax.stderr" || code=$?
+          printf '%s\n' "$code" > "$META/caller-syntax.exit"; test "$code" -eq 0
+          code=0; bash "$META/REMOTE-CALLER.sh" > "$META/caller.stdout" 2> "$META/caller.stderr" || code=$?
+          printf '%s\n' "$code" > "$META/caller.exit"
+          tail -n 24 "$META/caller.stdout"; tail -n 24 "$META/caller.stderr"
+          test "$code" -eq 0
+      - name: Always retain exact source, dependencies and original evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          status=0
+          if test -f "$META/source.sha256"; then sha256sum --check "$META/source.sha256" > "$META/source-held.log" 2>&1 || status=1; fi
+          if test -f "$META/dependency.sha256"; then sha256sum --check "$META/dependency.sha256" > "$META/dependency-held.log" 2>&1 || status=1; fi
+          git ls-files -z > "$META/source-members.after"
+          if test -f "$META/source-members.before"; then cmp "$META/source-members.before" "$META/source-members.after" > "$META/membership-held.log" 2>&1 || status=1; fi
+          git diff --exit-code HEAD > "$META/source-diff.log" 2>&1 || status=1
+          git ls-files --others --exclude-standard > "$META/untracked.txt"
+          test ! -s "$META/untracked.txt" || status=1
+          if test -d "$SC_SHIELD_ORACLE_OUT"; then cp -a "$SC_SHIELD_ORACLE_OUT" "$META/evidence" || status=1; fi
+          printf '%s\n' "$status" > "$META/always-holds.exit"
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-shield-old-oracles-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-shield-old-oracles/
+          retention-days: 14
