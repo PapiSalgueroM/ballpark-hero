@@ -194,7 +194,7 @@ const shouldShowHeader = (pathname: string) =>
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   const navigationType = useNavigationType();
-  const previousNavigation = useRef({ pathname, navigationType });
+  const previousNavigation = useRef([pathname, navigationType]);
 
   // The browser's own scroll restoration ("auto") can silently re-scroll the
   // page to wherever it was on a previous visit to this history entry, and it
@@ -244,8 +244,8 @@ const ScrollToTop = () => {
 
   useEffect(() => {
     const previous = previousNavigation.current;
-    previousNavigation.current = { pathname, navigationType };
-    if (previous.pathname === pathname && previous.navigationType !== navigationType) return;
+    previousNavigation.current = [pathname, navigationType];
+    if (previous[0] === pathname && previous[1] !== navigationType) return;
     if (pathname === '/') {
       // Returning home: restore the remembered games-list position (0 on a
       // fresh visit). Instant jump, no smooth scroll - it should feel like
