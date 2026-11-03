@@ -84,7 +84,7 @@ const DIAGNOSTICS = process.env.AGREEMENT_DIAGNOSTICS === '1';
 const SELF_OFF = { file: 'src/lib/season/core.ts', from: 'const bad = disagreements(sport, row, ctx, s);', to: 'const bad: string[] = [];' };
 const DROP_GOAL = { file: 'src/lib/season/core.ts', from: 'for (let u = 0; u < rem; u += 1) {', to: "for (let u = 0; u < rem - (t.key === 'goals' && rem > 0 ? 1 : 0); u += 1) {" };
 const CONTROLS = {
-  annualkey: [{ file: 'src/lib/season/soccer.ts', from: "  const annual = communityShieldAnnualStats(row);\n  return row.type === 'playing' && annual && annual.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`\n    : null;", to: "  return row.type === 'playing' && row.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${row.apps}|${row.goals}|${row.assists}|${row.rating}|centre`\n    : null;" }],
+  annualkey: [{ file: 'src/lib/season/soccer.ts', from: "  const annual = careerOpeningAnnualStats(row);\n  return row.type === 'playing' && annual && annual.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`\n    : null;", to: "  return row.type === 'playing' && row.apps > 0\n    ? `${playerName}|${row.club}|${row.year}|${row.apps}|${row.goals}|${row.assists}|${row.rating}|centre`\n    : null;" }],
   goals: [DROP_GOAL, SELF_OFF],
   selfcheck: [DROP_GOAL],
   position: [{ file: 'src/lib/season/core.ts', from: '  const f = target.finish;\n  const pos = rows.findIndex(x => x.slot === 0) + 1;\n  if (pos > f)', to: '  const f = target.finish;\n  const pos = rows.findIndex(x => x.slot === 0) + 1;\n  if (f > 0) return null;\n  if (pos > f)' }, SELF_OFF],
@@ -397,8 +397,9 @@ function unconditioned(row, ctx, s, seed) {
 }
 
 function annualForChecks(row) {
-  if (row.extraCups === undefined) return row;
-  const match = EC.readCommunityShield(row);
+  const german = Object.prototype.hasOwnProperty.call(row, 'germanSupercup');
+  if (!german && row.extraCups === undefined) return row;
+  const match = german ? EC.readGermanSupercup(row) : EC.readCommunityShield(row);
   if (!match) throw new Error('A recorded opener must pass its strict saved-result reader');
   if (match.player.apps === 0) return row;
   const p = match.player, rating = match.annualRating;

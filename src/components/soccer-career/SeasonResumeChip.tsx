@@ -21,7 +21,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { readResume, resumeLabel, resumeRowIndex } from '@/lib/season/resume';
-import { communityShieldAnnualStats } from '@/lib/soccerCareerExtraCups';
+import { careerOpeningAnnualStats } from '@/lib/soccerCareerExtraCups';
 
 interface Props {
   career: CareerState;
@@ -34,7 +34,7 @@ export default function SeasonResumeChip({ career, at, onOpen }: Props) {
   const [resume, setResume] = useState(() => readResume('soccer'));
   useEffect(() => { setResume(readResume('soccer')); }, [at]);
   const row = career.seasons[resumeRowIndex(resume, career.seasons, r => {
-    const annual = communityShieldAnnualStats(r);
+    const annual = careerOpeningAnnualStats(r);
     return r.type === 'playing' && annual && annual.apps > 0
       ? `${career.playerName}|${r.club}|${r.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`
       : null;

@@ -34,7 +34,7 @@
      plus keyed noise, never by a ledger's order. */
 import type { CareerState, ClubData, SeasonRecord } from '../soccerCareerEngine';
 import type { WorldSeason } from '../soccerPhone';
-import { communityShieldAnnualStats } from '../soccerCareerExtraCups';
+import { careerOpeningAnnualStats } from '../soccerCareerExtraCups';
 import { LAW, goalLambda, poissonDraw } from './law';
 import {
   ownRowRounds, roundRobinRounds,
@@ -233,7 +233,7 @@ const RULE3 = { win: 3, draw: 1, loss: 0 };
 
 /** The season key of a row: saved fields only, so any device rebuilds the same season. */
 export function soccerSeasonKey(playerName: string, row: SeasonRecord): string | null {
-  const annual = communityShieldAnnualStats(row);
+  const annual = careerOpeningAnnualStats(row);
   return row.type === 'playing' && annual && annual.apps > 0
     ? `${playerName}|${row.club}|${row.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`
     : null;
@@ -296,7 +296,7 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
   },
   fixed: (row, ctx) => fixedOf(row, ctx),
   availability: (row, ctx) => {
-    const annual = communityShieldAnnualStats(row);
+    const annual = careerOpeningAnnualStats(row);
     if (!annual) return { played: 0, block: 0, severe: false };
     const M = ctx.games;
     const block = injuryBlock(row, M);
@@ -310,7 +310,7 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
     return { played, block, severe, ...(suspended > 0 ? { suspended } : {}) };
   },
   totals: (row, ctx): StatTotal[] => {
-    const annual = communityShieldAnnualStats(row);
+    const annual = careerOpeningAnnualStats(row);
     return annual ? [
       { key: 'goals', kind: 'sum', total: annual.goals, perGameCap: ctx.position === 'GK' ? 0 : 4, teamFor: true, ...(ctx.goldenBoot ? { noBucket: true } : {}) },
       { key: 'assists', kind: 'sum', total: annual.assists, perGameCap: 3, teamFor: true },
@@ -320,7 +320,7 @@ export const SOCCER: SeasonSport<SeasonRecord, SoccerSeasonCtx> = {
       { key: 'red', kind: 'sum', total: row.redCards, perGameCap: 1, distinct: 'card', suspends: true },
     ] : [];
   },
-  apps: row => communityShieldAnnualStats(row)?.apps ?? 0,
+  apps: row => careerOpeningAnnualStats(row)?.apps ?? 0,
   score: (edge, home, rng) => [
     poissonDraw(goalLambda(edge, home ? LAW.home : LAW.away), rng),
     poissonDraw(goalLambda(-edge, home ? LAW.away : LAW.home), rng),

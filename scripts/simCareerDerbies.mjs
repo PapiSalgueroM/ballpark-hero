@@ -694,8 +694,9 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
 }
 
 function annualForReplay(row) {
-  if (row.extraCups === undefined) return row;
-  const match = extraCups.readCommunityShield(row);
+  const german = Object.prototype.hasOwnProperty.call(row, 'germanSupercup');
+  if (!german && row.extraCups === undefined) return row;
+  const match = german ? extraCups.readGermanSupercup(row) : extraCups.readCommunityShield(row);
   if (!match) throw new Error('A recorded opener must pass its strict saved-result reader');
   if (match.player.apps === 0) return row;
   const p = match.player, rating = match.annualRating;

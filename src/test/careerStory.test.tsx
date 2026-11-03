@@ -297,6 +297,7 @@ describe('Soccer Career: the story keeps the save small', () => {
     const p = saveParts(s);
     console.log(`[save parts] seed ${seed}: rest ${p.rest} bytes, cup games ${p.cup} bytes over ${p.cupRows} seasons, division ${p.division} bytes over ${p.divisionRows} seasons, ten divisions ${p.ten} bytes`);
     console.log('[save parts] seed ' + seed + ': Shield ' + p.shield + ' units over ' + p.shieldFields + ' physical fields, root ' + p.shieldQualification + ' units');
+    console.log('[save parts] seed ' + seed + ': German subset of rest ' + p.german + ' units over ' + p.germanFields + ' physical fields, root ' + p.germanQualification + ' units over ' + p.germanQualificationFields + ' fields; no separate allocation');
     expect(p.shieldFields, 'recorded opening fields to measure').toBeGreaterThanOrEqual(PART_SEASONS_FLOOR);
     expect(p.shield / p.shieldFields, 'SC_STORY_SHIELD_FIELDS: complete saved result evidence stays bounded').toBeLessThan(SHIELD_BYTES_PER_FIELD);
     expect(p.shieldQualification, 'SC_STORY_SHIELD_QUALIFICATION: the separate root receipt stays bounded').toBeLessThan(SHIELD_QUALIFICATION_BYTES);
@@ -393,6 +394,9 @@ function saveParts(s: CareerState) {
   const shieldRows = s.seasons.filter(r => r.extraCups !== undefined);
   const pendingShield = s.pendingSummary?.extraCups !== undefined ? s.pendingSummary : null;
   const shieldBytes = (row: CareerState['seasons'][number]) => bytesOf(row) - bytesOf({ ...row, extraCups: undefined });
+  const germanRows = s.seasons.filter(r => r.germanSupercup !== undefined);
+  const pendingGerman = s.pendingSummary?.germanSupercup !== undefined ? s.pendingSummary : null;
+  const germanBytes = (row: CareerState['seasons'][number]) => bytesOf(row) - bytesOf({ ...row, germanSupercup: undefined });
   return {
     cup: cupRows.reduce((n, r) => n + bytesOf(r.clubCupRun), 0), cupRows: cupRows.length,
     division: divisionRows.reduce((n, r) => n + bytesOf(r.leagueWorld), 0), divisionRows: divisionRows.length,
@@ -404,6 +408,10 @@ function saveParts(s: CareerState) {
     shieldFields: shieldRows.length + (pendingShield ? 1 : 0),
     shieldQualification: bytesOf(s) - bytesOf({ ...s, extraCupQualification: undefined }),
     shieldQualificationFields: s.extraCupQualification !== undefined ? 1 : 0,
+    german: germanRows.reduce((n, r) => n + germanBytes(r), 0) + (pendingGerman ? germanBytes(pendingGerman) : 0),
+    germanFields: germanRows.length + (pendingGerman ? 1 : 0),
+    germanQualification: bytesOf(s) - bytesOf({ ...s, germanSupercupQualification: undefined }),
+    germanQualificationFields: s.germanSupercupQualification !== undefined ? 1 : 0,
     /* Round 1318: the generated rivals' pool (THE PARTS below). */
     pool: bytesOf(s.generatedBallonPool),
     rest: bytesOf({ ...s, leagueWorld: undefined, chanceWheel: undefined, generatedBallonPool: undefined, extraCupQualification: undefined, pendingSummary: s.pendingSummary ? { ...s.pendingSummary, extraCups: undefined } : s.pendingSummary, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined, extraCups: undefined, cupRun: r.cupRun?.opening ? { ...r.cupRun, opening: undefined } : r.cupRun })) }),

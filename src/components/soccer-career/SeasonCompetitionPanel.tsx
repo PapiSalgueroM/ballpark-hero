@@ -7,7 +7,7 @@ import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { squadNow } from '@/lib/soccerClubSquad';
 import { SquadTile } from './SquadTile';
 
-export type CentreScreen = 'league' | 'domestic' | 'club' | 'shield' | 'squad';
+export type CentreScreen = 'league' | 'domestic' | 'club' | 'shield' | 'german-supercup' | 'squad';
 export function CompetitionNavigation({ league, competitions, screen, onSelect }: {
   league: string; competitions: SavedSeasonCompetition[]; screen: CentreScreen; onSelect: (screen: CentreScreen) => void;
 }) {
@@ -92,7 +92,7 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
           <div className="rounded-xl bg-muted/30 p-4 text-center">
             <p className="text-sm font-semibold">{row.club} vs {match.opponent ?? 'Opponent not recorded'}</p>
             <p className="my-2 text-3xl font-black tabular-nums" data-centre-cup-score>{match.goalsFor === null || match.goalsAgainst === null ? 'Score not recorded' : `${match.goalsFor}-${match.goalsAgainst}`}</p>
-            {match.neutral ? <p className="text-xs text-muted-foreground">Neutral ground</p> : match.home !== undefined && <p className="text-xs text-muted-foreground">{match.home ? 'Home' : 'Away'}</p>}
+            {match.neutral ? <p className="text-xs text-muted-foreground">Neutral ground</p> : match.home !== undefined ? <p className="text-xs text-muted-foreground">{match.home ? 'Home' : 'Away'}</p> : competition?.id === 'german-supercup' && <p className="text-xs text-muted-foreground">Venue not recorded</p>}
             {match.result && <p className="text-xs font-semibold">{match.result}</p>}
             {match.note && <p className="mt-1 text-xs text-muted-foreground">{match.note}</p>}
             {match.playerGoals !== undefined && <p className="mt-1 text-xs">You scored {match.playerGoals}</p>}
@@ -113,8 +113,8 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
             </tbody></table></div><p className="text-xs text-muted-foreground">{stage.footnote}</p>
           </section>)}
           {competition.matches.length === 0 ? <p className="text-sm" data-centre-cup-missing>No match details recorded.</p> : <div className="space-y-2" data-centre-cup-games data-centre-cup-bracket>
-            <h4 className="text-xs font-bold">{competition.id === 'shield' ? 'Saved opening match' : "Recorded bracket: your club's path"}</h4>
-            <p className="text-xs text-muted-foreground">{competition.id === 'shield' ? 'This competition has one neutral match.' : 'Other knockout ties were not kept.'}</p>
+            <h4 className="text-xs font-bold">{competition.id === 'shield' || competition.id === 'german-supercup' ? 'Saved opening match' : "Recorded bracket: your club's path"}</h4>
+            <p className="text-xs text-muted-foreground">{competition.id === 'shield' ? 'This competition has one neutral match.' : competition.id === 'german-supercup' ? 'One saved match. Venue not recorded.' : 'Other knockout ties were not kept.'}</p>
             {rounds.map((round, roundIndex) => <section key={roundIndex} data-centre-cup-round={roundIndex} className="rounded-xl border border-border p-2">
               <h5 className="mb-2 text-xs font-bold">{roundIndex > 0 ? '↓ ' : ''}{round.name}</h5>
               <div className="grid grid-cols-2 gap-2">{round.games.map(({ game, index }) => <button key={index} type="button" onClick={() => setPicked(index)} data-centre-cup-open={index} className="min-h-20 min-w-0 rounded-xl border border-border bg-muted/20 p-3 text-left">

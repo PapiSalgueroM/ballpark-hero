@@ -75,6 +75,13 @@ async function main() {
   const text = fs.readFileSync(path.join(root, SOURCE), 'utf8').replace(/\r\n/g, '\n');
   assert.equal(text, rawText.replace(/\r\n/g, '\n'), 'Normalized matching text must bind to the held original');
   const encode = normalized => Buffer.from(ending === '\r\n' ? normalized.replace(/\n/g, '\r\n') : normalized);
+  const opening = 'export function playCommunityShield(input: CommunityShieldOpeningInput): CommunityShieldResult | null {';
+  const following = 'function pair(v: unknown, max = Number.MAX_SAFE_INTEGER): v is [number, number] {';
+  const englishStart = text.indexOf(opening);
+  assert.ok(englishStart >= 0 && text.indexOf(opening, englishStart + opening.length) < 0, 'Unique actual English generator');
+  const englishEnd = text.indexOf(following, englishStart + opening.length);
+  assert.ok(englishEnd > englishStart && text.indexOf(following, englishEnd + following.length) < 0, 'Unique following English generator boundary');
+  const english = text.slice(englishStart, englishEnd);
   const copy = path.join(root, 'src/lib/__control_shield_match_' + process.pid + '.ts');
   assert.equal(fs.existsSync(copy), false, 'Owned physical source copy must not exist');
   const results = [], controlReceipts = [];
@@ -138,9 +145,15 @@ async function main() {
     run('current'); put(original); run('healthy-copy', null, true);
     for (const fault of faults) {
       const before = fault.before, after = fault.after;
-      const offset = text.indexOf(before); assert.ok(offset >= 0 && text.indexOf(before, offset + 1) < 0, 'Unique executable anchor: ' + fault.id);
-      const changedText = text.slice(0, offset) + after + text.slice(offset + before.length);
-      assert.equal(changedText.indexOf(after), offset); assert.equal(changedText.indexOf(after, offset + 1), -1);
+      const localOffset = english.indexOf(before);
+      assert.ok(localOffset >= 0 && english.indexOf(before, localOffset + before.length) < 0, 'Unique executable English anchor: ' + fault.id);
+      const offset = englishStart + localOffset;
+      assert.equal(text.slice(offset, offset + before.length), before);
+      const changedEnglish = english.slice(0, localOffset) + after + english.slice(localOffset + before.length);
+      assert.equal(changedEnglish.indexOf(after), localOffset); assert.equal(changedEnglish.indexOf(after, localOffset + after.length), -1);
+      const changedText = text.slice(0, englishStart) + changedEnglish + text.slice(englishEnd);
+      assert.equal(changedText.slice(0, englishStart), text.slice(0, englishStart), 'Control keeps the complete preceding source');
+      assert.equal(changedText.slice(englishStart + changedEnglish.length), text.slice(englishEnd), 'Control keeps the complete following source including German code');
       const changed = encode(changedText);
       assert.notEqual(sha(changed), sha(original), 'Source control must change physical source bytes');
       const inverse = encode(changedText.slice(0, offset) + before + changedText.slice(offset + after.length));
@@ -150,6 +163,7 @@ async function main() {
       run(fault.id, fault, true);
       put(original);
       const receipt = { id: fault.id, case: fault.case, primaryMarker: fault.marker, offset, offsetUnits: 'UTF-16 normalized source',
+        sourceRange: { function: 'playCommunityShield', start: englishStart, end: englishEnd, localOffset },
         lineEnding: ending === '\r\n' ? 'CRLF' : 'LF', before, after,
         original: { bytes: original.length, sha256: sha(original) }, changed: { bytes: changed.length, sha256: sha(changed) },
         inverse: { bytes: inverse.length, sha256: sha(inverse) }, physicalRestoreSha256: sha(fs.readFileSync(copy)) };
