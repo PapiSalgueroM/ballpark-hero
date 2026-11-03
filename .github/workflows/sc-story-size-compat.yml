@@ -1,0 +1,206 @@
+name: Soccer Career measured Story field accounting
+on:
+  push:
+    branches: [codex/sc-story-size-compat-20261102]
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the provisional unchanged product and exact four accounting paths
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-story-parts"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          test "$GITHUB_REF" = refs/heads/codex/sc-story-size-compat-20261102
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = bb1fc63549bf9f4e4d5d5f12ee6acfedbd987d8e
+          test "$(git rev-parse 'HEAD^^{tree}')" = 26c394c0adb44af470ce918b84b89a6e3b3f6355
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\n' '.github/workflows/sc-story-size-compat.yml' 'scripts/qa/qualifySoccerCareerStoryParts.mjs' > "$OUT/expected-paths.txt"
+          printf 'M\t%s\n' 'scripts/simCareerStory.mjs' 'src/test/careerStory.test.tsx' >> "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          scripts/qa/qualifySoccerCareerStoryParts.mjs 8df6167a331e7e7dc0151975377f346f6360efed
+          scripts/simCareerStory.mjs 6eb77ba60f330e8213ea7192d39b54a8075c118b
+          src/test/careerStory.test.tsx c56e00ebaf17c54fb241466f49a5959327e0fe3b
+          src/lib/soccerCareerEngine.ts 53c57e31c4796e8ea4934d133cc1d82baa6ec34b
+          src/lib/soccerCareerExtraCups.ts ac6158ec8a272780da6a6776bdec2f785f0e3c5b
+          src/lib/soccerCareerSave.ts 86ec011693fd5bc702b5e8ccec05d27775a72a76
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          cat > "$OUT/sha256-pins.txt" <<'SHAS'
+          54fcc9c58ef31b9747400f23f8eadb38fb912ab8e611f583268fac217169c065  scripts/qa/qualifySoccerCareerStoryParts.mjs
+          ee9504e8ce3293df4e7d0aabd1be301c893fee23d283b067dc1651ea23c4929e  scripts/simCareerStory.mjs
+          d0bd9df10204c4dfb1775a0422ed3a0aa35a5d3b71a0dbb02574b0580d333e02  src/test/careerStory.test.tsx
+          SHAS
+          sha256sum --check "$OUT/sha256-pins.txt" > "$OUT/source-pins.log"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked online install separate from offline qualification
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Actual Story tests and unchanged permanent fleet with bounded copied controls
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SC_STORY_PARTS_OUT="$PWD/tmp/sc-story-parts-$GITHUB_RUN_ID"
+          printf 'SC_STORY_PARTS_OUT=%s\n' "$SC_STORY_PARTS_OUT" >> "$GITHUB_ENV"
+          test ! -e "$SC_STORY_PARTS_OUT"
+          source "$OUT/capture.sh"
+          capture syntax node --check scripts/qa/qualifySoccerCareerStoryParts.mjs
+          capture story-parts node scripts/qa/qualifySoccerCareerStoryParts.mjs
+          test ! -s "$OUT/story-parts.transport"
+      - name: Bind the frozen helper raw summaries without broad suite repetition
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          const out = process.env.OUT, dir = process.env.SC_STORY_PARTS_OUT;
+          const read = file => JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+          const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+          for (const tag of ['syntax', 'story-parts']) {
+            assert.equal(Number(fs.readFileSync(path.join(out, tag + '.exit'), 'utf8')), 0);
+            assert.equal(fs.statSync(path.join(out, tag + '.transport')).size, 0);
+          }
+          const summary = read('summary.json'), receipt = read('receipt.json');
+          assert.equal(summary.schema, 1); assert.equal(summary.completed, true);
+          assert.equal(receipt.complete, true); assert.equal(receipt.primary, null); assert.deepEqual(receipt.secondary, []); assert.equal(receipt.copiesRemoved, true);
+          assert.equal(summary.unitChildren, 12); assert.equal(receipt.unitChildren, 12);
+          assert.equal(summary.simChildren, 9); assert.equal(receipt.simChildren, 9);
+          assert.deepEqual(summary.unitTotals, { healthy: 29, owned: 7, unselected: 120 }); assert.equal(summary.unitExecuted, 36);
+          assert.equal(summary.simActualCareers, 864); assert.equal(summary.simNewOwnedFailures, 4); assert.equal(summary.simExistingControls, 3);
+          const unitNames = ['unit-current','unit-healthy-copy','unit-mirror','unit-null','unit-oversized-result','unit-oversized-root','unit-oversized-mirror','unit-malformed-result','unit-unknown-result','unit-unknown-root','unit-old-rest','unit-restored'];
+          const simNames = ['sim-current','sim-old-worldmoves','sim-old-cuptwice','sim-old-poolcopy','sim-result-envelope','sim-root-envelope','sim-result-count','sim-root-count','sim-restored'];
+          assert.deepEqual(summary.units.map(row => row.name), unitNames); assert.deepEqual(summary.sims.map(row => row.name), simNames);
+          const childNames = ['types', ...unitNames, ...simNames];
+          assert.equal(Number(fs.readFileSync(path.join(dir, 'types.exit'), 'utf8')), 0);
+          const typesArgv = read('types.argv.json');
+          assert.ok(typesArgv.some(arg => arg.endsWith('/node_modules/typescript/bin/tsc'))); assert.ok(typesArgv.includes('--noEmit')); assert.ok(typesArgv.includes('tsconfig.app.json'));
+          for (const name of childNames) {
+            assert.equal(fs.statSync(path.join(dir, name + '.transport')).size, 0);
+            const processReceipt = read(name + '.process.json'); assert.equal(processReceipt.signal, null); assert.equal(processReceipt.error, null);
+            assert.equal(Number(fs.readFileSync(path.join(dir, name + '.exit'), 'utf8')), processReceipt.status);
+          }
+          const totals = { healthy: 0, owned: 0, unselected: 0 };
+          for (const result of summary.units) {
+            const bytes = fs.readFileSync(path.join(dir, result.name + '.vitest.json')), report = JSON.parse(bytes);
+            assert.equal(sha(bytes), result.reportSha256); assert.equal(report.success, !result.owner);
+            assert.equal(read(result.name + '.process.json').status, result.owner ? 1 : 0);
+            assert.equal(report.numTotalTests, 13); assert.equal(report.numPassedTests, result.passed); assert.equal(report.numFailedTests, result.ownedFailures); assert.equal(report.numPendingTests, result.declaredUnselected); assert.equal(report.numTodoTests, 0);
+            assert.equal(report.testResults.length, 1); assert.equal(report.testResults[0].assertionResults.length, 13); assert.equal(report.testResults[0].message, '');
+            const counters = Object.fromEntries(['numUnhandledErrors','numRuntimeErrorTestSuites','numRuntimeErrorTests'].map(key => [key, report[key] ?? null]));
+            assert.deepEqual(result.counters, counters);
+            for (const value of Object.values(counters)) if (value !== null) { assert.equal(typeof value, 'number'); assert.equal(value, 0); }
+            for (const key of ['errors','unhandledErrors']) if (report[key] != null) { assert.ok(Array.isArray(report[key])); assert.equal(report[key].length, 0); }
+            assert.equal(result.runtimeCounterCompleteness, Object.values(counters).some(value => value === null) ? 'UNKNOWN' : 'REPORTED'); assert.equal(result.detectedRuntimeError, false);
+            if (result.accounting) assert.equal(sha(fs.readFileSync(path.join(dir, result.name + '.evidence.json'))), result.accounting.rawEvidenceSha256);
+            totals.healthy += report.numPassedTests; totals.owned += report.numFailedTests; totals.unselected += report.numPendingTests;
+          }
+          assert.deepEqual(totals, summary.unitTotals);
+          const rawRuntime = /(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled|ERR_MODULE_NOT_FOUND|Failed to load url|Cannot find module|SyntaxError:|ReferenceError:|TypeError:)/i;
+          for (const name of childNames) {
+            const raw = fs.readFileSync(path.join(dir, name + '.stdout'), 'utf8') + '\n' + fs.readFileSync(path.join(dir, name + '.stderr'), 'utf8');
+            assert.equal(rawRuntime.test(raw), false, 'No setup or runtime error: ' + name);
+          }
+          for (const result of summary.sims) {
+            const stdout = fs.readFileSync(path.join(dir, result.name + '.stdout'));
+            assert.equal(sha(stdout), result.stdoutSha256); assert.equal(result.actualCareers, 96); assert.equal(result.runtimeCounters, null); assert.equal(result.runtimeCounterCompleteness, 'UNKNOWN');
+            assert.equal(read(result.name + '.process.json').status, result.owner ? 1 : 0);
+            assert.ok(stdout.toString('utf8').includes('careers 96 (4 seeds x 24)'));
+          }
+          for (const id of ['result-envelope','root-envelope','result-count','root-count']) {
+            const edit = read('sim-' + id + '.edit.json'), bytes = fs.readFileSync(path.join(dir, 'sim-' + id + '.source.mjs'));
+            assert.equal(sha(bytes), edit.changedSha256); assert.notEqual(edit.changedSha256, edit.originalSha256); assert.equal(edit.wholeInverse, true);
+            const body = bytes.toString('utf8'); assert.equal(body.split(edit.after).length, 2);
+            assert.equal(sha(Buffer.from(body.replace(edit.after, edit.before))), edit.originalSha256);
+          }
+          const oldEdit = read('unit-old-rest.edit.json'), oldSource = fs.readFileSync(path.join(dir, 'unit-old-rest.source.tsx'));
+          assert.equal(sha(oldSource), oldEdit.changedSha256); assert.notEqual(oldEdit.changedSha256, oldEdit.originalSha256); assert.equal(oldEdit.inverseExact, true);
+          assert.equal(oldSource.toString('utf8').split(oldEdit.after).length, 2);
+          assert.equal(sha(Buffer.from(oldSource.toString('utf8').replace(oldEdit.after, oldEdit.before))), oldEdit.originalSha256);
+          assert.equal(read('unit-copy-transform.json').wholeInverse, true);
+          assert.deepEqual(read('source-after.json'), read('source-before.json'));
+          fs.writeFileSync(path.join(out, 'qualification-summary.json'), JSON.stringify({
+            scope: summary.scope, unitChildren: 12, unitExecuted: 36, unitTotals: totals,
+            simChildren: 9, simReportedMainCareers: 864, simExistingControls: 3, simNewOwnedFailures: 4,
+            copiesRemoved: true, runtimeCounterCompleteness: 'UNKNOWN',
+            limits: 'No engine, codec, history, old band, floor, fleet or global RNG changes. Repeated permanent cohorts are reported main careers, not a new independent population. No build, browser or full-suite credit.'
+          }, null, 2) + '\n');
+          console.log('SC_STORY_PARTS_QUALIFIED: 12 unit children, 36 executed, 29 healthy, 7 owned, 120 unselected; 9 permanent runs, 864 reported main careers.');
+          VERIFY
+          capture verify node "$OUT/verify.mjs"
+      - name: Always retain complete child data source controls and raw receipts
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -n "${SC_STORY_PARTS_OUT:-}" && test -d "$SC_STORY_PARTS_OUT"; then cp -a -- "$SC_STORY_PARTS_OUT" "$OUT/parts"; fi
+      - name: Always hold source dependencies and complete tracked membership
+        if: always()
+        run: |
+          set -euo pipefail
+          sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-story-parts-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-story-parts/
+          retention-days: 14
