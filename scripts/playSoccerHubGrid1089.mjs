@@ -157,7 +157,7 @@ try {
   const { chromium } = await import('./lib/playwrightLoader.mjs');
   browser = await chromium.launch({ headless: true });
   const profiles = [{ name: '390-touch', width: 390, height: 844, touch: true }, { name: '1280-keyboard', width: 1280, height: 900, touch: false }];
-  const baselineStorage = { 'cookie-consent': 'essential', 'dukb-theme': 'dark', 'dukb-soccer-currency': 'EUR', 'rules-gate-seen:/soccer-career': '1', 'nbaCareerSave': '1089 opaque NBA bytes', 'nflCareerSave': '1089 opaque NFL bytes', 'stadiumTycoonV1': '1089 opaque Tycoon bytes' };
+  const baselineStorage = { 'cookie-consent-v2': JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: NOW }), 'dukb-theme': 'dark', 'dukb-soccer-currency': 'EUR', 'rules-gate-seen:/soccer-career': '1', 'nbaCareerSave': '1089 opaque NBA bytes', 'nflCareerSave': '1089 opaque NFL bytes', 'stadiumTycoonV1': '1089 opaque Tycoon bytes' };
   for (const arm of ['healthy', 'old-nesting']) {
     const port = await new Promise((resolve, reject) => { const probe = createServer(); probe.on('error', reject); probe.listen(0, '127.0.0.1', () => { const value = probe.address().port; probe.close(error => error ? reject(error) : resolve(value)); }); });
     const base = `http://127.0.0.1:${port}`, dir = arm === 'healthy' ? 'dist' : path.relative(ROOT, controlDist);
