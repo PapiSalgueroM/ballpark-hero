@@ -85,6 +85,7 @@ export default function Index() {
   const canReadPersonal = !!accountId && profile?.user_id === accountId;
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const clearSearch = () => { setSearchQuery(''); searchInputRef.current?.focus({ preventScroll: true }); };
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
   const isSearching = searchQuery.trim().length > 0;
   const { paths: gamePicks, toggle: changeGamePick, storageFailed: picksStorageFailed } = useGamePicks();
@@ -309,7 +310,7 @@ export default function Index() {
               />
               {isSearching && (
                 <button
-                  onClick={() => { setSearchQuery(''); searchInputRef.current?.focus({ preventScroll: true }); }}
+                  onClick={clearSearch}
                   className="absolute right-1.5 top-1/2 -translate-y-1/2 grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:text-foreground transition-colors"
                   aria-label="Clear search"
                 >
@@ -329,7 +330,7 @@ export default function Index() {
                keystroke: hold the space, and never say "no games found"
                for a search that has not run yet */
             searchFailed ? (
-              <HomeSearchUnavailable onBack={() => { setSearchQuery(''); searchInputRef.current?.focus({ preventScroll: true }); }} />
+              <HomeSearchUnavailable onBack={clearSearch} />
             ) : !engine ? (
               <div aria-busy="true" className="min-h-[120px]" />
             ) : filteredGames.length > 0 ? (
