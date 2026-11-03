@@ -1,0 +1,159 @@
+name: Soccer Career rating report context baseline
+on:
+  push:
+    branches: [codex/sc-rating-report-context-red-20261103]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the parent application and exact new test
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-rating-report-context-red"
+          mkdir -p "$OUT/raw"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git fetch --no-tags --depth=1 origin cc9a55a2f35b6215d5e6e664cc401d10d7f76291
+          test "$(git rev-parse cc9a55a2f35b6215d5e6e664cc401d10d7f76291^{tree})" = 90d580e7007917a4959187bd449d054d63191b08
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status cc9a55a2f35b6215d5e6e664cc401d10d7f76291 HEAD > "$OUT/candidate-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import crypto from 'node:crypto';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const paths = execFileSync('git', ['diff', '--name-status', 'cc9a55a2f35b6215d5e6e664cc401d10d7f76291', 'HEAD']).toString().trim().split('\n').sort();
+          assert.deepEqual(paths, ['A\t.github/workflows/sc-rating-report-context-red-20261103.yml', 'A\tsrc/test/soccerCareerRatingReport.test.tsx'].sort(), 'Only the new test and baseline workflow may differ from pinned main');
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/soccerCareerRatingReport.test.tsx')).digest('hex'), 'b7cb6994750a3b32f7bf4026bc4156a68448bb198dede07547c96fcb1c2ca724');
+          assert.equal(execFileSync('git', ['rev-parse', 'HEAD:src/pages/SoccerCareer.tsx']).toString().trim(), 'c6b270bf74c5b97fd21e07900c327ac7ccba24e0');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          cp src/test/soccerCareerRatingReport.test.tsx "$OUT/test-source.tsx"
+          npm ci --no-audit --no-fund > "$OUT/install.log" 2>&1
+      - name: Actual application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/types.transport.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/types.transport.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$QA_OUT/types.log"
+          codes=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/types.exit"
+          test "${codes[1]}" -eq 0
+          test "${codes[0]}" -eq 0
+          test ! -s "$QA_OUT/types.transport.log"
+      - name: Observe seven actual Page report context cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          export SC_RATING_REPORT_RAW="$QA_OUT/raw"
+          : > "$QA_OUT/units.transport.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/units.transport.log" node node_modules/vitest/vitest.mjs run src/test/soccerCareerRatingReport.test.tsx \
+            --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile="$QA_OUT/units.json" 2>&1 | tee "$QA_OUT/units.log"
+          codes=("${PIPESTATUS[@]}")
+          set -e
+          printf '%s\n' "${codes[0]}" > "$QA_OUT/units.exit"
+          test "${codes[1]}" -eq 0
+          test ! -s "$QA_OUT/units.transport.log"
+      - name: Admit only the seven owned missing-context failures and preserve the RED outcome
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = process.env.QA_OUT;
+          const report = JSON.parse(fs.readFileSync(out + '/units.json', 'utf8'));
+          assert.equal(Number(fs.readFileSync(out + '/units.exit', 'utf8')), 1);
+          assert.equal(report.success, false); assert.equal(report.numPassedTests, 0); assert.equal(report.numFailedTests, 7);
+          assert.equal(report.testResults.length, 1);
+          const suite = report.testResults[0];
+          assert.equal(suite.status, 'failed');
+          if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+          const expected = {"Soccer Career safe rating report context describes creation without inventing a player or writing a career":"SC_RATING_REPORT_CONTEXT_CREATION","Soccer Career safe rating report context keeps stored and derived ratings distinct, omits personal data and never substitutes match rating for missing historical overall":"SC_RATING_REPORT_CONTEXT_MISMATCH","Soccer Career safe rating report context reports the current state after one real academy season without replaying progress":"SC_RATING_REPORT_CONTEXT_ADVANCE_BEFORE","Soccer Career safe rating report context keeps rating diagnostics safe on the real retirement ceremony phase":"SC_RATING_REPORT_CONTEXT_RETIREMENT","Soccer Career safe rating report context reports a real refused save and clears the flag after Retry without advancing the career":"SC_RATING_REPORT_CONTEXT_SAVE_FAILED","Soccer Career safe rating report context reports a real cross-tab move while preserving the newer tab save":"SC_RATING_REPORT_CONTEXT_SAVE_MOVED","Soccer Career safe rating report context reports an unreadable save without exposing or deleting its bytes":"SC_RATING_REPORT_CONTEXT_SAVE_ERROR"};
+          assert.equal(suite.assertionResults.length, 7);
+          for (const row of suite.assertionResults) {
+            assert.ok(Object.hasOwn(expected, row.fullName), row.fullName);
+            assert.equal(row.status, 'failed');
+            assert.ok(row.failureMessages.length > 0 && row.failureMessages.every(message => message.includes(expected[row.fullName])), row.fullName);
+          }
+          assert.equal(new Set(suite.assertionResults.map(row => row.fullName)).size, 7);
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(report, key) ? report[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          const counts = { creation: 1, mismatch: 1, advance: 2, retirement: 1, 'save-failed': 2, 'save-moved': 1, 'save-error': 1 };
+          const files = fs.readdirSync(out + '/raw').filter(name => name.endsWith('.json')).sort();
+          assert.deepEqual(files, Object.keys(counts).map(key => key + '.json').sort());
+          const rawSummary = [];
+          for (const file of files) {
+            const text = fs.readFileSync(out + '/raw/' + file, 'utf8'), receipt = JSON.parse(text);
+            assert.equal(file, receipt.case + '.json');
+            for (const secret of ['PRIVATE_PLAYER_SENTINEL', 'PRIVATE_NEWS_SENTINEL', 'PRIVATE_EVENT_SENTINEL', 'PRIVATE_QUERY_SENTINEL', '9876543.21', '87654321']) assert.ok(!text.includes(secret), 'Private fixture content in raw receipt');
+            const observations = [];
+            const collect = value => {
+              if (!value || typeof value !== 'object') return;
+              if (Object.hasOwn(value, 'context') && Object.hasOwn(value, 'envelope')) observations.push(value);
+              for (const item of Object.values(value)) collect(item);
+            };
+            collect(receipt.observations);
+            assert.equal(observations.length, counts[receipt.case]);
+            for (const observation of observations) {
+              assert.equal(observation.context, null, 'Old Page has no reportGameContext prop');
+              assert.equal(observation.envelope.path, '/soccer-career');
+              assert.equal(observation.envelope.source, 'game-report-button');
+              assert.equal(observation.envelope.contextTruncated, false);
+              assert.ok(JSON.stringify(observation.envelope).length < 1500);
+              assert.ok(!Object.hasOwn(observation.envelope, 'careerRating'));
+            }
+            rawSummary.push({ case: receipt.case, observations: observations.length });
+          }
+          assert.equal(rawSummary.reduce((n, row) => n + row.observations, 0), 9);
+          fs.writeFileSync(out + '/owned-red-admission.json', JSON.stringify({
+            actualPasses: 0, actualOwnedFailures: 7, expected, rawSummary, counters, absentCounterMeaning: 'UNKNOWN',
+            scope: 'Actual Page report-context absence with real engine/save/codec/fence preservation. Crafted 98/75 diagnostic fixture is not the reported loss reproduction. Footer stays generic; no report submission, product, engine, shared reporter or database change.',
+          }, null, 2) + '\n');
+          NODE
+          # Actual focused failure remains a failed baseline job.
+          test "$(cat "$QA_OUT/units.exit")" -eq 0
+      - name: Retain whole source holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: sc-rating-report-context-baseline-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-rating-report-context-red
+          retention-days: 14
+          if-no-files-found: error
