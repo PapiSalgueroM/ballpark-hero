@@ -1,0 +1,250 @@
+name: Soccer Conquest natural first match and Continue follow-up
+on:
+  push:
+    branches: [codex/conquest-first-match-followup-20261103]
+permissions:
+  contents: read
+jobs:
+  first-match:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+      CONQUEST_FIRST_MATCH_EXPECTED_PARENT: aa3331cf33486f474af367824300384b4ef6f391
+      CONQUEST_FIRST_MATCH_PRODUCER_GIT: ab733ba1d9448565a21fb2c80ca381f9dc93e701
+      CONQUEST_FIRST_MATCH_PRODUCER_SHA256: 7cface89164398a72f5d08b5e89b9a2abf5a532d6d0d9bd93877f3498d12d15d
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the immutable PR449 source and three QA additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/conquest-first-match-followup-$GITHUB_RUN_ID"
+          test ! -e "$OUT"; mkdir "$OUT"
+          printf 'OUT=%s\nCONQUEST_FIRST_MATCH_OUT=%s\nPLAYWRIGHT_BROWSERS_PATH=%s\n' "$OUT" "$OUT/producer" "$RUNNER_TEMP/conquest-first-match-browsers-$GITHUB_RUN_ID" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/conquest-first-match-followup-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = "$CONQUEST_FIRST_MATCH_EXPECTED_PARENT"
+          test "$(git rev-parse 'HEAD^^{tree}')" = e9a4d2003ee690bbcefb20ebe3339355c079d88c
+          [[ "$CONQUEST_FIRST_MATCH_PRODUCER_GIT" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$CONQUEST_FIRST_MATCH_PRODUCER_SHA256" =~ ^[a-f0-9]{64}$ ]]
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          cat > "$OUT/expected-paths.txt" <<'PATHS'
+          A	.github/workflows/conquest-first-match-followup.yml
+          A	scripts/qa/fixtures/siteFonts.captured.json
+          A	scripts/qa/probeSoccerConquestFirstMatch.mjs
+          PATHS
+          cmp "$OUT/changed-paths.txt" "$OUT/expected-paths.txt"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          scripts/lib/playwrightLoader.mjs 4f7739e217e0a47ee82e6bfc8be1c04bed17454a
+          scripts/qa/fixtures/siteFonts.captured.json 6111bd87a083d02447dc6e2c32d7d0e5c0584955
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          test "$(git rev-parse HEAD:scripts/qa/probeSoccerConquestFirstMatch.mjs)" = "$CONQUEST_FIRST_MATCH_PRODUCER_GIT"
+          printf '%s  %s\n' "$CONQUEST_FIRST_MATCH_PRODUCER_SHA256" scripts/qa/probeSoccerConquestFirstMatch.mjs | sha256sum --check > "$OUT/producer-pin.log"
+          printf '%s  %s\n' a6c24e3ec7711d400f53a1baf10a3a6a3925d1f269e48ee0cd14bdca5b749938 scripts/qa/fixtures/siteFonts.captured.json | sha256sum --check > "$OUT/font-pin.log"
+          cp scripts/qa/fixtures/siteFonts.captured.json "$OUT/siteFonts.captured.json"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          git ls-files --others --exclude-standard -z > "$OUT/untracked.before"; test ! -s "$OUT/untracked.before"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"; : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 12 "$OUT/$tag.stdout"; tail -n 12 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+      - name: Locked app install and isolated Playwright before the offline boundary
+        run: |
+          set -euo pipefail
+          code=0; NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.before"
+          xargs -0 sha256sum < "$OUT/dependency-members.before" > "$OUT/dependency-files.sha256"
+          tools="$RUNNER_TEMP/conquest-first-match-tools-$GITHUB_RUN_ID"
+          test ! -e "$tools"; mkdir "$tools"
+          printf 'CONQUEST_FIRST_MATCH_TOOLS=%s\n' "$tools" >> "$GITHUB_ENV"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.0"}}\n' > "$tools/package.json"
+          code=0; NODE_OPTIONS='' npm install --prefix "$tools" --ignore-scripts --no-audit --no-fund > "$OUT/browser-install.stdout" 2> "$OUT/browser-install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/browser-install.exit"; test "$code" -eq 0
+          test ! -e node_modules/playwright; test ! -e node_modules/playwright-core
+          ln -s "$tools/node_modules/playwright" node_modules/playwright
+          ln -s "$tools/node_modules/playwright-core" node_modules/playwright-core
+          readlink node_modules/playwright > "$OUT/playwright-symlink.txt"
+          readlink node_modules/playwright-core > "$OUT/playwright-core-symlink.txt"
+          cp "$tools/package.json" "$OUT/browser-package.json"; cp "$tools/package-lock.json" "$OUT/browser-package-lock.json"
+          code=0; NODE_OPTIONS='' node "$tools/node_modules/playwright/cli.js" install --with-deps chromium > "$OUT/chromium-install.stdout" 2> "$OUT/chromium-install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/chromium-install.exit"; test "$code" -eq 0
+          find "$tools" -type f -print0 | sort -z > "$OUT/tool-members.before"
+          xargs -0 sha256sum < "$OUT/tool-members.before" > "$OUT/tool-files.sha256"
+          find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z > "$OUT/browser-members.before"
+          xargs -0 sha256sum < "$OUT/browser-members.before" > "$OUT/browser-files.sha256"
+      - name: Real application types and producer syntax under the offline guard
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          capture actual-types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          capture producer-syntax node --check scripts/qa/probeSoccerConquestFirstMatch.mjs
+      - name: One ordinary build and immutable completed dist inventory
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          capture ordinary-build npm run build
+          find dist -type f -print0 | sort -z > "$OUT/dist-members.before"
+          xargs -0 sha256sum < "$OUT/dist-members.before" > "$OUT/dist-files.sha256"
+          cp dist/index.html "$OUT/dist-index.html"
+      - name: Natural first scene, recap reload, trusted Continue and actual second settlement
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          test ! -e "$CONQUEST_FIRST_MATCH_OUT"
+          capture actual-followup node scripts/qa/probeSoccerConquestFirstMatch.mjs
+          test ! -s "$OUT/actual-followup.transport"
+      - name: Bind the actual complete observations and eight changed controls
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          capture followup-verifier node --input-type=module <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const out = process.env.CONQUEST_FIRST_MATCH_OUT;
+          const read = name => JSON.parse(fs.readFileSync(path.join(out, name), 'utf8'));
+          const summary = read('summary.json'), receipt = read('receipt.json');
+          for (const [key, value] of Object.entries({ contextsAttempted: 2, contextsCompleted: 2, healthyContexts: 2, controls: 8, restored: 8, originalPngs: 10, nativeReloads: 2 })) assert.equal(summary[key], value, key);
+          assert.equal(summary.runtimeCounters, null); assert.equal(summary.runtimeCounterCompleteness, 'UNKNOWN');
+          const ids = ['native-current', 'report-date'];
+          assert.equal(summary.schema, 1); assert.equal(summary.completed, true); assert.deepEqual(summary.modes, ids); assert.equal(summary.sourceCommit, process.env.GITHUB_SHA);
+          assert(Number.isInteger(summary.nativeActions) && summary.nativeActions > 0);
+          assert.equal(receipt.schema, 1); assert.equal(receipt.completed, true); assert.deepEqual(receipt.attempted, ids);
+          assert.equal(receipt.contextsCompleted, 2); assert.equal(receipt.healthyContexts, 2); assert.equal(receipt.primary, null); assert.deepEqual(receipt.secondary, []);
+          assert.equal(receipt.runtimeCounters, null); assert.equal(receipt.runtimeCounterCompleteness, 'UNKNOWN');
+          const records = read('observations.json'), projected = read('guard-observations.json');
+          assert.equal(records.length, 2); assert.equal(projected.length, 2); assert.deepEqual(records.map(row => row.id), ids); assert.deepEqual(projected.map(row => row.id), ids);
+          const sha = body => createHash('sha256').update(body).digest('hex');
+          const relative = file => { assert.equal(typeof file, 'string'); assert.equal(path.basename(file), file); return path.join(out, file); };
+          const stages = ['first-scene', 'natural-recap', 'recap-reload', 'next-preview', 'second-scene'], images = [];
+          let actionCount = 0;
+          for (let i = 0; i < records.length; i++) {
+            const row = records[i], guard = projected[i];
+            assert.equal(row.completed, true); assert.equal(Object.hasOwn(row, 'failure'), false);
+            for (const key of ['states', 'actions', 'documents', 'images', 'assets', 'responses']) assert(Array.isArray(row[key]) && row[key].length > 0, row.id + ':' + key);
+            for (const key of ['unexpected', 'pageErrors', 'consoleUnexpected', 'failedUnexpected', 'routeErrors', 'responseErrors', 'sockets', 'cleanupErrors']) assert.deepEqual(row[key], [], row.id + ':' + key);
+            assert.equal(row.mode, ids[i]); assert.equal(guard.mode, row.mode); assert.equal(guard.completed, true);
+            assert.equal(guard.input.length, row.actions.length); actionCount += row.actions.length;
+            assert.deepEqual(guard.one, row.one); assert.deepEqual(guard.zero, row.zero);
+            assert.deepEqual(guard.natural.document, row.firstDocument); assert.deepEqual(guard.natural.dailyLog, row.natural.dailyLog);
+            assert.deepEqual(guard.reload.dailyLog, row.reloaded.dailyLog); assert.deepEqual(guard.second.dailyLog, row.second.dailyLog);
+            assert.deepEqual(guard.companion.draws, row.oracle.draws); assert.deepEqual(guard.companion.replayDraws, row.oracle.replayDraws);
+            assert.deepEqual(row.images.map(image => image.file), stages.map(stage => row.id + '-' + stage + '.png'));
+            for (const image of row.images) {
+              const body = fs.readFileSync(relative(image.file)); assert(body.length > 0); assert.equal(body.length, image.bytes); assert.equal(sha(body), image.sha256);
+              assert.deepEqual(image.before, image.after); images.push(image.file);
+            }
+          }
+          assert.equal(summary.nativeActions, actionCount); assert.equal(images.length, 10);
+          const expectedControls = { viewport: 'CQ_CONTEXT', 'clock-mode': 'CQ_CLOCK', skip: 'CQ_NATURAL_RECAP', 'reload-bytes': 'CQ_RECAP_RELOAD', 'continue-input': 'CQ_NATIVE_CONTINUE', 'second-pick': 'CQ_SECOND_MATCH', draw: 'CQ_SHARED_DRAWS', write: 'CQ_BOUNDARY' };
+          const originalHash = sha(Buffer.from(JSON.stringify(projected)));
+          for (const [id, marker] of Object.entries(expectedControls)) {
+            const result = read('control-' + id + '.json'), changed = read('control-' + id + '-changed.json'), restored = read('control-' + id + '-restored.json');
+            assert.equal(result.id, id); assert.equal(result.marker, marker);
+            for (const key of ['changed', 'ownedRefusal', 'restoredHealthy']) assert.equal(result[key], true, id + ':' + key);
+            assert.equal(result.refusal.name, 'AssertionError'); assert(result.refusal.message.startsWith(marker + ':'));
+            assert.equal(result.originalSha256, originalHash); assert.equal(result.changedSha256, sha(Buffer.from(JSON.stringify(changed))));
+            assert.notEqual(result.changedSha256, originalHash); assert.notDeepEqual(changed, projected);
+            assert.deepEqual(restored, projected); assert.equal(result.restoredSha256, originalHash);
+          }
+          assert.deepEqual(read('source-before.json'), read('source-after.json')); assert.deepEqual(read('dist-before.json'), read('dist-after.json'));
+          const graph = read('oracle-inputs.json'), held = read('oracle-held.json'), metafile = read('oracle-metafile.json'), bundle = read('oracle-bundle.json');
+          assert(graph.length > 1 && Object.keys(metafile.inputs).length > 0);
+          for (const input of graph) assert.deepEqual(held.find(row => row.file === input.file), input);
+          const executable = fs.readFileSync(path.join(out, 'actual-oracle.cjs')); assert.equal(executable.length, bundle.bytes); assert.equal(sha(executable), bundle.sha256);
+          assert.equal(bundle.browserRngIntercepted, false);
+          const font = read('font-inputs.json'); assert.equal(font.entries.length, 9); assert.equal(font.archiveReacquisitions, 0); assert.equal(font.fontDownloads, 0);
+          assert.equal(font.fixtureSha256, 'a6c24e3ec7711d400f53a1baf10a3a6a3925d1f269e48ee0cd14bdca5b749938');
+          const evidence = process.env.OUT;
+          for (const tag of ['actual-types', 'producer-syntax', 'ordinary-build', 'actual-followup']) {
+            assert.equal(fs.readFileSync(path.join(evidence, tag + '.exit'), 'utf8').trim(), '0');
+            assert.equal(fs.statSync(path.join(evidence, tag + '.transport')).size, 0);
+          }
+          console.log(JSON.stringify({ schema: 1, sourceCommit: process.env.GITHUB_SHA, complete: true, contexts: ids, controls: Object.keys(expectedControls).length, originalPngs: images.length, nativeReloads: 2, nativeActions: actionCount, runtimeCounters: null, runtimeCounterCompleteness: 'UNKNOWN', scope: 'Focused natural first-scene and Continue reproduction only; global units, readers, weight caps, integration and publication unrun' }));
+          VERIFY
+      - name: Always retain source, dependency, tools, import and same-dist custody
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -z "${OUT:-}" || test ! -d "$OUT"; then exit 1; fi
+          status=0
+          if test -L node_modules/playwright; then
+            readlink node_modules/playwright > "$OUT/playwright-symlink.after.txt"
+            test "$(readlink node_modules/playwright)" = "${CONQUEST_FIRST_MATCH_TOOLS:-}/node_modules/playwright" || status=1
+            rm node_modules/playwright
+          fi
+          if test -L node_modules/playwright-core; then
+            readlink node_modules/playwright-core > "$OUT/playwright-core-symlink.after.txt"
+            test "$(readlink node_modules/playwright-core)" = "${CONQUEST_FIRST_MATCH_TOOLS:-}/node_modules/playwright-core" || status=1
+            rm node_modules/playwright-core
+          fi
+          if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-holds.log" 2>&1 || status=1; else status=1; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after" > "$OUT/source-members.log" 2>&1 || status=1
+          git diff --exit-code > "$OUT/diff.log" 2>&1 || status=1
+          git ls-files --others --exclude-standard -z > "$OUT/untracked.after"; test ! -s "$OUT/untracked.after" || status=1
+          if test -f "$OUT/dependency-files.sha256"; then
+            sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-holds.log" 2>&1 || status=1
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.after"
+            cmp "$OUT/dependency-members.before" "$OUT/dependency-members.after" > "$OUT/dependency-members.log" 2>&1 || status=1
+          else status=1; fi
+          if test -f "$OUT/tool-files.sha256"; then
+            sha256sum --check "$OUT/tool-files.sha256" > "$OUT/tool-holds.log" 2>&1 || status=1
+            find "$CONQUEST_FIRST_MATCH_TOOLS" -type f -print0 | sort -z > "$OUT/tool-members.after"
+            cmp "$OUT/tool-members.before" "$OUT/tool-members.after" > "$OUT/tool-members.log" 2>&1 || status=1
+          else status=1; fi
+          if test -f "$OUT/browser-files.sha256"; then
+            sha256sum --check "$OUT/browser-files.sha256" > "$OUT/browser-holds.log" 2>&1 || status=1
+            find "$PLAYWRIGHT_BROWSERS_PATH" -type f -print0 | sort -z > "$OUT/browser-members.after"
+            cmp "$OUT/browser-members.before" "$OUT/browser-members.after" > "$OUT/browser-members.log" 2>&1 || status=1
+          else status=1; fi
+          if test -f "$OUT/dist-files.sha256"; then
+            sha256sum --check "$OUT/dist-files.sha256" > "$OUT/dist-holds.log" 2>&1 || status=1
+            find dist -type f -print0 | sort -z > "$OUT/dist-members.after"
+            cmp "$OUT/dist-members.before" "$OUT/dist-members.after" > "$OUT/dist-members.log" 2>&1 || status=1
+          else status=1; fi
+          printf '%s\n' "$status" > "$OUT/always-holds.exit"
+          exit "$status"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: conquest-first-match-followup-${{ github.run_id }}
+          path: ${{ runner.temp }}/conquest-first-match-followup-${{ github.run_id }}/
+          retention-days: 14
