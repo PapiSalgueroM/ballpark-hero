@@ -1,0 +1,40 @@
+name: Free agent reasons baseline
+on:
+  push:
+    branches: [codex/free-agent-reasons-red-20261102]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install unchanged application dependencies
+        run: npm ci
+      - name: Proper app type gate
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+      - name: Mounted regression against unchanged component
+        run: |
+          set -euo pipefail
+          mkdir -p baseline-evidence
+          git rev-parse HEAD > baseline-evidence/source.txt
+          git diff --stat cc9a55a2f35b6215d5e6e664cc401d10d7f76291 HEAD > baseline-evidence/diff.txt
+          SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$PWD/baseline-evidence/transport.log" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/cmFreeAgentDiscovery.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=baseline-evidence/units.json 2>&1 | tee baseline-evidence/units.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: free-agent-reasons-baseline
+          path: baseline-evidence
+          retention-days: 5
+          if-no-files-found: error
