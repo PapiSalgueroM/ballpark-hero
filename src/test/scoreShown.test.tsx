@@ -110,12 +110,12 @@ vi.mock('@/components/game/PlayerAutocomplete', () => {
   return { default: Stub, PlayerAutocomplete: Stub, PlayerAutocompleteSearchIcon: () => null };
 });
 vi.mock('@/components/fantasy-draft/PlayerPool', () => ({
-  PlayerPool: ({ players, draftedIds, onSelect, disabled }: {
-    players: { id: string; name: string }[]; draftedIds: Set<string>; onSelect: (p: unknown) => void; disabled: boolean;
+  PlayerPool: ({ players, draftedIds, onSelect, disabled, isEligible }: {
+    players: { id: string; name: string }[]; draftedIds: Set<string>; onSelect: (p: unknown) => void; disabled: boolean; isEligible?: (p: unknown) => boolean;
   }) => (
     <div>
       {players.filter(p => !draftedIds.has(p.id)).map(p => (
-        <button key={p.id} data-testid="fd-pick" disabled={disabled} onClick={() => onSelect(p)}>{p.name}</button>
+        <button key={p.id} data-testid="fd-pick" disabled={disabled || (isEligible ? !isEligible(p) : false)} onClick={() => onSelect(p)}>{p.name}</button>
       ))}
     </div>
   ),
@@ -572,7 +572,7 @@ describe('rarity-round', () => {
 
 describe('fantasy-draft', () => {
   it('fantasy-draft: the verdict card and the share carry the season score the draft records, and the share tells the result as it was', async () => {
-    const positions = ['GK', 'GK', 'GK', 'CB', 'CB', 'CB', 'CB', 'LB', 'RB', 'CM', 'CM', 'CM', 'CDM', 'CAM', 'LW', 'RW', 'ST', 'ST', 'ST', 'CM', 'CB', 'ST', 'LW', 'RW', 'CM', 'CB', 'GK', 'ST', 'CAM', 'CDM'];
+    const positions = ['GK', 'GK', 'GK', 'GK', ...Array(8).fill('DEF'), ...Array(8).fill('MID'), ...Array(10).fill('FWD')];
     H.tables.fantasy_draft_players = positions.map((pos, i) => ({
       id: `fd${i}`, name: `Draft Player ${i}`, position: pos, nationality: 'Nowhere',
       market_value_millions: 10 + ((i * 37) % 90), dominant_foot: 'Right', age: 22 + (i % 12),

@@ -240,3 +240,149 @@ describe('Soccer Career creation: the academy shown is the academy joined', () =
     }
   });
 });
+
+
+import { serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
+
+const RATING98_KEYS = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'] as const;
+const rating98Skills = (state: E.CareerState) => Object.fromEntries(RATING98_KEYS.map(key => [key, state[key]]));
+function rating98Roundtrip(state: E.CareerState): E.CareerState {
+  const restored = parseSoccerCareerSave(serializeSoccerCareerSave(state));
+  expect(isSoccerCareerSave(restored), 'SC_RATING98_CODEC_VALID').toBe(true);
+  expect(restored, 'SC_RATING98_CODEC_COMPLETE').toEqual(clone(state));
+  return restored as E.CareerState;
+}
+function rating98Display(state: E.CareerState) {
+  cleanup();
+  localStorage.setItem(KEY, serializeSoccerCareerSave(state));
+  const view = mount();
+  const label = view.getByText('OVR', { exact: true });
+  return { displayed: Number(label.previousElementSibling!.textContent), saved: saved()! };
+}
+function rating98Neutral(state: E.CareerState) {
+  const catalog = E.getAllEvents(state);
+  const neutral = catalog.find(event => event.id === 1)!;
+  const sentinel = catalog.find(event => event.id === 2)!;
+  expect(neutral.choices[1].label).toBe('Stay humble');
+  expect(sentinel).toBeDefined();
+  // A declared catalog-queue fixture, not a claim this card arose naturally.
+  const prepared = rating98Roundtrip({ ...clone(state), phase: 'random_events', pendingEvents: [neutral, sentinel] });
+  const after = E.applyEventChoice(clone(prepared), 1, E.FALLBACK_CLUBS);
+  expect(rating98Skills(after), 'SC_RATING98_NEUTRAL_SKILLS').toEqual(rating98Skills(prepared));
+  expect(after.morale).toBe(Math.min(100, prepared.morale + 10));
+  expect(after.lastEventId).toBe(1);
+  expect(after.pendingEvents.map(event => event.id)).toEqual([2]);
+  expect(after.phase).toBe('random_events');
+  return { prepared, after };
+}
+function rating98Guard(age: number): E.CareerState {
+  const uniform = Object.fromEntries(RATING98_KEYS.map(key => [key, 98])) as Pick<E.CareerState, typeof RATING98_KEYS[number]>;
+  const initial = E.initCareer('Rating guard', 'England', 'ST', '2020-24', uniform, 98, 2020, E.FALLBACK_CLUBS, undefined, 99);
+  const youth = E.advanceYouthYear(initial, E.FALLBACK_CLUBS);
+  expect(youth.pendingOffers.length, 'SC_RATING98_GUARD_REAL_OFFER').toBeGreaterThan(0);
+  const signed = E.acceptOffer(youth, youth.pendingOffers[0]);
+  // Controlled age and uniform skills isolate named costs, not a replay of the report.
+  return {
+    ...signed, ...uniform, age, overall: 98, peakOverall: 98, potential: 99, potentialEarned: 0,
+    primeType: 'normal', phase: 'playing', retirementSuggested: true,
+    purchasedItems: [], statBoostNextSeason: {}, socialMediaFocusBoost: false,
+    corruptionHeat: 0, dirtyMoney: 0, prisonSeasons: 0, pedActive: false, pedSeasonsRemaining: 0,
+    seasons: signed.seasons.map((row, index) => index === signed.seasons.length - 1
+      ? { ...row, age, year: 2020 + age - 16 } : row),
+  };
+}
+function rating98CostObservation(name: string, input: E.CareerState, after: E.CareerState) {
+  const restored = rating98Roundtrip(after);
+  const current = rating98Display(restored);
+  const derived = E.calcOverall(restored, restored.position);
+  retain(name, { condition: 'Controlled named-cost fixture; not the reported player or a 23-point reproduction',
+    before: input, after: restored, skills: rating98Skills(restored), derivedOverall: derived,
+    displayedOverall: current.displayed, savedOverall: current.saved.overall,
+    storedOverallMatchesSkills: restored.overall === derived });
+  return { restored, derived, ...current };
+}
+
+describe('Soccer Career rating98 diagnostic', () => {
+  it.each(['ST', 'GK'])('rating98 diagnostic actual %s editor, save, neutral choice and first healthy year agree', async pos => {
+    const view = prepare();
+    if (pos !== 'ST') position(view, pos);
+    roll(view); settle();
+    // Warm the real lazy module, then enter it through its actual page button.
+    await import('@/components/soccer-career/SoccerCareerBuildEditor');
+    await act(async () => { fireEvent.click(view.getByRole('button', { name: /Customize your build/i })); });
+    const input = view.getByRole('textbox', { name: /^Starting overall$/ });
+    fireEvent.change(input, { target: { value: '98' } }); fireEvent.blur(input);
+    expect(input).toHaveValue('98');
+    expect(Number(view.getByText('Starting overall', { exact: true }).parentElement!.lastElementChild!.textContent)).toBe(98);
+    expect(Number(view.getByText('Room to grow', { exact: true }).parentElement!.lastElementChild!.textContent)).toBe(1);
+    fireEvent.click(view.getByRole('button', { name: /Lock in build/i }));
+    const shown = preview(view, pos)!;
+    expect(shown.overall, 'SC_RATING98_EDITOR_PREVIEW').toBe(98);
+    fireEvent.click(begin(view));
+    const created = assertStarted(view, pos, shown);
+    retain('rating98-' + pos + '-created', { shown, created, derivedOverall: E.calcOverall(created, pos) });
+    expect(E.calcOverall(created, pos), 'SC_RATING98_CREATED_SKILLS').toBe(98);
+    expect(Number(view.getByText('OVR', { exact: true }).previousElementSibling!.textContent)).toBe(98);
+    expect(created.potential).toBe(99);
+    expect(E.effectivePotential(created) - created.overall).toBe(1);
+    const decoded = rating98Roundtrip(created);
+    const neutral = rating98Neutral(decoded);
+    retain('rating98-' + pos + '-neutral', neutral);
+    expect(neutral.after.overall, 'SC_RATING98_NEUTRAL_OVR').toBe(98);
+    vi.mocked(Math.random).mockReturnValue(0.99);
+    const youth = E.advanceYouthYear(clone(decoded), E.FALLBACK_CLUBS);
+    expect(youth.age).toBe(17);
+    expect(youth.pendingOffers.length).toBeGreaterThan(0);
+    for (const key of RATING98_KEYS) expect(youth[key], key).toBeGreaterThanOrEqual(decoded[key]);
+    const signed = E.acceptOffer(youth, youth.pendingOffers[0]);
+    const senior = E.advanceProSeason(clone(signed), E.FALLBACK_CLUBS);
+    const row = senior.seasons[senior.seasons.length - 1];
+    const current = rating98Display(rating98Roundtrip(senior));
+    retain('rating98-' + pos + '-healthy-year', { condition: 'Constant .99 controls a healthy first senior year; not a natural injury-rate claim',
+      decoded, youth, signed, senior, row, displayedOverall: current.displayed, savedOverall: current.saved.overall });
+    expect(row.type).toBe('playing'); expect(row.apps).toBeGreaterThan(0); expect(row.injurySevere).not.toBe(true);
+    expect(senior.age).toBe(18);
+    expect(senior.overall).toBe(E.calcOverall(senior, pos));
+    expect(senior.overall).toBeGreaterThanOrEqual(98); expect(senior.overall).toBeLessThanOrEqual(99);
+    expect(current.displayed).toBe(senior.overall); expect(current.saved.overall).toBe(senior.overall);
+  });
+
+  it('rating98 diagnostic legitimate old-age skill loss stays in stored and displayed overall', () => {
+    const before = rating98Guard(39);
+    expect(E.calcOverall(before, 'ST')).toBe(98);
+    vi.mocked(Math.random).mockReturnValue(0.99);
+    const after = E.advanceProSeason(clone(before), E.FALLBACK_CLUBS);
+    const observed = rating98CostObservation('rating98-old-age', before, after);
+    expect(after.pace).toBe(92);
+    for (const key of RATING98_KEYS.filter(key => key !== 'pace')) expect(after[key], key).toBe(94);
+    expect(observed.derived).toBe(94);
+    expect(after.overall, 'SC_RATING98_AGE_STORED_OVR').toBe(observed.derived);
+    expect(observed.displayed).toBe(observed.derived); expect(observed.saved.overall).toBe(observed.derived);
+  });
+
+  it('rating98 diagnostic legitimate prison skill loss stays in stored and displayed overall', () => {
+    const before = { ...rating98Guard(24), prisonSeasons: 1 };
+    vi.mocked(Math.random).mockReturnValue(0.99);
+    const after = E.advanceProSeason(clone(before), E.FALLBACK_CLUBS);
+    const observed = rating98CostObservation('rating98-prison', before, after);
+    expect(after.seasons[after.seasons.length - 1].club).toBe('PRISON');
+    for (const key of RATING98_KEYS) expect(after[key], key).toBe(93);
+    expect(observed.derived).toBe(93);
+    expect(after.overall, 'SC_RATING98_PRISON_STORED_OVR').toBe(observed.derived);
+    expect(observed.displayed).toBe(observed.derived); expect(observed.saved.overall).toBe(observed.derived);
+  });
+
+  it('rating98 diagnostic PED removal updates stored and displayed overall after its five-point skill cost', () => {
+    const before = { ...rating98Guard(24), pedActive: true, pedSeasonsRemaining: 3 };
+    vi.mocked(Math.random).mockReturnValue(0);
+    const after = E.advanceProSeason(clone(before), E.FALLBACK_CLUBS);
+    const observed = rating98CostObservation('rating98-ped-loss', before, after);
+    expect(after.seasons[after.seasons.length - 1].club).toBe('BANNED (PED)');
+    expect(after.pedActive).toBe(false); expect(after.pedSeasonsRemaining).toBe(0);
+    for (const key of RATING98_KEYS) expect(after[key], key).toBe(93);
+    expect(observed.derived).toBe(93);
+    expect(after.overall, 'SC_RATING98_PED_STORED_OVR').toBe(observed.derived);
+    expect(observed.displayed, 'SC_RATING98_PED_DISPLAYED_OVR').toBe(observed.derived);
+    expect(observed.saved.overall, 'SC_RATING98_PED_SAVED_OVR').toBe(observed.derived);
+  });
+});

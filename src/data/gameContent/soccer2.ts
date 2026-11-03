@@ -1985,8 +1985,8 @@ export const SOCCER_CONTENT_2: GameContentMap = {
 
   '/fantasy-draft': {
     intro: [
-      "You and an AI rival take turns raiding one player pool until you have each drafted a full XI. Then a season is simulated, both squads get dissected, and the community votes on who built better.",
-      "The wrinkle is the daily criteria: one squad building rule per day, and it is enforced, not decorative. Picks that break it are blocked for you and the AI alike.",
+      "You and the AI draft a 4-3-3 from one shared pool. The simulated 38-game table decides the winner. Season stories and the community vote follow.",
+      "Daily criteria apply to both sides. They relax only when no eligible player fits an open position. Full positions stay blocked.",
     ],
     headings: {
       howToPlay: "How to play Fantasy Draft, a free online soccer draft game",
@@ -2011,14 +2011,14 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Covering every position on the pitch",
         items: [
-          "Cover every position, goalkeeper included.",
+          "Both sides need 1 goalkeeper, 4 defenders, 3 midfielders and 3 forwards.",
         ],
       },
       {
         heading: "Simulating the season and voting on the winner",
         items: [
-          "At 11 apiece, hit Simulate Season for the story of each team's year.",
-          "Read the strengths and weaknesses report, then vote for the winner.",
+          "At 11 apiece, the 38-game table names the winner. Ask for the season story afterwards.",
+          "Read the analysis and cast a separate community vote.",
         ],
       },
     ],
@@ -2036,9 +2036,9 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
       },
       {
-        heading: "Blocked picks are relaxed automatically",
+        heading: "Daily criteria can relax, positions cannot",
         items: [
-          "Illegal picks are blocked with the reason shown, relaxing only when no legal option remains.",
+          "Full positions stay blocked. Daily criteria relax only if no eligible player fits an open slot.",
         ],
         subsections: [
           {
@@ -2054,13 +2054,13 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "An Under 25s rule blocks your opening pick",
         paragraphs: [
-          "The rule is Under 25s, so your 27 year old superstar opener dies on contact: blocked. Round one becomes a wonderkid land grab, and the AI, which leans expensive, snaps up the priciest young forward on the board.",
+          "Under 25s blocks an older opener. You and the AI still need a 4-3-3, so both chase eligible players in the positions left.",
         ],
       },
       {
-        heading: "Grabbing a keeper late while the AI stalls",
+        heading: "Filling defense when your attack is full",
         paragraphs: [
-          "You counter with a young keeper, because the AI leaves goalkeepers late. By pick 22 both rosters are packed with kids, and the vote breaks your way.",
+          "With 1 GK, 3 MID and 3 FWD drafted, only defenders fit. Another forward is blocked. If no defender meets today's criteria, that rule relaxes for a defender, never an extra forward.",
         ],
       },
     ],
@@ -2068,7 +2068,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Drafting against what the AI values",
         items: [
-          "Draft against the AI's taste: it chases market value, so grab the cheap positional glue it ignores.",
+          "The AI chases value but fills the same positions. Keep good options for each slot.",
         ],
       },
       {
@@ -2088,7 +2088,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     faqs: [
       {
         q: "Who decides the winner?",
-        a: "The community. After the season stories and analysis, players vote for the squad they rate higher, and the totals are shown. One vote per signed in account.",
+        a: "The simulated 38-game table decides the draft. Stories and the signed-in community vote are extras.",
       },
       {
         q: "Does the criteria change?",
@@ -2096,7 +2096,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "Can the AI cheat the rule?",
-        a: "No, its picks pass the same legality check as yours. It relaxes for either side only when the pool has no legal option left, so every draft can finish.",
+        a: "Both sides use the same position limits. Daily criteria relax only when no eligible player fits an open slot.",
       },
     ],
   },

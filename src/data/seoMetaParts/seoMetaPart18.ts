@@ -16,7 +16,7 @@ export const SEO_META_PART: Record<string, SeoMeta> = {
   },
   "/fantasy-draft": {
     title: "Fantasy Draft: Soccer XI Draft Against the AI",
-    description: "Take turns with an AI rival drafting from one player pool under the day's squad rule, then a season is simulated and votes pick the winner. Free soccer draft.",
+    description: "Draft a balanced soccer XI against the AI under a daily squad rule. The simulated season table decides the winner. Free soccer draft.",
   },
   "/nba-career": {
     title: "NBA Career Path: Guess the Basketball Player",

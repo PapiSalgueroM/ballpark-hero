@@ -192,7 +192,7 @@ export const PlayerPool = ({ players, draftedIds, onSelect, disabled, isEligible
               <div className="text-right shrink-0">
                 <p className="text-sm font-bold text-primary">{draftRating(player)} <span className="font-normal text-muted-foreground">· £{player.market_value_millions}M</span></p>
                 {blocked ? (
-                  <p className="text-[10px] font-semibold text-destructive">Blocked by today's rule</p>
+                  <p className="text-[10px] font-semibold text-destructive">Pick blocked</p>
                 ) : (
                   <p className="text-[10px] text-muted-foreground">{player.dominant_foot} foot</p>
                 )}

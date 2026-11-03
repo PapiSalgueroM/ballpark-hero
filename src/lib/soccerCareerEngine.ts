@@ -5471,6 +5471,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       for (const k of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) {
         (s as any)[k] = clamp((s as any)[k] - 5, 20, 99);
       }
+      s.overall = calcOverall(s, s.position);
       s.matchFixBanned = 1; // 1 year ban
       s.integrityBonus -= 25;
       s.popularity = clamp(s.popularity - 30, 0, 100);
