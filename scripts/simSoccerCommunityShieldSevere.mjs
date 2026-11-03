@@ -108,7 +108,12 @@ async function main() {
       else { assert.equal(row.status, 'passed'); assert.equal(row.failureMessages.length, 0); }
     }
     assert.equal(sha(fs.readFileSync(reportFile)), sha(reportBytes));
-    const evidenceBytes = fs.readFileSync(env.SC_SHIELD_SEVERE_EVIDENCE), evidence = JSON.parse(evidenceBytes);
+    let evidenceBytes;
+    {
+      const rawEvidenceBytes = fs.readFileSync(env.SC_SHIELD_SEVERE_EVIDENCE);
+      evidenceBytes = Buffer.from(rawEvidenceBytes);
+    }
+    const evidence = JSON.parse(evidenceBytes);
     assert.equal(evidence.calls.length, 4);
     assert.deepEqual(evidence.calls.map(row => row.label), ['repair', 'actual-close', 'opening-present', 'opening-absent']);
     for (const call of evidence.calls) { assert.ok(call.before && call.after && Array.isArray(call.draws)); assert.equal(call.error, undefined); }
