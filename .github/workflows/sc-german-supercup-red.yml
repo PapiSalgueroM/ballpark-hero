@@ -1,0 +1,178 @@
+name: German Supercup owned missing-feature baseline
+on:
+  push:
+    branches: [codex/sc-german-supercup-red-20261103]
+permissions:
+  contents: read
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      NO_COLOR: '1'
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+          cache: npm
+      - name: Bind the exact qualified Shield parent and two test-only additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-german-supercup-baseline"
+          test ! -e "$OUT"; mkdir "$OUT"
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          printf 'SC_GERMAN_SUPERCUP_EVIDENCE=%s\n' "$OUT/inputs" >> "$GITHUB_ENV"
+          test "$GITHUB_REF" = refs/heads/codex/sc-german-supercup-red-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = 7510fc3ed387187094f3e0f2337416c458e0e1a2
+          test "$(git rev-parse 'HEAD^^{tree}')" = 7ca634f9ed3bf6531632389542b0ef5275022150
+          test "$(git rev-parse --is-shallow-repository)" = false
+          git rev-parse HEAD 'HEAD^{tree}' > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t.github/workflows/sc-german-supercup-red.yml\nA\tsrc/test/soccerGermanSupercupAcceptance.test.ts\n' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/pins.txt" <<'PINS'
+          src/lib/soccerCareerEngine.ts a65c8353d6e4660c1d6cec6471e17095eed35805
+          src/lib/soccerCareerExtraCups.ts f96d2442942db57eb89d3d73d7dc18bba02ec165
+          src/lib/soccerCareerLeagueWorld.ts 72fcabdd0c557a743aa849b01208140c3030048f
+          src/lib/soccerSeasonCompetitions.ts e00266f57feb0bd0b4a60d4a4c5407e55074d2c1
+          src/lib/soccerSeasonCalendar.ts 164d980cb5edfbe542dd863586131e027f75fa86
+          src/components/soccer-career/TrophyCabinet.tsx 2c084986319e798140af26e8652d0a739be047a4
+          src/test/fixtures/soccerSeasonCompetitions1173.ts a9d674dc7a830856dbeed148a65438626745303c
+          scripts/data/careerLeagueWorldSaves1100.json 81425f731297f0ff72fc4e163dfe1a4cb86814ab
+          src/test/soccerCommunityShieldAnnualRating.test.ts bf4a086302e324ddae02a26d9736d5cd78e11f2c
+          src/test/soccerCommunityShieldAcceptance.test.ts 72cf4787781245c914ebc0b178de5d56b5991687
+          src/test/soccerCommunityShieldUiAcceptance.test.tsx 52cc2d31bcf186cb1193068940bd70d45a4c5a2e
+          src/lib/soccerCareerPress.ts 08b91f6cae1d239ee2ac52ecaf80fd81a66cda8b
+          src/test/soccerGermanSupercupAcceptance.test.ts e5f4cdaee20715379ac72410484b0ce2b00d7539
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/pins.txt"
+          printf '%s  %s\n' 40f5f2d109f05c34644d04261f828c43b9e24255449341e95f856b9d589d1ac9 src/test/soccerGermanSupercupAcceptance.test.ts | sha256sum --check > "$OUT/test-pin.log"
+          test "$(git ls-files | wc -l)" -eq 5666
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          git ls-files --others --exclude-standard -z > "$OUT/untracked.before"; test ! -s "$OUT/untracked.before"
+      - name: Locked online install before guarded original owner calls
+        run: |
+          set -euo pipefail
+          code=0; NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"; test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.before"
+          xargs -0 sha256sum < "$OUT/dependency-members.before" > "$OUT/dependency.sha256"
+      - name: Retain actual owned RED and held English acceptance
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset SC_EXTRA_CUPS_ENGINE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP FORCE_COLOR
+          capture(){
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"; : > "$OUT/$tag.transport"
+            local code=0; SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr" || code=$?
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 14 "$OUT/$tag.stdout"; tail -n 14 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          capture types node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json
+          unitcode=0
+          capture units node node_modules/vitest/vitest.mjs run src/test/soccerGermanSupercupAcceptance.test.ts --reporter=json --outputFile="$OUT/units.json" || unitcode=$?
+          capture admission node --input-type=module <<'ADMISSION'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { createHash } from 'node:crypto';
+          const out=process.env.OUT,raw=fs.readFileSync(path.join(out,'units.json')),report=JSON.parse(raw);
+          const expected=[{"title":"SC_GERMAN_PROSPECTIVE_CAPTURE: captures Germany globally from the same actual closed world","primary":"SC_GERMAN_PROSPECTIVE_CAPTURE_MISSING","predictedStatus":"failed","fullName":"Soccer Career German Supercup first slice SC_GERMAN_PROSPECTIVE_CAPTURE: captures Germany globally from the same actual closed world"},{"title":"SC_GERMAN_AUTOMATIC_OPENER: plays one saved German match for the current represented club","primary":"SC_GERMAN_AUTOMATIC_OPENER_MISSING","predictedStatus":"failed","fullName":"Soccer Career German Supercup first slice SC_GERMAN_AUTOMATIC_OPENER: plays one saved German match for the current represented club"},{"title":"SC_GERMAN_SAVED_CABINET: counts a saved played German win once in its own cabinet category","primary":"SC_GERMAN_SAVED_CABINET_MISSING","predictedStatus":"failed","fullName":"Soccer Career German Supercup first slice SC_GERMAN_SAVED_CABINET: counts a saved played German win once in its own cabinet category"},{"title":"SC_GERMAN_SAVED_CALENDAR: reveals its distinct saved opener before league one without inventing a venue","primary":"SC_GERMAN_SAVED_CALENDAR_MISSING","predictedStatus":"failed","fullName":"Soccer Career German Supercup first slice SC_GERMAN_SAVED_CALENDAR: reveals its distinct saved opener before league one without inventing a venue"},{"title":"SC_GERMAN_ENGLISH_PRESERVED: keeps the existing full English result counter and neutral opening readable","primary":null,"predictedStatus":"passed","fullName":"Soccer Career German Supercup first slice SC_GERMAN_ENGLISH_PRESERVED: keeps the existing full English result counter and neutral opening readable"}];
+          const sha=value=>createHash('sha256').update(value).digest('hex');
+          const strip=value=>value.replace(/\x1b\[[0-9;]*m/g,'');
+          const actual=report.testResults.flatMap(file=>file.assertionResults.map(row=>({...row,file:file.name})));
+          const observe=rows=>rows.map(row=>({fullName:row.fullName,status:row.status,firstHeadline:row.failureMessages?.length?strip(row.failureMessages[0]).split('\n')[0]:null,failureMessages:row.failureMessages,file:row.file}));
+          fs.writeFileSync(path.join(out,'observations-before-admission.json'),JSON.stringify({unitExit:Number(fs.readFileSync(path.join(out,'units.exit'),'utf8')),reportSha256:sha(raw),observations:observe(actual)},null,2)+'\n');
+          function admit(rows){
+            assert.equal(rows.length,5,'Exactly five German acceptance cases');
+            assert.equal(new Set(rows.map(row=>row.fullName)).size,5,'Five unique full identities');
+            for(const spec of expected){
+              const row=rows.find(value=>value.fullName===spec.fullName);assert(row,'Exact expected test identity: '+spec.fullName);
+              assert.equal(row.status,spec.predictedStatus,'Expected owned baseline status: '+spec.title);
+              if(spec.primary){
+                assert.equal(row.failureMessages.length,1,'One first failure per owned missing feature');
+                const headline=strip(row.failureMessages[0]).split('\n')[0];
+                assert(headline.startsWith('AssertionError: '+spec.primary+':'),'Owned first primary: '+spec.primary);
+              }else assert.equal(row.failureMessages.length,0,'Preservation has no failure');
+            }
+            assert.equal(rows.filter(row=>row.status==='failed').length,4);assert.equal(rows.filter(row=>row.status==='passed').length,1);
+          }
+          const runtime=fs.readFileSync(path.join(out,'units.stdout'),'utf8')+'\n'+fs.readFileSync(path.join(out,'units.stderr'),'utf8');
+          function admitRuntime(value){
+            assert.equal(/Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|ERR_MODULE_NOT_FOUND|ERR_LOAD_URL|Failed to load url|Cannot find (?:module|package)|SyntaxError:|ReferenceError:|TypeError:/i.test(value),false,'No unexpected runtime diagnostics');
+          }
+          assert.equal(Number(fs.readFileSync(path.join(out,'types.exit'),'utf8')),0);
+          assert.equal(Number(fs.readFileSync(path.join(out,'units.exit'),'utf8')),1);
+          assert.equal(report.testResults.length,1);assert.equal(report.numTotalTests,5);
+          assert.equal(report.numFailedTests,4);assert.equal(report.numPassedTests,1);
+          if(typeof report.numRuntimeErrorTestSuites==='number')assert.equal(report.numRuntimeErrorTestSuites,0);
+          if(Array.isArray(report.unhandledErrors))assert.equal(report.unhandledErrors.length,0);
+          admit(actual);admitRuntime(runtime);
+          const controls=[];
+          const wrong=structuredClone(actual),owned=wrong.find(row=>row.status==='failed'),old=owned.failureMessages[0];
+          owned.failureMessages[0]='TypeError: a setup failure cannot own feature RED\n'+old;assert.notEqual(owned.failureMessages[0],old);
+          let changed=null;
+          assert.throws(()=>admit(wrong),error=>{changed={name:error.name,message:error.message};return error.name==='AssertionError'&&error.message.startsWith('Owned first primary:');});
+          admit(actual);controls.push({id:'wrong-first-error',changed:true,observed:changed,restoredHealthy:true});
+          const missing=actual.slice(0,-1);assert.notDeepEqual(missing,actual);changed=null;
+          assert.throws(()=>admit(missing),error=>{changed={name:error.name,message:error.message};return error.name==='AssertionError'&&error.message.startsWith('Exactly five German acceptance cases');});
+          admit(actual);controls.push({id:'missing-case',changed:true,observed:changed,restoredHealthy:true});
+          const badRuntime=runtime+'\nTypeError: explicit copied runtime control';assert.notEqual(badRuntime,runtime);changed=null;
+          assert.throws(()=>admitRuntime(badRuntime),error=>{changed={name:error.name,message:error.message};return error.name==='AssertionError'&&error.message.startsWith('No unexpected runtime diagnostics');});
+          admitRuntime(runtime);controls.push({id:'unexpected-runtime',changed:true,observed:changed,restoredHealthy:true});
+          for(const tag of ['types','units'])assert.equal(fs.statSync(path.join(out,tag+'.transport')).size,0);
+          const evidence=process.env.SC_GERMAN_SUPERCUP_EVIDENCE;
+          const required=['capture-actual-close','capture-qualification-expectation','capture-before-owned-assertion','opening-actual-close','opening-qualification-expectation','opening-before-owned-assertion','cabinet-before-owned-assertion','calendar-before-owned-assertion','english-preservation'];
+          const inputs=required.map(name=>{const bytes=fs.readFileSync(path.join(evidence,name+'.json'));JSON.parse(bytes);return{name,bytes:bytes.length,sha256:sha(bytes)};});
+          fs.writeFileSync(path.join(out,'owned-red-admission.json'),JSON.stringify({schemaVersion:1,ownedBaselineAdmitted:true,productImplemented:false,tests:5,ownedMissing:4,englishPreserved:1,reportSha256:sha(raw),identities:observe(actual),inputs,controls,runtimeCounters:null,runtimeCounterCompleteness:'UNKNOWN'},null,2)+'\n');
+          console.log('SC_GERMAN_OWNED_RED: four actual missing-feature AssertionErrors and one English preservation pass; product unimplemented');
+          ADMISSION
+          printf '%s\n' "$unitcode" > "$OUT/observed-unit-return.exit"
+          exit "$unitcode"
+      - name: Retain complete immutable source and dependency holds
+        if: always()
+        run: |
+          set -euo pipefail
+          code=0
+          if test -d "$OUT"; then
+            if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log" 2>&1 || code=1; fi
+            if test -f "$OUT/dependency.sha256"; then sha256sum --check "$OUT/dependency.sha256" > "$OUT/dependency-held.log" 2>&1 || code=1; fi
+            git ls-files -z > "$OUT/source-members.after"
+            if test -f "$OUT/source-members.before"; then cmp "$OUT/source-members.before" "$OUT/source-members.after" > "$OUT/source-members.log" 2>&1 || code=1; fi
+            if test -d node_modules; then
+              find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.after"
+              if test -f "$OUT/dependency-members.before"; then cmp "$OUT/dependency-members.before" "$OUT/dependency-members.after" > "$OUT/dependency-members.log" 2>&1 || code=1; fi
+            fi
+            git diff --exit-code > "$OUT/source-diff.log" 2>&1 || code=1
+            git ls-files --others --exclude-standard -z > "$OUT/untracked.after"; test ! -s "$OUT/untracked.after" || code=1
+            if find "$OUT" -maxdepth 1 -name '*.transport' -type f ! -size 0 | grep -q .; then code=1; fi
+            printf '%s\n' "$code" > "$OUT/holds.exit"
+          else code=1; fi
+          exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-german-supercup-owned-baseline
+          path: ${{ runner.temp }}/sc-german-supercup-baseline
+          if-no-files-found: error
+          retention-days: 14
