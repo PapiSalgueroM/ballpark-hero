@@ -1,0 +1,279 @@
+name: German Supercup full ordinary units
+on:
+  push:
+    branches: [codex/sc-german-supercup-full-units-20261103]
+permissions:
+  contents: read
+jobs:
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the exact qualified German parent and one new workflow
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-german-supercup-full-units"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          parent='e46b39130a56bea4b0cf0e4091a281356f52b854'
+          tree='b37f80c4d2602bcd08679e7432a6276cef31dd07'
+          [[ "$parent" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$tree" =~ ^[0-9a-f]{40}$ ]]
+          test "$GITHUB_REF" = refs/heads/codex/sc-german-supercup-full-units-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = "$parent"
+          test "$(git rev-parse 'HEAD^^{tree}')" = "$tree"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\n' '.github/workflows/sc-german-supercup-full-units.yml' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          test "$(git ls-tree -r --name-only HEAD^ | wc -l)" -eq 5671
+          test "$(git ls-files | wc -l)" -eq 5672
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          scripts/simCareerDerbies.mjs 2b6c96cdb99b67d8d3001a0b3a014edb8ce52fb4
+          scripts/simCareerStory.mjs 2b43be244e7f1c327d519594563d67aab63c574f
+          scripts/simSeasonCentreAgreement.mjs 3fbcd99a4936a13eaec7eb6eb4055b7b568452cf
+          scripts/simSeasonCentreMotion.mjs 9de1614896c12abcddc81194d9801f60bd54263a
+          scripts/simSoccerCommunityShieldMatch.mjs 7564cdf0f119325e6af8dcbfb654ed2bd74ac8d1
+          scripts/simSoccerCommunityShieldSevere.mjs 2d871e8e8e6c2a486a36b2fe55899dea7e70129c
+          scripts/simSoccerSeasonCentreFocus.mjs bdcaa282e2ef6b2f6fa676afa11fee5057b61f7c
+          scripts/simSoccerShieldPress.mjs 340110272e304e0022200bb51c1e053c5621cc3d
+          scripts/simSoccerShieldReplay.mjs f574ccd140453390faa926e1273ff6024fa793e2
+          src/components/season-centre/SeasonCentre.tsx 63d843863cede4f6d2f397053dc70a629ea4325f
+          src/components/soccer-career/PressRoom.tsx 19790caba42083109732c5cf2127d2b7636b00fb
+          src/components/soccer-career/SeasonCompetitionPanel.tsx 4c4aefca774e51e3453947efd91bfbb70f615dd9
+          src/components/soccer-career/SeasonResumeChip.tsx 34256e795a464b7dff8c139e7fe16cbfdec662d5
+          src/components/soccer-career/SoccerSeasonCentre.tsx 6bdc18c9a6b942bcef0d7147215168626bebd34b
+          src/components/soccer-career/TrophyCabinet.tsx b88596ab0ebdf7abae55e8c59512280bbb66a6f7
+          src/lib/season/soccer.ts 1b7958da501755adcc95879da3e8d65c4d593845
+          src/lib/soccerCareerEngine.ts 7ab833904768c34cdba6ed49656eba95647d9379
+          src/lib/soccerCareerExtraCups.ts 369ded47ea71cfe6f98441e09817450c3f2ebcca
+          src/lib/soccerCareerGermanSupercup.test.ts 621e2cdfb539f56ed8b2e64bb761f896c03d1a24
+          src/lib/soccerCareerPress.ts 8491f89ac463342cc2acb85e91a2e77b7a8aa04e
+          src/lib/soccerSeasonCalendar.ts 51ced17522fb64e78686705f8e2c4dfc0ff8e9d9
+          src/lib/soccerSeasonCompetitions.ts 0bbb0abfc395ac2b412056c7ab15d71c7c3d680c
+          src/pages/SoccerCareer.tsx 09ad9c5827de9271cc4e0ac33dbbfdf030c1aa40
+          src/test/careerRecordedStats.test.tsx eeba1d7db1671541995177fae66e056cac12ebb4
+          src/test/careerStory.test.tsx 41a638727d7c29e862648efe562a03df858dc0f2
+          src/test/soccerCommunityShieldAcceptance.test.ts 72cf4787781245c914ebc0b178de5d56b5991687
+          src/test/soccerCommunityShieldAnnualRating.test.ts bf4a086302e324ddae02a26d9736d5cd78e11f2c
+          src/test/soccerCommunityShieldLegacyReplay.test.tsx ca7e722f27012cd5f0bc362107bd86d84199937c
+          src/test/soccerCommunityShieldMatch.test.ts 0f337b3f65fe9d7d506ff387956ff025c75e8944
+          src/test/soccerCommunityShieldReplay.test.ts f1242b3a3b350a4e01bf9dafb3b24da180d8189e
+          src/test/soccerCommunityShieldRules.test.ts aee086a743f4c0c261d805ee0d994b01323d092f
+          src/test/soccerCommunityShieldSevere.test.ts 1c8e9b1908d7e2268e4ec1bbff9438611e4bb118
+          src/test/soccerGermanSupercupAcceptance.test.ts e5f4cdaee20715379ac72410484b0ce2b00d7539
+          src/test/soccerGermanSupercupConsumers.test.ts a45b5bc68184d6ffb0b118e68e709075789a15b1
+          src/test/soccerGermanSupercupScreens.test.tsx 0aa1a01133bf2303cf374d0e2ed38102b26e3dd5
+          src/test/soccerSeasonCentreFocus.test.tsx 1fa2099cb71ab36a5a1667833c304841a8e931a4
+          src/test/soccerShieldPress.test.ts 60faec8ee37a88ed4ecfafc53172b0212907014b
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 18 "$OUT/$tag.stdout"; tail -n 18 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          cat > "$OUT/expected-provenance.json" <<'PROVENANCE'
+          {"schemaVersion":1,"status":"UNRUN expectation only","qualifiedBaseline":{"source":"542e124ccd4eb0fe8dc70ba409ad20b3b5e27d49","run":41595767626,"artifact":13214256525,"report":{"bytes":3675244,"sha256":"fe7c46db02281342931c083d58548bfe0977c5dc8a535795bc31c177bb03b11e","gitBlob":"3c74aad94a63e44f375fc06b260bcc147f161785"},"actualRows":10365,"actualPassed":10307,"pending":58,"files":724,"workflow":{"bytes":19060,"sha256":"0bedcf0bcf8bc8b560787cceca2a85f45e6e66d795be76ecdbfeffad9ec49304","gitBlob":"8d7ba397e762185ec041012bd5660e6ea93e5006"}},"newCases":{"source":"Exact 30 identities derived from frozen first-green literal and independently matched to acquired actual focused report","workflow":{"bytes":40390,"sha256":"5d07ea32077c36a8927be59c6214e91bb0ba5b6ed7a1523c9dea9ab06c3e542a","gitBlob":"79803a9a7c001d5a58c62dc1a300d0e600576ee6"},"literalCount":115,"selectedGermanCases":30,"files":["src/lib/soccerCareerGermanSupercup.test.ts","src/test/soccerGermanSupercupAcceptance.test.ts","src/test/soccerGermanSupercupConsumers.test.ts","src/test/soccerGermanSupercupScreens.test.tsx"],"expectedStatus":"passed","actualRunPending":41634405336,"actualOutcome":"Actual first candidate: 29 German passed, one German UI calendar failed. All 30 successor passes remain expected only.","actualReport":{"run":41634405336,"artifact":13230312158,"pin":{"bytes":61082,"sha256":"f444b301467afba2d4568949339e1391428964f883833f0844915d4f7ba7ab47","gitBlob":"198b0025cc9e0295fce57d86cc6772c89a102269"},"germanPassed":29,"germanFailed":1,"old85Passed":true,"failed":[{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_CALENDAR: reveals one distinct unknown-venue opener before league one then continues","status":"failed"}]}},"added":[{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_ANNUAL: forward-verifies the one cup contribution and fails missing proof closed","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_CAPTURE: binds18 actual-order inputs, the double runner-up and a lower-division cup winner","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_COEXIST: accepts English world-only evidence and rejects represented or malformed English","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_GLOBAL: consumes no mainstream random draws during actual match generation","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_IDENTITY: binds Germany and canonical entrant identity without granting nonentrants","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_PARTIAL: refuses incomplete, mismatched, duplicate and pre-world qualification","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_PLAY: keeps team outcome independent of player selection and preserves all inputs","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_READER: refuses malformed proof, score, contribution, grade and invented venue","status":"passed"},{"file":"src/lib/soccerCareerGermanSupercup.test.ts","fullName":"Soccer Career German Supercup domain SC_GERMAN_DOMAIN_TITLES: counts only unambiguous played wins in input order without mutation","status":"passed"},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","fullName":"Soccer Career German Supercup first slice SC_GERMAN_AUTOMATIC_OPENER: plays one saved German match for the current represented club","status":"passed"},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","fullName":"Soccer Career German Supercup first slice SC_GERMAN_ENGLISH_PRESERVED: keeps the existing full English result counter and neutral opening readable","status":"passed"},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","fullName":"Soccer Career German Supercup first slice SC_GERMAN_PROSPECTIVE_CAPTURE: captures Germany globally from the same actual closed world","status":"passed"},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","fullName":"Soccer Career German Supercup first slice SC_GERMAN_SAVED_CABINET: counts a saved played German win once in its own cabinet category","status":"passed"},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","fullName":"Soccer Career German Supercup first slice SC_GERMAN_SAVED_CALENDAR: reveals its distinct saved opener before league one without inventing a venue","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_ANNUAL_LEAGUE: keeps the exact annual key and complete league plan","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_ANNUAL_PROOF: uses captured grade and refuses corrupt evidence before any league key","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_CODEC history: preserves complete German fields and pending mirror","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_CODEC literal: preserves complete German fields and pending mirror","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_CODEC whole: preserves complete German fields and pending mirror","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_CODEC_UNKNOWN: stores malformed optional evidence without validating or backfilling it","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_PRESS_ANNUAL: preserves the annual promise and strict final answer source","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_PRESS_LEGACY: keeps the English actualRating fallback and blocks German fallthrough","status":"passed"},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","fullName":"Soccer Career German opening annual consumers and storage SC_GERMAN_PRESS_ZERO: keeps a proven zero-annual-app promise excused","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_CABINET_DETAIL: shows saved penalties and contribution separately and restores the winning tile after Back","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_CALENDAR: reveals one distinct unknown-venue opener before league one then continues","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_PANEL: shows the saved match with unknown venue and keeps Help and Back functional","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_REFUSAL: omits invalid and nonentrant records and shares duplicate-edition trophy decisions","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_RESULTS: preserves saved sides participation and the separate English world result","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_TOTALS: adds the German title to existing career and legacy displays while retaining English counts","status":"passed"},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","fullName":"German Supercup saved screen adapters SC_GERMAN_UI_ZERO_APPS: reaches a represented bench match through the real replay picker without league games","status":"passed"}],"preserved":{"old10365IdentityStatusMultiset":true,"oldPending":"9c0f051d352996bf0bcc403f327d42d33b7eeed379efc55c122540cd6e454376","oldDuplicateDigest":"2e24f9a0cc21fcb652e38351177c02566f77fe9a78fffe8ae589e3abbf719560","newCasesUnique":true,"diagnosticSignature":"cc27a7444f82da970ec8229225021533bd6ca19fc42c89f295e51211f51de7b2"},"encoding":"UTF8 ordinal-sorted file+NUL+fullName+NUL+rawstatus joined by LF without terminal LF; repeats retained","limits":["Native metadata only, no local application/compiler/test/Node/Git execution","No artifact reacquisition","Expected new statuses remain predictions until actual run"]}
+          PROVENANCE
+      - name: Actual full history closure before the long suite
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          cat > "$OUT/history-preflight.sh" <<'HISTORY'
+          set -euo pipefail
+          test "$(git rev-parse --is-shallow-repository)" = false
+          : > "$OUT/historical-baselines.tsv"
+          while read -r ref file; do
+            git cat-file -e "$ref:$file"
+            printf '%s\t%s\t%s\t%s\n' "$ref" "$file" "$(git rev-parse "$ref:$file")" "$(git cat-file -s "$ref:$file")" >> "$OUT/historical-baselines.tsv"
+          done <<'BASELINES'
+          56356be9 src/lib/frontOffice.ts
+          56356be9 src/data/frontOfficePlayers.ts
+          56356be9 src/data/frontOfficeDepth.ts
+          0c66a559 src/lib/frontOffice.ts
+          0c66a559 src/data/frontOfficePlayers.ts
+          0c66a559 src/data/frontOfficeDepth.ts
+          e8b39ccc src/lib/nbaFrontOffice.ts
+          e8b39ccc src/lib/nbaSeasonStats.ts
+          e8b39ccc src/lib/nbaRotation.ts
+          e8b39ccc src/data/conquestDataNba.ts
+          6b7596d2 src/lib/nhlFrontOffice.ts
+          6b7596d2 src/data/nhlFoPlayers.ts
+          2b7dda2951fb9b63e76a2af66970cb682f312105 src/lib/cageClash.ts
+          31a4ec01 src/lib/cageClash.ts
+          BASELINES
+          test "$(wc -l < "$OUT/historical-baselines.tsv")" -eq 14
+          cat "$OUT/historical-baselines.tsv"
+          HISTORY
+          capture history-availability bash "$OUT/history-preflight.sh"
+      - name: Locked online install separate from guarded execution
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.before"
+          xargs -0 sha256sum < "$OUT/dependency-members.before" > "$OUT/dependency-files.sha256"
+      - name: Proper app types and one full ordinary suite
+        timeout-minutes: 60
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP SC_EXTRA_CUPS_ENGINE SC_GERMAN_SUPERCUP_EVIDENCE FORCE_COLOR
+          source "$OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture all-units node node_modules/vitest/vitest.mjs run --maxWorkers=2 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$OUT/all-units.json"
+      - name: Exact actual baseline identities and unchanged optional pending cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const out=process.env.OUT;
+          const report=JSON.parse(fs.readFileSync(out+'/all-units.json','utf8'));
+          const expected={"files":728,"total":10395,"passed":10337,"failed":0,"pending":58,"todo":0,"identitySha256":"0751802ea0bc0f14c0b16bdbd028245c2b4f6e60ae83991bd32fd496035f41b8","passedIdentitySha256":"2e8f8ab7e641de618a6cd0116496662e1a9e904af6b48b8f58181966c4dd7569","pendingIdentitySha256":"9c0f051d352996bf0bcc403f327d42d33b7eeed379efc55c122540cd6e454376","fileIdentitySha256":"6acf2f6da0be9d2297f3a90bab41a55e54f72b32b86bad09001edbc6aab5e409","scIdentitySha256":"2718108797df734421f4bd507166de8d429d5a49f182113b212b8e23d9b43f53","scCases":34,"scFiles":[{"file":"src/test/soccerCommunityShieldAcceptance.test.ts","cases":2},{"file":"src/test/soccerCommunityShieldAnnualRating.test.ts","cases":2},{"file":"src/test/soccerCommunityShieldLegacyReplay.test.tsx","cases":1},{"file":"src/test/soccerCommunityShieldMatch.test.ts","cases":6},{"file":"src/test/soccerCommunityShieldReplay.test.ts","cases":5},{"file":"src/test/soccerCommunityShieldRules.test.ts","cases":8},{"file":"src/test/soccerCommunityShieldScreens.test.tsx","cases":6},{"file":"src/test/soccerCommunityShieldSevere.test.ts","cases":1},{"file":"src/test/soccerCommunityShieldUiAcceptance.test.tsx","cases":3}],"germanIdentitySha256":"359820fc2266d499971254024bb5664651cdf30feed58534c645bd7635874a44","germanCases":30,"germanFiles":[{"file":"src/lib/soccerCareerGermanSupercup.test.ts","cases":9},{"file":"src/test/soccerGermanSupercupAcceptance.test.ts","cases":5},{"file":"src/test/soccerGermanSupercupConsumers.test.ts","cases":9},{"file":"src/test/soccerGermanSupercupScreens.test.tsx","cases":7}],"duplicateGroups":4,"duplicateExtras":7.0,"duplicateIdentitySha256":"2e24f9a0cc21fcb652e38351177c02566f77fe9a78fffe8ae589e3abbf719560"};
+          const suffix=name=>{const normalized=name.replaceAll('\\','/');return normalized.slice(normalized.lastIndexOf('/src/')+1);};
+          const hash=values=>createHash('sha256').update(values.sort().join('\n')).digest('hex');
+          const identities=rows=>hash(rows.map(row=>row.file+'\0'+row.fullName+'\0'+row.status));
+          const suites=report.testResults.map(suite=>({file:suffix(suite.name),rows:suite.assertionResults}));
+          const rows=suites.flatMap(suite=>suite.rows.map(row=>({file:suite.file,fullName:row.fullName,status:row.status})));
+          const passed=rows.filter(row=>row.status==='passed'), pending=rows.filter(row=>row.status!=='passed');
+          const counts=new Map();for(const row of rows){const key=row.file+'\0'+row.fullName;counts.set(key,(counts.get(key)||0)+1);}
+          const duplicates=[...counts].filter(([,count])=>count>1).map(([identity,count])=>({identity,count}));
+          const duplicateExtras=duplicates.reduce((n,row)=>n+row.count-1,0);
+          const duplicateIdentitySha256=hash(duplicates.map(row=>row.identity+'\0'+row.count));
+          const sc=suites.filter(suite=>suite.file.startsWith('src/test/soccerCommunityShield')).flatMap(suite=>suite.rows.map(row=>({file:suite.file,fullName:row.fullName,status:row.status})));
+          const germanPaths=new Set(expected.germanFiles.map(row=>row.file));
+          const german=rows.filter(row=>germanPaths.has(row.file));
+          const observed={files:suites.length,total:rows.length,passed:passed.length,pending:pending.length,
+            identitySha256:identities(rows),passedIdentitySha256:identities(passed),pendingIdentitySha256:identities(pending),
+            fileIdentitySha256:hash(suites.map(suite=>suite.file)),scIdentitySha256:identities(sc),germanIdentitySha256:identities(german),
+            duplicateGroups:duplicates.length,duplicateExtras,duplicateIdentitySha256};
+          fs.writeFileSync(out+'/observed-identities.json',JSON.stringify({observed,sc,german,pending,duplicates},null,2)+'\n');
+          assert.equal(Number(fs.readFileSync(out+'/all-units.exit','utf8')),0);
+          assert.equal(report.success,true);assert.equal(report.numFailedTests,0);assert.equal(report.numTodoTests,0);
+          function admitInventory(candidate){
+            for(const key of ['files','total','passed','pending','identitySha256','passedIdentitySha256','pendingIdentitySha256','fileIdentitySha256','scIdentitySha256','germanIdentitySha256','duplicateGroups','duplicateExtras','duplicateIdentitySha256']) assert.equal(candidate[key],expected[key],'SC_FULL_INVENTORY:'+key);
+          }
+          admitInventory(observed);
+          const controls=[];
+          function detachedControl(name,healthy,mutate,admit,marker){
+            const before=JSON.stringify(healthy),changed=JSON.parse(before);mutate(changed);
+            const after=JSON.stringify(changed);assert.notEqual(after,before,name+': changed');
+            let error=null;try{admit(changed);}catch(caught){error=caught;}
+            assert(error instanceof assert.AssertionError && error.message.includes(marker),name+': owned refusal');
+            const restored=JSON.parse(before);admit(restored);assert.equal(JSON.stringify(restored),before,name+': restored');
+            controls.push({name,changed:true,primary:error.message.split('\n')[0],beforeSha256:hash([before]),changedSha256:hash([after]),restoredSha256:hash([JSON.stringify(restored)])});
+            fs.writeFileSync(out+'/classifier-controls.json',JSON.stringify(controls,null,2)+'\n');
+          }
+          detachedControl('identity',observed,value=>{value.identitySha256='0'.repeat(64);},admitInventory,'SC_FULL_INVENTORY:identitySha256');
+          assert.equal(report.numTotalTests,expected.total);assert.equal(report.numPassedTests,expected.passed);assert.equal(report.numPendingTests,expected.pending);
+          assert.equal(suites.filter(suite=>suite.file.startsWith('src/test/grandPrixBoss')).length,0);
+          assert.equal(sc.length,expected.scCases);
+          const byFile=(a,b)=>a.file<b.file?-1:a.file>b.file?1:0;
+          assert.deepEqual(suites.filter(suite=>suite.file.startsWith('src/test/soccerCommunityShield')).map(suite=>({file:suite.file,cases:suite.rows.length})).sort(byFile),expected.scFiles.slice().sort(byFile));
+          assert.equal(german.length,expected.germanCases);
+          assert.deepEqual(suites.filter(suite=>germanPaths.has(suite.file)).map(suite=>({file:suite.file,cases:suite.rows.length})).sort(byFile),expected.germanFiles.slice().sort(byFile));
+          assert.equal(new Set(german.map(row=>row.file+'\0'+row.fullName)).size,expected.germanCases);
+          for(const suite of suites)for(const row of suite.rows){
+            assert(['passed','skipped','pending'].includes(row.status));
+            assert.deepEqual(row.failureMessages,[]);
+          }
+          const runtimeCounters={numUnhandledErrors:report.numUnhandledErrors??null,numRuntimeErrorTestSuites:report.numRuntimeErrorTestSuites??null,numRuntimeErrorTests:report.numRuntimeErrorTests??null};
+          for(const [key,value] of Object.entries(runtimeCounters))if(report[key]!==undefined){assert.equal(typeof value,'number');assert.equal(value,0);}
+          for(const key of ['errors','unhandledErrors'])if(report[key]!==undefined){assert(Array.isArray(report[key]));assert.deepEqual(report[key],[]);}
+          const knownDiagnostics={"count":7,"identitySha256":"cc27a7444f82da970ec8229225021533bd6ca19fc42c89f295e51211f51de7b2","pressRejectedImportHeaders":6,"resetPasswordTeardownHeaders":1,"records":[{"file":"src/test/soccerPressRoomFailure.test.tsx","context":"stderr | src/test/soccerPressRoomFailure.test.tsx > Soccer Career optional press-room import isolation > a rejected press-room import keeps the career and its pending save mounted","header":"Error: Uncaught [Error: [vitest] There was an error when mocking a module. If you are using \"vi.mock\" factory, make sure there are no top level variables inside, since this call is hoisted to top of the file. Read more: https://vitest.dev/api/vi.html#vi-mock]"},{"file":"src/test/soccerPressRoomFailure.test.tsx","context":"stderr | src/test/soccerPressRoomFailure.test.tsx > Soccer Career optional press-room import isolation > a rejected press-room import keeps the career and its pending save mounted","header":"Error: Uncaught [Error: [vitest] There was an error when mocking a module. If you are using \"vi.mock\" factory, make sure there are no top level variables inside, since this call is hoisted to top of the file. Read more: https://vitest.dev/api/vi.html#vi-mock]"},{"file":"src/test/soccerPressRoomFailure.test.tsx","context":"stderr | src/test/soccerPressRoomFailure.test.tsx > Soccer Career optional press-room import isolation > closing and reopening the failed press room preserves the career save and focus","header":"Error: Uncaught [Error: [vitest] There was an error when mocking a module. If you are using \"vi.mock\" factory, make sure there are no top level variables inside, since this call is hoisted to top of the file. Read more: https://vitest.dev/api/vi.html#vi-mock]"},{"file":"src/test/soccerPressRoomFailure.test.tsx","context":"stderr | src/test/soccerPressRoomFailure.test.tsx > Soccer Career optional press-room import isolation > closing and reopening the failed press room preserves the career save and focus","header":"Error: Uncaught [Error: [vitest] There was an error when mocking a module. If you are using \"vi.mock\" factory, make sure there are no top level variables inside, since this call is hoisted to top of the file. Read more: https://vitest.dev/api/vi.html#vi-mock]"},{"file":"src/test/soccerPressRoomFailure.test.tsx","context":"stderr | src/test/soccerPressRoomFailure.test.tsx > Soccer Career optional press-room import isolation > closing and reopening the failed press room preserves the career save and focus","header":"Error: Uncaught [Error: [vitest] There was an error when mocking a module. If you are using \"vi.mock\" factory, make sure there are no top level variables inside, since this call is hoisted to top of the file. Read more: https://vitest.dev/api/vi.html#vi-mock]"},{"file":"src/test/soccerPressRoomFailure.test.tsx","context":"stderr | src/test/soccerPressRoomFailure.test.tsx > Soccer Career optional press-room import isolation > closing and reopening the failed press room preserves the career save and focus","header":"Error: Uncaught [Error: [vitest] There was an error when mocking a module. If you are using \"vi.mock\" factory, make sure there are no top level variables inside, since this call is hoisted to top of the file. Read more: https://vitest.dev/api/vi.html#vi-mock]"},{"file":"src/test/skipTarget.test.tsx","context":"stderr | src/test/skipTarget.test.tsx > skip to main content > /reset-password","header":"Error: Uncaught [TypeError: Cannot read properties of undefined (reading 'unsubscribe')]"}]};
+          const stderr=fs.readFileSync(out+'/all-units.stderr','utf8'),diagnosticRecords=[];
+          let context='';
+          for(const line of stderr.split(/\r?\n/)){
+            const clean=line.replace(/\x1b\[[0-9;]*m/g,'');
+            if(clean.startsWith('stderr | src/test/'))context=clean;
+            if(clean.includes('Error: Uncaught')){
+              const file=context.match(/src\/test\/[^ ]+/)?.[0]??null;
+              diagnosticRecords.push({file,context,header:clean.trim()});
+            }
+          }
+          const diagnosticCensus={count:diagnosticRecords.length,identitySha256:hash(diagnosticRecords.map(row=>row.file+'\0'+row.context+'\0'+row.header)),
+            pressRejectedImportHeaders:diagnosticRecords.filter(row=>row.file==='src/test/soccerPressRoomFailure.test.tsx').length,
+            resetPasswordTeardownHeaders:diagnosticRecords.filter(row=>row.file==='src/test/skipTarget.test.tsx').length};
+          fs.writeFileSync(out+'/diagnostic-census.json',JSON.stringify({observed:diagnosticCensus,records:diagnosticRecords,expected:knownDiagnostics},null,2)+'\n');
+          function admitDiagnostics(candidate){
+            for(const key of ['count','identitySha256','pressRejectedImportHeaders','resetPasswordTeardownHeaders'])assert.equal(candidate[key],knownDiagnostics[key],'SC_FULL_DIAGNOSTICS:'+key);
+          }
+          admitDiagnostics(diagnosticCensus);
+          detachedControl('inherited-diagnostic-signature',diagnosticCensus,value=>{value.identitySha256='0'.repeat(64);},admitDiagnostics,'SC_FULL_DIAGNOSTICS:identitySha256');
+          assert.equal(controls.length,2);
+          const raw=fs.readFileSync(out+'/all-units.stdout','utf8')+'\n'+stderr;
+          const detectedRuntimeError=/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw);
+          assert.equal(detectedRuntimeError,false);
+          fs.writeFileSync(out+'/unit-summary.json',JSON.stringify({scope:'One full ordinary suite on the exact German source. No build or browser credit.',
+            expectedProvenance:JSON.parse(fs.readFileSync(out+'/expected-provenance.json','utf8')),observed,failed:report.numFailedTests,todo:report.numTodoTests,
+            exactShieldCases:sc,exactGermanCases:german,existingPending:pending,inheritedDiagnostics:diagnosticCensus,diagnosticPolicy:"Seven inherited headers are required; stderr is not asserted quiet.",classifierControls:controls,runtimeCounters,runtimeCounterCompleteness:Object.values(runtimeCounters).some(value=>value===null)?'UNKNOWN':'REPORTED',
+            rawErrors:report.errors??null,rawUnhandledErrors:report.unhandledErrors??null,detectedRuntimeError,
+            installNetwork:'Locked npm ci is explicitly online, before guarded execution.'},null,2)+'\n');
+          console.log('SC_FULL_UNITS: exact acquired baseline multiset plus frozen additions, '+observed.files+' files, '+observed.passed+' passes, '+observed.pending+' old pending identities, '+observed.duplicateExtras+' exact duplicate extras; no new skips.');
+          VERIFY
+          capture verify node "$OUT/verify.mjs"
+      - name: Always hold all source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"; fi
+          if test -f "$OUT/dependency-files.sha256"; then
+            sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"
+            find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z > "$OUT/dependency-members.after"
+            cmp "$OUT/dependency-members.before" "$OUT/dependency-members.after"
+          fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          test "$(tr '\0' '\n' < "$OUT/source-members.after" | wc -l)" -eq 5672
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-german-supercup-full-units-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-german-supercup-full-units/
+          retention-days: 14
