@@ -55,10 +55,44 @@ const writeControl = (name, source) => {
 const swaps = {};
 const alias = file => `@/${file.slice(4).replace(/\.tsx?$/, '')}`;
 if (CONTROL === 'before') {
+  // Only the historical copies rebind an export removed from three current sibling engines.
+  const ts = createRequire(path.join(ROOT, 'package.json'))('typescript');
+  const repairFace = (source, file) => {
+    const tree = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+    assert.equal(tree.parseDiagnostics.length, 0, `Historical repair source parses: ${file}`);
+    const functions = tree.statements.filter(node => ts.isFunctionDeclaration(node) && node.name?.text === 'repairNetWorth');
+    assert.equal(functions.length, 1, `One executable repair function: ${file}`);
+    assert(functions[0].body && functions[0].modifiers?.some(node => node.kind === ts.SyntaxKind.ExportKeyword), `Exported repair body: ${file}`);
+    const constants = tree.statements.filter(ts.isVariableStatement).flatMap(statement =>
+      [...statement.declarationList.declarations].map(declaration => ({ statement, declaration })))
+      .filter(({ declaration }) => ts.isIdentifier(declaration.name) && declaration.name.text === 'TAKE_HOME');
+    assert.equal(constants.length, 1, `One executable TAKE_HOME: ${file}`);
+    const { statement, declaration } = constants[0];
+    assert(statement.declarationList.flags & ts.NodeFlags.Const, `TAKE_HOME is constant: ${file}`);
+    assert(declaration.initializer && ts.isNumericLiteral(declaration.initializer), `TAKE_HOME is a numeric literal: ${file}`);
+    return { declaration: functions[0].getText(tree), body: functions[0].body.getText(tree), takeHome: declaration.initializer.getText(tree) };
+  };
+  const currentRepair = repairFace(fs.readFileSync(path.join(ROOT, 'src/lib/nbaMyCareer.ts'), 'utf8'), 'src/lib/nbaMyCareer.ts');
+  assert.equal(currentRepair.takeHome, '0.45', 'The shared repair retains the historical take-home constant');
   for (const [slug, name] of [['nfl', 'Nfl'], ['nba', 'Nba'], ['mlb', 'Mlb'], ['nhl', 'Nhl']]) {
     const file = `src/components/${slug}-my-career/${name}MyCareerBoard.tsx`;
-    const original = execFileSync('git', ['show', `a0ba8344:${file}`], { cwd: ROOT, encoding: 'utf8' });
+    let original = execFileSync('git', ['show', `a0ba8344:${file}`], { cwd: ROOT, encoding: 'utf8' });
     assert(original.includes('Play the {career.year} season') && !original.includes('data-career-practice'), `Not a pre-practice board: ${file}`);
+    if (slug !== 'nba') {
+      const engine = `src/lib/${slug}MyCareer.ts`;
+      const historical = execFileSync('git', ['show', `a0ba8344:${engine}`], { cwd: ROOT, encoding: 'utf8' });
+      assert.deepEqual(repairFace(historical, engine), currentRepair, `Identical historical repair declaration, AST body and TAKE_HOME: ${slug}`);
+      const from = `  repairNetWorth,\n  get${name}SpendItem\n} from '@/lib/${slug}MyCareer';`;
+      const to = `  get${name}SpendItem\n} from '@/lib/${slug}MyCareer';\nimport { repairNetWorth } from '@/lib/nbaMyCareer';`;
+      assert.equal(original.split(from).length - 1, 1, `One historical repair import: ${slug}`);
+      const rebound = original.replace(from, to);
+      assert.notEqual(rebound, original, `The temporary repair import changes: ${slug}`);
+      assert.equal(rebound.split(to).length - 1, 1, `One inverse repair import: ${slug}`);
+      assert.equal(rebound.replace(to, from), original, `The complete historical board restores: ${slug}`);
+      fs.writeFileSync(path.join(work, `${name}Before-unbound.tsx.txt`), original);
+      fs.writeFileSync(path.join(work, `${name}Before-repair-binding.json`), JSON.stringify({ file, originalRef: 'a0ba8344', from, to, repair: currentRepair, scope: 'Temporary old-board import compatibility only; no application or test changes' }, null, 2));
+      original = rebound;
+    }
     swaps[alias(file)] = writeControl(`${name}Before.tsx`, original);
   }
 } else if (CONTROL) {
