@@ -214,9 +214,9 @@ check(!fails.has('1 keys') && !fails.has('1 shift'), `1. every club's from and t
   if (callbackMatch) {
     let callback = callbackMatch[1];
     if (CONTROL === 'pagekey') { once(callback, PAGEKEY_NEEDLE, 'the actual page key callback'); callback = callback.replace(PAGEKEY_NEEDLE, ''); }
-    const pageKey = new Function('career', 'r', 'communityShieldAnnualStats', callback);
+    const pageKey = new Function('career', 'r', 'careerOpeningAnnualStats', callback);
     let drift = 0;
-    for (const A of list) for (const row of A.seasons) if (played(row) && pageKey({ playerName: A.name }, row, EC.communityShieldAnnualStats) !== S.soccerSeasonKey(A.name, row)) { drift += 1; fail('2 pagekey', `${A.name} ${row.year}: the page says ${pageKey({ playerName: A.name }, row, EC.communityShieldAnnualStats)}, the season says ${S.soccerSeasonKey(A.name, row)}`); }
+    for (const A of list) for (const row of A.seasons) if (played(row) && pageKey({ playerName: A.name }, row, EC.careerOpeningAnnualStats) !== S.soccerSeasonKey(A.name, row)) { drift += 1; fail('2 pagekey', `${A.name} ${row.year}: the page says ${pageKey({ playerName: A.name }, row, EC.careerOpeningAnnualStats)}, the season says ${S.soccerSeasonKey(A.name, row)}`); }
     check(drift === 0, `2. the page's key for a season is the Season Centre's own key on every played row (${drift} of ${rows} differ)`);
   }
   for (const [item, f] of fails) if (item.startsWith('2 ')) console.log(`FAIL item ${item}: ${f.n} times, first: ${f.first.join(' | ')}`);

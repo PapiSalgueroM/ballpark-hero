@@ -341,6 +341,9 @@ function saveParts(s) {
   const shield = [...s.seasons, ...(s.pendingSummary ? [s.pendingSummary] : [])]
     .map(r => bytesOf(r) - bytesOf({ ...r, extraCups: undefined })).filter(n => n > 0);
   const shieldQualification = bytesOf(s) - bytesOf({ ...s, extraCupQualification: undefined });
+  const german = [...s.seasons, ...(s.pendingSummary ? [s.pendingSummary] : [])]
+    .map(r => bytesOf(r) - bytesOf({ ...r, germanSupercup: undefined })).filter(n => n > 0);
+  const germanQualification = bytesOf(s) - bytesOf({ ...s, germanSupercupQualification: undefined });
   return {
     cup: cupRows.reduce((n, r) => n + bytesOf(r.clubCupRun), 0), cupRows: cupRows.length,
     division: divisionRows.reduce((n, r) => n + bytesOf(r.leagueWorld), 0), divisionRows: divisionRows.length,
@@ -348,12 +351,14 @@ function saveParts(s) {
     pool: bytesOf(s.generatedBallonPool),
     shield: shield.reduce((n, value) => n + value, 0), shieldFields: shield.length,
     shieldQualification, shieldQualificationFields: shieldQualification > 0 ? 1 : 0,
+    german: german.reduce((n, value) => n + value, 0), germanFields: german.length,
+    germanQualification, germanQualificationFields: germanQualification > 0 ? 1 : 0,
     rest: bytesOf({ ...s, leagueWorld: undefined, generatedBallonPool: undefined, extraCupQualification: undefined, pendingSummary: s.pendingSummary ? { ...s.pendingSummary, extraCups: undefined } : s.pendingSummary, seasons: s.seasons.map(r => ({ ...r, clubCupRun: undefined, leagueWorld: undefined, extraCups: undefined })) }),
   };
 }
 
 const fails = { completeness: [], draws: [], size: [], log: [], parts: [] };
-const part = { cup: 0, cupRows: 0, division: 0, divisionRows: 0, ten: 0, pool: 0, rest: 0, shield: 0, shieldFields: 0, shieldQualification: 0, shieldQualificationFields: 0 };
+const part = { cup: 0, cupRows: 0, division: 0, divisionRows: 0, ten: 0, pool: 0, rest: 0, shield: 0, shieldFields: 0, shieldQualification: 0, shieldQualificationFields: 0, german: 0, germanFields: 0, germanQualification: 0, germanQualificationFields: 0 };
 const partBySeed = { ...part };
 let loans = 0, transfers = 0;
 let careers = 0, seasonsKept = 0, linesKept = 0, linesWritten = 0, liveLines = 0, cut = 0;
@@ -394,6 +399,7 @@ for (const seed of SEEDS) {
   const d = Object.fromEntries(Object.keys(part).map(k => [k, part[k] - partBySeed[k]]));
   console.log(`seed ${seed} parts: rest mean ${(d.rest / Math.max(1, n)).toFixed(0)} bytes, cup games ${(d.cup / Math.max(1, d.cupRows)).toFixed(0)} bytes a season over ${d.cupRows} seasons, division ${(d.division / Math.max(1, d.divisionRows)).toFixed(0)} bytes a season over ${d.divisionRows} seasons, ten divisions mean ${(d.ten / Math.max(1, n)).toFixed(0)} bytes, award pool mean ${(d.pool / Math.max(1, n)).toFixed(0)} bytes`);
   console.log(`seed ${seed} Shield fields: result envelopes ${d.shield} code units over ${d.shieldFields} physical fields, mean ${(d.shield / Math.max(1, d.shieldFields)).toFixed(1)}; root qualification envelopes ${d.shieldQualification} over ${d.shieldQualificationFields} fields, mean ${(d.shieldQualification / Math.max(1, d.shieldQualificationFields)).toFixed(1)}`);
+  console.log(`seed ${seed} German subset of rest: result envelopes ${d.german} code units over ${d.germanFields} physical fields; root qualification envelopes ${d.germanQualification} over ${d.germanQualificationFields} fields; no separate allocation`);
   Object.assign(bySeed, { careers, storyBytes, seasons: seasonsKept, saveBytes });
   Object.assign(partBySeed, part);
 }
@@ -430,6 +436,7 @@ console.log(`baseline before Round 974: a finished career could read ${liveLines
 console.log(`size: story ${perSeason.toFixed(0)} bytes a season, save mean ${meanSave.toFixed(0)} bytes, median ${saves[Math.floor(saves.length / 2)]}`);
 console.log(`parts: rest mean ${partMeans.restBytesMean.toFixed(0)} bytes (the save before the train's parts), cup games ${partMeans.cupBytesPerSeason.toFixed(0)} bytes a season over ${part.cupRows} seasons, division ${partMeans.divisionBytesPerSeason.toFixed(0)} bytes a season over ${part.divisionRows} seasons, ten divisions mean ${partMeans.tenDivisionsBytesMean.toFixed(0)} bytes, award pool mean ${partMeans.poolBytesMean.toFixed(0)} bytes`);
 console.log(`Shield fields: result envelopes ${part.shield} code units over ${part.shieldFields} physical fields, mean ${shieldMean.toFixed(1)} (budget ${SHIELD_BYTES_PER_FIELD}); root qualification envelopes ${part.shieldQualification} over ${part.shieldQualificationFields} fields, mean ${shieldQualificationMean.toFixed(1)} (budget ${SHIELD_QUALIFICATION_BYTES})`);
+console.log(`German subset of rest: result envelopes ${part.german} code units over ${part.germanFields} physical fields; root qualification envelopes ${part.germanQualification} over ${part.germanQualificationFields} fields; no separate allocation`);
 for (const [name, list] of Object.entries(fails)) {
   console.log(`check ${name}: ${list.length === 0 ? "ok" : `FAIL (${list.length})`}`);
   for (const f of list.slice(0, 5)) console.log(`  ${f}`);
