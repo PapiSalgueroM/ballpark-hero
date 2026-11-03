@@ -1,0 +1,157 @@
+name: Requested release World Editor qualification invariant
+on:
+  push:
+    branches: [codex/flagship-world-invariant-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: flagship-world-invariant-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  world-invariant:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+      PARENT: 00c85815cac64d72014594e6b38515d4d6ce2e45
+      WORLD_SHA256: 52cbb86c8850f6d9fd91fb378b3931847a137eaebc6847e2ad4c7f983da9f25d
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the exact joined source and two-path QA scope
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-world-invariant"
+          mkdir -p "$OUT/normal" "$OUT/control" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git cat-file -p HEAD | sed -n 's/^parent //p')" = "$PARENT"
+          git fetch --no-tags --depth=1 origin "$PARENT"
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = 9d8dc92557bf2f4358b5be044359354eda841769
+          test "$(git rev-parse "$PARENT":scripts/simWorldEditor.mjs)" = 39b2a920e1e56b7a01e33a72d227a840785b08b2
+          test "$(sha256sum scripts/simWorldEditor.mjs | cut -d' ' -f1)" = "$WORLD_SHA256"
+          git diff --name-status "$PARENT" HEAD > "$OUT/candidate-diff.txt"
+          printf 'A\t.github/workflows/flagship-world-invariant-20261103.yml\nM\tscripts/simWorldEditor.mjs\n' > "$OUT/expected-diff.txt"
+          cmp "$OUT/expected-diff.txt" "$OUT/candidate-diff.txt"
+          git rev-parse HEAD HEAD^{tree} "$PARENT" > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+      - name: Install unchanged dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper application types
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+      - name: Make the sole copied outsider fault with exact inverse
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,file='scripts/.release-world-editor-control.mjs';
+          assert.equal(fs.existsSync(file),false);
+          const original=execFileSync('git',['show',process.env.PARENT+':scripts/simWorldEditor.mjs'],{encoding:'utf8'});
+          const fixed=fs.readFileSync('scripts/simWorldEditor.mjs','utf8');
+          const edits=[
+            {before:"  const earned = cm.uclFieldFromTables(played, cm.uclHolderOf(end), undefined, undefined, cm.uelHolderOf ? cm.uelHolderOf(end) : null);",
+             after:"  const uclHolder = cm.uclHolderOf(end);\n  const uelHolder = cm.uelHolderOf ? cm.uelHolderOf(end) : null;\n  const earned = cm.uclFieldFromTables(played, uclHolder, undefined, undefined, uelHolder);"},
+            {before:'  const outsiders = field.filter(c => !europeans.has(c));',
+             after:'  const outsiders = field.filter(c => !europeans.has(c) && c !== uclHolder && c !== uelHolder);'},
+          ];
+          let expected=original;
+          for(const edit of edits){assert.equal(expected.split(edit.before).length,2);expected=expected.replace(edit.before,edit.after);}
+          assert.equal(expected,fixed);
+          let inverse=fixed;for(const edit of edits.slice().reverse()){assert.equal(inverse.split(edit.after).length,2);inverse=inverse.replace(edit.after,edit.before);}
+          assert.equal(inverse,original);
+          const before=edits[1].after;
+          const after="  const outsiders = [...field, '__CM_WORLD_EDITOR_INELIGIBLE_CONTROL__'].filter(c => !europeans.has(c) && c !== uclHolder && c !== uelHolder);";
+          assert.equal(fixed.split(before).length,2);assert.equal(fixed.includes('__CM_WORLD_EDITOR_INELIGIBLE_CONTROL__'),false);
+          const changed=fixed.replace(before,after);assert.notEqual(changed,fixed);assert.equal(changed.replace(after,before),fixed);
+          const earnedCheck="  ok(field.length > 0 && JSON.stringify(field) === JSON.stringify(earned),";
+          assert.equal(fixed.split(earnedCheck).length,2);assert.equal(changed.split(earnedCheck).length,2);
+          assert.equal(/diagnosticUclHolder|qualification\.json|release-world-editor-diagnostic/.test(fixed),false);
+          const hash=s=>crypto.createHash('sha256').update(s).digest('hex');
+          fs.writeFileSync(out+'/world-original.mjs',original);fs.writeFileSync(out+'/world-fixed.mjs',fixed);fs.writeFileSync(out+'/world-control.mjs',changed);
+          fs.writeFileSync(out+'/control-source.json',JSON.stringify({edits,original:hash(original),fixed:hash(fixed),control:hash(changed),wholeInverse:true,fault:{before,after},expected:{normal:{exit:0,checks:2478,failures:0},control:{exit:1,checks:2478,failures:3,healthyChecks:2475}},scope:'Only a fictional sentinel in the copied membership-check input. Exact earned equality, engine, fixtures, source seed identity and original assertions remain held.'},null,2)+'\n');
+          fs.writeFileSync(file,changed,{flag:'wx'});
+          fs.writeFileSync(out+'/control-launch.mjs',"import path from 'node:path';\nimport {pathToFileURL} from 'node:url';\nprocess.argv[1]=path.resolve('scripts/simWorldEditor.mjs');\nawait import(pathToFileURL(path.resolve('scripts/.release-world-editor-control.mjs')).href);\n",{flag:'wx'});
+          NODE
+      - name: Normal invariant and effective non-holder outsider fault
+        run: |
+          set -euo pipefail
+          trap 'rm -f -- scripts/.release-world-editor-control.mjs' EXIT
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset SIM_SEED SIM_WORLD_EDITOR_CONTROL CM_SHOOTOUT_CONTROL ONLY BROWSER
+          : > "$QA_OUT/transport/normal.log"
+          : > "$QA_OUT/transport/control.log"
+          set +e
+          CM_WORLD_EDITOR_ARTIFACTS="$QA_OUT/normal" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/normal.log" timeout --kill-after=15s 8m node scripts/simWorldEditor.mjs > "$QA_OUT/normal.stdout.log" 2> "$QA_OUT/normal.stderr.log"
+          normal_exit=$?
+          CM_WORLD_EDITOR_ARTIFACTS="$QA_OUT/control" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/control.log" timeout --kill-after=15s 8m node "$QA_OUT/control-launch.mjs" > "$QA_OUT/control.stdout.log" 2> "$QA_OUT/control.stderr.log"
+          control_exit=$?
+          set -e
+          printf '%s\n' "$normal_exit" > "$QA_OUT/normal.exit"
+          printf '%s\n' "$control_exit" > "$QA_OUT/control.exit"
+          tail -n 8 "$QA_OUT/normal.stdout.log" "$QA_OUT/normal.stderr.log" "$QA_OUT/control.stdout.log" "$QA_OUT/control.stderr.log"
+          test ! -s "$QA_OUT/transport/normal.log"
+          test ! -s "$QA_OUT/transport/control.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,read=name=>fs.readFileSync(out+'/'+name,'utf8');
+          const normalOut=read('normal.stdout.log'),normalErr=read('normal.stderr.log'),controlOut=read('control.stdout.log'),controlErr=read('control.stderr.log');
+          assert.equal(read('normal.exit').trim(),'0');assert.equal(read('control.exit').trim(),'1');
+          assert.deepEqual(normalOut.match(/^simWorldEditor: \d+ checks, \d+ failures$/gm),['simWorldEditor: 2478 checks, 0 failures']);
+          assert.deepEqual(controlOut.match(/^simWorldEditor: \d+ checks, \d+ failures$/gm),['simWorldEditor: 2478 checks, 3 failures']);
+          const failures=controlErr.split(/\r?\n/).filter(line=>line.startsWith('  FAIL: '));
+          assert.equal(failures.length,3);
+          for(const [i,label] of ['Celtic in the Premier League','Real Madrid in the Championship for Lincoln City','Brisbane Roar in premier on a 246 move world'].entries()){
+            assert.equal(failures[i],"  FAIL: "+label+": next season's Champions League has clubs that played outside Europe's leagues: __CM_WORLD_EDITOR_INELIGIBLE_CONTROL__");
+          }
+          assert.equal(/^  FAIL: /m.test(normalErr),false);assert.equal(/section \d threw/.test(controlErr),false);
+          assert.deepEqual(controlOut.match(/^   section \d+: RED$/gm),['   section 2: RED']);
+          const association={normal:{exit:0,checks:2478,failures:0},control:{exit:1,checks:2478,ownedFailures:3,otherChecks:2475,failures},sourceRNGIdentity:'simWorldEditor.mjs with SIM_SEED unset; original seedRandom and internal SEED964 unchanged.',scope:'Existing World Editor normal cases and one copied predicate-input fault only. No app, build, full-suite or historical outcome qualification.'};
+          fs.writeFileSync(out+'/admission.json',JSON.stringify(association,null,2)+'\n');
+          console.log('World Editor qualification: normal 2478/0 and copied non-holder outsider 3 owned failures, remaining 2475 checks held.');
+          NODE
+      - name: Preserve every original source byte and remove the copied fault
+        if: always()
+        run: |
+          set -euo pipefail
+          rm -f -- scripts/.release-world-editor-control.mjs
+          test ! -e scripts/.release-world-editor-diagnostic.mjs
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+      - name: Bound retained QA evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.artifact.outputs.ready == 'true'
+        with:
+          name: flagship-world-invariant-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-world-invariant
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
