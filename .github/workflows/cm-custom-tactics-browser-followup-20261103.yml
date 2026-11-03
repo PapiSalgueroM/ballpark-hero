@@ -27,6 +27,8 @@ jobs:
       SOURCE_ZIP_SHA256: '3701278ce32b8a4723450fdda03e305a93ca6dd1476b2d90edf477bd91ffcebc'
       BUILT_SOURCE_SHA: '424867fc94cf78d72964a6e905d187cfef471ac4'
       BUILT_TREE_SHA: '0a3c6097cad2368b709d27c0e72decebfac2a4ea'
+      CANDIDATE_PARENT_SHA: 'e566d9f5cce732c5456e435a177cf6f25c24dc3e'
+      CANDIDATE_PARENT_TREE: 'f06df8db058315b7dce4a5de12f4fc1061ade0b6'
       DIST_TAR_BYTES: '6982847'
       DIST_TAR_SHA256: '523f18e14acedc73d9bd63fa698ef9d6255667225376b3d16d29f5a74db997b4'
     defaults:
@@ -86,6 +88,9 @@ jobs:
           test "$(git rev-parse "$BUILT_SOURCE_SHA^{tree}")" = "$BUILT_TREE_SHA"
           git rev-parse HEAD HEAD^{tree} > "$OUT/current-source.txt"
           git diff --name-status "$BUILT_SOURCE_SHA" HEAD > "$OUT/candidate-paths.txt"
+          git fetch --no-tags --depth=1 origin "$CANDIDATE_PARENT_SHA"
+          test "$(git rev-parse "$CANDIDATE_PARENT_SHA^{tree}")" = "$CANDIDATE_PARENT_TREE"
+          git diff --name-status "$CANDIDATE_PARENT_SHA" HEAD > "$OUT/candidate-parent-paths.txt"
           test ! -e dist
           tar -tzf "$PRIOR/completed-dist.tar.gz" > "$OUT/completed-dist-members.txt"
           node --input-type=module <<'NODE'
@@ -111,7 +116,11 @@ jobs:
           const originalSource = [process.env.BUILT_SOURCE_SHA, process.env.BUILT_TREE_SHA];
           assert.deepEqual(fs.readFileSync(prior + '/source.txt', 'utf8').trim().split(/\s+/), originalSource);
           const paths = execFileSync('git', ['diff', '--name-status', process.env.BUILT_SOURCE_SHA, 'HEAD']).toString().trim().split('\n').sort();
-          assert.deepEqual(paths, ['A\t' + workflow, 'M\t' + driver].sort(), 'Only the new workflow and diagnostic driver may differ');
+          assert.deepEqual(paths, ['A\t' + workflow, 'M\t' + driver].sort(), 'Only the follow-up workflow and driver may differ from the built source');
+          const candidatePaths = execFileSync('git', ['diff', '--name-status', process.env.CANDIDATE_PARENT_SHA, 'HEAD']).toString().trim().split('\n').sort();
+          assert.deepEqual(candidatePaths, ['M\t' + workflow, 'M\t' + driver].sort(), 'Only the two existing QA files may differ from the diagnostic parent');
+          assert.equal(execFileSync('git', ['rev-parse', process.env.CANDIDATE_PARENT_SHA + ':' + driver]).toString().trim(), '9b1debb58921276554aa1daf4f2d050296e0a421');
+          assert.equal(execFileSync('git', ['rev-parse', process.env.CANDIDATE_PARENT_SHA + ':' + workflow]).toString().trim(), '412cd9ab6447215eda2e1e2a1973266935fdfff8');
           const original = JSON.parse(fs.readFileSync(prior + '/source-before.json', 'utf8'));
           assert.equal(sha(prior + '/source-before.json'), '4ac1b9a19c0a03a6663647120e2373999f869da1d2e1803813c8337ea7adbaa6');
           assert.deepEqual(JSON.parse(fs.readFileSync(prior + '/source-before-browser.json', 'utf8')), original);
@@ -124,7 +133,7 @@ jobs:
           const tracked = execFileSync('git', ['ls-files', '-z']).toString().split('\0').filter(Boolean).sort();
           assert.deepEqual(tracked, [...Object.keys(original), ...generated, workflow].sort(), 'Tracked source membership changed');
           for (const [p, value] of Object.entries(original)) {
-            assert.equal(sha(p), p === driver ? 'dc164466a14b477d39834ec78d225dcc3155aaffde3658eec6777da338a4c517' : value, p);
+            assert.equal(sha(p), p === driver ? '5753a9390a5ac0eabc3c86b2b8ed4c510c337798bf7166db54261a9090fbe6e3' : value, p);
           }
           for (const p of generated) assert.deepEqual(fs.readFileSync(p), fs.readFileSync(path.join(prior, 'original', p)), p);
           const association = JSON.parse(fs.readFileSync(prior + '/source-association.json', 'utf8'));
@@ -133,7 +142,7 @@ jobs:
           assert.equal(association.parentTree, 'b02488cd7e071745b3013c5e7fa0a8951cc5d00e');
           assert.equal(Object.keys(association.pins).length, 25);
           assert.equal(association.pins[driver], 'ccda3af5c7e5972d0b406f5a2557e088250f2b64');
-          const currentPins = { ...association.pins, [driver]: '9b1debb58921276554aa1daf4f2d050296e0a421' };
+          const currentPins = { ...association.pins, [driver]: 'dd8f5bef0e3ccbc2845b52020e4dca62d82a9d01' };
           for (const [p, blob] of Object.entries(currentPins)) {
             assert.equal(execFileSync('git', ['rev-parse', 'HEAD:' + p]).toString().trim(), blob, p);
           }
@@ -184,10 +193,12 @@ jobs:
             completedDistTarBytes: Number(process.env.DIST_TAR_BYTES), completedDistTarSha256: process.env.DIST_TAR_SHA256,
             builtSource: originalSource, originalGuardedEntries: Object.keys(original).length,
             originalGuardedEntriesHeld: Object.keys(original).length - 1, generatedCheckoutEntriesHeld: generated.length,
-            originalPins: association.pins, currentPins, onlyChangedSource: [driver], onlyAddedSource: [workflow],
+            originalPins: association.pins, currentPins, onlyChangedFromBuiltSource: [driver], onlyAddedSinceBuiltSource: [workflow],
+            candidateParent: [process.env.CANDIDATE_PARENT_SHA, process.env.CANDIDATE_PARENT_TREE], changedFromCandidateParent: [driver, workflow],
+            previousDiagnostic: { run: '41622967467', artifact: '13223933117', head: 'e566d9f5cce732c5456e435a177cf6f25c24dc3e', zipSha256: '19cf8b12fefc0d06219e9e8ddfe1ccf7da8e41c5df2146bb1fe31e3eaaf262e9', outcome: 'FAILED, retained separately by Root. Native hit trace proved sticky ticker interception; live portal was running while a zero-height metadata wrapper failed visibility.' },
             buildRepeated: false, typesRepeated: false, generatorsRepeated: false, readersRepeated: false, capsRepeated: false,
             originalRunOutcome: 'FAILED at actual App checks. Earlier proper types, generators, build, 20 readers and 16 unchanged caps passed. The overall failure and raw report are retained.',
-            browserDelta: 'Empty automatic shootout order normalized to []. Read-only pointer/DOM/event diagnostics and truthful failure photos added. Native input stream and movement threshold held.',
+            browserDelta: 'Two source-proven QA fixes: native wheel preparation only for an obscured slot hit, and visible portal controls/dots with attached stage metadata. Native gesture, preview threshold, four journeys and twelve normal photos held. Earlier diagnostics and empty-order normalization retained.',
             scope: 'App diagnostic only on the exact retained completed dist and fixtures. No new engine, control, balance, natural-progression or actual-font credit.',
           }, null, 2) + '\n');
           NODE

@@ -176,11 +176,37 @@ async function pointerMove(page, row, index, cancel = false) {
   try {
     await token.scrollIntoViewIfNeeded(); await idle(page);
     beforeRaw = await raw(page); before = JSON.parse(beforeRaw); point = customPoints(before)[index];
-    const box = await token.boundingBox(); assert.ok(box);
+    let box = await token.boundingBox(); assert.ok(box);
+    const initialPoint = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+    attempt.preparation = { before: await pointerSample(page, index, initialPoint), nativeWheel: null };
+    const ownsStart = await token.evaluate(node => {
+      const rect = node.getBoundingClientRect();
+      return node.contains(document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2));
+    });
+    if (!ownsStart) {
+      const deltaY = Math.round(initialPoint.y - row.height / 2);
+      assert.ok(Math.abs(deltaY) >= 1, 'An obscured pointer target needs a measurable native scroll');
+      const targetScroll = await page.evaluate(delta => Math.max(0, Math.min(document.documentElement.scrollHeight - innerHeight, scrollY + delta)), deltaY);
+      await page.mouse.move(row.width / 2, row.height / 2);
+      await page.mouse.wheel(0, deltaY);
+      await page.waitForFunction(({ index, targetScroll }) => {
+        const node = document.querySelector('[data-cm-slot="' + index + '"]');
+        if (!node || Math.abs(scrollY - targetScroll) > 1) return false;
+        const rect = node.getBoundingClientRect();
+        return node.contains(document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2));
+      }, { index, targetScroll }, { polling: 'raf' });
+      attempt.preparation.nativeWheel = { deltaY, targetScroll };
+      assert.equal(await raw(page), beforeRaw, 'Native target preparation must not change the save');
+      box = await token.boundingBox(); assert.ok(box);
+    }
     a = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
     b = { x: a.x + (point.x >= 50 ? -12 : 12), y: a.y + (point.y >= 50 ? -12 : 12) };
     Object.assign(attempt, { a, b, beforeRawSha256: hash(beforeRaw), beforePoint: point, initialBox: box });
     attempt.before = await pointerSample(page, index, a, b);
+    assert.equal(await token.evaluate(node => {
+      const rect = node.getBoundingClientRect();
+      return node.contains(document.elementFromPoint(rect.x + rect.width / 2, rect.y + rect.height / 2));
+    }), true, 'The native pointer must start on its actual slot');
     assert.ok(a.x > 0 && a.x < row.width && a.y > 0 && a.y < row.height && b.x > 0 && b.x < row.width && b.y > 0 && b.y < row.height);
     beforeBox = await token.boundingBox(); scrollBefore = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
     await page.evaluate(() => {
@@ -368,20 +394,25 @@ async function liveWitness(page, row) {
   await page.getByRole('tab', { name: 'Home', exact: true }).click();
   const liveButton = page.locator('[data-cm-way="live"]');
   await liveButton.click();
-  await page.locator('[data-cm-live-stage="first"]').waitFor();
+  await page.locator('[data-cm-live-stage="first"]').waitFor({ state: 'attached' });
+  const stageBox = page.locator('[data-cm-live-stagebox="1"]');
+  await stageBox.waitFor({ state: 'visible' });
   await page.waitForFunction(key => !!JSON.parse(localStorage.getItem(key))?.live, KEY);
   row.live = { status: 'incomplete', witnesses: [] };
-  const pause = page.getByRole('button', { name: 'Pause', exact: true });
+  const pause = stageBox.getByRole('button', { name: 'Pause', exact: true });
   if (await pause.count()) await pause.click();
+  await idle(page);
   async function witness(stage) {
-    const wrapper = page.locator('[data-cm-live-stage="' + stage + '"]');
-    const minute = Number(await wrapper.getAttribute('data-cm-live-minute')), state = await read(page), live = state.live;
+    const metadata = page.locator('[data-cm-live-stage="' + stage + '"]');
+    await metadata.waitFor({ state: 'attached' });
+    assert.equal(await stageBox.isVisible(), true);
+    const minute = Number(await metadata.getAttribute('data-cm-live-minute')), state = await read(page), live = state.live;
     assert.ok(live && live.positionRules === 1);
     const shape = cm.liveShapeAt(live, minute + 1), formation = cm.FORMATIONS[shape.formationIndex];
     assert.ok(shape.customShape && formation);
     const ids = cm.myOnPitchAt(live, minute + 1);
-    const dots = await wrapper.locator('[data-cm-dot][data-cm-stage-x][data-cm-stage-y]').evaluateAll(nodes => nodes.map(node => ({ id: node.dataset.cmDot, x: Number(node.dataset.cmStageX), y: Number(node.dataset.cmStageY) })));
-    const ownIds = await wrapper.locator('[data-cm-dot]').evaluateAll((nodes, mine) => nodes.map(node => node.dataset.cmDot).filter(id => mine.includes(id)), ids);
+    const dots = await stageBox.locator('[data-cm-dot][data-cm-stage-x][data-cm-stage-y]').evaluateAll(nodes => nodes.map(node => ({ id: node.dataset.cmDot, x: Number(node.dataset.cmStageX), y: Number(node.dataset.cmStageY) })));
+    const ownIds = await stageBox.locator('[data-cm-dot]').evaluateAll((nodes, mine) => nodes.map(node => node.dataset.cmDot).filter(id => mine.includes(id)), ids);
     assert.ok(ownIds.length > 0);
     assert.equal(dots.length, ownIds.length, 'CM_CUSTOM_APP_LIVE_STAGE_GEOMETRY: every actual own player must carry supported stage geometry');
     assert.deepEqual(dots.map(dot => dot.id).sort(), [...ownIds].sort());
@@ -396,25 +427,28 @@ async function liveWitness(page, row) {
       return Math.hypot(value.point.x - old.x, value.point.y - old.y) > 0.5;
     }).length;
     assert.equal(legacyDifference, expected.length, 'Every moved live base must differ from the old preset projection');
-    row.live.witnesses.push({ stage, minute, dots, expected, legacyDifference, liveSnapshotShape: shape.customShape });
+    row.live.witnesses.push({ stage, minute, metadataRect: await metadata.boundingBox(), visibleStageRect: await stageBox.boundingBox(), dots, expected, legacyDifference, liveSnapshotShape: shape.customShape });
   }
-  await witness('first'); await screenshot(page, row, 'live-custom', '[data-cm-live-stage]');
-  const speeds = page.locator('[data-cm-live-controls] button').filter({ hasText: /^[1248]x$/ });
+  await witness('first'); await screenshot(page, row, 'live-custom', '[data-cm-live-stagebox="1"]');
+  const speeds = stageBox.locator('[data-cm-live-controls] button').filter({ hasText: /^[1248]x$/ });
   const labels = await speeds.allTextContents();
   assert.ok(labels.length > 0); await speeds.nth(labels.length - 1).click();
-  const resume = page.getByRole('button', { name: 'Resume', exact: true }); if (await resume.count()) await resume.click();
-  await page.getByRole('button', { name: 'Skip', exact: true }).click();
+  const resume = stageBox.getByRole('button', { name: 'Resume', exact: true }); if (await resume.count()) await resume.click();
+  await stageBox.getByRole('button', { name: 'Skip', exact: true }).click();
   row.live.nativeFirstHalfSkip = true;
-  await page.locator('[data-cm-live-stage="interval"]').waitFor({ timeout: 45000 });
+  const interval = page.locator('[data-cm-live-stage="interval"]');
+  await interval.waitFor({ state: 'visible', timeout: 45000 });
   const half = await read(page);
   assert.ok(half.live && half.live.positionRules === 1);
   assert.deepEqual(cm.liveShapeAt(half.live, 46).customShape, half.customShape);
   row.live.halftimeSnapshot = cm.liveShapeAt(half.live, 46);
-  await screenshot(page, row, 'halftime-custom', '[data-cm-live-stage]');
-  await page.getByRole('button', { name: 'Second half', exact: true }).click();
-  await page.locator('[data-cm-live-stage="second"]').waitFor();
+  await screenshot(page, row, 'halftime-custom', '[data-cm-live-stage="interval"]');
+  await interval.getByRole('button', { name: 'Second half', exact: true }).click();
+  await page.locator('[data-cm-live-stage="second"]').waitFor({ state: 'attached' });
+  await stageBox.waitFor({ state: 'visible' });
   await page.waitForFunction(key => !!JSON.parse(localStorage.getItem(key))?.live?.h2Drawn, KEY);
   if (await pause.count()) await pause.click();
+  await idle(page);
   await witness('second');
   row.live.status = 'passed';
 }
