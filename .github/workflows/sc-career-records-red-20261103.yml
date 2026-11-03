@@ -1,0 +1,169 @@
+name: Soccer Career completed records owned baseline
+on:
+  push:
+    branches: [codex/sc-career-records-red-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: sc-career-records-red-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact baseline source
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/sc-career-records-red"
+          mkdir -p "$QA_OUT"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          git rev-parse HEAD HEAD^{tree} > "$QA_OUT/source.txt"
+          test "$(git rev-parse HEAD^)" = cc9a55a2f35b6215d5e6e664cc401d10d7f76291
+          test "$(git rev-parse 'HEAD^^{tree}')" = 90d580e7007917a4959187bd449d054d63191b08
+          test "$(git rev-parse HEAD:src/pages/SoccerCareer.tsx)" = c6b270bf74c5b97fd21e07900c327ac7ccba24e0
+          test "$(git rev-parse HEAD:src/lib/soccerCareerEngine.ts)" = 722b2285628775dff77f8de0138cf44d7b104b49
+          test "$(git rev-parse HEAD:src/lib/soccerCareerSave.ts)" = 86ec011693fd5bc702b5e8ccec05d27775a72a76
+          test "$(git rev-parse HEAD:src/lib/saveFence.ts)" = 1de45b573fd866433eb0982495af927a5427e8f4
+          test "$(git rev-parse HEAD:src/test/soccerCareerCompletedRecords.test.tsx)" = 20ae0b2b422763a4a616e57b2637abb8e92ee4b6
+          echo '17c0ddae51f89c30a5aed5d453fd840ab7e948e8ce5613222cc9075b3c323ca1  src/test/soccerCareerCompletedRecords.test.tsx' | sha256sum --check
+          git diff --name-status HEAD^ HEAD > "$QA_OUT/changed-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const actual = fs.readFileSync(process.env.QA_OUT + '/changed-paths.txt', 'utf8').trim().split('\n').sort();
+          assert.deepEqual(actual, ['A\t.github/workflows/sc-career-records-red-20261103.yml', 'A\tsrc/test/soccerCareerCompletedRecords.test.tsx'].sort());
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          cp .github/workflows/sc-career-records-red-20261103.yml "$QA_OUT/workflow.yml"
+      - name: Install unchanged dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund 2>&1 | tee "$QA_OUT/install.log"
+          git diff --exit-code -- package.json package-lock.json
+      - name: Proper types and actual owned baseline
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/types.transport.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$QA_OUT/types.log"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          export SC_CAREER_RECORDS_RAW="$QA_OUT/raw"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/units.transport.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node_modules/.bin/vitest run src/test/soccerCareerCompletedRecords.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=verbose --reporter=json --outputFile="$QA_OUT/units.json" 2>&1 | tee "$QA_OUT/units.log"
+          unit_exit=${PIPESTATUS[0]}
+          set -e
+          echo "$unit_exit" > "$QA_OUT/units.exit"
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs'; import assert from 'node:assert/strict';
+          const root = process.env.QA_OUT, report = JSON.parse(fs.readFileSync(root + '/units.json', 'utf8'));
+          const files = report.testResults;
+          assert.equal(files.length, 1);
+          assert.ok(files[0].name.replaceAll('\\', '/').endsWith('/src/test/soccerCareerCompletedRecords.test.tsx'));
+          const rows = files[0].assertionResults;
+          assert.equal(rows.length, 7);
+          assert.equal(new Set(rows.map(r => r.fullName)).size, 7);
+          assert.ok(rows.every(r => r.status === 'passed' || r.status === 'failed'));
+          const expectedOwned = [{"title":"keeps an acknowledged completed record before New Career removes the source save","marker":"SC_RECORDS_KEEP_BEFORE_RESTART"},{"title":"dedupes the same playing record and replaces it with the latest lower saved legacy","marker":"SC_RECORDS_LATEST_ACK_REPLACES"},{"title":"creates no ghost record and refuses New Career when the current save was not acknowledged","marker":"SC_RECORDS_MAIN_FAILURE_BLOCKS_CLEAR"},{"title":"keeps a saved career after record-book quota refusal and recovers through Retry","marker":"SC_RECORDS_QUOTA_BLOCKS_CLEAR"},{"title":"preserves a future record book and refuses ordinary destructive confirmation","marker":"SC_RECORDS_FUTURE_STORE_BLOCKS_CLEAR"}];
+          const expectedHeld = ["leaves unfinished phases unarchived and preserves the record book during an active restart","keeps both storage keys when the real save fence refuses a stale confirmation"];
+          assert.equal(expectedOwned.length, 5); assert.equal(expectedHeld.length, 2);
+          assert.equal(new Set([...expectedOwned.map(r => r.title), ...expectedHeld]).size, 7);
+          assert.deepEqual(rows.map(r => r.title).sort(), [...expectedOwned.map(r => r.title), ...expectedHeld].sort());
+          const failed = rows.filter(r => r.status === 'failed'), passed = rows.filter(r => r.status === 'passed');
+          assert.equal(failed.length, 5); assert.equal(passed.length, 2);
+          assert.deepEqual(failed.map(r => r.title).sort(), expectedOwned.map(r => r.title).sort());
+          assert.deepEqual(passed.map(r => r.title).sort(), expectedHeld.slice().sort());
+          for (const expected of expectedOwned) {
+            const messages = failed.find(r => r.title === expected.title).failureMessages;
+            assert.ok(Array.isArray(messages) && messages.length > 0);
+            assert.ok(messages.every(m => m.includes('AssertionError') && m.includes(expected.marker)));
+          }
+          assert.ok(passed.every(r => (r.failureMessages ?? []).length === 0));
+          assert.equal(report.success, false);
+          assert.equal(Number(fs.readFileSync(root + '/units.exit', 'utf8').trim()), 1);
+          const rawNames = ["keep-before-restart","latest-lower","current-save-failed","archive-quota","future-store","unfinished","moved"];
+          assert.equal(rawNames.length, 7); assert.equal(new Set(rawNames).size, 7);
+          assert.deepEqual(fs.readdirSync(root + '/raw').filter(n => n.endsWith('.json')).sort(), rawNames.map(n => n + '.json').sort());
+          const raw = Object.fromEntries(rawNames.map(name => [name, JSON.parse(fs.readFileSync(root + '/raw/' + name + '.json', 'utf8'))]));
+          for (const [name, value] of Object.entries(raw)) assert.equal(value.case, name);
+          const o = name => raw[name].observations;
+          assert.equal(o('keep-before-restart').sourceRemoved, true);
+          assert.deepEqual(o('keep-before-restart').records, []);
+          assert.equal(o('keep-before-restart').sourceAfter, null);
+          assert.equal(o('keep-before-restart').otherHeld, true);
+          assert.deepEqual(o('latest-lower').firstRecords, []);
+          assert.deepEqual(o('latest-lower').records, []);
+          assert.equal(o('latest-lower').firstLegacy.score, 84);
+          assert.equal(o('latest-lower').laterLegacy.score, 55);
+          assert.equal(o('latest-lower').samePlayingRows, true);
+          assert.ok(o('current-save-failed').mainFailures > 0);
+          assert.equal(o('current-save-failed').successfulMainWrites, 0);
+          assert.equal(o('current-save-failed').sourceHeld, false);
+          assert.equal(o('current-save-failed').sourceAfter, null);
+          assert.equal(o('current-save-failed').recordsRaw, null);
+          assert.equal(o('archive-quota').sourceHeld, false);
+          assert.equal(o('archive-quota').recordsAttempts, 0);
+          assert.equal(o('archive-quota').recordsFailures, 0);
+          assert.equal(o('archive-quota').recordsRaw, null);
+          assert.equal(o('future-store').sourceHeld, false);
+          assert.equal(o('future-store').recordsAttempts, 0);
+          assert.equal(o('future-store').recordsRaw, '{"version":99,"records":[{"opaque":"KEEP_FUTURE_RECORD"}],"extra":"KEEP_FUTURE_FIELD"}');
+          assert.equal(o('unfinished').ceremonyPhase, 'retirement_ceremony');
+          assert.equal(o('unfinished').afterCeremony, '{"version":1,"nextSequence":1,"records":[]}');
+          assert.equal(o('unfinished').afterActiveRestart, o('unfinished').afterCeremony);
+          assert.equal(o('unfinished').sourceRemoved, true);
+          assert.equal(o('unfinished').recordsAttempts, 0);
+          assert.equal(o('moved').sourceHeld, true);
+          assert.equal(o('moved').archiveHeld, true);
+          assert.equal(o('moved').newerSource.name, 'Newer Record Keeper');
+          assert.equal(o('moved').fenceOutcome, 'written');
+          const counterNames = ['numRuntimeErrorTestSuites', 'numUnhandledErrors', 'numPendingTests', 'numTodoTests'];
+          const counters = Object.fromEntries(counterNames.map(k => [k, report[k] ?? null]));
+          assert.ok(Object.values(counters).every(v => v === null || v === 0));
+          fs.writeFileSync(root + '/admission.json', JSON.stringify({ status:'ACTUAL_OWNED_BASELINE_5_RED_2_PRESERVED', rows:7, failed:failed.map(r=>r.fullName), passed:passed.map(r=>r.fullName), rawFiles:rawNames, counters, absentCounterMeaning:'UNKNOWN' }, null, 2) + '\n');
+          NODE
+          exit "$unit_exit"
+      - name: Retain every tracked source byte
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound retained diagnostics
+        id: artifact-size
+        if: always()
+        run: |
+          set -euo pipefail
+          artifact_dir="$RUNNER_TEMP/sc-career-records-red"
+          test -d "$artifact_dir"
+          artifact_bytes=$(du -sb "$artifact_dir" | cut -f1)
+          echo "$artifact_bytes" > "$artifact_dir/artifact-bytes.txt"
+          test "$artifact_bytes" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.artifact-size.outputs.ready == 'true'
+        with:
+          name: sc-career-records-red-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sc-career-records-red
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
