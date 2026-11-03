@@ -32,8 +32,9 @@ function fixture(): { annual: SeasonRecord; row: SeasonRecord; career: CareerSta
   const career: CareerState = { ...initCareer('Legacy Shield fixture', 'England', 'ST', '2020s', stats, 71, 2027, FALLBACK_CLUBS, null), seasons: [row], lastUCLResult: null };
   return { annual, row, career };
 }
+// JSDOM fixture adapter for its declared reduced-motion setting, using the production .cm-rise final-state rule.
 function mount(career: CareerState, row: SeasonRecord, onCareer: SoccerSeasonCentreProps['onCareer']) {
-  return render(<MemoryRouter><SoccerSeasonCentre career={career} clubs={FALLBACK_CLUBS} row={row} mode="watch" onClose={() => {}} onCareer={onCareer} /></MemoryRouter>);
+  return render(<MemoryRouter><SoccerSeasonCentre career={career} clubs={FALLBACK_CLUBS} row={row} mode="watch" onClose={() => {}} onCareer={onCareer} /><style>{'.cm-rise { animation: none; opacity: 1; transform: none; visibility: visible; }'}</style></MemoryRouter>);
 }
 function acknowledge(view: ReturnType<typeof render>) {
   const help = view.container.querySelector<HTMLElement>('[data-season-help]');

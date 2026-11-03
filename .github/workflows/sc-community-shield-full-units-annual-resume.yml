@@ -1,0 +1,219 @@
+name: Community Shield annual replay and Resume full ordinary units
+on:
+  push:
+    branches: [codex/sc-community-shield-full-units-annual-resume-20261103]
+permissions:
+  contents: read
+jobs:
+  units:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      BEFORE: ${{ github.event.before }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Bind the exact ECAD parent, three admitted successor bodies and new workflow
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/sc-shield-full-units-annual-resume"
+          export OUT
+          printf 'OUT=%s\n' "$OUT" >> "$GITHUB_ENV"
+          mkdir "$OUT"
+          parent='ecad8206e30f003420778d01cc3bba00d99d6fef'
+          tree='5d8fefa375a67878d977a02e2f3a8b78eeb899d0'
+          [[ "$parent" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$tree" =~ ^[0-9a-f]{40}$ ]]
+          test "$GITHUB_REF" = refs/heads/codex/sc-community-shield-full-units-annual-resume-20261103
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$BEFORE" = 0000000000000000000000000000000000000000
+          test "$(git rev-parse HEAD^)" = "$parent"
+          test "$(git rev-parse 'HEAD^^{tree}')" = "$tree"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/head-tree.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t%s\nM\t%s\nM\t%s\nM\t%s\n' '.github/workflows/sc-community-shield-full-units-annual-resume.yml' 'scripts/simSeasonCentreMotion.mjs' 'src/components/soccer-career/SeasonResumeChip.tsx' 'src/test/soccerCommunityShieldLegacyReplay.test.tsx' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          cat > "$OUT/input-pins.txt" <<'PINS'
+          package-lock.json 97d6f12a052f25f400462938c241789a083f0bfe
+          package.json 2ff64986fb76ebc51b706f2fd24765768874008a
+          scripts/lib/offlineTransport.cjs 0fda542a2649fe5da937c6976fd0f5b6073e74b6
+          scripts/simCareerDerbies.mjs 2b6c96cdb99b67d8d3001a0b3a014edb8ce52fb4
+          scripts/simCareerStory.mjs 6eb77ba60f330e8213ea7192d39b54a8075c118b
+          scripts/simSeasonCentreAgreement.mjs 3fbcd99a4936a13eaec7eb6eb4055b7b568452cf
+          scripts/simSeasonCentreMotion.mjs a728f0ec6b240cedaf2b580d5f81aa9313efcfac
+          scripts/simSoccerCommunityShieldSevere.mjs 2d871e8e8e6c2a486a36b2fe55899dea7e70129c
+          scripts/simSoccerSeasonCentreFocus.mjs bdcaa282e2ef6b2f6fa676afa11fee5057b61f7c
+          scripts/simSoccerShieldPress.mjs 967de754af1c8e1118257255695cc5fdc7ecb95e
+          scripts/simSoccerShieldReplay.mjs 975b427f5b01f4e26b0dc6f43643ba4ae1a13a9f
+          src/components/season-centre/SeasonCentre.tsx 42fe7d090f403ac165886a0a49dff596bb346b8a
+          src/components/soccer-career/PressRoom.tsx 19790caba42083109732c5cf2127d2b7636b00fb
+          src/components/soccer-career/SeasonResumeChip.tsx 587387a73e218ed66199e1e74cd4aa36ed21320e
+          src/lib/season/soccer.ts 2a797be25739ebd030e5caf197273accf82d0258
+          src/lib/soccerCareerEngine.ts a65c8353d6e4660c1d6cec6471e17095eed35805
+          src/lib/soccerCareerExtraCups.ts f96d2442942db57eb89d3d73d7dc18bba02ec165
+          src/lib/soccerCareerPress.ts 08b91f6cae1d239ee2ac52ecaf80fd81a66cda8b
+          src/pages/SoccerCareer.tsx 76b6780a0ea2dfce80fa9846731dd26bde763e61
+          src/test/careerRecordedStats.test.tsx c27cbf7c523fc46e0e43b2df5c68d1ad1cf5bcbf
+          src/test/careerStory.test.tsx c56e00ebaf17c54fb241466f49a5959327e0fe3b
+          src/test/soccerCommunityShieldAcceptance.test.ts 72cf4787781245c914ebc0b178de5d56b5991687
+          src/test/soccerCommunityShieldAnnualRating.test.ts bf4a086302e324ddae02a26d9736d5cd78e11f2c
+          src/test/soccerCommunityShieldLegacyReplay.test.tsx ca7e722f27012cd5f0bc362107bd86d84199937c
+          src/test/soccerCommunityShieldMatch.test.ts 0f337b3f65fe9d7d506ff387956ff025c75e8944
+          src/test/soccerCommunityShieldReplay.test.ts f1242b3a3b350a4e01bf9dafb3b24da180d8189e
+          src/test/soccerCommunityShieldRules.test.ts aee086a743f4c0c261d805ee0d994b01323d092f
+          src/test/soccerCommunityShieldSevere.test.ts 1c8e9b1908d7e2268e4ec1bbff9438611e4bb118
+          src/test/soccerSeasonCentreFocus.test.tsx 1fa2099cb71ab36a5a1667833c304841a8e931a4
+          src/test/soccerShieldPress.test.ts 60faec8ee37a88ed4ecfafc53172b0212907014b
+          tsconfig.app.json 51f581dd91641b4c1f1219f646788e73cf6bf00c
+          vitest.config.ts ed2a9dc677f77dfe95c061064eeff5782b856864
+          PINS
+          while read -r file blob; do test "$(git rev-parse "HEAD:$file")" = "$blob"; done < "$OUT/input-pins.txt"
+          git ls-files -z > "$OUT/source-members.before"
+          git ls-files -z | xargs -0 sha256sum > "$OUT/source.sha256"
+          cat > "$OUT/capture.sh" <<'CAPTURE'
+          capture() {
+            local tag="$1"; shift
+            test ! -e "$OUT/$tag.exit"
+            printf '%s\0' "$@" > "$OUT/$tag.argv"
+            : > "$OUT/$tag.transport"
+            set +e
+            SIM_OFFLINE_RECEIPT="$OUT/$tag.transport" "$@" > "$OUT/$tag.stdout" 2> "$OUT/$tag.stderr"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$OUT/$tag.exit"
+            tail -n 18 "$OUT/$tag.stdout"; tail -n 18 "$OUT/$tag.stderr"
+            test ! -s "$OUT/$tag.transport" || return 1
+            return "$code"
+          }
+          CAPTURE
+          cat > "$OUT/expected-provenance.json" <<'PROVENANCE'
+          {"schemaVersion":1,"sources":[{"run":41577744125,"sha256":"b32d02ba05735c78766363966291004acb18deef93d2c3b1635146baeb0f04aa","scope":"Actual prior full721files10357rows10299passed58oldpending; all existing identities and statuses preserved."},{"run":41587579334,"sha256":"9155045b51244d63c0080c247cd9e39d6aa6da015824503c1de1a9d6db5332d2","scope":"Actual first annual candidate83passed2failed of85selected. Eight new identities are retained; their expected successor status is passed, no new runtime admission."}],"added":[{"file":"src/test/soccerCommunityShieldAnnualRating.test.ts","fullName":"Soccer Career Community Shield annual rating capture SC_SHIELD_ANNUAL_RATING_NORMAL: records the exact annual grade before the normal opening merge","actualPartialStatus":"passed","expectedSuccessorStatus":"passed"},{"file":"src/test/soccerCommunityShieldAnnualRating.test.ts","fullName":"Soccer Career Community Shield annual rating capture SC_SHIELD_ANNUAL_RATING_SEVERE: records the exact annual grade before the severe opening merge","actualPartialStatus":"passed","expectedSuccessorStatus":"passed"},{"file":"src/test/soccerCommunityShieldLegacyReplay.test.tsx","fullName":"Community Shield legacy league replay boundary SC_SHIELD_LEGACY_VISIBLE: keeps the old saved cup inspectable while refusing unproved league games","actualPartialStatus":"failed","expectedSuccessorStatus":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_ANNUAL: keeps the exact annual key and complete league reconstruction","actualPartialStatus":"passed","expectedSuccessorStatus":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_GRADE: uses the recorded annual grade when the opener changes the rounded mean","actualPartialStatus":"passed","expectedSuccessorStatus":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_LEGACY: keeps a valid selected legacy cup readable without inventing league proof","actualPartialStatus":"passed","expectedSuccessorStatus":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_UNSELECTED: preserves no-opener and unselected season keys and whole plans","actualPartialStatus":"passed","expectedSuccessorStatus":"passed"},{"file":"src/test/soccerCommunityShieldReplay.test.ts","fullName":"Soccer Career Shield annual league replay SC_SHIELD_REPLAY_PROOF: refuses malformed proof and keeps a selected zero-annual-app opener separate","actualPartialStatus":"passed","expectedSuccessorStatus":"passed"}],"preserved":{"oldPending":58,"exactDuplicateGroups":4,"exactDuplicateExtras":7},"encoding":"UTF8 ordinal-sorted file+NUL+fullName+NUL+rawstatus strings joined by LF, no terminal LF, repetitions retained","scope":"Exact expectation for the frozen annual helper/binding/engine plus minimal Resume/JSDOM successor, no build/browser credit."}
+          PROVENANCE
+      - name: Actual full history closure before the long suite
+        run: |
+          set -euo pipefail
+          source "$OUT/capture.sh"
+          cat > "$OUT/history-preflight.sh" <<'HISTORY'
+          set -euo pipefail
+          test "$(git rev-parse --is-shallow-repository)" = false
+          : > "$OUT/historical-baselines.tsv"
+          while read -r ref file; do
+            git cat-file -e "$ref:$file"
+            printf '%s\t%s\t%s\t%s\n' "$ref" "$file" "$(git rev-parse "$ref:$file")" "$(git cat-file -s "$ref:$file")" >> "$OUT/historical-baselines.tsv"
+          done <<'BASELINES'
+          56356be9 src/lib/frontOffice.ts
+          56356be9 src/data/frontOfficePlayers.ts
+          56356be9 src/data/frontOfficeDepth.ts
+          0c66a559 src/lib/frontOffice.ts
+          0c66a559 src/data/frontOfficePlayers.ts
+          0c66a559 src/data/frontOfficeDepth.ts
+          e8b39ccc src/lib/nbaFrontOffice.ts
+          e8b39ccc src/lib/nbaSeasonStats.ts
+          e8b39ccc src/lib/nbaRotation.ts
+          e8b39ccc src/data/conquestDataNba.ts
+          6b7596d2 src/lib/nhlFrontOffice.ts
+          6b7596d2 src/data/nhlFoPlayers.ts
+          2b7dda2951fb9b63e76a2af66970cb682f312105 src/lib/cageClash.ts
+          31a4ec01 src/lib/cageClash.ts
+          BASELINES
+          test "$(wc -l < "$OUT/historical-baselines.tsv")" -eq 14
+          cat "$OUT/historical-baselines.tsv"
+          HISTORY
+          capture history-availability bash "$OUT/history-preflight.sh"
+      - name: Locked online install separate from guarded execution
+        run: |
+          set -euo pipefail
+          code=0
+          NODE_OPTIONS='' npm ci > "$OUT/install.stdout" 2> "$OUT/install.stderr" || code=$?
+          printf '%s\n' "$code" > "$OUT/install.exit"
+          test "$code" -eq 0
+          find node_modules -path node_modules/.vite -prune -o -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dependency-files.sha256"
+      - name: Proper app types and one full ordinary suite
+        timeout-minutes: 60
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          unset GP_BOSS_PAGE_FILE GP_BOSS_HOOK_FILE GP_BOSS_ENGINE_FILE US_BOARD_CONTROL_ALIAS US_BOARD_CONTROL_FILE NO_DOUBLE_SWAP SC_EXTRA_CUPS_ENGINE
+          source "$OUT/capture.sh"
+          capture types node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture all-units node node_modules/vitest/vitest.mjs run --maxWorkers=2 --no-file-parallelism --reporter=verbose --reporter=json --outputFile="$OUT/all-units.json"
+      - name: Exact actual baseline identities and unchanged optional pending cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          source "$OUT/capture.sh"
+          cat > "$OUT/verify.mjs" <<'VERIFY'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const out=process.env.OUT;
+          const report=JSON.parse(fs.readFileSync(out+'/all-units.json','utf8'));
+          const expected={"files":724,"total":10365,"passed":10307,"failed":0,"pending":58,"todo":0,"identitySha256":"e2f9c140e4c97f338a717e1db49990ad0738ca4496815aea8189be8289f91e93","passedIdentitySha256":"b10f0ebdc268b8934d1ee732c3d03c340a72058d213e4d2851bf0db640d14ad2","pendingIdentitySha256":"9c0f051d352996bf0bcc403f327d42d33b7eeed379efc55c122540cd6e454376","fileIdentitySha256":"48ecac1c7a6dc253e77a0434351abded61cdeded7d48e0a5a54839d0edfdd52c","scIdentitySha256":"2718108797df734421f4bd507166de8d429d5a49f182113b212b8e23d9b43f53","scCases":34,"scFiles":[{"file":"src/test/soccerCommunityShieldAcceptance.test.ts","cases":2},{"file":"src/test/soccerCommunityShieldAnnualRating.test.ts","cases":2},{"file":"src/test/soccerCommunityShieldLegacyReplay.test.tsx","cases":1},{"file":"src/test/soccerCommunityShieldMatch.test.ts","cases":6},{"file":"src/test/soccerCommunityShieldReplay.test.ts","cases":5},{"file":"src/test/soccerCommunityShieldRules.test.ts","cases":8},{"file":"src/test/soccerCommunityShieldScreens.test.tsx","cases":6},{"file":"src/test/soccerCommunityShieldSevere.test.ts","cases":1},{"file":"src/test/soccerCommunityShieldUiAcceptance.test.tsx","cases":3}],"duplicateExtras":7,"duplicateIdentitySha256":"2e24f9a0cc21fcb652e38351177c02566f77fe9a78fffe8ae589e3abbf719560"};
+          const suffix=name=>{const normalized=name.replaceAll('\\','/');return normalized.slice(normalized.lastIndexOf('/src/')+1);};
+          const hash=values=>createHash('sha256').update(values.sort().join('\n')).digest('hex');
+          const identities=rows=>hash(rows.map(row=>row.file+'\0'+row.fullName+'\0'+row.status));
+          const suites=report.testResults.map(suite=>({file:suffix(suite.name),rows:suite.assertionResults}));
+          const rows=suites.flatMap(suite=>suite.rows.map(row=>({file:suite.file,fullName:row.fullName,status:row.status})));
+          const passed=rows.filter(row=>row.status==='passed'), pending=rows.filter(row=>row.status!=='passed');
+          const counts=new Map();for(const row of rows){const key=row.file+'\0'+row.fullName;counts.set(key,(counts.get(key)||0)+1);}
+          const duplicates=[...counts].filter(([,count])=>count>1).map(([identity,count])=>({identity,count}));
+          const duplicateExtras=duplicates.reduce((n,row)=>n+row.count-1,0);
+          const duplicateIdentitySha256=hash(duplicates.map(row=>row.identity+'\0'+row.count));
+          const sc=suites.filter(suite=>suite.file.startsWith('src/test/soccerCommunityShield')).flatMap(suite=>suite.rows.map(row=>({file:suite.file,fullName:row.fullName,status:row.status})));
+          const observed={files:suites.length,total:rows.length,passed:passed.length,pending:pending.length,
+            identitySha256:identities(rows),passedIdentitySha256:identities(passed),pendingIdentitySha256:identities(pending),
+            fileIdentitySha256:hash(suites.map(suite=>suite.file)),scIdentitySha256:identities(sc),duplicateExtras,duplicateIdentitySha256};
+          fs.writeFileSync(out+'/observed-identities.json',JSON.stringify({observed,sc,pending,duplicates},null,2)+'\n');
+          assert.equal(Number(fs.readFileSync(out+'/all-units.exit','utf8')),0);
+          assert.equal(report.success,true);assert.equal(report.numFailedTests,0);assert.equal(report.numTodoTests,0);
+          for(const key of ['files','total','passed','pending','identitySha256','passedIdentitySha256','pendingIdentitySha256','fileIdentitySha256','scIdentitySha256','duplicateExtras','duplicateIdentitySha256']) assert.equal(observed[key],expected[key],key);
+          assert.equal(report.numTotalTests,expected.total);assert.equal(report.numPassedTests,expected.passed);assert.equal(report.numPendingTests,expected.pending);
+          assert.equal(suites.filter(suite=>suite.file.startsWith('src/test/grandPrixBoss')).length,0);
+          assert.equal(sc.length,expected.scCases);
+          assert.deepEqual(suites.filter(suite=>suite.file.startsWith('src/test/soccerCommunityShield')).map(suite=>({file:suite.file,cases:suite.rows.length})).sort((a,b)=>a.file.localeCompare(b.file)),expected.scFiles);
+          for(const suite of suites)for(const row of suite.rows){
+            assert(['passed','skipped','pending'].includes(row.status));
+            assert.deepEqual(row.failureMessages,[]);
+          }
+          const runtimeCounters={numUnhandledErrors:report.numUnhandledErrors??null,numRuntimeErrorTestSuites:report.numRuntimeErrorTestSuites??null,numRuntimeErrorTests:report.numRuntimeErrorTests??null};
+          for(const [key,value] of Object.entries(runtimeCounters))if(report[key]!==undefined){assert.equal(typeof value,'number');assert.equal(value,0);}
+          for(const key of ['errors','unhandledErrors'])if(report[key]!==undefined){assert(Array.isArray(report[key]));assert.deepEqual(report[key],[]);}
+          const raw=fs.readFileSync(out+'/all-units.stdout','utf8')+'\n'+fs.readFileSync(out+'/all-units.stderr','utf8');
+          const detectedRuntimeError=/(?:Unhandled (?:Errors?|Rejection|Exception)|unhandledRejection|uncaughtException|Vitest caught \d+ unhandled)/i.test(raw);
+          assert.equal(detectedRuntimeError,false);
+          fs.writeFileSync(out+'/unit-summary.json',JSON.stringify({scope:'One full ordinary suite on the held final Shield source. No build or browser credit.',
+            expectedProvenance:JSON.parse(fs.readFileSync(out+'/expected-provenance.json','utf8')),observed,failed:report.numFailedTests,todo:report.numTodoTests,
+            exactShieldCases:sc,existingPending:pending,runtimeCounters,runtimeCounterCompleteness:Object.values(runtimeCounters).some(value=>value===null)?'UNKNOWN':'REPORTED',
+            rawErrors:report.errors??null,rawUnhandledErrors:report.unhandledErrors??null,detectedRuntimeError,
+            installNetwork:'Locked npm ci is explicitly online, before guarded execution.'},null,2)+'\n');
+          console.log('SC_FULL_UNITS: exact acquired baseline multiset plus frozen additions, '+observed.files+' files, '+observed.passed+' passes, '+observed.pending+' old pending identities, '+observed.duplicateExtras+' exact duplicate extras; no new skips.');
+          VERIFY
+          capture verify node "$OUT/verify.mjs"
+      - name: Always hold all source dependencies and membership
+        if: always()
+        run: |
+          set -euo pipefail
+          if test -f "$OUT/source.sha256"; then sha256sum --check "$OUT/source.sha256" > "$OUT/source-held.log"; fi
+          if test -f "$OUT/dependency-files.sha256"; then sha256sum --check "$OUT/dependency-files.sha256" > "$OUT/dependency-held.log"; fi
+          git ls-files -z > "$OUT/source-members.after"
+          cmp "$OUT/source-members.before" "$OUT/source-members.after"
+          git diff --exit-code HEAD > "$OUT/source-diff.log"
+          git ls-files --others --exclude-standard > "$OUT/untracked.txt"
+          test ! -s "$OUT/untracked.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sc-shield-full-units-annual-resume-${{ github.run_id }}
+          path: ${{ runner.temp }}/sc-shield-full-units-annual-resume/
+          retention-days: 14
