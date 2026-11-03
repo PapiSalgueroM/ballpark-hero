@@ -1,0 +1,245 @@
+name: Club Manager custom tactics focused engine qualification
+on:
+  push:
+    branches: [codex/cm-custom-tactics-focused-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: cm-custom-tactics-focused-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      SOURCE_PARENT: 424867fc94cf78d72964a6e905d187cfef471ac4
+      SOURCE_PARENT_TREE: 0a3c6097cad2368b709d27c0e72decebfac2a4ea
+      PORTED_SOURCE: 87ac9fb26d563b88c7788457c08716befde32802
+      ORIGINAL_MAIN: cc9a55a2f35b6215d5e6e664cc401d10d7f76291
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact focused source and ordinary inputs
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/cm-custom-tactics-focused"
+          mkdir -p "$OUT/logs" "$OUT/units" "$OUT/raw" "$OUT/transport" "$OUT/original"
+          export QA_OUT="$OUT"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git fetch --no-tags --depth=1 origin "$SOURCE_PARENT" "$PORTED_SOURCE" "$ORIGINAL_MAIN" > "$OUT/fetch.log" 2>&1
+          test "$(git rev-parse "$SOURCE_PARENT^{tree}")" = "$SOURCE_PARENT_TREE"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const pins = {"scripts/simTacticsEngine.mjs":"d6bf2bc4e94db7bcb532e9b773fc584f334340a5","scripts/qa/managerMatchPlans1079.mjs":"98972610390be00aebed0d85099e7393fd07fb37","src/components/club-manager/AcademyScreen.tsx":"2d3ca44121cf0a84dad9b965328bd0c970403be3","src/components/club-manager/LiveSimScreen.tsx":"a6a434180c6ee9ffe263fc5c82cc8328a36914ee","src/components/club-manager/LiveTacticsPanel.tsx":"b12a1a0303ec9b3d043bdac089b873a4cc35383c","src/components/club-manager/MatchPlansCard.tsx":"c64e82d0adff5180272f0164e7a84b80fd9d9dce","src/components/club-manager/TacticsScreen.tsx":"950c4e9b0d2df22d1d6de95723122cc699b4bacd","src/hooks/useClubManager.ts":"5b2aac4ea3f649e478fc4e26939dff7dadbed310","src/lib/clubManager.ts":"9d8dc92557bf2f4358b5be044359354eda841769","src/lib/clubManagerCalendar.ts":"353c2019273564b48b0ad9657c02a83990ff7bc3","src/lib/clubManagerPositions.ts":"999b26b065246a2bf2db452d17d96439e855c6af","src/lib/clubManagerUiInfo.ts":"8e0b99eb1941760b18fa4d5de1df2b72fd894a0a","src/pages/ClubManager.tsx":"4781925c031abde3822c81ef49d5e1558d315a17","src/test/academyFilters.test.tsx":"c2d432043c153bcf56a881d264d7077c74c7ba3d","src/lib/clubManagerMatchPlans.ts":"345b05725fff2c2b502be4ec32d6e2728cf3c1b3","src/test/managerMatchPlans.test.tsx":"43d803e92473dbb3ce1f765b71800c96e27125ef","src/test/cmCustomTacticsPitch.test.ts":"b7a2160b9d3d98da728b2f7ad7ab6bd5eeccdf95","src/test/MatchPlansCard.customPositions.test.tsx":"0eaa919e0d4cc8b0c24db5f331f7664d2db79a52","src/test/clubManagerPositionPersistence.test.tsx":"d71d8486dad8da7bdc5904e43ef2c4641651e301","src/test/cmCustomTacticalPlans.test.ts":"5eb8a489de955660be29d470476b6a90bf3ac492","src/test/cmCustomTacticsUi.test.tsx":"1884a41fde35b8152c51f055b29c04389983e56d","src/test/LiveSimScreen.positionNotice.test.tsx":"86c18f8813278f105aefd2305fe338f1d5d83096","src/test/TacticsScreen.freePositions.test.tsx":"85f4bed196a46bb77cd1793058981ecbd523b3f4","src/test/clubManagerPositionBlocked.test.tsx":"0f9c4de7514f0a7515d21e3abc37f9a4764309ec","src/test/clubManagerPositionIntegration.test.ts":"c1eabe3e33ffc37aafbb4f34d4a3435d47fdf9b0","src/test/clubManagerPositionLive.test.ts":"b8174f45778f49e59cccfe0428daf4c4b5d7ec3d","src/test/clubManagerPositionOldParity.test.ts":"8ca98f45c07d384a0c9cf53670c9004986d15876","src/test/clubManagerPositions.test.ts":"a075328b1967a6aebb2bddf30014eb308f682084","src/test/cmCustomTacticsPitchMissingPlayer.test.ts":"194a0fcb5d32863c61f8370175e6e95bc83ee788","src/test/cmCustomPlanPreservation.test.ts":"008263b6bf1f914b1383058d91852850dff22e43","scripts/simManagerMatchPlans.mjs":"7d6eb5ffe213b115eb506d2711fdacfe0950d978","scripts/qa/cmPosition.controls.json":"46e35713c4c0e1be53a516284f100885f6901f68","scripts/qa/runCmPositionControls.mjs":"df8c6c295936d8ea052398394c1eaa62e034dc30","scripts/qa/runClubManagerPositionOldParity.mjs":"a07470ae92f9878cfb09e55bb0081ec9db225758","scripts/qa/cmCustomTacticsCombined.mjs":"af3386318a64cf2451ac4a3d141db4587881793e"}, expected = [".github/workflows/cm-custom-tactics-focused-20261103.yml","scripts/qa/cmCustomTacticsCombined.mjs","scripts/qa/cmPosition.controls.json","scripts/qa/runClubManagerPositionOldParity.mjs","scripts/qa/runCmPositionControls.mjs","src/test/LiveSimScreen.positionNotice.test.tsx","src/test/TacticsScreen.freePositions.test.tsx","src/test/clubManagerPositionBlocked.test.tsx","src/test/clubManagerPositionIntegration.test.ts","src/test/clubManagerPositionLive.test.ts","src/test/clubManagerPositionOldParity.test.ts","src/test/clubManagerPositions.test.ts","src/test/cmCustomTacticsPitchMissingPlayer.test.ts"];
+          const changed = execFileSync('git', ['diff', '--name-only', process.env.SOURCE_PARENT, 'HEAD']).toString().trim().split('\n').filter(Boolean).sort();
+          assert.deepEqual(changed, expected.sort());
+          for (const [file, blob] of Object.entries(pins)) assert.equal(execFileSync('git', ['rev-parse', 'HEAD:' + file]).toString().trim(), blob, file);
+          assert.equal(execFileSync('git', ['rev-parse', 'HEAD:vitest.config.ts']).toString().trim(), 'ed2a9dc677f77dfe95c061064eeff5782b856864');
+          const config = fs.readFileSync('vitest.config.ts', 'utf8');
+          for (const match of config.matchAll(/process\.env\.([A-Z_]+)/g)) assert.ok(!process.env[match[1]], 'No inherited alias: ' + match[1]);
+          fs.writeFileSync(process.env.QA_OUT + '/source-association.json', JSON.stringify({
+            source: process.env.GITHUB_SHA, parent: process.env.SOURCE_PARENT, pins,
+            scope: 'Focused units, physical original-leaf controls, default full-state/RNG parity and finite tactical engine checks. Site and App proof are separate.',
+          }, null, 2) + '\n');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          cp src/lib/clubManagerMatchPlans.ts "$OUT/original/fixed-helper.ts"
+          cp src/hooks/useClubManager.ts "$OUT/original/fixed-hook.ts"
+          cp src/components/club-manager/LiveSimScreen.tsx "$OUT/original/fixed-live.tsx"
+          git show "$ORIGINAL_MAIN:src/lib/clubManagerMatchPlans.ts" > "$OUT/original/main-helper.ts"
+          git show "$PORTED_SOURCE:src/hooks/useClubManager.ts" > "$OUT/original/ported-hook.ts"
+          git show "$ORIGINAL_MAIN:src/components/club-manager/LiveSimScreen.tsx" > "$OUT/original/main-live.tsx"
+          git show "$ORIGINAL_MAIN:src/lib/clubManager.ts" > "$OUT/original/main-engine.ts"
+          test "$(git hash-object "$OUT/original/main-helper.ts")" = b942fc0e71c40aa61862e22f5ccd0a774bfe27ed
+          test "$(git hash-object "$OUT/original/ported-hook.ts")" = 2783e5af21cf45a823f232d2a9e9c1d70ad3fc69
+          test "$(git hash-object "$OUT/original/main-engine.ts")" = cf378e002c1f253a4cd48a147af66117f982f6b2
+          test "$(git hash-object "$OUT/original/main-live.tsx")" = 9f56faecfc7d342046820ab51f8e62bbd2bdd8ba
+          npm ci --no-audit --no-fund > "$OUT/install.log" 2>&1
+      - name: Proper types and scoped positive and physical-original unit arms
+        timeout-minutes: 30
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+          restore_leaves() {
+            cp "$QA_OUT/original/fixed-helper.ts" src/lib/clubManagerMatchPlans.ts
+            cp "$QA_OUT/original/fixed-hook.ts" src/hooks/useClubManager.ts
+            cp "$QA_OUT/original/fixed-live.tsx" src/components/club-manager/LiveSimScreen.tsx
+          }
+          trap restore_leaves EXIT
+          run_units() {
+            UNIT_PROFILE="$1" node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { spawnSync } from 'node:child_process';
+          const profiles = {"healthy":{"files":{"src/test/clubManagerPositions.test.ts":25,"src/test/clubManagerPositionIntegration.test.ts":9,"src/test/clubManagerPositionLive.test.ts":16,"src/test/TacticsScreen.freePositions.test.tsx":17,"src/test/clubManagerPositionPersistence.test.tsx":16,"src/test/clubManagerPositionBlocked.test.tsx":7,"src/test/MatchPlansCard.customPositions.test.tsx":5,"src/test/LiveSimScreen.positionNotice.test.tsx":2,"src/test/cmCustomTacticalPlans.test.ts":7,"src/test/cmCustomTacticsUi.test.tsx":3,"src/test/managerMatchPlans.test.tsx":13,"src/test/cmCustomTacticsPitch.test.ts":3,"src/test/cmCustomTacticsPitchMissingPlayer.test.ts":1,"src/test/cmCustomPlanPreservation.test.ts":4,"src/test/academyFilters.test.tsx":8},"failures":{},"raw":{"helper":["capture.json","switch.json","preview.json","reset.json","legacy.json","unsupported-plan.json","limits-live.json"],"ui":["move-mode.json","complete-plan.json","legacy-refusal.json"],"pitch":["current.json","history.json","legacy.json"],"store":["mixed.json","store-shapes.json","extra-axis.json","foreign.json"],"pitch-middle":["middle-departure.json"]}},"old-helper":{"files":{"src/test/cmCustomTacticalPlans.test.ts":7,"src/test/cmCustomTacticsUi.test.tsx":3,"src/test/cmCustomPlanPreservation.test.ts":4},"failures":{"Club Manager complete custom tactical plans captures a detached version two snapshot of the full custom plan":"CM_CUSTOM_PLAN_V2_CAPTURE","Club Manager complete custom tactical plans reapplies two distinct named custom mixes without leaving the previous instructions or shape behind":"CM_CUSTOM_PLAN_V2_APPLY_MIX","Club Manager complete custom tactical plans previews the saved custom mix without changing the active career or plan":"CM_CUSTOM_PLAN_V2_PREVIEW_MIX","Club Manager complete custom tactical plans records balanced instructions and a preset shape explicitly and removes both optional career fields on apply":"CM_CUSTOM_PLAN_V2_EXPLICIT_RESET","Club Manager custom tactics UI saves the named philosophy selected on the real screen with its actual instruction mix and custom points":"CM_CUSTOM_UI_COMPLETE_PLAN_CAPTURE","Club Manager unsupported tactical plan preservation locks a mixed raw store without dropping future data while known previews remain readable":"CM_CUSTOM_STORE_MIXED_KEPT","Club Manager unsupported tactical plan preservation keeps malformed non-array duplicate and over-capacity stores untouched":"CM_CUSTOM_STORE_MALFORMED_KEPT","Club Manager unsupported tactical plan preservation refuses unknown instruction axes in current tactics and in a version two plan":"CM_CUSTOM_STORE_UNKNOWN_TACTICS_KEPT"},"raw":{"helper":["capture.json","switch.json","preview.json","reset.json","legacy.json","unsupported-plan.json","limits-live.json"],"ui":["move-mode.json","complete-plan.json","legacy-refusal.json"],"store":["mixed.json","store-shapes.json","extra-axis.json","foreign.json"]}},"restored-helper":{"files":{"src/test/cmCustomTacticalPlans.test.ts":7,"src/test/cmCustomTacticsUi.test.tsx":3,"src/test/cmCustomPlanPreservation.test.ts":4},"failures":{},"raw":{"helper":["capture.json","switch.json","preview.json","reset.json","legacy.json","unsupported-plan.json","limits-live.json"],"ui":["move-mode.json","complete-plan.json","legacy-refusal.json"],"store":["mixed.json","store-shapes.json","extra-axis.json","foreign.json"]}},"old-hook":{"files":{"src/test/clubManagerPositionPersistence.test.tsx":16},"failures":{"Custom base positions through the actual career hook and storage saves a complete custom plan before acknowledgement and keeps refused writes and deletes honest":"CM_CUSTOM_PLAN_HOOK_V2_SAVE_ACK","Custom base positions through the actual career hook and storage reapplies both recorded custom shapes and instruction mixes through the real atomic hook":"CM_CUSTOM_PLAN_HOOK_V2_APPLY_POINTS"},"raw":{}},"restored-hook":{"files":{"src/test/clubManagerPositionPersistence.test.tsx":16},"failures":{},"raw":{}},"old-live":{"files":{"src/test/cmCustomTacticsPitch.test.ts":3,"src/test/cmCustomTacticsPitchMissingPlayer.test.ts":1},"failures":{"Club Manager custom live pitch input projects the marked live snapshot into actual pitch input while keeping roles, opponent and feed unchanged":"CM_CUSTOM_STAGE_CURRENT_POINTS","Club Manager custom live pitch input uses the same strictly-after history snapshot and canonical indexes as the live lineup":"CM_CUSTOM_STAGE_HISTORY_POINTS","Club Manager custom pitch with an actual missing player keeps the surviving custom-point indexes after an actual middle-slot red card or injury":"CM_CUSTOM_STAGE_MIDDLE_SLOT_POINTS"},"raw":{"pitch":["current.json","history.json","legacy.json"],"pitch-middle":["middle-departure.json"]}},"restored-live":{"files":{"src/test/cmCustomTacticsPitch.test.ts":3,"src/test/cmCustomTacticsPitchMissingPlayer.test.ts":1},"failures":{},"raw":{"pitch":["current.json","history.json","legacy.json"],"pitch-middle":["middle-departure.json"]}}};
+          const name = process.env.UNIT_PROFILE, profile = profiles[name], out = process.env.QA_OUT;
+          assert.ok(profile, 'A frozen profile is required');
+          const raw = out + '/raw/' + name, env = { ...process.env };
+          const rawGroups = {
+            CM_CUSTOM_PLAN_HELPER_RAW: 'helper', CM_CUSTOM_TACTICS_UI_RAW: 'ui',
+            CM_CUSTOM_STAGE_RAW: 'pitch', CM_CUSTOM_PLAN_STORE_RAW: 'store',
+            CM_CUSTOM_STAGE_MISSING_RAW: 'pitch-middle',
+          };
+          for (const [key, group] of Object.entries(rawGroups)) {
+            env[key] = raw + '/' + group; fs.mkdirSync(env[key], { recursive: true });
+          }
+          const receipt = out + '/transport/' + name + '.log'; fs.writeFileSync(receipt, '');
+          env.SIM_OFFLINE_RECEIPT = receipt;
+          const reportPath = out + '/units/' + name + '.json';
+          const args = ['node_modules/vitest/vitest.mjs', 'run', ...Object.keys(profile.files),
+            '--maxWorkers=1', '--minWorkers=1', '--reporter=default', '--reporter=json', '--outputFile=' + reportPath];
+          const run = spawnSync(process.execPath, args, { env, encoding: 'utf8', timeout: 25 * 60 * 1000, maxBuffer: 64 * 1024 * 1024 });
+          const log = (run.stdout || '') + '\n' + (run.stderr || '');
+          fs.writeFileSync(out + '/logs/' + name + '.log', log);
+          fs.writeFileSync(out + '/units/' + name + '.exit', String(run.status) + '\n');
+          process.stdout.write(log);
+          assert.ok(!run.error && !run.signal, 'The actual focused process must finish');
+          const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+          const failures = profile.failures, failedNames = Object.keys(failures);
+          const total = Object.values(profile.files).reduce((sum, count) => sum + count, 0);
+          assert.equal(run.status, failedNames.length ? 1 : 0);
+          assert.equal(report.success, failedNames.length === 0);
+          assert.equal(report.numPassedTests, total - failedNames.length); assert.equal(report.numFailedTests, failedNames.length);
+          assert.equal(report.testResults.length, Object.keys(profile.files).length);
+          const seenFiles = new Set(), seenCases = new Set(), seenFailures = new Set();
+          for (const suite of report.testResults) {
+            const file = Object.keys(profile.files).find(file => suite.name.replaceAll('\\', '/').endsWith('/' + file));
+            assert.ok(file && !seenFiles.has(file), suite.name); seenFiles.add(file);
+            if (Object.hasOwn(suite, 'message')) assert.equal(suite.message, '');
+            assert.equal(suite.assertionResults.length, profile.files[file]);
+            let suiteFailures = 0;
+            for (const row of suite.assertionResults) {
+              const identity = file + '\n' + row.fullName;
+              assert.ok(!seenCases.has(identity)); seenCases.add(identity);
+              const marker = failures[row.fullName];
+              assert.equal(row.status, marker ? 'failed' : 'passed', row.fullName);
+              if (marker) {
+                suiteFailures++; seenFailures.add(row.fullName);
+                assert.ok(row.failureMessages.length && row.failureMessages.every(message => message.includes(marker)), row.fullName);
+              } else assert.deepEqual(row.failureMessages, []);
+            }
+            assert.equal(suite.status, suiteFailures ? 'failed' : 'passed');
+          }
+          assert.deepEqual([...seenFailures].sort(), failedNames.sort());
+          const counters = {};
+          for (const key of ['numRuntimeErrorTestSuites', 'numUnhandledErrors', 'numPendingTests', 'numTodoTests']) {
+            counters[key] = Object.hasOwn(report, key) ? report[key] : null;
+            if (counters[key] !== null) assert.equal(counters[key], 0, key);
+          }
+          for (const [group, files] of Object.entries(profile.raw || {})) assert.deepEqual(fs.readdirSync(raw + '/' + group).sort(), [...files].sort());
+          assert.equal(fs.readFileSync(receipt, 'utf8'), '');
+          fs.writeFileSync(out + '/units/' + name + '-admission.json', JSON.stringify({
+            name, actualPasses: report.numPassedTests, actualOwnedFailures: report.numFailedTests,
+            files: profile.files, failures, counters, missingCounterMeaning: 'UNKNOWN',
+            cases: [...seenCases], scope: name === 'healthy' ? 'Unique normal focused cases; other profiles are repeated controls/restores.' : 'Physical source-control or restore arm, no extra unique-case credit.',
+          }, null, 2) + '\n');
+          NODE
+          }
+          run_units healthy
+          cp "$QA_OUT/original/main-helper.ts" src/lib/clubManagerMatchPlans.ts
+          run_units old-helper
+          restore_leaves
+          cmp "$QA_OUT/original/fixed-helper.ts" src/lib/clubManagerMatchPlans.ts
+          run_units restored-helper
+          cp "$QA_OUT/original/ported-hook.ts" src/hooks/useClubManager.ts
+          run_units old-hook
+          restore_leaves
+          cmp "$QA_OUT/original/fixed-hook.ts" src/hooks/useClubManager.ts
+          run_units restored-hook
+          cp "$QA_OUT/original/main-live.tsx" src/components/club-manager/LiveSimScreen.tsx
+          run_units old-live
+          restore_leaves
+          cmp "$QA_OUT/original/fixed-live.tsx" src/components/club-manager/LiveSimScreen.tsx
+          run_units restored-live
+          trap - EXIT
+      - name: Effective position and plan faults and untouched-default parity
+        timeout-minutes: 45
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          run_gate() {
+            local name="$1"; shift
+            : > "$QA_OUT/transport/$name.log"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/$name.log" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            test ! -s "$QA_OUT/transport/$name.log"
+          }
+          run_gate position-controls node scripts/qa/runCmPositionControls.mjs --out "$QA_OUT/position-controls"
+          run_gate default-parity env CM_POSITION_ORIGINAL_SOURCE="$QA_OUT/original/main-engine.ts" CM_POSITION_PARITY_OUT="$QA_OUT/default-parity" node scripts/qa/runClubManagerPositionOldParity.mjs
+          run_gate plan-controls env MANAGER_MATCH_PLANS_CONTROL=all MANAGER_MATCH_PLANS_ARTIFACTS="$QA_OUT/plan-controls" node scripts/simManagerMatchPlans.mjs
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out = process.env.QA_OUT;
+          const controls = JSON.parse(fs.readFileSync(out + '/position-controls/proof.json', 'utf8'));
+          assert.equal(controls.status, 'ACTUAL_SIXTEEN_AND_SEVENTEEN_COPIED_CORE_CONTROLS_PASS');
+          assert.equal(controls.complete, true); assert.deepEqual(controls.errors, []);
+          assert.equal(controls.runs.length, 53); assert.equal(controls.controls.length, 17);
+          const parity = JSON.parse(fs.readFileSync(out + '/default-parity/parity.json', 'utf8'));
+          assert.equal(parity.status, 'ACTUAL_OLD_ENGINE_PARITY_AND_TWO_EFFECTIVE_CONTROLS_PASS');
+          assert.equal(parity.runs.length, 4); assert.equal(parity.controls.length, 2);
+          const plans = JSON.parse(fs.readFileSync(out + '/plan-controls/summary.json', 'utf8'));
+          assert.equal(plans.length, 35); assert.ok(plans.every(row => row.passed && row.exit === 0));
+          NODE
+      - name: Normal existing tactical engine scopes
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          run_gate() {
+            local name="$1"; shift
+            : > "$QA_OUT/transport/$name.log"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/$name.log" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            test ! -s "$QA_OUT/transport/$name.log"
+          }
+          run_gate legacy-tactics node scripts/simTacticsEngine.mjs
+          run_gate team-instructions env OUT_JSON="$QA_OUT/instructions-fleet.json" node scripts/simCmTactics.mjs
+      - name: Combined real position and instruction measurement and effective omission control
+        timeout-minutes: 40
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/combined.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/combined.log" node scripts/qa/cmCustomTacticsCombined.mjs --out "$QA_OUT/combined" 2>&1 | tee "$QA_OUT/logs/combined.log"
+          test ! -s "$QA_OUT/transport/combined.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const admission = JSON.parse(fs.readFileSync(process.env.QA_OUT + '/combined/admission.json', 'utf8'));
+          assert.equal(admission.status, 'ACTUAL_COMBINED_RATE_MEASUREMENT_AND_EFFECTIVE_OMISSION_PASS');
+          NODE
+      - name: Retain source holds and finite focused evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: cm-custom-tactics-focused-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cm-custom-tactics-focused
+          retention-days: 14
+          if-no-files-found: error
