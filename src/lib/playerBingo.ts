@@ -508,6 +508,9 @@ async function fetchWorldCupSets(signal: AbortSignal): Promise<{ all: Set<string
       if (key === 'andy robertson' && normalizeName(r.nationality ?? '') === 'scotland') {
         keys.push('andrew robertson');
       }
+      if (key === 'gabriel magalhaes' && normalizeName(r.nationality ?? '') === 'brazil') {
+        keys.push('gabriel');
+      }
       const year = Number(r.world_cup_year);
       for (const nameKey of keys) {
         all.add(nameKey);
