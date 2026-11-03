@@ -1,0 +1,134 @@
+name: Requested release CM legacy causal pair
+on:
+  push:
+    branches: [codex/flagship-cm-legacy-causal-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: flagship-cm-legacy-causal-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  legacy-pair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arm: main
+            source: c176be815dc4af57dfd7185a485e28357aa0d41e
+            core: cf378e002c1f253a4cd48a147af66117f982f6b2
+            sourceRows: 5647
+          - arm: joined
+            source: 00c85815cac64d72014594e6b38515d4d6ce2e45
+            core: 9d8dc92557bf2f4358b5be044359354eda841769
+            sourceRows: 5669
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      TZ: UTC
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.source }}
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold both exact sources and unchanged legacy scripts and fixtures
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/flagship-cm-legacy-${{ matrix.arm }}"
+          mkdir -p "$OUT/shootout" "$OUT/appeal" "$OUT/transport" "$OUT/history"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD)" = '${{ matrix.source }}'
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = '${{ matrix.core }}'
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const pins={"scripts/simCmShootoutOrder.mjs":"8d348809a1cb6556d6628fa6571e0c38b3005bf1","scripts/simManagerAppealIsolation.mjs":"244254168b3992e6d227a897357ab8e5d5fd49e6","scripts/data/cmShootoutUnset782.json":"972ac314b0a6c676d1f2b5902256d37bc095c05f","scripts/fixtures/managerAppealIsolation1081/manifest.json":"3b1b404b1a0a85010361ea08fadab3cd73e62842","scripts/fixtures/managerAppealIsolation1081/clubManagerDecisions.historical.ts":"8a7f08bc543854c9da601fe6ba9b11d0f7ee545d","scripts/qa/managerAppealIsolation1081.mjs":"87ecddfb0b7f6e7935b5bedd75116ca00c8a177f","scripts/qa/managerAppealCompatibility1081.mjs":"ea7ce1549805a619e42a90cb3f0dddf2a416d262","scripts/lib/seedRandom.mjs":"13e2534d2936880c0529a37190050fffb7d8df7d","scripts/lib/offlineTransport.cjs":"0fda542a2649fe5da937c6976fd0f5b6073e74b6","scripts/lib/cmWorldSeed1250.mjs":"57711eceb39ce95d3aed63d1dc8c04e8145a90fc"};
+          for(const [file,sha] of Object.entries(pins))assert.equal(execFileSync('git',['rev-parse','HEAD:'+file],{encoding:'utf8'}).trim(),sha,file);
+          fs.writeFileSync(process.env.QA_OUT+'/association.json',JSON.stringify({arm:'${{ matrix.arm }}',source:'${{ matrix.source }}',core:'${{ matrix.core }}',expectedSourceRows:${{ matrix.sourceRows }},pins,scope:'Unchanged vanilla Shootout and Appeal characterization only. Native failures remain failed. No product, fixture, assertion, seed or clock edits.'},null,2)+'\n');
+          NODE
+          # Preserve the exact historical source before Node's offline runtime.
+          git cat-file -e 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f^{commit}
+          git show 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f:src/lib/clubManager.ts > "$OUT/history/5b70-clubManager.ts"
+          sha256sum "$OUT/history/5b70-clubManager.ts" > "$OUT/history/source.sha256"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq ${{ matrix.sourceRows }}
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+      - name: Install unchanged dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/install.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json
+      - name: Retain both vanilla exits and all raw diagnostic outputs
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          unset SIM_SEED CM_SHOOTOUT_CONTROL CM_SHOOTOUT_WRITE_FIXTURE SIM_WORLD_EDITOR_CONTROL ONLY BROWSER MANAGER_APPEAL_CONTROL
+          : > "$QA_OUT/transport/shootout.log"
+          : > "$QA_OUT/transport/appeal.log"
+          set +e
+          CM_SHOOTOUT_ARTIFACTS="$QA_OUT/shootout" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/shootout.log" timeout --kill-after=15s 15m node scripts/simCmShootoutOrder.mjs > "$QA_OUT/shootout.stdout.log" 2> "$QA_OUT/shootout.stderr.log"
+          shootout_exit=$?
+          MANAGER_APPEAL_ISOLATION_ARTIFACTS="$QA_OUT/appeal" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/appeal.log" timeout --kill-after=15s 15m node scripts/simManagerAppealIsolation.mjs --characterize > "$QA_OUT/appeal.stdout.log" 2> "$QA_OUT/appeal.stderr.log"
+          appeal_exit=$?
+          set -e
+          printf '%s\n' "$shootout_exit" > "$QA_OUT/shootout.exit"
+          printf '%s\n' "$appeal_exit" > "$QA_OUT/appeal.exit"
+          tail -n 10 "$QA_OUT/shootout.stdout.log" "$QA_OUT/shootout.stderr.log" "$QA_OUT/appeal.stdout.log" "$QA_OUT/appeal.stderr.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const out=process.env.QA_OUT;
+          const json=file=>fs.existsSync(out+'/'+file)?JSON.parse(fs.readFileSync(out+'/'+file,'utf8')):null;
+          const shootout=json('shootout/normal-baseline.json'),appeal=json('appeal/report.json');
+          const summary={
+            shootout:{nativeExit:Number(fs.readFileSync(out+'/shootout.exit','utf8')),reportPresent:shootout!==null,baselineRef:shootout?.baselineRef??null,rowCount:Array.isArray(shootout?.rows)?shootout.rows.length:null,failedSections:shootout?.failedSections??null,runtimeErrors:shootout?.runtimeErrors??null},
+            appeal:{nativeExit:Number(fs.readFileSync(out+'/appeal.exit','utf8')),reportPresent:appeal!==null,failure:appeal?.failure??null,integrityPassed:appeal?.integrityPassed??null,productCorrectness:appeal?.productCorrectness??null,parityFailures:appeal?.parityFailures??null,rawNames:appeal?.raw?Object.keys(appeal.raw):null},
+            limits:'No native nonzero or absent report is a pass. Full reports, raw worker outputs, source hashes, RNG evidence and stdout/stderr are retained without normalization. Characterization alone is not appeal parity qualification.'
+          };
+          fs.writeFileSync(out+'/diagnostic-summary.json',JSON.stringify(summary,null,2)+'\n');
+          console.log(JSON.stringify({shootoutExit:summary.shootout.nativeExit,shootoutReport:summary.shootout.reportPresent,appealExit:summary.appeal.nativeExit,appealReport:summary.appeal.reportPresent,appealFailure:summary.appeal.failure}));
+          NODE
+          test ! -s "$QA_OUT/transport/shootout.log"
+          test ! -s "$QA_OUT/transport/appeal.log"
+          test -s "$QA_OUT/shootout/normal-baseline.json"
+          test -s "$QA_OUT/appeal/report.json"
+          # Keep every real failure visible; these are diagnostic jobs.
+          test "$shootout_exit" -eq 0
+          test "$appeal_exit" -eq 0
+      - name: Preserve every original source and fixture byte
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+      - name: Bound retained diagnostic evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.artifact.outputs.ready == 'true'
+        with:
+          name: flagship-cm-legacy-${{ matrix.arm }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/flagship-cm-legacy-${{ matrix.arm }}
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
