@@ -1,0 +1,830 @@
+{
+  "version": 1,
+  "productPins": {
+    "src/pages/SoccerCareer.tsx": "c999898871c2a7b19067d1f93cd94f599e9345aed0b83e2cb3e5f48d32110b73",
+    "src/lib/soccerCareerCompletedRecords.ts": "d4ebc565ab914dd34efca706aa9d3fc95c7c18cf71b6136ec95020a29f35e4e3",
+    "src/components/soccer-career/PastCareersSheet.tsx": "f24c438e35eb4584866a53ea957c065bf31a01a869dbe2b306ef092a896948d3"
+  },
+  "suites": [
+    {
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "sha256": "0364180542b288aec0082656959c0d3cefe10e4b448fabfb8839a2f932c5a697",
+      "rawEnv": "SC_RECORDS_HELPER_RAW",
+      "cases": [
+        {
+          "fullName": "Soccer Career completed record helper keys the exact ordered playing record and normalizes only the two absent optional fields",
+          "rawFile": "identity.json"
+        },
+        {
+          "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+          "rawFile": "capture.json"
+        },
+        {
+          "fullName": "Soccer Career completed record helper keeps every unsupported stored envelope byte intact without a write attempt",
+          "rawFile": "strict-store.json"
+        },
+        {
+          "fullName": "Soccer Career completed record helper replaces a latest lower snapshot while identical reads keep their sequence and bytes",
+          "rawFile": "latest.json"
+        },
+        {
+          "fullName": "Soccer Career completed record helper keeps twelve scored records with latest changed ties and a no-write lower cutoff",
+          "rawFile": "capacity.json"
+        },
+        {
+          "fullName": "Soccer Career completed record helper requires exact archive readback after quota ignored altered and unreadable writes",
+          "rawFile": "readback.json"
+        },
+        {
+          "fullName": "Soccer Career completed record helper checks the real caller source precondition before upsert before setting and after readback",
+          "rawFile": "source.json"
+        },
+        {
+          "fullName": "Soccer Career completed record helper verifies a fresh retained snapshot or genuine cutoff without granting stale deletion proof",
+          "rawFile": "clear.json"
+        }
+      ]
+    },
+    {
+      "testPath": "src/test/soccerCareerCompletedRecordsBoundary.test.tsx",
+      "sha256": "834498c906ae985e8b27945ebcd40750467377f1334ec9805e9406fde920653d",
+      "rawEnv": "SC_CAREER_RECORDS_BOUNDARY_RAW",
+      "cases": [
+        {
+          "fullName": "Soccer Career completed record storage boundaries rejects a nonthrowing ignore source write before archive or discard",
+          "rawFile": "source-ignore.json"
+        },
+        {
+          "fullName": "Soccer Career completed record storage boundaries rejects a nonthrowing alter source write before archive or discard",
+          "rawFile": "source-alter.json"
+        },
+        {
+          "fullName": "Soccer Career completed record storage boundaries refuses restart when an existing current acknowledgement no longer matches disk",
+          "rawFile": "source-mismatch.json"
+        },
+        {
+          "fullName": "Soccer Career completed record storage boundaries keeps the current career mounted when removal returns without deleting its bytes",
+          "rawFile": "ignored-removal.json"
+        },
+        {
+          "fullName": "Soccer Career completed record storage boundaries allows explicit archive discard only after refusal with a valid current acknowledgement",
+          "rawFile": "explicit-discard.json"
+        }
+      ]
+    }
+  ],
+  "faults": [
+    {
+      "name": "identity-profile",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "const profile: Profile = [career.playerName, career.nationality, career.position, career.era];",
+          "after": "const profile: Profile = ['Merged names', career.nationality, career.position, career.era];"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keys the exact ordered playing record and normalizes only the two absent optional fields",
+      "marker": "SC_RECORD_HELPER_IDENTITY",
+      "rawFile": "identity.json",
+      "expectedRawChange": "Literal profile and changed-name identity stop matching."
+    },
+    {
+      "name": "identity-mutable-age",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "const profile: Profile = [career.playerName, career.nationality, career.position, career.era];",
+          "after": "const profile: Profile = [career.playerName + String(career.age), career.nationality, career.position, career.era];"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keys the exact ordered playing record and normalizes only the two absent optional fields",
+      "marker": "SC_RECORD_HELPER_IDENTITY",
+      "rawFile": "identity.json",
+      "expectedRawChange": "Mutable top-level age is appended to the profile name, so the literal profile and tail-key equality change before owned IDENTITY."
+    },
+    {
+      "name": "identity-playing-goals",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "season.apps, season.goals, season.assists, season.cleanSheets,",
+          "after": "season.apps, 0, season.assists, season.cleanSheets,"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keys the exact ordered playing record and normalizes only the two absent optional fields",
+      "marker": "SC_RECORD_HELPER_IDENTITY",
+      "rawFile": "identity.json",
+      "expectedRawChange": "Changed-goal record merges and literal tuple goal is lost."
+    },
+    {
+      "name": "identity-order",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "for (const season of career.seasons) {",
+          "after": "for (const season of [...career.seasons].sort((a, b) => a.year - b.year)) {"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keys the exact ordered playing record and normalizes only the two absent optional fields",
+      "marker": "SC_RECORD_HELPER_IDENTITY",
+      "rawFile": "identity.json",
+      "expectedRawChange": "Ordered two-row key no longer matches recorded order."
+    },
+    {
+      "name": "identity-continental-default",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "own(season, 'continentalCup') ? season.continentalCup : false,",
+          "after": "own(season, 'continentalCup') ? season.continentalCup : true,"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keys the exact ordered playing record and normalizes only the two absent optional fields",
+      "marker": "SC_RECORD_HELPER_IDENTITY",
+      "rawFile": "identity.json",
+      "expectedRawChange": "Absent and explicit false no longer share a key."
+    },
+    {
+      "name": "identity-club-cup-default",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "own(season, 'clubCupTitle') ? season.clubCupTitle : null,",
+          "after": "own(season, 'clubCupTitle') ? season.clubCupTitle : 'Unknown cup',"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keys the exact ordered playing record and normalizes only the two absent optional fields",
+      "marker": "SC_RECORD_HELPER_IDENTITY",
+      "rawFile": "identity.json",
+      "expectedRawChange": "Absent and explicit null no longer share a key."
+    },
+    {
+      "name": "capture-eligibility",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "career.retired !== true || career.phase !== 'retired'",
+          "after": "career.retired !== career.retired"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "Unfinished phase/retired-false rejection vector contains false."
+    },
+    {
+      "name": "capture-detachment",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "    legacy: { score: value.legacy.score, tier: value.legacy.tier,\n      breakdown: value.legacy.breakdown.map(row => ({ label: row.label, points: row.points })) },",
+          "after": "    legacy: value.legacy,"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "Mutating source breakdown changes captured snapshot and detached becomes false."
+    },
+    {
+      "name": "capture-profile-bound",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "const text = (value: unknown, limit = 128): value is string",
+          "after": "const text = (value: unknown, limit = 129): value is string"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "129-unit identity is incorrectly accepted."
+    },
+    {
+      "name": "capture-row-bound",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "MAX_ROWS = 64",
+          "after": "MAX_ROWS = 65"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "65-row candidate is incorrectly accepted through both projection and parsed-key bounds."
+    },
+    {
+      "name": "capture-key-bound",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "if (typeof key !== 'string' || key.length > MAX_KEY_BYTES || bytes(key) > MAX_KEY_BYTES) return null;",
+          "after": "if (typeof key !== 'string') return null;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "ASCII oversized canonical key is incorrectly accepted."
+    },
+    {
+      "name": "capture-utf8-key-bound",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "if (typeof key !== 'string' || key.length > MAX_KEY_BYTES || bytes(key) > MAX_KEY_BYTES) return null;",
+          "after": "if (typeof key !== 'string' || key.length > MAX_KEY_BYTES) return null;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "Unicode vector remains under char cap but is accepted over UTF-8 byte cap."
+    },
+    {
+      "name": "capture-legacy-row-bound",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "dense(value.breakdown, 64)",
+          "after": "dense(value.breakdown, 65)"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "65 saved breakdown rows are incorrectly accepted."
+    },
+    {
+      "name": "capture-legacy-label-bound",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "text(row.label, 256)",
+          "after": "text(row.label, 257)"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "257-unit saved label is incorrectly accepted."
+    },
+    {
+      "name": "capture-legacy-score-bound",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "value.score >= 0 && value.score <= 100",
+          "after": "value.score >= 0 && value.score <= 101"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "Saved score101 is incorrectly accepted."
+    },
+    {
+      "name": "capture-negative-points",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "&& finite(row.points));",
+          "after": "&& finite(row.points) && (row.points as number) >= 0);"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "Legitimate negative saved breakdown point is rejected rather than preserved."
+    },
+    {
+      "name": "capture-finite-numbers",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "typeof value === 'number' && Number.isFinite(value)",
+          "after": "typeof value === 'number' && value === value"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "Infinity summary is incorrectly accepted."
+    },
+    {
+      "name": "capture-primitive-profile",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "|| !value.profile.every(v => text(v))",
+          "after": "|| value.profile.length < 0"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "Object with toJSON impersonating a profile string is incorrectly accepted."
+    },
+    {
+      "name": "store-extra-fields",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "const exact = (value: object, keys: readonly string[]) => Reflect.ownKeys(value).length === keys.length && keys.every(key => own(value, key));",
+          "after": "const exact = (value: object, keys: readonly string[]) => keys.length >= 0;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps every unsupported stored envelope byte intact without a write attempt",
+      "marker": "SC_RECORD_HELPER_STORE",
+      "rawFile": "strict-store.json",
+      "expectedRawChange": "Unsupported envelope/record extras become known instead of blocked."
+    },
+    {
+      "name": "store-future-version",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "value.version !== 1",
+          "after": "(value.version !== 1 && value.version !== 99)"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps every unsupported stored envelope byte intact without a write attempt",
+      "marker": "SC_RECORD_HELPER_STORE",
+      "rawFile": "strict-store.json",
+      "expectedRawChange": "Future version99 is incorrectly read as supported."
+    },
+    {
+      "name": "store-sequence-type",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "!Number.isSafeInteger(value.nextSequence)",
+          "after": "value.nextSequence === null"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps every unsupported stored envelope byte intact without a write attempt",
+      "marker": "SC_RECORD_HELPER_STORE",
+      "rawFile": "strict-store.json",
+      "expectedRawChange": "String/unsafe sequence is no longer refused by read."
+    },
+    {
+      "name": "store-duplicates-and-order",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "  if (new Set(records.map(row => row.key)).size !== records.length\n    || new Set(records.map(row => row.ackSequence)).size !== records.length\n    || records.some(row => row.ackSequence >= (value.nextSequence as number))) return blocked;",
+          "after": "  if (records.length < 0) return blocked;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps every unsupported stored envelope byte intact without a write attempt",
+      "marker": "SC_RECORD_HELPER_STORE",
+      "rawFile": "strict-store.json",
+      "expectedRawChange": "Duplicate keys/sequences and counter not beyond retained sequences become supported."
+    },
+    {
+      "name": "store-canonical-key",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "|| JSON.stringify(parsed) !== key",
+          "after": "|| key.length < 0"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps every unsupported stored envelope byte intact without a write attempt",
+      "marker": "SC_RECORD_HELPER_STORE",
+      "rawFile": "strict-store.json",
+      "expectedRawChange": "Noncanonical whitespace key becomes supported and can duplicate its logical record."
+    },
+    {
+      "name": "store-row-arity",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "if (!dense(value, 25) || value.length !== 25) return false;",
+          "after": "if (!dense(value, 26) || value.length < 25) return false;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps every unsupported stored envelope byte intact without a write attempt",
+      "marker": "SC_RECORD_HELPER_STORE",
+      "rawFile": "strict-store.json",
+      "expectedRawChange": "Future26th canonical row field becomes supported."
+    },
+    {
+      "name": "capture-row-boolean",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "if (![11, 12, 13, 14, 15, 17].every(i => typeof value[i] === 'boolean')) return false;",
+          "after": "if (value.length < 0) return false;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "String-valued trophy flag becomes an accepted candidate."
+    },
+    {
+      "name": "store-size-bound",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "if (typeof raw !== 'string' || raw.length > MAX_STORE_BYTES || bytes(raw) > MAX_STORE_BYTES) return blocked;",
+          "after": "if (typeof raw !== 'string') return blocked;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps every unsupported stored envelope byte intact without a write attempt",
+      "marker": "SC_RECORD_HELPER_STORE",
+      "rawFile": "strict-store.json",
+      "expectedRawChange": "Oversized syntactically valid envelope becomes known and may return kept without rewriting the identical candidate, changing owned STORE statuses."
+    },
+    {
+      "name": "latest-lower-replacement",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "return JSON.stringify(values(a)) === JSON.stringify(values(b));",
+          "after": "return a.key === b.key;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper replaces a latest lower snapshot while identical reads keep their sequence and bytes",
+      "marker": "SC_RECORD_HELPER_LATEST",
+      "rawFile": "latest.json",
+      "expectedRawChange": "Same key with lower changed legacy incorrectly stays at84."
+    },
+    {
+      "name": "latest-idempotence",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "if (existing) return current() ?",
+          "after": "if (existing === 'below-cutoff') return current() ?"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper replaces a latest lower snapshot while identical reads keep their sequence and bytes",
+      "marker": "SC_RECORD_HELPER_LATEST",
+      "rawFile": "latest.json",
+      "expectedRawChange": "Identical retained record now writes and advances sequence."
+    },
+    {
+      "name": "capacity-twelve",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "MAX_RECORDS = 12",
+          "after": "MAX_RECORDS = 13"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps twelve scored records with latest changed ties and a no-write lower cutoff",
+      "marker": "SC_RECORD_HELPER_CAPACITY",
+      "rawFile": "capacity.json",
+      "expectedRawChange": "A13th lower candidate writes instead of ordinary no-write exclusion."
+    },
+    {
+      "name": "capacity-score-rank",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "b.legacy.score - a.legacy.score",
+          "after": "a.legacy.score - b.legacy.score"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps twelve scored records with latest changed ties and a no-write lower cutoff",
+      "marker": "SC_RECORD_HELPER_CAPACITY",
+      "rawFile": "capacity.json",
+      "expectedRawChange": "Retained scores are in the wrong order and wrong candidates survive."
+    },
+    {
+      "name": "capacity-tie-rank",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "b.ackSequence - a.ackSequence",
+          "after": "a.ackSequence - b.ackSequence"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps twelve scored records with latest changed ties and a no-write lower cutoff",
+      "marker": "SC_RECORD_HELPER_CAPACITY",
+      "rawFile": "capacity.json",
+      "expectedRawChange": "Older equal-score card survives instead of new changed acknowledgement."
+    },
+    {
+      "name": "capacity-tie-cutoff",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "freshRead.records.every(row => row.legacy.score > candidate.legacy.score)",
+          "after": "freshRead.records.every(row => row.legacy.score >= candidate.legacy.score)"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps twelve scored records with latest changed ties and a no-write lower cutoff",
+      "marker": "SC_RECORD_HELPER_CAPACITY",
+      "rawFile": "capacity.json",
+      "expectedRawChange": "Equal-score incoming record is incorrectly excluded without a write."
+    },
+    {
+      "name": "capacity-sequence-exhaustion",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "if (fresh.nextSequence >= Number.MAX_SAFE_INTEGER)",
+          "after": "if (fresh.nextSequence > Number.MAX_SAFE_INTEGER)"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper keeps twelve scored records with latest changed ties and a no-write lower cutoff",
+      "marker": "SC_RECORD_HELPER_CAPACITY",
+      "rawFile": "capacity.json",
+      "expectedRawChange": "Known safe counter atMAX writes an unsafe successor instead of preserving bytes."
+    },
+    {
+      "name": "readback-exact",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "if (storage.getItem(SC_CAREER_RECORDS_KEY) !== raw) return { status: 'blocked', reason: 'readback-failed' };",
+          "after": "if (raw.length < 0) return { status: 'blocked', reason: 'readback-failed' };"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper requires exact archive readback after quota ignored altered and unreadable writes",
+      "marker": "SC_RECORD_HELPER_READBACK",
+      "rawFile": "readback.json",
+      "expectedRawChange": "Ignored/altered/readback-refused writes are falsely reported kept."
+    },
+    {
+      "name": "readback-read-refusal",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "catch { return { status: 'blocked', reason: 'unreadable', raw: null }; }",
+          "after": "catch { return { status: 'known', records: [], nextSequence: 1, raw: null }; }"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper requires exact archive readback after quota ignored altered and unreadable writes",
+      "marker": "SC_RECORD_HELPER_READBACK",
+      "rawFile": "readback.json",
+      "expectedRawChange": "Unreadable storage is incorrectly treated as an empty supported book."
+    },
+    {
+      "name": "readback-write-refusal",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "catch { return { status: 'blocked', reason: 'storage-refused' }; }",
+          "after": "catch { return { status: 'kept', key: candidate.key }; }"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper requires exact archive readback after quota ignored altered and unreadable writes",
+      "marker": "SC_RECORD_HELPER_READBACK",
+      "rawFile": "readback.json",
+      "expectedRawChange": "Thrown quota write is falsely reported kept."
+    },
+    {
+      "name": "source-entry",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "  if (!current()) return { status: 'blocked', reason: 'source-changed' };\n  if (!validCandidate(candidate))",
+          "after": "  if (candidate.key.length < 0) return { status: 'blocked', reason: 'source-changed' };\n  if (!validCandidate(candidate))"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper checks the real caller source precondition before upsert before setting and after readback",
+      "marker": "SC_RECORD_HELPER_SOURCE",
+      "rawFile": "source.json",
+      "expectedRawChange": "False/throwing source callback now performs archive reads before refusal."
+    },
+    {
+      "name": "source-before-setter",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "  if (!current()) return { status: 'blocked', reason: 'source-changed' };\n  try { storage.setItem",
+          "after": "  if (raw.length < 0) return { status: 'blocked', reason: 'source-changed' };\n  try { storage.setItem"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper checks the real caller source precondition before upsert before setting and after readback",
+      "marker": "SC_RECORD_HELPER_SOURCE",
+      "rawFile": "source.json",
+      "expectedRawChange": "Source invalidated after read now still writes the archive."
+    },
+    {
+      "name": "source-after-readback",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "  return current() ? { status: 'kept', key: candidate.key } : { status: 'blocked', reason: 'source-changed' };",
+          "after": "  return { status: 'kept', key: candidate.key };"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper checks the real caller source precondition before upsert before setting and after readback",
+      "marker": "SC_RECORD_HELPER_SOURCE",
+      "rawFile": "source.json",
+      "expectedRawChange": "Invalidated source after write is falsely published kept."
+    },
+    {
+      "name": "source-exception-fail-closed",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "const current = () => { try { return sourceIsCurrent() === true; } catch { return false; } };",
+          "after": "const current = () => { try { return sourceIsCurrent() === true; } catch { return true; } };"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper checks the real caller source precondition before upsert before setting and after readback",
+      "marker": "SC_RECORD_HELPER_SOURCE",
+      "rawFile": "source.json",
+      "expectedRawChange": "Throwing source callback incorrectly grants authority and writes."
+    },
+    {
+      "name": "retention-rng-neutral",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "  const fresh = readCompletedRecords(storage);",
+          "after": "  Math.random();\n  const fresh = readCompletedRecords(storage);"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper replaces a latest lower snapshot while identical reads keep their sequence and bytes",
+      "marker": "SC_RECORD_HELPER_LATEST",
+      "rawFile": "latest.json",
+      "expectedRawChange": "Read/retention randomDraws becomes nonzero."
+    },
+    {
+      "name": "capture-array-extra-field",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "Reflect.ownKeys(value).length !== value.length + 1",
+          "after": "value.length < 0"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper captures detached saved values and refuses unfinished malformed or oversized candidates",
+      "marker": "SC_RECORD_HELPER_CAPTURE",
+      "rawFile": "capture.json",
+      "expectedRawChange": "The extra-key source history array is accepted instead of rejected, changing capture.json before owned CAPTURE assertion."
+    },
+    {
+      "name": "clear-stale-snapshot",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "if (same) return sameSnapshot(candidate, same) ? 'kept' : null;",
+          "after": "if (same) return 'kept';"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper verifies a fresh retained snapshot or genuine cutoff without granting stale deletion proof",
+      "marker": "SC_RECORD_HELPER_CLEAR",
+      "rawFile": "clear.json",
+      "expectedRawChange": "The latest changed saved summary is incorrectly treated as kept, changing clear.actual.stale to kept before the owned CLEAR assertion."
+    },
+    {
+      "name": "clear-unsupported-status",
+      "target": "src/lib/soccerCareerCompletedRecords.ts",
+      "edits": [
+        {
+          "before": "if (!validCandidate(candidate) || freshRead.status !== 'known') return null;",
+          "after": "if (!validCandidate(candidate) || freshRead.status !== 'known') return 'kept';"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsHelper.test.ts",
+      "fullName": "Soccer Career completed record helper verifies a fresh retained snapshot or genuine cutoff without granting stale deletion proof",
+      "marker": "SC_RECORD_HELPER_CLEAR",
+      "rawFile": "clear.json",
+      "expectedRawChange": "The actual future ledger is incorrectly granted retained status, changing clear.actual.future to kept before the owned CLEAR assertion."
+    },
+    {
+      "name": "ignored-source-readback",
+      "target": "src/pages/SoccerCareer.tsx",
+      "edits": [
+        {
+          "before": "        && localStorage.getItem(SAVE_KEY) === ack.raw;",
+          "after": "        ;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsBoundary.test.tsx",
+      "fullName": "Soccer Career completed record storage boundaries rejects a nonthrowing ignore source write before archive or discard",
+      "marker": "SC_RECORD_BOUNDARY_SOURCE_READBACK_IGNORE",
+      "rawFile": "source-ignore.json"
+    },
+    {
+      "name": "altered-source-readback",
+      "target": "src/pages/SoccerCareer.tsx",
+      "edits": [
+        {
+          "before": "        && localStorage.getItem(SAVE_KEY) === ack.raw;",
+          "after": "        ;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsBoundary.test.tsx",
+      "fullName": "Soccer Career completed record storage boundaries rejects a nonthrowing alter source write before archive or discard",
+      "marker": "SC_RECORD_BOUNDARY_SOURCE_READBACK_ALTER",
+      "rawFile": "source-alter.json"
+    },
+    {
+      "name": "restart-source-mismatch",
+      "target": "src/pages/SoccerCareer.tsx",
+      "edits": [
+        {
+          "before": "        && localStorage.getItem(SAVE_KEY) === ack.raw;",
+          "after": "        ;"
+        },
+        {
+          "before": "          if (!ack || !career || ack.career !== career || serializeSoccerCareerSave(career) !== ack.raw\n            || localStorage.getItem(SAVE_KEY) !== ack.raw) return false;",
+          "after": "          if (!ack || !career || ack.career !== career || serializeSoccerCareerSave(career) !== ack.raw) return false;"
+        },
+        {
+          "before": "          if (localStorage.getItem(SAVE_KEY) !== ack.raw) return false;",
+          "after": "          void ack.raw;"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsBoundary.test.tsx",
+      "fullName": "Soccer Career completed record storage boundaries refuses restart when an existing current acknowledgement no longer matches disk",
+      "marker": "SC_RECORD_BOUNDARY_SOURCE_MISMATCH",
+      "rawFile": "source-mismatch.json"
+    },
+    {
+      "name": "removal-readback",
+      "target": "src/pages/SoccerCareer.tsx",
+      "edits": [
+        {
+          "before": "        return localStorage.getItem(SAVE_KEY) === null;",
+          "after": "        return Boolean(SAVE_KEY);"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsBoundary.test.tsx",
+      "fullName": "Soccer Career completed record storage boundaries keeps the current career mounted when removal returns without deleting its bytes",
+      "marker": "SC_RECORD_BOUNDARY_REMOVAL_READBACK",
+      "rawFile": "ignored-removal.json"
+    },
+    {
+      "name": "valid-ack-explicit-discard",
+      "target": "src/pages/SoccerCareer.tsx",
+      "edits": [
+        {
+          "before": "            {isRetired && showRecordDiscard && !saveFailed && (",
+          "after": "            {false && isRetired && showRecordDiscard && !saveFailed && ("
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsBoundary.test.tsx",
+      "fullName": "Soccer Career completed record storage boundaries allows explicit archive discard only after refusal with a valid current acknowledgement",
+      "marker": "SC_RECORD_BOUNDARY_VALID_ACK_DISCARD",
+      "rawFile": "explicit-discard.json"
+    },
+    {
+      "name": "failed-write-is-not-ack",
+      "target": "src/pages/SoccerCareer.tsx",
+      "edits": [
+        {
+          "before": "    if (saved === 'failed') { setSaveFailed(true); setRecordOutcome(null); return null; }",
+          "after": "    if (saved === 'failed') { setSaveFailed(false); }"
+        }
+      ],
+      "testPath": "src/test/soccerCareerCompletedRecordsBoundary.test.tsx",
+      "fullName": "Soccer Career completed record storage boundaries allows explicit archive discard only after refusal with a valid current acknowledgement",
+      "marker": "SC_RECORD_BOUNDARY_FAILED_ACK_NO_DISCARD",
+      "rawFile": "explicit-discard.json"
+    }
+  ]
+}
