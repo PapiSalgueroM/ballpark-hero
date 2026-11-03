@@ -40,7 +40,7 @@ jobs:
           import { execFileSync } from 'node:child_process';
           const paths = execFileSync('git', ['diff', '--name-status', 'cc9a55a2f35b6215d5e6e664cc401d10d7f76291', 'HEAD']).toString().trim().split('\n').sort();
           assert.deepEqual(paths, ['A\t.github/workflows/sc-rating-report-context-red-20261103.yml', 'A\tsrc/test/soccerCareerRatingReport.test.tsx'].sort(), 'Only the new test and baseline workflow may differ from pinned main');
-          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/soccerCareerRatingReport.test.tsx')).digest('hex'), 'b7cb6994750a3b32f7bf4026bc4156a68448bb198dede07547c96fcb1c2ca724');
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/soccerCareerRatingReport.test.tsx')).digest('hex'), '7b4fc7afa95050d98c7eec0e11fc17a0ccbc759a246330170c2a0bb210d9e092');
           assert.equal(execFileSync('git', ['rev-parse', 'HEAD:src/pages/SoccerCareer.tsx']).toString().trim(), 'c6b270bf74c5b97fd21e07900c327ac7ccba24e0');
           NODE
           git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"

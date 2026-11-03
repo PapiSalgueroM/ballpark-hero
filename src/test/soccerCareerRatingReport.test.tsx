@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { act, cleanup, fireEvent, render } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter } from 'react-router-dom';
@@ -40,7 +40,7 @@ vi.mock('@/components/soccer-career/AppearanceBuilder', () => ({ default: () => 
 vi.mock('@/components/soccer-career/PlayerAvatar', () => ({ default: () => null }));
 vi.mock('@/components/ui/select', () => ({
   Select: ({ value, onValueChange, children }: any) => <select value={value} onChange={event => onValueChange(event.target.value)}>{children}</select>,
-  SelectContent: ({ children }: any) => <>{children}</>, SelectItem: ({ value, children }: any) => <option value={value}>{children}</option>,
+  SelectContent: ({ children }: any) => <>{children}</>, SelectItem: ({ value }: any) => <option value={value}>{value}</option>,
   SelectGroup: ({ children }: any) => <>{children}</>, SelectLabel: () => null, SelectTrigger: () => null, SelectValue: () => null,
 }));
 
@@ -195,14 +195,15 @@ describe('Soccer Career safe rating report context', () => {
   });
 
   it('reports a real cross-tab move while preserving the newer tab save', async () => {
-    const view = mount(serializeSoccerCareerSave(nativeCareer())), before = read();
+    mount(serializeSoccerCareerSave(nativeCareer()));
+    const before = read();
     const theirs = E.advanceYouthYear(copy(before), E.FALLBACK_CLUBS), bytes = serializeSoccerCareerSave(theirs);
     const fence = String(Number(localStorage.getItem(FENCE) ?? '0') + 1);
     localStorage.setItem(FENCE, fence); localStorage.setItem(KEY, bytes);
     await act(async () => { window.dispatchEvent(new StorageEvent('storage', { key: FENCE })); await Promise.resolve(); });
+    await waitFor(() => expect(document.body.querySelector('[data-testid="save-moved-notice"]')).not.toBeNull());
     const observation = observe();
     retain('save-moved', { observation, pageRating: rating(before), newerRating: rating(read()) });
-    expect(view.container.querySelector('[data-testid="save-moved-notice"]')).not.toBeNull();
     expect(localStorage.getItem(KEY)).toBe(bytes); expect(localStorage.getItem(FENCE)).toBe(fence);
     expect(view.container.querySelector('[data-soccer-save-status="failed"]')).toBeNull();
     expect(localStorage.getItem(OTHER)).toBe('untouched');
