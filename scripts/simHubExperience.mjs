@@ -16,7 +16,7 @@ const controls = {
   daily: ["filter === 'daily' ? game.daily : game.featured", "filter === 'daily' ? !game.daily : game.featured", [1]],
   sim: ["filter === 'daily' ? game.daily : game.featured", "filter === 'daily' ? game.daily : !game.featured", [2]],
   search: ['const needle = query.trim().toLocaleLowerCase();', "const needle = '';", [3, 4, 5]],
-  reset: ["setQuery(''); setFilter('all');", "setQuery(''); setFilter('daily');", [4]],
+  reset: ["setLibrary('all', '');", "setLibrary('daily', '');", [4]],
   random: ['visible[Math.floor(Math.random() * visible.length)]', 'games[0]', [5]],
   saves: ['const saved = games.filter(game => continuations[game.path]);', 'const saved = savedGames(window.localStorage).map(({ game }) => game);', [6]],
   focus: ['searchRef.current?.focus({ preventScroll: true });', '', [3, 4], true],
