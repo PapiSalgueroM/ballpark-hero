@@ -40,7 +40,7 @@ jobs:
           import { execFileSync } from 'node:child_process';
           const paths = execFileSync('git', ['diff', '--name-status', 'cc9a55a2f35b6215d5e6e664cc401d10d7f76291', 'HEAD']).toString().trim().split('\n').sort();
           assert.deepEqual(paths, ['A\t.github/workflows/cm-currency-red-20261103.yml', 'A\tsrc/test/cmFinanceCurrency.test.tsx'].sort(), 'Only the new test and baseline workflow may differ from pinned main');
-          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/cmFinanceCurrency.test.tsx')).digest('hex'), '80e198545b139711ce13725536f17b2955cbe824742d4dc87b7113e91f7ba752');
+          assert.equal(crypto.createHash('sha256').update(fs.readFileSync('src/test/cmFinanceCurrency.test.tsx')).digest('hex'), 'd4d817db2151ce9b2ee3fe7f4e1949177a7a98a060f02d81a7db96e59fba1d77');
           assert.equal(execFileSync('git', ['rev-parse', 'HEAD:src/components/club-manager/FinancesScreen.tsx']).toString().trim(), '9377bb4fb8840b872914188bffec98f390a0b530');
           NODE
           git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"

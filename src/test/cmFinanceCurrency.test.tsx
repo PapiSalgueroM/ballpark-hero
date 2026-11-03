@@ -75,7 +75,7 @@ describe('Club Manager finance pricing currency', () => {
       .getByText('Transfer kitty', { exact: true });
     const kittyText = kittyLabel.previousElementSibling?.textContent ?? null;
     const pricing = view.container.querySelector<HTMLElement>('[data-pricing-desk]')!;
-    const buttons = within(pricing).getAllByRole('button');
+    const buttons = Array.from(pricing.querySelectorAll<HTMLButtonElement>('button'));
     for (const button of buttons) fireEvent.click(button);
 
     const receipt = {
