@@ -1,0 +1,186 @@
+name: Runner final report physical backpressure
+on:
+  push:
+    branches: [codex/runner-report-flush-retry-20261104]
+permissions:
+  contents: read
+concurrency:
+  group: runner-report-flush-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  CORE: 85e13a49273bcd022ac7ed033046962922a76f24
+  CORE_TREE: bd620cde34817967bd8cc5f37e1e6ec2c8786db4
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Pin the isolated source and whole original runner
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/runner-report-flush"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          [[ "$CORE" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$CORE_TREE" =~ ^[a-f0-9]{40}$ ]]
+          test "$(git rev-parse HEAD^)" = "$CORE"
+          test "$(git rev-parse HEAD^^{tree})" = "$CORE_TREE"
+          git diff --name-status HEAD^ HEAD > "$OUT/changed-paths.txt"
+          printf 'A\t.github/workflows/runner-report-flush-20261104.yml\n' > "$OUT/expected-paths.txt"
+          cmp "$OUT/expected-paths.txt" "$OUT/changed-paths.txt"
+          test "$(git hash-object scripts/runAllSims.mjs)" = 7ba1658dcc8757cdda5a13ffa967f10db5880f36
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/runner-report-flush-20261104.yml "$OUT/workflow.yml"
+          cp scripts/runAllSims.mjs "$OUT/runner-fixed.mjs"
+          git cat-file blob 5988827caabcc07a1e643494fa2610f559c779f6 > "$OUT/runner-original.mjs"
+          test "$(git hash-object "$OUT/runner-original.mjs")" = 5988827caabcc07a1e643494fa2610f559c779f6
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          let body=fs.readFileSync('scripts/runAllSims.mjs','utf8');
+          const edits=[{"before":"  process.exit(0);\n}\n\nfor (const f of failures)","after":"  await new Promise(resolve => process.stdout.write('', resolve));\n  await new Promise(resolve => process.stderr.write('', resolve));\n  process.exit(0);\n}\n\nfor (const f of failures)"},{"before":"console.log(`${failures.length} harness${failures.length === 1 ? '' : 'es'} not green.`);\nprocess.exit(1);","after":"console.log(`${failures.length} harness${failures.length === 1 ? '' : 'es'} not green.`);\nawait new Promise(resolve => process.stdout.write('', resolve));\nawait new Promise(resolve => process.stderr.write('', resolve));\nprocess.exit(1);"}];
+          for(const e of edits.reverse()){assert.equal(body.split(e.after).length,2);body=body.replace(e.after,e.before);}
+          assert.equal(body,fs.readFileSync(process.env.QA_OUT+'/runner-original.mjs','utf8'),'Exactly the two final-exit flushes changed');
+          NODE
+      - name: Install held Node dependencies
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json
+      - name: Exercise both actual final exits and physically truncating original controls
+        timeout-minutes: 5
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/probe.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/probe.log"
+          node --input-type=module <<'NODE' 2>&1 | tee "$QA_OUT/logs/probe.log"
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import crypto from 'node:crypto';
+          import { spawn, execFileSync } from 'node:child_process';
+          const out=process.env.QA_OUT,sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const harness='simReportFlushProbe.mjs',temporary=path.join('scripts',harness),oldRunner='scripts/__runnerBeforeFlush.mjs';
+          assert(!fs.existsSync(temporary));assert(!fs.existsSync(oldRunner));
+          const original=fs.readFileSync(out+'/runner-original.mjs'),fixed=fs.readFileSync('scripts/runAllSims.mjs');
+          assert.equal(execFileSync('git',['hash-object','scripts/runAllSims.mjs']).toString().trim(),'7ba1658dcc8757cdda5a13ffa967f10db5880f36');
+          assert.notEqual(sha(original),sha(fixed));
+          const begin='FLUSH_PROBE_BEGIN\n',end='FLUSH_PROBE_END\n';
+          const payload=Buffer.from(begin+Array.from({length:32768},(_,i)=>'ROW '+String(i).padStart(6,'0')+' '+ 'x'.repeat(240)+'\n').join('')+end);
+          fs.writeFileSync(out+'/expected-payload.bin',payload);
+          const childSource="import fs from 'node:fs';\nconst payload=fs.readFileSync(process.env.FLUSH_PROBE_PAYLOAD);\nconst suffix=Buffer.from(process.env.FLUSH_PROBE_EXIT==='1'?'CHECK one\\nCHECK two\\nCHECK three\\nFAIL PROBE EXPECTED\\n':'CHECK one\\nCHECK two\\nCHECK three\\nCHECK four\\n');\nawait new Promise(resolve=>process.stdout.write(Buffer.concat([payload,suffix]),resolve));\nprocess.exitCode=Number(process.env.FLUSH_PROBE_EXIT);\n";
+          const rows=[];
+          function inspect(bytes,code){
+            const text=bytes.toString('utf8'),start=bytes.indexOf(Buffer.from(begin)),suffix=Buffer.from(code===1?'CHECK one\nCHECK two\nCHECK three\nFAIL PROBE EXPECTED\n':'CHECK one\nCHECK two\nCHECK three\nCHECK four\n');
+            const child=Buffer.concat([payload,suffix]),matches=[...text.matchAll(/^  (PASS|FAIL) +simReportFlushProbe\.mjs +[0-9]+\.[0-9]s$/gm)];
+            const prefix='Network mode: offline, loopback only, no production probe or database retries.\nRunning 1 node harness\n';
+            const tail=code===0?'\nAll 1 harnesses green.\n':'\n----- simReportFlushProbe.mjs (FAIL) -----\nFAIL PROBE EXPECTED\n\n1 harness not green.\n';
+            const expected=matches.length===1?Buffer.concat([Buffer.from(prefix),child,Buffer.from(matches[0][0]+'\n'+tail)]):null;
+            return {start,expectedChildBytes:child.length,expectedChildSHA256:sha(child),fullChildExact:start>=0&&bytes.subarray(start,start+child.length).equals(child),verdictRows:matches.length,verdict:matches[0]?.[1]??null,closing:text.trimEnd().split('\n').at(-1),wholeOutputExact:expected!==null&&bytes.equals(expected),stdoutBytes:bytes.length,stdoutSHA256:sha(bytes)};
+          }
+          async function run(label,file,code){
+            return new Promise((resolve,reject)=>{
+              const stdout=[],stderr=[],started=Date.now();let header='',pauseAt=null,resumeAt=null,exitAt=null,bytesAtPause=null,exitCode=null,signal=null,resumeTimer=null,timedOut=false,done=false;
+              const child=spawn(process.execPath,[file],{cwd:process.cwd(),env:{...process.env,ONLY:harness,SIM_FULL_OUTPUT:'1',SIM_NETWORK:'offline',FLUSH_PROBE_PAYLOAD:path.resolve(out+'/expected-payload.bin'),FLUSH_PROBE_EXIT:String(code)},stdio:['ignore','pipe','pipe']});
+              const timeout=setTimeout(()=>{timedOut=true;child.stdout.resume();child.kill('SIGKILL');},45000);
+              child.stdout.on('data',chunk=>{
+                stdout.push(Buffer.from(chunk));
+                if(pauseAt===null){
+                  header+=chunk.toString('utf8');
+                  if(header.includes('Running 1 node harness\n')){
+                    pauseAt=Date.now();bytesAtPause=Buffer.concat(stdout).length;child.stdout.pause();
+                    resumeTimer=setTimeout(()=>{resumeAt=Date.now();child.stdout.resume();},2000);
+                  }
+                }
+              });
+              child.stderr.on('data',chunk=>stderr.push(Buffer.from(chunk)));
+              child.on('error',error=>{if(!done){done=true;clearTimeout(timeout);clearTimeout(resumeTimer);reject(error);}});
+              child.on('exit',(value,sig)=>{exitAt=Date.now();exitCode=value;signal=sig;});
+              child.on('close',()=>{
+                if(done)return;done=true;clearTimeout(timeout);clearTimeout(resumeTimer);
+                const bytes=Buffer.concat(stdout),errors=Buffer.concat(stderr),actual=inspect(bytes,code);
+                fs.writeFileSync(out+'/'+label+'.stdout.bin',bytes);fs.writeFileSync(out+'/'+label+'.stderr.bin',errors);
+                const row={label,runner:file,runnerSHA256:sha(fs.readFileSync(file)),requestedExit:code,nativeExit:exitCode,signal,timedOut,stderrBytes:errors.length,started,pauseAt,resumeAt,exitAt,bytesAtPause,exitWhilePaused:pauseAt!==null&&exitAt!==null&&(resumeAt===null||exitAt<resumeAt),...actual};
+                fs.writeFileSync(out+'/'+label+'.json',JSON.stringify(row,null,2)+'\n');rows.push(row);resolve(row);
+              });
+            });
+          }
+          try{
+            fs.writeFileSync(temporary,childSource,{flag:'wx'});fs.writeFileSync(oldRunner,original,{flag:'wx'});
+            fs.writeFileSync(out+'/executed-harness.mjs',childSource);
+            const plan=execFileSync(process.execPath,['scripts/runAllSims.mjs','--plan-json'],{env:{...process.env,ONLY:harness},encoding:'utf8'});
+            assert.deepEqual(JSON.parse(plan),{nodeGroup:[harness],browserGroup:[]});
+            for(const code of [0,1]){
+              const control=await run('original-'+code,oldRunner,code);
+              assert.equal(control.timedOut,false);assert.equal(control.signal,null);assert.equal(control.nativeExit,code);assert.equal(control.stderrBytes,0);
+              assert(control.pauseAt!==null&&control.exitWhilePaused,'Original must actually exit while its reader is paused');
+              assert.equal(control.bytesAtPause,Buffer.byteLength('Network mode: offline, loopback only, no production probe or database retries.\nRunning 1 node harness\n'),'Backpressure begins before payload reporting');
+              assert.equal(control.fullChildExact,false,'Original control must actually truncate child bytes');
+              assert.equal(control.wholeOutputExact,false,'Original control cannot pass whole output/closing admission');
+              const positive=await run('fixed-'+code,'scripts/runAllSims.mjs',code);
+              assert.equal(positive.timedOut,false);assert.equal(positive.signal,null);assert.equal(positive.nativeExit,code);assert.equal(positive.stderrBytes,0);
+              assert(positive.pauseAt!==null&&positive.resumeAt!==null&&!positive.exitWhilePaused,'Fixed waits for the same physical reader to resume');
+              assert.equal(positive.bytesAtPause,control.bytesAtPause);
+              assert.equal(positive.fullChildExact,true,'Every buffered child byte must survive');
+              assert.equal(positive.verdictRows,1);assert.equal(positive.verdict,code===0?'PASS':'FAIL');
+              assert.equal(positive.wholeOutputExact,true,'Every header, child byte, verdict and final closing must survive');
+            }
+            fs.writeFileSync(out+'/admission.json',JSON.stringify({status:'passed',payloadBytes:payload.length,payloadSHA256:sha(payload),rows,scope:'Actual runner, one temporary high-output harness, two final native branches. The parent pauses the actual stdout pipe for two seconds after the startup header. Whole original controls physically truncate; fixed stdout is exact byte-for-byte including complete child output, verdict and final closing. No fleet, scheduling, skip, engine or gameplay credit.'},null,2)+'\n');
+            console.log('RUNNER REPORT FLUSH: both terminal branches retained exact whole output; both original controls physically truncated.');
+          }finally{
+            for(const file of [temporary,oldRunner]){
+              if(fs.existsSync(file)){const expected=file===temporary?Buffer.from(childSource):original;assert(fs.readFileSync(file).equals(expected),'Only exact owned temporary probe files may be removed');fs.unlinkSync(file);assert(!fs.existsSync(file));}
+            }
+          }
+          
+          NODE
+          test ! -s "$QA_OUT/transport/probe.log"
+          grep -Fx 'RUNNER REPORT FLUSH: both terminal branches retained exact whole output; both original controls physically truncated.' "$QA_OUT/logs/probe.log"
+      - name: Always require exact tracked source and owned probe cleanup
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git diff --binary HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          test ! -s "$QA_OUT/source-diff.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          test ! -e scripts/simReportFlushProbe.mjs
+          test ! -e scripts/__runnerBeforeFlush.mjs
+      - name: Bound retained raw evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo ready=true >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: runner-report-flush-${{ github.run_id }}
+          path: ${{ env.QA_OUT }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
