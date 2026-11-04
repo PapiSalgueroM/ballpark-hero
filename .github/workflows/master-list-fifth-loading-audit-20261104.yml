@@ -1,0 +1,32 @@
+name: Fifth complete loading consumer audit
+on:
+  push:
+    branches: [codex/master-list-fifth-loading-audit-20261104]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Account for all application and harness references
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/fifth-loading-audit"
+          mkdir -p "$OUT"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z src scripts | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git grep -n -E '(^|[^[:alnum:]_])(liveFeed|liveShapeAt|squadNumbers|plusOf)([^[:alnum:]_]|$)' -- src scripts > "$OUT/symbols.txt"
+          git grep -n -E 'LiveSimScreen|liveStatsAt' -- src scripts > "$OUT/live-references.txt"
+          git diff --exit-code HEAD
+          git ls-files -z src scripts | sort -z | xargs -0 sha256sum > "$OUT/source-after.sha256"
+          cmp "$OUT/source-before.sha256" "$OUT/source-after.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fifth-loading-audit
+          path: ${{ runner.temp }}/fifth-loading-audit
+          if-no-files-found: error
+          retention-days: 14
