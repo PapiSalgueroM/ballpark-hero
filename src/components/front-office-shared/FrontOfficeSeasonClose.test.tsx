@@ -253,7 +253,7 @@ for (const c of CASES) {
       expect(screen.getByText(c.draftHeading)).toBeTruthy();
       for (let i = 0; i < c.picks; i += 1) {
         fireEvent.click(screen.getAllByText(/· age \d+/)[0]);
-        if (c.env === 'FO_BOARD_NFL') fireEvent.click(screen.getByRole('button', { name: 'Confirm draft', exact: true }));
+        if (c.env === 'FO_BOARD_NFL') fireEvent.click(screen.getByRole('button', { name: /^Confirm draft$/ }));
       }
       expect(read().phase).toBe('hub');
       expect(read().league.season).toBe(2027);
