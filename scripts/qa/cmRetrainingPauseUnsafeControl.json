@@ -1,0 +1,64 @@
+{
+  "purpose": "QA-only controlled restoration of the two unsafe beta own-flag reads. No product repair, no generic classifier modification.",
+  "files": [
+    {
+      "path": "src/lib/clubManager.ts",
+      "safeGit": "63dec52cb0d1becf7a2d8e921114d02987178118",
+      "safeSha256": "06407c751247ed81b8621a18a14a7d9f8f4216cb12e2ad97eeabc9e41a91033e",
+      "unsafeGit": "eb56141ff3ee373f3ee6c8ec86045926a82d936d",
+      "unsafeSha256": "18c5b85f0fe95b4431c4b87c259b6059c32a4c76ec3adf849e29813370a81087",
+      "safeLiteral": "    if (p.retraining && (!Object.prototype.hasOwnProperty.call(p.retraining, 'paused') || p.retraining.paused === false)) {",
+      "unsafeLiteral": "    if (p.retraining && (!('paused' in p.retraining) || p.retraining.paused === false)) {"
+    },
+    {
+      "path": "src/components/club-manager/TrainingScreen.tsx",
+      "safeGit": "cb2b02e885e01e4fe4248a16b4aade76046da486",
+      "safeSha256": "6166e569ce010ff437825eae4708daeb0eea4e093434986ce14f3d80e34d591f",
+      "unsafeGit": "c8713633aa0e5d8c1a67b32d300c5f7a7410b2b6",
+      "unsafeSha256": "55fc897b375e9a07c24d95c0faf7267e06f186c06887599cbd4afaae8d6b15f1",
+      "safeLiteral": "            {Object.prototype.hasOwnProperty.call(r, 'paused') && typeof r.paused !== 'boolean' ? (",
+      "unsafeLiteral": "            {'paused' in r && typeof r.paused !== 'boolean' ? ("
+    }
+  ],
+  "holds": [
+    {
+      "path": "src/hooks/useClubManager.ts",
+      "git": "32a058a2cbe7888a218f527538d6b687184f21ac"
+    },
+    {
+      "path": "src/test/clubManagerRetrainingPause.test.tsx",
+      "git": "cbe2093a2c1bbbf3e5b866157d18e923b97481b1"
+    }
+  ],
+  "test": {
+    "path": "src/test/clubManagerRetrainingPause.test.tsx",
+    "git": "cbe2093a2c1bbbf3e5b866157d18e923b97481b1",
+    "fullNames": [
+      "Club Manager retraining pause keeps earned weeks and the older learned wing fit through a paid paused week",
+      "Club Manager retraining pause resumes the existing counter without restarting and completes by the original replacement rule",
+      "Club Manager retraining pause offers native Pause and Resume controls while keeping Stop as complete cancellation",
+      "Club Manager retraining pause refuses stale or malformed toggles and preserves unknown pause metadata through a paid tick",
+      "Club Manager retraining pause preserves legacy starts unpaused ticks full tapes real reloads and the existing Stop result"
+    ],
+    "failedName": "Club Manager retraining pause preserves legacy starts unpaused ticks full tapes real reloads and the existing Stop result",
+    "marker": "CM_RETRAIN_SCALAR_COMPAT",
+    "rawEnv": "CM_RETRAINING_PAUSE_RAW",
+    "rawFiles": [
+      "ordinary.json",
+      "pause-fit.json",
+      "refusals.json",
+      "resume.json",
+      "ui-actions.json"
+    ],
+    "scalarValues": [
+      "future",
+      42
+    ]
+  },
+  "expected": {
+    "healthy": "all five passed, native0, no runtime/unhandled errors, empty Node transport receipt",
+    "unsafe": "native1; exactly ordinary case AssertionError with the named marker; other four passed; both RAW scalar rows have exact in-operator TypeErrors at both tick and render and null run/zero rendered rows",
+    "restored": "exact source buffers and pins; all five passed; all five RAW byte hashes equal healthy, including complete ordinary states/tapes without masks"
+  },
+  "scope": "Selected CM unit control only, no build/caps/browser/public or original full-fleet claim."
+}
