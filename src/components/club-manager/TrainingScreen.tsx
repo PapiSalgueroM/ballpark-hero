@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Dumbbell, GraduationCap } from 'lucide-react';
 import {
   developmentRate, developingPlayers, recordedTraining, recoveryWeekOf,
-  retrainWeeks, retrainRefusal, heldPositions, MAX_SECONDARY_POSITIONS, RETRAIN_MIN_WEEKS, FORMATIONS, fitPenalty,
+  retrainWeeks, retrainRefusal, validRetrainingCourse, heldPositions, MAX_SECONDARY_POSITIONS, RETRAIN_MIN_WEEKS, FORMATIONS, fitPenalty,
 } from '@/lib/clubManager';
 import type {
   CareerState, CMPlayer, TrainingFocus, TrainingIntensity, TrainingPlan,
@@ -124,10 +124,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
         const r = p.retraining!;
         const hasReplacement = Object.prototype.hasOwnProperty.call(r, 'replace');
         const replace = (r as { replace?: unknown }).replace;
-        const learned = p.secondaryPositions;
-        const unavailableReplacement = hasReplacement && (typeof replace !== 'string' || !Array.isArray(learned)
-          || learned.length !== MAX_SECONDARY_POSITIONS || new Set(learned).size !== MAX_SECONDARY_POSITIONS
-          || learned.some(pos => pos === p.position || !ALL_POSITIONS.includes(pos)) || !learned.includes(replace as Position));
+        const unavailableReplacement = hasReplacement && !validRetrainingCourse(p, r.to);
         const pct = Math.round((100 * (r.weeksTotal - r.weeksLeft)) / Math.max(1, r.weeksTotal));
         return (
           <div key={p.id} className="py-1.5 border-b border-border/30 last:border-0" data-cm-retraining={p.id} data-cm-retraining-to={r.to}>
@@ -153,7 +150,7 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
             </div>
             {hasReplacement && !unavailableReplacement && <p className="mt-1 text-[10px] text-muted-foreground">Replaces {replace as Position} when training finishes. Current positions stay until then.</p>}
             {unavailableReplacement ? (
-              <p className="mt-1 text-[10px] text-amber-400">This course has an unavailable replacement position. Progress is held. Stop the course and choose again.</p>
+              <p className="mt-1 text-[10px] text-amber-400">This course has an unavailable replacement position or setting. Progress is held. Stop the course and choose again.</p>
             ) : Object.prototype.hasOwnProperty.call(r, 'paused') && typeof r.paused !== 'boolean' ? (
               <p className="mt-1 text-[10px] text-amber-400">This course has an unknown pause setting. Progress is held; Pause and Resume are unavailable. Stop still cancels the whole course.</p>
             ) : (
