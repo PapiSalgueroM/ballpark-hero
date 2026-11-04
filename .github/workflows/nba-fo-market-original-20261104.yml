@@ -1,0 +1,82 @@
+name: NBA free-agent market original test-first admission
+on:
+  push:
+    branches: [codex/nba-fo-market-original-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  NBA_FO_VERIFIED_BASE: ae17830b9daee522ac5ea738f2e36b93e888ad04
+  NBA_FO_QA_PARENT: 679599f4977553f68cfb1d294816a50c229d0b7d
+jobs:
+  original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind future verified base and actual QA source
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/nba-fo-market-original"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          [[ "$NBA_FO_VERIFIED_BASE" =~ ^[a-f0-9]{40}$ ]]
+          [[ "$NBA_FO_QA_PARENT" =~ ^[a-f0-9]{40}$ ]]
+          test "$(git rev-parse HEAD^)" = "$NBA_FO_QA_PARENT"
+          git rev-parse HEAD HEAD^ HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status HEAD^ HEAD > "$OUT/qa-commit-paths.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          cp .github/workflows/nba-fo-market-original-20261104.yml "$OUT/workflow.yml"
+          cp scripts/qa/nbaFoMarketCases.json "$OUT/cases.json"
+      - name: Install exact npm lock
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Proper real application types first
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+          echo '{"command":"node_modules/.bin/tsc --noEmit -p tsconfig.app.json","exit":0}' > "$QA_OUT/types-passed.json"
+      - name: Actual original cases and full RAW admission
+        run: |
+          set -euo pipefail
+          node --check scripts/qa/nbaFoMarketOriginal.mjs
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/original.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/original.log" node scripts/qa/nbaFoMarketOriginal.mjs --out "$QA_OUT" --cases scripts/qa/nbaFoMarketCases.json > "$QA_OUT/logs/original-admission.log" 2>&1
+          test ! -s "$QA_OUT/transport/original.log"
+      - name: Always retain unchanged full source and lock holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nba-fo-market-original
+          path: ${{ runner.temp }}/nba-fo-market-original
+          if-no-files-found: error
+          retention-days: 14
