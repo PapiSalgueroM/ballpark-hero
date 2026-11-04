@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } from 'react';
 import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
-import { saveMatchPlan as savePlan, applyMatchPlan as applyPlan, deleteMatchPlan as deletePlan } from '@/lib/clubManagerMatchPlans';
+import { saveMatchPlan as savePlan, applyMatchPlan as applyPlan, deleteMatchPlan as deletePlan } from '@/lib/clubManagerMatchPlansCore';
 import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,

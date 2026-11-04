@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Dumbbell, GraduationCap } from 'lucide-react';
 import {
-  developmentRate, developingPlayers, recordedTraining,
+  developmentRate, developingPlayers, recordedTraining, recoveryWeekOf,
   retrainWeeks, retrainRefusal, heldPositions, MAX_SECONDARY_POSITIONS, RETRAIN_MIN_WEEKS, FORMATIONS, fitPenalty,
 } from '@/lib/clubManager';
 import type {
@@ -219,8 +219,14 @@ function RetrainCard({ career, onRetrain, onStopRetrain }: { career: CareerState
  * Round 505: and the third card, a second position learned over weeks.
  */
 export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: TrainingScreenProps) {
-  const plan = career.training ?? { intensity: 'normal' as TrainingIntensity, focus: 'balanced' as TrainingFocus };
+  const [recoveryId, setRecoveryId] = useState('');
+  const plan: TrainingPlan = career.training ?? { intensity: 'normal' as TrainingIntensity, focus: 'balanced' as TrainingFocus };
   const growing = developingPlayers(career).slice(0, 10);
+  const recovery = recoveryWeekOf(plan.recoveryWeek);
+  const recoveryBlocked = plan.recoveryWeek !== undefined && !recovery;
+  const pickedRecovery = career.squad.find(p => p.id === recoveryId);
+  const pendingRecovery = recovery && recovery.club === career.clubName && recovery.season === career.season
+    ? career.squad.find(p => p.id === recovery.playerId) : null;
 
   return (
     <div className="space-y-2" style={{ overflowAnchor: 'none' }}>
@@ -268,6 +274,45 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
           ))}
         </div>
         <p className="text-[9px] text-muted-foreground mt-1.5">{FOCUS_INFO[plan.focus].desc}</p>
+      </div>
+
+      <div className="bg-card border border-border rounded-xl p-3">
+        <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">One player's recovery week</div>
+        <p className="text-[10px] text-muted-foreground mb-2">
+          Give one player Light training for the next paid week. Everyone else keeps your plan. Light training trades some summer growth for fresher legs, your picked XI stays unchanged, and injuries still count down normally. Midweek nights do not use this order.
+        </p>
+        {recoveryBlocked ? (
+          <p className="text-[10px] text-amber-400">This recovery order uses a different format. It is kept unchanged; recovery edits are unavailable.</p>
+        ) : (
+          <>
+            {recovery && <p className="text-[11px] text-primary mb-2">
+              {pendingRecovery ? <>{pendingRecovery.name}: Light next paid week, then {INTENSITY_INFO[plan.intensity].label} again. {FOCUS_INFO[plan.focus].label} stays on.</>
+                : <>This old recovery order is inactive. It clears at the next paid week, or you can replace or cancel it now.</>}
+            </p>}
+            <label className="block text-[10px] text-muted-foreground mb-1" htmlFor="cm-recovery-player">Player for recovery</label>
+            <select id="cm-recovery-player" aria-label="Player for recovery" value={recoveryId}
+              onChange={e => setRecoveryId(e.target.value)}
+              className="w-full min-h-[44px] bg-secondary border border-border rounded px-2 text-[11px] text-foreground">
+              <option value="">Pick a player</option>
+              {career.squad.map(p => <option key={p.id} value={p.id}>{p.position} {p.name} ({p.fitness}% fitness)</option>)}
+            </select>
+            <div className="flex flex-wrap gap-2 mt-2">
+              <button type="button" disabled={!pickedRecovery}
+                onClick={() => { if (pickedRecovery) onSetPlan({ ...plan, recoveryWeek: {
+                  v: 1, club: career.clubName, season: career.season, playerId: pickedRecovery.id,
+                } }); }}
+                className="min-h-[44px] rounded-lg border border-primary px-3 text-[11px] font-bold text-primary disabled:opacity-40">
+                Queue recovery week
+              </button>
+              {recovery && <button type="button" onClick={() => {
+                const { recoveryWeek: _cancelled, ...standing } = plan; onSetPlan(standing);
+              }} className="min-h-[44px] rounded-lg border border-border px-3 text-[11px] text-muted-foreground">
+                Cancel recovery week
+              </button>}
+            </div>
+          </>
+        )}
+        <p className="text-[9px] text-muted-foreground mt-2">For example, keep Double for the squad while one player takes one Light paid week. This does not rest him from matches or cure an injury.</p>
       </div>
 
       <RetrainCard career={career} onRetrain={onRetrain} onStopRetrain={onStopRetrain} />
