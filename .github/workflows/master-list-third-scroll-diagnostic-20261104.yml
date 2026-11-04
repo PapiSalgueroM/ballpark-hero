@@ -1,0 +1,113 @@
+name: Diagnose held draft scroll without rebuilding
+on:
+  push:
+    branches: [codex/master-list-third-scroll-diagnostic-20261104]
+permissions:
+  contents: read
+  actions: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold source and admit the exact completed build payload
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-scroll-diagnostic"
+          REF="$RUNNER_TEMP/master-list-scroll-reference"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$REF"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$REF" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = 29983aa2c640afa64ef244e571ebc759edab783b
+          test "$(git rev-parse HEAD^^{tree})" = 1bc08a32ffb1cfffe92ee9027211abcc7205804d
+          git diff --exit-code c22a8feb1788afe8fed84fa56875ed2ada883bde HEAD -- src public index.html package.json package-lock.json bun.lockb vite.config.ts
+          git diff --exit-code fe0c3ec0636587f79e998f27b2eb3c8c23866f65 HEAD -- src public index.html package.json package-lock.json bun.lockb vite.config.ts
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13319515631 --output "$OUT/reference-meta.json"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/jobs/126555328278 --output "$OUT/reference-job.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const out=process.env.RUNNER_TEMP+'/master-list-scroll-diagnostic',m=JSON.parse(fs.readFileSync(out+'/reference-meta.json')),j=JSON.parse(fs.readFileSync(out+'/reference-job.json'));
+          assert.equal(m.id,13319515631);assert.equal(m.size_in_bytes,10119343);assert.equal(m.digest,'sha256:9a198c43037cc1b4459df32a8baeed7ff3c9f1d8774149251cb5a3a6749878fb');assert.equal(m.workflow_run.head_sha,'fe0c3ec0636587f79e998f27b2eb3c8c23866f65');assert.equal(m.expired,false);assert.equal(j.status,'completed');assert.equal(j.conclusion,'failure');assert.equal(j.steps.find(s=>s.number===8).conclusion,'success');assert.deepEqual(j.steps.filter(s=>s.conclusion==='failure').map(s=>s.number),[9]);
+          NODE
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13319515631/zip --output "$OUT/reference-original.zip"
+          test "$(stat -c%s "$OUT/reference-original.zip")" = 10119343
+          echo "9a198c43037cc1b4459df32a8baeed7ff3c9f1d8774149251cb5a3a6749878fb  $OUT/reference-original.zip" | sha256sum --check
+          unzip -q "$OUT/reference-original.zip" -d "$REF"
+          test "$(stat -c%s "$REF/completed-dist.tar.gz")" = 6976555
+          echo "9ad511d03bbab86e7af8d58b9b58d80de5d202f4b794dc6c7ad215787ea8d146  $REF/completed-dist.tar.gz" | sha256sum --check
+          echo "c2f9580bb461ac264c72723e9da3eba661d754f5ea5056c4413561f235c2b412  $REF/dist-before.sha256" | sha256sum --check
+          tar -xzf "$REF/completed-dist.tar.gz" -C "$REF"
+          (cd "$REF" && sha256sum --check dist-before.sha256) > "$OUT/reference-dist-held.log"
+          cp "$REF/dist-before.sha256" "$OUT/dist-before.sha256"
+      - name: Install source and isolated browser tooling
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/install.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/draft-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/tools.log" 2>&1
+          ln -s "$RUNNER_TEMP/draft-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/draft-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/draft-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium.log" 2>&1
+          git diff --exit-code -- package.json package-lock.json bun.lockb
+      - name: Observe the same native failure with source and output held
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/fixtures.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/fixtures.log" node scripts/qa/masterListNextFixtures.mjs --out "$QA_OUT/fixtures" --dist "$QA_REF/dist" --core c22a8feb1788afe8fed84fa56875ed2ada883bde --sc-module scripts/qa/scTransferFloorJourney.mjs --cm-module scripts/qa/cmCustomOddsJourney.mjs > "$QA_OUT/logs/fixtures.log" 2>&1
+          : > "$QA_OUT/transport/server.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/server.log" node scripts/lib/hostLikeServer.mjs "$QA_REF/dist" 4174 > "$QA_OUT/logs/server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for n in $(seq 1 40); do if curl --fail --silent http://127.0.0.1:4174/ >/dev/null; then break; fi; sleep 1; done
+          : > "$QA_OUT/transport/browser.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser.log" node scripts/qa/masterListNextBrowser.mjs --out "$QA_OUT/browser" --fixtures "$QA_OUT/fixtures" --dist "$QA_REF/dist" --base-url http://127.0.0.1:4174 > "$QA_OUT/logs/browser.log" 2>&1
+          status=$?
+          set -e
+          test "$status" = 1
+          test ! -s "$QA_OUT/transport/fixtures.log"
+          test ! -s "$QA_OUT/transport/browser.log"
+          test ! -s "$QA_OUT/transport/server.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const j=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/browser/report.json'));assert.equal(j.contexts.length,9);const bad=j.contexts.filter(r=>r.status==='failed');assert.equal(bad.length,3);for(const r of bad){assert.equal(r.name,'front-office-draft-focus');assert(r.error.includes('FO_ENTRY_SCROLL_HELD'));assert(r.focusJourney.before&&r.focusJourney.after&&r.focusJourney.trace);}
+          fs.writeFileSync(process.env.QA_OUT+'/diagnostic-admission.json',JSON.stringify({scope:'Expected fault reproduction only, no release/browser pass credit',observedFailures:bad.map(r=>({width:r.width,focusJourney:r.focusJourney})),otherPassed:j.contexts.filter(r=>r.status==='passed').length},null,2)+'\n');
+          NODE
+      - name: Always hold actual source and completed output
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          (cd "$QA_REF" && find dist -type f -print0 | sort -z | xargs -0 sha256sum) > "$QA_OUT/dist-after.sha256"
+          cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: master-list-third-scroll-diagnostic
+          path: ${{ runner.temp }}/master-list-scroll-diagnostic
+          if-no-files-found: error
+          retention-days: 7
