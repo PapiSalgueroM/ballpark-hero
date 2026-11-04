@@ -1,0 +1,53 @@
+{
+  "base": "81e614f2e4716927cb8955e852a8b1bf37346b43",
+  "products": [
+    "src/components/us-career/FreeAgencyPanel.tsx",
+    "src/components/us-career/UsCareerBoard.tsx"
+  ],
+  "files": [
+    "src/test/usCareerSigningReview.test.tsx"
+  ],
+  "cases": [
+    {
+      "fullName": "US free agency signing review NBA and NFL review and Back preserve the complete saved career without signing or drawing",
+      "baseline": "failed",
+      "marker": "US_FA_REVIEW_READ_ONLY"
+    },
+    {
+      "fullName": "US free agency signing review refuses replaced withdrawn missing and mutated quotes instead of signing a reused offer index",
+      "baseline": "failed",
+      "marker": "US_FA_STALE_QUOTE_REFUSED"
+    },
+    {
+      "fullName": "US free agency signing review NBA and NFL Confirm commit exactly the original full signing result and draw tape once",
+      "baseline": "failed",
+      "marker": "US_FA_CONFIRM_REQUIRED"
+    },
+    {
+      "fullName": "US free agency signing review default panel and MLB and NHL boards preserve immediate signing with the original index",
+      "baseline": "passed",
+      "marker": null
+    }
+  ],
+  "rawEnv": {
+    "US_CAREER_SIGNING_REVIEW_RAW": "us"
+  },
+  "rawFiles": [
+    "us/review-back.json",
+    "us/stale-quotes.json",
+    "us/confirm-once.json",
+    "us/legacy-immediate.json"
+  ],
+  "heldRaw": [
+    "us/legacy-immediate.json"
+  ],
+  "crossArmValues": [
+    {
+      "file": "us/confirm-once.json",
+      "path": [
+        "signedResults"
+      ],
+      "count": 2
+    }
+  ]
+}
