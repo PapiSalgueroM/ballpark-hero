@@ -1,0 +1,118 @@
+name: Final native Season profiles and controls
+on:
+  push:
+    branches: [codex/season-native-last-qa-20261104]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    env:
+      CI: '1'
+      CORE: ce65e525d055786a1a98ccec7343ab1c78b20e87
+      CORE_TREE: fcd3997abacbb6fc9e829d3d4b09ceb0c9cc9f32
+      CORE_PARENT: 42ef023a2a36afea43c4b7d4b9e64cac098d95cf
+      QA_PATCHES: '{"scripts/qa/careerDecisionOutcome1009.mjs":"ba894e0b6cb29a5f8ff37f3790405a2f7b6d6bae","scripts/qa/careerSeasonReview1008.mjs":"f6d10b2f2b452131637888b96e71a5d3c0de5788","scripts/qa/careerTransferBriefKit.mjs":"22af5caac7b55187416a0bf192848f93efaadb7f","scripts/qa/soccerAgentReviewKit.mjs":"c67ae736ce09e55c509526d21e3cd6569c60badd","scripts/qa/soccerFarewellKit.mjs":"512900d26eea41f192f337b39496ed1c835f5e0d","scripts/qa/soccerInternationalReturnKit.mjs":"575bb70913b5a7366dda36e60886c121f1516ee3","scripts/simUsBoardParity.mjs":"2e574a8be770d8ac188433964b754415dbc1747b","src/test/fixtures/careerDecisionOutcome1009.ts":"90008408b2e410d07e4685c689a62e510bc54b68","src/test/fixtures/careerSeasonReview1008.ts":"471db3aef7e2dc48ec042ee2677da682b5dcf255"}'
+      BUILD: d3b2bb06fa7019509fc5e32bd865191259d4a1d7
+      COMPILED: 9650b2e8c01d756e48701dba46bb079db9da8051
+      ARTIFACT: 13284398836
+      ZIP_SHA: 7603f6ce3f4a489740e0cdcfc4d2404a16eb591dda9003443ef4fb140fb7a10b
+      TAR_SHA: f353341a35bde3155872f6f057404e81374fa98e00c93fd64343fefb59d07c59
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Reuse the already admitted completed build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/season-native-last"; PRIOR="$RUNNER_TEMP/compiled"
+          mkdir -p "$OUT/logs" "$OUT/exits" "$PRIOR"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq 5674
+          cp .github/workflows/season-native-last-20261104.yml "$OUT/workflow.yml"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          curl -fLsS --retry 0 -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$ARTIFACT/zip" -o "$RUNNER_TEMP/build.zip"
+          echo "$ZIP_SHA  $RUNNER_TEMP/build.zip" | sha256sum --check
+          unzip -q "$RUNNER_TEMP/build.zip" -d "$PRIOR"
+          echo "$TAR_SHA  $PRIOR/completed-dist.tar.gz" | sha256sum --check
+          git fetch --depth=1 --filter=blob:none origin "$COMPILED"
+          export QA_OUT="$OUT" QA_PRIOR="$PRIOR"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync as git} from 'node:child_process';
+          const ref=x=>git('git',['rev-parse',x]).toString().trim(),out=process.env.QA_OUT,prior=process.env.QA_PRIOR,pins=JSON.parse(process.env.QA_PATCHES),paths=Object.keys(pins).sort();
+          assert.equal(ref('HEAD^'),process.env.CORE);assert.equal(ref('HEAD^^{tree}'),process.env.CORE_TREE);assert.equal(ref(process.env.CORE+'^'),process.env.CORE_PARENT);
+          assert.equal(git('git',['diff','--name-status','HEAD^','HEAD']).toString(),'A\t.github/workflows/season-native-last-20261104.yml\n');
+          assert.deepEqual(git('git',['diff','--name-status',process.env.COMPILED,process.env.CORE]).toString().trim().split('\n').sort(),paths.map(p=>'M\t'+p).sort());
+          for(const p of paths){assert.match(pins[p],/^[a-f0-9]{40}$/);assert.equal(ref('HEAD:'+p),pins[p]);assert.equal(git('git',['hash-object',p]).toString().trim(),pins[p]);}
+          const sums=p=>Object.fromEntries(fs.readFileSync(p,'utf8').trim().split('\n').map(l=>[l.slice(66),l.slice(0,64)])),old=sums(prior+'/source-before.sha256'),now=sums(out+'/source-before.sha256'),wf='.github/workflows/popular-pages-build-20261103.yml',next='.github/workflows/season-native-last-20261104.yml';
+          assert.equal(Object.keys(old).length,5674);
+          assert.deepEqual(Object.keys(old).filter(p=>p!==wf).sort(),Object.keys(now).filter(p=>p!==next).sort());
+          for(const p of Object.keys(old))if(p!==wf&&!paths.includes(p))assert.equal(now[p],old[p],p);
+          NODE
+          test ! -e dist
+          tar -xzf "$PRIOR/completed-dist.tar.gz"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$OUT/dist-before.sha256"
+          cmp "$PRIOR/dist-before.sha256" "$OUT/dist-before.sha256"
+      - name: Original native Season sixteen profiles and four geometry controls
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/install.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/tools" --no-audit --no-fund --package-lock=false playwright@1.64.0 >> "$QA_OUT/logs/install.log" 2>&1
+          ln -s "$RUNNER_TEMP/tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/tools/node_modules/.bin/playwright" install --with-deps chromium >> "$QA_OUT/logs/install.log" 2>&1
+          cat > "$QA_OUT/network-policy.txt" <<'POLICY'
+          This native run uses the unchanged driver's own route policy. It admits local traffic, the exact stylesheet GET from index.html and only the font GET URLs declared by that stylesheet. All other external requests remain closed and recorded. Native font traffic is not claimed as loopback-only or as covered by a Node offline preload.
+          POLICY
+          set +e
+          env -u NODE_OPTIONS CAREER_SEASON_REVIEW_NATIVE_ARTIFACTS="$QA_OUT/native-season" node scripts/qa/careerSeasonReview1008.mjs > "$QA_OUT/logs/native-season.log" 2>&1
+          rc=$?
+          set -e
+          echo "$rc" > "$QA_OUT/exits/native-season"
+          tail -n 3 "$QA_OUT/logs/native-season.log"
+          test "$rc" = 0
+      - name: Always retain raw and source and payload holds
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+          git diff --binary HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+          test ! -s "$QA_OUT/source-diff.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+      - name: Bound evidence
+        id: evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo ready=true >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.evidence.outputs.ready == 'true' }}
+        with:
+          name: season-native-last-${{ github.run_id }}
+          path: ${{ env.QA_OUT }}
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
