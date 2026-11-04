@@ -1,0 +1,183 @@
+name: Grand Prix field strategy baseline
+
+on:
+  push:
+    branches: [codex/grand-prix-field-strategy-baseline-20261103]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_FIELD_PHASE: baseline
+      GP_FIELD_OUT: ${{ github.workspace }}/gp-field-artifacts
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact source fence and capture
+        run: |
+          mkdir -p "$GP_FIELD_OUT"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          const git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trimEnd(),parent='3de519d296ee1b09013d5f3728b4dbe44dafdcfa';
+          assert.equal(git('rev-parse','HEAD^'),parent);
+          assert.equal(git('rev-parse','HEAD^^{tree}'),'228582bc5686430b38acdcf971d3608c4a9c6791');
+          assert.equal(git('status','--porcelain','--untracked-files=no'),'');
+          const expected=['A\t.github/workflows/grand-prix-field-strategy.yml','A\tscripts/qa/grandPrixFieldPriorIdentities.json','A\tscripts/qa/verifyGrandPrixFieldStrategyUnits.mjs','A\tsrc/test/grandPrixBossFieldStrategy.test.tsx'];
+          const actual=git('diff','--name-status',parent,'HEAD').split('\n').filter(Boolean).sort();assert.deepEqual(actual,expected.sort());
+          fs.writeFileSync(process.env.GP_FIELD_OUT+'/source-fence.json',JSON.stringify({head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),parent,changes:actual,phase:'baseline'},null,2));
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$GP_FIELD_OUT/source-before.sha256"
+          cat > "$GP_FIELD_OUT/capture.sh" <<'SH'
+          capture() {
+            local label="$1"
+            shift
+            set +e
+            "$@" > "$GP_FIELD_OUT/$label.stdout.log" 2> "$GP_FIELD_OUT/$label.stderr.log"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$GP_FIELD_OUT/$label.exit.txt"
+            cat "$GP_FIELD_OUT/$label.stdout.log"
+            cat "$GP_FIELD_OUT/$label.stderr.log" >&2
+            return "$code"
+          }
+          SH
+          mkdir -p "$GP_FIELD_OUT/selected-source"
+          cp src/pages/GrandPrixBoss.tsx src/lib/grandPrixBoss.ts src/hooks/useGrandPrixBoss.ts src/test/grandPrixBossDecisionInfo.test.tsx src/test/grandPrixBossRaceTiming.test.tsx src/test/grandPrixBossFieldStrategy.test.tsx scripts/qa/grandPrixFieldPriorIdentities.json scripts/qa/verifyGrandPrixFieldStrategyUnits.mjs .github/workflows/grand-prix-field-strategy.yml "$GP_FIELD_OUT/selected-source/"
+      - name: Locked application install
+        run: |
+          source "$GP_FIELD_OUT/capture.sh"
+          capture install npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')),installed=[];
+          for(const [p,entry] of Object.entries(lock.packages)){
+            if(!p.startsWith('node_modules/')||!fs.existsSync(p+'/package.json'))continue;
+            const version=JSON.parse(fs.readFileSync(p+'/package.json')).version;
+            assert.equal(version,entry.version,p);installed.push({path:p,version});
+          }
+          assert(installed.length>0);
+          fs.writeFileSync(process.env.GP_FIELD_OUT+'/installed.json',JSON.stringify({node:process.versions,installed,scope:'Locked installed VERSION receipts, not complete dependency binary/member custody.'},null,2));
+          NODE
+      - name: Proper application types and controller syntax
+        run: |
+          source "$GP_FIELD_OUT/capture.sh"
+          capture types env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          capture syntax env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --check scripts/qa/verifyGrandPrixFieldStrategyUnits.mjs
+      - name: All fifteen prior Grand Prix ordinary unit files
+        run: |
+          source "$GP_FIELD_OUT/capture.sh"
+          capture original-units env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/grandPrixBoss.test.ts src/test/grandPrixBossFocusSave.test.tsx src/test/grandPrixBossHistoryTies.test.ts src/test/grandPrixBossLifecycle.test.ts src/test/grandPrixBossLifecyclePage.test.tsx src/test/grandPrixBossManagementPage.test.tsx src/test/grandPrixBossMarket.test.ts src/test/grandPrixBossMarketSave.test.tsx src/test/grandPrixBossPage.test.tsx src/test/grandPrixBossRollover.test.ts src/test/grandPrixBossRolloverSave.test.tsx src/test/grandPrixBossSave.test.tsx src/test/grandPrixBossStarterBalance.test.ts src/test/grandPrixBossDecisionInfo.test.tsx src/test/grandPrixBossRaceTiming.test.tsx --reporter=default --reporter=json --outputFile.json="$GP_FIELD_OUT/original-units.json" --maxWorkers=1 --no-file-parallelism
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.GP_FIELD_OUT,bytes=fs.readFileSync(out+'/original-units.json'),expected=["src/test/grandPrixBoss.test.ts","src/test/grandPrixBossDecisionInfo.test.tsx","src/test/grandPrixBossFocusSave.test.tsx","src/test/grandPrixBossHistoryTies.test.ts","src/test/grandPrixBossLifecycle.test.ts","src/test/grandPrixBossLifecyclePage.test.tsx","src/test/grandPrixBossManagementPage.test.tsx","src/test/grandPrixBossMarket.test.ts","src/test/grandPrixBossMarketSave.test.tsx","src/test/grandPrixBossPage.test.tsx","src/test/grandPrixBossRaceTiming.test.tsx","src/test/grandPrixBossRollover.test.ts","src/test/grandPrixBossRolloverSave.test.tsx","src/test/grandPrixBossSave.test.tsx","src/test/grandPrixBossStarterBalance.test.ts"];
+          const expectedIdentities=JSON.parse(fs.readFileSync('scripts/qa/grandPrixFieldPriorIdentities.json','utf8'));
+          assert.equal(expectedIdentities.length,112);
+          const order=rows=>rows.slice().sort((a,b)=>(a.file+'\0'+a.fullName).localeCompare(b.file+'\0'+b.fullName));
+          const validate=r=>{
+            assert.equal(r.numTotalTests,112,'GP_ORIGINAL_COUNT');assert.equal(r.numPassedTests,112);assert.equal(r.numFailedTests,0);
+            assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);assert.equal(r.success,true);
+            assert.equal(r.testResults.length,15);
+            assert.deepEqual(r.testResults.map(f=>path.relative(process.cwd(),path.resolve(f.name)).split(path.sep).join('/')).sort(),expected,'GP_ORIGINAL_FILES');
+            const rows=r.testResults.flatMap(f=>{assert.equal(f.message||'','');return f.assertionResults;});
+            assert.equal(rows.length,112);for(const row of rows){assert.equal(row.status,'passed','GP_ORIGINAL_STATUS');assert.equal(row.failureMessages.length,0);}
+            const identities=r.testResults.flatMap(f=>f.assertionResults.map(row=>({file:path.relative(process.cwd(),path.resolve(f.name)).split(path.sep).join('/'),title:row.title,fullName:row.fullName,status:row.status})));
+            assert.deepEqual(order(identities),order(expectedIdentities),'GP_ORIGINAL_IDENTITIES');
+            for(const key of ['errors','unhandledErrors'])if(Object.hasOwn(r,key)){assert(Array.isArray(r[key]),'GP_ORIGINAL_ERROR_ARRAY:'+key);assert.equal(r[key].length,0,'GP_ORIGINAL_ERROR_ARRAY:'+key);}
+            for(const key of ['numUnhandledErrors','numRuntimeErrorTestSuites','numRuntimeErrorTests'])if(r[key]!==undefined&&r[key]!==null){assert.equal(typeof r[key],'number');assert.equal(r[key],0);}
+          };
+          const actual=JSON.parse(bytes);validate(actual);const controls=[];
+          for(const [id,marker,edit] of [
+            ['count','GP_ORIGINAL_COUNT',r=>{r.numTotalTests=113;}],
+            ['identity','GP_ORIGINAL_FILES',r=>{r.testResults[0].name=path.resolve('src/test/fixture-missing.test.ts');}],
+            ['status','GP_ORIGINAL_STATUS',r=>{r.testResults[0].assertionResults[0].status='pending';}],
+            ['full-name','GP_ORIGINAL_IDENTITIES',r=>{r.testResults[0].assertionResults[0].fullName+=' copied-control';}],
+            ['errors-nonempty','GP_ORIGINAL_ERROR_ARRAY:errors',r=>{r.errors=['Copied error'];}],
+            ['unhandled-nonempty','GP_ORIGINAL_ERROR_ARRAY:unhandledErrors',r=>{r.unhandledErrors=['Copied unhandled error'];}],
+            ['errors-null','GP_ORIGINAL_ERROR_ARRAY:errors',r=>{r.errors=null;}],
+            ['unhandled-null','GP_ORIGINAL_ERROR_ARRAY:unhandledErrors',r=>{r.unhandledErrors=null;}],
+          ]){
+            const copy=JSON.parse(bytes);edit(copy);const changed=Buffer.from(JSON.stringify(copy)),file=out+'/reader-'+id+'.json';
+            assert.notEqual(createHash('sha256').update(changed).digest('hex'),createHash('sha256').update(bytes).digest('hex'));
+            fs.writeFileSync(file,changed);let refusal;
+            try{validate(JSON.parse(fs.readFileSync(file)));}catch(e){refusal={name:e.name,message:String(e.message),stack:String(e.stack)};}
+            assert.equal(refusal?.name,'AssertionError');assert(String(refusal.message).startsWith(marker));
+            fs.writeFileSync(out+'/reader-'+id+'.refusal.json',JSON.stringify(refusal,null,2));
+            fs.writeFileSync(out+'/reader-'+id+'.changed.json',fs.readFileSync(file));fs.writeFileSync(file,bytes);
+            assert(fs.readFileSync(file).equals(bytes));validate(JSON.parse(fs.readFileSync(file)));
+            controls.push({id,marker,changedSHA256:createHash('sha256').update(changed).digest('hex'),restoredSHA256:createHash('sha256').update(bytes).digest('hex')});
+          }
+          const text=fs.readFileSync(out+'/original-units.stdout.log','utf8')+'\n'+fs.readFileSync(out+'/original-units.stderr.log','utf8');
+          assert.doesNotMatch(text,/\bUnhandled (?:Errors?|Rejections?)\b|\bunhandledRejection\b|\buncaughtException\b|\bUnhandledPromiseRejection(?:Warning|Error)?\b|\bSIM_OFFLINE_BLOCK\b/i);
+          const runtime=Object.fromEntries(['numUnhandledErrors','numRuntimeErrorTestSuites','numRuntimeErrorTests'].map(k=>[k,actual[k]===undefined||actual[k]===null?{status:'UNKNOWN',value:null}:{status:'REPORTED_ZERO',value:actual[k]}]));
+          const errorArrays=Object.fromEntries(['errors','unhandledErrors'].map(key=>[key,Object.hasOwn(actual,key)?{status:'OBSERVED_EMPTY',value:actual[key]}:{status:'UNKNOWN',value:null}]));
+          fs.writeFileSync(out+'/original-units-admission.json',JSON.stringify({files:15,executed:112,passed:112,pending:0,todo:0,controls,runtime,errorArrays,identities:order(actual.testResults.flatMap(f=>f.assertionResults.map(r=>({file:path.relative(process.cwd(),path.resolve(f.name)).split(path.sep).join('/'),title:r.title,fullName:r.fullName,status:r.status}))))},null,2));
+          NODE
+      - name: Current four-case owned absence proof
+        run: |
+          source "$GP_FIELD_OUT/capture.sh"
+          capture field-units env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/verifyGrandPrixFieldStrategyUnits.mjs
+      - name: Final tracked-source and installed-version holds
+        if: always()
+        run: |
+          sha256sum --check "$GP_FIELD_OUT/source-before.sha256" > "$GP_FIELD_OUT/source-hold.log"
+          git diff --exit-code > "$GP_FIELD_OUT/tracked.diff"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.GP_FIELD_OUT,r=JSON.parse(fs.readFileSync(out+'/installed.json'));
+          for(const row of r.installed)assert.equal(JSON.parse(fs.readFileSync(row.path+'/package.json')).version,row.version,row.path);
+          const cache='node_modules/.vite',rows=[];
+          if(fs.existsSync(cache)){
+            const walk=p=>{const s=fs.lstatSync(p);assert(!s.isSymbolicLink());if(s.isDirectory()){for(const n of fs.readdirSync(p))walk(path.join(p,n));return;}assert(s.isFile());const b=fs.readFileSync(p),rel=path.relative(cache,p),target=path.join(out,'framework-cache',rel);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,b);rows.push({path:rel,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')});};walk(cache);
+          }
+          fs.writeFileSync(out+'/final-holds.json',JSON.stringify({trackedHashesHeld:true,trackedDiffEmpty:true,installedVersions:r.installed.length,frameworkCache:rows,scope:'No complete dependency binary/member/link or transport census.'},null,2));
+          NODE
+      - name: Bound retained evidence
+        id: evidence
+        if: always()
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.GP_FIELD_OUT,rows=[];
+          const walk=p=>{const s=fs.lstatSync(p);assert(!s.isSymbolicLink());if(s.isDirectory()){for(const n of fs.readdirSync(p))walk(path.join(p,n));return;}assert(s.isFile());const b=fs.readFileSync(p);rows.push({path:path.relative(out,p),bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')});};walk(out);
+          const bytes=rows.reduce((s,r)=>s+r.bytes,0),manifest=Buffer.from(JSON.stringify({rows,bytes,scope:'Owned raw proof only, manifest-inclusive strict30MB/1000 member ceilings.'},null,2));
+          console.log('GP_FIELD_PACKET_INPUT',JSON.stringify({regularMembers:rows.length+1,rawBytes:bytes+manifest.length,manifestBytes:manifest.length}));
+          assert(rows.length>0&&rows.length+1<1000);assert(bytes+manifest.length<30000000);
+          fs.writeFileSync(out+'/artifact-members.json',manifest);
+          NODE
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.ready == 'true'
+        with:
+          name: gp-field-baseline-${{ github.run_id }}
+          path: gp-field-artifacts/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error
