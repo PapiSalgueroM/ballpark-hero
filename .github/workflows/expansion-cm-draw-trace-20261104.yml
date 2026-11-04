@@ -1,0 +1,86 @@
+name: CM summer draw path diagnostic only
+on:
+  push:
+    branches: [codex/expansion-cm-draw-trace-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  fixed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact source and dependencies
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/expansion-cm-draw-trace"
+          mkdir -p "$OUT/logs" "$OUT/raw"/{sc,cm,us,fo,payroll,hub} "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = d251032d369fbfe6b8e871ffaa4e522d02603ab2
+          test "$(git rev-parse HEAD^^{tree})" = 5a416780019b6c0f9c38043c1042f33c544d0c57
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/expansion-cm-draw-trace-20261104.yml "$OUT/workflow.yml"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Proper types and real new plus adjacent outcomes
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          export CM_TRAINING_EXPOSURE_RAW="$QA_OUT/raw/cm" SC_OFFER_NEGOTIATION_RAW="$QA_OUT/raw/sc" US_FREE_PRACTICE_RAW="$QA_OUT/raw/us" FO_DRAFT_PROSPECT_RAW="$QA_OUT/raw/fo" TYCOON_PAYROLL_RAW="$QA_OUT/raw/payroll" HUB_GAME_PICKS_RAW="$QA_OUT/raw/hub"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+          const out=process.env.QA_OUT,receipt=out+'/transport/units.log';fs.writeFileSync(receipt,'');
+          const p=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',...["src/test/clubManagerTrainingExposure.test.ts","-t","uses the charged season instead of a last-week switch"],'--maxWorkers=1','--no-file-parallelism','--reporter=default','--reporter=json','--outputFile='+out+'/units.json'],{env:{...process.env,SIM_OFFLINE_RECEIPT:receipt},encoding:'utf8',timeout:900000,maxBuffer:32*1024*1024});
+          const log=(p.stdout||'')+'\n'+(p.stderr||'');fs.writeFileSync(out+'/logs/units.log',log);fs.writeFileSync(out+'/units.exit.json',JSON.stringify({status:p.status,signal:p.signal,error:p.error?String(p.error):null})+'\n');
+          assert(!p.error&&p.signal===null,'Native completion');assert.equal(p.status,1);
+          assert(!/Unhandled\s+(?:Error|Rejection)|Vitest caught [1-9]|uncaughtException|unhandledRejection/i.test(log));
+          const j=JSON.parse(fs.readFileSync(out+'/units.json')),rows=j.testResults.flatMap(s=>s.assertionResults);
+          assert.equal(j.numTotalTests,9);assert.equal(j.numFailedTests,1);assert.equal(j.numPendingTests,8);
+          const failed=rows.filter(r=>r.status==='failed');assert.equal(failed.length,1);assert(failed[0].fullName.includes('uses the charged season instead'));
+          const raw=JSON.parse(fs.readFileSync(out+'/raw/cm/late-flip.json'));
+          assert(raw.recordedTrace.length>0&&raw.referenceTrace.length>0);
+          fs.writeFileSync(out+'/diagnostic-only.json',JSON.stringify({status:'diagnostic-captured-only',nativeExit:p.status,failed:failed.map(r=>r.fullName),recordedDraws:raw.draws.length,referenceDraws:raw.referenceDraws.length,scope:'No passing-test, fixed-product, build, browser or public credit.'},null,2)+'\n');
+          NODE
+      - name: Always require full source and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          for receipt in "$QA_OUT"/transport/*.log; do test ! -s "$receipt"; done
+      - name: Bound evidence
+        if: always()
+        id: artifact
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: expansion-cm-draw-trace
+          path: ${{ runner.temp }}/expansion-cm-draw-trace
+          if-no-files-found: error
+          retention-days: 7
