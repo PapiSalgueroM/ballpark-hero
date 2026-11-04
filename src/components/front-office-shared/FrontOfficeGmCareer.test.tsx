@@ -228,7 +228,7 @@ function playSeason(row: BoardRow, at: (label: string) => void) {
 function runDraft(row: BoardRow) {
   for (let n = 0; n < 20 && readSave(row).phase === 'draft'; n += 1) {
     const rows = screen.queryAllByText(/· age \d+/);
-    if (rows.length) { fireEvent.click(rows[0]); fireEvent.click(screen.getByRole('button', { name: 'Confirm draft', exact: true })); continue; }
+    if (rows.length) { fireEvent.click(rows[0]); fireEvent.click(screen.getByRole('button', { name: /^Confirm draft$/ })); continue; }
     const skip = buttons().find(b => /no picks|without/i.test(b.textContent ?? '') && !b.disabled);
     if (!skip) throw new Error('the draft shows no prospect and no way on');
     fireEvent.click(skip);
