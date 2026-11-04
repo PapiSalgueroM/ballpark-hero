@@ -33,7 +33,7 @@ const originals=new Map(products.map(p=>[p,git('show','978e9f7081a36c6ab105adf92
 for(const p of products)assert(!fixed.get(p).equals(originals.get(p)),'Negative control must change '+p);
 const bindings=products.map(p=>({path:p,fixedSha256:sha(fixed.get(p)),originalSha256:sha(originals.get(p))}));
 fs.writeFileSync(path.join(out,'product-bindings.json'),JSON.stringify(bindings,null,2)+'\n');
-function run(name,old){
+function run(name,old,fault=''){
   const dir=path.join(out,name);fs.mkdirSync(dir,{recursive:true});
   const raw=path.join(dir,'raw');for(const key of ['sc','cm','us','fo','payroll','hub'])fs.mkdirSync(path.join(raw,key),{recursive:true});
   const receipt=path.join(dir,'transport.log');fs.writeFileSync(receipt,'');
@@ -44,16 +44,20 @@ function run(name,old){
   fs.writeFileSync(path.join(dir,'units.log'),log);
   fs.writeFileSync(path.join(dir,'native-exit.json'),JSON.stringify({status:p.status,signal:p.signal,error:p.error?String(p.error):null})+'\n');
   assert(!p.error&&p.signal===null,name+' native completion');
-  assert.equal(p.status,old?1:0,name+' native status');assert.equal(fs.statSync(receipt).size,0);
+  assert.equal(p.status,old||fault?1:0,name+' native status');assert.equal(fs.statSync(receipt).size,0);
   assert(!/Unhandled\s+(?:Error|Rejection)|Vitest caught [1-9]|uncaughtException|unhandledRejection/i.test(log),name+' runtime errors');
   const j=JSON.parse(fs.readFileSync(path.join(dir,'units.json'))),rows=j.testResults.flatMap(r=>r.assertionResults);
-  assert.deepEqual([j.numTotalTests,j.numPassedTests,j.numFailedTests,j.numPendingTests,j.numTodoTests],[36,old?8:36,old?28:0,0,0],name+' full census');
+  assert.deepEqual([j.numTotalTests,j.numPassedTests,j.numFailedTests,j.numPendingTests,j.numTodoTests],[36,old?8:fault?34:36,old?28:fault?2:0,0,0],name+' full census');
   assert.equal(j.testResults.length,6);assert.equal(rows.length,36);
   assert.deepEqual(rows.map(r=>r.fullName).sort(),expected.map(r=>r.fullName).sort());
   for(const r of rows){
-    const e=expected.find(e=>e.fullName===r.fullName);assert.equal(r.status,old?e.status:'passed',r.fullName);
-    if(old&&e.status==='failed'){
-      const m=r.failureMessages.join('\n');assert(m.includes('AssertionError')&&m.includes(e.marker),r.fullName);
+    const e=expected.find(e=>e.fullName===r.fullName);
+    const label=r.fullName==='US free practice after banking NBA repeats a banked drill without another reward or save'?'NBA':r.fullName==='US free practice after banking NFL repeats a banked drill without another reward or save'?'NFL':null;
+    const broken=!!fault&&!!label,status=old?e.status:broken?'failed':'passed';
+    assert.equal(r.status,status,r.fullName);
+    if(status==='failed'){
+      const marker=broken?'US_FREE_PRACTICE_'+label+'_'+(fault==='replay'?'REPLAY':'MENU')+'_FOCUS':e.marker;
+      const m=r.failureMessages.join('\n');assert(m.includes('AssertionError')&&m.includes(marker),r.fullName);
       assert(!/TypeError|SyntaxError|ReferenceError|Cannot find module|is not a function/.test(m),r.fullName);
     }
   }
@@ -62,7 +66,7 @@ function run(name,old){
     const files=fs.readdirSync(path.join(raw,key)).sort();assert.equal(files.length,n,key);
     raws[key]={};for(const file of files){const bytes=fs.readFileSync(path.join(raw,key,file));JSON.parse(bytes);raws[key][file]=sha(bytes);}
   }
-  const admission={name,status:old?'expected-owned-red':'all-fixed-pass',nativeExit:p.status,total:36,passed:j.numPassedTests,failed:j.numFailedTests,runtimeErrors:j.numRuntimeErrors??'UNKNOWN',raw:raws};
+  const admission={name,status:old?'expected-owned-red':fault?'expected-'+fault+'-focus-red':'all-fixed-pass',nativeExit:p.status,total:36,passed:j.numPassedTests,failed:j.numFailedTests,runtimeErrors:j.numRuntimeErrors??'UNKNOWN',raw:raws};
   fs.writeFileSync(path.join(dir,'admission.json'),JSON.stringify(admission,null,2)+'\n');return admission;
 }
 const heldBefore=git('status','--porcelain=v1','--untracked-files=all').toString();
@@ -79,7 +83,19 @@ try{
 }
 restored=run('restored',false);
 assert.deepEqual(first.raw,restored.raw,'Every deterministic raw outcome restored exactly');
+const ground='src/components/career/TrainingGround.tsx',groundFixed=fixed.get(ground),groundBefore=git('cat-file','blob','965122f776faa82511cb7768c00c31d0271b919c');
+assert(!groundFixed.equals(groundBefore),'Replay control must change bytes');
+let replayFault,menuFault;
+try{
+  fs.writeFileSync(ground,groundBefore);replayFault=run('replay-focus-fault',false,'replay');
+  const source=groundFixed.toString(),from="<button onClick={e => { e.currentTarget.closest<HTMLElement>('[role=\"dialog\"]')?.focus({ preventScroll: true }); toMenu(); }} className=\"min-h-11 rounded-lg border border-border text-sm font-bold\">Choose a drill</button>",to="<button onClick={toMenu} className=\"min-h-11 rounded-lg border border-border text-sm font-bold\">Choose a drill</button>";
+  assert.equal(source.split(from).length,2,'One menu focus edit');
+  const broken=source.replace(from,to);assert.notEqual(broken,source,'Menu control changed bytes');
+  fs.writeFileSync(ground,broken);menuFault=run('menu-focus-fault',false,'menu');
+}finally{fs.writeFileSync(ground,groundFixed);}
+const focusRestored=run('focus-restored',false);
+assert.deepEqual(first.raw,focusRestored.raw,'Focus controls restore exact outcomes');
 assert.equal(git('status','--porcelain=v1','--untracked-files=all').toString(),heldBefore);
 git('diff','--exit-code','HEAD');
-fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({status:'qualified',cases:36,fixedPassed:36,originalOwnedFailures:28,originalHeldPasses:8,restoredPassed:36,physicalChangedProducts:products.length,rawRestoredExactly:true,limits:'Outcome controls only. No full fleet, build, browser or public claim.'},null,2)+'\n');
+fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({status:'qualified',cases:36,fixedPassed:36,originalOwnedFailures:28,originalHeldPasses:8,restoredPassed:36,physicalChangedProducts:products.length,rawRestoredExactly:true,replayFocusOwnedFailures:replayFault.failed,menuFocusOwnedFailures:menuFault.failed,focusRestoredPassed:focusRestored.passed,limits:'Outcome controls only. No full fleet, build, browser or public claim.'},null,2)+'\n');
 console.log('36 fixed PASS, 28 whole-original owned RED plus 8 held PASS, 36 restored PASS. All14 product substitutions changed bytes and restored exact RAW.');
