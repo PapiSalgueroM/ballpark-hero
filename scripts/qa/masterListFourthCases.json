@@ -1,0 +1,110 @@
+{
+  "base": "d2617a2f6d1fe17fd8814a9855e8234e1b2bb84c",
+  "products": [
+    "src/lib/soccerCareerProgramme.ts",
+    "src/components/soccer-career/SoccerCareerProgramme.tsx",
+    "src/lib/clubManager.ts",
+    "src/components/club-manager/TrainingScreen.tsx"
+  ],
+  "files": [
+    "src/test/soccerProgrammePrimaryRole.test.tsx",
+    "src/test/clubManagerRecoveryWeek.test.tsx"
+  ],
+  "cases": [
+    {
+      "fullName": "Soccer programme primary role adopts the genuinely learned role through the native plan while keeping all 98 skills and signed terms",
+      "baseline": "failed",
+      "marker": "SC_PRIMARY_ROLE_NATIVE"
+    },
+    {
+      "fullName": "Soccer programme primary role consumes the course and flexibility once without rewriting unrelated plans money history or attributes",
+      "baseline": "failed",
+      "marker": "SC_PRIMARY_ROLE_CONSUMED"
+    },
+    {
+      "fullName": "Soccer programme primary role uses the adopted position in the actual next season rather than only changing the visible label",
+      "baseline": "failed",
+      "marker": "SC_PRIMARY_ROLE_FUTURE"
+    },
+    {
+      "fullName": "Soccer programme primary role requires both real consecutive played course settlements before adopting and consumes no action draw",
+      "baseline": "failed",
+      "marker": "SC_PRIMARY_ROLE_EARNED"
+    },
+    {
+      "fullName": "Soccer programme primary role refuses unearned unavailable stale and future qualifications without overwriting their raw state",
+      "baseline": "passed",
+      "marker": null
+    },
+    {
+      "fullName": "Soccer programme primary role retains every existing eligible plan action and ordinary position choice when no adoption action is requested",
+      "baseline": "passed",
+      "marker": null
+    },
+    {
+      "fullName": "Club Manager one-player recovery week applies Light recovery and its growth record only to the selected player on a paid week",
+      "baseline": "failed",
+      "marker": "CM_RECOVERY_PAID_PLAYER"
+    },
+    {
+      "fullName": "Club Manager one-player recovery week consumes one paid week then returns the same player to the standing plan",
+      "baseline": "failed",
+      "marker": "CM_RECOVERY_ONE_CHARGE"
+    },
+    {
+      "fullName": "Club Manager one-player recovery week waits through a non-charged night and read-only previews before applying the recovery week",
+      "baseline": "failed",
+      "marker": "CM_RECOVERY_NIGHTS"
+    },
+    {
+      "fullName": "Club Manager one-player recovery week keeps the pending player through the real save reader before the paid action",
+      "baseline": "failed",
+      "marker": "CM_RECOVERY_SAVED"
+    },
+    {
+      "fullName": "Club Manager one-player recovery week queues and cancels a named player from Training without changing the standing plan or XI",
+      "baseline": "failed",
+      "marker": "CM_RECOVERY_UI_QUEUE_CANCEL"
+    },
+    {
+      "fullName": "Club Manager one-player recovery week preserves unreadable recovery metadata and refuses queue or cancel without blocking ordinary plan edits",
+      "baseline": "failed",
+      "marker": "CM_RECOVERY_UNSUPPORTED"
+    },
+    {
+      "fullName": "Club Manager one-player recovery week keeps all nine ordinary paid-week states and full draw tapes unchanged when no recovery is queued",
+      "baseline": "passed",
+      "marker": null
+    },
+    {
+      "fullName": "Club Manager one-player recovery week expires stale club season and departed-player queues at the first paid tick without giving their recovery to anyone",
+      "baseline": "failed",
+      "marker": "CM_RECOVERY_STALE"
+    }
+  ],
+  "rawEnv": {
+    "SC_PRIMARY_ROLE_RAW": "sc",
+    "CM_RECOVERY_WEEK_RAW": "cm"
+  },
+  "rawFiles": [
+    "sc/native-adoption.json",
+    "sc/consume-once.json",
+    "sc/future-role.json",
+    "sc/two-season-gate.json",
+    "sc/refused-state.json",
+    "sc/legacy-default.json",
+    "cm/paid-player.json",
+    "cm/once.json",
+    "cm/night-delay.json",
+    "cm/saved-queue.json",
+    "cm/queue-cancel.json",
+    "cm/unsupported.json",
+    "cm/ordinary.json",
+    "cm/boundaries.json"
+  ],
+  "heldRaw": [
+    "sc/refused-state.json",
+    "sc/legacy-default.json",
+    "cm/ordinary.json"
+  ]
+}
