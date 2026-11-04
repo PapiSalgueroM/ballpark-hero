@@ -29,3 +29,7 @@ Changing priority must not silently discard a saved appearance floor. A zero-mat
 ## November4 qualification policy correction
 
 The first physical runs qualified all12 new outcomes but stopped on two older invalid/stale brief expectations and the save-keeper part-version policy. They explicitly required permissive fallback or overwriting unreadable transferBrief metadata. The new documented policy preserves and refuses that data. Additional bounded QA claims: src/test/soccerCareerTransferBrief.test.ts, scripts/simSaveKeeper.mjs and scripts/lib/realSaves.mjs. Keep every case, all generic version policies and all five application pins. Add an effective physical helper-guard removal control with changed bytes, exact owned failure and complete restoration, then rerun the unchanged gates. No gate is waived.
+
+## Measured unchanged download cap
+
+The second physical build passed all20 output readers but Club Manager measured648.6K gzip and rounded649 against the unchanged648K limit. Other15 caps passed; browser steps were skipped. The bounded correction stays inside matchFacts: compute each Poisson mass incrementally in the same multiplication/cell/accumulation order and remove the now-orphaned private helper. All geometry, rates, clamps and rounding stay held. Require4096 actual-source exact mass/odds comparisons, an effective condition-mutation control, all four CM RAW bodies byte-identical to the already-qualified version, and the full unchanged cap/readers/browser rerun. No limit is raised.

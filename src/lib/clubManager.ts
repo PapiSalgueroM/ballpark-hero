@@ -21628,12 +21628,6 @@ export interface MatchFacts {
   firstLeg?: { mine: number; theirs: number; home: boolean };
 }
 
-function poissonPmf(lambda: number, k: number): number {
-  let p = Math.exp(-lambda);
-  for (let i = 1; i <= k; i++) p *= lambda / i;
-  return p;
-}
-
 /**
  * Everything the pre-match screen shows, computed from the save's own state:
  * real form from results this world actually simulated, real head-to-head
@@ -21670,9 +21664,9 @@ export function matchFacts(career: CareerState): MatchFacts | null {
     const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk + (t1 && t2 ? (t1.atk + t2.atk) / 2 : 0) + (geometry?.atk ?? 0), 0.12, 4.2) * k;
     const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def + (t1 && t2 ? (t1.def + t2.def) / 2 : 0) + (geometry?.conceded ?? 0), 0.12, 4.2) * k;
     let pWin = 0, pDraw = 0, pLoss = 0;
-    for (let a = 0; a <= 9; a++) {
-      for (let b = 0; b <= 9; b++) {
-        const p = poissonPmf(lamMe, a) * poissonPmf(lamOpp, b);
+    for (let a = 0, pa = Math.exp(-lamMe); a <= 9; a++, pa *= lamMe / a) {
+      for (let b = 0, pb = Math.exp(-lamOpp); b <= 9; b++, pb *= lamOpp / b) {
+        const p = pa * pb;
         if (a > b) pWin += p; else if (a === b) pDraw += p; else pLoss += p;
       }
     }
