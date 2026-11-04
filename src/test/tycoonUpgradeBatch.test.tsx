@@ -1,7 +1,7 @@
 import './dailyReload/mocks';
 import { resetMocks } from './dailyReload/mocks';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent } from '@testing-library/react';
+import { act, cleanup, fireEvent, screen } from '@testing-library/react';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { mountPage } from './dailyReload/harness';
@@ -87,15 +87,15 @@ describe('Stadium Tycoon upgrade batches', () => {
       const before = initial(wallet);
       localStorage.setItem(E.TYCOON_SAVE_KEY, E.serializeTycoon(before, EPOCH));
       localStorage.setItem('batch-unrelated-save', 'held');
-      const view = mountPage(<StadiumTycoon />, '/stadium-tycoon');
-      const toggle = view.queryByRole('button', { name: 'Up to 5 levels' });
+      mountPage(<StadiumTycoon />, '/stadium-tycoon');
+      const toggle = screen.queryByRole('button', { name: 'Up to 5 levels' });
       keep('page-' + wallet, { before, togglePresent: toggle !== null });
       expect(toggle, 'TYCOON_BATCH_PAGE_CONTROL').not.toBeNull();
       act(() => { fireEvent.click(toggle!); });
-      const stands = view.getByRole('button', { name: /Stands/ });
+      const stands = screen.getByRole('button', { name: /Stands/ });
       expect(stands.textContent).toContain('Buy ' + quantity);
       act(() => { fireEvent.click(stands); });
-      expect(view.getByRole('button', { name: /Stands/ }).textContent).toContain('Lv ' + quantity);
+      expect(screen.getByRole('button', { name: /Stands/ }).textContent).toContain('Lv ' + quantity);
       act(() => { window.dispatchEvent(new Event('pagehide')); });
       const saved = JSON.parse(localStorage.getItem(E.TYCOON_SAVE_KEY)!);
       keep('page-result-' + wallet, { before, saved });
