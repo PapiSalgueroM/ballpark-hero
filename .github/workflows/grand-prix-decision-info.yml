@@ -1,0 +1,546 @@
+name: Grand Prix decision information verification
+
+on:
+  push:
+    branches: [codex/grand-prix-decision-fixed-v3-20261103]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      GP_DECISION_PHASE: fixed
+      GP_DECISION_OUT: ${{ github.workspace }}/gp-decision-artifacts
+      GP_DECISION_MUTATIONS: ${{ github.workspace }}/scripts/qa/grandPrixDecisionSourceMap.json
+      GP_TOOLS: ${{ github.workspace }}/tmp/gp-decision-tools
+      FREE_KICK_FONT_CACHE: ${{ github.workspace }}/gp-decision-artifacts/font-cache
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact source fence and capture
+        id: source
+        run: |
+          mkdir -p "$GP_DECISION_OUT"
+          echo '127.0.0.1 flawuiqbvjobmkfkauhw.supabase.co' | sudo tee -a /etc/hosts
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import {execFileSync} from 'node:child_process';
+          const git=(...a)=>execFileSync('git',a,{encoding:'utf8'}).trimEnd(),parent='d832d7c9573163d029b3542d440c9b484c6cbeff';
+          assert.equal(git('rev-parse','HEAD^'),parent);
+          assert.equal(git('rev-parse','HEAD^^{tree}'),'30fbf7a40eb9815e394686557bb60d419a63c9fd');
+          assert.equal(git('status','--porcelain','--untracked-files=no'),'');
+          const expected=["A\t.github/workflows/grand-prix-decision-info.yml","A\tscripts/qa/fixtures/siteFonts.captured.json","A\tscripts/qa/grandPrixDecisionBaselineIdentities.json","A\tscripts/qa/grandPrixDecisionSourceMap.json","A\tscripts/qa/playGrandPrixDecisionApp.mjs","A\tscripts/qa/prepareGrandPrixDecisionApp.mjs","A\tscripts/qa/verifyGrandPrixDecisionUnits.mjs","A\tsrc/test/grandPrixBossDecisionInfo.test.tsx","A\tsrc/test/grandPrixBossRaceTiming.test.tsx","M\tscripts/simGrandPrixBossManagement.mjs","M\tsrc/pages/GrandPrixBoss.tsx"];
+          const actual=git('diff','--name-status',parent,'HEAD').split('\n').filter(Boolean).sort();assert.deepEqual(actual,expected.sort());
+          fs.writeFileSync(process.env.GP_DECISION_OUT+'/source-fence.json',JSON.stringify({head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),parent,changes:actual,phase:'fixed'},null,2));
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$GP_DECISION_OUT/source-before.sha256"
+          cat > "$GP_DECISION_OUT/capture.sh" <<'SH'
+          capture() {
+            local label="$1"
+            shift
+            set +e
+            "$@" > "$GP_DECISION_OUT/$label.stdout.log" 2> "$GP_DECISION_OUT/$label.stderr.log"
+            local code=$?
+            set -e
+            printf '%s\n' "$code" > "$GP_DECISION_OUT/$label.exit.txt"
+            cat "$GP_DECISION_OUT/$label.stdout.log"
+            cat "$GP_DECISION_OUT/$label.stderr.log" >&2
+            return "$code"
+          }
+          SH
+          mkdir -p "$GP_DECISION_OUT/selected-source"
+          cp src/pages/GrandPrixBoss.tsx src/lib/grandPrixBoss.ts src/hooks/useGrandPrixBoss.ts src/test/grandPrixBossDecisionInfo.test.tsx src/test/grandPrixBossRaceTiming.test.tsx scripts/qa/verifyGrandPrixDecisionUnits.mjs scripts/qa/prepareGrandPrixDecisionApp.mjs scripts/qa/playGrandPrixDecisionApp.mjs scripts/qa/grandPrixDecisionSourceMap.json scripts/qa/grandPrixDecisionBaselineIdentities.json scripts/simGrandPrixBossManagement.mjs .github/workflows/grand-prix-decision-info.yml "$GP_DECISION_OUT/selected-source/"
+          mkdir -p "$GP_DECISION_OUT/input"
+          cp scripts/qa/fixtures/siteFonts.captured.json "$GP_DECISION_OUT/input/"
+      - name: Locked application install
+        id: install
+        run: |
+          source "$GP_DECISION_OUT/capture.sh"
+          capture install npm ci
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json')),installed=[];
+          for(const [p,entry] of Object.entries(lock.packages)){
+            if(!p.startsWith('node_modules/')||!fs.existsSync(p+'/package.json'))continue;
+            const version=JSON.parse(fs.readFileSync(p+'/package.json')).version;
+            assert.equal(version,entry.version,p);installed.push({path:p,version});
+          }
+          assert(installed.length>0);
+          fs.writeFileSync(process.env.GP_DECISION_OUT+'/installed.json',JSON.stringify({node:process.versions,installed,scope:'Locked installed VERSION receipts, not complete dependency binary/member custody.'},null,2));
+          NODE
+      - name: Isolated pinned browser and image verification tools
+        id: tools
+        run: |
+          source "$GP_DECISION_OUT/capture.sh"
+          test ! -e "$GP_TOOLS"
+          mkdir -p "$GP_TOOLS"
+          printf '{"private":true,"dependencies":{"playwright":"1.64.1"}}\n' > "$GP_TOOLS/package.json"
+          capture browser-install env NODE_OPTIONS='' npm install --prefix "$GP_TOOLS" --ignore-scripts --no-audit --no-fund
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$GP_TOOLS/node_modules/playwright" node_modules/playwright
+          ln -s "$GP_TOOLS/node_modules/playwright-core" node_modules/playwright-core
+          cp "$GP_TOOLS/package.json" "$GP_TOOLS/package-lock.json" "$GP_DECISION_OUT/input/"
+          capture chromium-install env NODE_OPTIONS='' node "$GP_TOOLS/node_modules/playwright/cli.js" install --with-deps chromium
+          capture python-venv env NODE_OPTIONS='' python3 -m venv "$GP_TOOLS/python"
+          capture python-install env NODE_OPTIONS='' "$GP_TOOLS/python/bin/python" -m pip install fonttools==4.60.1 Pillow==11.3.0
+          "$GP_TOOLS/python/bin/python" -m pip freeze > "$GP_DECISION_OUT/python-versions.txt"
+          echo "$GP_TOOLS/python/bin" >> "$GITHUB_PATH"
+      - name: Materialize only nine already-held font bodies and cache adapter
+        run: |
+          set -euo pipefail
+          out="$GP_DECISION_OUT"
+          env NODE_OPTIONS='' node --input-type=module <<'FONTS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          import { gunzipSync } from 'node:zlib';
+          const sha=b=>createHash('sha256').update(b).digest('hex'),raw=fs.readFileSync('scripts/qa/fixtures/siteFonts.captured.json');
+          assert.equal(raw.length,1600766);assert.equal(sha(raw),'a6c24e3ec7711d400f53a1baf10a3a6a3925d1f269e48ee0cd14bdca5b749938');
+          const rows=JSON.parse(raw).entries,dir=process.env.FREE_KICK_FONT_CACHE;assert.equal(rows.length,9);fs.mkdirSync(dir,{recursive:true});
+          const manifest=[];
+          for(const row of rows){
+            assert.equal(row.encoding,'gzip+hex');assert(['https://fonts.googleapis.com','https://fonts.gstatic.com'].includes(new URL(row.url).origin));
+            const body=gunzipSync(Buffer.from(row.body,'hex'));assert.equal(body.length,row.bytes);assert.equal(sha(body),row.sha256);
+            const file=path.basename(row.originalFile);assert.equal(file,row.originalFile);assert(/^[a-f0-9]+$/.test(file));
+            fs.writeFileSync(path.join(dir,file),body,{flag:'wx'});manifest.push({url:row.url,file,contentType:row.contentType,sha256:row.sha256,bytes:row.bytes});
+          }
+          assert.equal(new Set(manifest.map(row=>row.url)).size,9);
+          fs.writeFileSync(path.join(dir,'manifest.json'),JSON.stringify(manifest,null,2)+'\n');
+          fs.writeFileSync(process.env.GP_DECISION_OUT+'/font-custody.json',JSON.stringify({heldFixtureSha256:sha(raw),heldFixtureBytes:raw.length,sourceRun:41443229767,sourceArtifact:13140509319,archiveReacquisitions:0,fontDownloads:0,manifest},null,2)+'\n');
+          FONTS
+          cat > "$out/cached-fonts.cjs" <<'ADAPTER'
+          'use strict';
+          const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),{createHash}=require('node:crypto');
+          const out=process.env.GP_DECISION_OUT,sha=b=>createHash('sha256').update(b).digest('hex');
+          const manifest=JSON.parse(fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE,'manifest.json'),'utf8'));
+          const cache=new Map(manifest.map(row=>{const body=fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE,row.file));assert.equal(sha(body),row.sha256);return[row.url,{body,contentType:row.contentType,sha256:row.sha256}];}));
+          const pw=require(path.join(process.env.GITHUB_WORKSPACE,'node_modules/playwright')),launch=pw.chromium.launch.bind(pw.chromium);
+          pw.chromium.launch=async(...args)=>{
+            const browser=await launch(...args),newContext=browser.newContext.bind(browser);
+            browser.newContext=async(...options)=>{
+              const context=await newContext(...options);
+              await context.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//,async route=>{
+                const req=route.request(),url=req.url(),row=cache.get(url);
+                if(!row||req.method()!=='GET'){fs.appendFileSync(path.join(out,'font-cache-misses.jsonl'),JSON.stringify({url,method:req.method()})+'\n');return route.abort();}
+                fs.appendFileSync(path.join(out,'font-cache-use.jsonl'),JSON.stringify({url,sha256:row.sha256})+'\n');
+                return route.fulfill({status:200,body:row.body,contentType:row.contentType});
+              });
+              for(const [kind,pattern]of[['flag',/^https:\/\/flagcdn\.com\//],['database',/^https:\/\/[^/]+\.supabase\.co\//]])await context.route(pattern,route=>{
+                const req=route.request();fs.appendFileSync(path.join(out,'blocked-external.jsonl'),JSON.stringify({kind,url:req.url(),method:req.method(),bodySha256:req.postData()?sha(req.postData()):null})+'\n');return route.abort();
+              });
+              return context;
+            };
+            return browser;
+          };
+          ADAPTER
+          find "$FREE_KICK_FONT_CACHE" -type f -print0 | sort -z | xargs -0 sha256sum > "$out/font-files.sha256"
+          sha256sum "$out/cached-fonts.cjs" > "$out/cache-adapter.sha256"
+      - name: Proper application types and controller syntax
+        run: |
+          source "$GP_DECISION_OUT/capture.sh"
+          capture types env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+          for script in scripts/qa/verifyGrandPrixDecisionUnits.mjs scripts/qa/prepareGrandPrixDecisionApp.mjs scripts/qa/playGrandPrixDecisionApp.mjs scripts/simGrandPrixBossManagement.mjs; do
+            capture "syntax-$(basename "$script")" env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --check "$script"
+          done
+      - name: All thirteen original Grand Prix ordinary unit files
+        run: |
+          source "$GP_DECISION_OUT/capture.sh"
+          capture original-units env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/grandPrixBoss.test.ts src/test/grandPrixBossFocusSave.test.tsx src/test/grandPrixBossHistoryTies.test.ts src/test/grandPrixBossLifecycle.test.ts src/test/grandPrixBossLifecyclePage.test.tsx src/test/grandPrixBossManagementPage.test.tsx src/test/grandPrixBossMarket.test.ts src/test/grandPrixBossMarketSave.test.tsx src/test/grandPrixBossPage.test.tsx src/test/grandPrixBossRollover.test.ts src/test/grandPrixBossRolloverSave.test.tsx src/test/grandPrixBossSave.test.tsx src/test/grandPrixBossStarterBalance.test.ts --reporter=default --reporter=json --outputFile.json="$GP_DECISION_OUT/original-units.json" --maxWorkers=1 --no-file-parallelism
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.GP_DECISION_OUT,bytes=fs.readFileSync(out+'/original-units.json'),expected=["src/test/grandPrixBoss.test.ts","src/test/grandPrixBossFocusSave.test.tsx","src/test/grandPrixBossHistoryTies.test.ts","src/test/grandPrixBossLifecycle.test.ts","src/test/grandPrixBossLifecyclePage.test.tsx","src/test/grandPrixBossManagementPage.test.tsx","src/test/grandPrixBossMarket.test.ts","src/test/grandPrixBossMarketSave.test.tsx","src/test/grandPrixBossPage.test.tsx","src/test/grandPrixBossRollover.test.ts","src/test/grandPrixBossRolloverSave.test.tsx","src/test/grandPrixBossSave.test.tsx","src/test/grandPrixBossStarterBalance.test.ts"];
+          const validate=r=>{
+            assert.equal(r.numTotalTests,104,'GP_ORIGINAL_COUNT');assert.equal(r.numPassedTests,104);assert.equal(r.numFailedTests,0);
+            assert.equal(r.numPendingTests,0);assert.equal(r.numTodoTests,0);assert.equal(r.success,true);
+            assert.equal(r.testResults.length,13);
+            assert.deepEqual(r.testResults.map(f=>path.relative(process.cwd(),path.resolve(f.name)).split(path.sep).join('/')).sort(),expected,'GP_ORIGINAL_FILES');
+            const rows=r.testResults.flatMap(f=>{assert.equal(f.message||'','');return f.assertionResults;});
+            assert.equal(rows.length,104);for(const row of rows){assert.equal(row.status,'passed','GP_ORIGINAL_STATUS');assert.equal(row.failureMessages.length,0);}
+            const identity=r.testResults.flatMap(f=>f.assertionResults.map(a=>({file:path.relative(process.cwd(),path.resolve(f.name)).split(path.sep).join('/'),title:a.title,fullName:a.fullName,status:a.status}))).sort((a,b)=>(a.file+'\0'+a.fullName).localeCompare(b.file+'\0'+b.fullName));
+            const frozen=JSON.parse(fs.readFileSync('scripts/qa/grandPrixDecisionBaselineIdentities.json')).sort((a,b)=>(a.file+'\0'+a.fullName).localeCompare(b.file+'\0'+b.fullName));
+            assert.deepEqual(identity,frozen,'GP_ORIGINAL_IDENTITIES');
+            for(const key of ['numUnhandledErrors','numRuntimeErrorTestSuites','numRuntimeErrorTests'])if(r[key]!==undefined&&r[key]!==null){assert.equal(typeof r[key],'number');assert.equal(r[key],0);}
+          };
+          const actual=JSON.parse(bytes);validate(actual);const controls=[];
+          for(const [id,marker,edit] of [
+            ['count','GP_ORIGINAL_COUNT',r=>{r.numTotalTests=105;}],
+            ['identity','GP_ORIGINAL_FILES',r=>{r.testResults[0].name=path.resolve('src/test/fixture-missing.test.ts');}],
+            ['status','GP_ORIGINAL_STATUS',r=>{r.testResults[0].assertionResults[0].status='pending';}],
+            ['full-name','GP_ORIGINAL_IDENTITIES',r=>{r.testResults[0].assertionResults[0].fullName+=' copied';}],
+          ]){
+            const copy=JSON.parse(bytes);edit(copy);const changed=Buffer.from(JSON.stringify(copy)),file=out+'/reader-'+id+'.json';
+            assert.notEqual(createHash('sha256').update(changed).digest('hex'),createHash('sha256').update(bytes).digest('hex'));
+            fs.writeFileSync(file,changed);assert.throws(()=>validate(JSON.parse(fs.readFileSync(file))),e=>e?.name==='AssertionError'&&String(e.message).startsWith(marker));
+            fs.writeFileSync(out+'/reader-'+id+'.changed.json',fs.readFileSync(file));fs.writeFileSync(file,bytes);
+            assert(fs.readFileSync(file).equals(bytes));validate(JSON.parse(fs.readFileSync(file)));
+            controls.push({id,marker,changedSHA256:createHash('sha256').update(changed).digest('hex'),restoredSHA256:createHash('sha256').update(bytes).digest('hex')});
+          }
+          const text=fs.readFileSync(out+'/original-units.stdout.log','utf8')+'\n'+fs.readFileSync(out+'/original-units.stderr.log','utf8');
+          assert.doesNotMatch(text,/\bUnhandled (?:Errors?|Rejections?)\b|\bunhandledRejection\b|\buncaughtException\b|\bUnhandledPromiseRejection(?:Warning|Error)?\b|\bSIM_OFFLINE_BLOCK\b/i);
+          const runtime=Object.fromEntries(['numUnhandledErrors','numRuntimeErrorTestSuites','numRuntimeErrorTests'].map(k=>[k,actual[k]===undefined||actual[k]===null?{status:'UNKNOWN',value:null}:{status:'REPORTED_ZERO',value:actual[k]}]));
+          fs.writeFileSync(out+'/original-units-admission.json',JSON.stringify({files:13,executed:104,passed:104,pending:0,todo:0,controls,runtime,identities:actual.testResults.flatMap(f=>f.assertionResults.map(r=>({file:f.name,title:r.title,fullName:r.fullName,status:r.status})))},null,2));
+          NODE
+      - name: Actual new decisions and two physical omission restorations
+        run: |
+          source "$GP_DECISION_OUT/capture.sh"
+          capture decision-units env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" GP_DECISION_CONTROL='' node scripts/qa/verifyGrandPrixDecisionUnits.mjs
+          capture profile-omission env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" GP_DECISION_CONTROL=profile node scripts/qa/verifyGrandPrixDecisionUnits.mjs
+          capture timing-omission env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" GP_DECISION_CONTROL=timing node scripts/qa/verifyGrandPrixDecisionUnits.mjs
+      - name: All twelve original Grand Prix harnesses with raw retention
+        run: |
+          source "$GP_DECISION_OUT/capture.sh"
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          mkdir -p "$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_SAVE_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_FOCUS_SAVE_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_LIFECYCLE_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_LIFECYCLE_OUTCOMES_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_LIFECYCLE_PAGE_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_MANAGEMENT_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_MARKET_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_MARKET_SAVE_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_ROLLOVER_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_ROLLOVER_SAVE_OUT="$GP_DECISION_OUT/original-harnesses"
+          export GP_BOSS_STARTER_OUT="$GP_DECISION_OUT/original-harnesses"
+          failed=0
+          for script in scripts/simGrandPrixBoss.mjs scripts/simGrandPrixBossFocusSave.mjs scripts/simGrandPrixBossLifecycle.mjs scripts/simGrandPrixBossLifecycleOutcomes.mjs scripts/simGrandPrixBossLifecyclePage.mjs scripts/simGrandPrixBossManagement.mjs scripts/simGrandPrixBossMarket.mjs scripts/simGrandPrixBossMarketSave.mjs scripts/simGrandPrixBossRollover.mjs scripts/simGrandPrixBossRolloverSave.mjs scripts/simGrandPrixBossSave.mjs scripts/simGrandPrixBossStarterBalance.mjs; do
+            status=0
+            capture "$(basename "$script" .mjs)" node "$script" || status=$?
+            printf '%s\t%s\n' "$script" "$status" >> "$GP_DECISION_OUT/original-harnesses.tsv"
+            test "$status" -eq 0 || failed=1
+          done
+          test "$(wc -l < "$GP_DECISION_OUT/original-harnesses.tsv")" -eq 12
+          exit "$failed"
+      - name: Normal production build
+        id: build
+        if: always() && steps.source.outcome == 'success' && steps.install.outcome == 'success' && steps.tools.outcome == 'success'
+        run: |
+          source "$GP_DECISION_OUT/capture.sh"
+          capture build env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" npm run build
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$GP_DECISION_OUT/dist.sha256"
+      - name: All fifteen required completed-output readers
+        id: readers
+        if: always() && steps.build.outcome == 'success'
+        run: |
+          set -euo pipefail
+          out="$GP_DECISION_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/cached-fonts.cjs"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/readers-server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          failed=0
+          for reader in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            status=0; capture "$reader" env BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 node "scripts/$reader.mjs" || status=$?
+            printf '%s\t%s\n' "$reader" "$status" >> "$out/readers.tsv"; test "$status" -eq 0 || failed=1
+          done
+          test "$(wc -l < "$out/readers.tsv")" -eq 15
+          cat "$out/readers.tsv"
+          test ! -s "$out/font-cache-misses.jsonl" || failed=1
+          node --input-type=module <<'FONT_SCOPE'
+          import fs from 'node:fs';
+          const out=process.env.GP_DECISION_OUT,file=out+'/font-cache-use.jsonl';
+          const uses=fs.existsSync(file)?fs.readFileSync(file,'utf8').trim().split('\n').filter(Boolean).length:0;
+          fs.writeFileSync(out+'/reader-font-scope.json',JSON.stringify({observedFulfills:uses,requiredFulfills:null,scope:'These fifteen readers do not require external font fulfillment. The browser boot reader intentionally aborts external requests. The real font-use liveness gate belongs to the later page-weight sweep.'},null,2));
+          FONT_SCOPE
+          exit "$failed"
+      - name: All sixteen unchanged page weight ceilings
+        id: caps
+        if: always() && steps.build.outcome == 'success'
+        run: |
+          set -euo pipefail
+          out="$GP_DECISION_OUT"; source "$out/capture.sh"
+          export SIM_NETWORK=offline
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs --require=$out/cached-fonts.cjs"
+          capture caps-source node --input-type=module <<'CAPS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          import { createHash } from 'node:crypto';
+          const body=fs.readFileSync('scripts/sweepWeight.mjs','utf8'),before=execFileSync('git',['show','d832d7c9573163d029b3542d440c9b484c6cbeff:scripts/sweepWeight.mjs'],{encoding:'utf8'});
+          const read=text=>{
+            const code=text.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|\n)\s*\/\/[^\n]*/g,'$1');
+            const start=code.indexOf('const BUDGETS = [');assert(start>=0);const end=code.indexOf('];',start);assert(end>start);
+            return [...code.slice(start,end+2).matchAll(/\[\s*(['"])(\/[^'"]*)\1\s*,\s*(\d+)\s*\]/g)].map(row=>({route:row[2],cap:Number(row[3])}));
+          };
+          const budgets=read(body);assert.equal(budgets.length,16);assert.equal(new Set(budgets.map(row=>row.route)).size,16);assert.deepEqual(budgets,read(before));assert(!budgets.some(row=>row.route==='/grand-prix-boss'));
+          fs.writeFileSync(process.env.GP_DECISION_OUT+'/caps16.json',JSON.stringify({sourceSha256:createHash('sha256').update(body).digest('hex'),unchangedParent:'d832d7c9573163d029b3542d440c9b484c6cbeff',budgetCount:16,budgets,newRouteCeiling:null},null,2)+'\n');
+          CAPS
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/caps-server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          ready=0; for attempt in 1 2 3 4 5; do if curl --fail --silent http://127.0.0.1:4173/ > /dev/null; then ready=1; break; fi; sleep 1; done; test "$ready" -eq 1
+          capture all-page-caps env BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+          test ! -s "$out/font-cache-misses.jsonl"
+          test -s "$out/font-cache-use.jsonl"
+      - name: Three actual App viewports and real reloads
+        if: always() && steps.build.outcome == 'success'
+        run: |
+          source "$GP_DECISION_OUT/capture.sh"
+          export GP_DECISION_APP_PREP="$PWD/tmp/gp-decision-app-prep"
+          export GP_DECISION_APP_OUT="$GP_DECISION_OUT/app"
+          export GP_DECISION_APP_FONTS="$GP_DECISION_OUT/input/siteFonts.captured.json"
+          capture app-prep env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/prepareGrandPrixDecisionApp.mjs
+          cp -R "$GP_DECISION_APP_PREP" "$GP_DECISION_OUT/app-prepared"
+          capture actual-app env NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playGrandPrixDecisionApp.mjs
+      - name: Final tracked-source and installed-version holds
+        if: always()
+        run: |
+          sha256sum --check "$GP_DECISION_OUT/source-before.sha256" > "$GP_DECISION_OUT/source-hold.log"
+          git diff --exit-code > "$GP_DECISION_OUT/tracked.diff"
+          if test -f "$GP_DECISION_OUT/dist.sha256"; then sha256sum --check "$GP_DECISION_OUT/dist.sha256" > "$GP_DECISION_OUT/dist-hold.log"; fi
+          if test -f "$GP_DECISION_OUT/font-files.sha256"; then sha256sum --check "$GP_DECISION_OUT/font-files.sha256" > "$GP_DECISION_OUT/font-hold.log"; fi
+          if test -f "$GP_DECISION_OUT/cache-adapter.sha256"; then sha256sum --check "$GP_DECISION_OUT/cache-adapter.sha256" > "$GP_DECISION_OUT/cache-adapter-hold.log"; fi
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import {createHash} from 'node:crypto';
+          const out=process.env.GP_DECISION_OUT,r=JSON.parse(fs.readFileSync(out+'/installed.json'));
+          for(const row of r.installed)assert.equal(JSON.parse(fs.readFileSync(row.path+'/package.json')).version,row.version,row.path);
+          const cache='node_modules/.vite',rows=[];
+          if(fs.existsSync(cache)){
+            const walk=p=>{const s=fs.lstatSync(p);assert(!s.isSymbolicLink());if(s.isDirectory()){for(const n of fs.readdirSync(p))walk(path.join(p,n));return;}assert(s.isFile());const b=fs.readFileSync(p),rel=path.relative(cache,p),target=path.join(out,'framework-cache',rel);fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,b);rows.push({path:rel,bytes:b.length,sha256:createHash('sha256').update(b).digest('hex')});};walk(cache);
+          }
+          fs.writeFileSync(out+'/final-holds.json',JSON.stringify({trackedHashesHeld:true,trackedDiffEmpty:true,installedVersions:r.installed.length,frameworkCache:rows,scope:'No complete dependency binary/member/link or transport census.'},null,2));
+          NODE
+      - name: Partition and bound all retained evidence
+        id: evidence
+        if: always()
+        run: |
+          node --input-type=module <<'PACKETS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { createHash } from 'node:crypto';
+          const out = path.resolve(process.env.GP_DECISION_OUT), root = path.dirname(out);
+          const packetRoot = path.join(root, 'gp-decision-packets');
+          const MEMBER_LIMIT = 2000, BYTE_LIMIT = 100000000, PART_LIMIT = 8;
+          const sha = b => createHash('sha256').update(b).digest('hex');
+          const json = x => Buffer.from(JSON.stringify(x, null, 2) + '\n');
+          const ordered = rows => rows.slice().sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
+          function scan(dir) {
+            const rows = [], invalid = [];
+            const walk = file => {
+              const stat = fs.lstatSync(file);
+              if (stat.isSymbolicLink()) { invalid.push(path.relative(dir, file) || '.'); return; }
+              if (stat.isDirectory()) { for (const leaf of fs.readdirSync(file).sort()) walk(path.join(file, leaf)); return; }
+              if (!stat.isFile()) { invalid.push(path.relative(dir, file) || '.'); return; }
+              const body = fs.readFileSync(file);
+              rows.push({ path: path.relative(dir, file).split(path.sep).join('/'), bytes: body.length, sha256: sha(body) });
+            };
+            walk(dir); return { rows: ordered(rows), invalid };
+          }
+          const input = scan(out), sourceBytes = input.rows.reduce((sum, row) => sum + row.bytes, 0);
+          console.log('GP_PACKET_INPUT ' + JSON.stringify({ regularFiles: input.rows.length, bytes: sourceBytes, invalidMembers: input.invalid }));
+          assert.equal(input.invalid.length, 0, 'GP_PACKET_INPUT');
+          assert(fs.lstatSync(out).isDirectory(), 'GP_PACKET_INPUT');
+          assert.equal(path.basename(out), 'gp-decision-artifacts', 'GP_PACKET_INPUT');
+          assert(input.rows.length > 0, 'GP_PACKET_INPUT');
+          assert.equal(new Set(input.rows.map(row => row.path)).size, input.rows.length, 'GP_PACKET_INPUT');
+          assert(!fs.existsSync(packetRoot), 'Fresh owned sibling packet root');
+          fs.mkdirSync(packetRoot);
+          function closure(expected, actual) {
+            const a = ordered(expected), b = ordered(actual);
+            const same = a.length === b.length && new Set(b.map(row => row.path)).size === b.length
+              && a.every((row, i) => row.path === b[i].path && row.bytes === b[i].bytes
+                && row.sha256 === b[i].sha256 && row.part === b[i].part);
+            assert(same, 'GP_PACKET_CLOSURE');
+          }
+          const lab = input.rows.map(row => ({ ...row, part: 'part001' }));
+          const controlDir = path.join(packetRoot, '_closure-control'); fs.mkdirSync(controlDir);
+          const original = json(lab), probe = path.join(controlDir, 'restored.json');
+          fs.writeFileSync(path.join(controlDir, 'original.json'), original, { flag: 'wx' });
+          fs.writeFileSync(probe, original, { flag: 'wx' }); closure(lab, JSON.parse(fs.readFileSync(probe)));
+          const changed = json(lab.slice(1)); assert.notEqual(sha(changed), sha(original), 'Changed physical omission');
+          fs.writeFileSync(probe, changed); assert(fs.readFileSync(probe).equals(changed));
+          let nativeFirst = null;
+          try { closure(lab, JSON.parse(fs.readFileSync(probe))); }
+          catch (error) {
+            nativeFirst = { name: error.name, message: error.message, stack: error.stack };
+            assert(error instanceof assert.AssertionError && error.message.startsWith('GP_PACKET_CLOSURE'), 'GP_PACKET_CONTROL_OWNER');
+          }
+          assert(nativeFirst, 'GP_PACKET_CONTROL_FIRED');
+          fs.writeFileSync(path.join(controlDir, 'changed.json'), fs.readFileSync(probe), { flag: 'wx' });
+          fs.writeFileSync(probe, original); assert(fs.readFileSync(probe).equals(original));
+          closure(lab, JSON.parse(fs.readFileSync(probe)));
+          fs.writeFileSync(path.join(controlDir, 'refusal.json'), json({
+            scope: 'Detached complete source-row ledger omission lab. Constant part001 labels exercise the same closure predicate, not a one-part bounds claim.',
+            removed: lab[0], originalSHA256: sha(original), changedSHA256: sha(changed), restoredSHA256: sha(fs.readFileSync(probe)),
+            changed: true, nativeFirst, wholeRestore: true, restoredHealthy: true
+          }), { flag: 'wx' });
+          const auxiliary = scan(controlDir);
+          assert.equal(auxiliary.invalid.length, 0); assert.equal(auxiliary.rows.length, 4);
+          const aux = auxiliary.rows.map(row => ({ ...row, path: 'metadata/closure-control/' + row.path, source: path.join(controlDir, row.path) }));
+          const inventoryOf = rows => ({ schema: 1, sourceRoot: 'gp-decision-artifacts', sourceFiles: input.rows.length, sourceBytes, rows });
+          const prototypeInventory = json(inventoryOf(lab));
+          const inventoryPlan = { file: 'global-inventory.json', bytes: prototypeInventory.length, sha256: '0'.repeat(64) };
+          function manifest(part, rows, inventory, extra) {
+            const data = { schema: 1, part, inventory, sourceRows: rows,
+              auxiliary: extra.map(({ path, bytes, sha256 }) => ({ path, bytes, sha256 })),
+              inclusive: { regularMembers: String(rows.length + extra.length + 2).padStart(4, '0'),
+                bytes: '000000000', manifestBytes: '000000000' },
+              limits: { membersExclusive: MEMBER_LIMIT, bytesExclusive: BYTE_LIMIT } };
+            const placeholder = json(data);
+            const bytes = rows.reduce((sum, row) => sum + row.bytes, 0) + extra.reduce((sum, row) => sum + row.bytes, 0) + inventory.bytes + placeholder.length;
+            data.inclusive.bytes = String(bytes).padStart(9, '0');
+            data.inclusive.manifestBytes = String(placeholder.length).padStart(9, '0');
+            const body = json(data);
+            assert.equal(body.length, placeholder.length, 'Fixed-width exact manifest accounting');
+            return { data, body, bytes, members: rows.length + extra.length + 2 };
+          }
+          const name = n => 'part' + String(n).padStart(3, '0');
+          const fits = value => value.members < MEMBER_LIMIT && value.bytes < BYTE_LIMIT;
+          const groups = []; let current = [], number = 1;
+          for (const source of input.rows) {
+            const row = { ...source, part: name(number) }, extra = number === 1 ? aux : [];
+            const candidate = manifest(name(number), [...current, row], inventoryPlan, extra);
+            if (fits(candidate)) { current.push(row); continue; }
+            console.log('GP_PACKET_SPLIT ' + JSON.stringify({ part: name(number), attemptedMembers: candidate.members, attemptedBytes: candidate.bytes }));
+            const closed = manifest(name(number), current, inventoryPlan, extra);
+          assert(fits(closed), 'GP_PACKET_METADATA_TOO_LARGE');
+          assert(current.length > 0 || number === 1 && extra.length > 0, 'GP_PACKET_ITEM_TOO_LARGE');
+            groups.push(current); current = []; number += 1;
+            console.log('GP_PACKET_PART_COUNT ' + number);
+            assert(number <= PART_LIMIT, 'GP_PACKET_PART_LIMIT');
+            const next = { ...source, part: name(number) }, one = manifest(name(number), [next], inventoryPlan, []);
+            assert(fits(one), 'GP_PACKET_ITEM_TOO_LARGE'); current.push(next);
+          }
+          groups.push(current);
+          const assigned = groups.flat(), inventoryBody = json(inventoryOf(ordered(assigned)));
+          assert.equal(inventoryBody.length, prototypeInventory.length, 'Constant-width assignment names preserve exact inventory size');
+          const assignmentByPath = new Map(assigned.map(row => [row.path, row.part]));
+          closure(input.rows.map(row => ({ ...row, part: assignmentByPath.get(row.path) })), assigned);
+          const inventory = { file: 'global-inventory.json', bytes: inventoryBody.length, sha256: sha(inventoryBody) };
+          const actualAssigned = [], partSummaries = [];
+          for (const [index, rows] of groups.entries()) {
+            const part = name(index + 1), dir = path.join(packetRoot, part), extra = index === 0 ? aux : [];
+            fs.mkdirSync(dir);
+            for (const row of rows) {
+              assert(!path.isAbsolute(row.path) && !row.path.split('/').includes('..'), 'GP_PACKET_SOURCE_PATH');
+              const destination = path.join(dir, 'evidence', row.path); fs.mkdirSync(path.dirname(destination), { recursive: true });
+              fs.copyFileSync(path.join(out, row.path), destination, fs.constants.COPYFILE_EXCL);
+              const copied = fs.readFileSync(destination); assert.equal(copied.length, row.bytes, 'GP_PACKET_COPY'); assert.equal(sha(copied), row.sha256, 'GP_PACKET_COPY');
+            }
+            for (const row of extra) {
+              const destination = path.join(dir, row.path); fs.mkdirSync(path.dirname(destination), { recursive: true });
+              fs.copyFileSync(row.source, destination, fs.constants.COPYFILE_EXCL);
+              const copied = fs.readFileSync(destination); assert.equal(copied.length, row.bytes); assert.equal(sha(copied), row.sha256);
+            }
+            fs.writeFileSync(path.join(dir, inventory.file), inventoryBody, { flag: 'wx' });
+            const packed = manifest(part, rows, inventory, extra);
+            fs.writeFileSync(path.join(dir, 'part-manifest.json'), packed.body, { flag: 'wx' });
+            const actual = scan(dir), bytes = actual.rows.reduce((sum, row) => sum + row.bytes, 0);
+            console.log('GP_PACKET_CLOSED ' + JSON.stringify({ part, regularMembers: actual.rows.length, bytes, sourceFiles: rows.length }));
+            assert.equal(actual.invalid.length, 0, 'GP_PACKET_MEMBER');
+            const expectedNames = ['global-inventory.json', 'part-manifest.json', ...rows.map(row => 'evidence/' + row.path), ...extra.map(row => row.path)].sort();
+            assert.deepEqual(actual.rows.map(row => row.path).sort(), expectedNames, 'GP_PACKET_MEMBERSHIP');
+            assert(actual.rows.length < MEMBER_LIMIT && bytes < BYTE_LIMIT, 'GP_PACKET_BOUND');
+            assert.equal(actual.rows.length, packed.members); assert.equal(bytes, packed.bytes);
+            assert.equal(Number(packed.data.inclusive.regularMembers), actual.rows.length); assert.equal(Number(packed.data.inclusive.bytes), bytes);
+            assert.equal(Number(packed.data.inclusive.manifestBytes), packed.body.length);
+            assert(fs.readFileSync(path.join(dir, 'global-inventory.json')).equals(inventoryBody));
+            const actualManifestBytes = fs.readFileSync(path.join(dir, 'part-manifest.json'));
+            assert(actualManifestBytes.equals(packed.body));
+            const actualManifest = JSON.parse(actualManifestBytes); assert.equal(actualManifest.part, part);
+            for (const row of actualManifest.sourceRows) {
+              assert.equal(row.part, part, 'GP_PACKET_ASSIGNMENT');
+              const physical = actual.rows.find(value => value.path === 'evidence/' + row.path);
+              assert(physical && physical.bytes === row.bytes && physical.sha256 === row.sha256, 'GP_PACKET_COPY');
+              actualAssigned.push({ ...row, part: actualManifest.part });
+            }
+            partSummaries.push({ part, regularMembers: actual.rows.length, bytes, sourceFiles: rows.length, manifestSHA256: sha(packed.body) });
+          }
+          closure(assigned, actualAssigned);
+          const after = scan(out);
+          assert.equal(after.invalid.length, 0);
+          assert(sha(json(after.rows)) === sha(json(input.rows)), 'GP_PACKET_SOURCE_HELD');
+          console.log('GP_PACKET_READY ' + JSON.stringify({ sourceFiles: input.rows.length, sourceBytes, parts: partSummaries, inventorySHA256: sha(inventoryBody),
+            closure: 'Exact original source paths/bytes/SHA and assigned parts, no omission or duplicate. Originals held. Four detached closure-control metadata bodies retained in part001.' }));
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, 'parts=' + groups.length + '\nready=true\n');
+          PACKETS
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.ready == 'true' && fromJSON(steps.evidence.outputs.parts) >= 1
+        with:
+          name: gp-decision-fixed-${{ github.run_id }}-part001
+          path: gp-decision-packets/part001/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.ready == 'true' && fromJSON(steps.evidence.outputs.parts) >= 2
+        with:
+          name: gp-decision-fixed-${{ github.run_id }}-part002
+          path: gp-decision-packets/part002/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.ready == 'true' && fromJSON(steps.evidence.outputs.parts) >= 3
+        with:
+          name: gp-decision-fixed-${{ github.run_id }}-part003
+          path: gp-decision-packets/part003/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.ready == 'true' && fromJSON(steps.evidence.outputs.parts) >= 4
+        with:
+          name: gp-decision-fixed-${{ github.run_id }}-part004
+          path: gp-decision-packets/part004/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.ready == 'true' && fromJSON(steps.evidence.outputs.parts) >= 5
+        with:
+          name: gp-decision-fixed-${{ github.run_id }}-part005
+          path: gp-decision-packets/part005/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.ready == 'true' && fromJSON(steps.evidence.outputs.parts) >= 6
+        with:
+          name: gp-decision-fixed-${{ github.run_id }}-part006
+          path: gp-decision-packets/part006/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.ready == 'true' && fromJSON(steps.evidence.outputs.parts) >= 7
+        with:
+          name: gp-decision-fixed-${{ github.run_id }}-part007
+          path: gp-decision-packets/part007/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always() && steps.evidence.outputs.ready == 'true' && fromJSON(steps.evidence.outputs.parts) >= 8
+        with:
+          name: gp-decision-fixed-${{ github.run_id }}-part008
+          path: gp-decision-packets/part008/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
