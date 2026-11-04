@@ -38,15 +38,21 @@ export function ContinueRow() {
 
   useEffect(() => {
     if (saved.length === 0) return;
-    const storage = browserStorage();
-    const next: Record<string, string> = {};
-    for (const { entry } of saved) {
-      let raw: string | null = null;
-      try { raw = storage ? storage.getItem(entry.saveKey) : null; } catch { raw = null; }
-      const line = describeSave(entry, raw);
-      if (line) next[entry.path] = line;
-    }
-    setLines(next);
+    const refresh = () => {
+      const storage = browserStorage();
+      const next: Record<string, string> = {};
+      for (const { entry } of saved) {
+        let raw: string | null = null;
+        try { raw = storage ? storage.getItem(entry.saveKey) : null; } catch { raw = null; }
+        const line = describeSave(entry, raw);
+        if (line) next[entry.path] = line;
+      }
+      setLines(next);
+    };
+    refresh();
+    window.addEventListener('storage', refresh);
+    window.addEventListener('focus', refresh);
+    return () => { window.removeEventListener('storage', refresh); window.removeEventListener('focus', refresh); };
   }, [saved]);
 
   if (saved.length === 0) return null;

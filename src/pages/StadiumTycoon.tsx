@@ -30,7 +30,7 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
-  TRACKS, levelOf, costOf, canBuy, capacity, attendance, incomePerSec,
+  TRACKS, levelOf, costOf, canBuy, upgradePurchase, capacity, attendance, incomePerSec,
   ticketPolicyOf, TICKET_POLICIES,
   tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney as tycoonMoney,
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
@@ -408,6 +408,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
      rooms of the office are tiles now, one panel open at a time, Upgrades first
      because buying is the loop. */
   const [panel, setPanel] = useState<OfficePanel>('upgrades');
+  const [buyAmount, setBuyAmount] = useState<1 | 5>(1);
   const [burst, setBurst] = useState<{ id: number; pieces: { x: number; d: number; c: string; r: number }[] } | null>(null);
   const pitchRef = useRef<HTMLDivElement | null>(null);
   /* Round 583: floaters are positioned inside the pitch, so the tap is measured
@@ -755,16 +756,21 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           ))}
         </div>
 
-        {panel === 'upgrades' && (
+        {panel === 'upgrades' && (<>
+        <div role="group" aria-label="Upgrade quantity" className="flex gap-2 mb-2">
+          {([1, 5] as const).map(amount => <button key={amount} aria-pressed={buyAmount === amount} onClick={() => setBuyAmount(amount)} className={cn('min-h-11 rounded-lg border px-3 text-xs font-bold', buyAmount === amount ? 'border-primary bg-primary/10' : 'border-border')}>{amount === 1 ? '1 level' : 'Up to 5 levels'}</button>)}
+        </div>
+        {buyAmount === 5 && <p className="text-[10px] text-muted-foreground mb-2">Each level costs more. Buy up to five you can afford, stopping at the level cap.</p>}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pb-4">
           {TRACKS.map(t => {
             const lvl = levelOf(s, t.id);
-            const cost = costOf(s, t.id);
-            const ok = canBuy(s, t.id);
+            const batch = buyAmount === 5 ? upgradePurchase(s, t.id, 5) : null;
+            const cost = batch ? batch.cost : costOf(s, t.id);
+            const ok = batch ? batch.quantity > 0 : canBuy(s, t.id);
             return (
               <button
                 key={t.id}
-                onClick={() => g.doBuy(t.id)}
+                onClick={() => g.doBuy(t.id, buyAmount)}
                 disabled={!ok}
                 className={cn(
                   'relative rounded-xl border p-2.5 text-left transition-all active:scale-[0.97]',
@@ -777,12 +783,12 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                   <span className="ml-auto text-[9px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5">Lv {lvl}</span>
                 </div>
                 <div className="text-[9px] text-muted-foreground mt-1 leading-snug min-h-[22px]">{t.blurb}</div>
-                <div className={cn('text-[11px] font-bold mt-1 tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{fmtMoney(cost)}</div>
+                <div className={cn('text-[11px] font-bold mt-1 tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{batch ? batch.quantity > 0 ? `Buy ${batch.quantity} · ${fmtMoney(cost)} total` : lvl >= t.maxLevel ? 'Max level' : 'Save for the next level' : fmtMoney(cost)}</div>
               </button>
             );
           })}
         </div>
-        )}
+        </>)}
 
         {panel === 'tickets' && <TicketPolicyCard state={s} onSelect={g.doSetTicketPolicy} saveFailed={g.ticketSaveFailed} onRetrySave={g.retryTicketSave} showSaveNotice={false} />}
 

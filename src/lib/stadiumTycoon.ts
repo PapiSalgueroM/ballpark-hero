@@ -1248,6 +1248,17 @@ export function buy(s: TycoonState, id: string): TycoonState {
   };
 }
 
+/** Quote and buy the affordable levels at their existing individual prices. */
+export function upgradePurchase(s: TycoonState, id: string, amount: 1 | 5): { state: TycoonState; quantity: number; cost: number } {
+  let state = s, quantity = 0, cost = 0;
+  while (quantity < amount && canBuy(state, id)) {
+    cost += costOf(state, id);
+    state = buy(state, id);
+    quantity++;
+  }
+  return { state, quantity, cost };
+}
+
 /** One tap: money in, counter up. */
 export function tap(s: TycoonState): TycoonState {
   const v = tapValue(s);
