@@ -1,0 +1,163 @@
+name: Top games decision and practice baseline
+on:
+  push:
+    branches: [codex/top-games-decision-red-20261104]
+permissions:
+  contents: read
+concurrency:
+  group: top-games-decision-red-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  TEST_CORE: 826295472e97a60be137dd5dbd78b5ea08856523
+  TEST_TREE: 5a95015d299dfe6f45617d92608349c6c15d9d1a
+jobs:
+  red:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the three test-only changes and current application source
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/top-games-decision-red"
+          mkdir -p "$OUT/logs" "$OUT/raw/sc" "$OUT/raw/cm" "$OUT/transport" "$OUT/tests"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          for(const key of ['TEST_CORE','TEST_TREE'])assert.match(process.env[key]||'',/^[a-f0-9]{40}$/,key+' must be bound');
+          const git=(...args)=>execFileSync('git',args).toString().trim(),out=process.env.QA_OUT;
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');assert.equal(git('rev-parse','HEAD'),process.env.GITHUB_SHA);
+          assert.equal(git('rev-parse','HEAD^'),process.env.TEST_CORE);assert.equal(git('rev-parse','HEAD^^{tree}'),process.env.TEST_TREE);
+          assert.deepEqual(git('diff','--name-status',process.env.TEST_CORE,'HEAD').split('\n'),['A\t.github/workflows/top-games-decision-red-20261104.yml']);
+          const changes=git('diff','--name-status','424ebff09166fb6bfa989dbdb2e1e8c4e2cdf1fe','HEAD').split('\n').sort(),board=changes.filter(row=>row.endsWith('\tdocs/WORKBOARD.md'));
+          assert(board.length===0||board.length===1&&board[0]==='M\tdocs/WORKBOARD.md','Only the intervening ownership-board append may accompany tests');
+          assert.deepEqual(changes.filter(row=>!row.endsWith('\tdocs/WORKBOARD.md')),['A\t.github/workflows/top-games-decision-red-20261104.yml','A\tsrc/test/clubManagerRetrainingPreview.test.tsx','A\tsrc/test/trainingClassicPractice.test.tsx','M\tsrc/test/usCareerProgrammeUi.test.tsx']);
+          const pins={
+            'src/test/usCareerProgrammeUi.test.tsx':'77dc6c7231623ff77633aad5adf8f4e1c1cc8c28',
+            'src/test/clubManagerRetrainingPreview.test.tsx':'4b31819d37baadb3a4bc0fce2e8124216a9404cf',
+            'src/test/trainingClassicPractice.test.tsx':'b86096813b39f7cd2cbc678d748237bd37742135',
+            'src/components/us-career/UsCareerProgramme.tsx':'4877b3ad01aac1a347268486a7b92ce4bae1d859',
+            'src/components/club-manager/TrainingScreen.tsx':'e374e452b8a5eee52a56149da2fa1dc66ed65587',
+            'src/components/soccer-career/TrainingPanel.tsx':'7027493bc968cf77bdcde7c6e21646441dc40bd4',
+            'src/lib/usCareerProgramme.ts':'71b154d75384af3c74c5a328c2043c327f35e4d4',
+            'src/lib/clubManager.ts':'9d8dc92557bf2f4358b5be044359354eda841769',
+            'src/lib/soccerCareerEngine.ts':'63f61a713f12462fc69ca38fd2a062ec82886e33'
+          };
+          for(const [file,blob]of Object.entries(pins)){assert.equal(git('rev-parse','HEAD:'+file),blob,file+' tracked');assert.equal(git('hash-object',file),blob,file+' actual');}
+          for(const file of Object.keys(pins).filter(file=>file.startsWith('src/test/')))fs.copyFileSync(file,out+'/tests/'+file.split('/').at(-1));
+          fs.writeFileSync(out+'/association.json',JSON.stringify({source:process.env.GITHUB_SHA,core:process.env.TEST_CORE,tree:process.env.TEST_TREE,base:'424ebff09166fb6bfa989dbdb2e1e8c4e2cdf1fe',changes,pins,expected:{total:33,pass:20,ownedRed:13},scope:'Test-first baseline only. No new product, build, browser or feature qualification.'},null,2)+'\n');
+          NODE
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq 5679
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/top-games-decision-red-20261104.yml "$OUT/workflow.yml"
+      - name: Install only locked dependencies
+        run: |
+          set -euo pipefail
+          npm ci > "$QA_OUT/logs/npm-ci.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json
+          echo "NODE_OPTIONS=--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" >> "$GITHUB_ENV"
+      - name: Proper actual application types
+        id: types
+        run: |
+          set -euo pipefail
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Run all thirty-three mounted cases and retain the original native exit
+        id: units
+        run: |
+          set -euo pipefail
+          : > "$QA_OUT/transport/units.log"
+          set +e
+          CM_RETRAIN_PREVIEW_RAW="$QA_OUT/raw/cm" SC_CLASSIC_PRACTICE_RAW="$QA_OUT/raw/sc" SIM_OFFLINE_RECEIPT="$QA_OUT/transport/units.log" node_modules/.bin/vitest run src/test/usCareerProgrammeUi.test.tsx src/test/clubManagerRetrainingPreview.test.tsx src/test/trainingClassicPractice.test.tsx --reporter=json --outputFile="$QA_OUT/units.json" > "$QA_OUT/logs/units.log" 2>&1
+          code=$?
+          set -e
+          echo "$code" > "$QA_OUT/units.exit"
+          cat "$QA_OUT/logs/units.log"
+          exit "$code"
+      - name: Require exactly thirteen owned assertion failures and twenty held passes
+        if: ${{ always() && steps.types.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,report=JSON.parse(fs.readFileSync(out+'/units.json'));
+          const output=fs.readFileSync(out+'/logs/units.log','utf8').replace(/\u001b\[[0-9;]*m/g,'');assert.doesNotMatch(output,/Unhandled\s+(?:Error|Rejection)s?|Vitest caught [1-9][0-9]* unhandled|uncaughtException|unhandledRejection/i);
+          if(report.numRuntimeErrors!==undefined)assert.equal(report.numRuntimeErrors,0,'No runtime errors may accompany owned RED');
+          assert.equal(fs.readFileSync(out+'/units.exit','utf8').trim(),'1');assert.equal(report.numTotalTests,33);assert.equal(report.numPassedTests,20);assert.equal(report.numFailedTests,13);assert.equal(report.numPendingTests,0);assert.equal(report.numTodoTests,0);
+          const own=new Map([
+            ["US programme choices and restoration 'nba' previews the capped whole plan without writing, then applies it through one callback",'US_PROGRAMME_PREVIEW_APPLY'],
+            ["US programme choices and restoration 'nfl' previews the capped whole plan without writing, then applies it through one callback",'US_PROGRAMME_PREVIEW_APPLY'],
+            ["US programme choices and restoration 'nba' discards an uncommitted plan and restores the real current selections",'US_PROGRAMME_PREVIEW_DISCARD'],
+            ["US programme choices and restoration 'nfl' discards an uncommitted plan and restores the real current selections",'US_PROGRAMME_PREVIEW_DISCARD'],
+            ['Club Manager retraining fit preview shows the two points restored by learning the other wing before starting','CM_RETRAIN_PREVIEW_FAMILY'],
+            ['Club Manager retraining fit preview uses the extended current formation roles when custom coordinates are active','CM_RETRAIN_PREVIEW_CURRENT_SHAPE'],
+            ['Club Manager retraining fit preview says when a course adds no fit change because held positions already cover the shape','CM_RETRAIN_PREVIEW_NO_CHANGE'],
+            ['Club Manager retraining fit preview shows the fit lost when the oldest of two learned positions is replaced','CM_RETRAIN_PREVIEW_REPLACEMENT'],
+            ['Soccer classic practice keeps all four classic drills open after the reward and repeats cones and sprint without a bank','SC_CLASSIC_SPENT_MENU'],
+            ['Soccer classic practice keeps a banked session spent when the same drill is retried without a parent rerender','SC_CLASSIC_BANKED_RETRY'],
+            ["Soccer classic practice repeats free 'penalty' runs without reward callbacks or global career draws",'SC_CLASSIC_FREE_PENALTY'],
+            ["Soccer classic practice repeats free 'keeper' runs without reward callbacks or global career draws",'SC_CLASSIC_FREE_KEEPER'],
+            ["Soccer classic practice repeats free 'passing' runs without reward callbacks or global career draws",'SC_CLASSIC_FREE_PASSING']
+          ]);
+          const suites=report.testResults;assert.equal(suites.length,3);
+          const expected=new Map([['usCareerProgrammeUi.test.tsx',[22,18,4]],['clubManagerRetrainingPreview.test.tsx',[5,1,4]],['trainingClassicPractice.test.tsx',[6,1,5]]]),failed=[];
+          for(const suite of suites){const leaf=suite.name.replaceAll('\\','/').split('/').at(-1),want=expected.get(leaf);assert(want,leaf);expected.delete(leaf);const rows=suite.assertionResults;assert.deepEqual([rows.length,rows.filter(r=>r.status==='passed').length,rows.filter(r=>r.status==='failed').length],want,leaf);assert(rows.every(r=>r.status==='passed'||r.status==='failed'));for(const row of rows)if(row.status==='failed'){const marker=own.get(row.fullName);assert(marker,row.fullName);const message=row.failureMessages.join('\n');assert(message.includes(marker),row.fullName);assert(message.includes('AssertionError'),row.fullName);assert(!/TypeError|SyntaxError|ReferenceError|Cannot find module|ERR_MODULE_NOT_FOUND|is not a function/.test(message),row.fullName);failed.push({name:row.fullName,marker});}}
+          assert.equal(expected.size,0);assert.equal(failed.length,13);assert.equal(new Set(failed.map(row=>row.name)).size,13);assert.deepEqual(failed.map(row=>row.name).sort(),[...own.keys()].sort());
+          const cmNames=['callback','extended-custom','family','no-change','replacement'],scNames=['banked-repeat','free-keeper','free-passing','free-penalty','menu-free','rewarded-held'];
+          for(const [folder,names]of [['cm',cmNames],['sc',scNames]]){assert.deepEqual(fs.readdirSync(out+'/raw/'+folder).sort(),names.map(name=>name+'.json').sort());for(const name of names)JSON.parse(fs.readFileSync(out+'/raw/'+folder+'/'+name+'.json'));}
+          const read=(folder,name)=>JSON.parse(fs.readFileSync(out+'/raw/'+folder+'/'+name+'.json'));
+          for(const name of ['family','extended-custom','no-change','replacement'])assert.deepEqual(read('cm',name).rows,[],name);
+          const callback=read('cm','callback');assert.equal(callback.calls.length,1);assert.equal(callback.calls[0][1],'ST');assert(callback.weeks>0);assert.deepEqual(callback.nextPlayer.retraining,{to:'ST',weeksLeft:callback.weeks,weeksTotal:callback.weeks});
+          for(const name of scNames){const row=read('sc',name);assert.equal(row.inputHeld,true,name);assert.equal(row.storageHeld,true,name);assert.deepEqual(row.callbacks.drill,[],name);}
+          const held=read('sc','rewarded-held');assert.deepEqual(held.draws,[0.5,0.5,0.5,0.5,0.5]);assert.deepEqual(held.callbacks.complete,[['shooting',100]]);
+          assert.deepEqual(read('sc','menu-free').available,[false,false,false,false]);assert.equal(read('sc','banked-repeat').retryAvailable,false);
+          for(const name of ['free-penalty','free-keeper','free-passing']){const row=read('sc',name);assert.equal(row.available,false);assert.deepEqual(row.draws,[]);assert.deepEqual(row.callbacks.complete,[]);}
+          fs.writeFileSync(out+'/owned-red-admission.json',JSON.stringify({status:'expected-owned-red',total:33,pass:20,fail:13,failed,raw:{cm:5,sc:6},nativeExit:1,runtimeErrors:report.numRuntimeErrors??'UNKNOWN',meaning:'Actual assertion RED only, not product/fixed/build/browser credit. Runtime performance counters not collected are UNKNOWN.'},null,2)+'\n');
+          NODE
+          test ! -s "$QA_OUT/transport/units.log"
+      - name: Always retain full source, status and transport closure
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          for file in "$QA_OUT"/transport/*.log; do test ! -s "$file"; done
+      - name: Bound retained baseline evidence
+        if: always()
+        id: artifact
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: top-games-decision-red-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/top-games-decision-red
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
