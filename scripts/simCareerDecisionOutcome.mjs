@@ -80,12 +80,19 @@ let folder;
 try {
   if (control) {
     const spec = controls[control], source = (await readFile(path.join(root, spec.file), 'utf8')).replace(/\r\n/g, '\n');
-    let changed = source;
+    const ordinaryChoice = ['snapshot', 'choice', 'drawOrder', 'tradeDrawOrder', 'tradeTeam'].includes(control);
+    const handler = '  const chooseOption = (idx: number) => {';
+    assert(!ordinaryChoice || source.split(handler).length - 1 === 1, control + ' ordinary choice handler is unique');
+    const start = ordinaryChoice ? source.indexOf(handler) : 0;
+    const end = ordinaryChoice ? source.indexOf('\n  };', start) : source.length;
+    assert(end > start, control + ' executable control scope is complete');
+    let changed = source.slice(start, end);
     for (const edit of [spec, ...(spec.also || [])]) {
       assert(!edit.from.includes('\n'), control + ' uses a single-line anchor');
       assert.equal(changed.split(edit.from).length - 1, 1, control + ' binds exactly one executable anchor');
       const prior = changed; changed = changed.replace(edit.from, edit.to); assert.notEqual(changed, prior);
     }
+    changed = source.slice(0, start) + changed + source.slice(end);
     await mkdir(path.join(root, '.sim-control'), { recursive: true });
     folder = await mkdtemp(path.join(root, '.sim-control/career-decision-outcome-'));
     const copy = path.join(folder, path.basename(spec.file)); await writeFile(copy, changed);
