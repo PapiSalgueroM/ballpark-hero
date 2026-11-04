@@ -21709,7 +21709,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       .filter(p => groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID')
       .slice(0, 2)
       .map(p => p.n);
-    const clubForm = career.clubForm ?? {};
+    const clubForm = career.clubForm ?? Object.create(null);
     const ctx = secondLegContext(career, w, 0, 0);
 
     return {
