@@ -111,7 +111,7 @@ describe('US programme choices and restoration', () => {
     } as ProgrammeCareer;
     const input = JSON.stringify(base), { changed } = mount(base, sport);
     await open(sport); start();
-    const preview = screen.queryByRole('button', { name: 'Try a plan', exact: true });
+    const preview = screen.queryByRole('button', { name: 'Try a plan' });
     expect(changed).not.toHaveBeenCalled(); expect(JSON.stringify(base)).toBe(input);
     expect(preview, 'US_PROGRAMME_PREVIEW_APPLY: a whole plan must be previewable without saving each choice').not.toBeNull();
     fireEvent.click(preview!); fireEvent.click(tile('workload'));
@@ -128,7 +128,7 @@ describe('US programme choices and restoration', () => {
       ? 'Season scoring multiplier +8%, playmaking multiplier -8%. Your position stays the same.'
       : 'Season morale +6, durability -0.06. More form, more injury risk.');
     expect(changed).not.toHaveBeenCalled(); expect(JSON.stringify(base)).toBe(input);
-    fireEvent.click(screen.getByRole('button', { name: 'Apply plan', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Apply plan' }));
     expect(changed).toHaveBeenCalledOnce();
     const next = changed.mock.calls[0][0] as ProgrammeCareer;
     expect(next).toEqual({ ...base, programme: { sport, year: 2026, team: 'BOS', workload: 'recover', tactics: 'attack', expectation: 'normal', partnership: 'normal', bonus: 'normal', reinvention: 'normal' } });
@@ -143,16 +143,16 @@ describe('US programme choices and restoration', () => {
     const base = { ...fixture(), pos, programme: { sport, year: 2026, team: 'BOS', workload: 'push', tactics: 'normal', expectation: 'normal', partnership: 'normal', bonus: 'normal', reinvention: 'normal' } } as ProgrammeCareer;
     const input = JSON.stringify(base), { changed } = mount(base, sport);
     await open(sport); start();
-    const preview = screen.queryByRole('button', { name: 'Try a plan', exact: true });
+    const preview = screen.queryByRole('button', { name: 'Try a plan' });
     expect(changed).not.toHaveBeenCalled(); expect(JSON.stringify(base)).toBe(input);
     expect(preview, 'US_PROGRAMME_PREVIEW_DISCARD: experimenting must not replace the current plan').not.toBeNull();
     fireEvent.click(preview!); fireEvent.click(tile('workload'));
     fireEvent.click(document.querySelector('[data-us-programme-choice="workload:recover"]')!);
     expect(changed).not.toHaveBeenCalled(); expect(JSON.stringify(base)).toBe(input);
-    fireEvent.click(screen.getByRole('button', { name: 'Discard preview', exact: true }));
-    expect(screen.queryByRole('button', { name: 'Apply plan', exact: true })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Discard preview' }));
+    expect(screen.queryByRole('button', { name: 'Apply plan' })).toBeNull();
     expect(tile('workload')).toHaveTextContent('Push the workload');
-    fireEvent.click(screen.getByRole('button', { name: 'Try a plan', exact: true })); fireEvent.click(tile('workload'));
+    fireEvent.click(screen.getByRole('button', { name: 'Try a plan' })); fireEvent.click(tile('workload'));
     expect(document.querySelector('[data-us-programme-choice="workload:push"]')).toHaveAttribute('aria-pressed', 'true');
     expect(document.querySelector('[data-us-programme-choice="workload:recover"]')).toHaveAttribute('aria-pressed', 'false');
     fireEvent.keyDown(screen.getByRole('dialog', { name: sport.toUpperCase() + ' season programme' }), { key: 'Escape' });
