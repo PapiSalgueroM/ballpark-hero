@@ -16,7 +16,7 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { ruleForCriteria, pickIsLegal, anyLegalPick } from '@/lib/fantasyCriteria';
+import { FANTASY_FORMATION, fantasyDraftCandidates, fantasySlotOpen, fantasyXiComplete, ruleForCriteria } from '@/lib/fantasyCriteria';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { settleSeason, type SdSeason } from '@/lib/searchDiscard';
 import type { Player } from '@/types/game';
@@ -101,6 +101,7 @@ const FantasyDraft = () => {
   const [voteCounts, setVoteCounts] = useState({ user: 0, ai: 0 });
 
   const draftComplete = pickIndex >= TOTAL_PICKS;
+  const validXis = fantasyXiComplete(userTeam) && fantasyXiComplete(aiTeam);
   const currentTurn = draftComplete ? 'user' : getPickOwner(pickIndex, userFirst);
   const seasonSimulated = teamAStory !== null && teamBStory !== null;
 
@@ -112,19 +113,21 @@ const FantasyDraft = () => {
      points share, the same shape Search and Discard records. */
   const completionRef = useRef(false);
   useEffect(() => {
-    if (!draftComplete || completionRef.current || userTeam.length < TEAM_SIZE || aiTeam.length < TEAM_SIZE) return;
+    if (!draftComplete || completionRef.current || !validXis) return;
     completionRef.current = true;
     const season = settleSeason(userTeam.map(toSettlePlayer), aiTeam.map(toSettlePlayer));
     setVerdict(season);
     const score = seasonScore(season.points[0]);
     recordCompletion('/fantasy-draft', score, getCurrentPlayerName(profile), season.winner === 0 ? 1 : 0);
-  }, [draftComplete, userTeam, aiTeam, profile]);
+  }, [draftComplete, validXis, userTeam, aiTeam, profile]);
 
   // Owner 2026-08-05: the daily criteria is a real rule, not decoration.
-  // Illegal picks are blocked for BOTH the player and the AI. If a side has
-  // no legal pick left (pool exhaustion), the rule relaxes for that pick so
-  // the draft can always finish.
+  // Both sides keep the 4-3-3. Daily criteria relax only when no eligible
+  // player fits an open position, never to overfill one.
   const rule = ruleForCriteria(criteria);
+  const userOptions = fantasyDraftCandidates(rule, userTeam, players, draftedIds);
+  const userPickIds = new Set(userOptions.players.map(p => p.id));
+  const activeOptions = currentTurn === 'user' ? userOptions : fantasyDraftCandidates(rule, aiTeam, players, draftedIds);
 
   // Fetch daily criteria
   useEffect(() => {
@@ -163,9 +166,12 @@ const FantasyDraft = () => {
   }, []);
 
   const handleUserPick = useCallback((player: DraftPlayer) => {
-    if (currentTurn !== 'user' || draftComplete) return;
-    const mustFollowRule = anyLegalPick(rule, userTeam, players, draftedIds);
-    if (mustFollowRule && !pickIsLegal(rule, userTeam, player)) {
+    if (currentTurn !== 'user' || draftComplete || draftedIds.has(player.id)) return;
+    if (!fantasySlotOpen(userTeam, player)) {
+      toast({ title: 'That position is full', description: 'Your XI needs 1 GK, 4 DEF, 3 MID and 3 FWD.', variant: 'destructive' });
+      return;
+    }
+    if (!userPickIds.has(player.id)) {
       toast({
         title: 'Blocked by today\'s rule',
         description: rule?.blockedReason ?? 'That pick breaks today\'s criteria.',
@@ -174,7 +180,7 @@ const FantasyDraft = () => {
       return;
     }
     draftPlayer(player, 'user');
-  }, [currentTurn, draftComplete, draftPlayer, rule, userTeam, players, draftedIds, toast]);
+  }, [currentTurn, draftComplete, draftPlayer, rule, userTeam, userPickIds, draftedIds, toast]);
 
   // AI auto-pick: obeys the criteria like the player does, and drafts with
   // intent (leans toward the priciest legal options with a little chaos)
@@ -182,10 +188,8 @@ const FantasyDraft = () => {
   useEffect(() => {
     if (draftComplete || currentTurn !== 'ai' || players.length === 0) return;
     aiTimerRef.current = window.setTimeout(() => {
-      const available = players.filter((p) => !draftedIds.has(p.id));
-      if (available.length === 0) return;
-      const legal = available.filter((p) => pickIsLegal(rule, aiTeam, p));
-      const pool = legal.length > 0 ? legal : available;
+      const pool = fantasyDraftCandidates(rule, aiTeam, players, draftedIds).players;
+      if (pool.length === 0) return;
       // Needs a keeper by the end: if the AI has no GK and keepers are
       // getting scarce, grab one now.
       const aiHasGk = aiTeam.some((p) => p.position === 'GK');
@@ -207,6 +211,7 @@ const FantasyDraft = () => {
 
   // Simulate season
   const handleSimulate = async () => {
+    if (!validXis) return;
     setSimulating(true);
     try {
       const { data, error } = await supabase.functions.invoke('simulate-season', {
@@ -271,7 +276,7 @@ const FantasyDraft = () => {
     <>
       <PageSeo
         title="Fantasy Draft Showdown - Soccer Draft Game | DoUKnowBall"
-        description="Draft your Starting XI, simulate a full season, and vote for the winner. Daily fantasy football challenge."
+        description="Draft a balanced soccer XI against the AI under a daily squad rule. The simulated season table decides the winner. Free soccer draft."
         path="/fantasy-draft"
       />
       <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, hsl(145 40% 8%) 0%, hsl(152 35% 6%) 50%, hsl(225 25% 6%) 100%)' }}>
@@ -297,7 +302,7 @@ const FantasyDraft = () => {
                   Fantasy Draft{' '}<span className="block text-primary">Showdown</span>
                 </h1>
                 <p className="text-base sm:text-xl text-muted-foreground max-w-md mx-auto leading-relaxed">
-                  The goal: outdraft the AI. Your XI and its XI play the same simulated season, and the final table decides who drafted better.
+                  Build a 4-3-3: 1 goalkeeper, 4 defenders, 3 midfielders and 3 forwards. After three forwards, fill another position. You and the AI play the same simulated season. The final table decides who drafted better.
                 </p>
                 <div className="w-full max-w-md mx-auto rounded-2xl border border-primary/30 bg-card/60 backdrop-blur-md p-5 sm:p-6 shadow-lg shadow-primary/10">
                   <div className="flex items-center justify-center gap-2 mb-3">
@@ -351,10 +356,30 @@ const FantasyDraft = () => {
                     <Target className="w-3.5 h-3.5 text-primary" />
                     <span className="text-xs font-semibold text-muted-foreground">{criteria}</span>
                     {rule && (
-                      <span className="text-[10px] font-bold uppercase tracking-wide text-primary">Enforced</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wide text-primary">{activeOptions.relaxed ? 'Relaxed for this pick' : 'Enforced'}</span>
                     )}
                   </div>
                 )}
+
+                {rule && !draftComplete && activeOptions.relaxed && (
+                  <p role="status" aria-label="Daily rule" className="text-xs text-muted-foreground">
+                    {currentTurn === 'user' ? 'Your' : "The AI's"} daily rule is relaxed for this pick. Position limits still apply.
+                  </p>
+                )}
+                <div className="grid max-w-[380px] grid-cols-2 gap-3 text-[10px] font-semibold text-muted-foreground">
+                  {([['Your formation', userTeam], ['AI formation', aiTeam]] as const).map(([label, team]) => (
+                    <p key={label} role="status" aria-label={label}>
+                      <span className="block">{label === 'Your formation' ? 'You' : 'AI'}</span>
+                      <span className="mt-0.5 grid grid-cols-2 gap-x-1">
+                        {Object.entries(FANTASY_FORMATION).map(([position, count]) => (
+                          <span key={position} className="whitespace-nowrap">
+                            {position} {team.filter(p => p.position === position).length}/{count}{' '}
+                          </span>
+                        ))}
+                      </span>
+                    </p>
+                  ))}
+                </div>
 
                 {loadingPlayers ? (
                   <div className="flex items-center justify-center py-12">
@@ -378,12 +403,8 @@ const FantasyDraft = () => {
                             draftedIds={draftedIds}
                             onSelect={handleUserPick}
                             disabled={currentTurn !== 'user' || draftComplete}
-                            isEligible={
-                              rule && anyLegalPick(rule, userTeam, players, draftedIds)
-                                ? (p) => pickIsLegal(rule, userTeam, p)
-                                : undefined
-                            }
-                            ineligibleReason={rule?.blockedReason}
+                            isEligible={(p) => userPickIds.has(p.id)}
+                            ineligibleReason="That position is full or today's rule blocks this pick."
                           />
                         </div>
                       )}
@@ -410,7 +431,7 @@ const FantasyDraft = () => {
                     )}
 
                     {/* Simulate button */}
-                    {draftComplete && !seasonSimulated && (
+                    {draftComplete && validXis && !seasonSimulated && (
                       <Button
                         size="lg"
                         onClick={handleSimulate}
@@ -467,7 +488,7 @@ const FantasyDraft = () => {
           description="Draft your ultimate soccer squad against an AI opponent. Pick 11 players in a snake draft, then simulate a full season to see who built the better team."
           howToPlay={[
             "Take turns drafting soccer players with the AI in a snake draft format (you pick, AI picks, repeat).",
-            "Build a balanced squad of 11 players across all positions within the daily criteria.",
+            "Both sides build a 4-3-3: 1 goalkeeper, 4 defenders, 3 midfielders and 3 forwards. Daily criteria can relax for a needed position, never for an extra player in a full position.",
             "The moment the draft completes, both XIs play the same simulated 38 game season and the table names the winner. The narrated season stories and the community vote follow underneath."
           ]}
           examples={[
