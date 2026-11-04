@@ -1,0 +1,116 @@
+name: Published top games source and guest journeys
+on:
+  push:
+    branches: [codex/popular-games-public-20261104]
+permissions:
+  contents: read
+  actions: read
+env:
+  CI: '1'
+  SIM_NETWORK: live
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact source and admit the completed host-compatible build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/popular-games-public"
+          REF="$RUNNER_TEMP/popular-games-reference"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$REF"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$REF" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT" QA_REF="$REF"
+          test "$(git rev-parse 5b4e1ab5887ba97953241a859f4f1b68953fa668)" = 5b4e1ab5887ba97953241a859f4f1b68953fa668
+          git diff --exit-code 5b4e1ab5887ba97953241a859f4f1b68953fa668 HEAD -- src public index.html package.json package-lock.json bun.lockb vite.config.ts
+          test "$(git rev-parse HEAD^)" = f60bf0bab3fb70bd567a490ab02082b5f6d677ab
+          test "$(git rev-parse HEAD^^{tree})" = 0a8cde8fad6cdf1a6211afad314df4776a5980ce
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/popular-games-public-20261104.yml'
+          git diff --exit-code dbe17f736f38e7e53de76f6a87b9620e46f36e3c HEAD -- src public index.html package.json package-lock.json bun.lockb vite.config.ts
+          git diff --exit-code 288d409d918b8811381ea11ffc56f3dbe612367b HEAD -- src public index.html package.json package-lock.json bun.lockb vite.config.ts
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/popular-games-public-20261104.yml "$OUT/workflow.yml"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13297488348 --output "$OUT/reference-meta.json"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/jobs/126401848923 --output "$OUT/reference-job.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const out=process.env.QA_OUT,m=JSON.parse(fs.readFileSync(out+'/reference-meta.json')),j=JSON.parse(fs.readFileSync(out+'/reference-job.json'));assert.equal(m.id,13297488348);assert.equal(m.expired,false);assert.equal(m.size_in_bytes,7721818);assert.equal(m.digest,'sha256:29f1b9f1ed291ce23c1ff72f3006c6ae81b15584428c612db5e737ebe05ed07b');assert.equal(m.workflow_run.id,41777717604);assert.equal(m.workflow_run.head_sha,'288d409d918b8811381ea11ffc56f3dbe612367b');assert.equal(j.id,126401848923);assert.equal(j.run_id,41777717604);assert.equal(j.head_sha,m.workflow_run.head_sha);assert.equal(j.status,'completed');assert.equal(j.conclusion,'success');
+          NODE
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13297488348/zip --output "$OUT/reference-original.zip"
+          test "$(stat -c%s "$OUT/reference-original.zip")" = 7721818
+          echo "29f1b9f1ed291ce23c1ff72f3006c6ae81b15584428c612db5e737ebe05ed07b  $OUT/reference-original.zip" | sha256sum --check
+          unzip -q "$OUT/reference-original.zip" -d "$REF"
+          test "$(stat -c%s "$REF/completed-dist.tar.gz")" = 6995865
+          echo "4bab1cd66a1c899effa43b130ef0d21fabf4108f1e03a46d82b006f18eaa94f2  $REF/completed-dist.tar.gz" | sha256sum --check
+          echo "f7418082fc301f23d925114bd3df0f7b79bd25f80e1d03744795d647033b5ac6  $REF/dist-before.sha256" | sha256sum --check
+          tar -xzf "$REF/completed-dist.tar.gz" -C "$REF"
+          (cd "$REF" && sha256sum --check dist-before.sha256) > "$OUT/reference-dist-held.log"
+          cp "$REF/dist-before.sha256" "$OUT/reference-dist.sha256"
+      - name: Install held source and browser tooling outside dependency locks
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/top-games-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/top-games-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/top-games-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/top-games-browser-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Generate source-held fixtures and play twenty real feature journeys
+        run: |
+          set -euo pipefail
+          unset NODE_OPTIONS
+          : > "$QA_OUT/transport/fixtures.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/fixtures.log" node scripts/qa/topFeaturesFixtures.mjs --out "$QA_OUT/fixtures" --dist "$QA_REF/dist" --core dbe17f736f38e7e53de76f6a87b9620e46f36e3c > "$QA_OUT/logs/fixtures.log" 2>&1
+          test ! -s "$QA_OUT/transport/fixtures.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/browser.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          node scripts/qa/topFeaturesPublishedAssets.mjs "$QA_OUT/fixtures/manifest.json" "$QA_REF/dist" "$QA_OUT" before > "$QA_OUT/logs/public-assets-before.log" 2>&1
+          node scripts/qa/topFeaturesBrowser.mjs --public --base-url https://douknowball.com --out "$QA_OUT/browser" --fixtures "$QA_OUT/fixtures" --dist "$QA_REF/dist" > "$QA_OUT/logs/browser.log" 2>&1
+          node scripts/qa/topFeaturesPublishedAssets.mjs "$QA_OUT/fixtures/manifest.json" "$QA_REF/dist" "$QA_OUT" after > "$QA_OUT/logs/public-assets-after.log" 2>&1
+      - name: Always retain actual source and completed-dist holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          if [[ -d "$QA_REF/dist" ]]; then
+            (cd "$QA_REF" && find dist -type f -print0 | sort -z | xargs -0 sha256sum) > "$QA_OUT/reference-dist-after.sha256"
+            cmp "$QA_OUT/reference-dist.sha256" "$QA_OUT/reference-dist-after.sha256"
+          fi
+      - name: Bound evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: popular-games-public
+          path: ${{ runner.temp }}/popular-games-public
+          if-no-files-found: error
+          retention-days: 7
