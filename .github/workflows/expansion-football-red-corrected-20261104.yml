@@ -1,0 +1,99 @@
+name: Expansion test-first outcomes
+on:
+  push:
+    branches: [codex/expansion-football-red-corrected-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 8
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the test-only source and install held dependencies
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/expansion-football-red"
+          mkdir -p "$OUT/logs" "$OUT/raw/sc" "$OUT/raw/cm" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          test "$(git rev-parse HEAD^)" = e1913344649f090d96f7d4e2af528c086bb3c57c
+          test "$(git rev-parse HEAD^^{tree})" = f874a078ba033eda51e15b8d25afa039f3722b4a
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/expansion-football-red-corrected-20261104.yml "$OUT/workflow.yml"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const git=(...a)=>execFileSync('git',a).toString().trim();
+          const allowed=["A\t.github/workflows/expansion-football-red-corrected-20261104.yml","A\tsrc/test/clubManagerTrainingExposure.test.ts","A\tsrc/test/frontOfficeDraftAccess.test.tsx","A\tsrc/test/hubGamePicks.test.tsx","A\tsrc/test/soccerOfferNegotiationTarget.test.tsx","A\tsrc/test/tycoonPayrollBatch.test.tsx","A\tsrc/test/usCareerFreePractice.test.tsx"];
+          assert.deepEqual(git('diff','--name-status','028a58d8e85e0c2761a46e8471e52aada20e910d','HEAD').split('\n').sort(),allowed);
+          for(const[file,pin]of [["src/lib/soccerCareerProgramme.ts","5dca0371812eed97f9c28c5ed11c83fb423f9c72"],["src/components/soccer-career/SoccerCareerProgramme.tsx","12b1dc2e51836ddfcb65d2d8f8d0a8613661a337"],["src/lib/soccerCareerEngine.ts","63f61a713f12462fc69ca38fd2a062ec82886e33"],["src/lib/soccerCareerLife.ts","592170d7967162d9967e3cf13e22333afb840732"],["src/lib/soccerCareerLoyalty.ts","54abe2e7ec76814be2b5be7e1d5c8501cfc2d6b1"],["src/lib/soccerCareerSave.ts","86ec011693fd5bc702b5e8ccec05d27775a72a76"],["src/lib/clubManager.ts","9d8dc92557bf2f4358b5be044359354eda841769"],["src/components/club-manager/TrainingScreen.tsx","abeb6b4f93d87befd1d0b842c8888c4de504826a"],["src/lib/clubManagerFacilities.ts","4a3aa41a7652cb8dfbdfcc8ffb624d41faba1c51"],["src/lib/clubManagerStaff.ts","db69fdf34797a4f827511947b1c0b253605a19b3"],["src/test/usCareerFreePractice.test.tsx","6611c431569a7ff75390e2a2ca3955be4a65b2fd"],["src/test/frontOfficeDraftAccess.test.tsx","673959bd8edeb776faf36793da3e949c8047592e"],["src/test/tycoonPayrollBatch.test.tsx","7246c2a2b3adb5bae228bd7b76027c29963a2783"],["src/test/hubGamePicks.test.tsx","8dbb56b28d037e141479b53b101523da34962eaa"],["src/test/soccerOfferNegotiationTarget.test.tsx","3227b8efac3e52f0803c6fad25b9a4dd25935efe"],["src/test/clubManagerTrainingExposure.test.ts","a79ca2b2595c162c6d882df9212b3457e97c0165"]])assert.equal(git('hash-object',file),pin,file);
+          assert.equal(process.env.NO_DOUBLE_SWAP,undefined);fs.writeFileSync(process.env.QA_OUT+'/expected.json',JSON.stringify([{"fullName":"Soccer selected offer negotiation selects offer B in the real plans screen, counters it, signs and reloads its exact wage","status":"failed","marker":"SC_OFFER_TARGET_UI_B"},{"fullName":"Soccer selected offer negotiation shortens the selected pending offer and retains the real agent wage and fee transforms","status":"failed","marker":"SC_OFFER_TARGET_SHORTER_B"},{"fullName":"Soccer selected offer negotiation counters an expiry offer before applying the existing quoted loyalty contract and codec","status":"failed","marker":"SC_OFFER_TARGET_LOYALTY_B"},{"fullName":"Soccer selected offer negotiation records a rejected B attempt once while preserving both offers and leaving A available","status":"failed","marker":"SC_OFFER_TARGET_REJECT_B"},{"fullName":"Soccer selected offer negotiation refuses stale, outside, loan and invalid explicit targets without touching the current first offer","status":"failed","marker":"SC_OFFER_TARGET_REFUSAL"},{"fullName":"Soccer selected offer negotiation preserves omitted-target first-offer behavior through signing and the existing save codec","status":"passed","marker":null},{"fullName":"Club Manager recorded training exposure records the charged policy once per player and never charges a skipped night","status":"failed","marker":"CM_TRAINING_CHARGED_POLICY"},{"fullName":"Club Manager recorded training exposure uses the charged season instead of a last-week switch at the real summer rollover","status":"failed","marker":"CM_TRAINING_LATE_FLIP_SUMMER"},{"fullName":"Club Manager recorded training exposure preserves all nine constant-plan annual states and complete random tapes","status":"passed","marker":null},{"fullName":"Club Manager recorded training exposure applies the literal mixed-policy mean while keeping the current-plan forecast unchanged","status":"failed","marker":"CM_TRAINING_MIXED_MEAN"},{"fullName":"Club Manager recorded training exposure keeps observations through real save/load and starts the next season with no inherited weeks","status":"failed","marker":"CM_TRAINING_RELOAD_ROLLOVER"},{"fullName":"Club Manager recorded training exposure starts new signings and incoming loans at their own first charged week","status":"failed","marker":"CM_TRAINING_PLAYER_OWNERSHIP"},{"fullName":"Club Manager recorded training exposure freezes a loaned-out player while absent and resumes only his own count on recall","status":"failed","marker":"CM_TRAINING_LOAN_ABSENCE"},{"fullName":"Club Manager recorded training exposure does not carry a previous employer or previous season into a new charged week","status":"failed","marker":"CM_TRAINING_SCOPE_RESET"},{"fullName":"Club Manager recorded training exposure keeps missing, empty and unsupported history readable with no invented past observations","status":"passed","marker":null}],null,2)+'\n');
+          NODE
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Proper app types before outcome credit
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Classify actual owned missing-feature assertions
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SC_OFFER_NEGOTIATION_RAW="$QA_OUT/raw/sc" CM_TRAINING_EXPOSURE_RAW="$QA_OUT/raw/cm"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+          const out=process.env.QA_OUT,receipt=out+'/transport/units.log';fs.writeFileSync(receipt,'');
+          const p=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',...["src/test/soccerOfferNegotiationTarget.test.tsx","src/test/clubManagerTrainingExposure.test.ts"],'--maxWorkers=1','--no-file-parallelism','--reporter=default','--reporter=json','--outputFile='+out+'/units.json'],{env:{...process.env,SIM_OFFLINE_RECEIPT:receipt},encoding:'utf8',timeout:420000,maxBuffer:32*1024*1024});
+          const log=(p.stdout||'')+'\n'+(p.stderr||'');fs.writeFileSync(out+'/logs/units.log',log);fs.writeFileSync(out+'/units.exit.json',JSON.stringify({status:p.status,signal:p.signal,error:p.error?String(p.error):null})+'\n');
+          assert(!p.error&&p.signal===null,'Native completion');assert.equal(p.status,1);assert.equal(fs.statSync(receipt).size,0);assert(!/Unhandled\s+(?:Error|Rejection)|Vitest caught [1-9]|uncaughtException|unhandledRejection/i.test(log));
+          const j=JSON.parse(fs.readFileSync(out+'/units.json')),want=JSON.parse(fs.readFileSync(out+'/expected.json')),rows=j.testResults.flatMap(s=>s.assertionResults);
+          if(j.numRuntimeErrors!==undefined)assert.equal(j.numRuntimeErrors,0);
+          assert.deepEqual([j.numTotalTests,j.numPassedTests,j.numFailedTests,j.numPendingTests,j.numTodoTests],[15,3,12,0,0]);assert.equal(rows.length,15);assert.equal(j.testResults.length,2);
+          assert.deepEqual(rows.map(r=>r.fullName).sort(),want.map(r=>r.fullName).sort());
+          for(const r of rows){const e=want.find(e=>e.fullName===r.fullName);assert.equal(r.status,e.status,r.fullName);if(e.status==='failed'){const m=r.failureMessages.join('\n');assert(m.includes('AssertionError')&&m.includes(e.marker),r.fullName);assert(!/TypeError|SyntaxError|ReferenceError|Cannot find module|is not a function/.test(m));}}
+          const census={sc:6,cm:9};for(const[folder,count]of Object.entries(census)){const paths=fs.readdirSync(out+'/raw/'+folder);assert.equal(paths.length,count,folder);for(const path of paths)JSON.parse(fs.readFileSync(out+'/raw/'+folder+'/'+path));}
+          fs.writeFileSync(out+'/owned-red-admission.json',JSON.stringify({status:'expected-owned-red',total:15,heldPass:3,ownedFail:12,nativeExit:1,runtimeErrors:j.numRuntimeErrors??'UNKNOWN',raw:census,scope:'Actual test-first assertions only. No fixed product/build/browser credit.'},null,2)+'\n');
+          NODE
+      - name: Always require full source and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          for receipt in "$QA_OUT"/transport/*.log; do test ! -s "$receipt"; done
+      - name: Bound evidence
+        if: always()
+        id: artifact
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: expansion-football-red
+          path: ${{ runner.temp }}/expansion-football-red
+          if-no-files-found: error
+          retention-days: 7
