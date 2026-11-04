@@ -138,14 +138,14 @@ function assertSigned(value: ReturnType<typeof signJourney>, id: string) {
   expect(signed[0]).toMatchObject({ salary: 3, years: 2, age: 24, out: 0, pot: 99 });
   expect(value.actual.frame.league.freeAgents.some(p => p.id === id)).toBe(false);
   if (value.rotation) expect(value.actual.frame.league.teams[TEAM].rotation).toEqual(preferredRotation);
-  else expect(Object.hasOwn(value.actual.frame.league.teams[TEAM], 'rotation')).toBe(false);
+  else expect(Object.prototype.hasOwnProperty.call(value.actual.frame.league.teams[TEAM], 'rotation')).toBe(false);
   if (value.desk) {
     const ledger = nbaContractsOf(value.actual.frame.gm!, value.actual.frame.league, TEAM);
     expect(ledger.men[id]).toStrictEqual({ since: 2026, how: 'signing', mid: true });
     expect(value.initial.gm && nbaContractsOf(value.initial.gm, value.initial.league, TEAM).men[id]).toBeUndefined();
     expect(value.actual.frame.gm!.blocks.picks).toStrictEqual(value.initial.gm!.blocks.picks);
     expect(value.actual.frame.gm!.blocks.staff).toStrictEqual(value.initial.gm!.blocks.staff);
-  } else expect(Object.hasOwn(value.actual.frame, 'gm')).toBe(false);
+  } else expect(Object.prototype.hasOwnProperty.call(value.actual.frame, 'gm')).toBe(false);
   expect(Object.fromEntries(Object.entries(value.actual.frame.league.teams).filter(([id]) => id !== TEAM)))
     .toStrictEqual(Object.fromEntries(Object.entries(value.initial.league.teams).filter(([id]) => id !== TEAM)));
   expect(value.inputHeld).toBe(true); expect(value.unrelated).toBe('held');

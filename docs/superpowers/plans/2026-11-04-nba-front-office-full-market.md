@@ -10,7 +10,7 @@ Verified sixth release closure main ae17830b9daee522ac5ea738f2e36b93e888ad04, Ap
 
 NBA Front Office displays the first20free agents while its engine can retain30after offseason and additional cuts. Proposed minimum: remove only the row .slice(0,20), retaining descending OVR/tie order, current internally scrolling grid, original signing/rotation/Bird/arrival/refusal paths and all saved state.
 
-Original board9790f2cdb506f7feda1ed80304fe0864017878c6; enginec1a4fd8c65f45ca251d6b6a5fe12f35c1bb3c217. Frozen test18333040215bb22539c41207f393392295055593 (14114bytes,SHA2562b28d6ead694740d7c073f352b07bd2c3414da8a60f5954a664cad5806ff8c54).
+Original board9790f2cdb506f7feda1ed80304fe0864017878c6; enginec1a4fd8c65f45ca251d6b6a5fe12f35c1bb3c217. Frozen types-compatible test8987f39786d523be495e1bacf3b7731e5c16bc57 (14160bytes,SHA256534d088807fe731ac8c5158a3ca275f11eedc2cec26ecc4cefdf23ddeaccc45f). Original-only run41927916585 stopped at proper application types because the first test used Object.hasOwn beyond the current TS library. The two presence checks now use Object.prototype.hasOwnProperty.call; the whole-file inverse exactly recovers test18333040215bb22539c41207f393392295055593. No gameplay baseline credit from that setup failure.
 
 ## Verification
 
