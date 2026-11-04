@@ -1,0 +1,109 @@
+{
+  "base": "617b90cb361e056e5c89136431de3f4bf3ca5a9a",
+  "files": [
+    "src/test/soccerLoyaltyOfferTarget.test.tsx",
+    "src/test/clubManagerFreshXI.test.tsx",
+    "src/test/frontOfficeDraftReview.test.tsx"
+  ],
+  "products": [
+    "src/lib/soccerCareerProgramme.ts",
+    "src/components/soccer-career/SoccerCareerProgramme.tsx",
+    "src/lib/clubManager.ts",
+    "src/hooks/useClubManager.ts",
+    "src/components/club-manager/TacticsScreen.tsx",
+    "src/components/front-office/FrontOfficeBoard.tsx"
+  ],
+  "rawEnv": {
+    "SC_LOYALTY_TARGET_RAW": "sc",
+    "CM_FRESH_XI_RAW": "cm",
+    "FO_DRAFT_REVIEW_RAW": "fo"
+  },
+  "cases": [
+    {
+      "fullName": "Soccer selected loyalty offer chooses B in the real plans screen and signs and reloads its reduced wage and fixed payout",
+      "baseline": "failed",
+      "marker": "SC_LOYALTY_TARGET_UI_B"
+    },
+    {
+      "fullName": "Soccer selected loyalty offer retains agent adjusted B terms and pays its literal completion bonus once through recorded service and reload",
+      "baseline": "failed",
+      "marker": "SC_LOYALTY_TARGET_PAID_B"
+    },
+    {
+      "fullName": "Soccer selected loyalty offer keeps a B quote when cash or cancellation targets A and clears only the selected B choice",
+      "baseline": "failed",
+      "marker": "SC_LOYALTY_TARGET_CANCEL_SCOPE"
+    },
+    {
+      "fullName": "Soccer selected loyalty offer refuses cloned stale outside loan short and unsupported targets without changing the first offer or ledger",
+      "baseline": "failed",
+      "marker": "SC_LOYALTY_TARGET_REFUSAL"
+    },
+    {
+      "fullName": "Soccer selected loyalty offer requires fresh selected B terms after a counter and leaves the stale pointer inert",
+      "baseline": "failed",
+      "marker": "SC_LOYALTY_TARGET_FRESH_TERMS"
+    },
+    {
+      "fullName": "Soccer selected loyalty offer preserves omitted target first offer signing and legacy cash cancellation in every existing window",
+      "baseline": "passed",
+      "marker": null
+    },
+    {
+      "fullName": "Club Manager fresh XI prioritizes eighty-fit eligible players without crossing availability or position rules",
+      "baseline": "failed",
+      "marker": "CM_FRESH_XI_POLICY"
+    },
+    {
+      "fullName": "Club Manager fresh XI rests the tired starter through the actual kickoff and charged match week",
+      "baseline": "failed",
+      "marker": "CM_FRESH_XI_RECOVERY"
+    },
+    {
+      "fullName": "Club Manager fresh XI offers Fresh XI through the real tactics hook and preserves it through save reload",
+      "baseline": "failed",
+      "marker": "CM_FRESH_XI_SAVED_ACTION"
+    },
+    {
+      "fullName": "Club Manager fresh XI keeps ordinary Auto Pick rating-first with no new draws or state edits",
+      "baseline": "passed",
+      "marker": null
+    },
+    {
+      "fullName": "Club Manager fresh XI fills a short squad once each and leaves only genuinely empty slots",
+      "baseline": "passed",
+      "marker": null
+    },
+    {
+      "fullName": "NFL draft prospect review opens a review and returns to the same page without spending picks or draws",
+      "baseline": "failed",
+      "marker": "FO_DRAFT_REVIEW_NO_COMMIT"
+    },
+    {
+      "fullName": "NFL draft prospect review confirms one prospect through the unchanged pick and rival sequence",
+      "baseline": "failed",
+      "marker": "FO_DRAFT_CONFIRM_REQUIRED"
+    },
+    {
+      "fullName": "NFL draft prospect review keeps scouting grades and hides true ratings before selection",
+      "baseline": "passed",
+      "marker": null
+    }
+  ],
+  "rawFiles": [
+    "sc/ui-selected-b.json",
+    "sc/agent-payout-b.json",
+    "sc/cash-cancel-scope.json",
+    "sc/invalid-targets.json",
+    "sc/changed-terms-b.json",
+    "sc/legacy-default.json",
+    "cm/policy.json",
+    "cm/recovery.json",
+    "cm/saved-action.json",
+    "cm/ordinary.json",
+    "cm/short-squad.json",
+    "fo/review-back.json",
+    "fo/confirm.json",
+    "fo/scout-held.json"
+  ]
+}
