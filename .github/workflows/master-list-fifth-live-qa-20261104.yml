@@ -1,0 +1,74 @@
+name: Fifth existing live presentation regressions
+on:
+  push:
+    branches: [codex/master-list-fifth-live-qa-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold source and install unchanged dependencies
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/fifth-live-qa"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = be59115679185e1f66f32020b40ec04833724eef
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+      - name: Existing getters and actual viewer regression cases
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/units.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/units.log" node node_modules/vitest/vitest.mjs run src/lib/clubManagerTactics.test.ts src/test/clubManagerPositionLive.test.ts src/test/managerScorerMarks.test.tsx src/test/clubManagerVarScreen.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile="$QA_OUT/units.json" > "$QA_OUT/logs/units.log" 2>&1
+          test ! -s "$QA_OUT/transport/units.log"
+      - name: Existing committed live-match model and viewer control
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for name in simLiveMatch simLiveSimMotion; do
+            : > "$QA_OUT/transport/$name.log"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/$name.log" node "scripts/$name.mjs" > "$QA_OUT/logs/$name.log" 2>&1
+            test ! -s "$QA_OUT/transport/$name.log"
+          done
+          : > "$QA_OUT/transport/whistle.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/whistle.log" LIVE_MOTION_CONTROL=whistle node scripts/simLiveSimMotion.mjs > "$QA_OUT/logs/whistle.log" 2>&1
+          status=$?
+          set -e
+          test "$status" = 1
+          test ! -s "$QA_OUT/transport/whistle.log"
+          grep -F 'simLiveSimMotion: control whistle' "$QA_OUT/logs/whistle.log"
+          : > "$QA_OUT/transport/motion-restored.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/motion-restored.log" node scripts/simLiveSimMotion.mjs > "$QA_OUT/logs/motion-restored.log" 2>&1
+          test ! -s "$QA_OUT/transport/motion-restored.log"
+      - name: Always preserve whole source
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fifth-live-presentation-qa
+          path: ${{ runner.temp }}/fifth-live-qa
+          if-no-files-found: error
+          retention-days: 14
