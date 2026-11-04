@@ -1,0 +1,177 @@
+name: Verify published seventh reading sessions and current snapshot entry
+on:
+  push:
+    branches: [codex/master-list-seventh-public-20261104]
+permissions:
+  contents: read
+  actions: read
+env:
+  CI: '1'
+  SIM_NETWORK: live
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact source and admit the completed payload qualification
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-seventh-public"
+          REF="$RUNNER_TEMP/popular-games-reference"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$REF"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$REF" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT" QA_REF="$REF"
+          test "$(git rev-parse HEAD^)" = f82281e4bb7e02a20183705a347c577285726e9e
+          test "$(git rev-parse HEAD^^{tree})" = 7e88f1934a85afe3a2b3a7e49badcd46d5e327b9
+          test "$(git rev-parse f04c7c8804349f9aee792e566221bb4c0b1bb0a5^{tree})" = 3e5868c5d75e158bf39d224f3e1934485cbc4057
+          test "$(git rev-parse 0cc7afa91d44183401ba57ff2dab1ea6d98374fd^{tree})" = 5e6e84e0ab75e214d5729e50f1ce0137dc035b92
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-seventh-public-20261104.yml'
+          git diff --exit-code f04c7c8804349f9aee792e566221bb4c0b1bb0a5 HEAD -- src public index.html package.json package-lock.json bun.lock bun.lockb vite.config.ts
+          git diff --exit-code 0cc7afa91d44183401ba57ff2dab1ea6d98374fd HEAD -- src public index.html package.json package-lock.json bun.lock bun.lockb vite.config.ts
+          test "$(git rev-parse bb5207a2832805772d24c635f7f2fc577a73f7d3)" = bb5207a2832805772d24c635f7f2fc577a73f7d3
+          git diff --exit-code bb5207a2832805772d24c635f7f2fc577a73f7d3 HEAD -- src public index.html package.json package-lock.json bun.lock bun.lockb vite.config.ts
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-seventh-public-20261104.yml "$OUT/workflow.yml"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13370149485 --output "$OUT/reference-meta.json"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/jobs/126922430291 --output "$OUT/reference-job.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';const out=process.env.QA_OUT,m=JSON.parse(fs.readFileSync(out+'/reference-meta.json')),j=JSON.parse(fs.readFileSync(out+'/reference-job.json'));assert.equal(m.id,13370149485);assert.equal(m.expired,false);assert.equal(m.size_in_bytes,9452473);assert.equal(m.digest,'sha256:45570e5487b5e1820639479034b637e12dc4852996baf1eabb8f55f107a29dfe');assert.equal(m.workflow_run.id,41929484381);assert.equal(m.workflow_run.head_sha,'0cc7afa91d44183401ba57ff2dab1ea6d98374fd');assert.equal(j.id,126922430291);assert.equal(j.run_id,41929484381);assert.equal(j.head_sha,m.workflow_run.head_sha);assert.equal(j.status,'completed');assert.equal(j.conclusion,'success');
+          NODE
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13370149485/zip --output "$REF/reference-original.zip"
+          test "$(stat -c%s "$REF/reference-original.zip")" = 9452473
+          echo "45570e5487b5e1820639479034b637e12dc4852996baf1eabb8f55f107a29dfe  $REF/reference-original.zip" | sha256sum --check
+          unzip -q "$REF/reference-original.zip" -d "$REF"
+          test "$(stat -c%s "$REF/completed-dist.tar.gz")" = 6983157
+          echo "541e40b16ecc8a963a12485adbc0cabf480d1b1938f8b2992b1da9b5b9b7b98b  $REF/completed-dist.tar.gz" | sha256sum --check
+          echo "6f4d51fa77e97d72e2cfc613e0115cef0422e7c7e781bf5dc4f457f80bd3be57  $REF/dist-before.sha256" | sha256sum --check
+          cmp "$REF/source-before.sha256" "$REF/source-after.sha256"
+          test ! -s "$REF/status-before.txt"
+          test ! -s "$REF/status-after.txt"
+          test ! -s "$REF/source-diff.txt"
+          echo "5eef35e56731377d616f843269a44315902810ec8abc002d7745e897a088ad7d  $REF/source-before.sha256" | sha256sum --check
+          test "$(wc -l < "$REF/source-before.sha256")" = 5728
+          test "$(wc -l < "$REF/dist-before.sha256")" = 848
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const n=JSON.parse(fs.readFileSync(process.env.QA_REF+'/native-admission.json'));assert.equal(n.status,'passed');assert.equal(n.contexts,6);assert.equal(n.photos,6);assert.equal(n.controlsAdmittedBeforeNormal,true);
+          NODE
+          tar -xzf "$REF/completed-dist.tar.gz" -C "$REF"
+          (cd "$REF" && sha256sum --check dist-before.sha256) > "$OUT/reference-dist-held.log"
+          cp "$REF/dist-before.sha256" "$OUT/reference-dist.sha256"
+      - name: Install held source and browser tooling outside dependency locks
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/top-games-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/top-games-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/top-games-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/top-games-browser-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Wait for the exact custom-domain publication
+        run: |
+          set -euo pipefail
+          unset NODE_OPTIONS
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const rows=[],expected='/assets/index-C03yjsfa.js',file=process.env.QA_OUT+'/publication-entry-wait.json';
+          let ready=false;
+          for(let attempt=1;attempt<=72;attempt++){
+            let row={attempt,at:new Date().toISOString(),expected};
+            try{const r=await fetch('https://douknowball.com/',{headers:{'cache-control':'no-cache'},signal:AbortSignal.timeout(15000)});const text=await r.text();row={...row,status:r.status,entries:[...text.matchAll(/\/assets\/index-[^"'\s<>]+\.js/g)].map(m=>m[0]),ready:r.status===200&&text.includes(expected)};ready=row.ready;}catch(e){row.error=String(e);}
+            rows.push(row);fs.writeFileSync(file,JSON.stringify({scope:'Exact entry readiness only, no browser credit',rows},null,2)+'\n');
+            if(ready)break;await new Promise(resolve=>setTimeout(resolve,5000));
+          }
+          assert(ready,'Expected custom-domain entry did not arrive within the bounded publication wait');
+          NODE
+      - name: Source-held SC6 public Bank control and normal reading journeys
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for script in scReadingJourney scReadingFixtures scReadingBrowser scReadingScrollControl nativeScrollReady scReadingAssets; do node --check "scripts/qa/$script.mjs"; done
+          test "$(git hash-object scripts/qa/scReadingJourney.mjs)" = 11a2c9ad90994fa02639fc8f8d8aef22a27513a5
+          test "$(git hash-object scripts/qa/scReadingFixtures.mjs)" = ec8c906221974940a63718eca5ab438d72d65dc7
+          test "$(git hash-object scripts/qa/scReadingBrowser.mjs)" = 873e5dd1b4d72fd87157a73c02dee42003ace195
+          test "$(git hash-object scripts/qa/scReadingScrollControl.mjs)" = 761bfc38ec9e7579716dee90bbbeb0553928b19c
+          test "$(git hash-object scripts/qa/nativeScrollReady.mjs)" = 671f460aa088d42b44c435a03594cf26695d6e09
+          test "$(git hash-object scripts/qa/scReadingAssets.mjs)" = 09820fc6017d7dd95ec5408aa49246f571aeb13a
+          : > "$QA_OUT/transport/sc-fixtures.log"
+          SIM_NETWORK=offline SIM_OFFLINE_RECEIPT="$QA_OUT/transport/sc-fixtures.log" node scripts/qa/scReadingFixtures.mjs --out "$QA_OUT/sc-fixtures" --dist "$QA_REF/dist" --core f82281e4bb7e02a20183705a347c577285726e9e > "$QA_OUT/logs/sc-fixtures.log" 2>&1
+          test ! -s "$QA_OUT/transport/sc-fixtures.log"
+          unset NODE_OPTIONS
+          node scripts/qa/scReadingAssets.mjs "$QA_OUT/sc-fixtures/manifest.json" "$QA_REF/dist" "$QA_OUT" https://douknowball.com before > "$QA_OUT/logs/public-assets-before.log" 2>&1
+          : > "$QA_OUT/transport/sc-scroll-control.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/sc-scroll-control.log" node scripts/qa/scReadingScrollControl.mjs --public --out "$QA_OUT/sc-scroll-control" --fixtures "$QA_OUT/sc-fixtures" --dist "$QA_REF/dist" --base-url https://douknowball.com > "$QA_OUT/logs/sc-scroll-control.log" 2>&1
+          sc_control_status=$?
+          set -e
+          echo "$sc_control_status" > "$QA_OUT/sc-scroll-control-native-exit.txt"
+          test "$sc_control_status" = 1
+          test ! -s "$QA_OUT/transport/sc-scroll-control.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const m=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/sc-scroll-control/report.json'));assert.equal(m.status,'owned-fault-qualified');assert.equal(m.observed.qualified,true);assert.equal(m.sourceHeld,true);assert.equal(m.distHeld,true);assert.equal(m.fixtureManifestHeld,true);assert.equal(m.engineBundleHeld,true);
+          NODE
+          : > "$QA_OUT/transport/sc-native.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/sc-native.log" node scripts/qa/scReadingBrowser.mjs --public --out "$QA_OUT/sc-native" --fixtures "$QA_OUT/sc-fixtures" --dist "$QA_REF/dist" --base-url https://douknowball.com > "$QA_OUT/logs/sc-native.log" 2>&1
+          test ! -s "$QA_OUT/transport/sc-native.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,r=JSON.parse(fs.readFileSync(out+'/sc-native/report.json'));assert.equal(r.status,'passed');assert.equal(r.contexts.length,6);assert(r.contexts.every(x=>x.status==='passed'));assert.deepEqual(r.contexts.map(x=>[x.width,x.kind]),[[320,'cm'],[320,'gk'],[390,'cm'],[390,'gk'],[1280,'cm'],[1280,'gk']]);assert.equal(r.screenshots.length,6);assert.equal(new Set(r.screenshots).size,6);assert.equal(r.sourceHeld,true);assert.equal(r.distHeld,true);assert.equal(r.fixtureManifestHeld,true);assert.equal(r.engineBundleHeld,true);fs.writeFileSync(out+'/native-admission.json',JSON.stringify({status:'passed',contexts:6,photos:6,controlsAdmittedBeforeNormal:true,scope:'Six CM/GK-role Soccer Career reading journeys on the exact custom-domain publication and new completed host-compatible Bun payload. No natural-career or full-fleet claim.'},null,2)+'\n');
+          NODE
+          node scripts/qa/scReadingAssets.mjs "$QA_OUT/sc-fixtures/manifest.json" "$QA_REF/dist" "$QA_OUT" https://douknowball.com after > "$QA_OUT/logs/public-assets-after.log" 2>&1
+      - name: Audit changed public route metadata
+        run: |
+          set -euo pipefail
+          node scripts/auditLive.mjs /soccer-career > "$QA_OUT/logs/audit-live.log" 2>&1
+      - name: Notify search engines after exact public verification
+        run: |
+          set -euo pipefail
+          URLS=/soccer-career node scripts/indexnowSubmit.mjs > "$QA_OUT/logs/indexnow.log" 2>&1
+      - name: Always retain actual source and completed-dist holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          if [[ -d "$QA_REF/dist" ]]; then
+            (cd "$QA_REF" && find dist -type f -print0 | sort -z | xargs -0 sha256sum) > "$QA_OUT/reference-dist-after.sha256"
+            cmp "$QA_OUT/reference-dist.sha256" "$QA_OUT/reference-dist-after.sha256"
+          fi
+      - name: Bound evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-seventh-public
+          path: ${{ runner.temp }}/master-list-seventh-public
+          if-no-files-found: error
+          retention-days: 7
