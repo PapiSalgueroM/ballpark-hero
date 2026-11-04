@@ -1,0 +1,92 @@
+name: Expansion adjacent regression outcomes
+on:
+  push:
+    branches: [codex/expansion-adjacent-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  fixed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact source and dependencies
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/expansion-adjacent"
+          mkdir -p "$OUT/logs" "$OUT/raw"/{sc,us,fo,payroll,hub} "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = b5001714beb1dde21ad4139335afdad574227f4b
+          test "$(git rev-parse HEAD^^{tree})" = 677d1bab29e31829c29b13e1b7af71e9d651c74c
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/expansion-adjacent-20261104.yml "$OUT/workflow.yml"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Proper types and real new plus adjacent outcomes
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SC_OFFER_NEGOTIATION_RAW="$QA_OUT/raw/sc" US_FREE_PRACTICE_RAW="$QA_OUT/raw/us" FO_DRAFT_PROSPECT_RAW="$QA_OUT/raw/fo" TYCOON_PAYROLL_RAW="$QA_OUT/raw/payroll" HUB_GAME_PICKS_RAW="$QA_OUT/raw/hub"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+          const out=process.env.QA_OUT,receipt=out+'/transport/units.log';fs.writeFileSync(receipt,'');
+          const p=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',...["src/components/front-office/FrontOfficeDraftCapital.test.tsx","src/test/clubManagerLoanDevelopment.test.ts","src/test/clubManagerLoanPlanIntegration.test.ts","src/test/clubManagerLoanPlanMounted.test.tsx","src/test/clubManagerSave.test.tsx","src/test/clubManagerSaveSize.test.tsx","src/test/clubManagerRetrainingPreview.test.tsx","src/lib/clubManagerTrajectory.test.ts","src/test/careerTrainingGround.test.tsx","src/test/trainingFeedbackMotion.test.tsx"],'--maxWorkers=1','--no-file-parallelism','--reporter=default','--reporter=json','--outputFile='+out+'/units.json'],{env:{...process.env,SIM_OFFLINE_RECEIPT:receipt},encoding:'utf8',timeout:900000,maxBuffer:32*1024*1024});
+          const log=(p.stdout||'')+'\n'+(p.stderr||'');fs.writeFileSync(out+'/logs/units.log',log);fs.writeFileSync(out+'/units.exit.json',JSON.stringify({status:p.status,signal:p.signal,error:p.error?String(p.error):null})+'\n');
+          assert(!p.error&&p.signal===null,'Native completion');assert.equal(p.status,0);
+          assert(!/Unhandled\s+(?:Error|Rejection)|Vitest caught [1-9]|uncaughtException|unhandledRejection/i.test(log));
+          const j=JSON.parse(fs.readFileSync(out+'/units.json')),rows=j.testResults.flatMap(s=>s.assertionResults);
+          assert(j.success);assert.equal(j.numFailedTests,0);assert.equal(j.numPendingTests,0);assert.equal(j.numTodoTests,0);assert.equal(rows.length,j.numPassedTests);
+          assert(rows.length>=30);assert(rows.every(r=>r.status==='passed'));assert.equal(j.testResults.length,10);
+          assert.deepEqual(j.testResults.map(s=>s.name.split('/ballpark-hero/ballpark-hero/').at(-1)).sort(),["src/components/front-office/FrontOfficeDraftCapital.test.tsx","src/lib/clubManagerTrajectory.test.ts","src/test/careerTrainingGround.test.tsx","src/test/clubManagerLoanDevelopment.test.ts","src/test/clubManagerLoanPlanIntegration.test.ts","src/test/clubManagerLoanPlanMounted.test.tsx","src/test/clubManagerRetrainingPreview.test.tsx","src/test/clubManagerSave.test.tsx","src/test/clubManagerSaveSize.test.tsx","src/test/trainingFeedbackMotion.test.tsx"]);
+          fs.writeFileSync(out+'/adjacent-admission.json',JSON.stringify({status:'adjacent-all-pass',total:rows.length,files:j.testResults.length,nativeExit:0,runtimeErrors:j.numRuntimeErrors??'UNKNOWN'},null,2)+'\n');
+          NODE
+      - name: Existing affected simulation guards
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for name in simClubManager simClubManagerFacilities simClubManagerStaff simClubManagerSaveSize simAcademy simCareerTraining simTrainingFeedbackMotion simGamePicks simStadiumTycoon simUsCareerPractice; do
+            : > "$QA_OUT/transport/$name.log"
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport/$name.log" node "scripts/$name.mjs" > "$QA_OUT/logs/$name.log" 2>&1
+            test ! -s "$QA_OUT/transport/$name.log"
+          done
+      - name: Always require full source and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          for receipt in "$QA_OUT"/transport/*.log; do test ! -s "$receipt"; done
+      - name: Bound evidence
+        if: always()
+        id: artifact
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: expansion-adjacent
+          path: ${{ runner.temp }}/expansion-adjacent
+          if-no-files-found: error
+          retention-days: 7
