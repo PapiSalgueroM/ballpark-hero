@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "scope": "Six frozen cases. Each physical fault selects one case and retains five unselected, with no case credit. No App, engine, codec, build, browser or full-suite claim.",
+  "test": "src/test/trainingPassingDecision.test.tsx",
+  "testBlob": "765f34735dc7cb608e0a47d9a1d712ba28091372",
+  "panel": "src/components/soccer-career/TrainingPanel.tsx",
+  "board": "src/components/soccer-career/PassingDecisionBoard.tsx",
+  "pins": {
+    "src/components/soccer-career/TrainingPanel.tsx": "c98cb31af7d9d4298b78ffe908b26d3bbec89906",
+    "src/components/soccer-career/PassingDecisionBoard.tsx": "ac438cb04641766b5a09be676afca5829daa2b1f",
+    "src/lib/soccerCareerEngine.ts": "e88d6f91744bf14ac1d1afd43bbb26be9f9e15db",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76",
+    "src/pages/SoccerCareer.tsx": "1f4d448cc9718bc3fa97b6987be5f14b27496c47"
+  },
+  "originalPanel": "d1beb9426daab4620807139d7634b47dc3dca601",
+  "cases": [
+    {
+      "fullName": "Soccer untimed passing decisions turns three correct first reads into one real Passing reward and a complete codec reload",
+      "baseline": "failed",
+      "marker": "SC_READING_CM_REWARD",
+      "rawFile": "cm-reward.json"
+    },
+    {
+      "fullName": "Soccer untimed passing decisions maps four correct keeper reads to Distribution without increasing current 98 skills or overall",
+      "baseline": "failed",
+      "marker": "SC_READING_GK_REWARD",
+      "rawFile": "gk-reward.json"
+    },
+    {
+      "fullName": "Soccer untimed passing decisions locks the first read, explains the open lane and holds score while rules and time change",
+      "baseline": "failed",
+      "marker": "SC_READING_FIRST_LOCK",
+      "rawFile": "first-read.json"
+    },
+    {
+      "fullName": "Soccer untimed passing decisions replays the reading session freely after banking even before an available prop rerender",
+      "baseline": "failed",
+      "marker": "SC_READING_SPENT_REPLAY",
+      "rawFile": "spent-replay.json"
+    },
+    {
+      "fullName": "Soccer untimed passing decisions keeps the paid classic penalty score, five global draws and existing reward route unchanged",
+      "baseline": "passed",
+      "marker": null,
+      "rawFile": "classic-paid.json"
+    },
+    {
+      "fullName": "Soccer untimed passing decisions keeps already-spent classic practice free with the complete saved career and global tape held",
+      "baseline": "passed",
+      "marker": null,
+      "rawFile": "classic-spent.json"
+    }
+  ],
+  "heldRawSHA256": {
+    "classic-paid.json": "2bc023d088eb43eb00b47c8f60322ecaa707163f3b03e212a835dd16b921f021",
+    "classic-spent.json": "c8a758e658839cac20890f9ac498c507018efb4d0dda7eb26f9f1a5bf874d90a"
+  },
+  "faults": [
+    {
+      "id": "scoring",
+      "selected": 0,
+      "path": "src/components/soccer-career/PassingDecisionBoard.tsx",
+      "edits": [
+        {
+          "before": "answer === situations[i].correct ? 20 : 0",
+          "after": "answer === situations[i].correct ? 20 : 20"
+        },
+        {
+          "before": "pick === situations[i].correct ? 20 : 0",
+          "after": "pick === situations[i].correct ? 20 : 20"
+        }
+      ],
+      "cause": "The same three correct first reads now callback passing100 and queue passing2, instead of passing60 and passing1."
+    },
+    {
+      "id": "first-answer",
+      "selected": 2,
+      "path": "src/components/soccer-career/PassingDecisionBoard.tsx",
+      "edits": [
+        {
+          "before": " || firstAnswers.current[at] !== undefined",
+          "after": ""
+        },
+        {
+          "before": "disabled={answered}",
+          "after": "disabled={false}"
+        }
+      ],
+      "cause": "The batched wrong-then-right first decision is overwritten; the final score becomes100 and disabled-lock evidence is false, instead of80/true."
+    },
+    {
+      "id": "deadline",
+      "selected": 2,
+      "path": "src/components/soccer-career/PassingDecisionBoard.tsx",
+      "edits": [
+        {
+          "before": "import { useRef, useState } from 'react';",
+          "after": "import { useEffect, useRef, useState } from 'react';"
+        },
+        {
+          "before": "  const finished = useRef(false);",
+          "after": "  const finished = useRef(false);\n  const expired = useRef(false);\n  useEffect(() => {\n    if (index !== 0) return;\n    const timer = setTimeout(() => { expired.current = true; }, 30000);\n    return () => clearTimeout(timer);\n  }, [index]);"
+        },
+        {
+          "before": "      onComplete(points);",
+          "after": "      onComplete(expired.current ? 0 : points);"
+        }
+      ],
+      "cause": "The questions stay mounted and the90-second wait still reaches RAW. The hidden deadline wrongly makes final score0 instead of80."
+    },
+    {
+      "id": "replay",
+      "selected": 3,
+      "path": "src/components/soccer-career/TrainingPanel.tsx",
+      "edits": [
+        {
+          "before": "  const openReading = () => { resetDrills(); setScreen(\"decisions\"); };",
+          "after": "  const openReading = () => { resetDrills(); setBanked(false); setPracticeOnly(false); setScreen(\"decisions\"); };"
+        }
+      ],
+      "cause": "With the stale available prop, retry wrongly exposes Bank and sends a second passing100 callback. The engine annual guard still holds the saved reward."
+    },
+    {
+      "id": "global-rng",
+      "selected": 0,
+      "path": "src/components/soccer-career/PassingDecisionBoard.tsx",
+      "edits": [
+        {
+          "before": "    const next = [...firstAnswers.current]; next[at] = option;",
+          "after": "    Math.random();\n    const next = [...firstAnswers.current]; next[at] = option;"
+        }
+      ],
+      "cause": "The five answer actions consume five global0.5 draws while reward/state remain otherwise equal. Expected action tape is empty."
+    }
+  ]
+}
