@@ -1,0 +1,77 @@
+name: Expansion physical outcome controls
+on:
+  push:
+    branches: [codex/expansion-outcomes-focus-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact source and materialize original controls before offline execution
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/expansion-outcomes"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = 9b713eb18f3f9b6f217663a35c15744f757e5763
+          test "$(git rev-parse HEAD^^{tree})" = daa43b12e561e6e67cae5575279405e6d4d5bb67
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/expansion-outcomes-20261104.yml'
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/expansion-outcomes-20261104.yml "$OUT/workflow.yml"
+          for blob in 965122f776faa82511cb7768c00c31d0271b919c 8ec9d84eecff84791212f8c24b7b36c2ed5d9474 56c575249b078d3cab2cfd5d6a39f330cbe7aac7 f996eac8defc3dc407ac8c7157239e1314cd74a7 bbb5d7449abc7b778ffdd8c14749951fabc4ced0 3aee920c2aca600dee6234f11c01ff527adab9b3 1a18dbbb0ceeb2b7b7da60b16c11844a300c08d5 a446d7524160d55b9e8a5a116e438b5d1986a1b8 63c5f0af4a02f2e8fce26b8e49cfd40c87182d6b 887691384f37095b18de054a3e7a66c0a60cb03d 6016c7c42eed81af36d3cab2e1eb4c1b3e9990f2 5dca0371812eed97f9c28c5ed11c83fb423f9c72 12b1dc2e51836ddfcb65d2d8f8d0a8613661a337 9d8dc92557bf2f4358b5be044359354eda841769 abeb6b4f93d87befd1d0b842c8888c4de504826a; do
+            git cat-file blob "$blob" > /dev/null
+          done
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Actual fixed, whole-original, restored and physical fault outcomes
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/caller.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          node scripts/qa/expansionOutcomeQualification.mjs "$QA_OUT/outcomes" > "$QA_OUT/logs/outcomes.log" 2>&1
+          test ! -s "$QA_OUT/transport/caller.log"
+      - name: Always require full source restoration and empty status
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: expansion-outcomes
+          path: ${{ runner.temp }}/expansion-outcomes
+          if-no-files-found: error
+          retention-days: 7
