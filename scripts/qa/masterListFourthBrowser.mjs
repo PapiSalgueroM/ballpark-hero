@@ -20,7 +20,7 @@ for(const[name,f]of Object.entries(m.fixtures)){const raw=await fs.readFile(dir+
 async function inventory(){const rows=[];async function walk(rel=''){for(const e of await fs.readdir(path.join(dist,rel),{withFileTypes:true})){const file=path.posix.join(rel,e.name);if(e.isDirectory())await walk(file);else{assert(e.isFile());const b=await fs.readFile(path.join(dist,file));rows.push({file,bytes:b.length,sha256:sha(b)});}}}await walk();return rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);}
 assert.deepEqual(await inventory(),m.distBefore);assert.equal(sha(JSON.stringify(m.distBefore)),m.distDigest);
 const assetReference=new Map(m.distBefore.filter(row=>row.file.startsWith('assets/')).map(row=>[row.file,row])),observedAssets=new Map();
-const report={status:'incomplete',mode:publicMode?'public':'local',core:m.core,distDigest:m.distDigest,contexts:[],screenshots:[],scope:'Six controlled saved-state native App journeys at320,390,1280: earned primary position and one-player recovery week. Real input/clocks/RNG, source and completed-output holds, original published body checks. No natural-career, full-fleet, first-visit or provider-availability claim.'};
+const report={status:'incomplete',mode:publicMode?'public':'local',core:m.core,distDigest:m.distDigest,contexts:[],screenshots:[],scope:'Nine controlled saved-state native App journeys at320,390,1280: earned primary position, one-player recovery week and saved-plan loading. Real input/clocks/RNG, source and completed-output holds, original published body checks. No natural-career, full-fleet, first-visit or provider-availability claim.'};
 const known=new Set(['https://flagcdn.com','https://fonts.googleapis.com','https://fonts.gstatic.com','https://flawuiqbvjobmkfkauhw.supabase.co']);
 const routes=['/soccer-career','/club-manager'];
 const idle=p=>p.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
@@ -86,17 +86,18 @@ const scModule=m.modules?.sc,cmModule=m.modules?.cm;
 assert(scModule&&cmModule,'Two source-owned extra journey modules are required');
 for(const x of[scModule,cmModule])assert.equal(sha(await fs.readFile(x.file)),x.sha256,x.file);
 const scFlow=await import(pathToFileURL(path.resolve(scModule.file)).href),cmFlow=await import(pathToFileURL(path.resolve(cmModule.file)).href);
+const plansModule=m.modules?.plans;assert(plansModule);assert.equal(sha(await fs.readFile(plansModule.file)),plansModule.sha256);const plansFlow=await import(pathToFileURL(path.resolve(plansModule.file)).href);
 const browser=await pw.chromium.launch({headless:true});
 try{for(const width of[320,390,1280]){
- for(const[k,flow]of[['sc',scFlow.runPrimaryRole],['cm',cmFlow.runRecoveryWeek]])await journey(k==='sc'?'soccer-primary-role':'manager-recovery-week',width,seed(k),async(p,r)=>{
+ for(const[k,label,flow]of[['sc','soccer-primary-role',scFlow.runPrimaryRole],['cm','manager-recovery-week',cmFlow.runRecoveryWeek],['cm','manager-saved-plans',plansFlow.runMatchPlans]])await journey(label,width,seed(k),async(p,r)=>{
   const fixture=fixtures[k];assert.equal(typeof flow,'function');
-  const observed=await flow({page:p,width,base,fixture,engine:k==='sc'?engine.sc:engine.cm,photo:async(label,selector)=>{assert(!r.screenshot,'One normal photo per context');r.checkpoint=label;await photo(p,r,selector);},tap:locator=>tap(p,r,locator),goto:async value=>{const u=new URL(value,base);assert.equal(u.origin,origin);await goto(p,u.pathname+u.search+u.hash);},save:key=>save(p,key)});
+  const observed=await flow({page:p,width,base,fixture,engine:k==='sc'?engine.sc:engine.cm,plans:engine.cmPlans,photo:async(label,selector)=>{assert(!r.screenshot,'One normal photo per context');r.checkpoint=label;await photo(p,r,selector);},tap:locator=>tap(p,r,locator),goto:async value=>{const u=new URL(value,base);assert.equal(u.origin,origin);await goto(p,u.pathname+u.search+u.hash);},save:key=>save(p,key)});
   r.observed=observed;assert(r.screenshot,'Source-owned flow must retain its photo');
  });
 }
 }finally{await browser.close();}
 assert.deepEqual(await inventory(),m.distBefore);for(const[file,digest]of Object.entries(m.sourceAfter))assert.equal(sha(await fs.readFile(file)),digest,file);
 for(const[name,f]of Object.entries(m.fixtures))assert.equal(sha(await fs.readFile(dir+'/'+f.file)),f.sha256,name);
-report.sourceHeld=true;report.distHeld=true;report.publicAssets=Object.fromEntries([...observedAssets].sort(([a],[b])=>a<b?-1:a>b?1:0));report.status=report.contexts.length===6&&report.contexts.every(r=>r.status==='passed')&&report.screenshots.length===6&&new Set(report.screenshots).size===6&&(!publicMode||report.contexts.every(r=>r.assetBodies.length>0))?'passed':'failed';
+report.sourceHeld=true;report.distHeld=true;report.publicAssets=Object.fromEntries([...observedAssets].sort(([a],[b])=>a<b?-1:a>b?1:0));report.status=report.contexts.length===9&&report.contexts.every(r=>r.status==='passed')&&report.screenshots.length===9&&new Set(report.screenshots).size===9&&(!publicMode||report.contexts.every(r=>r.assetBodies.length>0))?'passed':'failed';
 await fs.writeFile(out+'/report.json',JSON.stringify(report,null,2)+'\n');assert.equal(report.status,'passed');
-console.log('masterListFourthBrowser: six controlled native journeys and six normal screenshots passed.');
+console.log('masterListFourthBrowser: nine controlled native journeys and nine normal screenshots passed.');

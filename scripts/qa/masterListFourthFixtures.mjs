@@ -20,7 +20,7 @@ const sourceBefore=await source(),distBefore=await inventory();assert(distBefore
 const entry=path.join(out,'entry.mjs'),bundle=path.join(out,'engines.mjs');
 await fs.writeFile(entry,[
 'const store=new Map();globalThis.localStorage={getItem:k=>store.get(k)??null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k),clear:()=>store.clear()};',
-...Object.entries({sc:'soccerCareerEngine',codec:'soccerCareerSave',programme:'soccerCareerProgramme',cm:'clubManager',cmTactics:'clubManagerTactics',fence:'saveFence',}).map(([key,file])=>'export const '+key+'=await import('+JSON.stringify(path.join(root,'src/lib/'+file+'.ts'))+');'),
+...Object.entries({sc:'soccerCareerEngine',codec:'soccerCareerSave',programme:'soccerCareerProgramme',cm:'clubManager',cmTactics:'clubManagerTactics',cmPlans:'clubManagerMatchPlans',fence:'saveFence',}).map(([key,file])=>'export const '+key+'=await import('+JSON.stringify(path.join(root,'src/lib/'+file+'.ts'))+');'),
 ].join('\n'),{flag:'wx'});
 await build({entryPoints:[entry],outfile:bundle,bundle:true,format:'esm',platform:'node',alias:{'@':path.join(root,'src')},logLevel:'error'});
 const e=await import(pathToFileURL(bundle).href),fixtures={};
@@ -31,10 +31,11 @@ for(const[name,key]of[['sc','--sc-module'],['cm','--cm-module']]){
  const file=path.relative(root,path.resolve(arg(key))).split(path.sep).join('/');assert(!file.startsWith('../')&&!path.isAbsolute(file));assert(tracked.includes(file),file+' must be tracked');
  modules[name]={file,sha256:sha(await fs.readFile(file))};
 }
+const plansFile='scripts/qa/cmPlansNativeJourney.mjs';assert(tracked.includes(plansFile));modules.plans={file:plansFile,sha256:sha(await fs.readFile(plansFile))};
 const scFlow=await import(pathToFileURL(path.resolve(modules.sc.file)).href),cmFlow=await import(pathToFileURL(path.resolve(modules.cm.file)).href);
 const scFixture=await scFlow.createPrimaryRoleFixture({engine:e.sc,codec:e.codec,programme:e.programme});
 assert.equal(typeof scFixture.raw,'string');await put('sc','soccerCareerSave',scFixture.raw,{expected:scFixture.expected});
-const cmFixture=await cmFlow.createRecoveryWeekFixture({engine:e.cm,fence:e.fence.saveFence});
+const cmFixture=await cmFlow.createRecoveryWeekFixture({engine:e.cm,fence:e.fence.saveFence,plans:e.cmPlans});
 assert.equal(typeof cmFixture.raw,'string');await put('cm',e.cm.SAVE_KEY,cmFixture.raw,{expected:cmFixture.expected});
 const sourceAfter=await source();assert.deepEqual(sourceAfter,sourceBefore);assert.deepEqual(await inventory(),distBefore);
 await fs.writeFile(out+'/manifest.json',JSON.stringify({schema:1,core,pins,sourceBefore,sourceAfter,distBefore,distDigest:sha(JSON.stringify(distBefore)),bundle:'engines.mjs',bundleSHA:sha(await fs.readFile(bundle)),fixtures,modules,scope:'Controlled fictional earned-primary-role and temporary player-recovery saves. Real constructors/helpers/save reader, explicit fixture labels and values. Native browser clocks/RNG remain untouched. Completed-build association is supplied by the outer caller.'},null,2)+'\n',{flag:'wx'});
