@@ -1,0 +1,131 @@
+name: Master list sixth replacement fixed
+on:
+  push:
+    branches: [codex/master-list-sixth-replacement-fixed-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Pin original application and both test sources
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-sixth-replacement-fixed"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/raw/engine" "$OUT/raw/ui"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = aea490127f9864dd11918563af7994bb213b606b
+          test "$(git rev-parse HEAD^^{tree})" = b0a8067b10d9abf509ffc89bf7479f5424e4e05d
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-sixth-replacement-fixed-20261104.yml'
+          test "$(git rev-parse HEAD:src/lib/clubManager.ts)" = e3c9bcf0aec0f1e1caeb27d38d506d591d694237
+          test "$(git rev-parse HEAD:src/components/club-manager/TrainingScreen.tsx)" = 1247042a9e57c9bd89958959dff8c1490f633313
+          test "$(git rev-parse HEAD:src/hooks/useClubManager.ts)" = fe8d97dbfabaea602968e9cca25d4930895093e1
+          test "$(git rev-parse HEAD:src/test/clubManagerRetrainingReplacement.test.ts)" = ae0d2a2f0cb57c71f9c467fde3a2776ea5561f4d
+          test "$(git rev-parse HEAD:src/test/clubManagerRetrainingReplacementUi.test.tsx)" = cb6a7e3a57e67e8dde5f53a29b89395e691a13f0
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-sixth-replacement-fixed-20261104.yml "$OUT/workflow.yml"
+          cp src/test/clubManagerRetrainingReplacement{.test.ts,Ui.test.tsx} "$OUT/"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Proper application type check before any case credit
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          echo 0 > "$QA_OUT/types-exit.txt"
+      - name: Execute both unfiltered files and retain native result
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/units.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/units.log"
+          export CM_REPLACEMENT_RAW="$QA_OUT/raw/engine"
+          export CM_REPLACEMENT_UI_RAW="$QA_OUT/raw/ui"
+          set +e
+          node_modules/.bin/vitest run src/test/clubManagerRetrainingReplacement.test.ts src/test/clubManagerRetrainingReplacementUi.test.tsx --reporter=json --outputFile="$QA_OUT/report.json" > "$QA_OUT/logs/units.log" 2>&1
+          native=$?
+          set -e
+          echo "$native" > "$QA_OUT/native-exit.txt"
+          test "$native" = 0
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out=process.env.QA_OUT, read=file=>fs.readFileSync(path.join(out,file),'utf8');
+          const expected=[{"fullName":"Club Manager retraining replacement choice keeps learned cover until the paid completion and replaces only the chosen role","baseline":"passed","marker":"CM_REPLACE_PAID_CHOICE","rawFile":"paid-choice.json","rawDir":"engine"},{"fullName":"Club Manager retraining replacement choice preserves course intent through pause and reload while Stop leaves future default FIFO unchanged","baseline":"passed","marker":"CM_REPLACE_PAUSE_STOP","rawFile":"pause-stop-reload.json","rawDir":"engine"},{"fullName":"Club Manager retraining replacement choice refuses invalid replacement starts without changing qualifications or consuming a draw","baseline":"passed","marker":"CM_REPLACE_REFUSE_START","rawFile":"invalid-starts.json","rawDir":"engine"},{"fullName":"Club Manager retraining replacement choice preserves stale or unsupported tagged courses through paid ticks and refuses pause edits","baseline":"passed","marker":"CM_REPLACE_UNSUPPORTED","rawFile":"unsupported-courses.json","rawDir":"engine"},{"fullName":"Club Manager retraining replacement choice keeps omitted choices exact across default FIFO paid outputs and full draw tapes","baseline":"passed","marker":null,"rawFile":"ordinary-fifo.json","rawDir":"engine"},{"fullName":"Club Manager retraining replacement choice retains spare-slot behavior and untagged scalar save compatibility without adding replacement metadata","baseline":"passed","marker":null,"rawFile":"legacy-loads.json","rawDir":"engine"},{"fullName":"Club Manager retraining replacement choice UI lets the manager keep RW cover and forwards the chosen replacement without editing current positions","baseline":"passed","marker":"CM_REPLACE_UI_CHOICE","rawFile":"choose.json","rawDir":"ui"},{"fullName":"Club Manager retraining replacement choice UI clears a previous choice when switching players and retains the default two-argument callback","baseline":"passed","marker":"CM_REPLACE_UI_RESET","rawFile":"reset.json","rawDir":"ui"},{"fullName":"Club Manager retraining replacement choice UI shows the saved completion choice through Pause and Resume, and Stop removes only the course","baseline":"passed","marker":"CM_REPLACE_UI_PENDING","rawFile":"pending.json","rawDir":"ui"},{"fullName":"Club Manager retraining replacement choice UI holds an unavailable saved replacement safely while leaving Stop available","baseline":"passed","marker":"CM_REPLACE_UI_UNKNOWN","rawFile":"unknown.json","rawDir":"ui"},{"fullName":"Club Manager retraining replacement choice UI keeps ordinary target fit and callbacks unchanged without a replacement selection","baseline":"passed","marker":null,"rawFile":"ordinary.json","rawDir":"ui"}];
+          const report=JSON.parse(read('report.json')), rows=(report.testResults??[]).flatMap(file=>file.assertionResults??[]);
+          assert.equal(report.testResults?.length,2,'Both exact files must execute');
+          assert.equal(rows.length,11,'Eleven exact cases');
+          assert.equal(new Set(rows.map(row=>row.fullName)).size,11,'Unique full identities');
+          const strip=value=>value.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,'');
+          const runtimeCounters={};
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors']){
+            runtimeCounters[key]=key in report?report[key]:'UNKNOWN';
+            if(key in report)assert.equal(report[key],0,key);
+          }
+          const log=strip(read('logs/units.log'));
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed Suites|Failed to collect/.test(log),'No setup or runtime banner');
+          for(const want of expected){
+            const found=rows.filter(row=>row.fullName===want.fullName);
+            assert.equal(found.length,1,want.fullName);const row=found[0];
+            assert.equal(row.status,want.baseline,want.fullName);
+            const message=strip((row.failureMessages??[]).join('\n'));
+            if(want.baseline==='failed'){
+              assert(message.includes('AssertionError'),want.fullName+' must own an assertion');
+              assert(message.includes(want.marker),want.fullName+' exact owned marker');
+            }else assert.equal(message,'',want.fullName+' healthy message');
+            const raw=JSON.parse(read('raw/'+want.rawDir+'/'+want.rawFile));
+            assert.equal(raw.case,want.rawFile.slice(0,-5),'Exact RAW identity');
+            assert.equal(typeof raw.observations,'object','RAW observations before owned assertion');
+          }
+          for(const [dir,count] of [['engine',6],['ui',5]])
+            assert.equal(fs.readdirSync(path.join(out,'raw',dir)).filter(name=>name.endsWith('.json')).length,count,'Complete RAW set '+dir);
+          assert.equal(rows.filter(row=>row.status==='failed').length,0);
+          assert.equal(rows.filter(row=>row.status==='passed').length,11);
+          assert.equal(fs.statSync(path.join(out,'transport/units.log')).size,0,'No offline transport attempts');
+          fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({status:'fixed',cases:11,ownedFailures:0,passed:11,raw:11,native:0,runtimeCounters,scope:'First focused fixed outcome check only. Original controls, physical faults, build, browser and full-suite qualification remain separate.'},null,2)+'\n');
+          console.log('Replacement fixed: 11 exact passing cases and 11 RAW records.');
+          JS
+      - name: Always require complete source and status holds
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound retained evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-sixth-replacement-fixed
+          path: ${{ runner.temp }}/master-list-sixth-replacement-fixed
+          if-no-files-found: error
+          retention-days: 7
