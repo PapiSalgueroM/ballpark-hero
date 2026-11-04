@@ -47,8 +47,13 @@ async function journey(args, completion) {
   const read = async () => JSON.parse(await save(key));
   const { press, native } = controls({ page, width, save, key, actions });
   const resume = async () => {
-    await press(page.getByRole('button', { name: 'Resume Career', exact: true }));
-    await page.locator('[data-cm-hub]').waitFor({ state: 'visible' });
+    const bytes = await save(key), button = page.getByRole('button', { name: 'Resume Career', exact: true });
+    const hub = page.locator('[data-cm-hub]');
+    await button.or(hub).waitFor({ state: 'visible' });
+    if (await button.isVisible()) await press(button);
+    else assert.equal(await hub.isVisible(), true, 'CM_REPLACEMENT_APP_VISIBLE_LOADED_HUB');
+    await hub.waitFor({ state: 'visible' });
+    assert.equal(await save(key), bytes, 'CM_REPLACEMENT_APP_LANDING_PRESERVES_SAVE_BYTES');
   };
   const home = async () => {
     await press(page.getByRole('tab', { name: 'Home', exact: true }));
@@ -110,8 +115,11 @@ async function journey(args, completion) {
     await home(); await press(page.getByRole('button', { name: 'Open the Window', exact: true }));
     await page.waitForFunction(({ key, week }) => JSON.parse(localStorage.getItem(key)).week === week + 1, { key, week: x.week });
     const paid = await read(); assert.equal(paid.week, x.week + 1); assertRole(paid);
+    assert.equal(initial.facilities.dressingRoom, 8, 'CM_REPLACEMENT_APP_DRESSING_ROOM_PREMISE');
+    assert(initial.squad.every(p => p.morale === 68), 'CM_REPLACEMENT_APP_INITIAL_MORALE_PREMISE');
+    // Existing level 8 dressing room: round1(0.08 * (8 - 1)) = 0.6, below the 70 rest cap.
     const expectedPlayers = initial.squad.map(p => {
-      const next = { ...p, trainingExposure: { v: 1, club: x.clubName, season: x.season, counts: [0, 0, 0, 0, 1, 0, 0, 0, 0] } };
+      const next = { ...p, morale: 68.6, trainingExposure: { v: 1, club: x.clubName, season: x.season, counts: [0, 0, 0, 0, 1, 0, 0, 0, 0] } };
       if (p.id === x.target.id) { next.secondaryPositions = ['RW', 'ST']; delete next.retraining; }
       return next;
     });
