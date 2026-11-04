@@ -1,0 +1,18 @@
+{
+  "pageSHA256": "e2f816673010d58e48d3ea329fb604ebc90f2695a9660cabaaccebb5191d4161",
+  "pageGit": "3d70b6f41cc090ea88ac7ac899d1e26ebbd809b4",
+  "parentSHA256": "f2bf041677d3604c9137e617288a26172e56c8bcf67ab4c44483d900f9e999f7",
+  "parentGit": "fa4e7b08c93f80c3a3cea4dcae1c4c2d9d1122f8",
+  "edits": [
+    {
+      "at": 4318,
+      "before": "    <p>At each saved checkpoint, gaps compare elapsed time with the leading active driver. Retired drivers show the laps they completed. In the market, compare the incoming driver's current age, potential and skills before checking the quote.</p>\n",
+      "after": "    <p>At each saved checkpoint, gaps compare elapsed time with the leading active driver. Retired drivers show the laps they completed. In the market, compare the incoming driver's current age, potential and skills before checking the quote.</p>\n    <p>Open Whole field after a checkpoint to compare saved tyres, wear and pit stops. Your picks take effect when you run the next interval.</p>\n"
+    },
+    {
+      "at": 30241,
+      "before": "    {race && <details><summary className=\"min-h-11 cursor-pointer py-3 text-sm font-semibold\">Whole field</summary><ol className=\"max-h-72 space-y-1 overflow-y-auto text-sm\">{entries.map((entry, index) => <li key={entry.driverId} className=\"flex justify-between gap-3 border-b border-border py-2\"><span className=\"min-w-0 break-words\">{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className=\"max-w-[60%] shrink-0 text-right tabular-nums\">{timing(entry) ?? (entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps')}</span></li>)}</ol></details>}",
+      "after": "    {race && <details><summary className=\"min-h-11 cursor-pointer py-3 text-sm font-semibold\">Whole field</summary><ol className=\"max-h-72 space-y-1 overflow-y-auto text-sm\">{entries.map((entry, index) => <li key={entry.driverId} className=\"border-b border-border py-2\"><div className=\"flex justify-between gap-3\"><span className=\"min-w-0 break-words\">{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className=\"max-w-[60%] shrink-0 text-right tabular-nums\">{timing(entry) ?? (entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps')}</span></div>{race.lap > 0 && entry.status !== 'retired' && <p className=\"mt-1 text-xs text-muted-foreground\">{label(entry.compound)} tyres, {Math.round(entry.tyreWear)}% wear, {entry.stops} stops</p>}</li>)}</ol></details>}"
+    }
+  ]
+}
