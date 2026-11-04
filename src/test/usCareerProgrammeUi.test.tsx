@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import UsCareerProgramme from '@/components/us-career/UsCareerProgramme';
-import type { ProgrammeCareer } from '@/lib/usCareerProgramme';
+import { prepareUsCareerProgramme, type ProgrammeCareer } from '@/lib/usCareerProgramme';
 import type { UsSport } from '@/lib/usCoachCareer';
 
 const fixture = (): ProgrammeCareer => ({
@@ -99,6 +99,67 @@ describe('US programme choices and restoration', () => {
     await waitFor(() => expect(screen.queryByRole('dialog', { name: 'NBA season programme' })).toBeNull());
     await waitFor(() => expect(opener).toHaveFocus());
   });
+
+  it.each([
+    { sport: 'nba' as const, pos: 'PG', morale: 92, durability: 0.9, scoring: 1.08, playmaking: 0.92 },
+    { sport: 'nfl' as const, pos: 'QB', morale: 98, durability: 0.84, scoring: 1, playmaking: 1 },
+  ])('$sport previews the capped whole plan without writing, then applies it through one callback', async ({ sport, pos, morale, durability, scoring, playmaking }) => {
+    const base = {
+      ...fixture(), pos, health: 96, morale: 98,
+      archetype: { durability: 0.9, scoring: 1, playmaking: 1, rebounding: 1, scoringMult: 1 },
+      programme: { sport, year: 2026, team: 'BOS', workload: 'push', tactics: 'normal', expectation: 'normal', partnership: 'normal', bonus: 'normal', reinvention: 'normal' },
+    } as ProgrammeCareer;
+    const input = JSON.stringify(base), { changed } = mount(base, sport);
+    await open(sport); start();
+    const preview = screen.queryByRole('button', { name: 'Try a plan' });
+    expect(changed).not.toHaveBeenCalled(); expect(JSON.stringify(base)).toBe(input);
+    expect(preview, 'US_PROGRAMME_PREVIEW_APPLY: a whole plan must be previewable without saving each choice').not.toBeNull();
+    fireEvent.click(preview!); fireEvent.click(tile('workload'));
+    fireEvent.click(document.querySelector('[data-us-programme-choice="workload:recover"]')!);
+    expect(document.querySelector('[data-us-programme-current]')).toHaveTextContent('Current plan: Push the workload');
+    expect(document.querySelector('[data-us-programme-current]')).toHaveTextContent('Season health -8, morale +2 (morale tops out at 100).');
+    expect(document.querySelector('[data-us-programme-preview-selection]')).toHaveTextContent('Preview: Prioritize recovery');
+    expect(document.querySelector('[data-us-programme-preview-selection]')).toHaveTextContent('Season health +4 (health tops out at 100), morale -6.');
+    expect(changed).not.toHaveBeenCalled(); expect(JSON.stringify(base)).toBe(input);
+    back(); fireEvent.click(tile('tactics'));
+    fireEvent.click(document.querySelector('[data-us-programme-choice="tactics:attack"]')!);
+    expect(document.querySelector('[data-us-programme-current]')).toHaveTextContent('Current plan: Your usual approach');
+    expect(document.querySelector('[data-us-programme-preview-selection]')).toHaveTextContent(sport === 'nba'
+      ? 'Season scoring multiplier +8%, playmaking multiplier -8%. Your position stays the same.'
+      : 'Season morale +6, durability -0.06. More form, more injury risk.');
+    expect(changed).not.toHaveBeenCalled(); expect(JSON.stringify(base)).toBe(input);
+    fireEvent.click(screen.getByRole('button', { name: 'Apply plan' }));
+    expect(changed).toHaveBeenCalledOnce();
+    const next = changed.mock.calls[0][0] as ProgrammeCareer;
+    expect(next).toEqual({ ...base, programme: { sport, year: 2026, team: 'BOS', workload: 'recover', tactics: 'attack', expectation: 'normal', partnership: 'normal', bonus: 'normal', reinvention: 'normal' } });
+    expect(JSON.stringify(base)).toBe(input);
+    const prepared = JSON.parse(JSON.stringify(next)) as ProgrammeCareer;
+    const receipt = prepareUsCareerProgramme(prepared, sport);
+    expect(receipt).not.toBeNull(); expect(prepared.health).toBe(100); expect(prepared.morale).toBe(morale);
+    const archetype = (prepared as ProgrammeCareer & { archetype: { durability: number; scoring: number; playmaking: number } }).archetype;
+    expect(archetype.durability).toBeCloseTo(durability, 10); expect(archetype.scoring).toBeCloseTo(scoring, 10); expect(archetype.playmaking).toBeCloseTo(playmaking, 10);
+  });
+  it.each([{ sport: 'nba' as const, pos: 'PG' }, { sport: 'nfl' as const, pos: 'QB' }])('$sport discards an uncommitted plan and restores the real current selections', async ({ sport, pos }) => {
+    const base = { ...fixture(), pos, programme: { sport, year: 2026, team: 'BOS', workload: 'push', tactics: 'normal', expectation: 'normal', partnership: 'normal', bonus: 'normal', reinvention: 'normal' } } as ProgrammeCareer;
+    const input = JSON.stringify(base), { changed } = mount(base, sport);
+    await open(sport); start();
+    const preview = screen.queryByRole('button', { name: 'Try a plan' });
+    expect(changed).not.toHaveBeenCalled(); expect(JSON.stringify(base)).toBe(input);
+    expect(preview, 'US_PROGRAMME_PREVIEW_DISCARD: experimenting must not replace the current plan').not.toBeNull();
+    fireEvent.click(preview!); fireEvent.click(tile('workload'));
+    fireEvent.click(document.querySelector('[data-us-programme-choice="workload:recover"]')!);
+    expect(changed).not.toHaveBeenCalled(); expect(JSON.stringify(base)).toBe(input);
+    fireEvent.click(screen.getByRole('button', { name: 'Discard preview' }));
+    expect(screen.queryByRole('button', { name: 'Apply plan' })).toBeNull();
+    expect(tile('workload')).toHaveTextContent('Push the workload');
+    fireEvent.click(screen.getByRole('button', { name: 'Try a plan' })); fireEvent.click(tile('workload'));
+    expect(document.querySelector('[data-us-programme-choice="workload:push"]')).toHaveAttribute('aria-pressed', 'true');
+    expect(document.querySelector('[data-us-programme-choice="workload:recover"]')).toHaveAttribute('aria-pressed', 'false');
+    fireEvent.keyDown(screen.getByRole('dialog', { name: sport.toUpperCase() + ' season programme' }), { key: 'Escape' });
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    expect(changed).not.toHaveBeenCalled(); expect(JSON.stringify(base)).toBe(input);
+  });
+
   it('renders the earned outcome using saved target and bonus values', () => {
     const c = fixture(); c.programmeResults = [{ sport: 'nba', year: 2025, team: 'BOS', outcome: 'completed', bonusGross: 0.25, bonusNet: 0.1, partnershipProgress: 2, decisions: [{ section: 'bonus', label: 'Match the benchmark', outcome: 'completed', target: 4, actual: 7, unit: 'assists per game' }] }];
     mount(c);

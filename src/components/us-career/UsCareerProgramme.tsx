@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { currentUsCareerProgramme, saveUsCareerProgramme, usProgrammeDefaults, usProgrammeMenus, usProgrammeResults, usProgrammeStateValid, type ProgrammeCareer, type ProgrammeChoice, type ProgrammeSection } from '@/lib/usCareerProgramme';
+import { currentUsCareerProgramme, saveUsCareerProgramme, usProgrammeDefaults, usProgrammeMenus, usProgrammeResults, usProgrammeStateValid, type ProgrammeCareer, type ProgrammeChoice, type ProgrammeChoices, type ProgrammeSection } from '@/lib/usCareerProgramme';
 import type { UsSport } from '@/lib/usCoachCareer';
 
 /** A gross bonus the way a player reads money: thousands under a tenth of a million, millions above. */
@@ -8,6 +8,7 @@ const grossMoney = (millions: number) => millions < 0.095 ? '$' + Math.round(mil
 
 export default function UsCareerProgramme({ career, sport, onChange }: { career: ProgrammeCareer; sport: UsSport; onChange: (next: ProgrammeCareer) => void }) {
   const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState<{ career: ProgrammeCareer; sport: UsSport; choices: ProgrammeChoices } | null>(null);
   const [mode, setMode] = useState<ProgrammeSection | 'menu' | 'help'>('help');
   const returnMode = useRef<ProgrammeSection | 'menu'>('menu');
   const heading = useRef<HTMLHeadingElement>(null);
@@ -19,11 +20,16 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
   const selected = useRef<ProgrammeSection | null>(null);
   const pending = useRef<{ top: number; target: ProgrammeSection | 'help' } | null>(null);
   const held = currentUsCareerProgramme(career, sport);
-  /* Release AU fix pass: the cards are drawn against the plan held so far, so each states what its own choice will land. */
-  const menus = usProgrammeMenus(career, sport, held);
+  const preview = draft && draft.career === career && draft.sport === sport ? draft : null;
+  const previewing = preview !== null;
+  const choices = preview?.choices ?? held;
+  /* Each card reads the current plan or preview, including the caps its earlier choices meet. */
+  const menus = usProgrammeMenus(career, sport, choices);
+  const currentMenus = preview ? usProgrammeMenus(career, sport, held) : menus;
   const results = usProgrammeResults(career);
   const last = results[results.length - 1];
   const disabled = !usProgrammeStateValid(career) || career.retired || (career.suspendedSeasons ?? 0) > 0;
+  useEffect(() => { setDraft(null); }, [career, sport]);
   useEffect(() => {
     if (!open) return;
     const restore = pending.current;
@@ -32,13 +38,16 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
       if (body.current) body.current.scrollTop = restore.top;
       (restore.target === 'help' ? helpButton.current : tiles.current[restore.target])?.focus({ preventScroll: true });
     } else { if (body.current) body.current.scrollTop = 0; heading.current?.focus({ preventScroll: true }); }
-  }, [open, mode]);
+  }, [open, mode, previewing]);
   const choose = (section: ProgrammeSection, choice: ProgrammeChoice) => {
-    const next = { ...(held ?? usProgrammeDefaults()), [section]: choice };
-    onChange(saveUsCareerProgramme(career, sport, next));
+    const next = { ...(choices ?? usProgrammeDefaults()), [section]: choice };
+    if (preview) setDraft({ ...preview, choices: next });
+    else onChange(saveUsCareerProgramme(career, sport, next));
   };
   const button = 'min-h-11 min-w-11 rounded-lg border border-border px-3 py-2 text-sm font-bold hover:border-primary';
   const selectedMenu = menus.find(m => m.id === mode);
+  const currentOption = selectedMenu && currentMenus.find(m => m.id === selectedMenu.id)?.options.find(o => o.id === (held?.[selectedMenu.id] ?? 'normal'));
+  const previewOption = selectedMenu?.options.find(o => o.id === (choices?.[selectedMenu.id] ?? 'normal'));
   return <section data-us-programme-panel className="mt-4 rounded-xl border border-primary/30 p-3 text-left">
     <h3 className="text-sm font-black">Your season programme</h3>
     <p className="mt-1 text-xs text-muted-foreground">{held ? 'Programme saved for ' + career.year + ' at ' + career.team + '.' : 'Choose how to approach the season. Your usual routine stays available.'}</p>
@@ -48,7 +57,7 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
       {last.bonusGross > 0 && <p data-us-programme-bonus>Bonus: {grossMoney(last.bonusGross)} gross, {last.bonusNet >= 0.05 ? '$' + last.bonusNet.toFixed(1) + 'M banked.' : 'none of it banked (the 45% share was under the $0.1M the bank counts in).'}</p>}
       {last.partnershipProgress > 0 && <p>Partnership progress: {last.partnershipProgress}/3.</p>}
     </div>}
-    <Dialog open={open} onOpenChange={next => { setOpen(next); if (next) { returnMode.current = 'menu'; setMode('help'); } }}>
+    <Dialog open={open} onOpenChange={next => { setOpen(next); setDraft(null); if (next) { returnMode.current = 'menu'; setMode('help'); } }}>
       <DialogTrigger asChild><button data-us-programme-open className={button + ' mt-3 w-full'}>Plan your season</button></DialogTrigger>
       <DialogContent data-us-programme="dialog" className="flex max-h-[88dvh] w-[calc(100%-1.5rem)] max-w-lg flex-col gap-0 overflow-hidden rounded-2xl p-0 [&>button:last-child]:hidden">
         <header className="shrink-0 border-b border-border p-3">
@@ -58,11 +67,22 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
             <button data-us-programme-back className={button} onClick={() => {
               if (mode === 'help') { pending.current = { top: helpTop.current, target: 'help' }; setMode(returnMode.current); }
               else if (mode !== 'menu') { if (selected.current) pending.current = { top: listTop.current, target: selected.current }; setMode('menu'); }
-              else setOpen(false);
+              else { setDraft(null); setOpen(false); }
             }}>Back</button>
             <button ref={helpButton} data-us-programme-help aria-label="Season programme help" className={button} onClick={() => { if (mode !== 'help') { returnMode.current = mode; helpTop.current = body.current?.scrollTop ?? 0; } setMode('help'); }}>?</button>
-            <button data-us-programme-close className={button + ' ml-auto'} onClick={() => setOpen(false)}>Close</button>
+            <button data-us-programme-close className={button + ' ml-auto'} onClick={() => { setDraft(null); setOpen(false); }}>Close</button>
           </div>
+          {preview && <div className="mt-2">
+            <p role="status" className="text-xs text-muted-foreground">Preview only. Try choices, then apply the whole plan or discard.</p>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <button className={button + ' border-primary disabled:opacity-50'} disabled={disabled} onClick={() => {
+                const next = saveUsCareerProgramme(career, sport, preview.choices);
+                if (next !== career) onChange(next);
+                setDraft(null); setMode('menu');
+              }}>Apply plan</button>
+              <button className={button} onClick={() => { setDraft(null); setMode('menu'); }}>Discard preview</button>
+            </div>
+          </div>}
         </header>
         <div ref={body} data-us-programme-scroll className="min-h-0 overflow-y-auto p-3">
           <h3 ref={heading} tabIndex={-1} className="mb-2 text-sm font-black">{mode === 'help' ? 'How your programme works' : mode === 'menu' ? 'Choose a season decision' : selectedMenu?.label}</h3>
@@ -73,16 +93,25 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
             <p>Bonus targets use your saved position stats and enough games played. A successful challenge adds 2% or 5% of that season's salary to gross earnings. 45% of it reaches the bank, counted in tenths of a million like the rest of your bank, so each card shows what your salary would bank. Targets and rewards never alter the recorded stats.</p>
             <p>Veteran adaptation is available from age 30. It trades form for durability this season and earns health +3 for next year after games played. It cannot promise another contract or prevent retirement.</p>
             <p>Each card shows what its choice adds as things stand. Health and morale top out at 100 and durability has a ceiling too: a choice with nothing left to add says so and costs nothing, and the training camp can still move your morale before the season starts.</p>
+            <p>Try a plan to compare the current choices with a preview. Preview choices do not change your programme until you apply the whole plan. Discard or close to keep your current plan.</p>
             <p>Example: Prioritize recovery adds 8 to season health, capped at 100, and subtracts 6 from season morale. Injury losses still count. After the sim, temporary preparation is removed before normal career growth.</p>
             <p>A suspension or a season with no games interrupts the programme and pays no reward. Your usual routine preserves the original simulation.</p>
             <button data-us-programme-start className={button + ' w-full'} onClick={() => setMode(returnMode.current)}>Continue to programme</button>
           </div> : mode === 'menu' ? <div className="grid grid-cols-2 gap-2">
-            {menus.map(menu => <button key={menu.id} ref={node => { tiles.current[menu.id] = node; }} data-us-programme-tile={menu.id} className={button + ' text-left'} onClick={() => { listTop.current = body.current?.scrollTop ?? 0; selected.current = menu.id; setMode(menu.id); }}><span className="block">{menu.label}</span><span className="mt-1 block text-xs text-muted-foreground">{menu.options.find(o => o.id === (held?.[menu.id] ?? 'normal'))?.label}</span></button>)}
-            <button data-us-programme-clear disabled={disabled || !held} className={button + ' col-span-2 disabled:opacity-50'} onClick={() => onChange(saveUsCareerProgramme(career, sport, null))}>Use your usual routine</button>
+            {menus.map(menu => <button key={menu.id} ref={node => { tiles.current[menu.id] = node; }} data-us-programme-tile={menu.id} className={button + ' text-left'} onClick={() => { listTop.current = body.current?.scrollTop ?? 0; selected.current = menu.id; setMode(menu.id); }}><span className="block">{menu.label}</span><span className="mt-1 block text-xs text-muted-foreground">{preview && <>Preview: </>}{menu.options.find(o => o.id === (choices?.[menu.id] ?? 'normal'))?.label}</span>{preview && <span className="mt-1 block text-xs text-muted-foreground">Current: {currentMenus.find(m => m.id === menu.id)?.options.find(o => o.id === (held?.[menu.id] ?? 'normal'))?.label}</span>}</button>)}
+            {!preview && <button disabled={disabled} className={button + ' col-span-2 disabled:opacity-50'} onClick={() => setDraft({ career, sport, choices: { ...(held ?? usProgrammeDefaults()) } })}>Try a plan</button>}
+            <button data-us-programme-clear disabled={disabled || !(preview || held)} className={button + ' col-span-2 disabled:opacity-50'} onClick={() => {
+              if (preview) setDraft({ ...preview, choices: usProgrammeDefaults() });
+              else onChange(saveUsCareerProgramme(career, sport, null));
+            }}>Use your usual routine</button>
           </div> : <div className="space-y-2">
-            {selectedMenu?.options.map(option => <button key={option.id} disabled={disabled} aria-pressed={(held?.[selectedMenu.id] ?? 'normal') === option.id} data-us-programme-choice={selectedMenu.id + ':' + option.id} className={button + ' w-full text-left disabled:opacity-50 aria-pressed:border-primary aria-pressed:bg-primary/10'} onClick={() => choose(selectedMenu.id, option.id)}><span className="block">{option.label}</span><span className="mt-1 block text-xs font-normal">{option.effect}</span></button>)}
+            {preview && <div className="rounded-lg border border-border bg-secondary/40 p-2 text-xs">
+              <p data-us-programme-current>Current plan: <b>{currentOption?.label}</b>. {currentOption?.effect}</p>
+              <p data-us-programme-preview-selection className="mt-2">Preview: <b>{previewOption?.label}</b>. {previewOption?.effect}</p>
+            </div>}
+            {selectedMenu?.options.map(option => <button key={option.id} disabled={disabled} aria-pressed={(choices?.[selectedMenu.id] ?? 'normal') === option.id} data-us-programme-choice={selectedMenu.id + ':' + option.id} className={button + ' w-full text-left disabled:opacity-50 aria-pressed:border-primary aria-pressed:bg-primary/10'} onClick={() => choose(selectedMenu.id, option.id)}><span className="block">{option.label}</span><span className="mt-1 block text-xs font-normal">{option.effect}</span></button>)}
             {disabled && <p className="text-xs text-muted-foreground">Choices are unavailable while retired, suspended or when the saved programme record is incomplete.</p>}
-            <p className="text-xs text-muted-foreground">Each choice saves immediately. You can change it before playing.</p>
+            <p className="text-xs text-muted-foreground">{preview ? 'These choices only change your preview. Apply the whole plan when ready.' : 'Each choice saves immediately. You can change it before playing.'}</p>
           </div>}
         </div>
       </DialogContent>

@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Link, useLocation, useNavigate, useNavigationType, useSearchParams } from 'react-router-dom';
 import { ArrowUpRight, CalendarDays, Gamepad2, Search, Shuffle, X } from 'lucide-react';
 import type { GameDef } from '@/data/gameRegistry';
@@ -18,10 +18,10 @@ const arenas = {
   '/college': { image: '/arenas/football.webp', color: '#d6bbff', line: 'Build a program people remember.' },
 };
 
-export type HubFilter = 'all' | 'daily' | 'sim';
-export function filterHubGames(games: GameDef[], filter: HubFilter, query: string): GameDef[] {
+export type HubFilter = 'all' | 'daily' | 'sim' | 'saved';
+export function filterHubGames(games: GameDef[], filter: HubFilter, query: string, savedPaths: string[] = []): GameDef[] {
   const needle = query.trim().toLocaleLowerCase();
-  return games.filter(game => (filter === 'all' || (filter === 'daily' ? game.daily : game.featured))
+  return games.filter(game => (filter === 'all' || (filter === 'saved' ? savedPaths.includes(game.path) : filter === 'daily' ? game.daily : game.featured))
     && (!needle || `${game.label} ${game.description}`.toLocaleLowerCase().includes(needle)));
 }
 
@@ -48,7 +48,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
   }, [location.key, location.state, navigationType, owner, incomingSearch]);
   const libraryParams = new URLSearchParams(librarySearch);
   const requestedFilter = libraryParams.get('filter');
-  const filter: HubFilter = requestedFilter === 'daily' || requestedFilter === 'sim' ? requestedFilter : 'all';
+  const filter: HubFilter = requestedFilter === 'daily' || requestedFilter === 'sim' || requestedFilter === 'saved' ? requestedFilter : 'all';
   const query = libraryParams.get('q') ?? '';
   const setLibrary = (nextFilter: HubFilter | undefined, nextQuery?: string) => {
     const next = new URLSearchParams(latestSearch.current);
@@ -67,9 +67,16 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
   const setFilter = (nextFilter: HubFilter) => setLibrary(nextFilter);
   const setQuery = (nextQuery: string) => setLibrary(undefined, nextQuery);
   const searchRef = useRef<HTMLInputElement>(null);
-  const [continuations] = useState<Record<string, string>>(() => readContinuations(games));
+  const [saveRevision, setSaveRevision] = useState(0);
+  useEffect(() => {
+    const refresh = () => setSaveRevision(value => value + 1);
+    window.addEventListener('storage', refresh);
+    window.addEventListener('focus', refresh);
+    return () => { window.removeEventListener('storage', refresh); window.removeEventListener('focus', refresh); };
+  }, []);
+  const continuations = useMemo(() => readContinuations(games), [games, saveRevision]);
   const arena = arenas[hub.route as keyof typeof arenas] ?? arenas['/soccer'];
-  const visible = filterHubGames(games, filter, query);
+  const visible = filterHubGames(games, filter, query, Object.keys(continuations));
   const deep = visible.filter(game => game.featured);
   const quick = visible.filter(game => !game.featured).sort((a, b) => Number(!!b.daily) - Number(!!a.daily));
   const first = games.find(game => game.featured) ?? games[0];
@@ -79,6 +86,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
     { id: 'all', label: 'All games', count: games.length },
     { id: 'sim', label: 'Careers & sims', count: games.filter(game => game.featured).length },
     { id: 'daily', label: 'Daily puzzles', count: dailyCount },
+    { id: 'saved', label: 'Saved games', count: saved.length },
   ];
 
   const card = (game: GameDef, featured = false) => (
@@ -135,7 +143,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
         </div>
         <div className={styles.controls}>
           <div role="group" aria-label="Filter games" className={styles.filters}>
-            {filters.filter(item => item.count > 0).map(item => <button key={item.id} aria-pressed={filter === item.id} onClick={() => setFilter(item.id)}>{item.label}<span>{item.count}</span></button>)}
+            {filters.filter(item => item.count > 0 || item.id === 'saved' && filter === 'saved').map(item => <button key={item.id} data-no-prerender={item.id === 'saved' || undefined} aria-pressed={filter === item.id} onClick={() => setFilter(item.id)}>{item.label}<span>{item.count}</span></button>)}
           </div>
           <label className={styles.search}><Search aria-hidden="true" /><input ref={searchRef} aria-label={`Search ${hub.navLabel} games`} value={query} onChange={event => setQuery(event.target.value)} placeholder="Find your game" />
             {query && <button onClick={() => { setQuery(''); searchRef.current?.focus({ preventScroll: true }); }} aria-label="Clear game search"><X /></button>}
@@ -152,7 +160,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
           <p className={styles.sectionNote}>{hub.quick.blurb}</p>
           <div className={styles.gameGrid}>{quick.map(game => card(game))}</div>
         </section>}
-        {visible.length === 0 && <div className={styles.empty}><Search aria-hidden="true" /><h3>No games match that search.</h3><p>Try a shorter name, or see the full collection.</p><button onClick={() => { setLibrary('all', ''); searchRef.current?.focus({ preventScroll: true }); }}>Show all {hub.navLabel} games</button></div>}
+        {visible.length === 0 && <div className={styles.empty}><Search aria-hidden="true" /><h3>{filter === 'saved' && saved.length === 0 ? 'No saved games here yet.' : 'No games match that search.'}</h3><p>{filter === 'saved' && saved.length === 0 ? 'Play a career or sim to keep your progress in this browser.' : 'Try a shorter name, or see the full collection.'}</p><button onClick={() => { setLibrary('all', ''); searchRef.current?.focus({ preventScroll: true }); }}>Show all {hub.navLabel} games</button></div>}
       </section>
     </div>
   );

@@ -11,7 +11,7 @@ import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { recordFullTimes } from '@/lib/tycoonRewards';
 import type { FullTime } from '@/lib/tycoonRewards';
 import {
-  TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
+  TycoonState, TickEvent, newTycoon, tick, buy, upgradePurchase, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
   activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
   GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,
@@ -383,9 +383,9 @@ export function useStadiumTycoon(getEdge?: () => number) {
     saveTicketState(next);
   }, [commit, saveTicketState, markSessionPlay]);
 
-  const doBuy = useCallback((id: string) => {
+  const doBuy = useCallback((id: string, amount: 1 | 5 = 1) => {
     markSessionPlay();
-    commit(buy(stateRef.current, id));
+    commit(amount === 1 ? buy(stateRef.current, id) : upgradePurchase(stateRef.current, id, amount).state);
   }, [commit]);
 
   /* Round 162: the payroll. */

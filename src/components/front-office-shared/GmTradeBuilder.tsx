@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { assetKey } from '@/lib/gmTradePackage';
 import type { PackageVerdict, TradeAsset } from '@/lib/gmTradePackage';
@@ -45,15 +46,29 @@ export interface GmTradeBuilderProps {
   onPropose: () => void;
 }
 
-function Column({ title, tiles, selected, onToggle, full }: {
-  title: string; tiles: BuilderTile[]; selected: Set<string>; onToggle: (a: TradeAsset) => void; full: boolean;
+function Column({ title, side, tiles, selected, onToggle, full }: {
+  title: string; side: 'your' | 'their'; tiles: BuilderTile[]; selected: Set<string>; onToggle: (a: TradeAsset) => void; full: boolean;
 }) {
+  const [query, setQuery] = useState('');
+  const needle = query.trim().toLowerCase();
+  const visible = tiles.filter(t => selected.has(assetKey(t.asset)) || (t.label + ' ' + (t.sub ?? '')).toLowerCase().includes(needle));
   const inDeal = tiles.filter(t => selected.has(assetKey(t.asset))).length;
   return (
     <div className="min-w-0 flex-1">
       <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{title} ({inDeal})</p>
+      <div className="mt-1 flex gap-1">
+        <input type="search" aria-label={`Search ${side} trade assets`} placeholder="Name, position or pick"
+          value={query} onChange={event => setQuery(event.target.value)}
+          className="min-h-11 min-w-0 flex-1 rounded-lg border border-border bg-background px-2 text-xs" />
+        <button type="button" aria-label={`Clear ${side} asset search`} disabled={!query} onClick={() => setQuery('')}
+          className="min-h-11 min-w-11 rounded-lg border border-border px-2 text-xs font-bold disabled:opacity-40">Clear</button>
+      </div>
+      <p role="status" className="mt-1 text-[10px] text-muted-foreground">
+        Showing {visible.length} of {tiles.length}.{query && ' Selected pieces stay visible.'}
+      </p>
+      {visible.length === 0 && <p className="mt-1 text-xs text-muted-foreground">No matching assets.</p>}
       <ul className="mt-1 max-h-64 space-y-1 overflow-y-auto pr-0.5">
-        {tiles.map(t => {
+        {visible.map(t => {
           const key = assetKey(t.asset);
           const on = selected.has(key);
           /* a piece already in the deal can always come out, blocked or not */
@@ -101,8 +116,8 @@ export function GmTradeBuilder(props: GmTradeBuilderProps) {
   return (
     <div data-gm-trade-builder className="rounded-2xl border border-border bg-card p-3">
       <div className="flex gap-2">
-        <Column title="You send" tiles={mine} selected={selected} onToggle={onToggle} full={giving >= maxPerSide} />
-        <Column title={`From ${partnerName}`} tiles={theirs} selected={selected} onToggle={onToggle} full={getting >= maxPerSide} />
+        <Column title="You send" side="your" tiles={mine} selected={selected} onToggle={onToggle} full={giving >= maxPerSide} />
+        <Column title={`From ${partnerName}`} side="their" tiles={theirs} selected={selected} onToggle={onToggle} full={getting >= maxPerSide} />
       </div>
       <p
         data-gm-verdict={verdict?.verdict ?? 'none'}
