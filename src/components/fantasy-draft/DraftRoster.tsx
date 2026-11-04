@@ -31,10 +31,10 @@ const RosterColumn = ({
   lastPickId?: string | null;
 }) => (
   <div className="flex-1 min-w-0">
-    <div className={cn('flex items-center justify-center gap-1.5 mb-3 pb-2 border-b', accent)}>
+    <div className={cn('flex flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5 mb-3 pb-2 border-b', accent)}>
       {icon}
-      <span className="text-xs sm:text-sm font-bold uppercase tracking-widest">{label}</span>
-      <span className="ml-1 text-xs font-mono opacity-60">{players.length}/11</span>
+      <span className="whitespace-nowrap text-xs sm:text-sm font-bold uppercase tracking-widest">{label}</span>
+      <span className="basis-full text-center text-xs font-mono opacity-60 sm:basis-auto">{players.length}/11</span>
     </div>
     <div className="space-y-1">
       {Array.from({ length: 11 }).map((_, i) => {
@@ -46,7 +46,7 @@ const RosterColumn = ({
             data-draft-slot={i + 1}
             data-draft-pick={isLastPick ? 'latest' : p ? 'settled' : 'empty'}
             className={cn(
-              'flex items-center gap-2 px-2 py-1.5 rounded-lg text-left transition-all duration-500',
+              'flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-0.5 px-2 py-1.5 rounded-lg text-left transition-all duration-500',
               motion.row,
               isLastPick && motion.pick,
               p
@@ -56,23 +56,23 @@ const RosterColumn = ({
                 : 'bg-secondary/10 border border-dashed border-border/40'
             )}
           >
-            <span className="text-[10px] font-mono text-muted-foreground w-4 text-right shrink-0">
+            <span className="order-1 text-[10px] font-mono text-muted-foreground w-4 text-right shrink-0">
               {i + 1}
             </span>
             {p ? (
               <>
-                <span className={cn('text-[9px] font-bold w-6 shrink-0', POS_COLORS[p.position])}>
+                <span className={cn('order-1 text-[9px] font-bold w-6 shrink-0', POS_COLORS[p.position])}>
                   {p.position}
                 </span>
-                <span className="text-xs sm:text-sm font-semibold text-foreground truncate flex-1" title={p.name}>
+                <span className="order-first basis-full min-w-0 whitespace-normal break-words text-xs sm:text-sm font-semibold leading-tight text-foreground" title={p.name}>
                   {p.name}
                 </span>
-                <span className="text-[10px] text-primary font-semibold shrink-0">
+                <span className="order-1 ml-auto whitespace-nowrap text-[10px] text-primary font-semibold shrink-0">
                   £{p.market_value_millions}M
                 </span>
               </>
             ) : (
-              <span className="text-xs text-muted-foreground/40 italic">Empty slot</span>
+              <span className="order-1 flex-1 text-xs text-muted-foreground/40 italic">Empty slot</span>
             )}
           </div>
         );

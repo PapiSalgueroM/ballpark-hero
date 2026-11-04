@@ -900,22 +900,22 @@
       "howToPlay": [
         "Read today's criteria first. It shapes the whole draft.",
         "Draft snake style: 22 alternating picks, with a coin flip deciding who starts.",
-        "Cover every position, goalkeeper included.",
-        "At 11 apiece, hit Simulate Season for the story of each team's year.",
-        "Read the strengths and weaknesses report, then vote for the winner."
+        "Both sides need 1 goalkeeper, 4 defenders, 3 midfielders and 3 forwards.",
+        "At 11 apiece, the 38-game table names the winner. Ask for the season story afterwards.",
+        "Read the analysis and cast a separate community vote."
       ],
       "rules": [
         "Both sides draft 11 players from one shared pool, so a taken player is gone for both.",
         "Rules come with exact numbers: Under 25s, a 1 billion pound squad cap, One Nation (max 3 per country), Bargain Hunt (60 million or less each), Wonderkids (outfielders 21 or under), or Galacticos (outfielders 80 million plus).",
-        "Illegal picks are blocked with the reason shown, relaxing only when no legal option remains.",
+        "Full positions stay blocked. Daily criteria relax only if no eligible player fits an open slot.",
         "Voting requires signing in, so nobody stuffs the ballot."
       ],
       "example": [
-        "The rule is Under 25s, so your 27 year old superstar opener dies on contact: blocked. Round one becomes a wonderkid land grab, and the AI, which leans expensive, snaps up the priciest young forward on the board.",
-        "You counter with a young keeper, because the AI leaves goalkeepers late. By pick 22 both rosters are packed with kids, and the vote breaks your way."
+        "Under 25s blocks an older opener. You and the AI still need a 4-3-3, so both chase eligible players in the positions left.",
+        "With 1 GK, 3 MID and 3 FWD drafted, only defenders fit. Another forward is blocked. If no defender meets today's criteria, that rule relaxes for a defender, never an extra forward."
       ],
       "tips": [
-        "Draft against the AI's taste: it chases market value, so grab the cheap positional glue it ignores.",
+        "The AI chases value but fills the same positions. Keep good options for each slot.",
         "Under a budget cap, one megastar eats a third of your money. Spread it.",
         "Scarcity beats stardom mid draft. Two keepers left is a pick, not a luxury.",
         "The AI picks in about 2 seconds, so keep a shortlist ready for every position."
