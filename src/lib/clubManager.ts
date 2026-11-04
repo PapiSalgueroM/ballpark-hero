@@ -20422,18 +20422,18 @@ export function recordedTraining(p: CMPlayer, career: CareerState): { weeks: num
   const counts = h && h.club === career.clubName && h.season === career.season ? h.counts : null;
   const weeks = counts?.reduce((sum, n) => sum + n, 0) ?? 0;
   if (!weeks) return { weeks: 0, rate: developmentRate(p, career) };
-  let total = 0, policies = 0, only = 0;
+  let total = 0;
   for (let i = 0; i < 9; i++) {
     if (!counts![i]) continue;
     const training: TrainingPlan = {
       intensity: (['light', 'normal', 'double'] as const)[Math.floor(i / 3)],
       focus: (['firstTeam', 'balanced', 'youth'] as const)[i % 3],
     };
-    only = developmentRate(p, { ...career, training });
-    total += only * counts![i]; policies++;
+    const rate = developmentRate(p, { ...career, training });
+    if (counts![i] === weeks) return { weeks, rate };
+    total += rate * counts![i];
   }
-  // One policy returns its original value directly, without multiplication and division rounding.
-  return { weeks, rate: policies === 1 ? only : total / weeks };
+  return { weeks, rate: total / weeks };
 }
 
 /**

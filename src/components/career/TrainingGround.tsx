@@ -182,7 +182,7 @@ export default function TrainingGround<Id extends string>({ sport, available, on
                 {sport.bank}
               </button>
             ) : (
-              <button onClick={close} data-training-banked={banked ? '' : undefined} className={`w-full h-11 rounded-lg bg-muted/40 hover:bg-muted/60 text-sm font-black ${feedback.banked}`}>
+              <button onClick={close} data-training-banked={banked ? true : undefined} className={`w-full h-11 rounded-lg bg-muted/40 hover:bg-muted/60 text-sm font-black ${feedback.banked}`}>
                 {sport.done}
               </button>
             )}
