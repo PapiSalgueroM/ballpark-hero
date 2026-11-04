@@ -1,0 +1,220 @@
+name: Sixth same-payload native qualification
+on:
+  push:
+    branches: [codex/master-list-sixth-recovery-20261104]
+permissions:
+  contents: read
+  actions: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+jobs:
+  qualify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Admit the failed original and its completed unchanged build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-sixth-recovery"
+          REF="$RUNNER_TEMP/original-sixth-build"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/original" "$REF"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          echo "QA_REF=$REF" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT" QA_REF="$REF"
+          test "$(git rev-parse HEAD^)" = fbb617878c9f11a60dd3cbab2f5c3d953d136290
+          test "$(git rev-parse HEAD^^{tree})" = 529baf482e3ea6ab66e55ce43107ca509aeb778a
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-sixth-recovery-20261104.yml'
+          git diff --exit-code d4e5c9df5a9c1acd8d2f9b670ddedf452fe83056 HEAD -- src public index.html package.json package-lock.json bun.lock bun.lockb vite.config.ts > "$OUT/app-source-bridge.txt"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-sixth-recovery-20261104.yml "$OUT/workflow.yml"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13361849993 --output "$OUT/original/artifact-meta.json"
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/jobs/126855657277 --output "$OUT/original/job.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,m=JSON.parse(fs.readFileSync(out+'/original/artifact-meta.json')),j=JSON.parse(fs.readFileSync(out+'/original/job.json'));
+          assert.equal(m.id,13361849993);assert.equal(m.expired,false);assert.equal(m.size_in_bytes,12184940);assert.equal(m.digest,'sha256:a15b9d2e143423182090771d00f657229276de48084984f1122cdc13d7051fb7');assert.equal(m.workflow_run.id,41910267879);assert.equal(m.workflow_run.head_sha,'d4e5c9df5a9c1acd8d2f9b670ddedf452fe83056');
+          assert.equal(j.id,126855657277);assert.equal(j.run_id,41910267879);assert.equal(j.head_sha,m.workflow_run.head_sha);assert.equal(j.status,'completed');assert.equal(j.conclusion,'failure');
+          const expected=[
+            ['Proper joined application types','success'],
+            ['Existing save and home guards, normal build, twenty readers and all unchanged page caps','success'],
+            ['Source-held CM6 and FO3 native journeys on this completed build','failure'],
+            ['Retain full source holds and transport evidence','failure']
+          ];for(const[name,result]of expected){const rows=j.steps.filter(s=>s.name===name);assert.equal(rows.length,1,name);assert.equal(rows[0].conclusion,result,name);}
+          NODE
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/13361849993/zip --output "$REF/original.zip"
+          test "$(stat -c%s "$REF/original.zip")" = 12184940
+          echo "a15b9d2e143423182090771d00f657229276de48084984f1122cdc13d7051fb7  $REF/original.zip" | sha256sum --check
+          unzip -q "$REF/original.zip" -d "$REF/extracted"
+          export ORIGINAL="$REF/extracted"
+          test "$(stat -c%s "$ORIGINAL/completed-dist.tar.gz")" = 6978488
+          echo "0437cc098e1aa8b596b6e3f4cd9b54643b34c8c55514fa12dad885bf213e3f0b  $ORIGINAL/completed-dist.tar.gz" | sha256sum --check
+          echo "126809e62fb780ef94d89144cc9f9755d4b593281c49a476846235819dde8318  $ORIGINAL/dist-before.sha256" | sha256sum --check
+          echo "0197b7d84e3f5ed688fb3f8e4c93746368724604be71b01881a872537d726211  $ORIGINAL/source-before.sha256" | sha256sum --check
+          echo "c2dbaa23576486988a611efcf00ede0096ff700a472f58d30307c71baea114dd  $ORIGINAL/cm-fixtures/manifest.json" | sha256sum --check
+          cmp "$ORIGINAL/dist-before.sha256" "$ORIGINAL/dist-after.sha256"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const base=process.env.ORIGINAL,out=process.env.QA_OUT;
+          assert.equal(fs.statSync(base+'/source-diff.txt').size,0);assert.equal(fs.statSync(base+'/status-before.txt').size,0);
+          assert.equal(fs.readFileSync(base+'/status-after.txt','utf8'),'?? .tmp-fx/career-records-tests.json\n');
+          assert.equal(fs.existsSync(base+'/source-after.sha256'),false);
+          const rows=fs.readFileSync(base+'/source-before.sha256','utf8').trimEnd().split('\n').map(line=>{const m=/^([a-f0-9]{64})  (.+)$/.exec(line);assert(m);return[m[2],m[1]];});
+          assert.equal(rows.length,5728);const map=Object.fromEntries(rows);assert.equal(Object.keys(map).length,rows.length);
+          const cm=JSON.parse(fs.readFileSync(base+'/cm-fixtures/manifest.json'));
+          assert.deepEqual(cm.sourceBefore,map);assert.deepEqual(cm.sourceAfter,map);
+          const versions=JSON.parse(fs.readFileSync(base+'/logs/build-versions.json'));assert.deepEqual(versions,{router:'7.18.4',vite:'5.4.19',rollup:'4.24.0'});
+          assert.equal(fs.readFileSync(base+'/logs/bun-version.log','utf8').trim(),'1.4.4');
+          assert.match(fs.readFileSync(base+'/logs/simSoccerCareerRecords.log','utf8'),/simSoccerCareerRecords: 12 outcome checks green, three effective controls caught/);
+          fs.writeFileSync(out+'/original/qualification.json',JSON.stringify({originalRun:41910267879,originalJob:126855657277,originalConclusion:'failure',properTypesAndNormalBuild20Readers16Caps:'passed',native:'failed, QA reload readiness and expected existing morale lift; FO normal skipped',closure:'failed, sole generated records JSON; old final shell source-after inventory absent',trackedSourceBridge:{rows:5728,beforeAndFixtureBeforeAfterExact:true,originalSourceDiffEmpty:true,oldFinalShellAfterExists:false},completedPayload:{tarBytes:6978488,tarSHA256:'0437cc098e1aa8b596b6e3f4cd9b54643b34c8c55514fa12dad885bf213e3f0b',files:847,manifestSHA256:'126809e62fb780ef94d89144cc9f9755d4b593281c49a476846235819dde8318'},scope:'QA-only recovery reuses the single completed normal Bun compile. Original failure remains retained and is not relabeled success.'},null,2)+'\n');
+          NODE
+          cp "$ORIGINAL/source-before.sha256" "$OUT/original/source-before.sha256"
+          cp "$ORIGINAL/source-diff.txt" "$ORIGINAL/status-before.txt" "$ORIGINAL/status-after.txt" "$ORIGINAL/workflow.yml" "$OUT/original/"
+          cp "$ORIGINAL/cm-fixtures/manifest.json" "$OUT/original/cm-fixture-manifest.json"
+          cp "$ORIGINAL/logs/build-versions.json" "$ORIGINAL/logs/bun-version.log" "$ORIGINAL/logs/sweep-weight.log" "$ORIGINAL/logs/simSoccerCareerRecords.log" "$OUT/original/"
+          cp "$ORIGINAL/completed-dist.tar.gz" "$OUT/completed-dist.tar.gz"
+          cp "$ORIGINAL/dist-before.sha256" "$OUT/dist-before.sha256"
+          test "$(wc -l < "$OUT/dist-before.sha256")" = 847
+          tar -tzf "$OUT/completed-dist.tar.gz" > "$OUT/completed-dist-members.txt"
+          tar -xzf "$OUT/completed-dist.tar.gz" -C "$GITHUB_WORKSPACE"
+          sha256sum --check "$OUT/dist-before.sha256" > "$OUT/reference-dist-held.log"
+      - name: Install unchanged source and browser QA tooling without a rebuild
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund > "$QA_OUT/logs/npm-ci.log" 2>&1
+          npm install --prefix "$RUNNER_TEMP/top-games-browser-tools" --package-lock=false --no-audit --no-fund playwright@1.64.0 > "$QA_OUT/logs/playwright-install.log" 2>&1
+          test ! -e node_modules/playwright
+          test ! -e node_modules/playwright-core
+          ln -s "$RUNNER_TEMP/top-games-browser-tools/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/top-games-browser-tools/node_modules/playwright-core" node_modules/playwright-core
+          "$RUNNER_TEMP/top-games-browser-tools/node_modules/.bin/playwright" install --with-deps chromium > "$QA_OUT/logs/chromium-install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+      - name: Reproduce and retain the exact existing records guard output
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD:scripts/simSoccerCareerRecords.mjs)" = d8d20dc8fed3de3d759f7d8a44d8c74610e2e771
+          test ! -e .tmp-fx/career-records-tests.json
+          test ! -e src/lib/__control_soccerCareerRecords.ts
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/records-reproduction.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/records-reproduction.log" node scripts/simSoccerCareerRecords.mjs > "$QA_OUT/logs/records-reproduction.log" 2>&1
+          test ! -s "$QA_OUT/transport/records-reproduction.log"
+          grep -F 'ok copied academy counted defect fired in its required outcome check' "$QA_OUT/logs/records-reproduction.log"
+          grep -F 'ok copied loan merged defect fired in its required outcome check' "$QA_OUT/logs/records-reproduction.log"
+          grep -F 'ok copied short rating season defect fired in its required outcome check' "$QA_OUT/logs/records-reproduction.log"
+          grep -F 'simSoccerCareerRecords: 12 outcome checks green, three effective controls caught' "$QA_OUT/logs/records-reproduction.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/records-generated-status.txt"
+          test "$(cat "$QA_OUT/records-generated-status.txt")" = '?? .tmp-fx/career-records-tests.json'
+          git diff --exit-code HEAD > "$QA_OUT/records-source-diff.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const parent=path.resolve('.tmp-fx'),leaf=path.join(parent,'career-records-tests.json'),dest=process.env.QA_OUT+'/records-last-control-tests.json';
+          assert(fs.lstatSync(parent).isDirectory());assert.equal(fs.lstatSync(parent).isSymbolicLink(),false);assert.equal(fs.realpathSync(parent),parent);
+          assert(fs.lstatSync(leaf).isFile());assert.equal(fs.lstatSync(leaf).isSymbolicLink(),false);assert.equal(fs.realpathSync(leaf),leaf);
+          const bytes=fs.readFileSync(leaf),hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const report=JSON.parse(bytes),rows=report.testResults.flatMap(s=>s.assertionResults);assert.equal(rows.length,12);assert.equal(rows.filter(r=>r.status==='passed').length,11);const failed=rows.filter(r=>r.status==='failed');assert.equal(failed.length,1);assert(failed[0].fullName.includes('uses actual records, keeps ties earliest'));
+          fs.writeFileSync(dest,bytes,{flag:'wx'});assert.deepEqual(fs.readFileSync(dest),bytes);assert.equal(hash(fs.readFileSync(dest)),hash(bytes));
+          fs.writeFileSync(process.env.QA_OUT+'/records-output-retention.json',JSON.stringify({script:'d8d20dc8fed3de3d759f7d8a44d8c74610e2e771',sourceLeaf:'.tmp-fx/career-records-tests.json',retained:'records-last-control-tests.json',bytes:bytes.length,sha256:hash(bytes),nativeSimExit:0,meaning:'Last negative-control report, intentionally 1 failed and 11 passed. Healthy 12 passes and all three owned controls are in the complete retained native log.',ordinaryNonSymlinkLeaf:true,copyReadBackExact:true,removedOnlyExactLeaf:true},null,2)+'\n');
+          fs.unlinkSync(leaf);assert.equal(fs.existsSync(leaf),false);
+          NODE
+          sha256sum "$QA_OUT/records-last-control-tests.json" > "$QA_OUT/records-last-control-tests.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/records-retained-status.txt"
+          test ! -s "$QA_OUT/records-retained-status.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/records-source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/records-source-after.sha256"
+      - name: Source-held CM6 and FO3 native journeys on this completed build
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          for script in cmReplacementFixtures cmReplacementBrowser cmReplacementScrollControl foMarketAccessFixtures foMarketAccessBrowser foMarketAccessScrollControl nativeScrollReady; do node --check "scripts/qa/$script.mjs"; done
+          : > "$QA_OUT/transport/cm-fixtures.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/cm-fixtures.log" node scripts/qa/cmReplacementFixtures.mjs --out "$QA_OUT/cm-fixtures" --dist dist --core fbb617878c9f11a60dd3cbab2f5c3d953d136290 > "$QA_OUT/logs/cm-fixtures.log" 2>&1
+          test ! -s "$QA_OUT/transport/cm-fixtures.log"
+          : > "$QA_OUT/transport/fo-fixtures.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/fo-fixtures.log" node scripts/qa/foMarketAccessFixtures.mjs --out "$QA_OUT/fo-fixtures" --dist dist --core fbb617878c9f11a60dd3cbab2f5c3d953d136290 > "$QA_OUT/logs/fo-fixtures.log" 2>&1
+          test ! -s "$QA_OUT/transport/fo-fixtures.log"
+          : > "$QA_OUT/transport/native-server.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/native-server.log" node scripts/lib/hostLikeServer.mjs dist 4174 > "$QA_OUT/logs/native-server.log" 2>&1 &
+          native_pid=$!
+          trap 'kill "$native_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 40); do if curl --fail --silent http://127.0.0.1:4174/ > /dev/null; then ready=1; break; fi; kill -0 "$native_pid"; sleep 1; done
+          test "$ready" = 1
+          : > "$QA_OUT/transport/cm-scroll-control.log"
+          set +e
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/cm-scroll-control.log" node scripts/qa/cmReplacementScrollControl.mjs --out "$QA_OUT/cm-scroll-control" --fixtures "$QA_OUT/cm-fixtures" --dist dist --base-url http://127.0.0.1:4174 > "$QA_OUT/logs/cm-scroll-control.log" 2>&1
+          cm_control_status=$?
+          set -e
+          echo "$cm_control_status" > "$QA_OUT/cm-scroll-control-native-exit.txt"
+          test "$cm_control_status" = 1
+          test ! -s "$QA_OUT/transport/cm-scroll-control.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const m=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/cm-scroll-control/report.json'));assert.equal(m.status,'owned-fault-qualified');assert.equal(m.observed.qualified,true);assert.equal(m.sourceHeld,true);assert.equal(m.distHeld,true);assert.equal(m.fixtureManifestHeld,true);assert.equal(m.engineBundleHeld,true);
+          NODE
+          : > "$QA_OUT/transport/fo-scroll-control.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/fo-scroll-control.log" node scripts/qa/foMarketAccessScrollControl.mjs --out "$QA_OUT/fo-scroll-control" --fixtures "$QA_OUT/fo-fixtures" --dist dist --base-url http://127.0.0.1:4174 > "$QA_OUT/logs/fo-scroll-control.log" 2>&1
+          test ! -s "$QA_OUT/transport/fo-scroll-control.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const m=JSON.parse(fs.readFileSync(process.env.QA_OUT+'/fo-scroll-control/control-report.json'));assert.equal(m.status,'admitted');assert.equal(m.owned.actualVerticalPixels,10);assert.equal(m.owned.trustedClicks,1);assert.equal(m.owned.completeSignedBytesEqual,true);assert.equal(m.sourceHeld,true);assert.equal(m.distHeld,true);assert.equal(m.normalHeld,true);
+          NODE
+          : > "$QA_OUT/transport/cm-native.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/cm-native.log" node scripts/qa/cmReplacementBrowser.mjs --out "$QA_OUT/cm-native" --fixtures "$QA_OUT/cm-fixtures" --dist dist --base-url http://127.0.0.1:4174 > "$QA_OUT/logs/cm-native.log" 2>&1
+          test ! -s "$QA_OUT/transport/cm-native.log"
+          : > "$QA_OUT/transport/fo-native.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/fo-native.log" node scripts/qa/foMarketAccessBrowser.mjs --out "$QA_OUT/fo-native" --fixtures "$QA_OUT/fo-fixtures" --dist dist --base-url http://127.0.0.1:4174 > "$QA_OUT/logs/fo-native.log" 2>&1
+          test ! -s "$QA_OUT/transport/fo-native.log"
+          test ! -s "$QA_OUT/transport/native-server.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=[['cm-native',6],['fo-native',3]].map(([name,count])=>{const r=JSON.parse(fs.readFileSync(out+'/'+name+'/report.json'));assert.equal(r.status,'passed');assert.equal(r.contexts.length,count);assert(r.contexts.every(x=>x.status==='passed'));assert.equal(r.screenshots.length,count);assert.equal(r.sourceHeld,true);assert.equal(r.distHeld,true);return{name,contexts:count,photos:r.screenshots.length};});fs.writeFileSync(out+'/native-admission.json',JSON.stringify({status:'passed',rows,contexts:9,photos:9,controlsAdmittedBeforeNormal:true,scope:'Six CM and three FO controlled fixture journeys on one completed normal Bun build. No natural-career or full-fleet claim.'},null,2)+'\n');
+          NODE
+      - name: Always retain complete source, status and completed payload holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+          cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256"
+          sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-held.log"
+          echo "0437cc098e1aa8b596b6e3f4cd9b54643b34c8c55514fa12dad885bf213e3f0b  $QA_OUT/completed-dist.tar.gz" | sha256sum --check
+      - name: Bound retained focused evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-sixth-recovery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/master-list-sixth-recovery
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
