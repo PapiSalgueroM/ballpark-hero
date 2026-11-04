@@ -1,0 +1,63 @@
+name: Fifth physical compatibility controls and consumer census
+on:
+  push:
+    branches: [codex/master-list-fifth-controls-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold source and census all application and harness consumers
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/fifth-controls"
+          mkdir -p "$OUT/logs"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = de6468e05814598800f38f5f9eb0b4c349cb69e4
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git grep -n -E '(^|[^[:alnum:]_])(liveFeed|liveShapeAt|squadNumbers|plusOf)([^[:alnum:]_]|$)' -- src scripts > "$OUT/whole-repo-symbols.txt"
+          git grep -n -E 'LiveSimScreen|liveStatsAt' -- src scripts > "$OUT/live-references.txt"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+      - name: Physically restore and reject the unsafe reads
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/caller-transport.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/caller-transport.log" node scripts/qa/cmRetrainingPauseUnsafeControl.mjs "$QA_OUT/cm-unsafe-read" > "$QA_OUT/logs/cm-control.log" 2>&1
+          test ! -s "$QA_OUT/caller-transport.log"
+      - name: Physically reject conditional loan faults
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/sc-caller-transport.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/sc-caller-transport.log" node scripts/qa/scLoanPhysicalControls.mjs "$QA_OUT/sc-physical" > "$QA_OUT/logs/sc-control.log" 2>&1
+          test ! -s "$QA_OUT/sc-caller-transport.log"
+      - name: Always prove whole source held
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fifth-physical-controls
+          path: ${{ runner.temp }}/fifth-controls
+          if-no-files-found: error
+          retention-days: 14
