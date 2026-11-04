@@ -7,6 +7,7 @@ export interface TicketPolicyCardProps {
   onSelect: (policy: TicketPolicy) => void;
   saveFailed: boolean;
   onRetrySave: () => void;
+  showSaveNotice?: boolean;
 }
 
 const explanations: Record<TicketPolicy, string> = {
@@ -16,7 +17,7 @@ const explanations: Record<TicketPolicy, string> = {
 };
 const dollars = (value: number) => `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetrySave }: TicketPolicyCardProps) {
+export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetrySave, showSaveNotice = true }: TicketPolicyCardProps) {
   const current = ticketEconomy(state);
   const early = newTycoon(0);
   const full = { ...early, fanbase: 240 };
@@ -35,7 +36,7 @@ export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetryS
   return <section data-ticket-policy-panel data-current-policy={current.policy} data-save-status={saveFailed ? 'failed' : 'current'} className="rounded-xl border border-border bg-card p-3 mb-3 text-xs">
     <h3 className="font-bold text-sm">Ticket offer: pick your price</h3>
     <p className="text-muted-foreground mt-1">Trade gate money for supporter growth. Choose freely; your money stays put.</p>
-    {saveFailed && <div role="alert" className="mt-3 rounded-lg border border-destructive p-2">
+    {saveFailed && showSaveNotice && <div role="alert" className="mt-3 rounded-lg border border-destructive p-2">
       <p>Active now, but not saved on this device. Keep this page open and retry.</p>
       <button type="button" onClick={onRetrySave} className="min-h-[44px] min-w-[44px] font-bold underline">Retry save</button>
     </div>}

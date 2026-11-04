@@ -59,7 +59,7 @@ const controls = [
   ['noticeWrite', NOTICE, '  return (', "  localStorage.setItem('home-search-control', 'changed');\n  return (", FAILURE],
   ['noticeDraw', NOTICE, '  return (', '  Math.random();\n  return (', FAILURE],
   ['failureRole', NOTICE, '<section role="alert"', '<section role="status"', FAILURE],
-  ['clearQuery', PAGE, "onClick={() => setSearchQuery('')}", 'onClick={() => undefined}', CLEAR],
+  ['clearQuery', PAGE, "onClick={clearSearch}", 'onClick={() => undefined}', CLEAR],
   ['fallback', PAGE, "const POPULAR_FALLBACK_PATHS = ['/soccer-grid', '/footle', '/squad-deal'];", "const POPULAR_FALLBACK_PATHS = ['/soccer-grid', '/footle'];", EMPTY],
   ['prewarmTerminal', PAGE, 'setSearchFailed(true);', 'if (isSearching) setSearchFailed(true);', PREFETCH],
 ];

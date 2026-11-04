@@ -30,7 +30,7 @@ await build({
       "export const SUPABASE_URL='http://offline.invalid'; export const SUPABASE_PUBLISHABLE_KEY='offline'; export const supabase=new Proxy({}, {get(){throw new Error('Native decision fixture cannot use transport');}});" }));
   } }],
 });
-const { decisionSports, nativeDecisionFixture, nativeTradeDecisionFixture, decisionSave } = createRequire(import.meta.url)(bundle);
+const { decisionSports, nativeSummerDecisionFixture: nativeDecisionFixture, nativeSummerTradeDecisionFixture: nativeTradeDecisionFixture, decisionSave } = createRequire(import.meta.url)(bundle);
 const fixtures = [...['nba', 'nfl', 'mlb', 'nhl'].map(slug => nativeDecisionFixture(slug)), nativeDecisionFixture('nba', true), nativeTradeDecisionFixture()];
 const profiles = [
   { width: 320, height: 780, input: 'touch', theme: 'dark', reduced: true },
@@ -299,7 +299,28 @@ try {
         assert.equal(await more.getAttribute('aria-expanded'), 'false');
         assert.deepEqual(await state(page), applied, 'Collapsing changes no draws, writes, or career fields');
       }
-      if (profile.input === 'keyboard') {
+      let finalApplied = applied;
+      for (const followUp of fixture.followUps) {
+        if (profile.input === 'keyboard' && finalApplied === applied) {
+          await page.keyboard.press('Tab'); assert.equal(await next.evaluate(el => el === document.activeElement), true);
+          await page.keyboard.press('Enter');
+        } else await activate(next, profile.input);
+        const card = page.locator(`[data-career-decision-event="${followUp.eventId}"]`); await card.waitFor();
+        assert.deepEqual(await state(page), finalApplied, 'Continue to the next real summer card consumes no draws or writes');
+        const option = card.locator(`[data-career-decision-option="${followUp.optionIndex}"]`);
+        assert.equal(await option.locator('span').first().textContent(), followUp.choice);
+        await page.evaluate(tape => { window.__decisionTape = [...tape]; }, followUp.choiceTape);
+        const beforeNext = await state(page); await activate(option, profile.input);
+        await page.locator('[data-career-decision-outcome]').waitFor(); await inspect(`summer-${followUp.eventId}`);
+        finalApplied = await state(page);
+        assert.equal(finalApplied.draws - beforeNext.draws, followUp.choiceTape.length);
+        assert.equal(finalApplied.tapeRemaining, 0);
+        assert.equal(finalApplied.storage[sport.saveKey], followUp.appliedBytes, 'Each remaining real summer answer persists its complete reference state');
+        assert.equal(finalApplied.writes.filter(row => row.method === 'setItem' && row.args[0] === sport.saveKey).length - beforeNext.writes.filter(row => row.method === 'setItem' && row.args[0] === sport.saveKey).length, 1);
+        assert.equal(finalApplied.storage['decision-unrelated-save'], '{"keep":"exact bytes"}');
+        assert.deepEqual(result.scoreWrites, []);
+      }
+      if (profile.input === 'keyboard' && finalApplied === applied) {
         await page.keyboard.press('Tab'); assert.equal(await next.evaluate(el => el === document.activeElement), true);
         await page.keyboard.press('Enter');
       } else await activate(next, profile.input);
@@ -308,11 +329,11 @@ try {
       assert.equal(await play.evaluate(el => el === document.activeElement), true);
       const playRect = await play.boundingBox();
       assert(playRect && playRect.y >= -2 && playRect.y + playRect.height <= result.viewport.height + 2 && playRect.x >= -2 && playRect.x + playRect.width <= result.viewport.width + 2, 'Returned Play action is visible before driver scrolling');
-      assert.deepEqual(await state(page), applied, 'Continue consumes no RNG, saves, or extra season');
+      assert.deepEqual(await state(page), finalApplied, 'Continue consumes no RNG, saves, or extra season');
       assert.deepEqual(result.scoreWrites, []);
       await page.reload({ waitUntil: 'domcontentloaded' }); await play.waitFor(); await settle(page);
       const restored = await state(page);
-      assert.equal(restored.storage[sport.saveKey], fixture.appliedBytes, 'Reload keeps exact applied save bytes');
+      assert.equal(restored.storage[sport.saveKey], fixture.finishedBytes, 'Reload keeps exact applied save bytes');
       assert.equal(restored.storage['decision-unrelated-save'], '{"keep":"exact bytes"}');
       assert.equal(await page.locator('[data-career-decision-outcome], [data-career-decision-event]').count(), 0, 'Reload never replays the applied choice');
       assert.deepEqual(restored.writes.filter(row => row.args[0] === sport.saveKey), [], 'Reload writes no career state');

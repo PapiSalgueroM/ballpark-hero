@@ -6,10 +6,8 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { build } from 'esbuild';
-/* Release BB: Rounds 1280 to 1282 and 1318 keep the made up Ballon d'Or rivals in a saved pool on purpose, which this
-   base pinned comparison cannot know about. Every copy compared with the base takes them out, as the history
-   harnesses do: scripts/lib/careerAwardGenerations1318.mjs. The browser oracle of the native walk is
-   compared with the built page, which keeps the pool, so the oracle keeps it too. */
+/* Current-main oracle: both node source frames take the same existing inverses.
+   The browser oracle stays unmodified, matching the built page. */
 import { inverseAwardGenerations, AWARD_GENERATIONS_ADDITIONS } from '../lib/careerAwardGenerations1318.mjs';
 /* Round 1327: the event deck draws on a keyed stream and the paper picks by weight, so a season makes other global draws from its paper on. Every node bundle of the tree takes that out first (scripts/lib/careerDeckFair1327.mjs), every row once, in order; the browser oracle stays the tree as built, like the page it is held to. */
 import { inverseDeckFair, DECK_FAIR_ADDITIONS } from '../lib/careerDeckFair1327.mjs';
@@ -19,7 +17,7 @@ import { inverseWorldTruth, worldTruthReceiptProblem } from '../lib/careerWorldT
 import { inverseSoccerDeck, soccerDeckReceiptProblem } from '../lib/careerSoccerDeck1334.mjs';
 
 export const ROOT = process.cwd();
-export const BASE = 'd69a448ce830f8312af1eea252a3ae84b13bde9c';
+export const BASE = 'c176be815dc4af57dfd7185a485e28357aa0d41e';
 export const NOW = 1791676800000;
 export const OUT = path.resolve('soccer-agent-review-artifacts');
 export const KEY = 'soccerCareerSave';
@@ -58,7 +56,7 @@ export function evidence(name, value) {
 export async function bundleAgentReview({ original = false, patches = [], browser = false } = {}) {
   const soccerDeck = [], deckFair = [], worldTruth = [], loaded = [], faults = [], temp = fs.mkdtempSync(path.join(os.tmpdir(), 'soccer-agent-review-'));
   const file = path.join(temp, 'oracle.cjs');
-  const entry = "export * as engine from './src/lib/soccerCareerEngine';export * as life from './src/lib/soccerCareerLife';" + (original ? '' : "export * as review from './src/lib/soccerAgentReview';export * as moments from './src/components/soccer-career/careerMoments';export * as reveal from './src/lib/soccerAwardReveal';")
+  const entry = "export * as engine from './src/lib/soccerCareerEngine';export * as life from './src/lib/soccerCareerLife';" + "export * as review from './src/lib/soccerAgentReview';export * as moments from './src/components/soccer-career/careerMoments';export * as reveal from './src/lib/soccerAwardReveal';"
     /* Release BJ triage: the browser oracle also carries the summer deck's gate, so scripts/playSoccerAgentReview.mjs
        can load the deck the way the page has since Round 1504; the node bundles are unchanged. */
     + (browser ? "export * as deckGate from './src/lib/soccerDeckGate';" : '');
@@ -76,8 +74,8 @@ export async function bundleAgentReview({ original = false, patches = [], browse
           if (!relative.startsWith('src/')) return;
           const raw = original ? execFileSync('git', ['show', BASE + ':' + relative], { maxBuffer: 30 * 1024 * 1024 }) : fs.readFileSync(args.path);
           let contents = raw.toString('utf8').replaceAll('\r\n', '\n');
-          if (!original && !browser) contents = inverseDeckFair(relative, inverseWorldTruth(relative, inverseSoccerDeck(relative, contents, soccerDeck), worldTruth), deckFair);
-          if (!original && !browser && relative === 'src/lib/soccerCareerEngine.ts') {
+          if (!browser) contents = inverseDeckFair(relative, inverseWorldTruth(relative, inverseSoccerDeck(relative, contents, soccerDeck), worldTruth), deckFair);
+          if (!browser && relative === 'src/lib/soccerCareerEngine.ts') {
             const rows = [];
             contents = inverseAwardGenerations(relative, contents, rows);
             assert.deepEqual(rows.map(row => row.addition), AWARD_GENERATIONS_ADDITIONS, 'Release BB: the award generations of Rounds 1280 to 1282 and 1318 are taken out of every copy compared with the base, once each in order');
@@ -95,9 +93,9 @@ export async function bundleAgentReview({ original = false, patches = [], browse
       } }],
     });
     assert.equal(faults.length, patches.length, 'Every fault reaches its compiled product source');
-    assert.deepEqual(deckFair.map(row => row.addition), original || browser ? [] : DECK_FAIR_ADDITIONS, 'Round 1327 came out of every node bundle of the tree once, in order');
-    if (!original && !browser) assert.equal(worldTruthReceiptProblem(worldTruth), '', 'Round 1329 came out of every node bundle of the tree once, in order');
-    if (!original && !browser) assert.equal(soccerDeckReceiptProblem(soccerDeck), '', 'Round 1334 came out of every node bundle of the tree once, in order');
+    assert.deepEqual(deckFair.map(row => row.addition), browser ? [] : DECK_FAIR_ADDITIONS, 'Round 1327 came out of every node bundle of the tree once, in order');
+    if (!browser) assert.equal(worldTruthReceiptProblem(worldTruth), '', 'Round 1329 came out of every node bundle of the tree once, in order');
+    if (!browser) assert.equal(soccerDeckReceiptProblem(soccerDeck), '', 'Round 1334 came out of every node bundle of the tree once, in order');
     return { value: browser ? result.outputFiles[0].text : createRequire(path.join(ROOT, 'package.json'))(file), loaded, faults };
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 }

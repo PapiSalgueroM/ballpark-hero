@@ -516,12 +516,19 @@ for (const [, hunk] of NFL_STAFF_RECOVERY_PANEL_HUNKS) {
   }
 }
 assert.throws(() => stripNflStaffRecoveryPanelHunks(currentCoachPanel + '\n// Unrelated source.\n'), /Whole historical panel SHA/, 'Unrelated panel source refuses');
+const currentBoard = read(path.join(ROOT, US_CAREER_BOARD));
+const restoredLastLine = '      setLastLine(loaded.seasons[loaded.seasons.length - 1] ?? null);\n';
+assert.equal(currentBoard.split(restoredLastLine).length - 1, 1, 'Exactly one restored last-season display fallback');
+const historicalBoard = currentBoard.replace(restoredLastLine, '');
+const historicalBoardFile = path.join(tmp, 'UsCareerBoard.historical.tsx');
+fs.writeFileSync(historicalBoardFile, historicalBoard, { flag: 'wx' });
 const historicalPanelFile = path.join(tmp, 'CoachCareerPanel.historical.tsx');
 fs.writeFileSync(historicalPanelFile, historicalCoachPanel, { flag: 'wx' });
 const nativeRequire = createRequire(path.join(ROOT, 'package.json'));
 const historicalAliases = {
   ...Object.fromEntries(['react/jsx-dev-runtime', 'react/jsx-runtime', 'react', 'lucide-react'].map(id => [id, nativeRequire.resolve(id)])),
   '@/components/us-career/CoachCareerPanel': historicalPanelFile,
+  '@/components/us-career/UsCareerBoard': historicalBoardFile,
 };
 const inheritedAliases = JSON.parse(process.env.NO_DOUBLE_SWAP || '{}');
 for (const alias of Object.keys(historicalAliases)) assert(!(alias in inheritedAliases), 'No inherited alias replaces the proved historical Panel or installed packages');
@@ -636,6 +643,7 @@ function wholeProblems(fx) {
 
 function replay(env) {
   assert.equal(read(historicalPanelFile), historicalCoachPanel, 'Proved historical Panel copy held');
+  assert.equal(read(historicalBoardFile), historicalBoard, 'Only the restored last-season display fallback is excluded from the legacy replay');
   const out = path.join(tmp, `report-${Date.now()}.json`);
   const report = path.join(tmp, `problems-${Date.now()}.txt`);
   fs.writeFileSync(report, '');
@@ -721,7 +729,7 @@ if (CONTROL) {
   } else {
     const c = SOURCE_CONTROLS[CONTROL];
     if (!c) { console.error(`unknown control "${CONTROL}": use label, draw, binding, restore, era, fixture, wheel or talk`); process.exit(1); }
-    const src = read(path.join(ROOT, c.file));
+    const src = c.file === BOARD ? historicalBoard : read(path.join(ROOT, c.file));
     if (!c.red.length) { console.error(`control ${CONTROL}: no sport is drawn by ${c.file}, so this control would prove nothing`); process.exit(1); }
     if (src.split(c.from).length !== 2) { console.error(`control ${CONTROL}: ${c.file} does not carry exactly one "${c.from.trim()}", so this control would change nothing and prove nothing`); process.exit(1); }
     const copy = path.join(ROOT, 'src/test', `__control_usBoard_${CONTROL}${path.extname(c.file)}`);
