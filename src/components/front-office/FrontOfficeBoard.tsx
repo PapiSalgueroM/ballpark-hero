@@ -212,6 +212,9 @@ export default function FrontOfficeBoard() {
   const [playoffRounds, setPlayoffRounds] = useState<PlayoffRound[]>([]);
   const [champion, setChampion] = useState<string>('');
   const [draftClass, setDraftClass] = useState<Prospect[] | null>(null);
+  const [draftPosition, setDraftPosition] = useState('all');
+  const [draftPage, setDraftPage] = useState(0);
+  useEffect(() => { setDraftPosition('all'); setDraftPage(0); }, [phase, league, draftClass]);
   /* Round 515: draft night. Transient on the board and never persisted, the
      Round 186 rule for reveals: reload mid reveal and the save opens on the
      same screen it always did. */
@@ -1656,6 +1659,11 @@ export default function FrontOfficeBoard() {
        one on from it, and the board is put away: no picks, no grid, just the
        card and its Continue button. */
     const draftDone = picksLeft <= 0 && draftBatchesLeft === 0;
+    const orderedProspects = gm ? [...draftClass].sort((a, b) => gradeOf(b) - gradeOf(a) || a.id.localeCompare(b.id)) : draftClass;
+    const filteredProspects = orderedProspects.filter(pr => draftPosition === 'all' || pr.pos === draftPosition);
+    const pages = Math.max(1, Math.ceil(filteredProspects.length / 18));
+    const page = Math.min(draftPage, pages - 1);
+    const shownProspects = filteredProspects.slice(page * 18, (page + 1) * 18);
     return (
       <div className="space-y-4">
         {saveNotice}
@@ -1737,9 +1745,20 @@ export default function FrontOfficeBoard() {
             <button onClick={replaceDraftBoard} className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Replace the remaining prospect board</button>
           </div>
         )}
-        {!draftDone && picksLeft > 0 && my.picks.length > 0 && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
+        {!draftDone && picksLeft > 0 && my.picks.length > 0 && draftClass.length > 0 && <>
+        <label className="flex items-center justify-between gap-3 text-xs">
+          <span className="font-bold">Prospect position</span>
+          <select value={draftPosition} onChange={event => { setDraftPosition(event.target.value); setDraftPage(0); }} className="min-h-11 rounded-lg border border-border bg-background px-3">
+            <option value="all">All prospects</option>
+            {DEPTH_GROUPS.map(pos => <option key={pos} value={pos}>{pos}</option>)}
+            {draftClass.some(pr => pr.pos === 'DEF') && <option value="DEF">Defense (legacy)</option>}
+          </select>
+        </label>
+        <p className="text-center text-[11px] text-muted-foreground">Browse every prospect or narrow the board by position. Grades keep their existing scout order.</p>
+        {filteredProspects.length === 0 && <p role="status" className="rounded-xl border border-border p-4 text-center text-sm">No prospects at this position. Choose another position or All prospects.</p>}
+        <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
           {/* Round 1019: with the desk on, the board is your scout's, in his order. */}
-          {(gm ? [...draftClass].sort((a, b) => gradeOf(b) - gradeOf(a) || a.id.localeCompare(b.id)) : draftClass).slice(0, 18).map(pr => (
+          {shownProspects.map(pr => (
             <button
               key={pr.id}
               onClick={() => draftProspect(pr.id)}
@@ -1752,7 +1771,13 @@ export default function FrontOfficeBoard() {
               <span className="rounded-full bg-primary/15 px-2.5 py-1 text-sm font-black text-primary">{gradeOf(pr)}</span>
             </button>
           ))}
-        </div>}
+        </div>
+        <div className="flex items-center justify-between gap-2">
+          <button type="button" disabled={page === 0} onClick={() => setDraftPage(value => Math.max(0, value - 1))} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold disabled:opacity-40">Previous prospects</button>
+          <span role="status" className="text-center text-[11px] text-muted-foreground">{filteredProspects.length === 0 ? '0 prospects' : 'Page ' + (page + 1) + ' of ' + pages}</span>
+          <button type="button" disabled={page >= pages - 1} onClick={() => setDraftPage(value => Math.min(pages - 1, value + 1))} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold disabled:opacity-40">Next prospects</button>
+        </div>
+        </>}
         {newsFeed.length > 0 && (
           <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
             {/* Keyed on the pick count so each pick's news ticks in, and on the

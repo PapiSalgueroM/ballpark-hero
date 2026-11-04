@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate, useNavigationType, useSearchParams } fr
 import { ArrowUpRight, CalendarDays, Gamepad2, Search, Shuffle, X } from 'lucide-react';
 import type { GameDef } from '@/data/gameRegistry';
 import { describeSave, savedGames } from '@/data/continueSaves';
+import { useGamePicks } from '@/hooks/useGamePicks';
+import { GamePickButton, GamePicksWarning } from '@/components/game/GamePickButton';
 import { CATEGORY_SPORT } from '@/data/homeFront';
 import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { HUB_NAV } from '@/lib/sportHubNav';
@@ -75,6 +77,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
     return () => { window.removeEventListener('storage', refresh); window.removeEventListener('focus', refresh); };
   }, []);
   const continuations = useMemo(() => readContinuations(games), [games, saveRevision]);
+  const picks = useGamePicks();
   const arena = arenas[hub.route as keyof typeof arenas] ?? arenas['/soccer'];
   const visible = filterHubGames(games, filter, query, Object.keys(continuations));
   const deep = visible.filter(game => game.featured);
@@ -95,9 +98,12 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
       <div className={styles.gameCopy}>
         <h3><Link className={styles.gameLink} to={game.path}>{game.label}</Link></h3>
         <p>{game.description}</p>
-        {continuations[game.path] ? (
-          <span data-no-prerender data-hub-resume className={styles.resumeLine}>Resume: {continuations[game.path]}</span>
-        ) : <span className={styles.gameAction}>{game.daily ? 'Daily challenge' : featured ? 'Start playing' : 'Play now'} <ArrowUpRight aria-hidden="true" /></span>}
+        <div className={styles.cardActions}>
+          {continuations[game.path] ? (
+            <span data-no-prerender data-hub-resume className={styles.resumeLine}>Resume: {continuations[game.path]}</span>
+          ) : <span className={styles.gameAction}>{game.daily ? 'Daily challenge' : featured ? 'Start playing' : 'Play now'} <ArrowUpRight aria-hidden="true" /></span>}
+          <GamePickButton game={game} pinned={picks.paths.includes(game.path)} onToggle={picks.toggle} className={styles.pickButton} />
+        </div>
       </div>
       {game.daily && <CalendarDays className={styles.dailyIcon} aria-label="Daily" />}
     </article>
@@ -149,6 +155,8 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
             {query && <button onClick={() => { setQuery(''); searchRef.current?.focus({ preventScroll: true }); }} aria-label="Clear game search"><X /></button>}
           </label>
         </div>
+        <p className={styles.sectionNote}>Pin a game to keep it on Home.</p>
+        {picks.storageFailed && <GamePicksWarning />}
         <p role="status" className={styles.resultCount}>{visible.length} {visible.length === 1 ? 'game' : 'games'}{query ? ` matching "${query.trim()}"` : ''}</p>
         {deep.length > 0 && <section className={styles.deep} aria-label="Careers and simulations">
           <h2 className="font-display">{hub.deep?.heading ?? 'Careers and simulations'}</h2>

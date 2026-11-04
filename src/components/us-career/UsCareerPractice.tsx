@@ -12,6 +12,7 @@ export default function UsCareerPractice({ sport, pos, available, result, onComp
   onComplete: (drill: string, score: number) => void;
   onClose: () => void;
 }) {
+  const freePractice = sport.slug === 'nba' || sport.slug === 'nfl';
   const [skin, setSkin] = useState<TrainingSport | null>(null);
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
@@ -36,9 +37,10 @@ export default function UsCareerPractice({ sport, pos, available, result, onComp
   return <TrainingGround
     sport={skin}
     available={available}
+    allowFreePractice={freePractice}
     onComplete={onComplete}
     onClose={onClose}
     bankedNote={result ? `${trainingBankNote(result)} OVR ${result.before} to ${result.ovr}.` : undefined}
-    instructions="Choose one drill and bank its score. Below 50 earns no rating, 50 to 79 earns up to +1, and 80 or more earns up to +2. Example: an 80 score at 74 OVR with a 75 ceiling earns +1. Banking uses this season's session, even at your ceiling. Leaving before banking keeps it available. Your rating carries into camp and the next season."
+    instructions={"Choose one drill and bank its score. Below 50 earns no rating, 50 to 79 earns up to +1, and 80 or more earns up to +2. Example: an 80 score at 74 OVR with a 75 ceiling earns +1. Banking uses this season's session, even at your ceiling. Leaving before banking keeps it available. Your rating carries into camp and the next season." + (freePractice ? " After banking, play any drill again for practice only. Free runs add no rating and use no new season session." : "")}
   />;
 }
