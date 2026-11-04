@@ -184,17 +184,20 @@ describe('Club Manager recorded training exposure', () => {
       return { c, id, forecast: m.cm.developmentRate(p, c) };
     });
     const { c, id, forecast } = fixture.value;
-    const reference = copy(c); reference.training = LIGHT;
+    const reference = copy(c);
     delete (player(reference, id) as CMPlayer & { trainingExposure?: unknown }).trainingExposure;
     const a = await summer(reference, 7104), b = await summer(c, 7104);
-    // Literal fixture rates: light/first-team 1.07759808, double/youth clamped at 2.6.
-    // The reference rounds each possible age-21 base drift (1, 2, 3) to itself.
-    const baseDrift = player(a.value, id).rating - 70;
-    expect([1, 2, 3]).toContain(baseDrift); expect(forecast).toBe(2.6);
+    // Both careers retain Double/youth. Its literal 2.6 rate maps base drifts 1/2/3 to gains 3/5/8.
+    // Only this player's recorded history differs, rather than changing the whole squad's standing plan.
+    const referenceGain = player(a.value, id).rating - 70;
+    const baseDrift = referenceGain === 3 ? 1 : referenceGain === 5 ? 2 : referenceGain === 8 ? 3 : null;
+    const expected = baseDrift === null ? null : 70 + Math.round(baseDrift * 1.45819856);
+    raw('mixed-mean', { forecast, counts: [3, 0, 0, 0, 0, 0, 0, 0, 1], baseDrift, referenceGain,
+      literalRate: 1.45819856, expected, actual: player(b.value, id), reference: player(a.value, id),
+      referencePlan: reference.training, recordedPlan: c.training, referenceDraws: a.draws, draws: b.draws,
+      referenceNextDraw: a.nextDraw, nextDraw: b.nextDraw });
+    expect([3, 5, 8]).toContain(referenceGain); expect(forecast).toBe(2.6);
     expect(b.draws).toStrictEqual(a.draws); expect(b.nextDraw).toBe(a.nextDraw);
-    const expected = 70 + Math.round(baseDrift * 1.45819856);
-    raw('mixed-mean', { forecast, counts: [3, 0, 0, 0, 0, 0, 0, 0, 1], baseDrift,
-      literalRate: 1.45819856, expected, actual: player(b.value, id), draws: b.draws, nextDraw: b.nextDraw });
     expect(player(b.value, id).rating, 'CM_TRAINING_MIXED_MEAN').toBe(expected);
   });
 
