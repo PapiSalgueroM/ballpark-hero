@@ -1,0 +1,82 @@
+name: Front Office remaining harnesses with exact historical inputs
+on:
+  push:
+    branches: [codex/front-office-market-remaining-sims-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  sims:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold current source and acquire only the two declared historical snapshots
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/fo-market-remaining-sims"
+          mkdir -p "$OUT/sims"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          git fetch --no-filter --depth=1 origin cf3679e78076fb6f84a49106481de15d36c22348 1d2e5d9609bb866f21ff1ffa5bf9f44525178b31 > "$OUT/historical-fetch.log" 2>&1
+          test "$(git rev-parse cf3679e7)" = cf3679e78076fb6f84a49106481de15d36c22348
+          test "$(git rev-parse 1d2e5d96)" = 1d2e5d9609bb866f21ff1ffa5bf9f44525178b31
+          npm ci --no-audit --no-fund > "$OUT/install.log" 2>&1
+      - name: Proper app-config typecheck including all four corrected drivers
+        shell: bash
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/types.log" 2>&1
+      - name: Run every remaining harness and retain all native exits
+        shell: bash
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport.log"
+          : > "$QA_OUT/status.tsv"
+          for harness in simFrontOfficeSchedule simNflFullRosters simNflGmDesk simNflPracticePromotion simNflTagDepth simGmDesk simGmDeskHost; do
+            set +e
+            SIM_OFFLINE_RECEIPT="$QA_OUT/transport.log" node "scripts/$harness.mjs" > "$QA_OUT/sims/$harness.log" 2>&1
+            status=$?
+            set -e
+            printf '%s\t%s\n' "$harness" "$status" >> "$QA_OUT/status.tsv"
+            cat "$QA_OUT/sims/$harness.log"
+          done
+          test ! -s "$QA_OUT/transport.log"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const wanted=["simFrontOfficeSchedule","simNflFullRosters","simNflGmDesk","simNflPracticePromotion","simNflTagDepth","simGmDesk","simGmDeskHost"];
+          const rows=fs.readFileSync(process.env.QA_OUT+'/status.tsv','utf8').trim().split('\n').map(line=>{const[name,exit]=line.split('\t');return{name,exit:Number(exit)};});
+          assert.deepEqual(rows.map(row=>row.name),wanted);
+          fs.writeFileSync(process.env.QA_OUT+'/admission.json',JSON.stringify({status:rows.every(row=>row.exit===0)?'selected-remaining-harnesses-passed':'failed',rows,scope:'Seven remaining existing harnesses only, exact declared historical inputs. No all-suite or historical-failure waiver.'},null,2)+'\n');
+          assert(rows.every(row=>row.exit===0),'Every remaining harness must actually pass');
+          NODE
+      - name: Always hold full exact current source
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: front-office-market-remaining-sims
+          path: ${{ runner.temp }}/fo-market-remaining-sims
+          if-no-files-found: error
+          retention-days: 14
