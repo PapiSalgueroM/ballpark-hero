@@ -1,0 +1,372 @@
+{
+  "schema": 1,
+  "target": "src/lib/soccerCareerProgramme.ts",
+  "testPath": "src/test/soccerProgrammeConditionalLoan.test.tsx",
+  "rawEnv": "SC_LOAN_APPEARANCE_RAW",
+  "pins": {
+    "src/lib/soccerCareerProgramme.ts": "fd41aa55933a692c2d4b1f72f91e1ff6273d4b57",
+    "src/components/soccer-career/SoccerCareerProgramme.tsx": "52b55fdb1667476d99ccf82f885f0bd644ec3689",
+    "src/test/soccerProgrammeConditionalLoan.test.tsx": "4fb3e84fcb39d4382efcf51bdd7786e2a1309044",
+    "src/lib/soccerCareerEngine.ts": "e88d6f91744bf14ac1d1afd43bbb26be9f9e15db",
+    "src/lib/soccerCareerSave.ts": "86ec011693fd5bc702b5e8ccec05d27775a72a76"
+  },
+  "allFullNames": [
+    "Soccer programme conditional loan chooses an 18 appearance condition through the native plan and completes the actual recorded loan season then reloads",
+    "Soccer programme conditional loan uses literal 18 and 26 league appearance boundaries rather than total appearances when sealing and completing",
+    "Soccer programme conditional loan keeps the real parent return after a shortfall and records an honest missing or interrupted review",
+    "Soccer programme conditional loan rechecks the matching sealed record and receipt before signing and cannot complete the same agreement twice",
+    "Soccer programme conditional loan refuses unavailable and unreadable choices without signing deleting metadata or spending a draw",
+    "Soccer programme conditional loan retains the complete ordinary season outputs and draw tapes for no choice and unconditional permanent moves"
+  ],
+  "selected": [
+    {
+      "key": "boundaries",
+      "fullName": "Soccer programme conditional loan uses literal 18 and 26 league appearance boundaries rather than total appearances when sealing and completing",
+      "rawFile": "literal-boundaries.json",
+      "assertion": {
+        "marker": "SC_LOAN_CONDITIONAL_BOUNDARIES"
+      }
+    },
+    {
+      "key": "proof",
+      "fullName": "Soccer programme conditional loan rechecks the matching sealed record and receipt before signing and cannot complete the same agreement twice",
+      "rawFile": "sealed-proof.json",
+      "assertion": {
+        "stackFile": "src/test/soccerProgrammeConditionalLoan.test.tsx",
+        "stackLine": 195,
+        "messagePattern": "expected[\\s\\S]+to deeply equal"
+      }
+    }
+  ],
+  "faults": [
+    {
+      "name": "settlement-threshold",
+      "selected": "boundaries",
+      "edits": [
+        {
+          "before": "      state.loanBuy.ready = agreed && known && season.leagueApps! >= minimum!;",
+          "after": "      state.loanBuy.ready = agreed && known;"
+        }
+      ],
+      "witnesses": [
+        {
+          "path": [
+            "observations",
+            "values",
+            1,
+            "ready"
+          ],
+          "healthy": false,
+          "fault": true
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            3,
+            "ready"
+          ],
+          "healthy": false,
+          "fault": true
+        }
+      ],
+      "invariants": [
+        {
+          "path": [
+            "observations",
+            "values",
+            1,
+            "completed"
+          ],
+          "value": false
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            3,
+            "completed"
+          ],
+          "value": false
+        }
+      ],
+      "meaning": "Recorded17/25 league appearances wrongly set18/26 readiness. Existing final completion guard must still prevent signing."
+    },
+    {
+      "name": "settlement-countability",
+      "selected": "boundaries",
+      "edits": [
+        {
+          "before": "      state.loanBuy.ready = agreed && known && season.leagueApps! >= minimum!;",
+          "after": "      state.loanBuy.ready = agreed && season.leagueApps! >= minimum!;"
+        }
+      ],
+      "witnesses": [
+        {
+          "path": [
+            "observations",
+            "values",
+            4,
+            "ready"
+          ],
+          "healthy": false,
+          "fault": true
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            5,
+            "ready"
+          ],
+          "healthy": false,
+          "fault": true
+        }
+      ],
+      "invariants": [
+        {
+          "path": [
+            "observations",
+            "values",
+            4,
+            "completed"
+          ],
+          "value": false
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            5,
+            "completed"
+          ],
+          "value": false
+        }
+      ],
+      "meaning": "Fractional18.5/20 and impossible21/20 league/total counts wrongly set readiness. Final count validation must still prevent signing."
+    },
+    {
+      "name": "completion-proof",
+      "selected": "proof",
+      "edits": [
+        {
+          "before": "  if (minimum !== undefined || conditional) {",
+          "after": "  if ((minimum !== undefined || conditional) && false) {"
+        }
+      ],
+      "witnesses": [
+        {
+          "path": [
+            "observations",
+            "values",
+            0,
+            "completed"
+          ],
+          "healthy": false,
+          "fault": true
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            0,
+            "held"
+          ],
+          "healthy": true,
+          "fault": false
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            0,
+            "after",
+            "loan"
+          ],
+          "healthyNonNullObject": true,
+          "fault": null
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            0,
+            "after",
+            "contractYearsLeft"
+          ],
+          "healthy": 4,
+          "fault": 2
+        }
+      ],
+      "invariants": [
+        {
+          "path": [
+            "observations",
+            "values",
+            0,
+            "name"
+          ],
+          "value": "missing conditional tag"
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            1,
+            "completed"
+          ],
+          "value": false
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            2,
+            "completed"
+          ],
+          "value": false
+        }
+      ],
+      "meaning": "A missing-tag conditional agreement wrongly signs, removes real parent-loan rights and changes remaining years4→2. The separate reader still refuses unknown99/null."
+    },
+    {
+      "name": "unknown-tag-double-defence",
+      "selected": "proof",
+      "edits": [
+        {
+          "before": "  if (minimum !== undefined || conditional) {",
+          "after": "  if ((minimum !== undefined || conditional) && false) {"
+        },
+        {
+          "before": "('minimumLeagueApps' in state.loanBuy && state.loanBuy.minimumLeagueApps !== 18 && state.loanBuy.minimumLeagueApps !== 26)",
+          "after": "(false && 'minimumLeagueApps' in state.loanBuy && state.loanBuy.minimumLeagueApps !== 18 && state.loanBuy.minimumLeagueApps !== 26)"
+        }
+      ],
+      "witnesses": [
+        {
+          "path": [
+            "observations",
+            "values",
+            1,
+            "completed"
+          ],
+          "healthy": false,
+          "fault": true
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            2,
+            "completed"
+          ],
+          "healthy": false,
+          "fault": true
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            1,
+            "held"
+          ],
+          "healthy": true,
+          "fault": false
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            1,
+            "after",
+            "loan"
+          ],
+          "healthyNonNullObject": true,
+          "fault": null
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            1,
+            "after",
+            "contractYearsLeft"
+          ],
+          "healthy": 4,
+          "fault": 2
+        }
+      ],
+      "invariants": [
+        {
+          "path": [
+            "observations",
+            "values",
+            1,
+            "name"
+          ],
+          "value": "unknown conditional tag"
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            1,
+            "before",
+            "programme",
+            "loanBuy",
+            "minimumLeagueApps"
+          ],
+          "value": 99
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            2,
+            "name"
+          ],
+          "value": "null conditional tag"
+        },
+        {
+          "path": [
+            "observations",
+            "values",
+            2,
+            "before",
+            "programme",
+            "loanBuy",
+            "minimumLeagueApps"
+          ],
+          "value": null
+        }
+      ],
+      "crossFault": {
+        "name": "completion-proof",
+        "witnesses": [
+          {
+            "path": [
+              "observations",
+              "values",
+              1,
+              "completed"
+            ],
+            "other": false,
+            "current": true
+          },
+          {
+            "path": [
+              "observations",
+              "values",
+              2,
+              "completed"
+            ],
+            "other": false,
+            "current": true
+          }
+        ]
+      },
+      "meaning": "Proof-only neutralization still refuses unknown tags. Adding only reader neutralization must make those same99/null rows wrongly sign. This paired fault proves the reader defence caused an actual contract-state difference."
+    }
+  ],
+  "scope": "Four physical source faults only. Each selects one frozen case with5pending/no credit; healthy1PASS, fault1ownedAssertionError, restoration1PASS and byte-identical selectedRAW. General15-case normal/original/restored admission remains separate. No test/app product edits by author, no local execution."
+}
