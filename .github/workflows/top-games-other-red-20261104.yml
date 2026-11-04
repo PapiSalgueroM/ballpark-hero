@@ -1,0 +1,83 @@
+name: Other top games test-first outcomes
+on:
+  push:
+    branches: [codex/top-games-other-red-retry-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 8
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold test-only source and install
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/other-top-games-red"
+          mkdir -p "$OUT/logs" "$OUT/raw/stadium" "$OUT/raw/library" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = 6cb7321e978c1a18dd2cd0b0ea76d395d233a04b
+          test "$(git rev-parse HEAD^^{tree})" = ff77da3ebe237e7625e914aa8e0918c15b676b87
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/top-games-other-red-20261104.yml'
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq 5680
+          test -z "$(git status --porcelain=v1 --untracked-files=all)"
+          cp .github/workflows/top-games-other-red-20261104.yml "$OUT/workflow.yml"
+          npm ci > "$OUT/logs/install.log" 2>&1
+          echo "NODE_OPTIONS=--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs" >> "$GITHUB_ENV"
+      - name: Proper app types
+        run: |
+          set -euo pipefail
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+      - name: Classify actual expected missing-feature assertions
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from'node:fs';import assert from'node:assert/strict';import{spawnSync}from'node:child_process';
+          const out=process.env.QA_OUT,files=['src/test/tycoonUpgradeBatch.test.tsx','src/test/savedLibraryAccess.test.tsx','src/components/front-office-shared/GmTradeBuilder.test.tsx'];
+          const result=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run',...files,'--maxWorkers=1','--minWorkers=1','--reporter=json','--outputFile='+out+'/units.json'],{env:{...process.env,TYCOON_BATCH_RAW:out+'/raw/stadium',SAVED_LIBRARY_RAW:out+'/raw/library',SIM_OFFLINE_RECEIPT:out+'/transport/units'},encoding:'utf8',timeout:240000,maxBuffer:33554432});
+          fs.writeFileSync(out+'/units.exit',String(result.status));const log=(result.stdout||'')+'\n'+(result.stderr||'');fs.writeFileSync(out+'/logs/units.log',log);
+          assert.equal(result.error,undefined);assert.equal(result.signal,null);assert.equal(result.status,1);
+          assert.doesNotMatch(log,/Unhandled (?:Error|Rejection)|Vitest caught [1-9][0-9]* unhandled|uncaughtException|unhandledRejection|Cannot find module|Transform failed|No test files found/i);
+          const r=JSON.parse(fs.readFileSync(out+'/units.json')),own=new Map([["Stadium Tycoon upgrade batches buys five real levels at their escalating prices without extra rewards or draws","TYCOON_BATCH_FIVE"],["Stadium Tycoon upgrade batches buys only the affordable part of a batch and spends no more than the wallet","TYCOON_BATCH_PARTIAL"],["Stadium Tycoon upgrade batches stops at the existing track cap instead of charging for unavailable levels","TYCOON_BATCH_CAP"],["Stadium Tycoon upgrade batches the real page previews and saves an affordable batch from wallet1000","TYCOON_BATCH_PAGE_CONTROL"],["Stadium Tycoon upgrade batches the real page previews and saves an affordable batch from wallet105","TYCOON_BATCH_PAGE_CONTROL"],["Saved game access on Home and sport hubs filters to actual saved games without rewriting saves on /soccer","HUB_SAVED_FILTER"],["Saved game access on Home and sport hubs filters to actual saved games without rewriting saves on /pro-basketball","HUB_SAVED_FILTER"],["Saved game access on Home and sport hubs filters to actual saved games without rewriting saves on /pro-football","HUB_SAVED_FILTER"],["Saved game access on Home and sport hubs reads the new sport save when the same hub component changes routes","HUB_SAVED_SPORT_SWITCH"],["Saved game access on Home and sport hubs refreshes an existing Home career line after another tab saves progress without changing its cards","HOME_SAVED_PROGRESS"],["GM trade asset search finds name, position and pick text independently without changing the deal","GM_TRADE_SEARCH_MATCHES"],["GM trade asset search keeps selected pieces visible and uses the whole deal for the limit while filtering","GM_TRADE_SEARCH_SELECTION"],["GM trade asset search clears either search without unlocking blocked assets or changing a closed-window verdict","GM_TRADE_SEARCH_CLEAR"]]);
+          assert.equal(r.numTotalTests,16);assert.equal(r.numPassedTests,3);assert.equal(r.numFailedTests,13);assert.equal(r.numPendingTests,0);if(r.numRuntimeErrors!==undefined)assert.equal(r.numRuntimeErrors,0);
+          const rows=r.testResults.flatMap(s=>{assert(!s.testExecError);return s.assertionResults;}),red=rows.filter(x=>x.status==='failed');assert.equal(rows.length,16);assert.equal(new Set(rows.map(x=>x.fullName)).size,16);assert.deepEqual(red.map(x=>x.fullName).sort(),[...own.keys()].sort());
+          for(const row of rows){assert(['passed','failed'].includes(row.status));if(row.status==='failed'){assert(row.failureMessages.length>0);for(const m of row.failureMessages){assert(m.includes('AssertionError')&&m.includes(own.get(row.fullName)),row.fullName);assert.doesNotMatch(m,/TypeError|ReferenceError|SyntaxError|is not a function/);}}else assert.deepEqual(row.failureMessages,[]);}
+          fs.writeFileSync(out+'/owned-red-admission.json',JSON.stringify({status:'expected-owned-red',total:16,passed:3,failed:13,nativeExit:result.status,failures:red.map(x=>({name:x.fullName,marker:own.get(x.fullName)})),runtimeErrors:r.numRuntimeErrors??'UNKNOWN',scope:'Test-first baseline only. No fixed product/build/browser credit.'},null,2)+'\n');
+          NODE
+      - name: Always require exact source and offline holds
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git diff --binary HEAD > "$QA_OUT/source-diff.txt"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          test ! -s "$QA_OUT/source-diff.txt"
+          test ! -s "$QA_OUT/status-after.txt"
+          for f in "$QA_OUT"/transport/*; do if [ -f "$f" ]; then test ! -s "$f"; fi; done
+      - name: Bound evidence
+        id: evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo ready=true >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.evidence.outputs.ready == 'true' }}
+        with:
+          name: other-top-games-red
+          path: ${{ env.QA_OUT }}
+          if-no-files-found: error
+          retention-days: 7
