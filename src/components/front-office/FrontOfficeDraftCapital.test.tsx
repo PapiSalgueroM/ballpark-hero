@@ -45,7 +45,7 @@ function mount(save: ReturnType<typeof saved>) {
 }
 const read = () => JSON.parse(localStorage.getItem(KEY)!);
 const open = () => fireEvent.click(screen.getByRole('button', { name: 'Go to the draft' }));
-const pick = () => { const s = read(); fireEvent.click(screen.getByText(s.draftClass[0].name)); };
+const pick = () => { const s = read(); fireEvent.click(screen.getByText(s.draftClass[0].name)); fireEvent.click(screen.getByRole('button', { name: 'Confirm draft' })); };
 function captureOffseason() {
   const original = engine.runOffseason, snapshots: LeagueState[] = [];
   const spy = vi.spyOn(engine, 'runOffseason').mockImplementation((lg, rng, user) => {
@@ -201,7 +201,7 @@ describe('NFL draft capital outcomes', () => {
   });
 
   it('settles only one accepted human decision or zero-pick transition in the same frame', () => {
-    const lg = league(); mount(saved(lg)); open(); const button = screen.getByText(read().draftClass[0].name).closest('button')!;
+    const lg = league(); mount(saved(lg)); open(); fireEvent.click(screen.getByText(read().draftClass[0].name).closest('button')!); const button = screen.getByRole('button', { name: 'Confirm draft' });
     const writes = vi.spyOn(Storage.prototype, 'setItem'); writes.mockClear();
     act(() => { fireEvent.click(button); fireEvent.click(button); });
     expect(writes).toHaveBeenCalledTimes(1); expect(read().picksLeft).toBe(2); expect(read().league.teams.SEA.picks.length).toBe(2);

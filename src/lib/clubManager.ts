@@ -7316,19 +7316,21 @@ export function stopRetraining(career: CareerState, playerId: string): CareerSta
   };
 }
 
-export function autoPickXI(squad: CMPlayer[], formation: Formation): (string | null)[] {
+export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = false): (string | null)[] {
   const used = new Set<string>();
   const xi: (string | null)[] = [];
+  const order = (a: CMPlayer, b: CMPlayer) =>
+    (fresh ? Number(b.fitness >= 80) - Number(a.fitness >= 80) : 0) || b.rating - a.rating;
   for (const slot of formation.slots) {
     /* Round 505: a position he has retrained into is his too. */
     const fits = squad
       .filter(p => isAvailable(p) && !used.has(p.id) && heldPositions(p).some(pos => slot.allowed.includes(pos)))
-      .sort((a, b) => b.rating - a.rating);
+      .sort(order);
     let chosen: CMPlayer | null = fits[0] ?? null;
     if (!chosen) {
       const any = squad
         .filter(p => isAvailable(p) && !used.has(p.id))
-        .sort((a, b) => b.rating - a.rating);
+        .sort(order);
       chosen = any[0] ?? null;
     }
     if (chosen) {
