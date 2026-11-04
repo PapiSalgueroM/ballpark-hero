@@ -32,21 +32,21 @@ function held(state: Setup) {
   expect(state.callbacks.onDrill).not.toHaveBeenCalled();
 }
 function cones(state: Setup) {
-  for (let i = 1; i <= 8; i++) fireEvent.click(state.view.getByRole('button', { name: String(i), exact: true }));
+  for (let i = 1; i <= 8; i++) fireEvent.click(state.view.getByRole('button', { name: String(i) }));
 }
 function penalties(state: Setup) {
-  for (let i = 0; i < 5; i++) { fireEvent.click(state.view.getByRole('button', { name: 'Shoot bottom middle', exact: true })); advance(1100); }
+  for (let i = 0; i < 5; i++) { fireEvent.click(state.view.getByRole('button', { name: 'Shoot bottom middle' })); advance(1100); }
 }
 function keeper(state: Setup) {
   advance(1250);
   for (let i = 0; i < 5; i++) {
-    fireEvent.click(state.view.getByRole('button', { name: 'Dive bottom left', exact: true })); advance(1100);
+    fireEvent.click(state.view.getByRole('button', { name: 'Dive bottom left' })); advance(1100);
     if (i < 4) advance(650);
   }
 }
 function passing(state: Setup) {
   fireEvent.click(state.view.getByRole('button', { name: /Tap to start the passing drill/ }));
-  for (let i = 0; i < 8; i++) { fireEvent.click(state.view.getByRole('button', { name: '🚩', exact: true })); if (i < 7) advance(350); }
+  for (let i = 0; i < 8; i++) { fireEvent.click(state.view.getByRole('button', { name: '🚩' })); if (i < 7) advance(350); }
 }
 beforeEach(() => {
   localStorage.clear(); localStorage.setItem('practice-unrelated', '{"keep":"unchanged"}');
@@ -62,9 +62,9 @@ describe('Soccer classic practice', () => {
     const observation = keep('rewarded-held', s);
     expect(observation.draws, 'SC_CLASSIC_REWARDED_DRAWS').toEqual([0.5, 0.5, 0.5, 0.5, 0.5]);
     expect(observation.score).toBe('100');
-    fireEvent.click(s.view.getByRole('button', { name: 'Bank the session', exact: true }));
+    fireEvent.click(s.view.getByRole('button', { name: 'Bank the session' }));
     expect(s.callbacks.onComplete).toHaveBeenCalledExactlyOnceWith('shooting', 100);
-    expect(s.view.queryByRole('button', { name: 'Bank the session', exact: true })).toBeNull();
+    expect(s.view.queryByRole('button', { name: 'Bank the session' })).toBeNull();
     keep('rewarded-held', s); held(s);
   });
 
@@ -75,10 +75,10 @@ describe('Soccer classic practice', () => {
     expect(available, 'SC_CLASSIC_SPENT_MENU').toEqual([true, true, true, true]);
     fireEvent.click(s.view.getByRole('button', { name: /Cone Slalom/ })); cones(s);
     expect(s.view.container.querySelector('[data-training-score]')).toHaveTextContent('100');
-    expect(s.view.queryByRole('button', { name: 'Bank the session', exact: true }), 'SC_CLASSIC_NO_FREE_BANK').toBeNull();
-    fireEvent.click(s.view.getByRole('button', { name: 'Try again', exact: true })); cones(s);
+    expect(s.view.queryByRole('button', { name: 'Bank the session' }), 'SC_CLASSIC_NO_FREE_BANK').toBeNull();
+    fireEvent.click(s.view.getByRole('button', { name: 'Try again' })); cones(s);
     expect(s.view.container.querySelector('[data-training-score]')).toHaveTextContent('100');
-    fireEvent.click(s.view.getByRole('button', { name: 'Choose a drill', exact: true }));
+    fireEvent.click(s.view.getByRole('button', { name: 'Choose a drill' }));
     fireEvent.click(s.view.getByRole('button', { name: /Sprint Burst/ }));
     fireEvent.click(s.view.getByRole('button', { name: /Tap to start the 5 second sprint/ }));
     for (let i = 0; i < 20; i++) fireEvent.click(s.view.getByRole('button', { name: /GO GO GO/ }));
@@ -92,14 +92,14 @@ describe('Soccer classic practice', () => {
   it('keeps a banked session spent when the same drill is retried without a parent rerender', () => {
     const s = setup('ST', true);
     fireEvent.click(s.view.getByRole('button', { name: /Cone Slalom/ })); cones(s);
-    fireEvent.click(s.view.getByRole('button', { name: 'Bank the session', exact: true }));
+    fireEvent.click(s.view.getByRole('button', { name: 'Bank the session' }));
     expect(s.callbacks.onComplete).toHaveBeenCalledExactlyOnceWith('dribbling', 100);
-    const again = s.view.queryByRole('button', { name: 'Try again', exact: true });
+    const again = s.view.queryByRole('button', { name: 'Try again' });
     keep('banked-repeat', s, { retryAvailable: again !== null });
     expect(again !== null, 'SC_CLASSIC_BANKED_RETRY').toBe(true);
     fireEvent.click(again!); cones(s);
     const observation = keep('banked-repeat', s);
-    expect(s.view.queryByRole('button', { name: 'Bank the session', exact: true }), 'SC_CLASSIC_NO_SECOND_BANK').toBeNull();
+    expect(s.view.queryByRole('button', { name: 'Bank the session' }), 'SC_CLASSIC_NO_SECOND_BANK').toBeNull();
     expect(s.view.getByText('Practice only. No career boost.')).toBeInTheDocument();
     expect(s.callbacks.onComplete).toHaveBeenCalledTimes(1); expect(observation.draws).toEqual([]); held(s);
   });
@@ -115,14 +115,14 @@ describe('Soccer classic practice', () => {
     expect(button !== null, 'SC_CLASSIC_FREE_' + name.toUpperCase()).toBe(true);
     fireEvent.click(button!); play(s);
     const first = Number(s.view.container.querySelector('[data-training-score]')?.textContent);
-    fireEvent.click(s.view.getByRole('button', { name: 'Try again', exact: true })); play(s);
+    fireEvent.click(s.view.getByRole('button', { name: 'Try again' })); play(s);
     const observation = keep('free-' + name, s, { first });
     expect(first).toBeGreaterThanOrEqual(0); expect(first).toBeLessThanOrEqual(100);
     expect(Number(observation.score)).toBeGreaterThanOrEqual(0); expect(Number(observation.score)).toBeLessThanOrEqual(100);
     expect(observation.draws, 'SC_CLASSIC_FREE_GLOBAL_DRAWS').toEqual([]);
-    expect(s.view.queryByRole('button', { name: 'Bank the session', exact: true }), 'SC_CLASSIC_NO_FREE_BANK').toBeNull();
+    expect(s.view.queryByRole('button', { name: 'Bank the session' }), 'SC_CLASSIC_NO_FREE_BANK').toBeNull();
     expect(s.callbacks.onComplete).not.toHaveBeenCalled(); held(s);
-    fireEvent.click(s.view.getByRole('button', { name: 'Close', exact: true }));
+    fireEvent.click(s.view.getByRole('button', { name: 'Close' }));
     expect(s.callbacks.onClose).toHaveBeenCalledTimes(1);
     s.view.unmount(); advance(30000);
     expect(s.callbacks.onComplete).not.toHaveBeenCalled(); held(s);
