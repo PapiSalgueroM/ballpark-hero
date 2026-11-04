@@ -118,7 +118,7 @@ describe('Club Manager retraining replacement choice UI', () => {
       const resume = screen.queryByRole('button', { name: 'Resume retraining for ' + player(c, id).name });
       if (resume) fireEvent.click(resume);
     }
-    const stop = screen.queryByRole('button', { name: 'Stop', exact: true });
+    const stop = screen.queryByRole('button', { name: 'Stop' });
     if (stop) fireEvent.click(stop);
     raw('pending', { id, label, pending, frames, before, after: c, extraDraws: draws - at });
     expect(label, 'CM_REPLACE_UI_PENDING').toContain('Replaces CM when training finishes');
@@ -144,7 +144,7 @@ describe('Club Manager retraining replacement choice UI', () => {
         onRetrain={() => calls.push('pause')} onStopRetrain={playerId => calls.push(playerId)} />);
       const warning = !!screen.queryByText(/unavailable replacement position/i);
       const toggle = screen.queryByRole('button', { name: /^(Pause|Resume) retraining/ });
-      const stop = screen.queryByRole('button', { name: 'Stop', exact: true });
+      const stop = screen.queryByRole('button', { name: 'Stop' });
       if (stop) fireEvent.click(stop);
       const row = { value, warning, toggle: !!toggle, calls, positions: player(input, id).secondaryPositions };
       view.unmount(); return row;
