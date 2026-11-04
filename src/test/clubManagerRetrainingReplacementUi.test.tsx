@@ -13,11 +13,13 @@ let E: Engine, draws: number;
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 beforeEach(async () => {
   draws = 0;
-  let seed = 6410001;
+  let seed = 6410000;
   vi.spyOn(Math, 'random').mockImplementation(() => { draws++; seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; });
   vi.spyOn(Date, 'now').mockReturnValue(1793800800000);
   Element.prototype.scrollIntoView = vi.fn();
   E = await import('@/lib/clubManager');
+  await import('@/components/club-manager/TrainingScreen');
+  seed = 6410001; draws = 0;
 });
 afterEach(() => { cleanup(); vi.restoreAllMocks(); localStorage.clear(); sessionStorage.clear(); });
 function raw(name: string, observations: unknown) {
