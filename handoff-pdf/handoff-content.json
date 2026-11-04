@@ -286,7 +286,7 @@
         },
         {
           "type": "p",
-          "text": "Final test d804e0e9 changes only three review-dialog queries from container to baseElement for real portal content. Outcomes, markers, RAW payloads and counts stay unchanged. Existing SecondTab regression changes only NBA/NFL actions to include the real Confirm."
+          "text": "Final test d804e0e9 changes only three query spans for the review dialog from container to baseElement for real portal content. Outcomes, markers, RAW payloads and counts stay unchanged. Existing SecondTab regression changes only NBA/NFL actions to include the real Confirm."
         },
         {
           "type": "h",

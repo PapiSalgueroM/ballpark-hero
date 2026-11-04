@@ -25,7 +25,7 @@ jobs:
         run: |
           set -euo pipefail
           cd handoff-pdf
-          node container_tools/mark_artifact_operation_started.mjs --operation-kind create --expected-output-count 1 --output-format pdf
+          node container_tools/mark_artifact_operation_started.mjs --operation-kind edit --expected-output-count 1 --output-format pdf
           python create_handoff.py
       - uses: actions/upload-artifact@v4
         with:
