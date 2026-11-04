@@ -73,9 +73,10 @@ describe('NFL draft review keyboard focus', () => {
     const review = screen.getByRole('region', { name: 'Draft review' }), active = document.activeElement as HTMLElement;
     raw('entry', { activeInsideReview: review.contains(active), activeTag: active.tagName, saveHeld: localStorage.getItem(KEY) === before.bytes,
       writes: before.writes.mock.calls.length, draws: vi.mocked(Math.random).mock.calls.length, selected: before.target.name, pageBefore: before.page, shownBefore: before.shown,
-      scrollHeld: window.scrollX === before.scroll[0] && window.scrollY === before.scroll[1], reviewHeight: before.area.style.height, reviewOverflow: before.area.style.overflowY });
+      scrollHeld: window.scrollX === before.scroll[0] && window.scrollY === before.scroll[1], reviewHeight: before.area.style.height, reviewOverflow: before.area.style.overflowY, reviewAnchor: before.area.style.overflowAnchor });
     expect(review.contains(active), 'FO_DRAFT_REVIEW_ENTRY_FOCUS').toBe(true);
     expect(before.area.style.height, 'FO_DRAFT_REVIEW_HEIGHT_HELD').toBe('612.375px');
+    expect(before.area.style.overflowAnchor, 'FO_DRAFT_REVIEW_ANCHOR_HELD').toBe('none');
     expect(before.area.style.overflowY).toBe('auto');
     const call = before.focus.mock.contexts.lastIndexOf(active);
     expect(call).toBeGreaterThanOrEqual(0); expect(before.focus.mock.calls[call]?.[0]?.preventScroll).toBe(true);

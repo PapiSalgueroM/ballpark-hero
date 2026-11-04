@@ -1681,7 +1681,7 @@ export default function FrontOfficeBoard() {
     const reviewed = draftClass.find(pr => pr.id === draftReview);
     const current = reviewed ? my.players.filter(p => p.pos === reviewed.pos) : [];
     return (
-      <div ref={draftArea} style={{ height: draftReview ? draftHeight.current : undefined, overflowY: draftReview ? 'auto' : undefined }} className="space-y-4">
+      <div ref={draftArea} style={{ overflowAnchor: 'none', height: draftReview ? draftHeight.current : undefined, overflowY: draftReview ? 'auto' : undefined }} className="space-y-4">
         {saveNotice}
         <CelebrationStyles />
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
