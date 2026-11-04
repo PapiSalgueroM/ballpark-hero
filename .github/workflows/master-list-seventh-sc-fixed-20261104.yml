@@ -1,0 +1,126 @@
+name: Master list seventh SC reading fixed
+on:
+  push:
+    branches: [codex/master-list-seventh-sc-fixed-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold original SC sources and frozen test
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-seventh-sc-fixed"
+          mkdir -p "$OUT/logs" "$OUT/transport" "$OUT/raw"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = f04c7c8804349f9aee792e566221bb4c0b1bb0a5
+          test "$(git rev-parse HEAD^^{tree})" = 3e5868c5d75e158bf39d224f3e1934485cbc4057
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-seventh-sc-fixed-20261104.yml'
+          test "$(git rev-parse HEAD:src/components/soccer-career/TrainingPanel.tsx)" = c98cb31af7d9d4298b78ffe908b26d3bbec89906
+          test "$(git rev-parse HEAD:src/components/soccer-career/PassingDecisionBoard.tsx)" = ac438cb04641766b5a09be676afca5829daa2b1f
+          test "$(git rev-parse HEAD:src/lib/soccerCareerEngine.ts)" = e88d6f91744bf14ac1d1afd43bbb26be9f9e15db
+          test "$(git rev-parse HEAD:src/lib/soccerCareerSave.ts)" = 86ec011693fd5bc702b5e8ccec05d27775a72a76
+          test "$(git rev-parse HEAD:src/pages/SoccerCareer.tsx)" = 1f4d448cc9718bc3fa97b6987be5f14b27496c47
+          test "$(git rev-parse HEAD:src/test/trainingPassingDecision.test.tsx)" = 765f34735dc7cb608e0a47d9a1d712ba28091372
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-seventh-sc-fixed-20261104.yml "$OUT/workflow.yml"
+          cp src/test/trainingPassingDecision.test.tsx "$OUT/test.tsx"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Proper app types before outcome credit
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          echo 0 > "$QA_OUT/types-exit.txt"
+      - name: Actual fixed six-case outcomes
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/units.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/units.log"
+          export SC_PASSING_DECISION_RAW="$QA_OUT/raw"
+          set +e
+          node_modules/.bin/vitest run src/test/trainingPassingDecision.test.tsx --reporter=json --outputFile="$QA_OUT/report.json" > "$QA_OUT/logs/units.log" 2>&1
+          native=$?
+          set -e
+          echo "$native" > "$QA_OUT/native-exit.txt"
+          test "$native" = 0
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out=process.env.QA_OUT,expected=[{"fullName":"Soccer untimed passing decisions turns three correct first reads into one real Passing reward and a complete codec reload","baseline":"passed","marker":"SC_READING_CM_REWARD","rawFile":"cm-reward.json"},{"fullName":"Soccer untimed passing decisions maps four correct keeper reads to Distribution without increasing current 98 skills or overall","baseline":"passed","marker":"SC_READING_GK_REWARD","rawFile":"gk-reward.json"},{"fullName":"Soccer untimed passing decisions locks the first read, explains the open lane and holds score while rules and time change","baseline":"passed","marker":"SC_READING_FIRST_LOCK","rawFile":"first-read.json"},{"fullName":"Soccer untimed passing decisions replays the reading session freely after banking even before an available prop rerender","baseline":"passed","marker":"SC_READING_SPENT_REPLAY","rawFile":"spent-replay.json"},{"fullName":"Soccer untimed passing decisions keeps the paid classic penalty score, five global draws and existing reward route unchanged","baseline":"passed","marker":null,"rawFile":"classic-paid.json"},{"fullName":"Soccer untimed passing decisions keeps already-spent classic practice free with the complete saved career and global tape held","baseline":"passed","marker":null,"rawFile":"classic-spent.json"}];
+          const read=file=>fs.readFileSync(path.join(out,file),'utf8');
+          const report=JSON.parse(read('report.json')),files=report.testResults??[],rows=files.flatMap(file=>file.assertionResults??[]);
+          assert.equal(files.length,1,'One exact test file');
+          assert.equal(path.relative(process.cwd(),files[0].name).replaceAll('\\','/'),'src/test/trainingPassingDecision.test.tsx');
+          assert.equal(rows.length,6,'Six exact cases');
+          assert.equal(new Set(rows.map(row=>row.fullName)).size,6,'Unique full identities');
+          const strip=text=>text.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g,'');
+          const runtimeCounters={};
+          for(const key of ['numRuntimeErrorTestSuites','numUnhandledErrors']){
+            runtimeCounters[key]=key in report?report[key]:'UNKNOWN';if(key in report)assert.equal(report[key],0,key);
+          }
+          assert(!/Unhandled Errors|Unhandled Rejection|Uncaught Exception|Failed Suites|Failed to collect/.test(strip(read('logs/units.log'))),'No setup/runtime banner');
+          const raw=[];
+          for(const want of expected){
+            const found=rows.filter(row=>row.fullName===want.fullName);assert.equal(found.length,1,want.fullName);
+            const row=found[0];assert.equal(row.status,want.baseline,want.fullName);
+            const message=strip((row.failureMessages??[]).join('\n'));
+            if(want.baseline==='failed'){assert(message.includes('AssertionError'),want.fullName+' must own assertion');assert(message.includes(want.marker),want.marker);}
+            else assert.equal(message,'',want.fullName+' held case');
+            const value=JSON.parse(read('raw/'+want.rawFile));assert.equal(value.case,want.rawFile.slice(0,-5));assert(value.observations&&typeof value.observations==='object');
+            raw.push({file:want.rawFile,bytes:fs.statSync(path.join(out,'raw',want.rawFile)).size});
+          }
+          assert.equal(fs.readdirSync(path.join(out,'raw')).length,6,'Exact RAW six');
+          assert.equal(rows.filter(row=>row.status==='failed').length,0);
+          assert.equal(rows.filter(row=>row.status==='passed').length,6);
+          assert.equal(fs.statSync(path.join(out,'transport/units.log')).size,0,'No offline attempts');
+          fs.writeFileSync(path.join(out,'admission.json'),JSON.stringify({status:'fixed',cases:6,ownedFailures:0,passed:6,native:0,raw,runtimeCounters,scope:'First focused fixed six-case check only. Controls/restoration/build/native/public/full-suite qualification remains separate.'},null,2)+'\n');
+          console.log('SC reading fixed: six passing cases and six RAW records.');
+          JS
+      - name: Always hold entire source and status
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound retained evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-seventh-sc-fixed
+          path: ${{ runner.temp }}/master-list-seventh-sc-fixed
+          if-no-files-found: error
+          retention-days: 7
