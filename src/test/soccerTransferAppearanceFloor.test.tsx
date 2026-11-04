@@ -23,7 +23,7 @@ const clubs = [home, higher, abroad, domestic];
 const tape = [0.1, 0.7, 0.2, 0.8, 0.3, 0.6, 0.4];
 function fixture(): E.CareerState {
   const c = E.initCareer('Appearance Fixture', 'England', 'ST', '2020-24',
-    { pace: 75, shooting: 75, passing: 75, dribbling: 75, defending: 75, physical: 75, reflexes: 75 }, 75, 2020, [home], null, 90);
+    { pace: 75, shooting: 75, passing: 75, dribbling: 75, defending: 75, physical: 75, reflexes: 75 }, 75, 2020, [{ ...home, tier: 1 }], null, 90);
   const row: E.SeasonRecord = { year: 2028, age: 24, club: home.name, clubCountry: home.country, clubTier: 2,
     apps: 25, goals: 9, assists: 5, cleanSheets: 0, yellowCards: 2, redCards: 0, rating: 7.2, ovr: 75,
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: 'playing',
