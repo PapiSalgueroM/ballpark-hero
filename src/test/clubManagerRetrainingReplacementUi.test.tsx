@@ -138,7 +138,7 @@ describe('Club Manager retraining replacement choice UI', () => {
     const { TrainingScreen } = await import('@/components/club-manager/TrainingScreen');
     const rows = [null, 'future-role', { v: 99 }, 'LW', 'ST'].map(value => {
       const input = copy(c);
-      (player(input, id) as CMPlayer & { retraining: Course }).retraining = { to: 'ST', weeksLeft: 1, weeksTotal: 9, replace: value };
+      (player(input, id) as unknown as { retraining: Course }).retraining = { to: 'ST', weeksLeft: 1, weeksTotal: 9, replace: value };
       const calls: string[] = [];
       const view = render(<TrainingScreen career={input} onSetPlan={() => { throw new Error('Unexpected plan edit'); }}
         onRetrain={() => calls.push('pause')} onStopRetrain={playerId => calls.push(playerId)} />);
