@@ -49,6 +49,7 @@ import { useArrivalTop } from '@/hooks/useArrivalTop';
 /* Round 1593: the hub's Week X of Y counts the weeks a season charges, never a night. */
 import { tickingWeeksDone, tickingWeeksIn } from '@/lib/worldNights';
 
+const HubTile = lazy(() => import('@/components/club-manager/HubTile'));
 const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
 const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubManagerBoardPanel'));
 const ClubManagerCareerPanel = lazy(() => import('@/components/club-manager/ClubManagerCareerPanel'));
@@ -167,30 +168,6 @@ const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
   W: 'bg-emerald-500', D: 'bg-yellow-500', L: 'bg-red-500',
 };
 
-/** Round 74: one hub box (the tile rule). Tap it, it becomes its own screen. */
-function HubTile({ icon, title, value, sub, accent, onClick }: {
-  icon: string; title: string; value: string; sub?: string; accent?: boolean; onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        'rounded-xl border p-3 text-left transition-all bg-card hover:border-primary hover:-translate-y-0.5',
-        accent ? 'border-gold/50' : 'border-border',
-      )}
-    >
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-base leading-none">{icon}</span>
-        {accent && <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />}
-      </div>
-      <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{title}</div>
-      {/* Round 1328: the value and the line wrap instead of cutting their key
-          words at 320 ("-£13.5m projec..."), and the line is 12px. */}
-      <div className="text-sm font-bold font-display text-foreground break-words">{value}</div>
-      {sub && <div className="text-xs leading-snug text-muted-foreground break-words mt-0.5">{sub}</div>}
-    </button>
-  );
-}
 
 type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff' | 'xp' | 'options' | 'points';
 
@@ -1303,7 +1280,7 @@ const ClubManager = () => {
               (his words: "make it smaller and with boxes and when they open
               it takes u to see something different"). */}
           {hubPanel === null && (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <ScreenLoading><div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               <HubTile
                 icon="📋" title="Board" accent={objBehind > 0}
                 value={objBehind > 0 ? `${objBehind} behind` : `${objDone}/${objStatuses.length} done`}
@@ -1510,7 +1487,7 @@ const ClubManager = () => {
                   onClick={() => setHubPanel('trophies')}
                 />
               )}
-            </div>
+            </div></ScreenLoading>
           )}
 
           {/* Round 74: drill-in screens, one per box. */}
