@@ -116,8 +116,11 @@ try{for(const width of[390,1280]){
   await photo(p,r,'[data-training-result]');assert.equal(await save(p,f.key),banked);protect(freeBefore,await allStorage(p));
   await tap(p,r,p.getByRole('button',{name:'Try again',exact:true}));
   await p.getByRole('button',{name:f.drills.at(-1).startTitle,exact:false}).waitFor();
-  await p.keyboard.press('Escape');await p.getByRole('button',{name:'View practice',exact:true}).waitFor();
+  await p.keyboard.press('Escape');
+  await p.locator('[role="dialog"][data-practice-screen]').waitFor({state:'hidden'});
+  await p.waitForFunction(()=>{const buttons=[...document.querySelectorAll('button')].filter(n=>n.textContent.trim()==='View practice');return buttons.length===1&&buttons[0]===document.activeElement;});
   assert.equal(await p.getByRole('button',{name:'View practice',exact:true}).evaluate(n=>n===document.activeElement),true);
+  r.replayEscape='Native Escape immediately after Try again; strict dialog-hidden and opener-focus checks';
   assert.equal(await save(p,f.key),banked);await p.reload();await answerConsent(p,{wait:1000});
   await tap(p,r,p.getByRole('button',{name:'View practice',exact:true}));await p.getByRole('button',{name:'Practice rules',exact:true}).waitFor();
   for(const drill of f.drills)assert.equal(await p.getByRole('button',{name:new RegExp(drill.name)}).count(),1);
@@ -150,8 +153,13 @@ try{for(const width of[390,1280]){
   const disk=await save(p,f.key);await p.reload();await answerConsent(p,{wait:1000});await combo.waitFor();assert.equal(await combo.inputValue(),'all');assert.equal(await save(p,f.key),disk);
   r.observed={allFortyAndGrades:observed,target,arrivals,spentOneOwnedPick:true,unfilteredSixRivalPicks:true,saveAfter:sha(disk),reloaded:true};
  });
- for(const wallet of[1000,341])await journey('payroll-'+wallet,width,seed('payroll'+wallet),async(p,r)=>{
-  const f=fixtures['payroll'+wallet];await goto(p,'/stadium-tycoon');
+ for(const wallet of[1000,341]){
+  const f=fixtures['payroll'+wallet],original=JSON.parse(f.raw),now=Date.now(),fresh=engine.tycoon.serializeTycoon(original,now);
+  assert.deepEqual(JSON.parse(fresh),{...original,savedAt:now});
+  await journey('payroll-'+wallet,width,{[f.key]:fresh},async(p,r)=>{
+  r.seedTimestampRefresh={sourceSHA:sha(f.raw),seedSHA:sha(fresh),before:original.savedAt,after:now,onlySavedAt:true};r.awayDismissals=[];
+  const dismissAway=async checkpoint=>{const dialog=p.getByRole('dialog',{name:'While you were away',exact:true});if(await dialog.isVisible()){const text=await dialog.innerText();await tap(p,r,dialog.getByRole('button',{name:'Back to work',exact:true}));await dialog.waitFor({state:'hidden'});r.awayDismissals.push({checkpoint,text});}};
+  await goto(p,'/stadium-tycoon');await p.getByRole('button',{name:/Payroll/}).waitFor();await dismissAway('initial');
   await tap(p,r,p.getByRole('button',{name:/Payroll/}));await tap(p,r,p.getByRole('button',{name:'Up to 5 hires',exact:true}));
   const steward=p.getByRole('button',{name:/Turnstile Steward/}),before=JSON.parse(await save(p,f.key));
   assert((await steward.innerText()).includes('Hire '+f.quantity));assert((await steward.innerText()).includes(String(f.cost)));
@@ -160,10 +168,11 @@ try{for(const width of[390,1280]){
   await p.evaluate(()=>window.dispatchEvent(new Event('pagehide')));const saved=JSON.parse(await save(p,f.key));
   assert.equal(saved.staffLevels.steward,f.quantity);assert(saved.money>=f.moneyAfter);assert(saved.money>=0);
   assert.deepEqual(saved.levels,before.levels);assert.deepEqual(saved.league,before.league);assert.equal(saved.totalTaps,before.totalTaps);
-  await p.reload();await answerConsent(p,{wait:1000});await tap(p,r,p.getByRole('button',{name:/Payroll/}));await p.evaluate(()=>window.dispatchEvent(new Event('pagehide')));
+  await p.reload();await answerConsent(p,{wait:1000});await idle(p);await p.getByRole('button',{name:/Payroll/}).waitFor();await dismissAway('reload');await tap(p,r,p.getByRole('button',{name:/Payroll/}));await p.evaluate(()=>window.dispatchEvent(new Event('pagehide')));
   const reload=JSON.parse(await save(p,f.key));assert.equal(reload.staffLevels.steward,f.quantity);
   r.observed={wallet,quantity:f.quantity,quoteCost:f.cost,savedStaff:saved.staffLevels.steward,savedMoney:saved.money,reloadStaff:reload.staffLevels.steward,nativeIncomeMayAccrue:true};
- });
+  });
+ }
  for(const[k,flow]of[['sc',scFlow.runSelectedOffer],['cm',cmFlow.runCmTraining]])await journey(k==='sc'?'soccer-selected-offer':'manager-recorded-training',width,seed(k),async(p,r)=>{
   const fixture=fixtures[k];assert.equal(typeof flow,'function');
   const observed=await flow({page:p,width,base,fixture,engine:engine.cm,photo:async(label,selector)=>{assert(!r.screenshot,'One normal photo per context');r.checkpoint=label;await photo(p,r,selector);},tap:locator=>tap(p,r,locator),goto:async value=>{const u=new URL(value,base);assert.equal(u.origin,origin);await goto(p,u.pathname+u.search+u.hash);},save:key=>save(p,key)});
@@ -171,6 +180,10 @@ try{for(const width of[390,1280]){
  });
 }
 for(const width of[320,390,1280])for(const hub of m.hubs)await journey(hub.route.slice(1)+'-pin',width,{[PICK_KEY]:JSON.stringify([heldPick])},async(p,r)=>{
+ await goto(p,'/');
+ await p.waitForFunction(()=>localStorage.getItem('dukb-play-diary-v1')!==null&&localStorage.getItem('dukb-streaks-v1')!==null);
+ r.homeInitialization={diary:await save(p,'dukb-play-diary-v1'),streaks:await save(p,'dukb-streaks-v1')};
+ assert.deepEqual(JSON.parse(await save(p,PICK_KEY)),[heldPick]);
  const chosen=width===320?hub.daily:hub.game,url=hub.route+'?from=pin-qa&from=second';await goto(p,url);
  const button=p.locator('[data-hub-game="'+chosen.path+'"] [data-game-pick="'+chosen.path+'"]');await button.waitFor({state:'visible'});await button.scrollIntoViewIfNeeded();await idle(p);
  const before=await allStorage(p),witness=await footerWitness(button);

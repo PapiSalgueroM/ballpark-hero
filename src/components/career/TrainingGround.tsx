@@ -187,8 +187,8 @@ export default function TrainingGround<Id extends string>({ sport, available, on
               </button>
             )}
             {allowFreePractice && (banked || !available) && <div className="grid grid-cols-2 gap-2">
-              <button onClick={() => openDrill(drill)} className="min-h-11 rounded-lg border border-border text-sm font-bold">Try again</button>
-              <button onClick={toMenu} className="min-h-11 rounded-lg border border-border text-sm font-bold">Choose a drill</button>
+              <button onClick={e => { e.currentTarget.closest<HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true }); openDrill(drill); }} className="min-h-11 rounded-lg border border-border text-sm font-bold">Try again</button>
+              <button onClick={e => { e.currentTarget.closest<HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true }); toMenu(); }} className="min-h-11 rounded-lg border border-border text-sm font-bold">Choose a drill</button>
             </div>}
           </div>
         )}
