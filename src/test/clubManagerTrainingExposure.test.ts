@@ -19,16 +19,20 @@ function stream(initial: number) {
   let seed = initial;
   return () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
 }
-async function observe<T>(seed: number, body: (m: Modules) => T) {
+async function observe<T>(seed: number, body: (m: Modules) => T, trace = false) {
   vi.resetModules();
-  const draws: number[] = [], next = stream(seed);
-  const random = vi.spyOn(Math, 'random').mockImplementation(() => { const n = next(); draws.push(n); return n; });
+  const draws: number[] = [], traces: { index: number; value: number; stack: string[] }[] = [], next = stream(seed);
+  const random = vi.spyOn(Math, 'random').mockImplementation(() => {
+    const n = next(); draws.push(n);
+    if (trace) traces.push({ index: draws.length - 1, value: n, stack: (new Error().stack ?? '').split('\n').slice(2, 9) });
+    return n;
+  });
   const now = vi.spyOn(Date, 'now').mockReturnValue(1793743200000);
   try {
     const cm = await import('@/lib/clubManager');
     const fac = await import('@/lib/clubManagerFacilities');
     const staff = await import('@/lib/clubManagerStaff');
-    return { value: copy(body({ cm, fac, staff })), draws, nextDraw: next() };
+    return { value: copy(body({ cm, fac, staff })), draws, nextDraw: next(), traces };
   } finally { random.mockRestore(); now.mockRestore(); }
 }
 function scene(m: Modules): CareerState {
@@ -79,13 +83,13 @@ function step(m: Modules, c: CareerState): CareerState {
   expect(result.state.week, 'SETUP real calendar entry advanced').toBe(c.week + 1);
   return result.state;
 }
-async function summer(input: CareerState, seed: number, club?: string) {
+async function summer(input: CareerState, seed: number, club?: string, trace = false) {
   return observe(seed, m => {
     const c = copy(input);
     m.cm.registerLeagueOverrides(c.leagueOverrides ?? null);
     m.cm.registerCustomClub(c.customClub ?? null, c.eraId);
     return m.cm.startNextSeason(c, club);
-  });
+  }, trace);
 }
 const player = (c: CareerState, id: string) => {
   const p = c.squad.find(row => row.id === id);
@@ -139,13 +143,15 @@ describe('Club Manager recorded training exposure', () => {
       return { c, legacy, id, expected };
     });
     const { c, legacy, id, expected } = season.value;
-    const recorded = await summer(c, 7102), finalPlanOnly = await summer(legacy, 7102);
+    const recorded = await summer(c, 7102, undefined, true), finalPlanOnly = await summer(legacy, 7102, undefined, true);
     const actual = player(recorded.value, id), old = player(finalPlanOnly.value, id);
-    expect(recorded.draws).toStrictEqual(finalPlanOnly.draws);
-    expect(recorded.nextDraw).toBe(finalPlanOnly.nextDraw);
     raw('late-flip', { id, expected, actualHistory: history(player(c, id)), currentPlan: c.training,
       recorded: actual, finalPlanOnly: old, draws: recorded.draws, nextDraw: recorded.nextDraw,
+      referenceDraws: finalPlanOnly.draws, referenceNextDraw: finalPlanOnly.nextDraw,
+      recordedTrace: recorded.traces, referenceTrace: finalPlanOnly.traces,
       seasonDraws: season.draws, seasonNextDraw: season.nextDraw });
+    expect(recorded.draws).toStrictEqual(finalPlanOnly.draws);
+    expect(recorded.nextDraw).toBe(finalPlanOnly.nextDraw);
     expect(actual.rating, 'CM_TRAINING_LATE_FLIP_SUMMER').toBeLessThan(old.rating);
     expect(history(player(c, id)), 'CM_TRAINING_LATE_FLIP_SUMMER').toStrictEqual(exposure(c, expected));
     expect(history(actual), 'CM_TRAINING_LATE_FLIP_SUMMER').toBeUndefined();
