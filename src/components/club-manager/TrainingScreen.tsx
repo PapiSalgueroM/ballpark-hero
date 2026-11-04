@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Dumbbell, GraduationCap } from 'lucide-react';
 import {
-  INTENSITY_INFO, FOCUS_INFO, developmentRate, developingPlayers,
+  INTENSITY_INFO, FOCUS_INFO, developmentRate, developingPlayers, recordedTraining,
   retrainWeeks, retrainRefusal, heldPositions, MAX_SECONDARY_POSITIONS, RETRAIN_MIN_WEEKS, FORMATIONS, fitPenalty,
 } from '@/lib/clubManager';
 import type {
@@ -36,6 +36,7 @@ function rateLabel(rate: number): { text: string; cls: string } {
 
 function PlayerRow({ p, career }: { p: CMPlayer; career: CareerState }) {
   const rate = developmentRate(p, career);
+  const recorded = recordedTraining(p, career);
   const lab = rateLabel(rate);
   const head = (p.potential ?? p.rating) - p.rating;
   const apps = p.apps ?? 0;
@@ -50,6 +51,9 @@ function PlayerRow({ p, career }: { p: CMPlayer; career: CareerState }) {
         </div>
         <div className="text-[9px] text-muted-foreground">
           {p.rating} now · {head >= 12 ? 'lots of room left' : head >= 6 ? 'plenty of room left' : 'a little room left'} · {apps} app{apps === 1 ? '' : 's'} this season
+        </div>
+        <div className="text-[10px] text-muted-foreground" data-cm-training-record={p.id}>
+          {recorded.weeks ? `${recorded.weeks} recorded week${recorded.weeks === 1 ? '' : 's'} · summer mix ${recorded.rate.toFixed(2)}x` : 'No recorded weeks. Current plan used.'}
         </div>
       </div>
       <span className={cn('shrink-0 text-[9px] font-bold', lab.cls)}>{lab.text}</span>
@@ -263,6 +267,9 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
             Nobody in this squad has room left to grow. Sign someone young or bring a kid up from the academy.
           </p>
         )}
+        <p className="text-[10px] text-muted-foreground mb-1.5">
+          Summer growth uses each player's recorded mix. Earlier weeks are not reconstructed. With no record, the current plan is used. The status at right previews the current plan, not a promised OVR gain.
+        </p>
         {growing.map(p => <PlayerRow key={p.id} p={p} career={career} />)}
         {growing.length > 0 && (
           <p className="text-[9px] text-muted-foreground mt-1.5">
