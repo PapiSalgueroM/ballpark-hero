@@ -1,0 +1,96 @@
+name: Master list seventh SC reading qualification
+on:
+  push:
+    branches: [codex/master-list-seventh-sc-qualified-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  qualification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Bind immutable source and original before offline execution
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-seventh-sc-qualified"
+          mkdir -p "$OUT/logs"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = de1fca51904576e6144f24fe1babb85d3335d6a1
+          test "$(git rev-parse HEAD^^{tree})" = 2467b733f85410474fcf84a9c9b460f2300429df
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-seventh-sc-qualified-20261104.yml'
+          test "$(git rev-parse HEAD:scripts/qa/scReadingQualification.mjs)" = 649e1eee704a1fe57359b814fb5d0472a1c1c96b
+          test "$(git rev-parse HEAD:scripts/qa/scReadingControls.json)" = 467f67e6b766bf4dbe9206f8a0c4feee3f284dd2
+          test "$(git rev-parse HEAD:src/components/soccer-career/TrainingPanel.tsx)" = c98cb31af7d9d4298b78ffe908b26d3bbec89906
+          test "$(git rev-parse HEAD:src/components/soccer-career/PassingDecisionBoard.tsx)" = ac438cb04641766b5a09be676afca5829daa2b1f
+          test "$(git rev-parse HEAD:src/test/trainingPassingDecision.test.tsx)" = 765f34735dc7cb608e0a47d9a1d712ba28091372
+          git cat-file blob d1beb9426daab4620807139d7634b47dc3dca601 > "$OUT/original-TrainingPanel.tsx"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" = 5723
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-seventh-sc-qualified-20261104.yml "$OUT/workflow.yml"
+          cp scripts/qa/scReadingQualification.mjs "$OUT/runner.mjs"
+          cp scripts/qa/scReadingControls.json "$OUT/controls.json"
+          cp src/test/trainingPassingDecision.test.tsx "$OUT/test.tsx"
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Proper app types before case credit
+        run: |
+          set -euo pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          echo 0 > "$QA_OUT/types-exit.txt"
+      - name: Fixed original restored and effective causal faults
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/runner-offline.log"
+          : > "$SIM_OFFLINE_RECEIPT"
+          set +e
+          node scripts/qa/scReadingQualification.mjs > "$QA_OUT/logs/qualification.log" 2>&1
+          native=$?
+          set -e
+          echo "$native" > "$QA_OUT/native-exit.txt"
+          test "$native" = 0
+          test ! -s "$SIM_OFFLINE_RECEIPT"
+      - name: Always hold full source status and lock files
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound retained evidence independently
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "${QA_OUT:-}"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-seventh-sc-qualified
+          path: ${{ runner.temp }}/master-list-seventh-sc-qualified
+          if-no-files-found: error
+          retention-days: 7
