@@ -44,6 +44,7 @@ function fixture() {
   const at = c.calendar.findIndex(entry => entry.type === 'window');
   expect(at, 'SETUP real constructor has a paid January window').toBeGreaterThanOrEqual(0);
   c.week = at;
+  c.press!.lastWeek = at;
   const id = c.squad[0].id;
   return { c, id };
 }
