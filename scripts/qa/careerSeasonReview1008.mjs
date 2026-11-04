@@ -478,9 +478,20 @@ try {
         assert.deepEqual(await protectedState(page), eventBefore, 'Review preserves the exact pending choice, all save bytes, draws, and writes');
         const file = `${id}-pending-event-return.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' }); result.screenshots.push(file);
         await activate(pending.getByRole('button').first(), profile.input, 30); await pending.waitFor({ state: 'hidden' });
-        const resolved = JSON.parse(await page.evaluate(key => localStorage.getItem(key), sport.saveKey));
+        let resolved = JSON.parse(await page.evaluate(key => localStorage.getItem(key), sport.saveKey));
+        let resolvedCards = 1;
+        while (resolved.phase === 'event') {
+          assert(resolved.c.summer && resolvedCards < sport.summer.cards, 'Only the real bounded Summer queue can keep another choice pending');
+          const answered = await protectedState(page);
+          await activate(page.locator('[data-decision-continue]'), profile.input, 30); await pending.waitFor(); await settle(page);
+          assert.deepEqual(await protectedState(page), answered, 'Continue to the next Summer card changes no state, draws, or writes');
+          await activate(pending.getByRole('button').first(), profile.input, 30); await pending.waitFor({ state: 'hidden' });
+          resolved = JSON.parse(await page.evaluate(key => localStorage.getItem(key), sport.saveKey));
+          resolvedCards += 1;
+          assert.equal(resolved.c.seasons.length, 4, 'Each retained Summer choice belongs to the same completed season');
+        }
         assert.equal(resolved.phase, 'season'); assert.equal(resolved.c.seasons.length, 4, 'The retained choice resolves without playing another season');
-        result.pendingEvent = { id: pendingId, retained: true, resolved: true, originalSeasons: 4 };
+        result.pendingEvent = { id: pendingId, retained: true, resolved: true, originalSeasons: 4, resolvedCards };
       }
       assert.deepEqual(result.scoreWrites, []);
       assert.deepEqual(result.pageErrors, []); assert.deepEqual(result.consoleErrors, []); assert.deepEqual(result.localFailures, []); assert.deepEqual(result.fontFailures, []);

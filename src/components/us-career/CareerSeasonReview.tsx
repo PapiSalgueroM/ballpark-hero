@@ -35,8 +35,7 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
   const picker = useRef<HTMLDivElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const back = useRef<HTMLButtonElement>(null);
-  const area = useRevealScroll<HTMLDivElement>(`${selected}:${tab}:${comparing}:${highs}`, { enabled: comparing || highs || selected !== null || career.seasons.length === 0, skipFirst: false });
-  const pickedTile = useRevealScroll<HTMLButtonElement>(selected, { enabled: selected === null, skipFirst: false });
+  const area = useRevealScroll<HTMLDivElement>(`${selected}:${tab}:${comparing}:${highs}`, { skipFirst: false });
   const season = selected === null ? undefined : career.seasons[selected];
   const previous = selected !== null && selected > 0 ? career.seasons[selected - 1] : undefined;
   const detail = season ? sport.reviewStats(season, career.pos) : null;
@@ -74,7 +73,7 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
       </div>}
       {career.seasons.length === 0 ? <p className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">No seasons on the books yet. Go play one.</p>
         : <div ref={picker} role="group" aria-label="Choose a season" className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-          {career.seasons.map((saved, index) => ({ saved, index })).reverse().map(({ saved, index }) => <button key={index} ref={index === lastSelected.current ? pickedTile : null} data-season-tile={index}
+          {career.seasons.map((saved, index) => ({ saved, index })).reverse().map(({ saved, index }) => <button key={index} data-season-tile={index}
             aria-label={`Review ${finite(saved.year) ? saved.year : index + 1} season`} onClick={() => choose(index)} className={cn(control, 'min-w-0 p-3 text-left')}>
             <span className="block text-lg font-bold text-primary">{recorded(saved.year)}</span>
             <span className="mt-1 block break-words text-xs">{saved.team ? sport.teamLabelOf(saved.team, career.eraId) : 'Team not recorded'}</span>

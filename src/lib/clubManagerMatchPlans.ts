@@ -3,12 +3,13 @@ import {
   effectiveXIWithSlots, matchStrengthNow, slotDuty, dutyOptions, shootoutOrderOf,
 } from '@/lib/clubManager';
 import type { CareerState, Duty, Mentality, SetPieces } from '@/lib/clubManager';
+import { BALANCED, INSTRUCTION_KEYS, isBalanced, readInstructions, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
+import { readCustomShape, type CustomShape } from '@/lib/clubManagerPositions';
 
 export const MATCH_PLAN_LIMIT = 3;
 export const MATCH_PLAN_NAME_LIMIT = 24;
 
-export interface SavedMatchPlan {
-  version: 1;
+interface MatchPlanAssignments {
   slot: number;
   name: string;
   clubName: string;
@@ -21,33 +22,80 @@ export interface SavedMatchPlan {
   shootoutOrder: string[];
 }
 
+export interface SavedMatchPlanV1 extends MatchPlanAssignments { version: 1 }
+export interface SavedMatchPlanV2 extends MatchPlanAssignments {
+  version: 2;
+  instructions: TeamInstructions;
+  customShape: CustomShape | null;
+}
+export type SavedMatchPlan = SavedMatchPlanV1 | SavedMatchPlanV2;
+
 const validSlot = (slot: number) => Number.isInteger(slot) && slot >= 0 && slot < MATCH_PLAN_LIMIT;
 const playerId = (id: unknown): id is string => typeof id === 'string' && id.length > 0 && id.length <= 200;
 const optionalId = (id: unknown): id is string | null => id === null || playerId(id);
 
-/** Old saves have no plans. Damaged or foreign-club entries never reach the preview or apply path. */
+function exactInstructions(raw: unknown): TeamInstructions | null {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw) || Object.keys(raw).length !== 4
+    || !INSTRUCTION_KEYS.every(key => Object.prototype.hasOwnProperty.call(raw, key))) return null;
+  return readInstructions(raw);
+}
+
+function currentTactics(career: CareerState) {
+  const formation = FORMATIONS[career.formationIndex];
+  if (!Number.isInteger(career.formationIndex) || !formation || !MENTALITIES.some(m => m.id === career.mentality)) return null;
+  const instructions = career.instructions === undefined ? { ...BALANCED } : exactInstructions(career.instructions);
+  if (!instructions) return null;
+  const customShape = career.customShape === undefined ? null : readCustomShape(career.customShape, career.formationIndex, formation.slots);
+  if (career.customShape !== undefined && !customShape) return null;
+  return { instructions, customShape };
+}
+
+/** Structural support is separate from the club and era where a plan can be applied. */
+function readPlan(value: unknown): SavedMatchPlan | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const p = value as SavedMatchPlan;
+  if ((p.version !== 1 && p.version !== 2) || !validSlot(p.slot)) return null;
+  if (typeof p.clubName !== 'string' || !p.clubName || typeof p.eraId !== 'string' || !p.eraId) return null;
+  if (typeof p.name !== 'string' || !p.name.trim() || p.name.length > MATCH_PLAN_NAME_LIMIT || /[\r\n]/.test(p.name)) return null;
+  if (!Number.isInteger(p.formationIndex) || !FORMATIONS[p.formationIndex] || !MENTALITIES.some(m => m.id === p.mentality)) return null;
+  const slots = FORMATIONS[p.formationIndex].slots;
+  if (!Array.isArray(p.xiIds) || p.xiIds.length !== slots.length || !p.xiIds.every(optionalId)) return null;
+  if (!Array.isArray(p.xiDuties) || p.xiDuties.length !== slots.length || !p.xiDuties.every((d, i) => d === null || dutyOptions(slots[i]).includes(d))) return null;
+  if (!p.setPieces || typeof p.setPieces !== 'object' || !SET_PIECE_KEYS.every(k => optionalId(p.setPieces[k]))) return null;
+  if (!Array.isArray(p.shootoutOrder) || p.shootoutOrder.length > SHOOTOUT_MAX_ORDER || !p.shootoutOrder.every(playerId) || new Set(p.shootoutOrder).size !== p.shootoutOrder.length) return null;
+  if (p.version === 2) {
+    if (!Object.prototype.hasOwnProperty.call(p, 'instructions') || !Object.prototype.hasOwnProperty.call(p, 'customShape')
+      || !exactInstructions(p.instructions)) return null;
+    if (p.customShape !== null && !readCustomShape(p.customShape, p.formationIndex, slots)) return null;
+  }
+  return p;
+}
+
+/** Old saves have no plans. Unsupported raw entries remain stored and inactive. */
 export function matchPlansOf(career: CareerState): SavedMatchPlan[] {
   if (!Array.isArray(career.matchPlans)) return [];
   const found: SavedMatchPlan[] = [];
   for (const value of career.matchPlans.slice(0, MATCH_PLAN_LIMIT)) {
-    if (!value || typeof value !== 'object') continue;
-    const p = value as SavedMatchPlan;
-    if (p.version !== 1 || !validSlot(p.slot) || found.some(x => x.slot === p.slot)) continue;
+    const p = readPlan(value);
+    if (!p || found.some(x => x.slot === p.slot)) continue;
     if (p.clubName !== career.clubName || p.eraId !== (career.eraId ?? DEFAULT_ERA_ID)) continue;
-    if (typeof p.name !== 'string' || !p.name.trim() || p.name.length > MATCH_PLAN_NAME_LIMIT || /[\r\n]/.test(p.name)) continue;
-    if (!Number.isInteger(p.formationIndex) || !FORMATIONS[p.formationIndex] || !MENTALITIES.some(m => m.id === p.mentality)) continue;
-    const slots = FORMATIONS[p.formationIndex].slots;
-    if (!Array.isArray(p.xiIds) || p.xiIds.length !== slots.length || !p.xiIds.every(optionalId)) continue;
-    if (!Array.isArray(p.xiDuties) || p.xiDuties.length !== slots.length || !p.xiDuties.every((d, i) => d === null || dutyOptions(slots[i]).includes(d))) continue;
-    if (!p.setPieces || typeof p.setPieces !== 'object' || !SET_PIECE_KEYS.every(k => optionalId(p.setPieces[k]))) continue;
-    if (!Array.isArray(p.shootoutOrder) || p.shootoutOrder.length > SHOOTOUT_MAX_ORDER || !p.shootoutOrder.every(playerId) || new Set(p.shootoutOrder).size !== p.shootoutOrder.length) continue;
     found.push(p);
   }
   return found.sort((a, b) => a.slot - b.slot);
 }
 
 export function canEditMatchPlans(career: CareerState): boolean {
-  return !career.live && !career.sacked && !career.wilderness;
+  if (career.live || career.sacked || career.wilderness || !currentTactics(career)) return false;
+  const raw = career.matchPlans;
+  if (raw === undefined) return true;
+  if (!Array.isArray(raw) || raw.length > MATCH_PLAN_LIMIT || Object.keys(raw).length !== raw.length) return false;
+  const slots = new Set<number>();
+  for (const value of raw) {
+    const plan = readPlan(value);
+    if (!plan || slots.has(plan.slot)) return false;
+    slots.add(plan.slot);
+  }
+  return true;
 }
 
 /** These are assignments, not copies of players. A departed taker returns to the existing automatic rule. */
@@ -65,9 +113,14 @@ export function saveMatchPlan(career: CareerState, slot: number, name: string): 
   if (!label) return career;
   const formation = FORMATIONS[career.formationIndex];
   if (!formation) return career;
-  const plan: SavedMatchPlan = {
-    version: 1, slot, name: label, clubName: career.clubName, eraId: career.eraId ?? DEFAULT_ERA_ID,
+  const tactics = currentTactics(career);
+  if (!tactics) return career;
+  const { instructions, customShape } = tactics;
+  const plan: SavedMatchPlanV2 = {
+    version: 2, slot, name: label, clubName: career.clubName, eraId: career.eraId ?? DEFAULT_ERA_ID,
     formationIndex: career.formationIndex, mentality: career.mentality,
+    instructions,
+    customShape: customShape ? { v: 1, formationIndex: customShape.formationIndex, points: customShape.points.map(point => ({ x: point.x, y: point.y })) } : null,
     xiIds: formation.slots.map((_, i) => career.xiIds[i] ?? null),
     xiDuties: formation.slots.map((_, i) => slotDuty(career, formation, i)),
     setPieces: currentSetPieces(career, career.setPieces),
@@ -77,12 +130,21 @@ export function saveMatchPlan(career: CareerState, slot: number, name: string): 
 }
 
 function withPlan(career: CareerState, plan: SavedMatchPlan): CareerState {
-  return {
+  const next: CareerState = {
     ...career, formationIndex: plan.formationIndex, mentality: plan.mentality,
     xiIds: [...plan.xiIds], xiDuties: [...plan.xiDuties],
     setPieces: currentSetPieces(career, plan.setPieces),
     shootoutOrder: plan.shootoutOrder.filter(id => career.squad.some(p => p.id === id)),
   };
+  if (plan.version === 2) {
+    if (isBalanced(plan.instructions)) delete next.instructions;
+    else next.instructions = { ...plan.instructions };
+    if (plan.customShape === null) delete next.customShape;
+    else next.customShape = { v: 1, formationIndex: plan.customShape.formationIndex, points: plan.customShape.points.map(point => ({ x: point.x, y: point.y })) };
+  } else {
+    delete next.customShape;
+  }
+  return next;
 }
 
 export function applyMatchPlan(career: CareerState, slot: number): CareerState {

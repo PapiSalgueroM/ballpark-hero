@@ -210,7 +210,7 @@ describe('Club Manager saved match plans', () => {
     const c = fixture();
     expect(matchPlansOf(c)).toEqual([]); expect(applyMatchPlan(c, 0)).toBe(c);
     const valid = matchPlansOf(saveMatchPlan(c, 0, 'Saved'))[0];
-    const broken: unknown[] = [null, {}, { ...valid, version: 2 }, { ...valid, slot: 3 },
+    const broken: unknown[] = [null, {}, { ...valid, version: 99 }, { ...valid, slot: 3 },
       { ...valid, formationIndex: 999 }, { ...valid, mentality: 'unknown' }, { ...valid, name: 5 },
       { ...valid, xiIds: [7] }, { ...valid, xiIds: [] }, { ...valid, xiDuties: [] },
       { ...valid, xiDuties: FORMATIONS[valid.formationIndex].slots.map(() => 'poacher') },

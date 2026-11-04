@@ -488,6 +488,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         }).catch(() => { /* a chunk that fails to load: the site's preloadError listener reloads once */ });
       }
       setCareer(loaded);
+      setLastLine(loaded.seasons[loaded.seasons.length - 1] ?? null);
       setTeamQuality(s.teamQuality);
       /* Round 126, house pattern from ensureContracts and ensureAcademy in
          clubManager.ts: repair whatever is on disk instead of trusting it. A

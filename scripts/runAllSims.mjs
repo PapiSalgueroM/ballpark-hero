@@ -84,22 +84,56 @@ function needsBrowser(file) {
      one layout measurement). Neither needs the served site and nothing else
      ran them. So an import the harness guards ITSELF does not count: a try
      that holds that one statement and has a catch. Such a harness has already
-     decided what a missing browser means for it (skip that section and say
-     so, or fail it), which is a decision this runner cannot make better by
-     leaving the whole file out. A try wrapped round a whole driver is not
-     that, and still counts. */
+     decided what a missing browser means for its optional section, so the
+     runner keeps its core checks. A catch that directly exits or throws makes
+     the import mandatory and still counts. So does a try round a whole driver.
+     Literal-backed path.join/resolve and pathToFileURL imports are read only
+     inside the actual module argument, never from comments or example strings. */
+  const catchTerminates = (block) => {
+    const visit = (node) => {
+      if (ts.isFunctionLike(node)) return false;
+      if (ts.isThrowStatement(node)) return true;
+      if (ts.isCallExpression(node)) {
+        const call = node.expression;
+        if ((ts.isPropertyAccessExpression(call) && call.name.text === 'exit'
+          || ts.isElementAccessExpression(call) && ts.isStringLiteral(call.argumentExpression) && call.argumentExpression.text === 'exit')
+          && ts.isIdentifier(call.expression) && call.expression.text === 'process') return true;
+      }
+      return ts.forEachChild(node, visit);
+    };
+    return Boolean(ts.forEachChild(block, visit));
+  };
+  const literal = (node) => ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node);
+  const modulePathText = (node) => {
+    if (literal(node)) return node.text;
+    if (ts.isPropertyAccessExpression(node) && node.name.text === 'href'
+      && ts.isCallExpression(node.expression) && ts.isIdentifier(node.expression.expression)
+      && node.expression.expression.text === 'pathToFileURL' && node.expression.arguments.length === 1) {
+      return modulePathText(node.expression.arguments[0]);
+    }
+    if (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression)
+      && ts.isIdentifier(node.expression.expression) && node.expression.expression.text === 'path'
+      && ['join', 'resolve'].includes(node.expression.name.text) && node.arguments.length > 0
+      && literal(node.arguments[node.arguments.length - 1])
+      && node.arguments.every(arg => literal(arg) || ts.isIdentifier(arg))) {
+      return node.arguments.filter(literal).map(arg => arg.text).join('/');
+    }
+    return null;
+  };
   const guardedByItsOwnTry = (node) => {
     let statement = node;
     while (statement.parent && !ts.isBlock(statement.parent) && !ts.isSourceFile(statement.parent)) statement = statement.parent;
     const block = statement.parent;
     return Boolean(block && ts.isBlock(block) && block.statements.length === 1
-      && ts.isTryStatement(block.parent) && block.parent.tryBlock === block && block.parent.catchClause);
+      && ts.isTryStatement(block.parent) && block.parent.tryBlock === block && block.parent.catchClause
+      && !catchTerminates(block.parent.catchClause.block));
   };
   const visit = (node) => {
     const module = ts.isImportDeclaration(node) ? node.moduleSpecifier
       : ts.isCallExpression(node) && (node.expression.kind === ts.SyntaxKind.ImportKeyword
         || ts.isIdentifier(node.expression) && node.expression.text === 'require') ? node.arguments[0] : null;
-    if (module && ts.isStringLiteral(module) && /playwright/i.test(module.text) && !guardedByItsOwnTry(node)) return true;
+    const moduleText = module && modulePathText(module);
+    if (moduleText && /playwright/i.test(moduleText) && !guardedByItsOwnTry(node)) return true;
     return ts.forEachChild(node, visit);
   };
   return Boolean(visit(syntax));
