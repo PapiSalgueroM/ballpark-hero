@@ -463,6 +463,8 @@ if (skipped.length) {
 if (!failures.length) {
   const ran = nodeResults.length + (WANT_BROWSER ? browserGroup.length : 0) - skipped.length;
   console.log(`All ${ran} harnesses green${skipped.length ? `, ${skipped.length} skipped above` : ''}.`);
+  await new Promise(resolve => process.stdout.write('', resolve));
+  await new Promise(resolve => process.stderr.write('', resolve));
   process.exit(0);
 }
 
@@ -474,4 +476,6 @@ for (const f of failures) {
   console.log('');
 }
 console.log(`${failures.length} harness${failures.length === 1 ? '' : 'es'} not green.`);
+await new Promise(resolve => process.stdout.write('', resolve));
+await new Promise(resolve => process.stderr.write('', resolve));
 process.exit(1);
