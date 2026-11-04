@@ -1,0 +1,216 @@
+name: Exact published-source Bun locked build identity
+on:
+  push:
+    branches: [codex/public-bun-build-retry-20261104]
+permissions:
+  contents: read
+concurrency:
+  group: public-bun-build-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+      SWEEP_OFFLINE: '1'
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold the exact joined application and source scope
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/public-bun-build"
+          mkdir -p "$OUT/logs" "$OUT/units" "$OUT/raw" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git diff --name-status 2c298ebbecfe3546d0e787952b04aba247e42ea4 HEAD > "$OUT/changed-paths.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,pins={"package.json":"2ff64986fb76ebc51b706f2fd24765768874008a","package-lock.json":"97d6f12a052f25f400462938c241789a083f0bfe","bun.lock":"dff081dcd34a1aa928ddc90d910774a6b855dfe3","bun.lockb":"5d9d33a3bf4f45fa099e2aa3014149e034981149","vite.config.ts":"0112b6ac4f2ad80b2fc04f9ec2f7185300913e7d"},expected=["A\t.github/workflows/public-bun-build-20261104.yml"];
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');
+          assert.equal(execFileSync('git',['rev-parse','HEAD']).toString().trim(),process.env.GITHUB_SHA);
+          assert.equal(execFileSync('git',['rev-parse','HEAD^']).toString().trim(),'2c298ebbecfe3546d0e787952b04aba247e42ea4');
+          assert.equal(execFileSync('git',['rev-parse','HEAD^^{tree}']).toString().trim(),'edb54ef06382a8b99c7cb669c77c3b514439fea0');
+          assert.deepEqual(fs.readFileSync(out+'/changed-paths.txt','utf8').trim().split('\n').sort(),expected);
+          for(const [file,git]of Object.entries(pins)){
+            assert.equal(execFileSync('git',['rev-parse','HEAD:'+file]).toString().trim(),git,file+' tracked');
+            assert.equal(execFileSync('git',['hash-object',file]).toString().trim(),git,file+' actual');
+          }
+          const config=fs.readFileSync('vitest.config.ts','utf8');
+          for(const match of config.matchAll(/process\.env\.([A-Z_]+)/g))assert.ok(!process.env[match[1]],'No inherited alias:'+match[1]);
+          fs.writeFileSync(out+'/association.json',JSON.stringify({source:process.env.GITHUB_SHA,releaseCore:'2c298ebbecfe3546d0e787952b04aba247e42ea4',base:'2c298ebbecfe3546d0e787952b04aba247e42ea4',pins,scope:'Exact published application source, unchanged Bun locks and one isolated workflow. Dependency installer reproduction only: proper types, plain npm run build and exact retained public entry comparison. No reader, cap, browser, gameplay, fleet or host-setting qualification.'},null,2)+'\n');
+          NODE
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq 5674
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/public-bun-build-20261104.yml "$OUT/workflow.yml"
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.4.4'
+      - name: Install frozen Bun resolution and record actual dependency versions
+        run: |
+          set -euo pipefail
+          mkdir -p "$QA_OUT/inputs" "$QA_OUT/assets"
+          cp package.json package-lock.json bun.lock bun.lockb vite.config.ts "$QA_OUT/inputs/"
+          node --version > "$QA_OUT/node-version.txt"
+          npm --version > "$QA_OUT/npm-version.txt"
+          bun --version > "$QA_OUT/bun-version.txt"
+          sha256sum "$(command -v bun)" > "$QA_OUT/bun-executable.sha256"
+          bun install --frozen-lockfile > "$QA_OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lock bun.lockb
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import {createRequire} from 'node:module';
+          const req=createRequire(process.cwd()+'/package.json'),vreq=createRequire(req.resolve('vite/package.json')),versions={};
+          for(const name of ['vite','rollup','@vitejs/plugin-react-swc','@swc/core','react','react-dom','react-router','react-router-dom','@supabase/supabase-js']){
+            const file='node_modules/'+name+'/package.json';versions[name]=fs.existsSync(file)?JSON.parse(fs.readFileSync(file)).version:'NOT_AT_ROOT';
+          }
+          for(const name of ['esbuild','rollup']){
+            const entry=vreq.resolve(name);let folder=path.dirname(entry);
+            for(;;){const file=path.join(folder,'package.json');if(fs.existsSync(file)){const pkg=JSON.parse(fs.readFileSync(file));if(pkg.name===name){versions['vite-resolved/'+name]={version:pkg.version,entry};break;}}const parent=path.dirname(folder);if(parent===folder)throw new Error('No owning package for '+entry);folder=parent;}
+          }
+          fs.writeFileSync(process.env.QA_OUT+'/installed-versions.json',JSON.stringify(versions,null,2)+'\n');
+          NODE
+      - name: Proper joined application types
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/types.log"
+          SIM_OFFLINE_RECEIPT="$QA_OUT/transport/types.log" node_modules/.bin/tsc --noEmit -p tsconfig.app.json > "$QA_OUT/logs/types.log" 2>&1
+          test ! -s "$QA_OUT/transport/types.log"
+      - name: Plain production build and complete payload evidence
+        timeout-minutes: 25
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          classify_receipt() {
+            local name="$1" receipt="$2"
+            local allowed='^\[SIM_OFFLINE_BLOCK\] external browser route continue https://fonts\.(googleapis|gstatic)\.com$'
+            if [[ "$name" == sweep-weight ]]; then
+              allowed="$allowed|^\[SIM_OFFLINE_BLOCK\] external browser route continue https://flagcdn\.com$"
+            elif [[ "$name" != build ]]; then
+              if [[ -s "$receipt" ]]; then cat "$receipt"; return 1; fi
+              return 0
+            fi
+            local status=0
+            grep -Ev "$allowed" "$receipt" || status=$?
+            if [[ "$status" == 1 ]]; then return 0; fi
+            return 1
+          }
+          run_gate() {
+            local name="$1"
+            shift
+            local receipt="$QA_OUT/transport/$name.log"
+            : > "$receipt"
+            SIM_OFFLINE_RECEIPT="$receipt" "$@" 2>&1 | tee "$QA_OUT/logs/$name.log"
+            if ! classify_receipt "$name" "$receipt"; then
+              echo "Unexpected blocked transport in $name" >&2
+              return 1
+            fi
+            # Every refusal is retained and counted, never credited as zero transport.
+            if [[ -s "$receipt" ]]; then
+              wc -l "$receipt" | tee "$QA_OUT/logs/$name-blocked-attempts.txt"
+            fi
+          }
+          # First-release guard outcomes are retained separately; this job builds the new source and checks its output.
+          run_gate build npm run build
+          find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-before.sha256"
+          tar -czf "$QA_OUT/completed-dist.tar.gz" dist
+          sha256sum "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist.tar.gz.sha256"
+          tar -tzf "$QA_OUT/completed-dist.tar.gz" > "$QA_OUT/completed-dist-members.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=[],root=path.resolve('dist'),hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
+          function walk(folder){for(const entry of fs.readdirSync(folder,{withFileTypes:true})){const file=path.join(folder,entry.name);if(entry.isDirectory())walk(file);else{assert(entry.isFile());const bytes=fs.readFileSync(file);rows.push({file:path.relative(root,file).replaceAll('\\','/'),bytes:bytes.length,sha256:hash(bytes)});}}}
+          walk(root);rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);assert(rows.length>0);
+          const source=fs.readFileSync(out+'/source.txt','utf8').trim().split('\n'),tar=fs.readFileSync(out+'/completed-dist.tar.gz');
+          fs.writeFileSync(out+'/dist-manifest.json',JSON.stringify(rows,null,2)+'\n');
+          fs.writeFileSync(out+'/completed-dist-association.json',JSON.stringify({source:source[0],tree:source[1],applicationCore:'2c298ebbecfe3546d0e787952b04aba247e42ea4',fileCount:rows.length,distDigest:hash(JSON.stringify(rows)),tarBytes:tar.length,tarSHA256:hash(tar),meaning:'Actual complete payload census, no fixed file count. The normal build completed before archiving. This reproduction does not rerun readers, caps, browser or gameplay checks.'},null,2)+'\n');
+          console.log('Completed dist: '+rows.length+' actual payload files retained with hashes.');
+          NODE
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,rows=JSON.parse(fs.readFileSync(out+'/dist-manifest.json')),html=fs.readFileSync('dist/index.html','utf8');
+          const entry=[...html.matchAll(/<script[^>]+type="module"[^>]+src="\/([^"]+)"/g)].map(m=>m[1]),styles=[...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="\/([^"]+)"/g)].map(m=>m[1]);assert.equal(entry.length,1);assert.equal(styles.length,1);
+          const names=[entry[0],styles[0],...['SoccerCareer','ClubManager','StadiumTycoon','FrontOffice','NbaMyCareer','NflMyCareer'].map(name=>{const found=rows.filter(r=>r.file.startsWith('assets/'+name+'-')&&r.file.endsWith('.js'));assert.equal(found.length,1,name);return found[0].file;})];assert.equal(new Set(names).size,8);
+          const assets=names.map(file=>{const row=rows.find(r=>r.file===file);assert(row);fs.copyFileSync('dist/'+file,out+'/assets/'+path.basename(file));return row;});
+          const expected={file:'assets/index-BsP5Dzik.js',bytes:798601,sha256:'e1ec8e409bb2a9da63b8f6054181aa58b4c0869e079550cedd9abdc63efc896e'},actual=assets[0],matches=Object.keys(expected).every(k=>expected[k]===actual[k]);
+          fs.writeFileSync(out+'/eight-assets.json',JSON.stringify(assets,null,2)+'\n');
+          fs.writeFileSync(out+'/entry-comparison.json',JSON.stringify({expected,actual,matches,scope:'Exact retained public entry comparison, not public route or whole-dist qualification.'},null,2)+'\n');
+          fs.writeFileSync(out+'/entry-match.txt',String(matches)+'\n');console.log(JSON.stringify({expected,actual,matches}));
+          NODE
+      - name: Require byte identity with the retained actual public entry
+        run: |
+          set -euo pipefail
+          test "$(cat "$QA_OUT/entry-match.txt")" = true
+      - name: Retain full source holds and transport evidence
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          dist_hold=0
+          if [[ -f "$QA_OUT/dist-before.sha256" ]]; then
+            find dist -type f -print0 | sort -z | xargs -0 sha256sum > "$QA_OUT/dist-after.sha256"
+            cmp "$QA_OUT/dist-before.sha256" "$QA_OUT/dist-after.sha256" || dist_hold=$?
+            sha256sum --check "$QA_OUT/dist-before.sha256" > "$QA_OUT/dist-held.log" || dist_hold=$?
+          else
+            echo "No completed-build inventory exists. No dist hold credit." > "$QA_OUT/dist-hold-unknown.txt"
+          fi
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          if [[ -f "$QA_OUT/source-before.sha256" ]]; then
+            cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+            sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+          else
+            echo "No qualified before inventory was produced." > "$QA_OUT/source-hold-unknown.txt"
+            exit 1
+          fi
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const out=process.env.QA_OUT;
+          const rows=fs.existsSync(out+'/transport')?fs.readdirSync(out+'/transport').sort().map(file=>{
+            const text=fs.readFileSync(out+'/transport/'+file,'utf8'),lines=text.split('\n').filter(Boolean);
+            return {file,blockedAttempts:lines.length,
+              fontBlockedAttempts:lines.filter(line=>/^\[SIM_OFFLINE_BLOCK\] external browser route continue https:\/\/fonts\.(googleapis|gstatic)\.com$/.test(line)).length,
+              flagBlockedAttempts:lines.filter(line=>line==='[SIM_OFFLINE_BLOCK] external browser route continue https://flagcdn.com').length};
+          }):[];
+          fs.writeFileSync(out+'/transport-summary.json',JSON.stringify({
+            receipts:rows,meaning:'Blocked attempts are retained. Empty Node receipts are not a browser or provider availability claim.'
+          },null,2)+'\n');
+          NODE
+          test "$dist_hold" -eq 0
+      - name: Bound retained focused evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: public-bun-build-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/public-bun-build
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
