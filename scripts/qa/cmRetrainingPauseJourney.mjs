@@ -76,7 +76,7 @@ export async function runRetrainingPause({ page, width, base, fixture, engine, p
   const native = async (control, action) => {
     await waitForScrollIdle(page);
     await control.scrollIntoViewIfNeeded();
-    if (width < 768) await control.tap({ trial: true }); else await control.click({ trial: true });
+    await control.click({ trial: true });
     await idle(); const before = await scroll();
     await action(); await idle(); const after = await scroll();
     assert.deepEqual(after, before, 'CM_RETRAIN_PAUSE_APP_NO_JUMP');

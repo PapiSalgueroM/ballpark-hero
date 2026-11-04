@@ -76,7 +76,7 @@ export async function runUsSigning({ page, width, base, fixture, photo, tap, got
   await waitForScrollIdle(page);
   await opener.scrollIntoViewIfNeeded();
   if (width === 1280) { await opener.click({ trial: true }); await opener.focus(); }
-  else await opener.tap({ trial: true });
+  else await opener.click({ trial: true });
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const beforeOpen = await y();
   if (width === 1280) await keyboard('Enter'); else await tap(opener);
