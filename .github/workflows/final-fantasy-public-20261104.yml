@@ -1,0 +1,239 @@
+name: Final release nine public assets and Fantasy native drafts
+on:
+  push:
+    branches: [codex/final-fantasy-public-20261104]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: final-fantasy-public-${{ github.ref }}
+  cancel-in-progress: false
+env:
+  CI: '1'
+  PUBLIC_RELEASE_SHA: dc4f8b1995a3da4fe1f0c63a795b2f41ecdeb506
+  PUBLIC_RELEASE_TREE: 5cdfd8e695d5f5ec4689615e3996d58d29027ced
+  BUN_SOURCE_SHA: 306f9dadb6ea972d127f74ba5bfe0ea3e8f47992
+  BUN_SOURCE_TREE: 6c318295a5e6b84954665ae8020618f3930585fc
+  BUN_WORKFLOW_BLOB: 6b7ce3744481ddde61cde53285ccd2e7e466fcd7
+  BUN_RUN_ID: 41770959867
+  BUN_JOB_ID: 126380278566
+  BUN_ARTIFACT_ID: 13294941807
+  BUN_ZIP_BYTES: 8823739
+  BUN_ZIP_SHA256: 408c66ff2f27e5993b182fbd36a8bb03e1120ac8d5521bdcd6077d404bf1cf46
+  BUN_TAR_BYTES: 6988161
+  BUN_TAR_SHA256: 9187fdbbca66f1df9dd4491788c8ff81c48453410e5d0e1e902db2f122afc429
+  BUN_MANIFEST_SHA256: a33c3db95a7cbe2d609bf542f6d4ac883cc3f69dc09816c45b799d47f1589cad
+  BUN_DIST_DIGEST: 568ecd0c7882ac4117fad4acde1ab0385bd85ff12a610d3390df1d22fa345811
+  BUN_FILE_COUNT: 845
+jobs:
+  public:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      BASE: https://douknowball.com
+      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Require the actual published tree and only two temporary QA additions
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/final-fantasy-public"
+          mkdir -p "$OUT/logs" "$OUT/api" "$OUT/transport" "$OUT/retained"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          export QA_OUT="$OUT"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const keys=['PUBLIC_RELEASE_SHA','PUBLIC_RELEASE_TREE','BUN_SOURCE_SHA','BUN_SOURCE_TREE','BUN_WORKFLOW_BLOB','BUN_RUN_ID','BUN_JOB_ID','BUN_ARTIFACT_ID','BUN_ZIP_BYTES','BUN_ZIP_SHA256','BUN_TAR_BYTES','BUN_TAR_SHA256','BUN_MANIFEST_SHA256','BUN_DIST_DIGEST','BUN_FILE_COUNT'];
+          for(const key of keys)assert.match(process.env[key]||'',key.endsWith('_SHA256')||key.endsWith('_DIGEST')?/^[a-f0-9]{64}$/:key.endsWith('_SHA')||key.endsWith('_TREE')||key.endsWith('_BLOB')?/^[a-f0-9]{40}$/:/^[1-9][0-9]*$/,key+' must be bound');
+          const git=(...args)=>execFileSync('git',args).toString().trim(),release=process.env.PUBLIC_RELEASE_SHA;
+          assert.equal(process.env.GITHUB_REPOSITORY,'PapiSalgueroM/ballpark-hero');assert.equal(git('rev-parse','HEAD'),process.env.GITHUB_SHA);
+          assert.equal(git('rev-parse','HEAD^'),release);assert.equal(git('rev-parse',release+'^{tree}'),process.env.PUBLIC_RELEASE_TREE);
+          assert.equal(process.env.PUBLIC_RELEASE_TREE,'5cdfd8e695d5f5ec4689615e3996d58d29027ced','Published application must be the qualified final tree');
+          assert.deepEqual(git('diff','--name-status',release,'HEAD').split('\n').sort(),['A\t.github/workflows/final-fantasy-public-20261104.yml','A\tscripts/qa/fantasyDraftPublic20261104.mjs']);
+          const driver='scripts/qa/fantasyDraftPublic20261104.mjs';
+          assert.equal(git('hash-object',driver),'9805557a0ae7727c80636d9a2f2cfd699b618819');
+          assert.equal(git('hash-object','scripts/data/fantasyDraftPool.json'),'e5a83f3e5d498b3c37b54373101df41e2f0496f6');
+          fs.copyFileSync(driver,process.env.QA_OUT+'/retained/fantasyDraftPublic20261104.mjs');
+          fs.copyFileSync('scripts/data/fantasyDraftPool.json',process.env.QA_OUT+'/retained/fantasyDraftPool.json');
+          fs.writeFileSync(process.env.QA_OUT+'/source-association.json',JSON.stringify({source:process.env.GITHUB_SHA,published:release,publishedTree:process.env.PUBLIC_RELEASE_TREE,scope:'Nine exact public assets and two Fantasy drafts using locally fulfilled declared guest data. Prior fourteen flagship flows are retained separately. No account, database write, provider availability or actual-font claim.'},null,2)+'\n');
+          NODE
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          test "$(wc -l < "$OUT/source-before.sha256")" -eq 5678
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/final-fantasy-public-20261104.yml "$OUT/workflow.yml"
+          git fetch --no-tags --depth=2 origin "$BUN_SOURCE_SHA"
+      - name: Admit the successful future Bun reference and its complete payload
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/runs/$BUN_RUN_ID" > "$QA_OUT/api/run.json"
+          curl --fail --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/jobs/$BUN_JOB_ID" > "$QA_OUT/api/job.json"
+          curl --fail --silent --show-error -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$BUN_ARTIFACT_ID" > "$QA_OUT/api/artifact.json"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';
+          const out=process.env.QA_OUT,read=name=>JSON.parse(fs.readFileSync(out+'/api/'+name+'.json')),run=read('run'),job=read('job'),artifact=read('artifact'),git=(...args)=>execFileSync('git',args).toString().trim();
+          assert.equal(run.id,Number(process.env.BUN_RUN_ID));assert.equal(run.head_sha,process.env.BUN_SOURCE_SHA);assert.equal(run.conclusion,'success');assert.equal(run.status,'completed');
+          assert.equal(job.id,Number(process.env.BUN_JOB_ID));assert.equal(job.run_id,run.id);assert.equal(job.conclusion,'success');
+          for(const name of ['Proper joined application types','Plain production build and complete payload evidence'])assert.equal(job.steps.find(step=>step.name===name)?.conclusion,'success',name);
+          assert.equal(artifact.id,Number(process.env.BUN_ARTIFACT_ID));assert.equal(artifact.expired,false);assert.equal(artifact.workflow_run.id,run.id);assert.equal(artifact.workflow_run.head_sha,run.head_sha);
+          assert.equal(git('rev-parse',run.head_sha+'^{tree}'),process.env.BUN_SOURCE_TREE);
+          const parent=git('rev-parse',run.head_sha+'^');
+          assert.equal(parent,'9644a63a71a7f9d166f08fb3d0572985a8b007cf');
+          assert.equal(git('rev-parse',parent+'^{tree}'),process.env.PUBLIC_RELEASE_TREE,'Bun application parent tree must equal published tree, not the merge commit hash');
+          assert.equal(git('rev-parse',run.head_sha+':.github/workflows/future-bun-build-20261104.yml'),process.env.BUN_WORKFLOW_BLOB);
+          assert.deepEqual(git('diff','--name-status',parent,run.head_sha).split('\n'),['A\t.github/workflows/future-bun-build-20261104.yml']);
+          NODE
+          curl --fail --silent --show-error --location -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/$BUN_ARTIFACT_ID/zip" -o "$QA_OUT/bun-reference.zip"
+          test "$(wc -c < "$QA_OUT/bun-reference.zip")" -eq "$BUN_ZIP_BYTES"
+          echo "$BUN_ZIP_SHA256  $QA_OUT/bun-reference.zip" | sha256sum --check
+          mkdir "$QA_OUT/bun-reference" "$QA_OUT/payload"
+          unzip -q "$QA_OUT/bun-reference.zip" -d "$QA_OUT/bun-reference"
+          export BUN_REFERENCE="$QA_OUT/bun-reference"
+          echo "BUN_REFERENCE=$BUN_REFERENCE" >> "$GITHUB_ENV"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import crypto from 'node:crypto';import {execFileSync} from 'node:child_process';
+          const root=process.env.BUN_REFERENCE,hash=b=>crypto.createHash('sha256').update(b).digest('hex'),read=f=>JSON.parse(fs.readFileSync(root+'/'+f)),association=read('association.json'),dist=read('completed-dist-association.json'),reference=read('reference-status.json'),tar=fs.readFileSync(root+'/completed-dist.tar.gz'),manifest=fs.readFileSync(root+'/dist-manifest.json');
+          assert.equal(association.source,process.env.BUN_SOURCE_SHA);assert.equal(association.applicationTree,process.env.PUBLIC_RELEASE_TREE);
+          assert.equal(dist.source,process.env.BUN_SOURCE_SHA);assert.equal(dist.tree,process.env.BUN_SOURCE_TREE);assert.equal(dist.applicationTree,process.env.PUBLIC_RELEASE_TREE);
+          assert.equal(reference.status,'future-reference');assert.equal(reference.published,false);assert.equal(reference.applicationTree,process.env.PUBLIC_RELEASE_TREE);
+          assert.equal(tar.length,Number(process.env.BUN_TAR_BYTES));assert.equal(hash(tar),process.env.BUN_TAR_SHA256);assert.equal(dist.tarBytes,tar.length);assert.equal(dist.tarSHA256,hash(tar));
+          assert.equal(hash(manifest),process.env.BUN_MANIFEST_SHA256);assert.equal(dist.fileCount,Number(process.env.BUN_FILE_COUNT));assert.equal(dist.distDigest,process.env.BUN_DIST_DIGEST);
+          assert.equal(fs.readFileSync(root+'/bun-version.txt','utf8').trim(),'1.4.4');
+          assert.equal(read('installed-versions.json')['react-router'],'7.18.4');
+          for(const file of ['source-before.sha256','dist-before.sha256'])assert.equal(fs.readFileSync(root+'/'+file,'utf8'),fs.readFileSync(root+'/'+file.replace('-before.','-after.'),'utf8'),file);
+          for(const file of ['source-diff.txt','status-before.txt','status-after.txt','logs/types.log'])assert.equal(fs.statSync(root+'/'+file).size,0,file);
+          for(const [file,count]of [['source-held.log',5677],['dist-held.log',Number(process.env.BUN_FILE_COUNT)]]){
+            const lines=fs.readFileSync(root+'/'+file,'utf8').trim().split('\n');assert.equal(lines.length,count,file);assert(lines.every(line=>line.endsWith(': OK')),file);
+          }
+          const sourceMap=new Map(fs.readFileSync(root+'/source-before.sha256','utf8').trim().split('\n').map(line=>{assert.match(line,/^[a-f0-9]{64}  /);return [line.slice(66),line.slice(0,64)];}));
+          assert.equal(sourceMap.size,5677);
+          const files=execFileSync('git',['ls-tree','-r','--name-only',process.env.PUBLIC_RELEASE_SHA]).toString().trim().split('\n');assert.equal(files.length,5676);
+          for(const file of files)assert.equal(sourceMap.get(file),hash(fs.readFileSync(file)),file+' published body equals executed Bun source');
+          assert.equal(sourceMap.get('.github/workflows/future-bun-build-20261104.yml'),hash(fs.readFileSync(root+'/workflow.yml')));
+          for(const file of ['package.json','package-lock.json','bun.lock','bun.lockb','vite.config.ts'])assert.deepEqual(fs.readFileSync(root+'/inputs/'+file),fs.readFileSync(file),file);
+          fs.writeFileSync(process.env.QA_OUT+'/reference-admission.json',JSON.stringify({source:association.source,applicationTree:dist.applicationTree,published:process.env.PUBLIC_RELEASE_SHA,heldPublishedBodies:files.length,dist,scope:'Same application tree under the frozen Bun build; release SHA association is independently bound. No prior live verification inferred.'},null,2)+'\n');
+          NODE
+          tar -tzf "$BUN_REFERENCE/completed-dist.tar.gz" > "$QA_OUT/retained/tar-members.txt"
+          if grep -Ev '^dist(/[^[:cntrl:]]*)?/?$' "$QA_OUT/retained/tar-members.txt"; then exit 1; fi
+          if grep -E '(^|/)\.\.(/|$)' "$QA_OUT/retained/tar-members.txt"; then exit 1; fi
+          tar -xzf "$BUN_REFERENCE/completed-dist.tar.gz" -C "$QA_OUT/payload"
+          export PUBLIC_REFERENCE="$QA_OUT/payload/dist"
+          echo "PUBLIC_REFERENCE=$PUBLIC_REFERENCE" >> "$GITHUB_ENV"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const rows=[],root=process.env.PUBLIC_REFERENCE,hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          function walk(folder){for(const name of fs.readdirSync(folder)){const file=path.join(folder,name),stat=fs.lstatSync(file);assert(!stat.isSymbolicLink());if(stat.isDirectory())walk(file);else{assert(stat.isFile());const bytes=fs.readFileSync(file);rows.push({file:path.relative(root,file).replaceAll('\\','/'),bytes:bytes.length,sha256:hash(bytes)});}}}
+          walk(root);rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);
+          const expected=JSON.parse(fs.readFileSync(process.env.BUN_REFERENCE+'/dist-manifest.json'));assert.deepEqual(rows,expected);assert.equal(rows.length,Number(process.env.BUN_FILE_COUNT));assert.equal(hash(JSON.stringify(rows)),process.env.BUN_DIST_DIGEST);
+          fs.writeFileSync(process.env.QA_OUT+'/payload-before.json',JSON.stringify(rows,null,2)+'\n');
+          const html=fs.readFileSync(root+'/index.html','utf8'),entry=[...html.matchAll(/<script[^>]+type="module"[^>]+src="\/([^"]+)"/g)].map(m=>m[1]),styles=[...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="\/([^"]+)"/g)].map(m=>m[1]);
+          assert.equal(entry.length,1);assert.equal(styles.length,1);
+          const names=[entry[0],styles[0],...['SoccerCareer','ClubManager','StadiumTycoon','FrontOffice','NbaMyCareer','NflMyCareer','FantasyDraft'].map(prefix=>{const found=rows.filter(r=>r.file.startsWith('assets/'+prefix+'-')&&r.file.endsWith('.js'));assert.equal(found.length,1,prefix);return found[0].file;})];
+          const assets=names.map(file=>{const row=rows.find(r=>r.file===file);assert(row);return row;});assert.equal(new Set(names).size,9);
+          assert.deepEqual(assets.slice(0,8),JSON.parse(fs.readFileSync(process.env.BUN_REFERENCE+'/eight-assets.json')));
+          const entryText=fs.readFileSync(root+'/'+entry[0],'utf8');for(const asset of assets.slice(2))assert(entryText.includes(path.basename(asset.file)),asset.file+' referenced by exact entry');
+          fs.writeFileSync(process.env.QA_OUT+'/expected-assets.json',JSON.stringify(assets,null,2)+'\n');
+          NODE
+      - name: Install the browser tooling without changing application inputs
+        run: |
+          set -euo pipefail
+          npm ci > "$QA_OUT/logs/npm-ci.log" 2>&1
+          npm install --no-save --package-lock=false playwright@1.64.0 > "$QA_OUT/logs/playwright-package.log" 2>&1
+          node_modules/.bin/playwright install --with-deps chromium > "$QA_OUT/logs/chromium.log" 2>&1
+          git diff --exit-code HEAD
+      - name: Require nine exact public assets before and after the native drafts
+        run: |
+          set -euo pipefail
+          cat > "$QA_OUT/public-assets.mjs" <<'NODE'
+          import fs from 'node:fs/promises';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,phase=process.env.PUBLIC_PHASE,rows=JSON.parse(await fs.readFile(out+'/expected-assets.json')),actual=[],base='https://douknowball.com',release=process.env.PUBLIC_RELEASE_SHA,hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          assert(['before','after'].includes(phase));assert.equal(process.env.BASE,base);assert.equal(rows.length,9);
+          await fs.mkdir(out+'/public-'+phase,{recursive:true});
+          async function read(file){assert(!file.startsWith('/')&&!file.includes('..'));const url=new URL('/'+file,base);url.searchParams.set('qa_release',release);url.searchParams.set('qa_phase',phase);url.searchParams.set('qa_nonce',String(Date.now()));assert.equal(url.origin,base);const response=await fetch(url,{method:'GET',redirect:'error',cache:'no-store',signal:AbortSignal.timeout(30000),headers:{'cache-control':'no-cache'}}),bytes=Buffer.from(await response.arrayBuffer());const row={url:url.href,method:'GET',status:response.status,bytes:bytes.length,sha256:hash(bytes)};actual.push(row);await fs.writeFile(out+'/public-'+phase+'/'+path.basename(file||'index.html'),bytes);assert.equal(response.status,200,file);return bytes;}
+          try{const html=(await read('')).toString('utf8'),entry=[...html.matchAll(/<script[^>]+type="module"[^>]+src="\/([^"]+)"/g)].map(m=>m[1]),styles=[...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="\/([^"]+)"/g)].map(m=>m[1]);assert.deepEqual(entry,[rows[0].file]);assert.deepEqual(styles,[rows[1].file]);for(const expected of rows){const bytes=await read(expected.file);assert.equal(bytes.length,expected.bytes,expected.file);assert.equal(hash(bytes),expected.sha256,expected.file);}await fs.writeFile(out+'/public-'+phase+'/result.json',JSON.stringify({status:'passed',published:release,assets:9,requests:actual,scope:'Exact cache-busted GET bytes only. Release source association uses the separately bound published tree.'},null,2)+'\n');}
+          finally{await fs.writeFile(out+'/public-'+phase+'/requests.json',JSON.stringify(actual,null,2)+'\n');}
+          NODE
+          PUBLIC_PHASE=before node "$QA_OUT/public-assets.mjs" > "$QA_OUT/logs/public-before.log" 2>&1
+      - name: Two native public Fantasy drafts with local declared guest data
+        run: |
+          set -euo pipefail
+          set +e
+          env -u NODE_OPTIONS node scripts/qa/fantasyDraftPublic20261104.mjs > "$QA_OUT/logs/fantasy-native.log" 2>&1
+          code=$?
+          set -e
+          echo "$code" > "$QA_OUT/fantasy-native.exit"
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,report=JSON.parse(fs.readFileSync(out+'/browser/report.json')),control=JSON.parse(fs.readFileSync(out+'/browser/console-classifier-control.json'));
+          assert.equal(report.status,'passed');assert.equal(report.contexts.length,2);
+          assert.deepEqual(report.contexts.map(c=>c.viewport.width),[320,1280]);
+          for(const context of report.contexts){assert.equal(context.status,'passed');assert.equal(context.humanClicks.length,11);assert.equal(context.timedPicks.length,22);assert.equal(context.final.user.length,11);assert.equal(context.final.ai.length,11);assert.deepEqual(context.pageErrors,[]);assert.deepEqual(context.unexpectedConsoleErrors,[]);assert.deepEqual(context.captures,[context.viewport.width+'-mid-draft.png',context.viewport.width+'-complete-counts.png',context.viewport.width+'-complete-xis.png',context.viewport.width+'-real-verdict.png']);for(const file of context.captures)assert(fs.statSync(out+'/browser/'+file).size>0);}
+          assert.equal(report.contexts.reduce((sum,c)=>sum+c.timedPicks.length,0),44);assert.equal(control.witnessedAccepted,true);assert.equal(control.changedTextRefused,true);assert.equal(control.changedOriginRefused,true);
+          fs.writeFileSync(out+'/fantasy-admission.json',JSON.stringify({status:'passed',contexts:2,widths:[320,1280],totalPicks:44,normalPNGs:8,sourceFixture:report.fixture,fonts:report.fontRendering,transport:report.contexts.map(c=>({width:c.viewport.width,fixtures:c.fixtures,aborted:c.aborted,consoleErrors:c.consoleErrors,pageErrors:c.pageErrors})),scope:'Native public UI and settlement with archived pool and locally fulfilled daily criterion. All non-origin requests are aborted except those declared local fulfills; no provider, real-font or natural-progression claim.'},null,2)+'\n');
+          NODE
+          test "$code" -eq 0
+      - name: Retain source, payload, request and native outcome closures
+        if: always()
+        run: |
+          set -euo pipefail
+          test -n "$QA_OUT"
+          close_status=0
+          if [[ -f "$QA_OUT/public-assets.mjs" && -f "$QA_OUT/expected-assets.json" ]]; then
+            PUBLIC_PHASE=after node "$QA_OUT/public-assets.mjs" > "$QA_OUT/logs/public-after.log" 2>&1 || close_status=$?
+          else
+            echo 'Public reference was not admitted. No public proof.' > "$QA_OUT/public-after-unknown.txt"
+            close_status=1
+          fi
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt" || close_status=$?
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          if [[ -f "$QA_OUT/source-before.sha256" ]]; then
+            cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256" || close_status=$?
+            sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log" || close_status=$?
+          else
+            close_status=1
+          fi
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt" || close_status=$?
+          if [[ -f "$QA_OUT/payload-before.json" ]]; then
+            node --input-type=module <<'NODE' || close_status=$?
+          import fs from 'node:fs';import path from 'node:path';import crypto from 'node:crypto';import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,root=process.env.PUBLIC_REFERENCE,rows=[],hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          function walk(folder){for(const name of fs.readdirSync(folder)){const file=path.join(folder,name),stat=fs.lstatSync(file);assert(!stat.isSymbolicLink());if(stat.isDirectory())walk(file);else{assert(stat.isFile());const b=fs.readFileSync(file);rows.push({file:path.relative(root,file).replaceAll('\\','/'),bytes:b.length,sha256:hash(b)});}}}
+          walk(root);rows.sort((a,b)=>a.file<b.file?-1:a.file>b.file?1:0);fs.writeFileSync(out+'/payload-after.json',JSON.stringify(rows,null,2)+'\n');assert.deepEqual(rows,JSON.parse(fs.readFileSync(out+'/payload-before.json')));
+          const tar=fs.readFileSync(process.env.BUN_REFERENCE+'/completed-dist.tar.gz');assert.equal(tar.length,Number(process.env.BUN_TAR_BYTES));assert.equal(hash(tar),process.env.BUN_TAR_SHA256);
+          const zip=fs.readFileSync(out+'/bun-reference.zip');assert.equal(zip.length,Number(process.env.BUN_ZIP_BYTES));assert.equal(hash(zip),process.env.BUN_ZIP_SHA256);
+          NODE
+          else
+            echo 'No admitted payload exists. No payload hold credit.' > "$QA_OUT/payload-hold-unknown.txt"
+            close_status=1
+          fi
+          test "$close_status" -eq 0
+      - name: Bound all retained evidence
+        if: always()
+        id: artifact
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: final-fantasy-public-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/final-fantasy-public
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
