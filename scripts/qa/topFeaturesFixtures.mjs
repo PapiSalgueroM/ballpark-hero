@@ -34,6 +34,10 @@ await put('sc','soccerCareerSave',e.codec.serializeSoccerCareerSave(sc),{age:sc.
 for(const[sport,name]of[[e.nba.NBA_CAREER_SPORT,'nba'],[e.nfl.NFL_CAREER_SPORT,'nfl']]){
  const pos=name==='nba'?'PG':'QB',c=sport.startCareer('Programme Browser',pos,sport.create.archetypes[pos][0],()=>0.4,e.appearance.defaultAppearance(),'now');
  Object.assign(c,{health:96,morale:98,pendingRivalryEvent:null,pendingRivalryChoice:null});
+ const beforeRole=structuredClone(c);
+ assert.equal(sport.campBattle(c,75,()=>0.4),null);
+ assert.equal(c.role,'starter');
+ assert.deepEqual(c,{...beforeRole,role:'starter'});
  const frame={c,phase:'season',teamQuality:75,coach:null};
  await put(name,sport.saveKey,JSON.stringify(frame),{path:name==='nba'?'/nba-my-career':'/nfl-my-career',team:c.team,year:c.year});
 }
