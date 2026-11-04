@@ -21709,6 +21709,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       .filter(p => groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID')
       .slice(0, 2)
       .map(p => p.n);
+    const clubForm = career.clubForm ?? {};
     const ctx = secondLegContext(career, w, 0, 0);
 
     return {
@@ -21716,8 +21717,8 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       competition: fx.competition,
       opponent: fx.opponent,
       home: fx.home,
-      myForm: career.clubForm?.[career.clubName] ?? career.form ?? [],
-      oppForm: career.clubForm?.[fx.opponent] ?? [],
+      myForm: clubForm[career.clubName] ?? career.form ?? [],
+      oppForm: clubForm[fx.opponent] ?? [],
       myPos,
       oppPos,
       oppLeagueName,
