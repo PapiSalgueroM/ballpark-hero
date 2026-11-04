@@ -2,8 +2,8 @@ import { Suspense, cloneElement, isValidElement, useEffect, useLayoutEffect, use
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { CareerState, TableRow } from '@/lib/clubManager';
-import { careerLeagueOf, uclGroupRule, worldUclFormatOf } from '@/lib/clubManager';
+import type { CareerState, CupRound, TableRow } from '@/lib/clubManager';
+import { careerLeagueOf, cupSatOutBy, uclGroupRule, worldUclFormatOf } from '@/lib/clubManager';
 import { shortDate, type CalDate } from '@/lib/clubManagerCalendar';
 import { uclGroupFootnote } from '@/lib/clubManagerUclGroups';
 import { leaguePhaseFootnote } from '@/lib/uclLeaguePhase';
@@ -24,8 +24,8 @@ import {
  * it. The same screen for the club in it and the club watching it from outside (clubManagerWorldView.ts reads
  * both). Small tiles and a back button, one view at a time; going back puts the page where it was.
  *
- * ClubManager.tsx hands in the cards it has always mounted on this panel (the cup line, CupBracketCard,
- * UclGroupsCard, UclBracketCard) as elements, in the panel's old order, so its source keeps the order
+ * The domestic cup line stays in this lazy panel. ClubManager.tsx hands in CupBracketCard, UclGroupsCard
+ * and UclBracketCard as elements, in the panel's old order, so its source keeps the order
  * scripts/simClubManagerEraMidSeason.mjs section 6 reads (the critic's correction 13, option A). The cards are
  * mounted unedited; this file only swaps the handler a tapped club calls, so a club tapped here opens its run
  * here, and a club page opened from here comes back to the view it was opened from.
@@ -603,8 +603,8 @@ interface CupsPanelProps {
   cupTitle: string;
   cupValue: string;
   cupSub?: string;
-  /** The domestic cup's line, as the panel has always printed it. */
-  cupLine: ReactNode;
+  /** An optional override of the domestic cup's line. */
+  cupLine?: ReactNode;
   /** The domestic bracket (CupBracketCard), absent in a league with no domestic cup. */
   cupBracket?: ReactElement;
   /** The Champions League heading. */
@@ -668,10 +668,37 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
 
   let body: ReactNode;
   if (nav.at === 'cup') {
+    let line = cupLine;
+    if (line === undefined) {
+      const c = career;
+      const cupName = careerLeagueOf(c).cupName;
+      const cupSatOut = cupSatOutBy(c);
+      const cupAlive = cupName !== null && c.cupRound !== 'out' && c.cupRound !== 'won';
+      line = cupName === null ? (
+        <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">
+          🏅 {cupSatOut
+            ? <>{c.clubName} do not enter the {cupSatOut}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.</>
+            : <>There is no domestic cup in the {careerLeagueOf(c).name}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.</>}
+        </div>
+      ) : (<>
+      <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1">
+        🏅 {cupName}
+      </div>
+      <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
+        {cupAlive ? (
+          <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: still alive. Next up, the <span className="font-bold">{c.cupRound === 'F' ? 'final' : c.cupRound === 'SF' ? 'semi-final' : c.cupRound === 'QF' ? 'quarter-final' : 'Round of 16'}</span> against <span className="font-bold">{c.cupDraw[c.cupRound as CupRound] ?? 'a club to be drawn'}</span>.</>
+        ) : c.cupRound === 'won' ? (
+          <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: WON. It is in the cabinet.</>
+        ) : (
+          <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: out{c.cupExit ? ` at the ${c.cupExit === 'F' ? 'final' : c.cupExit === 'SF' ? 'semi-final' : c.cupExit === 'QF' ? 'quarter-final' : 'Round of 16'}` : ''}. Next year.</>
+        )}
+      </div>
+      </>);
+    }
     body = (
       <div className="space-y-2" data-cm-cups-view="cup">
         <Back label="Cups" onClick={() => go(HOME)} />
-        {cupLine}
+        {line}
         {cupBracket && isValidElement(cupBracket) && (
           <Suspense fallback={<Loading />}>{cloneElement(cupBracket as ReactElement<{ onClubClick?: (c: string) => void }>, { onClubClick: clubPage })}</Suspense>
         )}

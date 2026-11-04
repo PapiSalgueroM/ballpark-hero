@@ -1585,7 +1585,7 @@ const ClubManager = () => {
 
               {/* Round 1503: two tiles, the domestic cup and the Champions League, each opening a view of its own
                   (WorldCompScreen.tsx, lazy). The cards this panel has always mounted are handed in, in its old
-                  order: the cup line, the cup bracket, the Champions League heading, the groups and the bracket
+                  order: the cup summary, the cup bracket, the Champions League heading, the groups and the bracket
                   (scripts/simClubManagerEraMidSeason.mjs section 6 reads that order). Round 312: two clearly
                   separated competitions. Round 832: a league with no domestic cup says so, once, and shows no
                   bracket. */}
@@ -1596,26 +1596,6 @@ const ClubManager = () => {
                   cupTitle="Domestic cup"
                   cupValue={cupName ?? cupSatOut ?? 'No domestic cup'}
                   cupSub={cupName === null ? (cupSatOut ? 'Not entered' : undefined) : cupAlive ? `Still alive. Next up: ${c.cupDraw[c.cupRound as CupRound] ?? 'to be drawn'}` : c.cupRound === 'won' ? 'Cup winners' : 'Knocked out'}
-                  cupLine={cupName === null ? (
-                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">
-                      🏅 {cupSatOut
-                        ? <>{c.clubName} do not enter the {cupSatOut}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.</>
-                        : <>There is no domestic cup in the {careerLeagueOf(c).name}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.</>}
-                    </div>
-                  ) : (<>
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1">
-                    🏅 {cupName}
-                  </div>
-                  <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
-                    {cupAlive ? (
-                      <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: still alive. Next up, the <span className="font-bold">{c.cupRound === 'F' ? 'final' : c.cupRound === 'SF' ? 'semi-final' : c.cupRound === 'QF' ? 'quarter-final' : 'Round of 16'}</span> against <span className="font-bold">{c.cupDraw[c.cupRound as CupRound] ?? 'a club to be drawn'}</span>.</>
-                    ) : c.cupRound === 'won' ? (
-                      <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: WON. It is in the cabinet.</>
-                    ) : (
-                      <>🏅 <span className="font-bold">{careerLeagueOf(c).cupName}</span>: out{c.cupExit ? ` at the ${c.cupExit === 'F' ? 'final' : c.cupExit === 'SF' ? 'semi-final' : c.cupExit === 'QF' ? 'quarter-final' : 'Round of 16'}` : ''}. Next year.</>
-                    )}
-                  </div>
-                  </>)}
                   /* Round 102 built this bracket; Round 312 mounted it. */
                   cupBracket={cupName === null ? undefined : <CupBracketCard career={c} onClubClick={setClubView} />}
                   uclHeading={<div className="text-xs text-muted-foreground uppercase tracking-wider">⭐ Champions League</div>}
