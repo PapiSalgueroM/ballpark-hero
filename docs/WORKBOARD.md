@@ -17659,3 +17659,7 @@ Original 98-to75 feedback remains unreproduced. The earlier published stale PED 
 
 Independent public review admitted the actual 23-journey matrix, all 1590 exact body reads, sixteen stable critical files, 41 completed navigation drains, source/output/fixture holds and accepted search submission. Four final-public phone screenshots were viewed by Root, supplementing prior local phone/desktop layout review. Controlled feature journeys do not establish natural-career progression, full-fleet health or guaranteed indexing.
 
+
+## November4 master-list continuation claims
+
+Root owns integration, remote Actions and publication. Career owns selected-offer Loyalty in the two existing Programme files. Manager owns explicit Fresh XI in clubManager.ts, useClubManager.ts and TacticsScreen.tsx. Free owns compact Front Office draft review in FrontOfficeBoard.tsx. Associated narrow tests are first, product authoring waits actual named baseline RED. All other owner work, local application/index and existing full prefixes stay held. The exact plan is docs/superpowers/plans/2026-11-04-master-list-continuation.md. No ready or live claim yet.
