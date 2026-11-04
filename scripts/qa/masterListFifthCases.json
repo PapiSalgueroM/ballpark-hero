@@ -1,0 +1,51 @@
+{
+  "base": "81e614f2e4716927cb8955e852a8b1bf37346b43",
+  "products": [
+    "src/lib/clubManager.ts",
+    "src/hooks/useClubManager.ts",
+    "src/components/club-manager/TrainingScreen.tsx"
+  ],
+  "files": [
+    "src/test/clubManagerRetrainingPause.test.tsx"
+  ],
+  "cases": [
+    {
+      "fullName": "Club Manager retraining pause keeps earned weeks and the older learned wing fit through a paid paused week",
+      "baseline": "failed",
+      "marker": "CM_RETRAIN_PAUSE_FIT"
+    },
+    {
+      "fullName": "Club Manager retraining pause resumes the existing counter without restarting and completes by the original replacement rule",
+      "baseline": "failed",
+      "marker": "CM_RETRAIN_RESUME"
+    },
+    {
+      "fullName": "Club Manager retraining pause offers native Pause and Resume controls while keeping Stop as complete cancellation",
+      "baseline": "failed",
+      "marker": "CM_RETRAIN_PAUSE_UI"
+    },
+    {
+      "fullName": "Club Manager retraining pause refuses stale or malformed toggles and preserves unknown pause metadata through a paid tick",
+      "baseline": "failed",
+      "marker": "CM_RETRAIN_PAUSE_REFUSAL"
+    },
+    {
+      "fullName": "Club Manager retraining pause preserves legacy starts unpaused ticks full tapes real reloads and the existing Stop result",
+      "baseline": "passed",
+      "marker": null
+    }
+  ],
+  "rawEnv": {
+    "CM_RETRAINING_PAUSE_RAW": "cm"
+  },
+  "rawFiles": [
+    "cm/pause-fit.json",
+    "cm/resume.json",
+    "cm/ui-actions.json",
+    "cm/refusals.json",
+    "cm/ordinary.json"
+  ],
+  "heldRaw": [
+    "cm/ordinary.json"
+  ]
+}
