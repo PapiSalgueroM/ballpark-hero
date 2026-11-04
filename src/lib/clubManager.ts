@@ -1585,7 +1585,10 @@ export type TrainingFocus = 'firstTeam' | 'balanced' | 'youth';
 export interface TrainingPlan {
   intensity: TrainingIntensity;
   focus: TrainingFocus;
+  recoveryWeek?: unknown;
 }
+
+export interface RecoveryWeek { v: 1; club: string; season: number; playerId: string }
 
 export interface TrainingExposure {
   v: 1;
@@ -18284,11 +18287,10 @@ export const MATCH_FITNESS_COST = 20;
 export const MATCH_FITNESS_SPREAD = 8;
 
 /** Round 116's week of recovery by the training plan, read by tickWeek and by a night (Round 1510). */
-function weekRecoveryOf(state: CareerState): { recoveryMod: number; flat: number } {
-  const plan = state.training ?? DEFAULT_TRAINING;
+function weekRecoveryOf(state: CareerState, intensity = (state.training ?? DEFAULT_TRAINING).intensity): { recoveryMod: number; flat: number } {
   return {
-    recoveryMod: plan.intensity === 'double' ? 0.78 : plan.intensity === 'light' ? 1.18 : 1,
-    flat: plan.intensity === 'light' ? 6 : plan.intensity === 'double' ? 3 : 4,
+    recoveryMod: intensity === 'double' ? 0.78 : intensity === 'light' ? 1.18 : 1,
+    flat: intensity === 'light' ? 6 : intensity === 'double' ? 3 : 4,
   };
 }
 
@@ -18331,7 +18333,10 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   // pick up knocks on the training ground, and that is the price of the
   // development the same setting buys you at the end of the season.
   const plan = state.training ?? DEFAULT_TRAINING;
+  const recovery = recoveryWeekOf(plan.recoveryWeek);
+  const restId = recovery?.club === state.clubName && recovery.season === state.season ? recovery.playerId : null;
   const { recoveryMod, flat } = weekRecoveryOf(state);
+  const light = weekRecoveryOf(state, 'light');
   const knockRisk = plan.intensity === 'double' ? 0.005 : 0;
   const policy = (plan.intensity === 'light' ? 0 : plan.intensity === 'double' ? 6 : 3)
     + (plan.focus === 'firstTeam' ? 0 : plan.focus === 'youth' ? 2 : 1);
@@ -18339,16 +18344,17 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   const learned: string[] = [];
   state.squad = state.squad.map(p => {
     const played = playedIds ? playedIds.has(p.id) : false;
-    const fitness = fitnessAfterWeek(p.fitness, played, recoveryMod, flat);
+    const recovering = p.id === restId;
+    const fitness = fitnessAfterWeek(p.fitness, played, recovering ? light.recoveryMod : recoveryMod, recovering ? light.flat : flat);
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
-    if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
+    if (!recovering && knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
     const out: CMPlayer = { ...p, fitness, injuryWeeks };
     const previous = readTrainingExposure(p.trainingExposure);
     if (p.trainingExposure === undefined || previous) {
       const counts = previous && previous.club === state.clubName && previous.season === state.season
         ? [...previous.counts] : Array(9).fill(0) as number[];
       if (Number.isSafeInteger(counts.reduce((sum, n) => sum + n, 0) + 1)) {
-        counts[policy] += 1;
+        counts[recovering ? policy % 3 : policy] += 1;
         out.trainingExposure = { v: 1, club: state.clubName, season: state.season, counts };
       }
     }
@@ -18368,6 +18374,10 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     }
     return out;
   });
+  if (recovery) {
+    const { recoveryWeek: _spent, ...standing } = plan;
+    state.training = standing;
+  }
   if (learned.length) state.aiHeadlines = [...learned, ...state.aiHeadlines].slice(0, 8);
   // Round 467: the dressing room's recovery and the week's books.
   tickFacilities(state);
@@ -20351,7 +20361,20 @@ export function releaseProspect(career: CareerState, prospectId: string): Career
   return next;
 }
 
+export function recoveryWeekOf(value: unknown): RecoveryWeek | null {
+  const r = value as RecoveryWeek | null;
+  return r && typeof r === 'object' && !Array.isArray(r) && Object.keys(r).length === 4
+    && r.v === 1 && typeof r.club === 'string' && Number.isSafeInteger(r.season) && r.season > 0
+    && typeof r.playerId === 'string' && r.playerId.length > 0 ? r : null;
+}
+
 export function setTrainingPlan(career: CareerState, plan: TrainingPlan): CareerState {
+  const before = career.training?.recoveryWeek, after = plan?.recoveryWeek;
+  if (JSON.stringify(before) !== JSON.stringify(after)) {
+    const r = recoveryWeekOf(after);
+    if ((before !== undefined && !recoveryWeekOf(before)) || (after !== undefined && (!r
+      || r.club !== career.clubName || r.season !== career.season || !career.squad.some(p => p.id === r.playerId)))) return career;
+  }
   return { ...career, training: { ...plan } };
 }
 
