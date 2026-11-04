@@ -1,0 +1,139 @@
+name: Compare the actual Soccer neutral input on current main and compact source
+on:
+  push:
+    branches: [codex/pr470-soccer-neutral-pair-20261103]
+permissions:
+  contents: read
+concurrency:
+  group: pr470-soccer-neutral-pair-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: '1'
+      SIM_NETWORK: offline
+      MAIN_REF: c176be815dc4af57dfd7185a485e28357aa0d41e
+      CANDIDATE_REF: 8d21ecf157933a20b8e2c3a5eed3afda30cde444
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 8d21ecf157933a20b8e2c3a5eed3afda30cde444
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold both source frames and the exact existing kit and fixture
+        run: |
+          set -euo pipefail
+          export QA_OUT="$RUNNER_TEMP/pr470-soccer-neutral-pair"
+          export MAIN_COPY="$RUNNER_TEMP/pr470-soccer-neutral-main"
+          mkdir -p "$QA_OUT" "$MAIN_COPY"
+          echo "QA_OUT=$QA_OUT" >> "$GITHUB_ENV"
+          echo "MAIN_COPY=$MAIN_COPY" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_REF"
+          test "$(git hash-object scripts/qa/soccerAgentReviewKit.mjs)" = 0aded897814562c86c18eddbfba10646fa849fd7
+          test "$(git hash-object scripts/data/careerLeagueWorldSaves1100.json)" = 81425f731297f0ff72fc4e163dfe1a4cb86814ab
+          test "$(git hash-object src/lib/soccerCareerEngine.ts)" = a60fab359f45dda9b125dbf118474170cdcc9417
+          test "$(git rev-parse "$MAIN_REF:src/lib/soccerCareerEngine.ts")" = 722b2285628775dff77f8de0138cf44d7b104b49
+          for file in scripts/qa/soccerAgentReviewKit.mjs scripts/data/careerLeagueWorldSaves1100.json scripts/lib/careerAwardGenerations1318.mjs scripts/lib/careerDeckFair1327.mjs scripts/lib/careerWorldTruth1329.mjs scripts/lib/careerSoccerDeck1334.mjs package.json package-lock.json; do
+            test "$(git rev-parse "$MAIN_REF:$file")" = "$(git rev-parse "$CANDIDATE_REF:$file")"
+          done
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-before.sha256"
+          git rev-parse HEAD HEAD^{tree} > "$QA_OUT/candidate-source.txt"
+          git rev-parse "$MAIN_REF" "$MAIN_REF^{tree}" > "$QA_OUT/main-source.txt"
+          git archive "$MAIN_REF" src scripts package.json package-lock.json tsconfig.json tsconfig.app.json | tar -x -C "$MAIN_COPY"
+          npm ci --no-audit --no-fund > "$QA_OUT/npm-ci.log" 2>&1
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$MAIN_COPY/node_modules"
+      - name: Capture both complete actual current-mode outcomes before comparison
+        run: |
+          set -euo pipefail
+          cat > "$QA_OUT/probe.mjs" <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { pathToFileURL } from 'node:url';
+          import { createHash } from 'node:crypto';
+          const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+          const kit=await import(pathToFileURL(path.join(process.env.GITHUB_WORKSPACE,'scripts/qa/soccerAgentReviewKit.mjs')));
+          const {copy,seeded,action,bundleAgentReview,capturedPlayers}=kit;
+          const bundled=await bundleAgentReview();
+          const captured=capturedPlayers().find(row=>row.id==='nan');
+          assert(captured&&captured.kind==='player');
+          const input=copy(captured.state),before=JSON.stringify(input);
+          const read=seeded(101,()=>action(bundled.value,'read',input));
+          const current=seeded(101,()=>action(bundled.value,'next',copy(input)));
+          fs.writeFileSync(process.env.RAW_FILE,JSON.stringify({
+            sourceRef:process.env.SOURCE_REF,fixture:'scripts/data/careerLeagueWorldSaves1100.json',
+            fixtureSHA256:sha(fs.readFileSync('scripts/data/careerLeagueWorldSaves1100.json')),
+            capturedId:captured.id,kind:'absent',age:input.age,seed:101,input,read,current,
+            loaded:bundled.loaded,inputUnchanged:JSON.stringify(input)===before,
+            meaning:'The same unchanged kit current-mode transformations, clock and seeded action on each source frame. Full actual state and draw vector retained before assertions. No new expected league values.'
+          },null,2)+'\n',{flag:'wx'});
+          assert.equal(JSON.stringify(input),before);
+          assert.deepEqual(read.draws,[]);
+          if(process.env.SOURCE_REF===process.env.CANDIDATE_REF)assert.equal(
+            bundled.loaded.find(row=>row.file==='src/lib/soccerCareerEngine.ts').compiledSha256,
+            '980dcbeee3b59d9d4fb878063269ec33f4ea2fdf87b90ce54885076199a5bed6',
+            'Candidate uses the exact transformed engine recorded in the actual failed job');
+          JS
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport.log"
+          set +e
+          (cd "$MAIN_COPY" && SOURCE_REF="$MAIN_REF" RAW_FILE="$QA_OUT/main.json" node "$QA_OUT/probe.mjs") > "$QA_OUT/main.stdout.log" 2> "$QA_OUT/main.stderr.log"
+          main_exit=$?
+          SOURCE_REF="$CANDIDATE_REF" RAW_FILE="$QA_OUT/candidate.json" node "$QA_OUT/probe.mjs" > "$QA_OUT/candidate.stdout.log" 2> "$QA_OUT/candidate.stderr.log"
+          candidate_exit=$?
+          set -e
+          printf '%s\n' "$main_exit" > "$QA_OUT/main.exit"
+          printf '%s\n' "$candidate_exit" > "$QA_OUT/candidate.exit"
+          test "$main_exit" -eq 0
+          test "$candidate_exit" -eq 0
+          test ! -s "$QA_OUT/transport.log"
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import assert from 'node:assert/strict';
+          const out=process.env.QA_OUT,main=JSON.parse(fs.readFileSync(out+'/main.json')),candidate=JSON.parse(fs.readFileSync(out+'/candidate.json'));
+          assert.deepEqual(candidate.input,main.input,'Exact same raw captured input');
+          assert.equal(candidate.fixtureSHA256,main.fixtureSHA256);
+          assert.deepEqual(candidate.read,main.read,'Same read result and draw vector');
+          assert.deepEqual(candidate.current,main.current,'Entire actual career and full draw vector equal current main');
+          fs.writeFileSync(out+'/comparison.json',JSON.stringify({
+            status:'ACTUAL_SAME_CURRENT_MAIN_INPUT_OUTCOME_AND_FULL_VECTOR',
+            main:main.sourceRef,candidate:candidate.sourceRef,seed:101,
+            draws:main.current.draws.length,fullStateEqual:true,fullDrawVectorEqual:true,
+            scope:'One actual first failing neutral input with the existing Agent kit. This does not execute or credit the other normal/control groups, other kits, browser, or full fleet.'
+          },null,2)+'\n');
+          JS
+      - name: Always retain exact source closure
+        if: always()
+        run: |
+          set -euo pipefail
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          git diff --binary HEAD > "$QA_OUT/source-diff.txt"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          test ! -s "$QA_OUT/source-diff.txt"
+      - name: Bound retained evidence
+        if: always()
+        id: artifact
+        run: |
+          set -euo pipefail
+          test -d "$QA_OUT"
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 150000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: pr470-soccer-neutral-pair-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pr470-soccer-neutral-pair
+          if-no-files-found: error
+          retention-days: 3
+          compression-level: 6
