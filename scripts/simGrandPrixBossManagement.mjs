@@ -168,14 +168,72 @@ function compatibilityInverse(text, spans) {
   assert.equal(restored, text, 'Complete current compatibility restoration');
   return { inverseSha256: sha(Buffer.from(inverse)), restoredSha256: sha(Buffer.from(restored)), edits };
 }
-const pageCompatibility = compatibilityInverse(source, lifecycleSpans);
+const decisionSpans = [
+  {
+    "before": "type GrandPrixFocus, type Pace",
+    "after": "type GrandPrixFocus, type GrandPrixRaceEntry, type Pace"
+  },
+  {
+    "before": "    <div><h3 className=\"font-bold\">A two-driver example</h3><p>One driver stays on worn tyres while the other pits for fresh hard tyres. Compare their positions and wear at the next decision. This is a game example, not a real race result.</p></div>\n",
+    "after": "    <div><h3 className=\"font-bold\">A two-driver example</h3><p>One driver stays on worn tyres while the other pits for fresh hard tyres. Compare their positions and wear at the next decision. This is a game example, not a real race result.</p></div>\n    <p>At each saved checkpoint, gaps compare elapsed time with the leading active driver. Retired drivers show the laps they completed. In the market, compare the incoming driver's current age, potential and skills before checking the quote.</p>\n"
+  },
+  {
+    "before": "  const offer = offers.find(value => value.incomingDriverId === incomingId) ?? offers[0];\n",
+    "after": "  const offer = offers.find(value => value.incomingDriverId === incomingId) ?? offers[0];\n  const incoming = offer && career.drivers.find(driver => driver.id === offer.incomingDriverId);\n"
+  },
+  {
+    "before": "      <div className=\"grid grid-cols-2 gap-3 rounded-lg border border-border p-3\">\n        <Stat title=\"Wage per race\" testId=\"gp-offer-wage\">",
+    "after": "      {incoming && <section aria-label=\"Incoming driver profile\" className=\"space-y-3 rounded-lg border border-border bg-background p-3\">\n        <h4 className=\"break-words font-bold\">{incoming.name}</h4>\n        <div className=\"grid grid-cols-2 gap-3 sm:grid-cols-3\">\n          <Stat title=\"Age\">{incoming.age}</Stat><Stat title=\"Potential\">{incoming.potential}</Stat>\n          <Stat title=\"Pace\">{incoming.skills.pace}</Stat><Stat title=\"Consistency\">{incoming.skills.consistency}</Stat>\n          <Stat title=\"Tyre care\">{incoming.skills.tyreCare}</Stat><Stat title=\"Wet\">{incoming.skills.wet}</Stat>\n        </div>\n      </section>}\n      <div className=\"grid grid-cols-2 gap-3 rounded-lg border border-border p-3\">\n        <Stat title=\"Wage per race\" testId=\"gp-offer-wage\">"
+  },
+  {
+    "before": "  const entries = race?.entries.slice().sort((a, b) => Number(a.status === 'retired') - Number(b.status === 'retired') || b.completedLaps - a.completedLaps || a.elapsedMs - b.elapsedMs || a.driverId.localeCompare(b.driverId)) ?? [];\n",
+    "after": "  const entries = race?.entries.slice().sort((a, b) => Number(a.status === 'retired') - Number(b.status === 'retired') || b.completedLaps - a.completedLaps || a.elapsedMs - b.elapsedMs || a.driverId.localeCompare(b.driverId)) ?? [];\n  const timing = (entry: GrandPrixRaceEntry) => {\n    if (!race || race.lap === 0) return null;\n    if (entry.status === 'retired') return 'Retired after ' + entry.completedLaps + (entry.completedLaps === 1 ? ' lap' : ' laps');\n    const leader = entries.find(row => row.status !== 'retired');\n    if (!leader) return null;\n    return 'Gap to leader: ' + (entry.driverId === leader.driverId ? 'Leader' : '+' + ((entry.elapsedMs - leader.elapsedMs) / 1000).toFixed(3) + 's');\n  };\n"
+  },
+  {
+    "before": "      const status = complete && classified ? classified.status : entry?.status;\n",
+    "after": "      const status = complete && classified ? classified.status : entry?.status;\n      const detail = entry ? timing(entry) : null;\n"
+  },
+  {
+    "before": "        {entry && <p className=\"mt-1 text-xs text-muted-foreground\">{label(entry.compound)} tyres, {Math.round(entry.tyreWear)}% wear, {entry.stops} stops</p>}\n",
+    "after": "        {entry && <p className=\"mt-1 text-xs text-muted-foreground\">{label(entry.compound)} tyres, {Math.round(entry.tyreWear)}% wear, {entry.stops} stops</p>}\n        {detail && <p className=\"mt-1 text-sm font-semibold tabular-nums\">{detail}</p>}\n"
+  },
+  {
+    "before": "<span>{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className=\"shrink-0 tabular-nums\">{entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps'}</span>",
+    "after": "<span className=\"min-w-0 break-words\">{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className=\"max-w-[60%] shrink-0 text-right tabular-nums\">{timing(entry) ?? (entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps')}</span>"
+  }
+];
+function decisionPredecessor(text) {
+  let inverse = text;
+  const edits = [];
+  for (const { before, after } of decisionSpans.slice().reverse()) {
+    assert.equal(inverse.split(after).length - 1, 1, 'Unique decision information provenance span');
+    assert.equal(executed(inverse).split(after).length - 1, 1, 'Executed decision information provenance span');
+    const offset = inverse.indexOf(after);
+    inverse = inverse.slice(0, offset) + before + inverse.slice(offset + after.length);
+    edits.push({ offset, before, after });
+  }
+  assert.equal(edits.length, 8);
+  const predecessor = Buffer.from(inverse);
+  const predecessorGit = createHash('sha1').update('blob ' + predecessor.length + '\0').update(predecessor).digest('hex');
+  assert.equal(predecessorGit, '9e922cf92192016fa25e7cc0e2fa8a5a92a0e2a1', 'Exact qualified Page before decision information');
+  let restored = inverse;
+  for (const { offset, before, after } of edits.slice().reverse()) {
+    assert.equal(restored.slice(offset, offset + before.length), before);
+    restored = restored.slice(0, offset) + after + restored.slice(offset + before.length);
+  }
+  assert.equal(restored, text, 'Complete actual decision Page provenance restoration');
+  return { source: inverse, proof: { edits, currentSha256: sha(Buffer.from(text)),
+    predecessorSha256: sha(predecessor), predecessorGit, restoredSha256: sha(Buffer.from(restored)) } };
+}
+const decisionCompatibility = decisionPredecessor(source);
+const pageCompatibility = compatibilityInverse(decisionCompatibility.source, lifecycleSpans);
 assert.equal(pageCompatibility.edits.length, 8);
 assert.equal(pageCompatibility.inverseSha256, '1474ae6a5e7c5ca99cc56e43c53502af4a4639ec1345f78af51a1af5588c8fc1', 'Exact focus-fixed page before lifecycle UI');
 const testCompatibility = compatibilityInverse(fs.readFileSync(path.join(root, TEST), 'utf8').replace(/\r\n?/g, '\n'), [olderFixtureSpan]);
 assert.equal(testCompatibility.inverseSha256, '77a3d05742e9621ab6146bfbfe3f5b33f1853b99a12008b66134f0387c351922', 'Exact six-case test before labelled older-fixture compatibility');
 fs.writeFileSync(path.join(out, 'compatibility-provenance.json'), JSON.stringify({
-  scope: 'Only eight lifecycle UI spans above the qualified focus-fixed page and one labelled older-fixture test adaptation. No product or test mutation.',
-  currentPageSha256: sha(held.get(PAGE)), currentTestSha256: sha(held.get(TEST)), pageCompatibility, testCompatibility,
+  scope: 'Eight decision information spans invert to the exact qualified Page, then the original eight lifecycle spans invert to the focus-fixed Page. Only provenance uses these predecessors; every current/copy/control child uses the actual Page. One labelled older-fixture test adaptation, no product or test mutation.',
+  currentPageSha256: sha(held.get(PAGE)), currentTestSha256: sha(held.get(TEST)), decisionCompatibility: decisionCompatibility.proof, pageCompatibility, testCompatibility,
   engineInputSha256: sha(held.get('src/lib/grandPrixBoss.ts')), hookInputSha256: sha(held.get('src/hooks/useGrandPrixBoss.ts')),
   engineHookScope: 'Observed actual inputs held by every child. The exact joined source pins belong to focused qualification; no old whole-engine or hook pin is substituted here.',
 }, null, 2));

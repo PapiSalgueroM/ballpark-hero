@@ -1,0 +1,60 @@
+{
+  "pageSHA256": "f2bf041677d3604c9137e617288a26172e56c8bcf67ab4c44483d900f9e999f7",
+  "pageGit": "fa4e7b08c93f80c3a3cea4dcae1c4c2d9d1122f8",
+  "edits": [
+    {
+      "at": 508,
+      "before": "type GrandPrixFocus, type Pace",
+      "after": "type GrandPrixFocus, type GrandPrixRaceEntry, type Pace"
+    },
+    {
+      "at": 4068,
+      "before": "    <div><h3 className=\"font-bold\">A two-driver example</h3><p>One driver stays on worn tyres while the other pits for fresh hard tyres. Compare their positions and wear at the next decision. This is a game example, not a real race result.</p></div>\n",
+      "after": "    <div><h3 className=\"font-bold\">A two-driver example</h3><p>One driver stays on worn tyres while the other pits for fresh hard tyres. Compare their positions and wear at the next decision. This is a game example, not a real race result.</p></div>\n    <p>At each saved checkpoint, gaps compare elapsed time with the leading active driver. Retired drivers show the laps they completed. In the market, compare the incoming driver's current age, potential and skills before checking the quote.</p>\n"
+    },
+    {
+      "at": 8112,
+      "before": "  const offer = offers.find(value => value.incomingDriverId === incomingId) ?? offers[0];\n",
+      "after": "  const offer = offers.find(value => value.incomingDriverId === incomingId) ?? offers[0];\n  const incoming = offer && career.drivers.find(driver => driver.id === offer.incomingDriverId);\n"
+    },
+    {
+      "at": 12134,
+      "before": "      <div className=\"grid grid-cols-2 gap-3 rounded-lg border border-border p-3\">\n        <Stat title=\"Wage per race\" testId=\"gp-offer-wage\">",
+      "after": "      {incoming && <section aria-label=\"Incoming driver profile\" className=\"space-y-3 rounded-lg border border-border bg-background p-3\">\n        <h4 className=\"break-words font-bold\">{incoming.name}</h4>\n        <div className=\"grid grid-cols-2 gap-3 sm:grid-cols-3\">\n          <Stat title=\"Age\">{incoming.age}</Stat><Stat title=\"Potential\">{incoming.potential}</Stat>\n          <Stat title=\"Pace\">{incoming.skills.pace}</Stat><Stat title=\"Consistency\">{incoming.skills.consistency}</Stat>\n          <Stat title=\"Tyre care\">{incoming.skills.tyreCare}</Stat><Stat title=\"Wet\">{incoming.skills.wet}</Stat>\n        </div>\n      </section>}\n      <div className=\"grid grid-cols-2 gap-3 rounded-lg border border-border p-3\">\n        <Stat title=\"Wage per race\" testId=\"gp-offer-wage\">"
+    },
+    {
+      "at": 19768,
+      "before": "  const entries = race?.entries.slice().sort((a, b) => Number(a.status === 'retired') - Number(b.status === 'retired') || b.completedLaps - a.completedLaps || a.elapsedMs - b.elapsedMs || a.driverId.localeCompare(b.driverId)) ?? [];\n",
+      "after": "  const entries = race?.entries.slice().sort((a, b) => Number(a.status === 'retired') - Number(b.status === 'retired') || b.completedLaps - a.completedLaps || a.elapsedMs - b.elapsedMs || a.driverId.localeCompare(b.driverId)) ?? [];\n  const timing = (entry: GrandPrixRaceEntry) => {\n    if (!race || race.lap === 0) return null;\n    if (entry.status === 'retired') return 'Retired after ' + entry.completedLaps + (entry.completedLaps === 1 ? ' lap' : ' laps');\n    const leader = entries.find(row => row.status !== 'retired');\n    if (!leader) return null;\n    return 'Gap to leader: ' + (entry.driverId === leader.driverId ? 'Leader' : '+' + ((entry.elapsedMs - leader.elapsedMs) / 1000).toFixed(3) + 's');\n  };\n"
+    },
+    {
+      "at": 23681,
+      "before": "      const status = complete && classified ? classified.status : entry?.status;\n",
+      "after": "      const status = complete && classified ? classified.status : entry?.status;\n      const detail = entry ? timing(entry) : null;\n"
+    },
+    {
+      "at": 24361,
+      "before": "        {entry && <p className=\"mt-1 text-xs text-muted-foreground\">{label(entry.compound)} tyres, {Math.round(entry.tyreWear)}% wear, {entry.stops} stops</p>}\n",
+      "after": "        {entry && <p className=\"mt-1 text-xs text-muted-foreground\">{label(entry.compound)} tyres, {Math.round(entry.tyreWear)}% wear, {entry.stops} stops</p>}\n        {detail && <p className=\"mt-1 text-sm font-semibold tabular-nums\">{detail}</p>}\n"
+    },
+    {
+      "at": 30392,
+      "before": "<span>{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className=\"shrink-0 tabular-nums\">{entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps'}</span>",
+      "after": "<span className=\"min-w-0 break-words\">{index + 1}. {career.drivers.find(driver => driver.id === entry.driverId)!.name}</span><span className=\"max-w-[60%] shrink-0 text-right tabular-nums\">{timing(entry) ?? (entry.status === 'retired' ? 'Retired' : entry.completedLaps + ' laps')}</span>"
+    }
+  ],
+  "controls": [
+    {
+      "id": "profile",
+      "before": "      {incoming && <section aria-label=\"Incoming driver profile\" className=\"space-y-3 rounded-lg border border-border bg-background p-3\">\n        <h4 className=\"break-words font-bold\">{incoming.name}</h4>\n        <div className=\"grid grid-cols-2 gap-3 sm:grid-cols-3\">\n          <Stat title=\"Age\">{incoming.age}</Stat><Stat title=\"Potential\">{incoming.potential}</Stat>\n          <Stat title=\"Pace\">{incoming.skills.pace}</Stat><Stat title=\"Consistency\">{incoming.skills.consistency}</Stat>\n          <Stat title=\"Tyre care\">{incoming.skills.tyreCare}</Stat><Stat title=\"Wet\">{incoming.skills.wet}</Stat>\n        </div>\n      </section>}\n",
+      "after": "",
+      "executableToken": "<section aria-label=\"Incoming driver profile\""
+    },
+    {
+      "id": "timing",
+      "before": "if (!race || race.lap === 0) return null;",
+      "after": "return null;",
+      "executableToken": "const timing = (entry: GrandPrixRaceEntry) => {"
+    }
+  ]
+}
