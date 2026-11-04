@@ -5,7 +5,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import SoccerCareerProgramme from '@/components/soccer-career/SoccerCareerProgramme';
-import { chooseProgramme, cancelProgramme } from '@/lib/soccerCareerProgramme';
+import { chooseProgramme, cancelProgramme, programmeOptions } from '@/lib/soccerCareerProgramme';
 import * as E from '@/lib/soccerCareerEngine';
 import { chooseLoyalty, readLoyalty, settleLoyaltySeason } from '@/lib/soccerCareerLoyalty';
 import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
@@ -97,8 +97,11 @@ describe('Soccer selected loyalty offer', () => {
     const initial = fixture('pending'), staged = chooseLoyalty(initial, offers(initial)[1], 12000, 'loyalty'), before = held(staged);
     const wrongCash = choose(staged, 'loyalty', 'cash', offers(staged)[0]), wrongCancel = cancel(staged, 'loyalty', offers(staged)[0]);
     const ownCash = choose(staged, 'loyalty', 'cash', offers(staged)[1]), ownCancel = cancel(staged, 'loyalty', offers(staged)[1]);
-    raw('cash-cancel-scope', staged, before, { wrongCashHeld: wrongCash === staged, wrongCancelHeld: wrongCancel === staged, ownCash: readLoyalty(ownCash), ownCancel: readLoyalty(ownCancel), pending: readLoyalty(staged)?.pending });
-    expect([wrongCash === staged, wrongCancel === staged], 'SC_LOYALTY_TARGET_CANCEL_SCOPE').toEqual([true, true]);
+    const collision = clone(staged), foreignA = offers(collision)[0];
+    foreignA.club = { ...foreignA.club, name: clubs[1].name, country: 'France' };
+    const foreignCash = choose(collision, 'loyalty', 'cash', foreignA), foreignCancel = cancel(collision, 'loyalty', foreignA);
+    raw('cash-cancel-scope', staged, before, { wrongCashHeld: wrongCash === staged, wrongCancelHeld: wrongCancel === staged, foreignCashHeld: foreignCash === collision, foreignCancelHeld: foreignCancel === collision, ownCash: readLoyalty(ownCash), ownCancel: readLoyalty(ownCancel), pending: readLoyalty(staged)?.pending });
+    expect([wrongCash === staged, wrongCancel === staged, foreignCash === collision, foreignCancel === collision], 'SC_LOYALTY_TARGET_CANCEL_SCOPE').toEqual([true, true, true, true]);
     expect(ownCash).toEqual(initial); expect(ownCancel).toEqual(initial); expect(offers(staged)).toEqual(offers(initial));
   });
 
@@ -124,10 +127,17 @@ describe('Soccer selected loyalty offer', () => {
     const initial = fixture(), staged = chooseLoyalty(initial, offers(initial)[1], 12000, 'loyalty'), before = held(staged), oldB = offers(staged)[1];
     const countered = choose(staged, 'negotiation', 'wage', oldB), currentB = offers(countered)[1];
     const blocked = E.acceptOffer(countered, currentB), stale = choose(countered, 'loyalty', 'loyalty', oldB);
+    const staleCash = choose(countered, 'loyalty', 'cash', oldB), staleCancel = cancel(countered, 'loyalty', oldB);
+    const cash = choose(countered, 'loyalty', 'cash', currentB), cancelled = cancel(countered, 'loyalty', currentB);
+    const cashSigned = signed(cash, offers(cash)[1]), cashView = programmeOptions(countered, currentB).find(v => v.id === 'loyalty');
     const renewed = choose(countered, 'loyalty', 'loyalty', currentB), repeat = choose(renewed, 'loyalty', 'loyalty', offers(renewed)[1]), loaded = signed(renewed, offers(renewed)[1]);
-    raw('changed-terms-b', staged, before, { counterWage: currentB.wage, blockedHeld: blocked === countered, staleHeld: stale === countered, pending: readLoyalty(renewed)?.pending, signedWage: loaded.weeklyWage, repeatHeld: repeat === renewed });
+    raw('changed-terms-b', staged, before, { counterWage: currentB.wage, blockedHeld: blocked === countered, staleHeld: stale === countered, staleCashHeld: staleCash === countered, staleCancelHeld: staleCancel === countered, cashCleared: readLoyalty(cash) === null, cancelCleared: readLoyalty(cancelled) === null, cashSignWage: cashSigned.weeklyWage, cashEligible: cashView?.choices.find(c => c.id === 'cash')?.eligible, canCancel: cashView?.canCancel, pending: readLoyalty(renewed)?.pending, signedWage: loaded.weeklyWage, repeatHeld: repeat === renewed });
     expect([stale === countered, readLoyalty(renewed)?.pending?.club, loaded.weeklyWage], 'SC_LOYALTY_TARGET_FRESH_TERMS').toEqual([true, clubs[1].name, 11880]);
     expect(currentB.wage).toBe(13200); expect(blocked).toBe(countered); expect(repeat).toBe(renewed); expect(offers(countered)[0]).toEqual(offers(initial)[0]);
+    expect(staleCash).toBe(countered); expect(staleCancel).toBe(countered);
+    expect(readLoyalty(cash)).toBeNull(); expect(cancelled).toEqual(cash); onlyLoyalty(countered, cash);
+    expect(cashSigned.weeklyWage).toBe(13200); expect(cashSigned.loyaltyContracts).toBeUndefined();
+    expect(cashView?.canCancel).toBe(true); expect(cashView?.choices.find(c => c.id === 'cash')?.eligible).toBe(true);
     expect(readLoyalty(loaded)?.deals[0]).toMatchObject({ baseWeeklyWage: 13200, weeklyWage: 11880, bonusEuros: 308880 }); sameRating(initial, loaded);
   });
 

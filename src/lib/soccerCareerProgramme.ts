@@ -115,6 +115,15 @@ export function programmeNegotiationOffers(career: CareerState): ContractOffer[]
 function validOffer(offer: ContractOffer): boolean {
   return text(offer.club?.name) && finite(offer.wage) && offer.wage > 0 && count(offer.contractYears) && offer.contractYears >= 1 && !offer.isLoan;
 }
+function sameLoyaltyEmployer(career: CareerState, offer: ContractOffer): boolean {
+  const pending = readLoyalty(career)?.pending;
+  if (!pending || pending.club !== offer.club.name) return false;
+  try {
+    const token: unknown = JSON.parse(pending.offerToken), club = offer.club;
+    return Array.isArray(token) && token.length === 12
+      && [club.name, club.country, club.league, club.color, club.tier].every((value, i) => value === token[i]);
+  } catch { return false; }
+}
 function allowed(career: CareerState, id: ProgrammeId, choice: string, target?: ContractOffer): string | null {
   const year = nextProgrammeYear(career);
   if (career.programme !== undefined && !stateOf(career)) return 'The saved programme is invalid. No new choice was applied.';
@@ -178,9 +187,11 @@ export function programmeEffects(career: CareerState): ProgrammeEffects {
 
 export function chooseProgramme(prev: CareerState, id: ProgrammeId, choice: string, target?: ContractOffer): CareerState {
   if (id === 'loyalty') {
-    const found = actualOffer(prev);
-    return found && validOffer(found.offer) && (choice === 'cash' || choice === 'loyalty')
-      ? chooseLoyalty(prev, found.offer, Math.round(found.offer.wage * agentWageMult(prev.agentId)), choice) : prev;
+    const found = actualOffer(prev, target);
+    if (!found || !validOffer(found.offer) || (choice !== 'cash' && choice !== 'loyalty')) return prev;
+    const wage = Math.round(found.offer.wage * agentWageMult(prev.agentId));
+    if (target !== undefined && choice === 'cash' && !sameLoyaltyEmployer(prev, found.offer)) return prev;
+    return chooseLoyalty(prev, found.offer, wage, choice);
   }
   if (allowed(prev, id, choice, target)) return prev;
   const year = nextProgrammeYear(prev)!;
@@ -205,8 +216,8 @@ export function chooseProgramme(prev: CareerState, id: ProgrammeId, choice: stri
   if (id === 'loan') programme.loanBuy = { year, club: prev.currentClub, parent: prev.loan!.parentClub, ready: false };
   return state;
 }
-export function cancelProgramme(prev: CareerState, id: ProgrammeId): CareerState {
-  if (id === 'loyalty') return chooseProgramme(prev, id, 'cash');
+export function cancelProgramme(prev: CareerState, id: ProgrammeId, target?: ContractOffer): CareerState {
+  if (id === 'loyalty') return chooseProgramme(prev, id, 'cash', target);
   const old = planOf(prev);
   if (prev.phase !== 'playing' || !old || !old.choices[id]) return prev;
   const choices = { ...old.choices };
@@ -344,21 +355,22 @@ export function programmeOptions(career: CareerState, negotiationTarget?: Contra
     const context = `${year ?? 'Unknown year'} at ${offeredClub || career.currentClub || 'unknown club'}. Simulation choices; final injuries, bans and selection still apply.${definition.id === 'position' && !choices.length ? ' No compatible second position is available for this position.' : ''}`;
     return { id: definition.id, title: definition.title, description: definition.description, context, choices: choices.map(([id, label, effect, tradeoff]) => { const reason = allowed(career, definition.id, id, definition.id === 'negotiation' ? negotiationTarget : undefined); const loss = definition.id === 'loan' && career.loan ? loyaltyForfeitEuros(career, career.currentClub) : 0; return { id, label, effect, tradeoff: loss > 0 ? tradeoff + ' Any loyalty pay still unpaid at the permanent signing is forfeited; EUR ' + loss.toLocaleString('en-US') + ' is currently pending at the parent club.' : tradeoff, eligible: !reason, ...(reason ? { reason } : {}) }; }), choice: plan?.choices[definition.id] ?? (negotiated?.mode ?? null), outcome: negotiationOutcome ?? (outcome && latest ? `${latest.year} at ${latest.club}: ${outcome}` : null), canCancel: career.phase === 'playing' && !!plan?.choices[definition.id] };
   });
-  const candidate = actualOffer(career);
+  const candidate = actualOffer(career, negotiationTarget);
   const found = candidate && validOffer(candidate.offer) ? candidate : null;
   const baseWage = found ? Math.round(found.offer.wage * agentWageMult(career.agentId)) : 0;
   const quote = found ? quoteLoyalty(career, found.offer, baseWage) : null;
   const ledger = readLoyalty(career), deal = ledger?.deals[ledger.deals.length - 1];
   const selected = quote && ledger?.pending?.key === quote.key;
+  const canClear = !!found && !!ledger?.pending && (negotiationTarget === undefined || sameLoyaltyEmployer(career, found.offer));
   const reason = 'A current permanent offer of two to five years is needed, with no active loyalty deal at that employer.';
   views.push({
     id: 'loyalty', title: 'Loyalty contract', description: 'Compare current pay with a fixed payout for finishing this contract.',
-    context: found ? `First permanent offer: ${found.offer.club.name}, ${found.offer.contractYears} years. This choice applies to that offer; other offers keep their cash terms.`
+    context: found ? `${negotiationTarget === undefined ? 'First' : 'Selected'} permanent offer: ${found.offer.club.name}, ${found.offer.contractYears} years. This choice applies to that offer; other offers keep their cash terms.`
       : 'Open a contract window to compare an actual offer. Existing loyalty records remain below.',
     choices: [
       { id: 'cash', label: 'Higher weekly pay', effect: found ? `Keep the quoted EUR ${baseWage.toLocaleString('en-US')} a week.` : 'Keep the existing cash terms.',
-        tradeoff: 'No loyalty payout is attached to this choice.', eligible: !!found && !!ledger?.pending,
-        ...(!found ? { reason: 'A current permanent offer is needed.' } : !ledger?.pending ? { reason: 'This offer already pays cash unless you pick the loyalty payout.' } : {}) },
+        tradeoff: 'No loyalty payout is attached to this choice.', eligible: canClear,
+        ...(!found ? { reason: 'A current permanent offer is needed.' } : !canClear ? { reason: 'This offer already pays cash unless you pick the loyalty payout.' } : {}) },
       { id: 'loyalty', label: 'Loyalty payout', effect: quote ? `EUR ${quote.weeklyWage.toLocaleString('en-US')} a week and EUR ${quote.bonusEuros.toLocaleString('en-US')} after ${quote.years} recorded contract seasons.` : 'A lower weekly wage with a quoted payout at completion.',
         tradeoff: 'Weekly pay falls 10%. A permanent move, early expiry or retirement forfeits the unpaid payout. A loan keeps parent-club rights.',
         eligible: !!quote, ...(!quote ? { reason } : {}) },
@@ -366,7 +378,7 @@ export function programmeOptions(career: CareerState, negotiationTarget?: Contra
     /* Release BS fix: cash is the default, never a stored choice, so with nothing picked nothing is recorded */
     choice: ledger?.pending ? (selected ? 'loyalty' : null) : deal?.status === 'active' && !found ? 'loyalty' : null,
     outcome: deal ? `${deal.club}: ${deal.status}, ${deal.completed} of ${deal.years} recorded seasons; EUR ${deal.status === 'paid' ? deal.paidEuros.toLocaleString('en-US') + ' paid' : deal.bonusEuros.toLocaleString('en-US') + (deal.status === 'forfeited' ? ' forfeited' : ' pending')}.` : null,
-    canCancel: !!found && !!ledger?.pending,
+    canCancel: canClear,
   });
   return views;
 }

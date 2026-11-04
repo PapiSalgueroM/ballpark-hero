@@ -112,6 +112,7 @@ describe('NFL draft prospect access', () => {
     expect(names()).toEqual(expected(36, 40));
     const target = source.draftClass[38], before = read();
     fireEvent.click(screen.getByText(target.name, { selector: 'span' }).closest('button')!);
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm draft' }));
     const after = read();
     expect(after.picksLeft).toBe(2);
     expect(after.draftBatchesLeft).toBe(2);
@@ -146,7 +147,7 @@ describe('NFL draft prospect access', () => {
     expect(source).toEqual(sourceCopy);
     expect(localStorage.getItem('draft-access-sentinel')).toBe('keep this unrelated save');
     // The actual phase transition must not leave draft controls on the hub.
-    for (let n = 0; n < 2; n++) fireEvent.click(rows()[0].button);
+    for (let n = 0; n < 2; n++) { fireEvent.click(rows()[0].button); fireEvent.click(screen.getByRole('button', { name: 'Confirm draft' })); }
     expect(read().phase).toBe('hub');
     expect(screen.queryByRole('combobox', { name: 'Prospect position' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Continue to the hub' }));
