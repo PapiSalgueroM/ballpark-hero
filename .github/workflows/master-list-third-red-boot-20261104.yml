@@ -1,0 +1,75 @@
+name: Master-list third baseline outcome diagnosis
+on:
+  push:
+    branches: [codex/master-list-third-red-boot-20261104]
+permissions:
+  contents: read
+env:
+  CI: '1'
+  SIM_NETWORK: offline
+jobs:
+  outcomes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Hold exact source and materialize original controls before offline execution
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/master-list-third-red-boot"
+          mkdir -p "$OUT/logs" "$OUT/transport"
+          echo "QA_OUT=$OUT" >> "$GITHUB_ENV"
+          test "$(git rev-parse HEAD^)" = 351cbbdb10cbba4596a6d00b24ee7f297d04cc0e
+          test "$(git rev-parse HEAD^^{tree})" = a538bc3d0322c8b5056b4c30e595b8ca6caba975
+          test "$(git diff --name-status HEAD^ HEAD)" = $'A\t.github/workflows/master-list-third-red-boot-20261104.yml'
+          git rev-parse HEAD HEAD^{tree} > "$OUT/source.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$OUT/source-before.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$OUT/status-before.txt"
+          test ! -s "$OUT/status-before.txt"
+          cp .github/workflows/master-list-third-red-boot-20261104.yml "$OUT/workflow.yml"
+          git diff --exit-code 14e888d72552248e3703d2ec65d1015ef3c887cc HEAD -- src ':!src/test/soccerTransferAppearanceFloor.test.tsx' ':!src/test/frontOfficeDraftFocus.test.tsx' ':!src/test/clubManagerCustomOdds.test.ts'
+          npm ci --no-audit --no-fund > "$OUT/logs/install.log" 2>&1
+          git diff --exit-code HEAD -- package.json package-lock.json bun.lockb
+      - name: Actual baseline outcome assertions
+        run: |
+          set -euo pipefail
+          export NODE_OPTIONS="--require=$GITHUB_WORKSPACE/scripts/lib/offlineTransport.cjs"
+          : > "$QA_OUT/transport/caller.log"
+          export SIM_OFFLINE_RECEIPT="$QA_OUT/transport/caller.log"
+          node scripts/qa/masterListNextQualification.mjs "$QA_OUT/outcomes" baseline > "$QA_OUT/logs/outcomes.log" 2>&1
+          test ! -s "$QA_OUT/transport/caller.log"
+      - name: Always require full source restoration and empty status
+        if: always()
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD > "$QA_OUT/source-diff.txt"
+          git ls-files -z | sort -z | xargs -0 sha256sum > "$QA_OUT/source-after.sha256"
+          cmp "$QA_OUT/source-before.sha256" "$QA_OUT/source-after.sha256"
+          git status --porcelain=v1 --untracked-files=all > "$QA_OUT/status-after.txt"
+          cmp "$QA_OUT/status-before.txt" "$QA_OUT/status-after.txt"
+          sha256sum --check "$QA_OUT/source-before.sha256" > "$QA_OUT/source-held.log"
+      - name: Bound evidence
+        id: artifact
+        if: always()
+        run: |
+          set -euo pipefail
+          test "$(du -sb "$QA_OUT" | cut -f1)" -lt 50000000
+          echo 'ready=true' >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() && steps.artifact.outputs.ready == 'true' }}
+        with:
+          name: master-list-third-red-boot
+          path: ${{ runner.temp }}/master-list-third-red-boot
+          if-no-files-found: error
+          retention-days: 7
